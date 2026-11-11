@@ -209,7 +209,12 @@ translation or a raw JSON field holds a plain text. Effect parameters come from 
 the effect, with its `label` as `title` and its `help` as `help` (a tooltip) in the language of the
 desktop; a `texture` or `mask` parameter offers the image assets and every other layer, written as
 `{ "layer": "<id>" }`, and every entry of `options` is a field of its own, with its values as
-choices and bindable to a property. Above the fields of an effect use, the inspector offers its
+choices and bindable to a property. A `vec2` or `position` parameter that is a point of the layer —
+the dedicated `position` kind, `center`, `source` or `pivot` by convention, or the four corners of a
+homography effect such as `perspective`, linked as a quad — draws a draggable handle on the canvas,
+alongside its pair of fields, while the effect use or that field is selected; a `float` parameter
+named `angle` gets a dial next to its slider, as particle emitter angles already have. Above the
+fields of an effect use, the inspector offers its
 mask: none, a picture, another layer or a shape (rect, ellipse, ring, polygon, star or line, each
 started at half the size of the layer), the channel, invert, a soft edge (a slider up to 200 px and
 a field up to 10000) and the strength, all through `effects mask`; the canvas draws it over the
