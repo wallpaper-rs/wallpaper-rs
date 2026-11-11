@@ -27,19 +27,13 @@ QQC2.ScrollView {
 
         delegate: ColumnLayout {
             required property var modelData
+            property bool expanded
 
             width: ListView.view.width
 
             Kirigami.Heading {
                 level: 4
                 text: (modelData.name || modelData.repo_id.slice(0, 8)) + " · " + App.tr("Packages: %1", modelData.packages)
-                textFormat: Text.PlainText
-            }
-
-            QQC2.Label {
-                Layout.fillWidth: true
-                wrapMode: Text.WrapAnywhere
-                text: [App.tr("Contacts: %1", modelData.hosts.join(", ")), App.tr("Keys: %1", modelData.fingerprints.join(", ")), App.tr("Last check: %1", App.time(modelData.checked))].join("\n")
                 textFormat: Text.PlainText
             }
 
@@ -64,6 +58,25 @@ QQC2.ScrollView {
                     icon.name: "edit-delete"
                     onClicked: list.remove(modelData.repo_id)
                 }
+
+                QQC2.ToolButton {
+                    icon.name: "documentinfo"
+                    text: App.tr("Details…")
+                    display: QQC2.AbstractButton.IconOnly
+                    QQC2.ToolTip.text: text
+                    QQC2.ToolTip.visible: hovered
+                    checkable: true
+                    checked: expanded
+                    onToggled: expanded = checked
+                }
+            }
+
+            QQC2.Label {
+                Layout.fillWidth: true
+                visible: expanded
+                wrapMode: Text.WrapAnywhere
+                text: [App.tr("Contacts: %1", modelData.hosts.join(", ")), App.tr("Keys: %1", modelData.fingerprints.join(", ")), App.tr("Last check: %1", App.time(modelData.checked))].join("\n")
+                textFormat: Text.PlainText
             }
         }
     }

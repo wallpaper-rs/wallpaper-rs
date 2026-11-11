@@ -368,6 +368,15 @@ msgid "%1 at %2, key %3"
 msgstr "%1 en %2, clave %3"
 
 #: apps/wprs-app/qml/AccountShared.qml
+msgid "%1 at %2"
+msgstr "%1 en %2"
+
+#: apps/wprs-app/qml/AccountShared.qml apps/wprs-app/qml/AccountSummary.qml
+#: apps/wprs-app/qml/RepoList.qml
+msgid "Details…"
+msgstr "Detalles…"
+
+#: apps/wprs-app/qml/AccountShared.qml
 msgid "Add it here"
 msgstr "Añadirlo aquí"
 
@@ -424,6 +433,10 @@ msgstr "Certificado:"
 #: apps/wprs-app/qml/AccountSummary.qml
 msgid "its own, pinned by the fingerprint %1"
 msgstr "propio, fijado por la huella %1"
+
+#: apps/wprs-app/qml/AccountSummary.qml
+msgid "its own, pinned"
+msgstr "propio, fijado"
 
 #: apps/wprs-app/qml/AccountSummary.qml
 msgid "Account:"
@@ -3306,18 +3319,6 @@ msgid "Packages: %1"
 msgstr "Paquetes: %1"
 
 #: apps/wprs-app/qml/RepoList.qml
-msgid "Contacts: %1"
-msgstr "Contacta con: %1"
-
-#: apps/wprs-app/qml/RepoList.qml
-msgid "Keys: %1"
-msgstr "Claves: %1"
-
-#: apps/wprs-app/qml/RepoList.qml
-msgid "Last check: %1"
-msgstr "Última comprobación: %1"
-
-#: apps/wprs-app/qml/RepoList.qml
 msgid ""
 "The stored copy of this repository cannot be read: refresh it to fetch it "
 "again from its address, or remove it. (%1)"
@@ -3328,6 +3329,18 @@ msgstr ""
 #: apps/wprs-app/qml/RepoList.qml apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Refresh"
 msgstr "Actualizar"
+
+#: apps/wprs-app/qml/RepoList.qml
+msgid "Contacts: %1"
+msgstr "Contacta con: %1"
+
+#: apps/wprs-app/qml/RepoList.qml
+msgid "Keys: %1"
+msgstr "Claves: %1"
+
+#: apps/wprs-app/qml/RepoList.qml
+msgid "Last check: %1"
+msgstr "Última comprobación: %1"
 
 #: apps/wprs-app/qml/RepoPolicy.qml
 msgid ""

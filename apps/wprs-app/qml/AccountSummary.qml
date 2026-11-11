@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
@@ -7,17 +8,33 @@ Kirigami.FormLayout {
     id: summary
 
     required property var account
+    property bool expanded
 
     QQC2.Label {
         Kirigami.FormData.label: App.tr("Server:")
         text: [summary.account.name, summary.account.url].filter(t => t).join(" · ")
     }
 
-    QQC2.Label {
+    RowLayout {
         Kirigami.FormData.label: App.tr("Certificate:")
         visible: (summary.account.pin ?? "") !== ""
-        text: App.tr("its own, pinned by the fingerprint %1", summary.account.pin ?? "")
-        wrapMode: Text.WrapAnywhere
+
+        QQC2.Label {
+            Layout.fillWidth: true
+            wrapMode: Text.WrapAnywhere
+            text: summary.expanded ? App.tr("its own, pinned by the fingerprint %1", summary.account.pin ?? "") : App.tr("its own, pinned")
+        }
+
+        QQC2.ToolButton {
+            icon.name: "documentinfo"
+            text: App.tr("Details…")
+            display: QQC2.AbstractButton.IconOnly
+            QQC2.ToolTip.text: text
+            QQC2.ToolTip.visible: hovered
+            checkable: true
+            checked: summary.expanded
+            onToggled: summary.expanded = checked
+        }
     }
 
     QQC2.Label {

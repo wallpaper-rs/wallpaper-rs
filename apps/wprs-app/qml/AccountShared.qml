@@ -44,13 +44,25 @@ ColumnLayout {
 
         delegate: RowLayout {
             required property var modelData
+            property bool expanded
 
             Layout.fillWidth: true
 
             QQC2.Label {
                 Layout.fillWidth: true
                 wrapMode: Text.Wrap
-                text: App.tr("%1 at %2, key %3", modelData.name, modelData.url, (modelData.fingerprints[0] ?? "").slice(0, 16))
+                text: expanded ? App.tr("%1 at %2, key %3", modelData.name, modelData.url, (modelData.fingerprints[0] ?? "").slice(0, 16)) : App.tr("%1 at %2", modelData.name, modelData.url)
+            }
+
+            QQC2.ToolButton {
+                icon.name: "documentinfo"
+                text: App.tr("Details…")
+                display: QQC2.AbstractButton.IconOnly
+                QQC2.ToolTip.text: text
+                QQC2.ToolTip.visible: hovered
+                checkable: true
+                checked: expanded
+                onToggled: expanded = checked
             }
 
             QQC2.Button {
