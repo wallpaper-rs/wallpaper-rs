@@ -27,7 +27,7 @@ ColumnLayout {
     }
 
     function load() {
-        App.query("GetInputs", [], "Inputs1", reply => panel.inputs = reply);
+        App.query("GetInputs", [], "Inputs1", reply => panel && (panel.inputs = reply));
     }
 
     Component.onCompleted: load()
