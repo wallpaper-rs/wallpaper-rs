@@ -127,8 +127,11 @@ fn names(project: &Project) -> serde_json::Map<String, Value> {
 pub fn catalog(project: &Project) -> Vec<Value> {
     let languages = wprs_core::locale::languages();
     let entry = |d: &wprs_scene::Descriptor| {
+        let points: Vec<Value> =
+            d.points().into_iter().map(|(id, default)| json!({"id": id, "default": default})).collect();
         json!({"id": d.id, "category": d.category,
-            "description": d.description.as_ref().map(|t| t.pick(&languages)), "units": d.units()})
+            "description": d.description.as_ref().map(|t| t.pick(&languages)), "units": d.units(),
+            "points": points, "quad": d.quad()})
     };
     let own = project.effects();
     wprs_scene::builtin().iter().map(entry).chain(own.values().map(|d| entry(d.as_ref()))).collect()

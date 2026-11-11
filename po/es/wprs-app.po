@@ -4352,6 +4352,11 @@ msgstr "Grupo 3D: modelos, luces y capas planas comparten profundidad"
 msgid "Hide behind nearer models"
 msgstr "Ocultarse tras los modelos más cercanos"
 
+#: apps/wprs-app/qml/SceneEditors.qml apps/wprs-app/qml/SceneSwarmLook.qml
+#: apps/wprs-app/qml/SceneSwarmPoints.qml
+msgid "Turn %1°"
+msgstr "Giro de %1°"
+
 #: apps/wprs-app/qml/SceneEditors.qml apps/wprs-app/qml/SceneInput.qml
 #: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
 msgid "Not set"
@@ -7193,10 +7198,6 @@ msgstr "Según el movimiento"
 #: apps/wprs-app/qml/SceneSwarmLook.qml
 msgid "At a fixed angle"
 msgstr "Con un ángulo fijo"
-
-#: apps/wprs-app/qml/SceneSwarmLook.qml apps/wprs-app/qml/SceneSwarmPoints.qml
-msgid "Turn %1°"
-msgstr "Giro de %1°"
 
 #: apps/wprs-app/qml/SceneSwarmPalette.qml
 msgid "Remove the color"

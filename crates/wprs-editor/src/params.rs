@@ -67,6 +67,7 @@ pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth:
             _ => Value::Null,
         },
         help: local(&p.help),
+        dial: p.kind == ParamKind::Float && p.id == "angle",
         ..Field::default()
     }
 }

@@ -38,6 +38,18 @@ Item {
                 onMoved: input.commit(Math.round(value * 1000) / 1000, true)
             }
 
+            SceneDial {
+                visible: input.field.dial
+                implicitWidth: Kirigami.Units.gridUnit * 2
+                implicitHeight: implicitWidth
+                from: -180
+                to: 180
+                value: Number(input.value ?? 0)
+                onMoved: input.commit(Math.round(value), true)
+                QQC2.ToolTip.visible: hovered
+                QQC2.ToolTip.text: App.tr("Turn %1°", Math.round(value))
+            }
+
             QQC2.TextField {
                 Layout.preferredWidth: Kirigami.Units.gridUnit * 5
                 Layout.fillWidth: !Array.isArray(input.field.range)
@@ -145,34 +157,22 @@ Item {
 
     Component {
         id: curveEditor
-
-        SceneCurve {
-            input: host.input
-        }
+        SceneCurve { input: host.input }
     }
 
     Component {
         id: maskEditor
-
-        SceneMask {
-            input: host.input
-        }
+        SceneMask { input: host.input }
     }
 
     Component {
         id: refsEditor
-
-        SceneRefs {
-            input: host.input
-        }
+        SceneRefs { input: host.input }
     }
 
     Component {
         id: rigEditor
-
-        SceneRig {
-            input: host.input
-        }
+        SceneRig { input: host.input }
     }
 
     Component {

@@ -41,6 +41,7 @@ pub struct Field {
     pub title: String,
     pub names: Vec<String>,
     pub help: String,
+    pub dial: bool,
 }
 
 pub(crate) fn candidates(doc: &Value, reference: &str, pointer: &str) -> Vec<Value> {

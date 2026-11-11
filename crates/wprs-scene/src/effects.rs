@@ -1,3 +1,4 @@
+use crate::value::Param;
 use crate::{Quality, Text};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
@@ -89,9 +90,30 @@ pub struct Descriptor {
     pub size: u64,
 }
 
+const POINTS: [&str; 3] = ["center", "source", "pivot"];
+
 impl Descriptor {
     pub fn below(&self) -> bool {
         self.compose || self.passes.iter().any(|p| p.inputs.iter().any(|i| i == "backdrop"))
+    }
+
+    pub fn quad(&self) -> bool {
+        self.solve == Some(Solve::Homography)
+    }
+
+    pub fn points(&self) -> Vec<(&str, [f32; 2])> {
+        let value = |p: &ParamDef| match &p.default {
+            Param::Vec2(v) => *v,
+            Param::Number(n) => [*n, *n],
+            _ => [0.5, 0.5],
+        };
+        if self.quad() {
+            return self.params.iter().take(4).map(|p| (p.id.as_str(), value(p))).collect();
+        }
+        let point = |p: &&ParamDef| {
+            p.kind == ParamKind::Position || (p.kind == ParamKind::Vec2 && POINTS.contains(&p.id.as_str()))
+        };
+        self.params.iter().filter(point).map(|p| (p.id.as_str(), value(p))).collect()
     }
 }
 
