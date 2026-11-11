@@ -5922,6 +5922,14 @@ msgid "No problems"
 msgstr "Sin problemas"
 
 #: apps/wprs-app/qml/SceneProblems.qml
+msgid ""
+"A script wants %1 but it is not granted here, so that part of the scene is "
+"off while you try it."
+msgstr ""
+"Un script quiere %1 pero no está concedido aquí, así que esa parte de la "
+"escena está apagada mientras se prueba."
+
+#: apps/wprs-app/qml/SceneProblems.qml
 msgid "Script console"
 msgstr "Consola de los scripts"
 

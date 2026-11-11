@@ -1,6 +1,6 @@
-use super::{hdr, note};
+use super::{hdr, note, off};
 use serde_json::json;
-use wprs_core::model::OutputState;
+use wprs_core::model::{OutputState, SceneInputs};
 
 fn shown(reason: &str, cost: f64, auto: &str) -> OutputState {
     let state = json!({ "width": 64, "height": 32, "image": null, "fit": "fill", "kind": "scene",
@@ -25,6 +25,18 @@ fn a_chosen_level_on_a_scene_heavy_only_in_model_triangles_still_warns() {
     assert!(over.starts_with("this scene costs 6.0 units a frame at q0, more than the 4"), "{over}");
     assert!(over.ends_with("automatic quality would keep it still at its poster"), "{over}");
     assert_eq!(note(&shown("user", 0.0, "")), None);
+}
+
+#[test]
+fn an_input_a_scene_uses_but_is_not_granted_shows_as_off() {
+    let used: SceneInputs = serde_json::from_value(json!({ "scene": "org.example.sea", "audio": true,
+        "pointer": true, "network": true, "granted": ["pointer"] }))
+    .unwrap();
+    assert_eq!(off(&used), ["audio", "network", "audio_network"]);
+    let none: SceneInputs = serde_json::from_value(json!({ "scene": "org.example.sea", "audio": false,
+        "pointer": true, "granted": ["pointer"] }))
+    .unwrap();
+    assert!(off(&none).is_empty());
 }
 
 #[test]

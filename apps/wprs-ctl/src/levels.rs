@@ -3,7 +3,7 @@ use anyhow::Result;
 use clap::Args;
 use serde_json::json;
 use wprs_client::Client;
-use wprs_core::model::{OutputState, State};
+use wprs_core::model::{Input, InputsReply, OutputState, State};
 use wprs_core::{HdrChoice, QualityChoice};
 
 const SETTLE: std::time::Duration = std::time::Duration::from_millis(300);
@@ -69,15 +69,52 @@ const STOPPED: &str = "this scene is too heavy for this device and automatic qua
 const TRIANGLES: &str = "this scene draws more model triangles than this device holds: frames may drop and battery use rise; automatic quality would keep it still at its poster";
 const WORDS: [&str; 2] = ["effect stays", "effects stay"];
 
-pub fn notes(state: &str) {
+fn off(used: &wprs_core::model::SceneInputs) -> Vec<&'static str> {
+    let simple = [
+        (used.audio, Input::Audio),
+        (used.pointer, Input::Pointer),
+        (used.clicks, Input::Clicks),
+        (used.network, Input::Network),
+        (used.rgb, Input::Rgb),
+        (used.media, Input::Media),
+    ];
+    let combo = [
+        (used.media && used.network, Input::MediaNetwork),
+        (used.audio && used.network, Input::AudioNetwork),
+    ];
+    simple
+        .into_iter()
+        .chain(combo)
+        .filter(|(on, i)| *on && !used.granted.contains(i))
+        .map(|(_, i)| i.as_str())
+        .collect()
+}
+
+pub fn notes(state: &str, inputs: &str) {
     let Ok(state) = serde_json::from_str::<State>(state) else {
         return;
     };
-    state
-        .outputs
-        .iter()
-        .filter_map(|(name, o)| Some((name, note(o)?)))
-        .for_each(|(name, n)| eprintln!("{name}: {n}"));
+    state.outputs.iter().for_each(|(name, o)| {
+        if let Some(n) = note(o) {
+            eprintln!("{name}: {n}");
+        }
+        if let Some(error) = &o.error {
+            eprintln!("{name}: {error}");
+        }
+    });
+    let Ok(inputs) = serde_json::from_str::<InputsReply>(inputs) else {
+        return;
+    };
+    inputs.shown.iter().for_each(|(name, used)| {
+        let off = off(used);
+        if !off.is_empty() {
+            eprintln!(
+                "{name}: {} wants {} but it is not granted here, so that part of the scene is off",
+                used.scene,
+                off.join(", ")
+            );
+        }
+    });
 }
 
 fn general(state: &State) -> String {

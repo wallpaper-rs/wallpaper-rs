@@ -36,7 +36,7 @@ pub async fn run(command: Command) -> Result<()> {
             let state = daemon.get_state().await?;
             println!("{state}");
             if std::io::IsTerminal::is_terminal(&std::io::stderr()) {
-                crate::levels::notes(&state);
+                crate::levels::notes(&state, &client.inputs.get_inputs().await.unwrap_or_default());
             }
         }
         Command::Calibrate { state } => daemon.show_calibration(state == "on").await?,

@@ -714,6 +714,11 @@ them under Script console while the preview is on, and `wprs-ctl scene preview D
 prints them as they change, along with the error, until stopped (Ctrl-C, or another `scene
 preview` on the same output).
 
+When a script `uses` an input such as `pointer` or `audio` that the preview output was not
+granted, the Problems panel warns of it next to the Script console, and `wprs-ctl state` on a
+terminal prints the same warning next to the output, from `Inputs1.GetInputs().shown[OUTPUT]`
+(its booleans against `granted`); it prints the stopped-module error there too.
+
 The canvas draws the outline of each layer with handles to turn, scale, tilt in depth
 (`transform.tilt`, a round handle on the left edge: up and down tilt around the width, sideways
 around the height) and lift (`transform.z`, a diamond below) the selected one, a dashed outline of
