@@ -21,9 +21,16 @@ fn layers_the_manifest_properties_and_the_canvas_are_authored_from_the_command_l
             "2,2",
             "--size",
             "300,200",
+            "--tilt",
+            "10,-5",
+            "--z",
+            "40",
         ]),
     );
     assert_eq!(shown(dir, "/scene/layers/0/transform/position"), json!([100.0, -20.0]));
+    assert_eq!(shown(dir, "/scene/layers/0/transform/tilt"), json!([10.0, -5.0]));
+    assert_eq!(shown(dir, "/scene/layers/0/transform/z"), json!(40.0));
+    assert!(fails(dir, &layer(&["transform", "--tilt", "90,0"])).contains("tilt"));
     ok(dir, &layer(&["blend", "screen"]));
     assert_eq!(shown(dir, "/scene/layers/0/blend"), "screen");
     assert_eq!(super::run(dir, &layer(&["blend", "glitter"])).status.code(), Some(2));
