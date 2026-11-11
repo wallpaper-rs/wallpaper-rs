@@ -248,6 +248,14 @@ track from a JSON file of the same shape (Simulate from a file…) on the screen
 and applied to (Stop ends it), the same `SimulateMedia` call `wprs-ctl media simulate` makes;
 until the package is applied once, the tab says so instead.
 
+Test the pointer and clicks, a toggle of the canvas toolbar, turns the mouse over the preview into
+a made-up pointer on it instead of an editing tool: while it is on, moving or pressing over the
+preview calls `SimulateTouch` (`dbus.md`) with the position as fractions of the output and the
+held buttons as a bitmask (1 left, 2 right, 4 middle), so `input.cursor`, `click:`, `enter:` and
+`leave:` can be tried without a real pointer there; turning it off, or the pointer leaving the
+preview, reports it left. `wprs-ctl inputs touch OUTPUT X,Y [--buttons N]` does the same on any
+screen, real or `preview:`, and `--stop` ends it.
+
 ## Package details
 
 The manifest is edited in the same inspector: `/manifest` shows the fields of the JSON Schema of

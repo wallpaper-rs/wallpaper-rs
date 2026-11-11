@@ -13,6 +13,7 @@ pub trait Inputs1 {
     fn set_pointer(&self, x: i32, y: i32) -> Result<()>;
     fn set_clicks(&self, output: &str, on: bool) -> Result<()>;
     fn simulate_media(&self, output: &str, track: &str, cover: &[u8]) -> Result<()>;
+    fn simulate_touch(&self, output: &str, x: f64, y: f64, buttons: u32) -> Result<()>;
 }
 
 #[proxy(

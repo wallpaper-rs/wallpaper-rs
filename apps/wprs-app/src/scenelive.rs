@@ -81,6 +81,17 @@ impl SceneEditor {
         }
     }
 
+    pub fn touch(self: Pin<&mut Self>, x: f64, y: f64, buttons: u32) {
+        let output = self.output.to_string();
+        if !output.is_empty() {
+            bus::spawn(async move {
+                bus::call("Inputs1", "SimulateTouch", vec![json!(output), json!(x), json!(y), json!(buttons)])
+                    .await
+                    .ok();
+            });
+        }
+    }
+
     pub fn seek(mut self: Pin<&mut Self>, time: f64, playing: bool) {
         self.as_mut().set_time(time.max(0.0));
         self.as_mut().set_playing(playing);

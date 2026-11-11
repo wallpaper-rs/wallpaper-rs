@@ -7,6 +7,7 @@ use std::sync::{Arc, Weak};
 use wprs_core::model::Input;
 use zbus::message::Header;
 
+mod give;
 mod told;
 
 pub struct Inputs(pub Weak<Daemon>);
@@ -26,36 +27,6 @@ impl Inputs {
     fn parts(&self) -> Result<(Arc<Daemon>, &'static Arc<Hub>)> {
         let stopping = || failed("the daemon is stopping");
         Ok((self.0.upgrade().ok_or_else(stopping)?, hub().ok_or_else(stopping)?))
-    }
-
-    async fn give(
-        &self,
-        call: (&zbus::Connection, &Header<'_>),
-        scene: &str,
-        key: Option<&str>,
-        input: &str,
-    ) -> Result<()> {
-        let (d, hub) = self.parts()?;
-        let (input, scene) = (parse(input)?, scene_id(scene)?.to_owned());
-        let (key, title) = lock(&hub.control).package(&scene, key)?;
-        let trusted = caller(call.0, call.1).await.trusted();
-        if matches!(input, Input::Network | Input::Rgb | Input::MediaNetwork | Input::AudioNetwork)
-            && !trusted
-        {
-            return Err(denied("only the app, the tray and wprs-ctl give wallpapers the network or lights"));
-        }
-        if !trusted {
-            if lock(&hub.control).has(&scene, &key, input) {
-                return Ok(());
-            }
-            return crate::confirm::grant(call.0, hub.clone(), grants_path(&d), (scene, key, title), input)
-                .await;
-        }
-        d.run(move |d| {
-            hub.grant(&grants_path(d), &scene, &key, input)?;
-            reopen(d, input)
-        })
-        .await
     }
 }
 
@@ -127,6 +98,24 @@ impl Inputs {
             return Err(denied("only the app, the tray and wprs-ctl simulate a media player"));
         }
         told::simulate(output, track, cover).await
+    }
+
+    async fn simulate_touch(
+        &self,
+        output: String,
+        x: f64,
+        y: f64,
+        buttons: u32,
+        #[zbus(header)] header: Header<'_>,
+        #[zbus(connection)] bus: &zbus::Connection,
+    ) -> Result<()> {
+        if !caller(bus, &header).await.trusted() {
+            return Err(denied("only the app, the tray and wprs-ctl simulate a pointer"));
+        }
+        let inside = [x, y].iter().all(|v| (0.0..=1.0).contains(v));
+        let pos = inside.then_some([x as f32, y as f32]);
+        crate::inputs::surface_pointer(&output, pos, buttons.min(255) as u8);
+        Ok(())
     }
 
     async fn set_clicks(

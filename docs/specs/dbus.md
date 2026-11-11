@@ -1621,6 +1621,17 @@ listener does not read them for that output either. Only the app, the tray and `
 (identified as for `Grant`) may call it; other callers get `AccessDenied`. `wprs-ctl media simulate
 OUTPUT FILE.json` (the `cover` of the file is a picture beside it) and `--stop` call it.
 
+### `SimulateTouch(s output, d x, d y, u buttons)`
+
+Shows a made-up pointer on the wallpaper of `output` instead of the real one, the same `x`, `y`
+(fractions of the output, outside `0..=1` for a pointer that left) and `buttons` as `Touch`, so that
+`input.cursor`, `click:`, `enter:` and `leave:` can be tried without a mouse there and without the
+checks `Touch` makes for a real screen (`clicking`, the Plasma shell, the pointer truly being on the
+output): it works on any output, including a `preview:` stream. Only the app, the tray and
+`wprs-ctl` (identified as for `Grant`) may call it; other callers get `AccessDenied`. `wprs-ctl
+inputs touch OUTPUT X,Y [--buttons N]` and `--stop` call it; the app calls it from the canvas while
+Test the pointer and clicks is on.
+
 ### `Touch(s output, d x, d y, u buttons)`
 
 A press or a release on the wallpaper of `output` in Plasma, at `x`, `y` in fractions of the

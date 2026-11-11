@@ -2227,6 +2227,32 @@ msgstr "Posición horizontal en píxeles lógicos"
 msgid "Vertical position in logical pixels"
 msgstr "Posición vertical en píxeles lógicos"
 
+#: apps/wprs-ctl/src/inputs.rs
+msgid ""
+"Show a made-up pointer on the wallpaper of a screen instead of the real one, "
+"to try input.cursor, click:, enter: and leave: without a mouse there; --stop "
+"ends it"
+msgstr ""
+"Mostrar un puntero inventado en el fondo de una pantalla en vez del real, "
+"para probar input.cursor, click:, enter: y leave: sin un mouse ahí; --stop "
+"lo termina"
+
+#: apps/wprs-ctl/src/inputs.rs apps/wprs-ctl/src/media.rs
+msgid "The screen"
+msgstr "La pantalla"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "Position as X,Y in fractions of the screen, 0..=1 for each"
+msgstr "Posición como X,Y en fracciones de la pantalla, 0..=1 para cada una"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "Bitmask of held buttons: 1 left, 2 right, 4 middle"
+msgstr "Máscara de bits de los botones presionados: 1 izquierdo, 2 derecho, 4 central"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "Stop the simulated pointer"
+msgstr "Detener el puntero simulado"
+
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid "the pointer (only its latest position over the screen, never kept)"
 msgstr ""
@@ -3439,10 +3465,6 @@ msgstr ""
 "Mostrar una pista inventada en el fondo de una pantalla en vez de lo que "
 "reproduce un reproductor, para probar valores, disparadores y scripts "
 "multimedia; --stop la termina"
-
-#: apps/wprs-ctl/src/media.rs
-msgid "The screen"
-msgstr "La pantalla"
 
 #: apps/wprs-ctl/src/media.rs
 msgid "Stop the simulated playback"

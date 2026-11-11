@@ -4072,19 +4072,6 @@ msgstr ""
 "el botón central o Mayús para desplazarla, y gira la rueda para acercarte"
 
 #: apps/wprs-app/qml/SceneCanvas.qml
-msgid "Zoom out"
-msgstr "Reducir"
-
-#: apps/wprs-app/qml/SceneCanvas.qml
-msgid "Zoom in"
-msgstr "Ampliar"
-
-#: apps/wprs-app/qml/SceneCanvas.qml apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Fit"
-msgstr "Ajustar"
-
-#: apps/wprs-app/qml/SceneCanvas.qml
 msgid "Guide:"
 msgstr "Guía:"
 
@@ -4133,6 +4120,24 @@ msgstr "Las capas se mueven en profundidad"
 #: apps/wprs-app/qml/SceneCanvasLook.qml
 msgid "Follow the tilt of a phone"
 msgstr "Seguir la inclinación del teléfono"
+
+#: apps/wprs-app/qml/SceneCanvasZoom.qml
+msgid "Zoom out"
+msgstr "Reducir"
+
+#: apps/wprs-app/qml/SceneCanvasZoom.qml
+msgid "Zoom in"
+msgstr "Ampliar"
+
+#: apps/wprs-app/qml/SceneCanvasZoom.qml
+#: apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Fit"
+msgstr "Ajustar"
+
+#: apps/wprs-app/qml/SceneCanvasZoom.qml
+msgid "Test the pointer and clicks"
+msgstr "Probar el puntero y los clics"
 
 #: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneLightTools.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml

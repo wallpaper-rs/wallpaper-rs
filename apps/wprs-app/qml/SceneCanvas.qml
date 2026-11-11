@@ -15,6 +15,7 @@ ColumnLayout {
     property point pan: Qt.point(0, 0)
     property var stream: null
     property bool missing: false
+    property bool testing: false
     readonly property var aspects: ["", "16:9", "21:9", "32:9", "4:3", "16:10", "9:16"]
 
     function connect() {
@@ -49,32 +50,8 @@ ColumnLayout {
         RowLayout {
             anchors.fill: parent
 
-            QQC2.ToolButton {
-                icon.name: "zoom-out"
-                text: App.tr("Zoom out")
-                display: QQC2.AbstractButton.IconOnly
-                onClicked: canvas.zoom = Math.max(0.1, canvas.zoom / 1.25)
-            }
-
-            QQC2.Label {
-                text: Math.round(canvas.zoom * 100) + " %"
-            }
-
-            QQC2.ToolButton {
-                icon.name: "zoom-in"
-                text: App.tr("Zoom in")
-                display: QQC2.AbstractButton.IconOnly
-                onClicked: canvas.zoom = Math.min(16, canvas.zoom * 1.25)
-            }
-
-            QQC2.ToolButton {
-                icon.name: "zoom-fit-best"
-                text: App.tr("Fit")
-                display: QQC2.AbstractButton.IconOnly
-                onClicked: {
-                    canvas.zoom = 1;
-                    canvas.pan = Qt.point(0, 0);
-                }
+            SceneCanvasZoom {
+                canvas: canvas
             }
 
             Item {
@@ -140,7 +117,7 @@ ColumnLayout {
 
         SceneBand {
             anchors.fill: parent
-            enabled: !canvas.page.moving
+            enabled: !canvas.page.moving && !canvas.testing
             page: canvas.page
             screen: screen
             ratio: canvas.ratio
@@ -188,6 +165,12 @@ ColumnLayout {
                 size: canvas.size
                 ratio: canvas.ratio
                 aspect: canvas.aspects[guides.currentIndex]
+            }
+
+            SceneCanvasTouch {
+                anchors.fill: parent
+                page: canvas.page
+                testing: canvas.testing
             }
         }
     }

@@ -148,6 +148,7 @@ calls! {
         GetInputs get_inputs() json;
         SetClicks set_clicks(output: str, on: bool);
         SimulateMedia simulate_media(output: str, track: str, cover: u8s);
+        SimulateTouch simulate_touch(output: str, x: f64, y: f64, buttons: u32);
     }
     Rgb1 rgb {
         GetStatus get_status() json;

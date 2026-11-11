@@ -63,6 +63,22 @@ pub enum Inputs {
         #[arg(allow_hyphen_values = true, help = "Vertical position in logical pixels")]
         y: i32,
     },
+    #[command(
+        about = "Show a made-up pointer on the wallpaper of a screen instead of the real one, to try input.cursor, click:, enter: and leave: without a mouse there; --stop ends it"
+    )]
+    Touch {
+        #[arg(help = "The screen")]
+        output: String,
+        #[arg(
+            required_unless_present = "stop",
+            help = "Position as X,Y in fractions of the screen, 0..=1 for each"
+        )]
+        at: Option<String>,
+        #[arg(long, default_value_t = 0, help = "Bitmask of held buttons: 1 left, 2 right, 4 middle")]
+        buttons: u32,
+        #[arg(long, conflicts_with = "at", help = "Stop the simulated pointer")]
+        stop: bool,
+    },
 }
 
 #[derive(ValueEnum, Clone, Copy, Debug)]
@@ -112,9 +128,23 @@ pub async fn run(client: &Client, command: Inputs) -> Result<()> {
         Inputs::Clicks { state, output } => {
             inputs.set_clicks(output.as_deref().unwrap_or_default(), matches!(state, Switch::On)).await?
         }
+        Inputs::Touch { output, at: None, .. } => inputs.simulate_touch(&output, -1.0, -1.0, 0).await?,
+        Inputs::Touch { output, at: Some(at), buttons, .. } => {
+            let (x, y) = at_fraction(&at)?;
+            inputs.simulate_touch(&output, x, y, buttons).await?
+        }
     }
     Ok(())
 }
+
+fn at_fraction(at: &str) -> Result<(f64, f64)> {
+    let (x, y) = at.split_once(',').ok_or_else(|| usage("expected X,Y"))?;
+    let parsed = |s: &str| s.trim().parse::<f64>().map_err(|_| usage(format!("{s} is not a number")));
+    Ok((parsed(x)?, parsed(y)?))
+}
+
+#[cfg(test)]
+mod tests;
 
 async fn grant(client: &Client, scene: &str, input: &str, output: Option<&str>) -> Result<()> {
     let reply: InputsReply = parse(&client.inputs.get_inputs().await?)?;
