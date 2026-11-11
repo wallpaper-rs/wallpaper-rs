@@ -77,6 +77,21 @@ fn user_properties_and_presets_are_edited_from_the_command_line() {
     }
 }
 
+#[test]
+fn renaming_a_particle_system_warns_about_the_scripts_that_name_it() {
+    let tmp = tempfile::tempdir().unwrap();
+    let dir = tmp.path();
+    ok(dir, &["scene", "new", "snow", "--from", "particles"]);
+    std::fs::create_dir_all(dir.join("snow/scripts")).unwrap();
+    std::fs::write(dir.join("snow/scripts/flakes.js"), "export const update = () => system('flakes');")
+        .unwrap();
+    ok(dir, &["scene", "set", "snow", "/scene/scripts", r#"[{"path": "scripts/flakes.js"}]"#]);
+    let renamed = run(dir, &["scene", "particles", "snow", "flakes", "rename", "embers"]);
+    let warned = String::from_utf8(renamed.stderr).unwrap();
+    assert!(renamed.status.success() && warned.contains("scripts/flakes.js names \"flakes\""), "{warned}");
+    assert_eq!(show(dir, "/scene/layers/1/system"), json!("embers"));
+}
+
 fn words(line: &str) -> Vec<String> {
     let (mut out, mut word, mut quote, mut started) = (Vec::new(), String::new(), None, false);
     for c in line.trim().chars() {
