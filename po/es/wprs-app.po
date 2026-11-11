@@ -2398,6 +2398,10 @@ msgid "Scene settings"
 msgstr "Ajustes de la escena"
 
 #: apps/wprs-app/qml/OutputControls.qml
+msgid "Web settings"
+msgstr "Ajustes de la página web"
+
+#: apps/wprs-app/qml/OutputControls.qml
 msgid "Video settings"
 msgstr "Ajustes del vídeo"
 

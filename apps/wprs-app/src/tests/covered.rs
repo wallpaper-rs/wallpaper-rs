@@ -65,6 +65,17 @@ fn screens_that_show_a_page_choose_their_own_quality() {
 }
 
 #[test]
+fn screens_that_show_a_web_page_can_open_its_settings() {
+    let files = qml_files();
+    let row = files.iter().find(|(n, _)| n == "OutputRow.qml").map(|(_, t)| t.clone()).unwrap();
+    assert!(row.contains(
+        r#"readonly property bool tunable: scene || info.kind === "web" || (info.kind === "video" && pkg.kind === "video")"#
+    ));
+    let controls = files.iter().find(|(n, _)| n == "OutputControls.qml").map(|(_, t)| t.clone()).unwrap();
+    assert!(controls.contains(r#"host.info?.kind === "web" ? host.daemon.tr("Web settings")"#));
+}
+
+#[test]
 fn identical_cards_are_offered_by_their_pci_bus() {
     let files = qml_files();
     let picker = files.iter().find(|(n, _)| n == "GpuPicker.qml").map(|(_, t)| t.clone()).unwrap();

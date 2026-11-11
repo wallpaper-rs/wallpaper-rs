@@ -16,7 +16,7 @@ RowLayout {
     readonly property var credit: info.credit ?? null
     readonly property var fits: daemon.schema.fits ?? ["fill", "fit", "stretch", "center", "tile"]
     readonly property bool scene: info.kind === "scene"
-    readonly property bool tunable: scene || (info.kind === "video" && pkg.kind === "video")
+    readonly property bool tunable: scene || info.kind === "web" || (info.kind === "video" && pkg.kind === "video")
     readonly property string sound: info.sound ?? ""
     readonly property bool muted: daemon.state?.muted === true
     property string thumb

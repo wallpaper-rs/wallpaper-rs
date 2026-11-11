@@ -63,7 +63,7 @@ ColumnLayout {
             checkable: true
             checked: host.daemon.checking === true
             icon.name: "configure"
-            text: host.scene ? host.daemon.tr("Scene settings") : host.daemon.tr("Video settings")
+            text: host.scene ? host.daemon.tr("Scene settings") : host.info?.kind === "web" ? host.daemon.tr("Web settings") : host.daemon.tr("Video settings")
         }
 
         QQC2.ToolButton {
