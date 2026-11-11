@@ -91,6 +91,15 @@ pub enum Flying {
         )]
         yields_to: Option<String>,
     },
+    #[command(about = "Print the relative cost of an effect of a layer's stack at each quality level")]
+    EffectCost {
+        #[arg(help = DIR)]
+        dir: PathBuf,
+        #[arg(help = "Id of the effect")]
+        effect: String,
+        #[arg(long, help = "Leave the effect out instead of the scene where it cannot run")]
+        optional: bool,
+    },
     #[command(about = "Show the foliage mask, the chroma matte or the shadows in the 3D preview, or nothing")]
     Debug3d {
         #[arg(help = DIR)]

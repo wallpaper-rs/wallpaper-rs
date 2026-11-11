@@ -25,6 +25,7 @@ fn shown(command: &Flying) -> bool {
         Flying::NewMaterial { check, .. } => *check,
         Flying::Debug3d { .. } => false,
         Flying::EffectRule { param, .. } => param.is_none(),
+        Flying::EffectCost { .. } => true,
         Flying::Clocks { .. } => true,
     }
 }
@@ -110,6 +111,7 @@ fn edit(command: Flying) -> Result<(PathBuf, Action)> {
             let param = param.unwrap_or_default();
             (dir, Action::EffectRule(RuleEdit { effect, param, uses, waits_for, yields_to }))
         }
+        Flying::EffectCost { .. } => anyhow::bail!("effect-cost only prints"),
         Flying::Clocks { .. } => anyhow::bail!("clocks only prints"),
         Flying::Debug3d { dir, show } => {
             let show = (show != "none").then_some(show);
@@ -146,6 +148,9 @@ pub(crate) fn run(command: Flying) -> Result<()> {
         }
         Flying::NewMaterial { dir, name, .. } => (dir, json!({ "material_check": { "name": name } })),
         Flying::EffectRule { dir, effect, .. } => (dir, json!({ "rules": { "effect": effect } })),
+        Flying::EffectCost { dir, effect, optional } => {
+            (dir, json!({ "effect_cost": { "effect": effect, "optional": optional } }))
+        }
         Flying::Clocks { dir, time, strip } => (dir, json!({ "clocks": { "time": time, "strip": strip } })),
         other => anyhow::bail!("{other:?} changes the scene"),
     };

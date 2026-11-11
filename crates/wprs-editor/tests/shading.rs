@@ -46,3 +46,45 @@ fn package_effects_are_removed_unless_a_layer_still_uses_them() {
     assert!(project.doc["scene"]["effects"].get("glow").is_none());
     assert!(dir.join("effects/glow.json").is_file(), "prune, not removal, clears the files");
 }
+
+#[test]
+fn the_cost_of_an_effect_is_shown_at_every_quality_level_and_drops_for_heavy_and_optional_effects() {
+    let root = tempfile::tempdir().unwrap();
+    unsafe { std::env::set_var("XDG_STATE_HOME", root.path().join("state")) };
+    let dir = root.path().join("weigh");
+    let mut project =
+        Project::create(&dir, starter("empty", "org.example.weigh", "Weigh", "en").unwrap()).unwrap();
+    let source = root.path().join("source");
+    fs::create_dir_all(&source).unwrap();
+    let heavy = json!({ "id": "heavy", "cost": { "taps": 50, "passes": 2 }, "passes": [{ "entry": "fs_glow" }] });
+    fs::write(source.join("heavy.json"), heavy.to_string()).unwrap();
+    fs::write(source.join("heavy.wgsl"), WGSL).unwrap();
+    project.act(&Action::ImportEffect { descriptor: source.join("heavy.json"), wgsl: None }).unwrap();
+    let ask = |optional: bool| {
+        wprs_editor::rigs::query(
+            &project.dir,
+            &project.doc,
+            "",
+            &json!({ "effect_cost": { "effect": "heavy", "optional": optional } }),
+        )
+    };
+    let kept = ask(false);
+    assert!(kept["units"].as_f64().unwrap() > 6.0, "heavy class: {kept}");
+    let levels = kept["levels"].as_array().unwrap();
+    assert_eq!(levels.len(), 4);
+    for (level, quality) in levels.iter().zip(["q0", "q1", "q2", "q3"]) {
+        assert_eq!(level["quality"], quality);
+    }
+    assert!(levels[0]["units"].is_null(), "q0 drops anything heavier than light, kept or not: {kept}");
+    assert!(levels[1]["units"].is_number(), "a non-optional heavy effect still runs at q1: {kept}");
+    assert!(levels[3]["units"].is_number());
+    let dropped = ask(true);
+    assert!(dropped["levels"][1]["units"].is_null(), "optional effects are left out below q2: {dropped}");
+    let missing = wprs_editor::rigs::query(
+        &project.dir,
+        &project.doc,
+        "",
+        &json!({ "effect_cost": { "effect": "missing" } }),
+    );
+    assert_eq!(missing, Value::Null);
+}

@@ -46,3 +46,24 @@ fn package_effects_are_removed_unless_a_layer_still_uses_them() {
     assert!(fails(dir, &["scene", "show", "snow", "/scene/effects/dim"]).contains("nothing is at"));
     assert!(!dir.join("snow/effects/dim.json").exists(), "the file leaves the folder, kept for undo");
 }
+
+#[test]
+fn effect_cost_prints_the_relative_units_at_every_quality_level() {
+    let tmp = tempfile::tempdir().unwrap();
+    let dir = tmp.path();
+    ok(dir, &["scene", "new", "snow", "--from", "empty", "--title", "Snow"]);
+    let descriptor = json!({ "id": "heavy", "cost": { "taps": 50, "passes": 2 }, "passes": [{ "entry": "fs_dim" }] });
+    std::fs::write(dir.join("heavy.json"), descriptor.to_string()).unwrap();
+    std::fs::write(
+        dir.join("heavy.wgsl"),
+        "@fragment fn fs_dim(in: VertexOut) -> @location(0) vec4<f32> { return tap(in.uv) * 0.5; }",
+    )
+    .unwrap();
+    ok(dir, &["scene", "import-effect", "snow", "heavy.json"]);
+    let printed: Value = serde_json::from_str(&ok(dir, &["scene", "effect-cost", "snow", "heavy"])).unwrap();
+    assert!(printed["units"].as_f64().unwrap() > 6.0, "{printed}");
+    assert!(printed["levels"][0]["units"].is_null(), "q0 drops anything but light effects: {printed}");
+    let out = ok(dir, &["scene", "effect-cost", "snow", "heavy", "--optional"]);
+    let printed: Value = serde_json::from_str(&out).unwrap();
+    assert!(printed["levels"][1]["units"].is_null(), "optional heavy effects leave at q1 too: {printed}");
+}

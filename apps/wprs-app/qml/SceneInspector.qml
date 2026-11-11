@@ -171,6 +171,12 @@ ColumnLayout {
                 system: /^\/scene\/particles\/[^\/]+$/.test(inspector.pointer) ? inspector.parts[2].replace(/~1/g, "/").replace(/~0/g, "~") : ""
             }
 
+            SceneEffectCost {
+                Layout.fillWidth: true
+                visible: /\/effects\/\d+$/.test(inspector.pointer)
+                page: inspector.page
+            }
+
             SceneRepeater {
                 id: listed
 

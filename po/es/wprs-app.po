@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-10 00:00+0000\n"
+"POT-Creation-Date: 2026-11-11 00:00+0000\n"
 "PO-Revision-Date: 2026-10-22 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -4390,6 +4390,18 @@ msgstr "Añadir un efecto"
 #: apps/wprs-app/qml/SceneEffectCatalog.qml
 msgid "%1 (cost %2)"
 msgstr "%1 (coste %2)"
+
+#: apps/wprs-app/qml/SceneEffectCost.qml
+msgid "Cost"
+msgstr "Coste"
+
+#: apps/wprs-app/qml/SceneEffectCost.qml
+msgid "%1: left out of the scene at this level"
+msgstr "%1: se deja fuera de la escena en este nivel"
+
+#: apps/wprs-app/qml/SceneEffectCost.qml
+msgid "%1: %2 units of work"
+msgstr "%1: %2 unidades de trabajo"
 
 #: apps/wprs-app/qml/SceneEffectMask.qml
 msgid "Mask of the effect:"

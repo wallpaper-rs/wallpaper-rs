@@ -1307,7 +1307,7 @@ msgstr "Nombre de este uso, con el que lo llaman los scripts y los enlaces"
 msgid "Place in the stack; the top when omitted"
 msgstr "Lugar en la pila; arriba del todo si se omite"
 
-#: apps/wprs-ctl/src/effecting.rs
+#: apps/wprs-ctl/src/effecting.rs apps/wprs-ctl/src/flying.rs
 msgid "Leave the effect out instead of the scene where it cannot run"
 msgstr "Dejar fuera el efecto en vez de la escena donde no pueda correr"
 
@@ -1806,6 +1806,13 @@ msgstr "Un parámetro que no debe ser cero, o un valor vacío"
 #: apps/wprs-ctl/src/flying.rs
 msgid "A parameter that takes over while not zero, or an empty value"
 msgstr "Un parámetro que toma el control mientras no es cero, o un valor vacío"
+
+#: apps/wprs-ctl/src/flying.rs
+msgid ""
+"Print the relative cost of an effect of a layer's stack at each quality level"
+msgstr ""
+"Imprimir el coste relativo de un efecto en la pila de una capa en cada "
+"nivel de calidad"
 
 #: apps/wprs-ctl/src/flying.rs
 msgid ""

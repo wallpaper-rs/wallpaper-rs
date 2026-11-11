@@ -4,7 +4,7 @@ use serde_json::{Map, Value, json};
 use std::fs;
 use std::path::Path;
 use wprs_core::message::said;
-use wprs_scene::{Descriptor, MAX_EFFECT_FILES, MAX_WGSL};
+use wprs_scene::{Descriptor, MAX_EFFECT_FILES, MAX_WGSL, Quality};
 
 fn text(path: &Path) -> Result<String> {
     let size = fs::metadata(path)
@@ -118,6 +118,20 @@ pub fn rule(dir: &Path, doc: &Value, r: &crate::actions::RuleEdit) -> Result<Vec
     fs::write(dir.join(&written), body)
         .map_err(|e| said("editor.cannot_write", "cannot write %1: %2", &[&written, &e]))?;
     Ok(vec![Op::Replace { path: format!("{path}/descriptor"), value: json!(written) }])
+}
+
+pub fn cost(dir: &Path, doc: &Value, id: &str, optional: bool) -> Value {
+    let Ok(mut scene) = serde_json::from_value::<wprs_scene::Scene>(doc["scene"].clone()) else {
+        return Value::Null;
+    };
+    crate::cache::read_files(&mut scene, dir);
+    let found = scene.loaded.get(id).map(|d| (**d).clone()).or_else(|| wprs_scene::descriptor(id).cloned());
+    let Some(d) = found else { return Value::Null };
+    let levels = [Quality::Q0, Quality::Q1, Quality::Q2, Quality::Q3].into_iter().map(|quality| {
+        let scale = quality.effect_scale(d.class(), optional).map(|s| s * d.scale_at(quality));
+        json!({ "quality": quality, "units": scale.map(|s| d.units() * s * s) })
+    });
+    json!({ "effect": id, "units": d.units(), "levels": levels.collect::<Vec<_>>() })
 }
 
 pub fn rules(dir: &Path, doc: &Value, id: &str) -> Value {
