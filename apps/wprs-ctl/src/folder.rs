@@ -1,6 +1,5 @@
 use crate::author::DIR;
-use crate::authoring::count;
-use anyhow::{Context, Result, anyhow, ensure};
+use anyhow::{Context, Result, ensure};
 use clap::Subcommand;
 use serde_json::json;
 use std::fs;
@@ -8,6 +7,8 @@ use std::path::PathBuf;
 use wprs_client::Client;
 use wprs_editor::actions::visible;
 use wprs_editor::{Project, assets, media, package};
+
+mod parts;
 
 #[derive(Subcommand, Debug)]
 pub enum Folder {
@@ -126,35 +127,8 @@ pub(crate) fn run(command: Folder) -> Result<()> {
                 project.save()?;
             }
         }
-        Folder::Validate { dir, json } => {
-            let project = Project::open(&dir)?;
-            let problems = package::problems(&project.dir, &project.doc);
-            for p in &problems {
-                match json {
-                    true => println!("{}", serde_json::to_string(p)?),
-                    false => {
-                        println!(
-                            "{}{}: {}",
-                            if p.warning { "warning: " } else { "" },
-                            p.pointer,
-                            p.said.local()
-                        )
-                    }
-                }
-            }
-            let errors = problems.iter().filter(|p| !p.warning).count();
-            ensure!(errors == 0, "{}", count(errors, "problem"));
-        }
-        Folder::Build { dir, out, key, json } => {
-            let mut project = Project::open(&dir)?;
-            let out = out.map_or_else(|| package::output(&dir, &project.doc), Ok)?;
-            let signer = key.map(|key| crate::keys::signer(&key)).transpose()?;
-            let (sha256, size) = package::build(&mut project, &out, signer.as_ref())?;
-            match json {
-                true => println!("{}", json!({"path": out, "sha256": sha256, "size": size})),
-                false => println!("{sha256} {size} {}", out.display()),
-            }
-        }
+        Folder::Validate { dir, json } => parts::validate(&dir, json)?,
+        Folder::Build { dir, out, key, json } => parts::build(&dir, out, key, json)?,
         Folder::Preview { dir, span: span @ crate::spanning::Span { layout: Some(_), .. }, time, .. } => {
             crate::spanning::preview(&dir, &span, (time >= 0.0).then_some(time))?
         }
@@ -184,7 +158,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             let out = package::applied(&project.doc)?;
             package::build(&mut project, &out, None)?;
             let path = out.to_str().context("the path is not UTF-8")?.to_owned();
-            runtime()?.block_on(apply(&path, &output, if span { "span" } else { "" }))?;
+            runtime()?.block_on(parts::apply(&path, &output, if span { "span" } else { "" }))?;
         }
         Folder::Schema { property, manifest } => {
             let schema = match (property, manifest) {
@@ -196,19 +170,5 @@ pub(crate) fn run(command: Folder) -> Result<()> {
         }
         Folder::Catalog { dir, category, json } => crate::catalog::run(&dir, category.as_deref(), json)?,
     }
-    Ok(())
-}
-
-async fn apply(path: &str, output: &str, fit: &str) -> Result<()> {
-    let client = Client::connect().await?;
-    let (_, job) =
-        client.run_job(async { Ok(((), client.library.import(&[path], false).await?)) }, |_, _| {}).await?;
-    let report = job.output.unwrap_or_default();
-    let uid = report["imported"][0]["uid"].as_str().map(String::from);
-    let failed =
-        report["failed"][0]["error"].as_str().unwrap_or("the library refused the package").to_owned();
-    let uid = uid.ok_or_else(|| anyhow!(failed))?;
-    client.library.apply(&uid, output, fit, "").await?;
-    println!("{uid}");
     Ok(())
 }
