@@ -1,4 +1,4 @@
-use super::{hdr, note, off};
+use super::{hdr, note, off, sandbox_note};
 use serde_json::json;
 use wprs_core::model::{OutputState, SceneInputs};
 
@@ -37,6 +37,17 @@ fn an_input_a_scene_uses_but_is_not_granted_shows_as_off() {
         "pointer": true, "granted": ["pointer"] }))
     .unwrap();
     assert!(off(&none).is_empty());
+}
+
+#[test]
+fn a_web_page_whose_sandbox_could_not_fully_start_warns_about_it() {
+    assert_eq!(sandbox_note(&shown("user", 0.0, "")), None);
+    let mut reduced = shown("user", 0.0, "");
+    reduced.sandbox = "reduced".into();
+    assert_eq!(
+        sandbox_note(&reduced),
+        Some("its web engine runs without part of its sandbox on this computer")
+    );
 }
 
 #[test]

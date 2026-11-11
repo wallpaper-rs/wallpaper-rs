@@ -65,6 +65,9 @@ pub fn note(o: &OutputState) -> Option<String> {
     })
 }
 
+pub fn sandbox_note(o: &OutputState) -> Option<&'static str> {
+    (o.sandbox == "reduced").then_some("its web engine runs without part of its sandbox on this computer")
+}
 const STOPPED: &str = "this scene is too heavy for this device and automatic quality keeps it still at its poster; a fixed level such as wprs-ctl quality q0 plays it anyway, with fewer frames per second and more battery use";
 const TRIANGLES: &str = "this scene draws more model triangles than this device holds: frames may drop and battery use rise; automatic quality would keep it still at its poster";
 const WORDS: [&str; 2] = ["effect stays", "effects stay"];
@@ -95,12 +98,9 @@ pub fn notes(state: &str, inputs: &str) {
         return;
     };
     state.outputs.iter().for_each(|(name, o)| {
-        if let Some(n) = note(o) {
-            eprintln!("{name}: {n}");
-        }
-        if let Some(error) = &o.error {
-            eprintln!("{name}: {error}");
-        }
+        note(o).into_iter().for_each(|n| eprintln!("{name}: {n}"));
+        sandbox_note(o).into_iter().for_each(|n| eprintln!("{name}: {n}"));
+        o.error.iter().for_each(|error| eprintln!("{name}: {error}"));
     });
     let Ok(inputs) = serde_json::from_str::<InputsReply>(inputs) else {
         return;
