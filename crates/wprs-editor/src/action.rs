@@ -113,6 +113,9 @@ pub enum Action {
         #[serde(default)]
         wgsl: Option<PathBuf>,
     },
+    RemoveEffect {
+        effect: String,
+    },
     ImportScript(ScriptFile),
     ImportAssets(ImportAssets),
     Asset(AssetEdit),

@@ -3,6 +3,7 @@ mod cues;
 mod language;
 mod marks;
 mod more;
+mod shading;
 mod textures;
 mod timing;
 

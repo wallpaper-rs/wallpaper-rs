@@ -74,6 +74,7 @@ mod scoped;
 mod seeding;
 pub mod server;
 pub mod serving;
+mod shading;
 mod shaping;
 pub mod shelving;
 pub mod show;

@@ -166,6 +166,7 @@ pub fn step(name: &str) -> Message {
         "keyframe" => said("editor.step.keyframe", "Change a keyframe", &[]),
         "import" => said("editor.step.import", "Import an asset", &[]),
         "import_effect" => said("editor.step.import_effect", "Import an effect", &[]),
+        "remove_effect" => said("editor.step.remove_effect", "Remove an effect", &[]),
         "import_script" => said("editor.step.import_script", "Import a script", &[]),
         "translate" => said("editor.step.translate", "Translate a text", &[]),
         "thumbnail" => said("editor.step.thumbnail", "Change the preview", &[]),

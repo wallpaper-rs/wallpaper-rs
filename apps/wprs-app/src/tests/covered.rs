@@ -113,6 +113,18 @@ fn a_3d_model_is_added_from_the_generic_layer_from_a_file_menu() {
 }
 
 #[test]
+fn package_effects_list_offers_reimport_and_remove() {
+    let files = qml_files();
+    let file = |wanted: &str| files.iter().find(|(n, _)| n == wanted).map(|(_, t)| t.clone()).unwrap();
+    let list = file("SceneEffectsList.qml");
+    assert!(list.contains("model: panel.page.view.package_effects"));
+    assert!(list.contains(r#"onClicked: panel.page.run("remove_effect""#));
+    assert!(list.contains(r#"panel.page.run("import_effect""#));
+    let assets = file("SceneAssets.qml");
+    assert!(assets.contains("SceneEffectsList {"));
+}
+
+#[test]
 fn the_3d_stage_reads_its_models_and_draws_the_bones_over_their_boxes() {
     let files = qml_files();
     let file = |wanted: &str| files.iter().find(|(n, _)| n == wanted).map(|(_, t)| t.clone()).unwrap();

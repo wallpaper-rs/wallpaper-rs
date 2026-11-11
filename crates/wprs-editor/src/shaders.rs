@@ -54,6 +54,41 @@ pub fn import(dir: &Path, doc: &Value, descriptor: &Path, wgsl: Option<&Path>) -
     })
 }
 
+fn users(doc: &Value, id: &str) -> Vec<String> {
+    let mut found: Vec<String> = Vec::new();
+    for (_, layer) in crate::layers::walk(doc) {
+        let layer_id = layer["id"].as_str().unwrap_or_default();
+        let effects = layer["effects"].as_array().into_iter().flatten();
+        let materials = layer["materials"].as_object().into_iter().flatten();
+        let used = effects.filter_map(|e| e["effect"].as_str()).any(|e| e == id)
+            || materials.filter_map(|(_, m)| m["shader"].as_str()).any(|s| s == id);
+        if used {
+            found.push(layer_id.to_owned());
+        }
+    }
+    found.sort();
+    found.dedup();
+    found
+}
+
+pub fn remove(doc: &Value, id: &str) -> Result<Vec<Op>> {
+    let path = format!("/scene/effects/{}", escape(id));
+    ensure!(
+        doc.pointer(&path).is_some(),
+        said("editor.no_package_effect", "%1 is no effect of this package", &[&id])
+    );
+    let users = users(doc, id);
+    ensure!(
+        users.is_empty(),
+        said(
+            "editor.effect_still_used",
+            "%1 is still used by %2; remove it from there first",
+            &[&id, &(users.join(", "))]
+        )
+    );
+    Ok(vec![Op::Remove { path }])
+}
+
 pub fn rule(dir: &Path, doc: &Value, r: &crate::actions::RuleEdit) -> Result<Vec<Op>> {
     let path = format!("/scene/effects/{}", escape(&r.effect));
     let entry = doc.pointer(&path).cloned().ok_or_else(|| {

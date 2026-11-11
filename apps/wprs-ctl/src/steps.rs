@@ -79,16 +79,7 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
         Author::Layers(command) => crate::layering::action(command),
         Author::Keying(command) => crate::keying::action(command),
         Author::Shaping(command) => crate::shaping::action(command),
-        Author::ImportEffect { dir, descriptor, wgsl } => {
-            let wgsl = wgsl.map(|w| fs::canonicalize(&w).unwrap_or(w));
-            (
-                dir,
-                Action::ImportEffect {
-                    descriptor: fs::canonicalize(&descriptor).unwrap_or(descriptor),
-                    wgsl,
-                },
-            )
-        }
+        Author::Shading(command) => crate::shading::action(command),
         Author::ImportScript { dir, file, template } => {
             let file = file.unwrap_or_default();
             let file = if template.is_some() { file } else { fs::canonicalize(&file).unwrap_or(file) };

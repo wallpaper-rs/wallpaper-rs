@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-10 00:00+0000\n"
+"POT-Creation-Date: 2026-11-11 00:00+0000\n"
 "PO-Revision-Date: 2026-11-06 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -175,20 +175,6 @@ msgstr "JSON Pointer del valor que se mueve"
 #: apps/wprs-ctl/src/author.rs
 msgid "JSON Pointer of its new place"
 msgstr "JSON Pointer de su lugar nuevo"
-
-#: apps/wprs-ctl/src/author.rs
-msgid ""
-"Copy an effect descriptor and its WGSL shader into the folder as an effect"
-msgstr ""
-"Copiar un descriptor de efecto y su shader WGSL a la carpeta como efecto"
-
-#: apps/wprs-ctl/src/author.rs
-msgid "The descriptor, a .json file"
-msgstr "El descriptor, un archivo .json"
-
-#: apps/wprs-ctl/src/author.rs
-msgid "The shader; the .wgsl file next to the descriptor when omitted"
-msgstr "El shader; el archivo .wgsl junto al descriptor si se omite"
 
 #: apps/wprs-ctl/src/author.rs
 msgid ""
@@ -1801,7 +1787,7 @@ msgstr ""
 "Imprimir las reglas de activación de un efecto, o cambiar qué pide, qué "
 "espera o a qué cede un parámetro de un efecto del paquete"
 
-#: apps/wprs-ctl/src/flying.rs
+#: apps/wprs-ctl/src/flying.rs apps/wprs-ctl/src/shading.rs
 msgid "Id of the effect"
 msgstr "Id del efecto"
 
@@ -5791,6 +5777,25 @@ msgstr ""
 #: apps/wprs-ctl/src/server.rs
 msgid "Also delete the local copies of the synced records"
 msgstr "Borrar también las copias locales de los registros sincronizados"
+
+#: apps/wprs-ctl/src/shading.rs
+msgid ""
+"Copy an effect descriptor and its WGSL shader into the folder as an effect"
+msgstr ""
+"Copiar un descriptor de efecto y su shader WGSL a la carpeta como efecto"
+
+#: apps/wprs-ctl/src/shading.rs
+msgid "The descriptor, a .json file"
+msgstr "El descriptor, un archivo .json"
+
+#: apps/wprs-ctl/src/shading.rs
+msgid "The shader; the .wgsl file next to the descriptor when omitted"
+msgstr "El shader; el archivo .wgsl junto al descriptor si se omite"
+
+#: apps/wprs-ctl/src/shading.rs
+msgid "Remove an effect of the package; refused while a layer still uses it"
+msgstr ""
+"Quitar un efecto del paquete; se rechaza mientras una capa todavía lo use"
 
 #: apps/wprs-ctl/src/shaping.rs
 msgid "%1 is not ROWS,COLUMNS"

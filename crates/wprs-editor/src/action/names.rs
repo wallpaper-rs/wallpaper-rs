@@ -1,6 +1,6 @@
 pub const EDITOR: &str = "/scene/ext/editor";
 
-pub const ACTIONS: [&str; 62] = [
+pub const ACTIONS: [&str; 63] = [
     "set",
     "add",
     "remove",
@@ -17,6 +17,7 @@ pub const ACTIONS: [&str; 62] = [
     "keyframe",
     "import",
     "import_effect",
+    "remove_effect",
     "import_script",
     "import_assets",
     "asset",

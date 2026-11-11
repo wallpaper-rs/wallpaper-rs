@@ -85,15 +85,8 @@ pub enum Author {
     Keying(crate::keying::Keying),
     #[command(flatten)]
     Shaping(crate::shaping::Shaping),
-    #[command(about = "Copy an effect descriptor and its WGSL shader into the folder as an effect")]
-    ImportEffect {
-        #[arg(help = DIR)]
-        dir: PathBuf,
-        #[arg(help = "The descriptor, a .json file")]
-        descriptor: PathBuf,
-        #[arg(long, help = "The shader; the .wgsl file next to the descriptor when omitted")]
-        wgsl: Option<PathBuf>,
-    },
+    #[command(flatten)]
+    Shading(crate::shading::Shading),
     #[command(about = crate::steps::SCRIPT)]
     ImportScript {
         #[arg(help = DIR)]

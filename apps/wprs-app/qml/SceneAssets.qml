@@ -64,6 +64,10 @@ ColumnLayout {
         page: panel.page
     }
 
+    SceneEffectsList {
+        page: panel.page
+    }
+
     Flow {
         Layout.fillWidth: true
 
@@ -77,12 +81,6 @@ ColumnLayout {
             text: App.tr("Import a sprite sheet or a data map…")
             icon.name: "view-grid"
             onClicked: sheet.open()
-        }
-
-        QQC2.ToolButton {
-            text: App.tr("Import an effect…")
-            icon.name: "special-effects-symbolic"
-            onClicked: shaders.open()
         }
 
         QQC2.ToolButton {
@@ -178,22 +176,4 @@ ColumnLayout {
         })
     }
 
-    FileDialog {
-        id: shaders
-
-        fileMode: FileDialog.OpenFiles
-        nameFilters: [App.tr("An effect descriptor, and its WGSL shader when it is not beside it") + " (*.json *.wgsl)"]
-        onAccepted: {
-            const paths = selectedFiles.map(file => App.path(file));
-            const descriptor = paths.find(path => path.endsWith(".json"));
-            const wgsl = paths.find(path => path.endsWith(".wgsl"));
-            if (descriptor)
-                panel.page.run("import_effect", wgsl ? {
-                    "descriptor": descriptor,
-                    "wgsl": wgsl
-                } : {
-                    "descriptor": descriptor
-                });
-        }
-    }
 }

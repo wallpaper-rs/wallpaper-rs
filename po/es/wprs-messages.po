@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-08 00:00+0000\n"
+"POT-Creation-Date: 2026-11-11 00:00+0000\n"
 "PO-Revision-Date: 2026-10-30 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -742,6 +742,10 @@ msgid "Import an effect"
 msgstr "Importar un efecto"
 
 #: crates/wprs-editor/src/history.rs
+msgid "Remove an effect"
+msgstr "Quitar un efecto"
+
+#: crates/wprs-editor/src/history.rs
 msgid "Import a script"
 msgstr "Importar un script"
 
@@ -1279,6 +1283,10 @@ msgstr "una escena tiene como mucho %1 efectos propios"
 #: crates/wprs-editor/src/shaders.rs
 msgid "%1 is no effect of this package"
 msgstr "%1 no es un efecto de este paquete"
+
+#: crates/wprs-editor/src/shaders.rs
+msgid "%1 is still used by %2; remove it from there first"
+msgstr "%1 todavía lo usa %2; quítalo de ahí primero"
 
 #: crates/wprs-editor/src/shaders.rs
 msgid "%1 has no parameter %2"
