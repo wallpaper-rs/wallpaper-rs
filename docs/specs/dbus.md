@@ -1629,7 +1629,7 @@ Shows a made-up pointer on the wallpaper of `output` instead of the real one, th
 checks `Touch` makes for a real screen (`clicking`, the Plasma shell, the pointer truly being on the
 output): it works on any output, including a `preview:` stream. Only the app, the tray and
 `wprs-ctl` (identified as for `Grant`) may call it; other callers get `AccessDenied`. `wprs-ctl
-inputs touch OUTPUT X,Y [--buttons N]` and `--stop` call it; the app calls it from the canvas while
+input touch OUTPUT X,Y [--buttons N]` and `--stop` call it; the app calls it from the canvas while
 Test the pointer and clicks is on.
 
 ### `Touch(s output, d x, d y, u buttons)`

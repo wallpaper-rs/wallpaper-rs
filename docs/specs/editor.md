@@ -263,7 +263,7 @@ a made-up pointer on it instead of an editing tool: while it is on, moving or pr
 preview calls `SimulateTouch` (`dbus.md`) with the position as fractions of the output and the
 held buttons as a bitmask (1 left, 2 right, 4 middle), so `input.cursor`, `click:`, `enter:` and
 `leave:` can be tried without a real pointer there; turning it off, or the pointer leaving the
-preview, reports it left. `wprs-ctl inputs touch OUTPUT X,Y [--buttons N]` does the same on any
+preview, reports it left. `wprs-ctl input touch OUTPUT X,Y [--buttons N]` does the same on any
 screen, real or `preview:`, and `--stop` ends it.
 
 ## Package details
