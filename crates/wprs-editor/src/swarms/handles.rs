@@ -100,7 +100,6 @@ pub fn heard(dir: &Path, doc: &Value, system: &str, layer: Option<&str>, (t, sou
         "points": spots,
         "emitters": emitters,
         "perspective": s["perspective"],
-        "depth": { "depth": s["init"]["depth"], "speed": s["init"]["depth_speed"] },
         "remaps": looks::remaps(s),
         "inputs": inputs,
         "steady_inputs": steady,

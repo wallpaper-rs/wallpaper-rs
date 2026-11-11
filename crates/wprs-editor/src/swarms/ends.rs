@@ -2,8 +2,10 @@ use anyhow::{Result, anyhow};
 use serde_json::{Map, Value};
 use wprs_core::message::said;
 
-const SPREADS: [&str; 10] =
-    ["life", "speed", "angle", "size", "rotation", "spin", "frame", "color", "alpha", "radial"];
+const SPREADS: [&str; 12] = [
+    "life", "speed", "angle", "size", "rotation", "spin", "frame", "color", "alpha", "radial", "depth",
+    "depth_speed",
+];
 
 pub(super) fn kept(init: &Map<String, Value>, key: &str, given: &Value) -> Result<Value> {
     let Some(list) = given.as_array().filter(|_| SPREADS.contains(&key)) else {

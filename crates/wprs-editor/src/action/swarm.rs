@@ -55,10 +55,6 @@ pub enum ParticleEdit {
         #[serde(default)]
         focal: Option<f64>,
         #[serde(default)]
-        depth: Option<[f64; 2]>,
-        #[serde(default)]
-        depth_speed: Option<[f64; 2]>,
-        #[serde(default)]
         off: bool,
     },
     Layer {

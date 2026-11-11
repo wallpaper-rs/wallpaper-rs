@@ -6694,6 +6694,11 @@ msgid "Add a collider"
 msgstr "Añadir un colisionador"
 
 #: apps/wprs-app/qml/SceneSwarmDepth.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Depth speed"
+msgstr "Velocidad en profundidad"
+
+#: apps/wprs-app/qml/SceneSwarmDepth.qml
 #: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Perspective"
@@ -6703,11 +6708,6 @@ msgstr "Perspectiva"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Focal length"
 msgstr "Distancia focal"
-
-#: apps/wprs-app/qml/SceneSwarmDepth.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Depth speed"
-msgstr "Velocidad en profundidad"
 
 #: apps/wprs-app/qml/SceneSwarmEmission.qml
 msgid "Rate follows keyframes or a link"

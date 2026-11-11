@@ -132,11 +132,20 @@ pub(crate) fn edit(system: String, what: Sowing) -> P {
                 alpha,
                 velocity,
                 radial,
+                depth,
+                depth_speed,
             } = *spread;
             let mut ranges = Map::new();
             let numbers =
                 [("life", life), ("speed", speed), ("angle", angle), ("size", size), ("rotation", rotation)];
-            let more = [("spin", spin), ("frame", frame), ("alpha", alpha), ("radial", radial)];
+            let more = [
+                ("spin", spin),
+                ("frame", frame),
+                ("alpha", alpha),
+                ("radial", radial),
+                ("depth", depth),
+                ("depth_speed", depth_speed),
+            ];
             numbers
                 .into_iter()
                 .chain(more)

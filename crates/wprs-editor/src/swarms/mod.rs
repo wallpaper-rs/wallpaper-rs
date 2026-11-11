@@ -115,8 +115,8 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &ParticleEdit) -> Result<Vec<Op>>
                 ops
             })?
         }
-        ParticleEdit::Perspective { system: s, focal, depth, depth_speed, off } => {
-            looks::perspective(doc, &system(doc, s)?, *focal, (*depth, *depth_speed), *off)
+        ParticleEdit::Perspective { system: s, focal, off } => {
+            looks::perspective(doc, &system(doc, s)?, *focal, *off)
         }
         ParticleEdit::Layer { system: s, emitter, id, threshold, color, inherit, jitter, refresh } => {
             let mut source = json!({ "id": id, "color": color, "inherit": inherit });

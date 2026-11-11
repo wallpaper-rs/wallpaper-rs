@@ -11,7 +11,6 @@ GridLayout {
     readonly property var cut: tools.info?.cutout ?? null
     readonly property var turn: tools.info?.orient ?? ({})
     readonly property var focal: tools.info?.perspective ?? null
-    readonly property var depth: tools.info?.depth ?? ({})
     readonly property var modes: ["screen", "velocity", "fixed"]
 
     columns: 2
@@ -103,6 +102,5 @@ GridLayout {
         Layout.fillWidth: true
         tools: look.tools
         focal: look.focal
-        depth: look.depth
     }
 }

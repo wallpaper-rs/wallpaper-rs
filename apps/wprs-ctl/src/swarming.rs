@@ -57,14 +57,12 @@ pub enum Particle {
         #[arg(long, help = "A particles layer whose own render changes")]
         layer: Option<String>,
     },
-    #[command(about = "Give the particles depth seen with a focal length in pixels")]
+    #[command(
+        about = "Give the particles depth seen with a focal length in pixels; set the depth and its speed with the start command"
+    )]
     Perspective {
         #[arg(help = "Focal length in pixels", allow_negative_numbers = true, long)]
         focal: Option<f64>,
-        #[arg(long, allow_hyphen_values = true, value_name = "MIN,MAX", help = "Starting depth in pixels")]
-        depth: Option<String>,
-        #[arg(long, allow_hyphen_values = true, value_name = "MIN,MAX", help = "Pixels a second")]
-        depth_speed: Option<String>,
         #[arg(long, help = "Remove the perspective and the depths")]
         off: bool,
     },

@@ -42,11 +42,7 @@ fn edit(system: String, what: Particle) -> P {
         Particle::Orient { orient, angle, layer } => {
             P::Orient { system, layer: layered(layer), orient: parsed(&orient), angle }
         }
-        Particle::Perspective { focal, depth, depth_speed, off } => {
-            let (depth, depth_speed) =
-                (depth.as_deref().and_then(pair), depth_speed.as_deref().and_then(pair));
-            P::Perspective { system, focal, depth, depth_speed, off }
-        }
+        Particle::Perspective { focal, off } => P::Perspective { system, focal, off },
         Particle::EmitFromLayer { emitter, layer, threshold, color, inherit, jitter, refresh } => {
             let refresh = refresh.as_deref().and_then(parsed);
             P::Layer { system, emitter, id: layer, threshold, color, inherit, jitter, refresh }

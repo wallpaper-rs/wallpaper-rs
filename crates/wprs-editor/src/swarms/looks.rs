@@ -38,13 +38,7 @@ pub(super) fn remap(
     }
 }
 
-pub(super) fn perspective(
-    doc: &Value,
-    sys: &str,
-    focal: Option<f64>,
-    (depth, speed): (Option<[f64; 2]>, Option<[f64; 2]>),
-    off: bool,
-) -> Vec<Op> {
+pub(super) fn perspective(doc: &Value, sys: &str, focal: Option<f64>, off: bool) -> Vec<Op> {
     let at = |k: &str| format!("{sys}/{k}");
     if off {
         return ["perspective", "init/depth", "init/depth_speed"]
@@ -57,8 +51,6 @@ pub(super) fn perspective(
     if focal.is_none() && doc.pointer(&at("perspective")).is_none() {
         ops.extend(set(doc, &at("perspective"), json!({ "focal": 800 })));
     }
-    depth.iter().for_each(|d| ops.extend(set(doc, &at("init/depth"), json!(d))));
-    speed.iter().for_each(|d| ops.extend(set(doc, &at("init/depth_speed"), json!(d))));
     ops
 }
 

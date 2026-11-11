@@ -57,6 +57,10 @@ pub struct Spread {
     pub velocity: Option<[[f64; 2]; 2]>,
     #[arg(long, value_name = RANGE, value_parser = range, allow_hyphen_values = true, help = "Pixels a second away from the center of the emitter")]
     pub radial: Option<Value>,
+    #[arg(long, value_name = RANGE, value_parser = range, allow_hyphen_values = true, help = "Pixels of depth, with perspective")]
+    pub depth: Option<Value>,
+    #[arg(long, value_name = RANGE, value_parser = range, allow_hyphen_values = true, help = "Pixels of depth a second, with perspective")]
+    pub depth_speed: Option<Value>,
 }
 
 #[derive(Subcommand, Debug)]

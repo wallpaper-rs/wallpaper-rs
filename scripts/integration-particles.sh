@@ -21,7 +21,8 @@ if ctl scene particles "$draft" dust remap add '{"input": "weather", "in": [0, 1
 fi
 ctl scene particles "$draft" dust cutout 0.3,0.7,0.9 || fail "the alpha was not cut out"
 ctl scene particles "$draft" dust orient fixed --angle 30 || fail "the sprites were not turned"
-ctl scene particles "$draft" dust perspective --focal 600 --depth 0,300 --depth-speed -10,10 || fail "no depth was given"
+ctl scene particles "$draft" dust perspective --focal 600 || fail "no focal length was set"
+ctl scene particles "$draft" dust start --depth 0,300,2 --depth-speed -10,10 || fail "no depth was given"
 ctl scene set "$draft" /scene/particles/spark '{"capacity": 10, "emitters": [{"shape": {"point": [0, 0]}}]}'
 ctl scene set "$draft" /scene/particles/dust/children '[{"system": "spark", "on": "follow"}]'
 ctl scene particles "$draft" dust inherit 0 color size --follow || fail "the child took nothing from its parent"

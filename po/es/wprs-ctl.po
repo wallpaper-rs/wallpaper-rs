@@ -1412,7 +1412,6 @@ msgid "How far apart particles born together read the noise"
 msgstr "Qué tan separadas leen el ruido las partículas que nacen juntas"
 
 #: apps/wprs-ctl/src/fielding.rs apps/wprs-ctl/src/sowing.rs
-#: apps/wprs-ctl/src/swarming.rs
 msgid "Pixels a second"
 msgstr "Píxeles por segundo"
 
@@ -5871,6 +5870,14 @@ msgid "Pixels a second away from the center of the emitter"
 msgstr "Píxeles por segundo alejándose del centro del emisor"
 
 #: apps/wprs-ctl/src/sowing.rs
+msgid "Pixels of depth, with perspective"
+msgstr "Píxeles de profundidad, con perspectiva"
+
+#: apps/wprs-ctl/src/sowing.rs
+msgid "Pixels of depth a second, with perspective"
+msgstr "Píxeles de profundidad por segundo, con perspectiva"
+
+#: apps/wprs-ctl/src/sowing.rs
 msgid ""
 "Create the system without a layer, from the default or as a copy, to start "
 "it from another system or draw it later"
@@ -6376,17 +6383,16 @@ msgid "Degrees on the screen, with fixed"
 msgstr "Grados en la pantalla, con fixed"
 
 #: apps/wprs-ctl/src/swarming.rs
-msgid "Give the particles depth seen with a focal length in pixels"
+msgid ""
+"Give the particles depth seen with a focal length in pixels; set the depth "
+"and its speed with the start command"
 msgstr ""
-"Dar profundidad a las partículas vista con una distancia focal en píxeles"
+"Dar profundidad a las partículas vista con una distancia focal en píxeles; "
+"la profundidad y su velocidad se ajustan con la orden start"
 
 #: apps/wprs-ctl/src/swarming.rs
 msgid "Focal length in pixels"
 msgstr "Distancia focal en píxeles"
-
-#: apps/wprs-ctl/src/swarming.rs
-msgid "Starting depth in pixels"
-msgstr "Profundidad inicial en píxeles"
 
 #: apps/wprs-ctl/src/swarming.rs
 msgid "Remove the perspective and the depths"
