@@ -19,8 +19,8 @@ pub(crate) fn picture(doc: &Value, id: &str) -> Result<()> {
 pub(crate) fn lit_layer<'a>(doc: &'a Value, id: &str) -> Result<(String, &'a Value)> {
     let (path, layer) = crate::actions::layer(doc, id)?;
     ensure!(
-        matches!(layer["type"].as_str(), Some("image" | "video" | "text")),
-        said("editor.lighting_kind", "lighting is for image, video and text layers", &[])
+        matches!(layer["type"].as_str(), Some("image" | "video" | "text" | "mesh" | "model")),
+        said("editor.lighting_kind", "lighting is for image, video, text, mesh and model layers", &[])
     );
     Ok((path, layer))
 }
@@ -38,8 +38,12 @@ pub(crate) fn lighting(doc: &Value, e: &LightingEdit) -> Result<Vec<Op>> {
     let (path, layer) = crate::actions::layer(doc, &e.layer)?;
     let kind = layer["type"].as_str();
     ensure!(
-        matches!(kind, Some("image" | "video" | "text" | "particles")),
-        said("editor.lighting_kinds", "lighting is for image, video, text and particles layers", &[])
+        matches!(kind, Some("image" | "video" | "text" | "mesh" | "model" | "particles")),
+        said(
+            "editor.lighting_kinds",
+            "lighting is for image, video, text, mesh, model and particles layers",
+            &[]
+        )
     );
     if kind == Some("particles") {
         sprites(e)?;

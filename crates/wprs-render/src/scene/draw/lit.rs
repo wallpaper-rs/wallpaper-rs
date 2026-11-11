@@ -9,7 +9,14 @@ impl Painter<'_, '_, '_> {
     pub(crate) fn lit(&self, i: usize) -> bool {
         let d = &self.frame.draws[i];
         d.lit.is_some()
-            && matches!(d.content, Content::Image { .. } | Content::Video { .. } | Content::Text { .. })
+            && matches!(
+                d.content,
+                Content::Image { .. }
+                    | Content::Video { .. }
+                    | Content::Text { .. }
+                    | Content::Mesh { .. }
+                    | Content::Model { .. }
+            )
     }
 
     pub(crate) fn baking(&self, i: usize) -> bool {

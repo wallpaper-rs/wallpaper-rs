@@ -1,5 +1,6 @@
 mod halos;
 mod kit;
+mod lit;
 mod motion;
 mod moving;
 mod parts;

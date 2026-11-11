@@ -35,7 +35,12 @@ impl Check<'_> {
         self.uses(true, "lighting2d");
         let lit = matches!(
             layer.kind,
-            Kind::Image { .. } | Kind::Video { .. } | Kind::Text(_) | Kind::Particles { .. }
+            Kind::Image { .. }
+                | Kind::Video { .. }
+                | Kind::Text(_)
+                | Kind::Particles { .. }
+                | Kind::Mesh(_)
+                | Kind::Model(_)
         );
         if !lit {
             self.issues.push(Issue::Type(format!("{p}/lighting")));

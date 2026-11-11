@@ -9,7 +9,7 @@ ColumnLayout {
 
     required property var page
     required property var node
-    readonly property bool takes: ["image", "video", "text", "particles"].includes(node?.type ?? "")
+    readonly property bool takes: ["image", "video", "text", "mesh", "model", "particles"].includes(node?.type ?? "")
     readonly property bool sprites: node?.type === "particles"
     readonly property var block: takes ? JSON.parse(page.editor.value(node.pointer + "/lighting") || "null") : null
     readonly property var pictures: [""].concat((page.view.assets ?? []).filter(a => a.kind === "image").map(a => a.id))
