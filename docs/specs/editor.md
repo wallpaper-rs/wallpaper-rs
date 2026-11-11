@@ -708,6 +708,12 @@ media player. The document of a preview may carry `preview: { quality, restart, 
 daemon reads only for previews; `media` is refused, naming the field, when a value is out of
 range, and never reads the media players or needs the `media` grant.
 
+The lines its scripts pass to `console.log` and the kind, and the error of a script or layer that
+stopped, are part of `GetState().outputs[OUTPUT]` (`console`, `error`); the Problems panel shows
+them under Script console while the preview is on, and `wprs-ctl scene preview DIR --console`
+prints them as they change, along with the error, until stopped (Ctrl-C, or another `scene
+preview` on the same output).
+
 The canvas draws the outline of each layer with handles to turn, scale, tilt in depth
 (`transform.tilt`, a round handle on the left edge: up and down tilt around the width, sideways
 around the height) and lift (`transform.z`, a diamond below) the selected one, a dashed outline of

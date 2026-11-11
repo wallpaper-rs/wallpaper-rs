@@ -14,6 +14,7 @@ pub mod cli;
 mod clipkey;
 mod clipping;
 mod consent;
+mod console;
 mod cropping;
 mod daemon;
 mod depth;

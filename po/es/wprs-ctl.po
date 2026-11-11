@@ -1900,6 +1900,14 @@ msgid "Start the particle systems and the scene again"
 msgstr "Volver a empezar los sistemas de partículas y la escena"
 
 #: apps/wprs-ctl/src/folder.rs
+msgid ""
+"Print the console of its scripts and report its error as they change, until "
+"stopped"
+msgstr ""
+"Mostrar la consola de sus scripts e informar su error a medida que cambian, "
+"hasta que se detenga"
+
+#: apps/wprs-ctl/src/folder.rs
 msgid "Build the scene into the library and show it on an output"
 msgstr "Construir la escena en la biblioteca y mostrarla en una salida"
 

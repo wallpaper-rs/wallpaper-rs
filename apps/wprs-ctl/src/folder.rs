@@ -62,6 +62,8 @@ pub enum Folder {
         restart: bool,
         #[arg(long, value_name = "FILE", help = crate::media::MEDIA)]
         media: Option<PathBuf>,
+        #[arg(long, conflicts_with = "stop", help = "Print the console of its scripts and report its error as they change, until stopped")]
+        console: bool,
         #[command(flatten)]
         span: crate::spanning::Span,
     },
@@ -141,7 +143,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
         Folder::Preview { dir, span: span @ crate::spanning::Span { layout: Some(_), .. }, time, .. } => {
             crate::spanning::preview(&dir, &span, (time >= 0.0).then_some(time))?
         }
-        Folder::Preview { dir, output, time, stop, quality, restart, media, .. } => {
+        Folder::Preview { dir, output, time, stop, quality, restart, media, console, .. } => {
             let project = Project::open(&dir)?;
             let mut document = json!({"manifest": project.doc["manifest"], "scene": visible(&project.doc)});
             let nonce = restart.then(|| std::time::UNIX_EPOCH.elapsed().map_or(1, |d| d.as_millis() as u64));
@@ -153,9 +155,12 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             let (dir, document) = (fs::canonicalize(&dir)?, if stop { String::new() } else { document });
             let path = dir.to_str().context("the path is not UTF-8")?.to_owned();
             runtime()?.block_on(async {
-                Ok::<_, anyhow::Error>(
-                    Client::connect().await?.daemon.preview_scene(&output, &path, &document, time).await?,
-                )
+                let client = Client::connect().await?;
+                client.daemon.preview_scene(&output, &path, &document, time).await?;
+                if console {
+                    crate::console::watch(&client, &output).await?;
+                }
+                Ok::<_, anyhow::Error>(())
             })?;
         }
         Folder::Apply { dir, output, span } => {
