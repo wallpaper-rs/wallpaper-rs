@@ -61,6 +61,40 @@ fn layer_sources_list_only_layers_that_may_feed_the_system_and_show_their_pixels
 }
 
 #[test]
+fn layer_sources_sample_real_pixels_from_a_mesh_a_text_and_a_group_layer() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    act(&mut p, json!({ "mesh_from_picture": { "image": "pic", "cells": 8, "id": "net" } })).unwrap();
+    edit(&mut p, "layer", json!({ "emitter": 0, "id": "net", "threshold": 0.5 })).unwrap();
+    let mesh = &handles(&p)["emitters"][0];
+    let mesh_samples = mesh["samples"].as_array().unwrap();
+    assert!(!mesh_samples.is_empty() && mesh.get("approximate").is_none(), "{mesh}");
+    assert!(
+        mesh_samples.iter().all(|s| (940.0..961.0).contains(&s[0].as_f64().unwrap())),
+        "only the opaque left half of the mesh texture"
+    );
+    let label = json!({ "id": "label", "type": "text", "text": "Hi", "size": 64,
+        "transform": { "position": [960, 540] } });
+    act(&mut p, json!({ "add": { "pointer": "/scene/layers/-", "value": label } })).unwrap();
+    edit(&mut p, "layer", json!({ "emitter": 0, "id": "label", "threshold": 0.3 })).unwrap();
+    let text = &handles(&p)["emitters"][0];
+    assert!(!text["samples"].as_array().unwrap().is_empty() && text.get("approximate").is_none(), "{text}");
+    let clock = json!({ "id": "clock", "type": "text", "text": { "clock": "HH:mm" }, "size": 64 });
+    act(&mut p, json!({ "add": { "pointer": "/scene/layers/-", "value": clock } })).unwrap();
+    edit(&mut p, "layer", json!({ "emitter": 0, "id": "clock" })).unwrap();
+    assert_eq!(handles(&p)["emitters"][0]["approximate"], json!(true), "a dynamic clock stays approximate");
+    act(&mut p, json!({ "group": { "ids": ["logo"], "id": "pack" } })).unwrap();
+    edit(&mut p, "layer", json!({ "emitter": 0, "id": "pack", "threshold": 0.5 })).unwrap();
+    let grouped = &handles(&p)["emitters"][0];
+    let grouped_samples = grouped["samples"].as_array().unwrap();
+    assert!(!grouped_samples.is_empty() && grouped.get("approximate").is_none(), "{grouped}");
+    assert!(
+        grouped_samples.iter().all(|s| (940.0..961.0).contains(&s[0].as_f64().unwrap())),
+        "only the opaque left half, read through the group"
+    );
+}
+
+#[test]
 fn pulls_show_their_center_and_rings_where_the_preview_draws_them() {
     let root = tempfile::tempdir().unwrap();
     let mut p = project(&root);

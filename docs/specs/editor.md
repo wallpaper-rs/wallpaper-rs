@@ -455,8 +455,9 @@ corners of a box and the center and radius of a circle, around the control point
 the ends of a line; for `around`, the center, a handle for the radius and one for the end of the
 arc, with a dot at each place a birth takes; for `between`, its two ends, a handle that bows the
 line and one that slides the widest point of the taper, with dots sized as the taper sizes them;
-for `layer`, the outline of the layer and the pixels above the threshold of an image layer, or
-only its outline for other layers), the control points `p0` to `p7` as markers to drag, and a ring
+for `layer`, the outline of the layer and the pixels above the threshold of an image, mesh, text
+or group layer, or only its outline where none can be read (a model layer, or dynamic text such as
+a clock), the control points `p0` to `p7` as markers to drag, and a ring
 whose handle sets the focal length of the perspective. A turbulent start draws, from the middle of
 the first emitter, a fan of the directions the noise may give, the exact directions of the first
 particles born now with the seed the preview runs (`clock.seed`, or while it is `null` one seed the

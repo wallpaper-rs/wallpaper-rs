@@ -1,5 +1,23 @@
+use image::RgbaImage;
 use serde_json::{Value, json};
 use std::path::Path;
+
+fn solid(image: &RgbaImage, threshold: f64, place: impl Fn(f64, f64) -> [f64; 2]) -> Value {
+    let (w, h) = (f64::from(image.width()), f64::from(image.height()));
+    json!(
+        image
+            .enumerate_pixels()
+            .filter(|(_, _, p)| f64::from(p.0[3]) / 255.0 > threshold)
+            .map(|(x, y, _)| place((f64::from(x) + 0.5) / w, (f64::from(y) + 0.5) / h))
+            .collect::<Vec<_>>()
+    )
+}
+
+fn pixels(dir: &Path, doc: &Value, layer: &Value, field: &str, t: f64) -> Option<RgbaImage> {
+    let asset = crate::keys::value_at(&layer[field], t);
+    let path = asset.as_str().and_then(|a| doc["scene"]["assets"][a]["path"].as_str())?;
+    crate::pictures::open(dir.join(path)).ok().map(|p| p.thumbnail(48, 48).to_rgba8())
+}
 
 pub(super) fn samples(dir: &Path, doc: &Value, v: &Value, t: f64) -> Value {
     let id = v["id"].as_str().unwrap_or_default();
@@ -16,20 +34,40 @@ pub(super) fn samples(dir: &Path, doc: &Value, v: &Value, t: f64) -> Value {
     };
     out["outline"] = json!([place(0.0, 0.0), place(1.0, 0.0), place(1.0, 1.0), place(0.0, 1.0)]);
     let layer = crate::actions::layer(doc, id).map(|(_, l)| l.clone()).unwrap_or_default();
-    let asset = crate::keys::value_at(&layer["image"], t);
-    let path = asset.as_str().and_then(|a| doc["scene"]["assets"][a]["path"].as_str()).map(|p| dir.join(p));
-    let Some(picture) = path.filter(|_| layer["type"] == "image").and_then(|p| crate::pictures::open(p).ok())
-    else {
-        out["approximate"] = json!(true);
+    if layer["type"] == "group" {
+        let kids = doc.pointer(&format!("{}/layers", g.pointer)).and_then(Value::as_array);
+        let kids = kids.cloned().unwrap_or_default();
+        let mut approximate = kids.is_empty();
+        let mut all = Vec::new();
+        for kid in &kids {
+            let Some(kid_id) = kid["id"].as_str() else { continue };
+            let sampled = samples(dir, doc, &json!({ "id": kid_id, "threshold": threshold }), t);
+            approximate |= sampled["approximate"] == true;
+            all.extend(sampled["samples"].as_array().into_iter().flatten().cloned());
+        }
+        out["samples"] = json!(all);
+        if approximate {
+            out["approximate"] = json!(true);
+        }
         return out;
+    }
+    let field = match layer["type"].as_str().unwrap_or_default() {
+        "image" => "image",
+        "mesh" => "texture",
+        _ => "",
     };
-    let small = picture.thumbnail(48, 48).to_rgba8();
-    let (sw, sh) = (f64::from(small.width()), f64::from(small.height()));
-    let solid = small.enumerate_pixels().filter(|(_, _, p)| f64::from(p.0[3]) / 255.0 > threshold);
-    out["samples"] = json!(
-        solid
-            .map(|(x, y, _)| place((f64::from(x) + 0.5) / sw, (f64::from(y) + 0.5) / sh))
-            .collect::<Vec<_>>()
-    );
+    if let Some(image) = (!field.is_empty()).then(|| pixels(dir, doc, &layer, field, t)).flatten() {
+        out["samples"] = solid(&image, threshold, place);
+        return out;
+    }
+    let text = (layer["type"] == "text")
+        .then(|| crate::keys::value_at(&layer["text"], t).as_str().map(str::to_owned))
+        .flatten();
+    let font = layer["font"].as_str().unwrap_or("");
+    if let Some(image) = text.and_then(|s| super::glyphs::raster(dir, doc, font, &s)) {
+        out["samples"] = solid(&image, threshold, place);
+        return out;
+    }
+    out["approximate"] = json!(true);
     out
 }
