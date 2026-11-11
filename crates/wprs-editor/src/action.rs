@@ -16,7 +16,7 @@ mod swarm;
 mod tend;
 mod timing;
 pub use lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, NormalsMake};
-pub use limbs::{AttachEdit, BodyEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit};
+pub use limbs::{AttachEdit, BodyEdit, BoneRuleEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit};
 pub use marks::{CanvasEdit, LayerEdit, ManifestEdit, PropertyEdit};
 pub use motion::{AnimEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use names::{
@@ -172,6 +172,7 @@ pub enum Action {
     Expression(ExpressionEdit),
     Ik(IkEdit),
     Physics(BodyEdit),
+    BoneRule(BoneRuleEdit),
     Wind(WindEdit),
     Attach(AttachEdit),
     Point(PointEdit),

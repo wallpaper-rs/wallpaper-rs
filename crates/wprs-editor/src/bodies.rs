@@ -1,9 +1,9 @@
-use crate::action::BodyEdit;
+use crate::action::{BodyEdit, BoneRuleEdit};
 use crate::clips::num;
-use crate::limbs::{joint, joints, listed};
+use crate::limbs::{Joints, joint, joints, listed};
 use crate::ops::Op;
 use crate::skin::Skin;
-use anyhow::{Result, ensure};
+use anyhow::{Result, anyhow, bail, ensure};
 use serde_json::{Map, Value, json};
 use std::path::Path;
 use wprs_core::message::said;
@@ -109,4 +109,54 @@ pub(crate) fn physics(dir: &Path, doc: &Value, b: &BodyEdit) -> Result<Vec<Op>> 
     );
     ops.extend(listed(doc, &format!("{path}/physics"), list));
     Ok(ops)
+}
+
+fn tune_rule(e: &mut Value, r: &BoneRuleEdit, j: &Joints) -> Result<()> {
+    if let Some(b) = &r.bone {
+        joint(j, b)?;
+        e["bone"] = json!(b);
+    }
+    if let Some(p) = &r.parent {
+        joint(j, p)?;
+        e["parent"] = json!(p);
+    }
+    ensure!(
+        e["bone"] != e["parent"],
+        said("editor.rule_self", "a rule names a different bone and parent", &[])
+    );
+    if let Some(w) = r.weight {
+        ensure!(
+            w.is_finite() && (0.0..=1.0).contains(&w),
+            said("editor.rule_weight", "a rule weighs from 0 to 1", &[])
+        );
+        e["weight"] = num(w);
+    }
+    Ok(())
+}
+
+pub(crate) fn rule(dir: &Path, doc: &Value, r: &BoneRuleEdit) -> Result<Vec<Op>> {
+    let (path, layer) = crate::actions::layer(doc, &r.layer)?;
+    let j = joints(dir, doc, layer)?;
+    let mut list = layer["rules"].as_array().cloned().unwrap_or_default();
+    let n = list.len();
+    let no = |i: usize| anyhow!(said("editor.no_rule", "there is no rule %1", &[&i]));
+    match r.index {
+        Some(i) if i >= n => return Err(no(i)),
+        Some(i) if r.remove => drop(list.remove(i)),
+        Some(i) => tune_rule(&mut list[i], r, &j)?,
+        None if r.remove => bail!(said("editor.rule_which", "say which rule changes", &[])),
+        None => {
+            ensure!(
+                n < MAX_BODIES,
+                said("editor.rules_most", "a mesh has at most %1 rules", &[&MAX_BODIES])
+            );
+            let (Some(bone), Some(parent)) = (&r.bone, &r.parent) else {
+                bail!(said("editor.rule_ends", "a new rule names its bone and its new parent", &[]))
+            };
+            let mut e = json!({ "bone": bone, "parent": parent });
+            tune_rule(&mut e, r, &j)?;
+            list.push(e);
+        }
+    }
+    Ok(listed(doc, &format!("{path}/rules"), list))
 }

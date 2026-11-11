@@ -52,6 +52,8 @@ pub enum Limbing {
     },
     #[command(flatten)]
     Marking(crate::marking::Marking),
+    #[command(flatten)]
+    Ruling(crate::ruling::Ruling),
     #[command(about = "Order, hide, show and cut the parts of a mesh layer to show only over another part")]
     Parts {
         #[arg(help = DIR)]
@@ -175,6 +177,7 @@ pub(crate) fn action(command: Limbing) -> Result<(PathBuf, Action), Box<Author>>
             (dir, Action::Wind(WindEdit { angle, strength, gusts, off }))
         }
         Limbing::Marking(command) => crate::marking::action(command),
+        Limbing::Ruling(command) => crate::ruling::action(command),
         Limbing::Parts { dir, layer, order, hide, show, clip, unclip, depth_scale, cull, sort, flat } => {
             let on = |v: Option<String>| v.map(|v| v == "on");
             let (cull, sort) = (on(cull), on(sort));

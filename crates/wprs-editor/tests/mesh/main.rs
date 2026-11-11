@@ -10,6 +10,7 @@ mod pins;
 mod points;
 mod refs;
 mod revisions;
+mod rules;
 mod scoped;
 mod seen;
 mod shapes;

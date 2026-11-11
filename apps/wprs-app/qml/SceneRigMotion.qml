@@ -11,6 +11,7 @@ ColumnLayout {
     readonly property var names: host.bones.map(b => b.name)
     readonly property var chains: (revision, listed("/ik", []))
     readonly property var bodies: (revision, listed("/physics", []))
+    readonly property var rules: (revision, listed("/rules", []))
     readonly property var touched: (revision, listed("/hit", []))
     readonly property var depth: (revision, listed("/depth", null))
     readonly property var points: (host.info.points ?? []).map(p => p.name)
@@ -71,6 +72,11 @@ ColumnLayout {
     }
 
     SceneRigTouch {
+        Layout.fillWidth: true
+        owner: motion
+    }
+
+    SceneRigRules {
         Layout.fillWidth: true
         owner: motion
     }

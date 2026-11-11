@@ -13,10 +13,10 @@ pub use crate::action::{
     UpgradeEdit,
 };
 pub use crate::action::{
-    AmbientEdit, AttachEdit, AutoWeights, BodyEdit, BoneEdit, ClipEdit, ClipKey, DepthSet, DepthStroke,
-    ExpressionEdit, IkEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, MaskStroke, MeshCut,
-    NormalsMake, ParticleEdit, PartsEdit, PointEdit, Response, SowEdit, Spot, Strand, SwarmLight, TendEdit,
-    WeightStroke, WindEdit,
+    AmbientEdit, AttachEdit, AutoWeights, BodyEdit, BoneEdit, BoneRuleEdit, ClipEdit, ClipKey, DepthSet,
+    DepthStroke, ExpressionEdit, IkEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, MaskStroke,
+    MeshCut, NormalsMake, ParticleEdit, PartsEdit, PointEdit, Response, SowEdit, Spot, Strand, SwarmLight,
+    TendEdit, WeightStroke, WindEdit,
 };
 pub use crate::action::{AnimEdit, EffectsEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use crate::action::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, TonesEdit, ViewEdit};

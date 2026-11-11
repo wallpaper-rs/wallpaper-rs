@@ -451,6 +451,30 @@ msgstr "el hueso «%1» no se balancea"
 msgid "a mesh has at most %1 swinging bones"
 msgstr "una malla tiene como mucho %1 huesos que se balancean"
 
+#: crates/wprs-editor/src/bodies.rs
+msgid "a rule names a different bone and parent"
+msgstr "una regla nombra un hueso y un padre distintos"
+
+#: crates/wprs-editor/src/bodies.rs
+msgid "a rule weighs from 0 to 1"
+msgstr "una regla pesa de 0 a 1"
+
+#: crates/wprs-editor/src/bodies.rs
+msgid "there is no rule %1"
+msgstr "no hay ninguna regla %1"
+
+#: crates/wprs-editor/src/bodies.rs
+msgid "say which rule changes"
+msgstr "indica qué regla cambia"
+
+#: crates/wprs-editor/src/bodies.rs
+msgid "a mesh has at most %1 rules"
+msgstr "una malla tiene como mucho %1 reglas"
+
+#: crates/wprs-editor/src/bodies.rs
+msgid "a new rule names its bone and its new parent"
+msgstr "una regla nueva nombra su hueso y su nuevo padre"
+
 #: crates/wprs-editor/src/bring.rs
 msgid "upgrade the scene to the second version before importing parts"
 msgstr "pasa la escena a la segunda versión antes de importar partes"

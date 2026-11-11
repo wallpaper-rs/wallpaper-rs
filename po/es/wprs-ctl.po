@@ -3133,7 +3133,7 @@ msgstr "Dejar que un hueso gire libre otra vez"
 msgid "Which way the joints of the chain bend"
 msgstr "Hacia qué lado se doblan las articulaciones de la cadena"
 
-#: apps/wprs-ctl/src/limbing.rs
+#: apps/wprs-ctl/src/limbing.rs apps/wprs-ctl/src/ruling.rs
 msgid "How much it moves the pose, from 0 to 1"
 msgstr "Cuánto mueve la pose, de 0 a 1"
 
@@ -5268,6 +5268,50 @@ msgid ""
 msgstr ""
 "Imprimir cada vértice de una capa de malla con su lugar, su parte y sus "
 "pesos de hueso como JSON"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid ""
+"Add, change or remove a rule that hands a bone of a mesh or model layer to "
+"another parent, keeping its pose"
+msgstr ""
+"Añadir, cambiar o quitar una regla que pasa un hueso de una capa de malla o "
+"de modelo a otro padre, manteniendo su pose"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "A new rule handing BONE to PARENT"
+msgstr "Una regla nueva que pasa HUESO a PADRE"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "The bone that is handed over"
+msgstr "El hueso que se pasa"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "Its new parent"
+msgstr "Su nuevo padre"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "How much it moves the pose, from 0 to 1, 1 by default"
+msgstr "Cuánto mueve la pose, de 0 a 1, 1 por defecto"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "Change rule N, 0 first"
+msgstr "Cambiar la regla N, 0 la primera"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "The rule, 0 first"
+msgstr "La regla, 0 la primera"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "Another bone to hand over"
+msgstr "Otro hueso para pasar"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "Another parent for it"
+msgstr "Otro padre para él"
+
+#: apps/wprs-ctl/src/ruling.rs
+msgid "Remove rule N, 0 first"
+msgstr "Quitar la regla N, 0 la primera"
 
 #: apps/wprs-ctl/src/scoped.rs
 msgid ""

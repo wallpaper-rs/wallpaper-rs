@@ -60,6 +60,22 @@ pub struct BodyEdit {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
+pub struct BoneRuleEdit {
+    pub layer: String,
+    #[serde(default)]
+    pub index: Option<usize>,
+    #[serde(default)]
+    pub bone: Option<String>,
+    #[serde(default)]
+    pub parent: Option<String>,
+    #[serde(default)]
+    pub weight: Option<f32>,
+    #[serde(default)]
+    pub remove: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct WindEdit {
     #[serde(default)]
     pub angle: Option<f32>,

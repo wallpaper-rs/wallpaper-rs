@@ -67,6 +67,7 @@ pub mod repo;
 mod rgb;
 mod rigging;
 mod rigshow;
+mod ruling;
 mod scoped;
 mod seeding;
 pub mod server;

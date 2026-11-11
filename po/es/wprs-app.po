@@ -1569,8 +1569,9 @@ msgstr "Bajar"
 #: apps/wprs-app/qml/SceneLayerTools.qml apps/wprs-app/qml/SceneModelSwing.qml
 #: apps/wprs-app/qml/ScenePairs.qml apps/wprs-app/qml/SceneProperties.qml
 #: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneRigPhysics.qml
-#: apps/wprs-app/qml/SceneRigRow.qml apps/wprs-app/qml/SceneSettingMenu.qml
-#: apps/wprs-app/qml/SceneShapes.qml apps/wprs-app/qml/SceneSwarmPoints.qml
+#: apps/wprs-app/qml/SceneRigRow.qml apps/wprs-app/qml/SceneRigRules.qml
+#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneShapes.qml
+#: apps/wprs-app/qml/SceneSwarmPoints.qml
 #: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
 msgid "Remove"
 msgstr "Quitar"
@@ -3712,7 +3713,7 @@ msgid "Adds"
 msgstr "Suma"
 
 #: apps/wprs-app/qml/SceneAnimLayers.qml apps/wprs-app/qml/SceneRigIk.qml
-#: apps/wprs-app/qml/facade/SceneLabels.qml
+#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Weight"
 msgstr "Peso"
 
@@ -6135,6 +6136,31 @@ msgstr ""
 msgid "Simulate"
 msgstr "Simular"
 
+#: apps/wprs-app/qml/SceneRigRules.qml
+msgid "Rules that hand a bone to another parent"
+msgstr "Reglas que pasan un hueso a otro padre"
+
+#: apps/wprs-app/qml/SceneRigRules.qml
+msgid "%1 to %2"
+msgstr "%1 a %2"
+
+#: apps/wprs-app/qml/SceneRigRules.qml
+msgid "New parent"
+msgstr "Nuevo padre"
+
+#: apps/wprs-app/qml/SceneRigRules.qml
+msgid "New rule"
+msgstr "Regla nueva"
+
+#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Bone"
+msgstr "Hueso"
+
+#: apps/wprs-app/qml/SceneRigRules.qml
+msgid "Add a rule"
+msgstr "Añadir una regla"
+
 #: apps/wprs-app/qml/SceneRigTouch.qml apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Bones that take the pointer"
 msgstr "Huesos que reciben el puntero"
@@ -6158,11 +6184,6 @@ msgstr "Ocultar las partes vistas por detrás"
 #: apps/wprs-app/qml/SceneRigWeights.qml
 msgid "Paint weights on the preview"
 msgstr "Pintar los pesos sobre la vista previa"
-
-#: apps/wprs-app/qml/SceneRigWeights.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Bone"
-msgstr "Hueso"
 
 #: apps/wprs-app/qml/SceneRigWeights.qml
 msgid "Brush"
