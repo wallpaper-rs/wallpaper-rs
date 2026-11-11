@@ -15,6 +15,7 @@ pub mod qobject {
         #[qproperty(QString, selected)]
         #[qproperty(QString, error)]
         #[qproperty(QString, output)]
+        #[qproperty(QString, placed)]
         #[qproperty(QString, look)]
         #[qproperty(u32, node)]
         #[qproperty(f64, serial)]
@@ -69,6 +70,8 @@ pub mod qobject {
         #[qinvokable]
         fn cover(self: Pin<&mut SceneEditor>, covered: bool);
         #[qinvokable]
+        fn simulate_media(self: Pin<&mut SceneEditor>, file: &QString);
+        #[qinvokable]
         fn preview(self: Pin<&mut SceneEditor>, live: bool);
         #[qinvokable]
         fn folder_for(self: &SceneEditor, name: &QString) -> QString;
@@ -98,6 +101,7 @@ pub struct SceneEditorRust {
     pub selected: QString,
     pub error: QString,
     pub output: QString,
+    pub placed: QString,
     pub look: QString,
     pub node: u32,
     pub serial: f64,
@@ -175,11 +179,6 @@ impl SceneEditor {
     pub fn scripts(&self, id: &QString) -> QString {
         let found = self.project.as_ref().map(|p| references::scripts(&p.dir, &p.doc, &id.to_string()));
         QString::from(&serde_json::to_string(&found.unwrap_or_default()).unwrap_or_default())
-    }
-
-    pub fn count(&self, pointer: &QString) -> i32 {
-        let list = self.project.as_ref().and_then(|p| p.doc.pointer(&pointer.to_string())?.as_array());
-        list.map_or(-1, |n| n.len() as i32)
     }
 
     pub fn show_fields(mut self: Pin<&mut Self>) {

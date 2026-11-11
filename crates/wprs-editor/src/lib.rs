@@ -28,6 +28,7 @@ pub mod lamps;
 pub mod layers;
 mod limbs;
 pub mod listing;
+pub mod media;
 pub mod meta;
 pub mod molds;
 pub mod motion;

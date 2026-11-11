@@ -7,7 +7,7 @@ use std::fs;
 use std::path::PathBuf;
 use wprs_client::Client;
 use wprs_editor::actions::visible;
-use wprs_editor::{Project, assets, package};
+use wprs_editor::{Project, assets, media, package};
 
 #[derive(Subcommand, Debug)]
 pub enum Folder {
@@ -145,7 +145,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             let project = Project::open(&dir)?;
             let mut document = json!({"manifest": project.doc["manifest"], "scene": visible(&project.doc)});
             let nonce = restart.then(|| std::time::UNIX_EPOCH.elapsed().map_or(1, |d| d.as_millis() as u64));
-            let media = media.map(|f| crate::media::simulated(&f)).transpose()?;
+            let media = media.map(|f| media::simulated(&f)).transpose()?;
             let look = json!({ "quality": quality, "restart": nonce, "media": media });
             let staged = wprs_editor::rigs::staged(&look);
             staged.into_iter().for_each(|s| document["preview"] = s);

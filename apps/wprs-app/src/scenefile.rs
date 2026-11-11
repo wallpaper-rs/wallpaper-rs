@@ -138,6 +138,11 @@ impl SceneEditor {
         QString::from(kind.as_deref().unwrap_or("scene"))
     }
 
+    pub fn count(&self, pointer: &QString) -> i32 {
+        let list = self.project.as_ref().and_then(|p| p.doc.pointer(&pointer.to_string())?.as_array());
+        list.map_or(-1, |n| n.len() as i32)
+    }
+
     pub fn script_source(&self, path: &QString) -> QString {
         let found =
             self.project.as_ref().and_then(|p| std::fs::read_to_string(p.dir.join(path.to_string())).ok());

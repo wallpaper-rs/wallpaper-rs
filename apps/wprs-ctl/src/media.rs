@@ -4,6 +4,7 @@ use anyhow::Result;
 use clap::Subcommand;
 use wprs_client::{Client, parse};
 use wprs_core::model::{InputsReply, MediaStatus};
+use wprs_editor::media::simulated;
 
 #[derive(Subcommand, Debug)]
 pub enum Media {
@@ -70,11 +71,3 @@ pub async fn run(client: &Client, command: Media) -> Result<()> {
 }
 
 pub const MEDIA: &str = "JSON file of a made-up track shown instead of a media player: title, artist, album, album_artist, subtitle, genres, playing, position, duration, rate and cover (a picture of the folder)";
-
-pub fn simulated(path: &std::path::Path) -> Result<serde_json::Value> {
-    let bytes = std::fs::read(path).map_err(|e| anyhow::anyhow!("cannot read {}: {e}", path.display()))?;
-    anyhow::ensure!(bytes.len() <= 64 << 10, "{} is larger than 64 KiB", path.display());
-    let value: serde_json::Value = serde_json::from_slice(&bytes)?;
-    anyhow::ensure!(value.is_object(), "{} holds a JSON object of the made-up track", path.display());
-    Ok(value)
-}

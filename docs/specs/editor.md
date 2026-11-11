@@ -243,6 +243,11 @@ simulate OUTPUT FILE.json` shows one on any screen (`dbus.md`, `SimulateMedia`).
 The preview then shows that track instead of what a media player plays, without asking for the
 `media` grant and without reading the players; it reaches only the preview.
 
+A web package has no preview to simulate media in, so its Player tab instead shows a made-up
+track from a JSON file of the same shape (Simulate from a file…) on the screen it was last built
+and applied to (Stop ends it), the same `SimulateMedia` call `wprs-ctl media simulate` makes;
+until the package is applied once, the tab says so instead.
+
 ## Package details
 
 The manifest is edited in the same inspector: `/manifest` shows the fields of the JSON Schema of

@@ -29,6 +29,7 @@ mod rows;
 mod scene;
 mod scenefile;
 mod scenelive;
+mod scenemedia;
 mod scenework;
 mod secret;
 mod shelf;

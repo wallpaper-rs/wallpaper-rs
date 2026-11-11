@@ -133,9 +133,12 @@ impl SceneEditor {
                 editor.as_mut().rescan();
                 let qt = editor.qt_thread();
                 bus::spawn(async move {
-                    let done = install(path, output).await;
+                    let done = install(path, output.clone()).await;
                     qt.queue(move |mut editor| match done {
-                        Ok(uid) => editor.as_mut().finished(QString::from(&uid)),
+                        Ok(uid) => {
+                            editor.as_mut().set_placed(QString::from(&output));
+                            editor.as_mut().finished(QString::from(&uid));
+                        }
                         Err(e) => editor.fail(e),
                     })
                     .ok();

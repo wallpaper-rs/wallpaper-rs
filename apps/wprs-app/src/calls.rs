@@ -147,6 +147,7 @@ calls! {
         Revoke revoke(scene: str, input: str);
         GetInputs get_inputs() json;
         SetClicks set_clicks(output: str, on: bool);
+        SimulateMedia simulate_media(output: str, track: str, cover: u8s);
     }
     Rgb1 rgb {
         GetStatus get_status() json;

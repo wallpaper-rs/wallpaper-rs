@@ -13,6 +13,7 @@ macro_rules! arg {
     (str) => { String };
     (strs) => { Vec<String> };
     (u32s) => { Vec<u32> };
+    (u8s) => { Vec<u8> };
     (map) => { HashMap<String, String> };
     ($t:tt) => { $t };
 }
@@ -25,6 +26,9 @@ macro_rules! pass {
         &$v.iter().map(String::as_str).collect::<Vec<_>>()
     };
     (u32s, $v:ident) => {
+        &$v
+    };
+    (u8s, $v:ident) => {
         &$v
     };
     (map, $v:ident) => {

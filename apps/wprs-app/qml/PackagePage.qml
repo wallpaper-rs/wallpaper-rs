@@ -130,6 +130,10 @@ Kirigami.Page {
                 QQC2.TabButton {
                     text: App.tr("Files")
                 }
+
+                QQC2.TabButton {
+                    text: App.tr("Player")
+                }
             }
 
             StackLayout {
@@ -138,6 +142,10 @@ Kirigami.Page {
                 currentIndex: side.currentIndex
 
                 PackageFiles {
+                    page: page
+                }
+
+                PackageMedia {
                     page: page
                 }
             }
