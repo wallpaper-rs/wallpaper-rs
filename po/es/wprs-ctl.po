@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-08 00:00+0000\n"
+"POT-Creation-Date: 2026-11-10 00:00+0000\n"
 "PO-Revision-Date: 2026-11-06 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -645,7 +645,8 @@ msgstr "Milisegundos de espera, como mucho 20000"
 
 #: apps/wprs-ctl/src/cli.rs apps/wprs-ctl/src/folder.rs
 #: apps/wprs-ctl/src/pack.rs apps/wprs-ctl/src/repo.rs
-#: apps/wprs-ctl/src/server.rs apps/wprs-ctl/src/shelving.rs
+#: apps/wprs-ctl/src/repo/authors.rs apps/wprs-ctl/src/server.rs
+#: apps/wprs-ctl/src/shelving.rs
 msgid "Print the result as JSON"
 msgstr "Imprimir el resultado como JSON"
 
@@ -3733,7 +3734,7 @@ msgstr ""
 msgid "The model file, or the ONNX Runtime release archive"
 msgstr "El archivo del modelo, o el archivo de la versión de ONNX Runtime"
 
-#: apps/wprs-ctl/src/moderate.rs
+#: apps/wprs-ctl/src/moderate.rs apps/wprs-ctl/src/repo/authors.rs
 msgid "Address of the server, such as https://wallpapers.example.org"
 msgstr "Dirección del servidor, como https://wallpapers.example.org"
 
@@ -4931,7 +4932,7 @@ msgstr "Carpeta vacía para el repositorio"
 msgid "Name of the repository"
 msgstr "Nombre del repositorio"
 
-#: apps/wprs-ctl/src/repo.rs
+#: apps/wprs-ctl/src/repo.rs apps/wprs-ctl/src/repo/authors.rs
 msgid "Public key file or text"
 msgstr "Archivo o texto de clave pública"
 
@@ -5044,7 +5045,7 @@ msgstr ""
 msgid "Revoke an author key; publish next"
 msgstr "Revocar una clave de autor; publicar después"
 
-#: apps/wprs-ctl/src/repo.rs
+#: apps/wprs-ctl/src/repo.rs apps/wprs-ctl/src/repo/authors.rs
 msgid "Fingerprint of the author key"
 msgstr "Huella de la clave de autor"
 
@@ -5097,6 +5098,39 @@ msgstr "Archivo secreto de una clave en línea"
 #: apps/wprs-ctl/src/repo.rs
 msgid "Days until the signed index expires"
 msgstr "Días hasta que caduca el índice firmado"
+
+#: apps/wprs-ctl/src/repo/authors.rs
+msgid ""
+"Register a public key as an online author, with a personal token of the "
+"upload scope"
+msgstr ""
+"Registrar una clave pública como autor en línea, con un token personal del "
+"alcance upload"
+
+#: apps/wprs-ctl/src/repo/authors.rs
+msgid ""
+"Hand an online author to a new key with the signature pack rotate-key printed"
+msgstr ""
+"Traspasar un autor en línea a una clave nueva con la firma que imprimió "
+"pack rotate-key"
+
+#: apps/wprs-ctl/src/repo/authors.rs
+msgid "Fingerprint of the key that signed the earlier versions"
+msgstr "Huella de la clave que firmó las versiones anteriores"
+
+#: apps/wprs-ctl/src/repo/authors.rs
+msgid "Public key file or text of the new key"
+msgstr "Archivo o texto de clave pública de la clave nueva"
+
+#: apps/wprs-ctl/src/repo/authors.rs
+msgid "Signature file or text that wprs-ctl pack rotate-key printed"
+msgstr "Archivo o texto de la firma que imprimió wprs-ctl pack rotate-key"
+
+#: apps/wprs-ctl/src/repo/authors.rs
+msgid "Remove a registered author key; refused while a rotation still names it"
+msgstr ""
+"Quitar una clave de autor registrada; se rechaza mientras una rotación la "
+"siga nombrando"
 
 #: apps/wprs-ctl/src/rgb.rs
 msgid ""

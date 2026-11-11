@@ -138,9 +138,13 @@ pub fn main() -> ExitCode {
     let result = match told::parse().command {
         Command::Pack(command) => pack::run(command),
         Command::Scene(command) => scoped::run(command),
-        Command::Repo(command) => repo::run(command),
         Command::Edit(command) => edit::run(command),
         Command::Models(command) => models::run(command),
+        Command::Repo(command) => tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .map_err(anyhow::Error::from)
+            .and_then(|runtime| runtime.block_on(repo::run(command))),
         Command::Moderate(command) => tokio::runtime::Builder::new_current_thread()
             .enable_all()
             .build()

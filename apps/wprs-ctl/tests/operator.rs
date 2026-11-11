@@ -89,6 +89,18 @@ fn operator_commands_parse() {
             "repo verify https://example.org/repo",
             r#"Repo(Verify { url: "https://example.org/repo", json: false })"#,
         ),
+        (
+            "repo register-author https://example.org --key author.pub",
+            r#"Repo(Author(RegisterAuthor { server: "https://example.org", key: "author.pub", json: false }))"#,
+        ),
+        (
+            "repo rotate-author https://example.org --from ab12 --key new.pub --signature sig.txt --json",
+            r#"Repo(Author(RotateAuthor { server: "https://example.org", from: "ab12", key: "new.pub", signature: "sig.txt", json: true }))"#,
+        ),
+        (
+            "repo drop-author-key https://example.org ab12",
+            r#"Repo(Author(DropAuthorKey { server: "https://example.org", fingerprint: "ab12" }))"#,
+        ),
     ];
     for (line, debug) in cases {
         assert_eq!(parsed(line), debug, "{line}");

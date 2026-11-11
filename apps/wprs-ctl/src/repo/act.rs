@@ -12,7 +12,7 @@ use wprs_format::{
 };
 use wprs_providers::HttpFetch;
 
-pub fn run(command: Repo) -> Result<()> {
+pub async fn run(command: Repo) -> Result<()> {
     match command {
         Repo::Keygen { name, no_password } => println!("{}", keygen(&name, no_password)?),
         Repo::Init { dir, name, root_keys, online_keys, policy, json } => {
@@ -84,6 +84,7 @@ pub fn run(command: Repo) -> Result<()> {
             ]);
             either(&info, json, text.trim_end().into())?
         }
+        Repo::Author(command) => super::authors::run(command).await?,
     }
     Ok(())
 }

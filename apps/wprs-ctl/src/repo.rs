@@ -3,6 +3,7 @@ use clap::{Args, Subcommand};
 use std::path::PathBuf;
 
 mod act;
+mod authors;
 
 pub use act::run;
 
@@ -167,6 +168,8 @@ pub enum Repo {
         #[arg(long, help = "Print the result as JSON")]
         json: bool,
     },
+    #[command(flatten)]
+    Author(authors::AuthorCommand),
 }
 
 #[derive(Args, Debug)]
