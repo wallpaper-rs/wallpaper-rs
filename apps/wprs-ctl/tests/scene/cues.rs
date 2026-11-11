@@ -47,3 +47,23 @@ fn a_media_script_is_made_from_a_template_from_the_command_line() {
     let refused = super::run(dir, &["scene", "import-script", "snow", "x.js", "--template", "nope"]);
     assert!(!refused.status.success());
 }
+
+#[test]
+fn touch_and_timer_scripts_are_made_from_templates_from_the_command_line() {
+    let tmp = tempfile::tempdir().unwrap();
+    let dir = tmp.path();
+    ok(dir, &["scene", "new", "snow", "--from", "empty"]);
+    ok(dir, &["scene", "import-script", "snow", "--template", "touch"]);
+    ok(dir, &["scene", "import-script", "snow", "--template", "timer"]);
+    let scripts = show(dir, "/scene/scripts");
+    let scripts = scripts.as_array().unwrap();
+    let touch = scripts.iter().find(|s| s["path"] == "scripts/touch.js").unwrap();
+    assert_eq!(touch["uses"], json!(["pointer"]));
+    let timer = scripts.iter().find(|s| s["path"] == "scripts/timer.js").unwrap();
+    assert_eq!(timer["uses"], json!(["timers"]));
+    let info: serde_json::Value =
+        serde_json::from_str(&ok(dir, &["scene", "open", "snow", "--json"])).unwrap();
+    let listed = info["scripts"].as_array().unwrap();
+    assert!(listed.iter().any(|s| s["path"] == "scripts/touch.js" && s["pointer"] == "/scene/scripts/0"));
+    assert!(listed.iter().any(|s| s["path"] == "scripts/timer.js" && s["size"].as_u64().unwrap() > 0));
+}

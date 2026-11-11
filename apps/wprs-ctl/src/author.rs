@@ -98,8 +98,8 @@ pub enum Author {
     ImportScript {
         #[arg(help = DIR)]
         dir: PathBuf,
-        #[arg(help = "The module, a .js file; with --template the name of the new one")]
-        file: PathBuf,
+        #[arg(help = "The module, a .js file; omit it with --template for the template's own name")]
+        file: Option<PathBuf>,
         #[arg(long, value_parser = wprs_editor::molds::SCRIPT_TEMPLATES, help = crate::steps::TEMPLATE)]
         template: Option<String>,
     },

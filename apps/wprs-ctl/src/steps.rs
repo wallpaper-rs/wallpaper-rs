@@ -9,7 +9,7 @@ use wprs_editor::{Op, Project, references};
 pub(crate) const NEW: &str = "Create a package folder from a starting point: the scenes empty, particles, parallax or clock, or web for a web page";
 pub(crate) const OPEN: &str = "Describe a scene folder, or first extract a .wpak scene package into it as an unsigned copy with the id <id>.copy";
 pub(crate) const SCRIPT: &str = "Copy a JavaScript module into the scripts, or make it from a template, and declare the events and parts it uses";
-pub(crate) const TEMPLATE: &str = "Make the module from a template instead of copying FILE: empty, or media (handles every media player event and exports nowPlaying, accentColor, shown and progress for values to follow)";
+pub(crate) const TEMPLATE: &str = "Make the module from a template instead of copying FILE: empty, media (handles every media player event and exports nowPlaying, accentColor, shown and progress for values to follow), touch (its update returns 1 while the pointer is over the output and exports position and pressed) or timer (counts seconds with setInterval and exports seconds)";
 
 pub(crate) fn value(text: &str) -> Value {
     serde_json::from_str(text).unwrap_or_else(|_| Value::String(text.into()))
@@ -90,6 +90,7 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
             )
         }
         Author::ImportScript { dir, file, template } => {
+            let file = file.unwrap_or_default();
             let file = if template.is_some() { file } else { fs::canonicalize(&file).unwrap_or(file) };
             (dir, Action::ImportScript(ScriptFile { file, template }))
         }
