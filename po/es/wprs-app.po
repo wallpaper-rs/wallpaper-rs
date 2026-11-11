@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 00:00+0000\n"
+"POT-Creation-Date: 2026-11-08 00:00+0000\n"
 "PO-Revision-Date: 2026-10-22 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -3762,6 +3762,18 @@ msgstr "carátula anterior"
 msgid "Convert to KTX2…"
 msgstr "Convertir a KTX2…"
 
+#: apps/wprs-app/qml/SceneAssets.qml apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Scripts"
+msgstr "Scripts"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "View source…"
+msgstr "Ver el código…"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "Open in your editor…"
+msgstr "Abrirlo en tu editor…"
+
 #: apps/wprs-app/qml/SceneAssets.qml
 msgid "Import a sprite sheet or a data map…"
 msgstr "Importar una hoja de sprites o un mapa de datos…"
@@ -3788,6 +3800,14 @@ msgid ""
 msgstr ""
 "Módulo que sigue al reproductor multimedia, con sus eventos y valores para "
 "enlazar"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "Module that follows the pointer, with its position and the left button"
+msgstr "Módulo que sigue al puntero, con su posición y el botón izquierdo"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "Module with a timer that counts seconds"
+msgstr "Módulo con un temporizador que cuenta segundos"
 
 #: apps/wprs-app/qml/SceneAssets.qml
 msgid "Import from an assets package…"
@@ -10297,10 +10317,6 @@ msgstr "Formato"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Script"
 msgstr "Script"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Scripts"
-msgstr "Scripts"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Secret"

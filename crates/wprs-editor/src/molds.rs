@@ -1,9 +1,11 @@
-pub const SCRIPT_TEMPLATES: [&str; 2] = ["empty", "media"];
+pub const SCRIPT_TEMPLATES: [&str; 4] = ["empty", "media", "touch", "timer"];
 
 pub fn script_template(name: &str) -> Option<&'static str> {
     match name {
         "empty" => Some(include_str!("molds/empty.js")),
         "media" => Some(include_str!("molds/media.js")),
+        "touch" => Some(include_str!("molds/touch.js")),
+        "timer" => Some(include_str!("molds/timer.js")),
         _ => None,
     }
 }

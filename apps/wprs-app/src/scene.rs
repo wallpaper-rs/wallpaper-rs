@@ -47,6 +47,8 @@ pub mod qobject {
         #[qinvokable]
         fn scripts(self: &SceneEditor, id: &QString) -> QString;
         #[qinvokable]
+        fn script_source(self: &SceneEditor, path: &QString) -> QString;
+        #[qinvokable]
         fn rig(self: &SceneEditor, id: &QString, query: &QString) -> QString;
         #[qinvokable]
         fn save(self: Pin<&mut SceneEditor>);

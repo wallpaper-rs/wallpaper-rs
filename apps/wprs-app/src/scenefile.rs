@@ -137,6 +137,12 @@ impl SceneEditor {
         };
         QString::from(kind.as_deref().unwrap_or("scene"))
     }
+
+    pub fn script_source(&self, path: &QString) -> QString {
+        let found =
+            self.project.as_ref().and_then(|p| std::fs::read_to_string(p.dir.join(path.to_string())).ok());
+        QString::from(&found.unwrap_or_default())
+    }
 }
 
 impl Drop for SceneEditorRust {

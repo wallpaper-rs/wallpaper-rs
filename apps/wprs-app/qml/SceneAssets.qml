@@ -60,6 +60,10 @@ ColumnLayout {
         }
     }
 
+    SceneScriptsList {
+        page: panel.page
+    }
+
     Flow {
         Layout.fillWidth: true
 
@@ -96,7 +100,7 @@ ColumnLayout {
                 id: molds
 
                 Repeater {
-                    model: [["empty", App.tr("Empty module")], ["media", App.tr("Module that follows the media player, with its events and values to follow")]]
+                    model: [["empty", App.tr("Empty module")], ["media", App.tr("Module that follows the media player, with its events and values to follow")], ["touch", App.tr("Module that follows the pointer, with its position and the left button")], ["timer", App.tr("Module with a timer that counts seconds")]]
 
                     delegate: QQC2.MenuItem {
                         required property var modelData
