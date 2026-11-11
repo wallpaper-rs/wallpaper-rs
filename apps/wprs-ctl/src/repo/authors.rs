@@ -63,7 +63,8 @@ pub async fn run(command: AuthorCommand) -> Result<()> {
             either(&reply, json, shown(&reply))?
         }
         AuthorCommand::RotateAuthor { server, from, key, signature, json } => {
-            let body = json!({"from": from, "public_key": key_text(&key)?, "signature": key_text(&signature)?});
+            let body =
+                json!({"from": from, "public_key": key_text(&key)?, "signature": key_text(&signature)?});
             let reply = api(&server).await?.post(&format!("{PATH}/rotate"), body).await?;
             either(&reply, json, shown(&reply))?
         }

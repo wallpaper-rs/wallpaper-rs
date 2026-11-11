@@ -56,7 +56,8 @@ fn the_cost_of_an_effect_is_shown_at_every_quality_level_and_drops_for_heavy_and
         Project::create(&dir, starter("empty", "org.example.weigh", "Weigh", "en").unwrap()).unwrap();
     let source = root.path().join("source");
     fs::create_dir_all(&source).unwrap();
-    let heavy = json!({ "id": "heavy", "cost": { "taps": 50, "passes": 2 }, "passes": [{ "entry": "fs_glow" }] });
+    let heavy =
+        json!({ "id": "heavy", "cost": { "taps": 50, "passes": 2 }, "passes": [{ "entry": "fs_glow" }] });
     fs::write(source.join("heavy.json"), heavy.to_string()).unwrap();
     fs::write(source.join("heavy.wgsl"), WGSL).unwrap();
     project.act(&Action::ImportEffect { descriptor: source.join("heavy.json"), wgsl: None }).unwrap();

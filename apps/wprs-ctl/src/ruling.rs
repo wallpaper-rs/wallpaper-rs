@@ -26,7 +26,11 @@ pub enum Rule {
         bone: String,
         #[arg(help = "Its new parent")]
         parent: String,
-        #[arg(long, allow_hyphen_values = true, help = "How much it moves the pose, from 0 to 1, 1 by default")]
+        #[arg(
+            long,
+            allow_hyphen_values = true,
+            help = "How much it moves the pose, from 0 to 1, 1 by default"
+        )]
         weight: Option<f32>,
     },
     #[command(about = "Change rule N, 0 first")]

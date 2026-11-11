@@ -13,27 +13,32 @@ use wprs_editor::{Project, assets, media, package};
 pub enum Folder {
     #[command(about = "Delete the files in assets/ that the scene does not use")]
     Prune {
-        #[arg(help = DIR)] dir: PathBuf,
+        #[arg(help = DIR)]
+        dir: PathBuf,
     },
     #[command(about = "List the changes that undo and redo walk through")]
     History {
-        #[arg(help = DIR)] dir: PathBuf,
+        #[arg(help = DIR)]
+        dir: PathBuf,
     },
     #[command(about = "Restore the unsaved changes the app kept for a folder, or drop them with --discard")]
     Recover {
-        #[arg(help = DIR)] dir: PathBuf,
+        #[arg(help = DIR)]
+        dir: PathBuf,
         #[arg(help = "Drop the kept changes instead of restoring them", long)]
         discard: bool,
     },
     #[command(about = "Check the scene and its files; exits with 1 when something is wrong")]
     Validate {
-        #[arg(help = DIR)] dir: PathBuf,
+        #[arg(help = DIR)]
+        dir: PathBuf,
         #[arg(long, help = "Print one JSON object per problem")]
         json: bool,
     },
     #[command(about = "Build the .wpak package, signed with --key, as wprs-ctl pack build does")]
     Build {
-        #[arg(help = DIR)] dir: PathBuf,
+        #[arg(help = DIR)]
+        dir: PathBuf,
         #[arg(short, long, help = "Package file; <id>-<version>.wpak next to the scene folder when omitted")]
         out: Option<PathBuf>,
         #[arg(long, help = "Secret key file of the author")]
@@ -43,7 +48,8 @@ pub enum Folder {
     },
     #[command(about = "Show the scene of the folder on the desktop for 60 seconds without applying it")]
     Preview {
-        #[arg(help = DIR)] dir: PathBuf,
+        #[arg(help = DIR)]
+        dir: PathBuf,
         #[arg(short, long, default_value = "", help = crate::cli::OUTPUT)]
         output: String,
         #[arg(long, default_value_t = -1.0, allow_hyphen_values = true, value_parser = crate::spanning::second, help = "Hold this second, up to 86400; plays when negative, and with --layout draws this second instead of the poster time")]
@@ -56,14 +62,19 @@ pub enum Folder {
         restart: bool,
         #[arg(long, value_name = "FILE", help = crate::media::MEDIA)]
         media: Option<PathBuf>,
-        #[arg(long, conflicts_with = "stop", help = "Print the console of its scripts and report its error as they change, until stopped")]
+        #[arg(
+            long,
+            conflicts_with = "stop",
+            help = "Print the console of its scripts and report its error as they change, until stopped"
+        )]
         console: bool,
         #[command(flatten)]
         span: crate::spanning::Span,
     },
     #[command(about = "Build the scene into the library and show it on an output")]
     Apply {
-        #[arg(help = DIR)] dir: PathBuf,
+        #[arg(help = DIR)]
+        dir: PathBuf,
         #[arg(short, long, default_value = "", help = crate::cli::OUTPUT)]
         output: String,
         #[arg(long, help = "Spread it over every screen, each one showing its part")]
@@ -78,11 +89,16 @@ pub enum Folder {
         #[arg(help = "Print the schema of manifests", long, conflicts_with = "property")]
         manifest: bool,
     },
-    #[command(about = "List the built-in effects and the effects of the package, with category, cost and description")]
+    #[command(
+        about = "List the built-in effects and the effects of the package, with category, cost and description"
+    )]
     Catalog {
-        #[arg(help = DIR)] dir: PathBuf,
-        #[arg(long, help = "Only the effects of this category")] category: Option<String>,
-        #[arg(long, help = "Print one JSON object per effect")] json: bool,
+        #[arg(help = DIR)]
+        dir: PathBuf,
+        #[arg(long, help = "Only the effects of this category")]
+        category: Option<String>,
+        #[arg(long, help = "Print one JSON object per effect")]
+        json: bool,
     },
 }
 

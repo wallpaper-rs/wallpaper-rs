@@ -8,8 +8,22 @@ use wprs_core::message::said;
 use wprs_scene::{Child, Frames, Moment};
 
 const RANGES: [&str; 16] = [
-    "life", "speed", "angle", "size", "rotation", "spin", "frame", "color", "alpha", "velocity", "radial",
-    "hsv", "palette", "gradient", "depth", "depth_speed",
+    "life",
+    "speed",
+    "angle",
+    "size",
+    "rotation",
+    "spin",
+    "frame",
+    "color",
+    "alpha",
+    "velocity",
+    "radial",
+    "hsv",
+    "palette",
+    "gradient",
+    "depth",
+    "depth_speed",
 ];
 const TINTS: [&str; 3] = ["hsv", "palette", "gradient"];
 const CLEARED: [&str; 6] = ["alpha", "velocity", "radial", "hsv", "palette", "gradient"];

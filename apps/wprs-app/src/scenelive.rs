@@ -85,9 +85,13 @@ impl SceneEditor {
         let output = self.output.to_string();
         if !output.is_empty() {
             bus::spawn(async move {
-                bus::call("Inputs1", "SimulateTouch", vec![json!(output), json!(x), json!(y), json!(buttons)])
-                    .await
-                    .ok();
+                bus::call(
+                    "Inputs1",
+                    "SimulateTouch",
+                    vec![json!(output), json!(x), json!(y), json!(buttons)],
+                )
+                .await
+                .ok();
             });
         }
     }

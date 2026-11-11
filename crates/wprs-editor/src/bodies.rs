@@ -146,10 +146,7 @@ pub(crate) fn rule(dir: &Path, doc: &Value, r: &BoneRuleEdit) -> Result<Vec<Op>>
         Some(i) => tune_rule(&mut list[i], r, &j)?,
         None if r.remove => bail!(said("editor.rule_which", "say which rule changes", &[])),
         None => {
-            ensure!(
-                n < MAX_BODIES,
-                said("editor.rules_most", "a mesh has at most %1 rules", &[&MAX_BODIES])
-            );
+            ensure!(n < MAX_BODIES, said("editor.rules_most", "a mesh has at most %1 rules", &[&MAX_BODIES]));
             let (Some(bone), Some(parent)) = (&r.bone, &r.parent) else {
                 bail!(said("editor.rule_ends", "a new rule names its bone and its new parent", &[]))
             };

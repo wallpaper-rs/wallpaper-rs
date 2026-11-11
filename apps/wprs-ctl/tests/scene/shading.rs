@@ -52,7 +52,8 @@ fn effect_cost_prints_the_relative_units_at_every_quality_level() {
     let tmp = tempfile::tempdir().unwrap();
     let dir = tmp.path();
     ok(dir, &["scene", "new", "snow", "--from", "empty", "--title", "Snow"]);
-    let descriptor = json!({ "id": "heavy", "cost": { "taps": 50, "passes": 2 }, "passes": [{ "entry": "fs_dim" }] });
+    let descriptor =
+        json!({ "id": "heavy", "cost": { "taps": 50, "passes": 2 }, "passes": [{ "entry": "fs_dim" }] });
     std::fs::write(dir.join("heavy.json"), descriptor.to_string()).unwrap();
     std::fs::write(
         dir.join("heavy.wgsl"),

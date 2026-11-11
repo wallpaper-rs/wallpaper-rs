@@ -3,7 +3,17 @@ use serde_json::{Map, Value};
 use wprs_core::message::said;
 
 const SPREADS: [&str; 12] = [
-    "life", "speed", "angle", "size", "rotation", "spin", "frame", "color", "alpha", "radial", "depth",
+    "life",
+    "speed",
+    "angle",
+    "size",
+    "rotation",
+    "spin",
+    "frame",
+    "color",
+    "alpha",
+    "radial",
+    "depth",
     "depth_speed",
 ];
 
