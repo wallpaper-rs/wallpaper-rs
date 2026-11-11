@@ -1,6 +1,8 @@
 {
   "id": "caustics",
   "name": { "en": "Caustics" },
+  "category": "motion",
+  "description": "Animates shifting light patterns like sunlight through water.",
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

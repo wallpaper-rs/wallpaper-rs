@@ -4381,6 +4381,14 @@ msgstr "Elemento %1"
 msgid "%1 is not valid JSON"
 msgstr "%1 no es JSON válido"
 
+#: apps/wprs-app/qml/SceneEffectCatalog.qml
+msgid "Add an effect"
+msgstr "Añadir un efecto"
+
+#: apps/wprs-app/qml/SceneEffectCatalog.qml
+msgid "%1 (cost %2)"
+msgstr "%1 (coste %2)"
+
 #: apps/wprs-app/qml/SceneEffectMask.qml
 msgid "Mask of the effect:"
 msgstr "Máscara del efecto:"
@@ -4825,6 +4833,7 @@ msgstr "importa antes un archivo de este tipo"
 #: apps/wprs-app/qml/SceneSwarmLight.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Light"
 msgstr "Luz"
 
@@ -9876,6 +9885,7 @@ msgstr "Estela de movimiento"
 
 #: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Transform"
 msgstr "Transformación"
 
@@ -11797,6 +11807,22 @@ msgstr "Extensiones"
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Eye"
 msgstr "Ojo"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Blend"
+msgstr "Mezcla"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Distort"
+msgstr "Distorsión"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Motion"
+msgstr "Movimiento"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Stylize"
+msgstr "Estilo"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Ease in (%1)"

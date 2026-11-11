@@ -1055,6 +1055,8 @@ fn uv_nudge(uv: vec2<f32>) -> vec2<f32> {
 
 | Field | Meaning |
 |-------|---------|
+| `category` | a word such as `blur`, `color`, `distort`, `light`, `motion`, `blend`, `stylize` or `transform` (any other word falls back to its capitalized form); groups the effect in the catalog browser of the editor and in `wprs-ctl scene catalog` |
+| `description` | a short `Text` (plain, or per locale like `name`) of what the effect does, shown next to its cost in the catalog browser and in `wprs-ctl scene catalog` |
 | `uses` | `time`, `cursor`, `audio`: the scene keeps rendering while time runs, the pointer moves or sound plays; otherwise the effect costs nothing after its first frame |
 | `pace` | when a time effect changes: `{ "rate": "<float parameter>" }` (that many times a second), `{ "sweep": ["<speed>", "<gap>", "<phase>"] }` (a band crosses the layer once every `1 + gap` turns and waits off it in between), `{ "steps": [<high>, <low>] }` (1 to 240 times a second, the second number at Q0) or `"outside"` (only while the pointer is off the output); the scene then sleeps until the picture changes |
 | `mask_mode` | `mix` (default) blends the result with the input by the mask; with `strength` the shader scales itself by `mask_at(uv)`, as distortions should, and must leave the picture as it is where the mask is zero: a single-pass effect masked by a picture (not a layer or a shape, not inverted, feathered or weakened) is then drawn only over the box of the lit texels of its mask channel, grown by `reach` and kept inside the visible part of the layer, and left out while that box is off screen |

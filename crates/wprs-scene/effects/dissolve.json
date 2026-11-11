@@ -1,6 +1,8 @@
 {
   "id": "dissolve",
   "name": { "en": "Dissolve" },
+  "category": "blend",
+  "description": "Dissolves the picture away in a grainy pattern.",
   "params": [
     { "id": "progress", "type": "float", "default": 0, "min": 0, "max": 1 },
     { "id": "size", "type": "float", "default": 48, "min": 1, "max": 4096 },

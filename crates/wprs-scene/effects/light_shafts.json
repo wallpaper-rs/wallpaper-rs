@@ -1,6 +1,8 @@
 {
   "id": "light_shafts",
   "name": { "en": "Light shafts" },
+  "category": "light",
+  "description": "Draws soft colored light shafts across the picture.",
   "mask_mode": "strength",
   "params": [
     {

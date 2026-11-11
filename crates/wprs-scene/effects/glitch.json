@@ -1,6 +1,8 @@
 {
   "id": "glitch",
   "name": { "en": "Glitch" },
+  "category": "motion",
+  "description": "Glitches the picture with shifted rows and color splits.",
   "mask_mode": "strength",
   "params": [
     { "id": "bursts", "type": "float", "default": 0, "min": 0, "max": 10, "uses": "time" },

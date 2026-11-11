@@ -9,6 +9,7 @@ mod backdrop;
 mod bench;
 mod benching;
 mod calls;
+mod catalog;
 mod caution;
 pub mod cli;
 mod clipkey;

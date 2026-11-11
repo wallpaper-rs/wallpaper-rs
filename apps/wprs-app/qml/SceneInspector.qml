@@ -87,22 +87,7 @@ ColumnLayout {
             visible: inspector.node !== null && inspector.node.type !== "sound"
             icon.name: "list-add"
             text: App.tr("Add effect")
-            onClicked: effects.popup()
-
-            QQC2.Menu {
-                id: effects
-
-                Repeater {
-                    model: inspector.page.view.effects ?? []
-
-                    delegate: QQC2.MenuItem {
-                        required property string modelData
-
-                        text: SceneWords.effect(modelData)
-                        onTriggered: inspector.addEffect(modelData)
-                    }
-                }
-            }
+            onClicked: catalog.open()
         }
 
         QQC2.ToolButton {
@@ -125,6 +110,12 @@ ColumnLayout {
             display: QQC2.AbstractButton.IconOnly
             onClicked: inspector.page.editor.select(SceneSwarmKnobs.pointer(String(inspector.page.fields.find(f => f.key === "system")?.value ?? ""), ""))
         }
+    }
+
+    SceneEffectCatalog {
+        id: catalog
+
+        inspector: inspector
     }
 
     QQC2.ScrollView {

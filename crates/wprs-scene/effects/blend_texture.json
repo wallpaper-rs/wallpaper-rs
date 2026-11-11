@@ -1,6 +1,8 @@
 {
   "id": "blend_texture",
   "name": { "en": "Blend texture" },
+  "category": "blend",
+  "description": "Blends a texture over the picture with a chosen blend mode.",
   "mask_mode": "strength",
   "params": [
     { "id": "texture", "type": "texture", "default": "" },

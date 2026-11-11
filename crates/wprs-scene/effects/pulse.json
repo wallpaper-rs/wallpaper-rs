@@ -1,6 +1,8 @@
 {
   "id": "pulse",
   "name": { "en": "Pulse" },
+  "category": "color",
+  "description": "Pulses brightness, color or opacity over time.",
   "mask_mode": "strength",
   "params": [
     {

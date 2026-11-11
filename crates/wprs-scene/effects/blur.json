@@ -1,6 +1,8 @@
 {
   "id": "blur",
   "name": { "en": "Blur" },
+  "category": "blur",
+  "description": "Blurs the picture by a fixed radius.",
   "params": [
     { "id": "radius", "type": "float", "default": 8, "min": 0, "max": 128 },
     { "id": "blend", "type": "blend", "default": "normal" },

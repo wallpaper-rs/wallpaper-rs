@@ -1,6 +1,8 @@
 {
   "id": "depth_parallax",
   "name": { "en": "Depth parallax" },
+  "category": "distort",
+  "description": "Shifts layers by a depth map as the pointer moves, for a 3D-ish parallax.",
   "mask_mode": "strength",
   "params": [
     { "id": "depth", "type": "texture", "default": "" },

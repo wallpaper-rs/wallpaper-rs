@@ -1,6 +1,8 @@
 {
   "id": "displace",
   "name": { "en": "Displace" },
+  "category": "distort",
+  "description": "Offsets pixels using a map of normals or offsets.",
   "mask_mode": "strength",
   "params": [
     { "id": "map", "type": "texture", "default": "" },

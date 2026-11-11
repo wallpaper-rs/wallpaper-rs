@@ -1,6 +1,8 @@
 {
   "id": "fire",
   "name": { "en": "Fire" },
+  "category": "motion",
+  "description": "Draws animated fire using a color gradient.",
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

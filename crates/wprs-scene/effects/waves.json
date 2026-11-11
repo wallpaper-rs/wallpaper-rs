@@ -1,6 +1,8 @@
 {
   "id": "waves",
   "name": { "en": "Waves" },
+  "category": "motion",
+  "description": "Distorts the picture with one or two wave patterns.",
   "min_fps": 30,
   "uses": ["time"],
   "mask_mode": "strength",

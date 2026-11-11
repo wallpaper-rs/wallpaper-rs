@@ -1,6 +1,8 @@
 {
   "id": "iris",
   "name": { "en": "Iris" },
+  "category": "light",
+  "description": "Darkens outside a circle that follows the pointer, like a spotlight.",
   "uses": ["cursor"],
   "mask_mode": "strength",
   "params": [

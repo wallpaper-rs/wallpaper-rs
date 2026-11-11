@@ -1,6 +1,8 @@
 {
   "id": "chromatic_aberration",
   "name": { "en": "Chromatic aberration" },
+  "category": "distort",
+  "description": "Splits color channels apart near the edges, like a cheap lens.",
   "mask_mode": "strength",
   "params": [
     { "id": "amount", "type": "float", "default": 3, "min": -64, "max": 64 },

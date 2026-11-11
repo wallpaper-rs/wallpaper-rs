@@ -1,6 +1,8 @@
 {
   "id": "twirl",
   "name": { "en": "Twirl" },
+  "category": "distort",
+  "description": "Twists the picture around a center point.",
   "mask_mode": "strength",
   "params": [
     { "id": "angle", "type": "float", "default": 60, "min": -1080, "max": 1080 },

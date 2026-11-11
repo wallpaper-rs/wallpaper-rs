@@ -60,3 +60,6 @@ pub fn drawn(effect: &str, param: Option<&str>) -> bool {
 pub fn reserved(id: &str) -> bool {
     builtin().iter().chain(undrawn()).any(|d| d.id == id)
 }
+
+#[cfg(test)]
+mod tests;

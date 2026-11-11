@@ -1,6 +1,8 @@
 {
   "id": "sway",
   "name": { "en": "Sway" },
+  "category": "motion",
+  "description": "Sways the picture like something hanging, with stiffness and spread.",
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

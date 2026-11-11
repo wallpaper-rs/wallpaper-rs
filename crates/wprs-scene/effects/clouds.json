@@ -1,6 +1,8 @@
 {
   "id": "clouds",
   "name": { "en": "Clouds and fog" },
+  "category": "motion",
+  "description": "Draws drifting procedural clouds or fog.",
   "min_fps": 20,
   "uses": ["time"],
   "params": [

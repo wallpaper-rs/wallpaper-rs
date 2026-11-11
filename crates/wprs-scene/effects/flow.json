@@ -1,6 +1,8 @@
 {
   "id": "flow",
   "name": { "en": "Flow" },
+  "category": "motion",
+  "description": "Distorts the picture along a flow map over time.",
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

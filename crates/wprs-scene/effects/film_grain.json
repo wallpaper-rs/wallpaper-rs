@@ -1,6 +1,8 @@
 {
   "id": "film_grain",
   "name": { "en": "Film grain" },
+  "category": "stylize",
+  "description": "Adds animated film grain.",
   "mask_mode": "strength",
   "params": [
     { "id": "amount", "type": "float", "default": 0.05, "min": 0, "max": 1 },

@@ -1931,6 +1931,22 @@ msgstr "Imprimir el esquema de las propiedades de usuario"
 msgid "Print the schema of manifests"
 msgstr "Imprimir el esquema de los manifiestos"
 
+#: apps/wprs-ctl/src/folder.rs
+msgid ""
+"List the built-in effects and the effects of the package, with category, "
+"cost and description"
+msgstr ""
+"Listar los efectos integrados y los efectos del paquete, con categoría, "
+"coste y descripción"
+
+#: apps/wprs-ctl/src/folder.rs
+msgid "Only the effects of this category"
+msgstr "Solo los efectos de esta categoría"
+
+#: apps/wprs-ctl/src/folder.rs
+msgid "Print one JSON object per effect"
+msgstr "Imprimir un objeto JSON por efecto"
+
 #: apps/wprs-ctl/src/forcing.rs apps/wprs-ctl/src/pulling.rs
 msgid ""
 "Replace the force at this place instead of adding one, keeping its window of "

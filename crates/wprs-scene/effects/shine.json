@@ -1,6 +1,8 @@
 {
   "id": "shine",
   "name": { "en": "Shine" },
+  "category": "light",
+  "description": "Sweeps a shine or glint band across the picture.",
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

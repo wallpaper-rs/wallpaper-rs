@@ -1,6 +1,8 @@
 {
   "id": "lens_flare",
   "name": { "en": "Lens flare" },
+  "category": "light",
+  "description": "Draws a lens flare from a light source.",
   "params": [
     { "id": "source", "type": "position", "default": [0.3, 0.3] },
     { "id": "follow", "type": "bool", "default": false, "uses": "cursor" },

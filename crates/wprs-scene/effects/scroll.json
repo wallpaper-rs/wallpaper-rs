@@ -1,6 +1,8 @@
 {
   "id": "scroll",
   "name": { "en": "Scroll" },
+  "category": "motion",
+  "description": "Scrolls the picture, repeating at the edges.",
   "mask_mode": "strength",
   "params": [
     { "id": "speed", "type": "vec2", "default": [0.01, 0], "min": -4, "max": 4, "uses": "time" },

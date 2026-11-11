@@ -1,6 +1,8 @@
 {
   "id": "reveal",
   "name": { "en": "Reveal" },
+  "category": "blend",
+  "description": "Reveals or hides the picture through a growing shape.",
   "mask_mode": "strength",
   "params": [
     { "id": "texture", "type": "texture", "default": "" },

@@ -1,6 +1,8 @@
 {
   "id": "color_adjust",
   "name": { "en": "Color adjustments" },
+  "category": "color",
+  "description": "Adjusts exposure, contrast, saturation and hue.",
   "params": [
     { "id": "exposure", "type": "float", "default": 0, "min": -5, "max": 5 },
     { "id": "contrast", "type": "float", "default": 1, "min": 0, "max": 4 },

@@ -1,6 +1,8 @@
 {
   "id": "blur_radial",
   "name": { "en": "Radial blur" },
+  "category": "blur",
+  "description": "Blurs outward from a center point, as if zooming.",
   "mask_mode": "strength",
   "params": [
     { "id": "center", "type": "vec2", "default": [0.5, 0.5], "min": -1, "max": 2 },

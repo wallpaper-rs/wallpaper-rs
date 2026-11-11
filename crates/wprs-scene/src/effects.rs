@@ -1,4 +1,4 @@
-use crate::Quality;
+use crate::{Quality, Text};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::sync::{OnceLock, RwLock};
@@ -37,6 +37,10 @@ pub struct Descriptor {
     pub id: String,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub name: BTreeMap<String, String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<Text>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub uses: Vec<Use>,
     #[serde(default)]

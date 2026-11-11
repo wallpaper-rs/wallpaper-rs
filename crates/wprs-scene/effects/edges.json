@@ -1,6 +1,8 @@
 {
   "id": "edges",
   "name": { "en": "Edges" },
+  "category": "stylize",
+  "description": "Outlines edges, with an optional sketch look.",
   "mask_mode": "strength",
   "params": [
     { "id": "strength", "type": "float", "default": 1, "min": 0, "max": 1 },

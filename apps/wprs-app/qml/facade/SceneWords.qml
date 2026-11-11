@@ -166,6 +166,15 @@ QtObject {
         return own[id] ?? SceneEffects.effects[id] ?? label(id);
     }
 
+    readonly property var categories: ({
+            "blend": App.tr("Blend"), "blur": App.tr("Blur"), "color": App.tr("Color"), "distort": App.tr("Distort"),
+            "light": App.tr("Light"), "motion": App.tr("Motion"), "stylize": App.tr("Stylize"), "transform": App.tr("Transform")
+        })
+
+    function category(key) {
+        return categories[key] ?? label(key);
+    }
+
     function easing(name) {
         const parts = /^(in_out|in|out)_(.*)$/.exec(name);
         if (!parts)

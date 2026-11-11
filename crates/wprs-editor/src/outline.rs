@@ -111,7 +111,8 @@ pub fn outline(project: &Project, time: f64, files: &[Problem]) -> Value {
         "history": {"done": done, "undone": undone, "undo": undo, "redo": redo}, "dirty": project.dirty(), "recoverable": project.pending.is_some(),
         "kinds": KINDS, "starters": STARTERS, "easings": wprs_scene::easings(),
         "effects": wprs_scene::builtin().iter().map(|d| d.id.as_str()).chain(own(doc)).collect::<Vec<_>>(),
-        "effect_names": names(project), "kind": crate::pages::kind(doc), "page_starters": crate::pages::PAGE_STARTERS,
+        "effect_names": names(project), "effect_catalog": catalog(project),
+        "kind": crate::pages::kind(doc), "page_starters": crate::pages::PAGE_STARTERS,
         "files": if crate::pages::scened(doc) { Vec::new() } else { crate::pages::files(&project.dir, doc) }})
 }
 
@@ -121,6 +122,16 @@ fn names(project: &Project) -> serde_json::Map<String, Value> {
     named
         .map(|d| (d.id.clone(), json!(wprs_scene::Text::Localized(d.name.clone()).pick(&languages))))
         .collect()
+}
+
+pub fn catalog(project: &Project) -> Vec<Value> {
+    let languages = wprs_core::locale::languages();
+    let entry = |d: &wprs_scene::Descriptor| {
+        json!({"id": d.id, "category": d.category,
+            "description": d.description.as_ref().map(|t| t.pick(&languages)), "units": d.units()})
+    };
+    let own = project.effects();
+    wprs_scene::builtin().iter().map(entry).chain(own.values().map(|d| entry(d.as_ref()))).collect()
 }
 
 fn own(doc: &Value) -> impl Iterator<Item = &str> {

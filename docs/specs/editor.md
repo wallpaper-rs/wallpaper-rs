@@ -219,7 +219,11 @@ masking layer framed, and a shape centered on the layer with its outline, its fe
 outside in dashes, a handle that sizes it (or moves the end of a line, which runs from −`to`/2 to
 `to`/2 around the middle) and a dot past its edge that sets the feather; each drag is one gesture.
 The outline adds `effect_names`, the `name` of each effect of
-the package in the language of the desktop. Problems and refused actions show the message of the validator and of the editor, the
+the package in the language of the desktop, and `effect_catalog`, the `id`, `category`, `description`
+and cost of every built-in effect and effect of the package, the description in the language of the
+desktop. *Add an effect* opens a dialog of that list grouped by category, searchable, each effect
+with its cost next to its description; `wprs-ctl scene catalog DIR [--category CAT] [--json]` prints
+the same list on a terminal, as a table or one JSON object per effect. Problems and refused actions show the message of the validator and of the editor, the
 same English text that `wprs-ctl scene validate` and the commands print, under a translated
 heading; each problem leads to its field, whose name is translated. A field that may follow a
 source (keyframes, a user property, the sound analysis, the pointer or the media player) has

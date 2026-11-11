@@ -1,6 +1,8 @@
 {
   "id": "transform",
   "name": { "en": "Transform" },
+  "category": "transform",
+  "description": "Offsets, scales, rotates and skews the picture.",
   "params": [
     { "id": "offset", "type": "vec2", "default": [0, 0], "min": -2, "max": 2 },
     { "id": "scale", "type": "vec2", "default": [1, 1], "min": 0.01, "max": 16 },
