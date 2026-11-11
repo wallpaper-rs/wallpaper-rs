@@ -80,8 +80,8 @@ fn remaps_looks_depth_children_and_shaders_are_set_undone_and_checked() {
     assert_eq!(system(&p)["init"]["remap"].as_array().map(Vec::len), Some(1));
     edit(&mut p, "cutout", json!({ "range": [0.2, 0.6, 0.8] })).unwrap();
     edit(&mut p, "orient", json!({ "orient": "fixed", "angle": 30 })).unwrap();
-    edit(&mut p, "perspective", json!({ "focal": 600, "depth": [-100, 300], "depth_speed": [0, 20] }))
-        .unwrap();
+    edit(&mut p, "perspective", json!({ "focal": 600 })).unwrap();
+    edit(&mut p, "start", json!({ "ranges": { "depth": [-100, 300], "depth_speed": [0, 20] } })).unwrap();
     let s = system(&p);
     assert_eq!(
         (s["render"]["cutout"].clone(), s["render"]["orient"].clone()),
@@ -89,7 +89,7 @@ fn remaps_looks_depth_children_and_shaders_are_set_undone_and_checked() {
     );
     assert_eq!(
         (s["perspective"]["focal"].clone(), s["init"]["depth"].clone()),
-        (json!(600.0), json!([-100.0, 300.0]))
+        (json!(600.0), json!([-100, 300]))
     );
     edit(&mut p, "orient", json!({ "layer": "flakes", "orient": "velocity" })).unwrap();
     let own = &p.doc["scene"]["layers"][1]["render"];
