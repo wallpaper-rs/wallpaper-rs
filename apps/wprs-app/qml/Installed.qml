@@ -9,10 +9,18 @@ ColumnLayout {
 
     required property Installer installer
     property var packages: []
+    property string removingId
+    property string removingVersion
     readonly property var updates: packages.filter((p, i) => p.update && packages.findIndex(q => q.id === p.id) === i)
 
     function load() {
         App.query("ListInstalled", [], "Repos1", reply => installed && (installed.packages = reply.packages));
+    }
+
+    function confirmUninstall(id, version) {
+        installed.removingId = id;
+        installed.removingVersion = version;
+        uninstaller.open();
     }
 
     Component.onCompleted: load()
@@ -77,7 +85,7 @@ ColumnLayout {
                 QQC2.ToolButton {
                     icon.name: "edit-delete"
                     text: App.tr("Uninstall")
-                    onClicked: App.act("Uninstall", [row.modelData.id, row.modelData.version], "Repos1")
+                    onClicked: installed.confirmUninstall(row.modelData.id, row.modelData.version)
                 }
 
                 QQC2.ToolButton {
@@ -86,9 +94,23 @@ ColumnLayout {
                     display: QQC2.AbstractButton.IconOnly
                     QQC2.ToolTip.text: text
                     QQC2.ToolTip.visible: hovered
-                    onClicked: App.act("Uninstall", [row.modelData.id, ""], "Repos1")
+                    onClicked: installed.confirmUninstall(row.modelData.id, "")
                 }
             }
+        }
+    }
+
+    Kirigami.Dialog {
+        id: uninstaller
+
+        title: App.tr("Uninstall package")
+        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
+        onAccepted: App.act("Uninstall", [installed.removingId, installed.removingVersion], "Repos1")
+
+        QQC2.Label {
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 24
+            wrapMode: Text.Wrap
+            text: installed.removingVersion === "" ? App.tr("Uninstall every installed version of %1? You can install it again from Browse.", installed.removingId) : App.tr("Uninstall %1 %2? You can install it again from Browse.", installed.removingId, installed.removingVersion)
         }
     }
 }

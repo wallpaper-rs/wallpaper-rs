@@ -1973,6 +1973,22 @@ msgstr "Desinstalar"
 msgid "Uninstall all versions"
 msgstr "Desinstalar todas las versiones"
 
+#: apps/wprs-app/qml/Installed.qml
+msgid "Uninstall package"
+msgstr "Desinstalar paquete"
+
+#: apps/wprs-app/qml/Installed.qml
+msgid ""
+"Uninstall every installed version of %1? You can install it again from "
+"Browse."
+msgstr ""
+"¿Desinstalar todas las versiones instaladas de %1? Podés instalarlo de "
+"nuevo desde Explorar."
+
+#: apps/wprs-app/qml/Installed.qml
+msgid "Uninstall %1 %2? You can install it again from Browse."
+msgstr "¿Desinstalar %1 %2? Podés instalarlo de nuevo desde Explorar."
+
 #: apps/wprs-app/qml/Installer.qml
 msgid "The repository is out of date"
 msgstr "El repositorio está desactualizado"
