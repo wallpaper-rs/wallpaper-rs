@@ -101,6 +101,18 @@ fn a_dragged_knob_commits_where_the_drag_ended_not_the_translation_after_release
 }
 
 #[test]
+fn a_3d_model_is_added_from_the_generic_layer_from_a_file_menu() {
+    let files = qml_files();
+    let file = |wanted: &str| files.iter().find(|(n, _)| n == wanted).map(|(_, t)| t.clone()).unwrap();
+    let menu = file("SceneLayerFiles.qml");
+    assert!(menu.contains(r#"["model", App.tr("3D model from a .glb file…"), "draw-cuboid"]"#));
+    assert!(menu.contains("SceneModelImport {"));
+    let tools = file("SceneLayerTools.qml");
+    assert!(!tools.contains("3D model from a file"), "the menu kept its own, non-generic entry");
+    assert!(!tools.contains("SceneModelImport {"), "the menu kept its own import dialog");
+}
+
+#[test]
 fn the_3d_stage_reads_its_models_and_draws_the_bones_over_their_boxes() {
     let files = qml_files();
     let file = |wanted: &str| files.iter().find(|(n, _)| n == wanted).map(|(_, t)| t.clone()).unwrap();

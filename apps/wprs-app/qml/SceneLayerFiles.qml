@@ -31,7 +31,7 @@ QQC2.Menu {
     title: App.tr("Layer from a file")
 
     Repeater {
-        model: [["image", App.tr("Picture…"), "image-x-generic"], ["video", App.tr("Video…"), "video-x-generic"], ["sound", App.tr("Sound…"), "audio-x-generic"], ["mesh", App.tr("Mesh from a .glb file…"), "draw-polyline"]]
+        model: [["image", App.tr("Picture…"), "image-x-generic"], ["video", App.tr("Video…"), "video-x-generic"], ["sound", App.tr("Sound…"), "audio-x-generic"], ["mesh", App.tr("Mesh from a .glb file…"), "draw-polyline"], ["model", App.tr("3D model from a .glb file…"), "draw-cuboid"]]
 
         delegate: QQC2.MenuItem {
             required property var modelData
@@ -39,9 +39,20 @@ QQC2.Menu {
             text: modelData[1]
             icon.name: modelData[2]
             onTriggered: {
+                if (modelData[0] === "model") {
+                    importer.open();
+                    return;
+                }
                 files.kind = modelData[0];
                 files.dialog.open();
             }
         }
+    }
+
+    SceneModelImport {
+        id: importer
+
+        page: files.owner.page
+        into: files.owner.current?.type === "group" ? files.owner.current.id : ""
     }
 }

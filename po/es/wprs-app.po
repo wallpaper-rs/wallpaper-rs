@@ -4814,6 +4814,10 @@ msgstr "Sonido…"
 msgid "Mesh from a .glb file…"
 msgstr "Malla desde un archivo .glb…"
 
+#: apps/wprs-app/qml/SceneLayerFiles.qml
+msgid "3D model from a .glb file…"
+msgstr "Modelo 3D desde un archivo .glb…"
+
 #: apps/wprs-app/qml/SceneLayerLook.qml
 msgid "Blend mode:"
 msgstr "Modo de fusión:"
@@ -4861,10 +4865,6 @@ msgstr "Tubo de luz"
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Directional light"
 msgstr "Luz direccional"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "3D model from a file…"
-msgstr "Modelo 3D desde un archivo…"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Mesh from a picture…"

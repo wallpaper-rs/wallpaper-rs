@@ -57,12 +57,6 @@ Flow {
                 }
             }
 
-            QQC2.MenuItem {
-                text: App.tr("3D model from a file…")
-                icon.name: "draw-cuboid"
-                onTriggered: importer.open()
-            }
-
             SceneLayerFiles {
                 owner: tools.owner
             }
@@ -79,13 +73,6 @@ Flow {
             id: cutter
 
             page: tools.owner.page
-        }
-
-        SceneModelImport {
-            id: importer
-
-            page: tools.owner.page
-            into: tools.owner.current?.type === "group" ? tools.owner.current.id : ""
         }
     }
 
