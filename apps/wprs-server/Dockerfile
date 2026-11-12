@@ -1,13 +1,22 @@
-FROM docker.io/library/rust:1.99-alpine@sha256:3ea887915f261f273d6a24efdfdb92665dee12199923e57870453644fe4ae5c9 AS build
+FROM docker.io/library/rust:1.99-alpine@sha256:3ea887915f261f273d6a24efdfdb92665dee12199923e57870453644fe4ae5c9 AS plan
 WORKDIR /src
+COPY . .
+RUN sh apps/wprs-server/skeleton.sh /skeleton
+
+FROM docker.io/library/rust:1.99-alpine@sha256:3ea887915f261f273d6a24efdfdb92665dee12199923e57870453644fe4ae5c9 AS dependencies
+WORKDIR /src
+COPY --from=plan /skeleton .
+RUN cargo build --release --locked -p wprs-server --features oidc
+
+FROM dependencies AS build
 ARG WPRS_VERSION
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 COPY . .
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/src/target \
-    cargo build --release --locked -p wprs-server --features oidc \
+RUN find apps crates -name '*.rs' -exec touch {} + \
+    && cargo build --release --locked -p wprs-server --features oidc \
     && install -D -m 0755 target/release/wprs-server /out/wprs-server \
-    && install -d -m 0700 /out/data
+    && install -d -m 0700 /out/data \
+    && rm -rf target "$CARGO_HOME/registry"
 
 FROM gcr.io/distroless/static-debian13:nonroot@sha256:d62067879de890a1def9da0e7766b7d20810a5e5555cef8506b752437d7a3e88
 LABEL org.opencontainers.image.title="wprs-server" \

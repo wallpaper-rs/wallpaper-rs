@@ -1,0 +1,4 @@
+services:
+  wprs:
+    image: wprs-server:local
+    pull_policy: never

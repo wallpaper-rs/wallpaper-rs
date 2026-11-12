@@ -894,7 +894,7 @@ jobs:
     env:
       WPRS_VERSION: ${{ needs.version.outputs.informational }}
       WPRS_PUBLIC_URL: http://127.0.0.1:8080
-      COMPOSE_FILE: compose.yaml:deploy/compose.build.yaml
+      COMPOSE_FILE: compose.yaml:deploy/compose.local.yaml
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -905,6 +905,7 @@ jobs:
         with:
           path: ${{ runner.temp }}/wprs-image
           key: server-image-${{ github.sha }}
+          restore-keys: server-image-
 
       - name: Build the image
         env:
