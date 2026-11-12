@@ -81,6 +81,26 @@ fn hitboxes_follow_transforms_groups_and_alpha() {
 }
 
 #[test]
+fn a_tilted_layer_takes_the_pointer_where_its_projected_outline_is() {
+    let Some(r) = renderer() else { return };
+    let layers = json!([{ "id": "card", "type": "solid", "color": "#ff8000", "size": [60, 40], "solid": true,
+        "transform": { "position": [80, 45], "tilt": [60, 0] } }]);
+    let doc = json!({ "schema": SCHEMA, "canvas": { "size": [160, 90], "background": "#102030", "perspective": 120 },
+        "layers": layers });
+    let scene = Scene::load(&doc.to_string(), &Default::default()).unwrap();
+    let mut view = r.scene_view(&scene, &assets(), &Values::new()).unwrap();
+    let runtime = Runtime::new(Arc::new(scene), Values::new());
+    draw(r, &mut view, &runtime);
+    let hit = |x: f32, y: f32| view.hitboxes().hit([x, y]).map(|(l, _)| l.to_owned());
+    assert_eq!(hit(80.0, 45.0).as_deref(), Some("card"), "the middle of the card took no pointer");
+    assert_eq!(hit(52.0, 27.0), None, "the far top corner is outside the projected card");
+    assert_eq!(hit(108.0, 27.0), None, "the far top corner on the right is outside the projected card");
+    assert_eq!(hit(48.0, 54.0).as_deref(), Some("card"), "the near bottom edge is wider than the flat box");
+    assert_eq!(hit(112.0, 54.0).as_deref(), Some("card"), "the near bottom edge is wider than the flat box");
+    assert_eq!(hit(80.0, 63.0), None, "the flat box below the projected card took the pointer");
+}
+
+#[test]
 fn clicks_on_solid_layers_start_animations_and_drags_away_do_not() {
     let Some(r) = renderer() else { return };
     let lamp = |opacity: Value| json!({ "id": "lamp", "type": "solid", "color": "#ffffff", "size": [20, 20], "opacity": opacity, "transform": { "position": [140, 20] } });
