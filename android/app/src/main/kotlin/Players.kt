@@ -2,6 +2,7 @@ package io.github.wallpaper_rs
 
 import android.content.ComponentName
 import android.content.Context
+import android.database.ContentObserver
 import android.graphics.Bitmap
 import android.media.MediaMetadata
 import android.media.session.MediaController
@@ -48,6 +49,11 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
         override fun onSessionDestroyed() = pick(null)
     }
 
+    private val access = object : ContentObserver(Render.handler) {
+        override fun onChange(selfChange: Boolean) = check()
+    }
+    private var observing = false
+
     private var failures = 0
     private val retry = Runnable { check() }
 
@@ -57,7 +63,15 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
 
     fun follow(painter: Painter, wanted: Boolean) {
         if (wanted) listeners += painter else listeners -= painter
+        observe(listeners.isNotEmpty())
         check()
+    }
+
+    private fun observe(on: Boolean) {
+        if (on == observing) return
+        observing = on
+        val resolver = context.contentResolver
+        if (on) resolver.registerContentObserver(Settings.Secure.getUriFor(ENABLED), false, access) else resolver.unregisterContentObserver(access)
     }
 
     private fun check() {
@@ -154,6 +168,7 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
 
     companion object {
         private const val SIDE = 256
+        private const val ENABLED = "enabled_notification_listeners"
         private val readers = mutableMapOf<Players, MediaShown>()
         private val all = Collections.newSetFromMap(WeakHashMap<Players, Boolean>())
         var status by mutableStateOf(MediaShown())
@@ -167,7 +182,7 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
         }
 
         fun allowed(context: Context): Boolean {
-            val enabled = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners").orEmpty()
+            val enabled = Settings.Secure.getString(context.contentResolver, ENABLED).orEmpty()
             return enabled.split(':').any { ComponentName.unflattenFromString(it) == ComponentName(context, Listener::class.java) }
         }
     }
