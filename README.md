@@ -1948,7 +1948,14 @@ pista, si hay carátula y sus colores, posición, duración y progreso) y recibe
 `mediaPlayback`, `mediaProperties`, `mediaThumbnail` y `mediaTimeline` cuando algo cambia; sin
 permiso solo ven `enabled: false`, y nunca reciben la imagen de la carátula. *Nuevo script…* en el
 panel de recursos (o `wprs-ctl scene import-script CARPETA reproductor.js --template media`) crea un
-módulo con todos esos eventos y valores para enlazar. Para probarlos sin música, `wprs-ctl media
+módulo con todos esos eventos y valores para enlazar; hay otras plantillas (`touch`, `timer`, `audio`,
+`spawn`, `wave`, `daytime`, `setting` y `launches`). La sección *Scripts* del panel de recursos
+lista los módulos de la escena y deja quitarlos, ordenarlos, atar un `.js` de la carpeta, abrirlos en
+el editor del sistema (la vista previa se recarga sola al guardar el archivo) o editarlos en la
+propia app, con una referencia de la API. Un informe compara el código con su declaración (lo que
+usa y no declara, lo que declara y no usa) y *Declarar lo que usa* lo corrige. Las plantillas de
+`scene.spawn` salen como un árbol de capas con su inspector, y *Hacer plantilla* toma las capas
+elegidas. Para probarlos sin música, `wprs-ctl media
 simulate PANTALLA pista.json` muestra una pista inventada en cualquier pantalla (`--stop` la quita).
 
 Un fondo web que declara `media` recibe lo mismo con `window.wprs.onMedia(cb)`: estado, título,
@@ -2427,7 +2434,8 @@ otra página no cierra un editor con cambios sin guardar.
   que pueden leer y sus variantes, enlazables a propiedades, fotogramas clave o scripts.
   *Importar un script…* (`wprs-ctl scene import-script`) copia un módulo `.js` a `scripts/` y
   propone su declaración: los eventos que exporta o atiende con `on` y las partes de `wprs` que
-  importa o llama; conviene revisarla antes de publicar. *Convertir a KTX2…*, en cada imagen fija,
+  importa o llama; conviene revisarla antes de publicar. Al importar otra vez el mismo módulo,
+  conserva sus `params` y dice qué cambió en la declaración. *Convertir a KTX2…*, en cada imagen fija,
   la pasa a una textura KTX2 con Basis Universal (UASTC, más nítida, o ETC1S, más pequeña) con un
   control de calidad: muestra el tamaño del archivo antes y después, la memoria que ocupa en cada
   clase de tarjeta y un recorte de cómo la dibuja cada una (BC7 en escritorio, ASTC en teléfonos,
@@ -2843,7 +2851,10 @@ interfaz completa; lo esencial:
   2}}` llama cada fotograma a `vaiven(valor, ctx)` con lo que devolvió la vez anterior y `ctx.path`,
   `ctx.layer` y `ctx.params`; un mismo módulo sirve así a muchas propiedades. Los `params` se declaran
   solo en la entrada del script en `scene.json`, con tipo, valor por defecto y límites: el módulo no
-  los exporta y `wprs-ctl scene import-script` no los propone, así que se escriben a mano.
+  los exporta y `wprs-ctl scene import-script` no los propone, pero los conserva al importar de nuevo
+  el módulo. En el editor se escriben en una tabla tipada por módulo (id, tipo, valor por defecto y,
+  en los números, mínimo y máximo) y cada propiedad los sigue con *Seguir un script*, que lista las
+  funciones del módulo.
 - **Capas**: `scene.layer(id)` lee la posición, la escala, el giro, la opacidad, el color, el tamaño,
   el texto y lo demás tal como la escena los evaluó, y escribe esos campos, que duran hasta que el
   script los cambie o llame a `reset()`. `layer.effect("nombre")` apaga un efecto, cambia sus

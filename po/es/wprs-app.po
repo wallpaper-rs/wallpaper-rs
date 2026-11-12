@@ -837,6 +837,7 @@ msgstr "Volver"
 
 #: apps/wprs-app/qml/EditActions.qml apps/wprs-app/qml/PackagePage.qml
 #: apps/wprs-app/qml/SceneEntry.qml apps/wprs-app/qml/ScenePage.qml
+#: apps/wprs-app/qml/SceneScriptCode.qml
 msgid "Save"
 msgstr "Guardar"
 
@@ -1291,7 +1292,8 @@ msgid "Soft light"
 msgstr "Luz suave"
 
 #: apps/wprs-app/qml/EditEffects.qml apps/wprs-app/qml/SceneMaterial3d.qml
-#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/facade/SceneWords.qml
+#: apps/wprs-app/qml/SceneScriptParams.qml apps/wprs-app/qml/SceneSwarmKin.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Color"
 msgstr "Color"
 
@@ -1567,12 +1569,12 @@ msgid "No changes yet"
 msgstr "Aún no hay cambios"
 
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/SceneInspector.qml
-#: apps/wprs-app/qml/SceneSetting.qml
+#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSetting.qml
 msgid "Move up"
 msgstr "Subir"
 
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/SceneInspector.qml
-#: apps/wprs-app/qml/SceneSetting.qml
+#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSetting.qml
 msgid "Move down"
 msgstr "Bajar"
 
@@ -1585,9 +1587,10 @@ msgstr "Bajar"
 #: apps/wprs-app/qml/SceneModelSwing.qml apps/wprs-app/qml/ScenePairs.qml
 #: apps/wprs-app/qml/SceneProperties.qml apps/wprs-app/qml/SceneRigIk.qml
 #: apps/wprs-app/qml/SceneRigPhysics.qml apps/wprs-app/qml/SceneRigRow.qml
-#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/SceneScriptsList.qml
-#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneShapes.qml
-#: apps/wprs-app/qml/SceneSwarmPoints.qml
+#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/SceneScriptParam.qml
+#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSettingMenu.qml
+#: apps/wprs-app/qml/SceneShapes.qml apps/wprs-app/qml/SceneSwarmPoints.qml
+#: apps/wprs-app/qml/SceneTemplateTree.qml
 #: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
 msgid "Remove"
 msgstr "Quitar"
@@ -3223,7 +3226,7 @@ msgid "Automatic rules"
 msgstr "Reglas automáticas"
 
 #: apps/wprs-app/qml/ProfileCard.qml apps/wprs-app/qml/SceneAssets.qml
-#: apps/wprs-app/qml/SceneSettingMenu.qml
+#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneTemplateTree.qml
 #: apps/wprs-app/qml/SceneTimelineMenu.qml
 msgid "Rename…"
 msgstr "Cambiar el nombre…"
@@ -3443,6 +3446,7 @@ msgstr ""
 "gráfica muestra entonces menos fotogramas por segundo."
 
 #: apps/wprs-app/qml/QualityPicker.qml apps/wprs-app/qml/SceneNewMaterial.qml
+#: apps/wprs-app/qml/SceneScriptAudit.qml
 msgid "%1: %2"
 msgstr "%1: %2"
 
@@ -4146,6 +4150,36 @@ msgid "Module with a timer that counts seconds"
 msgstr "Módulo con un temporizador que cuenta segundos"
 
 #: apps/wprs-app/qml/SceneAssets.qml
+msgid ""
+"Module that follows the sound, with a smoothed level, the bass and the beat"
+msgstr ""
+"Módulo que sigue al sonido, con un nivel suavizado, los graves y el pulso"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "Module that draws copies of a template of the scene, with settings"
+msgstr "Módulo que dibuja copias de una plantilla de la escena, con ajustes"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "Module with a swinging value and settings for its speed and size"
+msgstr "Módulo con un valor que oscila y ajustes para su velocidad y su tamaño"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "Module that follows the time of day, with the daylight and the hour"
+msgstr "Módulo que sigue la hora del día, con la luz del día y la hora"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid ""
+"Module that follows a setting of the user, chosen with a setting of the "
+"module"
+msgstr ""
+"Módulo que sigue un ajuste de quien usa el fondo, elegido con un ajuste del "
+"módulo"
+
+#: apps/wprs-app/qml/SceneAssets.qml
+msgid "Module that counts how many times the scene started and keeps the count"
+msgstr "Módulo que cuenta cuántas veces arrancó la escena y guarda la cuenta"
+
+#: apps/wprs-app/qml/SceneAssets.qml
 msgid "Import from an assets package…"
 msgstr "Importar de un paquete de recursos…"
 
@@ -4247,6 +4281,26 @@ msgstr "Posición vertical"
 #: apps/wprs-app/qml/SceneBind.qml apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Over the screen"
 msgstr "Sobre la pantalla"
+
+#: apps/wprs-app/qml/SceneBindScript.qml
+msgid "%1, every frame"
+msgstr "%1, cada fotograma"
+
+#: apps/wprs-app/qml/SceneBindScript.qml
+msgid "%1, function %2 with the settings %3"
+msgstr "%1, función %2 con los ajustes %3"
+
+#: apps/wprs-app/qml/SceneBindScript.qml
+msgid "%1, function %2"
+msgstr "%1, función %2"
+
+#: apps/wprs-app/qml/SceneBindScript.qml
+msgid "Follow a script"
+msgstr "Seguir un script"
+
+#: apps/wprs-app/qml/SceneBindScript.qml
+msgid "The scene has no script to follow"
+msgstr "La escena no tiene ningún script que seguir"
 
 #: apps/wprs-app/qml/SceneBodyKnobs.qml
 msgid "Drag up or down to set the gravity of %1"
@@ -5031,6 +5085,12 @@ msgid "Read it as data, such as a normal map or a mask, not as colors"
 msgstr ""
 "Leerla como datos, como un mapa de normales o una máscara, no como colores"
 
+#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePropertyRange.qml
+#: apps/wprs-app/qml/SceneScriptParam.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Default"
+msgstr "Valor por defecto"
+
 #: apps/wprs-app/qml/SceneInspector.qml
 msgid "Add effect"
 msgstr "Añadir un efecto"
@@ -5321,8 +5381,12 @@ msgid "Make a template"
 msgstr "Hacer plantilla"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Copy the layer to the templates that scripts spawn"
-msgstr "Copia la capa a las plantillas que crean los scripts"
+msgid ""
+"Copy the selected layer and the ones picked with Ctrl to the templates that "
+"scripts spawn"
+msgstr ""
+"Copia la capa elegida y las que marcaste con Ctrl a las plantillas que crean "
+"los scripts"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Particle systems"
@@ -5821,7 +5885,8 @@ msgstr "Secundario"
 msgid "Tertiary"
 msgstr "Terciario"
 
-#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/facade/SceneLabels.qml
+#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Text"
 msgstr "Texto"
@@ -6120,7 +6185,7 @@ msgstr "Crear un paquete de recursos"
 msgid "Title:"
 msgstr "Título:"
 
-#: apps/wprs-app/qml/SceneOffer.qml
+#: apps/wprs-app/qml/SceneOffer.qml apps/wprs-app/qml/SceneScriptAudit.qml
 msgid "parts"
 msgstr "partes"
 
@@ -6743,18 +6808,137 @@ msgstr "%1 px/s"
 msgid "Gusts"
 msgstr "Ráfagas"
 
+#: apps/wprs-app/qml/SceneScriptApi.qml
+msgid "Scene and layers"
+msgstr "Escena y capas"
+
+#: apps/wprs-app/qml/SceneScriptApi.qml
+msgid "What the scene gives a script"
+msgstr "Lo que la escena le da a un script"
+
+#: apps/wprs-app/qml/SceneScriptApi.qml
+msgid "Timers, storage and other tools"
+msgstr "Temporizadores, almacenamiento y otras herramientas"
+
+#: apps/wprs-app/qml/SceneScriptApi.qml
+msgid "Functions a module exports"
+msgstr "Funciones que exporta un módulo"
+
+#: apps/wprs-app/qml/SceneScriptApi.qml
+msgid "Functions a value follows"
+msgstr "Funciones que sigue un valor"
+
+#: apps/wprs-app/qml/SceneScriptApi.qml
+msgid "Script API"
+msgstr "API de los scripts"
+
+#: apps/wprs-app/qml/SceneScriptAudit.qml
+msgid "events"
+msgstr "eventos"
+
+#: apps/wprs-app/qml/SceneScriptAudit.qml
+msgid "settings"
+msgstr "ajustes"
+
+#: apps/wprs-app/qml/SceneScriptAudit.qml
+msgid "What the code uses matches what the scene declares"
+msgstr "Lo que usa el código coincide con lo que declara la escena"
+
+#: apps/wprs-app/qml/SceneScriptAudit.qml
+msgid "Used but not declared: %1"
+msgstr "Usado y no declarado: %1"
+
+#: apps/wprs-app/qml/SceneScriptAudit.qml
+msgid "Declared but not used: %1"
+msgstr "Declarado y no usado: %1"
+
+#: apps/wprs-app/qml/SceneScriptAudit.qml
+msgid "Declare what it uses"
+msgstr "Declarar lo que usa"
+
+#: apps/wprs-app/qml/SceneScriptCode.qml
+msgid "%1 (not saved)"
+msgstr "%1 (sin guardar)"
+
+#: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneScriptRow.qml
+msgid "Open in your editor…"
+msgstr "Abrirlo en tu editor…"
+
+#: apps/wprs-app/qml/SceneScriptCode.qml
+msgid "API reference…"
+msgstr "Referencia de la API…"
+
+#: apps/wprs-app/qml/SceneScriptParam.qml
+msgid "On by default"
+msgstr "Activado por defecto"
+
+#: apps/wprs-app/qml/SceneScriptParam.qml
+msgid "Min"
+msgstr "Mín."
+
+#: apps/wprs-app/qml/SceneScriptParam.qml
+msgid "Max"
+msgstr "Máx."
+
+#: apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Number"
+msgstr "Número"
+
+#: apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Switch"
+msgstr "Interruptor"
+
+#: apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Pair of numbers"
+msgstr "Par de números"
+
+#: apps/wprs-app/qml/SceneScriptParams.qml
+msgid "Settings of the module"
+msgstr "Ajustes del módulo"
+
+#: apps/wprs-app/qml/SceneScriptParams.qml
+msgid "Add a setting"
+msgstr "Añadir un ajuste"
+
+#: apps/wprs-app/qml/SceneScriptRow.qml
+msgid "Hide the declaration and settings"
+msgstr "Ocultar la declaración y los ajustes"
+
+#: apps/wprs-app/qml/SceneScriptRow.qml
+msgid "Show the declaration and settings"
+msgstr "Mostrar la declaración y los ajustes"
+
+#: apps/wprs-app/qml/SceneScriptRow.qml
+msgid "missing"
+msgstr "falta el archivo"
+
+#: apps/wprs-app/qml/SceneScriptRow.qml
+msgid "followed by %1"
+msgstr "lo siguen %1"
+
+#: apps/wprs-app/qml/SceneScriptRow.qml
+msgid "What the code uses differs from what the scene declares"
+msgstr "Lo que usa el código difiere de lo que declara la escena"
+
+#: apps/wprs-app/qml/SceneScriptRow.qml
+msgid "Edit the code…"
+msgstr "Editar el código…"
+
 #: apps/wprs-app/qml/SceneScriptsList.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Scripts"
 msgstr "Scripts"
 
 #: apps/wprs-app/qml/SceneScriptsList.qml
-msgid "View source…"
-msgstr "Ver el código…"
+msgid "Attach a script of the folder…"
+msgstr "Atar un script de la carpeta…"
 
 #: apps/wprs-app/qml/SceneScriptsList.qml
-msgid "Open in your editor…"
-msgstr "Abrirlo en tu editor…"
+msgid "Every script of the folder is already attached"
+msgstr "Todos los scripts de la carpeta ya están atados"
 
 #: apps/wprs-app/qml/SceneSetting.qml
 msgid "More"
@@ -8056,6 +8240,31 @@ msgstr ""
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Follow"
 msgstr "Seguir"
+
+#: apps/wprs-app/qml/SceneTemplateFollow.qml
+msgid "Stop following"
+msgstr "Dejar de seguir"
+
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Templates"
+msgstr "Plantillas"
+
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+msgid "%1 · named by %2"
+msgstr "%1 · la nombran %2"
+
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+msgid "Show it alone"
+msgstr "Mostrarla sola"
+
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+msgid "Rename the template"
+msgstr "Renombrar la plantilla"
+
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+msgid "Scripts that spawn it by name are not rewritten."
+msgstr "Los scripts que la crean por su nombre no se reescriben."
 
 #: apps/wprs-app/qml/SceneTemplates.qml
 msgid "The scene"
@@ -10364,10 +10573,6 @@ msgid "Target"
 msgstr "Objetivo"
 
 #: apps/wprs-app/qml/facade/SceneLabels.qml
-msgid "Templates"
-msgstr "Plantillas"
-
-#: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Textured"
 msgstr "Con textura"
 
@@ -11668,10 +11873,6 @@ msgid "Newest on top"
 msgstr "Las más nuevas encima"
 
 #: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Number"
-msgstr "Número"
-
-#: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Oldest on top"
 msgstr "Las más viejas encima"
 
@@ -11788,10 +11989,6 @@ msgstr "Arriba"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Every frame"
 msgstr "Cada fotograma"
-
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Pair of numbers"
-msgstr "Par de números"
 
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Vivid light"
@@ -12000,10 +12197,6 @@ msgstr "Espacio de mezcla"
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Flocking"
 msgstr "Bandada"
-
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Switch"
-msgstr "Interruptor"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Bottom left"
