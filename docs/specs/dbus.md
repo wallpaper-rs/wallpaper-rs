@@ -604,7 +604,7 @@ in their next frame (`scene.md`). Nothing is stored.
 ### `GetParticleStats(s output) → (s json)`
 
 Counts the particles of the scene that `output` draws now, for the editor of scenes and
-`wprs-ctl particle-stats --output`. The reply is `{ output, path, reason, alive, slots, systems,
+`wprs-ctl prop particles --output`. The reply is `{ output, path, reason, alive, slots, systems,
 quality, quality_reason, tier, tier_measured }`: `path` is `"gpu"` or `"cpu"`, the place that
 simulates the particles, and `reason` why (`"compute"`: the card runs compute shaders,
 `"software"`: the renderer is software, `"no_compute"`: the card lacks them, `"chosen"`);

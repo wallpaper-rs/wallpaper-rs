@@ -32,7 +32,6 @@ pub async fn run(command: Command) -> Result<()> {
         Command::Reload => daemon.reload().await?,
         Command::Restart => crate::gpus::restart(client).await?,
         Command::RetryEffects => daemon.retry_effects().await?,
-        Command::ParticleStats { output } => println!("{}", daemon.get_particle_stats(&output).await?),
         Command::State { .. } => {
             let state = daemon.get_state().await?;
             println!("{state}");

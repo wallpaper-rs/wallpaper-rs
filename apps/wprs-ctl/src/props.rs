@@ -61,6 +61,11 @@ pub enum Prop {
         #[arg(short, long, default_value = "", help = OUTPUT)]
         output: String,
     },
+    #[command(about = "Print the particles alive on an output, the path that simulates them and why")]
+    Particles {
+        #[arg(short, long, help = "Output that shows the scene, such as a preview output")]
+        output: String,
+    },
     #[command(about = "Let a screen follow the shared values of every screen, or keep its own with --own")]
     Share {
         #[arg(short, long, help = "Output name such as DP-1")]
@@ -120,6 +125,7 @@ pub async fn run(client: &Client, command: Prop) -> Result<()> {
         Prop::CheckShortcut { value: text } => daemon.check_shortcut(&value(&text)).await?,
         Prop::Reset { output } => daemon.reset_scene_properties(&output).await?,
         Prop::Press { id, output } => daemon.press_scene_button(&output, &id).await?,
+        Prop::Particles { output } => println!("{}", daemon.get_particle_stats(&output).await?),
         Prop::Share { output, own } => daemon.share_scene_values(&output, !own).await?,
         Prop::Preset(command) => propsets::run(client, command).await?,
     }
