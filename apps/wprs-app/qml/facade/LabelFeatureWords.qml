@@ -80,6 +80,7 @@ QtObject {
             "effect_options": App.tr("builds its effect shaders in several variants"),
             "vertex_effects": App.tr("bends layers with its effect shaders"),
             "custom_effects2": App.tr("runs effect shaders that use newer fields or helpers"),
+            "lighter_effects": App.tr("draws lighter variants of its effect shaders at low quality levels"),
             "spanned_scenes": App.tr("spreads its scene over every screen"),
             "mesh": App.tr("bends pictures with a skeleton"),
             "ik": App.tr("reaches for targets with chains of bones"),
