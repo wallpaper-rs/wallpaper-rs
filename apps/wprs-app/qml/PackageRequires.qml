@@ -8,27 +8,10 @@ ColumnLayout {
     id: requires
 
     required property var page
-    property var installed: []
     readonly property var needed: page.manifest.requires?.packages ?? []
-    readonly property var choices: installed.filter(item => item.id !== page.manifest.id && !needed.some(n => n.id === item.id))
+    readonly property var choices: library.list.filter(item => item.id !== page.manifest.id && !needed.some(n => n.id === item.id))
     readonly property var found: choices.find(item => item.id === entry.editText.trim())
     readonly property int most: 16
-
-    function load() {
-        installed = [];
-        for (const query of ["", "kind:assets"])
-            App.query("Search", [query, 0, 500], "Library1", reply => {
-                if (!requires)
-                    return;
-                const seen = requires.installed.map(item => item.id);
-                const fresh = (reply?.items ?? []).filter(item => item.package?.id && !seen.includes(item.package.id));
-                requires.installed = requires.installed.concat(fresh.map(item => ({
-                            "id": item.package.id,
-                            "version": item.package.version,
-                            "title": item.title
-                        })));
-            }, () => {});
-    }
 
     function add() {
         const id = entry.editText.trim();
@@ -59,7 +42,9 @@ ColumnLayout {
             });
     }
 
-    Component.onCompleted: load()
+    PackageInstalled {
+        id: library
+    }
 
     QQC2.Label {
         Layout.fillWidth: true

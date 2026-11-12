@@ -48,7 +48,7 @@ pub fn read(dir: &Path) -> Result<Value> {
     };
     let manifest = load(MANIFEST)?;
     if !crate::pages::scened(&json!({"manifest": manifest})) {
-        return Ok(json!({"manifest": manifest}));
+        return crate::presets::attach(dir, json!({"manifest": manifest}));
     }
     let scene = load(&entry(&json!({"manifest": manifest}))?)?;
     Ok(json!({"manifest": manifest, "scene": scene}))
@@ -92,6 +92,7 @@ impl Project {
         if crate::pages::scened(&self.doc) {
             write(&self.dir.join(entry(&self.doc)?), &pretty(&self.doc["scene"])?, 0o644)?;
         }
+        crate::presets::write(&self.dir, &self.doc)?;
         self.base = stamp(&self.doc);
         Ok(())
     }

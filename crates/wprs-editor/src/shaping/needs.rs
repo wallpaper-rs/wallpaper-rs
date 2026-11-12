@@ -16,7 +16,7 @@ fn range_of(version: &str) -> Option<String> {
     })
 }
 
-fn range(given: &str) -> Result<String> {
+pub(crate) fn range(given: &str) -> Result<String> {
     let text = given.trim();
     if let Some(suggested) = range_of(text) {
         return Ok(suggested);

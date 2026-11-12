@@ -6,7 +6,7 @@ use std::path::Path;
 use wprs_core::message::said;
 use wprs_format::{MANIFEST, SIGNATURE};
 
-pub const PAGE_STARTERS: [&str; 1] = ["web"];
+pub const PAGE_STARTERS: [&str; 2] = ["web", "preset"];
 const PAGE: [(&str, &str); 2] = [
     ("index.html", include_str!("../starters/web/index.html")),
     ("app.js", include_str!("../starters/web/app.js")),
@@ -40,6 +40,11 @@ pub(crate) fn manifest(name: &str, base: Value) -> Option<Value> {
             manifest["web"] = json!({"background": "#101828"});
             manifest["properties"] =
                 json!({"color": {"type": "color", "label": "@wprs.color", "default": "#f2f5ff"}});
+        }
+        "preset" => {
+            manifest["kind"] = json!("preset");
+            manifest["entry"] = json!(crate::presets::ENTRY);
+            return Some(json!({"manifest": manifest, "preset": crate::presets::blank()}));
         }
         _ => return None,
     }
@@ -95,7 +100,7 @@ pub fn scripts(dir: &Path) -> Vec<String> {
 }
 
 pub fn review(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
-    let mut out = Vec::new();
+    let mut out = crate::presets::review(doc, dir);
     let m = &doc["manifest"];
     let Some(dir) = dir else { return out };
     let missing = |field: &str, path: &str| {

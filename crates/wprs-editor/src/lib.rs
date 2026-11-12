@@ -48,6 +48,7 @@ pub mod paint;
 mod params;
 pub mod pictures;
 pub mod placing;
+pub mod presets;
 pub mod previews;
 pub mod project;
 pub mod props;

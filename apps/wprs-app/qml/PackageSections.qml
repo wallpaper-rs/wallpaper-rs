@@ -10,6 +10,7 @@ ColumnLayout {
     required property var page
     readonly property var pages: (page.view.files ?? []).filter(file => file.kind === "page").map(file => file.path)
     readonly property bool web: page.kind === "web"
+    readonly property bool preset: page.kind === "preset"
 
     spacing: Kirigami.Units.largeSpacing
 
@@ -91,12 +92,27 @@ ColumnLayout {
 
     Kirigami.Heading {
         Layout.fillWidth: true
+        visible: sections.preset
+        level: 4
+        text: App.tr("Preset")
+    }
+
+    PackagePreset {
+        Layout.fillWidth: true
+        visible: sections.preset
+        page: sections.page
+    }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        visible: !sections.preset
         level: 4
         text: App.tr("Required packages")
     }
 
     PackageRequires {
         Layout.fillWidth: true
+        visible: !sections.preset
         page: sections.page
     }
 }

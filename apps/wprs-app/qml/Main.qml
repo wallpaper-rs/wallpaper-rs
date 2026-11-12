@@ -157,7 +157,7 @@ Kirigami.ApplicationWindow {
 
         function onCompose(folder, starter, text) {
             root.current = -1;
-            const kind = starter ? (starter === "web" ? "web" : "scene") : probe.kindOf(folder, text);
+            const kind = starter ? (["web", "preset"].includes(starter) ? starter : "scene") : probe.kindOf(folder, text);
             root.open(["scene", "assets"].includes(kind) ? composer : packager, {
                 "folder": folder,
                 "starter": starter,

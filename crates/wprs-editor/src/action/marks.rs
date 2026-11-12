@@ -138,6 +138,16 @@ pub enum ManifestEdit {
         #[serde(default)]
         remove: bool,
     },
+    Preset {
+        #[serde(default)]
+        base: Option<Needed>,
+        #[serde(default)]
+        values: Map<String, Value>,
+        #[serde(default)]
+        clear: Vec<String>,
+        #[serde(default)]
+        files: Map<String, Value>,
+    },
     AddFile {
         file: std::path::PathBuf,
         #[serde(default)]
