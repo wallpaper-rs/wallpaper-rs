@@ -63,7 +63,7 @@ pub(super) fn key(dir: &Path, doc: &Value, h: &Held, path: &str, t: f64, aim: bo
         true => point(h, center, eye, up)?,
         false => point(h, eye, center, up)?,
     };
-    let f = |v: V3| Some(v.map(|x| f64::from(x)));
+    let f = |v: V3| Some(v.map(f64::from));
     let edit = PathKey {
         path: path.into(),
         time: t,
