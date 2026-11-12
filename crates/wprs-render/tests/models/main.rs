@@ -7,6 +7,7 @@ use wprs_render::{Layer, Pixels, Renderer, SceneAssets, SceneView};
 use wprs_scene::{Forge, ForgeMaterial, ForgeShape, Quality, Runtime, SCHEMA, Scene, Values};
 
 mod cached;
+mod casts;
 mod coverage;
 mod debug;
 mod depth;
