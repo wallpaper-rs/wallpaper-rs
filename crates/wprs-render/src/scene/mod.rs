@@ -6,6 +6,7 @@ mod clock;
 mod crop;
 mod damage;
 mod draw;
+mod dropped;
 mod effects;
 mod encode;
 mod fed;

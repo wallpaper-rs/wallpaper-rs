@@ -4,6 +4,12 @@ use crate::scene::pipes::Mode;
 use crate::scene::{Op, Src};
 use wgpu::TextureFormat;
 
+impl super::Swarms {
+    pub(crate) fn bent(&self) -> impl Iterator<Item = &str> {
+        self.kits.iter().filter(|k| k.bend.is_some()).map(|k| k.layer.as_deref().unwrap_or("particles"))
+    }
+}
+
 impl Painter<'_, '_, '_> {
     pub(crate) fn lit_swarms(&self) -> bool {
         self.swarms.as_ref().is_some_and(|s| s.kits.iter().any(|k| k.look.light[0] > 0.5))

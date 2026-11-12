@@ -32,6 +32,7 @@ pub struct SceneView {
     pub(super) swarms: Option<swarm::Swarms>,
     pub(super) _lease: Lease,
     pub(super) refused: std::collections::BTreeMap<String, String>,
+    pub(super) dropped: Vec<(String, &'static str)>,
     pub(super) scratch: super::Scratch,
     pub(crate) marks: Vec<super::damage::Mark>,
     pub(super) stamp: u64,
@@ -98,18 +99,23 @@ impl SceneView {
                 .take(240)
                 .collect::<String>()
         };
-        self.refused.iter().map(|(id, why)| (id.clone(), short(why))).collect()
+        let dropped = self.dropped.iter().map(|(id, why)| (id.clone(), (*why).to_owned()));
+        self.refused.iter().map(|(id, why)| (id.clone(), short(why))).chain(dropped).collect()
     }
 
     pub fn left_out(&self) -> Vec<String> {
-        self.left().into_iter().map(|(id, why)| format!("the effect {id} was left out: {why}")).collect()
+        let kind = |id: &str| if self.refused.contains_key(id) { "effect" } else { "layer" };
+        self.left()
+            .into_iter()
+            .map(|(id, why)| format!("the {} {id} was left out: {why}", kind(&id)))
+            .collect()
     }
 
     pub fn left_key(&self) -> u64 {
         use std::hash::{DefaultHasher, Hash, Hasher};
         let mut h = DefaultHasher::new();
-        self.refused.hash(&mut h);
-        if self.refused.is_empty() { 0 } else { h.finish() | 1 }
+        (&self.refused, &self.dropped).hash(&mut h);
+        if self.refused.is_empty() && self.dropped.is_empty() { 0 } else { h.finish() | 1 }
     }
 
     pub fn retry(&mut self) -> bool {

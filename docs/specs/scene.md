@@ -552,7 +552,8 @@ A `light` layer lights the layers that have `lighting` (`lights`); it draws noth
 lights, and `tilt`), `anchor`, `visible`, `parent`, `inherit` and these fields. It follows parents,
 groups and bones (`attach`) and animates with keyframes like other layers. A scene has at most 12
 lights; on T0 and T1 devices (phones and older computers) only the first 8 in the order of the layers
-light anything.
+light anything, and the others are named in the notes of what was left out (`the layer … was left
+out`), as the effects are.
 
 | Field | Meaning |
 |-------|---------|
@@ -1588,7 +1589,7 @@ sets it, and every other name must be one of `points`. Targets and centers of fo
 | render `order` | `newest`, `oldest`, `largest`, `smallest` or `lowest`: the particles drawn on top; others are drawn in no set order | `particles2` |
 | render `rope`, `trail` | `{ "subdivide" (0 to 7), "width", "uv_scale", "uv_scroll", "smooth" }` joins particles in birth order; trails of up to 64 steps with `segments`, `subdivide`, `uv_scale`, `uv_scroll` and `textured` | `particle_ropes` |
 | render `cutout`, `orient`, `angle` | `[start, end, opacity]` remaps the alpha of the texture; `screen`, `velocity` or `fixed` with `angle` | `particle_looks` |
-| render `lit`, `normal`, `refract` | `lit` lights the sprites with the scene lights, at most 8, on both faces (a light behind the canvas, with a negative `z`, lights the back); `normal` is a `linear` normal map laid over each sprite and turned with it; the `lighting` block of the layer, when set, lights them too and gives `strength` and `emissive`. `refract`: `{ "normal", "amount" }` (0 to 1) draws the sprites only as a bend of what is behind them, by the normal map, up to `amount` times half the size of a sprite; it works at full size at Q3, at half size at Q2 and leaves the sprites out at Q1 and Q0. Sprites drawn with a particle shader, trails and ropes are not lit | `particle_lighting` |
+| render `lit`, `normal`, `refract` | `lit` lights the sprites with the scene lights, at most 8, on both faces (a light behind the canvas, with a negative `z`, lights the back); `normal` is a `linear` normal map laid over each sprite and turned with it; the `lighting` block of the layer, when set, lights them too and gives `strength` and `emissive`. `refract`: `{ "normal", "amount" }` (0 to 1) draws the sprites only as a bend of what is behind them, by the normal map, up to `amount` times half the size of a sprite; it works at full size at Q3, at half size at Q2 and leaves the sprites out at Q1 and Q0; a device without a blendable half-float target leaves it out too and names the layer in the notes of what was left out. Sprites drawn with a particle shader, trails and ropes are not lit | `particle_lighting` |
 | render `shader` | a package effect with `stage: "particle"` | `particle_shaders` |
 
 The newer fields behave as follows.

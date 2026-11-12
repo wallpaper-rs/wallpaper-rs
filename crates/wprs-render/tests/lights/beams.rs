@@ -80,3 +80,19 @@ fn texts_take_the_light_too() {
     let bright = |img: &image::RgbaImage| img.pixels().map(|p| u32::from(p.0[0])).max().unwrap_or(0);
     assert!(bright(&dark) < 5 && bright(&lit) > 100, "{} {}", bright(&dark), bright(&lit));
 }
+
+#[test]
+fn lights_past_the_cap_of_a_device_are_named_as_left_out() {
+    let Some(r) = super::renderer() else { return };
+    let lamps: Vec<_> =
+        (0..10).map(|i| json!({ "id": format!("l{i}"), "type": "light", "radius": 6 })).collect();
+    let mut layers = vec![wall(json!({}))];
+    layers.extend(lamps);
+    let mut shot = super::Shot::new(r, super::scene(json!(layers), json!({})), &super::files(UP));
+    shot.pixels(r, wprs_scene::Quality::Q3);
+    let left = shot.view.left_out();
+    let named = |id: &str| left.iter().any(|l| l.contains(&format!("the layer {id} was left out")));
+    let modest = r.tier() <= wprs_scene::Tier::T1;
+    assert_eq!((named("l8"), named("l9"), named("l7")), (modest, modest, false), "{left:?}");
+    assert_eq!(shot.view.left_key() != 0, modest);
+}

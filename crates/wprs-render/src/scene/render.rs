@@ -36,6 +36,7 @@ impl Renderer {
         }
         let screen = view.screen(size);
         view.pool.glow.update(&self.queue, frame, screen, (view.srgb, &view.images), self.light_cap());
+        view.note_dropped(frame, self.light_cap());
         self.shrunk(view, frame, screen);
         let mut scratch = std::mem::take(&mut view.scratch);
         scratch.reset(frame.draws.len(), runtime);

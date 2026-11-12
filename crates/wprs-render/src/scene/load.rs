@@ -168,6 +168,7 @@ impl Renderer {
                 swarms,
                 _lease: lease,
                 refused,
+                dropped: Vec::new(),
                 scratch: Default::default(),
                 marks: Vec::new(),
                 stamp: 0,
