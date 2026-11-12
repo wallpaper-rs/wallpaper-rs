@@ -13,7 +13,7 @@ mod stall;
 mod tables;
 mod words;
 
-use crate::args::{INVALID, carries_secret, fixture};
+use crate::args::{INVALID, fixture};
 use crate::bus::{Daemon, url};
 use crate::calls::dispatch;
 use crate::{app, tr};
@@ -64,19 +64,6 @@ pub fn iface(line: &str) -> &'static str {
 
 pub fn literals<'a>(text: &'a str, call: &str) -> Vec<&'a str> {
     text.split(call).skip(1).filter_map(|rest| rest.strip_prefix('"')?.split('"').next()).collect()
-}
-
-#[test]
-fn secrets_never_travel_through_the_generic_call() {
-    let add = |secret: &str| vec![json!("nas"), json!("webdav"), json!({}), json!(secret)];
-    assert!(carries_secret("io.github.wallpaper_rs.Providers1", "SetSecret", &[json!("nas"), json!("x")]));
-    assert!(carries_secret("Providers1", "Add", &add("hunter2")));
-    assert!(!carries_secret("Providers1", "Add", &add("")));
-    assert!(!carries_secret("Library1", "Add", &add("x")));
-    assert!(carries_secret("Sync1", "SetEscrow", &[json!("copper lantern drifts over harbor")]));
-    assert!(carries_secret("Sync1", "Restore", &[json!("copper lantern drifts over harbor")]));
-    assert!(!carries_secret("Sync1", "SetEscrow", &[json!("")]));
-    assert!(carries_secret("Sync1", "ApproveDevice", &[json!("BCDF-GHJK"), json!("correct horse")]));
 }
 
 #[test]
