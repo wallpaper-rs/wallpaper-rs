@@ -150,7 +150,7 @@ impl Compositor {
     pub fn settled(&self) {
         let (done, wait) = mpsc::channel();
         self.send(Command::Settle(done));
-        drop(wait.recv_timeout(std::time::Duration::from_secs(2)));
+        wait.recv_timeout(std::time::Duration::from_secs(2)).ok();
     }
 
     pub fn stop(&self) {

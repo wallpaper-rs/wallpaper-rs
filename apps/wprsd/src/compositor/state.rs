@@ -119,7 +119,7 @@ impl State {
             self.render_due();
             self.sync_sounds();
             self.publish_status();
-            self.settling.drain(..).for_each(|done| drop(done.send(())));
+            self.settling.drain(..).for_each(|done| done.send(()).ok());
         }
     }
 }
