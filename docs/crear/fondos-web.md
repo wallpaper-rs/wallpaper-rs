@@ -122,7 +122,8 @@ wprs.onSettings(({ fps, locale, volume }) => ajustar(fps, locale, volume));
 
 - en el editor, en el panel *Problemas*, bajo *Consola de los scripts*, mientras la vista previa
   está encendida (guarda las últimas 50 líneas);
-- en la terminal: `wprs-ctl scene preview mi-fondo -o DP-1 --console` las imprime a medida que salen;
+- en la terminal: `wprs-ctl scene preview mi-fondo -o DP-1 --console` las imprime a medida que salen,
+  en tus pantallas o en las de prueba, mientras algo mira esa salida y hasta que lo interrumpas;
 - en el registro del servicio, a nivel `debug` (`RUST_LOG=wprsd=debug`), hasta 200 líneas por
   ejecución.
 

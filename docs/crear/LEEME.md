@@ -86,7 +86,8 @@ wprs-ctl scene new mi-escena --title "Mi primera escena"
 
 Se crea la carpeta `mi-escena` con un `manifest.json`, una `scene.json` sin capas y una carpeta
 `assets/`. El lienzo mide 1920 por 1080: es el tamaño de referencia con el que colocas todo, y
-el programa lo ajusta a cada pantalla.
+el programa lo ajusta a cada pantalla. El paquete recibe el id `org.example.mi-escena` (el nombre de
+la carpeta); es el que usan órdenes como `input grant` y conviene cambiarlo antes de publicar.
 
 ### 2. Una capa de imagen
 
@@ -98,10 +99,13 @@ wprs-ctl scene layer mi-escena fondo transform --size 1920,1080
 *Editor:* arrastra `cielo.png` a la lista *Capas* (dice «Suelta los archivos para añadirlos como
 capas»); luego, en el inspector de la capa, pon el tamaño en 1920 por 1080.
 
-La primera orden copia la imagen a `assets/` como recurso `cielo` y añade una capa `fondo` que la
-enseña. Sin `size`, una imagen se ve de su tamaño real y centrada; con `size` se estira hasta
-llenar el lienzo. Cada capa tiene un id (aquí `fondo`, hecho del nombre) que las demás órdenes usan
-para nombrarla.
+La primera orden copia la imagen a `assets/` como recurso `cielo`, añade una capa que la enseña e
+imprime su id: `fondo`. Sin `size`, una imagen se ve de su tamaño real y centrada, y casi nunca es
+el del lienzo: con `size` se estira hasta llenarlo, y hay que ponerlo en cada capa de imagen. Cada
+capa tiene un id, hecho del nombre, que las demás órdenes usan para nombrarla. Capas, recursos,
+sistemas de partículas y líneas de tiempo comparten los ids, así que, si el recurso ya se llamaba
+como la capa (`--file fondo.png --name Fondo`), la capa se llama `fondo_2`: lee siempre el id que
+imprime la orden (`cli.md`, «`scene add-layer`»).
 
 ### 3. Una capa que se mueve
 
@@ -126,6 +130,10 @@ wprs-ctl scene keyframe mi-escena /scene/layers/1/transform/position 12 '[1660, 
 *Editor:* en *Líneas de tiempo*, *Añadir una línea de tiempo* y ponle 12 segundos y `pingpong`;
 con el cabezal en 0, pulsa el rombo de *Posición* de la capa (*Fotograma clave aquí*) y arrastra el
 sol abajo a la izquierda; lleva el cabezal a 12 y arrastra el sol arriba a la derecha.
+
+Las capas se cuentan desde 0 desde abajo, y por eso el sol, la segunda, es `/scene/layers/1`. Para ver
+lo que hay en cualquier sitio: `wprs-ctl scene show mi-escena /scene/layers/1`. El puntero empieza
+por `/scene` (lo de `scene.json`) o por `/manifest` (lo de `manifest.json`); `/layers` solo no existe.
 
 La posición es un punto del lienzo en píxeles con el origen arriba a la izquierda. `pingpong`
 hace que la línea de tiempo vaya y vuelva sin parar, `in_out_sine` suaviza el principio del
@@ -170,7 +178,9 @@ wprs-ctl scene validate mi-escena
 *Editor:* el panel *Problemas*, que se actualiza mientras trabajas.
 
 No imprime nada si todo está bien. Si algo está mal, dice la ruta del campo y qué esperaba. Esta
-orden termina con error cuando hay problemas, y por eso sirve en guiones.
+orden termina con error cuando hay problemas, y por eso sirve en guiones. Si la escena tiene
+scripts (`scripts.md`), también los compila sin ejecutarlos y dice, con el archivo y la línea, un
+error de sintaxis o un script que falta.
 
 ### 7. Verla
 
@@ -192,7 +202,15 @@ wprs-ctl scene bench mi.wpak --frames 360 --shot cuadro.png
 como imagen: con `--frames 360` es el instante 6 s a 60 fotogramas por segundo, cuando el sol va a
 la mitad.
 
-Para aplicarla de verdad como fondo: `wprs-ctl scene apply mi-escena`.
+`bench` no ejecuta los scripts. Para ver una escena con scripts sin escritorio, y a una hora fija,
+usa `wprs-ctl scene render mi-escena -o vista.png --time-of-day 15:42` (`cli.md`, «`scene render`»).
+Una escena con partículas se ve vacía en el primer cuadro si su sistema no tiene `prewarm`
+(`particulas-y-sonido.md`).
+
+Para aplicarla de verdad como fondo: `wprs-ctl scene apply mi-escena`, que al final dice qué mostró y
+dónde (`applied: Mi primera escena 0.1.0 on DP-1, quality Q3`), y para quitarla,
+`wprs-ctl clear` (y `wprs-ctl restore` la trae de vuelta). Si cambias la escena, aplícala otra vez:
+no hace falta subir la versión, pero tarda en verse mientras el demonio construye y carga.
 
 ### Y ahora
 

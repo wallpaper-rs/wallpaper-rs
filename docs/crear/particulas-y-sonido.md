@@ -57,6 +57,32 @@ La capa `particles`:
 Se aplican los campos de toda capa: `blend` (`add` va bien con partículas que brillan), `opacity`,
 `mask` y `effects`.
 
+## Empezar con un punto de partida
+
+Una capa de partículas nueva ya trae un sistema que se ve: nieve que cae de arriba abajo sobre todo
+el lienzo, con turbulencia suave y `prewarm`, de modo que está llena desde el primer cuadro.
+
+```
+wprs-ctl scene add-layer mi-escena particles --name Nieve
+```
+
+Imprime el id de la capa y del sistema (`nieve`). Para otro comienzo, la acción `particles` con
+`kit` rellena de una vez los emisores, la vida, las fuerzas y los colores del sistema (los hijos se
+conservan) con `snow`, `sparks` (chispas que suben), `rain` o `dust` (motas que flotan), ajustados al
+tamaño del lienzo:
+
+```
+wprs-ctl scene act mi-escena particles '{"kit":{"system":"nieve","kit":"sparks"}}'
+```
+
+En el editor es el desplegable *Empezar con…* de los ajustes del sistema
+([editor-particulas-y-sonido.md](editor-particulas-y-sonido.md)). Después ajusta lo que quieras.
+
+**Si lo escribes a mano, pon `prewarm`.** Un sistema sin `prewarm` arranca vacío: las partículas
+nacen poco a poco, y una imagen suelta del primer instante (`scene render`, una miniatura) sale sin
+ninguna. Pon en `prewarm` los segundos que tardan en llenarse (hasta 30), del orden de la vida de
+las partículas (`init.life`): el punto de partida de la nieve, con vidas de 12 a 18 s, usa 14.
+
 ## El sistema
 
 | Campo | Por defecto | Rango | Qué hace |

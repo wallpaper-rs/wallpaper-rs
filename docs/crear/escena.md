@@ -41,6 +41,11 @@ rechaza con la ruta del campo, por ejemplo `/layers/2/effects/0/params/radius is
 wprs-ctl scene validate MI-CARPETA
 ```
 
+No imprime nada si todo está bien, y también compila los scripts de la escena sin ejecutarlos (un
+error de sintaxis sale con el archivo y la línea). Para leer o cambiar cualquier campo desde la
+terminal, el puntero empieza por `/scene` (lo que hay en `scene.json`: `/scene/layers/0`,
+`/scene/canvas/size`) o por `/manifest` (el manifiesto): `wprs-ctl scene show MI-CARPETA /scene/canvas`.
+
 Los colores se escriben `"#rrggbb"` o `"#rrggbbaa"` (siempre con 6 u 8 cifras: `"#fff"` se
 rechaza) o como lista `[r, g, b]` o `[r, g, b, a]` con números de 0 a 1.
 
@@ -285,7 +290,9 @@ wprs-ctl scene bench mi.wpak --quality q2 --tier t1
 Imprime el costo estimado, el tiempo por fotograma, la memoria que ocupa y las notas de lo que se
 dejó fuera. `--shot cuadro.png` guarda el último fotograma como imagen y `--tier t0` a `t3`
 aplica los límites de cada clase de equipo (`t1` es el de los teléfonos). Lo mismo pasa con
-`--quality auto`, que sube y baja el nivel como lo haría el teléfono.
+`--quality auto`, que sube y baja el nivel como lo haría el teléfono. `bench` mide el paquete tal
+como lo describe `scene.json`: no ejecuta los scripts. Para ver el resultado de los scripts a una
+hora fija, `wprs-ctl scene render MI-CARPETA -o vista.png --time-of-day 15:42`.
 
 ### Cuando el usuario pide menos destellos
 

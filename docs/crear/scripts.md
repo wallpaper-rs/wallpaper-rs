@@ -462,11 +462,26 @@ por segundo descarta las de más, y cada línea se corta a 512 caracteres.
   wprs-ctl scene preview mi-escena -o DP-1 --console
   ```
 
-  Muestra las líneas del script a medida que salen y el error cuando cambia, hasta que lo
-  interrumpas con Ctrl-C. La escena solo corre mientras algo mira esa salida, así que usa una pantalla
-  a la vista. Para un cuadro suelto sin escritorio, `wprs-ctl scene render mi-escena -o vista.png
-  --time-of-day 15:42` ejecuta los scripts y escribe sus líneas y errores en la salida de error. Si la escena tiene un error de script, `wprs-ctl state` lo imprime junto a
-  la salida.
+  Dice en qué salidas muestra la escena y luego escribe las líneas del script a medida que salen y
+  el error cuando cambia, hasta que lo interrumpas con Ctrl-C. Sirve en tus pantallas de verdad y
+  en las de prueba. La escena solo corre mientras algo mira esa salida, así que usa una pantalla
+  a la vista. `wprs-ctl scene preview
+  mi-escena --stop` termina la vista previa (si la app tenía *Ver en el escritorio* encendido,
+  también lo apaga) y dice en qué salidas la terminó.
+- **Para un cuadro suelto, sin escritorio ni demonio**, `wprs-ctl scene render mi-escena -o vista.png
+  --time-of-day 15:42` ejecuta los scripts, con esa hora de pared, y escribe sus líneas y sus errores
+  en la salida de error, con el prefijo `script:`:
+
+  ```
+  script: log scripts/reloj.js: hola 15:42
+  ```
+
+  Antes del primer cuadro da unos pasos a los scripts para que arranquen, así que cada línea sale
+  más de una vez. No simula el sonido ni el reproductor. Los scripts corren en el mismo proceso
+  aislado que usa el demonio, nunca en el de `wprs-ctl`; si no puede arrancar, dibuja sin scripts y
+  dice `script stopped: …` en una línea. `scene bench` y la captura de `scene thumbnail --capture`, en
+  cambio, no ejecutan los scripts.
+- Si la escena tiene un error de script, `wprs-ctl state` lo imprime junto a la salida.
 - **En el registro del servicio** (`wprsd`): lo que escribe `console` sale a nivel `debug`
   (`RUST_LOG=wprsd=debug`) y un módulo que se detiene sale a nivel `warn`.
 
@@ -476,7 +491,7 @@ por segundo descarta las de más, y cada línea se corta a 512 caracteres.
 |------------|-----------|
 | Una función lanza un error | `error <módulo>: <error>` en la consola; el cuadro sigue con los demás módulos. |
 | Un módulo falla tres cuadros seguidos | Se detiene con sus temporizadores. La pantalla dice «Un script de esta escena se detuvo y la escena sigue sin él: `<módulo>`: `<error>`». |
-| Un módulo no carga (error de sintaxis, un `import` que no existe) | Se detiene igual, sin llegar a ejecutar nada. |
+| Un módulo no carga (error de sintaxis, un `import` que no existe) | Se detiene igual, sin llegar a ejecutar nada. `scene validate` y `pack check` lo detectan antes de que corra (más abajo). |
 | Un cuadro se pasa de tiempo o de memoria | Falla ese cuadro entero. Tres seguidos apagan los scripts: «Los scripts de esta escena fallaron tres veces seguidas y están apagados; la escena sigue sin ellos». |
 
 Los textos de los errores del propio JavaScript y los de la interfaz (`opacity takes a number`)
@@ -488,25 +503,37 @@ salen en inglés. Los más comunes:
 | `<módulo> uses timers without declaring it in scene.json` | Falta `timers` (o `layers`, `effects`...) en `uses`. |
 | `<módulo> uses X, which a module has to declare in scene.json` | Un módulo sin declaración usó algo que no está en la interfaz reducida. |
 | `Error resolving module './x.js' ... only wprs, wprs/math and the scripts of the scene can be imported` | El `import` apunta a algo que no es `wprs`, `wprs/math` ni un script de `scripts`. |
-| `invalid property name at a.js:1:26` (y similares) | Error de sintaxis, con archivo, línea y columna. |
+| `invalid property name at a.js:1:26`, `scripts/a.js:4: unexpected token in expression: ';'` (y similares) | Error de sintaxis, con archivo y línea (y a veces columna). Es la línea en que el motor se dio cuenta, que puede ser una después de la errata. |
 | `the script used more than 4ms of CPU time` | El cuadro tardó demasiado; en la carga el límite es de 100 ms. |
 | `out of memory` | El script pasó de 32 MiB. |
 | `<ruta>: names <fn>, which the script does not export` | Un valor atado con `fn` nombra una función que el módulo no exporta. |
 
-### Lo que `pack check` no ve
+### Qué ve `validate` y qué no
 
-`wprs-ctl scene validate` y `wprs-ctl pack check` comprueban `scene.json`, el manifiesto y las
-entradas, pero no ejecutan los scripts: un error de sintaxis o una función que falla solo aparece
-cuando la escena corre. Prueba siempre la escena con la vista previa y mira la consola antes de
-empaquetar (`paquete.md`).
+`wprs-ctl scene validate` y `wprs-ctl pack check` comprueban `scene.json`, el manifiesto, las
+entradas y también **los scripts, sin ejecutarlos**: compilan cada módulo y dicen, con el archivo y
+la línea, un error de sintaxis o un script que `scene.json` nombra y no está en la carpeta (el editor
+lo pone en el panel *Problemas*, y `scene build` se niega a construir):
+
+```
+/scene/scripts/0/path: scripts/semaforo.js:4: unexpected token in expression: ';'
+Error: 1 problem
+```
+
+`pack check` los saca como líneas `problem:` y termina con error. Lo que solo se sabe al correr no
+se ve: una función que lanza un error, un valor del tipo equivocado (`opacity takes a number`), un
+bucle que tarda demasiado. Para eso, mira la
+consola con la vista previa o con `scene render` antes de empaquetar (`paquete.md`).
 
 Para probar un script que reacciona a algo que no tienes a mano:
 
-- `wprs-ctl input grant org.example.mi_escena pointer` concede la entrada `pointer` a la escena que
-  se está mostrando (el id es el de su manifiesto), y `wprs-ctl input touch DP-1 0.8,0.2` pone un
+- `wprs-ctl input grant org.example.mi-escena pointer` concede la entrada `pointer` a la escena que
+  se está mostrando (el id es el de su manifiesto, `org.example.<carpeta>` si no lo cambiaste; no
+  imprime nada, y `input status` muestra el permiso), y `wprs-ctl input touch DP-1 0.8,0.2` pone un
   puntero inventado en esa fracción de la pantalla (`--stop` lo quita). Con un `console.log` de
-  `input.cursor.scene` en `update`, la consola de la vista previa imprime
-  `log scripts/sigue.js: cursor [1536,216] true`: 0,8 y 0,2 de un lienzo de 1920 × 1080;
+  `input.cursor.scene` en `update`, la consola de la vista previa de un escritorio con Plasma
+  imprime `log scripts/sigue.js: cursor [1536,216] true`: 0,8 y 0,2 de un lienzo de 1920 × 1080. Sin
+  puntero que siga el escritorio (una sesión sin KWin) el script ve el centro y `false`;
 - `wprs-ctl input status` dice qué entradas usa la escena de cada pantalla y cuáles tiene
   concedidas;
 - `wprs-ctl scene preview mi-escena --media pista.json` inventa una pista del reproductor;
