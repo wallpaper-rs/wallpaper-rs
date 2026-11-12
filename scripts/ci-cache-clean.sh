@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -uo pipefail
-max_age_days=${CACHE_MAX_AGE_DAYS:-3}
+max_age_days=${CACHE_MAX_AGE_DAYS:-6}
 limit_gb=${CACHE_LIMIT_GB:-10}
 dry=${CACHE_DRY_RUN:-}
 
@@ -40,7 +40,8 @@ plan=$(jq -c --arg started "$started" --arg now "$now" --argjson age "$max_age_d
       | map(select(.id as $id | $keep | index($id) | not) | . + {reason: "older generation of the same cache"})
     ) | add // []) as $old
   | ($old | map(.id)) as $old_ids
-  | [$all[] | select(.used < $cutoff and .created < $run and (.id as $id | $old_ids | index($id) | not))
+  | ($all | group_by([.ref, .family]) | map(max_by(.created).id)) as $newest_ids
+  | [$all[] | select(.used < $cutoff and .created < $run and (.id as $id | ($old_ids + $newest_ids) | index($id) | not))
       | . + {reason: "not read for more than \($age) days"}] as $idle
   | {total: ($all | map(.size_in_bytes) | add // 0), count: ($all | length), delete: ($old + $idle)}
 ' <<< "$listing") || skip "the cache plan could not be computed"

@@ -1259,7 +1259,8 @@ jobs:
           persist-credentials: false
           sparse-checkout: scripts
 
-      - name: Delete the caches of older generations and the ones not read for three days
+      - name: Delete the caches of older generations and the ones not read for six days
         env:
           GH_TOKEN: ${{ github.token }}
+          CACHE_MAX_AGE_DAYS: "6"
         run: scripts/ci-cache-clean.sh
