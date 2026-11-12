@@ -107,6 +107,22 @@ msgid "Preset uid or name"
 msgstr "Uid o nombre del preajuste"
 
 #: apps/wprs-ctl/src/args.rs
+msgid "Output name such as DP-1; every output when omitted"
+msgstr "Nombre de la salida, como DP-1; todas las salidas si se omite"
+
+#: apps/wprs-ctl/src/args.rs
+msgid "Placement: fill, fit, stretch, center or tile"
+msgstr "Ubicación: fill, fit, stretch, center o tile"
+
+#: apps/wprs-ctl/src/args.rs
+msgid "Print the daemon reply as JSON"
+msgstr "Imprimir la respuesta del daemon como JSON"
+
+#: apps/wprs-ctl/src/args.rs
+msgid "Item: a file path, a uid or the last 6 or more characters of one"
+msgstr "Elemento: una ruta de archivo, un uid o sus últimos 6 o más caracteres"
+
+#: apps/wprs-ctl/src/args.rs
 msgid "Wait for the job, showing its progress, and print the finished job"
 msgstr ""
 "Esperar al trabajo, mostrando su progreso, e imprimir el trabajo terminado"
@@ -558,22 +574,6 @@ msgid "Installed %1 %2."
 msgstr "Se instaló %1 %2."
 
 #: apps/wprs-ctl/src/cli.rs
-msgid "Output name such as DP-1; every output when omitted"
-msgstr "Nombre de la salida, como DP-1; todas las salidas si se omite"
-
-#: apps/wprs-ctl/src/cli.rs
-msgid "Placement: fill, fit, stretch, center or tile"
-msgstr "Ubicación: fill, fit, stretch, center o tile"
-
-#: apps/wprs-ctl/src/cli.rs
-msgid "Print the daemon reply as JSON"
-msgstr "Imprimir la respuesta del daemon como JSON"
-
-#: apps/wprs-ctl/src/cli.rs
-msgid "Item: a file path, a uid or the last 6 or more characters of one"
-msgstr "Elemento: una ruta de archivo, un uid o sus últimos 6 o más caracteres"
-
-#: apps/wprs-ctl/src/cli.rs
 msgid "Control the wallpaper-rs daemon"
 msgstr "Controlar el daemon de wallpaper-rs"
 
@@ -584,6 +584,16 @@ msgstr "Fijar el fondo: una imagen o un vídeo"
 #: apps/wprs-ctl/src/cli.rs
 msgid "Local image or video file, as a path or a file:// URI"
 msgstr "Imagen o vídeo local, como ruta o URI file://"
+
+#: apps/wprs-ctl/src/cli.rs
+msgid ""
+"Remove the wallpaper and show only the background color; restore brings it "
+"back"
+msgstr "Quita el fondo y muestra solo el color de fondo; restore lo recupera"
+
+#: apps/wprs-ctl/src/cli.rs
+msgid "Bring back the wallpaper that clear removed"
+msgstr "Recupera el fondo que quitó clear"
 
 #: apps/wprs-ctl/src/cli.rs
 msgid "Change only the placement of the current wallpaper"

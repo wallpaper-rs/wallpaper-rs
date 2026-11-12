@@ -2690,6 +2690,18 @@ msgstr "Repositorios"
 msgid "Settings"
 msgstr "Ajustes"
 
+#: apps/wprs-app/qml/OutputControls.qml
+msgid "Remove wallpaper"
+msgstr "Quitar el fondo"
+
+#: apps/wprs-app/qml/OutputControls.qml
+msgid "Show only the background color. You can bring the wallpaper back."
+msgstr "Muestra solo el color de fondo. Puedes recuperar el fondo."
+
+#: apps/wprs-app/qml/OutputControls.qml
+msgid "Bring back the wallpaper"
+msgstr "Recuperar el fondo"
+
 #: apps/wprs-app/qml/OutputControls.qml apps/wprs-app/qml/OutputRow.qml
 #: apps/wprs-app/qml/facade/Labels.qml apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Background color"

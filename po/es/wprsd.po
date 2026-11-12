@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 00:00+0000\n"
+"POT-Creation-Date: 2026-11-12 00:00+0000\n"
 "PO-Revision-Date: 2026-10-22 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -39,6 +39,25 @@ msgid ""
 msgstr ""
 "Un paquete que destella no puede seguir en movimiento cuando el escritorio "
 "pide reducir el movimiento."
+
+#: apps/wprsd/src/words.rs
+msgid "There is no earlier wallpaper to bring back."
+msgstr "No hay un fondo anterior que recuperar."
+
+#: apps/wprsd/src/words.rs
+msgid ""
+"No screen shows a wallpaper with settings: apply a scene or a video first."
+msgstr "Ninguna pantalla muestra un fondo con ajustes: aplica antes una escena o un video."
+
+#: apps/wprsd/src/words.rs
+msgid "%1 shows no wallpaper with settings."
+msgstr "%1 no muestra ningún fondo con ajustes."
+
+#: apps/wprsd/src/words.rs
+msgid ""
+"The screens show different wallpapers: name the screen whose settings you "
+"mean."
+msgstr "Las pantallas muestran fondos distintos: indica la pantalla cuyos ajustes quieres."
 
 #: apps/wprsd/src/words.rs
 msgid "Volume"

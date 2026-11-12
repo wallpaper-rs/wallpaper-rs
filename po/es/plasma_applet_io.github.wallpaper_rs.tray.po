@@ -509,6 +509,26 @@ msgstr "Elegir…"
 
 #: integrations/plasma-tray/contents/ui/ScreenButtons.qml
 #, kde-format
+msgid "Remove"
+msgstr "Quitar"
+
+#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
+#, kde-format
+msgid "Remove the wallpaper and show only the background color"
+msgstr "Quita el fondo y muestra solo el color de fondo"
+
+#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
+#, kde-format
+msgid "Bring back"
+msgstr "Recuperar"
+
+#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
+#, kde-format
+msgid "Bring back the wallpaper that was removed"
+msgstr "Recupera el fondo que se quitó"
+
+#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
+#, kde-format
 msgid "Favorite"
 msgstr "Favorito"
 
