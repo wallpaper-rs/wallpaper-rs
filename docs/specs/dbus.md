@@ -683,7 +683,7 @@ effects are built and measured again.
 Library packages whose `error` says their shader is not checked again, or could not be checked
 because the helper that checks it crashed or ran out of memory or time, are read again, and
 `Changed` names them under the `library` topic. `wprs-ctl retry-effects` and the Try again button
-next to a left-out effect in the app call it.
+next to a left-out effect in the app and in the Plasma tray applet call it.
 
 ### `GetState() → (s json)`
 

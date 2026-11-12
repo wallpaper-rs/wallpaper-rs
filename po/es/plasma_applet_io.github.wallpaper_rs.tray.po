@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 00:00+0000\n"
+"POT-Creation-Date: 2026-11-11 00:00+0000\n"
 "PO-Revision-Date: 2026-10-22 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -455,6 +455,11 @@ msgstr "Color de fondo"
 #, kde-format
 msgid "%1 of %2"
 msgstr "%1 de %2"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+#, kde-format
+msgid "Try again"
+msgstr "Probar de nuevo"
 
 #: integrations/plasma-tray/contents/ui/ScreenRow.qml
 #, kde-format

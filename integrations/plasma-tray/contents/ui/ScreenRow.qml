@@ -119,6 +119,13 @@ ColumnLayout {
                 color: Kirigami.Theme.disabledTextColor
             }
 
+            PlasmaComponents3.ToolButton {
+                visible: (row.info.left_out ?? []).length > 0
+                icon.name: "view-refresh"
+                text: i18n("Try again")
+                onClicked: row.daemon.act("RetryEffects", [])
+            }
+
             PlasmaComponents3.Label {
                 Layout.fillWidth: true
                 visible: row.info.particles === "cpu"

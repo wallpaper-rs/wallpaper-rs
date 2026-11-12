@@ -86,6 +86,8 @@ fn the_tray_offers_the_app_only_where_it_is_installed() {
     let panel = read("../../integrations/plasma-tray/contents/ui/Panel.qml");
     assert_eq!(panel.matches("visible: panel.daemon.hasApp\n").count(), 2);
     assert!(panel.contains("visible: !panel.daemon.hasApp\n"));
+    let row = read("../../integrations/plasma-tray/contents/ui/ScreenRow.qml");
+    assert!(row.contains("row.daemon.act(\"RetryEffects\", [])") && row.contains("i18n(\"Try again\")"));
 }
 
 #[tokio::test]
