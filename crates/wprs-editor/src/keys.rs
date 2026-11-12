@@ -5,7 +5,7 @@ use crate::ops::{Op, set};
 use anyhow::{Result, anyhow, bail, ensure};
 use serde_json::{Value, json};
 use wprs_core::message::said;
-use wprs_scene::{Color, Ease};
+use wprs_scene::Color;
 
 pub(crate) fn time_of(key: &Value) -> f64 {
     key[0].as_f64().unwrap_or(0.0)
@@ -37,21 +37,7 @@ pub(crate) fn mix(a: &Value, b: &Value, f: f32) -> Value {
 }
 
 pub fn sample(keys: &[Value], t: f64) -> Option<Value> {
-    wprs_scene::sample_json(keys, t).or_else(|| unread(keys, t))
-}
-
-fn unread(keys: &[Value], t: f64) -> Option<Value> {
-    let i = keys.partition_point(|k| time_of(k) <= t);
-    match (i.checked_sub(1).and_then(|i| keys.get(i)), keys.get(i)) {
-        (Some(a), Some(b)) => {
-            let ease: Ease =
-                serde_json::from_value(a.get(2).cloned().unwrap_or(json!("linear"))).unwrap_or_default();
-            let f = ((t - time_of(a)) / (time_of(b) - time_of(a)).max(1e-6)) as f32;
-            Some(mix(&a[1], &b[1], ease.apply(f)))
-        }
-        (Some(k), None) | (None, Some(k)) => Some(k[1].clone()),
-        (None, None) => None,
-    }
+    wprs_scene::sample_json(keys, t).or_else(|| crate::kinded::unread(keys, t))
 }
 
 pub fn value_at(value: &Value, t: f64) -> Value {
