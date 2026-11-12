@@ -64,6 +64,12 @@ QtObject {
                 }
             }
         });
+        page.run("set", {
+            "pointer": "/scene/assets/gone",
+            "value": {
+                "path": "gone.png"
+            }
+        });
         page.run("particles", {
             "collider": {
                 "system": "flakes",
@@ -80,7 +86,7 @@ QtObject {
         const all = walls();
         const layer = all.find(c => c.kind === "layer"), mask = all.find(c => c.kind === "mask");
         if (!layer || !mask || !Array.isArray(layer.grip) || !Array.isArray(mask.grip))
-            throw new Error("collider grips: a layer and a mask collider show no handle on the canvas: " + JSON.stringify(all));
+            throw new Error("collider grips: a layer and a mask collider show no handle on the canvas: " + JSON.stringify(all) + page.editor.error);
         const drop = grips(layer)[0];
         drop.act([310, 310], false);
         if (walls().find(c => c.kind === "layer").value.bounds.layer.id !== "sky")
