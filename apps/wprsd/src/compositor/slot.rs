@@ -1,9 +1,13 @@
-use super::{Command, Reel, Settings, lock, loudness};
+use super::{Command, Reel, Settings, lock};
 use std::path::Path;
 use std::sync::{Arc, Mutex, mpsc};
 use std::time::{Duration, Instant};
 use wprs_render::{GpuImage, Imported, Renderer};
 use wprs_video::{Event, Frame, Options, Player};
+
+fn loudness(volume: f64, own: u32) -> f64 {
+    volume * f64::from(own.min(100)) / 100.0
+}
 
 const RETRIES: u32 = 3;
 const FIRST_RETRY: Duration = Duration::from_secs(2);

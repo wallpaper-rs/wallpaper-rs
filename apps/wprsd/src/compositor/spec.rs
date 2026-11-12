@@ -156,10 +156,6 @@ impl Reel {
     }
 }
 
-pub(crate) fn loudness(volume: f64, own: u32) -> f64 {
-    volume * f64::from(own.min(100)) / 100.0
-}
-
 impl SceneSpec {
     pub(crate) fn media(&self) -> Vec<(String, usize, Option<Reel>)> {
         let files = self.extra.iter().map(|(k, i)| (k.clone(), Arc::as_ptr(i) as usize, None));

@@ -3,6 +3,9 @@ use crate::error::{Error, Result, failed, invalid, not_found};
 use crate::jobs::now;
 use crate::look::display;
 use crate::store::private_dir;
+use crate::wallpaper::modified;
+use anyhow::Context;
+use image::RgbaImage;
 use std::io::Write;
 use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
@@ -163,5 +166,18 @@ impl Daemon {
             Err(e) => tracing::warn!("the wallpaper is shown, but its use was not recorded: {e}"),
         }
         Ok(())
+    }
+
+    pub fn check_media(&self, path: &Path) -> anyhow::Result<Option<Arc<RgbaImage>>> {
+        anyhow::ensure!(path.is_file(), "{} is not a file", path.display());
+        let file = match self.media(path.to_owned())? {
+            Media::Picture(file) => return Ok(Some(self.load_image(&file, modified(&file)?, None)?)),
+            Media::Scene(_) => return Ok(None),
+            Media::Web(_) => return crate::pages::available().map(|_| None).map_err(|e| anyhow::anyhow!(e)),
+            Media::Video(file, _) => file,
+        };
+        let size = wprs_video::probe(&file).with_context(|| format!("cannot play {}", path.display()))?;
+        tracing::debug!(path = %path.display(), ?size, "video accepted");
+        Ok(None)
     }
 }

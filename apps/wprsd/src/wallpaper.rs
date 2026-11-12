@@ -13,7 +13,7 @@ pub(crate) type Upload = ((u32, u32), Fit, PathBuf, Option<SystemTime>, Option<A
 
 static ORDER: Mutex<()> = Mutex::new(());
 
-fn modified(path: &Path) -> anyhow::Result<Option<SystemTime>> {
+pub(crate) fn modified(path: &Path) -> anyhow::Result<Option<SystemTime>> {
     let metadata = std::fs::metadata(path).with_context(|| format!("cannot read {}", path.display()))?;
     Ok(metadata.modified().ok())
 }
@@ -196,18 +196,5 @@ impl Daemon {
             c.set_image(output, path, fit);
             Ok(())
         })
-    }
-
-    pub fn check_media(&self, path: &Path) -> anyhow::Result<Option<Arc<RgbaImage>>> {
-        anyhow::ensure!(path.is_file(), "{} is not a file", path.display());
-        let file = match self.media(path.to_owned())? {
-            Media::Picture(file) => return Ok(Some(self.load_image(&file, modified(&file)?, None)?)),
-            Media::Scene(_) => return Ok(None),
-            Media::Web(_) => return crate::pages::available().map(|_| None).map_err(|e| anyhow::anyhow!(e)),
-            Media::Video(file, _) => file,
-        };
-        let size = wprs_video::probe(&file).with_context(|| format!("cannot play {}", path.display()))?;
-        tracing::debug!(path = %path.display(), ?size, "video accepted");
-        Ok(None)
     }
 }
