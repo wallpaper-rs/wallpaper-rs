@@ -18,19 +18,6 @@ fn fit(to: &str) -> Result<()> {
     Ok(())
 }
 
-pub(super) fn strings(v: &mut Value, old: &str, new: &str, skip: &[&str]) {
-    match v {
-        Value::String(s) if s == old => *s = new.to_owned(),
-        Value::Array(list) => list.iter_mut().for_each(|x| strings(x, old, new, skip)),
-        Value::Object(map) => {
-            for (_, x) in map.iter_mut().filter(|(k, _)| !skip.contains(&k.as_str())) {
-                strings(x, old, new, skip);
-            }
-        }
-        _ => {}
-    }
-}
-
 fn marks(editor: &mut Value, old: &str, new: &str) {
     if let Some(list) = editor.get_mut("locked").and_then(Value::as_array_mut) {
         list.iter_mut().filter(|v| *v == old).for_each(|v| *v = json!(new));
@@ -84,8 +71,7 @@ pub fn rename(dir: &std::path::Path, doc: &Value, kind: Named, id: &str, to: &st
                 .map(|(k, v)| (if k == id { to.to_owned() } else { k }, v))
                 .collect();
             *assets = moved;
-            strings(&mut scene, id, to, &WORDS);
-            strings(&mut manifest["properties"], id, to, &WORDS);
+            super::reword::assets_in(&mut scene, &mut manifest, id, to);
         }
         Named::System => {
             ensure!(!taken(doc, to), said("editor.id_use", "the id %1 is in use", &[&to]));

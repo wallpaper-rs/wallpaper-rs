@@ -1,6 +1,7 @@
 use super::files::{Files, moved};
 use super::refs::swap;
-use super::rename::{WORDS, strings};
+use super::rename::WORDS;
+use super::reword::{ASSETS, within};
 use crate::layers::{children, find, taken, unique_among};
 use crate::ops::{Op, escape};
 use crate::shaping::refused;
@@ -99,13 +100,14 @@ fn plan(
         names.insert(id, new);
     }
     let mut ops = Vec::new();
-    let mut words: Vec<(String, String)> = Vec::new();
+    let mut words: Vec<(&[&str], String, String)> = Vec::new();
     for section in ["assets", "particles"] {
         for (id, value) in clip[section].as_object().into_iter().flatten() {
             let same = doc["scene"][section].get(id) == Some(value) && from == dir;
             let new = if same { id.clone() } else { fresh(id, &mut taken_ids) };
             if new != *id {
-                words.push((id.clone(), new.clone()));
+                let kinds: &[&str] = if section == "assets" { &ASSETS } else { &["system"] };
+                words.push((kinds, id.clone(), new.clone()));
             }
             if !same {
                 let mut value = value.clone();
@@ -123,13 +125,13 @@ fn plan(
             ops.push(("effects", id.clone(), value));
         }
     }
-    let rewrite = |v: &mut Value| {
+    let rewrite = |v: &mut Value, section: &str, key: &str| {
         swap(v, &names);
-        words.iter().for_each(|(old, new)| strings(v, old, new, &WORDS));
+        within(section, key, v, &words);
     };
     let mut out = Vec::new();
     for (section, id, mut value) in ops {
-        rewrite(&mut value);
+        rewrite(&mut value, section, &id);
         let base = format!("/scene/{section}");
         out.push(
             match doc.pointer(&base).is_some_and(Value::is_object)
@@ -155,7 +157,7 @@ fn plan(
                 .for_each(|c| renamed(c, names));
         }
         renamed(&mut layer, &names);
-        rewrite(&mut layer);
+        rewrite(&mut layer, "layers", "0");
         out.push(Op::Add { path: format!("{list}/{}", start + i), value: layer });
     }
     let mut staged = doc.clone();

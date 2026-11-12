@@ -80,3 +80,19 @@ fn timelines_assets_and_systems_are_renamed_with_their_users() {
     act(&mut p, json!({"rename": {"kind": "system", "id": "dust", "to": "motes"}})).unwrap();
     assert_eq!(at(&p, "/scene/layers/4/system"), "motes");
 }
+
+#[test]
+fn renaming_an_asset_rewrites_only_the_fields_that_refer_to_assets() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = scene(&root, "refs");
+    let file = super::picture(&p.dir, "sky.png", 10);
+    act(&mut p, json!({"add_layer": {"kind": "image", "id": "sky", "file": file}})).unwrap();
+    let asset = at(&p, "/scene/layers/0/image").as_str().unwrap().to_owned();
+    act(&mut p, json!({"add_layer": {"kind": "text", "id": "words"}})).unwrap();
+    act(&mut p, json!({"set": {"pointer": "/scene/layers/1/text", "value": asset}})).unwrap();
+    act(&mut p, json!({"set": {"pointer": "/scene/ext/note", "value": asset}})).unwrap();
+    act(&mut p, json!({"rename": {"kind": "asset", "id": asset, "to": "clouds"}})).unwrap();
+    assert_eq!(at(&p, "/scene/layers/0/image"), "clouds");
+    assert_eq!(at(&p, "/scene/layers/1/text"), json!(asset));
+    assert_eq!(at(&p, "/scene/ext/note"), json!(asset));
+}

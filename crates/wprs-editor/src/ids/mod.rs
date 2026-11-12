@@ -2,6 +2,7 @@ mod clip;
 mod files;
 mod gone;
 mod refs;
+mod reword;
 mod rename;
 
 pub use clip::{copy, paste};

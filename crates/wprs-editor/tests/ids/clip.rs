@@ -62,3 +62,26 @@ fn walk(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
     out.sort();
     out
 }
+
+#[test]
+fn a_pasted_asset_renamed_for_a_free_id_leaves_other_texts_alone() {
+    let root = tempfile::tempdir().unwrap();
+    let mut from = scene(&root, "from");
+    let file = picture(&from.dir, "sky.png", 10);
+    act(&mut from, json!({"add_layer": {"kind": "image", "id": "sky", "file": file}})).unwrap();
+    let asset = at(&from, "/scene/layers/0/image").as_str().unwrap().to_owned();
+    act(&mut from, json!({"add_layer": {"kind": "text", "id": "words"}})).unwrap();
+    act(&mut from, json!({"set": {"pointer": "/scene/layers/1/text", "value": asset}})).unwrap();
+    let clip =
+        wprs_editor::rigs::query(&from.dir, &from.doc, "", &json!({"copy": {"ids": ["sky", "words"]}}));
+    let mut to = scene(&root, "to");
+    let other = picture(&to.dir, "other.png", 99);
+    act(&mut to, json!({"add_layer": {"kind": "image", "id": "lead", "file": other}})).unwrap();
+    let taken = at(&to, "/scene/layers/0/image");
+    let mut clip = clip;
+    clip["assets"] = json!({ taken.as_str().unwrap(): clip["assets"][&asset].clone() });
+    clip["layers"][0]["image"] = taken.clone();
+    act(&mut to, json!({"paste": {"clip": clip}})).unwrap();
+    assert_eq!(at(&to, "/scene/layers/2/text"), json!(asset));
+    assert_ne!(at(&to, "/scene/layers/1/image"), taken);
+}
