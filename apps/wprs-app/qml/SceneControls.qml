@@ -169,6 +169,7 @@ ColumnLayout {
         daemon: scene.daemon
         output: scene.output
         props: scene.props
+        onReset: scene.load()
     }
 
     SceneRepeater {

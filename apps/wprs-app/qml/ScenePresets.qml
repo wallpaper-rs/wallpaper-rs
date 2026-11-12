@@ -13,6 +13,8 @@ ColumnLayout {
     readonly property var saved: props.user_presets ?? []
     property string notice: ""
 
+    signal reset
+
     function copy(text) {
         clip.text = text;
         clip.selectAll();
@@ -105,7 +107,7 @@ ColumnLayout {
         QQC2.Button {
             icon.name: "edit-undo"
             text: presets.daemon.tr("Reset")
-            onClicked: presets.daemon.act("ResetSceneProperties", [presets.output])
+            onClicked: presets.daemon.act("ResetSceneProperties", [presets.output], "Daemon1", () => presets && presets.reset())
         }
     }
 

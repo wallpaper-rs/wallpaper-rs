@@ -93,8 +93,14 @@ ColumnLayout {
             to: field.log ? 1 : field.high
             stepSize: field.log ? 0 : (field.modelData.step ?? 0)
             snapMode: QQC2.Slider.SnapAlways
-            value: field.toPosition(Number(field.modelData.value ?? field.low))
             onMoved: settle.restart()
+
+            Binding {
+                target: slider
+                property: "value"
+                value: field.toPosition(Number(field.modelData.value ?? field.low))
+                restoreMode: Binding.RestoreNone
+            }
 
             Timer {
                 id: settle
