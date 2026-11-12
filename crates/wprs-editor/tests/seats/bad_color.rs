@@ -1,6 +1,6 @@
 use super::{card, scene};
-use wprs_editor::Project;
 use serde_json::json;
+use wprs_editor::Project;
 use wprs_editor::review::report;
 use wprs_editor::seats::seats;
 
@@ -38,7 +38,8 @@ fn the_problem_list_names_the_layer_and_field_of_a_bad_color() {
     let p = broken(&root, "#fff");
     let said = report(&p.dir, &p.doc);
     let found = said["findings"].as_array().unwrap();
-    let hit = found.iter().find(|f| f["pointer"] == "/scene/layers/1/color").unwrap_or_else(|| panic!("{found:?}"));
+    let hit =
+        found.iter().find(|f| f["pointer"] == "/scene/layers/1/color").unwrap_or_else(|| panic!("{found:?}"));
     assert_eq!(hit["level"], "error");
     assert!(hit["message"].as_str().unwrap().contains("#rrggbb"), "{hit}");
 }
