@@ -1,6 +1,7 @@
 mod accent;
 mod account;
 mod activate;
+mod announce;
 mod apply;
 mod blank;
 mod bus;
