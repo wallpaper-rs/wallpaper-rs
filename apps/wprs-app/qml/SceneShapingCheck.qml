@@ -119,5 +119,8 @@ QtObject {
         Qt.createComponent("SceneTextureCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("SceneFieldsCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
     }
 }

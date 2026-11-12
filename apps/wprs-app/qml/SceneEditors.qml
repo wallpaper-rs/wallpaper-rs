@@ -54,8 +54,15 @@ Item {
                 Layout.preferredWidth: Kirigami.Units.gridUnit * 5
                 Layout.fillWidth: !Array.isArray(input.field.range)
                 visible: !amount.named
+                property bool typed: false
+
                 text: typeof input.value === "number" ? String(Number(input.value.toFixed(4))) : ""
-                onEditingFinished: input.commit(input.parse(text, input.value))
+                onTextEdited: typed = true
+                onEditingFinished: {
+                    if (typed)
+                        input.commit(input.parse(text, input.value));
+                    typed = false;
+                }
             }
 
             Repeater {
@@ -116,9 +123,15 @@ Item {
                 delegate: QQC2.TextField {
                     required property int index
 
+                    property bool typed: false
+
                     Layout.fillWidth: true
                     text: String(Number(Number(input.both[index]).toFixed(4)))
+                    onTextEdited: typed = true
                     onEditingFinished: {
+                        if (!typed)
+                            return;
+                        typed = false;
                         const next = [input.both[0], input.both[1]];
                         next[index] = input.parse(text, next[index]);
                         input.commit(next);
@@ -132,6 +145,10 @@ Item {
         id: listEditor
 
         RowLayout {
+            id: items
+
+            readonly property var owner: input.field.key === "effects" ? (input.page.view.layers ?? []).find(layer => layer.pointer === input.field.pointer.replace(/\/effects$/, "")) : undefined
+
             QQC2.Label {
                 Layout.fillWidth: true
                 text: (input.value ?? []).length === 1 ? App.tr("1 item") : App.tr("%1 items", (input.value ?? []).length)
@@ -140,10 +157,24 @@ Item {
             QQC2.Button {
                 icon.name: "list-add"
                 text: App.tr("Add")
-                onClicked: input.page.run(input.field.set ? "add" : "set", {
+                onClicked: items.owner ? picker.open() : input.page.run(input.field.set ? "add" : "set", {
                     "pointer": input.field.pointer + (input.field.set ? "/-" : ""),
                     "value": input.field.set ? input.field.sample : [input.field.sample]
                 })
+            }
+
+            SceneEffectCatalog {
+                id: picker
+
+                inspector: ({
+                        "page": input.page,
+                        "addEffect": id => input.page.run("effects", {
+                                "add": {
+                                    "layer": items.owner.id,
+                                    "effect": id
+                                }
+                            })
+                    })
             }
 
             QQC2.ComboBox {
@@ -180,9 +211,14 @@ Item {
 
         QQC2.TextField {
             readonly property bool plain: ["text", "scalar"].includes(input.field.widget) || input.field.widget.startsWith("ref:")
+            property bool typed: false
 
             text: plain ? String(input.value ?? "") : JSON.stringify(input.value ?? null)
+            onTextEdited: typed = true
             onEditingFinished: {
+                if (!typed)
+                    return;
+                typed = false;
                 const number = Number(text.trim());
                 if (input.field.widget === "scalar")
                     return input.commit(["true", "false"].includes(text.trim()) ? text.trim() === "true" : text.trim() !== "" && Number.isFinite(number) ? number : text);

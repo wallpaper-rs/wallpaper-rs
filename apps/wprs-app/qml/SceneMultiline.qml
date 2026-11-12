@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
 Area {
@@ -9,6 +10,9 @@ Area {
     readonly property string shown: String(host.value ?? "")
 
     Layout.fillWidth: true
+    enterApplies: true
+    QQC2.ToolTip.visible: hovered && activeFocus
+    QQC2.ToolTip.text: App.tr("Enter applies the text; Shift+Enter starts a new line")
     text: shown
     wrapMode: TextEdit.Wrap
     selectByMouse: true

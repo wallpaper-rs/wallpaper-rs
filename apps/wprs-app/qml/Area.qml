@@ -4,6 +4,31 @@ import QtQuick.Controls as QQC2
 QQC2.TextArea {
     id: area
 
+    property bool enterApplies: false
+
+    function apply(event) {
+        if (!enterApplies || (event.modifiers & Qt.ShiftModifier)) {
+            event.accepted = false;
+            return;
+        }
+        event.accepted = true;
+        area.editingFinished();
+    }
+
+    function leave(event, forward) {
+        if (!enterApplies) {
+            event.accepted = false;
+            return;
+        }
+        event.accepted = true;
+        nextItemInFocusChain(forward).forceActiveFocus(forward ? Qt.TabFocusReason : Qt.BacktabFocusReason);
+    }
+
+    Keys.onReturnPressed: event => area.apply(event)
+    Keys.onEnterPressed: event => area.apply(event)
+    Keys.onTabPressed: event => area.leave(event, true)
+    Keys.onBacktabPressed: event => area.leave(event, false)
+
     Component.onCompleted: {
         if (background)
             background.visible = true;
