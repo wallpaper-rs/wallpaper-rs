@@ -970,8 +970,8 @@ msgid "Back"
 msgstr "Volver"
 
 #: apps/wprs-app/qml/EditActions.qml apps/wprs-app/qml/PackagePage.qml
-#: apps/wprs-app/qml/SceneEntry.qml apps/wprs-app/qml/ScenePage.qml
-#: apps/wprs-app/qml/SceneScriptCode.qml
+#: apps/wprs-app/qml/SceneEntry.qml apps/wprs-app/qml/SceneMaterialCode.qml
+#: apps/wprs-app/qml/ScenePage.qml apps/wprs-app/qml/SceneScriptCode.qml
 msgid "Save"
 msgstr "Guardar"
 
@@ -4098,6 +4098,7 @@ msgstr ""
 
 #: apps/wprs-app/qml/QualityPicker.qml apps/wprs-app/qml/SceneNewMaterial.qml
 #: apps/wprs-app/qml/ScenePropLevels.qml apps/wprs-app/qml/SceneScriptAudit.qml
+#: apps/wprs-app/qml/SceneMaterialCode.qml
 msgid "%1: %2"
 msgstr "%1: %2"
 
@@ -6835,6 +6836,26 @@ msgstr "Metal"
 msgid "Relief"
 msgstr "Relieve"
 
+#: apps/wprs-app/qml/SceneMaterialCode.qml
+#: apps/wprs-app/qml/SceneScriptCode.qml
+msgid "%1 (not saved)"
+msgstr "%1 (sin guardar)"
+
+#: apps/wprs-app/qml/SceneMaterialCode.qml
+#: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneScriptRow.qml
+msgid "Open in your editor…"
+msgstr "Abrirlo en tu editor…"
+
+#: apps/wprs-app/qml/SceneMaterialCode.qml
+#: apps/wprs-app/qml/SceneNewMaterial.qml
+msgid "%1 builds"
+msgstr "%1 se compila"
+
+#: apps/wprs-app/qml/SceneMaterialCode.qml
+#: apps/wprs-app/qml/SceneNewMaterial.qml
+msgid "%1, line %2, column %3: %4"
+msgstr "%1, línea %2, columna %3: %4"
+
 #: apps/wprs-app/qml/SceneMaterialShade.qml
 msgid "Shells"
 msgstr "Capas"
@@ -7144,12 +7165,9 @@ msgstr ""
 "effects/NOMBRE.wgsl del paquete; leen frame y de param(0u) a param(7u)."
 
 #: apps/wprs-app/qml/SceneNewMaterial.qml
-msgid "%1 builds"
-msgstr "%1 se compila"
-
-#: apps/wprs-app/qml/SceneNewMaterial.qml
-msgid "%1, line %2, column %3: %4"
-msgstr "%1, línea %2, columna %3: %4"
+#, fuzzy
+msgid "Edit code…"
+msgstr "Editar el código…"
 
 #: apps/wprs-app/qml/SceneNewMaterial.qml
 msgid "Check again"
@@ -8126,14 +8144,6 @@ msgstr "Declarado y no usado: %1"
 #: apps/wprs-app/qml/SceneScriptAudit.qml apps/wprs-app/qml/SceneUses.qml
 msgid "Declare what it uses"
 msgstr "Declarar lo que usa"
-
-#: apps/wprs-app/qml/SceneScriptCode.qml
-msgid "%1 (not saved)"
-msgstr "%1 (sin guardar)"
-
-#: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneScriptRow.qml
-msgid "Open in your editor…"
-msgstr "Abrirlo en tu editor…"
 
 #: apps/wprs-app/qml/SceneScriptCode.qml
 msgid "API reference…"

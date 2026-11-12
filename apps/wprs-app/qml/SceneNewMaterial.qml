@@ -22,6 +22,13 @@ ColumnLayout {
         checks = out;
     }
 
+    SceneMaterialCode {
+        id: code
+
+        page: made.page
+        onClosed: made.check()
+    }
+
     onPackagesChanged: check()
     Component.onCompleted: check()
 
@@ -75,6 +82,11 @@ ColumnLayout {
             type: found?.ok ? Kirigami.MessageType.Positive : Kirigami.MessageType.Error
             text: found?.ok ? App.tr("%1 builds", modelData) : found?.line ? App.tr("%1, line %2, column %3: %4", modelData, found.line, found.column, found.error ?? "") : App.tr("%1: %2", modelData, found?.error ?? "")
             actions: [
+                Kirigami.Action {
+                    text: App.tr("Edit code…")
+                    icon.name: "document-edit"
+                    onTriggered: code.show(modelData)
+                },
                 Kirigami.Action {
                     text: App.tr("Check again")
                     icon.name: "view-refresh"

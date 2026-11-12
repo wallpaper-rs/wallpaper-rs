@@ -127,7 +127,6 @@ msgstr "no se puede leer %1: %2"
 
 #: crates/wprs-core/src/edit/file.rs crates/wprs-editor/src/offer.rs
 #: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/shaders.rs
-#: crates/wprs-editor/src/swarms/named.rs
 msgid "cannot write %1: %2"
 msgstr "no se puede escribir %1: %2"
 
@@ -1588,6 +1587,7 @@ msgstr "la escena no tiene el script %1"
 
 #: crates/wprs-editor/src/scripts/audit.rs
 #: crates/wprs-editor/src/scripts/edit.rs
+#: crates/wprs-editor/src/stage3d/newmat.rs
 msgid "%1 is not a path of the package"
 msgstr "%1 no es una ruta del paquete"
 
@@ -1869,7 +1869,7 @@ msgstr ""
 "hay cambios sin guardar de una sesión anterior; recupéralos o descártalos "
 "antes"
 
-#: crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/shaders.rs crates/wprs-editor/src/stage3d/newmat.rs
 msgid "%1 is larger than %2 KiB"
 msgstr "%1 ocupa más de %2 KiB"
 
@@ -1889,7 +1889,7 @@ msgstr "el efecto %1 %2"
 msgid "a scene has at most %1 effects of its own"
 msgstr "una escena tiene como mucho %1 efectos propios"
 
-#: crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/shaders.rs crates/wprs-editor/src/stage3d/newmat.rs
 msgid "%1 is no effect of this package"
 msgstr "%1 no es un efecto de este paquete"
 

@@ -32,6 +32,10 @@ pub enum Edit3d {
     NewMaterial {
         name: String,
     },
+    MaterialCode {
+        name: String,
+        text: String,
+    },
     Debug {
         #[serde(default)]
         show: Option<String>,

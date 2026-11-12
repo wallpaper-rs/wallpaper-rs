@@ -58,6 +58,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
         Edit3d::Shadows(s) => shadows::edit(doc, s),
         Edit3d::Path(p) => paths::edit(dir, doc, p),
         Edit3d::NewMaterial { name } => newmat::create(dir, doc, name),
+        Edit3d::MaterialCode { name, text } => newmat::write(dir, doc, name, text),
         Edit3d::Debug { show } => camera::debug(doc, show.as_deref()),
     }
 }
@@ -88,7 +89,8 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("bound3d").is_some() => swing::bound(dir, doc, &q["bound3d"]),
         _ if q.get("paths3d").is_some() => paths::paths(dir, doc, t(&q["paths3d"])),
         _ if q.get("material_check").is_some() => {
-            newmat::check(dir, doc, q["material_check"]["name"].as_str().unwrap_or_default())
+            let c = &q["material_check"];
+            newmat::check(dir, doc, c["name"].as_str().unwrap_or_default(), c["text"].as_str())
         }
         _ if q.get("materials3d").is_some() => {
             material::listing(dir, doc, q["materials3d"]["layer"].as_str().unwrap_or(id))
