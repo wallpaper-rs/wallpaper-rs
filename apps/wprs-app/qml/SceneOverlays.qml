@@ -22,6 +22,14 @@ Item {
         return true;
     }
 
+    Connections {
+        function onCanvasWanted() {
+            overlays.forceActiveFocus();
+        }
+
+        target: overlays.page
+    }
+
     Keys.onPressed: event => {
         const by = (event.modifiers & Qt.ShiftModifier) ? 10 : 1;
         const steps = {

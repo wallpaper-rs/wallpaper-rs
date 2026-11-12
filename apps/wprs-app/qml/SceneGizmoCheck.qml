@@ -43,6 +43,11 @@ QtObject {
             throw new Error("gizmo: the handles did not place, tilt and lift the layer: " + page.editor.error);
         if ((gizmo.modelData.corners ?? []).length !== 4)
             throw new Error("gizmo: a tilted layer has no projected outline");
+        const outline = gizmo.modelData.outline;
+        const middle = gizmo.mapFromItem(gizmo.parent, outline.reduce((sum, c) => sum + c[0], 0) / outline.length, outline.reduce((sum, c) => sum + c[1], 0) / outline.length);
+        const away = gizmo.mapFromItem(gizmo.parent, 1e5, 1e5);
+        if (!gizmo.containmentMask.contains(middle) || gizmo.containmentMask.contains(away))
+            throw new Error("gizmo: the hit area is not the outline of the layer");
         if (JSON.stringify(shown(base + "position")) !== "[10,20]" || JSON.stringify(shown(base + "tilt")) !== "[12,-4]")
             throw new Error("gizmo: the inspector shows the position and tilt as " + JSON.stringify([shown(base + "position"), shown(base + "tilt")]));
         for (const t of [0, 1])

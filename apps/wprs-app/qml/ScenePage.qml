@@ -18,6 +18,7 @@ Kirigami.Page {
     property string spot
     property var picked: []
     property bool moving
+    signal canvasWanted
     property bool overwrite
     property bool magnets: true
     property string picking

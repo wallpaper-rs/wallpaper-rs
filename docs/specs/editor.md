@@ -833,7 +833,7 @@ diamond below lifts it (`transform.z`). Each handle sends the `grip` of the `lay
 point it is dragged to, so the corner or edge it holds stays under the pointer whatever the
 parents do. With *Magnets* (on by default) a dragged layer snaps to the edges and the middle of the
 canvas and of the other layers, showing a guide where it snaps, and Alt places it freely; the arrow
-keys nudge the selected layer by a pixel, by ten with Shift, as one step per press. *Fit to the
+keys nudge the selected layer by a pixel, by ten with Shift, as one step per press. The canvas takes the keyboard focus when a layer is picked in the layer list, when a layer is tapped or dragged and when the empty canvas is tapped, so the arrows work at once; a change of the selection that is not one of those gestures leaves the focus where it is. *Fit to the
 canvas* covers the canvas with it, fits it inside or stretches it (`fit`). *Follow a layer* picks
 its `parent` with a tap on another layer of the canvas, keeping it where it is (`parent` with
 `keep`), and *Stop following* removes it the same way; while a layer follows another a dashed line

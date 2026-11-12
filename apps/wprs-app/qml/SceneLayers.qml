@@ -38,6 +38,7 @@ ColumnLayout {
         else
             page.picked = page.picked.concat([layer.id]);
         page.editor.select(layer.pointer);
+        page.canvasWanted();
     }
 
     function move(to, into) {
