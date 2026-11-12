@@ -16,9 +16,8 @@ QQC2.ScrollView {
     })) || "null")
 
     function skip() {
-        const titles = ["Night Drive", "Morning Light", "Evening Tide", "Open Road"];
         const next = Object.assign({}, player.media);
-        next.title = titles[(titles.indexOf(next.title) + 1) % titles.length];
+        next.title = SceneMediaWords.nextTitle(next.title);
         const at = player.pictures.findIndex(p => p.path === next.cover);
         if (player.pictures.length > 0)
             next.cover = player.pictures[(at + 1) % player.pictures.length].path;

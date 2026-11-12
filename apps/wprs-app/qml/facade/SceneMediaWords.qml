@@ -28,6 +28,14 @@ QtObject {
         return name !== "" && said[kind] !== undefined ? said[kind] : SceneWords.label(option);
     }
 
+    readonly property var originals: ["Night Drive", "Morning Light", "Evening Tide", "Open Road"]
+    readonly property var tracks: [App.tr("Night Drive"), App.tr("Morning Light"), App.tr("Evening Tide"), App.tr("Open Road")]
+
+    function nextTitle(title) {
+        const at = Math.max(tracks.indexOf(title), originals.indexOf(title));
+        return tracks[(at + 1) % tracks.length];
+    }
+
     function clock(seconds) {
         const s = Math.max(0, Math.floor(seconds));
         const h = Math.floor(s / 3600);

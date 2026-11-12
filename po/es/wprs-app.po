@@ -11265,6 +11265,22 @@ msgid "When the pointer leaves %1"
 msgstr "Cuando el puntero sale de %1"
 
 #: apps/wprs-app/qml/facade/SceneMediaWords.qml
+msgid "Night Drive"
+msgstr "Viaje nocturno"
+
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
+msgid "Morning Light"
+msgstr "Luz de la mañana"
+
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
+msgid "Evening Tide"
+msgstr "Marea de la tarde"
+
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
+msgid "Open Road"
+msgstr "Camino abierto"
+
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
 msgid "yes"
 msgstr "sí"
 

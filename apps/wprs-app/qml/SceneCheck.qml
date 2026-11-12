@@ -170,7 +170,7 @@ QtObject {
                 }).exercise();
             }
             if (kind === "empty")
-                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml"])
+                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml"])
                     Qt.createComponent(check).createObject(page, {
                         "page": page
                     }).exercise();
