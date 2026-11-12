@@ -67,6 +67,7 @@ pub mod providers;
 mod pulling;
 pub mod refusing;
 pub mod remote;
+mod rendering;
 pub mod repo;
 mod rgb;
 mod rigging;

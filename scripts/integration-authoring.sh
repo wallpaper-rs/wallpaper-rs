@@ -92,3 +92,18 @@ if ctl scene show "$craft" /scene/ext/editor 2>/dev/null | grep -q generic; then
 if ctl scene act "$craft" remove_layer '{"id": "absent"}' 2>/dev/null; then fail "scene act removed a layer that is not there"; fi
 ctl scene actions add_layer | grep -q "kind: string (required)" || fail "scene actions did not describe add_layer"
 ctl scene ask "$craft" wind | grep -q strength || fail "scene ask did not answer"
+ctl scene preview "$craft" -o preview:1 --time 0.5 --quality q1 --battery --calm || fail "a preview on battery with reduced motion was refused"
+ctl scene preview "$craft" -o preview:1 --stop
+shots=$scene/shots
+mkdir -p "$shots"
+ctl scene render "$craft" --out "$shots/full.png" --size 96 --time 0.5 >/dev/null || fail "the scene was not rendered to a picture"
+ctl scene render "$craft" --out "$shots/low.png" --size 96 --time 0.5 --quality q0 --battery >/dev/null || fail "the scene was not rendered at the lowest level on battery"
+for shot in full low; do [ -s "$shots/$shot.png" ] || fail "the picture $shot is empty"; done
+ctl scene render "$craft" --out "$shots/clip.gif" --size 64 --frames 4 --fps 10 --pointer 0.2,0.5:0.8,0.5 --click >/dev/null || fail "the clip was not rendered"
+[ "$(head -c 3 "$shots/clip.gif")" = GIF ] || fail "the clip is no animated picture"
+ctl scene render "$craft" --out "$shots/seq.png" --size 64 --frames 3 >/dev/null || fail "the image sequence was not rendered"
+for n in 0001 0003; do [ -s "$shots/seq-$n.png" ] || fail "the image sequence is missing frame $n"; done
+ctl scene render "$craft" --out "$shots/versus.png" --size 96 --time 0.5 --against q0 --without-bloom --split 0.25 >/dev/null || fail "the comparison was not rendered"
+[ -s "$shots/versus.png" ] || fail "the comparison picture is empty"
+if ctl scene render "$craft" --out "$shots/bad.png" --pointer 2,0.5 2>/dev/null; then fail "a pointer outside the canvas was taken"; fi
+if ctl scene render "$craft" --out "$shots/bad.txt" 2>/dev/null; then fail "a picture was written with an unknown extension"; fi

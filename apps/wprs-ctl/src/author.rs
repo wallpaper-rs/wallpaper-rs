@@ -194,4 +194,6 @@ pub enum Author {
     Acting(crate::acting::Acting),
     #[command(flatten)]
     Naming(crate::naming::Naming),
+    #[command(flatten)]
+    Rendering(crate::rendering::Rendering),
 }

@@ -102,6 +102,14 @@ impl Renderer {
         runtime.seek(time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));
         let frame = runtime.frame(view.view(size), Quality::Q3);
         let image = self.render_scene(&mut view, &runtime, &frame, size, Quality::Q3, &[])?;
+        self.read_scene(image, size)
+    }
+
+    pub(crate) fn read_scene(
+        &self,
+        image: &crate::GpuImage,
+        size: (u32, u32),
+    ) -> Result<RgbaImage, RenderError> {
         let (mut target, mut pixels) = (self.create_target(size.0, size.1)?, Vec::new());
         let layer = Layer {
             image: Some(image),

@@ -79,9 +79,9 @@ pub use pq::pq_code;
 pub use readback::TargetLimits;
 pub use save::{FORMATS, save};
 pub use scene::{
-    MAX_FONT, MAX_SCENE_BUILD, Pixels, RGB_MOST, SceneAssets, SceneStats, SceneView, Stamping, drawn_effects,
-    finish_builds, font, lit, profiled_passes, reset_profiled_passes, retry_effects, set_build_timeout,
-    set_gpu_budget, stop_builds, stop_effects,
+    MAX_FONT, MAX_SCENE_BUILD, Opened, Pixels, RGB_MOST, Reel, Rehearsal, SceneAssets, SceneStats, SceneView,
+    Stamping, Trace, Versus, drawn_effects, finish_builds, font, lit, profiled_passes, reset_profiled_passes,
+    retry_effects, set_build_timeout, set_gpu_budget, split, stop_builds, stop_effects,
 };
 use std::sync::OnceLock;
 use std::sync::atomic::{AtomicU64, Ordering};

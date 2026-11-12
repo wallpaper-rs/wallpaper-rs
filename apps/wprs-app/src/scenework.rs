@@ -16,7 +16,7 @@ pub fn queued(action: &Action) -> bool {
 }
 
 impl SceneEditor {
-    fn work<T: Send + 'static>(
+    pub(crate) fn work<T: Send + 'static>(
         mut self: Pin<&mut Self>,
         job: impl FnOnce() -> anyhow::Result<T> + Send + 'static,
         done: Done<T>,

@@ -78,6 +78,8 @@ pub mod qobject {
         #[qinvokable]
         fn preview(self: Pin<&mut SceneEditor>, live: bool);
         #[qinvokable]
+        fn render(self: Pin<&mut SceneEditor>, out: &QString, spec: &QString);
+        #[qinvokable]
         fn folder_for(self: &SceneEditor, name: &QString) -> QString;
         #[qinvokable]
         fn projects(self: &SceneEditor) -> QString;
@@ -85,6 +87,8 @@ pub mod qobject {
         fn kind_of(self: &SceneEditor, folder: &QString, package: &QString) -> QString;
         #[qsignal]
         fn finished(self: Pin<&mut SceneEditor>, message: QString);
+        #[qsignal]
+        fn rendered(self: Pin<&mut SceneEditor>, files: QString);
     }
 
     impl cxx_qt::Threading for SceneEditor {}
