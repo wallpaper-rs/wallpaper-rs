@@ -86,9 +86,10 @@ QtObject {
         const tree = Qt.createComponent("SceneTemplateTree.qml").createObject(page, {
                 "page": page
             });
-        if (tree.templates.length !== 1 || tree.templates[0].layers.length !== 1)
+        const mine = tree.templates.find(t => t.name === "dot_template");
+        if (!mine || mine.layers.length !== 1)
             throw new Error("templates: the tree lists " + JSON.stringify(tree.templates));
-        page.editor.select(tree.templates[0].pointer);
+        page.editor.select(mine.pointer);
         if (!page.fields.some(field => field.key === "color"))
             throw new Error("templates: the inspector shows nothing of the template");
         page.run("template", {
