@@ -15,6 +15,11 @@ fn pulse_beats_brightness_color_or_opacity_and_follows_a_band() {
     low.check(&[((10, 10), [50; 3])]);
     let Some(tinted) = at(json!({ "what": 1, "speed": 1, "tint_high": "#ff0000" }), 0.0) else { return };
     tinted.check(&[((10, 10), [200, 0, 0])]);
+    let light = json!({ "what": 3, "speed": 1, "tint_low": "#ff0000", "tint_high": "#0000ff" });
+    let Some(lit) = at(light.clone(), 0.0) else { return };
+    lit.check(&[((10, 10), [200, 0, 200])]);
+    let Some(dim) = at(light, 0.5) else { return };
+    dim.check(&[((10, 10), [200, 0, 0])]);
     let Some(faded) = at(json!({ "what": 2, "speed": 1, "bounds": [0, 1] }), 0.5) else { return };
     faded.check(&[((10, 10), [0, 0, 255])]);
     let Some(mut heard) = Fx::new("pulse", json!({ "speed": 0, "audio_band": 3 })).input(solid([200; 3])).run() else {

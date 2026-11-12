@@ -15,6 +15,10 @@ fn color_pulse(color: vec4<f32>, uv: vec2<f32>) -> vec4<f32> {
             return vec4<f32>(color.rgb * mix(vec3<f32>(1.0), from_linear(tint), m), color.a);
         }
         case 2u: { return color * min(k, 1.0); }
+        case 3u: {
+            let lit = color.rgb * (from_linear(param(3u).rgb) + from_linear(param(4u).rgb) * mix(param(2u).x, param(2u).y, v));
+            return vec4<f32>(min(mix(color.rgb, lit, m), vec3<f32>(color.a)), color.a);
+        }
         default: { return vec4<f32>(min(color.rgb * k, vec3<f32>(color.a)), color.a); }
     }
 }

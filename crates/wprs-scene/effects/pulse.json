@@ -2,7 +2,7 @@
   "id": "pulse",
   "name": { "en": "Pulse" },
   "category": "color",
-  "description": "Pulses brightness, color or opacity over time.",
+  "description": "Pulses brightness, color, opacity or a tinted light over time.",
   "mask_mode": "strength",
   "params": [
     {
@@ -12,7 +12,8 @@
       "values": [
         { "value": 0, "label": { "en": "Brightness", "es": "Brillo" } },
         { "value": 1, "label": { "en": "Color", "es": "Color" } },
-        { "value": 2, "label": { "en": "Opacity", "es": "Opacidad" } }
+        { "value": 2, "label": { "en": "Opacity", "es": "Opacidad" } },
+        { "value": 3, "label": { "en": "Tinted light", "es": "Luz teñida" } }
       ]
     },
     { "id": "speed", "type": "float", "default": 1, "min": 0, "max": 16, "uses": "time", "yields_to": "audio_band" },
