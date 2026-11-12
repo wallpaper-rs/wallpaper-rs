@@ -39,3 +39,4 @@ test -f "$exports/icons/hicolor/scalable/apps/$app.svg"
 grep -qF "<release version=\"${version%%+*}\"" "$files/share/metainfo/$app.metainfo.xml"
 ls "$files/bin/wprsd" "$files/bin/wprs-ctl" "$files/bin/wprs-app" "$files/bin/wprs-web"
 if grep -l -E '/run/build|/(home|root)/' "$files"/bin/wprs*; then exit 1; fi
+"$(dirname "$0")/serve-check.sh"
