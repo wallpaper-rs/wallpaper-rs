@@ -147,10 +147,8 @@ pub fn template(
     })
 }
 
-pub fn system() -> Value {
-    json!({"capacity": 2000, "emitters": [{"shape": "edge", "rate": 120}],
-        "init": {"life": [3, 6], "speed": [20, 60], "size": [3, 8], "color": ["#ffffff", "#a0c8ff"]},
-        "forces": [{"turbulence": {"strength": 20, "scale": 0.004}}]})
+pub fn system(doc: &Value) -> Value {
+    crate::kits::kit("snow", crate::kits::size(doc)).unwrap_or_default()
 }
 
 pub fn renamed(doc: &Value, layer: &Value, used: &mut Vec<String>) -> Value {

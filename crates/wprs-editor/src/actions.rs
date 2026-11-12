@@ -111,7 +111,7 @@ fn steps(doc: &Value, action: &Action) -> Result<Vec<Op>> {
             let mut ops = Vec::new();
             let named = source.clone().unwrap_or_else(|| id.clone());
             if kind == "particles" && doc.pointer(&format!("/scene/particles/{named}")).is_none() {
-                ops.extend(set(doc, &format!("/scene/particles/{named}"), system()));
+                ops.extend(set(doc, &format!("/scene/particles/{named}"), system(doc)));
             }
             let path = format!("{list}/{}", at.unwrap_or(len).min(len));
             ops.push(Op::Add { path, value: template(doc, kind, &id, source.as_deref(), name.as_deref())? });

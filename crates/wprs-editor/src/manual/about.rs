@@ -81,7 +81,10 @@ pub const ABOUT: [(&str, &str); 80] = [
     ("attach", "Attach a layer to a bone or to a point of another layer"),
     ("point", "Add, move, rename or remove a named point of a layer"),
     ("parts", "Order, hide or show the parts of a layered picture"),
-    ("particles", "Edit a particle system: shape, bursts, forces, colliders, strands, lighting and settings"),
+    (
+        "particles",
+        "Edit a particle system: starting kits, shape, bursts, forces, colliders, strands, lighting and settings",
+    ),
     (
         "light",
         "Add, change, mute or remove the lights of the scene; add places a light at a position in its group, set moves it to a point of the canvas",

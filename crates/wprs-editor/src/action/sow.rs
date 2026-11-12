@@ -17,6 +17,10 @@ pub enum SowEdit {
     Delete {
         system: String,
     },
+    Kit {
+        system: String,
+        kit: String,
+    },
     Settings {
         system: String,
         #[serde(default)]

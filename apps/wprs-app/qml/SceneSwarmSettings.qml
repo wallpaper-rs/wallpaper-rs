@@ -9,6 +9,7 @@ ColumnLayout {
 
     required property var tools
     readonly property var spaces: ["local", "world"]
+    readonly property var kits: ["snow", "sparks", "rain", "dust"]
     readonly property real capacity: read("/capacity", 1)
     readonly property real seed: read("/seed", 0)
     readonly property real prewarm: read("/prewarm", 0)
@@ -40,6 +41,20 @@ ColumnLayout {
     GridLayout {
         Layout.fillWidth: true
         columns: 2
+
+        QQC2.Label {
+            text: App.tr("Start with")
+        }
+
+        QQC2.ComboBox {
+            Layout.fillWidth: true
+            model: [App.tr("Snow"), App.tr("Sparks"), App.tr("Rain"), App.tr("Dust")]
+            currentIndex: -1
+            displayText: App.tr("Choose a ready-made start…")
+            onActivated: index => settings.tools.edit("kit", {
+                    "kit": settings.kits[index]
+                })
+        }
 
         QQC2.Label {
             text: App.tr("Most particles alive")

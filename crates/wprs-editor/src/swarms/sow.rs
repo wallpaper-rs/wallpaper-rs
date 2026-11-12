@@ -43,7 +43,7 @@ fn create(
     ensure!(doc.pointer(&path).is_none(), said("editor.id_use", "the id %1 is in use", &[&id]));
     let value = match from {
         Some(f) => doc.pointer(&system(doc, f)?).cloned().unwrap_or_default(),
-        None => crate::layers::system(),
+        None => crate::layers::system(doc),
     };
     let mut ops = set(doc, &path, value);
     if let Some(p) = parent {
@@ -125,6 +125,14 @@ pub(super) fn edit(doc: &Value, e: &S) -> Result<Vec<Op>> {
     Ok(match e {
         S::Create { system: id, from, parent, on } => {
             create(doc, id, from.as_deref(), parent.as_deref(), *on)?
+        }
+        S::Kit { system: s, kit } => {
+            let at = system(doc, s)?;
+            let mut value = crate::kits::kit(kit, crate::kits::size(doc))?;
+            if let Some(children) = doc.pointer(&format!("{at}/children")) {
+                value["children"] = children.clone();
+            }
+            set(doc, &at, value)
         }
         S::Delete { system: s } => vec![Op::Remove { path: system(doc, s)? }],
         S::Settings { system: s, capacity, seed, prewarm, space, rate: r, emitter, replace, lock } => {

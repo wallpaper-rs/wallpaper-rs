@@ -16,9 +16,10 @@ Los controles de un sistema aparecen en el inspector cuando eliges ese sistema. 
 
 1. Pulsa **Añadir una capa**.
 2. Elige **Partículas**.
-3. La capa nace con un sistema que ya funciona: un emisor de **Borde**, una fuerza de turbulencia y colores y tamaños de salida.
+3. La capa nace con un sistema que ya funciona: nieve que cae de arriba abajo, ya visible desde el primer cuadro, con turbulencia suave y colores y tamaños de salida.
+4. En **Empezar con…** del inspector elige **Nieve**, **Chispas**, **Lluvia** o **Polvo** para rellenar de una vez los emisores, la vida y las fuerzas con un punto de partida; después ajústalo a tu gusto.
 
-**En la terminal.** Acción `add_layer` con `kind` igual a `particles`. Mira [acciones](acciones.md).
+**En la terminal.** Acción `add_layer` con `kind` igual a `particles`, y la variante `kit` de `particles` para el punto de partida. Mira [acciones](acciones.md).
 
 ## Cómo abrir el sistema de una capa
 

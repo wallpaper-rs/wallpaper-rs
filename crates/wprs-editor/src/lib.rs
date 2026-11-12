@@ -48,6 +48,7 @@ pub mod inspect;
 pub mod keys;
 pub mod kinded;
 pub mod lamps;
+pub mod kits;
 pub mod layers;
 mod lettering;
 pub mod levels;

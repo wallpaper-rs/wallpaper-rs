@@ -73,6 +73,20 @@ wprs-ctl scene act mi-escena particles '{"rename":{"system":"chispas","to":"bras
 wprs-ctl scene act mi-escena particles '{"scripts":{"from":"chispas","to":"brasas"}}'
 ```
 
+##### variante `kit`
+
+Reemplaza el sistema por un punto de partida que ya se ve bien: llena los emisores, la vida, las fuerzas y los colores, y deja el sistema con precalentamiento para que se vea lleno desde el primer cuadro. Se conservan los hijos del sistema. Los puntos de partida se ajustan al tamaño del lienzo.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `system` | texto | (obligatorio) Id del sistema. |
+| `kit` | texto | (obligatorio) `snow` (nieve que cae de arriba abajo), `sparks` (chispas que suben desde abajo), `rain` (lluvia rápida y oblicua) o `dust` (motas que flotan por todo el lienzo). |
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"particles","id":"chispas"}'
+wprs-ctl scene act mi-escena particles '{"kit":{"system":"chispas","kit":"sparks"}}'
+```
+
 ##### variante `settings`
 
 Ajustes generales del sistema. Solo cambia lo que nombras.
