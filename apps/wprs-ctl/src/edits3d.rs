@@ -23,6 +23,8 @@ pub struct Edits3d {
     #[arg(help = EDIT, long, value_name = "JSON")]
     light: Option<String>,
     #[arg(help = EDIT, long, value_name = "JSON")]
+    sculpt: Option<String>,
+    #[arg(help = EDIT, long, value_name = "JSON")]
     camera: Option<String>,
     #[arg(help = EDIT, long, value_name = "JSON")]
     view: Option<String>,
@@ -53,6 +55,7 @@ impl Edits3d {
             ("paint", self.paint),
             ("grab", self.grab),
             ("light", self.light),
+            ("sculpt", self.sculpt),
             ("camera", self.camera),
             ("view", self.view),
             ("tones", self.tones),
