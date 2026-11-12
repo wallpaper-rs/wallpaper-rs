@@ -29,7 +29,7 @@ QtObject {
         Qt.createComponent("PackageSettingsCheck.qml").createObject(page, {
             "page": page
         }).exercise();
-        Qt.createComponent("AuthorCheck.qml").createObject(page, {
+        Qt.createComponent("PackageAuthorCheck.qml").createObject(page, {
             "page": page
         }).exercise();
         page.editor.save();
