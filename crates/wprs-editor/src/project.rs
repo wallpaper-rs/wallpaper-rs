@@ -143,7 +143,11 @@ impl Project {
                 crate::scope::ops(ops, scope)?
             }
         };
-        self.commit(&action.name(), ops, gesture, at)
+        let done = self.commit(&action.name(), ops, gesture, at);
+        if matches!(action, Action::Thumbnail { .. } | Action::Shot(_)) {
+            self.tuck();
+        }
+        done
     }
 
     pub fn record(&mut self, label: &str, ops: Vec<Op>) -> Result<Vec<Op>> {

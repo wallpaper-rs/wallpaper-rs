@@ -10,8 +10,16 @@ use std::path::Path;
 const MESHES: &str = "meshes/";
 const EFFECTS: &str = "effects/";
 
+fn picture(p: &str) -> bool {
+    let name = p.strip_prefix("assets/").unwrap_or(p);
+    let kind = [".png", ".jpg", ".jpeg", ".webp", ".gif"].iter().any(|e| name.ends_with(e));
+    name.starts_with("preview") && !name.contains('/') && kind
+}
+
 fn revised(p: &str) -> bool {
-    (p.starts_with(MESHES) && p.ends_with(".glb")) || (p.starts_with(EFFECTS) && p.ends_with(".json"))
+    (p.starts_with(MESHES) && p.ends_with(".glb"))
+        || (p.starts_with(EFFECTS) && p.ends_with(".json"))
+        || picture(p)
 }
 
 pub(crate) fn kept(dir: &Path, p: &str) -> bool {
