@@ -127,6 +127,13 @@ ColumnLayout {
             onActiveChanged: canvas.page.editor.hold(active)
         }
 
+        SceneDropFiles {
+            anchors.fill: parent
+            z: 6
+            layers: true
+            page: canvas.page
+        }
+
         SceneBand {
             anchors.fill: parent
             enabled: !canvas.page.moving && !canvas.testing

@@ -116,9 +116,10 @@ undo and redo walk through, the undone ones marked.
 | `undo`, `redo` | none | `undo`, `redo` |
 
 `film` and `sprites` have no command of their own: `scene act` runs them. The queries `film`
-(`{"film": {"layer", "strip"}}`: real size, length, trim and speed of the video of a layer) and
-`sprites` (`{"sprites": {"asset"}}`: size of the picture, frames, `fps` and `frames`) go through `rig`,
-like the other queries of the canvas.
+(`{"film": {"layer", "strip"}}`: real size, length, trim and speed of the video of a layer),
+`sprites` (`{"sprites": {"asset"}}`: size of the picture, frames, `fps` and `frames`) and `uses`
+(`{"uses": {"asset"}}`: every pointer that names the asset, with the layer that holds it) go through
+`rig`, like the other queries of the canvas.
 
 A video layer has on the canvas the box of the real size of its video (that of `size` when the
 layer sets it), not one of 640 × 360. In the inspector of a video layer, or of an image layer that
@@ -128,6 +129,12 @@ times, which is what the format takes; the range of `playback.rate` in the inspe
 these layers too), the loop, *Use the size of the video* and *Play the whole video*. Wherever a
 texture is picked (the `texture` of a mask, an effect, a mesh or a spot light) the list also holds
 the video assets; the lists of normal, environment and particle-pool maps still ask for pictures.
+
+The list of assets shows a thumbnail of each (the picture, the first frame of a video, an "Aa"
+sample of a font, an icon for sounds, color tables and models), takes files dropped on it (it
+imports them) and, before an asset in use is removed, lists every place that names it and asks to
+confirm. Files dropped on the canvas import the pictures, videos and sounds among them and add one
+layer for each. The import dialog also offers `.mp3`, `.ttc`, `.otc` and `.woff2` files.
 
 The sprite cutter (the *Cut sprites* button of each picture) shows the picture with its numbered
 frames: a grid is cut by rows, columns, margin, spacing, number of frames and order; dragging over

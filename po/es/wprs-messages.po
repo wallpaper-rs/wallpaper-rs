@@ -291,8 +291,9 @@ msgstr "un sonido puede tener como mucho %1 MiB"
 msgid "the sound %1"
 msgstr "el sonido %1"
 
-#: crates/wprs-editor/src/assets.rs crates/wprs-editor/src/packing/source.rs
-#: crates/wprs-editor/src/previews.rs crates/wprs-editor/src/rig.rs
+#: crates/wprs-editor/src/assets.rs crates/wprs-editor/src/cutter.rs
+#: crates/wprs-editor/src/packing/source.rs crates/wprs-editor/src/previews.rs
+#: crates/wprs-editor/src/rig.rs
 msgid "the picture cannot be read: %1"
 msgstr "no se puede leer la imagen: %1"
 
@@ -546,6 +547,18 @@ msgstr "el paquete no ofrece %1"
 msgid "%1 exists with other content"
 msgstr "%1 ya existe con otro contenido"
 
+#: crates/wprs-editor/src/cells.rs crates/wprs-editor/src/cutter.rs
+msgid "a sprite sheet has at most %1 frames"
+msgstr "una hoja de sprites tiene como mucho %1 cuadros"
+
+#: crates/wprs-editor/src/cells.rs
+msgid "the cells would have no size"
+msgstr "las celdas no tendrían tamaño"
+
+#: crates/wprs-editor/src/cells.rs
+msgid "a frame lies inside the picture and has a size"
+msgstr "un cuadro cae dentro de la imagen y tiene tamaño"
+
 #: crates/wprs-editor/src/check.rs
 msgid "the kind of a scene package is scene"
 msgstr "el tipo de un paquete de escena es scene"
@@ -716,8 +729,8 @@ msgstr "el orden de una parte va de -1000 a 1000"
 msgid "a part shows over another part, not over itself"
 msgstr "una parte se ve sobre otra parte, no sobre sí misma"
 
-#: crates/wprs-editor/src/figures/drag.rs
 #
+#: crates/wprs-editor/src/figures/drag.rs
 msgid "the layer %1 has no handle %2"
 msgstr "la capa %1 no tiene el asa %2"
 
@@ -730,25 +743,57 @@ msgstr "la capa %1 no tiene el asa %2"
 msgid "the layer %1 is not placed on the canvas"
 msgstr "la capa %1 no está colocada en el lienzo"
 
-#: crates/wprs-editor/src/figures/stops.rs
 #
+#: crates/wprs-editor/src/figures/stops.rs
 msgid "the layer %1 has no gradient"
 msgstr "la capa %1 no tiene degradado"
 
-#: crates/wprs-editor/src/figures/stops.rs
 #
+#: crates/wprs-editor/src/figures/stops.rs
 msgid "the gradient has no stop %1"
 msgstr "el degradado no tiene la parada %1"
 
-#: crates/wprs-editor/src/figures/stops.rs
 #
+#: crates/wprs-editor/src/figures/stops.rs
 msgid "a gradient has at most %1 stops"
 msgstr "un degradado tiene como mucho %1 paradas"
 
-#: crates/wprs-editor/src/figures/stops.rs
 #
+#: crates/wprs-editor/src/figures/stops.rs
 msgid "a gradient keeps at least 2 stops"
 msgstr "un degradado conserva al menos 2 paradas"
+
+#: crates/wprs-editor/src/cutter.rs
+msgid "\"%1\" is not a picture"
+msgstr "«%1» no es una imagen"
+
+#: crates/wprs-editor/src/cutter.rs
+msgid "there is no frame %1"
+msgstr "no hay ningún cuadro %1"
+
+#: crates/wprs-editor/src/cutter.rs
+msgid "a sprite sheet plays from 0.1 to 120 frames a second"
+msgstr "una hoja de sprites se reproduce de 0,1 a 120 cuadros por segundo"
+
+#: crates/wprs-editor/src/cutter.rs
+msgid "a sprite sheet plays between 1 frame and all its frames"
+msgstr "una hoja de sprites reproduce entre 1 cuadro y todos los suyos"
+
+#: crates/wprs-editor/src/films.rs
+msgid "the layer \"%1\" does not show a video"
+msgstr "la capa «%1» no muestra un vídeo"
+
+#: crates/wprs-editor/src/films.rs
+msgid "a video plays from 0 to 4 times its speed"
+msgstr "un vídeo se reproduce de 0 a 4 veces su velocidad"
+
+#: crates/wprs-editor/src/films.rs
+msgid "the size of the video of \"%1\" cannot be read"
+msgstr "no se puede leer el tamaño del vídeo de «%1»"
+
+#: crates/wprs-editor/src/films.rs
+msgid "the part of the video must lie inside it and last 0.05 s or more"
+msgstr "la parte del vídeo debe caer dentro de él y durar 0,05 s o más"
 
 #: crates/wprs-editor/src/findings.rs
 msgid "%1: refused: %2"
@@ -1125,13 +1170,13 @@ msgstr "agrega una reserva primero"
 msgid "%1 is not a layer type; use one of %2"
 msgstr "%1 no es un tipo de capa; usa uno de %2"
 
-#: crates/wprs-editor/src/lettering/mod.rs
 #
+#: crates/wprs-editor/src/lettering/mod.rs
 msgid "the layer %1 is not a text layer"
 msgstr "la capa %1 no es una capa de texto"
 
-#: crates/wprs-editor/src/lettering/mod.rs
 #
+#: crates/wprs-editor/src/lettering/mod.rs
 msgid "a text has at most %1 fallback fonts"
 msgstr "un texto tiene como mucho %1 fuentes de respaldo"
 

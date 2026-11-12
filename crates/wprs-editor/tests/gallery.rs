@@ -165,3 +165,21 @@ fn a_sprite_grid_cuts_in_the_chosen_order_and_free_frames_are_edited_one_by_one(
     act(&mut p, json!({"sprites": {"clear": {"asset": "walk"}}})).unwrap();
     assert!(p.doc["scene"]["assets"]["walk"].get("rects").is_none());
 }
+
+#[test]
+fn an_asset_lists_every_place_that_uses_it() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = with_film(&root);
+    picture(&p.dir, "mask.png", [8, 8]);
+    act(&mut p, json!({"set": {"pointer": "/scene/assets/mask", "value": {"path": "assets/mask.png"}}}))
+        .unwrap();
+    let effects = json!([{"effect": "blur", "mask": {"texture": "mask"}}]);
+    act(&mut p, json!({"set": {"pointer": "/scene/layers/0/effects", "value": effects}})).unwrap();
+    let found = query(&p, json!({"uses": {"asset": "mask"}}));
+    let rows = found["uses"].as_array().unwrap();
+    assert_eq!(rows.len(), 1, "{found}");
+    assert_eq!(rows[0]["pointer"], "/scene/layers/0/effects/0/mask/texture");
+    assert_eq!(rows[0]["layer"], json!({"id": "film", "type": "video"}));
+    assert_eq!(query(&p, json!({"uses": {"asset": "clip"}}))["uses"][0]["pointer"], "/scene/layers/0/video");
+    assert!(query(&p, json!({"uses": {"asset": "nobody"}}))["uses"].as_array().unwrap().is_empty());
+}

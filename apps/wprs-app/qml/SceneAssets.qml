@@ -10,82 +10,35 @@ ColumnLayout {
 
     required property var page
 
-    function texture(t) {
-        if (!t)
-            return [];
-        return [t.hdr ? App.tr("HDR") : "", t.cube ? App.tr("cube map, shown as a panorama") : "", t.frames > 1 ? App.tr("%1 frames", t.frames) : ""].filter(w => w);
+    readonly property var frames: JSON.parse(strips.frames || "{}")
+    property alias strips: strips
+    property alias cutter: cutter
+    property alias packing: packing
+
+    Strips {
+        id: strips
     }
 
-    QQC2.ScrollView {
+    Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        ListView {
-            model: panel.page.view.assets ?? []
-            clip: true
+        QQC2.ScrollView {
+            anchors.fill: parent
 
-            delegate: QQC2.ItemDelegate {
-                id: row
+            ListView {
+                model: panel.page.view.assets ?? []
+                clip: true
 
-                required property var modelData
-
-                width: ListView.view.width
-                text: [modelData.id, SceneWords.kind(modelData.kind), App.bytes(modelData.size)].concat(panel.texture(modelData.texture)).join(" · ") + (modelData.media ? " · " + (modelData.media === "current" ? App.tr("cover of what plays") : App.tr("previous cover")) : "")
-                highlighted: panel.page.editor.selected === modelData.pointer
-                onClicked: panel.page.editor.select(modelData.pointer)
-
-                QQC2.ToolButton {
-                    anchors.right: cutting.left
-                    icon.name: "edit-rename"
-                    text: App.tr("Rename…")
-                    display: QQC2.AbstractButton.IconOnly
-                    onClicked: renaming.ask("asset", row.modelData.id)
-                }
-
-                QQC2.ToolButton {
-                    id: cutting
-
-                    anchors.right: packed.left
-                    visible: row.modelData.kind === "image" && !row.modelData.path.toLowerCase().endsWith(".ktx2")
-                    icon.name: "view-grid"
-                    text: App.tr("Cut sprites…")
-                    display: QQC2.AbstractButton.IconOnly
-                    QQC2.ToolTip.text: text
-                    QQC2.ToolTip.visible: hovered
-                    onClicked: cutter.show(row.modelData.id)
-                }
-
-                QQC2.ToolButton {
-                    id: packed
-
-                    anchors.right: remove.left
-                    visible: row.modelData.kind === "image" && !row.modelData.path.toLowerCase().endsWith(".ktx2")
-                    icon.name: "application-x-archive"
-                    text: App.tr("Convert to KTX2…")
-                    display: QQC2.AbstractButton.IconOnly
-                    QQC2.ToolTip.text: text
-                    QQC2.ToolTip.visible: hovered
-                    onClicked: packing.show(row.modelData.id, row.modelData.pointer)
-                }
-
-                SceneRename {
-                    id: renaming
-
-                    page: panel.page
-                }
-
-                QQC2.ToolButton {
-                    id: remove
-
-                    anchors.right: parent.right
-                    icon.name: "edit-delete"
-                    text: App.tr("Remove")
-                    display: QQC2.AbstractButton.IconOnly
-                    onClicked: panel.page.run("remove", {
-                            "pointer": row.modelData.pointer
-                        })
+                delegate: SceneAssetRow {
+                    owner: panel
                 }
             }
+        }
+
+        SceneDropFiles {
+            anchors.fill: parent
+            page: panel.page
         }
     }
 
@@ -192,7 +145,7 @@ ColumnLayout {
         id: files
 
         fileMode: FileDialog.OpenFiles
-        nameFilters: [App.tr("Pictures, videos, sounds, fonts, color tables and models") + " (*.png *.jpg *.jpeg *.webp *.gif *.bmp *.ktx2 *.hdr *.exr *.webm *.mp4 *.mkv *.ogg *.opus *.flac *.wav *.ttf *.otf *.cube *.glb)"]
+        nameFilters: [App.tr("Pictures, videos, sounds, fonts, color tables and models") + " (*.png *.jpg *.jpeg *.webp *.gif *.bmp *.ktx2 *.hdr *.exr *.webm *.mp4 *.mkv *.ogg *.opus *.flac *.wav *.mp3 *.ttf *.otf *.ttc *.otc *.woff2 *.cube *.glb)"]
         onAccepted: selectedFiles.forEach(file => panel.page.run("import", {
                         "file": App.path(file)
                     }))
