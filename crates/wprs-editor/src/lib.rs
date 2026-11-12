@@ -54,6 +54,7 @@ pub mod presets;
 pub mod previews;
 pub mod project;
 pub mod props;
+pub mod reels;
 pub mod references;
 mod rename;
 mod revisions;

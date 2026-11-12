@@ -69,6 +69,7 @@ pub(crate) fn manifest(dir: &Path, doc: &Value, e: &M) -> Result<Vec<Op>> {
             crate::presets::edit(dir, doc, base, values, clear, files)?
         }
         M::AddFile { file, to } => return super::page::add_file(dir, doc, file, to.as_deref()),
+        M::Media { file } => super::page::media(dir, doc, file)?,
     };
     refused(dir, doc, ops)
 }

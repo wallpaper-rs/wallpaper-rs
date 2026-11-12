@@ -153,6 +153,9 @@ pub enum ManifestEdit {
         #[serde(default)]
         to: Option<String>,
     },
+    Media {
+        file: std::path::PathBuf,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]

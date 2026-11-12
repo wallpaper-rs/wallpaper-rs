@@ -135,7 +135,7 @@ pub fn fields_in(dir: Option<&Path>, doc: &Value, pointer: &str, own: &Own) -> V
             0,
         ),
     }
-    crate::forms::extend(doc, pointer, &mut walk.out);
+    crate::forms::extend(dir, doc, pointer, &mut walk.out);
     walk.out.retain(|f| crate::meta::applies(doc, &f.pointer));
     walk.out.iter_mut().for_each(|f| adjust(doc, f));
     walk.out

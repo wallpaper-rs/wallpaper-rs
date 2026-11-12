@@ -932,6 +932,11 @@ any kind into an empty folder.
 | Action | Arguments | `wprs-ctl scene manifest DIR` |
 |--------|-----------|-------------------------------|
 | `manifest` `add_file` | `file`, `to` (a folder of the package, optional); copies the file into a web, picture or video package folder, never over `manifest.json` or its signature, and records nothing in the history | `add-file FILE [--to FOLDER]` |
+| `manifest` `media` | `file`; copies a picture or a video into the folder of a `image` or `video` package, as its `entry` (it must be of the kind of the package, a video for a `video` package, and must pass the checks of the format); undo returns to the earlier entry | `scene act DIR manifest '{"media": {"file": "FILE"}}'` |
+
+The starting points `image` and `video` write the manifest of a picture or video package (`kind`, an
+`entry` of `picture.png` or `video.mp4` that is not in the folder yet, so the problems ask for the
+file) and the *Scenes* page offers them next to the others, `wprs-ctl scene new` as well.
 
 The app opens such folders on a page of their own, *Package*: the file list (size, role, *Add
 files…*, *Open the folder*, and per file *Use as the entry page* or *Use as the thumbnail*), the
@@ -992,6 +997,32 @@ the fields are those of the inspector (`widget`, `range`, `unit`, `options`, `na
 `value` and `set` from the values of the preset, with `/preset/values/<id>` as pointer) and `files`
 the `file` properties with their `accept` and the picture the preset gives. A base that is not
 installed shows no settings and asks to install it.
+
+A picture or video package shows, in *Settings*: the file (*Choose the picture…* or *Choose the
+video…*, the `media` action, with its size and length), *Display* and, for a video, *Playback*.
+*Display* sends the `display` action: the placement `fit` (fill, fit, stretch, center, tile or
+span), the mirror `flip` as three buttons, the `background` color, `span` (*Spread over every
+screen*) and, for a video, `zoom` (1 to 8) and `position` with an alignment pad: a rectangle with a
+handle that is dragged (or clicked) to choose which part of the zoomed video shows, from -1 to 1 on
+each side, with magnets at the edges and the middle and a button that centers it again. *Playback*
+of a video starts with the trim on a timeline over the real length of the video (the `media` query of
+`rig`, `{"media": {}}`, answers `{kind, entry, present, bytes, length, size, aspect}`; `length` comes
+from the file, a picture gives its `size` and a video its `aspect`): a strip of thumbnails (the cache
+of `Strips`, also used by the clocks of the timeline) with a bar for the part that plays and two grips
+that set `start` and `end` of the `playback` action when they are let go (an `end` dragged to the end
+of the video is taken out, the grips never cross) and *Whole video*; a speed slider from 0.1 to 4
+(logarithmic) and *Loop*; and the volume, muting and frame rate that web pages have. A video package
+has a *Presets* tab in place of *Properties*: *Add preset* adds `/manifest/presets/N`, and the
+inspector shows one row per video setting (speed, start, stop at, volume, zoom, x and y) with the
+slider and the range of the video itself (`start` and `end` up to its length), so `set` on
+`/manifest/presets/N/values/<id>` and `scene act` do the same.
+
+The *Preview* tab also exists for pictures and videos: the editor sends the daemon a scene made from
+the folder (`wprs_editor::reels::preview_document`): one layer that shows the file at the proportion
+of the picture or video, a canvas that places it with `display.fit` and `display.background`, the
+mirror and the zoom as the scale and the part shown as the position, and `playback` as the playback
+of the layer (speed, start, end and loop) and of the manifest (frame rate, volume and muting). The
+quality selector and the frame rate selector are the same as the ones of a web page.
 
 *Required packages* (in the *Settings* tab of every kind of package) lists `requires.packages`, one row
 each with a remove button, and a picker to add one: a box that lists the installed packages of the

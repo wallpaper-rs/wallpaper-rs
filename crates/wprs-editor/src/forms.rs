@@ -3,13 +3,15 @@ use crate::listing::{named, ordered, values as options};
 use crate::ops::escape;
 use crate::settings::{candidates, names, properties};
 use serde_json::{Value, json};
+use std::collections::BTreeMap;
+use std::path::Path;
 use wprs_scene::{Control, Property};
 
-pub fn extend(doc: &Value, pointer: &str, out: &mut Vec<Field>) {
+pub fn extend(dir: Option<&Path>, doc: &Value, pointer: &str, out: &mut Vec<Field>) {
     let preset = pointer.strip_prefix("/manifest/presets/").is_some_and(|n| n.parse::<usize>().is_ok());
     if preset {
         out.retain(|f| f.key != "values");
-        out.extend(values(doc, pointer));
+        out.extend(values(dir, doc, pointer));
     }
     if let Some((id, "")) = crate::settings::owner(pointer) {
         let own = format!("{pointer}/quality");
@@ -62,15 +64,27 @@ pub(crate) fn value_field(
     f
 }
 
-fn values(doc: &Value, pointer: &str) -> Vec<Field> {
+fn videos(dir: Option<&Path>, doc: &Value) -> Option<(Vec<String>, BTreeMap<String, Property>)> {
+    let manifest = crate::meta::read(doc, None).ok().filter(|m| m.kind == wprs_format::Kind::Video)?;
+    let labels = ["Speed", "Start", "Stop at", "Volume", "Zoom", "X", "Y", "0 is the end"].map(String::from);
+    let length = dir.and_then(|d| crate::reels::info(d, doc)["length"].as_f64());
+    let ids = wprs_format::VIDEO_PROPERTIES.iter().map(|id| id.to_string()).collect();
+    Some((ids, manifest.video_properties(&labels, length)))
+}
+
+fn values(dir: Option<&Path>, doc: &Value, pointer: &str) -> Vec<Field> {
     let base = format!("{pointer}/values");
     let set = doc.pointer(&base);
-    let props = properties(doc);
-    let shown =
-        ordered(doc).into_iter().filter(|id| props.get(id).is_some_and(|p| p.holds_value() && !p.personal()));
+    let own = properties(doc);
+    let (ids, props, video) = match videos(dir, doc).filter(|_| own.is_empty()) {
+        Some((ids, props)) => (ids, props, true),
+        None => (ordered(doc), own, false),
+    };
+    let shown = ids.into_iter().filter(|id| props.get(id).is_some_and(|p| p.holds_value() && !p.personal()));
     let field = |id: String| {
         let at = format!("{base}/{}", escape(&id));
-        value_field(doc, &props[&id], &id, at, set.and_then(|v| v.get(&id)), 1)
+        let f = value_field(doc, &props[&id], &id, at, set.and_then(|v| v.get(&id)), 1);
+        Field { title: if video { String::new() } else { f.title }, ..f }
     };
     [group(base.clone(), "values")].into_iter().chain(shown.map(field)).collect()
 }

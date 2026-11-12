@@ -6,7 +6,7 @@ use std::path::Path;
 use wprs_core::message::said;
 use wprs_format::{MANIFEST, SIGNATURE};
 
-pub const PAGE_STARTERS: [&str; 2] = ["web", "preset"];
+pub const PAGE_STARTERS: [&str; 4] = ["web", "preset", "image", "video"];
 const PAGE: [(&str, &str); 2] = [
     ("index.html", include_str!("../starters/web/index.html")),
     ("app.js", include_str!("../starters/web/app.js")),
@@ -40,6 +40,10 @@ pub(crate) fn manifest(name: &str, base: Value) -> Option<Value> {
             manifest["web"] = json!({"background": "#101828"});
             manifest["properties"] =
                 json!({"color": {"type": "color", "label": "@wprs.color", "default": "#f2f5ff"}});
+        }
+        "image" | "video" => {
+            manifest["kind"] = json!(name);
+            manifest["entry"] = json!(if name == "image" { "picture.png" } else { "video.mp4" });
         }
         "preset" => {
             manifest["kind"] = json!("preset");

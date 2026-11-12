@@ -8,6 +8,19 @@ ColumnLayout {
     id: middle
 
     required property var page
+    readonly property string kind: page.kind
+    readonly property var names: ({
+            "web": ["settings", "properties", "preview"],
+            "video": ["settings", "presets", "preview"],
+            "image": ["settings", "preview"]
+        })[kind] ?? ["settings"]
+    readonly property var titles: ({
+            "settings": App.tr("Settings"),
+            "properties": App.tr("Properties"),
+            "presets": App.tr("Presets"),
+            "preview": App.tr("Preview")
+        })
+    readonly property string current: names[Math.min(tabs.currentIndex, names.length - 1)]
 
     spacing: 0
 
@@ -15,25 +28,23 @@ ColumnLayout {
         id: tabs
 
         Layout.fillWidth: true
-        visible: middle.page.kind === "web"
+        visible: middle.names.length > 1
 
-        QQC2.TabButton {
-            text: App.tr("Settings")
-        }
+        Repeater {
+            model: middle.names
 
-        QQC2.TabButton {
-            text: App.tr("Properties")
-        }
+            delegate: QQC2.TabButton {
+                required property string modelData
 
-        QQC2.TabButton {
-            text: App.tr("Preview")
+                text: middle.titles[modelData]
+            }
         }
     }
 
     StackLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        currentIndex: middle.page.kind === "web" ? tabs.currentIndex : 0
+        currentIndex: ["settings", "properties", "presets", "preview"].indexOf(middle.current)
 
         QQC2.ScrollView {
             contentWidth: availableWidth
@@ -46,6 +57,10 @@ ColumnLayout {
         }
 
         SceneProperties {
+            page: middle.page
+        }
+
+        PackagePresets {
             page: middle.page
         }
 

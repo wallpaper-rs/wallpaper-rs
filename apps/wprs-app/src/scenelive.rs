@@ -14,7 +14,7 @@ const EDGE: f64 = 1280.0;
 static STREAMS: AtomicU32 = AtomicU32::new(0);
 
 fn previewable(doc: &Value) -> bool {
-    wprs_editor::pages::scened(doc) || wprs_editor::pages::paged(doc)
+    wprs_editor::pages::scened(doc) || wprs_editor::pages::paged(doc) || wprs_editor::reels::media(doc)
 }
 
 impl SceneEditor {
@@ -44,7 +44,7 @@ impl SceneEditor {
         let Some(project) = self.project.as_ref().filter(|p| previewable(&p.doc)) else {
             return;
         };
-        let paged = wprs_editor::pages::paged(&project.doc);
+        let paged = wprs_editor::pages::paged(&project.doc) || wprs_editor::reels::media(&project.doc);
         let shown = serde_json::from_str::<Value>(&self.look.to_string()).is_ok_and(|l| l["show"] == true);
         if paged && !shown {
             return;
@@ -135,6 +135,8 @@ impl SceneEditor {
         let look: Value = serde_json::from_str(&self.look.to_string()).unwrap_or_default();
         let document = if wprs_editor::pages::paged(&project.doc) {
             wprs_editor::pages::preview_document(&project.doc, &look)
+        } else if wprs_editor::reels::media(&project.doc) {
+            wprs_editor::reels::preview_document(&project.dir, &project.doc, &look)
         } else {
             let mut scene = visible(&project.doc);
             wprs_editor::swarms::pin_seed(&mut scene);

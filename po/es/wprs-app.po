@@ -567,6 +567,11 @@ msgstr "Sincronizar los archivos con mis equipos"
 msgid "Remove…"
 msgstr "Quitar…"
 
+#: apps/wprs-app/qml/AlignPad.qml apps/wprs-app/qml/SceneSwarmSteer.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Alignment"
+msgstr "Alineación"
+
 #: apps/wprs-app/qml/ApplyDialog.qml
 msgid ""
 "This wallpaper flashes or shows fast patterns that can trigger seizures in "
@@ -585,9 +590,9 @@ msgstr "Pantalla:"
 msgid "All screens"
 msgstr "Todas las pantallas"
 
-#: apps/wprs-app/qml/ApplyDialog.qml
+#: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/PackageFraming.qml
 msgid "Placement:"
-msgstr "Colocación:"
+msgstr "Ubicación:"
 
 #: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/PresetDialog.qml
 msgid "Keep"
@@ -608,11 +613,11 @@ msgstr "Preajuste:"
 
 #: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/EditDepthCheck.qml
 #: apps/wprs-app/qml/EditDepthCompare.qml apps/wprs-app/qml/OutputFilter.qml
-#: apps/wprs-app/qml/PackageTrack.qml apps/wprs-app/qml/PackageWeb.qml
-#: apps/wprs-app/qml/SceneEffectMask.qml apps/wprs-app/qml/SceneMedia.qml
-#: apps/wprs-app/qml/SceneRig.qml apps/wprs-app/qml/SceneSwarmKin.qml
-#: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneTones.qml
-#: apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/PackageTrack.qml
+#: apps/wprs-app/qml/PackageWeb.qml apps/wprs-app/qml/SceneEffectMask.qml
+#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneRig.qml
+#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmLight.qml
+#: apps/wprs-app/qml/SceneTones.qml apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "None"
@@ -1598,9 +1603,10 @@ msgid "Move down"
 msgstr "Bajar"
 
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/PackageInspector.qml
-#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackageRequires.qml
-#: apps/wprs-app/qml/PlaylistItems.qml apps/wprs-app/qml/SceneAssets.qml
-#: apps/wprs-app/qml/SceneBoneRow.qml apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackagePresets.qml
+#: apps/wprs-app/qml/PackageRequires.qml apps/wprs-app/qml/PlaylistItems.qml
+#: apps/wprs-app/qml/SceneAssets.qml apps/wprs-app/qml/SceneBoneRow.qml
+#: apps/wprs-app/qml/SceneEffectsList.qml
 #: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
 #: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
 #: apps/wprs-app/qml/SceneModelSwing.qml apps/wprs-app/qml/ScenePairs.qml
@@ -2082,8 +2088,8 @@ msgstr "En listas"
 msgid "Remove from this playlist"
 msgstr "Quitar de esta lista"
 
-#: apps/wprs-app/qml/ItemExtras.qml apps/wprs-app/qml/ScenePresets.qml
-#: apps/wprs-app/qml/SceneProperties.qml
+#: apps/wprs-app/qml/ItemExtras.qml apps/wprs-app/qml/PackageMiddle.qml
+#: apps/wprs-app/qml/ScenePresets.qml apps/wprs-app/qml/SceneProperties.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Presets"
 msgstr "Preajustes"
@@ -2712,6 +2718,45 @@ msgstr ""
 msgid "Open this address in the browser?"
 msgstr "¿Abrir esta dirección en el navegador?"
 
+#: apps/wprs-app/qml/PackageClip.qml
+msgid "Choose the video first: the part that plays is cut on its timeline."
+msgstr ""
+"Elige primero el vídeo: la parte que se reproduce se recorta en su línea de "
+"tiempo."
+
+#: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/SceneClockLanes.qml
+msgid "Start %1 s"
+msgstr "Inicio %1 s"
+
+#: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/SceneClockLanes.qml
+msgid "End %1 s"
+msgstr "Fin %1 s"
+
+#: apps/wprs-app/qml/PackageClip.qml
+msgid "Plays from %1 s to %2 s of %3 s"
+msgstr "Se reproduce del segundo %1 al %2 de %3 s"
+
+#: apps/wprs-app/qml/PackageClip.qml
+msgid "Whole video"
+msgstr "Vídeo completo"
+
+#: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/SceneTimelinePanel.qml
+msgid "Speed:"
+msgstr "Velocidad:"
+
+#: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/PackageFraming.qml
+#: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/PackageWeb.qml
+#: apps/wprs-app/qml/PresetSettings.qml apps/wprs-app/qml/SceneInput.qml
+#: apps/wprs-app/qml/ScenePropertyRange.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Default"
+msgstr "Valor por defecto"
+
+#: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/SceneClockLanes.qml
+#: apps/wprs-app/qml/ScenePathRow.qml apps/wprs-app/qml/facade/SceneTerms.qml
+msgid "Loop"
+msgstr "Bucle"
+
 #: apps/wprs-app/qml/PackageFiles.qml
 msgid "entry page"
 msgstr "página de entrada"
@@ -2777,6 +2822,80 @@ msgstr "Usar como miniatura"
 #: apps/wprs-app/qml/PackageFiles.qml apps/wprs-app/qml/ScenesPage.qml
 msgid "Open"
 msgstr "Abrir"
+
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/PackagePlayback.qml
+#: apps/wprs-app/qml/SceneEditors.qml apps/wprs-app/qml/SceneFrameRate.qml
+#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/SceneLighting.qml
+#: apps/wprs-app/qml/SceneMask.qml
+msgid "Not set"
+msgstr "Sin fijar"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+msgid "Fill the screen"
+msgstr "Llenar la pantalla"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+msgid "Fit inside the screen"
+msgstr "Ajustar dentro de la pantalla"
+
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Stretch"
+msgstr "Estirar"
+
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/facade/LabelWords.qml
+msgid "Center"
+msgstr "Centrar"
+
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Tile"
+msgstr "Mosaico"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+msgid "Span every screen"
+msgstr "Extender por todas las pantallas"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+msgid "Mirror:"
+msgstr "Espejo:"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Horizontally"
+msgstr "En horizontal"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Vertically"
+msgstr "En vertical"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+msgid "Background:"
+msgstr "Fondo:"
+
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/SceneSpanPick.qml
+msgid "Screens:"
+msgstr "Pantallas:"
+
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/SceneSpanPick.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Spread over every screen"
+msgstr "Extenderse por todas las pantallas"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+msgid "Zoom:"
+msgstr "Zoom:"
+
+#: apps/wprs-app/qml/PackageFraming.qml
+msgid "Part shown:"
+msgstr "Parte visible:"
+
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/PackagePlayback.qml
+msgid "What the user sets for the screen always wins over these defaults."
+msgstr ""
+"Lo que el usuario fija para la pantalla siempre prevalece sobre estos "
+"valores por defecto."
 
 #: apps/wprs-app/qml/PackageInputs.qml
 msgid "Hears the sound that plays"
@@ -2868,6 +2987,45 @@ msgstr "Detener"
 msgid "A JSON file of a made-up track"
 msgstr "Un archivo JSON de una pista inventada"
 
+#: apps/wprs-app/qml/PackageMediaFile.qml
+msgid "Nothing chosen yet"
+msgstr "Aún no se eligió nada"
+
+#: apps/wprs-app/qml/PackageMediaFile.qml
+msgid "Choose the video…"
+msgstr "Elegir el vídeo…"
+
+#: apps/wprs-app/qml/PackageMediaFile.qml
+#: apps/wprs-app/qml/SceneImportSheet.qml
+msgid "Choose the picture…"
+msgstr "Elegir la imagen…"
+
+#: apps/wprs-app/qml/PackageMediaFile.qml apps/wprs-app/qml/SceneClipBar.qml
+#: apps/wprs-app/qml/ScenePathLanes.qml apps/wprs-app/qml/ScenePathRow.qml
+#: apps/wprs-app/qml/ScenePaths3d.qml apps/wprs-app/qml/SceneTimeBar.qml
+#: apps/wprs-app/qml/SceneTimeline.qml apps/wprs-app/qml/SceneTimelineMenu.qml
+msgid "%1 s"
+msgstr "%1 s"
+
+#: apps/wprs-app/qml/PackageMediaFile.qml
+msgid "Choose a video (webm, mp4 or mkv): it is copied into the package."
+msgstr "Elige un vídeo (webm, mp4 o mkv): se copia dentro del paquete."
+
+#: apps/wprs-app/qml/PackageMediaFile.qml
+msgid ""
+"Choose a picture (png, jpeg, webp, gif or ktx2): it is copied into the "
+"package."
+msgstr ""
+"Elige una imagen (png, jpeg, webp, gif o ktx2): se copia dentro del paquete."
+
+#: apps/wprs-app/qml/PackageMediaFile.qml
+msgid "Videos (*.webm *.mp4 *.mkv)"
+msgstr "Vídeos (*.webm *.mp4 *.mkv)"
+
+#: apps/wprs-app/qml/PackageMediaFile.qml
+msgid "Pictures (*.png *.jpg *.jpeg *.webp *.gif *.ktx2)"
+msgstr "Imágenes (*.png *.jpg *.jpeg *.webp *.gif *.ktx2)"
+
 #: apps/wprs-app/qml/PackageMiddle.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Properties"
@@ -2934,12 +3092,6 @@ msgstr "Reproductor"
 msgid "Highest frame rate:"
 msgstr "Fotogramas máximos:"
 
-#: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/SceneEditors.qml
-#: apps/wprs-app/qml/SceneFrameRate.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
-msgid "Not set"
-msgstr "Sin fijar"
-
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/SceneFrameRate.qml
 msgid "Follow the screen"
 msgstr "Seguir la pantalla"
@@ -2967,12 +3119,6 @@ msgstr "Sonido:"
 #: apps/wprs-app/qml/PackagePlayback.qml
 msgid "Start without sound"
 msgstr "Empezar sin sonido"
-
-#: apps/wprs-app/qml/PackagePlayback.qml
-msgid "What the user sets for the screen always wins over these defaults."
-msgstr ""
-"Lo que el usuario fija para la pantalla siempre prevalece sobre estos "
-"valores por defecto."
 
 #: apps/wprs-app/qml/PackagePreset.qml
 msgid ""
@@ -3025,6 +3171,19 @@ msgstr ""
 "negrita los fija este preajuste, y una imagen o un vídeo se copia dentro del "
 "paquete. El título, la licencia y la imagen de vista previa están en los "
 "datos del paquete."
+
+#: apps/wprs-app/qml/PackagePresets.qml
+msgid ""
+"A preset sets the speed, the part that plays, the volume, the zoom and the "
+"part shown in one click; pick one to set its values on the right."
+msgstr ""
+"Un preajuste fija con un clic la velocidad, la parte que se reproduce, el "
+"volumen, el zoom y la parte visible; elige uno para fijar sus valores a la "
+"derecha."
+
+#: apps/wprs-app/qml/PackagePresets.qml apps/wprs-app/qml/SceneProperties.qml
+msgid "Add preset"
+msgstr "Añadir un preajuste"
 
 #: apps/wprs-app/qml/PackagePreview.qml
 msgid "Reload"
@@ -3116,6 +3275,21 @@ msgstr "Red"
 #: apps/wprs-app/qml/PackageSections.qml
 msgid "Inputs"
 msgstr "Entradas"
+
+#: apps/wprs-app/qml/PackageSections.qml
+#: apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Video"
+msgstr "Vídeo"
+
+#: apps/wprs-app/qml/PackageSections.qml
+msgid "Picture"
+msgstr "Imagen"
+
+#: apps/wprs-app/qml/PackageSections.qml
+msgid "Display"
+msgstr "Visualización"
 
 #: apps/wprs-app/qml/PackageSections.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
@@ -4785,13 +4959,6 @@ msgstr "Pausar"
 msgid "Play"
 msgstr "Reproducir"
 
-#: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/ScenePathLanes.qml
-#: apps/wprs-app/qml/ScenePathRow.qml apps/wprs-app/qml/ScenePaths3d.qml
-#: apps/wprs-app/qml/SceneTimeBar.qml apps/wprs-app/qml/SceneTimeline.qml
-#: apps/wprs-app/qml/SceneTimelineMenu.qml
-msgid "%1 s"
-msgstr "%1 s"
-
 #: apps/wprs-app/qml/SceneClipBar.qml
 msgid "Key"
 msgstr "Clave"
@@ -4879,21 +5046,8 @@ msgid "%1 · own clock"
 msgstr "%1 · reloj propio"
 
 #: apps/wprs-app/qml/SceneClockLanes.qml
-msgid "Start %1 s"
-msgstr "Inicio %1 s"
-
-#: apps/wprs-app/qml/SceneClockLanes.qml
-msgid "End %1 s"
-msgstr "Fin %1 s"
-
-#: apps/wprs-app/qml/SceneClockLanes.qml
 msgid "Speed of this clock"
 msgstr "Velocidad de este reloj"
-
-#: apps/wprs-app/qml/SceneClockLanes.qml apps/wprs-app/qml/ScenePathRow.qml
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-msgid "Loop"
-msgstr "Bucle"
 
 #: apps/wprs-app/qml/SceneClockLanes.qml
 msgid "Plays"
@@ -5279,10 +5433,6 @@ msgstr "Se dobla en sentido antihorario; pulsa para doblarla al otro lado"
 #: apps/wprs-app/qml/SceneImportSheet.qml
 msgid "Import a sprite sheet or a data map"
 msgstr "Importar una hoja de sprites o un mapa de datos"
-
-#: apps/wprs-app/qml/SceneImportSheet.qml
-msgid "Choose the picture…"
-msgstr "Elegir la imagen…"
 
 #: apps/wprs-app/qml/SceneImportSheet.qml
 msgid "Sprite sheet:"
@@ -6663,10 +6813,6 @@ msgstr "%1: %2 (heredado)"
 msgid "Add property"
 msgstr "Añadir una propiedad"
 
-#: apps/wprs-app/qml/SceneProperties.qml
-msgid "Add preset"
-msgstr "Añadir un preajuste"
-
 #: apps/wprs-app/qml/ScenePropertyRange.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Minimum"
@@ -7408,10 +7554,6 @@ msgid "These screens cannot be shown: %1"
 msgstr "Estas pantallas no se pueden mostrar: %1"
 
 #: apps/wprs-app/qml/SceneSpanPick.qml
-msgid "Screens:"
-msgstr "Pantallas:"
-
-#: apps/wprs-app/qml/SceneSpanPick.qml
 msgid "One screen"
 msgstr "Una pantalla"
 
@@ -7430,11 +7572,6 @@ msgstr "Dos apiladas"
 #: apps/wprs-app/qml/SceneSpanPick.qml
 msgid "My screens"
 msgstr "Mis pantallas"
-
-#: apps/wprs-app/qml/SceneSpanPick.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Spread over every screen"
-msgstr "Extenderse por todas las pantallas"
 
 #: apps/wprs-app/qml/SceneStageCamera.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
@@ -8411,11 +8548,6 @@ msgstr "Separación"
 
 #: apps/wprs-app/qml/SceneSwarmSteer.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Alignment"
-msgstr "Alineación"
-
-#: apps/wprs-app/qml/SceneSwarmSteer.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Cohesion"
 msgstr "Cohesión"
 
@@ -8759,10 +8891,6 @@ msgstr "Repitiéndose"
 #: apps/wprs-app/qml/SceneTimelinePanel.qml
 msgid "Blend the end into the start"
 msgstr "Fundir el final con el principio"
-
-#: apps/wprs-app/qml/SceneTimelinePanel.qml
-msgid "Speed:"
-msgstr "Velocidad:"
 
 #: apps/wprs-app/qml/SceneTimelinePanel.qml
 msgid "Delay in seconds:"
@@ -9386,20 +9514,6 @@ msgid "Fill"
 msgstr "Rellenar"
 
 #: apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Stretch"
-msgstr "Estirar"
-
-#: apps/wprs-app/qml/facade/LabelWords.qml
-msgid "Center"
-msgstr "Centrar"
-
-#: apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Tile"
-msgstr "Mosaico"
-
-#: apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Span"
 msgstr "Extender"
 
@@ -9422,12 +9536,6 @@ msgstr "Fundido"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Image"
 msgstr "Imagen"
-
-#: apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/SceneLabels.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Video"
-msgstr "Vídeo"
 
 #: apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
@@ -10574,10 +10682,6 @@ msgid "Gore"
 msgstr "Sangre explícita"
 
 #: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Horizontally"
-msgstr "En horizontal"
-
-#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Strong language"
 msgstr "Lenguaje malsonante"
 
@@ -10612,10 +10716,6 @@ msgstr "Calidad máxima"
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Sexual content"
 msgstr "Contenido sexual"
-
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Vertically"
-msgstr "En vertical"
 
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Violence"

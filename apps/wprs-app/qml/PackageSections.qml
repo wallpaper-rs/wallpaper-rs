@@ -11,6 +11,8 @@ ColumnLayout {
     readonly property var pages: (page.view.files ?? []).filter(file => file.kind === "page").map(file => file.path)
     readonly property bool web: page.kind === "web"
     readonly property bool preset: page.kind === "preset"
+    readonly property bool video: page.kind === "video"
+    readonly property bool media: video || page.kind === "image"
 
     spacing: Kirigami.Units.largeSpacing
 
@@ -79,14 +81,46 @@ ColumnLayout {
 
     Kirigami.Heading {
         Layout.fillWidth: true
-        visible: sections.web
+        visible: sections.media
+        level: 4
+        text: sections.video ? App.tr("Video") : App.tr("Picture")
+    }
+
+    PackageMediaFile {
+        Layout.fillWidth: true
+        visible: sections.media
+        page: sections.page
+    }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        visible: sections.media
+        level: 4
+        text: App.tr("Display")
+    }
+
+    PackageFraming {
+        Layout.fillWidth: true
+        visible: sections.media
+        page: sections.page
+    }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        visible: sections.web || sections.video
         level: 4
         text: App.tr("Playback")
     }
 
+    PackageClip {
+        Layout.fillWidth: true
+        visible: sections.video
+        page: sections.page
+    }
+
     PackagePlayback {
         Layout.fillWidth: true
-        visible: sections.web
+        visible: sections.web || sections.video
         page: sections.page
     }
 

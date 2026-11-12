@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-11 00:00+0000\n"
+"POT-Creation-Date: 2026-11-12 00:00+0000\n"
 "PO-Revision-Date: 2026-10-30 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -1788,6 +1788,14 @@ msgstr ""
 #: crates/wprs-editor/src/shaping/page.rs
 msgid "files are added this way only to web, picture and video packages"
 msgstr "así solo se añaden archivos a paquetes web, de imagen y de vídeo"
+
+#: crates/wprs-editor/src/shaping/page.rs
+msgid "only a picture or video package has a file to show"
+msgstr "solo un paquete de imagen o de vídeo tiene un archivo que mostrar"
+
+#: crates/wprs-editor/src/shaping/page.rs
+msgid "%1 is not a file for a %2 package"
+msgstr "%1 no es un archivo para un paquete de tipo %2"
 
 #: crates/wprs-editor/src/shelf.rs
 msgid "name a part as layer:ID, particles:ID, script:PATH or effect:ID, not %1"

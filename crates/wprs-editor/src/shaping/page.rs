@@ -126,3 +126,18 @@ pub(super) fn add_file(dir: &Path, doc: &Value, file: &Path, to: Option<&str>) -
     crate::pages::copy_in(dir, file, to)?;
     Ok(Vec::new())
 }
+
+pub(super) fn media(dir: &Path, doc: &Value, file: &Path) -> Result<Vec<Op>> {
+    let kind = crate::pages::kind(doc);
+    ensure!(
+        crate::reels::media(doc),
+        said("editor.media_only", "only a picture or video package has a file to show", &[])
+    );
+    let found = crate::layers::asset_kind(&file.to_string_lossy());
+    ensure!(
+        found == kind,
+        said("editor.media_kind", "%1 is not a file for a %2 package", &[&file.display(), &kind])
+    );
+    let path = crate::pages::copy_in(dir, file, None)?;
+    Ok(set(doc, "/manifest/entry", json!(path)))
+}

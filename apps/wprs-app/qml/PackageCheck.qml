@@ -8,6 +8,12 @@ QtObject {
     }
 
     function exercise() {
+        if (page.kind === "image" || page.kind === "video") {
+            Qt.createComponent("PackageMediaCheck.qml").createObject(page, {
+                "page": page
+            }).exercise();
+            return;
+        }
         if (page.kind !== "web" || !has("index.html", "entry") || !has("app.js"))
             throw new Error("the web starter has no page: " + JSON.stringify(page.view.files));
         page.manifestEdit("add_file", {

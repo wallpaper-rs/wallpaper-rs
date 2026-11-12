@@ -86,6 +86,9 @@ pub(crate) fn preview_document(
     if wprs_editor::pages::paged(doc) {
         return Ok(wprs_editor::pages::preview_document(doc, &look));
     }
+    if wprs_editor::reels::media(doc) {
+        return Ok(wprs_editor::reels::preview_document(dir, doc, &look));
+    }
     let mut document = json!({"manifest": doc["manifest"], "scene": wprs_editor::actions::visible(doc)});
     wprs_editor::scripts::stamped(&mut document["scene"], dir, doc);
     wprs_editor::rigs::staged(&look).into_iter().for_each(|s| document["preview"] = s);
