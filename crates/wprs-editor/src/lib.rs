@@ -43,6 +43,7 @@ pub mod gallery;
 pub mod graph;
 mod handles;
 pub mod history;
+mod hidden;
 mod hulls;
 pub mod ids;
 pub mod inspect;
