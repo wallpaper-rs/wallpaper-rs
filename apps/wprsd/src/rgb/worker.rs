@@ -1,6 +1,7 @@
 use super::{Ask, Status};
 use crate::compositor::lock;
 use placed::{area, zone};
+use std::collections::BTreeSet;
 use std::path::PathBuf;
 use std::sync::mpsc::{Receiver, RecvTimeoutError};
 use std::sync::{Arc, Mutex};
@@ -23,7 +24,7 @@ struct Session {
     failed: Option<Instant>,
     last: Option<(String, Strip)>,
     test: Option<(Instant, Option<u32>)>,
-    opened: bool,
+    painters: BTreeSet<String>,
     direct: Vec<u32>,
     disk: Option<PathBuf>,
     owed: bool,
@@ -46,15 +47,9 @@ fn run(asks: Receiver<Ask>, mut s: Session) {
             Ok(Ask::Settings(rgb)) => s.settle(rgb),
             Ok(Ask::Forget(source)) => s.forget(Some(&source)),
             Ok(Ask::Covered) => s.retry(),
-            Ok(Ask::Frame(source, strip)) => {
-                lock(&s.status).source = Some(source.clone());
-                s.last = Some((source.clone(), strip.clone()));
-                if s.test.is_none() && !s.unwanted(Some(&source)) {
-                    s.paint(&strip, None);
-                }
-            }
+            Ok(Ask::Frame(source, strip)) => s.frame(source, strip),
             Ok(Ask::Connect(reply)) => {
-                (s.client, s.failed, s.opened, s.direct) = (None, None, false, Vec::new());
+                (s.client, s.failed, s.direct) = (None, None, Vec::new());
                 reply.send(s.ready()).ok();
             }
             Ok(Ask::Test(device, reply)) => {
@@ -65,7 +60,7 @@ fn run(asks: Receiver<Ask>, mut s: Session) {
                     false => Err(format!("there is no RGB device {}", device.unwrap_or_default())),
                 });
                 if ready.is_ok() {
-                    (s.test, s.opened) = (Some((Instant::now(), device)), false);
+                    s.test = Some((Instant::now(), device));
                     lock(&s.status).testing = true;
                 }
                 reply.send(ready).ok();
@@ -81,15 +76,7 @@ fn run(asks: Receiver<Ask>, mut s: Session) {
 }
 
 impl Session {
-    fn forget(&mut self, source: Option<&str>) {
-        if self.last.as_ref().is_some_and(|(from, _)| source.is_none_or(|s| s == from)) {
-            self.last = None;
-            lock(&self.status).source = None;
-        }
-        self.idle();
-    }
-
-    fn repaint(&mut self) {
+    pub(super) fn repaint(&mut self) {
         match self.last.clone() {
             Some((source, strip)) if super::allowed(&source) => self.paint(&strip, None),
             Some(_) => self.forget(None),
@@ -193,6 +180,8 @@ mod kept;
 #[cfg(test)]
 mod owed;
 mod placed;
+#[cfg(test)]
+mod released;
 #[cfg(test)]
 mod restored;
 #[cfg(test)]

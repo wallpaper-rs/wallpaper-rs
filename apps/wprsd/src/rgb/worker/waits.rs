@@ -1,4 +1,4 @@
-use super::{IDLE, LISTEN, RETRY, STEP, Session, Status};
+use super::{IDLE, LISTEN, RETRY, STEP, Session, Status, lock};
 use std::time::Duration;
 use wprs_core::rgb::Covered;
 use wprs_rgb::{Device, Strip};
@@ -24,9 +24,36 @@ impl Session {
 
     pub(super) fn retry(&mut self) {
         if self.client.is_none() && self.retries() {
-            self.opened = self.ready().is_ok();
+            self.ready().ok();
         }
         self.release();
+    }
+
+    pub(super) fn frame(&mut self, source: String, strip: Strip) {
+        lock(&self.status).source = Some(source.clone());
+        self.painters.insert(source.clone());
+        if self.test.is_none() && !self.unwanted(Some(&source)) {
+            self.paint(&strip, None);
+        }
+        self.last = Some((source, strip));
+    }
+
+    pub(super) fn forget(&mut self, source: Option<&str>) {
+        match source {
+            Some(source) => drop(self.painters.remove(source)),
+            None => self.painters.clear(),
+        }
+        if self.last.as_ref().is_some_and(|(from, _)| source.is_none_or(|s| s == from)) {
+            self.last = None;
+            lock(&self.status).source = None;
+        }
+        self.idle();
+        self.release();
+    }
+
+    fn needed(&self) -> bool {
+        let shown = self.painters.iter().any(|source| !super::super::covered::resting(source));
+        self.test.is_some() || super::super::covered::wanted() || shown
     }
 
     pub(super) fn unwanted(&self, source: Option<&str>) -> bool {
@@ -34,13 +61,10 @@ impl Session {
         follows && self.test.is_none() && source.is_none_or(super::super::covered::covered)
     }
 
-    fn release(&mut self) {
-        if self.opened
-            && self.client.is_some()
-            && self.unwanted(self.last.as_ref().map(|(source, _)| source.as_str()))
-        {
+    pub(super) fn release(&mut self) {
+        if self.rgb.when_covered == Covered::Follow && self.client.is_some() && !self.needed() {
             self.restore();
-            (self.client, self.opened) = (None, false);
+            self.client = None;
             self.publish(None, Vec::new());
         }
     }

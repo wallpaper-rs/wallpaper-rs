@@ -9,6 +9,7 @@ impl State {
             Command::Remove(output) => {
                 super::super::feed::declare(&output, None);
                 crate::rgb::cover(&output, false);
+                crate::rgb::rest(&output, false);
                 crate::rgb::want(&output, false);
                 drop((self.outputs.remove(&output), self.windows.remove(&output)));
                 self.pictures.prune(&self.outputs);
@@ -21,6 +22,7 @@ impl State {
             Command::Backdrop(output) => self.backdrop_again(&output),
             Command::SetActive(output, active, (covered, awake)) => {
                 crate::rgb::cover(&output, covered && !active);
+                crate::rgb::rest(&output, !active);
                 self.outputs
                     .get_mut(&output)
                     .into_iter()

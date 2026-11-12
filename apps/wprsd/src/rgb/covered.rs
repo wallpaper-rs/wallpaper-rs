@@ -6,6 +6,7 @@ use wprs_core::rgb::Covered;
 
 static COVERED: Mutex<BTreeSet<String>> = Mutex::new(BTreeSet::new());
 static WANTED: Mutex<BTreeSet<String>> = Mutex::new(BTreeSet::new());
+static RESTING: Mutex<BTreeSet<String>> = Mutex::new(BTreeSet::new());
 
 fn mark(set: &Mutex<BTreeSet<String>>, source: &str, on: bool) {
     let mut set = lock(set);
@@ -22,6 +23,14 @@ pub(crate) fn cover(source: &str, covered: bool) {
 
 pub(crate) fn want(source: &str, wanted: bool) {
     mark(&WANTED, source, wanted);
+}
+
+pub(crate) fn rest(source: &str, resting: bool) {
+    mark(&RESTING, source, resting);
+}
+
+pub(crate) fn resting(source: &str) -> bool {
+    lock(&RESTING).contains(source)
 }
 
 pub(crate) fn covered(source: &str) -> bool {

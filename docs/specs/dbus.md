@@ -1677,10 +1677,12 @@ failure. A device goes to its direct mode only when colors are first painted on 
 mode back (the colors too when that mode sets each light) as soon as nothing sends colors any more:
 when the package that sent them stops or changes to one without colors, its output goes away, RGB
 lighting is turned off, the server changes, after a test with nothing else to paint, and when the
-daemon stops. A connection made only for a covered wallpaper closes again, giving the devices their
-own mode back, as soon as nothing covered wants the lights (the session locks or pauses, the computer goes
-on battery, the wallpaper changes or the output goes away), unless an uncovered output sends colors;
-the daemon then sleeps until something asks for the lights again. A strip of
+daemon stops. With `rgb.when_covered` set to `follow`, the connection closes again, giving the devices
+their own mode back, as soon as nothing wants the lights: no covered wallpaper wants them and no output
+that is shown and running sent colors since it last stopped (the session locks or pauses, the computer
+goes on battery, the wallpaper changes to one without colors or the output goes away), whether a covered
+or a shown wallpaper opened it; while one shown output keeps sending colors it stays open, whichever
+output painted last. The daemon then sleeps until something asks for the lights again. A strip of
 at most 64 × 16 pixels comes from the shown scene or page of each output that holds the `rgb` grant
 (`Inputs1`), at most 30 times a second for all of them together; the daemon spreads it over each
 device: a zone with a matrix takes the cell of the strip under each key, the other zones the column

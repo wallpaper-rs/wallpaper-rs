@@ -1834,10 +1834,11 @@ mucho, dibujada a 320 píxeles por lado como mucho solo para la tira y nunca en 
 que esos fotogramas cambien su nivel de calidad, y una página sigue igual sin mostrarse, las dos solo mientras el servidor está conectado y tiene
 dispositivos (si no, el fondo tapado sigue en pausa y el servicio vuelve a probar el servidor cada
 10 segundos, solo mientras ese fondo tiene el permiso `rgb`, manda colores y nada más lo pausa:
-nunca por una imagen, un video, un paquete sin colores, la sesión bloqueada o la batería; si el
-servicio se conectó solo para ese fondo tapado, cierra la conexión en cuanto nada tapado pide las
-luces, al bloquear, pausar, pasar a batería, cambiar de fondo o quitar la pantalla, salvo que una
-pantalla a la vista mande colores). Si el fondo tapado no se pausa, sigue dibujándose y las luces lo
+nunca por una imagen, un video, un paquete sin colores, la sesión bloqueada o la batería; el
+servicio cierra la conexión, la haya abierto un fondo tapado o uno a la vista, en cuanto nada tapado
+pide las luces y ninguna pantalla a la vista y en marcha manda colores, al bloquear, pausar, pasar a
+batería, cambiar a un fondo sin colores o quitar la pantalla, y la mantiene mientras una pantalla a la
+vista siga mandando colores aunque la última en pintar haya sido la tapada). Si el fondo tapado no se pausa, sigue dibujándose y las luces lo
 siguen como siempre, elijas lo que elijas. `wprs-ctl rgb covered` y `wprs-ctl rgb status` muestran
 la elección y si las luces están en pausa ahora. Cada dispositivo pasa a su modo directo solo cuando
 se le pintan colores y recupera su propio modo (y sus colores, si ese modo fija cada luz) en cuanto

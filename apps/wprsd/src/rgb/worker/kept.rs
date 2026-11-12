@@ -37,7 +37,7 @@ impl Session {
             self.forget(None);
         }
         self.restore();
-        (self.client, self.failed, self.rgb, self.opened) = (None, None, rgb, false);
+        (self.client, self.failed, self.rgb) = (None, None, rgb);
         self.publish(None, Vec::new());
         self.retry();
     }

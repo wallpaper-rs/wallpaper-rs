@@ -4,9 +4,9 @@ use std::net::TcpListener;
 use std::sync::mpsc::{Receiver as Heard, channel};
 use wprs_core::rgb::Covered;
 
-static SERIAL: Mutex<()> = Mutex::new(());
+pub(super) static SERIAL: Mutex<()> = Mutex::new(());
 
-fn server(during: impl FnOnce() + Send + 'static) -> (String, Heard<()>) {
+pub(super) fn server(during: impl FnOnce() + Send + 'static) -> (String, Heard<()>) {
     let listener = TcpListener::bind("127.0.0.1:0").unwrap();
     let address = listener.local_addr().unwrap().to_string();
     let (closed, heard) = channel();
@@ -28,14 +28,14 @@ fn server(during: impl FnOnce() + Send + 'static) -> (String, Heard<()>) {
     (address, heard)
 }
 
-fn follower(source: &str, address: String) -> Session {
+pub(super) fn follower(source: &str, address: String) -> Session {
     let mut s = session(source);
     (s.last, s.rgb) =
         (None, Rgb { enabled: true, server: address, when_covered: Covered::Follow, ..Rgb::default() });
     s
 }
 
-fn released(s: &Session, heard: &Heard<()>) -> bool {
+pub(super) fn released(s: &Session, heard: &Heard<()>) -> bool {
     let closed = heard.recv_timeout(Duration::from_secs(5)).is_ok();
     closed && s.client.is_none() && s.wait() == IDLE && !lock(&s.status).connected
 }
@@ -154,7 +154,7 @@ fn lights_an_uncovered_screen_paints_stay_connected_when_covered_ones_stop_wanti
     super::super::cover("TEST-KEEP", true);
     super::super::want("TEST-KEEP", true);
     s.retry();
-    s.last = Some(("TEST-SHOWN".into(), Strip::new(1, 1, vec![0, 0, 255]).unwrap()));
+    s.frame("TEST-SHOWN".into(), Strip::new(1, 1, vec![0, 0, 255]).unwrap());
     super::super::want("TEST-KEEP", false);
     s.retry();
     assert!(s.unwanted(Some("TEST-KEEP")) && !s.unwanted(Some("TEST-SHOWN")));
