@@ -25,7 +25,7 @@ impl Scene {
         let mut weighed: Vec<(String, f32)> = self
             .layers()
             .filter(|l| l.flat())
-            .map(|l| (l.id.clone(), self.units(l, quality, 1.0) * area(l)))
+            .map(|l| (l.id.clone(), self.units(l, quality, (1.0, 1.0)) * area(l)))
             .filter(|(_, units)| *units > 0.0)
             .collect();
         weighed.sort_by(|a, b| b.1.total_cmp(&a.1));

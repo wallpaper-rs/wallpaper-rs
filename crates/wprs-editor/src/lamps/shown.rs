@@ -60,7 +60,7 @@ fn over(dir: &Path, doc: &Value, id: &str, (t, back): (f64, f64)) -> Option<Rgba
     let mut alone = doc.clone();
     alone["scene"]["ext"]["editor"]["solo"] = json!(id);
     alone["scene"]["canvas"]["background"] = json!([back, back, back, 1.0]);
-    crate::shots::still(dir, &alone, EDGE, t).ok()
+    crate::shots::still(dir, &alone, EDGE, (Some(t), None)).ok()
 }
 
 fn drawn(dir: &Path, doc: &Value, id: &str, t: f64) -> Option<RgbaImage> {
