@@ -6910,6 +6910,7 @@ dependencies = [
  "fontdb",
  "image",
  "schemars 1.2.3",
+ "semver",
  "serde",
  "serde_json",
  "tempfile",

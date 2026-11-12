@@ -88,4 +88,15 @@ ColumnLayout {
         visible: sections.web
         page: sections.page
     }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        level: 4
+        text: App.tr("Required packages")
+    }
+
+    PackageRequires {
+        Layout.fillWidth: true
+        page: sections.page
+    }
 }

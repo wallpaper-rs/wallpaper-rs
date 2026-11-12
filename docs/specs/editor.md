@@ -951,6 +951,19 @@ and removed with the last, so the declared input and the origins never disagree;
 add or remove `network` by itself. Only a web page takes origins. The same action is
 `wprs-ctl scene manifest DIR network ORIGIN... [--add|--remove]`.
 
+*Required packages* (in the *Settings* tab of every kind of package) lists `requires.packages`, one row
+each with a remove button, and a picker to add one: a box that lists the installed packages of the
+library (assets packages included, never the package itself) and also takes an id typed by hand, and
+a version range. Left empty, the range is the one compatible with the installed version, `^1.2` for
+`1.2.7`. It sends the `manifest` action `requires` (`packages`: `{id, version}`, with `add` or
+`remove` to change the list instead of replacing it). A `version` that is a plain version, such as
+`1.2.7` or `0.4.1`, becomes its compatible range (`^1.2`, `^0.4`, `^0.0.3` for `0.0.3`) and any
+other text must be a SemVer requirement, otherwise the action is refused; an id already listed
+takes the new range, the package cannot require itself, an id must be valid, at most 16 packages
+fit, and `requires.features` follows (`packages` with the first one, removed with the last).
+`wprs-ctl scene act DIR manifest '{"requires": {"packages": [{"id": "org.example.fx", "version":
+"1.2.7"}], "add": true}}'` does the same from a terminal.
+
 *Inputs* has a check box for each input a page cannot show it uses, since nothing in its code tells
 the tools: `audio`, `pointer`, `clicks` and `media`; the `network` box is read-only and follows the
 origins. A box sends the `manifest` action `inputs` with `add` or `remove`, which refuses a name that

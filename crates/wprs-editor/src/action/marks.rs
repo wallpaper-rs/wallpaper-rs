@@ -131,6 +131,13 @@ pub enum ManifestEdit {
         #[serde(default)]
         remove: bool,
     },
+    Requires {
+        packages: Vec<Needed>,
+        #[serde(default)]
+        add: bool,
+        #[serde(default)]
+        remove: bool,
+    },
     AddFile {
         file: std::path::PathBuf,
         #[serde(default)]
@@ -139,6 +146,14 @@ pub enum ManifestEdit {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct Needed {
+    pub id: String,
+    #[serde(default)]
+    pub version: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PropertyEdit {
     pub id: String,

@@ -1598,9 +1598,9 @@ msgid "Move down"
 msgstr "Bajar"
 
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/PackageInspector.qml
-#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PlaylistItems.qml
-#: apps/wprs-app/qml/SceneAssets.qml apps/wprs-app/qml/SceneBoneRow.qml
-#: apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackageRequires.qml
+#: apps/wprs-app/qml/PlaylistItems.qml apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneBoneRow.qml apps/wprs-app/qml/SceneEffectsList.qml
 #: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
 #: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
 #: apps/wprs-app/qml/SceneModelSwing.qml apps/wprs-app/qml/ScenePairs.qml
@@ -3010,6 +3010,51 @@ msgstr "La página y sus luces"
 #: apps/wprs-app/qml/PackagePreview.qml
 msgid "Allow the page to send colors to the lights"
 msgstr "Permitir que la página mande colores a las luces"
+#: apps/wprs-app/qml/PackageRequires.qml
+msgid ""
+"These packages must be installed to use this one; installing it from a "
+"repository installs them too."
+msgstr ""
+"Estos paquetes deben estar instalados para usar este; al instalarlo desde un "
+"repositorio se instalan también."
+
+#: apps/wprs-app/qml/PackageRequires.qml
+msgid ""
+"This package needs no other package. Add the ones whose effects, scenes or "
+"presets it uses."
+msgstr ""
+"Este paquete no necesita otros paquetes. Añade aquellos cuyos efectos, "
+"escenas o ajustes preestablecidos usa."
+
+#: apps/wprs-app/qml/PackageRequires.qml apps/wprs-app/qml/SceneSide.qml
+#: apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Package"
+msgstr "Paquete"
+
+#: apps/wprs-app/qml/PackageRequires.qml
+msgid "Compatible with %1"
+msgstr "Compatible con %1"
+
+#: apps/wprs-app/qml/PackageRequires.qml
+msgid "^1.2"
+msgstr "^1.2"
+
+#: apps/wprs-app/qml/PackageRequires.qml
+msgid "Version range"
+msgstr "Rango de versiones"
+
+#: apps/wprs-app/qml/PackageRequires.qml
+msgid "Add package"
+msgstr "Añadir paquete"
+
+#: apps/wprs-app/qml/PackageRequires.qml
+msgid ""
+"Pick an installed package: a version range left empty becomes the one "
+"compatible with its installed version, such as ^1.2. At most %1 packages."
+msgstr ""
+"Elige un paquete instalado: un rango de versiones vacío pasa a ser el "
+"compatible con su versión instalada, como ^1.2. Como máximo %1 paquetes."
 
 #: apps/wprs-app/qml/PackageSections.qml
 msgid "Entry page:"
@@ -3036,6 +3081,10 @@ msgstr "Entradas"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Playback"
 msgstr "Reproducción"
+
+#: apps/wprs-app/qml/PackageSections.qml
+msgid "Required packages"
+msgstr "Paquetes necesarios"
 
 #: apps/wprs-app/qml/PackageTrack.qml
 msgid ""
@@ -7210,11 +7259,6 @@ msgstr "Capas"
 #: apps/wprs-app/qml/SceneSide.qml apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Assets"
 msgstr "Recursos"
-
-#: apps/wprs-app/qml/SceneSide.qml apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Package"
-msgstr "Paquete"
 
 #: apps/wprs-app/qml/SceneSpan.qml
 msgid "These screens cannot be shown: %1"

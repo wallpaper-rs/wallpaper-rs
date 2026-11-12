@@ -1746,6 +1746,18 @@ msgstr "una máscara necesita una imagen, una capa o una forma"
 msgid "a sprite sheet has from 1 to 256 rows and from 1 to 256 columns"
 msgstr "una hoja de sprites tiene de 1 a 256 filas y de 1 a 256 columnas"
 
+#: crates/wprs-editor/src/shaping/needs.rs
+msgid "%1 is not a version or a version range such as ^1.2"
+msgstr "%1 no es una versión ni un rango de versiones como ^1.2"
+
+#: crates/wprs-editor/src/shaping/needs.rs
+msgid "a package cannot require itself"
+msgstr "un paquete no puede requerirse a sí mismo"
+
+#: crates/wprs-editor/src/shaping/needs.rs
+msgid "a package requires at most %1 other packages"
+msgstr "un paquete requiere como máximo %1 paquetes más"
+
 #: crates/wprs-editor/src/shaping/page.rs
 msgid "%1 is not a %2 setting of a %3 package; it takes %4"
 msgstr "%1 no es un ajuste de %2 de un paquete %3; admite %4"

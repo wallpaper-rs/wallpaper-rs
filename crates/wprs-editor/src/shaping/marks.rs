@@ -64,6 +64,7 @@ pub(crate) fn manifest(dir: &Path, doc: &Value, e: &M) -> Result<Vec<Op>> {
         M::Web { values, clear } => super::page::section(doc, "web", values, clear)?,
         M::Network { origins, add, remove } => super::page::network(doc, origins, *add, *remove)?,
         M::Inputs { inputs, add, remove } => super::page::inputs(doc, inputs, *add, *remove)?,
+        M::Requires { packages, add, remove } => super::needs::packages(doc, packages, *add, *remove)?,
         M::AddFile { file, to } => return super::page::add_file(dir, doc, file, to.as_deref()),
     };
     refused(dir, doc, ops)

@@ -1,4 +1,5 @@
 mod lights;
+mod needs;
 mod palette;
 mod settings;
 mod web;
