@@ -53,6 +53,7 @@ QtObject {
         lane.moved(lane.list[0], 3, "boom");
         if (read(pointer + "/events/0/name") !== "boom" || read(pointer + "/events/0/t") !== 3 || lane.fresh() !== "event_2")
             throw new Error("timeline panel: the lane did not rename or move the event: " + JSON.stringify(read(pointer + "/events")));
+        panel.page.editor.fire(line.trigger ?? "start");
         lane.destroy();
         panel.destroy();
         const menu = Qt.createComponent("SceneTimelineMenu.qml").createObject(page, {

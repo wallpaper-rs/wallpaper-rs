@@ -160,4 +160,8 @@ impl Runtime {
     pub fn press(&mut self, id: &str) {
         self.trigger(|t| t.strip_prefix("prop:") == Some(id));
     }
+
+    pub fn fire(&mut self, trigger: &str) {
+        self.trigger(|t| t == trigger);
+    }
 }

@@ -170,6 +170,15 @@ Kirigami.Dialog {
                     })
         }
 
+        QQC2.Button {
+            icon.name: "media-playback-start"
+            text: App.tr("Fire it in the preview")
+            enabled: (panel.line?.trigger ?? "") !== ""
+            onClicked: panel.page.editor.fire(panel.line.trigger)
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.text: App.tr("Starts this timeline and every timeline and sound with the same trigger in the preview, as %1 would", panel.line?.trigger ?? "")
+        }
+
         SceneTimelineEvents {
             Kirigami.FormData.label: App.tr("Events:")
             Layout.fillWidth: true

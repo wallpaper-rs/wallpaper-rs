@@ -135,6 +135,9 @@ settings() { ctl prop ls -o TEST-11 --json | js "$1"; }
 if ctl prop press flash -o TEST-11 2>/dev/null; then fail "a button was pressed while it was off"; fi
 ctl prop set mood 2 -o TEST-11 && shown "$s11" 0 255 0
 ctl prop press flash -o TEST-11 && shown "$s11" 255 255 255
+shown "$s11" 0 255 0
+ctl input trigger TEST-11 prop:flash && shown "$s11" 255 255 255
+if ctl input trigger TEST-11 "" 2>/dev/null; then fail "an empty trigger was fired"; fi
 png "$scene/red.png" ff0000
 (cd "$scene" && ctl prop set photo red.png -o TEST-11) && shown "$s11" 255 0 0
 [ "$(ctl prop get photo -o TEST-11)" = "\"$(realpath "$scene/red.png")\"" ] || fail "a relative path was kept: $(ctl prop ls -o TEST-11)"

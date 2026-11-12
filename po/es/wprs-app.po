@@ -9946,6 +9946,16 @@ msgid "Started by:"
 msgstr "La arranca:"
 
 #: apps/wprs-app/qml/SceneTimelinePanel.qml
+msgid "Fire it in the preview"
+msgstr "Dispararla en la vista previa"
+
+#: apps/wprs-app/qml/SceneTimelinePanel.qml
+msgid ""
+"Starts this timeline and every timeline and sound with the same trigger in "
+"the preview, as %1 would"
+msgstr "Arranca en la vista previa esta línea de tiempo y todas las líneas y sonidos con el mismo disparador, como lo haría %1"
+
+#: apps/wprs-app/qml/SceneTimelinePanel.qml
 msgid "Events:"
 msgstr "Eventos:"
 

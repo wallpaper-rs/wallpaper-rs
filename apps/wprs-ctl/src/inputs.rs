@@ -79,6 +79,15 @@ pub enum Inputs {
         #[arg(long, conflicts_with = "at", help = "Stop the simulated pointer")]
         stop: bool,
     },
+    #[command(
+        about = "Fire a trigger on the scene of a screen, such as event:boom, click:button or media:play, starting the timelines and sounds it starts"
+    )]
+    Trigger {
+        #[arg(help = "The screen, a preview stream included")]
+        output: String,
+        #[arg(help = "The trigger, as a timeline or a sound layer names it")]
+        trigger: String,
+    },
 }
 
 #[derive(ValueEnum, Clone, Copy, Debug)]
@@ -133,6 +142,7 @@ pub async fn run(client: &Client, command: Inputs) -> Result<()> {
             let (x, y) = at_fraction(&at)?;
             inputs.simulate_touch(&output, x, y, buttons).await?
         }
+        Inputs::Trigger { output, trigger } => inputs.simulate_trigger(&output, &trigger).await?,
     }
     Ok(())
 }

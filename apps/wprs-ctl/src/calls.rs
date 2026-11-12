@@ -125,6 +125,7 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Inputs1", "SetPointer", "input pointer", &["X", "Y"]),
     ("Inputs1", "SetClicks", "input clicks", &["--output", "STATE"]),
     ("Inputs1", "SimulateTouch", "input touch", &["OUTPUT", "=x of AT", "=y of AT", "--buttons"]),
+    ("Inputs1", "SimulateTrigger", "input trigger", &["OUTPUT", "TRIGGER"]),
     ("Inputs1", "SimulateMedia", "media simulate", &["OUTPUT", "FILE", "--stop"]),
     ("Rgb1", "GetStatus", "rgb status", &[]),
     ("Rgb1", "Connect", "rgb devices", &[]),

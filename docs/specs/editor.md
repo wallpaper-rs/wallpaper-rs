@@ -171,6 +171,15 @@ Bézier cúbica de cuatro números, un valor da la forma de las claves que ya ti
 una lista de N números), la base, las asas y la línea de tiempo dicen su propio límite, y una clave de
 clip dice el canal y su rango.
 
+El panel de una línea de tiempo (menú *Timelines*, *Edit the timeline and its events…*) edita su
+largo en segundos o en cuadros y fps, el bucle, el cierre del final con el principio, la velocidad, el
+retraso, el arranque solo y el disparador, elegido entre `start`, `beat`, los botones y ajustes, los
+`event:` de los eventos de la escena, los `click:`, `enter:` y `leave:` de las capas que se tocan y los
+`media:`; sus eventos son marcas sobre una franja que se agregan con doble clic, se arrastran, se
+renombran y se quitan con la acción `timeline`. *Fire it in the preview* dispara su disparador en la
+vista previa (`SimulateTrigger`, `dbus.md`; `wprs-ctl input trigger OUTPUT TRIGGER`), con lo que
+arrancan esa línea y todas las líneas y sonidos con el mismo disparador.
+
 ### Editor de curvas
 
 El botón *Editor de curvas* de la barra de la línea de tiempo (y el de la barra de clips de una malla

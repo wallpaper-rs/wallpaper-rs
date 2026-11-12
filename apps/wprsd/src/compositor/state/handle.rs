@@ -61,6 +61,14 @@ impl State {
                     o.dirty = true;
                 }
             }
+            Command::Fire(output, trigger) => {
+                if let Some(o) = self.outputs.get_mut(&output)
+                    && let Some(scene) = o.shown.scene.as_mut()
+                {
+                    scene.fire(&trigger);
+                    o.dirty = true;
+                }
+            }
             Command::Retry => {
                 super::super::stops::retry();
                 for o in self.outputs.values_mut() {

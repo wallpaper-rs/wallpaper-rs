@@ -12,6 +12,7 @@ mod parallax;
 mod pictures;
 mod players;
 mod power;
+mod pushed;
 mod scene;
 mod scripts;
 mod slot;
@@ -52,6 +53,7 @@ enum Command {
     Saver(bool),
     Locked(bool),
     Press(String, String),
+    Fire(String, String),
     Retry,
     Again(String),
     Count(String, mpsc::Sender<Option<Counted>>),
@@ -155,10 +157,6 @@ impl Compositor {
 
     pub fn set_locked(&self, locked: bool) {
         self.send(Command::Locked(locked))
-    }
-
-    pub fn press(&self, output: &str, id: &str) {
-        self.send(Command::Press(output.into(), id.into()))
     }
 
     pub fn retry_effects(&self) {

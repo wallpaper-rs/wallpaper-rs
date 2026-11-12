@@ -116,6 +116,23 @@ impl Inputs {
         Ok(())
     }
 
+    async fn simulate_trigger(
+        &self,
+        output: String,
+        trigger: String,
+        #[zbus(header)] header: Header<'_>,
+        #[zbus(connection)] bus: &zbus::Connection,
+    ) -> Result<()> {
+        if !caller(bus, &header).await.trusted() {
+            return Err(denied("only the app, the tray and wprs-ctl fire a trigger"));
+        }
+        if trigger.is_empty() || trigger.len() > 256 {
+            return Err(invalid("a trigger has 1 to 256 bytes, such as event:boom or prop:flash"));
+        }
+        self.parts()?.0.compositor.fire(&output, &trigger);
+        Ok(())
+    }
+
     async fn set_clicks(
         &self,
         output: String,

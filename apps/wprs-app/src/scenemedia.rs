@@ -24,6 +24,23 @@ impl SceneEditor {
     }
 }
 
+impl SceneEditor {
+    pub fn fire(self: Pin<&mut Self>, trigger: &QString) {
+        let trigger = trigger.to_string();
+        let mut outputs = vec![self.output.to_string(), self.placed.to_string()];
+        outputs.retain(|o| !o.is_empty());
+        outputs.dedup();
+        if trigger.is_empty() {
+            return;
+        }
+        bus::spawn(async move {
+            for output in outputs {
+                bus::call("Inputs1", "SimulateTrigger", vec![json!(output), json!(trigger)]).await.ok();
+            }
+        });
+    }
+}
+
 fn track_from(file: &str) -> anyhow::Result<(String, Vec<u8>)> {
     let path = Path::new(file);
     let mut track = wprs_editor::media::simulated(path)?;

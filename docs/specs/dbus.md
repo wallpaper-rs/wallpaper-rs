@@ -1690,6 +1690,17 @@ output): it works on any output, including a `preview:` stream. Only the app, th
 input touch OUTPUT X,Y [--buttons N]` and `--stop` call it; the app calls it from the canvas while
 Test the pointer and clicks is on.
 
+### `SimulateTrigger(s output, s trigger)`
+
+Fires `trigger` on the scene shown on `output`, a `preview:` stream included, as if it happened:
+every timeline whose `trigger` and every sound layer whose `play_on` is exactly `trigger` (for
+example `event:boom`, `click:button`, `media:play` or `prop:flash`) starts from its beginning, so an
+author can try them without the event, the pointer or the player that would fire them. Nothing else
+of the scene changes and nothing is stored. A trigger of no bytes or over 256 returns `InvalidArgs`;
+only the app, the tray and `wprs-ctl` (identified as for `Grant`) may call it, other callers get
+`AccessDenied`. `wprs-ctl input trigger OUTPUT TRIGGER` calls it, and the timeline panel of the
+scene editor calls it on its preview with *Fire it in the preview*.
+
 ### `Touch(s output, d x, d y, u buttons)`
 
 A press or a release on the wallpaper of `output` in Plasma, at `x`, `y` in fractions of the

@@ -101,6 +101,11 @@ impl SceneState {
         self.guard.as_ref().map_or("", |g| g.label())
     }
 
+    pub(in crate::compositor) fn fire(&mut self, trigger: &str) {
+        self.runtime.fire(trigger);
+        self.calm = 0;
+    }
+
     pub(in crate::compositor) fn press(&mut self, id: &str) {
         self.runtime.press(id);
         self.pressed.push(id.to_owned());

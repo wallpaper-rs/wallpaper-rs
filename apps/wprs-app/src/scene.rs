@@ -84,6 +84,8 @@ pub mod qobject {
         #[qinvokable]
         fn simulate_media(self: Pin<&mut SceneEditor>, file: &QString);
         #[qinvokable]
+        fn fire(self: Pin<&mut SceneEditor>, trigger: &QString);
+        #[qinvokable]
         fn touch(self: Pin<&mut SceneEditor>, x: f64, y: f64, buttons: u32);
         #[qinvokable]
         fn preview(self: Pin<&mut SceneEditor>, live: bool);
