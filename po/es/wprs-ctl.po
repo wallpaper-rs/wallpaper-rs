@@ -2000,7 +2000,9 @@ msgstr "Volver a empezar los sistemas de partículas y la escena"
 #: apps/wprs-ctl/src/folder.rs
 msgid ""
 "Show it as the daemon does on battery: a lower level and the battery pace"
-msgstr "Mostrarla como la muestra el demonio con batería: un nivel más bajo y el ritmo de la batería"
+msgstr ""
+"Mostrarla como la muestra el demonio con batería: un nivel más bajo y el "
+"ritmo de la batería"
 
 #: apps/wprs-ctl/src/folder.rs
 msgid "Show it as the daemon does with reduced motion"
@@ -4555,7 +4557,9 @@ msgstr "Id del botón"
 #: apps/wprs-ctl/src/props.rs
 msgid ""
 "Print the particles alive on an output, the path that simulates them and why"
-msgstr "Muestra las partículas vivas en una salida, el camino que las simula y por qué"
+msgstr ""
+"Muestra las partículas vivas en una salida, el camino que las simula y por "
+"qué"
 
 #: apps/wprs-ctl/src/props.rs
 msgid "Output that shows the scene, such as a preview output"
@@ -5096,13 +5100,17 @@ msgstr ""
 msgid ""
 "Picture file (.png, .jpg, .webp or .avif), an animated .gif, or with --"
 "frames the first of an image sequence named NAME-0001.EXT"
-msgstr "Archivo de imagen (.png, .jpg, .webp o .avif), un .gif animado o, con --frames, el primero de una secuencia de imágenes llamada NOMBRE-0001.EXT"
+msgstr ""
+"Archivo de imagen (.png, .jpg, .webp o .avif), un .gif animado o, con --"
+"frames, el primero de una secuencia de imágenes llamada NOMBRE-0001.EXT"
 
 #: apps/wprs-ctl/src/rendering.rs
 msgid ""
 "Render the scene to a picture, an animated picture or an image sequence as "
 "the daemon would at a level, without a desktop"
-msgstr "Dibuja la escena en una imagen, una imagen animada o una secuencia de imágenes como la dibujaría el demonio en un nivel, sin escritorio"
+msgstr ""
+"Dibuja la escena en una imagen, una imagen animada o una secuencia de "
+"imágenes como la dibujaría el demonio en un nivel, sin escritorio"
 
 #: apps/wprs-ctl/src/rendering.rs
 msgid "Second of the scene clock of the first frame"
@@ -5114,7 +5122,9 @@ msgstr "Nivel de calidad más alto"
 
 #: apps/wprs-ctl/src/rendering.rs
 msgid "Render as on battery: a lower level and at most 60 frames a second"
-msgstr "Dibujar como con batería: un nivel más bajo y como mucho 60 cuadros por segundo"
+msgstr ""
+"Dibujar como con batería: un nivel más bajo y como mucho 60 cuadros por "
+"segundo"
 
 #: apps/wprs-ctl/src/rendering.rs
 msgid "Render with reduced motion"
@@ -5136,7 +5146,9 @@ msgstr "Lado mayor de la imagen en píxeles"
 msgid ""
 "Make-believe pointer at these fractions of the canvas, moving to the second "
 "pair over the clip"
-msgstr "Puntero simulado en estas fracciones del lienzo, que se mueve al segundo par a lo largo del clip"
+msgstr ""
+"Puntero simulado en estas fracciones del lienzo, que se mueve al segundo par "
+"a lo largo del clip"
 
 #: apps/wprs-ctl/src/rendering.rs
 msgid "Press the pointer over the middle of the clip"
@@ -5153,7 +5165,8 @@ msgstr "Mostrar la parte derecha sin el brillo del lienzo"
 #: apps/wprs-ctl/src/rendering.rs
 msgid ""
 "Where the left part ends, from 0 to 1, with --against or --without-bloom"
-msgstr "Dónde acaba la parte izquierda, de 0 a 1, con --against o --without-bloom"
+msgstr ""
+"Dónde acaba la parte izquierda, de 0 a 1, con --against o --without-bloom"
 
 #: apps/wprs-ctl/src/repo.rs
 msgid "Create a key pair NAME.key and NAME.pub and print its fingerprint"
@@ -6678,7 +6691,9 @@ msgstr "Un modo de fusión como normal, add, multiply o screen"
 msgid ""
 "Let the pointer through the layer (off), take it over the whole box (all) or "
 "only where the layer is at least alpha opaque (alpha)"
-msgstr "Deja pasar el puntero por la capa (off), lo toma en toda la caja (all) o solo donde la capa es al menos alpha opaca (alpha)"
+msgstr ""
+"Deja pasar el puntero por la capa (off), lo toma en toda la caja (all) o "
+"solo donde la capa es al menos alpha opaca (alpha)"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid "off, all or alpha"

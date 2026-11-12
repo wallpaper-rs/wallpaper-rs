@@ -1321,7 +1321,8 @@ msgstr "Superponer"
 msgid "Soft light"
 msgstr "Luz suave"
 
-#: apps/wprs-app/qml/EditEffects.qml apps/wprs-app/qml/SceneMaterial3d.qml
+#: apps/wprs-app/qml/EditEffects.qml apps/wprs-app/qml/SceneMapPaint.qml
+#: apps/wprs-app/qml/SceneMaterial3d.qml
 #: apps/wprs-app/qml/SceneScriptParams.qml apps/wprs-app/qml/SceneSwarmKin.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Color"
@@ -1524,7 +1525,7 @@ msgid "Nearest"
 msgstr "Lo más cercano"
 
 #: apps/wprs-app/qml/EditMasks.qml apps/wprs-app/qml/SceneMapBrush.qml
-#: apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/SceneMapPaint.qml apps/wprs-app/qml/SceneMask.qml
 msgid "Hardness"
 msgstr "Dureza"
 
@@ -1678,7 +1679,8 @@ msgid "Slow orbit"
 msgstr "Órbita lenta"
 
 #: apps/wprs-app/qml/EditParallax.qml apps/wprs-app/qml/SceneCanvasLook.qml
-#: apps/wprs-app/qml/SceneTouch.qml apps/wprs-app/qml/facade/SceneWords.qml
+#: apps/wprs-app/qml/SceneProbe.qml apps/wprs-app/qml/SceneTouch.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Pointer"
 msgstr "Puntero"
 
@@ -2749,6 +2751,7 @@ msgstr "Velocidad:"
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/PackageWeb.qml
 #: apps/wprs-app/qml/PresetSettings.qml apps/wprs-app/qml/SceneInput.qml
 #: apps/wprs-app/qml/ScenePropertyRange.qml
+#: apps/wprs-app/qml/SceneScriptParam.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Default"
 msgstr "Valor por defecto"
@@ -2839,7 +2842,8 @@ msgstr "Llenar la pantalla"
 msgid "Fit inside the screen"
 msgstr "Ajustar dentro de la pantalla"
 
-#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/SceneSwarmScope.qml
+#: apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Stretch"
 msgstr "Estirar"
@@ -3106,13 +3110,6 @@ msgstr "%1 fotogramas por segundo"
 msgid "Volume:"
 msgstr "Volumen:"
 
-#: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/PackageWeb.qml
-#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePropertyRange.qml
-#: apps/wprs-app/qml/SceneScriptParam.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Default"
-msgstr "Valor por defecto"
-
 #: apps/wprs-app/qml/PackagePlayback.qml
 msgid "Sound:"
 msgstr "Sonido:"
@@ -3223,6 +3220,7 @@ msgstr "La página y sus luces"
 #: apps/wprs-app/qml/PackagePreview.qml
 msgid "Allow the page to send colors to the lights"
 msgstr "Permitir que la página mande colores a las luces"
+
 #: apps/wprs-app/qml/PackageRequires.qml
 msgid ""
 "These packages must be installed to use this one; installing it from a "
@@ -3285,6 +3283,7 @@ msgid "Video"
 msgstr "Vídeo"
 
 #: apps/wprs-app/qml/PackageSections.qml
+#: apps/wprs-app/qml/SceneSwarmCollider.qml
 msgid "Picture"
 msgstr "Imagen"
 
@@ -3760,7 +3759,7 @@ msgstr ""
 "gráfica muestra entonces menos fotogramas por segundo."
 
 #: apps/wprs-app/qml/QualityPicker.qml apps/wprs-app/qml/SceneNewMaterial.qml
-#: apps/wprs-app/qml/SceneScriptAudit.qml
+#: apps/wprs-app/qml/ScenePropLevels.qml apps/wprs-app/qml/SceneScriptAudit.qml
 msgid "%1: %2"
 msgstr "%1: %2"
 
@@ -5505,6 +5504,7 @@ msgid ""
 msgstr ""
 "Es un tope: nunca se supera lo que fija el usuario o la batería, y el "
 "contenido no pasa de su propio ritmo."
+
 #: apps/wprs-app/qml/SceneGizmoDepth.qml
 msgid ""
 "Tilt around the width %1°: drag this end of the upright axis toward or away "
@@ -5769,7 +5769,7 @@ msgid "import a file of this kind first"
 msgstr "importa antes un archivo de este tipo"
 
 #: apps/wprs-app/qml/SceneLayerAdd.qml apps/wprs-app/qml/SceneLightTools.qml
-#: apps/wprs-app/qml/SceneSwarmLight.qml
+#: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneSwarmScope.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
@@ -5889,42 +5889,6 @@ msgstr "Bloquear"
 #: apps/wprs-app/qml/SceneLayerRow.qml apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "Solo"
 msgstr "Solo"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Add layer"
-msgstr "Añadir una capa"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "import a file of this kind first"
-msgstr "importa antes un archivo de este tipo"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml apps/wprs-app/qml/SceneLightTools.qml
-#: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneSwarmScope.qml
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Light"
-msgstr "Luz"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Point light"
-msgstr "Luz puntual"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Spot light"
-msgstr "Foco"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Tube light"
-msgstr "Tubo de luz"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Directional light"
-msgstr "Luz direccional"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Mesh from a picture…"
-msgstr "Malla desde una imagen…"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Duplicate"
@@ -6058,7 +6022,9 @@ msgstr "El cono en la vista previa muestra dónde cae la imagen."
 msgid ""
 "The beam runs along the canvas; the preview draws the picture out to the "
 "radius of the light, where the light ends."
-msgstr "El haz corre a lo largo del lienzo; la vista previa dibuja la imagen hasta el radio de la luz, donde la luz termina."
+msgstr ""
+"El haz corre a lo largo del lienzo; la vista previa dibuja la imagen hasta "
+"el radio de la luz, donde la luz termina."
 
 #: apps/wprs-app/qml/SceneLightGizmo.qml
 msgid "Drag to move the light"
@@ -7000,46 +6966,27 @@ msgstr "Los mismos ajustes en todas las pantallas"
 msgid "Save the current settings as a preset"
 msgstr "Guardar los ajustes actuales como preajuste"
 
-#: apps/wprs-app/qml/SceneProbe.qml
-msgid "Simulated pointer: drag it and every layer moves by its parallax depth"
-msgstr "Puntero simulado: arrástralo y cada capa se mueve según su profundidad de paralaje"
-
-#: apps/wprs-app/qml/SceneProbe.qml apps/wprs-app/qml/facade/SceneLabels.qml
-msgid "Tilt"
-msgstr "Inclinación"
-
-#: apps/wprs-app/qml/SceneProbe.qml
-msgid ""
-"Simulated tilt of a phone: drag it away from the middle to lean the phone "
-"that way"
-msgstr "Inclinación simulada de un teléfono: aléjala del centro para inclinar el teléfono hacia ese lado"
-
-#: apps/wprs-app/qml/SceneProbeTool.qml
-msgid "Try the parallax"
-msgstr "Probar el paralaje"
-
-#: apps/wprs-app/qml/SceneProbeTool.qml
-msgid ""
-"Move a simulated pointer, or the tilt of a phone, on the canvas and watch "
-"every layer shift by its parallax depth"
-msgstr "Mueve un puntero simulado, o la inclinación de un teléfono, sobre el lienzo y mira cómo cada capa se desplaza según su profundidad de paralaje"
 #: apps/wprs-app/qml/ScenePreviewCompare.qml
 msgid "Compare with"
 msgstr "Comparar con"
 
 #: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q0, lowest"
 msgstr "Q0, la más baja"
 
 #: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q1"
 msgstr "Q1"
 
 #: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q2"
 msgstr "Q2"
 
 #: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q3, highest"
 msgstr "Q3, la más alta"
 
@@ -7058,11 +7005,14 @@ msgstr "Dibujada como %1 al %2 % del tamaño, con %3 efectos dejados fuera"
 #: apps/wprs-app/qml/ScenePreviewEffects.qml
 msgid ""
 "On battery the daemon lowers Q3 to Q2 and draws at most 60 frames a second"
-msgstr "Con batería el demonio baja Q3 a Q2 y dibuja como mucho 60 cuadros por segundo"
+msgstr ""
+"Con batería el demonio baja Q3 a Q2 y dibuja como mucho 60 cuadros por "
+"segundo"
 
 #: apps/wprs-app/qml/ScenePreviewEffects.qml
 msgid "With reduced motion the parallax and the camera shake stand still"
-msgstr "Con menos movimiento el paralaje y el temblor de la cámara se quedan quietos"
+msgstr ""
+"Con menos movimiento el paralaje y el temblor de la cámara se quedan quietos"
 
 #: apps/wprs-app/qml/ScenePreviewEffects.qml
 msgid "The glare above white is drawn"
@@ -7092,7 +7042,9 @@ msgstr "Nivel de la vista previa"
 msgid ""
 "Show the preview as the daemon draws it at a quality level, on battery or "
 "with reduced motion, and compare two levels"
-msgstr "Muestra la vista previa como la dibuja el demonio en un nivel de calidad, con batería o con menos movimiento, y compara dos niveles"
+msgstr ""
+"Muestra la vista previa como la dibuja el demonio en un nivel de calidad, "
+"con batería o con menos movimiento, y compara dos niveles"
 
 #: apps/wprs-app/qml/ScenePreviewPanel.qml
 msgid "On battery"
@@ -7129,6 +7081,36 @@ msgstr "Una imagen animada"
 #: apps/wprs-app/qml/ScenePreviewSave.qml
 msgid "A picture; a clip becomes an image sequence"
 msgstr "Una imagen; un clip se guarda como secuencia de imágenes"
+
+#: apps/wprs-app/qml/SceneProbe.qml
+msgid "Simulated pointer: drag it and every layer moves by its parallax depth"
+msgstr ""
+"Puntero simulado: arrástralo y cada capa se mueve según su profundidad de "
+"paralaje"
+
+#: apps/wprs-app/qml/SceneProbe.qml apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Tilt"
+msgstr "Inclinación"
+
+#: apps/wprs-app/qml/SceneProbe.qml
+msgid ""
+"Simulated tilt of a phone: drag it away from the middle to lean the phone "
+"that way"
+msgstr ""
+"Inclinación simulada de un teléfono: aléjala del centro para inclinar el "
+"teléfono hacia ese lado"
+
+#: apps/wprs-app/qml/SceneProbeTool.qml
+msgid "Try the parallax"
+msgstr "Probar el paralaje"
+
+#: apps/wprs-app/qml/SceneProbeTool.qml
+msgid ""
+"Move a simulated pointer, or the tilt of a phone, on the canvas and watch "
+"every layer shift by its parallax depth"
+msgstr ""
+"Mueve un puntero simulado, o la inclinación de un teléfono, sobre el lienzo "
+"y mira cómo cada capa se desplaza según su profundidad de paralaje"
 
 #: apps/wprs-app/qml/SceneProblems.qml
 msgid "Problems (%1)"
@@ -7194,26 +7176,6 @@ msgstr "Reiniciar"
 #: apps/wprs-app/qml/SceneQuality.qml
 msgid "Preview quality"
 msgstr "Calidad de la vista previa"
-
-#: apps/wprs-app/qml/SceneQuality.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Q0, lowest"
-msgstr "Q0, la más baja"
-
-#: apps/wprs-app/qml/SceneQuality.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Q1"
-msgstr "Q1"
-
-#: apps/wprs-app/qml/SceneQuality.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Q2"
-msgstr "Q2"
-
-#: apps/wprs-app/qml/SceneQuality.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Q3, highest"
-msgstr "Q3, la más alta"
 
 #: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneRigIk.qml
 msgid "A point"
@@ -8182,10 +8144,6 @@ msgid "Layer"
 msgstr "Capa"
 
 #: apps/wprs-app/qml/SceneSwarmCollider.qml
-msgid "Picture"
-msgstr "Imagen"
-
-#: apps/wprs-app/qml/SceneSwarmCollider.qml
 msgid "Solid from opacity %1"
 msgstr "Sólido desde la opacidad %1"
 
@@ -8463,11 +8421,6 @@ msgid "Drag to change how strongly depth shrinks particles"
 msgstr "Arrastra para cambiar cuánto encoge la profundidad a las partículas"
 
 #: apps/wprs-app/qml/SceneSwarmHues.qml
-#: apps/wprs-app/qml/facade/SceneLabels.qml
-msgid "Value"
-msgstr "Valor"
-
-#: apps/wprs-app/qml/SceneSwarmHues.qml
 msgid "Pick the hue among steps"
 msgstr "Elegir el tono entre pasos"
 
@@ -8742,12 +8695,6 @@ msgstr "Valores iniciales desde entradas"
 #: apps/wprs-app/qml/SceneSwarmRemaps.qml
 msgid "Add a remap"
 msgstr "Añadir una reasignación"
-
-#: apps/wprs-app/qml/SceneSwarmScope.qml
-#: apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Stretch"
-msgstr "Estirar"
 
 #: apps/wprs-app/qml/SceneSwarmScope.qml
 #: apps/wprs-app/qml/SceneTimelinePanel.qml
@@ -10029,15 +9976,6 @@ msgstr "%1 KB"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Fill"
 msgstr "Rellenar"
-
-#: apps/wprs-app/qml/facade/LabelWords.qml
-msgid "Center"
-msgstr "Centrar"
-
-#: apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Tile"
-msgstr "Mosaico"
 
 #: apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Span"

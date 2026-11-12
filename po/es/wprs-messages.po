@@ -118,8 +118,9 @@ msgstr "%1 es demasiado grande"
 #: crates/wprs-core/src/edit/file.rs crates/wprs-editor/src/assets.rs
 #: crates/wprs-editor/src/offer.rs crates/wprs-editor/src/package.rs
 #: crates/wprs-editor/src/packing/source.rs crates/wprs-editor/src/pages.rs
-#: crates/wprs-editor/src/previews.rs crates/wprs-editor/src/project.rs
-#: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/scripts/audit.rs
+#: crates/wprs-editor/src/presets.rs crates/wprs-editor/src/previews.rs
+#: crates/wprs-editor/src/project.rs crates/wprs-editor/src/scripts.rs
+#: crates/wprs-editor/src/scripts/audit.rs
 #: crates/wprs-editor/src/scripts/edit.rs crates/wprs-editor/src/shaders.rs
 msgid "cannot read %1: %2"
 msgstr "no se puede leer %1: %2"
@@ -383,9 +384,6 @@ msgstr "una capa se mueve con dos números de píxeles"
 msgid "there is no bone \"%1\""
 msgstr "no hay ningún hueso «%1»"
 
-#: crates/wprs-editor/src/batch.rs
-msgid "undo and redo cannot be part of a step with other actions"
-msgstr "deshacer y rehacer no pueden ser parte de un paso con otras acciones"
 #: crates/wprs-editor/src/bands.rs
 msgid "bands are counted out of 16, 32 or 64"
 msgstr "las bandas se cuentan sobre 16, 32 o 64"
@@ -417,6 +415,10 @@ msgstr "el canal es ambos, izquierdo o derecho"
 #: crates/wprs-editor/src/bands.rs
 msgid "%1 is not x, y, inside or speed"
 msgstr "%1 no es x, y, inside ni speed"
+
+#: crates/wprs-editor/src/batch.rs
+msgid "undo and redo cannot be part of a step with other actions"
+msgstr "deshacer y rehacer no pueden ser parte de un paso con otras acciones"
 
 #: crates/wprs-editor/src/blend.rs
 msgid "a number such as 0.5"
@@ -574,7 +576,8 @@ msgid "the file has no animation \"%1\""
 msgstr "el archivo no tiene ninguna animación «%1»"
 
 #: crates/wprs-editor/src/clips.rs crates/wprs-editor/src/clips/keyed.rs
-#: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/shaping/layers.rs
+#: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/lamps/edit.rs
+#: crates/wprs-editor/src/shaping/layers.rs
 #: crates/wprs-editor/src/shaping/lens.rs
 #: crates/wprs-editor/src/stage3d/paths.rs
 msgid "the time must be 0 or more seconds"
