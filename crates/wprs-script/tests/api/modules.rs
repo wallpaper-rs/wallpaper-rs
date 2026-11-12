@@ -58,10 +58,25 @@ fn a_failing_module_stops_alone() {
         wprs_script::Script::load(&wprs_script::Setup::plain(&common::sources(&files)), Default::default())
             .unwrap();
     let outs: Vec<_> = (0..4).map(|t| at(&mut script, f64::from(t)).unwrap()).collect();
-    assert!(outs[0].console.iter().any(|l| l == "error bad.js: Error: boom"));
+    let said = "Error: boom (bad.js line 1)";
+    assert!(outs[0].console.iter().any(|l| *l == format!("error bad.js: {said}")), "{:?}", outs[0].console);
     assert_eq!(
         (outs[1].stopped.len(), outs[2].stopped.as_slice()),
-        (0, ["bad.js: Error: boom".to_string()].as_slice())
+        (0, [format!("bad.js: {said}")].as_slice())
     );
     assert_eq!((outs[3].layers["a"].rotation, outs[3].wake), (Some(3.0), None));
+}
+
+#[test]
+fn an_error_names_the_file_and_the_line_of_the_script() {
+    let files = [(
+        "scripts/grow.js",
+        "import { scene } from 'wprs';\n\nexport function update() {\n  scene.layer('a').opacity = 'big';\n}\n",
+    )];
+    let mut script =
+        wprs_script::Script::load(&wprs_script::Setup::plain(&common::sources(&files)), Default::default())
+            .unwrap();
+    let out = at(&mut script, 0.0).unwrap();
+    let line = out.console.iter().find(|l| l.starts_with("error scripts/grow.js")).expect("no error line");
+    assert!(line.ends_with("(scripts/grow.js line 4)"), "{line}");
 }

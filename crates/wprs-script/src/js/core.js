@@ -66,6 +66,12 @@ export function show(v) {
     }
 }
 
+const place = (e) => {
+    const stack = typeof e?.stack === "string" ? e.stack : "";
+    const hit = stack.split("\n").map((l) => /([^\s()]+\.js):(\d+)(?::\d+)?\)?\s*$/.exec(l)).find(Boolean);
+    return hit ? ` (${hit[1]} line ${hit[2]})` : "";
+};
+
 export function log(level, args) {
     const now = Math.floor(state.frame.wall);
     if (now !== second) [second, lines] = [now, 0];
@@ -80,9 +86,10 @@ export function guard(mod, f, ...args) {
     try {
         return f(...args);
     } catch (e) {
+        const said = show(e) + place(e);
         mod.failed = true;
-        mod.error = show(e);
-        log("error", [e]);
+        mod.error = said;
+        log("error", [said]);
         return undefined;
     } finally {
         current = outer;
