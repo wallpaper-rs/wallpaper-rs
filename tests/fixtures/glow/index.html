@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
 <body style="margin:0;background:#0000ff">
+<style>@keyframes blink { from { opacity: 0; } to { opacity: 1; } }</style>
+<div style="position:fixed;left:0;top:0;width:1px;height:1px;background:#000000;animation:blink 0.2s infinite alternate"></div>
 <script>
 const green = new Uint8Array([0, 255, 0, 255, 0, 255, 0, 255]);
 setInterval(() => {

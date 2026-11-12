@@ -71,6 +71,13 @@ else
   sends() { local before; before=$(painted); sleep 1; [ "$(painted)" -gt "$before" ]; }
   ctl rgb covered follow >/dev/null && ctl covered TEST-W true && expect "s['outputs']['TEST-W']['active']" False
   wait_for 10 sends || fail "the lights stopped following a covered page: $(ctl rgb status)"
+  frames() { field "s['outputs']['TEST-W']['page_frames']"; }
+  runs() { local before; before=$(frames); sleep 1; [ "$(frames)" "$1" "$before" ]; }
+  wait_for 10 runs -gt || fail "a covered page the lights follow did not keep running: $(ctl state)"
+  ctl config rgb.server "127.0.0.1:1" >/dev/null
+  wait_for 15 runs = || fail "a covered page kept running for lights no server receives: $(ctl rgb status)"
+  ctl config rgb.server "127.0.0.1:$openrgb" >/dev/null
+  wait_for 30 sends || fail "the lights did not follow the covered page once the server came back: $(ctl rgb status)"
   ctl rgb covered pause >/dev/null && sleep 0.5
   before=$(painted) && sleep 1
   [ "$(painted)" = "$before" ] || fail "a covered page sent colors while the lights pause"
