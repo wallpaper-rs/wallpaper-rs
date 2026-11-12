@@ -59,9 +59,10 @@ pub(super) fn converted_videos_take_the_place_of_their_original() {
     fs::write(&target, b"half").unwrap();
     assert_eq!(ask(json!({ "op": "remove", "uids": [clip, still] })), Value::Null);
     assert!(!target.exists(), "removing a video leaves its conversion behind");
+    identical_conversions_of_two_videos_keep_both_files();
 }
 
-pub(super) fn identical_conversions_of_two_videos_keep_both_files() {
+fn identical_conversions_of_two_videos_keep_both_files() {
     let (first, _) = store::store(&mut open("magenta-64x32.webm"), "first.webm").unwrap();
     let (second, _) = store::store(&mut open("quadrants-64x32.webm"), "second.webm").unwrap();
     let mut placed = Vec::new();

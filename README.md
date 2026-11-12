@@ -284,9 +284,9 @@ otra vez el último fotograma, también con el vídeo en pausa, sin reiniciarlo.
 ## Android
 
 La misma página *Releases* trae un APK para Android 12 o posterior (64 bits) por arquitectura:
-`wallpaper-rs-android-arm64-v8a.apk` para los teléfonos (unos 18 MB) y
-`wallpaper-rs-android-x86_64.apk` para los emuladores y algunas tabletas (unos 19 MB), más
-`wallpaper-rs-android.apk` con las dos (unos 31 MB) si no sabes cuál te toca. Antes un solo APK de
+`wallpaper-rs-android-arm64-v8a.apk` para los teléfonos (unos 22 MB) y
+`wallpaper-rs-android-x86_64.apk` para los emuladores y algunas tabletas (unos 23 MB), más
+`wallpaper-rs-android.apk` con las dos (unos 39 MB) si no sabes cuál te toca. Antes un solo APK de
 83 MB llevaba las dos arquitecturas, ONNX Runtime dentro y el código de Kotlin sin reducir.
 Siempre se firman con la misma clave y la misma versión, así que cada versión se instala encima de
 la anterior, también si cambias de uno a otro, y conserva el fondo elegido. Ábrelo en el teléfono
