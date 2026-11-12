@@ -3332,6 +3332,12 @@ msgstr ""
 "Elige una imagen (png, jpeg, webp, gif o ktx2): se copia dentro del paquete."
 
 #: apps/wprs-app/qml/PackageMediaFile.qml
+msgid ""
+"This package shows one still picture. To animate it or add effects, make a "
+"scene and add the picture as a layer."
+msgstr "Este paquete muestra una sola imagen fija. Para animarla o añadir efectos, crea una escena y añade la imagen como capa."
+
+#: apps/wprs-app/qml/PackageMediaFile.qml
 msgid "Videos (*.webm *.mp4 *.mkv)"
 msgstr "Vídeos (*.webm *.mp4 *.mkv)"
 
@@ -5252,12 +5258,26 @@ msgid "No parent"
 msgstr "Sin padre"
 
 #: apps/wprs-app/qml/SceneBuild.qml
+msgid "Wait: the editor is still working."
+msgstr "Espera: el editor sigue trabajando."
+
+#: apps/wprs-app/qml/SceneBuild.qml
+msgid "You have changes that are not saved yet. Save them to build or apply."
+msgstr "Tienes cambios sin guardar. Guárdalos para crear el paquete o aplicarlo."
+
+#: apps/wprs-app/qml/SceneBuild.qml
+msgid ""
+"The scene has %1 problems to solve first; they are listed in the Problems "
+"panel."
+msgstr "La escena tiene %1 problemas que resolver antes; están en el panel de Problemas."
+
+#: apps/wprs-app/qml/SceneBuild.qml
 msgid "Build and apply"
 msgstr "Compilar y aplicar"
 
 #: apps/wprs-app/qml/SceneBuild.qml
-msgid "Save the scene and solve its problems before building it."
-msgstr "Guarda la escena y resuelve sus problemas antes de crear el paquete."
+msgid "Save now"
+msgstr "Guardar ahora"
 
 #: apps/wprs-app/qml/SceneBuild.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Package file:"
@@ -8191,6 +8211,24 @@ msgid "Playhead"
 msgstr "Cabezal"
 
 #: apps/wprs-app/qml/SceneNotes.qml
+msgid ""
+"Another program changed this folder while you were editing. Your changes are "
+"not lost: choose what to keep."
+msgstr "Otro programa cambió esta carpeta mientras editabas. Tus cambios no se han perdido: elige con qué quedarte."
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid "Keep mine"
+msgstr "Quedarme con lo mío"
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid "Take theirs"
+msgstr "Tomar lo del otro programa"
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid "Save elsewhere…"
+msgstr "Guardar en otra carpeta…"
+
+#: apps/wprs-app/qml/SceneNotes.qml
 msgid "This folder has unsaved changes from an earlier session."
 msgstr "Esta carpeta tiene cambios sin guardar de una sesión anterior."
 
@@ -10783,6 +10821,30 @@ msgid "Settings of this system"
 msgstr "Ajustes de este sistema"
 
 #: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Start with"
+msgstr "Empezar con"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Snow"
+msgstr "Nieve"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Sparks"
+msgstr "Chispas"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Rain"
+msgstr "Lluvia"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Dust"
+msgstr "Polvo"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Choose a ready-made start…"
+msgstr "Elige un punto de partida listo…"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
 msgid "Most particles alive"
 msgstr "Máximo de partículas vivas"
 
@@ -11568,6 +11630,18 @@ msgstr "Cede a %1"
 #: apps/wprs-app/qml/SceneWave.qml
 msgid "Waveform of the sound"
 msgstr "Forma de onda del sonido"
+
+#: apps/wprs-app/qml/ScenesPage.qml
+msgid ""
+"One still picture as the wallpaper: you choose it after creating the "
+"package. To animate or add effects, start from an empty scene and add the "
+"picture as a layer."
+msgstr "Una sola imagen fija como fondo: la eliges después de crear el paquete. Para animarla o añadir efectos, empieza con una escena vacía y añade la imagen como capa."
+
+#: apps/wprs-app/qml/ScenesPage.qml
+msgid ""
+"One looping video as the wallpaper: you choose it after creating the package."
+msgstr "Un solo video en bucle como fondo: lo eliges después de crear el paquete."
 
 #: apps/wprs-app/qml/ScenesPage.qml
 msgid "My scene"

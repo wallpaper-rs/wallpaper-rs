@@ -9,6 +9,8 @@ Kirigami.Dialog {
     id: dialog
 
     required property var page
+    readonly property int blocking: (page.view.problems ?? []).filter(problem => !problem.warning).length
+    readonly property string why: page.editor.busy ? App.tr("Wait: the editor is still working.") : page.editor.dirty ? App.tr("You have changes that are not saved yet. Save them to build or apply.") : blocking > 0 ? App.tr("The scene has %1 problems to solve first; they are listed in the Problems panel.", blocking) : ""
     readonly property bool ready: !page.editor.dirty && !page.editor.busy && !(page.view.problems ?? []).some(problem => !problem.warning)
 
     title: App.tr("Build and apply")
@@ -21,7 +23,14 @@ Kirigami.Dialog {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
             visible: !dialog.ready
-            text: App.tr("Save the scene and solve its problems before building it.")
+            text: dialog.why
+        }
+
+        QQC2.Button {
+            visible: dialog.page.editor.dirty && !dialog.page.editor.busy
+            text: App.tr("Save now")
+            icon.name: "document-save"
+            onClicked: dialog.page.editor.save()
         }
 
         Kirigami.FormLayout {

@@ -670,8 +670,8 @@ msgstr "el clip no tiene ninguna clave ahí en %1 s"
 msgid "Bézier handles shape one channel of a key at a time"
 msgstr "Las asas Bézier curvan un canal de una clave cada vez"
 
-#: crates/wprs-editor/src/copying.rs crates/wprs-editor/src/offer.rs
-#: crates/wprs-editor/src/project.rs
+#: crates/wprs-editor/src/copying.rs crates/wprs-editor/src/diverged.rs
+#: crates/wprs-editor/src/offer.rs crates/wprs-editor/src/project.rs
 msgid "%1 is not an empty folder"
 msgstr "%1 no es una carpeta vacía"
 
@@ -1232,6 +1232,10 @@ msgstr "no hay una línea de tiempo «%1»; añádela antes con la acción timel
 #: crates/wprs-editor/src/keys.rs
 msgid "%1 cannot take the keyframe value %2"
 msgstr "%1 no admite el valor de clave %2"
+
+#: crates/wprs-editor/src/kits.rs
+msgid "%1 is not a starting kit; use one of %2"
+msgstr "%1 no es un punto de partida; usa uno de %2"
 
 #: crates/wprs-editor/src/lamps/air.rs
 msgid "only point and spot lights light the air"
@@ -2924,8 +2928,8 @@ msgid ""
 "it carries no hash of manifest.json and no key was given to check it; run "
 "pack sign again or pass --key"
 msgstr ""
-"no lleva el hash de manifest.json y no se dio ninguna clave para comprobarla; "
-"vuelve a firmar con pack sign o pasa --key"
+"no lleva el hash de manifest.json y no se dio ninguna clave para "
+"comprobarla; vuelve a firmar con pack sign o pasa --key"
 
 #: crates/wprs-format/src/catalog.rs
 msgid "package size"
