@@ -91,6 +91,9 @@
     <string name="shortcut_missed_app">The last shortcut did not open: %1$s is not installed or has nothing to open.</string>
     <string name="shortcut_missed_web">The last shortcut did not open: no app on the phone opens %1$s.</string>
     <string name="shortcut_missed_denied">The last shortcut did not open: Android did not let the wallpaper open %1$s.</string>
+    <string name="shortcut_missed_document">The last shortcut did not open: no app on the phone can show %1$s.</string>
+    <string name="shortcut_file">File</string>
+    <string name="shortcut_folder">Folder</string>
     <string name="shortcut_none">Nothing chosen: a tap opens nothing</string>
     <string name="shortcut_app">App</string>
     <string name="shortcut_web">Web address</string>

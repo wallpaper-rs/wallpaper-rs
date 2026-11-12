@@ -72,6 +72,26 @@ class ShortcutTest : SceneBase() {
         }
     }
 
+    @Test
+    fun aChosenDocumentOpensThroughAViewIntentWithReadAccess() {
+        val filter = IntentFilter(Intent.ACTION_VIEW).apply { addDataScheme("content"); addDataType("*/*") }
+        val monitor = instrumentation.addMonitor(filter, null, true)
+        try {
+            val file = "content://com.android.externalstorage.documents/document/primary%3ADocuments%2Fa.txt"
+            assertTrue(Shortcuts.open(context, JSONObject().put("file", file)))
+            assertTrue("the document did not reach a viewer", waitFor { monitor.hits == 1 })
+            assertNull(Shortcuts.missed)
+        } finally {
+            instrumentation.removeMonitor(monitor)
+        }
+    }
+
+    @Test
+    fun theNameOfAChosenDocumentIsItsLastPart() {
+        assertEquals("a.txt", Shortcuts.named("content://x.documents/document/primary%3ADocuments%2Fa.txt"))
+        assertEquals("Documents", Shortcuts.named("content://x.documents/tree/primary%3ADocuments"))
+    }
+
     private companion object {
         const val APART_MS = 1_100L
         const val SHORTCUT_SCENE = """{ "schema": "wallpaper-rs.scene/1", "canvas": { "size": [64, 64] },

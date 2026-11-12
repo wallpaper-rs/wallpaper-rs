@@ -39,6 +39,7 @@ pub(crate) fn openable(value: &Value) -> bool {
     let text = text.as_str().unwrap_or_default();
     match kind.as_str() {
         "uri" => text.starts_with("https://") && text.len() <= 2048 && !text.chars().any(char::is_control),
+        "file" | "folder" => text.starts_with("content://") && text.len() <= 2048 && !text.chars().any(char::is_control),
         "app" => {
             (1..=255).contains(&text.len())
                 && text.bytes().all(|b| b.is_ascii_alphanumeric() || b"._".contains(&b))
@@ -96,8 +97,13 @@ mod tests {
     }
 
     #[test]
-    fn the_phone_opens_web_addresses_and_apps_only() {
-        for good in [json!({ "uri": "https://example.org/a?b=c" }), json!({ "app": "org.example.notes" })] {
+    fn the_phone_opens_web_addresses_apps_and_chosen_documents_only() {
+        for good in [
+            json!({ "uri": "https://example.org/a?b=c" }),
+            json!({ "app": "org.example.notes" }),
+            json!({ "file": "content://com.android.providers.media.documents/document/image%3A1" }),
+            json!({ "folder": "content://com.android.externalstorage.documents/tree/primary%3ADocuments" }),
+        ] {
             assert!(openable(&good), "{good}");
         }
         let long = format!("https://example.org/{}", "a".repeat(2048));
@@ -111,6 +117,9 @@ mod tests {
             json!({ "app": "notes-app" }),
             json!({ "file": "/sdcard/a.txt" }),
             json!({ "folder": "/sdcard" }),
+            json!({ "file": "file:///sdcard/a.txt" }),
+            json!({ "file": "content://x/\n" }),
+            json!({ "folder": format!("content://{}", "a".repeat(2048)) }),
             json!({ "uri": "https://a.org", "app": "org.example" }),
             json!("https://example.org"),
             json!(null),

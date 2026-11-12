@@ -6,6 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.provider.DocumentsContract
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
+import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,18 +41,36 @@ object Shortcuts {
         missed = null
     }
 
+    private fun document(context: Context, target: JSONObject): Pair<String, Intent>? {
+        val (file, folder) = target.optString("file") to target.optString("folder")
+        val view = Intent(Intent.ACTION_VIEW).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        return when {
+            file.isNotEmpty() -> Uri.parse(file).let { file to view.setDataAndType(it, context.contentResolver.getType(it) ?: "*/*") }
+            folder.isNotEmpty() -> Uri.parse(folder).let {
+                val at = DocumentsContract.buildDocumentUriUsingTree(it, DocumentsContract.getTreeDocumentId(it))
+                folder to view.setDataAndType(at, DocumentsContract.Document.MIME_TYPE_DIR)
+            }
+            else -> null
+        }
+    }
+
     fun open(context: Context, target: JSONObject): Boolean {
         val (uri, app) = target.optString("uri") to target.optString("app")
-        val intent = if (uri.isNotEmpty()) Intent(Intent.ACTION_VIEW, Uri.parse(uri)).addCategory(Intent.CATEGORY_BROWSABLE)
-        else context.packageManager.getLaunchIntentForPackage(app)
+        val chosen = runCatching { document(context, target) }.getOrNull()
+        val intent = when {
+            chosen != null -> chosen.second
+            uri.isNotEmpty() -> Intent(Intent.ACTION_VIEW, Uri.parse(uri)).addCategory(Intent.CATEGORY_BROWSABLE)
+            else -> context.packageManager.getLaunchIntentForPackage(app)
+        }
         val thrown = intent?.let { runCatching { context.startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }.exceptionOrNull() }
         val reason = when {
-            intent == null || thrown is ActivityNotFoundException && uri.isEmpty() -> "app"
+            intent == null || thrown is ActivityNotFoundException && uri.isEmpty() && chosen == null -> "app"
+            thrown is ActivityNotFoundException && chosen != null -> "document"
             thrown is ActivityNotFoundException -> "web"
             thrown != null -> "denied"
             else -> null
         }
-        val shown = uri.ifEmpty { app }
+        val shown = chosen?.first?.let(Shortcuts::named) ?: uri.ifEmpty { app }
         missed = reason?.let { it to shown }
         return reason == null
     }
@@ -63,6 +85,8 @@ object Shortcuts {
         return found.map { it.activityInfo.packageName to it.loadLabel(context.packageManager).toString() }
             .filter { it.first != context.packageName }.distinctBy { it.first }.sortedBy { it.second.lowercase() }
     }
+
+    fun named(uri: String) = Uri.parse(uri).lastPathSegment?.substringAfterLast(':')?.substringAfterLast('/').orEmpty().ifEmpty { uri }
 
     fun web(text: String) = text.trim().takeIf { it.startsWith("https://") && it.length <= 2048 && it.none(Char::isISOControl) }
 }
@@ -79,7 +103,17 @@ internal fun Shortcut(field: JSONObject, modifier: Modifier, enabled: Boolean, s
     var picking by remember { mutableStateOf(false) }
     var typing by remember { mutableStateOf<String?>(null) }
     val apps = remember(picking) { if (picking) Shortcuts.apps(context) else emptyList() }
+    val keep = { uri: Uri?, key: String ->
+        uri?.let {
+            runCatching { context.contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+            set(JSONObject().put(key, it.toString()))
+        }
+    }
+    val file = rememberLauncherForActivityResult(OpenDocument()) { keep(it, "file") }
+    val folder = rememberLauncherForActivityResult(OpenDocumentTree()) { keep(it, "folder") }
     val shown = chosen?.optString("uri")?.takeIf { it.isNotEmpty() }
+        ?: chosen?.optString("file")?.takeIf { it.isNotEmpty() }?.let(Shortcuts::named)
+        ?: chosen?.optString("folder")?.takeIf { it.isNotEmpty() }?.let(Shortcuts::named)
         ?: chosen?.optString("app")?.let { app -> apps.firstOrNull { it.first == app }?.second ?: app }
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
@@ -88,6 +122,8 @@ internal fun Shortcut(field: JSONObject, modifier: Modifier, enabled: Boolean, s
         }
         TextButton({ picking = true }, enabled = enabled) { Text(stringResource(R.string.shortcut_app)) }
         TextButton({ typing = chosen?.optString("uri").orEmpty() }, enabled = enabled) { Text(stringResource(R.string.shortcut_web)) }
+        TextButton({ file.launch(arrayOf("*/*")) }, enabled = enabled) { Text(stringResource(R.string.shortcut_file)) }
+        TextButton({ folder.launch(null) }, enabled = enabled) { Text(stringResource(R.string.shortcut_folder)) }
         if (chosen != null) TextButton({ set(null) }, enabled = enabled) { Text(stringResource(R.string.remove)) }
     }
     if (picking) AlertDialog(
@@ -123,6 +159,7 @@ internal fun ShortcutMissed() {
     val text = when (reason) {
         "app" -> R.string.shortcut_missed_app
         "web" -> R.string.shortcut_missed_web
+        "document" -> R.string.shortcut_missed_document
         else -> R.string.shortcut_missed_denied
     }
     ListItem(

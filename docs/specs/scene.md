@@ -1876,7 +1876,7 @@ A `shortcut` holds what the user chose to open from the wallpaper: an `https://`
 most 2048 characters (opened through the OpenURI portal of the desktop, which may ask first), a
 file or a folder (chosen through the file chooser and opened through the same portal, which gets
 it as an open file) or an application by its desktop id (`[A-Za-z0-9._-]`, at most 255 characters),
-never a command. Only the user sets it (`SetSceneProperty`, `wprs-ctl prop set open
+never a command. On the phone a file or a folder is the one the user picked with the system document picker, kept as a `content://` address with read permission that survives restarts (`{"file": "content://…"}` or `{"folder": "content://…"}`), and it is opened through the same view intent as the other targets. Only the user sets it (`SetSceneProperty`, `wprs-ctl prop set open
 '{"uri": "https://example.org"}'`, or the app's control under *Scene settings*), never the author, a
 preset or sync, and `SetSceneProperty` refuses a file or folder that does not exist. It stays in
 `config.toml` on this computer. An application is looked up as `applications/<id>.desktop` in the

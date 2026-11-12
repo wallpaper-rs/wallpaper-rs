@@ -91,6 +91,9 @@
     <string name="shortcut_missed_app">El último atajo no se abrió: %1$s no está instalada o no tiene nada que abrir.</string>
     <string name="shortcut_missed_web">El último atajo no se abrió: ninguna app del teléfono abre %1$s.</string>
     <string name="shortcut_missed_denied">El último atajo no se abrió: Android no dejó que el fondo abriera %1$s.</string>
+    <string name="shortcut_missed_document">El último atajo no se abrió: ninguna app del teléfono puede mostrar %1$s.</string>
+    <string name="shortcut_file">Archivo</string>
+    <string name="shortcut_folder">Carpeta</string>
     <string name="shortcut_none">Nada elegido: un toque no abre nada</string>
     <string name="shortcut_app">App</string>
     <string name="shortcut_web">Dirección web</string>
