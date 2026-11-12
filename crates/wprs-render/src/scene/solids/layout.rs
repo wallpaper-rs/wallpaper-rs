@@ -1,4 +1,5 @@
 use wgpu::ShaderStages as S;
+use wgpu::TextureViewDimension::{Cube, D2Array};
 
 fn entry(binding: u32, visibility: S, ty: wgpu::BindingType) -> wgpu::BindGroupLayoutEntry {
     wgpu::BindGroupLayoutEntry { binding, visibility, ty, count: None }
@@ -20,10 +21,10 @@ fn picture() -> wgpu::BindingType {
     }
 }
 
-fn depth() -> wgpu::BindingType {
+fn depth(view_dimension: wgpu::TextureViewDimension) -> wgpu::BindingType {
     wgpu::BindingType::Texture {
         sample_type: wgpu::TextureSampleType::Depth,
-        view_dimension: wgpu::TextureViewDimension::D2Array,
+        view_dimension,
         multisampled: false,
     }
 }
@@ -53,10 +54,12 @@ pub(super) fn layouts(device: &wgpu::Device) -> [wgpu::BindGroupLayout; 4] {
                 entry(1, S::FRAGMENT, picture()),
                 entry(2, S::FRAGMENT, sampler),
                 entry(3, both, uniform(false)),
-                entry(4, S::FRAGMENT, depth()),
-                entry(5, S::FRAGMENT, depth()),
+                entry(4, S::FRAGMENT, depth(D2Array)),
+                entry(5, S::FRAGMENT, depth(D2Array)),
                 entry(6, S::FRAGMENT, compare),
                 entry(7, S::FRAGMENT, uniform(false)),
+                entry(8, S::FRAGMENT, depth(Cube)),
+                entry(9, S::FRAGMENT, depth(Cube)),
             ],
         ),
         make(

@@ -27,9 +27,10 @@ impl Renderer {
         }
         let solids = self.solids();
         let scene = |casting: bool| {
-            let map = |k: usize| match casting {
-                true => &solids.no_shadow,
-                false => s.maps[k].as_ref().map_or(&solids.no_shadow, |m| &m.view),
+            let map = |k: usize, cube: bool| {
+                let blank = if cube { &solids.no_cube } else { &solids.no_shadow };
+                let own = s.maps[k].as_ref().filter(|m| !casting && (m.layers == 6) == cube);
+                own.map_or(blank, |m| &m.view)
             };
             self.solid_group(
                 0,
@@ -38,10 +39,12 @@ impl Renderer {
                     entry(1, R::TextureView(&env.view)),
                     entry(2, R::Sampler(&solids.wrap)),
                     entry(3, frame.as_entire_binding()),
-                    entry(4, R::TextureView(map(0))),
-                    entry(5, R::TextureView(map(1))),
+                    entry(4, R::TextureView(map(0, false))),
+                    entry(5, R::TextureView(map(1, false))),
                     entry(6, R::Sampler(&solids.compare)),
                     entry(7, s.shades.as_entire_binding()),
+                    entry(8, R::TextureView(map(0, true))),
+                    entry(9, R::TextureView(map(1, true))),
                 ],
             )
         };

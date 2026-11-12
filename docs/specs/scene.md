@@ -806,8 +806,8 @@ repeated and smooth where the file had no map) and should be `linear` for
   stage renders again each frame while it reads time, audio or the pointer.
 
 Shadows are maps the models are drawn into from the light: 2 048 pixels a side for a directional light,
-fitted around the models of the stage, 1 024 for a spot light within its cone and six faces of 512 for a
-point light, all at most 4 096 (1 024 on phones, 2 048 on T2) and half of that at the lowest quality;
+fitted around the models of the stage, 1 024 for a spot light within its cone and a cube of six faces of 512 for a
+point light (read as one cube map, so its edges filter across faces without seams), all at most 4 096 (1 024 on phones, 2 048 on T2) and half of that at the lowest quality;
 `shadow_resolution` picks another size within those caps. Each pixel of a material that takes shadows
 reads its map four times around its place and blends them (percentage closer filtering), lifted along its
 normal by `shadow_bias`. Desktop computers (T3) draw shadows of the first 2 lights that cast them, T2 of

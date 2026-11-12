@@ -17,6 +17,7 @@ fn layered(t: &wgpu::Texture, layer: Option<u32>) -> wgpu::TextureView {
     t.create_view(&wgpu::TextureViewDescriptor {
         dimension: Some(match layer {
             Some(_) => wgpu::TextureViewDimension::D2,
+            None if t.depth_or_array_layers() == 6 => wgpu::TextureViewDimension::Cube,
             None => wgpu::TextureViewDimension::D2Array,
         }),
         base_array_layer: layer.unwrap_or(0),
@@ -38,8 +39,8 @@ fn depth_texture(r: &Renderer, side: u32, layers: u32, usage: U) -> wgpu::Textur
     })
 }
 
-pub(super) fn blank(r: &Renderer) -> wgpu::TextureView {
-    layered(&depth_texture(r, 1, 1, U::TEXTURE_BINDING), None)
+pub(super) fn blank(r: &Renderer, layers: u32) -> wgpu::TextureView {
+    layered(&depth_texture(r, 1, layers, U::TEXTURE_BINDING), None)
 }
 
 impl Renderer {

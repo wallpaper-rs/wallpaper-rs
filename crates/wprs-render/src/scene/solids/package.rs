@@ -1,7 +1,7 @@
 use crate::Renderer;
 use std::sync::PoisonError;
 
-const OWN: [&str; 58] = [
+const OWN: [&str; 61] = [
     "Light",
     "Scene3",
     "Object",
@@ -60,6 +60,9 @@ const OWN: [&str; 58] = [
     "vs_shadow_cut",
     "vs_shadow_cut_skinned",
     "fs_shadow_cut",
+    "shadow_c",
+    "shadow_d",
+    "round_tap",
 ];
 const MORE: [&str; 3] = ["fs_solid", "shown", "lit"];
 

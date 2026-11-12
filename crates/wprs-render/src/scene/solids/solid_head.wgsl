@@ -61,6 +61,8 @@ struct Placed { p: vec3<f32>, n: vec3<f32>, t: vec3<f32> };
 @group(0) @binding(5) var shadow_b: texture_depth_2d_array;
 @group(0) @binding(6) var shadow_cmp: sampler_comparison;
 @group(0) @binding(7) var<uniform> shade: Shadows;
+@group(0) @binding(8) var shadow_c: texture_depth_cube;
+@group(0) @binding(9) var shadow_d: texture_depth_cube;
 @group(1) @binding(0) var<uniform> object: Object;
 @group(1) @binding(1) var<uniform> bones: Bones;
 @group(1) @binding(2) var<uniform> draw: Draw;

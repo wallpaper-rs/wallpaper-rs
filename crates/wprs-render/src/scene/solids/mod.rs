@@ -43,6 +43,7 @@ pub(crate) struct Solids {
     pub(crate) white: GpuImage,
     pub(crate) flat: GpuImage,
     pub(crate) no_shadow: wgpu::TextureView,
+    pub(crate) no_cube: wgpu::TextureView,
     pub(crate) no_morph: wgpu::TextureView,
 }
 
@@ -91,7 +92,8 @@ impl crate::Renderer {
                 compare,
                 white: pixel([255; 4], Format::Rgba8UnormSrgb),
                 flat: pixel([128, 128, 255, 255], Format::Rgba8Unorm),
-                no_shadow: shadows::blank(self),
+                no_shadow: shadows::blank(self, 1),
+                no_cube: shadows::blank(self, 6),
                 no_morph: gpu::blank_morphs(self),
             }
         })

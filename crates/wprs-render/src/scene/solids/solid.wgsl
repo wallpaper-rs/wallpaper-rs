@@ -41,16 +41,24 @@ fn tap(s: u32, uv: vec2<f32>, layer: u32, depth: f32) -> f32 {
     return textureSampleCompareLevel(shadow_b, shadow_cmp, uv, layer, depth);
 }
 
+fn round_tap(s: u32, d: vec3<f32>, depth: f32) -> f32 {
+    if s == 0u {
+        return textureSampleCompareLevel(shadow_c, shadow_cmp, d, depth);
+    }
+    return textureSampleCompareLevel(shadow_d, shadow_cmp, d, depth);
+}
+
 fn shadowed(l: Light, p: vec3<f32>, n: vec3<f32>) -> f32 {
     let s = i32(l.more.z) - 1;
     if s < 0 || finish.flags.z < 0.5 {
         return 1.0;
     }
     let info = shade.info[s];
+    let lift = n * info.w * shade.at[s].w;
+    let d = p + lift - shade.at[s].xyz;
+    let a = abs(d);
     var face = 0u;
     if info.x > 1.5 {
-        let d = p - shade.at[s].xyz;
-        let a = abs(d);
         if a.x >= a.y && a.x >= a.z {
             face = select(1u, 0u, d.x > 0.0);
         } else if a.y >= a.z {
@@ -59,18 +67,26 @@ fn shadowed(l: Light, p: vec3<f32>, n: vec3<f32>) -> f32 {
             face = select(5u, 4u, d.z > 0.0);
         }
     }
-    let lift = n * info.w * shade.at[s].w;
     let q = shade.mats[u32(info.y) + face] * vec4<f32>(p + lift, 1.0);
     let c = q.xyz / q.w;
     let uv = c.xy * vec2<f32>(0.5, -0.5) + 0.5;
-    if q.w <= 0.0 || any(uv < vec2<f32>(0.0)) || any(uv > vec2<f32>(1.0)) || c.z > 1.0 {
+    let outside = info.x < 1.5 && (any(uv < vec2<f32>(0.0)) || any(uv > vec2<f32>(1.0)));
+    if q.w <= 0.0 || outside || c.z > 1.0 {
         return 1.0;
     }
     let step = info.z * 0.5;
+    let depth = c.z - info.w * 0.002;
+    let side = select(vec3<f32>(0.0, 1.0, 0.0), vec3<f32>(1.0, 0.0, 0.0), a.y > a.x && a.y > a.z);
+    let t = normalize(cross(d, side)) * step * 2.0 * max(a.x, max(a.y, a.z));
+    let b = normalize(cross(d, t)) * length(t);
     var sum = 0.0;
     for (var k = 0u; k < 4u; k++) {
-        let o = vec2<f32>(select(-step, step, (k & 1u) == 1u), select(-step, step, k > 1u));
-        sum += tap(u32(s), uv + o, face, c.z - info.w * 0.002);
+        let o = vec2<f32>(select(-1.0, 1.0, (k & 1u) == 1u), select(-1.0, 1.0, k > 1u));
+        if info.x > 1.5 {
+            sum += round_tap(u32(s), d + t * o.x + b * o.y, depth);
+        } else {
+            sum += tap(u32(s), uv + o * step, 0u, depth);
+        }
     }
     return sum * 0.25;
 }

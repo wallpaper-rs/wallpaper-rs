@@ -89,7 +89,8 @@ pub(crate) fn plan_for(
                 ([0.0, 0.0, 1.0], [0.0, -1.0, 0.0]),
                 ([0.0, 0.0, -1.0], [0.0, -1.0, 0.0]),
             ];
-            let p = perspective(90.0, near.min(far * 0.5), far);
+            let mut p = perspective(90.0, near.min(far * 0.5), far);
+            p[5] = -p[5];
             for (m, (d, u)) in mats.iter_mut().zip(faces) {
                 *m = mul4(&p, &look(at, d, u));
             }

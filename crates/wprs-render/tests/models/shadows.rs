@@ -114,3 +114,51 @@ fn a_cut_out_material_casts_a_shadow_only_where_it_is_drawn() {
     assert!(dim(&kept, 32, 35) * 2 < dim(&lit, 32, 35), "{:?} {:?}", rgb(&kept, 32, 35), rgb(&lit, 32, 35));
     assert!(dim(&gone, 32, 35) + 6 >= dim(&lit, 32, 35), "{:?} {:?}", rgb(&gone, 32, 35), rgb(&lit, 32, 35));
 }
+
+fn darkened(kind: &str) -> Vec<(u32, u32)> {
+    let (layers, models) = world(lamp(kind), false);
+    let px = render(renderer().unwrap(), scene(json!({}), layers, models), Quality::Q3);
+    let mut open = lamp(kind);
+    open["shadows"] = json!(false);
+    let (layers, models) = world(open, false);
+    let bare = render(renderer().unwrap(), scene(json!({}), layers, models), Quality::Q3);
+    let all = (0..SIDE).flat_map(|y| (0..SIDE).map(move |x| (x, y)));
+    all.filter(|(x, y)| dim(&bare, *x, *y) > dim(&px, *x, *y) + 30).collect()
+}
+
+#[test]
+fn a_point_light_casts_its_shadow_where_a_spot_light_at_the_same_place_does() {
+    let Some(r) = renderer() else { return };
+    r.force_tier(Some(Tier::T3));
+    let (point, spot) = (darkened("point"), darkened("spot"));
+    let shared = point.iter().filter(|p| spot.contains(p)).count();
+    assert!(
+        spot.len() > 20 && shared * 10 >= spot.len().min(point.len()) * 7,
+        "{} {} {shared}",
+        point.len(),
+        spot.len()
+    );
+}
+
+#[test]
+fn a_point_light_hidden_behind_a_wall_shades_the_whole_ground_across_its_faces() {
+    let Some(r) = renderer() else { return };
+    r.force_tier(Some(Tier::T3));
+    let ground = Forge::default()
+        .material(ForgeMaterial { roughness: 1.0, ..ForgeMaterial::new("ground", [1.0; 4]) })
+        .part("ground", ForgeShape::Plane, [0.0; 3], 6.0, 0)
+        .glb();
+    let shown = |shadows: bool| {
+        let mut light = lamp("point");
+        (light["transform"]["position"], light["z"], light["shadows"]) =
+            (json!([32, 32]), json!(15), json!(shadows));
+        let layers = json!([light, { "id": "world", "type": "group", "space": "3d", "layers": [
+            { "id": "ground", "type": "model", "model": "ground" },
+            { "id": "wall", "type": "model", "model": "ground", "position": [0, 0, 0.6], "rotation": [0, 180, 0] }] }]);
+        render(r, scene(json!({}), layers, BTreeMap::from([("ground", ground.clone())])), Quality::Q3)
+    };
+    let (lit, dark) = (shown(false), shown(true));
+    let row: Vec<u32> = (4..60).map(|x| dim(&dark, x, 32)).collect();
+    assert!((4..60).all(|x| dim(&dark, x, 32) * 2 < dim(&lit, x, 32)), "{row:?}");
+    assert!(row.iter().max().unwrap() - row.iter().min().unwrap() < 12, "{row:?}");
+}
