@@ -957,7 +957,9 @@ card (WebGL keeps working with a generic renderer name) and its own storage (it 
 default a page sees all four, and `PackageInfo.exposes` lists what the package's page sees now:
 `zone`, `language`, `gpu`, `storage` (only for pages that declare `web.storage_kib`) and `network`
 (only for pages that declare origins and hold the `network` grant of `Inputs1`), so that every
-client shows the same notice. Every screen that shows a web page is configured again, and its page
+client shows the same notice. `PackageInfo.unshown` is `null`, or, for a web page that this build or
+computer cannot show (no `wprs-web` helper or no WPE WebKit 2.54 or newer), the same reason that
+applying it would return, so clients warn before it is applied. Every screen that shows a web page is configured again, and its page
 starts again with the new settings.
 
 ### `ClearData(as uids)`
@@ -2682,6 +2684,7 @@ enum ItemKind { Image, Video, Package }
 struct PackageInfo {
     id: String, version: String, kind: String, license: String, content: Option<String>,
     photosensitive: Option<bool>, facets: Vec<String>, confirmed: Vec<String>, exposes: Vec<String>,
+    unshown: Option<String>,
 }
 struct About {
     schema: String, title: String, description: String, changes: String, authors: Vec<String>,

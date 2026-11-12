@@ -1752,7 +1752,8 @@ servicio arranca para cada página que se ve y para en cuanto ninguna pantalla l
 WPE WebKit 2.54 o posterior (`wpewebkit` en Arch y Fedora); donde no está (Ubuntu 24.04, que no trae
 ningún `wpewebkit`, y el Flatpak, cuyo runtime de KDE tampoco lo trae y para el que no conocemos
 ninguno en Flathub) el fondo se rechaza con el motivo en lugar de quedarse en blanco, en `wprs-ctl` y en la app,
-con el texto en español. Meter WPE en el Flatpak exigiría compilar WPE WebKit 2.54 y sus dependencias
+con el texto en español, y la biblioteca avisa antes de aplicarlo: la ficha de la página lo marca
+con el motivo, sus detalles lo muestran y `wprs-ctl lib show` da la línea `not shown here`. Meter WPE en el Flatpak exigiría compilar WPE WebKit 2.54 y sus dependencias
 en cada versión (horas y varios GiB de memoria), así que por ahora no está. `docs/specs/web.md` explica el
 motor, el aislamiento y la interfaz de la página, y `docs/guia-fondos-web.md` es la guía para quien
 los hace. El fundido hacia una página empieza cuando la página dibuja su primer fotograma (o falla),

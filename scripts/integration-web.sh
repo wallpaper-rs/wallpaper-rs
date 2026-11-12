@@ -22,11 +22,16 @@ ctl lib show "$lights" | grep "^privacy = This web wallpaper uses your time zone
 read -r _ _ _ web < <(ctl stream TEST-W 320 180)
 if ! "$BIN/wprs-web" --check >/dev/null 2>&1; then
   [ "${WPRS_REQUIRE_WEB:-0}" != 1 ] || fail "WPRS_REQUIRE_WEB=1 but web wallpapers cannot run here"
+  ctl lib show "$tint" | grep "^not shown here = Web wallpapers cannot be shown here: " >/dev/null ||
+    fail "the library did not warn before applying: $(ctl lib show "$tint")"
+  [ "$(ctl lib search "" --json | from "[i['package']['unshown'] is not None for i in r['items'] if (i['package'] or {}).get('kind') == 'web']")" = "[True, True]" ] ||
+    fail "library items of web pages did not say they cannot be shown"
   if ctl lib apply "$tint" -o TEST-W 2>"$pages/refused"; then fail "a web wallpaper was applied without its helper"; fi
   grep -q "Web wallpapers cannot be shown here: .*\(WPE WebKit\|wprs-web\)" "$pages/refused" || fail "unclear refusal: $(cat "$pages/refused")"
   ctl release TEST-W
   echo "web wallpapers refused with a reason where the web engine is missing"
 else
+  if ctl lib show "$tint" | grep "^not shown here" >/dev/null; then fail "a web page was said not to show where it does"; fi
   ctl lib apply "$tint" -o TEST-W 2>"$pages/notice"
   grep -q "This web wallpaper uses your time zone, your language, what your graphics card can do and data it keeps" "$pages/notice" ||
     fail "no privacy notice on apply: $(cat "$pages/notice")"
