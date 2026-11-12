@@ -1,0 +1,26 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.luces",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "requires": {
+    "features": [
+      "ambient_light",
+      "lighting2d",
+      "lights",
+      "volumetric_lights"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Luces",
+  "version": "0.1.0"
+}

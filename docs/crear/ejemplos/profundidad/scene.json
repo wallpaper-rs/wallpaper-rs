@@ -1,0 +1,20 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": {
+    "size": [1920, 1080], "background": "#000000", "perspective": 1400,
+    "parallax": { "amount": 1, "delay": 0.2, "pointer": 1 }
+  },
+  "assets": {
+    "cielo": { "path": "assets/cielo.png" },
+    "profundidad": { "path": "assets/profundidad.png", "linear": true }
+  },
+  "layers": [
+    { "id": "fondo", "type": "image", "image": "cielo", "size": [1920, 1080],
+      "effects": [{ "effect": "depth_parallax",
+        "params": { "depth": "profundidad", "strength": 40, "focus": 0.5, "steps": 16, "follow": true, "orbit": true } }] },
+    { "id": "cartel", "type": "shape", "shape": { "rect": { "size": [640, 360], "radius": 30 } }, "fill": "#ffffffcc",
+      "transform": { "position": [960, 540], "tilt": [0, 25], "z": 120 }, "parallax": [0.03, 0.03] },
+    { "id": "titulo", "type": "text", "text": "Profundidad", "font": "sans-serif", "size": 110, "color": "#1b2440",
+      "transform": { "position": [960, 540], "tilt": [0, 25], "z": 130 }, "parallax": [0.04, 0.04] }
+  ]
+}

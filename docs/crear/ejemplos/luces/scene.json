@@ -1,0 +1,19 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#000000", "ambient": "#10131f", "sky": "#202a44" },
+  "assets": {
+    "piedra": { "path": "assets/piedra.png" },
+    "relieve": { "path": "assets/relieve.png", "linear": true }
+  },
+  "layers": [
+    { "id": "pared", "type": "image", "image": "piedra", "size": [1920, 1080],
+      "lighting": { "normal": "relieve", "roughness": 0.4, "strength": 1 } },
+    { "id": "farol", "type": "light", "light": "point", "color": "#ffd9a0", "intensity": 1.6, "radius": 700, "z": 160,
+      "transform": { "position": { "timeline": "paseo",
+        "keys": [[0, [400, 400]], [8, [1500, 700], "in_out_sine"], [16, [400, 400], "in_out_sine"]] } } },
+    { "id": "foco", "type": "light", "light": "spot", "color": "#8fb4ff", "intensity": 1.2, "radius": 900,
+      "cone": [20, 45], "z": 300, "transform": { "position": [1500, 150], "rotation": 20 },
+      "volumetric": { "density": 0.25, "samples": 16, "shafts": 0.3 } }
+  ],
+  "timelines": [{ "id": "paseo", "duration": 16, "loop": "repeat" }]
+}

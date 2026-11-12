@@ -1,0 +1,29 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.modelo-3d",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "requires": {
+    "features": [
+      "ambient_light",
+      "camera3d",
+      "camera_paths",
+      "lights",
+      "model3d",
+      "model_animation",
+      "shadows"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Escena en 3D",
+  "version": "0.1.0"
+}

@@ -1,0 +1,28 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.profundidad",
+  "inputs": [
+    "pointer"
+  ],
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "requires": {
+    "features": [
+      "inputs.pointer",
+      "parallax2",
+      "tilt"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Profundidad y perspectiva",
+  "version": "0.1.0"
+}

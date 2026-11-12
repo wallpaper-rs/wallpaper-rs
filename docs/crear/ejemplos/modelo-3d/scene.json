@@ -1,0 +1,31 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#0b1020", "ambient": "#1a2036", "sky": "#2c3a66" },
+  "camera3d": {
+    "fov": 40, "eye": [5, 3.5, 9], "center": [0, 0.5, 0],
+    "paths": [{ "id": "vuelta", "loop": true, "ease": "in_out_sine",
+      "keys": [{ "t": 0, "eye": [5, 3.5, 9], "center": [0, 0.5, 0] },
+               { "t": 8, "eye": [-5, 3.5, 9], "center": [0, 0.5, 0] }] }]
+  },
+  "assets": { "caja": { "path": "assets/caja.glb" }, "figura": { "path": "assets/figura.glb" } },
+  "layers": [
+    { "id": "fondo", "type": "solid", "color": "#0b1020" },
+    { "id": "escenario", "type": "group", "space": "3d", "layers": [
+      { "id": "suelo", "type": "model", "model": "caja", "position": [0, -1.2, 0], "scale": [6, 0.2, 6],
+        "materials": { "paint": { "color": "#46506b", "params": { "roughness": 0.8 } } } },
+      { "id": "cubo", "type": "model", "model": "caja", "position": [-1.8, 0, 0],
+        "rotation": { "timeline": "giro", "keys": [[0, [0, 0, 0]], [10, [0, 360, 0]]] },
+        "materials": { "paint": { "color": "#ff8a3d", "params": { "metallic": 0.3, "roughness": 0.35 } } } },
+      { "id": "persona", "type": "model", "model": "figura", "position": [1.8, -0.2, 0], "size": [800, 800],
+        "clips": [{ "id": "andar", "animation": "walk", "loop": "repeat" }],
+        "animations": [{ "clip": "andar" }],
+        "materials": { "body": { "color": "#9ad1ff" } } }
+    ] },
+    { "id": "sol", "type": "light", "light": "directional", "color": "#fff1d6", "intensity": 1.4,
+      "shadows": true, "shadow_resolution": 1024, "shadow_bias": 0.2,
+      "position3d": [4, 6, 3], "aim3d": [0, 0, 0] },
+    { "id": "lampara", "type": "light", "light": "point", "color": "#8fb4ff", "intensity": 1.2, "radius": 600,
+      "position3d": [-3, 2, 2] }
+  ],
+  "timelines": [{ "id": "giro", "duration": 10, "loop": "repeat" }]
+}
