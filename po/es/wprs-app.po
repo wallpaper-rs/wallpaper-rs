@@ -1676,6 +1676,8 @@ msgstr "Pinta sobre la imagen; cada trazo es un paso que se puede deshacer."
 #: apps/wprs-app/qml/EditMasks.qml apps/wprs-app/qml/SceneMask.qml
 #: apps/wprs-app/qml/SceneShapeSculpt.qml
 #: apps/wprs-app/qml/SceneTextureBrush.qml
+
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
 msgid "Erase"
 msgstr "Borrar"
 
@@ -7350,6 +7352,38 @@ msgstr "%1 se compila"
 msgid "%1, line %2, column %3: %4"
 msgstr "%1, línea %2, columna %3: %4"
 
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
+msgid "Comb on the model"
+msgstr "Peinar sobre el modelo"
+
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
+msgid "Clear the combing"
+msgstr "Borrar el peinado"
+
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
+msgid "Brush size, in pixels"
+msgstr "Tamaño del pincel, en píxeles"
+
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
+msgid "Combing strength"
+msgstr "Fuerza del peinado"
+
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
+msgid "Pick the key color from the model"
+msgstr "Tomar el color clave del modelo"
+
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
+msgid ""
+"Drag over the model in the 3D view to comb the fur where the pointer passes; "
+"the combing is painted into a map of the material."
+msgstr ""
+"Arrastra sobre el modelo en la vista 3D para peinar el pelo por donde pasa "
+"el puntero; el peinado se pinta en un mapa del material."
+
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
+msgid "Click the model in the 3D view to take its color as the key."
+msgstr "Haz clic en el modelo en la vista 3D para tomar su color como clave."
+
 #: apps/wprs-app/qml/SceneMaterialDebug.qml
 msgid "Debug view"
 msgstr "Vista de depuración"
@@ -9325,6 +9359,14 @@ msgstr "Después"
 #: apps/wprs-app/qml/SceneSpriteStrip.qml
 msgid "Remove the frame"
 msgstr "Quitar el cuadro"
+
+#: apps/wprs-app/qml/SceneStageBrush3d.qml
+msgid "Click the model where it shows the color to key out"
+msgstr "Haz clic en el modelo donde se ve el color que quieres quitar"
+
+#: apps/wprs-app/qml/SceneStageBrush3d.qml
+msgid "Drag over the fur to comb it; each stroke can be undone"
+msgstr "Arrastra sobre el pelo para peinarlo; cada trazo se puede deshacer"
 
 #: apps/wprs-app/qml/SceneStageCamera.qml
 msgid "Drag to move the scene camera"

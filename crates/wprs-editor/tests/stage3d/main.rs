@@ -11,6 +11,7 @@ mod edits;
 mod flight;
 mod looks;
 mod motion;
+mod picking;
 mod posing;
 mod views;
 

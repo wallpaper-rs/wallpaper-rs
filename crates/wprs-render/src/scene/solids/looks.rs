@@ -95,9 +95,12 @@ pub(super) fn finish(
         _ => (0.0, 1),
     };
     let (comb, key, more) = match shade {
-        Shade::Fur => ([x[3] / grow, x[4] / grow, x[5] / grow, 0.0], [0.0; 4], [1.0, 0.0, 0.0, 0.0]),
+        Shade::Fur => ([x[3] / grow, x[4] / grow, x[5] / grow, 1.0 / grow], [0.0; 4], [1.0, 0.0, 0.0, 0.0]),
         Shade::Foliage => ([0.0, 0.0, 0.0, x[0] * 0.05 * radius * grow], [0.0; 4], [1.0, 0.0, x[1], 0.0]),
-        Shade::Chroma => ([0.0; 4], [x[0], x[1], x[2], x[3]], [1.0, x[4], 0.0, 0.0]),
+        Shade::Chroma => {
+            let k = linear([x[0], x[1], x[2], 1.0]);
+            ([0.0; 4], [k[0], k[1], k[2], x[3]], [1.0, x[4], 0.0, 0.0])
+        }
         _ => ([0.0; 4], [0.0; 4], [1.0, 0.0, 0.0, 0.0]),
     };
     let uniform = Finish3 {

@@ -38,7 +38,7 @@ pub(crate) fn maps(doc: &Value, block: &mut Value, given: &BTreeMap<String, Opti
 }
 
 pub(crate) fn data_slot(slot: &str) -> bool {
-    MAP_SLOTS.iter().position(|s| *s == slot).is_some_and(|k| LINEAR_MAP_SLOTS[k])
+    slot == "comb" || MAP_SLOTS.iter().position(|s| *s == slot).is_some_and(|k| LINEAR_MAP_SLOTS[k])
 }
 
 pub(crate) fn chosen(doc: &Value, set: &Value) -> Vec<Value> {
@@ -56,10 +56,10 @@ pub(crate) fn chosen(doc: &Value, set: &Value) -> Vec<Value> {
 
 fn slot_ok(slot: &str) -> Result<()> {
     ensure!(
-        MAP_SLOTS.contains(&slot),
+        MAP_SLOTS.contains(&slot) || slot == "comb",
         said(
-            "editor.map_slot",
-            "%1 is not a map of a material; use base, orm, normal, occlusion or emissive",
+            "editor.material_map_slot",
+            "%1 is not a map of a material; use base, orm, normal, occlusion, emissive or comb",
             &[&slot]
         )
     );

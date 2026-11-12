@@ -105,6 +105,7 @@ impl<'a> Check<'a> {
         for (slot, id) in crate::MAP_SLOTS.iter().zip(mat.maps.slots()) {
             id.iter().for_each(|id| self.picture(&format!("{q}/maps/{slot}"), id));
         }
+        mat.maps.comb.iter().for_each(|id| self.picture(&format!("{q}/maps/comb"), id));
         self.uses(mat.cast_shadows == Some(true) || mat.receive_shadows == Some(true), "shadows");
         let shader = mat.shader.as_deref().unwrap_or("pbr");
         let built = MATERIALS.contains(&shader);

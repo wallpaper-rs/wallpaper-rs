@@ -51,7 +51,7 @@ impl Renderer {
 
     pub(super) fn maps_group(
         &self,
-        views: [&wgpu::TextureView; 5],
+        (views, comb): ([&wgpu::TextureView; 5], &wgpu::TextureView),
         f: &Finish,
         uvs: &wgpu::Buffer,
     ) -> wgpu::BindGroup {
@@ -68,6 +68,7 @@ impl Renderer {
                 .map(|(k, s)| wgpu::BindGroupEntry { binding: 5 + k as u32, resource: R::Sampler(s) }),
         );
         entries.push(wgpu::BindGroupEntry { binding: 10, resource: uvs.as_entire_binding() });
+        entries.push(wgpu::BindGroupEntry { binding: 11, resource: R::TextureView(comb) });
         self.device.create_bind_group(&wgpu::BindGroupDescriptor {
             label: Some("wprs-render solid maps"),
             layout: &self.solids().layouts[2],

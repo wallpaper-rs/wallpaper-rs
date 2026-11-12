@@ -20,13 +20,16 @@ pub struct MaterialMaps {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[schemars(extend("x-ref" = "image"))]
     pub emissive: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[schemars(extend("x-ref" = "image"))]
+    pub comb: Option<String>,
 }
 
 pub const LINEAR_SLOTS: [bool; 5] = [false, true, true, true, false];
 
 impl MaterialMaps {
     pub fn is_empty(&self) -> bool {
-        self.slots().iter().all(Option::is_none)
+        self.slots().iter().all(Option::is_none) && self.comb.is_none()
     }
 
     pub fn slots(&self) -> [Option<&str>; 5] {

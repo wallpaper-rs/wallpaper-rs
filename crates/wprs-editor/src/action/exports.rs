@@ -16,7 +16,7 @@ pub use super::shaping::{
     DepthMapEdit, EffectsEdit, MaskHold, RampEdit, RampFormat, RampStop, ScriptEdit, TemplateEdit,
 };
 pub use super::solid::{
-    CameraEdit, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit,
+    CameraEdit, CombStroke, Edit3d, KeyPick, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit,
 };
 pub use super::sow::SowEdit;
 pub use super::swarm::{ParticleEdit, Response, Strand, SwarmLight, TendEdit};

@@ -89,6 +89,12 @@ Item {
         stage: stage
     }
 
+    SceneStageBrush3d {
+        anchors.fill: parent
+        z: 2
+        stage: stage
+    }
+
     SceneRepeater {
         id: listed
 

@@ -79,11 +79,19 @@ struct Placed { p: vec3<f32>, n: vec3<f32>, t: vec3<f32> };
 @group(2) @binding(8) var occlusion_smp: sampler;
 @group(2) @binding(9) var emissive_smp: sampler;
 @group(2) @binding(10) var<uniform> uvs: Uvs;
+@group(2) @binding(11) var comb_map: texture_2d<f32>;
 @group(3) @binding(0) var<uniform> finish: Finish;
 
 const PI: f32 = 3.14159265;
 
-fn place(p: vec3<f32>, n: vec3<f32>, t: vec3<f32>, paint: f32, shell: u32) -> Placed {
+fn combed(uv: vec2<f32>) -> vec3<f32> {
+    let size = vec2<i32>(textureDimensions(comb_map));
+    let at = clamp(vec2<i32>(fract(uv) * vec2<f32>(size)), vec2<i32>(0), size - 1);
+    let c = textureLoad(comb_map, at, 0);
+    return mix(finish.comb.xyz, (c.rgb * 2.0 - 1.0) * finish.comb.w, c.a);
+}
+
+fn place(p: vec3<f32>, n: vec3<f32>, t: vec3<f32>, paint: f32, shell: u32, uv: vec2<f32>) -> Placed {
     var o: Placed;
     o.p = (object.model * vec4<f32>(p, 1.0)).xyz;
     o.n = normalize((object.normal * vec4<f32>(n, 0.0)).xyz);
@@ -91,7 +99,7 @@ fn place(p: vec3<f32>, n: vec3<f32>, t: vec3<f32>, paint: f32, shell: u32) -> Pl
     let kind = finish.shade.x;
     if kind > 1.5 && kind < 2.5 && shell > 0u {
         let k = f32(shell) / max(finish.shade.y, 1.0);
-        let comb = (object.model * vec4<f32>(finish.comb.xyz, 0.0)).xyz;
+        let comb = (object.model * vec4<f32>(combed(uv), 0.0)).xyz;
         o.p = o.p + (o.n * k + comb * k * k) * finish.shade.z;
     }
     if kind > 2.5 && kind < 3.5 {
@@ -148,24 +156,24 @@ fn posed(v: In, b: Bound, index: u32) -> array<vec3<f32>, 3> {
 
 @vertex
 fn vs_solid(v: In, @builtin(instance_index) shell: u32) -> Out {
-    return out(place(v.pos, v.normal, v.tangent.xyz, v.paint, shell), v, shell);
+    return out(place(v.pos, v.normal, v.tangent.xyz, v.paint, shell, v.uv), v, shell);
 }
 
 @vertex
 fn vs_skinned(v: In, b: Bound, @builtin(instance_index) shell: u32, @builtin(vertex_index) index: u32) -> Out {
     let q = posed(v, b, index);
-    return out(place(q[0], q[1], q[2], v.paint, shell), v, shell);
+    return out(place(q[0], q[1], q[2], v.paint, shell, v.uv), v, shell);
 }
 
 @vertex
 fn vs_shadow(v: In) -> @builtin(position) vec4<f32> {
-    return scene.clip * vec4<f32>(place(v.pos, v.normal, v.tangent.xyz, v.paint, 0u).p, 1.0);
+    return scene.clip * vec4<f32>(place(v.pos, v.normal, v.tangent.xyz, v.paint, 0u, v.uv).p, 1.0);
 }
 
 @vertex
 fn vs_shadow_skinned(v: In, b: Bound, @builtin(vertex_index) index: u32) -> @builtin(position) vec4<f32> {
     let q = posed(v, b, index);
-    return scene.clip * vec4<f32>(place(q[0], q[1], q[2], v.paint, 0u).p, 1.0);
+    return scene.clip * vec4<f32>(place(q[0], q[1], q[2], v.paint, 0u, v.uv).p, 1.0);
 }
 
 fn cast_shell(shell: u32) -> u32 {
@@ -175,7 +183,7 @@ fn cast_shell(shell: u32) -> u32 {
 @vertex
 fn vs_shadow_cut(v: In, @builtin(instance_index) shell: u32) -> Cut {
     let s = cast_shell(shell);
-    let p = place(v.pos, v.normal, v.tangent.xyz, v.paint, s).p;
+    let p = place(v.pos, v.normal, v.tangent.xyz, v.paint, s, v.uv).p;
     return Cut(scene.clip * vec4<f32>(p, 1.0), v.uv, v.uv1, f32(s));
 }
 
@@ -183,5 +191,5 @@ fn vs_shadow_cut(v: In, @builtin(instance_index) shell: u32) -> Cut {
 fn vs_shadow_cut_skinned(v: In, b: Bound, @builtin(vertex_index) index: u32, @builtin(instance_index) shell: u32) -> Cut {
     let q = posed(v, b, index);
     let s = cast_shell(shell);
-    return Cut(scene.clip * vec4<f32>(place(q[0], q[1], q[2], v.paint, s).p, 1.0), v.uv, v.uv1, f32(s));
+    return Cut(scene.clip * vec4<f32>(place(q[0], q[1], q[2], v.paint, s, v.uv).p, 1.0), v.uv, v.uv1, f32(s));
 }

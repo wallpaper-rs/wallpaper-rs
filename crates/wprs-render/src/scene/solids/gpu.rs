@@ -94,7 +94,7 @@ impl Renderer {
                 std::array::from_fn(|k| found[k].as_ref().map_or(fallback(k), |i| &i.0.view));
             let rows = super::maps::uv_rows(m);
             let uvs = fill("wprs-render solid uvs", bytemuck::cast_slice(&rows), B::UNIFORM);
-            maps.push(self.maps_group(views, m, &uvs));
+            maps.push(self.maps_group((views, &solids.no_comb.view), m, &uvs));
             kept.push(views.map(Clone::clone));
             uv_buffers.push(uvs);
         }

@@ -6,6 +6,7 @@ use std::path::Path;
 
 mod bones;
 mod camera;
+mod combed;
 mod cost;
 mod debug;
 mod edit;
@@ -16,11 +17,13 @@ mod material;
 mod newmat;
 mod painted;
 mod paths;
+mod picked;
 mod pose;
 mod shadows;
 mod spend;
 mod sphere;
 mod store;
+mod surface;
 mod swing;
 mod thumbs;
 mod turns;
@@ -33,7 +36,7 @@ pub use newmat::TEMPLATE;
 pub use store::file;
 pub use view::{View, preview};
 
-pub(crate) const QUERIES: [&str; 9] = [
+pub(crate) const QUERIES: [&str; 10] = [
     "model_info",
     "stage3d",
     "materials3d",
@@ -43,6 +46,7 @@ pub(crate) const QUERIES: [&str; 9] = [
     "material_check",
     "bone3d",
     "bound3d",
+    "surface3d",
 ];
 
 pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
@@ -60,6 +64,8 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
         Edit3d::Path(p) => paths::edit(dir, doc, p),
         Edit3d::NewMaterial { name } => newmat::create(dir, doc, name),
         Edit3d::MaterialCode { name, text } => newmat::write(dir, doc, name, text),
+        Edit3d::Key(k) => picked::key_from(dir, doc, k),
+        Edit3d::Comb(c) => combed::comb(dir, doc, c),
         Edit3d::Debug { show, layer, material } => debug::debug(dir, doc, show.as_deref(), (layer, material)),
     }
 }
@@ -88,6 +94,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("shadows3d").is_some() => shadows::shadows(dir, doc, t(&q["shadows3d"])),
         _ if q.get("bone3d").is_some() => pose::bone(dir, doc, &q["bone3d"]),
         _ if q.get("bound3d").is_some() => swing::bound(dir, doc, &q["bound3d"]),
+        _ if q.get("surface3d").is_some() => surface::surface(dir, doc, &q["surface3d"]),
         _ if q.get("paths3d").is_some() => paths::paths(dir, doc, t(&q["paths3d"])),
         _ if q.get("material_check").is_some() => {
             let c = &q["material_check"];

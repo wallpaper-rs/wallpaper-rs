@@ -36,6 +36,8 @@ pub enum Edit3d {
         name: String,
         text: String,
     },
+    Key(KeyPick),
+    Comb(CombStroke),
     Debug {
         #[serde(default)]
         show: Option<String>,
@@ -139,4 +141,31 @@ pub struct MaterialStroke {
     #[serde(default = "super::names::half")]
     pub hardness: f32,
     pub points: Vec<[f32; 2]>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct KeyPick {
+    pub layer: String,
+    pub name: String,
+    pub at: [f32; 2],
+    #[serde(default)]
+    pub time: f64,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct CombStroke {
+    pub layer: String,
+    pub name: String,
+    pub points: Vec<[f32; 2]>,
+    pub radius: f32,
+    #[serde(default = "super::names::whole")]
+    pub strength: f32,
+    #[serde(default = "super::names::half")]
+    pub hardness: f32,
+    #[serde(default)]
+    pub erase: bool,
+    #[serde(default)]
+    pub time: f64,
 }

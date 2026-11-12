@@ -9,10 +9,13 @@ pub(crate) fn drawn(p: &Placed) -> u64 {
     p.model.digest ^ p.maps.rotate_left(17)
 }
 
-fn picks<'a>(p: &'a Placed, m: usize) -> [Option<&'a str>; 5] {
-    let Kind::Model(layer) = &p.layer.kind else { return [None; 5] };
+fn picks<'a>(p: &'a Placed, m: usize) -> [Option<&'a str>; 6] {
+    let Kind::Model(layer) = &p.layer.kind else { return [None; 6] };
     let name = p.model.materials.get(m).map(|f| f.name.as_str());
-    name.and_then(|n| layer.materials.get(n)).map_or([None; 5], |mat| mat.maps.slots())
+    name.and_then(|n| layer.materials.get(n)).map_or([None; 6], |mat| {
+        let [a, b, c, d, e] = mat.maps.slots();
+        [a, b, c, d, e, mat.maps.comb.as_deref()]
+    })
 }
 
 fn ids(p: &Placed, images: &HashMap<String, Image>) -> u64 {
@@ -51,7 +54,9 @@ impl Renderer {
                 let over = picked[k].and_then(|i| images.get(i)).map(|i| &i.0.view);
                 over.unwrap_or(&base.views[m][k])
             });
-            made.maps[m] = self.maps_group(views, f, &base.uvs[m]);
+            let comb =
+                picked[5].and_then(|i| images.get(i)).map_or(&self.solids().no_comb.view, |i| &i.0.view);
+            made.maps[m] = self.maps_group((views, comb), f, &base.uvs[m]);
         }
         models.insert(key, made);
     }

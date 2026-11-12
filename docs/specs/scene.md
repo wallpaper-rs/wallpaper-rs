@@ -780,7 +780,7 @@ but `pbr` and `unlit`); `fur` also takes `comb_x`, `comb_y` and `comb_z` from âˆ
 take the numbers of `pbr`. Shadows of lights and materials name `shadows`; both `cast_shadows` and
 `receive_shadows` are `true` unless set, which changes nothing until a light casts shadows.
 `maps` replaces maps of the file with pictures of the scene: `{ "base", "orm", "normal",
-"occlusion", "emissive" }`, each the id of a picture asset; a replaced map keeps the texture
+"occlusion", "emissive" }` (and gives fur its `comb` map), each the id of a picture asset; a replaced map keeps the texture
 coordinates, the transform and the sampler of the slot it replaces (the first set unmoved,
 repeated and smooth where the file had no map) and should be `linear` for
 `orm`, `normal` and `occlusion`. A picture that is not loaded leaves the map of the file.
@@ -789,14 +789,18 @@ repeated and smooth where the file had no map) and should be `linear` for
   default) at Q3, three quarters at Q2, half at Q1 and a quarter at Q0 (at least one); `length` is how
   far the outer shell stands, in hundredths of the radius of the model (10 by default), `density` how
   close the strands grow (0.5), and the comb bends them towards that direction of the model, more at the
-  tips. Strands thin out towards the tips and shade darker at their roots; the shells are cut, not
-  blended, so they need no sorting.
+  tips. `maps.comb` names a `linear` picture over the first texture coordinates that combs each place
+  on its own: its red, green and blue are the direction in the space of the model (0.5 is none, 0 and 1
+  are âˆ’1 and 1) and its alpha how much it replaces the comb of the material; the vertex stage reads one
+  texel per vertex of each shell, a cost only fur with a comb map pays. Strands thin out towards the
+  tips and shade darker at their roots; the shells are cut, not blended, so they need no sorting.
 - **`foliage`** sways the vertices with `canvas.wind`: the red of the vertex colors (`COLOR_0`) of the
   file says how much each vertex moves (black stays), or, without vertex colors, the height within the
   model. `strength` (1 by default) scales the sway, which reaches a twentieth of the radius of the model
   for a wind of 100 pixels a second, and `speed` (1) its pace. Without wind, at the lowest quality or
   when the wind stays still at nothing, foliage stays still and asks for no frames.
-- **`chroma`** makes the colors close to `key` (green by default) transparent: closer than `threshold`
+- **`chroma`** makes the colors close to `key` (green by default, an sRGB color like the others,
+  compared with the color of the surface in linear light) transparent: closer than `threshold`
   (0.4) is cut, and the cut fades over `softness` (0.1) beyond it.
 - **A material shader of the package** (`stage: "material"`, checked and limited like every package
   shader) gives `fn material(s: Surface) -> Surface`, which runs for each pixel after the maps are read

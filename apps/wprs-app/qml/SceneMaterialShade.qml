@@ -17,8 +17,8 @@ ColumnLayout {
         const p = {};
         p[key] = Math.round(value * 1000) / 1000;
         row.panel.set(row.material.name, {
-            "params": p
-        });
+                "params": p
+            });
     }
 
     visible: ["fur", "foliage", "chroma"].includes(shader) || (row.panel.info?.packages ?? []).includes(shader)
@@ -27,10 +27,10 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: shade.shader === "fur"
         value: Object.assign({
-            "layers": 12,
-            "length": 10,
-            "density": 0.5
-        }, shade.params)
+                "layers": 12,
+                "length": 10,
+                "density": 0.5
+            }, shade.params)
         rows: [["layers", App.tr("Shells"), 1, 32, 1], ["length", App.tr("Length, in hundredths of the model"), 0, 100, 1], ["density", App.tr("Density"), 0, 1, 0.01]]
         onEdited: (key, value) => shade.param(key, value)
     }
@@ -47,13 +47,20 @@ ColumnLayout {
         onCombed: (axis, value) => shade.param(axis, value)
     }
 
+    SceneMaterialBrush {
+        Layout.fillWidth: true
+        visible: shade.shader === "fur"
+        row: shade.row
+        shader: shade.shader
+    }
+
     SceneSliders {
         Layout.fillWidth: true
         visible: shade.shader === "foliage"
         value: Object.assign({
-            "strength": 1,
-            "speed": 1
-        }, shade.params)
+                "strength": 1,
+                "speed": 1
+            }, shade.params)
         rows: [["strength", App.tr("Sway"), 0, 10, 0.1], ["speed", App.tr("Speed"), 0, 10, 0.1]]
         onEdited: (key, value) => shade.param(key, value)
     }
@@ -77,18 +84,25 @@ ColumnLayout {
             alpha: false
             hex: typeof shade.params.key === "string" ? shade.params.key : "#00ff00"
             onPicked: hex => shade.row.panel.set(shade.row.material.name, {
-                    "key": hex
-                })
+                        "key": hex
+                    })
         }
+    }
+
+    SceneMaterialBrush {
+        Layout.fillWidth: true
+        visible: shade.shader === "chroma"
+        row: shade.row
+        shader: shade.shader
     }
 
     SceneSliders {
         Layout.fillWidth: true
         visible: shade.shader === "chroma"
         value: Object.assign({
-            "threshold": 0.4,
-            "softness": 0.1
-        }, shade.params)
+                "threshold": 0.4,
+                "softness": 0.1
+            }, shade.params)
         rows: [["threshold", App.tr("Tolerance"), 0, 1, 0.01], ["softness", App.tr("Feather"), 0, 1, 0.01]]
         onEdited: (key, value) => shade.param(key, value)
     }

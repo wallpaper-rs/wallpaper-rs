@@ -8,6 +8,7 @@ use wprs_scene::{Forge, ForgeMaterial, ForgeShape, Quality, Runtime, SCHEMA, Sce
 
 mod cached;
 mod casts;
+mod combs;
 mod coverage;
 mod debug;
 mod depth;

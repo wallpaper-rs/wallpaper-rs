@@ -52,7 +52,7 @@ pub(super) fn layouts(device: &wgpu::Device) -> [wgpu::BindGroupLayout; 4] {
     let maps: Vec<_> = (0..5)
         .map(|k| entry(k, S::FRAGMENT, picture()))
         .chain((5..10).map(|k| entry(k, S::FRAGMENT, sampler)))
-        .chain([entry(10, S::FRAGMENT, uniform(false))])
+        .chain([entry(10, S::FRAGMENT, uniform(false)), entry(11, S::VERTEX, picture())])
         .collect();
     [
         make(
