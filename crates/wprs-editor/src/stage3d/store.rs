@@ -31,7 +31,7 @@ pub fn file_as(path: &Path, posed: bool) -> Result<Read> {
         return Err(tell(format!("is larger than {} MiB", MAX_MODEL_BYTES >> 20)));
     }
     let head = Arc::new(ModelFile::parse(&bytes).map_err(tell)?);
-    let decoded = if posed { Model::decode_posed(&bytes) } else { Model::decode(&bytes) };
+    let decoded = Model::shared(Arc::new(bytes), posed);
     let read = (Arc::new(decoded.map_err(tell)?), head);
     kept.retain(|_, (_, _, r)| Arc::strong_count(&r.0) > 1);
     kept.insert((path.to_path_buf(), posed), (stamp.0, stamp.1, read.clone()));

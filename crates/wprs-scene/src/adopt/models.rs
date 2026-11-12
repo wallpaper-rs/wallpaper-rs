@@ -87,8 +87,11 @@ impl Scene {
                 }
             }
             let rig = mesh.then(|| Rigged::decode(&bytes).map(Arc::new)).transpose().map_err(wrong)?;
-            let decode = |b: &[u8]| if posed { Model::decode_posed(b) } else { Model::decode(b) };
-            let model = solid.then(|| decode(&bytes).map(Arc::new)).transpose().map_err(wrong)?;
+            let bytes = Arc::new(bytes);
+            let model = solid
+                .then(|| Model::shared(bytes.clone(), posed).map(Arc::new))
+                .transpose()
+                .map_err(wrong)?;
             read.insert(path, (file.clone(), rig.clone(), model.clone()));
             self.models.insert(id.clone(), file);
             model.into_iter().for_each(|m| _ = self.solids.insert(id.clone(), m));

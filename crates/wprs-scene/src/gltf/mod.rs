@@ -8,6 +8,7 @@ pub const MAX_MODEL_BYTES: usize = 64 << 20;
 pub const MAX_MODEL_JSON: usize = 4 << 20;
 pub const MAX_MODELS_JSON: usize = 16 << 20;
 pub const MAX_MODEL_ENTRIES: usize = 1 << 18;
+pub const MAX_VIEWS: usize = 1 << 18;
 pub const MAX_NODES: usize = 1 << 16;
 pub const MAX_MODEL_PARTS: usize = 4096;
 pub const MAX_BONES: usize = 256;
@@ -93,8 +94,9 @@ impl ModelFile {
             return Err(format!("has {count} {what}, at most {max} are allowed"));
         }
         let bin = size.saturating_sub(28 + json.len() as u64);
+        let used = doc.textures.iter().filter_map(|t| doc.images.get(t.source?));
         let mut spans: Vec<(u64, u64)> =
-            doc.images.iter().filter_map(|i| doc.views.get(i.view?)).map(|v| (v.offset, v.length)).collect();
+            used.filter_map(|i| doc.views.get(i.view?)).map(|v| (v.offset, v.length)).collect();
         spans.sort_unstable();
         spans.dedup();
         if spans.iter().fold(0u64, |sum, s| sum.saturating_add(s.1)) > bin {

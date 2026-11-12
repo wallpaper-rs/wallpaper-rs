@@ -52,7 +52,7 @@ pub use crate::footage::Tape;
 pub use crate::form::{form, labels, order};
 pub use crate::gltf::{
     EXTENSIONS, MAX_BONES, MAX_MODEL_BYTES, MAX_MODEL_ENTRIES, MAX_MODEL_JSON, MAX_MODEL_PARTS,
-    MAX_MODELS_JSON, MAX_MORPHS, MAX_NODES, MAX_TRIANGLES, ModelFile,
+    MAX_MODELS_JSON, MAX_MORPHS, MAX_NODES, MAX_TRIANGLES, MAX_VIEWS, ModelFile,
 };
 pub use crate::governor::Governor;
 pub use crate::guard::{guarded, straightened};

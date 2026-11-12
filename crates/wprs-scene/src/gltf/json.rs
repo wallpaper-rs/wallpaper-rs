@@ -16,27 +16,38 @@ pub(super) fn within<T>(left: &mut usize, run: impl FnOnce() -> T) -> T {
 }
 
 fn listed<'de, D: Deserializer<'de>, T: DeserializeOwned>(d: D) -> Result<Vec<T>, D::Error> {
-    struct List<T>(PhantomData<T>);
-    impl<'de, T: DeserializeOwned> Visitor<'de> for List<T> {
-        type Value = Vec<T>;
+    d.deserialize_seq(List(None, PhantomData))
+}
 
-        fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            f.write_str("a list")
-        }
+fn views<'de, D: Deserializer<'de>, T: DeserializeOwned>(d: D) -> Result<Vec<T>, D::Error> {
+    d.deserialize_seq(List(Some(super::MAX_VIEWS), PhantomData))
+}
 
-        fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Vec<T>, A::Error> {
-            let mut out = Vec::new();
-            loop {
-                let left = LEFT.get().checked_sub(1).ok_or_else(|| de::Error::custom(super::CROWDED))?;
-                LEFT.set(left);
-                match seq.next_element()? {
-                    Some(item) => out.push(item),
-                    None => return Ok(out),
+struct List<T>(Option<usize>, PhantomData<T>);
+impl<'de, T: DeserializeOwned> Visitor<'de> for List<T> {
+    type Value = Vec<T>;
+
+    fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("a list")
+    }
+
+    fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<Vec<T>, A::Error> {
+        let mut out = Vec::new();
+        loop {
+            match self.0 {
+                Some(most) if out.len() >= most => return Err(de::Error::custom(super::CROWDED)),
+                Some(_) => {}
+                None => {
+                    let left = LEFT.get().checked_sub(1).ok_or_else(|| de::Error::custom(super::CROWDED))?;
+                    LEFT.set(left);
                 }
+            }
+            match seq.next_element()? {
+                Some(item) => out.push(item),
+                None => return Ok(out),
             }
         }
     }
-    d.deserialize_seq(List(PhantomData))
 }
 
 #[derive(Deserialize, Default)]
@@ -61,7 +72,9 @@ pub(super) struct Doc {
     pub buffers: Vec<Linked>,
     #[serde(deserialize_with = "listed")]
     pub images: Vec<Linked>,
-    #[serde(rename = "bufferViews", deserialize_with = "listed")]
+    #[serde(deserialize_with = "listed")]
+    pub textures: Vec<TextureHead>,
+    #[serde(rename = "bufferViews", deserialize_with = "views")]
     pub views: Vec<View>,
     #[serde(rename = "extensionsRequired", deserialize_with = "listed")]
     pub required: Vec<String>,
@@ -90,6 +103,12 @@ pub(super) struct Linked {
     pub uri: Option<IgnoredAny>,
     #[serde(rename = "bufferView")]
     pub view: Option<usize>,
+}
+
+#[derive(Deserialize, Default)]
+#[serde(default)]
+pub(super) struct TextureHead {
+    pub source: Option<usize>,
 }
 
 #[derive(Deserialize, Default)]

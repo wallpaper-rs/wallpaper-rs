@@ -36,8 +36,15 @@ pub struct Primitive {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ModelTexture {
-    pub bytes: Vec<u8>,
+    pub file: Arc<Vec<u8>>,
+    pub range: std::ops::Range<usize>,
     pub size: [u32; 2],
+}
+
+impl ModelTexture {
+    pub fn bytes(&self) -> &[u8] {
+        &self.file[self.range.clone()]
+    }
 }
 
 #[derive(Debug, Clone, Default)]
@@ -66,14 +73,15 @@ impl PartialEq for Model {
 
 impl Model {
     pub fn decode(bytes: &[u8]) -> Result<Model, String> {
-        Model::read(bytes, false)
+        Model::shared(Arc::new(bytes.to_vec()), false)
     }
 
     pub fn decode_posed(bytes: &[u8]) -> Result<Model, String> {
-        Model::read(bytes, true)
+        Model::shared(Arc::new(bytes.to_vec()), true)
     }
 
-    fn read(bytes: &[u8], posed: bool) -> Result<Model, String> {
+    pub fn shared(file: Arc<Vec<u8>>, posed: bool) -> Result<Model, String> {
+        let bytes = &file[..];
         let (text, bin) = chunks(bytes)?;
         let doc: crate::rigged::doc::Gltf =
             serde_json::from_slice(text).map_err(|e| format!("has invalid JSON: {e}"))?;
@@ -85,7 +93,7 @@ impl Model {
         bytes.hash(&mut h);
         posed.hash(&mut h);
         let mut model = Model { digest: h.finish(), ..Model::default() };
-        let (textures, map) = pictures::textures(&bin)?;
+        let (textures, map) = pictures::textures(&bin, &file)?;
         model.textures = textures;
         model.materials = surface::finishes(&doc, &map)?;
         match posed {

@@ -75,7 +75,7 @@ impl Renderer {
         let mut picture = |slot: Option<u16>, linear: bool| -> Option<Image> {
             let t = slot?;
             made.entry((t, linear))
-                .or_insert_with(|| self.model_picture(&model.textures.get(usize::from(t))?.bytes, linear))
+                .or_insert_with(|| self.model_picture(model.textures.get(usize::from(t))?.bytes(), linear))
                 .clone()
         };
         let mut maps = Vec::with_capacity(model.materials.len() + 1);

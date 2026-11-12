@@ -140,7 +140,10 @@ than `KHR_materials_emissive_strength`, `KHR_materials_unlit`, `KHR_mesh_quantiz
 editor warns about files that use it, read a second set of texture coordinates or clamp or mirror a
 texture, which models draw with the first set and repeated), skins of more than 256 bones, more than 64 blend shapes per primitive,
 more than 65 536 nodes or 4096 meshes, materials, animations or skins, more than 262 144 list
-entries for all the models of a scene and more than 2 000 000 triangles, and read the names of its nodes (attachment points), skin joints
+entries for all the models of a scene (buffer views have a cap of their own, 262 144 per file, and
+do not count there), pictures shown by textures whose distinct byte ranges together pass the size
+of the file (pictures no texture shows are never read, and a model keeps its pictures as ranges of
+the file it read instead of copies) and more than 2 000 000 triangles, and read the names of its nodes (attachment points), skin joints
 (bones), meshes (parts), materials, blend shapes (`extras.targetNames`, or `shape_<n>`) and
 animations with their length, against which every name the scene gives is checked. Unnamed
 elements are called `node_<n>`, `mesh_<n>`, `material_<n>` and `animation_<n>`.

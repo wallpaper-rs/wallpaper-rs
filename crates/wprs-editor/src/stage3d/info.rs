@@ -13,7 +13,7 @@ pub fn info(model: &Model, file: &ModelFile) -> Value {
         })
         .collect();
     let textures: Vec<Value> =
-        model.textures.iter().map(|t| json!({ "size": t.size, "bytes": t.bytes.len() })).collect();
+        model.textures.iter().map(|t| json!({ "size": t.size, "bytes": t.range.len() })).collect();
     let materials: Vec<Value> = model
         .materials
         .iter()

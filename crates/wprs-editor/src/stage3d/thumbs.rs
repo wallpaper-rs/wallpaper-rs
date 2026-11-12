@@ -10,7 +10,7 @@ pub(super) fn thumb(model: &Model, t: u16) -> Option<String> {
     if let Some(found) = kept.get(&(model.digest, t)) {
         return Some(found.clone());
     }
-    let bytes = &model.textures.get(usize::from(t))?.bytes;
+    let bytes = model.textures.get(usize::from(t))?.bytes();
     let url = crate::rigs::url(&image::load_from_memory(bytes).ok()?.thumbnail(64, 64).into_rgba8());
     if kept.len() > 256 {
         kept.clear();

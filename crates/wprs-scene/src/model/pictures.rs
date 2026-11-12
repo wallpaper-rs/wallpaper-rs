@@ -1,5 +1,6 @@
 use super::{MAX_MODEL_TEXELS, MAX_TEXTURE, ModelTexture};
 use crate::rigged::read::Bin;
+use std::sync::Arc;
 
 fn word(b: &[u8], at: usize) -> Option<u32> {
     b.get(at..at + 4).map(|w| u32::from_be_bytes([w[0], w[1], w[2], w[3]]))
@@ -47,7 +48,7 @@ fn webp(b: &[u8]) -> Option<[u32; 2]> {
     }
 }
 
-pub(super) fn textures(bin: &Bin) -> Result<(Vec<ModelTexture>, Vec<u16>), String> {
+pub(super) fn textures(bin: &Bin, file: &Arc<Vec<u8>>) -> Result<(Vec<ModelTexture>, Vec<u16>), String> {
     let doc = bin.doc;
     if doc.textures.len() > crate::MAX_MODEL_PARTS {
         let most = crate::MAX_MODEL_PARTS;
@@ -68,9 +69,9 @@ pub(super) fn textures(bin: &Bin) -> Result<(Vec<ModelTexture>, Vec<u16>), Strin
         if copied > bin.bin.len() {
             return Err(crate::gltf::PICTURES.into());
         }
-        let bytes = span.to_vec();
+        let start = span.as_ptr() as usize - file.as_ptr() as usize;
         let size =
-            picture_size(&bytes).ok_or_else(|| format!("texture {t} is not a PNG, JPEG or WebP picture"))?;
+            picture_size(span).ok_or_else(|| format!("texture {t} is not a PNG, JPEG or WebP picture"))?;
         if size[0].max(size[1]) > MAX_TEXTURE {
             return Err(format!(
                 "has a texture of {} px, at most {MAX_TEXTURE} are allowed",
@@ -86,7 +87,7 @@ pub(super) fn textures(bin: &Bin) -> Result<(Vec<ModelTexture>, Vec<u16>), Strin
         }
         map.push(out.len() as u16);
         held.push(range);
-        out.push(ModelTexture { bytes, size });
+        out.push(ModelTexture { file: file.clone(), range: start..start + span.len(), size });
     }
     Ok((out, map))
 }

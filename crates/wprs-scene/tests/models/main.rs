@@ -6,7 +6,9 @@ use wprs_scene::*;
 mod crafted;
 mod flight;
 mod frames;
+mod kit;
 mod limits;
+mod pictures;
 mod posing;
 mod reading;
 
