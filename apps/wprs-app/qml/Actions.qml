@@ -118,6 +118,25 @@ Item {
         if (!hid)
             throw new Error("the Escape key does not close the details panel");
         apply.show(uid);
+        shown();
+    }
+
+    function shown() {
+        const make = (id, kind) => Qt.createComponent("ItemSettings.qml").createObject(tools, {
+                "host": {
+                    "uid": id,
+                    "pkg": {
+                        "kind": kind
+                    }
+                }
+            });
+        const on = make("01J9Z0X9Z6Q7X4F3K5E1V0R1SC", "scene");
+        const off = make("01J9Z0X9Z6Q7X4F3K5E1V0R1AB", "scene");
+        const image = make("01J9Z0X9Z6Q7X4F3K5E1V0R1AB", "image");
+        const found = [on.screens.join(), off.screens.length, on.visible, image.visible];
+        [on, off, image].forEach(item => item.destroy());
+        if (found.join() !== "HDMI-A-1,0,true,false")
+            throw new Error("the details panel does not offer the settings of a wallpaper on a screen: " + found.join());
     }
 
     function applyTo(uid) {

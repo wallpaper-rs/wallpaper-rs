@@ -9,6 +9,11 @@ ColumnLayout {
 
     required property var host
 
+    ItemSettings {
+        Layout.fillWidth: true
+        host: extras.host
+    }
+
     Kirigami.Heading {
         level: 4
         text: App.tr("Tags")
