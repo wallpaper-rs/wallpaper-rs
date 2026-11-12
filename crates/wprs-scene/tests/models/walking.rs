@@ -99,7 +99,7 @@ fn sculpted_shapes_beside_a_model_join_its_blend_shapes() {
     assert_eq!(rig.shapes, ["bulge", "smile"]);
     let base = rig.pieces[0].targets[1].1 as usize;
     assert_eq!(m.morphs[base], [0.5, 0.0, 0.0, 0.0]);
-    let mut rt = runtime(scene);
+    let rt = runtime(scene);
     rt.frame([0.0, 0.0, 200.0, 100.0], Quality::Q3);
     let slots = rt.puppet("m").unwrap().posed().morphs[0];
     assert!(slots.contains(&(base as u32, 1.0)), "{slots:?}");

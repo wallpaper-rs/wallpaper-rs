@@ -69,7 +69,7 @@ pub(super) fn reached(
 
 fn around(model: &Model, touched: &BTreeMap<u32, f32>) -> BTreeMap<u32, Vec<u32>> {
     let mut out: BTreeMap<u32, Vec<u32>> = BTreeMap::new();
-    for t in model.indices.chunks_exact(3) {
+    for t in model.indices.as_chunks::<3>().0 {
         for (a, b) in [(t[0], t[1]), (t[1], t[2]), (t[2], t[0])] {
             for (x, y) in [(a, b), (b, a)] {
                 if touched.contains_key(&x) {
@@ -109,7 +109,7 @@ pub(super) fn apply(model: &Model, s: &SculptStroke, reached: &[(u32, f32)], mov
 fn normals(model: &Model, moved: &Moved, (first, count): (u32, u32), shift: bool) -> BTreeMap<u32, [f32; 3]> {
     let mut sum: BTreeMap<u32, [f32; 3]> = BTreeMap::new();
     let at = |v: u32| if shift { shaped(model, moved, v) } else { read(model, v, 0) };
-    for t in model.indices[first as usize..(first + count) as usize].chunks_exact(3) {
+    for t in model.indices[first as usize..(first + count) as usize].as_chunks::<3>().0 {
         let n = cross(sub(at(t[1]), at(t[0])), sub(at(t[2]), at(t[0])));
         t.iter().for_each(|v| {
             let s = sum.entry(*v).or_default();
