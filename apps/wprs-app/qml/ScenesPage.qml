@@ -17,10 +17,16 @@ Kirigami.ScrollablePage {
     readonly property var starters: [["empty", "document-new"], ["particles", "weather-snow"], ["parallax", "view-list-details"], ["clock", "clock"], ["web", "text-html"], ["preset", "color-management"], ["image", "image-x-generic"], ["video", "video-x-generic"], ["assets", "package-x-generic"]]
 
     function exercise() {
+        if (page.scenes.length === 0)
+            throw new Error("the scenes page offers no installed package to copy");
         for (const part of [["page", "web"], ["clip", "video"], ["still", "image"]])
             if (App.backend.claim("compose." + part[0]))
                 App.compose(helper.folderFor(part[0]), part[1], "");
         App.compose(helper.folderFor("check"), "empty", "");
+    }
+
+    function copy(uid) {
+        App.query("GetItem", [uid], "Library1", reply => page && copying.start(reply.item.path));
     }
 
     title: App.tr("Scenes")
@@ -28,7 +34,7 @@ Kirigami.ScrollablePage {
         App.query("Search", ["kind:package", 0, 500], "Library1", reply => {
             if (!page)
                 return;
-            page.scenes = (reply?.items ?? []).filter(item => String(item.path ?? "").endsWith(".wpak"));
+            page.scenes = (reply?.items ?? []).filter(item => item.package && !item.missing);
         });
     }
 
@@ -136,7 +142,7 @@ Kirigami.ScrollablePage {
                 Layout.fillWidth: true
                 text: modelData.title
                 icon.name: "edit-copy"
-                onClicked: copying.start(modelData.path)
+                onClicked: page.copy(modelData.uid)
             }
         }
     }
