@@ -88,7 +88,8 @@ fn example_scenes_pack_small_render_and_rest() {
         assert!(flashing && manifest.content.as_ref().is_some_and(|c| c.rating == Rating::General), "{name}");
         let scene = Arc::new(package.scene().unwrap());
         assert_eq!(scene.sounds().count(), usize::from(SOUNDS.contains(&name.as_str())), "{name}");
-        let pictures: Vec<_> = scene.assets.iter().filter(|(_, a)| !playable(&a.path) && !a.path.ends_with(".glb")).collect();
+        let pictures: Vec<_> =
+            scene.assets.iter().filter(|(_, a)| !playable(&a.path) && !a.path.ends_with(".glb")).collect();
         let drawn = pictures.iter().all(|(_, a)| a.linear || a.media.is_some());
         assert!(drawn, "{name} draws its pictures itself");
         let mut assets = SceneAssets::default();

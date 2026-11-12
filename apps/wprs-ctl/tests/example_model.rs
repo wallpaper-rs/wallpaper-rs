@@ -17,7 +17,8 @@ fn one_example_scene_ships_its_own_small_3d_model() {
     let found: Vec<_> = scenes()
         .into_iter()
         .filter(|dir| {
-            let scene: Value = serde_json::from_slice(&std::fs::read(dir.join("scene.json")).unwrap()).unwrap();
+            let scene: Value =
+                serde_json::from_slice(&std::fs::read(dir.join("scene.json")).unwrap()).unwrap();
             let layers = scene["layers"].to_string();
             let models: Vec<_> = scene["assets"]
                 .as_object()
