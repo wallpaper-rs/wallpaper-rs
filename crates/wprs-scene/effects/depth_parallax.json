@@ -8,10 +8,12 @@
     { "id": "depth", "type": "texture", "default": "" },
     { "id": "strength", "type": "float", "default": 24, "min": 0, "max": 256 },
     { "id": "focus", "type": "float", "default": 0.5, "min": 0, "max": 1 },
-    { "id": "steps", "type": "float", "default": 16, "min": 8, "max": 16 },
+    { "id": "steps", "type": "float", "default": 16, "min": 8, "max": 24 },
     { "id": "overscan", "type": "float", "default": 1, "min": 1, "max": 1.25 },
     { "id": "follow", "type": "bool", "default": true, "uses": "cursor" },
-    { "id": "orbit", "type": "bool", "default": false, "uses": "time" }
+    { "id": "orbit", "type": "bool", "default": false, "uses": "time" },
+    { "id": "scale", "type": "vec2", "default": [1, 1], "min": -1, "max": 1 },
+    { "id": "smooth", "type": "bool", "default": false }
   ],
   "passes": [{ "entry": "fs_depth_parallax", "inputs": ["previous", "asset:depth"] }],
   "cost": { "taps": 3 },

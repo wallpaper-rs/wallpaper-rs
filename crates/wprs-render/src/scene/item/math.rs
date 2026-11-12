@@ -114,5 +114,7 @@ pub(crate) fn frame_data(
         since_beat: runtime.since_beat(),
         presence: pointer.presence * pointer.presence * (3.0 - 2.0 * pointer.presence),
         audio: bands,
+        glide: runtime.glide(),
+        rest: [0.0; 2],
     }
 }

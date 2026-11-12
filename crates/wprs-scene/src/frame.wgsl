@@ -17,4 +17,5 @@ struct Frame {
     since_beat: f32,
     presence: f32,
     audio: array<vec4<f32>, 16>,
+    glide: vec2<f32>,
 };

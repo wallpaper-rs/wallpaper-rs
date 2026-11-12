@@ -78,6 +78,8 @@ pub(crate) struct FrameData {
     pub(crate) since_beat: f32,
     pub(crate) presence: f32,
     pub(crate) audio: [[f32; 4]; 16],
+    pub(crate) glide: [f32; 2],
+    pub(crate) rest: [f32; 2],
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]

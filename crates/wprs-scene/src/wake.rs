@@ -27,7 +27,9 @@ pub(crate) fn wakes(d: &Descriptor, slots: &[[f32; 4]; MAX_PARAMS], cx: &Context
     let settle = d.state.as_ref().map_or(0.0, |s| s.settle);
     let wake = |u| match u {
         Use::Time => pace(d, slots, cx, q),
-        Use::Cursor | Use::Clicks if cx.pointer.moving() || cx.calm[0] < settle => Wake::Frame,
+        Use::Cursor | Use::Clicks if cx.pointer.moving() || cx.glide.moving() || cx.calm[0] < settle => {
+            Wake::Frame
+        }
         Use::Audio if !cx.audio.silent || cx.beat < 2.0 || cx.calm[1] < settle => Wake::Frame,
         _ => Wake::Idle,
     };

@@ -50,6 +50,10 @@ impl Runtime {
         self.wall
     }
 
+    pub fn glide(&self) -> [f32; 2] {
+        self.glide.smooth.map(|v| (v - 0.5) * 2.0)
+    }
+
     pub fn parallax(&self) -> [f32; 2] {
         let glide = crate::kin::glide(&self.scene, &self.script);
         let tilt = if glide.gyro && !self.still { self.tilt } else { [0.0; 2] };

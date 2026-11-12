@@ -7,7 +7,7 @@ mod tree;
 
 const ROOM: usize = 64 << 20;
 
-const READS: [(&str, Use); 19] = [
+const READS: [(&str, Use); 20] = [
     ("time", Use::Time),
     ("dt", Use::Time),
     ("daytime", Use::Time),
@@ -17,6 +17,7 @@ const READS: [(&str, Use); 19] = [
     ("inside", Use::Cursor),
     ("presence", Use::Cursor),
     ("parallax", Use::Cursor),
+    ("glide", Use::Cursor),
     ("buttons", Use::Clicks),
     ("bass", Use::Audio),
     ("mid", Use::Audio),

@@ -51,3 +51,17 @@ fn depth_parallax_on_an_adjustment_layer_keeps_its_depth_on_the_canvas() {
     let (full, crop) = (full.shot(), crop.shot_at((48, H)));
     crop.check(&(10..46).flat_map(|x| [4, 16, 28].map(|y| ((x, y), full.at(x + 8, y)))).collect::<Vec<_>>());
 }
+
+#[test]
+fn depth_parallax_scales_each_direction_and_may_follow_the_eased_pointer() {
+    let depth = halves([255; 3], [0; 3]);
+    let fx = |params: Value| {
+        let depth = depth.clone();
+        move || relief(params.clone(), &depth).input(halves(RED, BLUE))
+    };
+    let Some((still, upright)) = moved(fx(json!({ "strength": 8, "focus": 0, "scale": [0, 1] }))) else { return };
+    assert_eq!(upright.diff(&still), 0.0);
+    let Some((_, raw)) = moved(fx(json!({ "strength": 8, "focus": 0 }))) else { return };
+    let Some((_, eased)) = moved(fx(json!({ "strength": 8, "focus": 0, "smooth": true }))) else { return };
+    assert!(raw.diff(&still) > 1.0 && eased.diff(&raw) < 0.5, "{}", eased.diff(&raw));
+}

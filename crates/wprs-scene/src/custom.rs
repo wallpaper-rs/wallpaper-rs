@@ -122,11 +122,12 @@ impl Descriptor {
             );
             let channels = p.channels.is_none_or(|c| p.kind == ParamKind::Mask && [1, 3, 4].contains(&c));
             fail(channels, format!("{id} has channels other than 1, 3 or 4, or is no mask"));
-            let paint = p
-                .paint
-                .as_ref()
-                .is_none_or(|v| p.kind == ParamKind::Mask && matches!(v, Param::Color(_) | Param::Number(_)));
+            let painted = p.kind == ParamKind::Mask || p.tool.is_some();
+            let paint =
+                p.paint.as_ref().is_none_or(|v| painted && matches!(v, Param::Color(_) | Param::Number(_)));
             fail(paint, format!("{id} paints with something other than a color or a number, or is no mask"));
+            let tool = p.tool.is_none() || p.kind == ParamKind::Texture;
+            fail(tool, format!("{id} names a tool but is no texture"));
             for (o, what) in [(&p.yields_to, "yields to"), (&p.waits_for, "waits for")] {
                 let other = o.as_ref().is_none_or(|o| o != id && self.param(o).is_some());
                 fail(other, format!("{id} {what} no other parameter of the effect"));

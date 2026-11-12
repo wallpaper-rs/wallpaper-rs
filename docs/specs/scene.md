@@ -1016,9 +1016,9 @@ Positions such as `center` and `source` are fractions of the layer (of the canva
 layer, which also places its masks and images there), and a `follow` flag hands them to the pointer
 while it is on the output and eases them back within a quarter second after it leaves.
 `tilt_shift` blurs outside a band, or by depth when `depth` names an image. `depth_parallax` shifts
-each point by `(depth - focus) × strength` pixels towards the pointer (`follow`) or along a slow
+each point by `(depth - focus) × strength` pixels, times `scale` on each axis (−1 to 1, so a parallax may move less or the other way up and down than across), towards the pointer (`follow`; with `smooth` the pointer as `canvas.parallax` eases it, with its `delay`, so the depth moves together with the parallax of the layers) or along a slow
 orbit (`orbit`, which also takes over while the pointer is away), searching its `depth` image (a
-`linear` asset, bright is near) in 8 to 16 `steps`, fewer at lower quality levels, so that near
+`linear` asset, bright is near) in 8 to 24 `steps` (16 by default; 24 costs half as much again at Q3 only), at most 12 at Q2 and 8 at Q1, so that near
 parts slide over far ones without tearing; `overscan` enlarges the layer to keep its edges out of
 sight (still pictures with a parallax of their own use depth layers computed once instead, in which what a near object uncovers is filled with background; see "Depth layers" in `dbus.md`). While it would move nothing (no orbit, no `overscan` and the pointer away, centred or not
 followed, or a `strength` of zero) the frame leaves it out, so it costs no pass; the phone, whose
@@ -1093,7 +1093,7 @@ Every shader starts from one prelude. `frame` holds `time`, `dt`, `resolution`, 
 `inside` (1 while the pointer is on the output), `presence` (`inside` eased over a quarter second),
 `bass`, `mid`, `treble`, `level`, `beat`,
 `since_beat` (seconds since the last beat), `seed`,
-`quality` and 64 audio bands (`band(i)`). The samplers are `samp` (clamped) and `wrap` (repeating);
+`quality`, 64 audio bands (`band(i)`) and `glide` (the pointer as `canvas.parallax` eases it with its `delay`, from −1 to 1 on each axis, 0 in the middle; reading it needs the pointer). The samplers are `samp` (clamped) and `wrap` (repeating);
 `lut_tex` is the 3D texture of the first `lut` parameter, read with `lut(rgb)`. Helpers: `tap(uv)`,
 `sample(t, uv)`, `px(pixels)`, `mask_at(uv)`, `layer_uv(uv)` and its inverse `from_layer(uv)`,
 `asset_at(t, uv)` (an asset placed on the layer, such as a depth map), `cursor_uv()`,
@@ -1415,6 +1415,7 @@ rules are also what a phone or a laptop on battery draws.
 | `blur` | `blend` (`normal`) and `amount` (0 to 1) mix the blurred picture back into the sharp one |
 | `blur_motion` | `follow`, `shutter` (0 to 0.5 s) |
 | `chromatic_aberration` | `mode` (0 grows with the distance from `center`, 1 the same shift along `angle`, 2 the same shift away from `center`, 3 grows with the square of the distance), `angle` (−360 to 360) |
+| `depth_parallax` | `scale` (−1 to 1 on each axis, 1 by default; a vector handle on the canvas), `smooth` (follows the pointer as `canvas.parallax` eases it) |
 | `film_grain` | `mono` (black and white film), `bias` (−1 to 1, more grain in dark or bright parts), `blend` (`overlay`, the lightness grain as before; any other mode blends a grey noise) |
 | `flow` | `noise` (a built-in flow field when no map is given, as long as `direction`), `phase` |
 | `god_rays` | `mode` (0 radial, 1 along `angle`, 2 a star of `edges` rays from every bright part, at most 8 at Q1), `angle` (−360 to 360), `noise` (0 to 1, a flicker that needs time while not zero), `edges` (2 to 16) |
