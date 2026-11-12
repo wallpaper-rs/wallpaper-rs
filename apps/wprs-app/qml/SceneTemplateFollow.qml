@@ -32,7 +32,7 @@ ColumnLayout {
 
     visible: node !== null && meshes.length > 0
     Binding {
-        target: follow.page
+        target: follow.page.mesh
         property: "following"
         value: follow.visible ? follow.mesh : ""
     }

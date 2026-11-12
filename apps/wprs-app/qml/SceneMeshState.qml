@@ -5,6 +5,7 @@ QtObject {
 
     required property var page
     property string layer
+    property string following
     property string rigging
     property var sculpt: null
     property var weighing: null

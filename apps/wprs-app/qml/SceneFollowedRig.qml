@@ -8,7 +8,7 @@ Item {
     required property var page
     required property real ratio
     readonly property var chosen: (page.view.gizmos ?? []).find(g => g.pointer === page.editor.selected) ?? null
-    readonly property var rows: page.following !== "" && chosen ? (page.view.followed ?? []).filter(g => g.id === page.following) : []
+    readonly property var rows: page.mesh.following !== "" && chosen ? (page.view.followed ?? []).filter(g => g.id === page.mesh.following) : []
 
     anchors.fill: parent
 
