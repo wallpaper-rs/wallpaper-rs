@@ -13,7 +13,7 @@ fn folded(steps: Vec<Step>) -> Option<Step> {
             label.push(&step.label);
         }
     }
-    let label = label.join(", ");
+    let label = if label.len() == 1 { label[0].to_owned() } else { "batch".to_owned() };
     let undo = steps.iter().rev().flat_map(|s| s.undo.iter().cloned()).collect();
     let redo = steps.iter().flat_map(|s| s.redo.iter().cloned()).collect();
     let size = steps.iter().map(|s| s.size).sum();

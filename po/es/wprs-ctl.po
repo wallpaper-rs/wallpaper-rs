@@ -22,6 +22,82 @@ msgstr ""
 "dispositivo que tuvo la clave de nombres y tiene el mismo archivo aún puede "
 "saber que la cuenta lo guarda, incluso después de revocarlo."
 
+#: apps/wprs-ctl/src/acting.rs
+msgid ""
+"Arguments of the action as a JSON object; - reads them from the standard "
+"input; {} when omitted"
+msgstr ""
+"Argumentos de la acción como objeto JSON; - los lee de la entrada estándar; "
+"{} si se omiten"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Read the JSON from this file instead of the argument"
+msgstr "Leer el JSON de este archivo en vez del argumento"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid ""
+"Apply any editor action to a scene folder, as the app does; the name batch "
+"takes a JSON list of {action: arguments} and applies them as one undo step"
+msgstr ""
+"Aplicar cualquier acción del editor a una carpeta de escena, como lo hace la "
+"aplicación; el nombre batch toma una lista JSON de {acción: argumentos} y "
+"las aplica como un solo paso de deshacer"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Action name, such as add_layer or set, or batch for a list of actions"
+msgstr ""
+"Nombre de la acción, como add_layer o set, o batch para una lista de acciones"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Print the operations that changed the document as JSON"
+msgstr "Imprimir como JSON las operaciones que cambiaron el documento"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid ""
+"List the editor actions with a line each, or show the arguments and an "
+"example of one; with --queries, the same for the questions scene ask answers"
+msgstr ""
+"Listar las acciones del editor con una línea cada una, o mostrar los "
+"argumentos y un ejemplo de una; con --queries, lo mismo para las preguntas "
+"que responde scene ask"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid ""
+"Action (or with --queries, query) to describe; every one is listed when "
+"omitted"
+msgstr ""
+"Acción (o con --queries, consulta) que se describe; si se omite, se listan "
+"todas"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Describe the queries of scene ask instead of the actions"
+msgstr "Describir las consultas de scene ask en vez de las acciones"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Print the list, or the JSON schema of the arguments, as JSON"
+msgstr "Imprimir la lista, o el esquema JSON de los argumentos, como JSON"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid ""
+"Ask the editor a question about a scene folder, as the app does, and print "
+"the reply as JSON"
+msgstr ""
+"Hacerle al editor una pregunta sobre una carpeta de escena, como lo hace la "
+"aplicación, e imprimir la respuesta como JSON"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Query name; wprs-ctl scene actions --queries lists them"
+msgstr "Nombre de la consulta; wprs-ctl scene actions --queries las lista"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Arguments of the query as JSON; - reads them from the standard input"
+msgstr "Argumentos de la consulta como JSON; - los lee de la entrada estándar"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "Layer the query is about when its arguments do not name one"
+msgstr ""
+"Capa sobre la que trata la consulta cuando sus argumentos no nombran una"
+
 #: apps/wprs-ctl/src/applying.rs
 msgid "Spread it over every screen, as --fit span"
 msgstr "Extenderlo sobre todas las pantallas, como --fit span"
@@ -180,8 +256,8 @@ msgstr "JSON Pointer de su lugar nuevo"
 msgid ""
 "The module, a .js file; omit it with --template for the template's own name"
 msgstr ""
-"El módulo, un archivo .js; omítelo con --template para que tome el nombre "
-"de la plantilla"
+"El módulo, un archivo .js; omítelo con --template para que tome el nombre de "
+"la plantilla"
 
 #: apps/wprs-ctl/src/author.rs
 msgid ""
@@ -1811,8 +1887,8 @@ msgstr "Un parámetro que toma el control mientras no es cero, o un valor vacío
 msgid ""
 "Print the relative cost of an effect of a layer's stack at each quality level"
 msgstr ""
-"Imprimir el coste relativo de un efecto en la pila de una capa en cada "
-"nivel de calidad"
+"Imprimir el coste relativo de un efecto en la pila de una capa en cada nivel "
+"de calidad"
 
 #: apps/wprs-ctl/src/flying.rs
 msgid ""
@@ -2265,7 +2341,8 @@ msgstr "Posición como X,Y en fracciones de la pantalla, 0..=1 para cada una"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid "Bitmask of held buttons: 1 left, 2 right, 4 middle"
-msgstr "Máscara de bits de los botones presionados: 1 izquierdo, 2 derecho, 4 central"
+msgstr ""
+"Máscara de bits de los botones presionados: 1 izquierdo, 2 derecho, 4 central"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid "Stop the simulated pointer"
@@ -5104,8 +5181,8 @@ msgstr ""
 msgid ""
 "Hand an online author to a new key with the signature pack rotate-key printed"
 msgstr ""
-"Traspasar un autor en línea a una clave nueva con la firma que imprimió "
-"pack rotate-key"
+"Traspasar un autor en línea a una clave nueva con la firma que imprimió pack "
+"rotate-key"
 
 #: apps/wprs-ctl/src/repo/authors.rs
 msgid "Fingerprint of the key that signed the earlier versions"

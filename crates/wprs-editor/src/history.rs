@@ -177,6 +177,7 @@ pub fn step(name: &str) -> Message {
         "remove_property" => said("editor.step.remove_property", "Remove a property", &[]),
         "condition" => said("editor.step.condition", "Change a condition", &[]),
         "add_preset" => said("editor.step.add_preset", "Add a preset", &[]),
+        "batch" => said("editor.step.batch", "Several changes", &[]),
         "sync" => said("editor.step.sync", "Update what the package uses", &[]),
         other => said("editor.step", "%1", &[&other]),
     }

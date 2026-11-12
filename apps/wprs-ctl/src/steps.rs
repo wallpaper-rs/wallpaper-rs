@@ -16,20 +16,36 @@ pub(crate) fn value(text: &str) -> Value {
 }
 
 pub(crate) fn edit(dir: &Path, action: Action) -> Result<()> {
+    edit_all(dir, vec![action], false)
+}
+
+pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<()> {
     let mut project = Project::open(dir)?;
-    let undoing = matches!(action, Action::Undo {} | Action::Redo {});
-    let named = match &action {
-        Action::RenameProperty { id, .. }
-        | Action::RemoveProperty { id }
-        | Action::Particles(ParticleEdit::Sow(SowEdit::Rename { system: id, .. })) => {
-            references::scripts(&project.dir, &project.doc, id).into_iter().map(|p| (p, id.clone())).collect()
-        }
-        _ => Vec::new(),
-    };
-    let ops = project.act(&action)?;
+    let single = actions.len() == 1;
+    let action = actions.first().cloned().unwrap_or(Action::Undo {});
+    let undoing = single && matches!(action, Action::Undo {} | Action::Redo {});
+    let named: Vec<(String, String)> = actions
+        .iter()
+        .flat_map(|action| match action {
+            Action::RenameProperty { id, .. }
+            | Action::RemoveProperty { id }
+            | Action::Particles(ParticleEdit::Sow(SowEdit::Rename { system: id, .. })) => {
+                references::scripts(&project.dir, &project.doc, id)
+                    .into_iter()
+                    .map(|p| (p, id.clone()))
+                    .collect()
+            }
+            _ => Vec::new(),
+        })
+        .collect();
+    let ops = if single { project.act(&action)? } else { project.act_all(&actions)? };
     ensure!(!(undoing && ops.is_empty()), "there is nothing to {}", action.name());
     project.save()?;
     named.iter().for_each(|(path, id)| eprintln!("warning: {path} names {id:?}; scripts are not rewritten"));
+    if json {
+        println!("{}", serde_json::to_string_pretty(&json!({ "ops": ops }))?);
+        return Ok(());
+    }
     let added = ops.iter().filter_map(|op| match op {
         Op::Add { path, value } => {
             Some(value["id"].as_str().unwrap_or(path.rsplit('/').next().unwrap_or_default()))
@@ -38,6 +54,13 @@ pub(crate) fn edit(dir: &Path, action: Action) -> Result<()> {
     });
     let added: Vec<&str> = added.collect();
     match action {
+        _ if !single => ops
+            .iter()
+            .filter_map(|op| match op {
+                Op::Add { value, .. } => value["id"].as_str(),
+                _ => None,
+            })
+            .for_each(|id| println!("{id}")),
         Action::Import { .. } => added.last().iter().for_each(|id| println!("{id}")),
         Action::AddPreset { .. } => {
             let last = project.doc["manifest"]["presets"].as_array().and_then(|l| l.last());

@@ -1,5 +1,6 @@
 mod about;
 mod account;
+mod acting;
 mod animated;
 mod applying;
 mod args;
