@@ -14,6 +14,11 @@ pub enum Grabbed {
         #[serde(default)]
         aim: bool,
     },
+    Light {
+        layer: String,
+        #[serde(default)]
+        aim: bool,
+    },
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
@@ -30,6 +35,16 @@ pub enum Handle {
     Orbit,
     Dolly,
     Roll,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(default, deny_unknown_fields)]
+pub struct LightPlace {
+    pub layer: String,
+    pub position: Option<[f64; 3]>,
+    pub aim: Option<[f64; 3]>,
+    pub place: bool,
+    pub flat: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]

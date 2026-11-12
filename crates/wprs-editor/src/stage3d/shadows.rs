@@ -7,7 +7,7 @@ use serde_json::{Value, json};
 use std::path::Path;
 use std::sync::Arc;
 use wprs_core::message::said;
-use wprs_scene::{Beam, Eye, Lamp, MAX_SHADOWS, Quality, Runtime, Stage3d, Tier, Values, shadow_side, unit3};
+use wprs_scene::{Beam, Lamp, MAX_SHADOWS, Quality, Runtime, Stage3d, Tier, Values, shadow_side, unit3};
 
 const TIERS: [Tier; 4] = [Tier::T0, Tier::T1, Tier::T2, Tier::T3];
 
@@ -53,17 +53,9 @@ pub(crate) fn edit(doc: &Value, e: &ShadowEdit) -> Result<Vec<Op>> {
     Ok(ops)
 }
 
-fn turn(eye: &Eye, [x, y, z]: [f32; 3]) -> [f32; 3] {
-    let (r, u, f) = eye.basis();
-    unit3(std::array::from_fn(|i| r[i] * x - u[i] * y - f[i] * z))
-}
-
 fn lines(seen: &Seen, stage: &Stage3d, lamp: &Lamp, (mid, r): ([f32; 3], f32)) -> Vec<Value> {
     let eye = &stage.eye;
-    let local = stage.world.inverse().apply(lamp.at());
-    let p = [local[0] + stage.origin[0] * stage.size[0], local[1] + stage.origin[1] * stage.size[1]];
-    let at = eye.place(p, lamp.z, stage.size);
-    let dir = turn(eye, lamp.heading());
+    let (at, dir) = wprs_scene::lamp3d(stage, eye, lamp);
     let side = unit3(if dir[1].abs() > 0.9 { [1.0, 0.0, 0.0] } else { [-dir[2], 0.0, dir[0]] });
     let up = unit3([
         dir[1] * side[2] - dir[2] * side[1],

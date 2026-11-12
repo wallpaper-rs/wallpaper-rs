@@ -5,12 +5,14 @@ use crate::{Affine, Color, Kind, Layer, Lean, Quality, Wake};
 use std::borrow::Cow;
 
 mod drawn;
+mod lamp3d;
 pub(crate) mod lamps;
 mod rest;
 mod shown;
 pub(crate) mod staged;
 
 pub use drawn::{Content, Draw, EffectDraw, Frame, Lit};
+pub use lamp3d::lamp3d;
 use shown::{content, masked, strength};
 pub use staged::paths::spline::centripetal;
 pub use staged::paths::{at_time as path_pose, period as path_period, play as play_paths, sequence};

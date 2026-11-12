@@ -2417,6 +2417,18 @@ msgstr "no hay ningún recorrido de cámara «%1»"
 msgid "the path has no key at %1 s"
 msgstr "el recorrido no tiene ninguna clave a los %1 s"
 
+#: crates/wprs-editor/src/stage3d/grab/lit.rs
+msgid "%1 is not a light"
+msgstr "%1 no es una luz"
+
+#: crates/wprs-editor/src/stage3d/grab/lit.rs
+msgid "%1 does not light a 3D view now"
+msgstr "%1 no ilumina ahora ninguna vista 3D"
+
+#: crates/wprs-editor/src/stage3d/grab/lit.rs
+msgid "a point of a light is within a million units"
+msgstr "un punto de una luz está dentro del millón de unidades"
+
 #: crates/wprs-editor/src/stage3d/maps.rs
 msgid ""
 "%1 is not a map of a material; use base, orm, normal, occlusion, emissive or "

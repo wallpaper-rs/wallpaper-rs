@@ -568,6 +568,8 @@ out`), as the effects are.
 | `shadows` | point, spot and directional lights: `true` casts shadows of models on models whose materials take them; at most 2 lights per scene (`shadows`), see "Models and 3D" |
 | `shadow_resolution` | with `shadows`: 256 to 4096 pixels a side of its map (for point lights, of each of its six faces) instead of the size picked for its kind |
 | `shadow_bias` | with `shadows`: 0 to 1 (default 0.2), how far surfaces lift away from their own shadow; raise it against stripes, lower it when shadows leave their casters |
+| `position3d` | `[x, y, z]` in the units of the models (may be keyed or bound): where the light stands among the models, in the space of every 3D group and lone model; without it the light stands on the plane of the camera (see "Models"). Flat layers keep using the place of the light layer |
+| `aim3d` | `[x, y, z]` (may be keyed or bound): the point a spot or directional light shines at, or the direction of a tube, among the models; without it the heading of the layer, turned with the camera, gives the direction |
 
 A spot or directional light with no rotation points down the canvas and turns clockwise with
 `rotation`; the first number of `transform.tilt` (−89 to 89 degrees) dips it into the canvas, so
@@ -824,10 +826,14 @@ only they pay. Fur casts the shadow of its length at Q2 and Q3: each shadow map 
 one more shell at six tenths of the length, cut to its `density` (as many triangles again as the
 skin for each face of the map, only when the map is drawn again); at Q0 and Q1 it casts its skin only.
 
-Light layers light the models as they light flat layers: each light stands on the plane through the
-point the camera looks at, under the point of the box where it is drawn, moved toward the viewer by
-its `z`, with its radius and length in pixels of that plane; directional lights shine along their
-heading, and the light around and from above (`canvas.ambient` and `canvas.sky`) comes from below and
+Light layers light the models as they light flat layers: each light without `position3d` stands on
+the plane through the point the camera looks at, under the point of the box where it is drawn, moved
+toward the viewer by its `z`, with its radius and length in pixels of that plane; a light with
+`position3d` stands at that point among the models whatever the camera does, so it can stand behind or
+beside a model, and with `aim3d` a spot or a directional light shines from it toward that point (its
+radius and length are still pixels of the plane through the point the camera looks at). Both cost
+nothing more at any quality level: the place of each light is worked out once a frame on the CPU.
+Directional lights shine along their heading, and the light around and from above (`canvas.ambient` and `canvas.sky`) comes from below and
 from the up of the camera. At most 12 lights count (8 on T0 and T1). A scene without lights, light
 around or sky and without `env` lights its models with a soft light from above the camera on the left,
 so that a model never shows black.

@@ -65,6 +65,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
         Edit3d::Shadows(s) => shadows::edit(doc, s),
         Edit3d::Path(p) => paths::edit(dir, doc, p),
         Edit3d::Grab(g) => grab::grab(dir, doc, g),
+        Edit3d::Light(l) => grab::place(dir, doc, l),
         Edit3d::NewMaterial { name } => newmat::create(dir, doc, name),
         Edit3d::MaterialCode { name, text } => newmat::write(dir, doc, name, text),
         Edit3d::Key(k) => picked::key_from(dir, doc, k),

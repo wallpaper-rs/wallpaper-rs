@@ -1,6 +1,6 @@
 use super::super::item::linear;
 use bytemuck::{Pod, Zeroable};
-use wprs_scene::{Beam, Color, Eye, Frame, Lamp, MAX_LIGHTS, Quality, Stage3d, unit3};
+use wprs_scene::{Color, Eye, Frame, Lamp, MAX_LIGHTS, Quality, Stage3d, unit3};
 
 #[repr(C)]
 #[derive(Debug, Clone, Copy, Default, PartialEq, Pod, Zeroable)]
@@ -73,18 +73,8 @@ fn turn(eye: &Eye, [x, y, z]: [f32; 3]) -> [f32; 3] {
 }
 
 pub(crate) fn light_from(stage: &Stage3d, eye: &Eye, lamp: &Lamp) -> Light3 {
-    let local = stage.world.inverse().apply(lamp.at());
-    let px = [local[0] + stage.origin[0] * stage.size[0], local[1] + stage.origin[1] * stage.size[1]];
-    let at = eye.place(px, lamp.z, stage.size);
+    let (at, dir) = wprs_scene::lamp3d(stage, eye, lamp);
     let unit = eye.unit(stage.size[1]);
-    let heading = lamp.heading();
-    let dir = match lamp.beam {
-        Beam::Tube => {
-            let [a, b, ..] = lamp.world.0;
-            turn(eye, [a, b, 0.0])
-        }
-        _ => turn(eye, heading),
-    };
     let cos = |deg: f32| (deg * 0.5).to_radians().cos();
     let (outer, inner) = (cos(lamp.cone[1]), cos(lamp.cone[0]));
     let mut color = tone(lamp.color, lamp.intensity);

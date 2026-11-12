@@ -102,6 +102,11 @@ Item {
         stage: stage
     }
 
+    SceneStageLamps {
+        anchors.fill: parent
+        stage: stage
+    }
+
     SceneStageBrush3d {
         anchors.fill: parent
         z: 2

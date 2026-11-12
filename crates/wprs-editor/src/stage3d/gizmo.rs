@@ -163,6 +163,7 @@ pub fn stage(dir: &Path, doc: &Value, t: f64) -> Value {
                 "up": seen.at(up).map(px), "rig": super::rings::camera(&seen, &cam) });
         }
     }
+    let lights = seen_at(doc, &frame, 0).map(|s| super::grab::listed(doc, &s, &frame)).unwrap_or_default();
     let groups: Vec<String> = crate::layers::walk(doc)
         .into_iter()
         .filter(|(_, l)| l["type"] == "group" && l["space"] == "3d")
@@ -179,5 +180,5 @@ pub fn stage(dir: &Path, doc: &Value, t: f64) -> Value {
     let scene_camera = json!({ "eye": c.at.map(round), "center": c.center.map(round), "up": c.up.map(round), "fov": round(c.fov),
         "near": round(c.near), "far": round(c.far) });
     json!({ "size": size, "view": view.json(), "through": view.through, "camera": scene_camera, "models": models,
-        "frustum": lines, "handles": handles, "flat": flat, "stages": frame.stages.len() })
+        "frustum": lines, "handles": handles, "flat": flat, "lights": lights, "stages": frame.stages.len() })
 }

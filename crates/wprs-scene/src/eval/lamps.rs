@@ -28,6 +28,8 @@ pub struct Lamp<'a> {
     pub slot: usize,
     pub within: usize,
     pub shadow: Option<(Option<u32>, f32)>,
+    pub space: Option<[f32; 3]>,
+    pub aim: Option<[f32; 3]>,
 }
 
 impl Lamp<'_> {
@@ -132,6 +134,8 @@ fn lamp<'a>(
         shadow: l
             .shadows
             .then(|| (l.shadow_resolution, l.shadow_bias.unwrap_or(SHADOW_BIAS).clamp(0.0, 1.0))),
+        space: l.position3d.as_ref().map(|v| v.get(cx).0.map(|x| x.clamp(-1e6, 1e6))),
+        aim: l.aim3d.as_ref().map(|v| v.get(cx).0.map(|x| x.clamp(-1e6, 1e6))),
     })
 }
 

@@ -7122,6 +7122,24 @@ msgstr "Rugosidad"
 msgid "Reflection"
 msgstr "Reflejo"
 
+#: apps/wprs-app/qml/SceneLights3d.qml
+msgid "Lights in 3D"
+msgstr "Luces en 3D"
+
+#: apps/wprs-app/qml/SceneLights3d.qml
+msgid ""
+"A light in 3D stands at its own point among the models and a spot points at "
+"its aim; on the plane it follows the light layer and its height. Drag its "
+"knobs in the authoring view, with Ctrl along the line of sight."
+msgstr ""
+"Una luz en 3D está en su propio punto entre los modelos y un foco apunta a "
+"su mira; en el plano sigue a la capa de luz y su altura. Arrastra sus "
+"perillas en la vista de autor; con Ctrl, por la línea de visión."
+
+#: apps/wprs-app/qml/SceneLights3d.qml
+msgid "%1 in 3D"
+msgstr "%1 en 3D"
+
 #: apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "air at %1 of the size, %2 taps"
 msgstr "aire a %1 del tamaño, %2 lecturas"
@@ -9404,7 +9422,7 @@ msgstr ""
 "Arrastra para mover la cámara de la escena en el plano de la vista; con "
 "Ctrl, por la línea de visión"
 
-#: apps/wprs-app/qml/SceneStageCamera.qml
+#: apps/wprs-app/qml/SceneStageCamera.qml apps/wprs-app/qml/SceneStageLamps.qml
 msgid "Aim"
 msgstr "Mira"
 
@@ -9415,6 +9433,26 @@ msgid ""
 msgstr ""
 "Arrastra para mover lo que mira la cámara de la escena en el plano de la "
 "vista; con Ctrl, por la línea de visión"
+
+#: apps/wprs-app/qml/SceneStageLamps.qml
+msgid ""
+"Drag to move this light among the models in the plane of the view, with Ctrl "
+"along the line of sight"
+msgstr ""
+"Arrastra para mover esta luz entre los modelos en el plano de la vista; con "
+"Ctrl, por la línea de visión"
+
+#: apps/wprs-app/qml/SceneStageLamps.qml
+msgid "This light follows its layer on the plane; drag it to place it in 3D"
+msgstr "Esta luz sigue a su capa en el plano; arrástrala para ponerla en 3D"
+
+#: apps/wprs-app/qml/SceneStageLamps.qml
+msgid ""
+"Drag to move the point this light points at, with Ctrl along the line of "
+"sight"
+msgstr ""
+"Arrastra para mover el punto al que apunta esta luz; con Ctrl, por la línea "
+"de visión"
 
 #: apps/wprs-app/qml/SceneStagePaths.qml
 msgid ""

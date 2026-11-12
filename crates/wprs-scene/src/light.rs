@@ -52,6 +52,10 @@ pub struct Light {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[schemars(extend("x-range" = [0, 1]))]
     pub shadow_bias: Option<f32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub position3d: Option<Value<crate::Vec3>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub aim3d: Option<Value<crate::Vec3>>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, JsonSchema)]

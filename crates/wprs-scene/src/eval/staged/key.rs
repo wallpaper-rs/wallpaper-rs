@@ -30,6 +30,8 @@ pub fn seal<'a>(cx: &Context<'a>, frame: &mut Frame<'a>) {
         floats(&mut lights, &l.color.0);
         let shadow = l.shadow.map_or([-1.0; 2], |s| [s.0.map_or(0.0, |r| r as f32), s.1]);
         floats(&mut lights, &shadow);
+        floats(&mut lights, &l.space.unwrap_or([f32::NAN; 3]));
+        floats(&mut lights, &l.aim.unwrap_or([f32::NAN; 3]));
     }
     for c in [frame.ambient, frame.sky].iter().flatten() {
         floats(&mut lights, &c.0);

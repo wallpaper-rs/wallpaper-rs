@@ -11,6 +11,9 @@ use wprs_scene::grip::{along, deepen, dolly, orbit, slide, turn};
 use wprs_scene::{Quality, Runtime, Values};
 
 mod aimed;
+mod lit;
+
+pub(crate) use lit::{listed, place};
 
 pub(super) type V3 = [f32; 3];
 
@@ -121,6 +124,7 @@ pub(crate) fn grab(dir: &Path, doc: &Value, g: &Grab) -> Result<Vec<Op>> {
         Grabbed::Model { layer } => model(dir, doc, g, layer),
         Grabbed::Eye | Grabbed::Center => aimed::camera(doc, &held(dir, doc, g)?),
         Grabbed::Key { path, key, aim } => aimed::key(dir, doc, &held(dir, doc, g)?, path, *key, *aim),
+        Grabbed::Light { layer, aim } => lit::light(dir, doc, &held(dir, doc, g)?, layer, *aim),
     }
 }
 
