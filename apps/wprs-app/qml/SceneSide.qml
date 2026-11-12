@@ -10,31 +10,28 @@ ColumnLayout {
     property alias tabs: side
     property alias settings: settings
 
-    QQC2.TabBar {
+    Flow {
         id: side
+
+        property int currentIndex: 0
 
         Layout.fillWidth: true
         Layout.minimumWidth: 0
         Layout.preferredWidth: 0
 
-        QQC2.TabButton {
-            text: App.tr("Layers")
-        }
+        Repeater {
+            model: [App.tr("Layers"), App.tr("Assets"), App.tr("Package"), App.tr("Player"), App.tr("Try")]
 
-        QQC2.TabButton {
-            text: App.tr("Assets")
-        }
+            delegate: QQC2.ToolButton {
+                required property int index
+                required property string modelData
 
-        QQC2.TabButton {
-            text: App.tr("Package")
-        }
-
-        QQC2.TabButton {
-            text: App.tr("Player")
-        }
-
-        QQC2.TabButton {
-            text: App.tr("Try")
+                text: modelData
+                checkable: true
+                autoExclusive: true
+                checked: side.currentIndex === index
+                onClicked: side.currentIndex = index
+            }
         }
     }
 
