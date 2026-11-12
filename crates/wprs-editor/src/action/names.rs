@@ -69,7 +69,6 @@ pub const ACTIONS: [&str; 69] = [
     "template",
     "pool",
     "uses",
-    "uses",
     "undo",
     "redo",
 ];

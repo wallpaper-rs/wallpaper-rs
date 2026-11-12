@@ -75,10 +75,6 @@ pub const ABOUT: [(&str, &str); 69] = [
         "uses",
         "Declare the parts of the scripting interface a script uses, or take undeclared ones from its source",
     ),
-    (
-        "uses",
-        "Declare the parts of the scripting interface a script uses, or take undeclared ones from its source",
-    ),
     ("undo", "Undo the last change"),
     ("redo", "Redo the last undone change"),
 ];

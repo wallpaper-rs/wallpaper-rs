@@ -185,7 +185,6 @@ pub enum Action {
     Template(TemplateEdit),
     Pool(PoolEdit),
     Uses(UsesEdit),
-    Uses(UsesEdit),
     Undo {},
     Redo {},
 }
