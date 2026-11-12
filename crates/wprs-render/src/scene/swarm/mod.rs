@@ -85,6 +85,7 @@ pub(crate) struct Swarms {
     pub(crate) micros: u32,
     pub(crate) created: u32,
     serial: u64,
+    pub(crate) shown: bool,
     gpu: bool,
     profile: bool,
     kits: Vec<Kit>,

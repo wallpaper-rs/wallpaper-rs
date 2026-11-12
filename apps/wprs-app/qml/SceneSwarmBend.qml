@@ -62,12 +62,7 @@ ColumnLayout {
         visible: bend.bent !== null
         text: App.tr("Show the displacement over the preview")
         checked: SceneSwarmGlow.shown
-        onToggled: {
-            SceneSwarmGlow.shown = checked;
-            SceneSwarmCensus.shown = checked || SceneSwarmCensus.shown;
-            if (checked)
-                SceneSwarmCensus.measure(bend.page, bend.light.tools.system, null);
-        }
+        onToggled: SceneSwarmGlow.view(bend.page, checked)
     }
 
     SceneRepeater {

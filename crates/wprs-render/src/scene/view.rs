@@ -128,6 +128,13 @@ impl SceneView {
         again
     }
 
+    pub fn show_shift(&mut self, on: bool) {
+        if let Some(swarms) = self.swarms.as_mut().filter(|s| s.shown != on) {
+            swarms.shown = on;
+            self.marks.clear();
+        }
+    }
+
     pub fn time_passes(&mut self, on: bool) {
         self.timed = on;
     }

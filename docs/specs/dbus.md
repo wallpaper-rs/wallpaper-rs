@@ -451,6 +451,9 @@ package: properties it leaves out take their defaults, and an unknown or invalid
 in the saved settings. Nothing of it is saved, and a call with another map shows the package again
 without building it again. The lines the page writes to `console` and its errors are
 in `GetState().previews[x].console` of a `preview:` output. A `time` of 0 or more
+made-up track for `window.wprs.onMedia`. For a scene, `preview.quality` caps its level the same way and `preview.shift` set to
+`true` draws the displacement of refracting particles instead of bending what is behind them (see
+`editor.md`). The lines the page writes to `console` and its errors are
 holds the scene at that second (up to 86400, a day), as a still frame that only renders again when the call changes;
 a negative `time` plays it. The scene is checked for what it needs to render: the id, the user
 properties, the presets and the scene itself, while texts, rating, origin and credits may still be

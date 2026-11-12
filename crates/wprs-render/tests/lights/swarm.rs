@@ -13,7 +13,16 @@ fn lamp(x: f32) -> Value {
     json!({ "id": "lamp", "type": "light", "transform": { "position": [x, 45] }, "z": 20, "radius": 60, "intensity": 2 })
 }
 
-fn shot(render: Value, mut layers: Vec<Value>, gpu: bool, quality: Quality) -> Option<image::RgbaImage> {
+fn shot(render: Value, layers: Vec<Value>, gpu: bool, quality: Quality) -> Option<image::RgbaImage> {
+    shown(render, layers, (gpu, false), quality)
+}
+
+fn shown(
+    render: Value,
+    mut layers: Vec<Value>,
+    (gpu, shift): (bool, bool),
+    quality: Quality,
+) -> Option<image::RgbaImage> {
     let r = renderer()?;
     layers.push(json!({ "id": "p", "type": "particles", "system": "s" }));
     let canvas = json!({ "size": [160, 90], "background": "#000000" });
@@ -27,6 +36,7 @@ fn shot(render: Value, mut layers: Vec<Value>, gpu: bool, quality: Quality) -> O
     if !shot.view.set_gpu_particles(r, gpu) {
         return None;
     }
+    shot.view.show_shift(shift);
     shot.pixels(r, quality);
     shot.runtime.advance(1.0 / 30.0);
     Some(shot.pixels(r, quality))
@@ -115,5 +125,22 @@ fn lit_particles_take_the_picture_a_spot_projects() {
         let (left, right) = (at(&cast, 70, 45), at(&cast, 90, 45));
         assert!(right[0] > left[0] + 40, "gpu {gpu}: {left:?} {right:?}");
         assert!(at(&plain, 70, 45)[0] > left[0] + 40, "gpu {gpu}: {:?}", at(&plain, 70, 45));
+    }
+}
+
+#[test]
+fn the_shift_view_paints_the_bend_of_refracting_particles_over_a_dimmed_scene() {
+    let back = json!({ "id": "back", "type": "image", "image": "wall", "size": [160, 90],
+        "transform": { "position": [80, 45] } });
+    let bend = json!({ "refract": { "normal": "bump", "amount": 1 } });
+    for gpu in [false, true] {
+        let Some(view) = shown(bend.clone(), vec![back.clone()], (gpu, true), Quality::Q3) else { continue };
+        let Some(plain) = shot(bend.clone(), vec![back.clone()], gpu, Quality::Q3) else { continue };
+        let (inside, off) = (at(&view, 80, 45), at(&view, 10, 10));
+        assert!(inside[0] > 200 && inside[2] > 200, "gpu {gpu}: a shift to the right reads red: {inside:?}");
+        assert!(
+            u16::from(off[0]) + 40 < u16::from(at(&plain, 10, 10)[0]),
+            "gpu {gpu}: the scene is dimmed: {off:?}"
+        );
     }
 }

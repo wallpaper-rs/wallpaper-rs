@@ -140,6 +140,7 @@ impl Daemon {
         let cap = serde_json::from_value(doc["preview"]["quality"].clone()).ok();
         let (battery, calm) = (doc["preview"]["battery"] == true, doc["preview"]["calm"] == true);
         let probe = super::probe::probed(&doc);
+        let shift = doc["preview"]["shift"] == true;
         Ok(ScenePack {
             path: dir,
             props,
@@ -158,6 +159,7 @@ impl Daemon {
             battery,
             calm,
             probe,
+            shift,
         })
     }
 }

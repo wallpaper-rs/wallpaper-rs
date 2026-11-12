@@ -8,8 +8,8 @@ pub fn staged(look: &Value) -> Option<Value> {
     let mut staged = json!({ "quality": quality, "restart": restart });
     media.into_iter().for_each(|m| staged["media"] = m.clone());
     fps.into_iter().for_each(|f| staged["fps"] = f.clone());
-    let flags = ["battery", "calm"].map(|k| look[k] == true);
-    ["battery", "calm"].iter().zip(flags).filter(|(_, on)| *on).for_each(|(k, _)| staged[*k] = json!(true));
+    let flags = ["battery", "calm", "shift"].map(|k| look[k] == true);
+    ["battery", "calm", "shift"].iter().zip(flags).filter(|(_, on)| *on).for_each(|(k, _)| staged[*k] = json!(true));
     (quality.is_some() || restart.is_some() || media.is_some() || fps.is_some() || flags.contains(&true))
         .then_some(staged)
 }

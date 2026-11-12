@@ -154,9 +154,4 @@ Item {
         anchors.fill: parent
         swarm: swarm
     }
-
-    SceneSwarmShift {
-        anchors.fill: parent
-        swarm: swarm
-    }
 }

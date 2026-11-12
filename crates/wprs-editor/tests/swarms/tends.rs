@@ -166,6 +166,8 @@ fn ropes_trails_textures_and_the_budget_follow_the_system() {
     let staged = wprs_editor::rigs::staged(&json!({ "layer": "x", "quality": "q1" }));
     assert_eq!(staged, Some(json!({ "quality": "q1", "restart": null })));
     assert_eq!(wprs_editor::rigs::staged(&json!({ "layer": "x" })), None);
+    let shift = wprs_editor::rigs::staged(&json!({ "shift": true }));
+    assert_eq!(shift, Some(json!({ "quality": null, "restart": null, "shift": true })));
     let _ = before;
 }
 

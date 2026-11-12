@@ -18,6 +18,17 @@ QtObject {
         })) || "null") : null;
     }
 
+    function view(page, on) {
+        shown = on;
+        const look = JSON.parse(page.editor.look || "{}");
+        if (on)
+            look.shift = true;
+        else
+            delete look.shift;
+        page.editor.look = JSON.stringify(look);
+        SceneLook.preview(page);
+    }
+
     function run(page, what, args, gesture) {
         page.run("particles", {
                 [what]: Object.assign({

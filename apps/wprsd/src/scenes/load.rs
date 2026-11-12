@@ -119,6 +119,7 @@ impl Daemon {
             battery: false,
             calm: false,
             probe: None,
+            shift: false,
         });
         let mut st = self.state();
         st.scenes.retain(|_, (_, weak)| weak.strong_count() > 0);

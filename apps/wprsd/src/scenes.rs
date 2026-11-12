@@ -39,6 +39,7 @@ pub struct ScenePack {
     pub battery: bool,
     pub calm: bool,
     pub probe: Option<([f32; 2], [f32; 2])>,
+    pub shift: bool,
 }
 
 pub type Extra = (Vec<(String, Arc<Pixels>)>, Vec<(String, Reel)>);
@@ -74,6 +75,7 @@ impl ScenePack {
             battery: false,
             calm: false,
             probe: None,
+            shift: false,
         }
     }
 }

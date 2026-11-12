@@ -1069,7 +1069,10 @@ reads, with the same rows for phones.
 The particle tools have a Light part: Take the lights of the scene, a normal map picker and a preview
 of a sprite lit from the front and from behind, and Bend what is behind the particles with a normal
 map picker, an amount slider, the displacement map, the shift each quality level keeps and a switch
-that draws the displacement over each particle of the processor simulation on the preview. The
+that makes the renderer draw the displacement of the frame on the preview, whether the particles
+run on the graphics card or the processor: the scene is dimmed and each refracting particle, trail
+or rope shows its shift as a color (red to the right, green up, saturated at 16 px). The app asks
+for it with `preview.shift` in the document of `PreviewScene`; it adds no work while it is off. The
 particle budget lists how many lights light the particles and whether they refract at each level.
 `wprs-ctl scene light … volumetric --show`, `projection --show`, `particles … lit --show`,
 `refract --show` and `lights --cost` print the same data.

@@ -34,3 +34,14 @@ fn fs_refract(in: Out) -> @location(0) vec4<f32> {
     let d = textureSampleLevel(mask_tex, samp, in.uv, 0.0);
     return textureSampleLevel(src_tex, samp, in.uv + d.xy * item.lit_env.zw, 0.0);
 }
+
+@fragment
+fn fs_shift_view(in: Out) -> @location(0) vec4<f32> {
+    let d = textureSampleLevel(mask_tex, samp, in.uv, 0.0);
+    let back = textureSampleLevel(src_tex, samp, in.uv, 0.0);
+    let k = min(d.a, 1.0);
+    let s = clamp(d.xy / max(d.a, 1e-4) / 16.0, vec2<f32>(-1.0), vec2<f32>(1.0));
+    let a = max(back.a, k);
+    let tint = vec3<f32>(0.5 + 0.5 * s.x, 0.5 - 0.5 * s.y, 1.0) * a;
+    return vec4<f32>(mix(back.rgb * 0.35, tint, k), a);
+}

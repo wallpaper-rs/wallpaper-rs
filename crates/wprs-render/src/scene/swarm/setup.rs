@@ -99,6 +99,7 @@ impl Swarms {
             micros: 0,
             created: 0,
             serial: super::lamp::serial(),
+            shown: false,
             gpu,
             profile: false,
             kits: kits.collect(),

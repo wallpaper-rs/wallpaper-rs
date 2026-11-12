@@ -35,7 +35,9 @@ impl Painter<'_, '_, '_> {
         item.lit_env = [0.0, 0.0, 1.0 / w as f32, 1.0 / h as f32];
         let tex = [back, shift, Src::Clear];
         let slot = self.pool.push(&item);
-        self.ops.push(Op::Draw { target: target.src, entry: "fs_refract", mode: Mode::Replace, slot, tex });
+        let shown = self.swarms.as_ref().is_some_and(|s| s.shown);
+        let entry = if shown { "fs_shift_view" } else { "fs_refract" };
+        self.ops.push(Op::Draw { target: target.src, entry, mode: Mode::Replace, slot, tex });
         self.release(back);
         self.release(shift);
     }
