@@ -111,6 +111,7 @@ QtObject {
             "page": page
         });
         doll.shapes();
+        doll.script();
         Qt.createComponent("SceneLimbCheck.qml").createObject(page, {
             "page": page
         }).exercise();

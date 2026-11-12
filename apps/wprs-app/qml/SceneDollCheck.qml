@@ -75,4 +75,18 @@ QtObject {
         page.mesh.shapes = {};
         panel.destroy();
     }
+
+    function script() {
+        const pick = Qt.createComponent("SceneScriptRigPick.qml").createObject(page, {
+                "page": page
+            });
+        const found = pick.ask({
+            "kind": "bone",
+            "name": "limb",
+            "what": "turn"
+        });
+        if (found.code !== 'scene.layer("puppet").bone("limb").rotation = 0;')
+            throw new Error("script calls: " + JSON.stringify(found));
+        pick.destroy();
+    }
 }

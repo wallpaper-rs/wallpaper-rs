@@ -137,6 +137,11 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         }
         _ if q.get("outline").is_some() => outline(dir, doc, id),
         _ if q.get("palette").is_some() => crate::covers::palette(dir, doc, q["palette"].as_str()),
+        _ if q.get("script_calls").is_some() => {
+            let ask = &q["script_calls"];
+            crate::scripts::calls(dir, doc, ask["layer"].as_str().unwrap_or(id), ask)
+                .unwrap_or_else(|e| json!({ "error": e.to_string() }))
+        }
         _ if q.get("wind").is_some() => wind_arrow(doc),
         _ if q.get("rules").is_some() => {
             crate::shaders::rules(dir, doc, q["rules"]["effect"].as_str().unwrap_or(id))

@@ -81,6 +81,17 @@ Kirigami.Dialog {
             report: dialog.report
         }
 
+        SceneScriptRigMissing {
+            Layout.fillWidth: true
+            report: dialog.report
+        }
+
+        SceneScriptRigPick {
+            Layout.fillWidth: true
+            page: dialog.page
+            onInserted: code => area.insert(area.cursorPosition, code + "\n")
+        }
+
         QQC2.ScrollView {
             Layout.fillWidth: true
             implicitHeight: Kirigami.Units.gridUnit * 20

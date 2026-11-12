@@ -7,11 +7,14 @@ use std::path::Path;
 use wprs_core::message::said;
 use wprs_scene::{ScriptApi, imported};
 
-const CALLS: [(&str, ScriptApi); 5] = [
+const CALLS: [(&str, ScriptApi); 8] = [
     (".bloom", ScriptApi::Bloom),
     (".spawn(", ScriptApi::Layers),
     (".order(", ScriptApi::Layers),
     (".effect(", ScriptApi::Effects),
+    (".bone(", ScriptApi::Animations),
+    (".impulse(", ScriptApi::Animations),
+    (".shape(", ScriptApi::Animations),
     ("console.", ScriptApi::Console),
 ];
 

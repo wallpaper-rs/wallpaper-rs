@@ -6,6 +6,7 @@ mod listing;
 mod params;
 mod reference;
 mod revert;
+mod rigcalls;
 
 use crate::ops::Op;
 use anyhow::{Result, ensure};
@@ -22,6 +23,7 @@ pub(crate) use edit::edit;
 pub use listing::{bound, listing, stamp, stamped};
 pub use reference::reference;
 pub(crate) use revert::{restore, save};
+pub use rigcalls::calls;
 
 pub(crate) fn room(dir: &Path, doc: &Value, path: &str, size: u64) -> Result<()> {
     let list = doc.pointer("/scene/scripts").and_then(Value::as_array).cloned().unwrap_or_default();

@@ -306,6 +306,15 @@ sus ajustes.
   se leen como `params.nombre` o `params["nombre"]`). Las partes que el código no puede mostrar
   (`clicks`, `geometry`, `animations`, `shortcuts`, `hierarchy`) nunca se informan como sin uso. El
   botón *Declare what it uses* ejecuta `script` con `declare`.
+- Los scripts que mueven una malla (`.bone(`, `.shape(` e `.impulse(` de una capa) cuentan como `animations`
+  en la declaración. La vista de código ofrece *Insert a call that moves a mesh*: una capa de malla
+  o modelo, el tipo (hueso, forma de mezcla o empujar un cuerpo), el hueso o la forma entre los que
+  tiene el archivo (los cuerpos para el empuje) y la llamada (girar, mover, escalar, leer, soltar, dar
+  peso, empujar); inserta en el cursor, por ejemplo `scene.layer("id").bone("brazo").rotation = 0;`, con la
+  consulta `{"script_calls": {"layer": ID, "kind", "name", "what"}}` de `rig` (sin `kind` devuelve los
+  huesos, formas y cuerpos). La comprobación añade `rig`: cada hueso o forma que el código nombra con un
+  texto y que las mallas citadas por el código (todas las de la escena si no cita ninguna) no tienen,
+  con su línea, y la vista de código lo lista bajo la comprobación.
 - Los ajustes de un módulo son una tabla con una fila por ajuste: su id, su tipo, su valor por defecto
   (un campo para números y textos, una casilla, el selector de color o dos números) y, para los
   números, el mínimo y el máximo. Cada cambio es una acción `script` con `param`; si el módulo rechaza

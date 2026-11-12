@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 41] = [
+pub const ASKS: [(&str, &str, &str); 42] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -33,6 +33,11 @@ pub const ASKS: [(&str, &str, &str); 41] = [
     ("bone3d", "A bone of a 3D model", "{}"),
     ("bound3d", "Bounds of a 3D model", "{}"),
     ("motion", "Clips and motion of a mesh or model layer", r#"{"layer": "ID"}"#),
+    (
+        "script_calls",
+        "Bones, blend shapes and bodies of a mesh or model for a script, and with kind, name and what the call that moves one",
+        r#"{"layer": "ID", "kind": "bone", "name": "arm", "what": "turn"}"#,
+    ),
     ("outline", "Outline of the picture of a layer", "{}"),
     ("palette", "Colors of a picture asset", r#""ASSET""#),
     ("wind", "The wind as an arrow", "{}"),

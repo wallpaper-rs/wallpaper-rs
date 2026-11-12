@@ -47,5 +47,6 @@ pub fn audit(dir: &Path, doc: &Value, path: &str) -> Result<Value> {
         v.as_object().is_some_and(|m| m.values().all(|l| l.as_array().is_some_and(Vec::is_empty)))
     };
     Ok(json!({"path": path, "undeclared": undeclared, "unused": unused,
-        "synced": empty(&undeclared) && empty(&unused)}))
+        "synced": empty(&undeclared) && empty(&unused),
+        "rig": super::rigcalls::missing(dir, doc, &text)}))
 }
