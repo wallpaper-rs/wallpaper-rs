@@ -76,6 +76,9 @@ impl Hub {
         drop((control, switch));
         tracing::info!(scene, input = input.as_str(), granted, "input permission changed");
         self.update(None);
+        if input == Input::Rgb {
+            (self.wake)();
+        }
         (self.changed)();
         Ok(())
     }

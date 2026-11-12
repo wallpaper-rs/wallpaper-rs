@@ -115,6 +115,21 @@ fn declining_is_remembered_until_the_input_is_granted() {
 }
 
 #[test]
+fn a_change_of_the_lights_permission_wakes_the_renderer_at_once() {
+    let dir = tempfile::tempdir().unwrap();
+    let wakes = Arc::new(AtomicU32::new(0));
+    let (path, hub) = (dir.path().join("inputs.json"), hub(wakes.clone()));
+    showing(&hub, "DP-1", "sha256:aa");
+    hub.grant(&path, SEA, "sha256:aa", Input::Rgb).unwrap();
+    assert_eq!(wakes.load(SeqCst), 1, "a granted light did not wake the renderer");
+    hub.grant(&path, SEA, "sha256:aa", Input::Rgb).unwrap();
+    hub.grant(&path, SEA, "sha256:aa", Input::Clicks).unwrap();
+    assert_eq!(wakes.load(SeqCst), 1, "an unchanged grant or another input woke the renderer");
+    hub.revoke(&path, SEA, Input::Rgb).unwrap();
+    assert_eq!(wakes.load(SeqCst), 2, "a revoked light did not wake the renderer");
+}
+
+#[test]
 fn a_declined_question_spares_the_twins_and_old_clients_see_the_shown_package() {
     let dir = tempfile::tempdir().unwrap();
     let (path, hub) = (dir.path().join("inputs.json"), hub(Arc::default()));

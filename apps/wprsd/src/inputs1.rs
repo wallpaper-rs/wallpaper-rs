@@ -39,10 +39,8 @@ fn parse(input: &str) -> Result<Input> {
 }
 
 fn reopen(d: &Daemon, input: Input) -> anyhow::Result<()> {
-    match input {
-        Input::Network => d.configure_all(),
-        Input::Rgb => d.compositor.waker()(),
-        _ => {}
+    if input == Input::Network {
+        d.configure_all();
     }
     Ok(())
 }
