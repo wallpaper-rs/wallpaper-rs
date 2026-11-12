@@ -16,7 +16,7 @@ json.dump(m, open(sys.argv[1], 'w'))" bump/manifest.json "$@"
   ctl remote refresh --wait >/dev/null
 }
 versions() { ctl pkg ls --json | jq_ "sorted(p['version'] for p in r['packages'])"; }
-newest() { [[ "$(versions)" == *"'$1']" ]]; }
+newest() { [ "$(versions)" = "['$1']" ]; }
 ctl pkg install "$dusk" --wait >/dev/null
 expect "s['options']['repos.auto_update']" False
 release 1.2.0

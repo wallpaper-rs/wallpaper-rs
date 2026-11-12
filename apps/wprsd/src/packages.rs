@@ -107,6 +107,7 @@ impl Daemon {
                 )));
             }
             let uid = d.link(&record)?;
+            d.replace_older(&record)?;
             tracing::info!(repo = &record.repo_id[..8], "package installed");
             d.reload_installed();
             let missing = d.install_needed(&record, (allow_stale, allow_downgrade));

@@ -53,6 +53,22 @@ impl Daemon {
         }
     }
 
+    pub fn replace_older(&self, record: &Installed) -> Result<()> {
+        let all = wprs_format::installed(&self.store.data)?;
+        let shared = |v: &str| all.iter().filter(|i| i.id == record.id && i.version == v).count() > 1;
+        let older: Vec<&Installed> = all
+            .iter()
+            .filter(|i| {
+                i.repo_id == record.repo_id && i.id == record.id && newer(&record.version, &i.version)
+            })
+            .filter(|i| !shared(&i.version) && self.shown_on(&i.path).is_ok())
+            .collect();
+        for old in older {
+            wprs_format::remove(&self.store.data, &old.id, Some(&old.version))?;
+        }
+        Ok(())
+    }
+
     pub fn keep_back(&self, record: &Installed) -> Result<()> {
         let all = wprs_format::installed(&self.store.data)?;
         let others = all.iter().filter(|i| i.id == record.id && i.version != record.version);
