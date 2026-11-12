@@ -7165,7 +7165,6 @@ msgstr ""
 "effects/NOMBRE.wgsl del paquete; leen frame y de param(0u) a param(7u)."
 
 #: apps/wprs-app/qml/SceneNewMaterial.qml
-#, fuzzy
 msgid "Edit code…"
 msgstr "Editar el código…"
 
