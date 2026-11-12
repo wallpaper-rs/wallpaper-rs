@@ -9,8 +9,8 @@ use wprs_core::message::said;
 use wprs_format::features;
 
 pub use crate::action::{
-    ACTIONS, Action, AssetEdit, ConditionEdit, EDITOR, ImportAssets, PresetAdd, RgbEdit, RuleEdit, ScriptFile,
-    ShotEdit, UpgradeEdit,
+    ACTIONS, Action, AssetEdit, ConditionEdit, EDITOR, ImportAssets, PresetAdd, RgbEdit, RuleEdit,
+    ScriptFile, ShotEdit, UpgradeEdit,
 };
 pub use crate::action::{
     AmbientEdit, AttachEdit, AutoWeights, BodyEdit, BoneEdit, BoneRuleEdit, ClipEdit, ClipKey, DepthSet,
