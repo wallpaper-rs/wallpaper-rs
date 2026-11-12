@@ -191,6 +191,29 @@ enseñan.
 Las fuentes del sistema se nombran por familia; solo `sans-serif`, `serif` y `monospace` existen
 seguro en todas partes.
 
+### Texturas KTX2
+
+Un recurso de imagen puede ser un archivo `.ktx2` con una textura Basis Universal: una imagen, una
+lista de hasta 256 fotogramas (se ordenan en una cuadrícula, como los de un GIF animado) o un cubo
+de seis caras, que se vuelve un panorama del doble de ancho que de alto y vale donde vale un
+panorama, como el `env` de un modelo (ver [3d.md](3d.md)). Mide hasta 16384 píxeles de lado, tiene
+hasta 15 niveles y pesa hasta 256 MiB. El programa la convierte al formato que la tarjeta gráfica
+lee mejor, y una escena de texturas KTX2 ocupa cerca de la cuarta parte de memoria de vídeo que
+las mismas imágenes en PNG. `linear`, `filter`, `wrap` y `atlas` valen igual que en otras imágenes,
+y con `animated: true` los fotogramas se reproducen con los tiempos del archivo. Una textura HDR
+conserva su luz por encima del blanco en los lienzos con `hdr`.
+
+Se hacen en el escritorio, desde la conversión a KTX2 del editor o con:
+
+```
+wprs-ctl scene asset MI-CARPETA cielo --ktx2 --codec uastc --quality 80
+wprs-ctl scene asset MI-CARPETA panorama --cube
+```
+
+`--dry-run` solo informa de los tamaños y de lo que recibe cada clase de tarjeta, y `--faces` hace
+el cubo con seis imágenes cuadradas. El teléfono solo las lee, no las crea: un paquete hecho en el
+escritorio se ve igual en el teléfono.
+
 ## Cuánto cuesta una escena
 
 Que tu escena se vea bien en un teléfono depende de cuánto trabajo pide cada fotograma. El
@@ -261,6 +284,14 @@ Imprime el costo estimado, el tiempo por fotograma, la memoria que ocupa y las n
 dejó fuera. `--shot cuadro.png` guarda el último fotograma como imagen y `--tier t0` a `t3`
 aplica los límites de cada clase de equipo (`t1` es el de los teléfonos). Lo mismo pasa con
 `--quality auto`, que sube y baja el nivel como lo haría el teléfono.
+
+### Cuando el usuario pide menos destellos
+
+Si el usuario activa `playback.flash_guard`, el programa mide el brillo de cada fotograma y, si la
+escena destella más de tres veces por segundo, la reproduce más despacio hasta que destelle como
+mucho tres veces, y si aun así destella más rápido, se detiene en su fotograma. Viene apagado. Si
+tu escena destella a propósito, dilo en el manifiesto con `photosensitive` (ver
+[paquete.md](paquete.md)).
 
 ### Cuando el usuario pide menos movimiento
 
