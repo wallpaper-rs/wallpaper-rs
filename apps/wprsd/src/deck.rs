@@ -125,8 +125,14 @@ impl Daemon {
         };
         let Some(layers) = found else {
             let failed = self.state().decks.failed.contains(&path) || wprs_depth::has_failed(&path);
+            let simple = set.fill == Fill::Simple && places.fill(Fill::Lama) == Fill::Simple;
             self.build_deck(file, sha, (depth, set), path);
-            return Err(Some(if failed { Still::Failed } else { Still::Building }));
+            let still = match (failed, simple) {
+                (true, _) => Still::Failed,
+                (false, true) => Still::BuildingSimple,
+                (false, false) => Still::Building,
+            };
+            return Err(Some(still));
         };
         if !layers.info.reach.moves(layers.info.size[0]) {
             return Err(Some(Still::Flat));

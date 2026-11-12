@@ -83,7 +83,7 @@ pub fn build(
         return Ok(None);
     }
     if let Some(wanted) = fill.filter(|f| *f != set.fill) {
-        bail!("{} is not installed", if wanted == Fill::Lama { "LaMa or ONNX Runtime" } else { "the fill" });
+        bail!("{}", wprs_core::travel::fill_missing(wanted == Fill::Lama).local());
     }
     let sets = (&target.depth(), &set);
     let made =

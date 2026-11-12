@@ -50,6 +50,8 @@ fn still_reasons_have_words_and_messages() {
         Still::FillOff,
         Still::Edited,
         Still::Building,
+        Still::BuildingSimple,
+        Still::Software,
         Still::Failed,
         Still::Flat,
     ] {

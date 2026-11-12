@@ -27,6 +27,8 @@ pub enum Still {
     FillOff,
     Edited,
     Building,
+    BuildingSimple,
+    Software,
     Failed,
     Flat,
 }
@@ -39,6 +41,8 @@ impl Still {
             Still::FillOff => "fill_off",
             Still::Edited => "edited",
             Still::Building => "building",
+            Still::BuildingSimple => "building_simple",
+            Still::Software => "software",
             Still::Failed => "failed",
             Still::Flat => "flat",
         }
@@ -67,6 +71,16 @@ impl Still {
             Still::Building => {
                 said("still.building", "The picture stays still until its depth layers are built.", &[])
             }
+            Still::BuildingSimple => said(
+                "still.building_simple",
+                "The picture stays still until its depth layers are built. They are built with the simple fill because LaMa, which fills the hidden parts better, is not installed. To get it (%1) run wprs-ctl models download lama-big-fp32 or use the app; nothing is downloaded until you ask.",
+                &[&size],
+            ),
+            Still::Software => said(
+                "still.software",
+                "The picture stays still: this computer draws with its processor, so depth movement is off. Turn it on with wprs-ctl config playback.software_parallax true or in the settings; it then moves in 8 steps at up to 15 frames per second.",
+                &[],
+            ),
             Still::Failed => {
                 said("still.failed", "The picture stays still: its depth layers could not be built.", &[])
             }
@@ -76,6 +90,17 @@ impl Still {
                 &[],
             ),
         }
+    }
+}
+
+pub fn fill_missing(lama: bool) -> Message {
+    match lama {
+        true => said(
+            "depth.lama_missing",
+            "LaMa or ONNX Runtime is not installed. Install it from the depth tool or with wprs-ctl models download lama-big-fp32; nothing is downloaded until you ask.",
+            &[],
+        ),
+        false => said("depth.fill_missing", "The chosen fill is not installed.", &[]),
     }
 }
 

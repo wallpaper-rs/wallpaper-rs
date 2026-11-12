@@ -33,6 +33,9 @@ impl Places {
             _ => load(&path).ok().flatten(),
         };
         match found {
+            None if set.fill == Fill::Simple && self.fill(Fill::Lama) == Fill::Simple => {
+                Some(Still::BuildingSimple)
+            }
             None => Some(Still::Building),
             Some(layers) if !layers.info.reach.moves(layers.info.size[0]) => Some(Still::Flat),
             Some(_) => None,
@@ -47,6 +50,15 @@ pub fn model_size(places: &Places) -> String {
     parts.join(" + ")
 }
 
+pub fn lama_size(places: &Places) -> String {
+    let runtime = crate::RUNTIME.filter(|_| places.library(None).is_empty());
+    let bytes = crate::LAMA.bytes + runtime.map_or(0, |r| r.bytes);
+    format!("{:.0} MB", bytes as f64 / 1e6)
+}
+
 pub fn still_note(places: &Places, still: Still) -> wprs_core::message::Message {
-    still.sized(&model_size(places))
+    match still {
+        Still::BuildingSimple => still.sized(&lama_size(places)),
+        _ => still.sized(&model_size(places)),
+    }
 }
