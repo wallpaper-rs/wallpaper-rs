@@ -32,7 +32,7 @@ Rectangle {
 
         anchors.fill: parent
         visible: thumb.kind === "image"
-        source: thumb.kind === "image" && thumb.plain ? App.url(thumb.file) : ""
+        source: thumb.visible && thumb.kind === "image" && thumb.plain ? App.url(thumb.file) : ""
         sourceSize.width: thumb.size * 2
         sourceSize.height: thumb.size * 2
         fillMode: Image.PreserveAspectCrop
@@ -44,7 +44,7 @@ Rectangle {
 
         anchors.fill: parent
         visible: thumb.kind === "video"
-        source: thumb.still !== "" ? App.url(thumb.still) : ""
+        source: thumb.visible && thumb.still !== "" ? App.url(thumb.still) : ""
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
     }
@@ -52,7 +52,7 @@ Rectangle {
     FontLoader {
         id: face
 
-        source: thumb.kind === "font" ? App.url(thumb.file) : ""
+        source: thumb.visible && thumb.kind === "font" ? App.url(thumb.file) : ""
     }
 
     QQC2.Label {
