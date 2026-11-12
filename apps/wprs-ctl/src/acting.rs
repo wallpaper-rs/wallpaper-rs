@@ -107,7 +107,8 @@ fn described(name: &str, json: bool) -> Result<()> {
         return Err(usage(format!("there is no action {name:?}; wprs-ctl scene actions lists them")));
     };
     if json {
-        return Ok(println!("{}", serde_json::to_string_pretty(&schema)?));
+        println!("{}", serde_json::to_string_pretty(&schema)?);
+        return Ok(());
     }
     println!("{}", manual::describe(name).unwrap_or_default());
     println!("\nExample:\n  {}", manual::invocation(name).unwrap_or_default());
@@ -121,10 +122,8 @@ fn asked(name: &str, json: bool) -> Result<()> {
         )));
     };
     if json {
-        return Ok(println!(
-            "{}",
-            json!({ "name": name, "about": about, "args": serde_json::from_str::<Value>(args)? })
-        ));
+        println!("{}", json!({ "name": name, "about": about, "args": serde_json::from_str::<Value>(args)? }));
+        return Ok(());
     }
     println!("{name}: {about}\n\nExample:\n  wprs-ctl scene ask DIR {name} '{args}'");
     Ok(())
