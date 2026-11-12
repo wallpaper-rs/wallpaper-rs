@@ -16,6 +16,11 @@ impl Drop for Mapped {
     }
 }
 
+pub(in crate::compositor) enum Snap {
+    Asked(std::time::Instant),
+    Ready((u32, u32), Vec<u8>),
+}
+
 #[derive(Default)]
 pub(in crate::compositor) struct ViewSlot {
     pub(in crate::compositor) id: u32,
@@ -35,6 +40,7 @@ pub(in crate::compositor) struct ViewSlot {
     pub(in crate::compositor) lights: Option<bool>,
     pub(in crate::compositor) drawn: u64,
     pub(in crate::compositor) console: std::collections::VecDeque<String>,
+    pub(in crate::compositor) snap: Option<Snap>,
     imported: HashMap<u32, GpuImage>,
     ring: Option<Mapped>,
     copied: Option<GpuImage>,
@@ -111,8 +117,20 @@ impl ViewSlot {
         };
         let room = ring.len / 2;
         let data = unsafe { std::slice::from_raw_parts(ring.map.add(slot as usize * room), room) };
+        if matches!(self.snap, Some(Snap::Asked(_))) {
+            self.snap = Some(Snap::Ready(size, tight(data, size, ring.stride)));
+        }
         renderer.upload_page(&mut self.copied, data, size, ring.stride)?;
         (self.texture, self.fresh, self.shown) = (self.copied.clone(), true, None);
         Ok(())
     }
+}
+
+fn tight(data: &[u8], (width, height): (u32, u32), stride: u32) -> Vec<u8> {
+    let (row, stride) = (width as usize * 4, stride as usize);
+    let mut out = Vec::with_capacity(row * height as usize);
+    for line in data.chunks(stride).take(height as usize) {
+        out.extend(line[..row.min(line.len())].chunks_exact(4).flat_map(|p| [p[2], p[1], p[0], 255]));
+    }
+    out
 }

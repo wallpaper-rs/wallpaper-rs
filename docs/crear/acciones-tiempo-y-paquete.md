@@ -391,11 +391,11 @@ wprs-ctl scene act mi-escena thumbnail '{"file":"mi-escena/assets/preview-animat
 
 #### `shot`
 
-Dibuja la escena para guardar una captura como miniatura, grabar un gif o webp como vista animada, o medir cuánto parpadea. `still` y `recording` también sirven para un paquete de imagen (solo `still`: el cuadro es la propia imagen, reducida) y de video (el cuadro y la grabación salen del video). Una página web no se puede dibujar aquí: se le pone una imagen con [`thumbnail`](#thumbnail). `flashes` es solo para escenas. Tres variantes.
+Dibuja la escena para guardar una captura como miniatura, grabar un gif o webp como vista animada, o medir cuánto parpadea. `still` y `recording` también sirven para un paquete de imagen (solo `still`: el cuadro es la propia imagen, reducida) y de video (el cuadro y la grabación salen del video). Una página web no se dibuja en el editor sino en el demonio, que la muestra con las mismas reglas de siempre: para ella usa la orden `wprs-ctl scene thumbnail CARPETA --capture [--animated] [--format webp] [--output PANTALLA]`, que la muestra un momento en una pantalla y guarda un cuadro o una grabación, o el botón de captura de la aplicación (solo el cuadro). Esta acción, con una página web, contesta con ese camino. `flashes` es solo para escenas. Tres variantes.
 
 ##### variante `still`
 
-Guarda un cuadro como miniatura (de hasta 1024 píxeles). En un paquete preset dibuja la escena base con los valores del preset. En un video, `time` es el segundo del video; sin él se toma un cuadro cerca del comienzo.
+Guarda un cuadro como miniatura (de hasta 1024 píxeles). En un paquete preset dibuja el paquete base con los valores del preset: una escena con sus ajustes, una imagen con `zoom`, `x` e `y`, un video con además `start`; la base de una página web se captura con la orden de arriba, con `--base ARCHIVO`. En un video, `time` es el segundo del video; sin él se toma un cuadro cerca del comienzo.
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|

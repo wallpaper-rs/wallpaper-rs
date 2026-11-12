@@ -63,6 +63,7 @@ pub fn handle(message: ToWeb) {
         }
         ToWeb::Freed { view: id, slot } => view(id).into_iter().for_each(|v| crate::frames::freed(&v, slot)),
         ToWeb::Copy => live(|l| l.copy = true),
+        ToWeb::Shot { view: id } => view(id).into_iter().for_each(|v| crate::frames::shot(&v)),
         ToWeb::Quit => crate::quit::quit(0),
     }
 }
@@ -90,6 +91,10 @@ pub fn close(id: u32) {
         let held: Vec<Ptr> = view.held.borrow_mut().drain().map(|(_, b)| b).collect();
         unsafe {
             held.iter().for_each(|b| (a.wpe_view_buffer_released)(view.wpe, *b));
+            let (newest, _) = view.newest.replace((std::ptr::null_mut(), false));
+            if !newest.is_null() {
+                (a.g_object_unref)(newest);
+            }
             (a.webkit_web_view_terminate_web_process)(view.web);
             (a.g_object_unref)(view.web);
             (a.g_object_unref)(view.manager);

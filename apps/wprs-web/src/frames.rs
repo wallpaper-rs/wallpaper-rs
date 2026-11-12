@@ -40,6 +40,11 @@ unsafe extern "C" fn render(wpe: Ptr, buffer: Ptr, _damage: Ptr, _count: u32, _e
     let a = get();
     unsafe { (a.g_object_ref)(buffer) };
     let dmabuf = unsafe { (a.g_type_check_instance_is_a)(buffer, (a.wpe_buffer_dma_buf_get_type)()) } != 0;
+    unsafe { (a.g_object_ref)(buffer) };
+    let (old, _) = view.newest.replace((buffer, dmabuf));
+    if !old.is_null() {
+        unsafe { (a.g_object_unref)(old) };
+    }
     let shared = dmabuf && !live(|l| l.copy) && unsafe { share(&view, buffer) };
     if !shared {
         unsafe { copy(&view, buffer, dmabuf) };
@@ -78,6 +83,13 @@ unsafe fn share(view: &View, buffer: Ptr) -> bool {
     view.held.borrow_mut().insert(id, buffer);
     send(&FromWeb::Frame { view: view.id, buffer: id });
     true
+}
+
+pub fn shot(view: &View) {
+    let (buffer, dmabuf) = view.newest.get();
+    if !buffer.is_null() {
+        unsafe { copy(view, buffer, dmabuf) };
+    }
 }
 
 unsafe fn copy(view: &View, buffer: Ptr, dmabuf: bool) {

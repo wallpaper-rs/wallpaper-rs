@@ -662,6 +662,17 @@ Presses the `button` setting `id` of the scene shown on `output` (`""` = every o
 it): timelines whose `trigger` is `prop:<id>` start again and the scripts of the scene see the press
 in their next frame (`scene.md`). Nothing is stored.
 
+### `CapturePage(s output) → (s path)`
+
+Takes one frame of the web page that `output` shows, for the editor of web packages (`wprs-ctl
+scene thumbnail DIR --capture`, *Capture the thumbnail*). The page is the one that is shown,
+started with the same helper, sandbox, network rules and settings as when it is a wallpaper: the
+daemon asks the helper for a copy of the last frame it drew (`Shot`), and the helper sends it as
+pixels. The first call asks for the frame and answers `""`; a later call, a moment after, answers
+the path of a PNG file of that frame (mode `0600`, in the runtime folder, replaced by the next
+capture). A client that gets `""` calls again after 200 ms, for at most 10 s. `NotFound` when
+`output` shows no web page.
+
 ### `GetParticleStats(s output) → (s json)`
 
 Counts the particles of the scene that `output` draws now, for the editor of scenes and

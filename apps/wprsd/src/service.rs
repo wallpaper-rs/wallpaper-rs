@@ -177,6 +177,11 @@ impl Service {
         self.d()?.render(move |d| d.particle_stats(&output)).await
     }
 
+    #[zbus(out_args("path"))]
+    async fn capture_page(&self, output: String) -> Result<String> {
+        self.d()?.render(move |d| d.capture_page(&output)).await
+    }
+
     async fn press_scene_button(&self, output: String, id: String) -> Result<()> {
         self.d()?.render(move |d| d.press_scene_button(&output, &id)).await
     }

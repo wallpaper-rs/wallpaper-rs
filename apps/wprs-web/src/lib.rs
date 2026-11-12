@@ -83,6 +83,7 @@ pub enum ToWeb {
     Released { view: u32, buffer: u32 },
     Freed { view: u32, slot: u32 },
     Copy,
+    Shot { view: u32 },
     Quit,
 }
 

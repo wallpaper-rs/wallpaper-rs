@@ -102,6 +102,7 @@ else
   if grep -q "page-lights" "$XDG_CONFIG_HOME/wallpaper-rs/config.toml"; then fail "a live preview reached the saved settings"; fi
   ctl release preview:page-lights
   source "$(dirname "$0")"/integration-web-preview.sh
+  source "$(dirname "$0")"/integration-web-capture.sh
   ctl lib apply "$lights" -o TEST-W 2>/dev/null
   expect "s['outputs']['TEST-W']['kind'], s['outputs']['TEST-W']['error']" "('web', None)"
   wait_for 10 fresh "$old" || fail "no single new web helper runs for the example page: $(helper), $(helpers) running"

@@ -95,6 +95,7 @@ pub fn open(id: u32, (width, height): (u32, u32), scale: f64) {
             ring: RefCell::new(None),
             loaded: Cell::new(false),
             answered: Cell::new(std::time::Instant::now()),
+            newest: Cell::new((std::ptr::null_mut(), false)),
         };
         let view = Rc::new(view);
         VIEWS.with(|v| v.borrow_mut().insert(id, view.clone()));

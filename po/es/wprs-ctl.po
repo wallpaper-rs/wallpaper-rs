@@ -850,7 +850,15 @@ msgstr ""
 msgid ""
 "For a preset package: the installed package file of its base, drawn with the "
 "values of the preset"
-msgstr "Para un paquete preajuste: el archivo instalado de su paquete base, que se dibuja con los valores del preajuste"
+msgstr ""
+"Para un paquete preajuste: el archivo instalado de su paquete base, que se "
+"dibuja con los valores del preajuste"
+
+#: apps/wprs-ctl/src/capturing.rs
+msgid ""
+"For a web page: the screen it is shown on while it is captured; the first "
+"screen without it"
+msgstr "Para una página web: la pantalla en la que se muestra mientras se captura; la primera pantalla sin él"
 
 #: apps/wprs-ctl/src/caution.rs
 msgid ""
@@ -5945,11 +5953,15 @@ msgstr "Con --from preset: el paquete para el que es el preajuste"
 msgid ""
 "With --base: the versions of the base it suits, such as ^1.2; any version "
 "when omitted"
-msgstr "Con --base: las versiones del paquete base a las que sirve, como ^1.2; cualquiera sin él"
+msgstr ""
+"Con --base: las versiones del paquete base a las que sirve, como ^1.2; "
+"cualquiera sin él"
 
 #: apps/wprs-ctl/src/presetting.rs
 msgid "With --base: a JSON file with the values the preset sets, by setting id"
-msgstr "Con --base: un archivo JSON con los valores que fija el preajuste, por id de ajuste"
+msgstr ""
+"Con --base: un archivo JSON con los valores que fija el preajuste, por id de "
+"ajuste"
 
 #: apps/wprs-ctl/src/presetting.rs
 msgid "With --from preset: license of the preset, such as CC-BY-4.0"

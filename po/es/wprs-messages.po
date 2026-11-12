@@ -2650,11 +2650,9 @@ msgstr "la escena no tiene %1"
 
 #: crates/wprs-editor/src/shotmedia.rs
 msgid ""
-"a web page is drawn by the web engine of the daemon, not here; choose a "
-"picture for it"
-msgstr ""
-"una página web la dibuja el motor web del demonio, no el editor; elige una "
-"imagen para ella"
+"a web page is drawn by the web engine of the daemon, not here: use wprs-ctl "
+"scene thumbnail with --capture, or the capture button of the app"
+msgstr "una página web la dibuja el motor web del demonio, no el editor: usa wprs-ctl scene thumbnail con --capture, o el botón de captura de la aplicación"
 
 #: crates/wprs-editor/src/shotmedia.rs
 msgid "the video cannot be read: %1"
@@ -2669,8 +2667,14 @@ msgid "name the installed file of the base package to draw the preset"
 msgstr "indica el archivo instalado del paquete base para dibujar el preajuste"
 
 #: crates/wprs-editor/src/shotmedia.rs
-msgid "only a preset of a scene can be drawn here"
-msgstr "aquí solo se puede dibujar el preajuste de una escena"
+msgid ""
+"only a preset of a scene, a picture or a video can be drawn here; a web page "
+"is drawn with wprs-ctl scene thumbnail --capture"
+msgstr "aquí solo se puede dibujar el preajuste de una escena, una imagen o un video; una página web se dibuja con wprs-ctl scene thumbnail --capture"
+
+#: crates/wprs-editor/src/shotmedia.rs crates/wprs-editor/src/shots.rs
+msgid "a picture does not move: keep a frame instead"
+msgstr "una imagen no se mueve: conserva un fotograma en su lugar"
 
 #: crates/wprs-editor/src/shots.rs
 msgid "only a scene can be drawn here; choose a picture for other packages"
@@ -2680,10 +2684,6 @@ msgstr ""
 #: crates/wprs-editor/src/shots.rs
 msgid "there is no graphics device to draw the scene: %1"
 msgstr "no hay tarjeta gráfica para dibujar la escena: %1"
-
-#: crates/wprs-editor/src/shots.rs
-msgid "a picture does not move: keep a frame instead"
-msgstr "una imagen no se mueve: conserva un fotograma en su lugar"
 
 #: crates/wprs-editor/src/shots.rs
 msgid "record from 0.1 to 15 s at 1 to 30 frames a second"

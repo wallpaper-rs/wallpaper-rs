@@ -99,7 +99,7 @@ pub fn still(
     found.ok_or_else(|| anyhow!(said("editor.shot_none", "the scene drew no picture", &[])))
 }
 
-fn encode(images: &[RgbaImage], fps: u32, format: ShotFormat) -> Result<Vec<u8>> {
+pub fn encode(images: &[RgbaImage], fps: u32, format: ShotFormat) -> Result<Vec<u8>> {
     if format == ShotFormat::Webp {
         return crate::webp::animated(images, fps);
     }

@@ -145,6 +145,8 @@ start its sandbox or the namespaces could not be made (some containers forbid th
 it next to the privacy notice. `wprs-ctl` prints the same notice, on standard error, after `lib apply`,
 `playlist start`, `next` and `prev` (for the screens they touch) and in `state` when run in a terminal.
 
+`wprs-ctl scene thumbnail DIR --capture` takes the thumbnail or the animated preview of a page from the page the daemon shows: `CapturePage` (`dbus.md`) sends `Shot` to the helper, which copies the last frame it drew, even while the view is hidden, and sends it as pixels. No second engine starts, so the sandbox and the network of the capture are those of the wallpaper.
+
 ## Privacy
 
 A page sees, by default, the real time zone, the language of the user, what the graphics card can

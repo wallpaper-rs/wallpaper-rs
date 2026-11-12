@@ -44,6 +44,7 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Daemon1", "ImportSceneValues", "prop preset import", &["--output", "FILE", "--save"]),
     ("Daemon1", "PressSceneButton", "prop press", &["--output", "ID"]),
     ("Daemon1", "GetParticleStats", "prop particles", &["--output"]),
+    ("Daemon1", "CapturePage", "scene thumbnail", &["--capture", "--output"]),
     ("Daemon1", "ShareSceneValues", "prop share", &["--output", "--own"]),
     ("Daemon1", "Reload", "reload", &[]),
     ("Daemon1", "Restart", "restart", &[]),

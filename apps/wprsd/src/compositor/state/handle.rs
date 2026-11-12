@@ -88,6 +88,10 @@ impl State {
                 let scene = self.outputs.get(&output).and_then(|o| o.shown.scene.as_ref());
                 done.send(scene.and_then(|s| s.counted(self.renderer))).ok();
             }
+            Command::Snap(output, done) => {
+                let now = std::time::Instant::now();
+                done.send(crate::compositor::pages::snap::take(self.pages.values_mut(), &output, now)).ok();
+            }
             Command::Wake => {}
             Command::Settle(done) => self.settling.push(done),
             Command::Clear(dir, done) => self.clear_page(dir, done),

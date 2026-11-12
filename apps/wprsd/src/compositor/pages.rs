@@ -14,6 +14,7 @@ mod keys;
 #[cfg(test)]
 mod lit;
 mod slot;
+pub(super) mod snap;
 #[cfg(test)]
 pub(super) mod tests;
 mod view;

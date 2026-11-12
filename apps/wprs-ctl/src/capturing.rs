@@ -28,4 +28,11 @@ pub struct Capture {
         help = "For a preset package: the installed package file of its base, drawn with the values of the preset"
     )]
     pub base: Option<std::path::PathBuf>,
+    #[arg(
+        short,
+        long,
+        requires = "capture",
+        help = "For a web page: the screen it is shown on while it is captured; the first screen without it"
+    )]
+    pub output: Option<String>,
 }

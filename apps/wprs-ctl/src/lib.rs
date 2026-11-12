@@ -118,6 +118,7 @@ mod wallclock;
 pub mod wallhaven;
 mod wallhaven_filters;
 mod watching;
+mod webshot;
 
 pub use calls::CALLS;
 pub use cli::{Cli, Command};

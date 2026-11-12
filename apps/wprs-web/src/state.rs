@@ -32,6 +32,7 @@ pub struct View {
     pub ring: RefCell<Option<Ring>>,
     pub loaded: Cell<bool>,
     pub answered: Cell<Instant>,
+    pub newest: Cell<(Ptr, bool)>,
 }
 
 #[derive(Default)]

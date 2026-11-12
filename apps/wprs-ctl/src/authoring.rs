@@ -62,6 +62,12 @@ pub(crate) fn problems_of(n: usize) -> String {
 }
 
 pub fn run(command: Author) -> Result<()> {
+    if let Author::Thumbnail { dir, animated, shot } = &command
+        && shot.capture
+        && crate::webshot::wanted(dir, shot)
+    {
+        return crate::webshot::run(dir, *animated, shot);
+    }
     let command = match action(command) {
         Ok((dir, action)) => return edit(&dir, action),
         Err(command) => *command,

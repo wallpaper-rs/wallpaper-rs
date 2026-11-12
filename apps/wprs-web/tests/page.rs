@@ -12,6 +12,8 @@ mod input;
 mod media;
 #[path = "page/reload.rs"]
 mod reload;
+#[path = "page/shot.rs"]
+mod shot;
 
 use helper::{Page, available, start};
 use serde_json::json;

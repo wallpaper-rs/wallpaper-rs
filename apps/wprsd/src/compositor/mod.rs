@@ -17,6 +17,7 @@ mod relays;
 mod scene;
 mod scripts;
 mod slot;
+mod snap;
 mod speakers;
 mod spec;
 mod state;
@@ -29,6 +30,7 @@ use crate::fatal;
 pub use counted::Counted;
 pub use light::Hdr;
 pub use output::Tone;
+pub use snap::Taken;
 pub use spec::*;
 use state::State;
 pub use status::*;
@@ -58,6 +60,7 @@ enum Command {
     Retry,
     Again(String),
     Count(String, mpsc::Sender<Option<Counted>>),
+    Snap(String, mpsc::Sender<snap::Taken>),
     Wake,
     Settle(mpsc::Sender<()>),
     Clear(std::path::PathBuf, mpsc::Sender<std::io::Result<()>>),
