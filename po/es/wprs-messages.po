@@ -1323,6 +1323,18 @@ msgstr ""
 "la base de %1 es un número, una lista de números o un color, como sus "
 "fotogramas clave"
 
+#: crates/wprs-editor/src/hidden.rs
+msgid ""
+"The layer \"%1\" never shows: \"%2\", above it, covers the whole canvas with "
+"no transparency; hide or move \"%2\", or move \"%1\" above it"
+msgstr "La capa «%1» nunca se ve: «%2», que está encima, tapa todo el lienzo sin transparencia; oculta o mueve «%2», o sube «%1» por encima de ella"
+
+#: crates/wprs-editor/src/hidden.rs
+msgid ""
+"The layer \"%1\" lies completely outside the canvas, so it never shows; move "
+"it inside the canvas"
+msgstr "La capa «%1» está del todo fuera del lienzo, así que nunca se ve; muévela dentro del lienzo"
+
 #: crates/wprs-editor/src/history.rs
 msgid "Change a value"
 msgstr "Cambiar un valor"

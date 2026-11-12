@@ -91,8 +91,15 @@ fn beneath(list: &Value, base: &str, cover: &str, out: &mut Vec<Problem>) {
         if layer["type"] == "group" {
             beneath(&layer["layers"], &format!("{at}/layers"), cover, out);
         } else if drawn(layer) {
-            let text = "The layer \"%1\" never shows: \"%2\", above it, covers the whole canvas with no transparency; hide or move \"%2\", or move \"%1\" above it";
-            out.push(warning(at, said("editor.layer_covered", text, &[&names(layer), &cover])));
+            let hidden = names(layer);
+            out.push(warning(
+                at,
+                said(
+                    "editor.layer_covered",
+                    "The layer \"%1\" never shows: \"%2\", above it, covers the whole canvas with no transparency; hide or move \"%2\", or move \"%1\" above it",
+                    &[&hidden, &cover],
+                ),
+            ));
         }
     }
 }
@@ -129,8 +136,14 @@ fn walk(list: &Value, base: &str, canvas: [f64; 2], out: &mut Vec<Problem>) {
                 walk(&layer["layers"], &format!("{at}/layers"), canvas, out);
             }
         } else if off(layer, canvas) {
-            let text = "The layer \"%1\" lies completely outside the canvas, so it never shows; move it inside the canvas";
-            out.push(warning(at, said("editor.layer_off_canvas", text, &[&names(layer)])));
+            out.push(warning(
+                at,
+                said(
+                    "editor.layer_off_canvas",
+                    "The layer \"%1\" lies completely outside the canvas, so it never shows; move it inside the canvas",
+                    &[&names(layer)],
+                ),
+            ));
         }
     }
 }
