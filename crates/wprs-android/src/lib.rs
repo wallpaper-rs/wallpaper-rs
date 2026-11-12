@@ -6,6 +6,7 @@ mod acting;
 mod address;
 mod apply;
 mod bench;
+mod blanked;
 mod blend;
 #[cfg(target_os = "android")]
 mod bridge;

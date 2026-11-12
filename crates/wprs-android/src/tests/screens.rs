@@ -40,6 +40,20 @@ pub(super) fn home_and_lock() {
     assert_eq!(ask(json!({ "op": "remove", "uids": [bands] })), Value::Null);
     assert_eq!((on(false), on(true)), (green.clone(), green.clone()));
     assert!(settings::config().outputs.get(choice::LOCK).is_none_or(|lock| lock.image.is_none()));
+    removing_the_wallpaper_keeps_the_previous_one();
+}
+
+fn removing_the_wallpaper_keeps_the_previous_one() {
+    let state = ask(json!({ "op": "wallpaper" }));
+    assert_eq!((&state["blank"], &state["previous"]), (&json!(false), &json!(false)));
+    let green = on(false);
+    let removed = ask(json!({ "op": "remove_wallpaper" }));
+    assert_eq!((&removed["blank"], &removed["previous"]), (&json!(true), &json!(true)), "{removed}");
+    assert_eq!((on(false), on(true)), (String::new(), String::new()));
+    let restored = ask(json!({ "op": "restore_wallpaper" }));
+    assert_eq!((&restored["blank"], &restored["previous"]), (&json!(false), &json!(false)), "{restored}");
+    assert_eq!((on(false), on(true)), (green.clone(), green));
+    assert!(ask(json!({ "op": "restore_wallpaper" }))["error"].is_string());
 }
 
 pub(super) fn ruled_lists() {

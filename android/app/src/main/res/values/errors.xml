@@ -121,4 +121,5 @@
     <string name="error_android_server_needs_https">The server address must start with https:// (http:// only works for this phone itself)</string>
     <string name="error_android_server_address_parts">The server address can only have a host and a path: no user, password, ? or #</string>
     <string name="error_android_server_unreachable">Could not reach %1$s. Check the address and that the phone has a connection</string>
+    <string name="error_android_nothing_before">There is no earlier wallpaper to bring back</string>
 </resources>

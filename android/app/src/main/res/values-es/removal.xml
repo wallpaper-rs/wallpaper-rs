@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wallpaper">Fondo de pantalla</string>
+    <string name="remove_wallpaper">Quitar el fondo</string>
+    <string name="bring_back_wallpaper">Recuperar el fondo anterior</string>
+    <string name="wallpaper_removed">Fondo quitado</string>
+    <string name="remove_wallpaper_note">El teléfono vuelve a usar su propio fondo. El que tenías se guarda aquí para que puedas recuperarlo.</string>
+</resources>

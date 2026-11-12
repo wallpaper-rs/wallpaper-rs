@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wallpaper">Wallpaper</string>
+    <string name="remove_wallpaper">Remove the wallpaper</string>
+    <string name="bring_back_wallpaper">Bring back the previous wallpaper</string>
+    <string name="wallpaper_removed">Wallpaper removed</string>
+    <string name="remove_wallpaper_note">The phone goes back to its own wallpaper. The one you had stays here so you can bring it back.</string>
+</resources>

@@ -72,6 +72,7 @@ pub(crate) fn with<T>(work: impl FnOnce(&mut Library) -> Result<T, Error>) -> Re
 pub(crate) fn request(text: &str, on_battery: bool) -> String {
     let answer = tried(text, props::request)
         .or_else(|| tried(text, crate::graded::request))
+        .or_else(|| tried(text, crate::blanked::request))
         .or_else(|| tried(text, crate::converted::request))
         .or_else(|| tried(text, crate::kin::request))
         .unwrap_or_else(|| {

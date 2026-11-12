@@ -121,4 +121,5 @@
     <string name="error_android_server_needs_https">La dirección del servidor debe empezar por https:// (http:// solo sirve para este mismo teléfono)</string>
     <string name="error_android_server_address_parts">La dirección del servidor solo puede tener un servidor y una ruta: sin usuario, contraseña, ? ni #</string>
     <string name="error_android_server_unreachable">No se pudo llegar a %1$s. Revisa la dirección y que el teléfono tenga conexión</string>
+    <string name="error_android_nothing_before">No hay un fondo anterior que recuperar</string>
 </resources>

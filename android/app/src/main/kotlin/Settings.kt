@@ -123,6 +123,7 @@ fun Settings(main: Main) {
                 },
             )
         }
+        item { Removal(main) }
         item { Grade(main) }
         item { ShortcutMissed() }
         item {
