@@ -632,6 +632,8 @@ rest of its state; `wprs-ctl scene preview DIR --quality Q --restart` does the s
 budget as JSON.
 
 
+The systems panel has a section with the settings of the system, all through `settings`: the most particles alive (`capacity`, up to 200 000), the `seed` typed, picked at random or taken from the preview, the seconds simulated before it shows (`prewarm`) and whether particles move with the layer or stay where they were born (`space`).
+
 Each emitter of the inspector has its rate (a live slider through `settings` with the `emitter`; a
 rate that follows keyframes or a link shows it and offers *Fixed rate*, which replaces it) and an
 emission lane, from 0 to at least 10 s: the delay, the end of the `duration`, the on and off spans

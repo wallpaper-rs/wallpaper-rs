@@ -47,6 +47,11 @@ ColumnLayout {
         system: tools.system
     }
 
+    SceneSwarmSettings {
+        Layout.fillWidth: true
+        tools: tools
+    }
+
     Kirigami.Heading {
         level: 4
         text: App.tr("Emitters")

@@ -7935,6 +7935,52 @@ msgstr "Valores iniciales desde entradas"
 msgid "Add a remap"
 msgstr "Añadir una reasignación"
 
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Settings of this system"
+msgstr "Ajustes de este sistema"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Most particles alive"
+msgstr "Máximo de partículas vivas"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Seed"
+msgstr "Semilla"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Pick a random seed"
+msgstr "Elegir una semilla al azar"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Use the seed of the preview"
+msgstr "Usar la semilla de la vista previa"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Seconds simulated before it shows %1"
+msgstr "Segundos simulados antes de mostrarse: %1"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Particles move with"
+msgstr "Las partículas se mueven con"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "The layer"
+msgstr "La capa"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Where they were born"
+msgstr "El sitio donde nacieron"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid ""
+"The layer and the control points only place particles when they are born"
+msgstr "La capa y los puntos de control solo colocan las partículas cuando nacen"
+
+#: apps/wprs-app/qml/SceneSwarmSettings.qml
+msgid "Particles move with the layer that draws them"
+msgstr "Las partículas se mueven con la capa que las dibuja"
+
 #: apps/wprs-app/qml/SceneSwarmSource.qml
 msgid "Pixels more opaque than %1 emit; the preview marks them"
 msgstr "Emiten los píxeles más opacos que %1; la vista previa los marca"
@@ -11067,10 +11113,6 @@ msgstr "Script"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Secret"
 msgstr "Secreto"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Seed"
-msgstr "Semilla"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Segments"

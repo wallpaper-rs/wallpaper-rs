@@ -63,6 +63,23 @@ QtObject {
             }, 86400);
         if (ticks.length > 1000 || Date.now() - begun > 50)
             throw new Error("emission: a day of bursts drew " + ticks.length + " lines in " + (Date.now() - begun) + " ms");
+        const bursts = Qt.createComponent("SceneSwarmBursts.qml").createObject(page, {
+                "emission": emission
+            });
+        bursts.change(0, {
+                "at": 2
+            });
+        emission.put({
+                "bursts": bursts.list.concat([{
+                        "count": 4,
+                        "on": "beat"
+                    }])
+            });
+        bursts.drop(0);
+        const left = read(base + "/emitters/0").bursts;
+        if (left.length !== 1 || left[0].on !== "beat")
+            throw new Error("emission: a burst was not changed or removed on its own: " + JSON.stringify(left) + page.editor.error);
+        bursts.destroy();
         lane.destroy();
         emission.destroy();
         const stack = Qt.createComponent("SceneSwarmStack.qml").createObject(page, {
@@ -79,6 +96,19 @@ QtObject {
         if (stack.render.order !== "oldest" || stack.locked.length !== 2)
             throw new Error("emission: the drawing order or the lock did not show: " + page.editor.error);
         stack.destroy();
+        const given = Qt.createComponent("SceneSwarmSettings.qml").createObject(page, {
+                "tools": tools
+            });
+        given.put({
+                "capacity": 300,
+                "seed": 42,
+                "prewarm": 2.5,
+                "space": "world"
+            });
+        given.seeded("77");
+        if (given.capacity !== 300 || given.seed !== 77 || given.prewarm !== 2.5 || given.space !== "world")
+            throw new Error("settings: the system did not take its settings: " + page.editor.error);
+        given.destroy();
         tools.destroy();
         const node = (page.view.layers ?? []).find(l => l.type === "particles");
         const own = Qt.createComponent("SceneSwarmInstance.qml").createObject(page, {
