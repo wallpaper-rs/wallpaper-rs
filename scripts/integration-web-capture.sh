@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
+declare BIN ROOT pages
 cp -r "$ROOT/tests/fixtures/tint" "$pages/tintdir"
 ctl scene thumbnail "$pages/tintdir" --capture -o TEST-W >/dev/null
 shot=$(ctl scene show "$pages/tintdir" /manifest/previews/thumbnail | tr -d '"')
-[ -n "$shot" ] && [ -f "$pages/tintdir/$shot" ] || fail "no thumbnail was captured from the page: $shot"
+if [ -z "$shot" ] || [ ! -f "$pages/tintdir/$shot" ]; then fail "no thumbnail was captured from the page: $shot"; fi
 center=$(python3 - "$pages/tintdir/$shot" <<'PY'
 import struct, sys, zlib
 data = open(sys.argv[1], "rb").read()
