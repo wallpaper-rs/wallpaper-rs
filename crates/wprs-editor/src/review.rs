@@ -84,7 +84,7 @@ pub fn signature(path: &Path, keys: &[String]) -> Value {
         return json!({"state": "invalid", "error": "manifest.json cannot be read"});
     };
     match Manifest::from_json(&json) {
-        Ok(m) => judged(&json, &signed, &wprs_format::manifest_comment(&m.id, &m.version, &json), keys),
+        Ok(m) => judged(&json, &signed, &wprs_format::manifest_comment(&m.id, &m.version), keys),
         Err(e) => json!({"state": "invalid", "error": e.to_string()}),
     }
 }
@@ -98,7 +98,7 @@ fn packed(path: &Path, keys: &[String]) -> Value {
     let Ok(json) = package.read_file(MANIFEST) else {
         return json!({"state": "invalid", "error": "no manifest"});
     };
-    let comment = wprs_format::manifest_comment(&package.manifest.id, &package.manifest.version, &json);
+    let comment = wprs_format::manifest_comment(&package.manifest.id, &package.manifest.version);
     judged(&json, &String::from_utf8_lossy(&signed), &comment, keys)
 }
 

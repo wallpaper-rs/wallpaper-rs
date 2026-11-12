@@ -17,18 +17,20 @@ pub fn fingerprint(key: &str) -> Result<String> {
     sha256(&raw[10..])
 }
 
-pub fn manifest_comment(id: &str, version: &str, manifest: &[u8]) -> String {
-    let digest = sha256(manifest).unwrap_or_default();
-    format!("wpak manifest {id} {version} sha256:{digest}")
+pub fn manifest_comment(id: &str, version: &str) -> String {
+    format!("wpak manifest {id} {version}")
 }
 
-pub fn signs_comment(sigs: &str, comment: &str) -> bool {
-    let lines: Vec<&str> = sigs.lines().collect();
-    let shaped = !lines.is_empty() && lines.len().is_multiple_of(4);
-    shaped
-        && lines
-            .chunks(4)
-            .all(|b| Signature::decode(&b.join("\n")).is_ok_and(|sig| sig.trusted_comment() == comment))
+const NOTE: &str = "wpak manifest sha256:";
+
+pub fn manifest_note(manifest: &[u8]) -> String {
+    format!("{NOTE}{}", sha256(manifest).unwrap_or_default())
+}
+
+pub fn noted_hash(sigs: &str) -> Option<String> {
+    let line = sigs.lines().next()?;
+    let hash = line.split_once(NOTE)?.1.split_whitespace().next()?;
+    Some(hash.to_owned())
 }
 
 pub fn verify_blocks(
@@ -70,8 +72,7 @@ pub fn threshold(
 pub fn verify_package<R: Read + Seek>(package: &mut Package<R>, keys: &[(&str, &str)]) -> Result<String> {
     let sig = String::from_utf8(package.read_file(SIGNATURE)?)
         .map_err(|_| Error::Signature(format!("{SIGNATURE} is not UTF-8")))?;
-    let data = package.read_file(MANIFEST)?;
-    let comment = manifest_comment(&package.manifest.id, &package.manifest.version, &data);
-    let verified = threshold(&data, &sig, &comment, keys, 1)?;
+    let comment = manifest_comment(&package.manifest.id, &package.manifest.version);
+    let verified = threshold(&package.read_file(MANIFEST)?, &sig, &comment, keys, 1)?;
     Ok(verified.into_iter().next().unwrap_or_default())
 }

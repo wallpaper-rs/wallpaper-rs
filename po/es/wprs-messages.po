@@ -2919,6 +2919,14 @@ msgstr ""
 "firma otra versión de manifest.json; vuelve a firmar con pack sign o bórrala "
 "para construir sin firma"
 
+#: crates/wprs-format/src/build.rs
+msgid ""
+"it carries no hash of manifest.json and no key was given to check it; run "
+"pack sign again or pass --key"
+msgstr ""
+"no lleva el hash de manifest.json y no se dio ninguna clave para comprobarla; "
+"vuelve a firmar con pack sign o pasa --key"
+
 #: crates/wprs-format/src/catalog.rs
 msgid "package size"
 msgstr "tamaño del paquete"

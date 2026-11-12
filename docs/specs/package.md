@@ -9,6 +9,14 @@ most 1 MiB. Repositories (`repo.md`) and the server (`server.md`) distribute pac
 described in `scene.md`. An author signs the exact bytes of `manifest.json` into
 `manifest.json.minisig`.
 
+`pack sign` writes the signature with the same trusted comment as always and adds, in its untrusted
+comment line (which every verifier ignores), `wpak manifest sha256:<hash of manifest.json>`. Signatures
+without that hash, made by earlier versions, keep verifying exactly as before: verification is only the
+cryptographic check. `pack build` never embeds a signature that does not match the manifest: with the hash
+it compares it, and it also verifies the signature against the keys given with `--key`; a signature
+without the hash and without `--key` is refused with the advice to sign again or pass the key (a key is
+never inferred from the folder).
+
 | `kind` | `entry` | Other files |
 |--------|---------|-------------|
 | `image` | png, jpg, jpeg, webp, avif, gif, bmp or ktx2 | images, txt |

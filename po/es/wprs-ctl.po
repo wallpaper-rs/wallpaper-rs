@@ -4062,6 +4062,13 @@ msgstr ""
 "Archivo del paquete; <id>-<versión>.wpak en la carpeta actual si se omite"
 
 #: apps/wprs-ctl/src/pack.rs
+msgid ""
+"Public key file or text that checks a signature made without a manifest hash"
+msgstr ""
+"Archivo o texto de clave pública que comprueba una firma hecha sin el hash "
+"del manifiesto"
+
+#: apps/wprs-ctl/src/pack.rs
 msgid "Sign the manifest of a package folder; run it before pack build"
 msgstr ""
 "Firmar el manifiesto de una carpeta de paquete; ejecutarlo antes de pack "

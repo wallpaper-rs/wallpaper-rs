@@ -5,7 +5,7 @@ use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};
 use wprs_format::{
-    Limits, MANIFEST, Manifest, build, features, fill, fingerprint, open, public_key, sha256_file,
+    Limits, MANIFEST, Manifest, build_with, features, fill, fingerprint, open, public_key, sha256_file,
     sign_source, verify_package,
 };
 
@@ -17,6 +17,12 @@ pub enum Pack {
         dir: PathBuf,
         #[arg(short, long, help = "Package file; <id>-<version>.wpak in the current folder when omitted")]
         out: Option<PathBuf>,
+        #[arg(
+            long = "key",
+            value_name = "PUB",
+            help = "Public key file or text that checks a signature made without a manifest hash"
+        )]
+        keys: Vec<String>,
         #[arg(long, help = "Print the result as JSON")]
         json: bool,
     },
@@ -75,7 +81,7 @@ pub enum Pack {
 pub fn run(command: Pack) -> Result<()> {
     match command {
         Pack::Shelving(command) => crate::shelving::run(command)?,
-        Pack::Build { dir, out, json } => {
+        Pack::Build { dir, out, keys, json } => {
             let manifest = Manifest::from_json(&fs::read(dir.join(MANIFEST))?)?;
             let out = out.unwrap_or_else(|| format!("{}-{}.wpak", manifest.id, manifest.version).into());
             for note in manifest.unread_texts(wprs_format::locale_names(&dir)) {
@@ -84,7 +90,12 @@ pub fn run(command: Pack) -> Result<()> {
             for added in fill(&dir)? {
                 eprintln!("requires.features += {added} ({})", features::explain(&added));
             }
-            let (sha256, size) = (build(&dir, &out, &Limits::default())?, fs::metadata(&out)?.len());
+            let keys = keys.iter().map(|k| key_text(k)).collect::<Result<Vec<_>>>()?;
+            let keys =
+                keys.iter().map(|k| Ok((fingerprint(k)?, public_key(k)?))).collect::<Result<Vec<_>>>()?;
+            let pairs: Vec<(&str, &str)> = keys.iter().map(|(fp, key)| (fp.as_str(), key.as_str())).collect();
+            let sha256 = build_with(&dir, &out, &Limits::default(), &pairs)?;
+            let size = fs::metadata(&out)?.len();
             match json {
                 true => println!("{}", json!({"path": out, "sha256": sha256, "size": size})),
                 false => println!("{sha256} {size} {}", out.display()),

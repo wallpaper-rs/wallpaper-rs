@@ -62,7 +62,7 @@ pub use archive::{extract, peek, thumbnail};
 pub use asks::asks;
 pub use authors::{AUTHORS_FORMAT, Authors, ONLINE, OnlineAuthor, Rotation, Trusted, rotation_text};
 pub use browse::{Item, browse, browse_with};
-pub use build::{build, build_staged, sha256, sha256_file};
+pub use build::{build, build_staged, build_with, sha256, sha256_file};
 pub use catalog::{Added, add, hide, list, revoke, revoke_key, unrevoke};
 pub use charter::{Charter, key_text};
 pub use client::{Outcome, RepoInfo, Update, add_repo, remove_repo, repos, update_repo, verify};
@@ -101,7 +101,8 @@ pub use release::{Needs, Preview, Rated, Release, Wanted};
 pub use repo::{Author, Key, Policy, ROOT_FORMAT, Role, Roles, Root, Time, comment};
 pub use settings::{Settings, settings};
 pub use sign::{
-    fingerprint, manifest_comment, public_key, signs_comment, threshold, verify_blocks, verify_package,
+    fingerprint, manifest_comment, manifest_note, noted_hash, public_key, threshold, verify_blocks,
+    verify_package,
 };
 pub use source::{Folder, fill, inspect, locale_names, with_strings};
 pub use stall::{Shelved, Stocked, stock};

@@ -1,4 +1,4 @@
-use crate::{Error, MANIFEST, Manifest, Result, SIGNATURE, fingerprint, manifest_comment};
+use crate::{Error, MANIFEST, Manifest, Result, SIGNATURE, fingerprint, manifest_comment, manifest_note};
 use minisign::{KeyPair, PError, PublicKey, SecretKey, SecretKeyBox};
 use serde::Serialize;
 use std::fs;
@@ -46,6 +46,10 @@ impl Signer {
     pub fn sign(&self, data: &[u8], comment: &str) -> Result<String> {
         Ok(minisign::sign(None, &self.key, data, Some(comment), None)?.into_string())
     }
+
+    pub fn sign_noted(&self, data: &[u8], comment: &str, note: &str) -> Result<String> {
+        Ok(minisign::sign(None, &self.key, data, Some(comment), Some(note))?.into_string())
+    }
 }
 
 pub fn sign_source(dir: impl AsRef<Path>, signer: &Signer) -> Result<String> {
@@ -54,9 +58,7 @@ pub fn sign_source(dir: impl AsRef<Path>, signer: &Signer) -> Result<String> {
     crate::fill(dir)?;
     let json = fs::read(dir.join(MANIFEST))?;
     let manifest = Manifest::from_json(&json)?;
-    fs::write(
-        dir.join(SIGNATURE),
-        signer.sign(&json, &manifest_comment(&manifest.id, &manifest.version, &json))?,
-    )?;
+    let comment = manifest_comment(&manifest.id, &manifest.version);
+    fs::write(dir.join(SIGNATURE), signer.sign_noted(&json, &comment, &manifest_note(&json))?)?;
     Ok(signer.fingerprint.clone())
 }

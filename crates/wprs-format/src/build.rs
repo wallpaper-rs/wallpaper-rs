@@ -1,7 +1,7 @@
 use crate::validate::extension;
 use crate::{
-    Error, FileEntry, Kind, Limits, MANIFEST, Manifest, Result, SIGNATURE, manifest_comment, signs_comment,
-    validate,
+    Error, FileEntry, Kind, Limits, MANIFEST, Manifest, Result, SIGNATURE, manifest_comment, noted_hash,
+    validate, verify_blocks,
 };
 use sha2::{Digest, Sha256};
 use std::fmt::Write as _;
@@ -18,21 +18,30 @@ const STORED: &[&str] = &[
 ];
 
 pub fn build(source: impl AsRef<Path>, out: impl AsRef<Path>, limits: &Limits) -> Result<String> {
+    build_with(source, out, limits, &[])
+}
+
+pub fn build_with(
+    source: impl AsRef<Path>,
+    out: impl AsRef<Path>,
+    limits: &Limits,
+    keys: &[(&str, &str)],
+) -> Result<String> {
     let source = source.as_ref();
     crate::fill(source)?;
-    current(source)?;
+    current(source, keys)?;
     pack(source, None, out.as_ref(), limits)
 }
 
-fn current(source: &Path) -> Result<()> {
+fn current(source: &Path, keys: &[(&str, &str)]) -> Result<()> {
     let signed = match fs::read_to_string(source.join(SIGNATURE)) {
         Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(()),
         read => read?,
     };
     let json = fs::read(source.join(MANIFEST))?;
     let manifest = Manifest::from_json(&json)?;
-    let comment = manifest_comment(&manifest.id, &manifest.version, &json);
-    crate::ensure(signs_comment(&signed, &comment), || {
+    let named = noted_hash(&signed);
+    let again = || {
         crate::refuse(
             SIGNATURE,
             said(
@@ -41,7 +50,26 @@ fn current(source: &Path) -> Result<()> {
                 &[],
             ),
         )
-    })
+    };
+    if named.as_ref().is_some_and(|hash| Some(hash.as_str()) != sha256(&json[..]).ok().as_deref()) {
+        return Err(again());
+    }
+    if keys.is_empty() {
+        let unchecked = || {
+            crate::refuse(
+                SIGNATURE,
+                said(
+                    "format.unchecked_signature",
+                    "it carries no hash of manifest.json and no key was given to check it; run pack sign again or pass --key",
+                    &[],
+                ),
+            )
+        };
+        return named.map(|_| ()).ok_or_else(unchecked);
+    }
+    let comment = manifest_comment(&manifest.id, &manifest.version);
+    let signers = verify_blocks(&json, &signed, &comment, keys);
+    crate::ensure(signers.is_ok_and(|s| !s.is_empty()), again)
 }
 
 pub fn build_staged(
