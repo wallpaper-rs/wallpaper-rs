@@ -15,7 +15,7 @@ fn rope(render: Value) -> Value {
     let mut s = system(json!({ "point": [20, 40] }), init, json!({ "render": render }));
     s["emitters"][0] = json!({ "shape": { "point": [20, 40] }, "rate": 30, "max_per_step": 1 });
     if s["render"].get("trail").is_some() {
-        s["emitters"][0] = json!({ "shape": { "point": [20, 40] }, "burst": { "count": 1 } });
+        s["emitters"][0] = json!({ "shape": { "point": [20, 40] }, "bursts": [{ "count": 1 }] });
         s["init"]["size"] = json!([8, 8]);
     }
     s

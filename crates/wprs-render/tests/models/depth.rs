@@ -83,7 +83,7 @@ fn a_3d_group_inside_another_shares_its_depth() {
 
 fn sparks(depth: f32) -> Value {
     json!({ "particles": { "s": { "capacity": 4, "seed": 1, "perspective": { "focal": 100 },
-        "emitters": [{ "shape": { "point": [32, 32] }, "burst": { "count": 1 } }],
+        "emitters": [{ "shape": { "point": [32, 32] }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [50, 50], "speed": [0, 0], "size": [20, 20], "color": ["#00ff00", "#00ff00"], "depth": [depth, depth] } } } })
 }
 
