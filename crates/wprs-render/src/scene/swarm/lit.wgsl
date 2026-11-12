@@ -10,19 +10,11 @@ fn turned(t: vec2<f32>, turn: vec4<f32>) -> vec2<f32> {
     return t.x * turn.xy - t.y * vec2<f32>(-turn.y, turn.x);
 }
 
-@fragment
-fn fs_lit_particle(in: Corner) -> @location(0) vec4<f32> {
-    let c = painted(in);
+fn lamp_lit(c: vec4<f32>, n: vec3<f32>, p: vec2<f32>) -> vec4<f32> {
     if c.a <= 1e-5 {
         return c;
     }
     let albedo = c.rgb / c.a;
-    var n = vec3<f32>(0.0, 0.0, 1.0);
-    if look.light.y > 0.5 {
-        let t = textureSampleLevel(normal_map, samp, in.uv * look.crops.xy, 0.0).xyz * 2.0 - 1.0;
-        n = normalize(vec3<f32>(turned(t.xy, in.turn), max(t.z, 0.0) + 1e-3));
-    }
-    let p = in.position.xy + look.place.xy;
     var light = mix(lights.ambient.rgb, lights.sky.rgb, 0.5 - 0.5 * n.y);
     for (var i = 0u; i < min(u32(lights.head.x), 8u); i++) {
         let b = lights.bulbs[i];
@@ -36,6 +28,16 @@ fn fs_lit_particle(in: Corner) -> @location(0) vec4<f32> {
     }
     let rgb = albedo * light + albedo * look.place.w;
     return vec4<f32>(mix(albedo, rgb, look.place.z) * c.a, c.a);
+}
+
+@fragment
+fn fs_lit_particle(in: Corner) -> @location(0) vec4<f32> {
+    var n = vec3<f32>(0.0, 0.0, 1.0);
+    if look.light.y > 0.5 {
+        let t = textureSampleLevel(normal_map, samp, in.uv * look.crops.xy, 0.0).xyz * 2.0 - 1.0;
+        n = normalize(vec3<f32>(turned(t.xy, in.turn), max(t.z, 0.0) + 1e-3));
+    }
+    return lamp_lit(painted(in), n, in.position.xy + look.place.xy);
 }
 
 @fragment

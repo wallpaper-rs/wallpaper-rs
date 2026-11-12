@@ -3,6 +3,7 @@ struct Cord {
     @location(0) color: vec4<f32>,
     @location(1) uv: vec2<f32>,
     @location(2) @interpolate(flat) textured: f32,
+    @location(3) bend: vec3<f32>,
 };
 
 fn toned(life: f32, c: vec4<f32>) -> vec4<f32> {
@@ -42,6 +43,7 @@ fn vs_rope(
     out.color = toned(i.z, select(ac, bc, far));
     out.uv = vec2<f32>(i.x * look.cord.y + look.cord.z, side + 0.5);
     out.textured = look.cord.w;
+    out.bend = across(p.zw, width);
     return out;
 }
 
@@ -90,11 +92,11 @@ fn vs_long(
     out.color = toned(s.y, mix(ca, cb, t)) * vec4<f32>(1.0, 1.0, 1.0, fade);
     out.uv = vec2<f32>((f32(j) + t) / max(look.extra.y - 1.0, 1.0) * look.strand.y + look.strand.z, side + 0.5);
     out.textured = look.strand.w;
+    out.bend = across(vec2<f32>(-c[1].y, c[1].x) / l, width);
     return out;
 }
 
-@fragment
-fn fs_cord(in: Cord) -> @location(0) vec4<f32> {
+fn corded(in: Cord) -> vec4<f32> {
     var s = textureSample(sprite, samp, vec2<f32>(fract(in.uv.x), in.uv.y));
     if look.tint.y > 0.5 {
         s = vec4<f32>(encode(s.rgb), s.a);
@@ -102,4 +104,9 @@ fn fs_cord(in: Cord) -> @location(0) vec4<f32> {
     let soft = vec4<f32>(1.0, 1.0, 1.0, 1.0 - smoothstep(0.6, 1.0, abs(in.uv.y * 2.0 - 1.0)));
     let c = select(soft, s, in.textured > 0.5 && look.tint.w > 0.5) * in.color;
     return vec4<f32>(c.rgb * c.a, c.a);
+}
+
+@fragment
+fn fs_cord(in: Cord) -> @location(0) vec4<f32> {
+    return corded(in);
 }

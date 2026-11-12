@@ -8,6 +8,7 @@ mod flight;
 mod hull;
 mod kit;
 mod lamp;
+mod lamped;
 mod looks;
 mod maps;
 mod paint;
@@ -98,10 +99,10 @@ pub(crate) struct Swarms {
     twining: Option<wgpu::ComputePipeline>,
     sorts: Option<[wgpu::ComputePipeline; 3]>,
     pipelines: HashMap<Mode, wgpu::RenderPipeline>,
-    lits: HashMap<Mode, wgpu::RenderPipeline>,
+    lits: HashMap<(Mode, usize), wgpu::RenderPipeline>,
     seens: HashMap<Mode, wgpu::RenderPipeline>,
     seen: Vec<Option<BindGroup>>,
-    bend: Option<wgpu::RenderPipeline>,
+    bends: [Option<wgpu::RenderPipeline>; 4],
     ribbons: HashMap<Mode, wgpu::RenderPipeline>,
     cords: HashMap<Mode, [wgpu::RenderPipeline; 2]>,
     format: wgpu::TextureFormat,
@@ -114,7 +115,7 @@ pub(crate) struct Swarms {
     none: Buffer,
     stamp: Stamp,
     maps: Vec<maps::Map>,
-    stages: HashMap<(Mode, u64), wgpu::RenderPipeline>,
+    stages: HashMap<(Mode, u64, usize), wgpu::RenderPipeline>,
     framing: BindGroupLayout,
     framed: Option<BindGroup>,
 }

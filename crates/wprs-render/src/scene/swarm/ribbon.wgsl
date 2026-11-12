@@ -2,7 +2,14 @@ struct Ribbon {
     @builtin(position) position: vec4<f32>,
     @location(0) color: vec4<f32>,
     @location(1) across: f32,
+    @location(2) @interpolate(flat) bend: vec3<f32>,
 };
+
+fn across(n: vec2<f32>, width: f32) -> vec3<f32> {
+    let c = cos(look.turn.z);
+    let s = sin(look.turn.z);
+    return vec3<f32>(c * n.x - s * n.y, s * n.x + c * n.y, width * look.light.w);
+}
 
 @vertex
 fn vs_trail(
@@ -38,11 +45,16 @@ fn vs_trail(
     let fade = 1.0 - (f32(j) + corner.x) / max(look.extra.y - 1.0, 1.0);
     out.color = base * tone * vec4<f32>(vec3<f32>(look.shade.x), look.tint.x * fade);
     out.across = corner.y;
+    out.bend = across(vec2<f32>(-d.y, d.x) / l, width);
     return out;
+}
+
+fn trailed(in: Ribbon) -> vec4<f32> {
+    let c = in.color * vec4<f32>(1.0, 1.0, 1.0, 1.0 - smoothstep(0.6, 1.0, abs(in.across * 2.0 - 1.0)));
+    return vec4<f32>(c.rgb * c.a, c.a);
 }
 
 @fragment
 fn fs_trail(in: Ribbon) -> @location(0) vec4<f32> {
-    let c = in.color * vec4<f32>(1.0, 1.0, 1.0, 1.0 - smoothstep(0.6, 1.0, abs(in.across * 2.0 - 1.0)));
-    return vec4<f32>(c.rgb * c.a, c.a);
+    return trailed(in);
 }

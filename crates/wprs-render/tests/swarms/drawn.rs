@@ -1,7 +1,7 @@
 use super::*;
 use image::{Rgba, RgbaImage};
 
-fn dot(at: [f32; 2], more: Value) -> Value {
+pub(super) fn dot(at: [f32; 2], more: Value) -> Value {
     let mut s = json!({ "capacity": 4, "seed": 2, "emitters": [{ "shape": { "point": at }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [24, 24], "color": ["#ffffff", "#ffffff"] } });
     more.as_object().into_iter().flatten().for_each(|(k, v)| s[k] = v.clone());
@@ -9,8 +9,17 @@ fn dot(at: [f32; 2], more: Value) -> Value {
 }
 
 fn seen(r: &Renderer, system: Value, files: &[(&str, &str)], gpu: bool) -> Option<(Vec<u8>, Vec<String>)> {
+    seen_among(r, (system, Vec::new()), files, gpu)
+}
+
+pub(super) fn seen_among(
+    r: &Renderer,
+    (system, mut layers): (Value, Vec<Value>),
+    files: &[(&str, &str)],
+    gpu: bool,
+) -> Option<(Vec<u8>, Vec<String>)> {
     let canvas = json!({ "size": [SIZE.0, SIZE.1], "background": "#000000" });
-    let layers = json!([{ "id": "p", "type": "particles", "system": "s" }]);
+    layers.push(json!({ "id": "p", "type": "particles", "system": "s" }));
     let effects: serde_json::Map<String, Value> = files
         .iter()
         .filter(|(p, _)| p.ends_with(".json"))

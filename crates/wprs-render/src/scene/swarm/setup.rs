@@ -118,6 +118,7 @@ impl Swarms {
                     include_str!("../lamps.wgsl"),
                     include_str!("lit.wgsl"),
                     include_str!("seen.wgsl"),
+                    include_str!("sheen.wgsl"),
                 ]
                 .join("\n"),
             ),
@@ -129,7 +130,7 @@ impl Swarms {
             lits: HashMap::new(),
             seens: HashMap::new(),
             seen: Vec::new(),
-            bend: None,
+            bends: Default::default(),
             ribbons: HashMap::new(),
             cords: HashMap::new(),
             sorts: None,

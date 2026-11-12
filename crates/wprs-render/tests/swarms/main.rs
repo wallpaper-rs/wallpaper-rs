@@ -11,6 +11,7 @@ mod drawn;
 mod families;
 mod fields;
 mod looks;
+mod shone;
 mod sources;
 mod steered;
 mod strung;
