@@ -27,8 +27,8 @@ pub use crate::action::{
     TimelineEdit, TimelineEvent,
 };
 pub use crate::action::{ClockSet, Fit, Grip, Named, PasteEdit, RenameEdit, SCREENS, TranslateEdit};
-pub use crate::action::{FigureEdit, Stop};
 pub use crate::action::{DepthMapEdit, RampEdit, RampFormat, RampStop};
+pub use crate::action::{FigureEdit, Stop};
 
 pub fn layer<'a>(doc: &'a Value, id: &str) -> Result<(String, &'a Value)> {
     let path = find(doc, id)?;

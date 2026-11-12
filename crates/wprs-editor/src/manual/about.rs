@@ -98,7 +98,10 @@ pub const ABOUT: [(&str, &str); 74] = [
         "Declare the parts of the scripting interface a script uses, or take undeclared ones from its source",
     ),
     ("film", "Trim a video layer to a part of the video, set its speed, or size its box from the video"),
-    ("sprites", "Cut a picture into frames with a grid or drawn rectangles, or change, add, remove and reorder them"),
+    (
+        "sprites",
+        "Cut a picture into frames with a grid or drawn rectangles, or change, add, remove and reorder them",
+    ),
     ("undo", "Undo the last change"),
     ("redo", "Redo the last undone change"),
 ];
