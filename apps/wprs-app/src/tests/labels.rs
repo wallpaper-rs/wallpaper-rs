@@ -46,7 +46,10 @@ fn sources(dir: &std::path::Path, out: &mut Vec<String>) {
 fn every_field_key_the_editor_writes_by_hand_has_a_translated_label() {
     let (words, catalog) = (Words(tables()), crate::tr::catalog(&["es".to_owned()]));
     let mut files = Vec::new();
-    sources(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../crates/wprs-editor/src"), &mut files);
+    sources(
+        &std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../crates/wprs-editor/src"),
+        &mut files,
+    );
     let keys: BTreeSet<&str> = files.iter().flat_map(|f| literals(f, "key: ")).collect();
     assert!(keys.contains("wake") && keys.contains("prop"), "{keys:?}");
     let missing: Vec<&&str> = keys
