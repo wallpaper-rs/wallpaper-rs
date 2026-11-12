@@ -14,15 +14,24 @@ pub async fn asking(
     output: &str,
     action: impl Future<Output = zbus::Result<()>>,
 ) -> Result<()> {
+    asking_for(client, output, None, action).await
+}
+
+pub async fn asking_for(
+    client: &Client,
+    output: &str,
+    only: Option<&str>,
+    action: impl Future<Output = zbus::Result<()>>,
+) -> Result<()> {
     let since = client.daemon.serial().await?;
     action.await.map_err(wprs_client::explain)?;
-    if let Ok(asks) = asks(client, output, since).await {
+    if let Ok(asks) = asks(client, output, only, since).await {
         asks.iter().for_each(|ask| eprintln!("{}", show::clean(ask)));
     }
     Ok(())
 }
 
-async fn asks(client: &Client, output: &str, mut serial: u64) -> Result<BTreeSet<String>> {
+async fn asks(client: &Client, output: &str, only: Option<&str>, mut serial: u64) -> Result<BTreeSet<String>> {
     let ours = |name: &String| output.is_empty() || name == output;
     let state: State = parse(&client.daemon.get_state().await?)?;
     let scene =
@@ -50,10 +59,15 @@ async fn asks(client: &Client, output: &str, mut serial: u64) -> Result<BTreeSet
     }
     let slow = after.outputs.iter().filter(|(name, o)| ours(name) && o.particles == "cpu");
     let slow = slow.map(|(name, _)| format!("{name}: {}", tr(SLOW)));
+    let asks = requests(&reply, &ours, only);
+    Ok(asks.into_iter().chain(slow).collect())
+}
+
+pub(super) fn requests(reply: &InputsReply, ours: &dyn Fn(&String) -> bool, only: Option<&str>) -> Vec<String> {
     let declined =
         |scene: &String, input: Input| reply.declined.get(scene).is_some_and(|set| set.contains(&input));
     let twins = |s: &SceneInputs| reply.shown.values().any(|o| o.scene == s.scene && o.key != s.key);
-    let shown = reply.shown.iter().filter(|(name, _)| ours(name));
+    let shown = reply.shown.iter().filter(|(name, s)| ours(name) && only.is_none_or(|id| s.scene == id));
     let asks = shown.flat_map(|(name, s)| {
         let title = if s.title.is_empty() { &s.scene } else { &s.title };
         let used = [
@@ -78,5 +92,5 @@ async fn asks(client: &Client, output: &str, mut serial: u64) -> Result<BTreeSet
             fill(told("%1 follows %2 once you allow it: %3"), &[&title, &what, &grant])
         })
     });
-    Ok(asks.chain(slow).collect())
+    asks.collect()
 }

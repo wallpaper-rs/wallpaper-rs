@@ -11,8 +11,9 @@ pub const FLASHING: &str = told(
 
 pub async fn apply(client: &Client, uid: &str, output: &str, fit: &str, preset: &str) -> Result<()> {
     let lib = &client.library;
-    notice(client, uid).await?;
-    let applied = crate::inputs::asking(client, output, lib.apply(uid, output, fit, preset)).await;
+    let id = notice(client, uid).await?;
+    let id = id.as_deref();
+    let applied = crate::inputs::asking_for(client, output, id, lib.apply(uid, output, fit, preset)).await;
     match applied {
         Err(e) if error_name(&e) == Some(UNCONFIRMED) => {
             eprintln!("{}", tr(FLASHING));
@@ -22,7 +23,7 @@ pub async fn apply(client: &Client, uid: &str, output: &str, fit: &str, preset: 
                 fill(told("not applied; run wprs-ctl lib confirm photosensitive %1 to allow it"), &[&uid])
             );
             lib.confirm(&[uid], "photosensitive").await?;
-            crate::inputs::asking(client, output, lib.apply(uid, output, fit, preset)).await
+            crate::inputs::asking_for(client, output, id, lib.apply(uid, output, fit, preset)).await
         }
         done => done,
     }
@@ -40,7 +41,7 @@ pub async fn installed(client: &Client, job: Option<&wprs_core::model::Job>) -> 
     }
     let item = job.and_then(|j| j.output.as_ref()).and_then(|o| o.get("item")).and_then(|i| i.as_str());
     match item {
-        Some(uid) => notice(client, uid).await,
+        Some(uid) => notice(client, uid).await.map(drop),
         None => Ok(()),
     }
 }
@@ -48,18 +49,19 @@ pub async fn installed(client: &Client, job: Option<&wprs_core::model::Job>) -> 
 pub const COMPUTE: &str = "Warning: this wallpaper needs compute shaders, which the graphics of this computer lack \
     or run in software, so it may draw slowly or leave parts out.";
 
-async fn notice(client: &Client, uid: &str) -> Result<()> {
+async fn notice(client: &Client, uid: &str) -> Result<Option<String>> {
     let details: wprs_core::model::ItemDetails = wprs_client::parse(&client.library.get_item(uid).await?)?;
     let compute = details.item.package.as_ref().is_some_and(|p| p.facets.iter().any(|f| f == "compute"));
     let state: wprs_core::model::State = wprs_client::parse(&client.daemon.get_state().await?)?;
     if compute && !state.compute {
         eprintln!("{COMPUTE}");
     }
+    let id = details.item.package.as_ref().map(|p| p.id.clone());
     let exposes = details.item.package.map(|p| p.exposes).unwrap_or_default();
     if let Some(notice) = wprs_format::web_notice(&exposes) {
         eprintln!("{}\n{}", notice.local(), wprs_format::web_restrict(uid).local());
     }
-    Ok(())
+    Ok(id)
 }
 
 #[cfg(test)]
