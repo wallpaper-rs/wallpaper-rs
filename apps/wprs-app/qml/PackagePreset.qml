@@ -9,10 +9,10 @@ ColumnLayout {
     id: preset
 
     required property var page
-    readonly property var data: page.view.id === undefined ? ({}) : JSON.parse(page.editor.value("/preset") || "{}")
-    readonly property var base: data.base ?? ({})
-    readonly property var values: data.values ?? ({})
-    readonly property var files: data.files ?? ({})
+    readonly property var document: page.view.id === undefined ? ({}) : JSON.parse(page.editor.value("/preset") || "{}")
+    readonly property var base: document.base ?? ({})
+    readonly property var values: document.values ?? ({})
+    readonly property var files: document.files ?? ({})
     readonly property var found: library.list.find(item => item.id === entry.editText.trim())
 
     function use() {
