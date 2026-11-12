@@ -26,6 +26,7 @@ class CostWarningTest {
     @After
     fun closed() {
         scenario?.close()
+        Native.power(false, false, false, 0, 0f, false)
     }
 
     private fun shown(report: String) {
