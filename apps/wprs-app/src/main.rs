@@ -6,6 +6,7 @@ mod bus;
 #[macro_use]
 mod callmacro;
 mod calls;
+mod checkrun;
 mod choices;
 mod depth;
 mod depthproc;
@@ -53,14 +54,12 @@ mod tests;
 mod tr;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQuickStyle, QString, QUrl};
-use std::io::{BufRead, BufReader};
 use std::path::Path;
-use std::process::{Command, ExitCode, Stdio};
+use std::process::ExitCode;
 use wprs_core::dbus::APP_ID;
 
 const MAIN: &str = "qrc:/qt/qml/io/github/wallpaper_rs/app/qml/Main.qml";
 const STYLE: &str = "org.kde.desktop";
-const CHECK_TIME: std::time::Duration = std::time::Duration::from_secs(540);
 
 fn main() -> ExitCode {
     wprs_scene::serve_check();
@@ -81,7 +80,7 @@ fn start() -> ExitCode {
             println!("usage: wprs-app [--check | --version | --page PAGE] [FILE | URI]...");
             println!("pages: {}", app::PAGES.join(", "));
         }
-        Some("--check") if !bus::checking() => return check(),
+        Some("--check") if !bus::checking() => return checkrun::run(),
         Some("--depth") => return depthproc::child(&args[1..]),
         Some("--page") => match app::page(args.get(1).map(String::as_str)) {
             Some(page) => return open(&args[2..], Some(page)),
@@ -124,45 +123,4 @@ fn run() -> ExitCode {
     }
     engine.load(&QUrl::from(MAIN));
     ExitCode::from(app.exec() as u8)
-}
-
-fn check() -> ExitCode {
-    let platform = std::env::var("QT_QPA_PLATFORM").unwrap_or_else(|_| "offscreen".into());
-    let state = std::env::temp_dir().join(format!("wprs-app-check-state-{}", std::process::id()));
-    let child = std::env::current_exe().and_then(|exe| {
-        let mut command = Command::new(exe);
-        command.env(bus::CHECK, "1").env("QT_QPA_PLATFORM", platform).env("QT_FORCE_STDERR_LOGGING", "1");
-        command.env("XDG_STATE_HOME", &state);
-        command.args(["--page", "settings"]);
-        command.stderr(Stdio::piped()).spawn()
-    });
-    let Ok(mut child) = child else { return ExitCode::FAILURE };
-    let (stderr, id) = (child.stderr.take().unwrap(), child.id());
-    let (done, waited) = std::sync::mpsc::channel();
-    let watch = std::thread::spawn(move || {
-        let late = waited.recv_timeout(CHECK_TIME).is_err();
-        if late {
-            eprintln!("wprs-app: the QML check did not finish within {} s", CHECK_TIME.as_secs());
-            child.kill().ok();
-        }
-        (child.wait(), late)
-    });
-    let mut problems = 0;
-    for line in BufReader::new(stderr).lines().map_while(Result::ok) {
-        eprintln!("{line}");
-        problems +=
-            usize::from([".qml", "QQmlApplicationEngine", "call failed"].iter().any(|p| line.contains(p)));
-    }
-    done.send(()).ok();
-    let (status, late) = watch.join().unwrap_or((Err(std::io::ErrorKind::Other.into()), true));
-    problems += usize::from(late);
-    std::fs::remove_dir_all(std::env::temp_dir().join(format!("wprs-app-check-{id}"))).ok();
-    std::fs::remove_dir_all(&state).ok();
-    match status {
-        Ok(status) if status.success() && problems == 0 => ExitCode::SUCCESS,
-        _ => {
-            eprintln!("wprs-app: the QML check found {problems} problems");
-            ExitCode::FAILURE
-        }
-    }
 }
