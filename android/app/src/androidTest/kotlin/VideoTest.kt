@@ -3,6 +3,7 @@ package io.github.wallpaper_rs
 import android.graphics.Color
 import android.graphics.ImageFormat
 import android.hardware.HardwareBuffer
+import androidx.media3.common.Player
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.util.concurrent.atomic.AtomicInteger
@@ -122,6 +123,26 @@ class VideoTest {
             listOf(shownOnLock, shownAtHome, speed()).also { videos.leave(uri, lock.painter) }
         }
         assertEquals(listOf(2f, 0.5f, 2f), speeds)
+    }
+
+    @Test
+    fun aVideoPlayedOnceGivesItsLastFrameToTheNextScreen() {
+        assertEquals(VIDEO, install(fixture(CLIP)))
+        listOf(lock, home).forEach { it.attach() }
+        home.show(true)
+        assertTrue(home.plays())
+        val once = JSONObject().put("rate", 4.0).put("loop", false).put("volume", 0.0).put("start", 0).put("end", -1).toString()
+        val video = Render.call {
+            val (uri, video) = videos.videos.entries.single()
+            listOf(lock, home).forEach { videos.cut(uri, once, it.painter) }
+            video.follow()
+            video
+        }
+        assertTrue("the video ends", waitFor { Render.call { video.player?.playbackState } == Player.STATE_ENDED })
+        assertTrue("an ended video draws nothing more", home.stopped())
+        val before = lock.frames.get()
+        lock.show(true)
+        assertTrue("the next screen gets the last frame", waitFor { lock.frames.get() > before })
     }
 
     @Test
