@@ -2,7 +2,9 @@ use anyhow::{Result, ensure};
 use wprs_core::message::said;
 use wprs_scene::MAX_FRAMES;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Debug, Clone, Copy, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize, schemars::JsonSchema,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Order {
     #[default]
