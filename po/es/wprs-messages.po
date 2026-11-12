@@ -812,34 +812,6 @@ msgstr "no se puede leer el tamaño del vídeo de «%1»"
 msgid "the part of the video must lie inside it and last 0.05 s or more"
 msgstr "la parte del vídeo debe caer dentro de él y durar 0,05 s o más"
 
-#: crates/wprs-editor/src/depthmap.rs
-msgid ""
-"the depth model is not installed: run %1, or install it from the depth "
-"dialog of the app"
-msgstr ""
-"el modelo de profundidad no está instalado: ejecuta %1, o instálalo desde el "
-"diálogo de profundidad de la app"
-
-#: crates/wprs-editor/src/depthmap.rs
-msgid ""
-"the library that runs the depth model is not installed: run wprs-ctl models "
-"download onnxruntime"
-msgstr ""
-"la biblioteca que ejecuta el modelo de profundidad no está instalada: "
-"ejecuta wprs-ctl models download onnxruntime"
-
-#: crates/wprs-editor/src/depthmap.rs
-msgid "the model input is a multiple of 14 from 196 to 1036"
-msgstr "la entrada del modelo es un múltiplo de 14 de 196 a 1036"
-
-#: crates/wprs-editor/src/depthmap.rs crates/wprs-editor/src/lamps/lit.rs
-msgid "%1 is not a picture of the scene"
-msgstr "%1 no es una imagen de la escena"
-
-#: crates/wprs-editor/src/depthmap.rs crates/wprs-editor/src/ramps.rs
-msgid "a ramp goes to a parameter of an effect"
-msgstr "una rampa va a un parámetro de un efecto"
-
 #: crates/wprs-editor/src/findings.rs
 msgid "%1: refused: %2"
 msgstr "%1: rechazado: %2"
@@ -1136,6 +1108,10 @@ msgstr "el color de una luz es #rrggbb o [r, g, b, a]"
 #: crates/wprs-editor/src/lamps/edit.rs
 msgid "the light %1 is not shown"
 msgstr "la luz %1 no se muestra"
+
+#: crates/wprs-editor/src/lamps/lit.rs crates/wprs-editor/src/stage3d/maps.rs
+msgid "%1 is not a picture of the scene"
+msgstr "%1 no es una imagen de la escena"
 
 #: crates/wprs-editor/src/lamps/lit.rs
 msgid "lighting is for image, video, text, mesh and model layers"
@@ -1527,26 +1503,6 @@ msgstr "el id de un ajuste predefinido tiene de 1 a 64 caracteres"
 #: crates/wprs-editor/src/props.rs
 msgid "the preset %1 exists"
 msgstr "el ajuste predefinido %1 ya existe"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "a ramp has 1 to %1 stops"
-msgstr "una rampa tiene de 1 a %1 paradas"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "a stop sits between 0 and 1"
-msgstr "una parada va entre 0 y 1"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "%1 is not a color"
-msgstr "%1 no es un color"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "a ramp is %1 to %2 pixels wide"
-msgstr "una rampa mide de %1 a %2 píxeles de ancho"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "%1 is not a ramp made here"
-msgstr "%1 no es una rampa hecha aquí"
 
 #: crates/wprs-editor/src/references.rs
 msgid "%1 is still named by %2; change them first"
@@ -4071,3 +4027,55 @@ msgstr "capa que recibe el puntero"
 #: crates/wprs-scene/src/validate.rs
 msgid "trigger"
 msgstr "disparador"
+
+#: crates/wprs-editor/src/clips/keyed.rs
+msgid "the key holds a value out of its range"
+msgstr "la clave tiene un valor fuera de su rango"
+
+#: crates/wprs-editor/src/depthmap.rs
+msgid ""
+"the depth model is not installed: run %1, or install it from the depth "
+"dialog of the app"
+msgstr ""
+"el modelo de profundidad no está instalado: ejecuta %1, o instálalo desde el "
+"diálogo de profundidad de la app"
+
+#: crates/wprs-editor/src/depthmap.rs
+msgid ""
+"the library that runs the depth model is not installed: run wprs-ctl models "
+"download onnxruntime"
+msgstr ""
+"la biblioteca que ejecuta el modelo de profundidad no está instalada: "
+"ejecuta wprs-ctl models download onnxruntime"
+
+#: crates/wprs-editor/src/depthmap.rs
+msgid "the model input is a multiple of 14 from 196 to 1036"
+msgstr "la entrada del modelo es un múltiplo de 14 de 196 a 1036"
+
+#: crates/wprs-editor/src/depthmap.rs crates/wprs-editor/src/ramps.rs
+msgid "a ramp goes to a parameter of an effect"
+msgstr "una rampa va a un parámetro de un efecto"
+
+#: crates/wprs-editor/src/lamps/maps.rs
+msgid "name a picture or an image layer"
+msgstr "indica una imagen o una capa de imagen"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "a ramp has 1 to %1 stops"
+msgstr "una rampa tiene de 1 a %1 paradas"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "a stop sits between 0 and 1"
+msgstr "una parada va entre 0 y 1"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "%1 is not a color"
+msgstr "%1 no es un color"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "a ramp is %1 to %2 pixels wide"
+msgstr "una rampa mide de %1 a %2 píxeles de ancho"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "%1 is not a ramp made here"
+msgstr "%1 no es una rampa hecha aquí"
