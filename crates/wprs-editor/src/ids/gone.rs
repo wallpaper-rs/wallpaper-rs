@@ -22,7 +22,9 @@ fn keyed(v: &Value) -> bool {
 fn shifted(v: &Value, now: &Value, to: &Value, field: &str) -> Option<Value> {
     let (now, to) = (numbers(now)?, numbers(to)?);
     let by: Vec<f64> = match field {
-        "scale" => now.iter().zip(&to).map(|(n, t)| (n.abs() > 1e-9).then(|| t / n)).collect::<Option<_>>()?,
+        "scale" => {
+            now.iter().zip(&to).map(|(n, t)| (n.abs() > 1e-9).then(|| t / n)).collect::<Option<_>>()?
+        }
         _ => now.iter().zip(&to).map(|(n, t)| t - n).collect(),
     };
     let mut out = v.clone();

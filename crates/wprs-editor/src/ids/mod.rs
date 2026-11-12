@@ -2,8 +2,8 @@ mod clip;
 mod files;
 mod gone;
 mod refs;
-mod reword;
 mod rename;
+mod reword;
 
 pub use clip::{copy, paste};
 pub use gone::{forget, unkept};

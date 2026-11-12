@@ -45,7 +45,8 @@ pub(super) fn assets_in(scene: &mut Value, manifest: &mut Value, old: &str, new:
 }
 
 pub(super) fn within(section: &str, key: &str, v: &mut Value, words: &[(&[&str], String, String)]) {
-    let held = child(&SCENE, &SCENE, section, &Value::Null).and_then(|s| child(&SCENE, &s, key, &Value::Null));
+    let held =
+        child(&SCENE, &SCENE, section, &Value::Null).and_then(|s| child(&SCENE, &s, key, &Value::Null));
     if let Some(schema) = held {
         for (kinds, old, new) in words {
             reword(&SCENE, &schema, v, kinds, (old, new), None);

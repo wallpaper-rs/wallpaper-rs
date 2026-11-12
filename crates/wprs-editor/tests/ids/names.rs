@@ -113,7 +113,10 @@ fn removing_a_layer_keeps_keyframed_followers_in_place_and_names_the_bound_ones(
     assert_eq!(query(&p)["layers"], json!([]));
     act(&mut p, json!({"remove_layer": {"id": "base"}})).unwrap();
     let after = pivot(&p, "kid");
-    assert!((after[0] - before[0]).abs() < 0.05 && (after[1] - before[1]).abs() < 0.05, "{before:?} {after:?}");
+    assert!(
+        (after[0] - before[0]).abs() < 0.05 && (after[1] - before[1]).abs() < 0.05,
+        "{before:?} {after:?}"
+    );
     let first = at(&p, "/scene/layers/0/transform/position/keys");
     let (a, b) = (first[0][1].as_array().unwrap(), first[1][1].as_array().unwrap());
     assert!(((b[0].as_f64().unwrap() - a[0].as_f64().unwrap()) - 30.0).abs() < 0.01, "{first}");
