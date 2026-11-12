@@ -82,8 +82,10 @@ impl SceneEditor {
     }
 
     pub fn cover(self: Pin<&mut Self>, covered: bool) {
-        let outputs: Vec<String> =
-            [self.output.to_string(), self.halved().unwrap_or_default()].into_iter().filter(|o| !o.is_empty()).collect();
+        let outputs: Vec<String> = [self.output.to_string(), self.halved().unwrap_or_default()]
+            .into_iter()
+            .filter(|o| !o.is_empty())
+            .collect();
         bus::spawn(async move {
             for output in outputs {
                 bus::call("Daemon1", "SetOutputCovered", vec![json!(output), json!(covered)]).await.ok();
@@ -92,8 +94,10 @@ impl SceneEditor {
     }
 
     pub fn touch(self: Pin<&mut Self>, x: f64, y: f64, buttons: u32) {
-        let outputs: Vec<String> =
-            [self.output.to_string(), self.halved().unwrap_or_default()].into_iter().filter(|o| !o.is_empty()).collect();
+        let outputs: Vec<String> = [self.output.to_string(), self.halved().unwrap_or_default()]
+            .into_iter()
+            .filter(|o| !o.is_empty())
+            .collect();
         bus::spawn(async move {
             for output in outputs {
                 let args = vec![json!(output), json!(x), json!(y), json!(buttons)];
@@ -128,7 +132,8 @@ impl SceneEditor {
         }
         let look: Value = serde_json::from_str(&self.look.to_string()).unwrap_or_default();
         let document = crate::scenedoc::document(&project.doc, &project.dir, &look);
-        let plain = self.halved().map(|output| (output, crate::scenesplit::without_glow(&document).to_string()));
+        let plain =
+            self.halved().map(|output| (output, crate::scenesplit::without_glow(&document).to_string()));
         let document = document.to_string();
         let dir = project.dir.to_string_lossy().into_owned();
         let time = if self.playing { -1.0 } else { self.time };

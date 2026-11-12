@@ -90,7 +90,8 @@ mod tests {
 
     #[test]
     fn the_other_half_drops_the_glow_of_the_canvas_and_nothing_else() {
-        let document = json!({ "scene": { "canvas": { "size": [8, 8], "bloom": { "strength": 1.0 } }, "layers": [] } });
+        let document =
+            json!({ "scene": { "canvas": { "size": [8, 8], "bloom": { "strength": 1.0 } }, "layers": [] } });
         let plain = without_glow(&document);
         assert_eq!(plain["scene"]["canvas"], json!({ "size": [8, 8] }));
         assert_eq!(plain["scene"]["layers"], json!([]));

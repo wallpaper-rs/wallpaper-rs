@@ -121,11 +121,13 @@ mod tests {
 
     #[test]
     fn a_preview_without_the_glow_drops_the_bloom_of_the_canvas_only_when_asked() {
-        let doc = json!({ "manifest": {}, "scene": { "canvas": { "bloom": { "strength": 1.0 } }, "layers": [] } });
+        let doc =
+            json!({ "manifest": {}, "scene": { "canvas": { "bloom": { "strength": 1.0 } }, "layers": [] } });
         let dir = std::path::Path::new(".");
         let with = preview_document(dir, &doc, None, false, None, [false; 3], (None, None)).unwrap();
         assert!(with["scene"]["canvas"]["bloom"].is_object());
-        let without = preview_document(dir, &doc, None, false, None, [false, false, true], (None, None)).unwrap();
+        let without =
+            preview_document(dir, &doc, None, false, None, [false, false, true], (None, None)).unwrap();
         assert!(without["scene"]["canvas"].get("bloom").is_none());
     }
 }

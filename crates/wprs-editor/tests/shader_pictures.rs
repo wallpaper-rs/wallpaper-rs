@@ -27,7 +27,8 @@ fn position_mask_and_texture_params_of_a_package_effect_offer_the_generic_pictur
     let root = tempfile::tempdir().unwrap();
     unsafe { std::env::set_var("XDG_STATE_HOME", root.path().join("state")) };
     let dir = root.path().join("pics");
-    let mut project = Project::create(&dir, starter("empty", "org.example.pics", "Pics", "en").unwrap()).unwrap();
+    let mut project =
+        Project::create(&dir, starter("empty", "org.example.pics", "Pics", "en").unwrap()).unwrap();
     let source = root.path().join("source");
     fs::create_dir_all(&source).unwrap();
     fs::write(source.join("pics.json"), descriptor().to_string()).unwrap();
@@ -35,7 +36,10 @@ fn position_mask_and_texture_params_of_a_package_effect_offer_the_generic_pictur
     act(&mut project, json!({ "import_effect": { "descriptor": source.join("pics.json") } }));
     act(&mut project, json!({"add_layer": {"kind": "solid", "id": "fill"}}));
     let pointer = wprs_editor::layers::find(&project.doc, "fill").unwrap();
-    act(&mut project, json!({"add": {"pointer": format!("{pointer}/effects"), "value": [{ "effect": "pics" }]}}));
+    act(
+        &mut project,
+        json!({"add": {"pointer": format!("{pointer}/effects"), "value": [{ "effect": "pics" }]}}),
+    );
     let at = format!("{pointer}/effects/0");
     let fields = fields_with(&project.doc, &at, 0.0, &project.effects());
     let field = |key: &str| fields.iter().find(|f| f.key == key).unwrap();
@@ -55,10 +59,12 @@ fn position_mask_and_texture_params_of_a_package_effect_offer_the_generic_pictur
     assert!(found.iter().all(|p| p.warning), "a generic picture is refused: {found:?}");
     let stroke = json!({"pointer": format!("{at}/params/brush"), "radius": 0.2, "points": [[0.5, 0.5]]});
     act(&mut project, json!({ "paint_mask": stroke }));
-    let painted = project.doc.pointer(&format!("{at}/params/brush")).and_then(Value::as_str).unwrap().to_owned();
+    let painted =
+        project.doc.pointer(&format!("{at}/params/brush")).and_then(Value::as_str).unwrap().to_owned();
     assert!(!["white", "black", "noise", "normal_flat"].contains(&painted.as_str()), "{painted}");
     assert!(project.doc["scene"]["assets"][&painted]["path"].is_string());
-    let shown = project.ask("fill", &json!({ "effect_handles": { "layer": "fill", "index": 0, "time": 0.0 } }));
+    let shown =
+        project.ask("fill", &json!({ "effect_handles": { "layer": "fill", "index": 0, "time": 0.0 } }));
     let handles = shown["handles"].as_array().unwrap();
     assert!(handles.iter().any(|h| h["param"] == "at" && h["kind"] == "point"), "{shown}");
 }
