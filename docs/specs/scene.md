@@ -428,7 +428,11 @@ the GPU one frame later so that drawing never waits for it; it is off by default
 
 ## Layers
 
-Every layer has a unique `id` and a `type`, and may set `transform` (`position`, `scale`,
+Every layer has a unique `id` (among the layers) and a `type`. The scene only requires the ids of
+layers to differ from each other, but the editor takes the ids of layers, assets and particle
+systems as one namespace: a new layer, asset or system never reuses the id of another of them
+(it adds a number to a name in use) and it refuses an explicit id that any of the three already
+holds. Keep them apart in hand-written scenes too. A layer may set `transform` (`position`, `scale`,
 `rotation`, `skew`, `origin`), `anchor` (`top_left` … `bottom_right`: the position is then
 relative to that point of the visible part of the canvas), `opacity`, `visible`, `blend`, `mask`,
 `effects` (at most 16), `parallax` (moves the layer with the pointer), `solid` and `cache`.
@@ -1081,7 +1085,7 @@ Every shader starts from one prelude. `frame` holds `time`, `dt`, `resolution`, 
 `lut_tex` is the 3D texture of the first `lut` parameter, read with `lut(rgb)`. Helpers: `tap(uv)`,
 `sample(t, uv)`, `px(pixels)`, `mask_at(uv)`, `layer_uv(uv)` and its inverse `from_layer(uv)`,
 `asset_at(t, uv)` (an asset placed on the layer, such as a depth map), `cursor_uv()`,
-`screen_uv(uv)`, `to_linear`, `from_linear`, `straight`, `oklab`, `from_oklab`, `gauss`, `hash`,
+`screen_uv(uv)`, `to_linear` and `from_linear` (they convert between the values the effect reads and linear light according to `canvas.blend_space`: with `linear`, the default, the values already are linear and both return their input unchanged; with `srgb` they decode and encode the sRGB curve), `straight`, `oklab`, `from_oklab`, `gauss`, `hash`,
 `hash2`, `noise1`, `value_noise`, `gradient_noise`, `fbm(p, octaves)`, `bayer(pixel)`,
 `layer_extent()` (the size of the layer in output pixels), `time_phase(t, uv)` (the brightness of a
 `phase` picture at that point), `outside_layer(uv)` (the point, or `OUTSIDE_UV` when it is off the
