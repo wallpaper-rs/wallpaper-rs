@@ -153,6 +153,7 @@ fn a_dedicated_scene_command_for_an_action_takes_the_same_arguments() {
             ("manifest", "text"),
             ("manifest", "locale"),
             ("layer", "figure"),
+            ("scene3d", "material_code"),
         ];
         for field in fields(json!({name: {"": null}})) {
             if by_act.contains(&(name, field.as_str())) {
