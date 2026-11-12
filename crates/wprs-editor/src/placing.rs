@@ -50,11 +50,12 @@ pub fn placed(dir: &Path, doc: &Value, action: &Action, asset: &str, path: &str)
 }
 
 pub fn import(dir: &Path, doc: &Value, action: &Action) -> Result<(String, String, bool)> {
-    let Action::AddLayer { kind, file: Some(file), id, .. } = action else {
+    let Action::AddLayer { kind, file: Some(file), id, name, .. } = action else {
         return Err(anyhow!(said("editor.name_a_file", "name a file", &[])));
     };
     fits(kind, file)?;
-    crate::assets::imported(dir, doc, file, named(doc, file, id.as_deref()).as_deref())
+    let wanted = id.clone().or_else(|| name.as_deref().map(crate::layers::clean).filter(|c| !c.is_empty()));
+    crate::assets::imported(dir, doc, file, named(doc, file, wanted.as_deref()).as_deref())
 }
 
 pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec<Op>>> {

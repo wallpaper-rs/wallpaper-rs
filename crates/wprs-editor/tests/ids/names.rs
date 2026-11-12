@@ -132,3 +132,16 @@ fn removing_a_layer_keeps_keyframed_followers_in_place_and_names_the_bound_ones(
     act(&mut q, json!({"remove_layer": {"id": "base"}})).unwrap();
     assert_eq!(at(&q, "/scene/layers/0/transform/position"), bound);
 }
+
+#[test]
+fn a_layer_named_like_its_file_keeps_exactly_that_id() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = scene(&root, "named");
+    let file = super::picture(&p.dir, "sunset.png", 10);
+    act(&mut p, json!({"add_layer": {"kind": "image", "name": "sunset", "file": file}})).unwrap();
+    assert_eq!(at(&p, "/scene/layers/0/id"), "sunset");
+    assert_eq!(at(&p, "/scene/layers/0/image"), "sunset_file");
+    let other = super::picture(&p.dir, "dusk.png", 20);
+    act(&mut p, json!({"add_layer": {"kind": "image", "name": "Dusk", "file": other}})).unwrap();
+    assert_eq!(at(&p, "/scene/layers/1/id"), "dusk");
+}
