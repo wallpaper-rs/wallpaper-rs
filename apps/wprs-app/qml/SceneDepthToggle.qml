@@ -17,8 +17,7 @@ ColumnLayout {
 
     property var way: null
     readonly property var reasons: ({
-            "perspective": App.tr("its particle system has no perspective"),
-            "children": App.tr("a child system is drawn that way or has children of its own")
+            "perspective": App.tr("its particle system has no perspective")
         })
 
     function load() {

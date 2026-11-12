@@ -183,3 +183,34 @@ fn ropes_in_a_3d_group_hide_one_by_one_behind_the_models_in_front_of_them() {
     let low = covered(r, strung(-50.0), Quality::Q0);
     assert!(front > 20 && behind == 0 && low == 0, "{front} {behind} {low}");
 }
+
+fn family(depth: f32) -> Value {
+    let mut s = sparks(depth, json!({}));
+    let base = s["particles"]["s"].clone();
+    let mut kid = |name: &str, next: Option<&str>, life: f32, size: f32| {
+        let mut k = base.clone();
+        k["emitters"] = json!([{ "shape": { "point": [0, 0] }, "bursts": [{ "count": 1 }] }]);
+        k["init"]["life"] = json!([life, life]);
+        k["init"]["size"] = json!([size, size]);
+        k["init"]["color"] = json!(["#0000ff", "#0000ff"]);
+        k["init"]["depth"] = json!([0, 0]);
+        if let Some(n) = next {
+            k["children"] = json!([{ "system": n, "on": "death" }]);
+        }
+        s["particles"][name] = k;
+    };
+    kid("g", None, 50.0, 20.0);
+    kid("c", Some("g"), 0.05, 2.0);
+    s["particles"]["s"]["children"] = json!([{ "system": "c", "on": "death" }]);
+    s["particles"]["s"]["init"]["life"] = json!([0.05, 0.05]);
+    s
+}
+
+#[test]
+fn grandchildren_of_a_system_in_a_3d_group_hide_one_by_one_too() {
+    let Some(r) = renderer() else { return };
+    let blue = |c: [u8; 3]| c[2] > 128 && c[0] < 64;
+    let (front, behind) =
+        (shaded(r, family(-50.0), Quality::Q3, blue), shaded(r, family(50.0), Quality::Q3, blue));
+    assert!(front > 5 && behind == 0, "{front} {behind}");
+}

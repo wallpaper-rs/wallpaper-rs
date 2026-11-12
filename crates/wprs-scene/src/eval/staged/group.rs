@@ -23,12 +23,7 @@ fn loose(cx: &Context, d: &Draw) -> bool {
 pub fn particle_plane(scene: &crate::Scene, layer: &Layer) -> Option<&'static str> {
     let Kind::Particles { system, .. } = &layer.kind else { return Some("kind") };
     let Some(s) = scene.particles.get(system) else { return Some("kind") };
-    let mut kids = s.children.iter().filter_map(|c| scene.particles.get(&c.system));
-    match () {
-        _ if s.perspective.is_none() => Some("perspective"),
-        _ if kids.any(|k| !k.children.is_empty()) => Some("children"),
-        _ => None,
-    }
+    s.perspective.is_none().then_some("perspective")
 }
 
 fn apart(cx: &Context, layer: &Layer) -> bool {

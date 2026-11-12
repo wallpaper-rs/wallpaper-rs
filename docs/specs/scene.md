@@ -856,7 +856,8 @@ refracting particles, trails (short and long, each point at the depth its partic
 was marked) and ropes (each knot at the depth of its particle) read it too. Refracting particles hide their bending where a nearer model
 covers them, but the picture they bend is the finished picture of the group, which holds no depth:
 where a visible particle sits beside a nearer model its offsets can still pull in a few pixels of that
-model. Systems whose children have children of their own stand on the plane of the layer as before, and so does every system at the lowest quality, which skips that pass. A plain group inside a 3D group (no
+model. Child systems, at any depth of the family, are drawn with their layer and tested the same
+way. Systems without `perspective` stand on the plane of the layer as before, and so does every system at the lowest quality, which skips that pass. A plain group inside a 3D group (no
 effects, mask, other blend, opacity below 1, color, brightness, `clip`, tilt, `z` or `depth_test`)
 lets its layers join the slices one by one, and a plain 3D group inside another 3D group, directly or
 through plain groups, shares its depth: its models and its flat layers are drawn with those of the
