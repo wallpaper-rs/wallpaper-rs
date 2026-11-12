@@ -165,3 +165,13 @@ fn the_traffic_light_walks_its_states() {
         [[true, false, false], [false, false, true], [false, true, false], [true, false, false]]
     );
 }
+
+#[test]
+fn bound_values_turn_at_their_own_speed() {
+    let mut play = Play::new("giro-por-valor");
+    let out = play.go(&quiet(), 61);
+    let mut turns: Vec<f64> = out.values.values().filter_map(|v| v.as_f64()).collect();
+    turns.sort_by(f64::total_cmp);
+    assert_eq!(turns.len(), 2, "{:?}", out.values);
+    assert!((turns[0] + 152.5).abs() < 0.01 && (turns[1] - 30.5).abs() < 0.01, "{turns:?}");
+}

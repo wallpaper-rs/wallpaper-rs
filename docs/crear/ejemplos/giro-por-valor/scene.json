@@ -1,0 +1,17 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "fit": "fill", "background": "#000000" },
+  "clock": { "max_fps": "display" },
+  "scripts": [
+    { "path": "scripts/giro.js", "events": ["update"],
+      "params": { "velocidad": { "type": "number", "default": 30, "min": -720, "max": 720 } } }
+  ],
+  "layers": [
+    { "id": "fondo", "type": "shape", "shape": { "rect": { "size": [1920, 1080] } },
+      "gradient": { "stops": [[0, "#101828"], [1, "#283a5c"]] } },
+    { "id": "aspa_lenta", "type": "shape", "shape": { "rect": { "size": [700, 40] } }, "fill": "#5ee7ff", "anchor": "center",
+      "transform": { "rotation": { "script": "scripts/giro.js", "fn": "gira" } } },
+    { "id": "aspa_rapida", "type": "shape", "shape": { "rect": { "size": [420, 28] } }, "fill": "#ff4fd8", "anchor": "center",
+      "transform": { "rotation": { "script": "scripts/giro.js", "fn": "gira", "params": { "velocidad": -150 } } } }
+  ]
+}

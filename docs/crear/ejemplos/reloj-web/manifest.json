@@ -1,0 +1,33 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "index.html",
+  "id": "org.example.reloj_web",
+  "kind": "web",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {
+    "color": {
+      "default": "#f2f5ff",
+      "label": "@wprs.color",
+      "type": "color"
+    }
+  },
+  "requires": {
+    "features": [
+      "engine_strings",
+      "web"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Reloj web",
+  "version": "0.1.0",
+  "web": {
+    "background": "#101828"
+  }
+}
