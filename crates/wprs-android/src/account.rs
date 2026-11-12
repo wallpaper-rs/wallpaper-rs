@@ -130,10 +130,10 @@ fn status() -> Value {
 }
 
 pub(crate) fn request(text: &str) -> String {
-    let answer = match serde_json::from_str(text) {
-        Ok(asked) => crate::updates::request(asked),
-        Err(_) => serde_json::from_str(text).map_err(Error::from).and_then(run),
-    };
+    let answer = crate::reply::tried(text, crate::updates::request)
+        .or_else(|| crate::reply::tried(text, crate::providers::request))
+        .or_else(|| crate::reply::tried(text, repos::anchored::request))
+        .unwrap_or_else(|| serde_json::from_str(text).map_err(Error::from).and_then(run));
     answer.unwrap_or_else(|e| e.reply()).to_string()
 }
 

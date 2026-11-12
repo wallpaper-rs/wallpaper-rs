@@ -23,6 +23,7 @@ mod looks;
 mod paced;
 mod pages;
 mod played;
+mod provided;
 mod previewed;
 mod records;
 mod reeled;
@@ -169,6 +170,7 @@ fn the_library_imports_rotates_and_keeps_settings() {
     paced::pages_keep_the_frame_cap_and_the_volume_of_their_author();
     paced::shortcuts_open_what_the_user_chose_after_a_tap();
     updated::nothing_to_update_without_repositories();
+    provided::picture_sources_download_only_when_turned_on();
     unreadable();
 }
 

@@ -57,3 +57,10 @@ fn synced(e: &wprs_sync::Error) -> (&'static str, Vec<String>) {
         Invalid(what) => ("android.sync_invalid", vec![what.clone()]),
     }
 }
+
+pub(crate) fn tried<R: serde::de::DeserializeOwned>(
+    text: &str,
+    run: fn(R) -> Result<serde_json::Value, Error>,
+) -> Option<Result<serde_json::Value, Error>> {
+    serde_json::from_str(text).ok().map(run)
+}

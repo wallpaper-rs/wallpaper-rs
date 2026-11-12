@@ -51,6 +51,7 @@ mod playing;
 mod power;
 mod private;
 mod props;
+mod providers;
 #[cfg(target_os = "android")]
 mod recorded;
 mod reel;

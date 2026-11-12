@@ -11,6 +11,7 @@ use wprs_format::Anchor;
 use wprs_providers::HttpFetch;
 use wprs_sync::{Ids, Kept, Local, Replica, View};
 
+pub(crate) mod anchored;
 mod install;
 pub(crate) mod preview;
 

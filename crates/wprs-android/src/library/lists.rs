@@ -4,7 +4,7 @@ use serde_json::{Value, json};
 use std::collections::HashSet;
 use wprs_library::{Item, Library};
 
-pub(super) fn remove(lib: &mut Library, uids: &[String], now: i64) -> Result<Value, Error> {
+pub(crate) fn remove(lib: &mut Library, uids: &[String], now: i64) -> Result<Value, Error> {
     let refs = known(lib, uids);
     let hashes = lib.hashed()?.into_iter().filter(|(i, _)| refs.contains(&i.uid.as_str()));
     let removed: Vec<String> = hashes.map(|(_, hash)| wprs_sync::removed_blob(&hash)).collect();

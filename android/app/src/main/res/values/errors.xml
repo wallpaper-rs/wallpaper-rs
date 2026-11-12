@@ -122,4 +122,19 @@
     <string name="error_android_server_unreachable">Could not reach %1$s. Check the address and that the phone has a connection</string>
     <string name="error_android_nothing_before">There is no earlier wallpaper to bring back</string>
     <string name="error_android_layers_off">The fill is off: pictures stay still</string>
+    <string name="error_android_provider_kind">%1$s is not a kind of picture source</string>
+    <string name="error_android_provider_address">The value of %1$s is not a web address</string>
+    <string name="error_android_provider_https">A web address here starts with https:// and holds no password or search part</string>
+    <string name="error_android_provider_option">The value of %1$s is not valid</string>
+    <string name="error_android_provider_option_unknown">%1$s has no option called %2$s</string>
+    <string name="error_android_provider_needs">%1$s needs the option %2$s</string>
+    <string name="error_android_provider_missing">There is no picture source %1$s</string>
+    <string name="error_android_provider_secret">%1$s needs its key or password first</string>
+    <string name="error_android_provider_secret_rejected">%1$s rejected the key or password: enter it again</string>
+    <string name="error_android_provider_failed">%1$s did not answer: %2$s</string>
+    <string name="error_android_provider_off">%1$s is off: turn it on to let it download</string>
+    <string name="error_android_provider_busy">Another picture source is downloading: try again when it ends</string>
+    <string name="error_android_repo_fingerprint">The fingerprint has 64 letters and digits (0 to 9 and a to f): copy it again as the publisher gave it</string>
+    <string name="error_android_repo_needs_fingerprint">Ask the publisher for the fingerprint of the repository: it is how this phone knows nobody swapped it</string>
+    <string name="error_android_repo_two_fingerprints">The address already holds a fingerprint: leave the fingerprint box empty</string>
 </resources>

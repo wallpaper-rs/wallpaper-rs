@@ -122,4 +122,19 @@
     <string name="error_android_server_unreachable">No se pudo llegar a %1$s. Revisa la dirección y que el teléfono tenga conexión</string>
     <string name="error_android_nothing_before">No hay un fondo anterior que recuperar</string>
     <string name="error_android_layers_off">El relleno está apagado: las imágenes quedan quietas</string>
+    <string name="error_android_provider_kind">%1$s no es un tipo de fuente de imágenes</string>
+    <string name="error_android_provider_address">El valor de %1$s no es una dirección web</string>
+    <string name="error_android_provider_https">Una dirección web aquí empieza con https:// y no lleva contraseña ni parte de búsqueda</string>
+    <string name="error_android_provider_option">El valor de %1$s no es válido</string>
+    <string name="error_android_provider_option_unknown">%1$s no tiene una opción llamada %2$s</string>
+    <string name="error_android_provider_needs">%1$s necesita la opción %2$s</string>
+    <string name="error_android_provider_missing">No hay una fuente de imágenes %1$s</string>
+    <string name="error_android_provider_secret">%1$s necesita primero su clave o contraseña</string>
+    <string name="error_android_provider_secret_rejected">%1$s rechazó la clave o contraseña: vuelve a escribirla</string>
+    <string name="error_android_provider_failed">%1$s no respondió: %2$s</string>
+    <string name="error_android_provider_off">%1$s está apagada: enciéndela para que descargue</string>
+    <string name="error_android_provider_busy">Otra fuente de imágenes está descargando: inténtalo de nuevo cuando termine</string>
+    <string name="error_android_repo_fingerprint">La huella tiene 64 letras y números (del 0 al 9 y de la a a la f): cópiala de nuevo tal como la dio quien publica</string>
+    <string name="error_android_repo_needs_fingerprint">Pide a quien publica la huella del repositorio: así este teléfono sabe que nadie lo cambió</string>
+    <string name="error_android_repo_two_fingerprints">La dirección ya lleva una huella: deja vacío el cuadro de la huella</string>
 </resources>
