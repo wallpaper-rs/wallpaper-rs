@@ -16,7 +16,7 @@ fn newer_effects_refuse_values_outside_their_types_and_ranges() {
         ),
         (json!({ "effect": "glitter", "params": { "size": 32 } }), "/params/size is 32, expected 0.5..=16"),
         (json!({ "effect": "pulse", "params": { "audio_band": 1.5 } }), "/params/audio_band does not fit"),
-        (json!({ "effect": "pulse", "params": { "what": 3 } }), "/params/what does not fit"),
+        (json!({ "effect": "pulse", "params": { "what": 4 } }), "/params/what does not fit"),
         (json!({ "effect": "reveal", "params": { "shape": 2 } }), "/params/shape does not fit"),
         (json!({ "effect": "displace", "params": { "map": "moon" } }), "names the unknown asset \"moon\""),
         (json!({ "effect": "transform", "params": { "skew": "far" } }), "/params/skew does not fit"),
