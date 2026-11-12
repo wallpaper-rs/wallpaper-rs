@@ -13,7 +13,7 @@ QtObject {
         const found = reasons.find(r => why.startsWith(r[0]));
         if (!found || found[1].startsWith(found[0]))
             return line;
-        return daemon.tr("The effect %1 was left out: %2", line.slice(head.length, at), found[1]);
+        return daemon.tr("The effect %1 was left out: %2", SceneWords.effect(line.slice(head.length, at)), found[1]);
     }
 
     function level(info, state) {

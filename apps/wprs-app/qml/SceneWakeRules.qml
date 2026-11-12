@@ -44,7 +44,7 @@ ColumnLayout {
 
             QQC2.Label {
                 Layout.preferredWidth: Kirigami.Units.gridUnit * 6
-                text: row.modelData.id
+                text: SceneWords.label(row.modelData.id)
                 elide: Text.ElideRight
             }
 
@@ -59,14 +59,14 @@ ColumnLayout {
 
             QQC2.ComboBox {
                 enabled: rules.info.own === true
-                model: row.others.map(n => n === "" ? App.tr("Waits for nothing") : App.tr("Waits for %1", n))
+                model: row.others.map(n => n === "" ? App.tr("Waits for nothing") : App.tr("Waits for %1", SceneWords.label(n)))
                 currentIndex: Math.max(0, row.others.indexOf(row.modelData.waits_for ?? ""))
                 onActivated: index => rules.change(row.modelData.id, "waits_for", row.others[index])
             }
 
             QQC2.ComboBox {
                 enabled: rules.info.own === true
-                model: row.others.map(n => n === "" ? App.tr("Yields to nothing") : App.tr("Yields to %1", n))
+                model: row.others.map(n => n === "" ? App.tr("Yields to nothing") : App.tr("Yields to %1", SceneWords.label(n)))
                 currentIndex: Math.max(0, row.others.indexOf(row.modelData.yields_to ?? ""))
                 onActivated: index => rules.change(row.modelData.id, "yields_to", row.others[index])
             }

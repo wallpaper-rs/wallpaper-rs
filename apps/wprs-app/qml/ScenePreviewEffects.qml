@@ -9,7 +9,7 @@ ColumnLayout {
     required property var page
     readonly property string stamp: SceneLook.quality + SceneLook.battery + SceneLook.calm + effects.visible
     property var info: null
-    readonly property var followers: (effects.info?.effects ?? []).filter(e => e.follows).map(e => e.effect + " (" + e.layer + ")").concat(effects.info?.pointer?.emitters ?? [])
+    readonly property var followers: (effects.info?.effects ?? []).filter(e => e.follows).map(e => SceneWords.effect(e.effect) + " (" + e.layer + ")").concat(effects.info?.pointer?.emitters ?? [])
 
     function load() {
         if (!effects.visible)
@@ -73,7 +73,7 @@ ColumnLayout {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
             font.bold: !modelData.kept
-            text: modelData.kept ? App.tr("%1 on %2: %3 units of work", modelData.effect, modelData.layer, modelData.units.toFixed(2)) : App.tr("%1 on %2: left out of the scene at this level", modelData.effect, modelData.layer)
+            text: modelData.kept ? App.tr("%1 on %2: %3 units of work", SceneWords.effect(modelData.effect), modelData.layer, modelData.units.toFixed(2)) : App.tr("%1 on %2: left out of the scene at this level", SceneWords.effect(modelData.effect), modelData.layer)
         }
     }
 }
