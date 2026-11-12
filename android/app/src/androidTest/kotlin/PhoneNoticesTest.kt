@@ -38,7 +38,7 @@ class PhoneNoticesTest {
 
     @Test
     fun anEmptyLibraryOffersTheExampleScenesAndAPickerRightThere() {
-        shown { Empty(it, Hollow.LIBRARY) }
+        shown { Empty(it, Hollow.LIBRARY) {} }
         text(R.string.empty).assertIsDisplayed()
         text(R.string.examples).assertIsDisplayed()
         text(R.string.pick_media).assertIsDisplayed()
@@ -46,7 +46,7 @@ class PhoneNoticesTest {
 
     @Test
     fun theWebFilterTalksAboutWebPagesAndOffersNoExamples() {
-        shown { Empty(it, Hollow.WEBS) }
+        shown { Empty(it, Hollow.WEBS) {} }
         text(R.string.empty_webs).assertIsDisplayed()
         text(R.string.examples).assertDoesNotExist()
         text(R.string.empty).assertDoesNotExist()

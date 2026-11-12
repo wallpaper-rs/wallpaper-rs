@@ -45,6 +45,7 @@ class Wprs : Application(), Configuration.Provider {
         thread(isDaemon = true) {
             Mirrors.watch(this, ExistingWorkPolicy.KEEP)
             Updates.schedule(this)
+            ProviderWork.schedule(this)
             Converting.resume(this)
         }
     }
@@ -105,6 +106,7 @@ object Sync {
         Heard.recheck()
         schedule(context)
         Updates.schedule(context)
+        ProviderWork.schedule(context)
         Mirrors.watch(context, ExistingWorkPolicy.KEEP)
     }
 

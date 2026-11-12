@@ -42,7 +42,6 @@ fun JSONArray?.objects() = this?.let { list -> List(list.length(), list::getJSON
 fun Repos(main: Main, status: JSONObject, run: Run) {
     var changed by remember { mutableIntStateOf(0) }
     var exploring by remember { mutableStateOf(false) }
-    var url by rememberSaveable { mutableStateOf("") }
     val shown by loaded(JSONObject(), changed, status.optInt("offers"), status.optLong("last_sync")) {
         account("repos") as? JSONObject ?: JSONObject()
     }
@@ -52,6 +51,7 @@ fun Repos(main: Main, status: JSONObject, run: Run) {
         withContext(Dispatchers.IO) { Updates.schedule(main) }
     }
     Text(stringResource(R.string.repos), Modifier.padding(horizontal = 16.dp), style = MaterialTheme.typography.titleSmall)
+    if (shown.optJSONArray("repos").objects().isEmpty()) Note(stringResource(R.string.repos_none))
     shown.optJSONArray("offers").objects().forEach { offer ->
         val key = offer.optJSONArray("fingerprints")?.optString(0).orEmpty().take(16)
         ListItem(
@@ -74,15 +74,8 @@ fun Repos(main: Main, status: JSONObject, run: Run) {
             },
         )
     }
-    Column(Modifier.padding(horizontal = 16.dp), Arrangement.spacedBy(8.dp)) {
-        OutlinedTextField(url, { url = it }, Modifier.fillMaxWidth(), singleLine = true, label = { Text(stringResource(R.string.repo_url)) })
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton({ act { account("add_repo", "url" to url.trim()); url = "" } }, enabled = url.isNotBlank()) {
-                Text(stringResource(R.string.repo_add_url))
-            }
-            if (shown.optJSONArray("repos").objects().isNotEmpty()) TextButton({ exploring = true }) { Text(stringResource(R.string.repo_browse)) }
-        }
-    }
+    RepoAdd(main, run) { changed++; exploring = true }
+    if (shown.optJSONArray("repos").objects().isNotEmpty()) TextButton({ exploring = true }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.repo_browse)) }
     if (shown.optJSONArray("repos").objects().isNotEmpty()) RepoUpdates(main, run)
     if (exploring) Explore(main, run) { exploring = false }
 }
@@ -103,6 +96,7 @@ private fun Explore(main: Main, run: Run, close: () -> Unit) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(query, { query = it }, Modifier.fillMaxWidth(), singleLine = true, label = { Text(stringResource(R.string.repo_search)) })
                 Text(stringResource(R.string.votes_note), style = MaterialTheme.typography.bodySmall)
+                if (items.isEmpty()) Text(stringResource(R.string.repo_nothing))
                 LazyColumn(Modifier.heightIn(max = 360.dp)) {
                     itemsIndexed(items) { index, item ->
                         val featured = item.optBoolean("featured")

@@ -9,8 +9,8 @@ use wprs_library::{Library, PlaylistInfo, Rules};
 
 mod lists;
 
-pub(crate) use lists::{drop_playlist, remove as drop_items};
 use lists::listed;
+pub(crate) use lists::{drop_playlist, remove as drop_items};
 
 const DATABASE: &str = "library.db";
 

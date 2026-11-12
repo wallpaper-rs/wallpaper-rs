@@ -10,7 +10,7 @@
     <string name="images">Images</string>
     <string name="videos">Videos</string>
     <string name="favorites">Favorites</string>
-    <string name="empty">Nothing here yet. Add photos, videos or scenes.</string>
+    <string name="empty">Nothing here yet. Add photos, videos or scenes, or get wallpapers from the internet.</string>
     <string name="choose">Add</string>
     <string name="apply">Set as wallpaper</string>
     <string name="applied">Wallpaper updated</string>

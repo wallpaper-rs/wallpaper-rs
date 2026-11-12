@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -52,6 +53,7 @@ import android.graphics.ImageDecoder
 private val TABS = listOf(
     R.string.library to Icons.Default.Home,
     R.string.playlists to Icons.AutoMirrored.Filled.List,
+    R.string.sources to Icons.Default.Search,
     R.string.devices to Icons.Default.AccountCircle,
     R.string.settings to Icons.Default.Settings,
 )
@@ -83,7 +85,7 @@ fun App(main: Main) {
                         },
                         icon = {
                             val updates = Updates.count.intValue
-                            if (label != R.string.devices || updates == 0) Icon(icon, null)
+                            if (label != R.string.sources || updates == 0) Icon(icon, null)
                             else BadgedBox({ Badge { Text("$updates") } }) { Icon(icon, stringResource(R.string.repo_updates)) }
                         },
                         label = { Text(stringResource(label)) },
@@ -95,10 +97,14 @@ fun App(main: Main) {
                 val (shown, list) = item to playlist
                 when {
                     shown != null -> Detail(main, shown, { item = it }) { item = null }
-                    tab == 0 -> Library(main) { item = it }
+                    tab == 0 -> Library(main, { tab = SOURCES }) { item = it }
                     tab == 1 && list != null -> Entries(main, list, { item = it }) { playlist = null }
                     tab == 1 -> Playlists(main) { playlist = it }
-                    tab == 2 -> Account(main)
+                    tab == SOURCES -> Sources(main) {
+                        main.search.value = it
+                        tab = 0
+                    }
+                    tab == 3 -> Account(main)
                     else -> Settings(main)
                 }
             }
@@ -142,3 +148,5 @@ fun Animated(path: String, modifier: Modifier = Modifier) = AndroidView({ ImageV
         (drawable as? AnimatedImageDrawable)?.start()
     }
 }
+
+private const val SOURCES = 2

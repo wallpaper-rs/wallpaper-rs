@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.dp
 import kotlin.concurrent.thread
 
 @Composable
-fun Adding(main: Main, modifier: Modifier) = Box(modifier) {
+fun Adding(main: Main, sources: () -> Unit, modifier: Modifier) = Box(modifier) {
     var open by remember { mutableStateOf(false) }
     ExtendedFloatingActionButton(onClick = { open = true }, icon = { Icon(Icons.Default.Add, stringResource(R.string.choose)) }, text = { Text(stringResource(R.string.choose)) })
     DropdownMenu(open, { open = false }) {
-        listOf(R.string.photos to main::choose, R.string.files to main::chooseFiles, R.string.folder to main::chooseFolder).forEach { (label, pick) ->
+        listOf(R.string.photos to main::choose, R.string.files to main::chooseFiles, R.string.folder to main::chooseFolder, R.string.from_internet to sources).forEach { (label, pick) ->
             DropdownMenuItem({ Text(stringResource(label)) }, {
                 open = false
                 pick()

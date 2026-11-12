@@ -47,6 +47,7 @@ class Main : ComponentActivity() {
     private val folder = registerForActivityResult(OpenDocumentTree()) { uri -> uri?.let(::importFolder) }
     private val packages = registerForActivityResult(OpenDocument()) { uri -> uri?.let { store(listOf(it)) } }
     val placing = mutableStateOf(false)
+    val search = mutableStateOf<String?>(null)
     val noticing = mutableStateOf(false)
     private val noticed = { runOnUiThread { Notice.asking(this).also { noticing.value = true } } }
     private val saverSkipped = AtomicBoolean()

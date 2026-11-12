@@ -1259,10 +1259,20 @@ revocado un equipo), los *Archivos privados* (los fondos propios que otro equipo
 *Descargar* para añadirlos a la biblioteca del teléfono, y en la página de una imagen o un vídeo
 del teléfono *Guardar cifrado en el servidor*, que lo sube por partes cifradas igual que
 `wprs-ctl server files share`, y al desactivarlo se borra del servidor), las claves de proveedores
-que se sincronizan (el teléfono no usa proveedores, pero las guarda selladas por el almacén de
-claves y las muestra) y los *Repositorios*: los que se añaden en otro equipo llegan como
-propuesta con su clave y se añaden o se rechazan una vez, también se añade uno por su dirección,
-y *Explorar* busca sus paquetes (los marca si son para adultos y los oculta con *Ocultar el
+que se sincronizan (el teléfono las guarda selladas por el almacén de claves y las muestra). La pestaña
+*Fuentes* reúne de dónde vienen los fondos, con o sin servidor propio, y es lo que ofrece el botón
+*Conseguir fondos de internet* de la biblioteca vacía y la opción *Desde internet* de *Añadir*. Arriba están las
+*Imágenes de internet*, los proveedores en el teléfono (imagen del día de Bing, imagen astronómica de la NASA,
+imagen del día de Wikimedia, búsqueda en Wallhaven y carpetas de un servidor WebDAV, Nextcloud o Immich): cada
+uno nace apagado, dice con quién se conecta y qué ve esa parte, y no toca la red hasta que lo enciendes; apagado, ni
+la descarga ahora ni la automática hacen nada; si cambia la dirección a la que apunta, vuelve a apagarse y olvida su
+clave. Descarga solo imágenes, cada seis horas como mucho y con las reglas de red y batería de la sincronización
+(*Usar también datos móviles en segundo plano*; *Descargar ahora* lo pide la persona y va sin esa espera), guarda
+cada una en la biblioteca con la etiqueta `from-ID`, conserva las últimas *N* (no quita favoritas, de listas ni la
+puesta) y muestra los créditos. Debajo están los *Repositorios*: los que se añaden en otro equipo llegan como
+propuesta con su clave y se añaden o se rechazan una vez, también se añade uno por su dirección y su huella
+(la huella se pide aparte y se explica con palabras: el teléfono solo lo acepta si responde con esa clave), y
+al añadirlo se abre *Explorar*, que busca sus paquetes (los marca si son para adultos y los oculta con *Ocultar el
 contenido para adultos*), enseña la vista previa de cada uno (una por vez que se ve la fila, solo del
 repositorio que añadiste, con un hueco gris mientras llega, sin pedir las de adultos salvo con
 *Mostrar sin difuminar*, y guardadas hasta 16 MiB, que se borran con el repositorio) y los instala en la biblioteca, comprobados con el índice firmado
@@ -2270,7 +2280,7 @@ para varias claves); la raíz nueva dura lo mismo que la anterior salvo que diga
 las réplicas salvo que des otras con `--mirror`, y `--no-mirrors` (o vaciar el campo en el diálogo) las
 quita todas. Cada cambio del catálogo
 trabaja fuera de la ventana, uno detrás de otro, y mientras dura los demás cambios y *Abrir* esperan
-desactivados. En el teléfono, *Repositorio estático* de
+desactivados. En el teléfono, *Publicar tu propio repositorio (avanzado)* de
 *Dispositivos* hace lo mismo con una carpeta que eliges en el selector del sistema (por ejemplo la que
 sincronizas con tu servidor): añade paquetes (también ocultos), oculta o vuelve a mostrar, destaca o
 deja de destacar con la misma confirmación y publica con un archivo de clave en línea; trabaja sobre

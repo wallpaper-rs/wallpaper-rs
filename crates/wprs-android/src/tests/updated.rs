@@ -3,6 +3,7 @@ use serde_json::{Value, json};
 
 mod automatic;
 mod away;
+mod provided;
 mod repository;
 
 fn offered(repo: &str, id: &str, versions: &[&str]) -> wprs_format::Item {
@@ -57,4 +58,5 @@ pub(super) fn nothing_to_update_without_repositories() {
     repository::dependencies_and_updates_follow_a_repository();
     automatic::updates_follow_the_setting();
     away::notes_follow_the_records_that_have_no_item_here();
+    provided::picture_sources_download_only_when_turned_on();
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="stall">Repositorio estático</string>
-    <string name="stall_hint">Una carpeta creada con wprs-ctl repo init</string>
+    <string name="stall">Publicar tu propio repositorio (avanzado)</string>
+    <string name="stall_hint">Solo para quien publica fondos: una carpeta preparada en una computadora. Para conseguir fondos, usa la pestaña Fuentes.</string>
     <string name="stall_folder_note">Android rechaza la raíz del almacenamiento, Descargas y otras carpetas del sistema. Elige o crea una carpeta propia dentro de Documentos.</string>
     <string name="stall_open">Abrir un repositorio estático…</string>
     <string name="stall_add">Añadir paquetes…</string>

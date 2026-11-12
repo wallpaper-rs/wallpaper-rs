@@ -61,13 +61,21 @@ private val FILTERS = listOf(
 )
 
 @Composable
-fun Library(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
+fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
     var filter by rememberSaveable { mutableIntStateOf(0) }
     var text by rememberSaveable { mutableStateOf("") }
     var searched by remember { mutableStateOf(text) }
     LaunchedEffect(text) {
         delay(SEARCH_MS)
         searched = text.trim()
+    }
+    LaunchedEffect(Unit) {
+        main.search.value?.let { found ->
+            text = found
+            searched = found
+            filter = 0
+            main.search.value = null
+        }
     }
     val chosen = rememberSelection()
     val kind = FILTERS[filter].second
@@ -98,7 +106,7 @@ fun Library(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
         }
         Importing(main)
         if (query.isEmpty()) AwayNotes(main)
-        if (items?.isEmpty() == true) Empty(main, hollow(kind, searched))
+        if (items?.isEmpty() == true) Empty(main, hollow(kind, searched), sources)
         LazyVerticalGrid(
             columns = GridCells.Adaptive(112.dp),
             contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 96.dp),
@@ -112,7 +120,7 @@ fun Library(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
             }
         }
     }
-    if (chosen.isEmpty()) Adding(main, Modifier.align(Alignment.BottomEnd).padding(16.dp))
+    if (chosen.isEmpty()) Adding(main, sources, Modifier.align(Alignment.BottomEnd).padding(16.dp))
 }
 
 @Composable

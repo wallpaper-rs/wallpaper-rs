@@ -77,7 +77,6 @@ fun Account(main: Main) {
                 items(devices(status).filterNot { it.optBoolean("current") }) { Device(it, state == "needs_key", run) }
                 item { Recovery(status, run) }
                 item { PrivateFiles(main, status, run) }
-                item { Repos(main, status, run) }
             }
         }
         item { Stall(main) }

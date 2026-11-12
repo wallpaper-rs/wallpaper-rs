@@ -75,9 +75,6 @@ enum Request {
         token: u64,
     },
     Repos,
-    AddRepo {
-        url: String,
-    },
     Offer {
         repo: String,
         add: bool,
@@ -152,7 +149,6 @@ fn run(request: Request) -> Result<Value, Error> {
         Request::Files => return Ok(private::list()),
         Request::ShareFiles { targets, share } => return private::share(&targets, share),
         Request::Repos => return repos::list(),
-        Request::AddRepo { url } => return repos::add(&url),
         Request::Offer { repo, add } => return repos::confirm(&repo, add),
         Request::RemoveRepo { repo_id } => return repos::remove(&repo_id),
         Request::Browse { query } => return repos::browse(&query),
