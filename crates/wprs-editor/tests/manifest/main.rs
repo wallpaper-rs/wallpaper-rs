@@ -136,6 +136,9 @@ fn the_inspector_shows_the_manifest_from_its_schema() {
         |doc: &Value| fields(doc, "/manifest/display").into_iter().map(|f| f.key).collect::<Vec<_>>();
     doc["manifest"]["display"] = json!({});
     assert_eq!(display(&doc), ["accent", "span"], "scenes are not framed");
+    doc["manifest"]["properties"] = json!({"tint": {"type": "color"}, "speed": {"type": "slider"}});
+    let accent = fields(&doc, "/manifest/display").into_iter().find(|f| f.key == "accent").unwrap();
+    assert_eq!((accent.widget.as_str(), accent.options), ("accent", vec![json!("tint")]));
     doc["manifest"]["display"] = json!({"fit": "tile"});
     assert_eq!(display(&doc), ["accent", "fit", "span"], "a value set by hand can still be removed");
     let playback =

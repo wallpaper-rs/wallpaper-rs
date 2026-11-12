@@ -360,6 +360,15 @@ manifest shows only the fields that version knows (title, description, version, 
 license, preview and tags). The default language has no way back to a default, since texts in
 several languages need it. More annotations guide the widgets:
 
+`accent` has its own control instead of raw JSON, in the inspector of the manifest of scenes and of
+web pages: a box that chooses between the dominant color of the preview (no value), a fixed color
+(the color chooser, written as `#rrggbb`) and the color of a property (a box with the color
+properties of the package, written as `{"prop": "<id>"}`). It sends the `manifest` action `display`
+with `values.accent`, or `clear: ["accent"]` for none, so `wprs-ctl scene act` and `scene manifest DIR
+display --accent C|prop:ID` do the same. The action refuses a property that is not a color, a
+rename of the property moves the accent along, and a property that the accent follows cannot be
+removed until the accent changes.
+
 | Annotation | Meaning |
 |------------|---------|
 | `x-markup` | a text with the markup of `package.md`, edited on several lines |

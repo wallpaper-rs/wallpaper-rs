@@ -4119,6 +4119,30 @@ msgstr "Nombre"
 msgid "Cannot write the file"
 msgstr "No se puede escribir el archivo"
 
+#: apps/wprs-app/qml/SceneAccent.qml
+msgid "Dominant color of the preview"
+msgstr "Color dominante de la vista previa"
+
+#: apps/wprs-app/qml/SceneAccent.qml
+msgid "A fixed color"
+msgstr "Un color fijo"
+
+#: apps/wprs-app/qml/SceneAccent.qml
+msgid "The color of a property"
+msgstr "El color de una propiedad"
+
+#: apps/wprs-app/qml/SceneAccent.qml apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Accent color"
+msgstr "Color de acento"
+
+#: apps/wprs-app/qml/SceneAccent.qml
+msgid "Color property"
+msgstr "Propiedad de color"
+
+#: apps/wprs-app/qml/SceneAccent.qml
+msgid "Add a color property first; the accent then follows its value."
+msgstr "Añade primero una propiedad de color; el acento seguirá su valor."
+
 #: apps/wprs-app/qml/SceneAmbient.qml
 msgid "Light around"
 msgstr "Luz ambiente"
@@ -10231,10 +10255,6 @@ msgstr "ajusta %1 en el efecto %2"
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "uses the %1 effect"
 msgstr "usa el efecto %1"
-
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Accent color"
-msgstr "Color de acento"
 
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Allowed origins"

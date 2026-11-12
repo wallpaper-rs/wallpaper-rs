@@ -112,6 +112,7 @@ ColumnLayout {
                 "enum": choiceEditor,
                 "variant": choiceEditor,
                 "color": colorEditor,
+                "accent": accentEditor,
                 "rgb": colorEditor,
                 "condition": hosts.condition,
                 "vec2": editors.pair,
@@ -152,6 +153,14 @@ ColumnLayout {
                 else
                     input.commit(variant ? input.field.sample[options[index]] : options[index]);
             }
+        }
+    }
+
+    Component {
+        id: accentEditor
+
+        SceneAccent {
+            owner: input
         }
     }
 

@@ -72,6 +72,9 @@ fn users(doc: &Value, id: &str) -> Vec<String> {
         .map(|(other, key, _)| format!("{}/{key}", path(other)))
         .collect();
     bound(&doc["scene"], "/scene", id, &mut out);
+    if doc["manifest"]["display"]["accent"]["prop"] == id {
+        out.push("/manifest/display/accent".into());
+    }
     out
 }
 

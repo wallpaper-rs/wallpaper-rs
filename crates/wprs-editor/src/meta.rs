@@ -56,6 +56,11 @@ pub fn adjust(doc: &Value, field: &mut crate::Field) {
         "/manifest/requires/features" => {
             field.options = wprs_format::features::CHOSEN.map(Value::from).to_vec()
         }
+        "/manifest/display/accent" => {
+            let props = doc["manifest"]["properties"].as_object().into_iter().flatten();
+            field.widget = "accent".into();
+            field.options = props.filter(|(_, p)| p["type"] == "color").map(|(id, _)| json!(id)).collect();
+        }
         _ => crate::settings::adjust(doc, field),
     }
 }

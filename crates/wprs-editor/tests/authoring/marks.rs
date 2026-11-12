@@ -78,3 +78,21 @@ fn an_asset_is_imported_as_linear_data_or_as_a_sprite_sheet() {
         assert!(refused(&mut p, json!({ "import": import })).contains("picture"));
     }
 }
+
+#[test]
+fn the_accent_follows_a_color_property_through_a_rename_and_keeps_it_from_being_removed() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    act(&mut p, json!({"add_property": {"kind": "color", "id": "tint"}})).unwrap();
+    act(&mut p, json!({"add_property": {"kind": "slider", "id": "speed"}})).unwrap();
+    assert!(
+        act(&mut p, json!({"manifest": {"display": {"values": {"accent": {"prop": "speed"}}}}})).is_err()
+    );
+    act(&mut p, json!({"manifest": {"display": {"values": {"accent": {"prop": "tint"}}}}})).unwrap();
+    assert_eq!(at(&p, "/manifest/display/accent"), json!({"prop": "tint"}));
+    assert!(refused(&mut p, json!({"remove_property": {"id": "tint"}})).contains("/manifest/display/accent"));
+    act(&mut p, json!({"rename_property": {"id": "tint", "to": "glow"}})).unwrap();
+    assert_eq!(at(&p, "/manifest/display/accent"), json!({"prop": "glow"}));
+    act(&mut p, json!({"manifest": {"display": {"values": {"accent": "#336699"}}}})).unwrap();
+    act(&mut p, json!({"remove_property": {"id": "glow"}})).unwrap();
+}

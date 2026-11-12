@@ -48,6 +48,11 @@ pub fn rename_json(manifest: &mut Value, scene: Option<&mut Value>, renames: &Re
     for preset in manifest.get_mut("presets").and_then(Value::as_array_mut).into_iter().flatten() {
         rekey(preset.get_mut("values"), renames);
     }
+    if let Some(name) = manifest.pointer_mut("/display/accent/prop") {
+        if let Some(to) = name.as_str().and_then(|n| renames.get(n)) {
+            *name = json!(to);
+        }
+    }
     scene.into_iter().for_each(|scene| bind(scene, renames));
 }
 
