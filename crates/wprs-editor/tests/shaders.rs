@@ -11,6 +11,13 @@ const WGSL: &str = "override soft: bool = false;
     return tap(in.uv) * select(param(0u).x, 1.0, soft);
 }";
 
+fn english() {
+    unsafe {
+        std::env::set_var("LC_ALL", "C");
+        std::env::remove_var("LANGUAGE");
+    }
+}
+
 fn descriptor(id: &str) -> Value {
     json!({ "id": id, "name": { "en": "Glow", "es": "Brillo" }, "cost": { "taps": 1 }, "passes": [{ "entry": "fs_glow" }],
         "params": [{ "id": "gain", "type": "float", "default": 1, "min": 0, "max": 4,
@@ -22,6 +29,7 @@ fn descriptor(id: &str) -> Value {
 
 #[test]
 fn package_effects_are_imported_listed_and_inspected() {
+    english();
     let root = tempfile::tempdir().unwrap();
     unsafe { std::env::set_var("XDG_STATE_HOME", root.path().join("state")) };
     let dir = root.path().join("glow");
@@ -100,6 +108,7 @@ fn package_effects_are_imported_listed_and_inspected() {
 
 #[test]
 fn shine_styles_are_picked_from_drawn_choices() {
+    english();
     let root = tempfile::tempdir().unwrap();
     unsafe { std::env::set_var("XDG_STATE_HOME", root.path().join("state")) };
     let dir = root.path().join("shine");
