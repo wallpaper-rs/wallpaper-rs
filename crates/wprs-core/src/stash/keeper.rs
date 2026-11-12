@@ -16,7 +16,7 @@ fn lock<T>(m: &Mutex<T>) -> MutexGuard<'_, T> {
 
 pub(super) fn drop_open(path: &Path) {
     lock(&OPEN).retain(|(p, w)| {
-        if let Some(stash) = w.upgrade().filter(|_| p == path) {
+        if let Some(stash) = (p == path).then(|| w.upgrade()).flatten() {
             let mut s = lock(&stash);
             (s.forgotten, s.dirty) = (true, false);
         }
