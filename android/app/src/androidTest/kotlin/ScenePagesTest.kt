@@ -68,6 +68,8 @@ class ScenePagesTest : SceneBase() {
         File(dir, "manifest.json").writeText(KNOBS_MANIFEST)
         Native.library(JSONObject().put("op", "examples").put("dir", dir.parent).toString())
         val uid = show("Knobs")
+        val left = (ask("scene", "uid" to uid, "languages" to listOf("en")) as JSONObject).getJSONArray("saved")
+        (0 until left.length()).forEach { ask("forget", "preset" to left.getJSONObject(it).getString("value")) }
         assertTrue(waitFor { frames.get() > 0 })
         val before = settled(frames)
         ask("press", "uid" to uid, "key" to "again")
