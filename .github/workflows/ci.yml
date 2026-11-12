@@ -264,6 +264,11 @@ jobs:
           WPRS_DEPTH_MODEL=$HOME/.local/share/wallpaper-rs/models/depth-anything-v2-small/depth_anything_v2_vits_dynamic.onnx \
             cargo test --locked -p wprs-depth --all-features --test model -- --nocapture
 
+      - name: Scene examples of the creator documentation
+        run: |
+          cargo build --locked -p wprs-ctl
+          scripts/docs-examples.sh target/debug
+
   e2e:
     name: End-to-end test (D-Bus + PipeWire + daemon)
     needs: version
