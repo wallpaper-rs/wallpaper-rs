@@ -40,7 +40,13 @@ Item {
     Item {
         id: frame
 
-        readonly property var g: overlay.gizmo
+        readonly property var g: overlay.gizmo ?? ({
+                "offset": [0, 0],
+                "position": [0, 0],
+                "size": [0, 0],
+                "scale": [1, 1],
+                "rotation": 0
+            })
         readonly property var center: [g.offset[0] + g.position[0], g.offset[1] + g.position[1]]
 
         x: center[0] * overlay.ratio - width / 2
@@ -61,9 +67,9 @@ Item {
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 overlay.points.forEach((point, i) => {
-                    const xy = overlay.at(point);
-                    i === 0 ? ctx.moveTo(xy[0] * width, xy[1] * height) : ctx.lineTo(xy[0] * width, xy[1] * height);
-                });
+                        const xy = overlay.at(point);
+                        i === 0 ? ctx.moveTo(xy[0] * width, xy[1] * height) : ctx.lineTo(xy[0] * width, xy[1] * height);
+                    });
                 ctx.closePath();
                 ctx.stroke();
             }
