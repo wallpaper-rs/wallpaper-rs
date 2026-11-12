@@ -68,6 +68,7 @@ pub(super) fn only_automatic_stops_heavy_scenes() {
     assert_eq!(shoot(&mut stage, n), 0, "automatic played a scene measured far too slow at the lowest level");
     assert_eq!(warned(), ("still".into(), None));
     assert_eq!(report::wallpaper()["step"], "still");
+    assert_eq!(report::wallpaper()["reason"], "saver", "power saving was told as slow frames");
     for choice in ["q0", "q1", "min-q1"] {
         assert_eq!(settings::setting("playback.quality", Some(choice)).unwrap(), choice);
         assert_eq!(warned().0, "lower", "{choice} kept warning of the old choice before a frame");

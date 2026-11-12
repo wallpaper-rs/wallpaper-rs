@@ -24,8 +24,8 @@ impl Stage {
         force: bool,
     ) -> Result<Shot<'a>, RenderError> {
         let started = self.measured.then(std::time::Instant::now);
-        let budget =
-            Budget { choice: crate::power::choice(), ..Budget::new(tier, !power.charging, cap.max(1)) };
+        let (choice, saver) = (crate::power::choice(), power.saver);
+        let budget = Budget { choice, saver, ..Budget::new(tier, !power.charging, cap.max(1)) };
         self.runtime.set_battery(!power.charging);
         self.runtime.set_magnify(self.runtime.scene.magnify(size));
         self.heavy = budget.choice.is_auto() && (budget.crowded(&self.runtime) || self.pilot.stalled());
