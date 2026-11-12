@@ -175,8 +175,8 @@ jobs:
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
         with:
-          shared-key: test-${{ matrix.shard }}
-          save-if: ${{ github.ref == 'refs/heads/master' }}
+          shared-key: dev
+          save-if: false
 
       - name: Unit and render tests
         env:
@@ -210,7 +210,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
         with:
-          shared-key: test-1
+          shared-key: dev
           save-if: false
 
       - name: Render tests with the OpenGL ES backend
@@ -292,6 +292,7 @@ jobs:
         with:
           shared-key: dev
           save-if: ${{ github.ref == 'refs/heads/master' }}
+          cache-on-failure: true
 
       - name: User namespaces for the sandbox stand-in
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
@@ -450,7 +451,8 @@ jobs:
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
         with:
-          save-if: ${{ github.ref == 'refs/heads/master' }}
+          shared-key: dev
+          save-if: false
 
       - name: Daemons, the phone client and wprs-server with end-to-end encrypted sync
         run: |
@@ -476,8 +478,8 @@ jobs:
               target/release/wprsd
           - name: app
             bins: wprs-app
-            cache: app
-            save: true
+            cache: daemon
+            save: false
             files: |
               target/release/wprs-app
           - name: tools
@@ -520,6 +522,7 @@ jobs:
         with:
           shared-key: release-${{ matrix.cache }}
           save-if: ${{ github.ref == 'refs/heads/master' && matrix.save }}
+          cache-on-failure: ${{ matrix.save }}
 
       - id: ccache
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
@@ -944,9 +947,8 @@ jobs:
           manifest-path: packaging/flatpak/io.github.wallpaper_rs.WallpaperRs.yml
           bundle: ${{ matrix.bundle }}
           arch: ${{ matrix.arch }}
-          cache-key: flatpak-${{ matrix.arch }}-${{ hashFiles('Cargo.lock', 'packaging/flatpak/*.yml') }}
+          cache: false
           upload-artifact: false
-          save-cache: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Install and run the bundle
         timeout-minutes: 20
