@@ -48,10 +48,16 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
         })
         .collect();
     let scripts = project.doc.pointer("/scene/scripts").cloned().unwrap_or_default();
+    let before = wprs_editor::check::review(&project.doc, Some(&project.dir));
     let ops = if single { project.act(&action)? } else { project.act_all(&actions)? };
+    let after = wprs_editor::check::review(&project.doc, Some(&project.dir));
+    let problems = wprs_editor::check::introduced(&before, &after);
     ensure!(!(undoing && ops.is_empty()), "there is nothing to {}", action.name());
     project.save()?;
     named.iter().for_each(|(path, id)| eprintln!("warning: {path} names {id:?}; scripts are not rewritten"));
+    for p in &problems {
+        eprintln!("{}: {}: {}", if p.warning { "warning" } else { "problem" }, p.pointer, p.said.local());
+    }
     if let (Action::Particles(ParticleEdit::Sow(SowEdit::Rename { system, to })), false) =
         (&action, named.is_empty())
     {
@@ -65,7 +71,7 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
         wprs_editor::scripts::changes(&scripts, &now).iter().for_each(|m| eprintln!("{}", m.local()));
     }
     if json {
-        println!("{}", serde_json::to_string_pretty(&json!({ "ops": ops }))?);
+        println!("{}", serde_json::to_string_pretty(&json!({ "ops": ops, "problems": problems }))?);
         return Ok(());
     }
     let added = ops.iter().filter_map(|op| match op {

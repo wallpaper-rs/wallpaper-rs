@@ -57,6 +57,15 @@ pub fn translate(
     text: Option<&str>,
     add: bool,
 ) -> Result<Vec<Op>> {
+    let layer_text = pointer.strip_suffix("/text").and_then(|owner| doc.pointer(owner));
+    ensure!(
+        layer_text.is_none_or(|layer| layer["type"] != "text"),
+        said(
+            "editor.layer_text_one_language",
+            "the text of a text layer has no languages; change it with set",
+            &[]
+        )
+    );
     let named = language.len() <= 35 && language.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'-');
     ensure!(
         named

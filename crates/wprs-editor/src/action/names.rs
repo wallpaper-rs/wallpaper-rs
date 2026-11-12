@@ -94,6 +94,7 @@ pub struct ImportAssets {
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct ScriptFile {
+    #[serde(default)]
     pub file: std::path::PathBuf,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub template: Option<String>,

@@ -1,6 +1,6 @@
 use crate::arrange;
 use crate::keys::keyframe;
-use crate::layers::{children, clean, find, parent, system, taken, template, unique, walk};
+use crate::layers::{children, clean, find, system, taken, template, unique, walk};
 use crate::ops::{Op, apply, set};
 use anyhow::{Result, anyhow, ensure};
 use serde_json::{Value, json};
@@ -134,13 +134,7 @@ fn steps(doc: &Value, action: &Action) -> Result<Vec<Op>> {
         }
         Action::DuplicateLayer { id, template: false } => arrange::duplicate(doc, id)?,
         Action::DuplicateLayer { id, template: true } => arrange::template(doc, id)?,
-        Action::MoveLayer { id, to, into } => {
-            let from = find(doc, id)?;
-            let list = children(doc, into.as_deref())?;
-            let len = doc.pointer(&list).and_then(Value::as_array).map_or(0, Vec::len);
-            let len = if parent(&from).0 == list { len - 1 } else { len };
-            vec![Op::Move { from, path: format!("{list}/{}", (*to).min(len)) }]
-        }
+        Action::MoveLayer { id, to, into } => arrange::relocate(doc, id, *to, into.as_deref())?,
         Action::Group { ids, id } => arrange::group(doc, ids, id.as_deref())?,
         Action::Ungroup { id } => arrange::ungroup(doc, id)?,
         Action::Hide { id, hidden } => arrange::hide(doc, id, *hidden)?,

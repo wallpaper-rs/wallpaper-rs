@@ -58,7 +58,7 @@ pub const ASKS: [(&str, &str); 77] = [
     ),
     (
         "flashes",
-        "What the last measure of the flashes found for the scene as it is now, or null; run measures first",
+        "What the last measure of the flashes found for the scene as it is now, kept between calls, or null; run measures first",
     ),
     ("credits", "The files of the package that can be credited, the credits and the files with none"),
     (

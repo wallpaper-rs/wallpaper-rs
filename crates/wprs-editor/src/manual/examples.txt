@@ -529,14 +529,14 @@ wprs-ctl scene act DIR add_property '{"kind":"slider","id":"bulb"}'
 wprs-ctl scene act DIR add_preset '{"id":"soft","label":"Soft"}'
 
 act import_script
-wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR import_script '{"template":"empty"}'
 
 act script
-wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR import_script '{"template":"empty"}'
 wprs-ctl scene act DIR script '{"remove":{"path":"scripts/empty.js"}}'
 
 act uses
-wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR import_script '{"template":"empty"}'
 wprs-ctl scene act DIR uses '{"path":"scripts/empty.js","add":["timers","math"]}'
 
 act template
@@ -617,7 +617,7 @@ wprs-ctl scene act DIR add_layer '{"kind":"shapes","source":"forms","id":"meshes
 wprs-ctl scene ask DIR pools '{}'
 
 ask uses
-wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR import_script '{"template":"empty"}'
 wprs-ctl scene act DIR script '{"write":{"path":"scripts/empty.js","text":"export function update() { scene.bloom; }\n"}}'
 wprs-ctl scene ask DIR uses '{}'
 
@@ -657,7 +657,7 @@ wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
 wprs-ctl scene ask DIR unkept '{"id":"backdrop"}'
 
 ask script_uses
-wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR import_script '{"template":"empty"}'
 wprs-ctl scene ask DIR script_uses '{"name":"sparks"}'
 
 ask review

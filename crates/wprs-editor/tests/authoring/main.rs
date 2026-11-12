@@ -12,6 +12,7 @@ mod graph;
 mod layers;
 mod marks;
 mod masking;
+mod mended;
 mod placing;
 mod pools;
 mod reaching;

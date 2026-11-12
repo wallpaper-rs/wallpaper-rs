@@ -1,6 +1,12 @@
 pub const ABOUT: [(&str, &str); 80] = [
-    ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
-    ("add", "Insert a value into a list or an object at a JSON Pointer"),
+    (
+        "set",
+        "Set the value at a JSON Pointer, creating the objects on the way; a value of the wrong kind is refused, one that breaks a rule is kept and the problems it adds are listed",
+    ),
+    (
+        "add",
+        "Insert a value into a list or an object at a JSON Pointer; the problems it adds are listed as for set",
+    ),
     ("remove", "Remove the value at a JSON Pointer"),
     ("move", "Move the value at one JSON Pointer to another"),
     ("add_layer", "Add a layer of a kind, optionally from a source, into a group or at a position"),
@@ -19,11 +25,17 @@ pub const ABOUT: [(&str, &str); 80] = [
     ("import", "Import a picture as an asset, optionally as a linear image or an atlas"),
     ("import_effect", "Import an effect from a descriptor and its shader"),
     ("remove_effect", "Remove an imported effect"),
-    ("import_script", "Copy a script module into the scene, or make one from a template"),
+    (
+        "import_script",
+        "Copy the script module in file into the scene, or make one from a template, which needs no file",
+    ),
     ("import_assets", "Copy assets from another package into the scene"),
     ("asset", "Change how an asset is stored: texture compression, cover, placeholder, cube faces"),
     ("rgb", "Turn the lighting of a layer on or off, or set its zone size"),
-    ("translate", "Set, add or remove the text of a field in one language"),
+    (
+        "translate",
+        "Set, add or remove the text of a manifest field in one language; the text of a text layer has no languages and is changed with set",
+    ),
     ("rename", "Rename a layer, timeline, asset or particle system and what refers to it"),
     ("paste", "Paste layers copied with the copy query, into a group or at a position"),
     ("thumbnail", "Set the thumbnail of the package, or its animated preview"),
@@ -70,7 +82,10 @@ pub const ABOUT: [(&str, &str); 80] = [
     ("point", "Add, move, rename or remove a named point of a layer"),
     ("parts", "Order, hide or show the parts of a layered picture"),
     ("particles", "Edit a particle system: shape, bursts, forces, colliders, strands, lighting and settings"),
-    ("light", "Add, change, mute or remove the lights of the scene"),
+    (
+        "light",
+        "Add, change, mute or remove the lights of the scene; add places a light at a position in its group, set moves it to a point of the canvas",
+    ),
     ("lighting", "Set the lighting model of the scene"),
     ("normals", "Make a normal map for a layer"),
     ("paint_map", "Paint a roughness or emissive map"),

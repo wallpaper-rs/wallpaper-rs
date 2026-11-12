@@ -26,7 +26,7 @@ fn sweep(dir: &Path, keep: &Path) {
     let entries = fs::read_dir(dir).into_iter().flatten().flatten();
     let mut found: Vec<(SystemTime, PathBuf)> = entries
         .filter_map(|e| Some((e.metadata().ok()?.modified().ok()?, e.path())))
-        .filter(|(_, p)| p != keep && p.extension().is_some_and(|e| e == "json"))
+        .filter(|(_, p)| p != keep && p.extension().is_some_and(|e| e == "json" || e == "flashes"))
         .collect();
     found.sort();
     let excess = found.len().saturating_sub(KEPT - 1);
@@ -49,6 +49,10 @@ fn state(dir: &Path) -> Result<PathBuf> {
 
 pub(crate) fn codes(dir: &Path) -> Result<PathBuf> {
     Ok(state(dir)?.with_extension("code"))
+}
+
+pub(crate) fn measured(dir: &Path) -> Result<PathBuf> {
+    Ok(state(dir)?.with_extension("flashes"))
 }
 
 pub(crate) fn stash(dir: &Path) -> Result<PathBuf> {

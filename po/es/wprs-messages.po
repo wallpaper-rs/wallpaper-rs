@@ -260,6 +260,10 @@ msgid "the id %1 is in use"
 msgstr "el id %1 ya está en uso"
 
 #: crates/wprs-editor/src/arrange.rs
+msgid "a group cannot be moved into itself or into what it holds"
+msgstr "un grupo no se puede mover dentro de sí mismo ni de lo que contiene"
+
+#: crates/wprs-editor/src/arrange.rs
 msgid "name the layers to group"
 msgstr "indica las capas que se agrupan"
 
@@ -2759,6 +2763,10 @@ msgstr "la plantilla %1 ya existe"
 #: crates/wprs-editor/src/templates.rs
 msgid "the scene has no template %1"
 msgstr "la escena no tiene la plantilla %1"
+
+#: crates/wprs-editor/src/texts.rs
+msgid "the text of a text layer has no languages; change it with set"
+msgstr "el texto de una capa de texto no tiene idiomas; cámbialo con set"
 
 #: crates/wprs-editor/src/texts.rs
 msgid ""

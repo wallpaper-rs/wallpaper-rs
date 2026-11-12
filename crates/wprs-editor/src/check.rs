@@ -48,6 +48,10 @@ pub fn check(doc: &Value) -> Vec<Problem> {
     review(doc, None)
 }
 
+pub fn introduced(before: &[Problem], after: &[Problem]) -> Vec<Problem> {
+    after.iter().filter(|p| !before.contains(p)).cloned().collect()
+}
+
 pub fn review(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
     let mut out = Vec::new();
     let props: BTreeMap<String, Property> = match crate::meta::read(doc, dir) {

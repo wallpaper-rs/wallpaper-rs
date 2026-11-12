@@ -1,8 +1,9 @@
 use crate::findings::{Problem, warning};
 use image::RgbaImage;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
+use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use wprs_core::message::said;
@@ -10,7 +11,7 @@ use wprs_scene::{Calming, FLASH_GRID, FlashGuard, SAFE_FLASHES};
 
 const EDGE: u32 = 160;
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Report {
     pub flashing: bool,
     pub rate: f32,
@@ -69,15 +70,29 @@ pub fn measure(dir: &Path, doc: &Value, (from, seconds, fps): (f64, f64, u32)) -
 }
 
 pub fn remember(dir: &Path, doc: &Value, report: &Report) {
+    let held = stamp(doc);
+    if let Ok(path) = crate::session::measured(dir) {
+        let kept = serde_json::to_string(&(&held, report)).unwrap_or_default();
+        let made = path.parent().map(|p| std::fs::DirBuilder::new().recursive(true).mode(0o700).create(p));
+        if made.is_some_and(|m| m.is_ok()) {
+            crate::session::write(&path, &kept, 0o600).ok();
+        }
+    }
     if let Ok(mut memory) = MEMORY.lock() {
-        memory.insert(dir.to_path_buf(), (stamp(doc), report.clone()));
+        memory.insert(dir.to_path_buf(), (held, report.clone()));
     }
 }
 
+fn kept(dir: &Path) -> Option<(String, Report)> {
+    let path = crate::session::measured(dir).ok()?;
+    serde_json::from_slice(&std::fs::read(path).ok()?).ok()
+}
+
 pub fn cached(dir: &Path, doc: &Value) -> Option<Report> {
-    let memory = MEMORY.lock().ok()?;
-    let (held, report) = memory.get(dir)?;
-    (*held == stamp(doc)).then(|| report.clone())
+    let held = stamp(doc);
+    let remembered = MEMORY.lock().ok().and_then(|m| m.get(dir).cloned());
+    let (said, report) = remembered.or_else(|| kept(dir))?;
+    (said == held).then_some(report)
 }
 
 pub fn suggestion(dir: &Path, doc: &Value) -> Option<Problem> {

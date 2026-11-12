@@ -91,3 +91,31 @@ fn a_wrong_name_or_json_is_a_usage_error() {
         assert_eq!(run(dir, args).status.code(), Some(2), "{args:?}");
     }
 }
+
+#[test]
+fn a_change_that_breaks_a_rule_is_kept_and_its_problems_are_printed() {
+    let tmp = tempfile::tempdir().unwrap();
+    let dir = tmp.path();
+    ok(dir, &["scene", "new", "s", "--from", "empty"]);
+    ok(dir, &["scene", "act", "s", "add_layer", r#"{"kind": "solid", "id": "a"}"#]);
+    let out =
+        run(dir, &["scene", "act", "s", "set", r#"{"pointer": "/scene/layers/0/opacity", "value": 7}"#]);
+    assert!(out.status.success());
+    let said = String::from_utf8_lossy(&out.stderr);
+    assert!(said.starts_with("problem: /scene/layers/0/opacity: "), "{said}");
+    let out = run(
+        dir,
+        &["scene", "act", "s", "--json", "set", r#"{"pointer": "/scene/layers/0/opacity", "value": 7}"#],
+    );
+    let all: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(all["problems"], serde_json::json!([]));
+    let out = run(
+        dir,
+        &["scene", "act", "s", "--json", "set", r#"{"pointer": "/scene/layers/0/opacity", "value": 9}"#],
+    );
+    let all: Value = serde_json::from_slice(&out.stdout).unwrap();
+    assert_eq!(all["problems"][0]["pointer"], "/scene/layers/0/opacity", "{all}");
+    let fine =
+        run(dir, &["scene", "act", "s", "set", r#"{"pointer": "/scene/layers/0/opacity", "value": 0.5}"#]);
+    assert!(fine.stderr.is_empty(), "{}", String::from_utf8_lossy(&fine.stderr));
+}

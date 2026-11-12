@@ -5,6 +5,19 @@ use anyhow::{Context, Result, ensure};
 use serde_json::{Value, json};
 use wprs_core::message::said;
 
+pub fn relocate(doc: &Value, id: &str, to: usize, into: Option<&str>) -> Result<Vec<Op>> {
+    let from = crate::layers::find(doc, id)?;
+    let list = crate::layers::children(doc, into)?;
+    ensure!(
+        !list.starts_with(&format!("{from}/")),
+        said("editor.move_into_itself", "a group cannot be moved into itself or into what it holds", &[])
+    );
+    let len = doc.pointer(&list).and_then(Value::as_array).map_or(0, Vec::len);
+    let len = if parent(&from).0 == list { len - 1 } else { len };
+    let list = crate::ops::once_removed(&list, &from);
+    Ok(vec![Op::Move { from, path: format!("{list}/{}", to.min(len)) }])
+}
+
 fn stash(id: &str) -> String {
     format!("{EDITOR}/hidden/{}", escape(id))
 }

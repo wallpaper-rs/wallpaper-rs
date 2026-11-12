@@ -90,6 +90,25 @@ fn remove(doc: &mut Value, path: &str) -> Result<(String, Value)> {
     }
 }
 
+fn shifted(path: &str, from: &str, after: bool) -> String {
+    let Some((home, at)) = from.rsplit_once('/').and_then(|(h, i)| Some((h, i.parse::<usize>().ok()?)))
+    else {
+        return path.to_owned();
+    };
+    let Some(rest) = path.strip_prefix(&format!("{home}/")) else { return path.to_owned() };
+    let (number, tail) = rest.split_once('/').map_or((rest, None), |(n, t)| (n, Some(t)));
+    let tail = tail.map(|t| format!("/{t}")).unwrap_or_default();
+    match number.parse::<usize>() {
+        Ok(n) if after && n > at => format!("{home}/{}{tail}", n - 1),
+        Ok(n) if !after && n >= at => format!("{home}/{}{tail}", n + 1),
+        _ => path.to_owned(),
+    }
+}
+
+pub(crate) fn once_removed(path: &str, from: &str) -> String {
+    shifted(path, from, true)
+}
+
 fn apply_one(doc: &mut Value, op: &Op) -> Result<Op> {
     match op {
         Op::Add { path, value } => add(doc, path, value.clone()),
@@ -102,7 +121,7 @@ fn apply_one(doc: &mut Value, op: &Op) -> Result<Op> {
         }
         Op::Move { from, path } => {
             ensure!(
-                !path.starts_with(&format!("{from}/")),
+                !shifted(path, from, false).starts_with(&format!("{from}/")),
                 said("editor.cannot_move_into", "%1 cannot move into itself", &[&from])
             );
             let (from, value) = remove(doc, from)?;
