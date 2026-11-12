@@ -11,7 +11,7 @@ const MOST: usize = 3;
 pub fn count() -> usize {
     let cores = std::thread::available_parallelism().map_or(1, usize::from);
     let wanted = std::env::var(SHARDS).ok().and_then(|n| n.parse::<usize>().ok());
-    wanted.unwrap_or(cores / 4).clamp(1, MOST)
+    wanted.unwrap_or(cores / 2).clamp(1, MOST)
 }
 
 pub fn claim(unit: &str) -> bool {
