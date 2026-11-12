@@ -851,9 +851,9 @@ no plane: each particle stands at the depth of its own place, the plane of the l
 `(f + z) / f`, and hides pixel by pixel behind the models in front of it. For that the stage also
 draws the depth of its opaque models once into a picture of its own size (one more pass of their
 triangles, without colors, only while such a layer is in the group, and kept while nothing moves),
-which the particles read. Systems that are lit, refract, have a shader of their own, trails or
-ropes, or children that do or have children of their own, stand on the plane of the layer as
-before, and so does every system at the lowest quality, which skips that pass. A plain group inside a 3D group (no
+which the particles read; lit particles (`render.lit` or a layer with `lighting`) read it too.
+Systems that refract, have a shader of their own, trails or ropes, or children that do or have
+children of their own, stand on the plane of the layer as before, and so does every system at the lowest quality, which skips that pass. A plain group inside a 3D group (no
 effects, mask, other blend, opacity below 1, color, brightness, `clip`, tilt, `z` or `depth_test`)
 lets its layers join the slices one by one, and a plain 3D group inside another 3D group, directly or
 through plain groups, shares its depth: its models and its flat layers are drawn with those of the

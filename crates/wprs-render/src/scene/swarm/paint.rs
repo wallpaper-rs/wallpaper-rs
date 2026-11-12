@@ -27,9 +27,6 @@ impl Painter<'_, '_, '_> {
         let Some(swarms) = self.swarms.as_deref_mut() else { return };
         let mode = mode(blend, atop);
         swarms.pipeline(r, mode);
-        if seen.is_some() {
-            swarms.seen_pipeline(r, mode);
-        }
         let Some(herd) = swarms.herds.get(flock) else { return };
         let [w, h] = swarms.canvas;
         let m = match herd.world {
@@ -84,7 +81,8 @@ impl Painter<'_, '_, '_> {
             let scroll = |v: f32| (f64::from(v) * f64::from(frame.time)).rem_euclid(1.0) as f32;
             (look.strand[2], look.cord[2]) = (scroll(look.strand[2]), scroll(look.cord[2]));
             if let Some((_, rows, window)) = &seen {
-                (look.seen, look.window) = (*rows, *window);
+                let shrink = swarms.kits[k].bend.as_ref().and(frame.quality.bend()).unwrap_or(1.0);
+                (look.seen, look.window) = (*rows, [window[0], window[1], window[2], 1.0 / shrink]);
             }
             swarms.seen.push(seen.as_ref().map(|s| s.0.clone()));
             swarms.looks.push(look);

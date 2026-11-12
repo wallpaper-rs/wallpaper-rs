@@ -15,6 +15,7 @@ mod debug;
 mod depth;
 mod fades;
 mod finish;
+mod kinds;
 mod lamps3d;
 mod light;
 mod paths;

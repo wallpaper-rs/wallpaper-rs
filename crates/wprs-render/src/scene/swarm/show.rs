@@ -1,5 +1,5 @@
 use super::lamped::{LONG, ROPE, SPRITE, TRAIL};
-use super::{B, LOOK, Look, Swarms, buffer};
+use super::{LOOK, Look, Swarms};
 use crate::Renderer;
 use crate::scene::pipes::Mode;
 
@@ -10,20 +10,7 @@ impl Swarms {
         if needed == 0 {
             return;
         }
-        if self.looked.as_ref().is_none_or(|(b, _)| b.size() < needed) {
-            let buffer = buffer(r, needed.next_power_of_two().max(4 * LOOK), B::UNIFORM | B::COPY_DST);
-            let size = wgpu::BufferSize::new(size_of::<Look>() as u64);
-            let look =
-                wgpu::BindingResource::Buffer(wgpu::BufferBinding { buffer: &buffer, offset: 0, size });
-            let entries = [
-                wgpu::BindGroupEntry { binding: 0, resource: look },
-                wgpu::BindGroupEntry { binding: 1, resource: wgpu::BindingResource::Sampler(&self.sampler) },
-            ];
-            let desc = wgpu::BindGroupDescriptor { label: None, layout: &self.layouts[1], entries: &entries };
-            let group = r.device.create_bind_group(&desc);
-            self.looked = Some((buffer, group));
-            self.created += 2;
-        }
+        self.looked(r, needed);
         self.bytes.clear();
         self.bytes.resize(needed as usize, 0);
         for (chunk, look) in self.bytes.chunks_mut(LOOK as usize).zip(&self.looks) {
@@ -42,7 +29,7 @@ impl Swarms {
     ) {
         let flight = self.flights.get(flock).and_then(Option::as_ref);
         let pipes = (self.pipelines.get(&mode), self.ribbons.get(&mode));
-        let (Some(flight), Some((_, group)), (Some(pipeline), Some(ribbon)), Some(herd)) =
+        let (Some(flight), Some(_), (Some(pipeline), Some(ribbon)), Some(herd)) =
             (flight, &self.looked, pipes, self.herds.get(flock))
         else {
             return;
@@ -55,6 +42,7 @@ impl Swarms {
                 continue;
             }
             let look = self.looks.get(first + p).map_or(0.0, |l| l.extra[1]);
+            let Some(group) = self.look_group(first + p) else { continue };
             pass.set_bind_group(0, group, &[slot + (p as u64 * LOOK) as u32]);
             pass.set_bind_group(1, &kit.tex, &[]);
             let (alloc, k) = (u64::from(herd.bake.allocs[p]), u64::from(herd.bake.trails[p]));
@@ -117,17 +105,10 @@ impl Swarms {
                         pass.set_bind_group(3, group, &[]);
                     }
                 }
-                (None, _) => {
-                    let seen = self.seen.get(first + p).and_then(Option::as_ref).filter(|_| !how.1 && !how.2);
-                    match (seen.zip(self.seens.get(&mode)), self.chosen(how, SPRITE, pipeline)) {
-                        (Some((group, seen)), _) => {
-                            pass.set_pipeline(seen);
-                            pass.set_bind_group(2, group, &[]);
-                        }
-                        (None, Some(chosen)) => pass.set_pipeline(chosen),
-                        (None, None) => continue,
-                    }
-                }
+                (None, _) => match self.chosen(how, SPRITE, pipeline) {
+                    Some(chosen) => pass.set_pipeline(chosen),
+                    None => continue,
+                },
             }
             pass.set_vertex_buffer(0, sorted.map_or(&store.particles, |s| &s.sorted).slice(..));
             pass.draw(0..if kit.look.hull[1][0] > 0.0 { 8 } else { 4 }, 0..herd.bake.allocs[p]);

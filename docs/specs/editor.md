@@ -1146,9 +1146,8 @@ occlusion, and the thumbnails of the maps of the file (color, metal and roughnes
 glow). The inspector of a group turns it 3D, and the inspector of a flat layer inside a 3D group
 toggles Hide behind nearer models (`depth_test`); on a particles layer a note under it says, from the
 `depth3d` query, whether each particle hides on its own (and that the lowest quality hides the whole
-layer as one plane) or why the whole layer hides as one plane: its system has no perspective, the
-layer takes light, its particles are lit, refract, use their own shader, draw trails or ropes, or a
-child system does or has children.
+layer as one plane) or why the whole layer hides as one plane: its system has no perspective, its
+particles refract, use their own shader, draw trails or ropes, or a child system does or has children.
 
 Selecting the canvas also shows the 3D camera: sliders for the field of view and the roll that change
 the preview while they move, where it looks from and toward, Set the camera from the view, Look

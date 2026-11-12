@@ -10,7 +10,7 @@ use wprs_scene::{Scene, Stage};
 
 const ENTRIES: [&str; 3] = ["wprs_fs_particle", "wprs_fs_lit_particle", "wprs_fs_bend_particle"];
 
-const OWN: [&str; 29] = [
+const OWN: [&str; 31] = [
     "Look",
     "look",
     "Corner",
@@ -24,6 +24,8 @@ const OWN: [&str; 29] = [
     "vs_particle",
     "fs_particle",
     "painted",
+    "seen_depth",
+    "hidden",
     "Bulb",
     "Lights",
     "lights",

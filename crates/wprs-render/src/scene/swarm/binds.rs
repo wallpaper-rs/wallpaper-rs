@@ -42,6 +42,8 @@ pub(super) fn layouts(device: &wgpu::Device) -> [BindGroupLayout; 7] {
     let (view_dimension, c) = (wgpu::TextureViewDimension::D2, S::COMPUTE);
     let texture = wgpu::BindingType::Texture { sample_type, view_dimension, multisampled: false };
     let rects = plain(4096);
+    let sample_type = wgpu::TextureSampleType::Float { filterable: false };
+    let depth = wgpu::BindingType::Texture { sample_type, view_dimension, multisampled: false };
     let sim = uniform(size_of::<wprs_scene::Sim>());
     [
         layout(&[
@@ -51,7 +53,11 @@ pub(super) fn layouts(device: &wgpu::Device) -> [BindGroupLayout; 7] {
             entry(3, c, storage(true)),
             entry(4, c, sim),
         ]),
-        layout(&[entry(0, S::VERTEX_FRAGMENT, uniform(size_of::<Look>())), entry(1, S::FRAGMENT, filtering)]),
+        layout(&[
+            entry(0, S::VERTEX_FRAGMENT, uniform(size_of::<Look>())),
+            entry(1, S::FRAGMENT, filtering),
+            entry(2, S::FRAGMENT, depth),
+        ]),
         layout(&[entry(0, S::FRAGMENT, texture), entry(1, S::FRAGMENT, rects)]),
         layout(&[
             entry(0, c, storage(true)),

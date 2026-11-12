@@ -17170,13 +17170,7 @@ msgstr "Cualquier vertical"
 msgid "its particle system has no perspective"
 msgstr "su sistema de partículas no tiene perspectiva"
 
-#: apps/wprs-app/qml/SceneDepthToggle.qml
-msgid "the layer takes light"
-msgstr "la capa recibe luz"
 
-#: apps/wprs-app/qml/SceneDepthToggle.qml
-msgid "its particles are lit"
-msgstr "sus partículas están iluminadas"
 
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid "its particles bend what lies behind them"

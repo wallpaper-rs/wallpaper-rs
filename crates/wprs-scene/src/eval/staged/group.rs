@@ -23,7 +23,6 @@ fn loose(cx: &Context, d: &Draw) -> bool {
 fn drawn_as(r: &crate::Render) -> Option<&'static str> {
     match () {
         _ if r.shader.is_some() => Some("shader"),
-        _ if r.lit => Some("lit"),
         _ if r.refract.is_some() => Some("refract"),
         _ if r.trail.is_some() => Some("trail"),
         _ if r.rope.is_some() => Some("rope"),
@@ -37,7 +36,6 @@ pub fn particle_plane(scene: &crate::Scene, layer: &Layer) -> Option<&'static st
     let mut kids = s.children.iter().filter_map(|c| scene.particles.get(&c.system));
     match () {
         _ if s.perspective.is_none() => Some("perspective"),
-        _ if layer.lighting.is_some() => Some("lighting"),
         _ => drawn_as(render.as_deref().unwrap_or(&s.render)).or_else(|| {
             kids.any(|k| drawn_as(&k.render).is_some() || !k.children.is_empty()).then_some("children")
         }),

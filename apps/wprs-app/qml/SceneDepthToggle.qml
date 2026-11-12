@@ -18,8 +18,6 @@ ColumnLayout {
     property var way: null
     readonly property var reasons: ({
             "perspective": App.tr("its particle system has no perspective"),
-            "lighting": App.tr("the layer takes light"),
-            "lit": App.tr("its particles are lit"),
             "refract": App.tr("its particles bend what lies behind them"),
             "shader": App.tr("its particles use their own shader"),
             "trail": App.tr("its particles draw trails"),

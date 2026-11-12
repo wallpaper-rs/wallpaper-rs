@@ -34,6 +34,7 @@ struct Corner {
 
 @group(0) @binding(0) var<uniform> look: Look;
 @group(0) @binding(1) var samp: sampler;
+@group(0) @binding(2) var seen_depth: texture_2d<f32>;
 @group(1) @binding(0) var sprite: texture_2d<f32>;
 @group(1) @binding(1) var<uniform> rects: array<vec4<f32>, 256>;
 
@@ -143,7 +144,26 @@ fn cell(f: f32, uv: vec2<f32>) -> vec4<f32> {
     return textureSample(sprite, samp, (at + uv) / vec2<f32>(cols, max(look.atlas.y, 1.0)));
 }
 
+fn hidden(position: vec2<f32>, scale: f32) -> bool {
+    if look.window.w <= 0.0 {
+        return false;
+    }
+    let px = vec3<f32>(position * look.window.w + look.place.xy, 1.0);
+    let uv = vec2<f32>(dot(look.seen_a.xyz, px), dot(look.seen_b.xyz, px));
+    if any(uv < vec2<f32>(0.0)) || any(uv >= vec2<f32>(1.0)) {
+        return false;
+    }
+    let at = vec2<i32>(uv * vec2<f32>(textureDimensions(seen_depth)));
+    let n = look.window.x;
+    let f = look.window.y;
+    let d = clamp(look.window.z / max(scale, 1e-6), n, f);
+    return textureLoad(seen_depth, at, 0).x > n * (f - d) / ((f - n) * d);
+}
+
 fn painted(in: Corner) -> vec4<f32> {
+    if hidden(in.position.xy, in.scale) {
+        discard;
+    }
     var s = mix(cell(in.frames.x, in.uv), cell(in.frames.y, in.uv), in.frames.z);
     if look.tint.y > 0.5 {
         s = vec4<f32>(encode(s.rgb), s.a);
