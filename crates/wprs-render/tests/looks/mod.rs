@@ -1,3 +1,4 @@
+mod camera;
 mod eight;
 mod fonts;
 mod styles;
