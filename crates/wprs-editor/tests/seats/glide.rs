@@ -26,6 +26,18 @@ fn depth_is_set_per_side_and_kept_short() {
 }
 
 #[test]
+fn a_bound_depth_is_kept_unless_the_write_replaces_it() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = layered(&root);
+    let bound = json!({"set": {"pointer": "/scene/layers/0/parallax", "value": {"keys": [[0, 1], [2, 3]]}}});
+    act(&mut p, bound).unwrap();
+    assert!(act(&mut p, json!({"layer": {"depth": {"layer": "a", "depth": [1, 2]}}})).is_err());
+    assert_eq!(p.doc["scene"]["layers"][0]["parallax"], json!({"keys": [[0, 1], [2, 3]]}));
+    act(&mut p, json!({"layer": {"depth": {"layer": "a", "depth": [1, 2], "replace": true}}})).unwrap();
+    assert_eq!(p.doc["scene"]["layers"][0]["parallax"], json!([1.0, 2.0]));
+}
+
+#[test]
 fn a_simulated_pointer_and_tilt_shift_each_layer_by_its_depth() {
     let root = tempfile::tempdir().unwrap();
     let mut p = layered(&root);

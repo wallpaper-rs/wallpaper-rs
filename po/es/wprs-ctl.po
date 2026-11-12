@@ -241,16 +241,6 @@ msgstr ""
 
 #: apps/wprs-ctl/src/author.rs
 msgid ""
-"Paint a stroke into the picture of a mask parameter of an effect, on one "
-"channel or on all colors, kept as a new linear picture in masks/ so that "
-"undo returns to the previous one"
-msgstr ""
-"Pintar un trazo en la imagen de un parámetro de máscara de un efecto, en un "
-"canal o en todos los colores, guardada como una imagen lineal nueva en "
-"masks/ para que deshacer vuelva a la anterior"
-
-#: apps/wprs-ctl/src/author.rs
-msgid ""
 "JSON Pointer to the parameter, such as /scene/layers/0/effects/0/params/"
 "regions"
 msgstr ""
@@ -275,13 +265,6 @@ msgstr "Dureza del borde del pincel, de 0 a 1"
 #: apps/wprs-ctl/src/author.rs
 msgid "Value painted, from 0 (erases) to 1"
 msgstr "Valor que se pinta, de 0 (borra) a 1"
-
-#: apps/wprs-ctl/src/author.rs
-msgid ""
-"Paint a flow map: the stroke writes the way it went, scaled by the value"
-msgstr ""
-"Pintar un mapa de flujo: el trazo escribe la dirección que llevó, escalada "
-"por el valor"
 
 #: apps/wprs-ctl/src/author.rs
 msgid ""
@@ -6923,6 +6906,16 @@ msgid ""
 msgstr ""
 "Describir una carpeta de escena, o antes extraer en ella un paquete de "
 "escena .wpak como copia sin firmar con el id <id>.copy"
+
+#: apps/wprs-ctl/src/steps.rs
+msgid ""
+"Paint a stroke into the picture of a mask parameter of an effect, on one "
+"channel or on all colors, kept as a new linear picture in masks/ so that "
+"undo returns to the previous one"
+msgstr ""
+"Pintar un trazo en la imagen de un parámetro de máscara de un efecto, en un "
+"canal o en todos los colores, guardada como una imagen lineal nueva en "
+"masks/ para que deshacer vuelva a la anterior"
 
 #: apps/wprs-ctl/src/steps.rs
 msgid ""

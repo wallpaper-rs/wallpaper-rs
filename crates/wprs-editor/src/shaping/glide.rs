@@ -6,8 +6,9 @@ use wprs_core::message::said;
 
 pub(super) const PROBE: &str = "/scene/ext/editor/probe";
 
-pub(super) fn depth(doc: &Value, id: &str, depth: [f64; 2]) -> Result<Vec<Op>> {
+pub(super) fn depth(doc: &Value, id: &str, depth: [f64; 2], replace: bool) -> Result<Vec<Op>> {
     let (path, _) = layer(doc, id)?;
+    super::plain(doc, &format!("{path}/parallax"), replace)?;
     let fits = depth.iter().all(|d| d.is_finite() && (-10.0..=10.0).contains(d));
     ensure!(fits, said("editor.parallax_range", "a parallax depth goes from -10 to 10", &[]));
     let [x, y] = depth.map(|d| (d * 1000.0).round() / 1000.0);

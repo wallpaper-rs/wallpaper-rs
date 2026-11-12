@@ -23,7 +23,6 @@ mod swarm;
 mod tend;
 mod timing;
 pub use exports::*;
-pub use figures::{FigureEdit, Stop};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]

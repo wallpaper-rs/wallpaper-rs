@@ -402,7 +402,7 @@ msgstr "%1 o %2 ya existe"
 msgid "name the author id that the repository shows"
 msgstr "indica el id de autor que muestra el repositorio"
 
-#: crates/wprs-editor/src/bands.rs
+#: crates/wprs-editor/src/bands.rs crates/wprs-editor/src/meter.rs
 msgid "bands are counted out of 16, 32 or 64"
 msgstr "las bandas se cuentan sobre 16, 32 o 64"
 
@@ -648,8 +648,12 @@ msgid "there is no part \"%1\""
 msgstr "no hay ninguna parte «%1»"
 
 #: crates/wprs-editor/src/clips/keyed.rs
-msgid "the key holds a value out of its range"
-msgstr "la clave tiene un valor fuera de su rango"
+msgid ""
+"%1 of the key cannot take %2; give a number from -%3 to %3, or a list of 2 "
+"or 3 such numbers"
+msgstr ""
+"%1 de la clave no admite %2; da un número de -%3 a %3, o una lista de 2 o 3 "
+"números así"
 
 #: crates/wprs-editor/src/clips/keyed.rs
 msgid "the clip has no key there at %1 s"
@@ -745,6 +749,51 @@ msgstr "el orden de una parte va de -1000 a 1000"
 msgid "a part shows over another part, not over itself"
 msgstr "una parte se ve sobre otra parte, no sobre sí misma"
 
+#: crates/wprs-editor/src/cutter.rs
+msgid "\"%1\" is not a picture"
+msgstr "«%1» no es una imagen"
+
+#: crates/wprs-editor/src/cutter.rs
+msgid "there is no frame %1"
+msgstr "no hay ningún cuadro %1"
+
+#: crates/wprs-editor/src/cutter.rs
+msgid "a sprite sheet plays from 0.1 to 120 frames a second"
+msgstr "una hoja de sprites se reproduce de 0,1 a 120 cuadros por segundo"
+
+#: crates/wprs-editor/src/cutter.rs
+msgid "a sprite sheet plays between 1 frame and all its frames"
+msgstr "una hoja de sprites reproduce entre 1 cuadro y todos los suyos"
+
+#: crates/wprs-editor/src/depthmap.rs
+msgid ""
+"the depth model is not installed: run %1, or install it from the depth "
+"dialog of the app"
+msgstr ""
+"el modelo de profundidad no está instalado: ejecuta %1, o instálalo desde el "
+"diálogo de profundidad de la app"
+
+#: crates/wprs-editor/src/depthmap.rs
+msgid ""
+"the library that runs the depth model is not installed: run wprs-ctl models "
+"download onnxruntime"
+msgstr ""
+"la biblioteca que ejecuta el modelo de profundidad no está instalada: "
+"ejecuta wprs-ctl models download onnxruntime"
+
+#: crates/wprs-editor/src/depthmap.rs
+msgid "the model input is a multiple of 14 from 196 to 1036"
+msgstr "la entrada del modelo es un múltiplo de 14 de 196 a 1036"
+
+#: crates/wprs-editor/src/depthmap.rs crates/wprs-editor/src/lamps/lit.rs
+#: crates/wprs-editor/src/stage3d/maps.rs
+msgid "%1 is not a picture of the scene"
+msgstr "%1 no es una imagen de la escena"
+
+#: crates/wprs-editor/src/depthmap.rs crates/wprs-editor/src/ramps.rs
+msgid "a ramp goes to a parameter of an effect"
+msgstr "una rampa va a un parámetro de un efecto"
+
 #
 #: crates/wprs-editor/src/figures/drag.rs
 msgid "the layer %1 has no handle %2"
@@ -779,22 +828,6 @@ msgstr "un degradado tiene como mucho %1 paradas"
 msgid "a gradient keeps at least 2 stops"
 msgstr "un degradado conserva al menos 2 paradas"
 
-#: crates/wprs-editor/src/cutter.rs
-msgid "\"%1\" is not a picture"
-msgstr "«%1» no es una imagen"
-
-#: crates/wprs-editor/src/cutter.rs
-msgid "there is no frame %1"
-msgstr "no hay ningún cuadro %1"
-
-#: crates/wprs-editor/src/cutter.rs
-msgid "a sprite sheet plays from 0.1 to 120 frames a second"
-msgstr "una hoja de sprites se reproduce de 0,1 a 120 cuadros por segundo"
-
-#: crates/wprs-editor/src/cutter.rs
-msgid "a sprite sheet plays between 1 frame and all its frames"
-msgstr "una hoja de sprites reproduce entre 1 cuadro y todos los suyos"
-
 #: crates/wprs-editor/src/films.rs
 msgid "the layer \"%1\" does not show a video"
 msgstr "la capa «%1» no muestra un vídeo"
@@ -823,6 +856,14 @@ msgstr "%1: se reproduce sin %2"
 msgid "%1 cannot take the value %2; give %3"
 msgstr "%1 no admite el valor %2; da %3"
 
+#: crates/wprs-editor/src/fits.rs
+msgid ""
+"%1 cannot take %2; give one of %3, or four numbers [x1, y1, x2, y2] of a "
+"cubic Bézier"
+msgstr ""
+"%1 no admite %2; da uno de %3, o cuatro números [x1, y1, x2, y2] de una "
+"Bézier cúbica"
+
 #: crates/wprs-editor/src/flashes.rs
 msgid "measure from 0.1 to 60 s at 1 to 30 frames a second"
 msgstr "mide de 0,1 a 60 s a 1 a 30 fotogramas por segundo"
@@ -834,6 +875,106 @@ msgid ""
 msgstr ""
 "la escena destelló más de %1 veces por segundo cerca del segundo %2 de un "
 "dibujo; si alguien puede verlo, marca photosensitive"
+
+#: crates/wprs-editor/src/graph/bend.rs
+msgid "handles bend one key at a time: one pick with one time"
+msgstr "las asas curvan una clave por vez: un pick con un solo tiempo"
+
+#: crates/wprs-editor/src/graph/bend.rs crates/wprs-editor/src/straight.rs
+msgid "straighten the curve after a keyframe on its own, without other changes"
+msgstr ""
+"endereza la curva después de un fotograma clave por sí sola, sin otros "
+"cambios"
+
+#: crates/wprs-editor/src/graph/bend.rs
+msgid ""
+"link the parts of the handles of a keyframe on its own, without other changes"
+msgstr ""
+"une las partes de las asas de un fotograma clave por sí solo, sin otros "
+"cambios"
+
+#: crates/wprs-editor/src/graph/bend.rs crates/wprs-editor/src/graph/mod.rs
+msgid "the key of %1 at %2 s has no part %3"
+msgstr "la clave de %1 en %2 s no tiene la parte %3"
+
+#: crates/wprs-editor/src/graph/bend.rs
+msgid ""
+"the keyframe of %1 at %2 s has no neighbour on that side to bend its curve "
+"towards"
+msgstr ""
+"el fotograma clave de %1 en %2 s no tiene vecino de ese lado hacia el que "
+"curvar su curva"
+
+#: crates/wprs-editor/src/graph/clip.rs crates/wprs-editor/src/graph/mod.rs
+msgid "picks names the keys to change: a pointer and the times of its keys"
+msgstr ""
+"picks nombra las claves que se cambian: un puntero y los tiempos de sus "
+"claves"
+
+#: crates/wprs-editor/src/graph/mod.rs crates/wprs-editor/src/keys.rs
+#: crates/wprs-editor/src/straight.rs
+msgid "%1 has no keyframes"
+msgstr "%1 no tiene fotogramas clave"
+
+#: crates/wprs-editor/src/graph/mod.rs crates/wprs-editor/src/keys.rs
+#: crates/wprs-editor/src/straight.rs
+msgid "%1 has no keyframe at %2 s"
+msgstr "%1 no tiene ningún fotograma clave en %2 s"
+
+#: crates/wprs-editor/src/graph/mod.rs
+msgid "two keys of %1 would meet at %2 s"
+msgstr "dos claves de %1 quedarían juntas en %2 s"
+
+#: crates/wprs-editor/src/graph/mod.rs
+msgid ""
+"shift, pivot, lift, value, value_scale, value_pivot and at are finite numbers"
+msgstr ""
+"shift, pivot, lift, value, value_scale, value_pivot y at son números finitos"
+
+#: crates/wprs-editor/src/graph/mod.rs
+msgid "times lists the seconds of the keys of %1 to change"
+msgstr "times lista los segundos de las claves de %1 que se cambian"
+
+#: crates/wprs-editor/src/graph/mod.rs
+msgid "scale is a number over 0 that stretches the times of the picked keys"
+msgstr ""
+"scale es un número mayor que 0 que estira los tiempos de las claves elegidas"
+
+#: crates/wprs-editor/src/graph/mod.rs
+msgid "keep at least one key of %1; the keyframe action removes the last one"
+msgstr "deja al menos una clave de %1; la acción keyframe quita la última"
+
+#: crates/wprs-editor/src/graph/mod.rs crates/wprs-editor/src/graph/paste.rs
+msgid "the keys of %1 would move before 0 s"
+msgstr "las claves de %1 quedarían antes de 0 s"
+
+#: crates/wprs-editor/src/graph/mod.rs
+msgid ""
+"part names the part to set in keys of lists and colors: 0 for x or red, 1 "
+"for y or green and so on"
+msgstr ""
+"part nombra la parte que se fija en claves de listas y colores: 0 para x o "
+"rojo, 1 para y o verde, y así"
+
+#: crates/wprs-editor/src/graph/paste.rs
+msgid "at is the second where the first pasted key goes"
+msgstr "at es el segundo donde va la primera clave pegada"
+
+#: crates/wprs-editor/src/graph/paste.rs
+msgid ""
+"a pasted key is [time, value], [time, value, easing] or [time, value, "
+"{\"in\", \"out\"}]"
+msgstr ""
+"una clave pegada es [tiempo, valor], [tiempo, valor, suavizado] o [tiempo, "
+"valor, {\"in\", \"out\"}]"
+
+#: crates/wprs-editor/src/graph/values.rs
+msgid ""
+"lift or scale the keys of several values only when they are of one kind and "
+"unit; %1 and %2 are not"
+msgstr ""
+"sube o escala las claves de varios valores solo si son de un mismo tipo y "
+"unidad; %1 y %2 no lo son"
 
 #: crates/wprs-editor/src/handles.rs
 msgid ""
@@ -1028,10 +1169,6 @@ msgstr "un id tiene de 1 a 32 minúsculas, cifras o _"
 msgid "there is no asset %1"
 msgstr "no hay ningún recurso %1"
 
-#: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/straight.rs
-msgid "%1 has no keyframe at %2 s"
-msgstr "%1 no tiene ningún fotograma clave en %2 s"
-
 #: crates/wprs-editor/src/keys.rs
 msgid "%1 already has a keyframe at %2 s"
 msgstr "%1 ya tiene un fotograma clave en %2 s"
@@ -1043,10 +1180,6 @@ msgid ""
 msgstr ""
 "la base de %1 no se suma a su último fotograma clave; quítalo con absolute "
 "para quedarte con el valor del fotograma clave"
-
-#: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/straight.rs
-msgid "%1 has no keyframes"
-msgstr "%1 no tiene fotogramas clave"
 
 #: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/shaping/mod.rs
 msgid "%1 follows another source; set a plain value first"
@@ -1107,10 +1240,6 @@ msgstr "el color de una luz es #rrggbb o [r, g, b, a]"
 #: crates/wprs-editor/src/lamps/edit.rs
 msgid "the light %1 is not shown"
 msgstr "la luz %1 no se muestra"
-
-#: crates/wprs-editor/src/lamps/lit.rs crates/wprs-editor/src/stage3d/maps.rs
-msgid "%1 is not a picture of the scene"
-msgstr "%1 no es una imagen de la escena"
 
 #: crates/wprs-editor/src/lamps/lit.rs
 msgid "lighting is for image, video, text, mesh and model layers"
@@ -1503,6 +1632,26 @@ msgstr "el id de un ajuste predefinido tiene de 1 a 64 caracteres"
 msgid "the preset %1 exists"
 msgstr "el ajuste predefinido %1 ya existe"
 
+#: crates/wprs-editor/src/ramps.rs
+msgid "a ramp has 1 to %1 stops"
+msgstr "una rampa tiene de 1 a %1 paradas"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "a stop sits between 0 and 1"
+msgstr "una parada va entre 0 y 1"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "%1 is not a color"
+msgstr "%1 no es un color"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "a ramp is %1 to %2 pixels wide"
+msgstr "una rampa mide de %1 a %2 píxeles de ancho"
+
+#: crates/wprs-editor/src/ramps.rs
+msgid "%1 is not a ramp made here"
+msgstr "%1 no es una rampa hecha aquí"
+
 #: crates/wprs-editor/src/references.rs
 msgid "%1 is still named by %2; change them first"
 msgstr "%2 todavía nombra a %1; cámbialo antes"
@@ -1510,6 +1659,10 @@ msgstr "%2 todavía nombra a %1; cámbialo antes"
 #: crates/wprs-editor/src/references.rs
 msgid "%1: %2 %3"
 msgstr "%1: %2 %3"
+
+#: crates/wprs-editor/src/response.rs
+msgid "smoothing goes from 0 to 60 seconds"
+msgstr "el suavizado va de 0 a 60 segundos"
 
 #: crates/wprs-editor/src/rgb.rs
 msgid "say what to change in %1: on, size or whole"
@@ -2362,12 +2515,6 @@ msgstr "Segundos"
 #: crates/wprs-editor/src/stock.rs
 msgid "%1 is not an assets package"
 msgstr "%1 no es un paquete de recursos"
-
-#: crates/wprs-editor/src/straight.rs
-msgid "straighten the curve after a keyframe on its own, without other changes"
-msgstr ""
-"endereza la curva después de un fotograma clave por sí sola, sin otros "
-"cambios"
 
 #: crates/wprs-editor/src/swarms/emits.rs
 #: crates/wprs-editor/src/swarms/fields.rs crates/wprs-editor/src/swarms/sow.rs
@@ -4027,55 +4174,3 @@ msgstr "capa que recibe el puntero"
 #: crates/wprs-scene/src/validate.rs
 msgid "trigger"
 msgstr "disparador"
-
-#: crates/wprs-editor/src/clips/keyed.rs
-msgid "the key holds a value out of its range"
-msgstr "la clave tiene un valor fuera de su rango"
-
-#: crates/wprs-editor/src/depthmap.rs
-msgid ""
-"the depth model is not installed: run %1, or install it from the depth "
-"dialog of the app"
-msgstr ""
-"el modelo de profundidad no está instalado: ejecuta %1, o instálalo desde el "
-"diálogo de profundidad de la app"
-
-#: crates/wprs-editor/src/depthmap.rs
-msgid ""
-"the library that runs the depth model is not installed: run wprs-ctl models "
-"download onnxruntime"
-msgstr ""
-"la biblioteca que ejecuta el modelo de profundidad no está instalada: "
-"ejecuta wprs-ctl models download onnxruntime"
-
-#: crates/wprs-editor/src/depthmap.rs
-msgid "the model input is a multiple of 14 from 196 to 1036"
-msgstr "la entrada del modelo es un múltiplo de 14 de 196 a 1036"
-
-#: crates/wprs-editor/src/depthmap.rs crates/wprs-editor/src/ramps.rs
-msgid "a ramp goes to a parameter of an effect"
-msgstr "una rampa va a un parámetro de un efecto"
-
-#: crates/wprs-editor/src/lamps/maps.rs
-msgid "name a picture or an image layer"
-msgstr "indica una imagen o una capa de imagen"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "a ramp has 1 to %1 stops"
-msgstr "una rampa tiene de 1 a %1 paradas"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "a stop sits between 0 and 1"
-msgstr "una parada va entre 0 y 1"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "%1 is not a color"
-msgstr "%1 no es un color"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "a ramp is %1 to %2 pixels wide"
-msgstr "una rampa mide de %1 a %2 píxeles de ancho"
-
-#: crates/wprs-editor/src/ramps.rs
-msgid "%1 is not a ramp made here"
-msgstr "%1 no es una rampa hecha aquí"

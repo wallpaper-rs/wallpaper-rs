@@ -288,17 +288,18 @@ msgstr "Traspasar…"
 #: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/EditOps.qml
 #: apps/wprs-app/qml/PackageInspector.qml apps/wprs-app/qml/PackageNetwork.qml
 #: apps/wprs-app/qml/PackagePresets.qml apps/wprs-app/qml/PackageRequires.qml
-#: apps/wprs-app/qml/PlaylistItems.qml apps/wprs-app/qml/SceneAssets.qml
-#: apps/wprs-app/qml/SceneBoneRow.qml apps/wprs-app/qml/SceneEffectsList.qml
-#: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
-#: apps/wprs-app/qml/SceneModelSwing.qml apps/wprs-app/qml/ScenePairs.qml
-#: apps/wprs-app/qml/ScenePools.qml apps/wprs-app/qml/SceneProperties.qml
-#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneRigPhysics.qml
-#: apps/wprs-app/qml/SceneRigRow.qml apps/wprs-app/qml/SceneRigRules.qml
-#: apps/wprs-app/qml/SceneScriptParam.qml apps/wprs-app/qml/SceneScriptRow.qml
-#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneShapes.qml
-#: apps/wprs-app/qml/SceneSwarmPoints.qml
+#: apps/wprs-app/qml/PlaylistItems.qml apps/wprs-app/qml/SceneAssetRow.qml
+#: apps/wprs-app/qml/SceneBoneRow.qml apps/wprs-app/qml/SceneClipEventMark.qml
+#: apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneFontPicker.qml
+#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/SceneInspector.qml
+#: apps/wprs-app/qml/SceneLayerTools.qml apps/wprs-app/qml/SceneModelSwing.qml
+#: apps/wprs-app/qml/ScenePairs.qml apps/wprs-app/qml/ScenePools.qml
+#: apps/wprs-app/qml/SceneProperties.qml apps/wprs-app/qml/SceneRigIk.qml
+#: apps/wprs-app/qml/SceneRigPhysics.qml apps/wprs-app/qml/SceneRigRow.qml
+#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/SceneScriptParam.qml
+#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSettingMenu.qml
+#: apps/wprs-app/qml/SceneShapes.qml apps/wprs-app/qml/SceneSwarmPoints.qml
 #: apps/wprs-app/qml/SceneTemplateTree.qml
 #: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
 msgid "Remove"
@@ -1061,19 +1062,22 @@ msgid "All channels"
 msgstr "Todos los canales"
 
 #: apps/wprs-app/qml/EditCurves.qml apps/wprs-app/qml/SceneEffectMaskTune.qml
-#: apps/wprs-app/qml/SceneMask.qml apps/wprs-app/qml/facade/SceneNames.qml
+#: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Red"
 msgstr "Rojo"
 
 #: apps/wprs-app/qml/EditCurves.qml apps/wprs-app/qml/SceneEffectMaskTune.qml
-#: apps/wprs-app/qml/SceneMask.qml apps/wprs-app/qml/facade/SceneTerms.qml
+#: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Green"
 msgstr "Verde"
 
 #: apps/wprs-app/qml/EditCurves.qml apps/wprs-app/qml/SceneEffectMaskTune.qml
-#: apps/wprs-app/qml/SceneMask.qml apps/wprs-app/qml/facade/SceneValues.qml
+#: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Blue"
 msgstr "Azul"
@@ -1202,6 +1206,8 @@ msgstr "Bajar"
 #: apps/wprs-app/qml/EditDepthBrush.qml apps/wprs-app/qml/EditMasks.qml
 #: apps/wprs-app/qml/SceneMapBrush.qml apps/wprs-app/qml/SceneMask.qml
 #: apps/wprs-app/qml/SceneRigDepth.qml apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+#: apps/wprs-app/qml/SceneTextureBrush.qml
 msgid "Brush size"
 msgstr "Tamaño del pincel"
 
@@ -1210,14 +1216,16 @@ msgstr "Tamaño del pincel"
 #: apps/wprs-app/qml/SceneEffectMaskTune.qml
 #: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
 #: apps/wprs-app/qml/SceneNormals.qml apps/wprs-app/qml/SceneRigWeights.qml
-#: apps/wprs-app/qml/SceneRigWind.qml apps/wprs-app/qml/SceneSwarmKeep.qml
-#: apps/wprs-app/qml/SceneSwarmPull.qml apps/wprs-app/qml/facade/SceneNames.qml
+#: apps/wprs-app/qml/SceneRigWind.qml apps/wprs-app/qml/SceneShapeSculpt.qml
+#: apps/wprs-app/qml/SceneSwarmKeep.qml apps/wprs-app/qml/SceneSwarmPull.qml
+#: apps/wprs-app/qml/SceneTextureBrush.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Strength"
 msgstr "Fuerza"
 
 #: apps/wprs-app/qml/EditDepthBrush.qml
 #: apps/wprs-app/qml/SceneEffectMaskTune.qml
-#: apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneShapeSculpt.qml
 msgid "Soft edge"
 msgstr "Borde suave"
 
@@ -1666,6 +1674,8 @@ msgid "Paint on the picture; each stroke is one step to undo."
 msgstr "Pinta sobre la imagen; cada trazo es un paso que se puede deshacer."
 
 #: apps/wprs-app/qml/EditMasks.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+#: apps/wprs-app/qml/SceneTextureBrush.qml
 msgid "Erase"
 msgstr "Borrar"
 
@@ -1694,13 +1704,15 @@ msgstr "Operaciones, en orden"
 msgid "No changes yet"
 msgstr "Aún no hay cambios"
 
-#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/SceneInspector.qml
-#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSetting.qml
+#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/SceneFontPicker.qml
+#: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneScriptRow.qml
+#: apps/wprs-app/qml/SceneSetting.qml
 msgid "Move up"
 msgstr "Subir"
 
-#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/SceneInspector.qml
-#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSetting.qml
+#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/SceneFontPicker.qml
+#: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneScriptRow.qml
+#: apps/wprs-app/qml/SceneSetting.qml
 msgid "Move down"
 msgstr "Bajar"
 
@@ -1734,7 +1746,7 @@ msgid "Masks"
 msgstr "Máscaras"
 
 #: apps/wprs-app/qml/EditPage.qml apps/wprs-app/qml/SceneCanvasLook.qml
-#: apps/wprs-app/qml/SceneRigTouch.qml apps/wprs-app/qml/SceneSwarmDepth.qml
+#: apps/wprs-app/qml/SceneSwarmDepth.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Depth"
@@ -2062,7 +2074,7 @@ msgstr ""
 msgid "HDR of %1"
 msgstr "HDR de %1"
 
-#: apps/wprs-app/qml/HdrPicker.qml apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/HdrPicker.qml apps/wprs-app/qml/SceneAssetRow.qml
 msgid "HDR"
 msgstr "HDR"
 
@@ -2966,15 +2978,18 @@ msgid "Default"
 msgstr "Valor por defecto"
 
 #: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/SceneClockLanes.qml
-#: apps/wprs-app/qml/ScenePathRow.qml apps/wprs-app/qml/facade/SceneTerms.qml
+#: apps/wprs-app/qml/SceneFilmRate.qml apps/wprs-app/qml/ScenePathRow.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Loop"
 msgstr "Bucle"
 
 #: apps/wprs-app/qml/PackageClipBar.qml apps/wprs-app/qml/SceneClockLanes.qml
+#: apps/wprs-app/qml/SceneFilmTrim.qml
 msgid "Start %1 s"
 msgstr "Inicio %1 s"
 
 #: apps/wprs-app/qml/PackageClipBar.qml apps/wprs-app/qml/SceneClockLanes.qml
+#: apps/wprs-app/qml/SceneFilmTrim.qml
 msgid "End %1 s"
 msgstr "Fin %1 s"
 
@@ -3089,6 +3104,7 @@ msgstr "Abrir"
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/SceneEditors.qml
 #: apps/wprs-app/qml/SceneFrameRate.qml apps/wprs-app/qml/SceneInput.qml
 #: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/SceneTrigger.qml
 msgid "Not set"
 msgstr "Sin fijar"
 
@@ -3293,8 +3309,9 @@ msgstr "Elegir la imagen…"
 
 #: apps/wprs-app/qml/PackageMediaFile.qml apps/wprs-app/qml/SceneClipBar.qml
 #: apps/wprs-app/qml/ScenePathLanes.qml apps/wprs-app/qml/ScenePathRow.qml
-#: apps/wprs-app/qml/ScenePaths3d.qml apps/wprs-app/qml/SceneTimeBar.qml
-#: apps/wprs-app/qml/SceneTimeline.qml apps/wprs-app/qml/SceneTimelineMenu.qml
+#: apps/wprs-app/qml/ScenePaths3d.qml apps/wprs-app/qml/SceneSoundLayer.qml
+#: apps/wprs-app/qml/SceneTimeBar.qml apps/wprs-app/qml/SceneTimeline.qml
+#: apps/wprs-app/qml/SceneTimelineMenu.qml
 msgid "%1 s"
 msgstr "%1 s"
 
@@ -3565,7 +3582,7 @@ msgstr "Red"
 msgid "Inputs"
 msgstr "Entradas"
 
-#: apps/wprs-app/qml/PackageSections.qml
+#: apps/wprs-app/qml/PackageSections.qml apps/wprs-app/qml/SceneFilmTrim.qml
 #: apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
@@ -3883,7 +3900,7 @@ msgstr "Activar"
 msgid "Automatic rules"
 msgstr "Reglas automáticas"
 
-#: apps/wprs-app/qml/ProfileCard.qml apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/ProfileCard.qml apps/wprs-app/qml/SceneAssetRow.qml
 #: apps/wprs-app/qml/SceneSettingMenu.qml
 #: apps/wprs-app/qml/SceneTemplateTree.qml
 #: apps/wprs-app/qml/SceneTimelineMenu.qml
@@ -4096,9 +4113,9 @@ msgstr ""
 "y en escenas pesadas; una escena más pesada de lo que aguanta esta tarjeta "
 "gráfica muestra entonces menos fotogramas por segundo."
 
-#: apps/wprs-app/qml/QualityPicker.qml apps/wprs-app/qml/SceneNewMaterial.qml
-#: apps/wprs-app/qml/ScenePropLevels.qml apps/wprs-app/qml/SceneScriptAudit.qml
-#: apps/wprs-app/qml/SceneMaterialCode.qml
+#: apps/wprs-app/qml/QualityPicker.qml apps/wprs-app/qml/SceneMaterialCode.qml
+#: apps/wprs-app/qml/SceneNewMaterial.qml apps/wprs-app/qml/ScenePropLevels.qml
+#: apps/wprs-app/qml/SceneScriptAudit.qml
 msgid "%1: %2"
 msgstr "%1: %2"
 
@@ -4656,7 +4673,7 @@ msgid "Size of the frame"
 msgstr "Tamaño del marco"
 
 #: apps/wprs-app/qml/SavedPresets.qml apps/wprs-app/qml/SceneBoneRow.qml
-#: apps/wprs-app/qml/SceneShapes.qml
+#: apps/wprs-app/qml/SceneClipEventMark.qml apps/wprs-app/qml/SceneShapes.qml
 msgid "Rename"
 msgstr "Cambiar el nombre"
 
@@ -4673,6 +4690,7 @@ msgid "Name the imported preset"
 msgstr "Nombre del preajuste importado"
 
 #: apps/wprs-app/qml/SavedPresets.qml apps/wprs-app/qml/ScenePresets.qml
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Name"
@@ -4739,18 +4757,18 @@ msgid "Weight"
 msgstr "Peso"
 
 #: apps/wprs-app/qml/SceneAnimLayers.qml apps/wprs-app/qml/SceneBind.qml
-#: apps/wprs-app/qml/SceneMaterialShade.qml
+#: apps/wprs-app/qml/SceneFilmRate.qml apps/wprs-app/qml/SceneMaterialShade.qml
 #: apps/wprs-app/qml/SceneSwarmFields.qml apps/wprs-app/qml/SceneSwarmStart.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Speed"
 msgstr "Velocidad"
 
-#: apps/wprs-app/qml/SceneAnimLayers.qml
+#: apps/wprs-app/qml/SceneAnimLayers.qml apps/wprs-app/qml/SceneWave.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Fade in"
 msgstr "Entrada gradual"
 
-#: apps/wprs-app/qml/SceneAnimLayers.qml
+#: apps/wprs-app/qml/SceneAnimLayers.qml apps/wprs-app/qml/SceneWave.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Fade out"
 msgstr "Salida gradual"
@@ -4767,25 +4785,49 @@ msgstr "Añadir una capa que reproduzca…"
 msgid "Which asset"
 msgstr "Qué recurso"
 
-#: apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneAssetRow.qml
 msgid "cube map, shown as a panorama"
 msgstr "mapa cúbico, visto como panorama"
 
-#: apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneAssetRow.qml
 msgid "%1 frames"
 msgstr "%1 cuadros"
 
-#: apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneAssetRow.qml
+msgid "%1 (%2): %3"
+msgstr "%1 (%2): %3"
+
+#: apps/wprs-app/qml/SceneAssetRow.qml
 msgid "cover of what plays"
 msgstr "carátula de lo que suena"
 
-#: apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneAssetRow.qml
 msgid "previous cover"
 msgstr "carátula anterior"
 
-#: apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneAssetRow.qml
+msgid "Cut sprites…"
+msgstr "Cortar sprites…"
+
+#: apps/wprs-app/qml/SceneAssetRow.qml
 msgid "Convert to KTX2…"
 msgstr "Convertir a KTX2…"
+
+#: apps/wprs-app/qml/SceneAssetRow.qml
+msgid "%1 is still in use"
+msgstr "%1 todavía está en uso"
+
+#: apps/wprs-app/qml/SceneAssetRow.qml
+msgid ""
+"Removing it leaves these places without a picture, video or file. Remove it "
+"anyway?"
+msgstr ""
+"Si se quita, estos lugares se quedan sin imagen, vídeo o archivo. ¿Quitarlo "
+"de todos modos?"
+
+#: apps/wprs-app/qml/SceneAssetRow.qml
+msgid "Remove anyway"
+msgstr "Quitar de todos modos"
 
 #: apps/wprs-app/qml/SceneAssets.qml
 msgid "Import a sprite sheet or a data map…"
@@ -4872,30 +4914,30 @@ msgstr "Un módulo JavaScript de la escena"
 msgid "Drag to move %1 along what it follows"
 msgstr "Arrastra para mover %1 a lo largo de lo que sigue"
 
-#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBindSound.qml
 #: apps/wprs-app/qml/SceneSwarmFields.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Bass"
 msgstr "Graves"
 
-#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBindSound.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Mids"
 msgstr "Medios"
 
-#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBindSound.qml
 #: apps/wprs-app/qml/SceneSwarmFields.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Treble"
 msgstr "Agudos"
 
-#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBindSound.qml
 #: apps/wprs-app/qml/SceneSwarmFields.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Level"
 msgstr "Nivel"
 
-#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBindSound.qml
 #: apps/wprs-app/qml/SceneSwarmFields.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Beat"
@@ -4917,7 +4959,7 @@ msgstr "Banda %1: %2"
 msgid "Bands %1 to %2: %3"
 msgstr "Bandas %1 a %2: %3"
 
-#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBindSound.qml
 msgid "Follow the sound"
 msgstr "Seguir el sonido"
 
@@ -5000,10 +5042,6 @@ msgid "Follow a user property"
 msgstr "Seguir una propiedad de usuario"
 
 #: apps/wprs-app/qml/SceneBind.qml
-msgid "A band or a range of bands…"
-msgstr "Una banda o un rango de bandas…"
-
-#: apps/wprs-app/qml/SceneBind.qml
 msgid "Follow the media player"
 msgstr "Seguir al reproductor multimedia"
 
@@ -5025,6 +5063,30 @@ msgstr "Posición vertical"
 msgid "Over the screen"
 msgstr "Sobre la pantalla"
 
+#: apps/wprs-app/qml/SceneBindMeter.qml
+msgid "Levels of the sound"
+msgstr "Niveles del sonido"
+
+#: apps/wprs-app/qml/SceneBindMeter.qml
+msgid ""
+"The scene may not follow the sound yet. Allow the sound input of the package "
+"to see the levels."
+msgstr ""
+"La escena todavía no puede seguir el sonido. Permite la entrada de sonido "
+"del paquete para ver los niveles."
+
+#: apps/wprs-app/qml/SceneBindMeter.qml
+msgid ""
+"Waiting for sound. Play something and keep the preview running; the levels "
+"are only read while this window is open and nothing is recorded."
+msgstr ""
+"Esperando sonido. Reproduce algo y deja la vista previa en marcha; los "
+"niveles solo se leen mientras esta ventana está abierta y no se graba nada."
+
+#: apps/wprs-app/qml/SceneBindMeter.qml
+msgid "The binding gives %1 now (%2 before shaping)"
+msgstr "El enlace da %1 ahora (%2 antes de darle forma)"
+
 #: apps/wprs-app/qml/SceneBindScript.qml
 msgid "%1, every frame"
 msgstr "%1, cada fotograma"
@@ -5044,6 +5106,63 @@ msgstr "Seguir un script"
 #: apps/wprs-app/qml/SceneBindScript.qml
 msgid "The scene has no script to follow"
 msgstr "La escena no tiene ningún script que seguir"
+
+#: apps/wprs-app/qml/SceneBindSound.qml
+msgid "A band or a range of bands…"
+msgstr "Una banda o un rango de bandas…"
+
+#
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Time of the day, from 0 to 1"
+msgstr "Hora del día, de 0 a 1"
+
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Hour"
+msgstr "Hora"
+
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Minute"
+msgstr "Minuto"
+
+#
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Second"
+msgstr "Segundo"
+
+#
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Day of the week"
+msgstr "Día de la semana"
+
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Month"
+msgstr "Mes"
+
+#
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Show the time or the date"
+msgstr "Mostrar la hora o la fecha"
+
+#
+#: apps/wprs-app/qml/SceneBindTime.qml
+msgid "Follow the time of the day"
+msgstr "Seguir la hora del día"
+
+#: apps/wprs-app/qml/SceneBindTry.qml
+msgid "Try and shape the response"
+msgstr "Probar y dar forma a la respuesta"
+
+#: apps/wprs-app/qml/SceneBindTry.qml
+msgid "Watch the levels of the sound…"
+msgstr "Ver los niveles del sonido…"
+
+#: apps/wprs-app/qml/SceneBindTry.qml
+msgid "Try the pointer"
+msgstr "Probar el puntero"
+
+#: apps/wprs-app/qml/SceneBindTry.qml
+msgid "Smooth the changes…"
+msgstr "Suavizar los cambios…"
 
 #: apps/wprs-app/qml/SceneBodyKnobs.qml
 msgid "Drag up or down to set the gravity of %1"
@@ -5432,13 +5551,14 @@ msgstr "Una vez"
 msgid "Back to the timelines"
 msgstr "Volver a las líneas de tiempo"
 
-#: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneTimeBar.qml
-#: apps/wprs-app/qml/StatusBar.qml apps/wprs-app/qml/facade/SceneNames.qml
+#: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneSpriteStrip.qml
+#: apps/wprs-app/qml/SceneTimeBar.qml apps/wprs-app/qml/StatusBar.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Pause"
 msgstr "Pausar"
 
-#: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneTimeBar.qml
-#: apps/wprs-app/qml/facade/SceneNames.qml
+#: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneSpriteStrip.qml
+#: apps/wprs-app/qml/SceneTimeBar.qml apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Play"
 msgstr "Reproducir"
 
@@ -5499,14 +5619,26 @@ msgstr "Cambiar el nombre del clip"
 msgid "Remove the clip"
 msgstr "Quitar el clip"
 
+#: apps/wprs-app/qml/SceneClipEventMark.qml
+#: apps/wprs-app/qml/SceneStagePaths.qml
+msgid "%1 at %2 s"
+msgstr "%1 a los %2 s"
+
+#: apps/wprs-app/qml/SceneClipEventMark.qml
+msgid "Name of the event"
+msgstr "Nombre del evento"
+
 #: apps/wprs-app/qml/SceneClipEvents.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Events"
 msgstr "Eventos"
 
-#: apps/wprs-app/qml/SceneClipEvents.qml apps/wprs-app/qml/SceneStagePaths.qml
-msgid "%1 at %2 s"
-msgstr "%1 a los %2 s"
+#: apps/wprs-app/qml/SceneClipEvents.qml
+msgid "Double-click the lane to add an event"
+msgstr ""
+"Doble clic en la franja para añadir un eventoHaz doble clic en la franja "
+"para añadir ahí un evento; los disparadores y los scripts arrancan con su "
+"nombre."
 
 #: apps/wprs-app/qml/SceneClipRow.qml apps/wprs-app/qml/SceneModelMotion.qml
 msgid "Shape %1"
@@ -5593,6 +5725,10 @@ msgstr ""
 "Haz clic para añadir un punto, arrástralo para moverlo y haz doble clic para "
 "quitarlo. A lo ancho va la vida de la partícula y hacia arriba su valor."
 
+#: apps/wprs-app/qml/SceneDepthKnob.qml apps/wprs-app/qml/SceneRigDepth.qml
+msgid "Perspective of the depth"
+msgstr "Perspectiva de la profundidad"
+
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid "3D group: models, lights and flat layers share depth"
 msgstr "Grupo 3D: modelos, luces y capas planas comparten profundidad"
@@ -5600,6 +5736,34 @@ msgstr "Grupo 3D: modelos, luces y capas planas comparten profundidad"
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid "Hide behind nearer models"
 msgstr "Ocultarse tras los modelos más cercanos"
+
+#: apps/wprs-app/qml/SceneDepthTool.qml
+msgid "Make a depth map"
+msgstr "Hacer un mapa de profundidad"
+
+#: apps/wprs-app/qml/SceneDepthTool.qml
+msgid ""
+"The depth model is not installed, so no depth map can be made yet. Install "
+"it with: %1"
+msgstr ""
+"El modelo de profundidad no está instalado, así que aún no se puede hacer un "
+"mapa de profundidad. Instálalo con: %1"
+
+#: apps/wprs-app/qml/SceneDepthTool.qml
+msgid ""
+"The library that runs the depth model is not installed, so no depth map can "
+"be made yet."
+msgstr ""
+"La biblioteca que ejecuta el modelo de profundidad no está instalada, así "
+"que aún no se puede hacer un mapa de profundidad."
+
+#: apps/wprs-app/qml/SceneDropFiles.qml
+msgid "Drop files to add them as layers"
+msgstr "Suelta los archivos para añadirlos como capas"
+
+#: apps/wprs-app/qml/SceneDropFiles.qml
+msgid "Drop files to import them"
+msgstr "Suelta los archivos para importarlos"
 
 #: apps/wprs-app/qml/SceneEditors.qml apps/wprs-app/qml/SceneSwarmLook.qml
 #: apps/wprs-app/qml/SceneSwarmPoints.qml
@@ -5697,8 +5861,9 @@ msgstr ""
 msgid "Brightness"
 msgstr "Brillo"
 
-#: apps/wprs-app/qml/SceneEffectMaskTune.qml apps/wprs-app/qml/SceneMask.qml
-#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmStart.qml
+#: apps/wprs-app/qml/SceneEffectMaskTune.qml apps/wprs-app/qml/SceneGraph.qml
+#: apps/wprs-app/qml/SceneMask.qml apps/wprs-app/qml/SceneSwarmKin.qml
+#: apps/wprs-app/qml/SceneSwarmStart.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Alpha"
@@ -5822,9 +5987,220 @@ msgstr "Imágenes"
 msgid "Videos"
 msgstr "Vídeos"
 
+#: apps/wprs-app/qml/SceneExpressionMix.qml
+msgid "Expressions in the preview"
+msgstr "Expresiones en la vista previa"
+
 #: apps/wprs-app/qml/SceneField.qml apps/wprs-app/qml/SceneLayerRow.qml
 msgid "Hide"
 msgstr "Ocultar"
+
+#: apps/wprs-app/qml/SceneFilmRate.qml
+msgid "A video plays from 0 to 4 times its speed"
+msgstr "Un vídeo se reproduce de 0 a 4 veces su velocidad"
+
+#: apps/wprs-app/qml/SceneFilmRate.qml
+msgid "Use the size of the video"
+msgstr "Usar el tamaño del vídeo"
+
+#: apps/wprs-app/qml/SceneFilmRate.qml
+msgid "Play the whole video"
+msgstr "Reproducir todo el vídeo"
+
+#: apps/wprs-app/qml/SceneFilmTrim.qml
+msgid "%1 s long"
+msgstr "%1 s de duración"
+
+#: apps/wprs-app/qml/SceneFilmTrim.qml
+msgid "length unknown"
+msgstr "duración desconocida"
+
+#
+#: apps/wprs-app/qml/SceneFontList.qml
+msgid "Search fonts"
+msgstr "Buscar fuentes"
+
+#
+#: apps/wprs-app/qml/SceneFontList.qml
+msgid "In this package"
+msgstr "En este paquete"
+
+#: apps/wprs-app/qml/SceneFontList.qml
+msgid "Whatever the system uses for this style"
+msgstr "La que use el sistema para este estilo"
+
+#
+#: apps/wprs-app/qml/SceneFontList.qml
+msgid "Installed on this computer"
+msgstr "Instalada en este equipo"
+
+#
+#: apps/wprs-app/qml/SceneFontPicker.qml
+msgid "Default font"
+msgstr "Fuente por defecto"
+
+#
+#: apps/wprs-app/qml/SceneFontPicker.qml
+msgid "Use the default font"
+msgstr "Usar la fuente por defecto"
+
+#
+#: apps/wprs-app/qml/SceneFontPicker.qml
+msgid "Add a fallback font"
+msgstr "Añadir una fuente de respaldo"
+
+#: apps/wprs-app/qml/SceneFontPicker.qml
+msgid "%1 is not in the package or installed here, so the next font is used"
+msgstr ""
+"%1 no está en el paquete ni instalada aquí, así que se usa la fuente "
+"siguiente"
+
+#: apps/wprs-app/qml/SceneFontPicker.qml
+msgid ""
+"A letter the font does not have is drawn with the first font of this list "
+"that has it"
+msgstr ""
+"Una letra que la fuente no tiene se dibuja con la primera fuente de esta "
+"lista que la tenga"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Hour, 00 to 23"
+msgstr "Hora, de 00 a 23"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Hour, 0 to 23"
+msgstr "Hora, de 0 a 23"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Hour, 01 to 12"
+msgstr "Hora, de 01 a 12"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Hour, 1 to 12"
+msgstr "Hora, de 1 a 12"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Minutes, 00 to 59"
+msgstr "Minutos, de 00 a 59"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Minutes, 0 to 59"
+msgstr "Minutos, de 0 a 59"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Seconds, 00 to 59"
+msgstr "Segundos, de 00 a 59"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Seconds, 0 to 59"
+msgstr "Segundos, de 0 a 59"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "AM or PM"
+msgstr "AM o PM"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Year, four digits"
+msgstr "Año, cuatro cifras"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Year, two digits"
+msgstr "Año, dos cifras"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Name of the month"
+msgstr "Nombre del mes"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Name of the month, short"
+msgstr "Nombre del mes, abreviado"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Month, 01 to 12"
+msgstr "Mes, de 01 a 12"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Month, 1 to 12"
+msgstr "Mes, de 1 a 12"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Day of the month, 01 to 31"
+msgstr "Día del mes, de 01 a 31"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Day of the month, 1 to 31"
+msgstr "Día del mes, de 1 a 31"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Name of the day"
+msgstr "Nombre del día"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Name of the day, short"
+msgstr "Nombre del día, abreviado"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Day of the year"
+msgstr "Día del año"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Week of the year"
+msgstr "Semana del año"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Day: 0 at midnight, almost 1 the next midnight"
+msgstr "Día: 0 a medianoche, casi 1 a la medianoche siguiente"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Minute, 0 to 59"
+msgstr "Minuto, de 0 a 59"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Second, 0 to 59"
+msgstr "Segundo, de 0 a 59"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Weekday, 1 is Monday"
+msgstr "Día de la semana, 1 es el lunes"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Now it reads: %1"
+msgstr "Ahora dice: %1"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Hide the help"
+msgstr "Ocultar la ayuda"
+
+#
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Help with the format"
+msgstr "Ayuda con el formato"
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid ""
+"Click a piece to add it. Text between single quotes stays as written, and "
+"two quotes in a row write one quote."
+msgstr ""
+"Pulsa una pieza para añadirla. El texto entre comillas simples se queda como "
+"está, y dos comillas seguidas escriben una comilla."
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "Click a piece to add it. Any other letter stays as written."
+msgstr ""
+"Pulsa una pieza para añadirla. Cualquier otra letra se queda como está."
+
+#: apps/wprs-app/qml/SceneFormat.qml
+msgid "For a number, write one of these names instead of a format"
+msgstr "Para un número, escribe uno de estos nombres en lugar de un formato"
 
 #: apps/wprs-app/qml/SceneFrameRate.qml
 msgid "Highest frame rate"
@@ -5834,7 +6210,7 @@ msgstr "Máximo de fotogramas por segundo"
 msgid "Another rate…"
 msgstr "Otra velocidad…"
 
-#: apps/wprs-app/qml/SceneFrameRate.qml
+#: apps/wprs-app/qml/SceneFrameRate.qml apps/wprs-app/qml/SceneSpriteStrip.qml
 msgid "Frames a second"
 msgstr "Fotogramas por segundo"
 
@@ -5900,6 +6276,123 @@ msgid "Click the bar to add a stop, at most %1, and drag a stop to move it"
 msgstr ""
 "Pulsa la barra para añadir una parada, %1 como mucho, y arrastra una parada "
 "para moverla"
+
+#: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/SceneSwarmHues.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Value"
+msgstr "Valor"
+
+#: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneGraphButton.qml
+msgid "Curve editor"
+msgstr "Editor de curvas"
+
+#: apps/wprs-app/qml/SceneGraph.qml
+msgid "No keys to show: add keyframes to a value first."
+msgstr "No hay claves que mostrar: primero agrega fotogramas clave a un valor."
+
+#: apps/wprs-app/qml/SceneGraph.qml
+msgid ""
+"Click a key to pick it, Ctrl+click to add it, drag around keys to pick "
+"several. Drag picked keys to move them in time and value (keys of several "
+"values too, when they are of one kind and unit), Alt and drag to scale their "
+"values, the grip at the right of the selection to stretch their times, and "
+"the round handles to bend the curve. Each track is drawn on its own scale."
+msgstr ""
+"Un clic elige una clave, Ctrl+clic la suma y arrastrar alrededor de varias "
+"las elige juntas. Arrastra las claves elegidas para moverlas en el tiempo y "
+"en el valor (también claves de varios valores, si son de un mismo tipo y "
+"unidad), con Alt para escalar sus valores, la manija a la derecha de la "
+"selección para estirar sus tiempos y las asas redondas para curvar la línea. "
+"Cada pista se dibuja con su propia escala."
+
+#: apps/wprs-app/qml/SceneGraphButton.qml
+msgid ""
+"Curve editor: the curves of the values part by part, with handles, several "
+"keys at once, copy and paste"
+msgstr ""
+"Editor de curvas: las curvas de los valores parte por parte, con asas, "
+"varias claves a la vez, copiar y pegar"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Aligned handles"
+msgstr "Asas alineadas"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Broken handles"
+msgstr "Asas rotas"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid ""
+"Aligned: dragging one handle of a key turns the other one with it. Broken: "
+"each handle moves alone."
+msgstr ""
+"Alineadas: al arrastrar un asa de una clave, la otra gira con ella. Rotas: "
+"cada asa se mueve sola."
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Linked parts"
+msgstr "Partes unidas"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Separate parts"
+msgstr "Partes separadas"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid ""
+"Linked: a handle dragged on one track of a position or a color bends every "
+"part of it. Separate: each track keeps handles of its own. Linking again "
+"gives the picked key the shape of its first part."
+msgstr ""
+"Unidas: un asa arrastrada en una pista de una posición o un color curva "
+"todas sus partes. Separadas: cada pista tiene sus propias asas. Volver a "
+"unirlas le da a la clave elegida la forma de su primera parte."
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Straighten"
+msgstr "Enderezar"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Copy"
+msgstr "Copiar"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Paste at the playhead"
+msgstr "Pegar en el cabezal"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Remove the picked keys"
+msgstr "Quitar las claves elegidas"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Stretch times ×"
+msgstr "Estirar tiempos ×"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Scale values ×"
+msgstr "Escalar valores ×"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid ""
+"Scales the values of the picked keys around the middle of each part, for "
+"keys of values of one kind and unit. Alt and drag a picked key does the same "
+"on its track."
+msgstr ""
+"Escala los valores de las claves elegidas alrededor del medio de cada parte, "
+"si son claves de valores de un mismo tipo y unidad. Alt y arrastrar una "
+"clave elegida hace lo mismo en su pista."
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Fit the picked keys (F)"
+msgstr "Encuadrar lo elegido (F)"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "Fit all keys (Home)"
+msgstr "Encuadrar todo (Inicio)"
+
+#: apps/wprs-app/qml/SceneGraphTools.qml
+msgid "%1 picked"
+msgstr "%1 elegidas"
 
 #: apps/wprs-app/qml/SceneHandover.qml
 msgid "Hand an online author over to a new key"
@@ -6258,16 +6751,21 @@ msgid "Rename the layer"
 msgstr "Cambiar el id de la capa"
 
 #: apps/wprs-app/qml/SceneLayerDepth.qml
+msgid "Parallax depth:"
+msgstr "Profundidad del paralaje:"
+
+#: apps/wprs-app/qml/SceneLayerDepth.qml
+msgid "Follows a binding or keyframes; change it from its bindings"
+msgstr ""
+"Sigue un enlace o fotogramas clave; cámbialo desde sus enlaces."
+
+#: apps/wprs-app/qml/SceneLayerDepth.qml
 msgid "Parallax range:"
 msgstr "Rango del paralaje:"
 
 #: apps/wprs-app/qml/SceneLayerDepth.qml
 msgid "Same depth across and up and down"
 msgstr "Misma profundidad a lo ancho y a lo alto"
-
-#: apps/wprs-app/qml/SceneLayerDepth.qml
-msgid "Parallax depth:"
-msgstr "Profundidad del paralaje:"
 
 #: apps/wprs-app/qml/SceneLayerDepth.qml
 msgid "Depth across:"
@@ -6692,7 +7190,8 @@ msgstr "Pintar la rugosidad sobre la vista previa"
 msgid "Paint glow on the preview"
 msgstr "Pintar la luz propia sobre la vista previa"
 
-#: apps/wprs-app/qml/SceneMapBrush.qml apps/wprs-app/qml/facade/SceneTerms.qml
+#: apps/wprs-app/qml/SceneMapBrush.qml apps/wprs-app/qml/SceneTextureBrush.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Gray"
 msgstr "Gris"
 
@@ -6733,11 +7232,6 @@ msgstr "Pintar este mapa…"
 #: apps/wprs-app/qml/SceneMask.qml
 msgid "Paint"
 msgstr "Pintar"
-
-#: apps/wprs-app/qml/SceneMask.qml apps/wprs-app/qml/SceneSwarmHues.qml
-#: apps/wprs-app/qml/facade/SceneLabels.qml
-msgid "Value"
-msgstr "Valor"
 
 #: apps/wprs-app/qml/SceneMask.qml
 msgid ""
@@ -6920,7 +7414,8 @@ msgstr ""
 "Inicia lo que espera una pista nueva y, si la escena tiene imágenes, una "
 "carátula nueva; Reproduciendo inicia lo que espera reproducir o pausar."
 
-#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneTimelinePanel.qml
+#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneSmooth.qml
+#: apps/wprs-app/qml/SceneTimelinePanel.qml
 msgid "Seconds"
 msgstr "Segundos"
 
@@ -7689,6 +8184,25 @@ msgstr "Reiniciar"
 msgid "Preview quality"
 msgstr "Calidad de la vista previa"
 
+#: apps/wprs-app/qml/SceneRampTool.qml
+msgid ""
+"The stops make a color table: dark tones take the first stops and light "
+"tones the last."
+msgstr ""
+"Las paradas forman una tabla de color: los tonos oscuros toman las primeras "
+"paradas y los claros las últimas."
+
+#: apps/wprs-app/qml/SceneRampTool.qml
+msgid ""
+"The stops make the picture of this gradient; change them to make it again."
+msgstr ""
+"Las paradas forman la imagen de este degradado; cámbialas para volver a "
+"hacerla."
+
+#: apps/wprs-app/qml/SceneRampTool.qml
+msgid "Change the stops to make a gradient picture and use it here."
+msgstr "Cambia las paradas para hacer una imagen de degradado y usarla aquí."
+
 #: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneRigIk.qml
 msgid "A point"
 msgstr "Un punto"
@@ -7871,10 +8385,6 @@ msgid "Depth: nearer vertices cover farther ones"
 msgstr "Profundidad: los vértices cercanos tapan a los lejanos"
 
 #: apps/wprs-app/qml/SceneRigDepth.qml
-msgid "Perspective of the depth"
-msgstr "Perspectiva de la profundidad"
-
-#: apps/wprs-app/qml/SceneRigDepth.qml
 msgid "Hide faces seen from behind"
 msgstr "Ocultar las caras vistas por detrás"
 
@@ -7991,6 +8501,7 @@ msgid "New rule"
 msgstr "Regla nueva"
 
 #: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Bone"
 msgstr "Hueso"
@@ -8004,6 +8515,18 @@ msgid "Bones that take the pointer"
 msgstr "Huesos que reciben el puntero"
 
 #: apps/wprs-app/qml/SceneRigTouch.qml
+msgid "Pick them on the preview"
+msgstr "Elegirlos en la vista previa"
+
+#: apps/wprs-app/qml/SceneRigTouch.qml
+msgid ""
+"Click a bone on the preview to make it take the pointer, or click it again "
+"to let it go; the bones that take it have a thick ring."
+msgstr ""
+"Pulsa un hueso de la vista previa para que reciba el puntero, o púlsalo de "
+"nuevo para soltarlo; los huesos que lo reciben tienen un anillo grueso."
+
+#: apps/wprs-app/qml/SceneRigTouch.qml
 msgid ""
 "Scripts learn which of these bones the pointer touched, with the pointer "
 "permission."
@@ -8011,19 +8534,11 @@ msgstr ""
 "Los scripts saben cuál de estos huesos tocó el puntero, con el permiso del "
 "puntero."
 
-#: apps/wprs-app/qml/SceneRigTouch.qml
-msgid "Push vertices by their depth with perspective"
-msgstr "Proyectar la profundidad de los vértices con perspectiva"
-
-#: apps/wprs-app/qml/SceneRigTouch.qml
-msgid "Hide parts seen from behind"
-msgstr "Ocultar las partes vistas por detrás"
-
 #: apps/wprs-app/qml/SceneRigWeights.qml
 msgid "Paint weights on the preview"
 msgstr "Pintar los pesos sobre la vista previa"
 
-#: apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneShapeSculpt.qml
 msgid "Brush"
 msgstr "Pincel"
 
@@ -8032,7 +8547,7 @@ msgstr "Pincel"
 msgid "Subtract"
 msgstr "Restar"
 
-#: apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneShapeSculpt.qml
 msgid "Smooth"
 msgstr "Suavizar"
 
@@ -8183,6 +8698,67 @@ msgstr "Ajustes del módulo"
 msgid "Add a setting"
 msgstr "Añadir un ajuste"
 
+#: apps/wprs-app/qml/SceneScriptRigMissing.qml
+msgid "Line %1 names the blend shape %2, which %3 does not have"
+msgstr "La línea %1 nombra la forma de mezcla %2, que %3 no tiene"
+
+#: apps/wprs-app/qml/SceneScriptRigMissing.qml
+msgid "Line %1 names the bone %2, which %3 does not have"
+msgstr "La línea %1 nombra el hueso %2, que %3 no tiene"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Blend shape"
+msgstr "Forma de mezcla"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Push a body"
+msgstr "Empujar un cuerpo"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Turn it"
+msgstr "Girarlo"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Move it"
+msgstr "Moverlo"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Scale it"
+msgstr "Escalarlo"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Read it"
+msgstr "Leerlo"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Let it go"
+msgstr "Soltarlo"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Set its weight"
+msgstr "Fijar su peso"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Push it"
+msgstr "Empujarlo"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Insert a call that moves a mesh"
+msgstr "Insertar una llamada que mueve una malla"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "Insert"
+msgstr "Insertar"
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "This mesh has no bone with a body; give one under Swinging bones."
+msgstr ""
+"Esta malla no tiene ningún hueso con cuerpo; dale uno en Huesos que oscilan."
+
+#: apps/wprs-app/qml/SceneScriptRigPick.qml
+msgid "This mesh has none yet."
+msgstr "Esta malla todavía no tiene ninguno."
+
 #: apps/wprs-app/qml/SceneScriptRow.qml
 msgid "Drag to change the order"
 msgstr "Arrastra para cambiar el orden"
@@ -8307,6 +8883,104 @@ msgstr "ninguna"
 #: apps/wprs-app/qml/SceneShadows3d.qml
 msgid "Show where shadows fall and the frusta of the maps"
 msgstr "Mostrar dónde caen las sombras y los volúmenes de los mapas"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Set the width"
+msgstr "Fijar el ancho"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Set the height"
+msgstr "Fijar el alto"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Resize; hold Shift to keep the proportions"
+msgstr "Cambiar el tamaño; Mayús mantiene las proporciones"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Round the corners"
+msgstr "Redondear las esquinas"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Set the thickness of the ring"
+msgstr "Fijar el grosor del anillo"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Drag around the shape to set the number of sides"
+msgstr "Arrastra alrededor de la forma para fijar el número de lados"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Drag around the shape to set the number of points"
+msgstr "Arrastra alrededor de la forma para fijar el número de puntas"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Set the depth of the points"
+msgstr "Fijar la profundidad de las puntas"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Move the start of the line"
+msgstr "Mover el principio de la línea"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Move the end of the line"
+msgstr "Mover el final de la línea"
+
+#
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Set the width of the outline"
+msgstr "Fijar el grosor del contorno"
+
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "Start of the gradient, or its center when it is radial"
+msgstr "Principio del degradado, o su centro si es radial"
+
+#: apps/wprs-app/qml/SceneShapeOverlay.qml
+msgid "End of the gradient, or the edge when it is radial"
+msgstr "Final del degradado, o su borde si es radial"
+
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+msgid "Sculpt a blend shape on the preview"
+msgstr "Esculpir una forma de mezcla en la vista previa"
+
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Shape"
+msgstr "Forma"
+
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+msgid "New shape…"
+msgstr "Forma nueva…"
+
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+msgid "Name of the new blend shape"
+msgstr "Nombre de la forma de mezcla nueva"
+
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+msgid "Push away"
+msgstr "Empujar hacia fuera"
+
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+msgid "Pull in"
+msgstr "Tirar hacia dentro"
+
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
+msgid ""
+"Strokes on the mesh move its vertices in the blend shape; the preview shows "
+"the shape at full weight. A new name makes the shape on the first stroke."
+msgstr ""
+"Los trazos sobre la malla mueven sus vértices en la forma de mezcla; la "
+"vista previa muestra la forma con todo su peso. Un nombre nuevo crea la "
+"forma con el primer trazo."
 
 #: apps/wprs-app/qml/SceneShapes.qml
 msgid "Blend shapes in the preview"
@@ -8477,6 +9151,64 @@ msgstr "Capas"
 msgid "Assets"
 msgstr "Recursos"
 
+#: apps/wprs-app/qml/SceneSmooth.qml
+msgid "Response of the smoothing to a step up and down"
+msgstr "Respuesta del suavizado a un salto hacia arriba y hacia abajo"
+
+#: apps/wprs-app/qml/SceneSmooth.qml
+msgid "Settles in %1 s going up and %2 s going down"
+msgstr "Se asienta en %1 s al subir y en %2 s al bajar"
+
+#: apps/wprs-app/qml/SceneSmooth.qml
+msgid "Different speed going up and down"
+msgstr "Distinta velocidad al subir y al bajar"
+
+#: apps/wprs-app/qml/SceneSmooth.qml
+msgid "Going up (s)"
+msgstr "Al subir (s)"
+
+#: apps/wprs-app/qml/SceneSmooth.qml
+msgid "Going down (s)"
+msgstr "Al bajar (s)"
+
+#: apps/wprs-app/qml/SceneSoundLayer.qml
+msgid "muted"
+msgstr "silenciada"
+
+#: apps/wprs-app/qml/SceneSoundLayer.qml apps/wprs-app/qml/SceneSoundSpare.qml
+msgid "Stop listening"
+msgstr "Dejar de escuchar"
+
+#: apps/wprs-app/qml/SceneSoundLayer.qml apps/wprs-app/qml/SceneSoundSpare.qml
+msgid "Listen"
+msgstr "Escuchar"
+
+#: apps/wprs-app/qml/SceneSoundLayer.qml
+msgid "Edit the sound layer"
+msgstr "Editar la capa de sonido"
+
+#: apps/wprs-app/qml/SceneSounds.qml
+msgid "Starts with %1"
+msgstr "Empieza con %1"
+
+#: apps/wprs-app/qml/SceneSounds.qml
+msgid "Starts with the scene"
+msgstr "Empieza con la escena"
+
+#: apps/wprs-app/qml/SceneSounds.qml
+msgid "Sounds of the scene"
+msgstr "Sonidos de la escena"
+
+#: apps/wprs-app/qml/SceneSounds.qml apps/wprs-app/qml/facade/SceneNames.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Sound"
+msgstr "Sonido"
+
+#: apps/wprs-app/qml/SceneSounds.qml
+msgid "Sounds no layer plays"
+msgstr "Sonidos que ninguna capa reproduce"
+
 #: apps/wprs-app/qml/SceneSpan.qml
 msgid "These screens cannot be shown: %1"
 msgstr "Estas pantallas no se pueden mostrar: %1"
@@ -8500,6 +9232,80 @@ msgstr "Dos apiladas"
 #: apps/wprs-app/qml/SceneSpanPick.qml
 msgid "My screens"
 msgstr "Mis pantallas"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Left to right, top to bottom"
+msgstr "De izquierda a derecha y de arriba abajo"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Top to bottom, left to right"
+msgstr "De arriba abajo y de izquierda a derecha"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Backwards, by rows"
+msgstr "Al revés, por filas"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Backwards, by columns"
+msgstr "Al revés, por columnas"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Cut the sprites of %1"
+msgstr "Cortar los sprites de %1"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid ""
+"Cut the picture in a grid, or drag over it to draw a frame. Drag a frame to "
+"move it and its corner to resize it. The picture is %1 × %2 px."
+msgstr ""
+"Corta la imagen en una cuadrícula o arrastra sobre ella para dibujar un "
+"cuadro. Arrastra un cuadro para moverlo y su esquina para cambiarle el "
+"tamaño. La imagen mide %1 × %2 px."
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Rows"
+msgstr "Filas"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Columns"
+msgstr "Columnas"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Margin"
+msgstr "Margen"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Spacing"
+msgstr "Separación"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Frames (0 for all)"
+msgstr "Cuadros (0 para todos)"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Cut the grid"
+msgstr "Cortar la cuadrícula"
+
+#: apps/wprs-app/qml/SceneSpriteCutter.qml
+msgid "Remove all frames"
+msgstr "Quitar todos los cuadros"
+
+#: apps/wprs-app/qml/SceneSpriteStrip.qml
+msgid "Frames played"
+msgstr "Cuadros que se reproducen"
+
+#: apps/wprs-app/qml/SceneSpriteStrip.qml
+msgid "Earlier"
+msgstr "Antes"
+
+#: apps/wprs-app/qml/SceneSpriteStrip.qml
+msgid "Later"
+msgstr "Después"
+
+#: apps/wprs-app/qml/SceneSpriteStrip.qml
+msgid "Remove the frame"
+msgstr "Quitar el cuadro"
 
 #: apps/wprs-app/qml/SceneStageCamera.qml
 msgid "Drag to move the scene camera"
@@ -9835,6 +10641,18 @@ msgstr ""
 "Muestra una plantilla sola en el lienzo, como se dibuja una copia, y edita "
 "sus capas con el panel de capas y las herramientas del lienzo"
 
+#: apps/wprs-app/qml/SceneTextOverlay.qml
+msgid "Set the width of the text; double-click to stop wrapping"
+msgstr "Fijar el ancho del texto; doble clic para dejar de ajustarlo"
+
+#: apps/wprs-app/qml/SceneTextOverlay.qml
+msgid "Drag to wrap the text at a width"
+msgstr "Arrastra para ajustar el texto a un ancho"
+
+#: apps/wprs-app/qml/SceneTextOverlay.qml
+msgid "%1 × %2 px, %3 lines"
+msgstr "%1 × %2 px, %3 líneas"
+
 #: apps/wprs-app/qml/SceneTexts.qml
 msgid "Remove this language"
 msgstr "Quitar este idioma"
@@ -9846,6 +10664,33 @@ msgstr "Idioma, como es o pt-BR"
 #: apps/wprs-app/qml/SceneTexts.qml
 msgid "Translate"
 msgstr "Traducir"
+
+#: apps/wprs-app/qml/SceneTextureBrush.qml
+msgid "Paint the direction"
+msgstr "Pintar la dirección"
+
+#: apps/wprs-app/qml/SceneTextureBrush.qml
+msgid "Paint in grey"
+msgstr "Pintar en gris"
+
+#: apps/wprs-app/qml/SceneTextureBrush.qml
+msgid "Flatten"
+msgstr "Aplanar"
+
+#: apps/wprs-app/qml/SceneTextureBrush.qml
+msgid ""
+"Drag on the layer in the preview: each stroke writes the way it went, and "
+"the rest stays still. Each stroke is one step to undo."
+msgstr ""
+"Arrastra sobre la capa en la vista previa: cada trazo escribe la dirección "
+"que llevó y el resto queda quieto. Cada trazo es un paso que se puede "
+"deshacer."
+
+#: apps/wprs-app/qml/SceneTextureBrush.qml
+msgid "Paint on the layer in the preview; each stroke is one step to undo."
+msgstr ""
+"Pinta sobre la capa en la vista previa; cada trazo es un paso que se puede "
+"deshacer."
 
 #: apps/wprs-app/qml/SceneTimeBar.qml
 msgid "Remove the keyframe"
@@ -9962,7 +10807,9 @@ msgstr "Dispararla en la vista previa"
 msgid ""
 "Starts this timeline and every timeline and sound with the same trigger in "
 "the preview, as %1 would"
-msgstr "Arranca en la vista previa esta línea de tiempo y todas las líneas y sonidos con el mismo disparador, como lo haría %1"
+msgstr ""
+"Arranca en la vista previa esta línea de tiempo y todas las líneas y sonidos "
+"con el mismo disparador, como lo haría %1"
 
 #: apps/wprs-app/qml/SceneTimelinePanel.qml
 msgid "Events:"
@@ -10037,6 +10884,30 @@ msgid ""
 msgstr ""
 "Los clics y la entrada o salida del puntero activan líneas de tiempo, "
 "sonidos y scripts, con el permiso del puntero. El área se ve sobre el lienzo."
+
+#: apps/wprs-app/qml/SceneTrigger.qml
+msgid "the timeline %1"
+msgstr "la línea de tiempo %1"
+
+#: apps/wprs-app/qml/SceneTrigger.qml
+msgid "the sound %1"
+msgstr "el sonido %1"
+
+#: apps/wprs-app/qml/SceneTrigger.qml
+msgid "Fires %1 in the preview, as the scene would, starting %2"
+msgstr "Dispara %1 en la vista previa, como lo haría la escena, y arranca %2"
+
+#: apps/wprs-app/qml/SceneTrigger.qml
+msgid ""
+"Fires %1 in the preview, as the scene would; nothing in the scene starts on "
+"it yet"
+msgstr ""
+"Dispara %1 en la vista previa, como lo haría la escena; todavía nada de la "
+"escena arranca con él"
+
+#: apps/wprs-app/qml/SceneTrigger.qml
+msgid "Fire this trigger in the preview"
+msgstr "Activar este disparador en la vista previa"
 
 #: apps/wprs-app/qml/SceneTry.qml
 msgid ""
@@ -10129,6 +11000,10 @@ msgstr "No cede a nada"
 #: apps/wprs-app/qml/SceneWakeRules.qml
 msgid "Yields to %1"
 msgstr "Cede a %1"
+
+#: apps/wprs-app/qml/SceneWave.qml
+msgid "Waveform of the sound"
+msgstr "Forma de onda del sonido"
 
 #: apps/wprs-app/qml/ScenesPage.qml
 msgid "My scene"
@@ -12588,10 +13463,6 @@ msgid "Rotation"
 msgstr "Giro"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Rows"
-msgstr "Filas"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Bone rules"
 msgstr "Reglas de huesos"
 
@@ -12642,11 +13513,6 @@ msgstr "Desplazamiento de la sombra"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Shadow map size"
 msgstr "Tamaño del mapa de sombras"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Shape"
-msgstr "Forma"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Blend shapes"
@@ -12708,12 +13574,6 @@ msgstr "Opaca"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Back to front"
 msgstr "De atrás hacia adelante"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Sound"
-msgstr "Sonido"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Light source"
@@ -13619,6 +14479,11 @@ msgstr "sinusoidal"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "the clock"
 msgstr "el reloj"
+
+#
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "the date"
+msgstr "la fecha"
 
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "the keyframes"
