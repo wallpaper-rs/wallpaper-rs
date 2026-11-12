@@ -37,6 +37,7 @@ pub(crate) fn masking(map: Option<&Path>, edit: &Edit) -> Option<Map> {
     Some(adjust(&shrink(read(map?).ok()?, EDGE), edit.depth.as_ref().unwrap_or(&Depth::default())))
 }
 
+#[cfg(test)]
 pub(crate) fn map(raise: &Raise) -> Option<Map> {
     let (path, _) = raise.map.as_ref()?;
     Some(adjust(&shrink(read(path).ok()?, EDGE), &raise.depth))
