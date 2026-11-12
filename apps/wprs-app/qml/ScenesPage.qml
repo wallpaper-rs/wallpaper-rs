@@ -13,10 +13,10 @@ Kirigami.ScrollablePage {
     readonly property var starters: [["empty", "document-new"], ["particles", "weather-snow"], ["parallax", "view-list-details"], ["clock", "clock"], ["web", "text-html"], ["preset", "color-management"], ["image", "image-x-generic"], ["video", "video-x-generic"], ["assets", "package-x-generic"]]
 
     function exercise() {
-        App.compose(helper.folderFor("check"), "empty", "");
         App.compose(helper.folderFor("page"), "web", "");
         App.compose(helper.folderFor("clip"), "video", "");
         App.compose(helper.folderFor("still"), "image", "");
+        App.compose(helper.folderFor("check"), "empty", "");
     }
 
     title: App.tr("Scenes")

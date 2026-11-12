@@ -1,4 +1,5 @@
 import QtQuick
+import io.github.wallpaper_rs.app
 
 QtObject {
     required property var page
@@ -83,7 +84,15 @@ QtObject {
             throw new Error("dragging a layer back did not restore the order: " + back);
     }
 
+    function ran(check, method) {
+        Qt.createComponent(check).createObject(page, {
+            "page": page
+        })[method ?? "exercise"]();
+        App.backend.reap();
+    }
+
     function exercise() {
+        App.backend.reap();
         for (const kind of page.view.starters) {
             page.editor.create(page.folder + "-" + kind, kind, "");
             page.run("add_layer", {
@@ -162,32 +171,23 @@ QtObject {
                 page.editor.select("/scene/particles/flakes/emitters/0");
                 if (!page.fields.some(field => field.widget === "points"))
                     throw new Error(kind + ": the emitter box has no editor");
-                Qt.createComponent("SceneSwarmCheck.qml").createObject(page, {
-                    "page": page
-                }).exercise();
-                Qt.createComponent("SceneShapingCheck.qml").createObject(page, {
-                    "page": page
-                }).exercise();
-                Qt.createComponent("SceneLightsCheck.qml").createObject(page, {
-                    "page": page
-                }).particles();
+                ran("SceneSwarmCheck.qml");
+                ran("SceneShapingCheck.qml");
+                ran("SceneLightsCheck.qml", "particles");
             }
             if (kind === "empty")
                 for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml", "SceneTouchCheck.qml", "SceneBandCheck.qml", "SceneLevelCheck.qml", "SceneLightsCheck.qml", "SceneHearingCheck.qml"])
-                    Qt.createComponent(check).createObject(page, {
-                        "page": page
-                    }).exercise();
+                    ran(check);
             if (kind === "parallax") {
                 manifest();
                 for (const check of ["SceneSettingsCheck.qml", "SceneTryCheck.qml", "SceneAuthorCheck.qml"])
-                    Qt.createComponent(check).createObject(page, {
-                        "page": page
-                    }).exercise();
+                    ran(check);
             }
             page.jump("/scene/layers/0/opacity");
             page.editor.seek(0.5, false);
             if (page.editor.error !== "" || page.view.problems.some(problem => !problem.warning))
                 throw new Error(kind + ": " + (page.editor.error || JSON.stringify(page.view.problems)));
+            App.backend.reap();
         }
         page.editor.save();
         page.tabs.currentIndex = 2;
