@@ -119,6 +119,7 @@ QtObject {
             "sound2": App.tr("plays MP3 or long sounds, lists of sounds or sounds started by events"),
             "camera": App.tr("moves, zooms, turns or shakes the whole scene"),
             "parallax2": App.tr("sets how the scene follows the pointer or the tilt of the phone"),
+            "parallax_values": App.tr("binds the parallax of the scene or of a layer to a property, sound or time"),
             "bloom": App.tr("makes the bright parts of the scene glow"),
             "hdr": App.tr("renders brighter than white and maps the tones"),
             "keep_frame": App.tr("draws over the previous frame"),

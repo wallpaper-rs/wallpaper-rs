@@ -6703,8 +6703,8 @@ msgid ""
 "Drag on the layer in the preview along the way it should move; erasing "
 "paints it still. Each stroke is one step to undo."
 msgstr ""
-"Arrastra sobre la capa en la vista previa en el sentido en que debe "
-"moverse; al borrar queda quieta. Cada trazo es un paso que se puede deshacer."
+"Arrastra sobre la capa en la vista previa en el sentido en que debe moverse; "
+"al borrar queda quieta. Cada trazo es un paso que se puede deshacer."
 
 #: apps/wprs-app/qml/SceneMask.qml
 msgid ""
@@ -11286,6 +11286,13 @@ msgid "sets how the scene follows the pointer or the tilt of the phone"
 msgstr "fija cómo sigue la escena al puntero o a la inclinación del teléfono"
 
 #: apps/wprs-app/qml/facade/Labels.qml
+msgid ""
+"binds the parallax of the scene or of a layer to a property, sound or time"
+msgstr ""
+"ata el paralaje de la escena o de una capa a una propiedad, al sonido o al "
+"tiempo"
+
+#: apps/wprs-app/qml/facade/Labels.qml
 msgid "makes the bright parts of the scene glow"
 msgstr "hace brillar las partes claras de la escena"
 
@@ -13643,6 +13650,18 @@ msgstr "Giro en 3D"
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Arc"
 msgstr "Arco"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Tape streaks"
+msgstr "Rayas de la cinta"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Tracking band"
+msgstr "Banda de seguimiento"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Foliage trembling"
+msgstr "Temblor del follaje"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Aspect"
