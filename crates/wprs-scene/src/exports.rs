@@ -32,7 +32,7 @@ pub use crate::easing::Ease;
 pub use crate::effects::{
     BLEND_WGSL, Cost, Descriptor, Entry, FRAME_WGSL, FX_SLOTS, Fuse, GENERIC_PICTURES, Grab, Hold,
     MASK_SLOTS, MaskMode, NOISE_WGSL, Output, PRELUDE, Pace, ParamDef, ParamKind, PassBlend, PassDef,
-    RELIEF_WGSL, RenderTarget, SLOTS, Solve, Stage, State, Texel, Tune, Unit, Use, Variant, builtin,
+    RELIEF_WGSL, RenderTarget, SLOTS, Solve, Stage, State, Texel, Tool, Tune, Unit, Use, Variant, builtin,
     descriptor, register,
 };
 pub use crate::eval::lamps::{Lamp, Picture, SHADOW_BIAS};

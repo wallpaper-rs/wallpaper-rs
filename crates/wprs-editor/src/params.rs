@@ -20,6 +20,7 @@ fn local(texts: &std::collections::BTreeMap<String, String>) -> String {
 pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth: usize) -> Field {
     let current = value["params"].get(&p.id);
     let (widget, reference) = match p.kind {
+        ParamKind::Texture if p.tool.is_some() => ("ref:mask", Some("image")),
         ParamKind::Float => ("number", None),
         ParamKind::Vec2 | ParamKind::Position => ("vec2", None),
         ParamKind::Color => ("color", None),
@@ -63,6 +64,7 @@ pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth:
         title: local(&p.label),
         sample: match (p.kind, drawn) {
             (ParamKind::Mask, _) => json!({ "channels": p.channels.unwrap_or(1) }),
+            (ParamKind::Texture, _) if p.tool.is_some() => json!({ "channels": 1, "tool": p.tool }),
             (_, Some(effect)) => json!({ "effect": effect }),
             _ => Value::Null,
         },

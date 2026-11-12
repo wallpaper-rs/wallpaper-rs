@@ -8,6 +8,7 @@ ColumnLayout {
 
     required property var input
     readonly property int channels: input.field.sample?.channels ?? 1
+    readonly property bool combing: input.field.sample?.tool === "direction"
     readonly property bool painting: input.page.brush?.pointer === input.field.pointer
     readonly property var options: [null].concat(input.field.options.filter(option => typeof option === "string"))
 
@@ -17,7 +18,8 @@ ColumnLayout {
             "channel": mask.channels > 1 ? channel.currentIndex : null,
             "radius": size.value,
             "hardness": Math.round(hard.value * 100) / 100,
-            "value": erase.checked ? 0 : Math.round(level.value * 100) / 100
+            "value": erase.checked ? 0 : Math.round(level.value * 100) / 100,
+            "direction": mask.combing
         };
     }
 
@@ -111,7 +113,7 @@ ColumnLayout {
         visible: mask.painting
 
         QQC2.Label {
-            text: App.tr("Value")
+            text: mask.combing ? App.tr("Strength") : App.tr("Value")
         }
 
         SceneSlider {
@@ -130,6 +132,6 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: mask.painting
         wrapMode: Text.Wrap
-        text: App.tr("Paint on the layer in the preview, where the channel is tinted; each stroke is one step to undo.")
+        text: mask.combing ? App.tr("Drag on the layer in the preview along the way it should move; erasing paints it still. Each stroke is one step to undo.") : App.tr("Paint on the layer in the preview, where the channel is tinted; each stroke is one step to undo.")
     }
 }

@@ -1,4 +1,4 @@
-use super::{Entry, ParamKind, PassBlend, Unit, Use, full, previous};
+use super::{Entry, ParamKind, PassBlend, Tool, Unit, Use, full, previous};
 use crate::value::Param;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
@@ -32,6 +32,8 @@ pub struct ParamDef {
     pub yields_to: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub waits_for: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tool: Option<Tool>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

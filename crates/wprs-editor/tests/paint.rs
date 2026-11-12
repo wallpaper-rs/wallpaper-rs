@@ -170,3 +170,24 @@ fn strokes_on_a_ktx2_map_start_from_the_exact_picture_of_the_last_stroke() {
         "a rewritten file kept its exact copy"
     );
 }
+
+#[test]
+fn a_flow_map_is_combed_along_the_stroke_from_a_still_picture() {
+    let root = tempfile::tempdir().unwrap();
+    state();
+    let dir = root.path().join("comb");
+    let mut project =
+        Project::create(&dir, starter("empty", "org.example.comb", "Comb", "en").unwrap()).unwrap();
+    let layer = json!([{ "id": "fill", "type": "solid", "color": "#ffffff", "effects": [{ "effect": "shake" }] }]);
+    act(&mut project, json!({ "set": { "pointer": "/scene/layers", "value": layer } })).unwrap();
+    let pointer = "/scene/layers/0/effects/0/params/flow";
+    let comb = json!({ "paint_mask": { "pointer": pointer, "radius": 0.1, "hardness": 0.9, "direction": true,
+        "points": [[0.3, 0.5], [0.7, 0.5]] } });
+    act(&mut project, comb).unwrap();
+    let id = project.doc.pointer(pointer).and_then(Value::as_str).unwrap().to_owned();
+    let path = project.doc["scene"]["assets"][&id]["path"].as_str().unwrap().to_owned();
+    let picture = image::open(dir.join(path)).unwrap().into_rgba8();
+    let [r, g, b, a] = picture.get_pixel(256, 256).0;
+    assert!(r == 255 && g == 128 && b == 0 && a == 255, "{:?}", [r, g, b, a]);
+    assert_eq!(picture.get_pixel(10, 10).0, [128, 128, 0, 255]);
+}

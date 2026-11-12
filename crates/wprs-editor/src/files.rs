@@ -35,11 +35,8 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::Shot(e) => crate::shotting::act(dir, doc, e),
         Action::PaintMask(m) => {
             let (channel, radius, hardness, value) = (m.channel, m.radius, m.hardness, m.value);
-            paint(
-                dir,
-                doc,
-                &Stroke { pointer: &m.pointer, channel, radius, hardness, value, points: &m.points },
-            )
+            let (points, direction) = (&m.points, m.direction);
+            paint(dir, doc, &Stroke { pointer: &m.pointer, channel, radius, hardness, value, points, direction })
         }
         action => return crate::rigging::act(dir, doc, action),
     })

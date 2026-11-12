@@ -122,6 +122,7 @@ pub(crate) fn paint(dir: &Path, doc: &Value, s: &MapStroke) -> Result<Vec<Op>> {
         hardness: s.hardness,
         value: s.value,
         points: &s.points,
+        direction: false,
     };
     stroke(&mut picture, &brush);
     let here = format!("{at}/lighting/{field}");

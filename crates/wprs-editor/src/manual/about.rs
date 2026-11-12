@@ -36,7 +36,7 @@ pub const ABOUT: [(&str, &str); 70] = [
     ("condition", "Add, change or remove a condition that shows or hides parts of the scene"),
     ("effect_rule", "Set the scheduling rules of an effect parameter"),
     ("add_preset", "Add a preset of the user properties"),
-    ("paint_mask", "Paint a stroke into the mask picture of an effect parameter"),
+    ("paint_mask", "Paint a stroke into the mask picture of an effect parameter, or with direction a flow map that points along the stroke"),
     ("mesh_from_picture", "Make a mesh from the outline of the picture of a layer"),
     ("bone", "Add, move, rename, parent or remove the bones of a mesh"),
     ("mesh_depth", "Paint the depth of a mesh"),

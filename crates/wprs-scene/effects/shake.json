@@ -2,7 +2,7 @@
   "id": "shake",
   "name": { "en": "Shake" },
   "category": "motion",
-  "description": "Shakes the picture along a direction.",
+  "description": "Shakes the picture along a direction or a painted flow map, by noise or a periodic push.",
   "mask_mode": "strength",
   "params": [
     { "id": "strength", "type": "float", "default": 0, "min": 0, "max": 256, "uses": "time" },
@@ -11,9 +11,29 @@
     { "id": "noise", "type": "float", "default": 0, "min": 0, "max": 1 },
     { "id": "friction", "type": "float", "default": 0, "min": 0, "max": 1 },
     { "id": "bounds", "type": "vec2", "default": [1, 1], "min": 0, "max": 1 },
-    { "id": "phase", "type": "texture", "default": "" }
+    { "id": "phase", "type": "texture", "default": "", "tool": "brush" },
+    { "id": "flow", "type": "texture", "default": "", "tool": "direction", "paint": "#808000" },
+    {
+      "id": "motion",
+      "type": "enum",
+      "default": 0,
+      "values": [
+        { "value": 0, "label": { "en": "Noise", "es": "Ruido" } },
+        { "value": 1, "label": { "en": "Periodic push", "es": "Empuje periódico" } }
+      ]
+    },
+    {
+      "id": "side",
+      "type": "enum",
+      "default": 0,
+      "values": [
+        { "value": 0, "label": { "en": "Both ways", "es": "A los dos lados" } },
+        { "value": 1, "label": { "en": "Forward", "es": "Hacia adelante" } },
+        { "value": 2, "label": { "en": "Backward", "es": "Hacia atrás" } }
+      ]
+    }
   ],
-  "passes": [{ "entry": "fs_shake", "inputs": ["previous", "asset:phase"] }],
+  "passes": [{ "entry": "fs_shake", "inputs": ["previous", "asset:phase", "asset:flow"] }],
   "fuse": "uv",
   "reach": "strength"
 }
