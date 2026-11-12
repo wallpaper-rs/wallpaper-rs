@@ -921,6 +921,7 @@ jobs:
             runner: ubuntu-24.04-arm
             bundle: wallpaper-rs-aarch64.flatpak
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
     env:
       WPRS_VERSION: ${{ needs.version.outputs.informational }}
       BUNDLE: ${{ matrix.bundle }}
@@ -945,8 +946,10 @@ jobs:
           arch: ${{ matrix.arch }}
           cache-key: flatpak-${{ matrix.arch }}-${{ hashFiles('Cargo.lock', 'packaging/flatpak/*.yml') }}
           upload-artifact: false
+          save-cache: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Install and run the bundle
+        timeout-minutes: 20
         run: packaging/flatpak/check.sh "$BUNDLE"
 
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4

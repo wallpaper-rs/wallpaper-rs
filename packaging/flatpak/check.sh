@@ -4,7 +4,7 @@ bundle=${1:?usage: WPRS_VERSION=<version> $0 <bundle>}
 version=${WPRS_VERSION:?}
 app=io.github.wallpaper_rs.WallpaperRs
 flatpak install -y --noninteractive --bundle "$bundle"
-run() { cmd=$1 && shift && flatpak run --env=QT_QPA_PLATFORM=offscreen --command="$cmd" "$@"; }
+run() { cmd=$1 && shift && flatpak run --env=QT_QPA_PLATFORM=offscreen --env=WPRS_APP_CHECK_SHARDS="${SHARDS:-3}" --command="$cmd" "$@"; }
 test "$(run wprs-ctl $app --version)" = "wprs-ctl $version"
 test "$(run wprsd $app --version)" = "wprsd $version"
 run wprs-app $app --check
