@@ -82,6 +82,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.test.junit)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.test)
+    debugImplementation(libs.compose.test.manifest)
 }
 
 val cargo = tasks.register<Exec>("cargo") {

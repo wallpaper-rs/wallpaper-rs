@@ -23,6 +23,8 @@ webkit = { module = "androidx.webkit:webkit", version.ref = "webkit" }
 test-runner = { module = "androidx.test:runner", version.ref = "test-runner" }
 test-junit = { module = "androidx.test.ext:junit", version.ref = "test-junit" }
 junit = { module = "junit:junit", version.ref = "junit" }
+compose-test = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
