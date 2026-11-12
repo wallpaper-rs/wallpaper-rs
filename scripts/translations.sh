@@ -10,6 +10,7 @@ case $MODE in
   *) echo "usage: $0 update [language...] | check | build [output-dir]" >&2 && exit 2 ;;
 esac
 cd "$ROOT"
+if [ "$MODE" = check ]; then "$ROOT/scripts/translations-lint.sh"; fi
 shopt -s nullglob
 LANGS=(po/*/)
 LANGS=("${LANGS[@]#po/}")
