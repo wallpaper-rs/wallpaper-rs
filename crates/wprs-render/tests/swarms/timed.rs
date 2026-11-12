@@ -38,9 +38,13 @@ fn timed(r: &Renderer, run: &mut Run, dt: f64, seen: &mut u64) -> Option<[f64; 2
     (std::mem::replace(seen, samples) != samples).then_some(timed)
 }
 
-fn median(mut times: Vec<[f64; 2]>) -> Option<[f64; 2]> {
-    times.sort_by(|a, b| a[0].total_cmp(&b[0]));
-    times.get(times.len() / 2).copied()
+fn median(times: Vec<[f64; 2]>) -> Option<[f64; 2]> {
+    let middle = |i: usize| {
+        let mut part: Vec<f64> = times.iter().map(|t| t[i]).collect();
+        part.sort_by(f64::total_cmp);
+        part.get(part.len() / 2).copied()
+    };
+    Some([middle(0)?, middle(1)?])
 }
 
 #[test]
