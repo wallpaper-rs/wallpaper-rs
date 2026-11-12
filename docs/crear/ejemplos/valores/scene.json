@@ -1,0 +1,28 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#0d1117" },
+  "layers": [
+    { "id": "noche", "type": "solid", "color": "#0a1030",
+      "opacity": { "clock": "hour", "bounds": [0, 23], "exponent": 2, "clamp": [0.1, 0.9] } },
+    { "id": "latido", "type": "shape", "shape": { "ellipse": { "size": [300, 300] } },
+      "fill": { "prop": "tema", "map": { "dia": "#ffe08a", "noche": "#8fb4ff" } },
+      "transform": { "position": [480, 540],
+        "scale": { "audio": "bass", "scale": 0.6, "offset": 1, "smooth": 0.1 } } },
+    { "id": "banda", "type": "shape", "shape": { "rect": { "size": [300, 300], "radius": 30 } },
+      "fill": "#ff6b9d", "transform": { "position": [960, 540] },
+      "opacity": { "audio": [0, 3], "of": 16, "reduce": "max", "offset": 0.2, "clamp": [0.2, 1] } },
+    { "id": "rebote", "type": "shape", "shape": { "polygon": { "sides": 5, "size": 150 } },
+      "fill": "#6ee7b7",
+      "transform": { "position": [1440, 540],
+        "scale": { "timeline": "salto", "keys": [[0, 0.4, "out_bounce"], [1.5, 1.2, "in_out_sine"], [3, 0.4]] } } },
+    { "id": "cursor", "type": "shape", "shape": { "ellipse": { "size": [60, 60] } }, "fill": "#ffffff",
+      "transform": { "position": { "x": { "cursor": "x", "scale": 1920, "smooth": 0.2 },
+                                    "y": { "cursor": "y", "scale": 1080, "smooth": 0.2 } } } },
+    { "id": "oscila", "type": "shape", "shape": { "ellipse": { "size": [50, 50] } }, "fill": "#fbbf24",
+      "transform": { "position": { "base": [960, 900], "keys": [[0, [-300, 0]], [2, [300, 0], "in_out_sine"], [4, [-300, 0], "in_out_sine"]],
+        "loop": "repeat" } } },
+    { "id": "saludo", "type": "text", "text": { "prop": "nombre" }, "font": "sans-serif", "size": 72,
+      "color": "#ffffff", "anchor": "top", "transform": { "position": [0, 80] } }
+  ],
+  "timelines": [{ "id": "salto", "duration": 3, "loop": "repeat" }]
+}

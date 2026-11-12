@@ -1,0 +1,31 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.lienzo-y-reloj",
+  "inputs": [
+    "pointer"
+  ],
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "requires": {
+    "features": [
+      "bloom",
+      "camera",
+      "clock_dates",
+      "inputs.pointer",
+      "parallax2",
+      "texture_options"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Lienzo y reloj",
+  "version": "0.1.0"
+}

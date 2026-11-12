@@ -1,0 +1,18 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": {
+    "size": [1920, 1080], "fit": "fill", "background": "#0b1020", "blend_space": "linear",
+    "parallax": { "amount": 1, "delay": 0.15, "pointer": 1 },
+    "bloom": { "threshold": 0.8, "strength": 0.6, "radius": 24 },
+    "camera": { "zoom": 1.05, "shake": { "enabled": false, "amplitude": 6, "roughness": 0.5, "speed": 1 } }
+  },
+  "clock": { "max_fps": 30, "poster_time": 2, "seed": 7 },
+  "assets": { "cielo": { "path": "assets/cielo.png", "filter": "linear", "wrap": "clamp" } },
+  "layers": [
+    { "id": "fondo", "type": "image", "image": "cielo", "size": [2000, 1125], "parallax": 0.01 },
+    { "id": "hora", "type": "text", "text": { "clock": "HH:mm" }, "font": "sans-serif", "size": 220,
+      "color": "#ffffff", "anchor": "center", "parallax": 0.03 },
+    { "id": "fecha", "type": "text", "text": { "date": "EEEE d 'de' MMMM" }, "font": "sans-serif", "size": 56,
+      "color": "#cfe0ff", "anchor": "bottom", "transform": { "position": [0, -120] } }
+  ]
+}

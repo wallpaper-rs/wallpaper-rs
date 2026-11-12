@@ -1,0 +1,63 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.valores",
+  "inputs": [
+    "audio",
+    "pointer"
+  ],
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {
+    "nombre": {
+      "default": "Hola",
+      "label": {
+        "es": "Texto de bienvenida"
+      },
+      "max_len": 40,
+      "type": "text"
+    },
+    "tema": {
+      "default": "dia",
+      "label": {
+        "es": "Tema"
+      },
+      "options": [
+        {
+          "label": {
+            "es": "Día"
+          },
+          "value": "dia"
+        },
+        {
+          "label": {
+            "es": "Noche"
+          },
+          "value": "noche"
+        }
+      ],
+      "type": "combo"
+    }
+  },
+  "requires": {
+    "features": [
+      "audio_ranges",
+      "clock_values",
+      "inputs.audio",
+      "inputs.pointer",
+      "relative_values",
+      "shaping",
+      "tracks"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Valores que se mueven",
+  "version": "0.1.0"
+}
