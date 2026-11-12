@@ -45,7 +45,7 @@ ctl clear -o TEST-12
 ctl edit depth layers "$tools" --clear >/dev/null
 sleep 3
 [ "$(sets)" = 0 ] || fail "a cleared output built layers"
-[ "$(ctl jobs | wc -l)" -le 1 ] || fail "a cleared output started a job: $(ctl jobs)"
+[ "$(ctl jobs | grep -Eic "queued|running")" = 0 ] || fail "a cleared output started a job: $(ctl jobs)"
 leave && ctl release TEST-12
 ctl edit parallax "$tools" --off
 ctl config playback.software_parallax false
