@@ -17,6 +17,16 @@ fn indexed(text: &str) -> Result<(usize, [f64; 2]), String> {
     Ok((k, pair(at)?))
 }
 
+fn takes(text: &str) -> Result<wprs_editor::actions::Takes, String> {
+    use wprs_editor::actions::Takes;
+    match text {
+        "off" => Ok(Takes::Off),
+        "all" => Ok(Takes::All),
+        "alpha" => Ok(Takes::Alpha),
+        _ => Err(fill(told("%1 is not off, all or alpha"), &[&text])),
+    }
+}
+
 fn mode(text: &str) -> Result<wprs_scene::Blend, String> {
     serde_json::from_value(json!(text)).map_err(|_| fill(told("%1 is not a blend mode"), &[&text]))
 }
@@ -104,6 +114,15 @@ pub enum Stage {
         blend: wprs_scene::Blend,
     },
     #[command(
+        about = "Let the pointer through the layer (off), take it over the whole box (all) or only where the layer is at least alpha opaque (alpha)"
+    )]
+    Touch {
+        #[arg(help = "off, all or alpha", value_parser = takes)]
+        takes: wprs_editor::actions::Takes,
+        #[arg(long, help = "From 0 to 1; with alpha, 0.5 when it had none")]
+        alpha: Option<f64>,
+    },
+    #[command(
         about = "Change one particles layer from the system it draws: alpha, size, count, speed, life, time scale, brightness, color and control points"
     )]
     Instance {
@@ -161,6 +180,7 @@ pub(crate) fn edit(layer: String, what: Stage) -> L {
             L::Fit { layer, fit, at, replace }
         }
         Stage::Parent { parent, keep, at, replace } => L::Parent { layer, parent, keep, at, replace },
+        Stage::Touch { takes, alpha } => L::Touch { layer, takes, alpha },
         Stage::Instance {
             alpha,
             size,

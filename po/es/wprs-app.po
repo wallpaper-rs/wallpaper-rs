@@ -9039,7 +9039,9 @@ msgstr "Opaca desde el %1%"
 msgid ""
 "Clicks and the pointer entering or leaving trigger timelines, sounds and "
 "scripts, with the pointer permission. The area shows over the canvas."
-msgstr "Los clics y la entrada o salida del puntero activan líneas de tiempo, sonidos y scripts, con el permiso del puntero. El área se ve sobre el lienzo."
+msgstr ""
+"Los clics y la entrada o salida del puntero activan líneas de tiempo, "
+"sonidos y scripts, con el permiso del puntero. El área se ve sobre el lienzo."
 
 #: apps/wprs-app/qml/SceneWakeRules.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml

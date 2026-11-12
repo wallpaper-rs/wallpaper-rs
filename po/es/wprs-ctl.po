@@ -6465,6 +6465,10 @@ msgid "%1 is not a control point"
 msgstr "%1 no es un punto de control"
 
 #: apps/wprs-ctl/src/staging.rs
+msgid "%1 is not off, all or alpha"
+msgstr "%1 no es off, all ni alpha"
+
+#: apps/wprs-ctl/src/staging.rs
 msgid "%1 is not a blend mode"
 msgstr "%1 no es un modo de fusión"
 
@@ -6588,6 +6592,20 @@ msgstr ""
 #: apps/wprs-ctl/src/staging.rs
 msgid "A blend mode such as normal, add, multiply or screen"
 msgstr "Un modo de fusión como normal, add, multiply o screen"
+
+#: apps/wprs-ctl/src/staging.rs
+msgid ""
+"Let the pointer through the layer (off), take it over the whole box (all) or "
+"only where the layer is at least alpha opaque (alpha)"
+msgstr "Deja pasar el puntero por la capa (off), lo toma en toda la caja (all) o solo donde la capa es al menos alpha opaca (alpha)"
+
+#: apps/wprs-ctl/src/staging.rs
+msgid "off, all or alpha"
+msgstr "off, all o alpha"
+
+#: apps/wprs-ctl/src/staging.rs
+msgid "From 0 to 1; with alpha, 0.5 when it had none"
+msgstr "De 0 a 1; con alpha, 0,5 si no tenía"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid ""
