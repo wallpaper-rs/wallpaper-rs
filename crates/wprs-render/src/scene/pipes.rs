@@ -112,12 +112,7 @@ impl Pipes {
         };
         let sampler = wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering);
         let flat = |b| entry(b, texture(Dim::D2));
-        let fx: Vec<_> = std::iter::once(entry(0, uniform(true)))
-            .chain((1..=6).map(flat))
-            .chain([entry(7, texture(Dim::D3))])
-            .collect();
-        let own: Vec<_> =
-            fx.iter().cloned().chain((8..=11).map(flat)).chain([entry(12, uniform(true))]).collect();
+        let [fx_frame, fx, own] = package_entries();
         let sampler_of = |address_mode, filter| {
             device.create_sampler(&wgpu::SamplerDescriptor {
                 label: Some("wprs-scene sampler"),
@@ -159,7 +154,7 @@ impl Pipes {
             lit: layout(
                 &std::iter::once(entry(0, uniform(false))).chain((1..=8).map(flat)).collect::<Vec<_>>(),
             ),
-            fx_frame: layout(&[entry(0, uniform(false)), entry(1, sampler), entry(2, sampler)]),
+            fx_frame: layout(&fx_frame),
             fx: layout(&fx),
             own: layout(&own),
             sampler: sampler_of(clamp, linear),
@@ -169,6 +164,23 @@ impl Pipes {
             fields: Mutex::default(),
         }
     }
+}
+
+fn package_entries() -> [Vec<wgpu::BindGroupLayoutEntry>; 3] {
+    let sampler = wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering);
+    let flat = |b| entry(b, texture(Dim::D2));
+    let fx = std::iter::once(entry(0, uniform(true))).chain((1..=6).map(flat));
+    let fx: Vec<_> = fx.chain([entry(7, texture(Dim::D3))]).collect();
+    let own = fx.iter().cloned().chain((8..=11).map(flat)).chain([entry(12, uniform(true))]).collect();
+    [vec![entry(0, uniform(false)), entry(1, sampler), entry(2, sampler)], fx, own]
+}
+
+pub(crate) fn package_layouts(device: &wgpu::Device) -> [BindGroupLayout; 2] {
+    let [frame, _, own] = package_entries();
+    [&frame, &own].map(|entries| {
+        let label = Some("wprs-scene layout");
+        device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor { label, entries })
+    })
 }
 
 pub(crate) fn module(device: &wgpu::Device, source: String) -> ShaderModule {

@@ -117,7 +117,9 @@ impl Renderer {
         }
         let pipes = self.pipes();
         let groups = [pipes.fx_frame.clone(), pipes.own.clone()];
-        let kit = Kit { device: self.device.clone(), groups, shelf: pipes.shelf.clone() };
+        let (device, shelf, probe) = (self.device.clone(), pipes.shelf.clone(), self.probe());
+        let kit = Arc::new(Kit { device, groups, shelf, probe });
+        let later: Vec<Job> = if kit.probe.is_some() { jobs.clone() } else { Vec::new() };
         let mut waiting: Vec<(u64, String)> = jobs.iter().map(|j| (j.d.key, j.d.id.clone())).collect();
         let stop = Arc::new(AtomicBool::new(false));
         let found = match kit.start(jobs, stop.clone()) {
@@ -132,6 +134,10 @@ impl Renderer {
             };
             let Some(at) = waiting.iter().position(|(k, _)| *k == key) else { continue };
             let (_, id) = waiting.swap_remove(at);
+            let built = built.and_then(|()| match later.iter().find(|j| j.d.key == key) {
+                Some(job) => built_here(&kit, job),
+                None => Ok(()),
+            });
             match built {
                 Ok(()) => super::flight::pending(view, key),
                 Err(e) => {
@@ -152,4 +158,11 @@ impl Renderer {
             refused.insert(id, why);
         }
     }
+}
+
+fn built_here(kit: &Kit, job: &Job) -> Result<(), String> {
+    super::flight::building(job.d.key, true);
+    let built = kit.build(job);
+    super::flight::building(job.d.key, false);
+    built
 }

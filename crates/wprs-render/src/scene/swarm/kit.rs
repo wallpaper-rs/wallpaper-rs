@@ -41,7 +41,7 @@ pub(super) struct Kit {
     pub(super) long: bool,
     pub(super) rope: Option<wprs_scene::Rope>,
     pub(super) tex: wgpu::BindGroup,
-    pub(super) stage: Option<(u64, wgpu::ShaderModule)>,
+    pub(super) stage: Option<(u64, wgpu::ShaderModule, std::sync::Arc<wgpu::naga::Module>)>,
     pub(super) shader: Option<String>,
     pub(super) refused: Option<(String, String)>,
     pub(super) lit: Option<[wgpu::TextureView; 2]>,

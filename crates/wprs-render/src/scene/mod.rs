@@ -32,6 +32,7 @@ mod pipes;
 mod placed;
 mod pool;
 mod poster;
+mod probe;
 mod profile;
 mod rasters;
 mod ready;

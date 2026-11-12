@@ -61,7 +61,7 @@ impl Swarms {
             return None;
         }
         let (tier, gpu) = (r.tier(), compute(r) && !r.software());
-        let layouts = layouts(r);
+        let layouts = layouts(&r.device);
         debug_assert!(size_of::<wprs_scene::Sim>() as u64 <= SIM);
         let masks = scene.particles.values().flat_map(masks);
         let masks = masks.filter_map(|t| Some((t, assets.images.get(t)?.image()?)));
@@ -145,7 +145,7 @@ impl Swarms {
             none,
             maps: Vec::new(),
             stages: HashMap::new(),
-            framing: super::stage::framing(r),
+            framing: super::stage::framing(&r.device),
             framed: None,
         };
         swarms.maps = Swarms::charts(r, scene, &swarms.herds);

@@ -24,6 +24,7 @@ mod export;
 #[cfg(target_os = "linux")]
 mod exported;
 mod filled;
+mod gles;
 pub mod hdr;
 #[cfg(target_os = "linux")]
 mod import;

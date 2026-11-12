@@ -1,8 +1,11 @@
+use crate::Renderer;
 use crate::scene::stops::{UNBUILT, stopped};
 use crate::scene::{builders, clock, flight, packages};
 use std::sync::{Arc, atomic::AtomicBool, mpsc};
 
 const ROOM: usize = 64 << 20;
+
+pub(super) type Trial = Box<dyn FnOnce(&wgpu::Device) + Send>;
 
 pub(super) fn left(key: u64) -> Option<String> {
     if stopped(key) {
@@ -11,18 +14,38 @@ pub(super) fn left(key: u64) -> Option<String> {
     clock::slow(key)
 }
 
+fn attempt<T>(device: &wgpu::Device, work: impl FnOnce(&wgpu::Device) -> T) -> Result<T, String> {
+    let (made, failure) = crate::lost::caught(device, || work(device));
+    failure.map_or(Ok(made), |e| Err(e.to_string()))
+}
+
 pub(super) fn within<T: Send + 'static>(
-    (key, device): (u64, &wgpu::Device),
+    (key, r): (u64, &Renderer),
+    trial: Option<Trial>,
+    work: impl FnOnce(&wgpu::Device) -> T + Send + 'static,
+) -> Result<T, String> {
+    let Some(probe) = r.probe() else { return elsewhere(key, &r.device, work) };
+    let Some(trial) = trial else { return attempt(&r.device, work) };
+    let tried =
+        elsewhere(key, &r.device, move |_| probe.open().map_or(Ok(()), |device| attempt(&device, trial)));
+    tried.and_then(|t| t)?;
+    flight::building(key, true);
+    let made = wprs_scene::trying(key).and_then(|()| attempt(&r.device, work));
+    flight::building(key, false);
+    wprs_scene::tried(key);
+    made
+}
+
+fn elsewhere<T: Send + 'static>(
+    key: u64,
+    device: &wgpu::Device,
     work: impl FnOnce(&wgpu::Device) -> T + Send + 'static,
 ) -> Result<T, String> {
     let (tx, rx) = mpsc::channel();
     let device = device.clone();
     let job = move || {
         flight::building(key, true);
-        let made = wprs_scene::trying(key).and_then(|()| {
-            let (made, failure) = crate::lost::caught(&device, || work(&device));
-            failure.map_or(Ok(made), |e| Err(e.to_string()))
-        });
+        let made = wprs_scene::trying(key).and_then(|()| attempt(&device, work));
         flight::building(key, false);
         wprs_scene::tried(key);
         drop(tx.send(made));

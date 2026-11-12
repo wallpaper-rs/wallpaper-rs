@@ -105,7 +105,7 @@ impl Swarms {
             }
             let sorted = kit.order.and_then(|(o, _)| store.stacks.iter().find(|s| s.order == o));
             let variant = if bend { 2 } else { usize::from(lamp.is_some()) };
-            let own = kit.stage.as_ref().zip(self.framed.as_ref()).and_then(|((key, _), framed)| {
+            let own = kit.stage.as_ref().zip(self.framed.as_ref()).and_then(|((key, ..), framed)| {
                 let found = |v: usize| self.stages.get(&(mode, *key, v)).map(|s| (s, v));
                 Some((found(variant).or_else(|| found(0).filter(|_| !bend))?, framed))
             });

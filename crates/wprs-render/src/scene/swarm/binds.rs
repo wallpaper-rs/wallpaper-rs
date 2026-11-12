@@ -32,10 +32,10 @@ pub(super) fn module(r: &Renderer, wgsl: &str) -> wgpu::ShaderModule {
         .create_shader_module(wgpu::ShaderModuleDescriptor { label: Some("wprs-scene particles"), source })
 }
 
-pub(super) fn layouts(r: &Renderer) -> [BindGroupLayout; 7] {
+pub(super) fn layouts(device: &wgpu::Device) -> [BindGroupLayout; 7] {
     let layout = |entries: &[wgpu::BindGroupLayoutEntry]| {
         let label = Some("wprs-scene particles");
-        r.device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor { label, entries })
+        device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor { label, entries })
     };
     let filtering = wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering);
     let sample_type = wgpu::TextureSampleType::Float { filterable: true };

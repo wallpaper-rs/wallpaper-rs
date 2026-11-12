@@ -1,10 +1,11 @@
 use super::kit::Kit;
 use super::lamped::{SPRITE, slots};
 use super::sprite::pipe;
-use super::staging::{left, within};
+use super::staging::{Trial, left, within};
 use super::{Swarms, binds};
 use crate::Renderer;
 use crate::scene::pipes::Mode;
+use std::sync::Arc;
 use wprs_scene::{Scene, Stage};
 
 const ENTRIES: [&str; 3] = ["wprs_fs_particle", "wprs_fs_lit_particle", "wprs_fs_bend_particle"];
@@ -71,15 +72,11 @@ pub(super) fn stage(r: &Renderer, scene: &Scene, kit: &mut Kit, id: Option<&str>
         return;
     };
     let made = left(d.key).map_or(Ok(()), Err).and_then(|()| {
-        let module = wprs_scene::particle_shader(d, &source())?;
-        within((d.key, &r.device), move |device| {
-            let source = wgpu::ShaderSource::Naga(std::borrow::Cow::Owned(module));
-            let label = Some("wprs-scene particle shader");
-            device.create_shader_module(wgpu::ShaderModuleDescriptor { label, source })
-        })
+        let naga = Arc::new(wprs_scene::particle_shader(d, &source())?);
+        within((d.key, r), None, move |device| (shader(device, &naga), naga))
     });
     match made {
-        Ok(module) => kit.stage = Some((d.key, module)),
+        Ok((module, naga)) => kit.stage = Some((d.key, module, naga)),
         Err(why) => kit.refused = Some((id.into(), why)),
     }
 }
@@ -95,7 +92,7 @@ pub(super) fn leave(kits: &mut [Kit], key: u64, why: &str) {
 impl Swarms {
     pub(super) fn staged(&mut self, r: &Renderer, mode: Mode) {
         for k in 0..self.kits.len() {
-            let Some((key, module)) = self.kits[k].stage.clone() else { continue };
+            let Some((key, module, naga)) = self.kits[k].stage.clone() else { continue };
             let kit = &self.kits[k];
             let wanted = [true, super::lamped::lit(kit), kit.bend.is_some()];
             for (variant, _) in wanted.iter().enumerate().filter(|(_, w)| **w) {
@@ -106,11 +103,15 @@ impl Swarms {
                 let mut groups = vec![self.layouts[1].clone(), self.layouts[2].clone(), self.framing.clone()];
                 groups.extend((variant > 0).then(|| self.layouts[6].clone()));
                 let format = if variant == 2 { wgpu::TextureFormat::Rgba16Float } else { self.format };
-                let module = module.clone();
-                let made = within((key, &r.device), move |device| {
-                    let layouts: Vec<_> = groups.iter().collect();
-                    let shader = (&module, ("wprs_vs_particle", ENTRIES[variant]));
-                    pipe(device, (format, mode), shader, &layouts, &slots(SPRITE))
+                let (module, naga) = (module.clone(), naga.clone());
+                let trial: Trial = Box::new(move |device: &wgpu::Device| {
+                    let (all, framing) = (binds::layouts(device), framing(device));
+                    let mut groups = vec![&all[1], &all[2], &framing];
+                    groups.extend((variant > 0).then_some(&all[6]));
+                    drop(sprite(device, (format, mode), (&shader(device, &naga), variant), &groups));
+                });
+                let made = within((key, r), Some(trial), move |device| {
+                    sprite(device, (format, mode), (&module, variant), &groups.iter().collect::<Vec<_>>())
                 });
                 match made {
                     Ok(pipeline) => {
@@ -136,8 +137,23 @@ impl Swarms {
     }
 }
 
-pub(super) fn framing(r: &Renderer) -> wgpu::BindGroupLayout {
+pub(super) fn framing(device: &wgpu::Device) -> wgpu::BindGroupLayout {
     let entries = [binds::entry(0, wgpu::ShaderStages::VERTEX_FRAGMENT, binds::plain(0))];
     let label = Some("wprs-scene particle frame");
-    r.device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor { label, entries: &entries })
+    device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor { label, entries: &entries })
+}
+
+fn shader(device: &wgpu::Device, naga: &wgpu::naga::Module) -> wgpu::ShaderModule {
+    let source = wgpu::ShaderSource::Naga(std::borrow::Cow::Owned(naga.clone()));
+    let label = Some("wprs-scene particle shader");
+    device.create_shader_module(wgpu::ShaderModuleDescriptor { label, source })
+}
+
+fn sprite(
+    device: &wgpu::Device,
+    target: (wgpu::TextureFormat, Mode),
+    (module, variant): (&wgpu::ShaderModule, usize),
+    groups: &[&wgpu::BindGroupLayout],
+) -> wgpu::RenderPipeline {
+    pipe(device, target, (module, ("wprs_vs_particle", ENTRIES[variant])), groups, &slots(SPRITE))
 }
