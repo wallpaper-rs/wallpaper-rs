@@ -10,7 +10,7 @@ dbus-monitor --session "type='signal',interface='io.github.wallpaper_rs.Daemon1'
   "type='signal',interface='io.github.wallpaper_rs.Library1'" >"$WORK/library-signals.log" 2>&1 & pids+=($!)
 sleep 0.5
 described=$(reply "sorted(o['key'] for o in r['options'])" Daemon1 GetSchema)
-[ "$described" = "$(field "sorted(s['options'])")" ] && [ "$described" != "[]" ] ||
+[[ $described != "[]" && $described == "$(field "sorted(s['options'])")" ]] ||
   fail "the schema does not describe exactly the settings in the state: $described"
 [ "$(reply "len(r['providers']), r['thumb_sizes']" Daemon1 GetSchema)" = "(7, [256, 512, 1024])" ] ||
   fail "schema: $(bus Daemon1 GetSchema)"
