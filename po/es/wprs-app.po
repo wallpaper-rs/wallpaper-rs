@@ -1196,10 +1196,10 @@ msgstr "Tamaño del pincel"
 #: apps/wprs-app/qml/EditDepthBrush.qml apps/wprs-app/qml/EditOps.qml
 #: apps/wprs-app/qml/OutputFilter.qml apps/wprs-app/qml/SceneCanvasLook.qml
 #: apps/wprs-app/qml/SceneEffectMaskTune.qml
-#: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneNormals.qml
-#: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneRigWind.qml
-#: apps/wprs-app/qml/SceneSwarmKeep.qml apps/wprs-app/qml/SceneSwarmPull.qml
-#: apps/wprs-app/qml/facade/SceneNames.qml
+#: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/SceneNormals.qml apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneRigWind.qml apps/wprs-app/qml/SceneSwarmKeep.qml
+#: apps/wprs-app/qml/SceneSwarmPull.qml apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Strength"
 msgstr "Fuerza"
 
@@ -5277,6 +5277,11 @@ msgid "Delay"
 msgstr "Retraso"
 
 #: apps/wprs-app/qml/SceneCanvasLook.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
+msgid "Offset"
+msgstr "Desplazamiento"
+
+#: apps/wprs-app/qml/SceneCanvasLook.qml
 msgid "Glow:"
 msgstr "Brillo:"
 
@@ -6692,6 +6697,14 @@ msgstr "Pintar"
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Value"
 msgstr "Valor"
+
+#: apps/wprs-app/qml/SceneMask.qml
+msgid ""
+"Drag on the layer in the preview along the way it should move; erasing "
+"paints it still. Each stroke is one step to undo."
+msgstr ""
+"Arrastra sobre la capa en la vista previa en el sentido en que debe "
+"moverse; al borrar queda quieta. Cada trazo es un paso que se puede deshacer."
 
 #: apps/wprs-app/qml/SceneMask.qml
 msgid ""
@@ -13072,10 +13085,6 @@ msgstr "Número de bandas"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Off time"
 msgstr "Tiempo apagado"
-
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-msgid "Offset"
-msgstr "Desplazamiento"
 
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Noise offset"
