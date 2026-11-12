@@ -114,7 +114,7 @@ ColumnLayout {
         catalog: preset.catalog
     }
 
-    PresetPublish {
+    PackagePresetPublish {
         Layout.fillWidth: true
         page: preset.page
         basePath: preset.basePath

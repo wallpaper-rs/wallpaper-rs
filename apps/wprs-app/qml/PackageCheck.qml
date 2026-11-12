@@ -15,7 +15,7 @@ QtObject {
             return;
         }
         if (page.kind === "preset") {
-            Qt.createComponent("PresetPublishCheck.qml").createObject(page, {
+            Qt.createComponent("PackagePresetPublishCheck.qml").createObject(page, {
                 "page": page
             }).exercise();
             return;

@@ -12,7 +12,7 @@ QtObject {
     }
 
     function exercise() {
-        const shown = Qt.createComponent("PresetPublish.qml").createObject(page, {
+        const shown = Qt.createComponent("PackagePresetPublish.qml").createObject(page, {
             "page": page
         });
         if (shown.report.steps.length !== 6 || shown.report.ready)

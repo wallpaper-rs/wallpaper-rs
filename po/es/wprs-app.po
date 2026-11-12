@@ -1467,6 +1467,8 @@ msgstr "Ensanchar los bordes cercanos (px)"
 
 #: apps/wprs-app/qml/EditDepth.qml apps/wprs-app/qml/PresetPublish.qml
 
+#: apps/wprs-app/qml/EditDepth.qml apps/wprs-app/qml/PackagePresetPublish.qml
+
 #: apps/wprs-app/qml/SceneImportSheet.qml apps/wprs-app/qml/SceneLayerFiles.qml
 
 #: apps/wprs-app/qml/SceneMapSlot.qml apps/wprs-app/qml/SceneMeta.qml
@@ -2636,6 +2638,8 @@ msgstr "Probar la página y sus luces…"
 
 #: apps/wprs-app/qml/ItemDrawer.qml apps/wprs-app/qml/PresetPublish.qml
 
+#: apps/wprs-app/qml/ItemDrawer.qml apps/wprs-app/qml/PackagePresetPublish.qml
+
 #: apps/wprs-app/qml/SceneEditors.qml
 
 msgid "Edit…"
@@ -3424,7 +3428,9 @@ msgstr "Grabar una vista previa como WebP"
 msgid "Record a preview as GIF"
 msgstr "Grabar una vista previa como GIF"
 
-#: apps/wprs-app/qml/PackageCapture.qml apps/wprs-app/qml/PresetPublish.qml
+#: apps/wprs-app/qml/PackageCapture.qml
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
 msgid "Capture the thumbnail"
 msgstr "Capturar la miniatura"
 
@@ -4025,7 +4031,79 @@ msgstr ""
 msgid ""
 "Each setting of the base package has its own control; the ones in bold are "
 "set by this preset, and a picture or video is copied into the package."
-msgstr "Cada ajuste del paquete base tiene su propio control; los que están en negrita los fija este preajuste, y una imagen o un video se copia dentro del paquete."
+msgstr ""
+"Cada ajuste del paquete base tiene su propio control; los que están en "
+"negrita los fija este preajuste, y una imagen o un video se copia dentro del "
+"paquete."
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "The base package is chosen"
+msgstr "Se eligió el paquete base"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "The preset sets at least one value or file"
+msgstr "El preajuste fija al menos un valor o un archivo"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "It has a title"
+msgstr "Tiene un título"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "It has a license"
+msgstr "Tiene una licencia"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "It has a preview picture"
+msgstr "Tiene una imagen de vista previa"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "The review finds no problem"
+msgstr "La revisión no encuentra ningún problema"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "Publish as a preset"
+msgstr "Publicar como preajuste"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "Install the base package to draw the preset over it."
+msgstr "Instala el paquete base para dibujar el preajuste sobre él."
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid ""
+"Draw the base package with the values of this preset and keep that frame"
+msgstr ""
+"Dibuja el paquete base con los valores de este preajuste y conserva ese "
+"fotograma"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "Record a preview"
+msgstr "Grabar una vista previa"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml apps/wprs-app/qml/SceneMeta.qml
+msgid "WebP"
+msgstr "WebP"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml apps/wprs-app/qml/SceneMeta.qml
+msgid "Record as WebP instead of GIF"
+msgstr "Grabar como WebP en vez de GIF"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "Choose a picture…"
+msgstr "Elegir una imagen…"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml apps/wprs-app/qml/RepoStatic.qml
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Publish…"
+msgstr "Publicar…"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "Build the package, then add it to a repository and publish it"
+msgstr "Construye el paquete, añádelo a un repositorio y publícalo"
+
+#: apps/wprs-app/qml/PackagePresetPublish.qml
+msgid "Finish the steps above first"
+msgstr "Termina primero los pasos de arriba"
 
 #: apps/wprs-app/qml/PackagePresets.qml
 msgid ""
@@ -4452,72 +4530,7 @@ msgstr "Nuevo preajuste para este elemento"
 msgid "New preset"
 msgstr "Nuevo preajuste"
 
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "The base package is chosen"
-msgstr "Se eligió el paquete base"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "The preset sets at least one value or file"
-msgstr "El preajuste fija al menos un valor o un archivo"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "It has a title"
-msgstr "Tiene un título"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "It has a license"
-msgstr "Tiene una licencia"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "It has a preview picture"
-msgstr "Tiene una imagen de vista previa"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "The review finds no problem"
-msgstr "La revisión no encuentra ningún problema"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "Publish as a preset"
-msgstr "Publicar como preajuste"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "Install the base package to draw the preset over it."
-msgstr "Instala el paquete base para dibujar el preajuste sobre él."
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid ""
-"Draw the base package with the values of this preset and keep that frame"
-msgstr "Dibuja el paquete base con los valores de este preajuste y conserva ese fotograma"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "Record a preview"
-msgstr "Grabar una vista previa"
-
-#: apps/wprs-app/qml/PresetPublish.qml apps/wprs-app/qml/SceneMeta.qml
-msgid "WebP"
-msgstr "WebP"
-
-#: apps/wprs-app/qml/PresetPublish.qml apps/wprs-app/qml/SceneMeta.qml
-msgid "Record as WebP instead of GIF"
-msgstr "Grabar como WebP en vez de GIF"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "Choose a picture…"
-msgstr "Elegir una imagen…"
-
 #: apps/wprs-app/qml/PresetPublish.qml apps/wprs-app/qml/RepoStatic.qml
-
-#: apps/wprs-app/qml/SceneShelve.qml
-msgid "Publish…"
-msgstr "Publicar…"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "Build the package, then add it to a repository and publish it"
-msgstr "Construye el paquete, añádelo a un repositorio y publícalo"
-
-#: apps/wprs-app/qml/PresetPublish.qml
-msgid "Finish the steps above first"
-msgstr "Termina primero los pasos de arriba"
 
 #: apps/wprs-app/qml/PresetSettings.qml
 msgid "No file"
