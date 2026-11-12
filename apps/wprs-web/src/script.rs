@@ -5,7 +5,6 @@ use std::ffi::c_int;
 use wprs_web::FromWeb;
 
 const POST: &str = "(m) => window.webkit.messageHandlers.wprs.postMessage(JSON.stringify(m))";
-const MAX_SAID: u32 = 200;
 const MEDIA: &str = include_str!("media.js");
 const ALL: c_int = 0;
 const TOP: c_int = 1;
@@ -139,11 +138,7 @@ pub unsafe extern "C" fn message(_manager: Ptr, value: Ptr, data: Ptr) {
         send(&FromWeb::Open { view, prop: prop.chars().take(64).collect() });
     }
     if let Some(error) = message.get("error").and_then(Value::as_str) {
-        let quiet = live(|l| {
-            l.said += 1;
-            l.said > MAX_SAID
-        });
-        if !quiet {
+        if live(|l| l.said.allow()) {
             send(&FromWeb::Console { view, line: error.chars().take(512).collect() });
         }
     }

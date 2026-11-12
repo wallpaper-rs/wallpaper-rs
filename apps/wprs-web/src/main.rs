@@ -8,6 +8,7 @@ mod quit;
 mod replay;
 mod ring;
 mod run;
+mod said;
 mod scheme;
 mod script;
 mod state;

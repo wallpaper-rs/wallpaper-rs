@@ -114,7 +114,8 @@ helper to end.
 A page shown for the editor on a `preview:` output (`PreviewScene`, `dbus.md`) keeps its last 50
 console lines and errors per screen, which the helper sends as `Console` with the view that wrote
 them, and `GetState` shows them in `console` of that output; other screens keep nothing, so a page
-that writes often never wakes the bus. The helper stops forwarding after 200 lines in all.
+that writes often never wakes the bus. The helper limits what it forwards with a bucket of 50 lines that refills at 10 a second, so a
+flood is cut but a preview that runs for hours keeps showing its latest lines.
 
 ## Sandbox
 

@@ -47,7 +47,7 @@ pub struct Live {
     pub media: bool,
     pub heard: Option<serde_json::Value>,
     pub copy: bool,
-    pub said: u32,
+    pub said: crate::said::Said,
 }
 
 thread_local! {
