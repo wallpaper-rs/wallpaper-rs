@@ -147,7 +147,7 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
                     hardness,
                     value,
                     points,
-                    direction: false,
+                    direction,
                 }),
             )
         }
