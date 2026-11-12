@@ -24,7 +24,7 @@ ColumnLayout {
             delegate: Kirigami.Chip {
                 required property string modelData
 
-                text: modelData
+                text: Labels.tag(modelData)
                 closable: true
                 checkable: false
                 onRemoved: App.act("SetTags", [[extras.host.uid], [], [modelData]], "Library1")

@@ -53,7 +53,7 @@ ColumnLayout {
     }
 
     QQC2.Switch {
-        text: App.tr("Compare LaMa with the simple fill")
+        text: App.tr("Compare the smart fill (LaMa) with the simple fill")
         enabled: compare.page.layerPick >= 0 && compare.survey.lama === true
         checked: compare.page.splitOn
         onToggled: {
@@ -65,14 +65,14 @@ ColumnLayout {
     QQC2.Label {
         Layout.fillWidth: true
         visible: compare.survey.lama === false
-        text: App.tr("LaMa is not installed, so there is nothing to compare. Download it in the settings.")
+        text: App.tr("The smart fill (LaMa) is not installed, so there is nothing to compare. Download it in the settings.")
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
     }
 
     EditSlider {
         visible: compare.page.splitOn
-        text: App.tr("Where LaMa ends")
+        text: App.tr("Where the smart fill ends")
         from: 0.02
         to: 0.98
         value: compare.page.splitAt

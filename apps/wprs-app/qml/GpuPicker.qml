@@ -13,14 +13,14 @@ ColumnLayout {
             "integrated": App.tr("integrated"),
             "dedicated": App.tr("dedicated"),
             "virtual": App.tr("virtual"),
-            "software": App.tr("software"),
+            "software": App.tr("drawn by the processor, slow"),
             "other": App.tr("other kind")
         })
     readonly property var words: ({
             "auto": App.tr("Automatic, the one that saves the most power"),
             "integrated": App.tr("Any integrated card"),
             "dedicated": App.tr("Any dedicated card"),
-            "software": App.tr("Software rendering, for tests")
+            "software": App.tr("Drawn by the processor instead of a graphics card, for tests")
         })
     readonly property var choices: {
         const found = [{
@@ -80,7 +80,7 @@ ColumnLayout {
     QQC2.Label {
         Layout.maximumWidth: Kirigami.Units.gridUnit * 30
         wrapMode: Text.Wrap
-        text: [App.tr("A dedicated card draws heavy scenes at a higher quality and uses more power."), picker.adapters.filter(a => a.used).map(a => App.tr("In use: %1 (%2).", a.name, picker.backend(a.backend))).join(" ")].filter(t => t).join(" ")
+        text: [App.tr("A dedicated card draws heavy scenes at a higher quality and uses more power."), App.tr("Vulkan and OpenGL ES are the two ways the program talks to the card; the automatic choice is almost always the right one."), picker.adapters.filter(a => a.used).map(a => App.tr("In use: %1 (%2).", a.name, picker.backend(a.backend))).join(" ")].filter(t => t).join(" ")
     }
 
     QQC2.Label {

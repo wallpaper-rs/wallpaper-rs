@@ -28,7 +28,7 @@ QtObject {
         };
         const quality = info.quality_pace > 1 ? daemon.tr("Quality %1 of 3 at %2 frames a second", info.quality.slice(1), info.fps) : daemon.tr("Quality %1 of 3", info.quality.slice(1));
         const tier = String(state?.tier ?? "").slice(1);
-        const card = !tier ? "" : state.tier_measured ? daemon.tr("graphics card class %1 of 3, measured", tier) : daemon.tr("graphics card class %1 of 3, from its model", tier);
+        const card = !tier ? "" : state.tier_measured ? daemon.tr("graphics card power %1 of 3 (3 is the strongest), measured on this computer", tier) : daemon.tr("graphics card power %1 of 3 (3 is the strongest), estimated from its model", tier);
         return [[reasons[info.quality_reason] ? quality + ": " + reasons[info.quality_reason] : quality, card].filter(t => t).join(" · "), timing(info)].filter(t => t).join("\n");
     }
 

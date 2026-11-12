@@ -32,6 +32,6 @@ ColumnLayout {
         wrapMode: Text.Wrap
         textFormat: Text.PlainText
         font: Kirigami.Theme.smallFont
-        text: picker.daemon.tr("Applies to phones and to wprs-ctl scene bench; this computer keeps its own controller, so nothing changes here. With the automatic quality, a heavy scene may run at half the frame rate (never below 30) to keep a higher level.")
+        text: picker.daemon.tr("Applies to phones and to the performance measurements made on a scene; this computer keeps its own controller, so nothing changes here. With the automatic quality, a heavy scene may run at half the frame rate (never below 30) to keep a higher level.")
     }
 }

@@ -31,13 +31,13 @@ ColumnLayout {
         QQC2.Label {
             Layout.fillWidth: true
             Layout.maximumWidth: Kirigami.Units.gridUnit * 28
-            text: note.lama ? App.tr("LaMa is not installed, so pictures use the simple fill. It is downloaded once from %1 (%2, license %3), checked against its SHA-256 and runs on this computer; computing the layers of a picture takes a few minutes.", note.lama.hosts, note.lama.size, note.lama.license) : ""
+            text: note.lama ? App.tr("The smart fill (LaMa) is not installed, so pictures use the simple fill. It is downloaded once from %1 (%2, license %3), checked against its SHA-256 and runs on this computer; computing the layers of a picture takes a few minutes.", note.lama.hosts, note.lama.size, note.lama.license) : ""
             wrapMode: Text.Wrap
         }
 
         RowLayout {
             QQC2.Button {
-                text: App.tr("Download LaMa")
+                text: App.tr("Download the smart fill (LaMa)")
                 icon.name: "download"
                 enabled: maps.allowed && !maps.busy
                 onClicked: maps.fetchLama()
@@ -54,14 +54,14 @@ ColumnLayout {
         visible: note.lama !== undefined && note.lama.installed
 
         QQC2.Button {
-            text: App.tr("Check LaMa")
+            text: App.tr("Check the smart fill (LaMa)")
             icon.name: "dialog-ok-apply"
             enabled: !maps.busy
             onClicked: maps.verifyLama()
         }
 
         QQC2.Button {
-            text: App.tr("Remove LaMa")
+            text: App.tr("Remove the smart fill (LaMa)")
             icon.name: "edit-delete"
             enabled: !maps.busy
             onClicked: maps.removeLama()
@@ -69,7 +69,7 @@ ColumnLayout {
 
         QQC2.Label {
             visible: maps.note === "verified"
-            text: App.tr("LaMa is whole")
+            text: App.tr("The smart fill (LaMa) is whole")
         }
     }
 

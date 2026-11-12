@@ -78,6 +78,10 @@ QtObject {
         return fields[key] ?? WallhavenWords.fields[key] ?? key;
     }
 
+    function tag(name) {
+        return LabelTags.words[String(name).toLowerCase()] ?? String(name);
+    }
+
     function value(text) {
         return LabelWords.values[text] ?? WallhavenWords.values[text] ?? String(text ?? "");
     }

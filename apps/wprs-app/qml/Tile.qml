@@ -49,7 +49,7 @@ QQC2.ItemDelegate {
 
         visible: tile.hovered
         delay: Kirigami.Units.toolTipDelay
-        text: [tile.title, tile.info, tile.tags, tile.broken, tile.revoked ? Labels.value(tile.revoked) : "", tile.veiled ? App.tr("Mature content: open the details to show it") : "", tile.flashing ? App.tr("Flashes or shows fast patterns; playlists skip it until you allow it in its details") : ""].filter(t => t).join("\n")
+        text: [tile.title, tile.info, tile.tags.split(", ").map(Labels.tag).join(", "), tile.broken, tile.revoked ? Labels.value(tile.revoked) : "", tile.veiled ? App.tr("Mature content: open the details to show it") : "", tile.flashing ? App.tr("Flashes or shows fast patterns; playlists skip it until you allow it in its details") : ""].filter(t => t).join("\n")
 
         contentItem: QQC2.Label {
             text: tip.text

@@ -74,7 +74,7 @@ ColumnLayout {
             delegate: Kirigami.Chip {
                 required property var modelData
 
-                text: modelData.name + " (" + modelData.count + ")"
+                text: Labels.tag(modelData.name) + " (" + modelData.count + ")"
                 checkable: true
                 closable: false
                 checked: filters.tag === modelData.name

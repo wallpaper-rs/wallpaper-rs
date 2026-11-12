@@ -84,7 +84,7 @@ Kirigami.ScrollablePage {
             }
 
             HdrPicker {
-                Kirigami.FormData.label: App.tr("HDR:")
+                Kirigami.FormData.label: App.tr("HDR (extra bright colors):")
                 daemon: App
             }
 

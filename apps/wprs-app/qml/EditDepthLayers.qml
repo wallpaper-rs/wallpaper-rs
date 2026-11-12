@@ -71,7 +71,7 @@ Item {
             anchors.top: parent.top
             anchors.margins: Kirigami.Units.smallSpacing
             visible: layers.split
-            text: App.tr("LaMa")
+            text: App.tr("Smart fill (LaMa)")
             color: Kirigami.Theme.highlightedTextColor
             background: Rectangle {
                 color: Kirigami.Theme.highlightColor
