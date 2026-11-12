@@ -8,7 +8,7 @@ ColumnLayout {
 
     required property var input
     readonly property int channels: input.field.sample?.channels ?? 1
-    readonly property bool combing: input.field.sample?.tool === "direction"
+    readonly property bool combing: input.field.sample?.tool === "flow"
     readonly property bool painting: input.page.brush?.pointer === input.field.pointer
     readonly property var options: [null].concat(input.field.options.filter(option => typeof option === "string"))
 

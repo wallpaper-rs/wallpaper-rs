@@ -11,8 +11,7 @@ mod tools;
 pub use defs::{Cost, Output, ParamDef, PassDef, State, Tune};
 pub use handles::{Grab, Hold};
 pub use parts::{
-    Entry, Fuse, MaskMode, Pace, ParamKind, PassBlend, RenderTarget, Solve, Stage, Texel, Tool, Unit, Use,
-    Variant,
+    Entry, Fuse, MaskMode, Pace, ParamKind, PassBlend, RenderTarget, Solve, Stage, Texel, Unit, Use, Variant,
 };
 pub use tools::Tool;
 

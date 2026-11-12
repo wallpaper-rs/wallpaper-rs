@@ -16,6 +16,9 @@ impl ParamDef {
         if !self.tools.is_empty() {
             return self.tools.clone();
         }
+        if let Some(tool) = self.tool {
+            return vec![tool];
+        }
         match (self.kind, self.id.as_str()) {
             (ParamKind::Lut, _) => vec![Tool::Table],
             (ParamKind::Texture, "gradient" | "ramp") => vec![Tool::Ramp],
