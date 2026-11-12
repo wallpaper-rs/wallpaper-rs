@@ -42,7 +42,7 @@ pub fn overlay(places: &Places, target: &Target, colour: bool) -> Result<RgbaIma
 }
 
 pub fn outline(places: &Places, target: &Target, cuts: &[f32]) -> Result<RgbaImage> {
-    Ok(outlines(&target.map(places, OUTLINE_EDGE)?, cuts))
+    Ok(outlines(&target.map(places, OUTLINE_EDGE)?, &target.depth(), cuts))
 }
 
 pub fn survey(places: &Places, target: &Target) -> Result<String> {
@@ -58,12 +58,15 @@ pub fn survey(places: &Places, target: &Target) -> Result<String> {
     let cuts = cuts.or_else(|| Some(current.as_ref()?.info.cuts.clone()));
     let cuts = cuts.unwrap_or_else(|| split(&levels, set.count.clamp(1, 6)).cuts);
     let bands = current.as_ref().map(|l| l.info.bands.iter().map(|b| b.pixels).collect::<Vec<_>>());
+    let still = places.still((&target.image, &target.sha), &target.edit, &set);
+    let regions = current.as_ref().map_or(0, |l| l.info.regions);
     Ok(json!({
         "histogram": histogram(&map, BINS), "cuts": cuts, "manual": depth.cuts.is_some(),
         "fill": set.fill.as_str(), "built": current.is_some(), "bands": bands.unwrap_or_default(),
         "sets": {"lama": built(Fill::Lama).is_some(), "simple": built(Fill::Simple).is_some()},
         "lama": places.fill(Fill::Lama) == Fill::Lama,
-        "strokes": depth.strokes.len(), "marks": depth.fills.len()
+        "strokes": depth.strokes.len(), "marks": depth.fills.len(), "regions": regions,
+        "still": still.map(|s| s.message().local()).unwrap_or_default()
     })
     .to_string())
 }

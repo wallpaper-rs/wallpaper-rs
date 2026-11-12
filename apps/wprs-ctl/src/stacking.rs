@@ -99,15 +99,22 @@ pub fn make(args: Make) -> Result<()> {
     }
     if args.list {
         for path in places.layers_of(&sha) {
-            let info = load(&path)?.map(|l| l.info);
-            let (fill, count) = info.map_or((String::new(), 0), |i| (i.fill, i.depths.len()));
-            println!("{}  {count} layers, fill {fill}", path.display());
+            let Some(i) = load(&path)?.map(|l| l.info) else { continue };
+            let (count, regions, most) = (i.depths.len(), i.regions, i.reach.shift);
+            let moves = if i.reach.moves(i.size[0]) { "moves" } else { "stays still" };
+            println!(
+                "{}  {count} layers from {regions} regions, fill {}, {}x{}, safe shift {most:.4}, {moves}",
+                path.display(),
+                i.fill,
+                i.size[0],
+                i.size[1]
+            );
         }
         return Ok(());
     }
     let config = Config::default_path().and_then(|p| Config::load(&p)).unwrap_or_default().parallax;
     let wanted = args.fill.as_deref().map_or(Ok(config.fill), Fill::parse).map_err(usage)?;
-    ensure!(wanted != Fill::Off, "the fill off builds no layers: pictures keep the single image warp");
+    ensure!(wanted != Fill::Off, "the fill off builds no layers: pictures stay still");
     let mut set = settings(&places, &edit, Some(wanted));
     if set.fill != wanted {
         eprintln!("LaMa or ONNX Runtime is not installed: using the simple fill (see wprs-ctl models list)");
@@ -125,6 +132,9 @@ pub fn make(args: Make) -> Result<()> {
     let sets = (&depth, &set);
     let made = places.ensure_layers((&args.path, &sha), sets, (device, args.force), &mut progress, &stop)?;
     println!("{}", made.display());
+    if let Some(still) = places.still((&args.path, &sha), &edit, &set) {
+        println!("{}", still.message().local());
+    }
     Ok(())
 }
 

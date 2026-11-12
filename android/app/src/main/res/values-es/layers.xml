@@ -4,13 +4,19 @@
     <string name="fill_simple">Simple</string>
     <string name="fill_lama">LaMa</string>
     <string name="fill_off">Apagado</string>
-    <string name="fill_note">El paralaje de profundidad rellena lo que descubre un objeto cercano. LaMa lo rellena mejor pero gasta más batería y memoria, tarda minutos por imagen y nunca funciona con el ahorro de batería, que usa el relleno simple. Apagado deja la deformación de una sola imagen.</string>
+    <string name="fill_note">El paralaje de profundidad rellena lo que descubre un objeto cercano. LaMa lo rellena mejor pero gasta más batería y memoria, tarda minutos por imagen y nunca funciona con el ahorro de batería, que usa el relleno simple. Apagado deja la imagen quieta.</string>
     <string name="lama_missing">LaMa no está instalado: se usa el relleno simple hasta que lo descargues.</string>
     <string name="download_lama">Descargar LaMa</string>
     <string name="delete_lama">Borrar LaMa</string>
     <string name="lama_model">Modelo LaMa (%s)</string>
     <string name="lama_terms">%1$s (%2$s) se descarga de %3$s con la licencia %4$s (%5$s). Después funciona en el teléfono y tus fotos no salen de él.</string>
     <string name="layers_ready">Capas de profundidad listas: lo que descubre un objeto cercano muestra fondo rellenado</string>
-    <string name="layers_none">Todavía no hay capas de profundidad: la imagen se mueve como una sola</string>
+    <string name="layers_none">Todavía no hay capas de profundidad: la imagen queda quieta hasta que estén listas</string>
     <string name="make_layers">Construir las capas de profundidad</string>
+    <string name="still_no_map">La imagen queda quieta: todavía no tiene mapa de profundidad.</string>
+    <string name="still_fill_off">La imagen queda quieta: el relleno del paralaje está apagado.</string>
+    <string name="still_edited">La imagen queda quieta: sus operaciones de color no se dibujan en las capas de profundidad.</string>
+    <string name="still_building">La imagen queda quieta hasta que estén listas sus capas de profundidad.</string>
+    <string name="still_failed">La imagen queda quieta: no se pudieron construir sus capas de profundidad.</string>
+    <string name="still_flat">La imagen queda quieta: su profundidad no permite moverla sin estirarla.</string>
 </resources>

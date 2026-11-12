@@ -2,6 +2,16 @@ use super::ask;
 use crate::{choice, depth, framing, library, power, store, tilt};
 use serde_json::{Value, json};
 
+fn layered(image: &std::path::Path) {
+    let sha = depth::edited(image).unwrap().source.sha256;
+    let info =
+        wprs_depth::Info { format: 2, size: [2, 2], field: [1, 1], depths: vec![0.5], ..Default::default() };
+    let (images, fields) = (vec![image::RgbaImage::new(2, 2)], vec![wprs_depth::Map::new(1, 1)]);
+    let path =
+        depth::places().unwrap().cache.join("depth").join(format!("{sha}-0123456789abcdef.layers.png"));
+    wprs_depth::save(&path, &wprs_depth::Layers { info, images, fields }).unwrap();
+}
+
 pub(super) fn framing(green: &str, bands: &str) {
     let deep = |request: Value| serde_json::from_str::<Value>(&depth::request(&request.to_string())).unwrap();
     let image = |uid: &str| library::with(|lib| Ok(lib.item(uid)?.path)).unwrap();
@@ -15,6 +25,9 @@ pub(super) fn framing(green: &str, bands: &str) {
         (&json!(0.02f32), &Value::Null, &Value::Null, &Value::Null, &Value::Null)
     );
     assert_eq!(deep(json!({ "op": "parallax", "uid": green, "on": true })), Value::Null);
+    assert_eq!(wanted(), [false, false], "a picture without depth layers stays still");
+    assert_eq!(deep(json!({ "op": "item", "uid": green }))["still"], json!("no_map"));
+    layered(&image(green));
     assert_eq!(wanted(), [true, true]);
     let saved = depth::loaded(&image(green)).unwrap().parallax.unwrap();
     assert_eq!(saved.source, wprs_core::edit::Motion::Auto, "the phone leaves the source to each device");

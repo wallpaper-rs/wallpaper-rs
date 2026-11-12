@@ -96,7 +96,8 @@ pub(super) fn answer(request: Request) -> Result<Value, Error> {
             let edit = loaded(&image)?;
             let p = edit.parallax.clone().unwrap_or_default();
             let levels = edit.depth.clone().unwrap_or_default();
-            json!({ "parallax": edit.moving().is_some(), "map": found(&image, &edit).is_some(),
+            let still = super::layers::still(&image, &edited(&image)?).map(|s| s.word());
+            json!({ "parallax": edit.moving().is_some(), "still": still, "map": found(&image, &edit).is_some(),
                 "near": levels.near, "far": levels.far, "gamma": levels.gamma, "smooth": levels.smooth, "dilate": levels.dilate,
                 "strength": p.strength, "focus": p.focus, "layers": super::layers::path(&image, &edit).is_some(),
                 "fill": super::layers::shown(), "fit": edit.fit, "base": edit.geometry.crop,

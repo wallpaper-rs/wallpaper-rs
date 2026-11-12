@@ -70,15 +70,12 @@ pub(super) fn develop(
             .as_ref()
             .and_then(|d| d.deck.as_ref())
             .filter(|_| !edit.is_some_and(Edit::operates));
-        let relief = match (moving, depth) {
-            (Some(parallax), Some(map)) if !uv.repeat => {
-                let stack = deck.and_then(|d| {
-                    let set = &d.layers;
-                    let made = renderer.upload_layers(&set.images, &set.info.depths);
-                    made.inspect_err(|e| tracing::warn!(output, "cannot show the layers: {e}")).ok()
-                });
-                let depth = stack.map_or_else(|| renderer.upload_depth(map, edit), Ok)?;
-                Some((depth, parallax.clone()))
+        let relief = match (moving, deck) {
+            (Some(parallax), Some(deck)) if !uv.repeat => {
+                let set = &deck.layers;
+                let made = renderer.upload_layers(&set.images, &set.fields, &set.info.depths);
+                let made = made.inspect_err(|e| tracing::warn!(output, "cannot show the layers: {e}")).ok();
+                made.map(|stack| (stack, parallax.clone(), set.info.reach))
             }
             _ => None,
         };
@@ -106,7 +103,8 @@ impl Pictures {
             None => renderer.upload_size(dims, uv, size),
         };
         let found = self.find(&look(picture), need)?;
-        let raised = edit.and_then(Edit::moving).is_some() && picture.depth.is_some() && !uv.repeat;
+        let decked = picture.depth.as_ref().is_some_and(|d| d.deck.is_some());
+        let raised = edit.and_then(Edit::moving).is_some() && decked && !uv.repeat;
         if raised && found.relief.is_none() {
             return None;
         }

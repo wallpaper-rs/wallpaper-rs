@@ -28,6 +28,14 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 private val STILL = mapOf("saver" to R.string.still_saver, "battery" to R.string.still_battery, "heat" to R.string.still_heat)
+private val UNMOVED = mapOf(
+    "no_map" to R.string.still_no_map,
+    "fill_off" to R.string.still_fill_off,
+    "edited" to R.string.still_edited,
+    "building" to R.string.still_building,
+    "failed" to R.string.still_failed,
+    "flat" to R.string.still_flat,
+)
 
 @Composable
 fun Relief(main: Main, uid: String, state: JSONObject) {
@@ -65,6 +73,7 @@ fun Relief(main: Main, uid: String, state: JSONObject) {
     Note(stringResource(map))
     if (moving && state.optBoolean("map")) {
         Note(stringResource(if (state.optBoolean("layers")) R.string.layers_ready else R.string.layers_none))
+        UNMOVED[state.optString("still")]?.let { Note(stringResource(it), MaterialTheme.colorScheme.error) }
         if (state.optJSONObject("fill")?.optString("used")?.isNotEmpty() == true) {
             TextButton({ Depth.layers(uid) }, Modifier.padding(horizontal = 8.dp), enabled = busy == null) {
                 Text(stringResource(R.string.make_layers))

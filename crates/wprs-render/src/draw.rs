@@ -102,7 +102,6 @@ impl Renderer {
         visible().enumerate().for_each(|(i, layer)| self.bind(slots, i, layer, size));
         slots.truncate(visible().count());
         let flat = self.layers.get(&self.device, format);
-        let deep = slots.iter().any(Slot::deep).then(|| self.reliefs().get(&self.device, format));
         let deck = slots.iter().any(Slot::decked).then(|| self.decks().get(&self.device, format));
         let mut encoder = self.device.create_command_encoder(&Default::default());
         let clip = clip.map(|c| c.within(size)).filter(|c| !c.covers(size));
@@ -123,7 +122,7 @@ impl Renderer {
         }
         for (i, (slot, layer)) in slots.iter().zip(visible()).enumerate() {
             let fading = i > 0 && layer.opacity < 1.0;
-            let chosen = if slot.decked() { deck.as_ref() } else { deep.as_ref().filter(|_| slot.deep()) };
+            let chosen = deck.as_ref().filter(|_| slot.decked());
             let [opaque, blended] = chosen.unwrap_or(&flat);
             pass.set_pipeline(if fading { blended } else { opaque });
             if fading {
