@@ -2,7 +2,7 @@ use super::*;
 
 const TOOLED: &str = "blend_gradient map gray; color_lut lut table; depth_parallax depth gray depth;
     displace map gray flow; fire gradient ramp; flow map gray flow; flow phase gray; fluid gradient ramp;
-    light_shafts gradient ramp; pulse phase gray; shake phase gray; shine gradient ramp; sway phase gray;
+    light_shafts gradient ramp; pulse phase gray; shake flow flow; shake phase gray; shine gradient ramp; sway phase gray;
     tilt_shift depth gray depth; water_ripple reflection gray; water_ripple walls gray; waves phase gray";
 
 #[test]

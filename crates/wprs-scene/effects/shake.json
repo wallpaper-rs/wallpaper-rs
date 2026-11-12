@@ -11,8 +11,8 @@
     { "id": "noise", "type": "float", "default": 0, "min": 0, "max": 1 },
     { "id": "friction", "type": "float", "default": 0, "min": 0, "max": 1 },
     { "id": "bounds", "type": "vec2", "default": [1, 1], "min": 0, "max": 1 },
-    { "id": "phase", "type": "texture", "default": "", "tool": "gray" },
-    { "id": "flow", "type": "texture", "default": "", "tool": "flow", "paint": "#808000" },
+    { "id": "phase", "type": "texture", "tools": ["gray"], "default": "", "tool": "gray" },
+    { "id": "flow", "type": "texture", "tools": ["flow"], "default": "", "tool": "flow", "paint": "#808000" },
     {
       "id": "motion",
       "type": "enum",
