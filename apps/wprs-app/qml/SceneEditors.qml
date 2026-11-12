@@ -143,47 +143,7 @@ Item {
 
     Component {
         id: listEditor
-
-        RowLayout {
-            id: items
-
-            readonly property var owner: input.field.key === "effects" ? (input.page.view.layers ?? []).find(layer => layer.pointer === input.field.pointer.replace(/\/effects$/, "")) : undefined
-
-            QQC2.Label {
-                Layout.fillWidth: true
-                text: (input.value ?? []).length === 1 ? App.tr("1 item") : App.tr("%1 items", (input.value ?? []).length)
-            }
-
-            QQC2.Button {
-                icon.name: "list-add"
-                text: App.tr("Add")
-                onClicked: items.owner ? picker.open() : input.page.run(input.field.set ? "add" : "set", {
-                    "pointer": input.field.pointer + (input.field.set ? "/-" : ""),
-                    "value": input.field.set ? input.field.sample : [input.field.sample]
-                })
-            }
-
-            SceneEffectCatalog {
-                id: picker
-
-                inspector: ({
-                        "page": input.page,
-                        "addEffect": id => input.page.run("effects", {
-                                "add": {
-                                    "layer": items.owner.id,
-                                    "effect": id
-                                }
-                            })
-                    })
-            }
-
-            QQC2.ComboBox {
-                model: (input.value ?? []).map((_, i) => App.tr("Item %1", i + 1))
-                displayText: App.tr("Edit…")
-                enabled: count > 0
-                onActivated: index => input.page.editor.select(input.field.pointer + "/" + index)
-            }
-        }
+        SceneListEditor { input: host.input }
     }
 
     Component {
