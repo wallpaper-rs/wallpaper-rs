@@ -19,6 +19,9 @@ pub fn depth(doc: &Value, q: &Value) -> Value {
     let particles = found["type"] == "particles";
     let why = particles.then(|| wprs_scene::particle_plane(&scene, layer)).flatten();
     let way = if particles && why.is_none() { "one_by_one" } else { "plane" };
+    let system = found["system"].as_str().map(|s| &doc["scene"]["particles"][s]["render"]);
+    let refracts = found["render"].get("refract").or_else(|| system?.get("refract")).is_some();
+    let caveat = (particles && refracts && why.is_none()).then_some("refract_edges");
     json!({ "layer": id, "inside": inside(doc, &pointer), "depth_test": found["depth_test"] == true,
-        "particles": particles, "way": way, "reason": why, "lowest": "plane" })
+        "particles": particles, "way": way, "reason": why, "caveat": caveat, "lowest": "plane" })
 }

@@ -18,7 +18,6 @@ ColumnLayout {
     property var way: null
     readonly property var reasons: ({
             "perspective": App.tr("its particle system has no perspective"),
-            "refract": App.tr("its particles bend what lies behind them"),
             "trail": App.tr("its particles draw trails"),
             "rope": App.tr("its particles draw ropes"),
             "children": App.tr("a child system is drawn that way or has children of its own")
@@ -70,6 +69,14 @@ ColumnLayout {
                 "on": checked
             }
         })
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: !toggle.group && toggle.way?.caveat === "refract_edges" && toggle.way.depth_test
+        wrapMode: Text.WordWrap
+        opacity: 0.8
+        text: App.tr("Their bending hides behind nearer models too, but next to such a model it can still pull in a few of its pixels, since the picture it bends holds no depth.")
     }
 
     QQC2.Label {

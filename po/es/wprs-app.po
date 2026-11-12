@@ -17172,9 +17172,6 @@ msgstr "su sistema de partículas no tiene perspectiva"
 
 
 
-#: apps/wprs-app/qml/SceneDepthToggle.qml
-msgid "its particles bend what lies behind them"
-msgstr "sus partículas doblan lo que hay detrás"
 
 
 #: apps/wprs-app/qml/SceneDepthToggle.qml
@@ -17200,3 +17197,13 @@ msgstr ""
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid "The whole layer hides as one plane, because %1."
 msgstr "Toda la capa se oculta como un solo plano, porque %1."
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid ""
+"Their bending hides behind nearer models too, but next to such a model it "
+"can still pull in a few of its pixels, since the picture it bends holds no "
+"depth."
+msgstr ""
+"Su desvío también se oculta tras los modelos más cercanos, pero junto a uno "
+"de ellos aún puede arrastrar algunos de sus píxeles, porque la imagen que "
+"desvía no guarda profundidad."

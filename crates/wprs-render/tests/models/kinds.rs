@@ -83,3 +83,53 @@ fn particles_with_a_shader_of_their_own_in_a_3d_group_hide_one_by_one() {
     assert!(near(shown[1], [255, 0, 0], 8), "a farther particle hides: {shown:?}");
     assert!(near(shown[2], [255, 0, 0], 8), "the lowest quality keeps the plane: {shown:?}");
 }
+
+fn bent(r: &Renderer, depth: Option<f32>) -> Vec<u8> {
+    let stripes =
+        RgbaImage::from_fn(16, 16, |x, _| Rgba(if x % 4 < 2 { [0, 255, 0, 255] } else { [0, 0, 255, 255] }));
+    let bump = RgbaImage::from_pixel(4, 4, Rgba([255, 128, 255, 255]));
+    let images = [("stripes", Pixels::new(stripes)), ("bump", Pixels::new(bump))];
+    let back = json!({ "id": "back", "type": "image", "image": "stripes", "size": [SIDE, SIDE],
+        "transform": { "position": [32, 32] }, "depth_test": true });
+    let mut layers = group(json!({ "id": "p", "type": "particles", "system": "s", "depth_test": true,
+        "visible": depth.is_some() }));
+    layers[0]["layers"].as_array_mut().unwrap().insert(0, back);
+    let mut extra = sparks(depth.unwrap_or(0.0), json!({ "refract": { "normal": "bump", "amount": 1 } }));
+    extra["particles"]["s"]["init"]["size"] = json!([80, 80]);
+    extra["assets"] =
+        json!({ "stripes": { "path": "stripes.png" }, "bump": { "path": "bump.png", "linear": true } });
+    let mut shot = shoot(r, scene(extra, layers, red()), &images);
+    (0..3).map(|_| shot.frame(r, 0.05, Quality::Q3)).last().unwrap()
+}
+
+#[test]
+fn refracting_particles_in_a_3d_group_bend_only_what_they_are_in_front_of() {
+    let Some(r) = renderer() else { return };
+    let plain = bent(r, None);
+    let reds: Vec<u32> = (0..SIDE).filter(|x| near(rgb(&plain, *x, 32), [255, 0, 0], 8)).collect();
+    let (Some(&left), Some(&right)) = (reds.first(), reds.last()) else { panic!("the cube shows") };
+    assert!(right > left + 6 && right < SIDE - 6, "{left} {right}");
+    let (front, behind) = (bent(r, Some(-50.0)), bent(r, Some(50.0)));
+    let inside = right - 2;
+    assert!(
+        !near(rgb(&front, inside, 32), [255, 0, 0], 40),
+        "a nearer particle bends the cube: {:?}",
+        rgb(&front, inside, 32)
+    );
+    assert!(
+        near(rgb(&behind, inside, 32), [255, 0, 0], 8),
+        "a farther one leaves it: {:?}",
+        rgb(&behind, inside, 32)
+    );
+    let moved = |px: &[u8]| (right + 2..SIDE - 2).any(|x| rgb(px, x, 32) != rgb(&plain, x, 32));
+    let row = |px: &[u8]| {
+        (0..SIDE).map(|x| rgb(px, x, 32)[2] / 128 + 2 * (rgb(px, x, 32)[0] / 128)).collect::<Vec<_>>()
+    };
+    assert!(
+        moved(&front) && moved(&behind),
+        "both bend the stripes beside the cube: {left} {right}\n{:?}\n{:?}\n{:?}",
+        row(&plain),
+        row(&front),
+        row(&behind)
+    );
+}

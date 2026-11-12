@@ -22,7 +22,6 @@ fn loose(cx: &Context, d: &Draw) -> bool {
 
 fn drawn_as(r: &crate::Render) -> Option<&'static str> {
     match () {
-        _ if r.refract.is_some() => Some("refract"),
         _ if r.trail.is_some() => Some("trail"),
         _ if r.rope.is_some() => Some("rope"),
         _ => None,
