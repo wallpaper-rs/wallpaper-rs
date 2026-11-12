@@ -1,6 +1,7 @@
 use wgpu::TextureFormat as Format;
 use wprs_scene::VERTEX_FLOATS;
 
+mod atlas;
 mod cast;
 mod make;
 mod mipped;
@@ -9,6 +10,8 @@ mod sharp;
 mod size;
 #[cfg(test)]
 mod steady;
+#[cfg(test)]
+mod stitched;
 mod wave;
 #[cfg(test)]
 mod waved;

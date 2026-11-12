@@ -108,3 +108,23 @@ fn meshes_are_capped_in_vertices_bones_and_parts() {
     gl.doc["meshes"] = json!([{ "primitives": [{ "attributes": { "POSITION": one } }] }]);
     assert!(refused(&gl).contains("bones and parts"), "{}", refused(&gl));
 }
+
+#[test]
+fn every_picture_its_parts_name_is_kept_with_the_part_that_shows_it() {
+    let mut gl = arm();
+    let first = gl.indices(&[1, 2, 3]);
+    let second = gl.indices(&[4, 5, 6, 7]);
+    let view = |gl: &Gl, a: usize| gl.doc["accessors"][a]["bufferView"].clone();
+    gl.doc["images"] = json!([{ "bufferView": view(&gl, first) }, { "bufferView": view(&gl, second) }]);
+    gl.doc["textures"] = json!([{ "source": 1 }, { "source": 0 }]);
+    gl.doc["materials"] = json!([{ "pbrMetallicRoughness": { "baseColorTexture": { "index": 0 } } },
+        { "pbrMetallicRoughness": { "baseColorTexture": { "index": 1 } } }]);
+    gl.doc["meshes"][0]["primitives"][0]["material"] = json!(0);
+    gl.doc["meshes"][1]["primitives"][0]["material"] = json!(1);
+    let rig = Rigged::decode(&gl.bytes()).unwrap();
+    assert_eq!((rig.pictures.len(), rig.sheets.clone()), (2, vec![0, 1]));
+    assert_eq!(rig.pictures[1].len(), 12);
+    gl.doc["meshes"][1]["primitives"][0]["material"] = json!(0);
+    let rig = Rigged::decode(&gl.bytes()).unwrap();
+    assert_eq!((rig.pictures.len(), rig.sheets), (1, vec![0, 0]));
+}

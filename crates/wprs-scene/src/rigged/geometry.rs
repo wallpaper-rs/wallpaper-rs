@@ -177,10 +177,3 @@ pub(crate) fn triangles(list: &[u32], mode: u32, base: u32, out: &mut Vec<u32>) 
     }
     Ok(())
 }
-
-pub(crate) fn picture(bin: &Bin) -> Option<Vec<u8>> {
-    let doc = bin.doc;
-    let chosen = doc.materials.iter().find_map(|m| m.pbr.as_ref()?.texture.as_ref()).map(|t| t.index);
-    let image = chosen.and_then(|t| doc.textures.get(t)?.source).or((!doc.images.is_empty()).then_some(0))?;
-    Some(bin.view(doc.images.get(image)?.view?).ok()?.to_vec())
-}

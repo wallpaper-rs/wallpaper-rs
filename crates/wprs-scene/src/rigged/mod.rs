@@ -7,6 +7,7 @@ pub(crate) mod maps;
 pub mod math;
 pub(crate) mod motion;
 pub(crate) mod read;
+mod sheets;
 mod sketch;
 mod stack;
 mod write;
@@ -63,7 +64,8 @@ pub struct Rigged {
     pub shapes: Vec<String>,
     pub defaults: Vec<f32>,
     pub motions: Vec<Motion>,
-    pub picture: Option<Vec<u8>>,
+    pub pictures: Vec<Vec<u8>>,
+    pub sheets: Vec<u16>,
     pub stack: Vec<Vec<(u16, [f32; 4])>>,
     pub swells: Vec<Vec<(u16, u16, [f32; 3])>>,
     pub digest: u64,
@@ -85,7 +87,7 @@ impl Rigged {
         geometry::pieces(&bin, &mut rig)?;
         motion::motions(&bin, &mut rig)?;
         (rig.stack, rig.swells) = (stack::stack(&rig), stack::swells(&rig));
-        rig.picture = geometry::picture(&bin);
+        sheets::sheets(&bin, &mut rig);
         Ok(rig)
     }
 

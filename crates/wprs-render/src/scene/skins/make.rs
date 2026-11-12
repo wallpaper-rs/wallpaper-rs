@@ -16,16 +16,22 @@ pub(crate) struct Skin {
     pub(crate) pieces: wgpu::Buffer,
     pub(crate) morphs: wgpu::TextureView,
     pub(crate) own: Option<GpuImage>,
+    pub(crate) atlased: bool,
     pub(crate) group: Option<(u64, wgpu::BindGroup)>,
     pub(crate) merged: Option<([u64; super::wave::WAVE], wgpu::BindGroup)>,
     pub(crate) scratch: Vec<[f32; 4]>,
 }
 
-fn embedded(r: &Renderer, rig: &Rigged) -> Option<GpuImage> {
-    let reader =
-        image::ImageReader::new(std::io::Cursor::new(rig.picture.as_deref()?)).with_guessed_format().ok()?;
-    let rgba = crate::decode_limited(reader, crate::picture_limits()).ok()?.into_rgba8();
-    r.upload_rgba(rgba.as_raw(), rgba.width(), rgba.height(), rgba.width() * 4).ok()
+fn embedded(r: &Renderer, rig: &Rigged, atlased: bool) -> (Option<GpuImage>, Option<Vec<f32>>) {
+    let mut pictures = super::atlas::pictures(rig);
+    let upload = |p: &image::RgbaImage| r.upload_rgba(p.as_raw(), p.width(), p.height(), p.width() * 4).ok();
+    if !atlased || pictures.len() < 2 {
+        return (pictures.drain(..).next().as_ref().and_then(upload), None);
+    }
+    match super::atlas::pack(pictures, r.max_edge()) {
+        Some(atlas) => (upload(&atlas.rgba), Some(super::atlas::placed(rig, &atlas.rects))),
+        None => (None, None),
+    }
 }
 
 impl Renderer {
@@ -40,13 +46,20 @@ impl Renderer {
         (image, depth.create_view(&Default::default()))
     }
 
-    pub(crate) fn fresh_skin(&self, rig: &Rigged, size: (u32, u32)) -> Result<Skin, RenderError> {
+    pub(crate) fn fresh_skin(
+        &self,
+        rig: &Rigged,
+        size: (u32, u32),
+        atlased: bool,
+    ) -> Result<Skin, RenderError> {
         self.scoped(|| {
             let (image, depth) = self.skin_targets(size);
             let fill = |label, bytes: &[u8], usage| {
                 crate::filled::filled((&self.device, &self.queue), label, bytes, usage)
             };
-            let vertices = fill("wprs-render skin vertices", bytemuck::cast_slice(&rig.vertices), B::VERTEX);
+            let (own, placed) = embedded(self, rig, atlased);
+            let laid = placed.as_deref().unwrap_or(&rig.vertices);
+            let vertices = fill("wprs-render skin vertices", bytemuck::cast_slice(laid), B::VERTEX);
             let indices = fill("wprs-render skin indices", bytemuck::cast_slice(&rig.indices), B::INDEX);
             let zeros = |n: usize| vec![0u8; n * 16];
             let bones = fill("wprs-render skin bones", &zeros(BONES), B::UNIFORM);
@@ -84,7 +97,8 @@ impl Renderer {
                 bones,
                 pieces,
                 morphs: view(&morphs),
-                own: embedded(self, rig),
+                own,
+                atlased,
                 group: None,
                 merged: None,
                 scratch: Vec::with_capacity(PIECES),
