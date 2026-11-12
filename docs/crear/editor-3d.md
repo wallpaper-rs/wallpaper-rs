@@ -204,7 +204,7 @@ Pasos:
 
 1. Elige el foco.
 2. En **Proyecta**, elige una imagen o un vídeo de la escena, o una capa que pueda proyectarse (sin bucle). **Nada** lo apaga.
-3. La vista previa dibuja dentro del cono, con un contorno de trazos, lo que cae sobre el lienzo. Para un vídeo se muestra el fotograma del cabezal.
+3. La vista previa dibuja dentro del cono, con un contorno de trazos, lo que cae sobre el lienzo. Para un vídeo se muestra el fotograma del cabezal. Un grupo, una forma, un espectro o una capa con efectos o máscara se ven tal como los dibuja el motor en el cabezal, recortados a lo que cubren.
 4. Si el haz corre a lo largo del lienzo, la imagen se dibuja hasta el radio de la luz, más tenue, con un aviso.
 
 Solo el punto y el foco, y no el tubo, ofrecen aire; solo el foco proyecta.

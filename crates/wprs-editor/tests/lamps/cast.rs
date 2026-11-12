@@ -74,3 +74,35 @@ fn the_cone_preview_shows_a_projected_layer() {
     assert_eq!((cast["kind"].as_str(), cast["landed"].as_bool()), (Some("layer"), Some(true)));
     assert!(cast["image"].as_str().unwrap().starts_with("data:image/png"), "{cast}");
 }
+
+fn decoded(url: &str) -> image::RgbaImage {
+    use base64::Engine;
+    let data = url.split_once(',').unwrap().1;
+    let bytes = base64::engine::general_purpose::STANDARD.decode(data).unwrap();
+    image::load_from_memory(&bytes).unwrap().into_rgba8()
+}
+
+#[test]
+fn the_cone_preview_shows_the_drawn_picture_of_shapes_and_groups() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    light(&mut p, json!({ "add": { "light": "spot", "id": "s" } })).unwrap();
+    light(&mut p, json!({ "set": { "layer": "s", "tilt": 89, "z": 200 } })).unwrap();
+    let left = json!({ "id": "left", "type": "shape", "shape": { "rect": { "size": [100, 100] } },
+        "fill": "#ff0000", "transform": { "position": [300, 300] } });
+    let right = json!({ "id": "right", "type": "shape", "shape": { "ellipse": { "size": [100, 100] } },
+        "fill": "#0000ff", "transform": { "position": [420, 300] } });
+    let group = json!({ "id": "g", "type": "group", "layers": [left, right] });
+    act(&mut p, json!({ "add": { "pointer": "/scene/layers/-", "value": group } })).unwrap();
+    light(&mut p, json!({ "projection": { "layer": "s", "from": "g" } })).unwrap();
+    let cast = wprs_editor::lamps::cast(&p.dir, &p.doc, "s", 0.0);
+    let Some(url) = cast["image"].as_str() else { panic!("the group shows its picture: {cast}") };
+    let shown = decoded(url);
+    let (w, h) = (shown.width(), shown.height());
+    assert!(w > h + h / 2, "the picture is cut to the drawn group: {w}x{h}");
+    let at = |x: u32| shown.get_pixel(x, h / 2).0;
+    let (red, blue) = (at(w / 8), at(w - w / 8));
+    assert!(red[0] > 150 && red[2] < 80 && red[3] > 200, "{red:?}");
+    assert!(blue[2] > 150 && blue[0] < 80, "{blue:?}");
+    assert!(shown.get_pixel(w - 1, 0).0[3] < 40, "the round corner outside the ellipse stays clear");
+}
