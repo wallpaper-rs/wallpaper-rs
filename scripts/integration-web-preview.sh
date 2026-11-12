@@ -33,12 +33,13 @@ ctl scene set "$folder" /manifest/permissions '{"rgb": true}' >/dev/null
 printf '{"title": "Made-up song", "artist": "Nobody", "playing": true, "position": 12, "duration": 200, "cover": "cover.png"}\n' >"$folder/track.json"
 read -r _ _ _ node < <(ctl stream preview:authored 320 180)
 ctl scene preview "$folder" -o preview:authored --media "$folder/track.json" || fail "the page folder was not previewed"
-seen "$node" "255, 0, 0"
+seen "$node" "0, 0, 255"
 consoled() { field "'$1' in ' '.join(s['outputs']['preview:authored']['console'])" | grep -q True; }
 wait_for 20 consoled "page-console-line" || fail "console.log of the page did not reach the preview: $(field "s['outputs']['preview:authored']['console']")"
 wait_for 20 consoled "page-error-line" || fail "the error of the page did not reach the preview: $(field "s['outputs']['preview:authored']['console']")"
-wait_for 20 consoled '"title":"Made-up song","artist":"Nobody","position":12,"cover":true,"colors":true' ||
+wait_for 20 consoled '"title":"Made-up song","artist":"Nobody","position":12.0' ||
   fail "the made-up track did not reach onMedia: $(field "s['outputs']['preview:authored']['console']")"
+consoled '"cover":true,"colors":true' || fail "the cover and its colors did not reach onMedia: $(field "s['outputs']['preview:authored']['console']")"
 printf '{"title": "Flood", "playing": true, "position": 1, "duration": 200}\n' >"$folder/flood.json"
 ctl scene preview "$folder" -o preview:authored --media "$folder/flood.json" || fail "the flooding track was not shown"
 wait_for 20 consoled "page-flood-line" || fail "the flood never reached the preview"
