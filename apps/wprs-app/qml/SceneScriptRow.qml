@@ -12,8 +12,15 @@ ColumnLayout {
     required property int position
     required property int total
     property bool open: false
+    property real dragged: 0
 
     signal edit(string path)
+
+    function drop(offset) {
+        const to = Math.max(0, Math.min(total - 1, position + Math.round(offset / Math.max(height, 1))));
+        if (to !== position)
+            move(to);
+    }
 
     function move(to) {
         page.run("script", {
@@ -24,10 +31,48 @@ ColumnLayout {
             });
     }
 
+    z: grip.dragging ? 1 : 0
     spacing: 0
+    transform: Translate {
+        y: row.dragged
+    }
 
     RowLayout {
         Layout.fillWidth: true
+
+        Kirigami.Icon {
+            id: grip
+
+            readonly property bool dragging: drag.active
+
+            source: "handle-sort"
+            implicitWidth: Kirigami.Units.iconSizes.small
+            implicitHeight: implicitWidth
+            QQC2.ToolTip.text: App.tr("Drag to change the order")
+            QQC2.ToolTip.visible: grab.hovered
+            HoverHandler {
+                id: grab
+
+                cursorShape: Qt.SizeVerCursor
+            }
+
+            DragHandler {
+                id: drag
+
+                xAxis.enabled: false
+                onTranslationChanged: {
+                    if (active)
+                        row.dragged = translation.y;
+                }
+                onActiveChanged: {
+                    if (!active) {
+                        const offset = row.dragged;
+                        row.dragged = 0;
+                        row.drop(offset);
+                    }
+                }
+            }
+        }
 
         QQC2.ToolButton {
             icon.name: row.open ? "arrow-down" : "arrow-right"

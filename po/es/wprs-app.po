@@ -6904,6 +6904,10 @@ msgid "Add a setting"
 msgstr "Añadir un ajuste"
 
 #: apps/wprs-app/qml/SceneScriptRow.qml
+msgid "Drag to change the order"
+msgstr "Arrastra para cambiar el orden"
+
+#: apps/wprs-app/qml/SceneScriptRow.qml
 msgid "Hide the declaration and settings"
 msgstr "Ocultar la declaración y los ajustes"
 
@@ -8263,8 +8267,12 @@ msgid "Rename the template"
 msgstr "Renombrar la plantilla"
 
 #: apps/wprs-app/qml/SceneTemplateTree.qml
-msgid "Scripts that spawn it by name are not rewritten."
-msgstr "Los scripts que la crean por su nombre no se reescriben."
+msgid "Rewrite the exact names in the scripts"
+msgstr "Reescribir los nombres exactos en los scripts"
+
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+msgid "These lines name it in another way and are not rewritten: %1"
+msgstr "Estas líneas la nombran de otra forma y no se reescriben: %1"
 
 #: apps/wprs-app/qml/SceneTemplates.qml
 msgid "The scene"

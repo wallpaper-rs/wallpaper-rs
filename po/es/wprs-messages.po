@@ -124,8 +124,7 @@ msgid "cannot read %1: %2"
 msgstr "no se puede leer %1: %2"
 
 #: crates/wprs-core/src/edit/file.rs crates/wprs-editor/src/offer.rs
-#: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/scripts/edit.rs
-#: crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/shaders.rs
 msgid "cannot write %1: %2"
 msgstr "no se puede escribir %1: %2"
 

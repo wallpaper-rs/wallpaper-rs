@@ -111,26 +111,47 @@ ColumnLayout {
     Kirigami.PromptDialog {
         id: renaming
 
+        readonly property var mentions: tree.templates.find(item => item.name === tree.target)?.mentions ?? []
+        readonly property var loose: mentions.filter(mention => !mention.exact)
+
         title: App.tr("Rename the template")
-        subtitle: App.tr("Scripts that spawn it by name are not rewritten.")
         standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
         onOpened: {
             name.text = tree.target;
+            rewrite.checked = renaming.mentions.length > 0;
             name.forceActiveFocus();
             name.selectAll();
         }
         onAccepted: tree.page.run("template", {
                 "rename": {
                     "name": tree.target,
-                    "to": name.text.trim()
+                    "to": name.text.trim(),
+                    "rewrite": rewrite.checked
                 }
             })
 
-        QQC2.TextField {
-            id: name
+        ColumnLayout {
+            QQC2.TextField {
+                id: name
 
-            Layout.fillWidth: true
-            onAccepted: renaming.accept()
+                Layout.fillWidth: true
+                onAccepted: renaming.accept()
+            }
+
+            QQC2.CheckBox {
+                id: rewrite
+
+                visible: renaming.mentions.some(mention => mention.exact)
+                text: App.tr("Rewrite the exact names in the scripts")
+            }
+
+            QQC2.Label {
+                Layout.fillWidth: true
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+                visible: renaming.loose.length > 0
+                wrapMode: Text.Wrap
+                text: App.tr("These lines name it in another way and are not rewritten: %1", renaming.loose.map(mention => mention.path + ":" + mention.line).join(", "))
+            }
         }
     }
 }
