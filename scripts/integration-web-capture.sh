@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare BIN ROOT pages
+declare ROOT pages
 cp -r "$ROOT/tests/fixtures/tint" "$pages/tintdir"
 ctl scene thumbnail "$pages/tintdir" --capture -o TEST-W >/dev/null
 shot=$(ctl scene show "$pages/tintdir" /manifest/previews/thumbnail | tr -d '"')
