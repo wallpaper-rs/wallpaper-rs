@@ -96,6 +96,10 @@ Loader {
                 elide: Text.ElideMiddle
             }
 
+            PackageCapture {
+                host: meta.host
+            }
+
             QQC2.Button {
                 text: App.tr("Choose…")
                 icon.name: "document-open"

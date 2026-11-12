@@ -57,6 +57,7 @@ pub fn problems(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
         })
         .collect();
     out.extend(dir.map(|d| crate::credits::gaps(d, doc)).unwrap_or_default());
+    out.extend(dir.and_then(|d| crate::flashes::suggestion(d, doc)));
     let unread = dir.map(|d| manifest.unread_texts(wprs_format::locale_names(d))).unwrap_or_default();
     let unread = unread.into_iter().map(|n| said("format.note", "%1", &[&n]));
     let notes = notes(&manifest, &found).into_iter().chain(unread);

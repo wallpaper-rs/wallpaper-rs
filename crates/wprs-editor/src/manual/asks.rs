@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 37] = [
+pub const ASKS: [(&str, &str, &str); 38] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -46,6 +46,11 @@ pub const ASKS: [(&str, &str, &str); 37] = [
         "strings",
         "The table of texts by key: languages, keys with the languages they lack, files and the texts of the engine",
         "{}",
+    ),
+    (
+        "flashes",
+        "What the last measure of the flashes found for the scene as it is now, or null; run measures first",
+        r#"{"run": true, "from": 0, "seconds": 8, "fps": 15}"#,
     ),
     ("credits", "The files of the package that can be credited, the credits and the files with none", "{}"),
 ];

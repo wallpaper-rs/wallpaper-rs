@@ -1,11 +1,12 @@
 use serde_json::Value;
 use std::path::Path;
 use wprs_editor::ops::Op;
-use wprs_editor::{Action, Project, assets, packing, placing, previews};
+use wprs_editor::{Action, Project, assets, packing, placing, previews, shotting};
 
 pub enum Placed {
     Asset(String, (bool, Option<[u32; 2]>)),
     Preview(bool),
+    Measured,
     Packed(String),
     Layer(String, Box<Action>),
 }
@@ -22,6 +23,7 @@ fn ops(dir: &Path, doc: &Value, placed: &Placed, path: &str) -> anyhow::Result<V
     match placed {
         Placed::Asset(id, cut) => assets::sheet(dir, doc, id, path, *cut),
         Placed::Preview(animated) => previews::adopt(doc, *animated, path),
+        Placed::Measured => Ok(Vec::new()),
         Placed::Packed(id) => Ok(packing::adopt(doc, id, path)),
         Placed::Layer(asset, add) => placing::placed(dir, doc, add, asset, path),
     }
@@ -32,6 +34,10 @@ pub fn land(dir: &Path, doc: Value, action: Action) -> anyhow::Result<Landed> {
         Action::Thumbnail { file, animated } => {
             (Placed::Preview(animated), previews::store(dir, &doc, &file, animated)?, false)
         }
+        Action::Shot(shot) => match shotting::file(dir, &doc, &shot)? {
+            Some((path, animated)) => (Placed::Preview(animated), path, false),
+            None => (Placed::Measured, String::new(), false),
+        },
         Action::Import { file, id, linear, atlas } => {
             assets::cuttable(&file.to_string_lossy(), (linear, atlas))?;
             let (id, path, fresh) = assets::imported(dir, &doc, &file, id.as_deref())?;
@@ -51,6 +57,7 @@ pub fn land(dir: &Path, doc: Value, action: Action) -> anyhow::Result<Landed> {
             Some(assets::undone(dir, (&path, fresh), ops(dir, &doc, &placed, &path))?)
         }
         Placed::Preview(_) | Placed::Packed(_) => None,
+        Placed::Measured => Some(Vec::new()),
     };
     Ok(Landed { placed, path, doc, ops, fresh })
 }

@@ -91,6 +91,7 @@ undo and redo walk through, the undone ones marked.
 | `rgb` | `layer` (an adjustment layer) and one or more of `on` (`true` sends what it captures to RGB lighting and sets `permissions.rgb` in the same step, `false` stops and drops the permission when no other layer sends), `size` (`[w, h]`, 1 pixel to twice the canvas: the region around the layer position, which is set to the middle of the canvas when the layer has none) and `whole` (drops `size`: the whole canvas); undo returns both. The inspector of an adjustment layer has a switch for it, Whole canvas and A strip of it, and the strip the lights get, read from the preview 10 times a second through `Rgb1.GetStrip` and drawn as a grid of up to 64 × 16 cells; on the preview the region has corner handles that resize it around the layer position as one gesture, and the layer handles move it | `rgb DIR LAYER [--on true\|false] [--size WxH \| --whole]` |
 | `translate` | `pointer` to a text of the manifest or of the scene (the `placeholder` of a `media` text), `language`, `text` (an empty or missing one removes that language), `add` (adds a language the text lacks, starting from the text in the default language, and leaves one it has alone) | `translate DIR POINTER LANGUAGE TEXT`, `--remove` or `--add` |
 | `thumbnail` | `file`, `animated`; copies a picture into `assets/` as `previews.thumbnail` or `previews.animated` (`preview` in a first-version manifest) | `thumbnail DIR FILE [--animated]` |
+| `shot` | one of `still` (`time`, the second of the scene; its `poster_time` without it: draws the scene and keeps the frame as the thumbnail, at most 1024 pixels), `recording` (`from`, `seconds` 0.1 to 15, `fps` 1 to 30; records a gif of at most 640 pixels and 8 MiB, made smaller until it fits, as the animated preview) or `flashes` (`from`, `seconds` and `fps`, 0, 8 and 15 without them; measures how much the scene flashes and keeps the result for the scene as it is); only scenes, on the graphics card of the process | `thumbnail DIR --capture [--time S]`, `thumbnail DIR --capture --animated [--from S] [--seconds N] [--fps F]`, `scene ask DIR flashes '{"run": true}'` |
 | `upgrade` | optional `rating`, `reasons`, `photosensitive`, `derived_from`; moves a first-version manifest to `wallpaper-rs.wpak/2` | `upgrade DIR [--rating R] [--reason R] [--photosensitive B] [--derived-from A]` |
 | `add_property` | `kind` (`slider`, `bool`, `color`, `combo`, `text`, `file`, `folder`, `shortcut`, `button`, `group`, `label` or `divider`), optional `id` (`<kind>_<n>` when omitted), `group`, `label`; the property starts valid, last of its group, and a combo with the options `option_1` and `option_2` and empty labels, so no text in a language the package may not use is written | `add-property DIR KIND` |
 | `move_property` | `id`, `to` (its position among the properties of its group, 0 first), optional `group` (an empty one takes it out of its group); the `order` of that group becomes 1, 2… | `move-property DIR ID TO` |
@@ -424,6 +425,21 @@ text, and the texts of the engine (`wprs.*`, in English and Spanish) listed. Eve
 (`places`: `manifest` or `file`), the `keys` (`used`, `texts` by language, `missing` languages) and the
 `engine` texts. The writes to a locale file happen when the action is accepted, after the manifest checks
 pass, and are not part of undo (the manifest part of `locale` is).
+
+The thumbnail and the animated preview of a scene can be captured instead of chosen from a file: *Capture
+from the scene* next to the picture chooser draws the scene at the second the preview is on and keeps the
+frame, and *Record a preview* records a few seconds from there as a gif; both run in the background
+(the editor shows it busy), draw with `Renderer::stills` (one view of the scene for all the frames) and
+store through the same path as `thumbnail`, so the size rules above apply. Packages that are not scenes
+keep the file chooser.
+
+The photosensitive switch has a *Measure the flashes* button that draws 8 s of the scene at 15 frames a
+second, takes the brightness of a grid of 32 × 18 cells of every frame and feeds it to the `FlashGuard`
+the daemon uses to calm scenes that flash (more than three times a second over a tenth of the picture).
+When it flashes and `photosensitive` is not set, the problems list gets a warning at
+`/manifest/photosensitive` (while the scene and its properties stay as they were measured), and
+`wprs-ctl pack check` measures a scene that does not declare itself photosensitive and prints the same
+warning. Sound, the pointer and the clock decide the real picture, so the measure is a hint, not a proof.
 
 Every step of the history ends with the inputs and features the document needs, computed as
 `wprs-ctl pack build` does: the inputs the scene uses are added to `inputs` (the ones an author

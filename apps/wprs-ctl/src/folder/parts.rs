@@ -7,6 +7,10 @@ use wprs_editor::{Project, package};
 
 pub(super) fn validate(dir: &Path, json: bool) -> Result<()> {
     let project = Project::open(dir)?;
+    let scene = wprs_editor::pages::scened(&project.doc);
+    if scene && project.doc["manifest"]["photosensitive"] != true {
+        wprs_editor::flashes::measure(&project.dir, &project.doc, (0.0, 8.0, 15)).ok();
+    }
     let problems = package::problems(&project.dir, &project.doc);
     for p in &problems {
         match json {

@@ -691,6 +691,16 @@ msgstr "%1: se reproduce sin %2"
 msgid "%1 cannot take the value %2; give %3"
 msgstr "%1 no admite el valor %2; da %3"
 
+#: crates/wprs-editor/src/flashes.rs
+msgid "measure from 0.1 to 60 s at 1 to 30 frames a second"
+msgstr "mide de 0,1 a 60 s a 1 a 30 fotogramas por segundo"
+
+#: crates/wprs-editor/src/flashes.rs
+msgid ""
+"the scene flashed more than %1 times a second near second %2 of a render; if "
+"people can see that, set photosensitive"
+msgstr "la escena destelló más de %1 veces por segundo cerca del segundo %2 de un dibujo; si alguien puede verlo, marca photosensitive"
+
 #: crates/wprs-editor/src/handles.rs
 msgid "a Bézier handle reaches from 0 s up to the neighbouring keyframe and by -1000000 to 1000000 in value"
 msgstr "un tirador Bézier llega de 0 s hasta el fotograma clave vecino y de -1000000 a 1000000 en valor"
@@ -1830,6 +1840,26 @@ msgstr "elige al menos una parte"
 #: crates/wprs-editor/src/shelf.rs
 msgid "the scene has no %1"
 msgstr "la escena no tiene %1"
+
+#: crates/wprs-editor/src/shots.rs
+msgid "only a scene can be drawn here; choose a picture for other packages"
+msgstr "aquí solo se puede dibujar una escena; para otros paquetes elige una imagen"
+
+#: crates/wprs-editor/src/shots.rs
+msgid "there is no graphics device to draw the scene: %1"
+msgstr "no hay tarjeta gráfica para dibujar la escena: %1"
+
+#: crates/wprs-editor/src/shots.rs
+msgid "the scene drew no picture"
+msgstr "la escena no dibujó ninguna imagen"
+
+#: crates/wprs-editor/src/shots.rs
+msgid "record from 0.1 to 15 s at 1 to 30 frames a second"
+msgstr "graba de 0,1 a 15 s a 1 a 30 fotogramas por segundo"
+
+#: crates/wprs-editor/src/shots.rs
+msgid "the recording is over 8 MiB; record fewer seconds"
+msgstr "la grabación pasa de 8 MiB; graba menos segundos"
 
 #: crates/wprs-editor/src/skin/bones.rs
 msgid "a bone has a name of 1 to 64 characters without / or #"

@@ -139,15 +139,15 @@ pub enum Author {
         add: bool,
     },
     #[command(
-        about = "Copy a picture into assets/ as the thumbnail of the package, made smaller when it is over 1024 pixels or 1 MiB, or with --animated as its animated preview"
+        about = "Copy a picture into assets/ as the thumbnail of the package, made smaller when it is over 1024 pixels or 1 MiB, or with --animated as its animated preview; with --capture draw the scene instead of giving a picture"
     )]
     Thumbnail {
         #[arg(help = DIR)]
         dir: PathBuf,
-        #[arg(help = "A picture, or with --animated a gif or webp")]
-        file: PathBuf,
         #[arg(long, help = "A gif or webp of at most 640 pixels a side, 15 s and 8 MiB")]
         animated: bool,
+        #[command(flatten)]
+        shot: crate::capturing::Capture,
     },
     #[command(
         about = "Move a first-version manifest to wallpaper-rs.wpak/2, as wprs-ctl pack upgrade does; what is not given stays to be set"

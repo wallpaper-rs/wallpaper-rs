@@ -1,10 +1,11 @@
 use crate::author::Author;
+use crate::capturing::Capture;
 use anyhow::{Result, ensure};
 use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
 use wprs_editor::actions::{
-    Action, MaskStroke, ParticleEdit, ScriptFile, SowEdit, TemplateEdit, UpgradeEdit,
+    Action, MaskStroke, ParticleEdit, ScriptFile, ShotEdit, SowEdit, TemplateEdit, UpgradeEdit,
 };
 use wprs_editor::{Op, Project, references};
 
@@ -95,7 +96,7 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
                 _ => None,
             })
             .for_each(|id| println!("{id}")),
-        Action::Thumbnail { .. } | Action::Asset(_) => ops
+        Action::Thumbnail { .. } | Action::Shot(_) | Action::Asset(_) => ops
             .iter()
             .filter_map(|op| match op {
                 Op::Add { value, .. } | Op::Replace { value, .. } => value.as_str(),
@@ -141,8 +142,15 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
         Author::Translate { dir, pointer, language, text, add, .. } => {
             (dir, Action::Translate(wprs_editor::actions::TranslateEdit { pointer, language, text, add }))
         }
-        Author::Thumbnail { dir, file, animated } => {
+        Author::Thumbnail { dir, animated, shot: Capture { file: Some(file), .. } } => {
             (dir, Action::Thumbnail { file: fs::canonicalize(&file).unwrap_or(file), animated })
+        }
+        Author::Thumbnail { dir, animated: false, shot, .. } => {
+            (dir, Action::Shot(ShotEdit::Still { time: shot.time }))
+        }
+        Author::Thumbnail { dir, shot, .. } => {
+            let (from, seconds, fps) = (shot.from, shot.seconds, shot.fps);
+            (dir, Action::Shot(ShotEdit::Recording { from, seconds, fps }))
         }
         Author::Upgrade { dir, rating, reasons, photosensitive, derived_from } => {
             let rating = rating.and_then(|r| serde_json::from_value(json!(r)).ok());

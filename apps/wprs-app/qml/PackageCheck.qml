@@ -29,6 +29,9 @@ QtObject {
         Qt.createComponent("PackageSettingsCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("AuthorCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         page.editor.save();
         if (page.editor.dirty || page.editor.error !== "")
             throw new Error("the page was not saved: " + page.editor.error);

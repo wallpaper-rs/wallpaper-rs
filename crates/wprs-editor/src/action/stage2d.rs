@@ -77,3 +77,28 @@ pub enum CameraHold {
     Zoom { corner: [f64; 2] },
     Turn,
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
+pub enum ShotEdit {
+    Still {
+        #[serde(default)]
+        time: Option<f64>,
+    },
+    Recording {
+        #[serde(default)]
+        from: Option<f64>,
+        #[serde(default)]
+        seconds: Option<f64>,
+        #[serde(default)]
+        fps: Option<u32>,
+    },
+    Flashes {
+        #[serde(default)]
+        from: Option<f64>,
+        #[serde(default)]
+        seconds: Option<f64>,
+        #[serde(default)]
+        fps: Option<u32>,
+    },
+}

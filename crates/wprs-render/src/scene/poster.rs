@@ -88,9 +88,23 @@ impl Renderer {
         scene: &Scene,
         assets: &SceneAssets,
         props: &Values,
-        (wall, lang): (f64, &str),
+        clock: (f64, &str),
         (edge, time): (u32, f64),
     ) -> Result<RgbaImage, RenderError> {
+        let mut out = Vec::new();
+        self.stills(scene, assets, props, clock, (edge, &[time]), |image| out.push(image))?;
+        out.pop().ok_or_else(|| RenderError::Readback("no image".into()))
+    }
+
+    pub fn stills(
+        &self,
+        scene: &Scene,
+        assets: &SceneAssets,
+        props: &Values,
+        (wall, lang): (f64, &str),
+        (edge, times): (u32, &[f64]),
+        mut each: impl FnMut(RgbaImage),
+    ) -> Result<(), RenderError> {
         let [w, h] = scene.canvas.size.map(|v| v.max(1) as f32);
         let scale = (edge as f32 / w.max(h)).min(1.0);
         let size = ((w * scale).round().max(1.0) as u32, (h * scale).round().max(1.0) as u32);
@@ -99,10 +113,14 @@ impl Renderer {
         assets.sheets.iter().for_each(|(id, d)| runtime.set_sheet(id, d.clone()));
         runtime.set_wall(wall);
         runtime.set_language(lang);
-        runtime.seek(time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));
-        let frame = runtime.frame(view.view(size), Quality::Q3);
-        let image = self.render_scene(&mut view, &runtime, &frame, size, Quality::Q3, &[])?;
-        self.read_scene(image, size)
+        let (mut target, mut pixels) = (self.create_target(size.0, size.1)?, Vec::new());
+        for time in times {
+            runtime.seek(time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));
+            let frame = runtime.frame(view.view(size), Quality::Q3);
+            let image = self.render_scene(&mut view, &runtime, &frame, size, Quality::Q3, &[])?;
+            each(self.read_into(&mut target, &mut pixels, image, size)?);
+        }
+        Ok(())
     }
 
     pub(crate) fn read_scene(
@@ -111,6 +129,16 @@ impl Renderer {
         size: (u32, u32),
     ) -> Result<RgbaImage, RenderError> {
         let (mut target, mut pixels) = (self.create_target(size.0, size.1)?, Vec::new());
+        self.read_into(&mut target, &mut pixels, image, size)
+    }
+
+    fn read_into(
+        &self,
+        target: &mut crate::Target,
+        pixels: &mut Vec<u8>,
+        image: &crate::GpuImage,
+        size: (u32, u32),
+    ) -> Result<RgbaImage, RenderError> {
         let layer = Layer {
             image: Some(image),
             fit: Fit::Stretch,
@@ -121,8 +149,9 @@ impl Renderer {
             flip: [false; 2],
             grade: None,
         };
-        self.render_layers(&mut target, &[layer], &mut pixels)?;
-        pixels.as_chunks_mut::<4>().0.iter_mut().for_each(|p| p.swap(0, 2));
-        RgbaImage::from_raw(size.0, size.1, pixels).ok_or_else(|| RenderError::Readback("short image".into()))
+        self.render_layers(target, &[layer], pixels)?;
+        let mut rgba = pixels.clone();
+        rgba.as_chunks_mut::<4>().0.iter_mut().for_each(|p| p.swap(0, 2));
+        RgbaImage::from_raw(size.0, size.1, rgba).ok_or_else(|| RenderError::Readback("short image".into()))
     }
 }

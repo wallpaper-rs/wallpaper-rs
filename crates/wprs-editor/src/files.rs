@@ -32,6 +32,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::Rgb(e) => crate::rgb::act(doc, e),
         Action::Thumbnail { file, animated } => crate::previews::store(dir, doc, file, *animated)
             .and_then(|path| crate::previews::adopt(doc, *animated, &path)),
+        Action::Shot(e) => crate::shotting::act(dir, doc, e),
         Action::PaintMask(m) => {
             let (channel, radius, hardness, value) = (m.channel, m.radius, m.hardness, m.value);
             paint(

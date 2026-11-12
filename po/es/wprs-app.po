@@ -2778,6 +2778,22 @@ msgstr "Inicio %1 s"
 msgid "End %1 s"
 msgstr "Fin %1 s"
 
+#: apps/wprs-app/qml/PackageCapture.qml
+msgid "Record a preview from the scene"
+msgstr "Grabar una vista previa de la escena"
+
+#: apps/wprs-app/qml/PackageCapture.qml
+msgid "Capture the thumbnail from the scene"
+msgstr "Capturar la miniatura de la escena"
+
+#: apps/wprs-app/qml/PackageCapture.qml
+msgid "Record 4 seconds of the scene from the second the preview is on"
+msgstr "Graba 4 segundos de la escena desde el segundo en que está la vista previa"
+
+#: apps/wprs-app/qml/PackageCapture.qml
+msgid "Draw the scene at the second the preview is on and keep that frame"
+msgstr "Dibuja la escena en el segundo en que está la vista previa y conserva ese fotograma"
+
 #: apps/wprs-app/qml/PackageCredits.qml
 msgid ""
 "%1 files have no credit. Choose the ones someone else made and say who and "
@@ -2959,6 +2975,32 @@ msgid "What the user sets for the screen always wins over these defaults."
 msgstr ""
 "Lo que el usuario fija para la pantalla siempre prevalece sobre estos "
 "valores por defecto."
+
+#: apps/wprs-app/qml/PackageFlashes.qml apps/wprs-app/qml/SceneEditors.qml
+msgid "Yes"
+msgstr "Sí"
+
+#: apps/wprs-app/qml/PackageFlashes.qml apps/wprs-app/qml/SceneEditors.qml
+msgid "No"
+msgstr "No"
+
+#: apps/wprs-app/qml/PackageFlashes.qml
+msgid "Measure the flashes"
+msgstr "Medir los destellos"
+
+#: apps/wprs-app/qml/PackageFlashes.qml
+msgid ""
+"Draw 8 seconds of the scene and count how often it flashes; sound and the "
+"pointer are not part of the measure"
+msgstr "Dibuja 8 segundos de la escena y cuenta cuántas veces destella; el sonido y el puntero no entran en la medida"
+
+#: apps/wprs-app/qml/PackageFlashes.qml
+msgid "It flashes more than three times a second near second %1."
+msgstr "Destella más de tres veces por segundo cerca del segundo %1."
+
+#: apps/wprs-app/qml/PackageFlashes.qml
+msgid "No flashing found in the %1 seconds that were drawn."
+msgstr "No hay destellos en los %1 segundos que se dibujaron."
 
 #: apps/wprs-app/qml/PackageInputs.qml
 msgid "Hears the sound that plays"
@@ -3156,6 +3198,7 @@ msgid "Highest frame rate:"
 msgstr "Fotogramas máximos:"
 
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/SceneFrameRate.qml
+#: apps/wprs-app/qml/PackagePlayback.qml
 msgid "Follow the screen"
 msgstr "Seguir la pantalla"
 
@@ -5358,14 +5401,6 @@ msgstr "Ocultarse tras los modelos más cercanos"
 #: apps/wprs-app/qml/SceneSwarmPoints.qml
 msgid "Turn %1°"
 msgstr "Giro de %1°"
-
-#: apps/wprs-app/qml/SceneEditors.qml
-msgid "Yes"
-msgstr "Sí"
-
-#: apps/wprs-app/qml/SceneEditors.qml
-msgid "No"
-msgstr "No"
 
 #: apps/wprs-app/qml/SceneEditors.qml
 msgid "1 item"

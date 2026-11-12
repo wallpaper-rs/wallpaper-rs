@@ -1,4 +1,6 @@
 mod credits;
+mod flashes;
+mod shots;
 mod strings;
 
 use serde_json::{Value, json};

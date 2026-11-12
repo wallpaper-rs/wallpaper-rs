@@ -43,6 +43,7 @@ pub fn adjust(doc: &Value, field: &mut crate::Field) {
     match field.pointer.as_str() {
         "/manifest/inputs" => field.fixed = used(doc),
         "/manifest/default_locale" => field.required = true,
+        "/manifest/photosensitive" if field.widget == "bool" => field.widget = "package:flashes".into(),
         "/manifest/strings" => field.widget = "package:strings".into(),
         "/manifest/credits" => field.widget = "package:credits".into(),
         "/manifest/requires/features" => {

@@ -12,7 +12,11 @@ type Done<T> = Box<dyn FnOnce(Pin<&mut SceneEditor>, T) + Send>;
 
 pub fn queued(action: &Action) -> bool {
     let placing = matches!(action, Action::AddLayer { file: Some(_), .. });
-    placing || matches!(action, Action::Import { .. } | Action::Thumbnail { .. } | Action::Asset(_))
+    placing
+        || matches!(
+            action,
+            Action::Import { .. } | Action::Thumbnail { .. } | Action::Shot(_) | Action::Asset(_)
+        )
 }
 
 impl SceneEditor {

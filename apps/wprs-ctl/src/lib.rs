@@ -10,6 +10,7 @@ mod backdrop;
 mod bench;
 mod benching;
 mod calls;
+mod capturing;
 mod catalog;
 mod caution;
 pub mod cli;

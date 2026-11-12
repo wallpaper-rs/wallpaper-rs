@@ -120,6 +120,7 @@ pub enum Action {
         #[serde(default)]
         animated: bool,
     },
+    Shot(ShotEdit),
     Upgrade(UpgradeEdit),
     AddProperty {
         kind: String,
