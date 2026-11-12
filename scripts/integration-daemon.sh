@@ -3,7 +3,7 @@ set -euo pipefail
 declare BIN log
 name_free() { ! dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus \
   org.freedesktop.DBus.NameHasOwner string:io.github.wallpaper_rs.Daemon | grep -q "boolean true"; }
-gone() {
+daemon_exited() {
   local state
   state=$(sed -n 's/^State:[[:space:]]*\(.\).*/\1/p' "/proc/$1/status" 2>/dev/null)
   [ -z "$state" ] || [ "$state" = Z ]
@@ -28,7 +28,7 @@ await_daemon() {
   local pid=$1 out=$2 ends=$((SECONDS + 30))
   shift 2
   while ! "$@" >/dev/null 2>&1; do
-    if gone "$pid"; then
+    if daemon_exited "$pid"; then
       [ -s "$out" ] && tail -n 40 "$out"
       fail "wprsd $pid exited while starting"
     fi
