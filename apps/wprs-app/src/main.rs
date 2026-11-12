@@ -51,7 +51,7 @@ use wprs_core::dbus::APP_ID;
 
 const MAIN: &str = "qrc:/qt/qml/io/github/wallpaper_rs/app/qml/Main.qml";
 const STYLE: &str = "org.kde.desktop";
-const CHECK_TIME: std::time::Duration = std::time::Duration::from_secs(240);
+const CHECK_TIME: std::time::Duration = std::time::Duration::from_secs(540);
 
 fn main() -> ExitCode {
     wprs_scene::serve_check();
