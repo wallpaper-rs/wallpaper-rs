@@ -908,8 +908,11 @@ layers, fades and bone masks), rules, blend shapes and expressions work as on me
 animations of the file; the keys of a clip may also give a bone `angles` (degrees around x, then y, then
 z) and `shift` (in units of the model, along x, y and z) added to its rest pose. The palette is worked out
 on the CPU at most once a frame and only for models that are shown, and the GPU skins each vertex with
-it in the vertex shader; blend shapes of the file (positions and normals) are mixed there too, the 8
-heaviest for each primitive. A still skinned model draws its rest pose, as the file places it. At most
+it in the vertex shader; blend shapes of the file (positions, normals and, when the file gives them, tangents, so that relief
+maps light a changed shape right) are mixed there too, the 8 heaviest for each primitive; a primitive
+whose shapes carry tangents keeps three values a vertex for each shape instead of two. A model without
+any of these fields bakes the weights its file sets for each mesh (or node) into its vertices once, when
+it is read, and costs nothing more while it plays. A still skinned model draws its rest pose, as the file places it. At most
 256 bones and parts, 1 024 nodes and 4 194 304 blend shape values a model.
 
 `physics` swings bones in the plane of x and y of the model, counting one unit of the model as 100

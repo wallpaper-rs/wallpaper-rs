@@ -1,5 +1,5 @@
 use super::*;
-use wprs_scene::{ForgeRig, Wake};
+use wprs_scene::{ForgeMaterial, ForgeRig, Wake};
 
 fn rig() -> Vec<u8> {
     ForgeRig { material: unlit("body", [1.0; 4]), ..ForgeRig::new(2.0, 0.5) }.glb()
@@ -77,4 +77,26 @@ fn a_clip_played_once_holds_its_pose_and_the_scene_sleeps() {
     let before = shot.view.model_renders();
     shot.frame(r, 0.5, Quality::Q3);
     assert_eq!(shot.view.model_renders(), before);
+}
+
+fn bumped(weights: [f32; 2]) -> Vec<u8> {
+    let mut material = ForgeMaterial::new("body", [1.0; 4]);
+    material.maps[2] = Some(png([230, 128, 200, 255], 4));
+    ForgeRig { material, twist: true, weights, ..ForgeRig::new(2.0, 0.5) }.glb()
+}
+
+fn shine(r: &Renderer, glb: Vec<u8>, extra: Value) -> u8 {
+    let models = BTreeMap::from([("rig", glb)]);
+    let px = render(r, scene(json!({}), model(extra), models), Quality::Q3);
+    (17..26).map(|y| rgb(&px, 32, y)[0]).max().unwrap_or(0)
+}
+
+#[test]
+fn blend_shapes_turn_the_tangents_of_normal_mapped_models_posed_or_still() {
+    let Some(r) = renderer() else { return };
+    let plain = shine(r, bumped([0.0; 2]), json!({}));
+    let posed = shine(r, bumped([0.0; 2]), json!({ "shapes": { "twist": 1 } }));
+    let still = shine(r, bumped([0.0, 1.0]), json!({}));
+    assert!(plain.abs_diff(posed) > 12, "the shape turns the bumps on the GPU: {plain} {posed}");
+    assert!(still.abs_diff(posed) < 4, "a still model bakes the same shape: {still} {posed}");
 }

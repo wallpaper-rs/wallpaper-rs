@@ -136,22 +136,28 @@ fn out(o: Placed, v: In, shell: u32) -> Out {
     return r;
 }
 
+fn shift(base: f32, w: f32, at: u32, stride: u32, q: ptr<function, array<vec3<f32>, 3>>) {
+    if w == 0.0 {
+        return;
+    }
+    let first = u32(base) + at * stride;
+    (*q)[0] += delta(first) * w;
+    (*q)[1] += delta(first + 1u) * w;
+    if stride > 2u {
+        (*q)[2] += delta(first + 2u) * w;
+    }
+}
+
 fn posed(v: In, b: Bound, index: u32) -> array<vec3<f32>, 3> {
-    var p = v.pos;
-    var n = v.normal;
+    var q = array<vec3<f32>, 3>(v.pos, v.normal, v.tangent.xyz);
     let local = index - u32(draw.first.x);
+    let stride = u32(draw.first.z);
     for (var s = 0u; s < 4u; s++) {
         let pair = draw.slots[s];
-        if pair.y != 0.0 {
-            p += delta(u32(pair.x) + local * 2u) * pair.y;
-            n += delta(u32(pair.x) + local * 2u + 1u) * pair.y;
-        }
-        if pair.w != 0.0 {
-            p += delta(u32(pair.z) + local * 2u) * pair.w;
-            n += delta(u32(pair.z) + local * 2u + 1u) * pair.w;
-        }
+        shift(pair.x, pair.y, local, stride, &q);
+        shift(pair.z, pair.w, local, stride, &q);
     }
-    return array<vec3<f32>, 3>(skin(vec4<f32>(p, 1.0), b), skin(vec4<f32>(n, 0.0), b), skin(vec4<f32>(v.tangent.xyz, 0.0), b));
+    return array<vec3<f32>, 3>(skin(vec4<f32>(q[0], 1.0), b), skin(vec4<f32>(q[1], 0.0), b), skin(vec4<f32>(q[2], 0.0), b));
 }
 
 @vertex

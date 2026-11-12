@@ -51,7 +51,7 @@ pub(super) fn append(model: &mut Model, p: &part::Part, material: Option<usize>)
     let material = material.filter(|m| *m < model.materials.len()).map(|m| m as u16);
     let count = model.indices.len() as u32 - first;
     model.triangles += u64::from(count / 3);
-    Primitive { first, count, material, base, vertices: p.at.len() as u32, piece: u16::MAX }
+    Primitive { first, count, material, base, vertices: p.at.len() as u32, piece: u16::MAX, stride: 2 }
 }
 
 pub(super) fn room(bin: &Bin, p: &crate::rigged::doc::Primitive, model: &Model) -> Result<(), String> {
@@ -72,9 +72,11 @@ pub(super) fn geometry(bin: &Bin, model: &mut Model) -> Result<(), String> {
     for (n, world) in roots(bin)? {
         let Some(m) = bin.doc.nodes[n].mesh else { continue };
         let mesh = bin.doc.meshes.get(m).ok_or_else(|| format!("node {n} names the missing mesh {m}"))?;
+        let node = &bin.doc.nodes[n];
+        let weights = if node.weights.is_empty() { &mesh.weights } else { &node.weights };
         for p in &mesh.primitives {
             room(bin, p, model)?;
-            let part = part::part(bin, p, MAX_MODEL_VERTICES - model.vertex_count(), &world)?;
+            let part = part::part(bin, p, MAX_MODEL_VERTICES - model.vertex_count(), (&world, weights))?;
             let prim = append(model, &part, p.material);
             model.primitives.push(prim);
         }

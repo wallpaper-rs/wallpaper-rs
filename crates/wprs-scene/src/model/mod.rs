@@ -1,5 +1,6 @@
 mod build;
 mod forge;
+mod morphs;
 mod pictures;
 mod posed;
 mod surface;
@@ -34,6 +35,7 @@ pub struct Primitive {
     pub base: u32,
     pub vertices: u32,
     pub piece: u16,
+    pub stride: u32,
 }
 
 #[derive(Debug, Clone, PartialEq)]

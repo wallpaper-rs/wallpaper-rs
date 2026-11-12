@@ -56,3 +56,23 @@ fn the_course_ahead_starts_at_the_layer_and_walks_each_lap() {
     let path = still.puppet("m").unwrap().course(still.scene.layer("m").unwrap(), 2.0);
     assert!(path.iter().all(|p| near(*p, [0.0; 3])), "{path:?}");
 }
+
+fn still(weights: [f32; 2]) -> Scene {
+    let glb = ForgeRig { twist: true, weights, ..ForgeRig::new(2.0, 0.5) }.glb();
+    let doc = json!({ "schema": SCHEMA, "canvas": { "size": [200, 100] },
+        "assets": { "toy": { "path": "toy.glb" } }, "layers": [model("m", json!({}))] });
+    let mut scene = Scene::from_json(&doc.to_string()).unwrap();
+    scene.adopt(&BTreeMap::new(), move |_: &str, _: usize| Ok::<_, String>(glb.clone())).unwrap();
+    scene
+}
+
+#[test]
+fn a_still_model_bakes_the_blend_shapes_its_file_sets() {
+    let (thin, wide) = (still([0.0, 0.0]), still([1.0, 0.0]));
+    assert!(thin.solids["toy"].rig.is_none() && wide.solids["toy"].rig.is_none());
+    let (a, b) = (thin.solids["toy"].bounds[1][0], wide.solids["toy"].bounds[1][0]);
+    assert!((a - 0.25).abs() < 1e-3 && (b - 0.35).abs() < 1e-3, "{a} {b}");
+    let tangent = |s: &Scene| s.solids["toy"].vertices[8..11].to_vec();
+    let (flat, turned) = (tangent(&thin), tangent(&still([0.0, 1.0])));
+    assert!(flat.iter().zip(&turned).all(|(x, y)| (x + y).abs() < 1e-4), "{flat:?} {turned:?}");
+}

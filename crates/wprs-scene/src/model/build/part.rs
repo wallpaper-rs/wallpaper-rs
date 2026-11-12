@@ -31,15 +31,22 @@ fn turn(n: &[f32; 9], v: [f32; 3]) -> [f32; 3] {
     if l > 1e-12 { o.map(|x| x / l) } else { [0.0, 0.0, 1.0] }
 }
 
-pub(crate) fn part(bin: &Bin, p: &Primitive, room: usize, world: &Mat) -> Result<Part, String> {
+pub(crate) fn part(
+    bin: &Bin,
+    p: &Primitive,
+    room: usize,
+    (world, weights): (&Mat, &[f32]),
+) -> Result<Part, String> {
     let (normals, flipped) = normal_matrix(world);
     let at = |key: &str| p.attributes.get(key).copied();
     let position = at("POSITION").ok_or("has a primitive without positions")?;
     if bin.count(position)? > room {
         return Err(format!("has more than {} vertices", super::super::MAX_MODEL_VERTICES));
     }
-    let positions = bin.floats(position, 3)?;
+    let mut positions = bin.floats(position, 3)?;
     let count = positions.len() / 3;
+    let shaped = |key: &str, v: &mut [f32]| super::super::morphs::shaped(bin, p, weights, key, v);
+    shaped("POSITION", &mut positions)?;
     let read = |key: &str, width: usize| at(key).map(|a| bin.floats(a, width)).transpose();
     let uvs = read("TEXCOORD_0", 2)?.unwrap_or_else(|| vec![0.0; count * 2]);
     let second = read("TEXCOORD_1", 2)?.filter(|v| v.len() == count * 2).unwrap_or_else(|| uvs.clone());
@@ -53,12 +60,14 @@ pub(crate) fn part(bin: &Bin, p: &Primitive, room: usize, world: &Mat) -> Result
         list.chunks_mut(3).for_each(|t| t.swap(1, 2));
     }
     let placed: Vec<[f32; 3]> = positions.chunks(3).map(|v| apply(world, [v[0], v[1], v[2]])).collect();
-    let given = read("NORMAL", 3)?.filter(|v| v.len() == count * 3);
+    let mut given = read("NORMAL", 3)?.filter(|v| v.len() == count * 3);
+    given.as_mut().map(|v| shaped("NORMAL", v)).transpose()?;
     let normals: Vec<[f32; 3]> = match given {
         Some(v) => v.chunks(3).map(|n| turn(&normals, [n[0], n[1], n[2]])).collect(),
         None => tangents::smooth(&placed, &list),
     };
-    let given = read("TANGENT", 4)?.filter(|v| v.len() == count * 4);
+    let mut given = read("TANGENT", 4)?.filter(|v| v.len() == count * 4);
+    given.as_mut().map(|v| bent(v, |d| shaped("TANGENT", d))).transpose()?;
     let tangents = match given {
         Some(t) => t.chunks(4).map(|t| tangents::along(world, t, flipped)).collect(),
         None => tangents::tangents(&placed, &normals, &uvs, &list),
@@ -75,4 +84,11 @@ pub(crate) fn part(bin: &Bin, p: &Primitive, room: usize, world: &Mat) -> Result
         None => None,
     };
     Ok(Part { at: placed, normals, uvs, second, tangents, list, paint })
+}
+
+fn bent(t: &mut [f32], shape: impl FnOnce(&mut [f32]) -> Result<(), String>) -> Result<(), String> {
+    let mut d: Vec<f32> = t.chunks(4).flat_map(|t| [t[0], t[1], t[2]]).collect();
+    shape(&mut d)?;
+    t.chunks_mut(4).zip(d.chunks(3)).for_each(|(t, d)| t[..3].copy_from_slice(d));
+    Ok(())
 }

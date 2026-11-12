@@ -98,8 +98,10 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d, debug: &wprs_
                 let weights = p.pose.and_then(|q| q.morphs.get(usize::from(prim.piece)));
                 let draw = match weights.filter(|w| w.iter().any(|(_, x)| *x != 0.0)) {
                     Some(w) => {
-                        let mut d =
-                            DrawSlots { first: [prim.base as f32, 1.0, 0.0, 0.0], ..Default::default() };
+                        let mut d = DrawSlots {
+                            first: [prim.base as f32, 1.0, prim.stride as f32, 0.0],
+                            ..Default::default()
+                        };
                         for (k, (b, x)) in w.iter().enumerate() {
                             d.slots[k / 2][(k % 2) * 2] = *b as f32;
                             d.slots[k / 2][(k % 2) * 2 + 1] = *x;

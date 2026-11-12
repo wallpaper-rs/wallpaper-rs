@@ -7,11 +7,14 @@ pub struct ForgeRig {
     pub width: f32,
     pub rows: u32,
     pub material: ForgeMaterial,
+    pub twist: bool,
+    pub weights: [f32; 2],
 }
 
 impl ForgeRig {
     pub fn new(height: f32, width: f32) -> ForgeRig {
-        ForgeRig { height, width, rows: 8, material: ForgeMaterial::new("body", [1.0; 4]) }
+        let material = ForgeMaterial::new("body", [1.0; 4]);
+        ForgeRig { height, width, rows: 8, material, twist: false, weights: [0.0; 2] }
     }
 
     fn column(&self) -> (Vec<f32>, Vec<f32>, Vec<f32>, Vec<u32>) {
@@ -56,11 +59,22 @@ impl ForgeRig {
         out.accessors
             .push(json!({ "bufferView": view, "componentType": 5123, "count": count, "type": "VEC4" }));
         let joint_at = out.accessors.len() - 1;
-        let attributes = json!({ "POSITION": out.floats(&p, 3, "VEC3"), "NORMAL": out.floats(&n, 3, "VEC3"),
+        let mut attributes = json!({ "POSITION": out.floats(&p, 3, "VEC3"), "NORMAL": out.floats(&n, 3, "VEC3"),
             "TEXCOORD_0": out.floats(&uv, 2, "VEC2"), "JOINTS_0": joint_at,
             "WEIGHTS_0": out.floats(&weights, 4, "VEC4"), "COLOR_0": out.floats(&colors, 4, "VEC4") });
-        let target = json!({ "POSITION": out.floats(&bulge, 3, "VEC3") });
-        let primitive = json!({ "attributes": attributes, "indices": out.indices(&list), "material": 0, "targets": [target] });
+        let mut targets = vec![json!({ "POSITION": out.floats(&bulge, 3, "VEC3") })];
+        if self.twist {
+            let along: Vec<f32> = (0..count).flat_map(|v| [-n[v * 3 + 2], 0.0, n[v * 3], 1.0]).collect();
+            attributes["TANGENT"] = json!(out.floats(&along, 4, "VEC4"));
+            let back: Vec<f32> =
+                (0..count).flat_map(|v| [2.0 * n[v * 3 + 2], 0.0, -2.0 * n[v * 3]]).collect();
+            let still = vec![0.0f32; count * 3];
+            let (p, t) = (out.floats(&still, 3, "VEC3"), out.floats(&back, 3, "VEC3"));
+            targets.push(json!({ "POSITION": p, "TANGENT": t }));
+        }
+        let names = &["bulge", "twist"][..targets.len()];
+        let weights = &self.weights[..targets.len()];
+        let primitive = json!({ "attributes": attributes, "indices": out.indices(&list), "material": 0, "targets": targets });
         let mut inverse = vec![0.0f32; 32];
         [0, 5, 10, 15, 16, 21, 26, 31].iter().for_each(|i| inverse[*i] = 1.0);
         inverse[29] = -h * 0.5;
@@ -92,7 +106,7 @@ impl ForgeRig {
         ]);
         let doc = json!({ "asset": { "version": "2.0" }, "scene": 0, "scenes": [{ "nodes": [0, 2] }],
             "nodes": nodes, "skins": [{ "joints": [0, 1], "inverseBindMatrices": ibm }],
-            "meshes": [{ "name": "body", "primitives": [primitive], "weights": [0.0], "extras": { "targetNames": ["bulge"] } }],
+            "meshes": [{ "name": "body", "primitives": [primitive], "weights": weights, "extras": { "targetNames": names } }],
             "materials": [material], "textures": textures, "images": images, "animations": animations,
             "accessors": out.accessors, "bufferViews": out.views });
         super::pack(doc, out.bin)

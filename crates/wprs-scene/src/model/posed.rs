@@ -1,5 +1,6 @@
 use super::build::{append, bounds, part::part};
-use super::{MAX_MODEL_VERTICES, MAX_POSED_MORPHS, Model};
+use super::morphs::morphs;
+use super::{MAX_MODEL_VERTICES, Model};
 use crate::rigged::math::{IDENTITY, Mat, apply, mul};
 use crate::rigged::read::Bin;
 use crate::rigged::{MAX_RIG_PALETTE, Piece, Rigged};
@@ -103,7 +104,7 @@ pub(super) fn geometry(bin: &Bin, model: &mut Model, rig: &mut Rigged) -> Result
                 return Err(format!("has more than {MAX_RIG_PALETTE} bones and parts"));
             }
             super::build::room(bin, p, model)?;
-            let found = part(bin, p, MAX_MODEL_VERTICES - model.vertex_count(), &IDENTITY)?;
+            let found = part(bin, p, MAX_MODEL_VERTICES - model.vertex_count(), (&IDENTITY, &[]))?;
             let count = found.at.len();
             match joints {
                 0 => (0..count)
@@ -111,25 +112,8 @@ pub(super) fn geometry(bin: &Bin, model: &mut Model, rig: &mut Rigged) -> Result
                 _ => model.skin.extend(weights(bin, p, count, base, joints)?),
             }
             let mut prim = append(model, &found, p.material);
-            let mut targets = Vec::new();
-            for (t, target) in p.targets.iter().enumerate() {
-                let Some(&a) = target.get("POSITION") else { continue };
-                let deltas = bin.floats(a, 3)?;
-                let normals = target.get("NORMAL").map(|a| bin.floats(*a, 3)).transpose()?;
-                if deltas.len() != count * 3 || normals.as_ref().is_some_and(|d| d.len() != count * 3) {
-                    return Err("has a blend shape with a different number of vertices".into());
-                }
-                let shape = names.get(t).and_then(|s| rig.shape(s)).unwrap_or(0) as u16;
-                targets.push((shape, model.morphs.len() as u32));
-                for v in 0..count {
-                    let d = &deltas[v * 3..v * 3 + 3];
-                    let k = normals.as_ref().map_or([0.0; 3], |n| [n[v * 3], n[v * 3 + 1], n[v * 3 + 2]]);
-                    model.morphs.extend([[d[0], d[1], d[2], 0.0], [k[0], k[1], k[2], 0.0]]);
-                }
-                if model.morphs.len() > MAX_POSED_MORPHS {
-                    return Err(format!("has more than {} blend shape vertices", MAX_POSED_MORPHS / 2));
-                }
-            }
+            let targets = morphs(bin, p, (&names, &*rig), count, model)?;
+            prim.stride = if p.targets.iter().any(|t| t.contains_key("TANGENT")) { 3 } else { 2 };
             prim.piece = rig.pieces.len() as u16;
             let (first, vertices) = (prim.base, prim.vertices);
             let piece = Piece {
