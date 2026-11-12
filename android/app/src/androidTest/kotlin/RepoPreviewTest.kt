@@ -6,7 +6,9 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(Baselined::class)
 class RepoPreviewTest {
     @Before
     fun prepare() {

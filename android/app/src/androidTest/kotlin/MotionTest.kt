@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.hardware.Sensor
 import android.os.ParcelFileDescriptor
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
@@ -26,7 +25,7 @@ fun blind(context: Context): Context = object : ContextWrapper(context) {
     override fun getSystemService(name: String): Any? = if (name == Context.SENSOR_SERVICE) null else super.getSystemService(name)
 }
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class MotionTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val frames = AtomicInteger()

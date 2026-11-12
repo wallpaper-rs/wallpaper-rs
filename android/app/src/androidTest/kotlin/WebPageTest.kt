@@ -4,7 +4,6 @@ import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.view.InputDevice
 import android.view.MotionEvent
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.TimeZone
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
@@ -13,7 +12,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class WebPageTest : PageBase() {
     @Test
     fun pagesSeeTheirValuesAndNothingElse() {

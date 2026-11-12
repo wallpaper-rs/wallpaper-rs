@@ -4,7 +4,6 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.webkit.WebViewCompat
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -12,7 +11,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class PeerTest : PageBase() {
     private fun frames(atStart: Boolean): JSONObject? {
         lateinit var bare: WebView

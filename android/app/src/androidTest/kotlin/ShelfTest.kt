@@ -1,7 +1,6 @@
 package io.github.wallpaper_rs
 
 import android.provider.DocumentsContract
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 import kotlinx.coroutines.runBlocking
@@ -15,7 +14,8 @@ import org.junit.runner.RunWith
 private const val REPOSITORY = "repo"
 private const val INCOMING = "in/dawn.wpak"
 
-@RunWith(AndroidJUnit4::class)
+@CleanApp
+@RunWith(Baselined::class)
 class ShelfTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val app = instrumentation.targetContext

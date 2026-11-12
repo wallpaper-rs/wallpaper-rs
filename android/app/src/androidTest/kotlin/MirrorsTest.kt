@@ -2,7 +2,6 @@ package io.github.wallpaper_rs
 
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.work.NetworkType
 import androidx.work.WorkInfo
@@ -16,7 +15,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class MirrorsTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val tree = "content://com.android.externalstorage.documents/tree/primary%3APictures"

@@ -2,7 +2,6 @@ package io.github.wallpaper_rs
 
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 import kotlinx.coroutines.runBlocking
@@ -14,7 +13,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class ShortcutTest : SceneBase() {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
 

@@ -2,7 +2,6 @@ package io.github.wallpaper_rs
 
 import android.os.SystemClock
 import android.view.MotionEvent
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.io.File
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
@@ -11,7 +10,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class PreviewTouchTest : SceneBase() {
     private fun press(feel: Feel, action: Int, x: Float): Boolean {
         val at = SystemClock.uptimeMillis()

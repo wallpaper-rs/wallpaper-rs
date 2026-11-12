@@ -2,7 +2,6 @@ package io.github.wallpaper_rs
 
 import android.graphics.ImageFormat
 import android.hardware.HardwareBuffer
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.util.concurrent.atomic.AtomicInteger
 import org.json.JSONObject
@@ -14,7 +13,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class ReelTest {
     private val readers = Readers("reels")
     private val context = InstrumentationRegistry.getInstrumentation().targetContext

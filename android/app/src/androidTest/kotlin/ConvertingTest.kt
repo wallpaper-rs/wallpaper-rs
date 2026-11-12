@@ -6,7 +6,6 @@ import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.os.ParcelFileDescriptor
 import androidx.media3.common.util.GlUtil
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 import org.json.JSONArray
@@ -18,13 +17,10 @@ import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class ConvertingTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
-
-    private fun shell(command: String) =
-        ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation.executeShellCommand(command)).use { it.readBytes() }
 
     private fun stored(name: String): String {
         val file = fixture(name)
@@ -172,8 +168,8 @@ class ConvertingTest {
         val (asked, automatic) = stored("magenta-64x32.webm") to stored("quadrants-64x32.webm")
         val (first, kept) = item(asked).getString("path") to item(automatic).getString("path")
         try {
-            shell("dumpsys battery unplug")
-            assertTrue("battery saver is on", waitFor { shell("cmd power set-mode 1").let { Convert.saving(context) } })
+            Device.unplugged()
+            assertTrue("battery saver is on", waitFor { Device.saving(true).let { Convert.saving(context) } })
             Converting.offer(context, Conversion(asked, first, "asked", false, 64 to 32))
             Converting.offer(context, Conversion(automatic, kept, "automatic", false, 64 to 32, asked = false))
             assertTrue("the asked conversion runs", waitFor { asked in Converting.progress })
@@ -183,8 +179,8 @@ class ConvertingTest {
             assertEquals("nothing converts on its own while saving battery", kept, item(automatic).getString("path"))
             assertFalse(File(File(kept).parentFile?.parentFile, "converting/$automatic.mp4").exists())
         } finally {
-            shell("cmd power set-mode 0")
-            shell("dumpsys battery reset")
+            Device.saving(false)
+            Device.batteryReset()
         }
     }
 

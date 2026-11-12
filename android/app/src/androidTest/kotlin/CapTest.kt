@@ -8,7 +8,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -16,7 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @OptIn(UnstableApi::class)
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class CapTest {
     private val readers = Readers("cap")
     private val instrumentation = InstrumentationRegistry.getInstrumentation()

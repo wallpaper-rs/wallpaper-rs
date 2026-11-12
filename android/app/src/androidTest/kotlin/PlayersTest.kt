@@ -1,11 +1,8 @@
 package io.github.wallpaper_rs
 
-import android.content.ComponentName
 import android.media.MediaMetadata
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
-import android.os.ParcelFileDescriptor
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -13,19 +10,16 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class PlayersTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
-    private val listener = ComponentName(context, Listener::class.java).flattenToString()
     private val painter = Painter(false, Videos(context), Tilt(context), Hearing(context), Pages(context))
     private val players = Players(context)
     private val session = MediaSession(context, "wprs-test")
 
-    private fun shell(command: String) = ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation.executeShellCommand(command)).use { it.readBytes() }
-
     private fun allow(on: Boolean) {
-        shell("cmd notification ${if (on) "allow_listener" else "disallow_listener"} $listener")
+        Device.listener(on)
         assertTrue(waitFor { Players.allowed(context) == on })
     }
 

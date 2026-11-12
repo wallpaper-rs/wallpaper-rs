@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.ImageFormat
 import android.hardware.HardwareBuffer
 import androidx.media3.common.Player
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.util.concurrent.atomic.AtomicInteger
 import org.json.JSONObject
@@ -15,7 +14,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class VideoTest {
     private val readers = Readers("frames")
     private val context = InstrumentationRegistry.getInstrumentation().targetContext

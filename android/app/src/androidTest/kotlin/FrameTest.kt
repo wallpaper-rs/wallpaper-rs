@@ -1,13 +1,12 @@
 package io.github.wallpaper_rs
 
 import android.os.Debug
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class FrameTest : SceneBase() {
     @Test
     fun drawingFramesMakesNoNativeAllocationsBesidesTheGpuCalls() {
