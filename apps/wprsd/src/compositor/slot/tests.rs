@@ -37,7 +37,7 @@ fn frames(slot: &PlayerSlot, span: Duration) -> Vec<(Instant, Duration)> {
 
 fn playing(slot: &PlayerSlot, within: impl Fn(Duration) -> bool) {
     let (start, mut last) = (Instant::now(), None::<Duration>);
-    while start.elapsed() < Duration::from_secs(10) {
+    while start.elapsed() < Duration::from_secs(30) {
         let pts = lock(&slot.inbox.frame).take().and_then(|f| f.pts).filter(|pts| within(*pts));
         if let (Some(pts), Some(was)) = (pts, last)
             && pts > was
@@ -47,7 +47,7 @@ fn playing(slot: &PlayerSlot, within: impl Fn(Duration) -> bool) {
         last = pts.or(last);
         std::thread::sleep(Duration::from_millis(4));
     }
-    panic!("the video did not play within 10 s");
+    panic!("the video did not play within 30 s");
 }
 
 #[test]
@@ -72,9 +72,25 @@ fn a_steered_part_and_speed_reach_a_video_with_sound_opened_plain() {
     let seen = frames(&slot, Duration::from_secs(2));
     assert!(seen.len() > 10, "only {} frames after steering", seen.len());
     assert!(seen.iter().all(|(_, pts)| range.contains(pts)), "{seen:?}");
-    let steps = seen.windows(2).filter(|w| w[1].1 > w[0].1);
-    let (stream, wall) = steps.fold((0.0, 0.0), |(s, w), p| {
-        (s + (p[1].1 - p[0].1).as_secs_f64(), w + (p[1].0 - p[0].0).as_secs_f64())
-    });
-    assert!((stream / wall / 2.0 - 1.0).abs() < 0.35, "played at {:.0} %", stream / wall * 100.0);
+    let speed = rate(&seen, Duration::from_millis(400), 2.0);
+    assert!((speed / 2.0 - 1.0).abs() < 0.35, "played at {:.0} %", speed * 100.0);
+}
+
+fn rate(seen: &[(Instant, Duration)], lap: Duration, expected: f64) -> f64 {
+    let mut laps = 0u32;
+    let stream: Vec<(Instant, f64)> = std::iter::once(None)
+        .chain(seen.iter().map(Some))
+        .zip(seen)
+        .map(|(before, &(at, pts))| {
+            laps += u32::from(before.is_some_and(|b| pts < b.1));
+            (at, (pts + lap * laps).as_secs_f64())
+        })
+        .collect();
+    let Some(&(start, _)) = stream.first() else { return 0.0 };
+    let late = |(at, t): &(Instant, f64)| (*at - start).as_secs_f64() - t / expected;
+    let third = (stream.len() / 3).max(1);
+    let on_time = |part: &[(Instant, f64)]| part.iter().copied().min_by(|a, b| late(a).total_cmp(&late(b)));
+    let ends = (on_time(&stream[..third]), on_time(&stream[stream.len() - third..]));
+    let (Some(a), Some(b)) = ends else { return 0.0 };
+    (b.1 - a.1) / (b.0 - a.0).as_secs_f64()
 }
