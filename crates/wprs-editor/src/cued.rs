@@ -30,3 +30,16 @@ pub fn offered(doc: &Value) -> Vec<String> {
     let touches = ids.flat_map(|id| TOUCHES.map(|k| format!("{k}:{id}")));
     events.into_iter().chain(touches).collect()
 }
+
+pub fn fires(doc: &Value, trigger: &str) -> Value {
+    let timelines = doc["scene"]["timelines"].as_array().into_iter().flatten();
+    let timelines: Vec<&str> =
+        timelines.filter(|t| t["trigger"] == trigger).filter_map(|t| t["id"].as_str()).collect();
+    let layers = crate::layers::walk(doc);
+    let sounds: Vec<&str> = layers
+        .iter()
+        .filter(|(_, l)| l["play_on"] == trigger)
+        .filter_map(|(_, l)| l["id"].as_str())
+        .collect();
+    serde_json::json!({ "trigger": trigger, "timelines": timelines, "sounds": sounds })
+}

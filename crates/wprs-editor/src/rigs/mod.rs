@@ -168,6 +168,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("spread").is_some() => crate::spread::spread(doc, &q["spread"]),
         _ if q.get("curves").is_some() => crate::graph::curves(doc, &q["curves"]),
         _ if q.get("key_clip").is_some() => crate::graph::key_clip(doc, &q["key_clip"]),
+        _ if q.get("fires").is_some() => crate::cued::fires(doc, q["fires"].as_str().unwrap_or_default()),
         _ => rig(dir, doc, id),
     }
 }

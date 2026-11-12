@@ -181,7 +181,10 @@ retraso, el arranque solo y el disparador, elegido entre `start`, `beat`, los bo
 `media:`; sus eventos son marcas sobre una franja que se agregan con doble clic, se arrastran, se
 renombran y se quitan con la acción `timeline`. *Fire it in the preview* dispara su disparador en la
 vista previa (`SimulateTrigger`, `dbus.md`; `wprs-ctl input trigger OUTPUT TRIGGER`), con lo que
-arrancan esa línea y todas las líneas y sonidos con el mismo disparador.
+arrancan esa línea y todas las líneas y sonidos con el mismo disparador. Todo campo de disparador del
+inspector, como el `play_on` de una capa de sonido, tiene al lado del selector el mismo botón de
+disparar en la vista previa; su ayuda dice qué líneas de tiempo y qué capas de sonido arranca, de la
+consulta `fires` (`wprs-ctl scene ask DIR fires '"event:boom"'`, que da `timelines` y `sounds`).
 
 ### Editor de curvas
 

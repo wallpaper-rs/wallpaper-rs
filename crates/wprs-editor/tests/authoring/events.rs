@@ -52,3 +52,19 @@ fn the_events_of_a_timeline_are_added_moved_and_removed_within_its_length() {
     let crowded = refused(&mut p, line("intro", json!({ "add_events": many })));
     assert!(crowded.contains("at most 64"), "{crowded}");
 }
+
+#[test]
+fn a_trigger_tells_the_timelines_and_sounds_it_starts() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    p.doc["scene"]["layers"]
+        .as_array_mut()
+        .unwrap()
+        .push(json!({"id": "boom", "type": "sound", "sound": "none", "play_on": "event:hit"}));
+    p.doc["scene"]["timelines"] = json!([{"id": "shake", "duration": 1, "trigger": "event:hit"},
+        {"id": "calm", "duration": 1}]);
+    let ask = |t: &str| wprs_editor::rigs::query(root.path(), &p.doc, "", &json!({ "fires": t }));
+    assert_eq!(ask("event:hit")["timelines"], json!(["shake"]));
+    assert_eq!(ask("event:hit")["sounds"], json!(["boom"]));
+    assert_eq!(ask("click:card")["sounds"], json!([]));
+}

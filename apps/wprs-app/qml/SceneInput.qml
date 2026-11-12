@@ -135,7 +135,8 @@ ColumnLayout {
                 "lines": hosts.meta,
                 "computed": hosts.meta,
                 "ref:thumbnail": hosts.meta,
-                "ref:animated": hosts.meta
+                "ref:animated": hosts.meta,
+                "ref:trigger": hosts.trigger
             })[input.field.widget] ?? (input.field.widget.startsWith("package:") ? hosts.authoring : /^(refs|map):|^ref:reach$/.test(input.field.widget) ? editors.refs : input.field.widget.startsWith("ref:") ? choiceEditor : editors.raw)
     }
 

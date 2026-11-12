@@ -63,4 +63,5 @@ pub const ASKS: [(&str, &str, &str); 39] = [
         "Copied keys as a clipboard text, or the keys a clipboard text holds (none for any other text)",
         r#"{"copy": [{"pointer": "/scene/layers/0/opacity", "times": [0]}]}"#,
     ),
+    ("fires", "The timelines and sound layers a trigger starts", r#""event:boom""#),
 ];

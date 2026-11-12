@@ -15,6 +15,7 @@ Item {
     readonly property Component fonts: fontsEditor
     readonly property Component multiline: multilineEditor
     readonly property Component format: formatEditor
+    readonly property Component trigger: triggerEditor
 
     visible: false
 
@@ -102,6 +103,13 @@ Item {
         id: formatEditor
 
         SceneFormat {
+            host: hosts.input
+        }
+    }
+
+        id: triggerEditor
+
+        SceneTrigger {
             host: hosts.input
         }
     }
