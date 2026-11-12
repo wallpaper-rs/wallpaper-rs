@@ -5,6 +5,7 @@ mod fields;
 mod glyphs;
 mod handles;
 mod looks;
+mod named;
 mod pulls;
 mod salt;
 mod samples;
@@ -97,6 +98,9 @@ pub(crate) fn checked(dir: &Path, doc: &Value, ops: Vec<Op>) -> Result<Vec<Op>> 
 }
 
 pub(crate) fn edit(dir: &Path, doc: &Value, e: &ParticleEdit) -> Result<Vec<Op>> {
+    if let ParticleEdit::Sow(crate::action::SowEdit::Scripts { from, to }) = e {
+        return named::rewrite(dir, doc, from, to);
+    }
     let ops = match e {
         ParticleEdit::Shape { system: s, emitter, shape } => {
             spots::shape(doc, &system(doc, s)?, *emitter, shape)?

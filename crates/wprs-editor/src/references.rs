@@ -93,17 +93,27 @@ fn bound(value: &Value, pointer: &str, id: &str, out: &mut Vec<String>) {
     }
 }
 
-pub fn scripts(dir: &Path, doc: &Value, id: &str) -> Vec<String> {
+#[derive(Debug, Clone, PartialEq, serde::Serialize)]
+pub struct ScriptUse {
+    pub path: String,
+    pub line: usize,
+}
+
+pub fn script_uses(dir: &Path, doc: &Value, id: &str) -> Vec<ScriptUse> {
     let quoted = ['"', '\'', '`'].map(|q| format!("{q}{id}{q}"));
     let list = doc["scene"]["scripts"].as_array().into_iter().flatten().filter_map(|s| s["path"].as_str());
-    let lines = |path: &str| {
-        let text =
-            wprs_format::check_path(path).ok().and_then(|_| std::fs::read_to_string(dir.join(path)).ok());
-        let text = text.unwrap_or_default();
-        let found = text.lines().enumerate().filter(|(_, l)| quoted.iter().any(|q| l.contains(q.as_str())));
-        found.map(|(n, _)| format!("{path}:{}", n + 1)).collect::<Vec<_>>()
-    };
-    list.flat_map(lines).collect()
+    let mut found = Vec::new();
+    for path in list.filter(|p| wprs_format::check_path(p).is_ok()) {
+        let Ok(text) = std::fs::read_to_string(dir.join(path)) else { continue };
+        let lines = text.lines().enumerate();
+        let named = lines.filter(|(_, l)| quoted.iter().any(|q| l.contains(q.as_str())));
+        found.extend(named.map(|(i, _)| ScriptUse { path: path.to_owned(), line: i + 1 }));
+    }
+    found
+}
+
+pub fn scripts(dir: &Path, doc: &Value, id: &str) -> Vec<String> {
+    script_uses(dir, doc, id).into_iter().map(|u| format!("{}:{}", u.path, u.line)).collect()
 }
 
 pub fn condition(doc: &Value, id: &str, enabled: bool, text: &str) -> Result<Vec<Op>> {

@@ -184,5 +184,6 @@ pub(super) fn edit(doc: &Value, e: &S) -> Result<Vec<Op>> {
             super::emits::window(doc, &system(doc, s)?, *index, *window)?
         }
         S::Rename { system: s, to } => super::emits::rename(doc, &system(doc, s)?, s, to)?,
+        S::Scripts { .. } => Vec::new(),
     })
 }

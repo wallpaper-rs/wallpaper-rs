@@ -40,6 +40,7 @@ if ctl scene layer "$craft" dust instance --move-point 8=1,1 2>/dev/null; then f
 printf 'const system = "sparks";\nexport function update() { return system; }\n' >"$WORK/sparks.js"
 ctl scene import-script "$craft" "$WORK/sparks.js" >/dev/null || fail "the script that names the system was not imported"
 ctl scene particles "$craft" sparks rename embers 2>"$WORK/renamed.err" || fail "the system was not renamed"
-grep -q 'names "sparks"; scripts are not rewritten' "$WORK/renamed.err" || fail "renaming did not warn about the script that names the system"
+grep -q 'scripts/sparks.js:1 names "sparks"; scripts are not rewritten' "$WORK/renamed.err" || fail "renaming did not warn about the line of the script that names the system"
+grep -q 'scene act DIR particles' "$WORK/renamed.err" || fail "renaming did not offer to rewrite the names"
 [ "$(ctl scene show "$craft" /scene/particles/dust/children/0/system)" = '"embers"' ] || fail "the child did not follow the new name"
 ctl scene preview "$craft" -o preview:1 --time 0.5 || fail "a scene with every emitter and color field was not previewed"

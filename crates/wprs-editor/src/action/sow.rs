@@ -98,4 +98,8 @@ pub enum SowEdit {
         system: String,
         to: String,
     },
+    Scripts {
+        from: String,
+        to: String,
+    },
 }

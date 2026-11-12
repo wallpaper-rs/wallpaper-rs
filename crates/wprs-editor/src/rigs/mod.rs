@@ -89,6 +89,9 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
             let ids: Vec<String> = serde_json::from_value(q["copy"]["ids"].clone()).unwrap_or_default();
             crate::ids::copy(dir, doc, &ids).unwrap_or_else(|e| json!({ "error": e.to_string() }))
         }
+        _ if q.get("script_uses").is_some() => {
+            json!(crate::references::script_uses(dir, doc, q["script_uses"]["name"].as_str().unwrap_or(id)))
+        }
         _ if q.get("particles").is_some() => {
             let p = &q["particles"];
             let (t, sound) = (p["time"].as_f64().unwrap_or(0.0), p["sound"].as_f64().unwrap_or(0.0) as f32);

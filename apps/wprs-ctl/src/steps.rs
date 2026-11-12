@@ -46,6 +46,14 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
     ensure!(!(undoing && ops.is_empty()), "there is nothing to {}", action.name());
     project.save()?;
     named.iter().for_each(|(path, id)| eprintln!("warning: {path} names {id:?}; scripts are not rewritten"));
+    if let (Action::Particles(ParticleEdit::Sow(SowEdit::Rename { system, to })), false) =
+        (&action, named.is_empty())
+    {
+        eprintln!(
+            "to rewrite the exact names: scene act DIR particles '{}'",
+            json!({ "scripts": { "from": system, "to": to } })
+        );
+    }
     if json {
         println!("{}", serde_json::to_string_pretty(&json!({ "ops": ops }))?);
         return Ok(());

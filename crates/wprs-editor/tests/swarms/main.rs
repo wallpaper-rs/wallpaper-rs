@@ -11,6 +11,7 @@ mod emits;
 mod fields;
 mod handles;
 mod looks;
+mod named;
 mod owns;
 mod sows;
 mod tends;
