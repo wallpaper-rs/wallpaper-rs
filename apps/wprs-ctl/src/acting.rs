@@ -102,6 +102,15 @@ fn listed(what: &[(&str, &str)], json: bool) -> Result<()> {
     Ok(())
 }
 
+fn example_text(kind: &str, name: &str) -> String {
+    let lines = manual::example_lines(kind, name).unwrap_or_default();
+    let head = match lines.len() > 1 {
+        true => "Example (the lines before the last one prepare the scene):",
+        false => "Example:",
+    };
+    format!("\n{head}\n  {}", lines.join("\n  "))
+}
+
 fn described(name: &str, json: bool) -> Result<()> {
     let Some(schema) = manual::schema(name) else {
         return Err(usage(format!("there is no action {name:?}; wprs-ctl scene actions lists them")));
@@ -111,21 +120,22 @@ fn described(name: &str, json: bool) -> Result<()> {
         return Ok(());
     }
     println!("{}", manual::describe(name).unwrap_or_default());
-    println!("\nExample:\n  {}", manual::invocation(name).unwrap_or_default());
+    println!("{}", example_text("act", name));
     Ok(())
 }
 
 fn asked(name: &str, json: bool) -> Result<()> {
-    let Some((about, args)) = manual::ask_about(name) else {
+    let Some(about) = manual::ask_about(name) else {
         return Err(usage(format!(
             "there is no query {name:?}; wprs-ctl scene actions --queries lists them"
         )));
     };
+    let lines = manual::example_lines("ask", name).unwrap_or_default();
     if json {
-        println!("{}", json!({ "name": name, "about": about, "args": serde_json::from_str::<Value>(args)? }));
+        println!("{}", json!({ "name": name, "about": about, "example": lines }));
         return Ok(());
     }
-    println!("{name}: {about}\n\nExample:\n  wprs-ctl scene ask DIR {name} '{args}'");
+    println!("{name}: {about}\n{}", example_text("ask", name));
     Ok(())
 }
 
@@ -135,10 +145,7 @@ pub fn run(command: Acting) -> Result<()> {
             edit_all(&dir, actions(&action, given(args, file)?)?, json)
         }
         Acting::Actions { name: None, queries: false, json } => listed(&manual::ABOUT, json),
-        Acting::Actions { name: None, queries: true, json } => {
-            let all: Vec<(&str, &str)> = manual::ASKS.iter().map(|(n, a, _)| (*n, *a)).collect();
-            listed(&all, json)
-        }
+        Acting::Actions { name: None, queries: true, json } => listed(&manual::ASKS, json),
         Acting::Actions { name: Some(name), queries: false, json } => described(&name, json),
         Acting::Actions { name: Some(name), queries: true, json } => asked(&name, json),
         Acting::Ask { dir, query, args, file, layer } => {

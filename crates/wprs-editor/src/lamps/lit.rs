@@ -29,7 +29,7 @@ fn sprites(e: &LightingEdit) -> Result<()> {
     let maps = [&e.normal, &e.env, &e.roughness_map, &e.emissive_map].iter().any(|m| m.is_some());
     ensure!(
         !maps && e.roughness.is_none() && e.reflection.is_none(),
-        said("editor.lighting_sprites", "a particles layer takes only strength and glow", &[])
+        said("editor.lighting_sprites", "a particles layer takes only strength and emissive", &[])
     );
     Ok(())
 }

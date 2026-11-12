@@ -1,0 +1,636 @@
+act scene3d
+wprs-ctl scene act DIR import '{"file":"figure.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"figure","id":"cube","at":[1,0,0]}}}'
+
+ask model_info
+wprs-ctl scene act DIR import '{"file":"figure.glb"}'
+wprs-ctl scene act DIR import '{"file":"model.glb"}'
+wprs-ctl scene ask DIR model_info '{"asset":"figure"}'
+
+ask materials3d
+wprs-ctl scene act DIR import '{"file":"model.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"model","id":"doll"}}}'
+wprs-ctl scene ask DIR materials3d '{"layer":"doll"}'
+
+ask material_check
+wprs-ctl scene act DIR scene3d '{"new_material":{"name":"glow"}}'
+wprs-ctl scene ask DIR material_check '{"name":"glow"}'
+
+ask surface3d
+wprs-ctl scene act DIR import '{"file":"model.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"model","id":"doll"}}}'
+wprs-ctl scene ask DIR surface3d '{"at":[960,540]}'
+
+ask stage3d
+wprs-ctl scene act DIR import '{"file":"figure.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"figure","id":"cube"}}}'
+wprs-ctl scene act DIR scene3d '{"view":{"orbit":[30,10]}}'
+wprs-ctl scene ask DIR stage3d '{"time":0}'
+
+ask cost3d
+wprs-ctl scene act DIR import '{"file":"model.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"model","id":"doll"}}}'
+wprs-ctl scene ask DIR cost3d '{"quality":"q2"}'
+
+ask shadows3d
+wprs-ctl scene act DIR import '{"file":"figure.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"figure","id":"cube"}}}'
+wprs-ctl scene act DIR add_layer '{"kind":"light","id":"bulb"}'
+wprs-ctl scene act DIR scene3d '{"shadows":{"layer":"bulb","on":true,"resolution":1024}}'
+wprs-ctl scene ask DIR shadows3d '{"time":0}'
+
+ask paths3d
+wprs-ctl scene act DIR import '{"file":"figure.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"figure","id":"cube"}}}'
+wprs-ctl scene act DIR scene3d '{"path":{"add":{"id":"flight"}}}'
+wprs-ctl scene ask DIR paths3d '{"time":1}'
+
+ask bone3d
+wprs-ctl scene act DIR import '{"file":"model.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"model","id":"doll"}}}'
+wprs-ctl scene act DIR clip '{"layer":"doll","id":"step","animation":"walk","add":true,"play":true}'
+wprs-ctl scene ask DIR bone3d '{"layer":"doll","bone":"tip","turn":10}'
+
+ask bound3d
+wprs-ctl scene act DIR import '{"file":"model.glb"}'
+wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"model","id":"doll"}}}'
+wprs-ctl scene act DIR clip '{"layer":"doll","id":"step","animation":"walk","add":true,"play":true}'
+wprs-ctl scene ask DIR bound3d '{"layer":"doll","bone":"tip","point":[1000,300]}'
+
+act set
+wprs-ctl scene act DIR set '{"pointer":"/scene/canvas/background","value":"#112233"}'
+
+act add
+wprs-ctl scene act DIR add '{"pointer":"/scene/layers/-","value":{"id":"backdrop","type":"solid","color":"#102030"}}'
+
+act remove
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR remove '{"pointer":"/scene/layers/0/color"}'
+
+act move
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"title"}'
+wprs-ctl scene act DIR move '{"from":"/scene/layers/1","to":"/scene/layers/0"}'
+
+act add_layer
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+
+act remove_layer
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR remove_layer '{"id":"backdrop"}'
+
+act duplicate_layer
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"title"}'
+wprs-ctl scene act DIR duplicate_layer '{"id":"title"}'
+
+act move_layer
+wprs-ctl scene act DIR add_layer '{"kind":"group","id":"charm"}'
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"title"}'
+wprs-ctl scene act DIR move_layer '{"id":"title","to":0,"into":"charm"}'
+
+act group
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"title"}'
+wprs-ctl scene act DIR group '{"ids":["backdrop","title"],"id":"sign"}'
+
+act ungroup
+wprs-ctl scene act DIR add_layer '{"kind":"group","id":"charm"}'
+wprs-ctl scene act DIR ungroup '{"id":"charm"}'
+
+act hide
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR hide '{"id":"backdrop","hidden":true}'
+
+act lock
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR lock '{"id":"backdrop","locked":true}'
+
+act solo
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR solo '{"id":"backdrop"}'
+
+act rename
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene act DIR rename '{"kind":"layer","id":"sky","to":"backdrop"}'
+
+act paste
+wprs-ctl scene act DIR paste '{"clip":{"layers":[{"id":"greet","type":"text","text":"Hello","size":96,"color":"#ffffff"}]}}'
+
+act rgb
+wprs-ctl scene act DIR add_layer '{"kind":"adjustment","id":"setting"}'
+wprs-ctl scene act DIR rgb '{"layer":"setting","on":true}'
+
+act layer
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene act DIR layer '{"transform":{"layer":"sky","position":[400,300],"rotation":10,"scale":[1.5,1.5],"size":[800,600]}}'
+
+act import
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+
+act asset
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR asset '{"asset":"picture","ktx2":true,"codec":"etc1s","quality":50}'
+
+act sprites
+wprs-ctl scene act DIR import '{"file":"sheet.png","id":"sheet"}'
+wprs-ctl scene act DIR sprites '{"grid":{"asset":"sheet","columns":4,"rows":2}}'
+
+act film
+wprs-ctl scene act DIR add_layer '{"kind":"video","file":"video.webm","id":"clip"}'
+wprs-ctl scene act DIR film '{"trim":{"layer":"clip","start":0.1,"end":0.5}}'
+
+act import_assets
+wprs-ctl scene new source
+wprs-ctl scene act source add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene act source manifest '{"credit":{"paths":["assets/picture.png"],"license":"CC-BY-4.0","attribution":"Ana Perez"}}'
+wprs-ctl pack new-assets source parts --part layer:sky --id org.example.parts --title Partes --license CC-BY-4.0 --attribution "Ana Perez"
+wprs-ctl pack build parts -o parts.wpak
+wprs-ctl scene act DIR import_assets '{"package":"parts.wpak","parts":["layer:sky"]}'
+
+act canvas
+wprs-ctl scene act DIR canvas '{"size":{"size":[1280,720]}}'
+
+act effects
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"blur","params":{"radius":6},"name":"soft","optional":true}}'
+
+act effect_rule
+wprs-ctl scene new-effect DIR glow --template color
+wprs-ctl scene act DIR effect_rule '{"effect":"glow","param":"amount","uses":"audio"}'
+
+act paint_mask
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"displace"}}'
+wprs-ctl scene act DIR paint_mask '{"pointer":"/scene/layers/0/effects/0/params/map","points":[[0.2,0.3],[0.8,0.6]],"radius":0.1}'
+
+act comb_flow
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"flow"}}'
+wprs-ctl scene act DIR comb_flow '{"pointer":"/scene/layers/0/effects/0/params/map","points":[[0.2,0.3],[0.8,0.6]],"radius":0.1,"value":0.8}'
+
+act ramp
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"fire"}}'
+wprs-ctl scene act DIR ramp '{"stops":[{"at":0,"color":"#000000"},{"at":0.5,"color":"#ff6a00"},{"at":1,"color":"#ffff99"}],"pointer":"/scene/layers/0/effects/0/params/gradient"}'
+
+ask rules
+wprs-ctl scene ask DIR rules '{"effect":"displace"}'
+
+ask effect_cost
+wprs-ctl scene ask DIR effect_cost '{"effect":"blur"}'
+
+ask ramp
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"fire"}}'
+wprs-ctl scene act DIR ramp '{"stops":[{"at":0,"color":"#000000"},{"at":1,"color":"#ffff99"}],"pointer":"/scene/layers/0/effects/0/params/gradient"}'
+wprs-ctl scene ask DIR ramp '"gradient"'
+
+ask depth_model
+wprs-ctl scene ask DIR depth_model '{}'
+
+ask normals
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene ask DIR normals '{"layer":"image","strength":3,"blur":2}'
+
+ask map
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR paint_map '{"layer":"image","map":"emissive","points":[[0.5,0.5]],"radius":0.2,"hardness":1}'
+wprs-ctl scene ask DIR map '{"layer":"image","map":"emissive"}'
+
+act mesh_from_picture
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+
+act mesh_depth
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR mesh_depth '{"layer":"mesh","points":[[0.3,0.5],[0.7,0.5]],"radius":0.2,"by":40}'
+
+act bone
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+
+act auto_weights
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR auto_weights '{"layer":"mesh"}'
+
+act weights
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR weights '{"layer":"mesh","bone":"arm","points":[[0.5,0.4],[0.5,0.6]],"mode":"add","by":0.8}'
+
+act clip
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true,"length":1.5,"loop":"pingpong","play":true}'
+
+act key
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true,"length":2}'
+wprs-ctl scene act DIR key '{"layer":"mesh","clip":"greet","time":0,"bone":"arm","rotation":0}'
+
+act edit_keys
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true,"length":2}'
+wprs-ctl scene act DIR key '{"layer":"mesh","clip":"greet","time":0,"bone":"arm","rotation":0}'
+wprs-ctl scene act DIR key '{"layer":"mesh","clip":"greet","time":1,"bone":"arm","rotation":40}'
+wprs-ctl scene act DIR key '{"layer":"mesh","clip":"greet","time":2,"bone":"arm","rotation":0}'
+wprs-ctl scene act DIR edit_keys '{"picks":[{"pointer":"/scene/layers/0/clips/0/bones/arm/rotation","times":[1]}],"shift":0.5}'
+
+act clip_event
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true,"length":2}'
+wprs-ctl scene act DIR clip_event '{"layer":"mesh","clip":"greet","name":"hello","time":0.5}'
+
+act shape_sculpt
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR shape_sculpt '{"layer":"mesh","shape":"smile","points":[[0.4,0.5],[0.6,0.5]],"mode":"push","by":20,"radius":0.2}'
+
+act expression
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR shape_sculpt '{"layer":"mesh","shape":"smile","points":[[0.4,0.5],[0.6,0.5]],"mode":"push","by":20,"radius":0.2}'
+wprs-ctl scene act DIR expression '{"layer":"mesh","name":"happy","shapes":{"smile":1}}'
+
+act ik
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"hand","parent":"arm","at":[0.5,0.2]}'
+wprs-ctl scene act DIR ik '{"layer":"mesh","root":"root","tip":"hand","target":[128,20]}'
+
+act physics
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"hand","parent":"root","at":[0.5,0.2]}'
+wprs-ctl scene act DIR physics '{"layer":"mesh","bones":["hand"],"mode":"spring","stiffness":0.4,"gravity":2}'
+
+act collider
+wprs-ctl scene act DIR add_layer '{"kind":"model","file":"model.glb","id":"doll"}'
+wprs-ctl scene act DIR collider '{"layer":"doll","bone":"tip","shape":"capsule","radius":0.2}'
+
+act bone_rule
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"hand","parent":"arm","at":[0.5,0.2]}'
+wprs-ctl scene act DIR bone_rule '{"layer":"mesh","bone":"hand","parent":"root","weight":0.5}'
+
+act wind
+wprs-ctl scene act DIR wind '{"angle":0,"strength":300,"gusts":0.5}'
+
+act attach
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"hand","parent":"root","at":[0.5,0.2]}'
+wprs-ctl scene act DIR add_layer '{"kind":"image","source":"picture","id":"hat"}'
+wprs-ctl scene act DIR attach '{"layer":"hat","to":"mesh","bone":"hand","offset":[5,5],"inherit":["position","rotation"]}'
+
+act point
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR point '{"layer":"mesh","name":"ring","at":[0.5,0.2],"parent":"root"}'
+
+act parts
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR parts '{"layer":"mesh","order":{"body":3}}'
+
+act animate
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true}'
+wprs-ctl scene act DIR animate '{"layer":{"layer":"mesh","add":"greet","weight":0.8,"rate":1.5}}'
+
+ask rig
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene ask DIR rig '{}' --layer mesh
+
+ask motion
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true,"length":2,"play":true}'
+wprs-ctl scene ask DIR motion '{"layer":"mesh"}'
+
+ask outline
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh","cells":4}'
+wprs-ctl scene ask DIR outline '{}' --layer mesh
+
+ask keys
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true,"length":2}'
+wprs-ctl scene act DIR key '{"layer":"mesh","clip":"greet","time":1,"bone":"arm","rotation":40}'
+wprs-ctl scene ask DIR keys '"greet"' --layer mesh
+
+ask pose
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR clip '{"layer":"mesh","id":"greet","add":true,"length":2}'
+wprs-ctl scene act DIR key '{"layer":"mesh","clip":"greet","time":1,"bone":"arm","rotation":40}'
+wprs-ctl scene ask DIR pose '{"clip":"greet","time":1}' --layer mesh
+
+ask weights
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene ask DIR weights '"arm"' --layer mesh
+
+ask handles
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"arm","parent":"root","at":[0.5,0.5]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"hand","parent":"arm","at":[0.5,0.2]}'
+wprs-ctl scene act DIR ik '{"layer":"mesh","root":"root","tip":"hand","target":[128,20]}'
+wprs-ctl scene act DIR physics '{"layer":"mesh","bones":["hand"],"gravity":1}'
+wprs-ctl scene ask DIR handles '{}' --layer mesh
+
+ask script_calls
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
+wprs-ctl scene act DIR bone '{"layer":"mesh","name":"hand","parent":"root","at":[0.5,0.2]}'
+wprs-ctl scene act DIR physics '{"layer":"mesh","bones":["hand"]}'
+wprs-ctl scene ask DIR script_calls '{"layer":"mesh"}'
+
+ask wind
+wprs-ctl scene act DIR wind '{"angle":90,"strength":200,"gusts":0.2}'
+wprs-ctl scene ask DIR wind '{}'
+
+ask wander
+wprs-ctl scene ask DIR wander '{"time":1.5}'
+
+act particles
+wprs-ctl scene act DIR add_layer '{"kind":"particles","id":"sparks"}'
+wprs-ctl scene act DIR particles '{"create":{"system":"smoke","from":"sparks"}}'
+
+act light
+wprs-ctl scene act DIR light '{"add":{"light":"spot","id":"lamp","at":[960,300]}}'
+
+act lighting
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR lighting '{"layer":"image","roughness":0.3,"reflection":0.2,"emissive":1,"strength":0.9}'
+
+act normals
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR normals '{"layer":"image","strength":3,"blur":2,"id":"relief"}'
+
+act paint_map
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR paint_map '{"layer":"image","map":"roughness","points":[[0.2,0.2],[0.8,0.5]],"radius":0.1,"value":0.2}'
+
+act ambient
+wprs-ctl scene act DIR ambient '{"ambient":"#202040","sky":"#8090ff"}'
+
+ask particles
+wprs-ctl scene act DIR add_layer '{"kind":"particles","id":"sparks"}'
+wprs-ctl scene ask DIR particles '{"layer":"sparks","time":1.5,"sound":0.5}' --layer sparks
+
+ask budget
+wprs-ctl scene act DIR add_layer '{"kind":"particles","id":"sparks"}'
+wprs-ctl scene ask DIR budget '{"layer":"sparks","time":1.5,"quality":"q2"}' --layer sparks
+
+ask swarm_light
+wprs-ctl scene act DIR add_layer '{"kind":"particles","id":"sparks"}'
+wprs-ctl scene ask DIR swarm_light '{"system":"sparks"}'
+
+ask lights
+wprs-ctl scene act DIR light '{"add":{"light":"spot","id":"lamp"}}'
+wprs-ctl scene ask DIR lights '{"time":0}'
+
+ask falloff
+wprs-ctl scene act DIR light '{"add":{"light":"spot","id":"lamp"}}'
+wprs-ctl scene ask DIR falloff '{"layer":"lamp","time":0}'
+
+ask lighting
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR lighting '{"layer":"image","roughness":0.3}'
+wprs-ctl scene act DIR light '{"add":{"light":"point","id":"spot"}}'
+wprs-ctl scene ask DIR lighting '{"time":0,"quality":"q2"}'
+
+ask air
+wprs-ctl scene act DIR light '{"add":{"light":"point","id":"spot"}}'
+wprs-ctl scene act DIR light '{"volumetric":{"layer":"spot","density":0.3}}'
+wprs-ctl scene ask DIR air '{"layer":"spot","time":0}'
+
+ask projection
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR light '{"add":{"light":"spot","id":"lamp"}}'
+wprs-ctl scene act DIR light '{"projection":{"layer":"lamp","asset":"picture"}}'
+wprs-ctl scene ask DIR projection '{"layer":"lamp","time":0}'
+
+ask hemisphere
+wprs-ctl scene act DIR ambient '{"ambient":"#202040","sky":"#8090ff"}'
+wprs-ctl scene ask DIR hemisphere '{}'
+
+ask spread
+wprs-ctl scene ask DIR spread '{"layout":"dual"}'
+
+ask sounds
+wprs-ctl scene act DIR add_layer '{"kind":"sound","file":"sound.ogg","id":"breeze"}'
+wprs-ctl scene act DIR set '{"pointer":"/scene/layers/0/play_on","value":"start"}'
+wprs-ctl scene ask DIR sounds '{}'
+
+ask wave
+wprs-ctl scene act DIR add_layer '{"kind":"sound","file":"sound.ogg"}'
+wprs-ctl scene ask DIR wave '{"asset":"sound","buckets":8}'
+
+ask meter
+wprs-ctl scene ask DIR meter '{"source":{"audio":[0,3],"of":16},"reading":{"listening":true,"raw":[[0.5,0.2,0.1,0.9],[0.5,0.2,0.1,0.9]],"loudness":0.5},"of":16}'
+
+ask response
+wprs-ctl scene ask DIR response '{"smooth":{"up":0.05,"down":0.4}}'
+
+act keyframe
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene act DIR keyframe '{"pointer":"/scene/layers/0/opacity","time":0,"value":0}'
+
+act timeline
+wprs-ctl scene act DIR timeline '{"id":"lap","add":true,"duration":3}'
+
+act manifest
+wprs-ctl scene act DIR manifest '{"origin":{"kind":"derived","derived_from":[{"author":"Ana Perez","title":"Aurora","url":"https://example.org/aurora","license":"CC-BY-4.0"}]}}'
+
+act translate
+wprs-ctl scene act DIR translate '{"pointer":"/manifest/title","language":"es","text":"Mi escena"}'
+
+act thumbnail
+wprs-ctl scene act DIR thumbnail '{"file":"picture.png"}'
+
+act shot
+wprs-ctl scene act DIR add_layer '{"kind":"solid"}'
+wprs-ctl scene act DIR shot '{"still":{"time":1}}'
+
+act upgrade
+wprs-ctl scene act DIR set '{"pointer":"/manifest/schema","value":"wallpaper-rs.wpak/1"}'
+wprs-ctl scene act DIR upgrade '{"rating":"mature","reasons":["language"],"photosensitive":false}'
+
+act add_property
+wprs-ctl scene act DIR add_property '{"kind":"group","id":"lights"}'
+
+act move_property
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"glow"}'
+wprs-ctl scene act DIR add_property '{"kind":"bool","id":"active"}'
+wprs-ctl scene act DIR move_property '{"id":"active","to":0}'
+
+act rename_property
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"glow"}'
+wprs-ctl scene act DIR rename_property '{"id":"glow","to":"bulb"}'
+
+act remove_property
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"glow"}'
+wprs-ctl scene act DIR remove_property '{"id":"glow"}'
+
+act property
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"bulb"}'
+wprs-ctl scene act DIR property '{"id":"bulb","min":0,"max":10,"step":0.5,"default":3}'
+
+act condition
+wprs-ctl scene act DIR add_property '{"kind":"bool","id":"active"}'
+wprs-ctl scene act DIR add_property '{"kind":"combo","id":"style"}'
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"level"}'
+wprs-ctl scene act DIR condition '{"id":"level","text":"active && style == \"option_1\""}'
+
+act add_preset
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"bulb"}'
+wprs-ctl scene act DIR add_preset '{"id":"soft","label":"Soft"}'
+
+act import_script
+wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+
+act script
+wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR script '{"remove":{"path":"scripts/empty.js"}}'
+
+act uses
+wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR uses '{"path":"scripts/empty.js","add":["timers","math"]}'
+
+act template
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"a"}'
+wprs-ctl scene act DIR add_layer '{"kind":"shape","id":"b"}'
+wprs-ctl scene act DIR template '{"make":{"layers":["a","b"],"name":"pair"}}'
+
+act pool
+wprs-ctl scene act DIR pool '{"id":"forms","add":true}'
+
+act shader
+wprs-ctl scene act DIR shader '{"new":{"name":"shade"}}'
+
+act import_effect
+wprs-ctl scene new source
+wprs-ctl scene act source shader '{"new":{"name":"shade"}}'
+wprs-ctl scene act DIR import_effect '{"descriptor":"source/effects/shade.json"}'
+
+act remove_effect
+wprs-ctl scene act DIR shader '{"new":{"name":"shade"}}'
+wprs-ctl scene act DIR remove_effect '{"effect":"shade"}'
+
+act undo
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR undo '{}'
+
+act redo
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene act DIR undo '{}'
+wprs-ctl scene act DIR redo '{}'
+
+ask strings
+wprs-ctl scene act DIR manifest '{"text":{"key":"greet","language":"en","text":"Hello"}}'
+wprs-ctl scene act DIR manifest '{"text":{"key":"greet","language":"es","text":"Hello"}}'
+wprs-ctl scene ask DIR strings '{}'
+
+ask credits
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene act DIR import '{"file":"sound.ogg"}'
+wprs-ctl scene act DIR manifest '{"credit":{"paths":["assets/picture.png"],"license":"CC-BY-4.0","attribution":"Ana Perez"}}'
+wprs-ctl scene ask DIR credits '{}'
+
+ask flashes
+wprs-ctl scene act DIR add_layer '{"kind":"solid"}'
+wprs-ctl scene ask DIR flashes '{"run":true,"from":0,"seconds":1,"fps":5}'
+
+ask curves
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene act DIR keyframe '{"pointer":"/scene/layers/0/opacity","time":0,"value":0}'
+wprs-ctl scene act DIR keyframe '{"pointer":"/scene/layers/0/opacity","time":2,"value":1}'
+wprs-ctl scene ask DIR curves '{"pointer":"/scene/layers/0/opacity","samples":3}'
+
+ask key_clip
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene act DIR keyframe '{"pointer":"/scene/layers/0/opacity","time":0,"value":0.2}'
+wprs-ctl scene act DIR keyframe '{"pointer":"/scene/layers/0/opacity","time":1,"value":1}'
+wprs-ctl scene ask DIR key_clip '{"copy":[{"pointer":"/scene/layers/0/opacity","times":[0,1]}]}'
+
+ask fires
+wprs-ctl scene act DIR timeline '{"id":"one","add":true,"add_events":[{"t":1,"name":"boom"}]}'
+wprs-ctl scene act DIR timeline '{"id":"two","add":true,"trigger":"event:boom"}'
+wprs-ctl scene act DIR add_layer '{"kind":"sound","file":"sound.ogg","id":"voice"}'
+wprs-ctl scene act DIR set '{"pointer":"/scene/layers/0/play_on","value":"event:boom"}'
+wprs-ctl scene ask DIR fires '"event:boom"'
+
+ask palette
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene ask DIR palette '"picture"'
+
+ask clocks
+wprs-ctl scene act DIR add_layer '{"kind":"video","file":"video.webm","id":"clip"}'
+wprs-ctl scene act DIR set '{"pointer":"/scene/layers/0/playback","value":{"own_clock":true,"rate":2}}'
+wprs-ctl scene ask DIR clocks '{"time":0.25}'
+
+ask pools
+wprs-ctl scene act DIR pool '{"id":"forms","add":true}'
+wprs-ctl scene act DIR add_layer '{"kind":"shapes","source":"forms","id":"meshes"}'
+wprs-ctl scene ask DIR pools '{}'
+
+ask uses
+wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act DIR script '{"write":{"path":"scripts/empty.js","text":"export function update() { scene.bloom; }\n"}}'
+wprs-ctl scene ask DIR uses '{}'
+
+ask shader_source
+wprs-ctl scene act DIR shader '{"new":{"name":"shade"}}'
+wprs-ctl scene ask DIR shader_source '{"effect":"shade"}'
+
+ask shader_check
+wprs-ctl scene act DIR shader '{"new":{"name":"shade"}}'
+wprs-ctl scene ask DIR shader_check '{"effect":"shade"}'
+
+act depth_map
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR manifest '{"inputs":{"inputs":["pointer"],"add":true}}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"depth_parallax"}}'
+wprs-ctl scene act DIR depth_map '{"asset":"picture","pointer":"/scene/layers/0/effects/0/params/depth"}'

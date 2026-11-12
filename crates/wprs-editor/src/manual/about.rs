@@ -10,7 +10,10 @@ pub const ABOUT: [(&str, &str); 80] = [
     ("group", "Put layers into a new group"),
     ("ungroup", "Dissolve a group, keeping its layers"),
     ("hide", "Show or hide a layer"),
-    ("lock", "Lock or unlock a layer against edits"),
+    (
+        "lock",
+        "Mark a layer locked or unlocked; only the canvas handles of the app honour the mark, while actions, the inspector and wprs-ctl still change a locked layer",
+    ),
     ("solo", "Show only one layer, or all of them when no id is given"),
     ("keyframe", "Add, change or remove a keyframe of an animated value"),
     ("import", "Import a picture as an asset, optionally as a linear image or an atlas"),

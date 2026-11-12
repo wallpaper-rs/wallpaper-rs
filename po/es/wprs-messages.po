@@ -1277,8 +1277,8 @@ msgid "lighting is for image, video, text, mesh and model layers"
 msgstr "la iluminación es para capas de imagen, vídeo, texto, malla y modelo"
 
 #: crates/wprs-editor/src/lamps/lit.rs
-msgid "a particles layer takes only strength and glow"
-msgstr "una capa de partículas solo toma fuerza y brillo"
+msgid "a particles layer takes only strength and emissive"
+msgstr "una capa de partículas solo toma fuerza y emisión"
 
 #: crates/wprs-editor/src/lamps/lit.rs
 msgid "lighting is for image, video, text, mesh, model and particles layers"

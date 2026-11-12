@@ -1,10 +1,11 @@
 mod about;
 mod asks;
-mod sample;
+mod examples;
 mod shape;
 
 pub use about::ABOUT;
 pub use asks::ASKS;
+pub use examples::lines as example_lines;
 use serde_json::{Value, json};
 use std::sync::OnceLock;
 
@@ -39,25 +40,15 @@ pub fn describe(name: &str) -> Option<String> {
     let mut out = vec![format!("{name}: {}", about(name).unwrap_or_default())];
     let args = shape::resolved(&schema["allOf"][0], defs);
     let before = out.len();
-    shape::lines(&args, defs, 1, DEPTH, &mut out);
+    shape::lines(&args, defs, name, DEPTH, &mut out);
     if out.len() == before {
         out.push("  no arguments".into());
     }
     Some(out.join("\n"))
 }
 
-pub fn example(name: &str) -> Option<Value> {
-    let schema = schema(name)?;
-    Some(sample::of(&schema["allOf"][0], &schema["$defs"], DEPTH))
-}
-
-pub fn invocation(name: &str) -> Option<String> {
-    let args = example(name)?;
-    Some(format!("wprs-ctl scene act DIR {name} '{args}'"))
-}
-
-pub fn ask_about(name: &str) -> Option<(&'static str, &'static str)> {
-    ASKS.iter().find(|(n, ..)| *n == name).map(|(_, a, e)| (*a, *e))
+pub fn ask_about(name: &str) -> Option<&'static str> {
+    ASKS.iter().find(|(n, _)| *n == name).map(|(_, a)| *a)
 }
 
 pub fn question(name: &str, args: Value) -> Value {
