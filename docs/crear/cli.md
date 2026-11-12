@@ -106,13 +106,13 @@ trabajo y vuelve enseguida.
 wprs-ctl scene preview mi-escena -o DP-1
 ```
 
-Muestra la escena en el escritorio durante 60 segundos sin aplicarla ni guardar nada. No imprime
-nada. Sin `-o`, en todas las salidas.
+Muestra la escena en el escritorio durante 60 segundos sin aplicarla ni guardar nada. Dice en qué
+salidas la muestra y cómo terminarla. Sin `-o`, en todas las salidas.
 
 | Opción | Qué hace |
 |--------|----------|
-| `--console` | Imprime lo que los scripts escriben con `console` y el error de la escena, a medida que salen, hasta que lo interrumpas. Ver `scripts.md`. |
-| `--stop` | Termina la vista previa. |
+| `--console` | Imprime lo que los scripts escriben con `console` y el error de la escena, con archivo y línea, a medida que salen, hasta que lo interrumpas. Sirve en cualquier salida, también en las de tus pantallas. Ver `scripts.md`. |
+| `--stop` | Termina la vista previa y dice en qué salidas la terminó. Si la app tenía encendido *Mostrar en el escritorio*, lo apaga también. |
 | `--restart` | Empieza otra vez la escena, los scripts y las partículas. |
 | `--time S` | Mantiene fijo ese segundo (hasta 86400). Con un valor negativo, la escena se reproduce. |
 | `--quality q0`…`q3` | El nivel de calidad más alto de la vista previa. |
@@ -129,11 +129,14 @@ wprs-ctl scene apply mi-escena -o DP-1
 ```
 
 ```
-01M77VZVQ51DK8N8PWEP43HRYA
+applied: Mi reloj 1.0.2 on DP-1, quality Q3
 ```
 
-Construye el paquete en tu biblioteca y lo muestra en la salida (o en todas). Imprime el id del
-elemento de la biblioteca. `--span` la extiende sobre todas las pantallas.
+Construye el paquete, lo añade a tu biblioteca y lo muestra en la salida (o en todas). Va diciendo
+en la salida de error lo que hace (construir, añadir, mostrar) y, si el demonio tarda porque tiene
+otros trabajos, avisa cada 5 segundos. Al final imprime el título, la versión, la pantalla y el
+nivel de calidad con que la muestra; el texto sale en tu idioma. Si cambias la escena sin subir la
+versión, la pantalla muestra lo nuevo igual. `--span` la extiende sobre todas las pantallas.
 
 ### `input`: entradas simuladas (con demonio)
 
@@ -166,6 +169,7 @@ Imprime los archivos que escribió.
 |--------|----------|
 | `-o ARCHIVO` | `.png`, `.jpg`, `.webp`, `.avif` o `.gif` (animado). Obligatorio. |
 | `--time S` | El segundo de la escena del primer cuadro. |
+| `--time-of-day HORA` | La hora de pared que ven la escena y sus scripts: `HH:MM[:SS]` de hoy o `AAAA-MM-DD HH:MM[:SS]`. Sin ella, la hora de este equipo; ponla para que la imagen salga igual siempre. |
 | `--quality q0`…`q3` | El nivel de calidad más alto (`q3` por defecto). |
 | `--size PX` | El lado mayor de la imagen (1280 por defecto). |
 | `--frames N`, `--fps F` | Con más de un cuadro, un clip: `.gif`, o una secuencia `NOMBRE-0001.EXT` (hasta 600 cuadros). |
@@ -173,8 +177,11 @@ Imprime los archivos que escribió.
 | `--against q0`, `--without-bloom`, `--split F` | La parte derecha se ve a otro nivel o sin brillo, para comparar. |
 | `--battery`, `--calm` | Como con batería, o con menos movimiento. |
 
-**No ejecuta los scripts.** El dibujo sale como lo deja `scene.json`. Para ver una escena con scripts,
-usa `scene preview`.
+**Ejecuta los scripts.** Para los cuadros que dibuja, corre los scripts de la escena con la hora de
+pared de `--time-of-day` (o la de este equipo) y escribe en la salida de error lo que imprimen con
+`console` (`script: log scripts/reloj.js: ...`) y sus errores, con archivo y línea
+(`script: error scripts/reloj.js: TypeError: ... (scripts/reloj.js line 4)`). Antes del primer cuadro
+da unos pasos a los scripts para que arranquen. No simula el sonido ni el reproductor.
 
 ### `scene thumbnail`: la imagen del paquete
 

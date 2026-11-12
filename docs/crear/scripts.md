@@ -443,10 +443,11 @@ Una escena solo se vuelve a dibujar por una entrada que usa.
 
 ```
 log scripts/semaforo.js: estado: roja
-error scripts/semaforo.js: TypeError: opacity takes a number
+error scripts/semaforo.js: TypeError: opacity takes a number (scripts/semaforo.js line 12)
 ```
 
-Primero el nivel, luego el módulo y luego el texto. Un módulo sin declaración no puede usar
+Primero el nivel, luego el módulo y luego el texto. Un error termina con el archivo y la línea donde
+ocurrió. Un módulo sin declaración no puede usar
 `console`: declara algo, aunque sea `"events": ["update"]`. Un objeto se escribe como JSON. Pasar de 20 líneas
 por segundo descarta las de más, y cada línea se corta a 512 caracteres.
 
@@ -462,7 +463,9 @@ por segundo descarta las de más, y cada línea se corta a 512 caracteres.
   ```
 
   Muestra las líneas del script a medida que salen y el error cuando cambia, hasta que lo
-  interrumpas con Ctrl-C. Si la escena tiene un error de script, `wprs-ctl state` lo imprime junto a
+  interrumpas con Ctrl-C. La escena solo corre mientras algo mira esa salida, así que usa una pantalla
+  a la vista. Para un cuadro suelto sin escritorio, `wprs-ctl scene render mi-escena -o vista.png
+  --time-of-day 15:42` ejecuta los scripts y escribe sus líneas y errores en la salida de error. Si la escena tiene un error de script, `wprs-ctl state` lo imprime junto a
   la salida.
 - **En el registro del servicio** (`wprsd`): lo que escribe `console` sale a nivel `debug`
   (`RUST_LOG=wprsd=debug`) y un módulo que se detiene sale a nivel `warn`.

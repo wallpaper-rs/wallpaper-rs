@@ -5,7 +5,7 @@ use clap::Subcommand;
 use std::fs;
 use std::path::PathBuf;
 use wprs_client::Client;
-use wprs_editor::{Project, assets, package};
+use wprs_editor::{Project, assets};
 
 mod parts;
 
@@ -169,21 +169,16 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             let path = dir.to_str().context("the path is not UTF-8")?.to_owned();
             runtime()?.block_on(async {
                 let client = Client::connect().await?;
+                let before = parts::drafted(&client).await?;
                 client.daemon.preview_scene(&output, &path, &document, time).await?;
+                parts::previewed(&client, (&before, &output), stop, &project.doc).await?;
                 if console {
                     crate::console::watch(&client, &output).await?;
                 }
                 Ok::<_, anyhow::Error>(())
             })?;
         }
-        Folder::Apply { dir, output, span } => {
-            let mut project = Project::open(&dir)?;
-            ensure!(!project.dirty() && project.pending.is_none(), "save the scene first");
-            let out = package::applied(&project.doc)?;
-            package::build(&mut project, &out, None)?;
-            let path = out.to_str().context("the path is not UTF-8")?.to_owned();
-            runtime()?.block_on(parts::apply(&path, &output, if span { "span" } else { "" }))?;
-        }
+        Folder::Apply { dir, output, span } => parts::apply_folder(&dir, &output, span)?,
         Folder::Schema { property, manifest } => {
             let schema = match (property, manifest) {
                 (true, _) => wprs_scene::property_schema(),

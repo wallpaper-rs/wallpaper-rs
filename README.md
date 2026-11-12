@@ -2877,6 +2877,7 @@ wprs-ctl scene preview mar --quality q1 --battery --calm   # como la dibuja el d
 wprs-ctl scene render mar --out mar.png --quality q1 --battery      # un fotograma a archivo, sin escritorio
 wprs-ctl scene render mar --out mar.gif --frames 90 --pointer 0.2,0.5:0.8,0.5 --click   # un clip con un puntero simulado
 wprs-ctl scene render mar --out brillo.png --against q0 --without-bloom   # comparar niveles o el brillo, partido por la mitad
+wprs-ctl scene render mar --out hora.png --time-of-day 15:42               # corre los scripts con esa hora de pared
 wprs-ctl scene build mar --key autor.key                # firmar y crear el .wpak
 wprs-ctl scene apply mar -o DP-1                        # añadirla a la biblioteca y mostrarla
 wprs-ctl scene apply mar --span                         # mostrarla extendida sobre todas las pantallas

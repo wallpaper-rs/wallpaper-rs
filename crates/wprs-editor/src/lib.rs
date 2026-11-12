@@ -1,5 +1,6 @@
 mod action;
 pub mod actions;
+pub mod applying;
 pub mod arrange;
 mod asking;
 pub mod assets;

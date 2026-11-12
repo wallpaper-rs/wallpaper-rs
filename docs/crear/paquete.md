@@ -213,9 +213,11 @@ píxeles o 1 MiB) y escribe `previews.thumbnail`. Las otras dos dibujan la escen
 gráfica del equipo y piden que el demonio esté en marcha. `--time` es el segundo de la escena que se
 guarda (sin él, el segundo de su fotograma fijo, `clock.poster_time`).
 
-**Una captura no ejecuta los scripts.** `scene thumbnail --capture` y `scene render` dibujan la
-escena como la deja `scene.json`: un texto que un script rellena sale con su valor inicial. Pon en
-`scene.json` valores de partida que se vean bien, o usa una imagen hecha aparte.
+**`scene render` ejecuta los scripts, la captura del demonio no.** `scene render` corre los scripts de
+la carpeta con la hora de este equipo (o la de `--time-of-day`) y deja ver el resultado; en cambio
+`scene thumbnail --capture` dibuja la escena como la deja `scene.json`: un texto que un script
+rellena sale con su valor inicial. Pon en `scene.json` valores de partida que se vean bien, o usa
+una imagen hecha con `scene render`.
 
 `wprs-ctl scene render mi-escena -o vista.png --size 640` dibuja una imagen sin escritorio, sin
 demonio y sin guardar nada en la carpeta; sirve para ver el resultado, para hacer clips (`--frames`)
@@ -364,7 +366,8 @@ wprs-ctl scene preview mi-escena
 
 - `lib import` instala el paquete en tu biblioteca: así lo verá quien lo instale. Imprime
   `job 1 import done: 0 failed, 1 imported`.
-- `scene apply` construye la carpeta, la importa y la muestra en una salida (`-o DP-1`) o en todas.
+- `scene apply` construye la carpeta, la importa y la muestra en una salida (`-o DP-1`) o en todas; al
+  final dice qué mostró, en qué pantalla y a qué calidad.
 - `scene preview` la muestra 60 segundos sin guardar nada.
 
 ## Publicar en un repositorio
@@ -543,7 +546,7 @@ con `wprs-ctl scene import mi-escena fondo.mp4`.
 2. Las entradas del manifiesto son las que la escena usa, ni una más.
 3. `content` y `photosensitive` dicen la verdad, y la licencia es la que quieres.
 4. La escena con scripts se vio en la vista previa y la consola no tiene errores.
-5. La vista previa se ve bien sin scripts (una captura no los ejecuta).
+5. La vista previa se ve bien sin scripts (la captura del demonio no los ejecuta).
 6. `version` subió, y `pack sign` y `pack build` se hicieron después del último cambio.
 7. `pack validate --key autor.pub` imprime `ok … signer=`.
 8. No hay claves, contraseñas ni rutas personales dentro de la carpeta.

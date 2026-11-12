@@ -6,7 +6,7 @@ use cxx_qt_lib::QString;
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use std::pin::Pin;
-use wprs_editor::{Action, check, package};
+use wprs_editor::{Action, applying, check, package};
 
 type Done<T> = Box<dyn FnOnce(Pin<&mut SceneEditor>, T) + Send>;
 
@@ -126,9 +126,10 @@ impl SceneEditor {
     pub fn apply(mut self: Pin<&mut Self>, output: &QString) {
         let Some((dir, doc)) = self.as_mut().saved() else { return };
         let output = output.to_string();
+        let titled = doc.clone();
         let job = move || {
             let out = package::applied(&doc)?;
-            package::build_saved(&dir, &doc, &out, None)?;
+            applying::build(&dir, &doc, &out)?;
             Ok(out.to_string_lossy().into_owned())
         };
         self.work(
@@ -137,11 +138,11 @@ impl SceneEditor {
                 editor.as_mut().rescan();
                 let qt = editor.qt_thread();
                 bus::spawn(async move {
-                    let done = install(path, output.clone()).await;
+                    let done = install(path, output.clone(), titled).await;
                     qt.queue(move |mut editor| match done {
-                        Ok(uid) => {
+                        Ok(said) => {
                             editor.as_mut().set_placed(QString::from(&output));
-                            editor.as_mut().finished(QString::from(&uid));
+                            editor.as_mut().finished(QString::from(&said));
                         }
                         Err(e) => editor.fail(e),
                     })
@@ -152,7 +153,7 @@ impl SceneEditor {
     }
 }
 
-async fn install(path: String, output: String) -> Result<String, String> {
+async fn install(path: String, output: String, doc: Value) -> Result<String, String> {
     let mut events = bus::events();
     let message = |e: wprs_client::Error| e.message;
     let reply = bus::call("Library1", "Import", vec![json!([path]), json!(false)]).await.map_err(message)?;
@@ -175,5 +176,19 @@ async fn install(path: String, output: String) -> Result<String, String> {
     bus::call("Library1", "Apply", vec![json!(uid), json!(output), json!(""), json!("")])
         .await
         .map_err(message)?;
-    Ok(uid)
+    let mut shown = Vec::new();
+    for _ in 0..30 {
+        let state = bus::call("Daemon1", "GetState", vec![]).await.map_err(message)?;
+        let state = serde_json::from_str::<Value>(&state).unwrap_or_default();
+        shown = applying::screens(&state, &uid, &output);
+        if applying::settled(&shown) {
+            break;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+    }
+    let mut said = applying::done(&doc, &shown).local();
+    if let Some(why) = applying::failed(&shown) {
+        said = format!("{said}\n{}", why.local());
+    }
+    Ok(said)
 }
