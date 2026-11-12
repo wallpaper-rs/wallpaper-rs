@@ -2781,6 +2781,10 @@ msgid "Id of the new asset"
 msgstr "Id del recurso nuevo"
 
 #: apps/wprs-ctl/src/lamping.rs
+msgid "Second of the video the map is made from, the first frame by default"
+msgstr "Segundo del vídeo del que se hace el mapa; por defecto, el primer fotograma"
+
+#: apps/wprs-ctl/src/lamping.rs
 msgid ""
 "Paint a roughness or emissive map on a layer in gray, or show it as a heat "
 "view"

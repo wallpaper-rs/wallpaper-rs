@@ -48,6 +48,8 @@ pub enum Lamping {
         layer: Option<String>,
         #[arg(long, help = "Id of the new asset")]
         id: Option<String>,
+        #[arg(long, help = "Second of the video the map is made from, the first frame by default")]
+        time: Option<f64>,
     },
     #[command(about = "Paint a roughness or emissive map on a layer in gray, or show it as a heat view")]
     PaintMap {

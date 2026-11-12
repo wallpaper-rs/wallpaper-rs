@@ -85,8 +85,8 @@ pub(crate) fn action(command: Lamping) -> Result<(PathBuf, Action), Box<Author>>
     Ok(match command {
         Lamping::Light { dir, layer, what } => (dir, Action::Light(light(layer, what))),
         Lamping::Lighting(l) => lighting(l),
-        Lamping::Normals { dir, asset, strength, blur, layer, id, .. } => {
-            (dir, Action::Normals(NormalsMake { asset: Some(asset), layer, strength, blur, id, time: None }))
+        Lamping::Normals { dir, asset, strength, blur, layer, id, time, .. } => {
+            (dir, Action::Normals(NormalsMake { asset: Some(asset), layer, strength, blur, id, time }))
         }
         Lamping::PaintMap { dir, layer, map, points, radius, hardness, value, .. } => {
             let points = points.unwrap_or_default();
@@ -126,9 +126,9 @@ pub(crate) fn run(command: Lamping) -> Result<()> {
             let p = open(&dir)?;
             wprs_editor::lamps::lights(&p.dir, &p.doc, time)
         }
-        Lamping::Normals { dir, asset, strength, blur, .. } => {
+        Lamping::Normals { dir, asset, strength, blur, time, .. } => {
             let p = open(&dir)?;
-            let m = NormalsMake { asset: Some(asset), layer: None, strength, blur, id: None, time: None };
+            let m = NormalsMake { asset: Some(asset), layer: None, strength, blur, id: None, time };
             wprs_editor::lamps::normals_preview(&p.dir, &p.doc, &m)
         }
         Lamping::PaintMap { dir, layer, map, .. } => {
