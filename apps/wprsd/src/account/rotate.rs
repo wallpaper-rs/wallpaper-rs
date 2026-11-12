@@ -75,6 +75,9 @@ impl Daemon {
         bound: &[u8],
         targets: Option<BTreeSet<String>>,
     ) -> Result<Vec<String>> {
+        if let Some(ms) = std::env::var("WPRS_HANDOVER_DELAY_MS").ok().and_then(|v| v.parse().ok()) {
+            std::thread::sleep(std::time::Duration::from_millis(ms));
+        }
         let pins = self.pins()?;
         let (me, user, encrypted, peers) = {
             let s = self.saved();

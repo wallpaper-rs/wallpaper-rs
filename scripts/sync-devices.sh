@@ -39,7 +39,11 @@ name=$(value e "['device']")
 a server sync --wait >/dev/null
 [ "$(listed "$name")" = 1 ] || fail "the new device is not listed: $(a server status)"
 if printf 'correct-horse-battery\n' | a server revoke Device-0 --yes 2>/dev/null; then fail "an unknown device was revoked"; fi
+for n in a b; do restart "$n" bash -c "echo WPRS_HANDOVER_DELAY_MS=6000 >>'$WORK/$n/env'"; done
 printf 'correct-horse-battery\n' | a server revoke "$name" --yes --wait >/dev/null
+a server sync --wait >/dev/null || fail "a computer that syncs before the new key reached it failed: $(a server status)"
+b server sync --wait >/dev/null || fail "a computer that syncs before the new key reached it failed: $(b server status)"
+for n in a b; do [ "$(value "$n" "['state']")" = ready ] || fail "$n did not get the new key: $("$n" server status)"; done
 [ "$(listed "$name")" = 0 ] || fail "the device stayed: $(a server status)"
 [ "$(devices)" = "$before" ] || fail "the device stayed on the server"
 if e server join "Device 1" 2>/dev/null; then fail "a revoked device joined"; fi
