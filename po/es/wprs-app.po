@@ -4864,7 +4864,9 @@ msgstr "Centro de la cámara: arrástralo para mover lo que muestra"
 
 #: apps/wprs-app/qml/SceneCameraFrame.qml
 msgid "Camera turned %1°: drag to turn the top of the view toward the pointer"
-msgstr "Cámara girada %1°: arrastra para girar la parte de arriba de la vista hacia el puntero"
+msgstr ""
+"Cámara girada %1°: arrastra para girar la parte de arriba de la vista hacia "
+"el puntero"
 
 #: apps/wprs-app/qml/SceneCameraTool.qml
 msgid "2D camera"
@@ -5498,6 +5500,23 @@ msgid ""
 msgstr ""
 "Es un tope: nunca se supera lo que fija el usuario o la batería, y el "
 "contenido no pasa de su propio ritmo."
+#: apps/wprs-app/qml/SceneGizmoDepth.qml
+msgid ""
+"Tilt around the width %1°: drag this end of the upright axis toward or away "
+"from the pivot"
+msgstr "Inclinación sobre el ancho %1°: arrastra este extremo del eje vertical hacia el pivote o lejos de él"
+
+#: apps/wprs-app/qml/SceneGizmoDepth.qml
+msgid ""
+"Tilt around the height %1°: drag this end of the level axis toward or away "
+"from the pivot"
+msgstr "Inclinación sobre el alto %1°: arrastra este extremo del eje horizontal hacia el pivote o lejos de él"
+
+#: apps/wprs-app/qml/SceneGizmoDepth.qml
+msgid ""
+"Depth %1 px: drag along the line out of the layer to bring it toward the "
+"viewer or send it back"
+msgstr "Profundidad %1 px: arrastra a lo largo de la línea que sale de la capa para acercarla a quien mira o alejarla"
 
 #: apps/wprs-app/qml/SceneGizmoKnobs.qml
 msgid "Scale from the pivot; Shift keeps the proportions"
@@ -5515,22 +5534,6 @@ msgstr "Girar alrededor del pivote"
 msgid ""
 "Pivot: drag to move the origin of the layer; the layer stays where it is"
 msgstr "Pivote: arrastra para mover el origen de la capa; la capa no se mueve"
-
-#: apps/wprs-app/qml/SceneGizmoKnobs.qml
-msgid ""
-"Tilt %1°, %2°: drag up or down to tilt around the width, sideways around the "
-"height"
-msgstr ""
-"Inclinación %1°, %2°: arrastra arriba o abajo para inclinar alrededor del "
-"ancho, de lado alrededor del alto"
-
-#: apps/wprs-app/qml/SceneGizmoKnobs.qml
-msgid ""
-"Depth %1 px: drag up to bring the layer towards the viewer, down to push it "
-"back"
-msgstr ""
-"Profundidad %1 px: arrastra hacia arriba para acercar la capa a quien mira, "
-"hacia abajo para alejarla"
 
 #: apps/wprs-app/qml/SceneGradientBar.qml
 msgid "Remove the stop"

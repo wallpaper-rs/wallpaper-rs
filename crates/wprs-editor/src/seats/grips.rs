@@ -12,6 +12,8 @@ pub struct Moved {
     pub scale: Option<[f64; 2]>,
     pub skew: Option<[f64; 2]>,
     pub origin: Option<[f64; 2]>,
+    pub tilt: Option<[f64; 2]>,
+    pub z: Option<f64>,
 }
 
 struct Own {
@@ -67,6 +69,8 @@ pub(crate) fn tidy(m: Moved) -> Moved {
         scale: m.scale.map(|s| two(s, 1e-4)),
         skew: m.skew.map(|k| two(k, 0.01).map(|a| a.clamp(-89.0, 89.0))),
         origin: m.origin.map(|o| two(o, 1e-4)),
+        tilt: m.tilt.map(|k| two(k, 0.1).map(|a| a.clamp(-89.0, 89.0))),
+        z: m.z.map(|z| round(z, 0.1).clamp(-1e5, 1e5)),
     }
 }
 
@@ -85,8 +89,18 @@ pub fn grip(
     let sized = me.size.iter().all(|s| s.abs() > 1e-6);
     let bare =
         said("editor.grip_no_size", "the layer %1 has no size to hold by a corner or an edge", &[&me.id]);
+    let (flat, lifted) = (me.unlean(to), me.unlift(to));
     let moved = match grip {
+        Grip::Tilt { axis } => {
+            ensure!(
+                *axis < 2,
+                said("editor.tilt_axis", "a layer tilts around its width (0) or its height (1)", &[])
+            );
+            Moved { tilt: Some(super::depth::tilted(me, *axis, to)), ..Moved::default() }
+        }
+        Grip::Lift => Moved { z: Some(super::depth::lifted(me, to)), ..Moved::default() },
         Grip::Move => {
+            let to = lifted;
             let q = snap.map_or(to, |s| super::snap::snapped(seats, me, to, s, canvas_of(doc)));
             Moved { position: Some(me.local(q)), ..Moved::default() }
         }
@@ -95,12 +109,12 @@ pub fn grip(
             Moved { position: Some(me.local([p[0] + to[0], p[1] + to[1]])), ..Moved::default() }
         }
         Grip::Turn => {
-            let d = sub(me.local(to), position);
+            let d = sub(me.local(flat), position);
             Moved { rotation: Some(d[0].atan2(-d[1]).to_degrees()), ..Moved::default() }
         }
         Grip::Origin => {
             ensure!(sized, bare);
-            let q = me.local(to);
+            let q = me.local(lifted);
             let back = me.own().inverse().apply(sub(q, position).map(|v| v as f32));
             let origin = [0, 1].map(|i| me.origin[i] + f64::from(back[i]) / me.size[i]);
             Moved { position: Some(q), origin: Some(origin), ..Moved::default() }
@@ -108,7 +122,7 @@ pub fn grip(
         Grip::Scale { corner, even } => {
             ensure!(sized, bare);
             let p = arm(me, *corner);
-            let q = skewed_back(turn(sub(me.local(to), position), -o.rotation), o.skew);
+            let q = skewed_back(turn(sub(me.local(flat), position), -o.rotation), o.skew);
             let mut scale = [0, 1].map(|i| if p[i].abs() > 1e-6 { q[i] / p[i] } else { o.scale[i] });
             if *even {
                 let base = [p[0] * o.scale[0], p[1] * o.scale[1]];
@@ -126,7 +140,7 @@ pub fn grip(
             ensure!(sized, bare);
             let p = arm(me, *edge);
             let p = [p[0] * o.scale[0], p[1] * o.scale[1]];
-            let q = turn(sub(me.local(to), position), -o.rotation);
+            let q = turn(sub(me.local(flat), position), -o.rotation);
             let upright = (edge[0] - 0.5).abs() >= (edge[1] - 0.5).abs();
             let mut skew = o.skew;
             match upright {

@@ -1629,6 +1629,10 @@ msgstr "el pincel tiene un radio mayor que 0 y de hasta 1 del lado más largo"
 msgid "a stroke raises or lowers vertices by at most %1 pixels"
 msgstr "un trazo acerca o aleja los vértices %1 píxeles como mucho"
 
+#: crates/wprs-editor/src/seats/grips.rs
+msgid "a layer tilts around its width (0) or its height (1)"
+msgstr "una capa se inclina sobre su ancho (0) o su alto (1)"
+
 #: crates/wprs-editor/src/session.rs
 msgid "there is no state folder"
 msgstr "no hay carpeta de estado"

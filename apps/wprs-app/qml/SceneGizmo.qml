@@ -149,7 +149,7 @@ Item {
                 gizmo.page.editor.select(gizmo.modelData.pointer);
             if (active)
                 gizmo.parent.forceActiveFocus();
-            gizmo.grabbed = gizmo.modelData.pivot;
+            gizmo.grabbed = gizmo.modelData.handles?.pivot ?? gizmo.modelData.pivot;
         }
         onCentroidChanged: {
             const delta = gizmo.moved(centroid);

@@ -17,8 +17,8 @@ fn written(doc: &Value, path: &str, m: Moved, at: Option<f64>, replace: bool) ->
         ("scale", pair(m.scale)),
         ("skew", pair(m.skew)),
         ("origin", pair(m.origin)),
-        ("tilt", None),
-        ("z", None),
+        ("tilt", pair(m.tilt)),
+        ("z", m.z.map(|z| json!(z))),
     ];
     transform(doc, path, fields, at, replace)
 }
@@ -71,7 +71,7 @@ fn reparent(
             rotation: Some(rotation),
             scale: Some(scale),
             skew: Some(skew),
-            origin: None,
+            ..Moved::default()
         }),
     ))
 }
@@ -81,7 +81,8 @@ pub(super) fn edit(dir: &Path, doc: &Value, e: &L) -> Result<Vec<Op>> {
         L::Grip { layer: id, grip: Grip::Size { corner }, to, at, .. } => {
             let (path, _) = layer(doc, id)?;
             let all = seats(dir, doc, at.unwrap_or(0.0));
-            let size = crate::onscreen::resize(found(&all, id)?, canvas_of(doc), *corner, *to)?;
+            let me = found(&all, id)?;
+            let size = crate::onscreen::resize(me, canvas_of(doc), *corner, me.unlean(*to))?;
             super::refused(dir, doc, set(doc, &format!("{path}/size"), json!(size)))
         }
         L::Grip { layer: id, grip: g, to, snap, at, replace } => {

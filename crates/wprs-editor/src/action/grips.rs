@@ -18,6 +18,10 @@ pub enum Grip {
     Size {
         corner: [f64; 2],
     },
+    Tilt {
+        axis: usize,
+    },
+    Lift,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]

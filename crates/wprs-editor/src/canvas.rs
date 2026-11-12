@@ -1,6 +1,7 @@
 use crate::actions::locked;
 use crate::keys::value_at;
 use crate::seats::boxes::pair;
+use crate::seats::depth::{Depth, Handles, depth, handles};
 use crate::seats::{Seat, seats};
 use serde::Serialize;
 use serde_json::Value;
@@ -21,6 +22,8 @@ pub struct Gizmo {
     pub z: f64,
     pub corners: Option<[[f64; 2]; 4]>,
     pub outline: [[f64; 2]; 4],
+    pub handles: Handles,
+    pub depth: Depth,
     pub pivot: [f64; 2],
     pub angle: f64,
     pub extent: [f64; 2],
@@ -60,6 +63,8 @@ pub fn gizmo(seat: &Seat, doc: &Value, t: f64, locked: bool) -> Gizmo {
         unit: seat.unit().0.map(f64::from),
         parent: seat.parent.clone(),
         outline,
+        handles: handles(seat),
+        depth: depth(seat),
         locked,
         kind: seat.kind.clone(),
     }

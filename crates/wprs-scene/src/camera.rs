@@ -37,24 +37,43 @@ impl Context<'_> {
         [0, 1].map(|axis| amplitude * fbm(self.t * speed, axis, rough))
     }
 
-    pub(crate) fn lean(&self, layer: &Layer, world: Affine, outer: Option<Lean>) -> Option<Lean> {
+    pub(crate) fn leaning(&self, layer: &Layer) -> Option<([f32; 2], f32)> {
         let t = &layer.transform;
         if t.tilt.is_none() && t.z.is_none() {
-            return outer;
+            return None;
         }
         let tilt = t.tilt.as_ref().map_or([0.0; 2], |v| v.get(self).0.map(|a| a.clamp(-89.0, 89.0)));
-        let z = t.z.as_ref().map_or(0.0, |v| v.get(self).clamp(-1e5, 1e5));
-        let back = self.camera.inverse();
-        let pivot = back.apply([world.0[4], world.0[5]]);
-        let view = (self.canvas.map(|v| v / 2.0), self.distance());
-        let outer = outer.map_or(Lean::IDENTITY, |o| Lean::of(back).then(o).then(Lean::of(self.camera)));
-        Some(Lean::of(self.camera).then(outer.within(pivot, tilt, z, view)).then(Lean::of(back)))
+        Some((tilt, t.z.as_ref().map_or(0.0, |v| v.get(self).clamp(-1e5, 1e5))))
+    }
+
+    pub(crate) fn plane(&self, outer: Option<Lean>) -> Plane {
+        Plane { camera: self.camera, outer, view: (self.canvas.map(|v| v / 2.0), self.distance()) }
+    }
+
+    pub(crate) fn lean(&self, layer: &Layer, world: Affine, outer: Option<Lean>) -> Option<Lean> {
+        let Some((tilt, z)) = self.leaning(layer) else { return outer };
+        Some(self.plane(outer).lean([world.0[4], world.0[5]], tilt, z))
     }
 
     pub(crate) fn distance(&self) -> f32 {
         let fov = || self.scene.camera3d.as_ref().map_or(45.0, |c| c.fov.get(self)).clamp(1.0, 179.0);
         let found = self.scene.canvas.perspective;
         found.unwrap_or_else(|| self.canvas[1] / 2.0 / (fov().to_radians() / 2.0).tan()).max(100.0)
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Plane {
+    pub camera: Affine,
+    pub outer: Option<Lean>,
+    pub view: ([f32; 2], f32),
+}
+
+impl Plane {
+    pub fn lean(&self, pivot: [f32; 2], tilt: [f32; 2], z: f32) -> Lean {
+        let back = self.camera.inverse();
+        let outer = self.outer.map_or(Lean::IDENTITY, |o| Lean::of(back).then(o).then(Lean::of(self.camera)));
+        Lean::of(self.camera).then(outer.within(back.apply(pivot), tilt, z, self.view)).then(Lean::of(back))
     }
 }
 

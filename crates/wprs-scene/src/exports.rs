@@ -7,6 +7,7 @@ pub use crate::blend::{BLENDS, Blend};
 pub use crate::book::{FORGIVEN, STRIKES};
 pub use crate::budget::{Budget, Heat};
 pub use crate::calendar::format as format_time;
+pub use crate::camera::Plane;
 pub use crate::canvas::{BlendSpace, Canvas, Clock};
 pub use crate::catalog::{described, drawn, newer_params, reserved, undrawn};
 pub use crate::chain::{CHAIN_ENTRY, cut_at, effect_source, fused_at, fusion};

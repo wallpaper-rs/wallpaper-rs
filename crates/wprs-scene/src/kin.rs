@@ -8,6 +8,7 @@ pub(crate) struct Place {
     pub(crate) world: Affine,
     pub(crate) frame: Affine,
     pub(crate) lean: Option<Lean>,
+    pub(crate) around: Option<Lean>,
     pub(crate) visible: bool,
     pub(crate) opacity: f32,
 }
@@ -102,7 +103,7 @@ impl Context<'_> {
         let (seat, own) = self.local(layer, set);
         let frame = base.then(seat);
         let world = frame.then(own);
-        let place = Place { world, frame, lean: self.lean(layer, world, around), visible, opacity };
+        let place = Place { world, frame, lean: self.lean(layer, world, around), around, visible, opacity };
         self.places.borrow_mut().insert(key, place);
         place
     }

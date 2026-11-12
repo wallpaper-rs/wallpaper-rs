@@ -43,6 +43,11 @@ QtObject {
             throw new Error("gizmo: the handles did not place, tilt and lift the layer: " + page.editor.error);
         if ((gizmo.modelData.corners ?? []).length !== 4)
             throw new Error("gizmo: a tilted layer has no projected outline");
+        if ((gizmo.modelData.depth?.ring ?? []).length < 8 || !Array.isArray(gizmo.modelData.handles?.pivot))
+            throw new Error("gizmo: a tilted layer has no projected depth gizmo");
+        gizmo.grip("lift", gizmo.modelData.depth.lift, false);
+        if (Math.abs(read(base + "z") - 30) > 1)
+            throw new Error("gizmo: the depth handle moved the layer to " + read(base + "z"));
         const outline = gizmo.modelData.outline;
         const middle = gizmo.mapFromItem(gizmo.parent, outline.reduce((sum, c) => sum + c[0], 0) / outline.length, outline.reduce((sum, c) => sum + c[1], 0) / outline.length);
         const away = gizmo.mapFromItem(gizmo.parent, 1e5, 1e5);

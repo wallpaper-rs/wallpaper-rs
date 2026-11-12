@@ -2,9 +2,10 @@ use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::path::Path;
 use std::sync::Arc;
-use wprs_scene::{Affine, Lean, Quality, Runtime, Scene, Seated, Values};
+use wprs_scene::{Affine, Lean, Plane, Quality, Runtime, Scene, Seated, Values};
 
 pub(crate) mod boxes;
+pub mod depth;
 pub(crate) mod grips;
 mod kin;
 pub mod lens;
@@ -22,6 +23,9 @@ pub struct Seat {
     pub size: [f64; 2],
     pub origin: [f64; 2],
     pub lean: Option<Lean>,
+    pub plane: Plane,
+    pub tilt: [f32; 2],
+    pub z: f32,
     pub parent: Option<String>,
 }
 
@@ -47,6 +51,22 @@ impl Seat {
     pub fn at(&self, u: [f64; 2]) -> [f64; 2] {
         let flat = self.unit().apply(single(u));
         point(self.lean.map_or(flat, |l| l.apply(flat)))
+    }
+
+    pub fn lift(&self) -> Option<Lean> {
+        let own = self.tilt != [0.0; 2] || self.z != 0.0;
+        if !own {
+            return self.lean;
+        }
+        Some(self.plane.lean(single(self.pivot()), [0.0; 2], self.z))
+    }
+
+    pub fn unlean(&self, q: [f64; 2]) -> [f64; 2] {
+        self.lean.map_or(q, |l| point(l.inverse().apply(single(q))))
+    }
+
+    pub fn unlift(&self, q: [f64; 2]) -> [f64; 2] {
+        self.lift().map_or(q, |l| point(l.inverse().apply(single(q))))
     }
 
     pub fn fraction(&self, q: [f64; 2]) -> [f64; 2] {
@@ -139,6 +159,9 @@ pub fn seats(dir: &Path, doc: &Value, t: f64) -> Vec<Seat> {
                 size: boxes::size(dir, doc, layer, canvas, t),
                 origin: point(found.origin),
                 lean: found.lean,
+                plane: found.plane,
+                tilt: found.tilt,
+                z: found.z,
                 parent: layer["parent"].as_str().filter(|p| !p.is_empty()).map(String::from),
                 pointer,
             })

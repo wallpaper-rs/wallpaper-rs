@@ -1,5 +1,5 @@
 use crate::resolve::Context;
-use crate::{Affine, Layer, Lean, Quality, Runtime};
+use crate::{Affine, Layer, Lean, Plane, Quality, Runtime};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Seated {
@@ -9,12 +9,16 @@ pub struct Seated {
     pub lean: Option<Lean>,
     pub origin: [f32; 2],
     pub visible: bool,
+    pub plane: Plane,
+    pub tilt: [f32; 2],
+    pub z: f32,
 }
 
 fn visit<'a>(cx: &Context<'a>, layers: &'a [Layer], out: &mut Vec<Seated>) {
     for layer in layers {
         let set = cx.script.layers.get(&layer.id).unwrap_or(&crate::input::UNSET);
         let place = cx.placed(layer, None, 0);
+        let (tilt, z) = cx.leaning(layer).unwrap_or_default();
         out.push(Seated {
             id: layer.id.clone(),
             frame: place.frame,
@@ -22,6 +26,9 @@ fn visit<'a>(cx: &Context<'a>, layers: &'a [Layer], out: &mut Vec<Seated>) {
             lean: place.lean,
             origin: crate::kin::origin_of(layer, set),
             visible: place.visible,
+            plane: cx.plane(place.around),
+            tilt,
+            z,
         });
         visit(cx, layer.children(), out);
     }

@@ -71,7 +71,7 @@ fn kept(doc: &Value, staged: &Value, owner: &str, id: &str) -> Option<Vec<Op>> {
         rotation: Some(rotation),
         scale: Some(scale),
         skew: Some(skew),
-        origin: None,
+        ..Moved::default()
     });
     let fields = [
         ("position", m.position.map(|p| json!(p))),

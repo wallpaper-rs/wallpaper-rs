@@ -7,6 +7,7 @@ use wprs_editor::seats::{Seat, seats};
 use wprs_editor::starters::starter;
 
 mod capture;
+mod depth;
 mod effect_points;
 mod grips;
 mod kin;
