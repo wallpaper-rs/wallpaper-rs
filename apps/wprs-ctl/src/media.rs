@@ -2,6 +2,7 @@ use crate::cli::JSON;
 use crate::show::list;
 use anyhow::Result;
 use clap::Subcommand;
+use serde_json::{Value, json};
 use wprs_client::{Client, parse};
 use wprs_core::model::{InputsReply, MediaStatus};
 use wprs_editor::media::simulated;
@@ -71,3 +72,20 @@ pub async fn run(client: &Client, command: Media) -> Result<()> {
 }
 
 pub const MEDIA: &str = "JSON file of a made-up track shown instead of a media player: title, artist, album, album_artist, subtitle, genres, playing, position, duration, rate and cover (a picture of the folder)";
+
+pub(crate) fn preview_document(
+    doc: &Value,
+    quality: Option<String>,
+    restart: bool,
+    media: Option<std::path::PathBuf>,
+) -> Result<Value> {
+    let nonce = restart.then(|| std::time::UNIX_EPOCH.elapsed().map_or(1, |d| d.as_millis() as u64));
+    let media = media.map(|f| simulated(&f)).transpose()?;
+    let look = json!({ "quality": quality, "restart": nonce, "media": media });
+    if wprs_editor::pages::paged(doc) {
+        return Ok(wprs_editor::pages::preview_document(doc, &look));
+    }
+    let mut document = json!({"manifest": doc["manifest"], "scene": wprs_editor::actions::visible(doc)});
+    wprs_editor::rigs::staged(&look).into_iter().for_each(|s| document["preview"] = s);
+    Ok(document)
+}

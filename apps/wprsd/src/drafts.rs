@@ -1,6 +1,5 @@
 use crate::daemon::{Daemon, output_name};
 use crate::error::invalid;
-use crate::scenes::ScenePack;
 use anyhow::{Context, Result, ensure};
 use std::path::Path;
 use std::sync::{Arc, Weak};
@@ -9,6 +8,9 @@ use std::time::{Duration, Instant};
 mod again;
 pub(crate) mod media;
 mod pack;
+mod page;
+
+pub(crate) use page::Drawn;
 
 const LIFE: Duration = Duration::from_secs(60);
 const MAX_DOCUMENT: usize = 9 << 20;
@@ -32,7 +34,7 @@ pub(crate) fn save_config(config: &wprs_core::Config, path: &Path) -> Result<(),
 }
 
 pub(crate) struct Draft {
-    pub(crate) pack: Arc<ScenePack>,
+    pub(crate) pack: Drawn,
     pub(crate) hold: Option<f64>,
     document: String,
     trusted: bool,
@@ -66,16 +68,22 @@ impl Daemon {
             _ => {
                 let dir =
                     std::fs::canonicalize(dir).with_context(|| format!("cannot find {}", dir.display()))?;
+                let web = page::wanted(document);
                 let found = self
                     .state()
                     .drafts
                     .values()
                     .find(|d| {
-                        let same = d.document == document || again::restarted(&d.document, document);
-                        same && d.pack.path == dir && d.trusted == trusted
+                        let same =
+                            d.document == document || (!web && again::restarted(&d.document, document));
+                        same && d.pack.path() == dir && d.trusted == trusted
                     })
                     .map(|d| d.pack.clone());
-                Some(found.map_or_else(|| self.draft_pack(&dir, document, trusted).map(Arc::new), Ok)?)
+                let made = |this: &Arc<Self>| match web {
+                    true => this.draft_page(&dir, document).map(|p| Drawn::Page(Arc::new(p))),
+                    false => this.draft_pack(&dir, document, trusted).map(|p| Drawn::Scene(Arc::new(p))),
+                };
+                Some(found.map_or_else(|| made(self), Ok)?)
             }
         };
         let (started, again) = {
@@ -85,7 +93,7 @@ impl Daemon {
                 match &pack {
                     Some(pack) => {
                         let old = st.drafts.get(output);
-                        let kept = old.is_some_and(|d| Arc::ptr_eq(&d.pack, pack) && d.hold == hold);
+                        let kept = old.is_some_and(|d| d.pack.same(pack) && d.hold == hold);
                         if kept && old.is_some_and(|d| again::restarted(&d.document, document)) {
                             again.push(output.clone());
                         }

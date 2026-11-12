@@ -106,6 +106,13 @@ keeps data starts again only once its earlier helper and group are gone, and `Cl
 the data only after that, so two engines never share it. When the daemon stops it waits for every
 helper to end.
 
+## Console of a preview
+
+A page shown for the editor on a `preview:` output (`PreviewScene`, `dbus.md`) keeps its last 50
+console lines and errors per screen, which the helper sends as `Console` with the view that wrote
+them, and `GetState` shows them in `console` of that output; other screens keep nothing, so a page
+that writes often never wakes the bus. The helper stops forwarding after 200 lines in all.
+
 ## Sandbox
 
 Every layer applies to every page:

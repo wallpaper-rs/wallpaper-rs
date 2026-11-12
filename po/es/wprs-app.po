@@ -2394,8 +2394,9 @@ msgstr "Proveedores"
 msgid "Repositories"
 msgstr "Repositorios"
 
-#: apps/wprs-app/qml/Navigation.qml apps/wprs-app/qml/SavedPresets.qml
-#: apps/wprs-app/qml/ScenePresets.qml apps/wprs-app/qml/SettingsPage.qml
+#: apps/wprs-app/qml/Navigation.qml apps/wprs-app/qml/PackageMiddle.qml
+#: apps/wprs-app/qml/SavedPresets.qml apps/wprs-app/qml/ScenePresets.qml
+#: apps/wprs-app/qml/SettingsPage.qml
 msgid "Settings"
 msgstr "Ajustes"
 
@@ -2778,6 +2779,11 @@ msgstr "Detener"
 msgid "A JSON file of a made-up track"
 msgstr "Un archivo JSON de una pista inventada"
 
+#: apps/wprs-app/qml/PackageMiddle.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Preview"
+msgstr "Vista previa"
+
 #: apps/wprs-app/qml/PackagePage.qml
 msgid "Package: %1"
 msgstr "Paquete: %1"
@@ -2950,7 +2956,7 @@ msgstr "Sin fijar"
 msgid "Follow the screen"
 msgstr "Seguir la pantalla"
 
-#: apps/wprs-app/qml/PagePlayback.qml
+#: apps/wprs-app/qml/PagePlayback.qml apps/wprs-app/qml/PagePreview.qml
 msgid "%1 frames a second"
 msgstr "%1 fotogramas por segundo"
 
@@ -2977,6 +2983,36 @@ msgid "What the user sets for the screen always wins over these defaults."
 msgstr ""
 "Lo que el usuario fija para la pantalla siempre prevalece sobre estos "
 "valores por defecto."
+
+#: apps/wprs-app/qml/PagePreview.qml
+msgid "Reload"
+msgstr "Recargar"
+
+#: apps/wprs-app/qml/PagePreview.qml
+msgid "Frame rate"
+msgstr "Tasa de fotogramas"
+
+#: apps/wprs-app/qml/PagePreview.qml
+msgid "Not capped"
+msgstr "Sin límite"
+
+#: apps/wprs-app/qml/PagePreview.qml
+msgid "Install the KPipeWire QML module to see the preview here."
+msgstr "Instala el módulo QML de KPipeWire para ver aquí la vista previa."
+
+#: apps/wprs-app/qml/PagePreview.qml
+msgid "The page appears here while wprsd runs."
+msgstr "La página aparece aquí mientras wprsd está en marcha."
+
+#: apps/wprs-app/qml/PagePreview.qml
+msgid ""
+"Reload builds the page again from its files, so what you changed in another "
+"editor shows; what the page writes with console.log and its errors appear in "
+"the console on the right."
+msgstr ""
+"Recargar vuelve a construir la página desde sus archivos, así que se ve lo "
+"que cambiaste en otro editor; lo que la página escribe con console.log y sus "
+"errores aparecen en la consola de la derecha."
 
 #: apps/wprs-app/qml/PageWeb.qml
 msgid "Script before the page:"
@@ -9708,10 +9744,6 @@ msgstr "Hecho para"
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Script loaded first"
 msgstr "Script que se carga primero"
-
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Preview"
-msgstr "Vista previa"
 
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Previews"

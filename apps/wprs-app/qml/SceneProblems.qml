@@ -109,7 +109,7 @@ ColumnLayout {
                 textFormat: Text.PlainText
                 font.family: "monospace"
                 elide: Text.ElideRight
-                color: modelData.startsWith("error ") ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                color: /^error\b/.test(modelData) ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
             }
         }
     }

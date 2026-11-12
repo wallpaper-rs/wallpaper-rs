@@ -5,6 +5,7 @@ use std::path::PathBuf;
 use std::time::{Duration, Instant};
 use wprs_web::{Folder, Settings, Start, ToWeb, token};
 
+mod console;
 mod ending;
 mod feed;
 mod frames;

@@ -13,3 +13,9 @@ if ctl scene manifest "$made/clock" add-file "$made/clock/manifest.json" 2>/dev/
 ctl scene validate "$made/clock" >/dev/null || fail "the web starter has problems: $(ctl scene validate "$made/clock")"
 ctl pack build "$made/clock" -o "$made/clock.wpak" >/dev/null || fail "the web starter does not build"
 echo "web page authoring checks passed"
+read -r _ _ _ pagepreview < <(ctl stream preview:pages 320 180)
+printf 'console.log("page-preview-ready");\n' >>"$made/clock/app.js"
+ctl scene preview "$made/clock" -o preview:pages --quality q1 --restart || fail "a web page was not previewed"
+ctl scene preview "$made/clock" -o preview:pages --stop || fail "the preview of a web page did not stop"
+ctl release preview:pages
+echo "web page preview checks passed"

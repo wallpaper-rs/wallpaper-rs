@@ -144,7 +144,7 @@ pub unsafe extern "C" fn message(_manager: Ptr, value: Ptr, data: Ptr) {
             l.said > MAX_SAID
         });
         if !quiet {
-            send(&FromWeb::Said(error.chars().take(512).collect()));
+            send(&FromWeb::Console { view, line: error.chars().take(512).collect() });
         }
     }
 }

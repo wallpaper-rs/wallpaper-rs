@@ -146,10 +146,16 @@ impl Daemon {
         PageSpec { pack, values, privacy, files, folders, storage, quality: None }
     }
 
-    pub fn page_on(&self, output: &str, pack: Arc<WebPack>, shown: &mut Option<Arc<Props>>) -> PageSpec {
+    pub fn page_on(
+        &self,
+        output: &str,
+        pack: Arc<WebPack>,
+        shown: &mut Option<Arc<Props>>,
+        drafted: Option<Option<wprs_core::QualityChoice>>,
+    ) -> PageSpec {
         let values = pack.props.values(&self.state().config.scene_values(output, &pack.props.id));
         *shown = Some(pack.props.clone());
-        let quality = self.state().config.own_quality(output);
+        let quality = drafted.unwrap_or_else(|| self.state().config.own_quality(output));
         PageSpec { quality, ..self.page_spec(pack, values) }
     }
 

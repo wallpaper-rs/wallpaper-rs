@@ -92,7 +92,10 @@ fn the_preview_of_a_page_carries_its_manifest_quality_rate_and_reload() {
     let look = json!({"quality": "q1", "fps": 30, "restart": 2, "media": {"title": "Song"}});
     let document = wprs_editor::pages::preview_document(&project.doc, &look);
     assert_eq!(document["manifest"], project.doc["manifest"]);
-    assert_eq!(document["preview"], json!({"quality": "q1", "restart": 2, "fps": 30, "media": {"title": "Song"}}));
+    assert_eq!(
+        document["preview"],
+        json!({"quality": "q1", "restart": 2, "fps": 30, "media": {"title": "Song"}})
+    );
     assert!(document.get("scene").is_none());
     let plain = wprs_editor::pages::preview_document(&project.doc, &json!({}));
     assert!(plain.get("preview").is_none());

@@ -440,7 +440,13 @@ call it.
 Shows a scene that is being edited on `output`, or on every output when `output` is empty,
 instead of what the output shows, without saving or applying anything (see `editor.md`).
 `dir` is the absolute path of the scene folder, whose files provide the assets, and `document`
-is `{"manifest": …, "scene": …}`, the unsaved manifest and `scene.json`. A `time` of 0 or more
+is `{"manifest": …, "scene": …}`, the unsaved manifest and `scene.json`. For a web page, whose
+manifest `kind` is `web`, `document` is `{"manifest": …, "preview": …}` and `dir` is the folder of
+the page: the daemon packs it into a temporary package with that manifest (without changing the
+folder) and shows it like a library page; `preview.quality` (`q0` to `q2`) runs it at that level,
+`preview.fps` caps its frames, a new `preview.restart` builds it again, and `preview.media` is a
+made-up track for `window.wprs.onMedia`. The lines the page writes to `console` and its errors are
+in `GetState().outputs[x].console` of a `preview:` output. A `time` of 0 or more
 holds the scene at that second (up to 86400, a day), as a still frame that only renders again when the call changes;
 a negative `time` plays it. The scene is checked for what it needs to render: the id, the user
 properties, the presets and the scene itself, while texts, rating, origin and credits may still be
@@ -450,7 +456,7 @@ output and reuse the decoded assets of the previous one, without a crossfade; a 
 of the same folder keeps its clock, so an edit does not restart it. An empty `document` ends it,
 and so do 60 s without a call or the output going away. Outputs whose name starts with
 `preview:` are virtual: a client creates one with `RequestStream` to show the preview inside its
-own window, and it is left out of `GetState`, of the conditions and holds of profiles, of
+own window, and it is left out of `GetState` (but for the time its console has lines, which is how a client reads them), of the conditions and holds of profiles, of
 playlists and of the record of what was shown, so it never counts as a screen.
 
 ### `SetWallpaper(s path, s output, s fit)`

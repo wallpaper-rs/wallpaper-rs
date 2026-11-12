@@ -160,7 +160,8 @@ impl Daemon {
             (name.clone(), state)
         };
         let playback = &st.config.playback;
-        let shown = st.outputs.iter().filter(|(name, _)| !crate::drafts::virtual_output(name));
+        let heard = |name: &String| status.get(name).is_some_and(|s| !s.console.is_empty());
+        let shown = st.outputs.iter().filter(|(name, _)| !crate::drafts::virtual_output(name) || heard(name));
         let state = State {
             model: MODEL,
             version: wprs_core::VERSION.into(),

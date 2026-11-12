@@ -4,10 +4,10 @@ use super::slot::{FIRST_FRAME, PageSlot, RETRIES};
 use super::view::Shared;
 use super::{SCAN, folders, values};
 use std::time::{Duration, Instant};
+use wprs_web::{FromWeb, ToWeb};
 
 const CLICK: Duration = Duration::from_secs(2);
 const APART: Duration = Duration::from_secs(1);
-use wprs_web::{FromWeb, ToWeb};
 
 impl State {
     pub(super) fn sync_link(&self, slot: &mut PageSlot, now: Instant) {
@@ -167,6 +167,7 @@ fn take(
         }
         FromWeb::Said(text) if text == "sandbox: off" => slot.sandbox = "reduced",
         FromWeb::Said(text) => tracing::debug!("web page: {text}"),
+        FromWeb::Console { view, line } => super::console::keep(slot, view, line),
         FromWeb::Open { view, prop } => open(slot, view, &prop, now),
         FromWeb::Rgb { view, size, rgb } => super::feed::lit(slot, view, size, rgb),
     }

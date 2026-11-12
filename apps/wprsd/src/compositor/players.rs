@@ -120,7 +120,7 @@ impl State {
             && self.outputs.iter().all(|(name, o)| {
                 let (kind, playing, error, parallax, fps, sound, flashes, sandbox) = status(name, o);
                 let left = left(o);
-                let lines = || console(name, o);
+                let lines = || self.console(name, o);
                 let same = |s: &OutputStatus| {
                     let now = (kind, playing, &error, parallax, fps, sound, flashes, left);
                     (
@@ -153,7 +153,7 @@ impl State {
                     (sandbox, helper),
                 ) = status(name, o);
                 let (frames, page_frames) = published.get(name).map_or((0, 0), |s| (s.frames, s.page_frames));
-                let (left_out, console) = (left(o).to_vec(), console(name, o).cloned().collect());
+                let (left_out, console) = (left(o).to_vec(), self.console(name, o).cloned().collect());
                 let status = OutputStatus {
                     kind,
                     playing,
@@ -190,9 +190,4 @@ impl State {
 
 fn left(o: &Output) -> &[String] {
     o.shown.scene.as_ref().map_or(&[], |s| &s.left)
-}
-
-fn console<'a>(name: &str, o: &'a Output) -> impl Iterator<Item = &'a String> {
-    let shown = o.shown.scene.as_ref().filter(|_| name.starts_with("preview:"));
-    shown.into_iter().flat_map(|s| &s.console)
 }

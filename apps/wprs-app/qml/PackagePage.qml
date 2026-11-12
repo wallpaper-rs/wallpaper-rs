@@ -151,17 +151,11 @@ Kirigami.Page {
             }
         }
 
-        QQC2.ScrollView {
+        PackageMiddle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.preferredWidth: Kirigami.Units.gridUnit
-            contentWidth: availableWidth
-            clip: true
-
-            PackageSections {
-                width: parent.width
-                page: page
-            }
+            page: page
         }
 
         ColumnLayout {

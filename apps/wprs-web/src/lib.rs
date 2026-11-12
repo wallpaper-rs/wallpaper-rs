@@ -100,6 +100,7 @@ pub enum FromWeb {
     Crashed { view: u32 },
     Broken { view: u32 },
     Said(String),
+    Console { view: u32, line: String },
     Open { view: u32, prop: String },
     Rgb { view: u32, size: (u32, u32), rgb: Vec<u8> },
 }

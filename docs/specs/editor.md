@@ -834,6 +834,16 @@ and `clear`, so `wprs-ctl scene act DIR manifest '{"web": {"values": {"storage_k
 same and so does `wprs-ctl scene manifest DIR web`; a color that is not `#rrggbb`, a size over
 5120 KiB or a preload that is not in the folder is refused like any other invalid manifest.
 
+The *Preview* tab next to *Settings* shows the page as it is in the folder, with the manifest as it
+is in the editor, inside the window: the preview stream of `PreviewScene` (`dbus.md`) is made once
+the tab is first shown and covered, so the page pauses, while another tab is open. *Reload* builds the
+page again from its files, which is how a change made in another editor shows; the quality
+selector (Q0 to Q3) runs the page at that level of the output and the frame rate selector caps its
+frames (15, 30, 60 or not capped), both of the preview only. What the page writes with `console.log`
+and the errors it raises appear in the console under the problems. `wprs-ctl scene preview DIR`
+does the same on the desktop: for a web page it sends the manifest and the staged build, with
+`--quality`, `--restart` (reload) and `--console`.
+
 *Network* lists the https origins the page may reach, one row each with a remove button, and a field
 with *Add origin* (at most 8). It sends the `manifest` action `network` (`origins`, with `add` or
 `remove` to change the list instead of replacing it): origins are written in lower case without a

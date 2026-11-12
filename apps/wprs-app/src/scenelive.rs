@@ -13,6 +13,10 @@ const REFRESH: Duration = Duration::from_secs(30);
 const EDGE: f64 = 1280.0;
 static STREAMS: AtomicU32 = AtomicU32::new(0);
 
+fn previewable(doc: &Value) -> bool {
+    wprs_editor::pages::scened(doc) || wprs_editor::pages::paged(doc)
+}
+
 impl SceneEditor {
     pub fn hold(mut self: Pin<&mut Self>, on: bool) {
         if let Some(project) = self.as_mut().rust_mut().project.as_mut() {
@@ -37,12 +41,20 @@ impl SceneEditor {
     }
 
     pub fn attach(mut self: Pin<&mut Self>) {
-        let Some(project) = self.project.as_ref().filter(|p| wprs_editor::pages::scened(&p.doc)) else {
+        let Some(project) = self.project.as_ref().filter(|p| previewable(&p.doc)) else {
             return;
         };
+        let paged = wprs_editor::pages::paged(&project.doc);
+        let shown = serde_json::from_str::<Value>(&self.look.to_string()).is_ok_and(|l| l["show"] == true);
+        if paged && !shown {
+            return;
+        }
         let size = &project.doc["scene"]["canvas"]["size"];
-        let (w, h) =
-            (size[0].as_f64().unwrap_or(1920.0).max(1.0), size[1].as_f64().unwrap_or(1080.0).max(1.0));
+        let fallback = if paged { (1280.0, 720.0) } else { (1920.0, 1080.0) };
+        let (w, h) = (
+            size[0].as_f64().unwrap_or(fallback.0).max(1.0),
+            size[1].as_f64().unwrap_or(fallback.1).max(1.0),
+        );
         let scale = (EDGE / w.max(h)).min(1.0);
         let pixels = (((w * scale).round() as u32).max(16), ((h * scale).round() as u32).max(16));
         if pixels == self.attached {
@@ -109,7 +121,7 @@ impl SceneEditor {
     }
 
     pub fn send(mut self: Pin<&mut Self>) {
-        let Some(project) = self.project.as_ref().filter(|p| wprs_editor::pages::scened(&p.doc)) else {
+        let Some(project) = self.project.as_ref().filter(|p| previewable(&p.doc)) else {
             return;
         };
         let streamed = !self.output.is_empty() && self.serial > 0.0;
@@ -120,14 +132,19 @@ impl SceneEditor {
             self.as_mut().rust_mut().queued = true;
             return;
         }
-        let mut scene = visible(&project.doc);
-        wprs_editor::swarms::pin_seed(&mut scene);
         let look: Value = serde_json::from_str(&self.look.to_string()).unwrap_or_default();
-        wprs_editor::rigs::preview(&mut scene, &look);
-        let mut document = json!({"manifest": project.doc["manifest"], "scene": scene});
-        if let Some(staged) = wprs_editor::rigs::staged(&look) {
-            document["preview"] = staged;
-        }
+        let document = if wprs_editor::pages::paged(&project.doc) {
+            wprs_editor::pages::preview_document(&project.doc, &look)
+        } else {
+            let mut scene = visible(&project.doc);
+            wprs_editor::swarms::pin_seed(&mut scene);
+            wprs_editor::rigs::preview(&mut scene, &look);
+            let mut document = json!({"manifest": project.doc["manifest"], "scene": scene});
+            if let Some(staged) = wprs_editor::rigs::staged(&look) {
+                document["preview"] = staged;
+            }
+            document
+        };
         let document = document.to_string();
         let dir = project.dir.to_string_lossy().into_owned();
         let time = if self.playing { -1.0 } else { self.time };

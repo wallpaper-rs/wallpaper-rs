@@ -5,8 +5,7 @@ use serde_json::json;
 use std::fs;
 use std::path::PathBuf;
 use wprs_client::Client;
-use wprs_editor::actions::visible;
-use wprs_editor::{Project, assets, media, package};
+use wprs_editor::{Project, assets, package};
 
 mod parts;
 
@@ -134,13 +133,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
         }
         Folder::Preview { dir, output, time, stop, quality, restart, media, console, .. } => {
             let project = Project::open(&dir)?;
-            let mut document = json!({"manifest": project.doc["manifest"], "scene": visible(&project.doc)});
-            let nonce = restart.then(|| std::time::UNIX_EPOCH.elapsed().map_or(1, |d| d.as_millis() as u64));
-            let media = media.map(|f| media::simulated(&f)).transpose()?;
-            let look = json!({ "quality": quality, "restart": nonce, "media": media });
-            let staged = wprs_editor::rigs::staged(&look);
-            staged.into_iter().for_each(|s| document["preview"] = s);
-            let document = document.to_string();
+            let document = crate::media::preview_document(&project.doc, quality, restart, media)?.to_string();
             let (dir, document) = (fs::canonicalize(&dir)?, if stop { String::new() } else { document });
             let path = dir.to_str().context("the path is not UTF-8")?.to_owned();
             runtime()?.block_on(async {

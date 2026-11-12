@@ -39,9 +39,10 @@ impl Daemon {
         if draft.is_some() {
             transition = Some(Duration::ZERO);
         }
-        let hold = draft.as_ref().and_then(|(_, hold)| *hold);
-        let media = match draft {
-            Some((pack, _)) => Some(Ok(Media::Scene(pack))),
+        let (hold, page_quality) =
+            (draft.as_ref().and_then(|d| d.1), draft.as_ref().and_then(|d| d.0.quality()));
+        let media = match &draft {
+            Some((d, _)) => Some(Ok(d.media())),
             None => image.clone().map(|image| self.media(image)),
         };
         let (mut shown_scene, mut shown_video, mut turn, mut fit) = (None, None, None, resolved.fit);
@@ -77,7 +78,9 @@ impl Daemon {
                 let span = self.scene_span(output, resolved.fit, pack.scene.canvas.size);
                 (Content::Scene(SceneSpec { pack, values, extra, clips, hold, moving, quality, span }), None)
             }
-            Some(Ok(Media::Web(pack))) => (Content::Web(self.page_on(output, pack, &mut shown_video)), None),
+            Some(Ok(Media::Web(pack))) => {
+                (Content::Web(self.page_on(output, pack, &mut shown_video, page_quality)), None)
+            }
             Some(Ok(Media::Picture(file))) => {
                 match self.picture(output, file, (size, resolved.fit), uploaded) {
                     Ok((picture, upload)) => {

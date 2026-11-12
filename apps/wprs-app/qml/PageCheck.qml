@@ -65,8 +65,20 @@ QtObject {
         expect(page.manifest.playback === undefined, "the playback was not cleared");
     }
 
+    function preview() {
+        const shown = Qt.createComponent("PagePreview.qml").createObject(page, {
+            "page": page
+        });
+        shown.rate(30);
+        expect(JSON.parse(page.editor.look).fps === 30, "the frame rate of the preview was not kept");
+        shown.rate(0);
+        expect(JSON.parse(page.editor.look).fps === undefined, "the frame rate of the preview was not released");
+        shown.destroy();
+    }
+
     function exercise() {
         web();
+        preview();
         playback();
         inputs();
         network();

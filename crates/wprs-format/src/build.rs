@@ -14,15 +14,34 @@ const STORED: &[&str] = &[
 ];
 
 pub fn build(source: impl AsRef<Path>, out: impl AsRef<Path>, limits: &Limits) -> Result<String> {
-    let source = source.as_ref();
-    crate::fill(source)?;
-    let manifest =
-        crate::source::with_strings(source, Manifest::from_json(&fs::read(source.join(MANIFEST))?)?)?;
+    crate::fill(source.as_ref())?;
+    pack(source.as_ref(), None, out.as_ref(), limits)
+}
+
+pub fn build_staged(
+    source: impl AsRef<Path>,
+    manifest: &[u8],
+    out: impl AsRef<Path>,
+    limits: &Limits,
+) -> Result<String> {
+    pack(source.as_ref(), Some(manifest), out.as_ref(), limits)
+}
+
+fn pack(source: &Path, staged: Option<&[u8]>, out: &Path, limits: &Limits) -> Result<String> {
+    let bytes = match staged {
+        Some(bytes) => bytes.to_vec(),
+        None => fs::read(source.join(MANIFEST))?,
+    };
+    let manifest = crate::source::with_strings(source, Manifest::from_json(&bytes)?)?;
     let mut files = Vec::new();
     collect(source, "", &mut files)?;
+    if staged.is_some() {
+        files.retain(|f| f.path != crate::SIGNATURE);
+        files.iter_mut().filter(|f| f.path == MANIFEST).for_each(|f| f.size = bytes.len() as u64);
+    }
     files.sort_by(|a, b| (a.path != MANIFEST, &a.path).cmp(&(b.path != MANIFEST, &b.path)));
     validate(&manifest, &files, limits)?;
-    let mut zip = ZipWriter::new(BufWriter::new(File::create(out.as_ref())?));
+    let mut zip = ZipWriter::new(BufWriter::new(File::create(out)?));
     for file in &files {
         let options = SimpleFileOptions::default()
             .compression_method(method(&file.path))
@@ -30,13 +49,16 @@ pub fn build(source: impl AsRef<Path>, out: impl AsRef<Path>, limits: &Limits) -
             .unix_permissions(0o644)
             .large_file(file.size >= u64::from(u32::MAX));
         zip.start_file(file.path.as_str(), options)?;
-        io::copy(&mut File::open(source.join(&file.path))?.take(file.size), &mut zip)?;
+        match (staged, file.path == MANIFEST) {
+            (Some(_), true) => zip.write_all(&bytes)?,
+            _ => drop(io::copy(&mut File::open(source.join(&file.path))?.take(file.size), &mut zip)?),
+        }
     }
     zip.finish()?.flush()?;
     if (manifest.kind == Kind::Scene || manifest.v2())
-        && let Err(e) = crate::open(out.as_ref(), limits)
+        && let Err(e) = crate::open(out, limits)
     {
-        fs::remove_file(out.as_ref())?;
+        fs::remove_file(out)?;
         return Err(e);
     }
     sha256_file(out)
