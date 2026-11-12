@@ -48,6 +48,10 @@ pub(crate) fn candidates(doc: &Value, reference: &str, pointer: &str) -> Vec<Val
     if let Some(found) = crate::settings::candidates(doc, reference, pointer) {
         return found;
     }
+    let owner = pointer.strip_suffix("/parent").filter(|o| o.starts_with("/scene/layers/"));
+    if let Some(id) = owner.and_then(|o| doc.pointer(o)?["id"].as_str()).filter(|_| reference == "layer") {
+        return crate::seats::parents(doc, id).into_iter().map(Value::String).collect();
+    }
     let keys =
         |p: &str| doc.pointer(p).and_then(Value::as_object).map(|o| o.keys().map(|k| json!(k)).collect());
     let ids = |p: &str| {

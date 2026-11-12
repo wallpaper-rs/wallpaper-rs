@@ -1,116 +1,127 @@
 import QtQuick
-import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Item {
+SceneSeat {
     id: knobs
 
     required property var gizmo
-    readonly property real knob: Kirigami.Units.gridUnit * 0.8
+    readonly property var model: gizmo.modelData
+    readonly property var corners: model.outline
+    readonly property var topMid: middle(corners[0], corners[1])
+    readonly property var bottomMid: middle(corners[2], corners[3])
+    readonly property var leftMid: middle(corners[3], corners[0])
+    readonly property var mid: middle(corners[0], corners[2])
+    readonly property real reach: Kirigami.Units.gridUnit / ratio
     property var grabbed: null
 
-    function leaned(delta) {
-        const span = Math.max(1, Math.max(Math.abs(gizmo.modelData.size[0] * gizmo.modelData.scale[0]), Math.abs(gizmo.modelData.size[1] * gizmo.modelData.scale[1])));
-        const angle = v => Math.max(-89, Math.min(89, Math.round(v * 10) / 10));
-        return [angle(grabbed[0] - delta[3] * 180 / span), angle(grabbed[1] + delta[2] * 180 / span)];
+    function middle(a, b) {
+        return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
     }
 
+    function out(from, by) {
+        const dx = from[0] - mid[0], dy = from[1] - mid[1], l = Math.hypot(dx, dy) || 1;
+        return [from[0] + dx / l * by, from[1] + dy / l * by];
+    }
+
+    function turned(knob, to) {
+        const dx = to[0] - knob.grabbed[0], dy = to[1] - knob.grabbed[1];
+        const a = -model.angle * Math.PI / 180;
+        return [dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a)];
+    }
+
+    function leaned(delta) {
+        const span = Math.max(1, model.extent[0], model.extent[1]);
+        const angle = v => Math.max(-89, Math.min(89, Math.round(v * 10) / 10));
+        return [angle(grabbed[0] - delta[1] * 180 / span), angle(grabbed[1] + delta[0] * 180 / span)];
+    }
+
+    page: gizmo.page
+    ratio: gizmo.ratio
+    layerId: model.id
     visible: gizmo.movable
 
-    Rectangle {
-        id: turn
+    Repeater {
+        model: [[0, 0], [1, 0], [1, 1], [0, 1]]
 
-        x: knobs.width / 2 - width / 2
-        y: -Kirigami.Units.gridUnit * 1.5
-        width: knobs.knob
-        height: width
-        radius: width / 2
-        color: Kirigami.Theme.highlightColor
+        delegate: SceneKnob {
+            required property var modelData
+            required property int index
 
-        DragHandler {
-            target: null
-            onCentroidChanged: {
-                if (!active)
-                    return;
-                const point = turn.mapToItem(knobs.gizmo.parent, centroid.position.x, centroid.position.y);
-                const dx = point.x - knobs.gizmo.center[0] * knobs.gizmo.ratio, dy = point.y - knobs.gizmo.center[1] * knobs.gizmo.ratio;
-                knobs.gizmo.commit("rotation", Math.atan2(dx, -dy) * 180 / Math.PI);
-            }
+            at: knobs.corners[index]
+            ratio: knobs.ratio
+            square: true
+            tip: App.tr("Scale from the pivot; Shift keeps the proportions")
+            onMoved: to => knobs.grip({
+                        "scale": {
+                            "corner": modelData,
+                            "even": (held & Qt.ShiftModifier) !== 0
+                        }
+                    }, to, false)
         }
     }
 
-    Rectangle {
-        x: knobs.width - width / 2
-        y: knobs.height - height / 2
-        width: knobs.knob
-        height: width
-        color: Kirigami.Theme.highlightColor
+    Repeater {
+        model: [[0.5, 0], [1, 0.5], [0.5, 1], [0, 0.5]]
 
-        DragHandler {
-            target: null
-            onActiveChanged: knobs.grabbed = knobs.gizmo.modelData.scale
-            onCentroidChanged: {
-                if (!active || !knobs.grabbed)
-                    return;
-                const delta = knobs.gizmo.moved(centroid);
-                const w = Math.max(1, knobs.gizmo.modelData.size[0] * knobs.grabbed[0]), h = Math.max(1, knobs.gizmo.modelData.size[1] * knobs.grabbed[1]);
-                knobs.gizmo.commit("scale", [knobs.grabbed[0] * (1 + 2 * delta[2] / w), knobs.grabbed[1] * (1 + 2 * delta[3] / h)]);
-            }
+        delegate: SceneKnob {
+            required property var modelData
+            required property int index
+
+            at: knobs.middle(knobs.corners[index], knobs.corners[(index + 1) % 4])
+            ratio: knobs.ratio
+            square: true
+            width: Kirigami.Units.gridUnit * 0.55
+            tip: App.tr("Stretch one side; Ctrl skews the layer along this edge")
+            onMoved: to => knobs.grip((held & Qt.ControlModifier) ? {
+                        "skew": {
+                            "edge": modelData
+                        }
+                    } : {
+                        "scale": {
+                            "corner": modelData
+                        }
+                    }, to, false)
         }
     }
 
-    Rectangle {
-        x: -width / 2
-        y: knobs.height / 2 - height / 2
-        width: knobs.knob
-        height: width
-        radius: width / 2
-        color: "transparent"
-        border.color: Kirigami.Theme.highlightColor
-        border.width: 2
-
-        QQC2.ToolTip.text: App.tr("Tilt %1°, %2°: drag up or down to tilt around the width, sideways around the height", knobs.gizmo.modelData.tilt[0], knobs.gizmo.modelData.tilt[1])
-        QQC2.ToolTip.visible: leanHover.hovered
-
-        HoverHandler {
-            id: leanHover
-        }
-
-        DragHandler {
-            target: null
-            onActiveChanged: knobs.grabbed = knobs.gizmo.modelData.tilt
-            onCentroidChanged: {
-                if (active && knobs.grabbed)
-                    knobs.gizmo.commit("tilt", knobs.leaned(knobs.gizmo.moved(centroid)));
-            }
-        }
+    SceneKnob {
+        at: knobs.out(knobs.topMid, knobs.reach * 1.5)
+        ratio: knobs.ratio
+        tip: App.tr("Turn around the pivot")
+        onMoved: to => knobs.grip("turn", to, false)
     }
 
-    Rectangle {
-        x: knobs.width / 2 - width / 2
-        y: knobs.height + Kirigami.Units.gridUnit * 0.7
-        width: knobs.knob
-        height: width
+    SceneKnob {
+        at: knobs.model.pivot
+        ratio: knobs.ratio
+        tint: Kirigami.Theme.neutralTextColor
+        width: Kirigami.Units.gridUnit * 0.65
+        tip: App.tr("Pivot: drag to move the origin of the layer; the layer stays where it is")
+        onMoved: to => knobs.grip("origin", to, false)
+    }
+
+    SceneKnob {
+        id: tilting
+
+        at: knobs.out(knobs.leftMid, knobs.reach * 1.2)
+        ratio: knobs.ratio
+        tint: Kirigami.Theme.backgroundColor
+        tip: App.tr("Tilt %1°, %2°: drag up or down to tilt around the width, sideways around the height", knobs.model.tilt[0], knobs.model.tilt[1])
+        onGrabbedChanged: knobs.grabbed = grabbed ? knobs.model.tilt : null
+        onMoved: to => knobs.grabbed && knobs.gizmo.commit("tilt", knobs.leaned(knobs.turned(tilting, to)))
+    }
+
+    SceneKnob {
+        id: lifting
+
+        at: knobs.out(knobs.bottomMid, knobs.reach * 1.2)
+        ratio: knobs.ratio
+        square: true
         rotation: 45
-        color: "transparent"
-        border.color: Kirigami.Theme.highlightColor
-        border.width: 2
-
-        QQC2.ToolTip.text: App.tr("Depth %1 px: drag up to bring the layer towards the viewer, down to push it back", knobs.gizmo.modelData.z)
-        QQC2.ToolTip.visible: liftHover.hovered
-
-        HoverHandler {
-            id: liftHover
-        }
-
-        DragHandler {
-            target: null
-            onActiveChanged: knobs.grabbed = [knobs.gizmo.modelData.z]
-            onCentroidChanged: {
-                if (active && knobs.grabbed)
-                    knobs.gizmo.commit("z", Math.max(-100000, Math.min(100000, knobs.grabbed[0] - knobs.gizmo.moved(centroid)[1] * 2)));
-            }
-        }
+        tint: Kirigami.Theme.backgroundColor
+        tip: App.tr("Depth %1 px: drag up to bring the layer towards the viewer, down to push it back", knobs.model.z)
+        onGrabbedChanged: knobs.grabbed = grabbed ? [knobs.model.z] : null
+        onMoved: to => knobs.grabbed && knobs.gizmo.commit("z", Math.max(-100000, Math.min(100000, knobs.grabbed[0] - (to[1] - lifting.grabbed[1]) * 2)))
     }
 }

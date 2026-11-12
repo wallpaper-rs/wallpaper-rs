@@ -97,6 +97,7 @@ mod scan;
 mod schema;
 mod scripted;
 mod scripting;
+mod seat;
 mod shader;
 mod shape;
 mod sheet;

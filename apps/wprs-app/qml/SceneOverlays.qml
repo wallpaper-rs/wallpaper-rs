@@ -6,6 +6,38 @@ Item {
     required property var page
     required property real ratio
 
+    function nudge(step, repeated) {
+        const chosen = (page.view.gizmos ?? []).find(g => g.pointer === page.editor.selected);
+        if (!chosen || chosen.locked)
+            return false;
+        page.run("layer", {
+                "grip": {
+                    "layer": chosen.id,
+                    "grip": "nudge",
+                    "to": step,
+                    "at": page.editor.time,
+                    "replace": page.overwrite
+                }
+            }, repeated);
+        return true;
+    }
+
+    Keys.onPressed: event => {
+        const by = (event.modifiers & Qt.ShiftModifier) ? 10 : 1;
+        const steps = {
+            [Qt.Key_Left]: [-by, 0],
+            [Qt.Key_Right]: [by, 0],
+            [Qt.Key_Up]: [0, -by],
+            [Qt.Key_Down]: [0, by]
+        };
+        if (event.key === Qt.Key_Escape && page.picking !== "") {
+            page.picking = "";
+            event.accepted = true;
+        } else if (steps[event.key]) {
+            event.accepted = nudge(steps[event.key], event.isAutoRepeat);
+        }
+    }
+
     SceneWind {
         anchors.fill: parent
         z: 4
@@ -51,6 +83,20 @@ Item {
     SceneStage3d {
         anchors.fill: parent
         z: 5
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
+    SceneSnapGuides {
+        anchors.fill: parent
+        z: 7
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
+    SceneParentLink {
+        anchors.fill: parent
+        z: 7
         page: overlays.page
         ratio: overlays.ratio
     }

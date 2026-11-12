@@ -6,6 +6,7 @@ use std::collections::HashMap;
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct Place {
     pub(crate) world: Affine,
+    pub(crate) frame: Affine,
     pub(crate) lean: Option<Lean>,
     pub(crate) visible: bool,
     pub(crate) opacity: f32,
@@ -25,6 +26,14 @@ impl Scene {
         let gyro = self.canvas.parallax.as_ref().is_some_and(|g| g.gyro);
         gyro && self.any_layer(|l| !l.parallax.is_zero())
     }
+}
+
+pub(crate) fn origin_of(layer: &Layer, set: &LayerOverride) -> [f32; 2] {
+    let valign = match &layer.kind {
+        Kind::Text(text) => text.valign.unwrap_or_default().fraction(),
+        _ => 0.5,
+    };
+    set.origin.or(layer.transform.origin).or(layer.anchor.map(|a| a.fraction())).unwrap_or([0.5, valign])
 }
 
 pub(crate) fn parent_of<'a>(layer: &'a Layer, set: &'a LayerOverride) -> Option<&'a String> {
@@ -90,13 +99,15 @@ impl Context<'_> {
             visible &= p.visible || !follows(Inherit::Visible);
             opacity *= if follows(Inherit::Opacity) { p.opacity } else { 1.0 };
         }
-        let world = base.then(self.local(layer, set));
-        let place = Place { world, lean: self.lean(layer, world, around), visible, opacity };
+        let (seat, own) = self.local(layer, set);
+        let frame = base.then(seat);
+        let world = frame.then(own);
+        let place = Place { world, frame, lean: self.lean(layer, world, around), visible, opacity };
         self.places.borrow_mut().insert(key, place);
         place
     }
 
-    fn local(&self, layer: &Layer, set: &LayerOverride) -> Affine {
+    fn local(&self, layer: &Layer, set: &LayerOverride) -> (Affine, Affine) {
         let (t, view, canvas) = (&layer.transform, self.view, self.canvas);
         let base = layer.anchor.map_or([0.0; 2], |a| {
             let [fx, fy] = a.fraction();
@@ -109,11 +120,12 @@ impl Context<'_> {
         let center = if free { [0.0; 2] } else { [canvas[0] / 2.0, canvas[1] / 2.0] };
         let position = set.position.unwrap_or_else(|| t.position.as_ref().map_or(center, |p| p.get(self).0));
         let shift = self.shift(set.parallax.unwrap_or(layer.parallax.0));
-        let at = [0, 1].map(|i| base[i] + position[i] + shift[i] * canvas[i]);
-        Affine::translate(at)
+        let seat = Affine::translate([0, 1].map(|i| base[i] + shift[i] * canvas[i]));
+        let own = Affine::translate(position)
             .then(Affine::rotate(set.rotation.unwrap_or_else(|| t.rotation.get(self))))
             .then(Affine::skew(set.skew.unwrap_or_else(|| t.skew.get(self).0)))
-            .then(Affine::scale(set.scale.unwrap_or_else(|| t.scale.get(self).0)))
+            .then(Affine::scale(set.scale.unwrap_or_else(|| t.scale.get(self).0)));
+        (seat, own)
     }
 
     fn shift(&self, depth: [f32; 2]) -> [f32; 2] {

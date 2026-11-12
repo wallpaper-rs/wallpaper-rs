@@ -4432,6 +4432,56 @@ msgstr "Las capas se mueven en profundidad"
 msgid "Follow the tilt of a phone"
 msgstr "Seguir la inclinación del teléfono"
 
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Magnets"
+msgstr "Imanes"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid ""
+"A dragged layer snaps to the edges and the middle of the canvas and of the "
+"other layers; hold Alt to place it freely, use the arrow keys (Shift for 10 "
+"px) to nudge it"
+msgstr "Una capa arrastrada se ajusta a los bordes y al centro del lienzo y de las demás capas; mantén Alt para colocarla libremente y usa las flechas (con Mayús, de 10 en 10 px) para moverla poco a poco"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Fit to the canvas"
+msgstr "Ajustar al lienzo"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Cover the canvas"
+msgstr "Cubrir el lienzo"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Fit inside the canvas"
+msgstr "Encajar dentro del lienzo"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Stretch to the canvas"
+msgstr "Estirar al lienzo"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Follow a layer"
+msgstr "Seguir a una capa"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Tap the layer that %1 follows on the canvas; Escape cancels"
+msgstr "Toca en el lienzo la capa que seguirá %1; Escape cancela"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid ""
+"Pick on the canvas the layer that the selected one follows, keeping it where "
+"it is"
+msgstr "Elige en el lienzo la capa que sigue la seleccionada, sin moverla de su sitio"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+#: apps/wprs-app/qml/SceneTemplateFollow.qml
+msgid "Stop following"
+msgstr "Dejar de seguir"
+
+#: apps/wprs-app/qml/SceneCanvasTools.qml
+msgid "Stop following %1, keeping the layer where it is"
+msgstr "Dejar de seguir a %1, sin mover la capa de su sitio"
+
 #: apps/wprs-app/qml/SceneCanvasZoom.qml
 msgid "Zoom out"
 msgstr "Reducir"
@@ -4871,6 +4921,23 @@ msgstr "Vídeos"
 #: apps/wprs-app/qml/SceneField.qml apps/wprs-app/qml/SceneLayerRow.qml
 msgid "Hide"
 msgstr "Ocultar"
+
+#: apps/wprs-app/qml/SceneGizmoKnobs.qml
+msgid "Scale from the pivot; Shift keeps the proportions"
+msgstr "Escalar desde el pivote; Mayús mantiene las proporciones"
+
+#: apps/wprs-app/qml/SceneGizmoKnobs.qml
+msgid "Stretch one side; Ctrl skews the layer along this edge"
+msgstr "Estirar un lado; Ctrl sesga la capa a lo largo de este borde"
+
+#: apps/wprs-app/qml/SceneGizmoKnobs.qml
+msgid "Turn around the pivot"
+msgstr "Girar alrededor del pivote"
+
+#: apps/wprs-app/qml/SceneGizmoKnobs.qml
+msgid ""
+"Pivot: drag to move the origin of the layer; the layer stays where it is"
+msgstr "Pivote: arrastra para mover el origen de la capa; la capa no se mueve"
 
 #: apps/wprs-app/qml/SceneGizmoKnobs.qml
 msgid ""
@@ -7895,10 +7962,6 @@ msgstr ""
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Follow"
 msgstr "Seguir"
-
-#: apps/wprs-app/qml/SceneTemplateFollow.qml
-msgid "Stop following"
-msgstr "Dejar de seguir"
 
 #: apps/wprs-app/qml/SceneTemplates.qml
 msgid "The scene"

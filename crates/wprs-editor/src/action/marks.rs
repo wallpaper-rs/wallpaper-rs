@@ -3,6 +3,8 @@ use serde_json::{Map, Value};
 use wprs_format::OriginKind;
 use wprs_scene::Blend;
 
+pub use super::grips::{Fit, Grip};
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum LayerEdit {
@@ -24,6 +26,36 @@ pub enum LayerEdit {
         z: Option<f64>,
         #[serde(default)]
         size: Option<[f64; 2]>,
+        #[serde(default)]
+        at: Option<f64>,
+        #[serde(default)]
+        replace: bool,
+    },
+    Grip {
+        layer: String,
+        grip: Grip,
+        to: [f64; 2],
+        #[serde(default)]
+        snap: Option<f64>,
+        #[serde(default)]
+        at: Option<f64>,
+        #[serde(default)]
+        replace: bool,
+    },
+    Fit {
+        layer: String,
+        fit: Fit,
+        #[serde(default)]
+        at: Option<f64>,
+        #[serde(default)]
+        replace: bool,
+    },
+    Parent {
+        layer: String,
+        #[serde(default)]
+        parent: Option<String>,
+        #[serde(default)]
+        keep: bool,
         #[serde(default)]
         at: Option<f64>,
         #[serde(default)]

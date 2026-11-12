@@ -19,6 +19,8 @@ Kirigami.Page {
     property var picked: []
     property bool moving
     property bool overwrite
+    property bool magnets: true
+    property string picking
     property var brush: null
     property var emitterEntry: ({})
     property bool lightBoxes
@@ -42,9 +44,9 @@ Kirigami.Page {
             "time": editor.time
         } : {};
         run(keyed ? "keyframe" : "set", Object.assign(args, {
-            "pointer": pointer,
-            "value": value
-        }), gesture);
+                    "pointer": pointer,
+                    "value": value
+                }), gesture);
     }
 
     function jump(pointer) {
@@ -60,8 +62,8 @@ Kirigami.Page {
         starter ? editor.create(folder, starter, heading) : editor.open(folder, source);
         if (App.checking)
             Qt.createComponent("SceneCheck.qml").createObject(page, {
-                "page": page
-            }).exercise();
+                    "page": page
+                }).exercise();
     }
     actions: [
         Kirigami.Action {

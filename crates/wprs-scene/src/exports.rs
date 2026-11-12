@@ -134,6 +134,7 @@ pub use crate::scripting::{
     MAX_POOL_LAYERS, MAX_POOL_VERTICES, MAX_POOLS, MAX_SCRIPT_PARAMS, MAX_SCRIPTS2, MAX_TEMPLATES, ParamType,
     Pool, PoolKind, Script, ScriptApi, ScriptEvent, ScriptParam,
 };
+pub use crate::seat::Seated;
 pub use crate::shape::{MAX_ARGUMENTS, MAX_BRACKETS, MAX_OPERANDS};
 pub use crate::signal::{CLOCKS, Gain, HEARD, Hearing, Reduce, SPLITS, Smooth, center, ease, edge, levels};
 pub use crate::sites::{Site, script_inputs, script_key, sites};

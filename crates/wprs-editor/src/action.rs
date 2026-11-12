@@ -3,6 +3,7 @@ use serde_json::Value;
 use std::path::PathBuf;
 
 mod glows;
+mod grips;
 mod lamps;
 mod limbs;
 mod marks;
@@ -17,7 +18,7 @@ mod tend;
 mod timing;
 pub use lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, NormalsMake};
 pub use limbs::{AttachEdit, BodyEdit, BoneRuleEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit};
-pub use marks::{CanvasEdit, LayerEdit, ManifestEdit, PropertyEdit};
+pub use marks::{CanvasEdit, Fit, Grip, LayerEdit, ManifestEdit, PropertyEdit};
 pub use motion::{AnimEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use names::{
     ACTIONS, AssetEdit, ConditionEdit, EDITOR, ImportAssets, RgbEdit, RuleEdit, ScriptFile, UpgradeEdit,

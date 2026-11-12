@@ -13,6 +13,7 @@ Rectangle {
     property color tint: Kirigami.Theme.highlightColor
     property var grabbed: null
     property var reached: null
+    readonly property int held: drag.centroid.modifiers
 
     signal moved(var to, bool done)
 

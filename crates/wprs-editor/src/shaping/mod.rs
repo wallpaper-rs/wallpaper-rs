@@ -1,5 +1,6 @@
 pub(crate) mod canvas;
 mod effects;
+mod grips;
 mod keyed;
 pub(crate) mod layers;
 pub(crate) mod marks;

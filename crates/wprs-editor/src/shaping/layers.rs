@@ -12,9 +12,15 @@ const SIZED: [&str; 5] = ["image", "video", "solid", "adjustment", "spectrum"];
 const TUNABLE: [&str; 9] =
     ["alpha", "size", "count", "speed", "life", "time_scale", "brightness", "color", "points"];
 
-type Fields<'a> = [(&'a str, Option<Value>); 7];
+pub(super) type Fields<'a> = [(&'a str, Option<Value>); 7];
 
-fn transform(doc: &Value, path: &str, fields: Fields, at: Option<f64>, replace: bool) -> Result<Vec<Op>> {
+pub(super) fn transform(
+    doc: &Value,
+    path: &str,
+    fields: Fields,
+    at: Option<f64>,
+    replace: bool,
+) -> Result<Vec<Op>> {
     let given: Vec<(&str, Value)> = fields.into_iter().filter_map(|(k, v)| Some((k, v?))).collect();
     if given.is_empty() {
         return Ok(Vec::new());
@@ -119,6 +125,7 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &L) -> Result<Vec<Op>> {
             }
             ops
         }
+        L::Grip { .. } | L::Fit { .. } | L::Parent { .. } => super::grips::edit(dir, doc, e)?,
         L::Blend { layer: id, blend } => {
             let (path, _) = layer(doc, id)?;
             set(doc, &format!("{path}/blend"), json!(blend))

@@ -68,6 +68,10 @@ ColumnLayout {
                 model: canvas.aspects.map(aspect => aspect || App.tr("No guide"))
             }
 
+            SceneCanvasTools {
+                page: canvas.page
+            }
+
             SceneOverwrite {
                 page: canvas.page
             }
@@ -107,7 +111,10 @@ ColumnLayout {
         }
 
         TapHandler {
-            onTapped: canvas.page.editor.select("/scene/canvas")
+            onTapped: {
+                canvas.page.picking = "";
+                canvas.page.editor.select("/scene/canvas");
+            }
         }
 
         PointHandler {

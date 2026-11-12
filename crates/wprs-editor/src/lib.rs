@@ -60,6 +60,7 @@ pub mod schema;
 pub mod scope;
 pub mod scripts;
 mod sculpt;
+pub mod seats;
 mod session;
 pub mod settings;
 pub mod shaders;

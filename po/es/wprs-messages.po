@@ -1259,6 +1259,10 @@ msgstr "el pincel tiene un radio mayor que 0 y de hasta 1 del lado más largo"
 msgid "a stroke raises or lowers vertices by at most %1 pixels"
 msgstr "un trazo acerca o aleja los vértices %1 píxeles como mucho"
 
+#: crates/wprs-editor/src/seats/grips.rs
+msgid "the layer %1 has no size to hold by a corner or an edge"
+msgstr "la capa %1 no tiene tamaño para tomarla por una esquina o un borde"
+
 #: crates/wprs-editor/src/session.rs
 msgid "there is no state folder"
 msgstr "no hay carpeta de estado"
@@ -1349,6 +1353,16 @@ msgstr "la capa %1 no tiene el efecto %2"
 #: crates/wprs-editor/src/shaping/effects.rs
 msgid "a sound or light layer takes no effects"
 msgstr "una capa de sonido o de luz no lleva efectos"
+
+#: crates/wprs-editor/src/shaping/grips.rs
+msgid "the layer %1 is not placed on the canvas"
+msgstr "la capa %1 no está colocada en el lienzo"
+
+#: crates/wprs-editor/src/shaping/grips.rs
+msgid ""
+"%1 cannot follow %2: it is itself, not drawn, follows %1 already or the "
+"chain would pass 8 layers"
+msgstr "%1 no puede seguir a %2: es la misma capa, no se dibuja, ya sigue a %1 o la cadena pasaría de 8 capas"
 
 #: crates/wprs-editor/src/shaping/keyed.rs
 msgid "a part of %1 follows another source; write over it with replace"

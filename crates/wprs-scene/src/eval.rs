@@ -49,12 +49,8 @@ fn emit<'a>(
     frame: &mut Frame<'a>,
     canvas: [f32; 2],
 ) {
-    let (t, opacity) = (&layer.transform, place.opacity);
-    let valign = match &layer.kind {
-        Kind::Text(text) => text.valign.unwrap_or_default().fraction(),
-        _ => 0.5,
-    };
-    let origin = set.origin.or(t.origin).or(layer.anchor.map(|a| a.fraction())).unwrap_or([0.5, valign]);
+    let opacity = place.opacity;
+    let origin = crate::kin::origin_of(layer, set);
     let mut content = content(cx, layer, set, canvas, quality);
     if let (Content::Mesh { size, relief, .. }, Kind::Mesh(m)) = (&mut content, &layer.kind) {
         *relief = m.depth.map(|d| cx.relief(&place, (origin, *size), d));

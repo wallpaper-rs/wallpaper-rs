@@ -64,7 +64,8 @@ QtObject {
         page.editor.hold(true);
         gizmo.commit("tilt", [20, 0]);
         const until = Date.now() + 700;
-        while (Date.now() < until) {}
+        while (Date.now() < until) {
+        }
         gizmo.commit("tilt", [30, 5]);
         page.editor.hold(false);
         if (page.view.history.done.length !== before + 1)
@@ -73,5 +74,8 @@ QtObject {
         page.editor.seek(0, false);
         while (page.view.history.done.length > steps)
             page.run("undo");
+        Qt.createComponent("SceneSeatCheck.qml").createObject(page, {
+                "page": page
+            }).exercise();
     }
 }
