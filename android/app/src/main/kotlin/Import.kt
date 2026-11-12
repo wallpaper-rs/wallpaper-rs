@@ -27,7 +27,7 @@ import kotlin.concurrent.thread
 @Composable
 fun Adding(main: Main, modifier: Modifier) = Box(modifier) {
     var open by remember { mutableStateOf(false) }
-    ExtendedFloatingActionButton(onClick = { open = true }, icon = { Icon(Icons.Default.Add, null) }, text = { Text(stringResource(R.string.choose)) })
+    ExtendedFloatingActionButton(onClick = { open = true }, icon = { Icon(Icons.Default.Add, stringResource(R.string.choose)) }, text = { Text(stringResource(R.string.choose)) })
     DropdownMenu(open, { open = false }) {
         listOf(R.string.photos to main::choose, R.string.files to main::chooseFiles, R.string.folder to main::chooseFolder).forEach { (label, pick) ->
             DropdownMenuItem({ Text(stringResource(label)) }, {

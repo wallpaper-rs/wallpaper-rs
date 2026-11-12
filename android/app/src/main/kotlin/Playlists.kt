@@ -24,6 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -58,9 +61,9 @@ fun Playlists(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) 
     }
     ExtendedFloatingActionButton(
         onClick = { naming = "" },
-        icon = { Icon(Icons.Default.Add, null) },
+        icon = { Icon(Icons.Default.Add, stringResource(R.string.new_playlist)) },
         text = { Text(stringResource(R.string.new_playlist)) },
-        modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+        modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).semantics { role = Role.Button },
     )
     naming?.let { name ->
         AlertDialog(

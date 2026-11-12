@@ -1,15 +1,15 @@
 package io.github.wallpaper_rs
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import java.io.File
@@ -62,7 +63,13 @@ fun App(main: Main) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var item by rememberSaveable { mutableStateOf<String?>(null) }
     var playlist by rememberSaveable { mutableStateOf<String?>(null) }
-    BackHandler(item != null || playlist != null) { if (item != null) item = null else playlist = null }
+    BackHandler(item != null || playlist != null || tab != 0) {
+        when {
+            item != null -> item = null
+            playlist != null -> playlist = null
+            else -> tab = 0
+        }
+    }
     MaterialTheme(colorScheme = colors) {
         if (main.placing.value) Placing(main)
         Scaffold(bottomBar = {
@@ -105,11 +112,12 @@ fun Header(title: String, back: (() -> Unit)? = null) = Row(verticalAlignment = 
     Text(title, Modifier.padding(16.dp), style = MaterialTheme.typography.headlineSmall)
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Choices(label: String?, options: List<Pair<String, String>>, chosen: String, choose: (String) -> Unit) =
     Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         label?.let { Text(it, style = MaterialTheme.typography.titleSmall) }
-        Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             options.forEach { (value, text) -> FilterChip(chosen == value, { choose(value) }, { Text(text) }) }
         }
     }
@@ -117,8 +125,8 @@ fun Choices(label: String?, options: List<Pair<String, String>>, chosen: String,
 @Composable
 fun Toggle(label: String, checked: Boolean, enabled: Boolean = true, change: (Boolean) -> Unit) = ListItem(
     headlineContent = { Text(label) },
-    trailingContent = { Switch(checked, change, enabled = enabled) },
-    modifier = Modifier.clickable(enabled) { change(!checked) },
+    trailingContent = { Switch(checked, null, enabled = enabled) },
+    modifier = Modifier.toggleable(value = checked, enabled = enabled, role = Role.Switch, onValueChange = change),
 )
 
 @Composable
