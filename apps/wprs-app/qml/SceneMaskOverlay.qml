@@ -16,6 +16,7 @@ SceneSeat {
                         }
                     })) || "null")) : null
     readonly property bool masking: shown !== null
+    readonly property bool brushing: (page.brush?.pointer ?? "").includes("/effects/")
     readonly property string kind: shown?.kind ?? ""
     readonly property string texture: shown?.texture ?? ""
     readonly property var picture: texture ? JSON.parse(page.editor.rig("", JSON.stringify({
@@ -64,9 +65,15 @@ SceneSeat {
     }
 
     layerId: owner?.id ?? ""
-    visible: owner !== null
+    visible: owner !== null || brushing
 
     SceneCaptureZone {
+        anchors.fill: parent
+        page: overlay.page
+        ratio: overlay.ratio
+    }
+
+    SceneBrushChannel {
         anchors.fill: parent
         page: overlay.page
         ratio: overlay.ratio

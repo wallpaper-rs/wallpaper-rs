@@ -16,8 +16,8 @@ ColumnLayout {
             "pointer": input.field.pointer,
             "channel": mask.channels > 1 ? channel.currentIndex : null,
             "radius": size.value,
-            "hardness": 0.5,
-            "value": erase.checked ? 0 : 1
+            "hardness": Math.round(hard.value * 100) / 100,
+            "value": erase.checked ? 0 : Math.round(level.value * 100) / 100
         };
     }
 
@@ -28,8 +28,8 @@ ColumnLayout {
         onActivated: index => {
             if (index === 0)
                 mask.input.page.run("remove", {
-                    "pointer": mask.input.field.pointer
-                });
+                        "pointer": mask.input.field.pointer
+                    });
             else
                 mask.input.commit(mask.options[index]);
         }
@@ -89,10 +89,47 @@ ColumnLayout {
         }
     }
 
+    RowLayout {
+        visible: mask.painting
+
+        QQC2.Label {
+            text: App.tr("Hardness")
+        }
+
+        SceneSlider {
+            id: hard
+
+            Layout.fillWidth: true
+            from: 0
+            to: 1
+            value: 0.5
+            onMoved: mask.brush()
+        }
+    }
+
+    RowLayout {
+        visible: mask.painting
+
+        QQC2.Label {
+            text: App.tr("Value")
+        }
+
+        SceneSlider {
+            id: level
+
+            Layout.fillWidth: true
+            from: 0
+            to: 1
+            value: 1
+            enabled: !erase.checked
+            onMoved: mask.brush()
+        }
+    }
+
     QQC2.Label {
         Layout.fillWidth: true
         visible: mask.painting
         wrapMode: Text.Wrap
-        text: App.tr("Paint on the layer in the preview; each stroke is one step to undo.")
+        text: App.tr("Paint on the layer in the preview, where the channel is tinted; each stroke is one step to undo.")
     }
 }
