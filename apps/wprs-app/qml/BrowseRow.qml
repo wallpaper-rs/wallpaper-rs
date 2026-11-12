@@ -10,6 +10,7 @@ RowLayout {
     required property var modelData
     required property var catalog
     readonly property bool veiled: modelData.content === "mature" && !modelData.revealed && !row.catalog.shown[modelData.repo_id + "/" + modelData.id] && !App.unveiled
+    readonly property bool here: modelData.installed.includes(version.currentText)
     readonly property bool wants: (pointer.hovered || version.activeFocus || install.activeFocus) && !veiled && !row.catalog.battery && modelData.photosensitive !== true
 
     onWantsChanged: {
@@ -43,8 +44,8 @@ RowLayout {
             onTapped: {
                 const key = row.modelData.repo_id + "/" + row.modelData.id;
                 row.catalog.shown = Object.assign({}, row.catalog.shown, {
-                    [key]: true
-                });
+                        [key]: true
+                    });
                 App.act("Reveal", [key], "Repos1");
             }
         }
@@ -99,8 +100,9 @@ RowLayout {
     QQC2.Button {
         id: install
 
-        text: row.modelData.update ? App.tr("Update") : App.tr("Install")
-        icon.name: "download"
+        text: row.here ? App.trc("a package that is already installed", "Installed") : row.modelData.update && version.currentIndex === version.count - 1 ? App.tr("Update") : App.tr("Install")
+        icon.name: row.here ? "dialog-ok" : "download"
+        enabled: !row.here
         onClicked: row.catalog.installer.install(row.modelData.repo_id + "/" + row.modelData.id + "@" + version.currentText)
     }
 }
