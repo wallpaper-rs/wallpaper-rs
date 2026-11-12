@@ -736,7 +736,9 @@ msgstr "Las asas Bézier curvan un canal de una clave cada vez"
 msgid ""
 "%1 by %2 is licensed %3, which allows no changed versions: publish this copy "
 "only if its author allows it"
-msgstr "%1 de %2 tiene la licencia %3, que no permite versiones modificadas: publica esta copia solo si su autor lo permite"
+msgstr ""
+"%1 de %2 tiene la licencia %3, que no permite versiones modificadas: publica "
+"esta copia solo si su autor lo permite"
 
 #: crates/wprs-editor/src/copying.rs crates/wprs-editor/src/diverged.rs
 #: crates/wprs-editor/src/offer.rs crates/wprs-editor/src/project.rs
@@ -3233,7 +3235,12 @@ msgid ""
 "lower it, remove the layers and effects you do not need, or make the "
 "heaviest effects lighter in the panel of each effect, which shows its cost "
 "at every quality level"
-msgstr "la escena cuesta %1 unidades por fotograma en el nivel de calidad 2, más que las %2 que tienen las tarjetas gráficas integradas antiguas y las de los teléfonos, así que las muestran con menos detalle. Para bajarlo, quita las capas y los efectos que no necesites, o aligera los efectos más pesados en el panel de cada efecto, que muestra su costo en cada nivel de calidad"
+msgstr ""
+"la escena cuesta %1 unidades por fotograma en el nivel de calidad 2, más que "
+"las %2 que tienen las tarjetas gráficas integradas antiguas y las de los "
+"teléfonos, así que las muestran con menos detalle. Para bajarlo, quita las "
+"capas y los efectos que no necesites, o aligera los efectos más pesados en "
+"el panel de cada efecto, que muestra su costo en cada nivel de calidad"
 
 #: crates/wprs-format/src/featured.rs
 msgid "expected a wpak-repo-featured/1.0 of this repository"
@@ -3471,58 +3478,77 @@ msgstr "%1 %2 es anterior a la %3 instalada; confirma que quieres volver atrás"
 
 #: crates/wprs-format/src/licenses.rs
 msgid "Public domain: anyone may use, change and share it with no conditions"
-msgstr "Dominio público: cualquiera puede usarlo, cambiarlo y compartirlo sin condiciones"
+msgstr ""
+"Dominio público: cualquiera puede usarlo, cambiarlo y compartirlo sin "
+"condiciones"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Anyone may use, change and share it, even commercially, if they credit you"
-msgstr "Cualquiera puede usarlo, cambiarlo y compartirlo, incluso con fines comerciales, si te da el crédito"
+msgstr ""
+"Cualquiera puede usarlo, cambiarlo y compartirlo, incluso con fines "
+"comerciales, si te da el crédito"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Like CC-BY, and whatever is made from it must be shared under the same "
 "license"
-msgstr "Como CC-BY, y lo que se haga a partir de él debe compartirse con la misma licencia"
+msgstr ""
+"Como CC-BY, y lo que se haga a partir de él debe compartirse con la misma "
+"licencia"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Anyone may change and share it if they credit you, but not for commercial use"
-msgstr "Cualquiera puede cambiarlo y compartirlo si te da el crédito, pero no para uso comercial"
+msgstr ""
+"Cualquiera puede cambiarlo y compartirlo si te da el crédito, pero no para "
+"uso comercial"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Credit you, no commercial use, and whatever is made from it uses the same "
 "license"
-msgstr "Dar el crédito, sin uso comercial, y lo que se haga a partir de él usa la misma licencia"
+msgstr ""
+"Dar el crédito, sin uso comercial, y lo que se haga a partir de él usa la "
+"misma licencia"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Anyone may share it unchanged if they credit you; changed versions are not "
 "allowed"
-msgstr "Cualquiera puede compartirlo sin cambios si te da el crédito; no se permiten versiones modificadas"
+msgstr ""
+"Cualquiera puede compartirlo sin cambios si te da el crédito; no se permiten "
+"versiones modificadas"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Anyone may share it unchanged, for free, if they credit you; changed "
 "versions are not allowed"
-msgstr "Cualquiera puede compartirlo sin cambios y sin cobrar si te da el crédito; no se permiten versiones modificadas"
+msgstr ""
+"Cualquiera puede compartirlo sin cambios y sin cobrar si te da el crédito; "
+"no se permiten versiones modificadas"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Anyone may use, change and share it, even commercially, if they keep your "
 "copyright notice"
-msgstr "Cualquiera puede usarlo, cambiarlo y compartirlo, incluso con fines comerciales, si conserva tu aviso de derechos de autor"
+msgstr ""
+"Cualquiera puede usarlo, cambiarlo y compartirlo, incluso con fines "
+"comerciales, si conserva tu aviso de derechos de autor"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Like MIT, and it also grants patent rights and asks to note what was changed"
-msgstr "Como MIT, además concede derechos de patente y pide indicar qué se cambió"
+msgstr ""
+"Como MIT, además concede derechos de patente y pide indicar qué se cambió"
 
 #: crates/wprs-format/src/licenses.rs
 msgid ""
 "Anyone may use, change and share it, but every shared version must stay free "
 "under the same terms"
-msgstr "Cualquiera puede usarlo, cambiarlo y compartirlo, pero toda versión compartida debe seguir siendo libre con las mismas condiciones"
+msgstr ""
+"Cualquiera puede usarlo, cambiarlo y compartirlo, pero toda versión "
+"compartida debe seguir siendo libre con las mismas condiciones"
 
 #: crates/wprs-format/src/licenses.rs
 msgid "Your own terms: the package must explain them where it is published"
@@ -3532,7 +3558,9 @@ msgstr "Tus propias condiciones: el paquete debe explicarlas donde se publique"
 msgid ""
 "Not one of the usual licenses: read its terms before using or changing the "
 "package"
-msgstr "No es una de las licencias habituales: lee sus condiciones antes de usar o cambiar el paquete"
+msgstr ""
+"No es una de las licencias habituales: lee sus condiciones antes de usar o "
+"cambiar el paquete"
 
 #: crates/wprs-format/src/licenses.rs
 msgid "credit the original author"

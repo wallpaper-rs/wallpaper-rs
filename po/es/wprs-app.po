@@ -2433,14 +2433,20 @@ msgid ""
 "This license allows a copy. When you share yours you must: %1. Put your own "
 "name among the authors of the copy in the package details; the original "
 "author stays credited."
-msgstr "Esta licencia permite hacer una copia. Cuando compartas la tuya debes: %1. Pon tu propio nombre entre los autores de la copia en los detalles del paquete; el autor original sigue acreditado."
+msgstr ""
+"Esta licencia permite hacer una copia. Cuando compartas la tuya debes: %1. "
+"Pon tu propio nombre entre los autores de la copia en los detalles del "
+"paquete; el autor original sigue acreditado."
 
 #: apps/wprs-app/qml/ItemCopy.qml
 msgid ""
 "This license allows a copy with no conditions. Put your own name among the "
 "authors of the copy in the package details; the original author stays "
 "credited."
-msgstr "Esta licencia permite hacer una copia sin condiciones. Pon tu propio nombre entre los autores de la copia en los detalles del paquete; el autor original sigue acreditado."
+msgstr ""
+"Esta licencia permite hacer una copia sin condiciones. Pon tu propio nombre "
+"entre los autores de la copia en los detalles del paquete; el autor original "
+"sigue acreditado."
 
 #: apps/wprs-app/qml/ItemCopy.qml
 msgid "I made this package or its author allows a copy"
@@ -3545,7 +3551,8 @@ msgstr "Licencia"
 
 #: apps/wprs-app/qml/PackageLicense.qml
 msgid "Choose the license that says what others may do with your package."
-msgstr "Elige la licencia que dice qué pueden hacer otras personas con tu paquete."
+msgstr ""
+"Elige la licencia que dice qué pueden hacer otras personas con tu paquete."
 
 #: apps/wprs-app/qml/PackageMedia.qml
 msgid "On a screen"
@@ -3619,7 +3626,9 @@ msgstr ""
 msgid ""
 "This package shows one still picture. To animate it or add effects, make a "
 "scene and add the picture as a layer."
-msgstr "Este paquete muestra una sola imagen fija. Para animarla o añadir efectos, crea una escena y añade la imagen como capa."
+msgstr ""
+"Este paquete muestra una sola imagen fija. Para animarla o añadir efectos, "
+"crea una escena y añade la imagen como capa."
 
 #: apps/wprs-app/qml/PackageMediaFile.qml
 msgid "Videos (*.webm *.mp4 *.mkv)"
@@ -4418,7 +4427,10 @@ msgid ""
 "Address to add this repository. Give it to whoever installs from it. If you "
 "publish the folder on the web, replace the start, up to the question mark, "
 "with its web address."
-msgstr "Dirección para agregar este repositorio. Dásela a quien vaya a instalar desde él. Si publicas la carpeta en la web, cambia el comienzo, hasta el signo de interrogación, por su dirección web."
+msgstr ""
+"Dirección para agregar este repositorio. Dásela a quien vaya a instalar "
+"desde él. Si publicas la carpeta en la web, cambia el comienzo, hasta el "
+"signo de interrogación, por su dirección web."
 
 #: apps/wprs-app/qml/RepoAddress.qml
 msgid "Repository address"
@@ -5562,13 +5574,16 @@ msgstr "Espera: el editor sigue trabajando."
 
 #: apps/wprs-app/qml/SceneBuild.qml
 msgid "You have changes that are not saved yet. Save them to build or apply."
-msgstr "Tienes cambios sin guardar. Guárdalos para crear el paquete o aplicarlo."
+msgstr ""
+"Tienes cambios sin guardar. Guárdalos para crear el paquete o aplicarlo."
 
 #: apps/wprs-app/qml/SceneBuild.qml
 msgid ""
 "The scene has %1 problems to solve first; they are listed in the Problems "
 "panel."
-msgstr "La escena tiene %1 problemas que resolver antes; están en el panel de Problemas."
+msgstr ""
+"La escena tiene %1 problemas que resolver antes; están en el panel de "
+"Problemas."
 
 #: apps/wprs-app/qml/SceneBuild.qml
 msgid "Build and apply"
@@ -7123,7 +7138,10 @@ msgstr "Se creó el par de claves %1; su huella es %2."
 msgid ""
 "%1.key is your SECRET key: never share it, and keep a copy somewhere safe. "
 "%1.pub is the public key: give it to whoever must check your signatures."
-msgstr "%1.key es tu clave SECRETA: no la compartas nunca y guarda una copia en un lugar seguro. %1.pub es la clave pública: entrégala a quien deba comprobar tus firmas."
+msgstr ""
+"%1.key es tu clave SECRETA: no la compartas nunca y guarda una copia en un "
+"lugar seguro. %1.pub es la clave pública: entrégala a quien deba comprobar "
+"tus firmas."
 
 #: apps/wprs-app/qml/SceneKeys.qml
 msgid "Signed the hand-over from %1 to %2"
@@ -7795,6 +7813,10 @@ msgstr "Reiniciar la vista previa"
 #: apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "On phones: %1"
 msgstr "En teléfonos: %1"
+
+#: apps/wprs-app/qml/SceneLineage.qml
+msgid "I made the original or its author allows this copy"
+msgstr "Hice el original o su autor permite esta copia"
 
 #: apps/wprs-app/qml/SceneMapBrush.qml
 msgid "Paint roughness on the preview"
@@ -8517,24 +8539,6 @@ msgstr "Cabezal"
 
 #: apps/wprs-app/qml/SceneNotes.qml
 msgid ""
-"Another program changed this folder while you were editing. Your changes are "
-"not lost: choose what to keep."
-msgstr "Otro programa cambió esta carpeta mientras editabas. Tus cambios no se han perdido: elige con qué quedarte."
-
-#: apps/wprs-app/qml/SceneNotes.qml
-msgid "Keep mine"
-msgstr "Quedarme con lo mío"
-
-#: apps/wprs-app/qml/SceneNotes.qml
-msgid "Take theirs"
-msgstr "Tomar lo del otro programa"
-
-#: apps/wprs-app/qml/SceneNotes.qml
-msgid "Save elsewhere…"
-msgstr "Guardar en otra carpeta…"
-
-#: apps/wprs-app/qml/SceneNotes.qml
-msgid ""
 "The preview on the desktop was ended from outside, so it is off here too."
 msgstr ""
 "La vista previa en el escritorio se terminó desde fuera, así que aquí "
@@ -8551,6 +8555,26 @@ msgstr ""
 #: apps/wprs-app/qml/SceneNotes.qml
 msgid "Stop the preview"
 msgstr "Detener la vista previa"
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid ""
+"Another program changed this folder while you were editing. Your changes are "
+"not lost: choose what to keep."
+msgstr ""
+"Otro programa cambió esta carpeta mientras editabas. Tus cambios no se han "
+"perdido: elige con qué quedarte."
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid "Keep mine"
+msgstr "Quedarme con lo mío"
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid "Take theirs"
+msgstr "Tomar lo del otro programa"
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid "Save elsewhere…"
+msgstr "Guardar en otra carpeta…"
 
 #: apps/wprs-app/qml/SceneNotes.qml
 msgid "This folder has unsaved changes from an earlier session."
@@ -9926,10 +9950,6 @@ msgstr "Ningún repositorio elegido"
 #: apps/wprs-app/qml/SceneShelve.qml
 msgid "Build the package first"
 msgstr "Construye antes el paquete"
-
-#: apps/wprs-app/qml/SceneShelve.qml
-msgid "I made the original or its author allows this copy"
-msgstr "Hice el original o su autor permite esta copia"
 
 #: apps/wprs-app/qml/SceneShelve.qml
 msgid "Add to the repository"
@@ -11964,12 +11984,16 @@ msgid ""
 "One still picture as the wallpaper: you choose it after creating the "
 "package. To animate or add effects, start from an empty scene and add the "
 "picture as a layer."
-msgstr "Una sola imagen fija como fondo: la eliges después de crear el paquete. Para animarla o añadir efectos, empieza con una escena vacía y añade la imagen como capa."
+msgstr ""
+"Una sola imagen fija como fondo: la eliges después de crear el paquete. Para "
+"animarla o añadir efectos, empieza con una escena vacía y añade la imagen "
+"como capa."
 
 #: apps/wprs-app/qml/ScenesPage.qml
 msgid ""
 "One looping video as the wallpaper: you choose it after creating the package."
-msgstr "Un solo video en bucle como fondo: lo eliges después de crear el paquete."
+msgstr ""
+"Un solo video en bucle como fondo: lo eliges después de crear el paquete."
 
 #: apps/wprs-app/qml/ScenesPage.qml
 msgid "My scene"
