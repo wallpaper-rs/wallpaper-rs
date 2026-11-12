@@ -45,6 +45,7 @@ bus_conf() {
 bus_conf "$WORK/session.conf"
 { read -r DBUS_SESSION_BUS_ADDRESS; read -r DBUS_SESSION_BUS_PID; } < <(dbus-daemon --config-file="$WORK/session.conf" --fork --print-address=1 --print-pid=1)
 export DBUS_SESSION_BUS_ADDRESS DBUS_SESSION_BUS_PID
+export WPRS_PRIVATE_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS
 pipewire >"$WORK/pipewire.log" 2>&1 & pids+=($!)
 wait_for 10 test -S "$XDG_RUNTIME_DIR/pipewire-0"
 wireplumber >"$WORK/wireplumber.log" 2>&1 & pids+=($!)

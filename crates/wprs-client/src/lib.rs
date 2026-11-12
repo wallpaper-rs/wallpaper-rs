@@ -36,8 +36,22 @@ enum Event {
     Lost,
 }
 
+pub fn private_only(env: &dyn Fn(&str) -> Option<String>) -> anyhow::Result<()> {
+    if env("WPRS_PRIVATE_BUS_ONLY").is_none_or(|value| value.is_empty() || value == "0") {
+        return Ok(());
+    }
+    let address = env("DBUS_SESSION_BUS_ADDRESS").filter(|address| !address.is_empty());
+    ensure!(
+        address.is_some() && address == env("WPRS_PRIVATE_BUS_ADDRESS"),
+        "WPRS_PRIVATE_BUS_ONLY is set and the session bus is not the private one of this run; \
+         start a private bus and export its address as DBUS_SESSION_BUS_ADDRESS and WPRS_PRIVATE_BUS_ADDRESS"
+    );
+    Ok(())
+}
+
 impl Client {
     pub async fn connect() -> anyhow::Result<Client> {
+        private_only(&|name| std::env::var(name).ok())?;
         Client::new(zbus::Connection::session().await.context("cannot connect to the session bus")?).await
     }
 

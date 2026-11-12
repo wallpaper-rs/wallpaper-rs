@@ -63,6 +63,12 @@ repository refresh starts 10 minutes later.
 - Titles have 1 to 256 characters, playlist, profile and preset names 1 to 128, tags 1 to 64;
   all are trimmed and may not contain control characters.
 
+`WPRS_PRIVATE_BUS_ONLY=1` in the environment of `wprs-ctl` (or of any client built on the shared
+client library) makes it refuse to connect unless `DBUS_SESSION_BUS_ADDRESS` equals
+`WPRS_PRIVATE_BUS_ADDRESS`, which only a run that started its own private bus exports (the
+integration scripts do). Set it for any manual or automated run that must never reach the daemon
+of the user's own session.
+
 ## Errors
 
 Every error carries a readable English message. An error raised without a description carries

@@ -122,3 +122,29 @@ fn every_proxy_uses_the_core_names() {
         assert_eq!(proxy, [Some(interface), Some(BUS_NAME), Some(OBJECT_PATH)]);
     }
 }
+
+#[test]
+fn a_private_only_run_refuses_the_session_bus_of_the_user() {
+    let env = |pairs: &'static [(&str, &str)]| {
+        move |name: &str| pairs.iter().find(|(key, _)| *key == name).map(|(_, value)| (*value).to_owned())
+    };
+    assert!(wprs_client::private_only(&env(&[])).is_ok());
+    assert!(wprs_client::private_only(&env(&[("WPRS_PRIVATE_BUS_ONLY", "0")])).is_ok());
+    let real =
+        env(&[("WPRS_PRIVATE_BUS_ONLY", "1"), ("DBUS_SESSION_BUS_ADDRESS", "unix:path=/run/user/1/bus")]);
+    assert!(wprs_client::private_only(&real).unwrap_err().to_string().contains("not the private one"));
+    let none = env(&[("WPRS_PRIVATE_BUS_ONLY", "1")]);
+    assert!(wprs_client::private_only(&none).is_err());
+    let own = env(&[
+        ("WPRS_PRIVATE_BUS_ONLY", "1"),
+        ("DBUS_SESSION_BUS_ADDRESS", "unix:path=/tmp/work/bus"),
+        ("WPRS_PRIVATE_BUS_ADDRESS", "unix:path=/tmp/work/bus"),
+    ]);
+    assert!(wprs_client::private_only(&own).is_ok());
+    let other = env(&[
+        ("WPRS_PRIVATE_BUS_ONLY", "1"),
+        ("DBUS_SESSION_BUS_ADDRESS", "unix:path=/run/user/1/bus"),
+        ("WPRS_PRIVATE_BUS_ADDRESS", "unix:path=/tmp/work/bus"),
+    ]);
+    assert!(wprs_client::private_only(&other).is_err());
+}
