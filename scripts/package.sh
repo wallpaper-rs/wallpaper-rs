@@ -9,7 +9,6 @@ NAME=wallpaper-rs-$VERSION-$ARCH-linux
 STAGE=$(mktemp -d)
 trap 'rm -rf "$STAGE"' EXIT
 
-export SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git -C "$ROOT" log -1 --format=%ct 2>/dev/null || echo 0)}
 CARGO_HOME=${CARGO_HOME:-$HOME/.cargo}
 RUSTUP_HOME=${RUSTUP_HOME:-$HOME/.rustup}
 unset CARGO_ENCODED_RUSTFLAGS CARGO_BUILD_RUSTFLAGS
@@ -17,7 +16,8 @@ export RUSTFLAGS="--remap-path-prefix=$CARGO_HOME=/cargo --remap-path-prefix=$RU
   --remap-path-prefix=$HOME=/build --remap-path-prefix=$ROOT=/src"
 export CFLAGS="-ffile-prefix-map=$CARGO_HOME=/cargo -ffile-prefix-map=$HOME=/build -ffile-prefix-map=$ROOT=/src"
 export CXXFLAGS=$CFLAGS
-cargo build --release --locked -p wprsd -p wprs-ctl -p wprs-app -p wprs-web --manifest-path "$ROOT/Cargo.toml"
+env -u SOURCE_DATE_EPOCH cargo build --release --locked --timings -p wprsd -p wprs-ctl -p wprs-app -p wprs-web --manifest-path "$ROOT/Cargo.toml"
+export SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git -C "$ROOT" log -1 --format=%ct 2>/dev/null || echo 0)}
 
 SRC=$STAGE/src
 D=$STAGE/$NAME
