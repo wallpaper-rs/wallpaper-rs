@@ -82,3 +82,29 @@ fn the_radius_and_tube_end_handles_write_keys_at_the_playhead_when_keyed() {
     let unkeyed = json!({ "set": { "layer": "t", "radius": 50 } });
     assert!(light(&mut p, unkeyed).is_err(), "a keyed radius is not overwritten without replace");
 }
+
+#[test]
+fn a_light_in_a_turned_skewed_and_stretched_group_lands_and_aims_where_dragged() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    let group = json!({ "id": "g", "type": "group", "layers": [],
+        "transform": { "position": [500, 400], "skew": [25, 10], "rotation": 20, "scale": [1.5, 0.8] } });
+    super::act(&mut p, json!({ "add": { "pointer": "/scene/layers/-", "value": group } })).unwrap();
+    light(&mut p, json!({ "add": { "light": "spot", "id": "s", "into": "g", "at": [0, 0] } })).unwrap();
+    let pointer = wprs_editor::actions::layer(&p.doc, "s").unwrap().0;
+    let anchor = json!({ "set": { "pointer": format!("{pointer}/anchor"), "value": "top_left" } });
+    super::act(&mut p, anchor).unwrap();
+    for (at, aim) in [([700.0, 600.0], [900.0, 650.0]), ([400.0, 300.0], [380.0, 100.0])] {
+        light(&mut p, json!({ "set": { "layer": "s", "at": at, "aim": aim } })).unwrap();
+        let shown = &wprs_editor::lamps::lights(&p.dir, &p.doc, 0.0)["lights"][0];
+        let got = [0, 1].map(|i| shown["at"][i].as_f64().unwrap());
+        assert!((got[0] - at[0]).hypot(got[1] - at[1]) < 0.1, "{got:?} {at:?}");
+        let wanted = (aim[1] - at[1]).atan2(aim[0] - at[0]).to_degrees();
+        let angle = shown["angle"].as_f64().unwrap();
+        let off = (angle - wanted + 540.0).rem_euclid(360.0) - 180.0;
+        assert!(off.abs() < 0.1, "the beam points at the aimed point: {angle} {wanted}");
+        let knob = [0, 1].map(|i| shown["aim"][i].as_f64().unwrap() - got[i]);
+        let cross = knob[0] * (aim[1] - at[1]) - knob[1] * (aim[0] - at[0]);
+        assert!(cross.abs() / knob[0].hypot(knob[1]).max(1.0) < 1.0, "the aim handle sits on the aim line");
+    }
+}
