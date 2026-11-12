@@ -632,16 +632,6 @@ msgstr ""
 "la tarjeta gráfica o un programa"
 
 #: apps/wprs-ctl/src/cli.rs
-msgid ""
-"Print the particles alive on an output, the path that simulates them and "
-"why, as JSON"
-msgstr ""
-
-#: apps/wprs-ctl/src/cli.rs
-msgid "The output that shows the scene, such as a preview output"
-msgstr ""
-
-#: apps/wprs-ctl/src/cli.rs
 msgid "Print the daemon state as JSON"
 msgstr "Imprimir el estado del daemon como JSON"
 
@@ -4552,6 +4542,15 @@ msgstr "Pulsar un botón de la escena"
 #: apps/wprs-ctl/src/props.rs
 msgid "Id of the button"
 msgstr "Id del botón"
+
+#: apps/wprs-ctl/src/props.rs
+msgid ""
+"Print the particles alive on an output, the path that simulates them and why"
+msgstr "Muestra las partículas vivas en una salida, el camino que las simula y por qué"
+
+#: apps/wprs-ctl/src/props.rs
+msgid "Output that shows the scene, such as a preview output"
+msgstr "Salida que muestra la escena, como una salida de vista previa"
 
 #: apps/wprs-ctl/src/props.rs
 msgid ""

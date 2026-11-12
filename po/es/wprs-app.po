@@ -7795,12 +7795,15 @@ msgstr "En la vista previa: %1 vivas de %2 espacios, simulados en %3 porque %4"
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
 msgid "The preview draws at quality %1 on a graphics card of class %2"
-msgstr "La vista previa se dibuja con calidad %1 en una tarjeta gráfica de clase %2"
+msgstr ""
+"La vista previa se dibuja con calidad %1 en una tarjeta gráfica de clase %2"
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
 msgid ""
 "No preview is running, so the counts below are an estimate made by the editor"
-msgstr "No hay vista previa en marcha, así que las cuentas de abajo son una estimación del editor"
+msgstr ""
+"No hay vista previa en marcha, así que las cuentas de abajo son una "
+"estimación del editor"
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
 msgid "Simulate on the processor and show the particles over the preview"
@@ -7811,7 +7814,9 @@ msgstr ""
 msgid ""
 "Estimate of the editor, not of the preview: %1 alive of %2 at %3 s; %4 slots "
 "on the processor"
-msgstr "Estimación del editor, no de la vista previa: %1 vivas de %2 a los %3 s; %4 espacios en el procesador"
+msgstr ""
+"Estimación del editor, no de la vista previa: %1 vivas de %2 a los %3 s; %4 "
+"espacios en el procesador"
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
 msgid ""
