@@ -164,6 +164,7 @@ pub enum Action {
     Clip(ClipEdit),
     Key(ClipKey),
     EditKeys(KeysEdit),
+    ClipEvent(ClipEventEdit),
     Expression(ExpressionEdit),
     Ik(IkEdit),
     Physics(BodyEdit),

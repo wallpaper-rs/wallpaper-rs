@@ -88,7 +88,7 @@ pub fn film(dir: &Path, doc: &Value, id: &str, strip: usize) -> Value {
         "strip": frames })
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum FilmEdit {
     Trim {

@@ -45,6 +45,7 @@ pub const ACTIONS: [&str; 74] = [
     "clip",
     "key",
     "edit_keys",
+    "clip_event",
     "expression",
     "ik",
     "physics",

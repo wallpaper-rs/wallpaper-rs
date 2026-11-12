@@ -95,6 +95,9 @@ QtObject {
         Qt.createComponent("SceneClipCurveCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("SceneDollCheck.qml").createObject(page, {
+            "page": page
+        }).events();
         page.mesh.clip = "";
         run("bone", {
             "name": "arm",

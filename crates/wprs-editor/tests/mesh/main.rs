@@ -1,5 +1,6 @@
 mod clips;
 mod curves;
+mod events;
 mod cutouts;
 mod kit;
 mod limbs;

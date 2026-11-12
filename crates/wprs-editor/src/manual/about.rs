@@ -49,6 +49,10 @@ pub const ABOUT: [(&str, &str); 72] = [
         "edit_keys",
         "Edit keys picked in the curve editor: move, scale, lift or set a part of them, bend or straighten handles of every part or of one part, link the parts of the handles, remove, or paste copied keys",
     ),
+    (
+        "clip_event",
+        "Add, move, rename or remove a named event of a clip, which fires when the clip passes it",
+    ),
     ("expression", "Add, change or remove a facial expression of a rig"),
     ("ik", "Add, change or remove an inverse kinematics chain"),
     ("physics", "Make bones follow physics: stiffness, damping and mode"),
@@ -84,6 +88,8 @@ pub const ABOUT: [(&str, &str); 72] = [
         "uses",
         "Declare the parts of the scripting interface a script uses, or take undeclared ones from its source",
     ),
+    ("film", "Trim a video layer to a part of the video, set its speed, or size its box from the video"),
+    ("sprites", "Cut a picture into frames with a grid or drawn rectangles, or change, add, remove and reorder them"),
     ("undo", "Undo the last change"),
     ("redo", "Redo the last undone change"),
 ];

@@ -5,9 +5,11 @@ use serde_json::{Value, json};
 use wprs_core::message::said;
 use wprs_scene::{MAX_ANIMATION_LAYERS, MAX_CLIPS_PER_MODEL};
 
+mod events;
 mod keyed;
 mod shape;
 
+pub(crate) use events::event;
 pub(crate) use keyed::{key, num};
 
 pub const MAX_LENGTH: f32 = 3600.0;

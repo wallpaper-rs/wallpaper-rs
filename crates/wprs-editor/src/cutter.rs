@@ -9,7 +9,7 @@ use wprs_scene::MAX_FRAMES;
 use crate::cells::inside;
 pub use crate::cells::{Order, cells};
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum SpriteEdit {
     Grid {
