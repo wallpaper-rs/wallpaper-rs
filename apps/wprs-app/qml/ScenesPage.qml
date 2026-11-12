@@ -122,6 +122,7 @@ Kirigami.ScrollablePage {
                 readonly property var modelData: listed2.rows[index]
 
                 Layout.fillWidth: true
+                focusPolicy: Qt.StrongFocus
                 text: (modelData.title || "") + " — " + modelData.folder
                 icon.name: "folder"
                 onClicked: App.compose(modelData.folder, "", "")
@@ -144,6 +145,7 @@ Kirigami.ScrollablePage {
                 readonly property var modelData: listed.rows[index]
 
                 Layout.fillWidth: true
+                focusPolicy: Qt.StrongFocus
                 text: modelData.title
                 icon.name: "edit-copy"
                 onClicked: page.copy(modelData.uid)
