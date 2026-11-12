@@ -13,6 +13,7 @@ QtObject {
     property var media: null
     property var values: null
     property string preset: ""
+    property var listen: null
     readonly property var sample: ({
             "title": "Night Drive",
             "artist": "Example Artist",
@@ -44,8 +45,17 @@ QtObject {
             delete look.values;
             delete look.preset;
         }
+        if (listen !== null)
+            look.listen = listen;
+        else
+            delete look.listen;
         page.editor.look = JSON.stringify(look);
-        page.editor.seek(page.clock, page.editor.playing);
+        page.editor.seek(listen !== null ? 0 : page.clock, listen !== null || page.editor.playing);
+    }
+
+    function hear(page, what) {
+        listen = what;
+        again(page);
     }
 
     function again(page) {

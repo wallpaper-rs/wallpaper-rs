@@ -173,7 +173,7 @@ QtObject {
                 }).particles();
             }
             if (kind === "empty")
-                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml", "SceneTouchCheck.qml", "SceneBandCheck.qml", "SceneLevelCheck.qml", "SceneLightsCheck.qml"])
+                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml", "SceneTouchCheck.qml", "SceneBandCheck.qml", "SceneLevelCheck.qml", "SceneLightsCheck.qml", "SceneHearingCheck.qml"])
                     Qt.createComponent(check).createObject(page, {
                         "page": page
                     }).exercise();

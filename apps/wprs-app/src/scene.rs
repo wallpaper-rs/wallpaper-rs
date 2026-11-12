@@ -94,6 +94,8 @@ pub mod qobject {
         #[qinvokable]
         fn sweep(self: Pin<&mut SceneEditor>, on: bool);
         #[qinvokable]
+        fn wave(self: Pin<&mut SceneEditor>, asset: &QString, buckets: i32);
+        #[qinvokable]
         fn preview(self: Pin<&mut SceneEditor>, live: bool);
         #[qinvokable]
         fn render(self: Pin<&mut SceneEditor>, out: &QString, spec: &QString);
@@ -107,6 +109,7 @@ pub mod qobject {
         fn finished(self: Pin<&mut SceneEditor>, message: QString);
         #[qsignal]
         fn rendered(self: Pin<&mut SceneEditor>, files: QString);
+        fn waved(self: Pin<&mut SceneEditor>, asset: QString, wave: QString);
     }
 
     impl cxx_qt::Threading for SceneEditor {}

@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 39] = [
+pub const ASKS: [(&str, &str, &str); 41] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -73,6 +73,16 @@ pub const ASKS: [(&str, &str, &str); 39] = [
         "response",
         "The response of smooth to a step up and down: points of time and value and the seconds it takes to settle",
         r#"{"smooth": {"up": 0.05, "down": 0.4}}"#,
+    ),
+    (
+        "sounds",
+        "The sound layers of the scene with their sounds, trigger and fades, and the sound assets",
+        "{}",
+    ),
+    (
+        "wave",
+        "The peaks of a sound asset in the given number of buckets, computed once and kept in the cache",
+        r#"{"asset": "NAME", "buckets": 256}"#,
     ),
     ("wander", "Where the made-up pointer of the preview is at a second", r#"{"time": 1.5}"#),
 ];

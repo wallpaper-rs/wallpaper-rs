@@ -20,6 +20,9 @@ pub fn preview(scene: &mut Value, look: &Value) {
     }
     crate::lamps::preview(scene);
     crate::stage3d::preview(scene);
+    if let Some(what) = look.get(crate::sounds::LISTEN).filter(|w| !w.is_null()) {
+        crate::sounds::listen(scene, what);
+    }
     if crate::seats::lens::whole(scene) {
         drop(scene["canvas"].as_object_mut().map(|c| c.remove("camera")));
     }

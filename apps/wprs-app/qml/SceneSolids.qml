@@ -8,6 +8,13 @@ ColumnLayout {
     required property var node
     required property string pointer
 
+    SceneSounds {
+        Layout.fillWidth: true
+        page: solids.page
+        node: solids.node
+        pointer: solids.pointer
+    }
+
     SceneModelTools {
         Layout.fillWidth: true
         page: solids.page

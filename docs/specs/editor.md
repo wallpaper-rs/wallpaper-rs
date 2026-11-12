@@ -541,6 +541,24 @@ The menu of a bound field has *Try and shape the response*:
 Next to the menus for scripts (*Follow a script* lists every script and function of the scene, with
 its settings) and the media player (above), these complete the entries of the binding menu.
 
+### Sound layers
+
+When the canvas or a sound layer is selected, the inspector lists the sounds of the scene (query
+`sounds`): each sound layer with its sounds, its trigger (`start` when it has none; the picker of
+`play_on` offers the buttons and properties of the package, `event:`, `click:`, `enter:`, `leave:`
+and `media:`, see above), whether it is muted, a *Listen* button and, below, the waveform of each
+of its sounds. Sound assets that no layer plays have a waveform and a *Listen* button too. The
+waveform is the query `wave` (`asset`, `buckets` up to 2048): the peaks of the decoded sound from 0
+to 1 and its length, decoded once off the window thread and kept in the cache folder
+(`wallpaper-rs/waves`, keyed by file, size, date and buckets, at most 256 files), so it is read from
+disk the next time. The fades of the layer are drawn over it and their two grips set `fade_in`
+and `fade_out`. *Listen* adds `listen` to the look of the preview, the layer id or `{ "asset" }`
+for a sound without a layer: the preview restarts and plays, once, only that sound (the other sound
+layers are muted, `play_on` ignored), through the daemon, so the volume and the mute of the
+application, the setting that turns the sound of scenes off and the sound of other programs apply as
+they do to a wallpaper. Listening again, or leaving the panel, goes back to the scene. The format
+has no trim of start and end for a sound: the fades are what shapes the audible part.
+
 ## Package details
 
 The manifest is edited in the same inspector: `/manifest` shows the fields of the JSON Schema of

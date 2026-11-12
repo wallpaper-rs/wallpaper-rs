@@ -2450,6 +2450,18 @@ msgid "The trigger, as a timeline or a sound layer names it"
 msgstr ""
 "El disparador, tal como lo nombra una línea de tiempo o una capa de sonido"
 
+"Print the levels of the 64 bands of the sound a scene on a screen follows, "
+"as the editor meter reads them; nothing is recorded or kept, and it needs "
+"the audio input of the scene"
+msgstr ""
+"Muestra los niveles de las 64 bandas del sonido que sigue la escena de"
+" una pantalla, como los lee el medidor del editor; no se graba ni se "
+"guarda nada y hace falta la entrada de audio de la escena"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "The screen, such as a preview: output"
+msgstr "La pantalla, por ejemplo una salida preview:"
+
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid "the pointer (only its latest position over the screen, never kept)"
 msgstr ""

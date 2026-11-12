@@ -165,6 +165,12 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("flashes").is_some() => crate::flashes::ask(dir, doc, &q["flashes"]),
         _ if q.get("strings").is_some() => crate::strings::query(dir, doc),
         _ if q.get("credits").is_some() => crate::credits::query(dir, doc),
+        _ if q.get("sounds").is_some() => crate::sounds::list(dir, doc),
+        _ if q.get("wave").is_some() => {
+            let w = &q["wave"];
+            let buckets = w["buckets"].as_u64().map_or(256, |n| n as usize);
+            crate::sounds::wave(dir, doc, w["asset"].as_str().unwrap_or_default(), buckets)
+        }
         _ if q.get("meter").is_some() => crate::meter::query(doc, &q["meter"]),
         _ if q.get("response").is_some() => crate::response::query(&q["response"]),
         _ if q.get("wander").is_some() => crate::wander::query(&q["wander"]),

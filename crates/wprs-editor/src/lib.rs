@@ -97,6 +97,7 @@ pub mod shelf;
 pub mod shots;
 pub mod shotting;
 pub mod skin;
+pub mod sounds;
 mod spots;
 pub mod spread;
 pub mod stage3d;
