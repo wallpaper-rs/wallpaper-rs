@@ -1,4 +1,5 @@
 import QtQuick
+import io.github.wallpaper_rs.app
 
 QtObject {
     required property var page
@@ -46,6 +47,13 @@ QtObject {
         const copied = clip.copy();
         if (!copied || (copied.layers ?? []).length !== 1)
             throw new Error("ids: copying a layer gave " + JSON.stringify(copied));
+        if (SceneClip.recognised("some other text") !== null || SceneClip.recognised(SceneClip.marker + "{}") !== null)
+            throw new Error("ids: text that is not a copied layer was taken for one");
+        if (!SceneClip.board.text.startsWith(SceneClip.marker))
+            throw new Error("ids: copying did not write the layers as text for the clipboard");
+        const shared = SceneClip.recognised(SceneClip.marker + JSON.stringify(copied));
+        if (!shared || typeof shared.from !== "string")
+            throw new Error("ids: the copied layers were not recognised as a payload");
         clip.paste();
         clip.destroy();
         if (!layer("ids_kid_2"))

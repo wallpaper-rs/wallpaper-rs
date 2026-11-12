@@ -16,13 +16,13 @@ Row {
             }
         })) || "null");
         if (found && !found.error)
-            SceneClip.clip = found;
+            SceneClip.share(found);
         return found;
     }
 
     function paste() {
         page.run("paste", {
-            "clip": SceneClip.clip,
+            "clip": SceneClip.take() ?? {},
             "into": owner.current?.type === "group" ? owner.current.id : undefined
         });
     }
@@ -41,7 +41,7 @@ Row {
         icon.name: "edit-paste"
         text: App.tr("Paste the layers")
         display: QQC2.AbstractButton.IconOnly
-        enabled: SceneClip.clip !== null
+        enabled: SceneClip.pasteable
         onClicked: clip.paste()
         QQC2.ToolTip.text: App.tr("Paste the copied layers with free ids, copying the files they use")
         QQC2.ToolTip.visible: hovered
