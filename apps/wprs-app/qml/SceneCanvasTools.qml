@@ -33,6 +33,10 @@ RowLayout {
         page: tools.page
     }
 
+    SceneSplitTool {
+        page: tools.page
+    }
+
     QQC2.ToolButton {
         icon.name: "snap-bounding-box-edges"
         text: App.tr("Magnets")

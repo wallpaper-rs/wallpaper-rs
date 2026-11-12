@@ -41,6 +41,7 @@ mod scenemedia;
 mod scenerender;
 mod scenesettle;
 mod sceneshow;
+mod scenesplit;
 mod scenesweep;
 mod scenewave;
 mod scenework;

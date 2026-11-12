@@ -1294,6 +1294,16 @@ preview and letting go returns to the first, so two levels, or the glow on and o
 told apart on the same frame; *Split the picture with the other side* in the panel writes both
 looks into one picture, the first on the left and the second on the right.
 
+*Compare the glow*, a button of the canvas toolbar that appears while the canvas has `bloom`, splits
+the canvas itself in two live views: the app asks the daemon for a second stream of the preview
+(`RequestStream`, released when the button is turned off, the canvas changes size or the editor
+closes) and sends it the same document without `canvas.bloom` (`SceneEditor.halve`, the property
+`split` carries `{ on, node, serial }`). The left of the canvas shows the first stream, with the
+glow, and the right the second, without it, cut by a line with a handle that is dragged to move
+the split (the position is not saved). Both streams follow the same time and edits, the simulated
+pointer and clicks reach both, and both are covered together. `wprs-ctl scene preview DIR
+--without-bloom` previews without the glow from the terminal.
+
 *Save a picture…* and *Save a clip…* render the scene to a file without the desktop, from the
 unsaved document, with the same code as `wprs-ctl scene render` (`Renderer::rehearse` of
 `wprs-render`): the scene is drawn at the level, with the render scale of that level, battery and

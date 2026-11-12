@@ -47,6 +47,20 @@ Item {
         }
     }
 
+    SceneGlowSplit {
+        id: glow
+
+        anchors.fill: parent
+        z: -1
+        page: overlays.page
+    }
+
+    SceneGlowGrip {
+        anchors.fill: parent
+        z: 20
+        glow: glow
+    }
+
     SceneWind {
         anchors.fill: parent
         z: 4

@@ -60,6 +60,7 @@ impl SceneEditor {
         let (old, qt) = (self.output.to_string(), self.qt_thread());
         self.as_mut().rust_mut().attached = pixels;
         self.as_mut().set_output(QString::from(&output));
+        self.as_mut().pair();
         bus::spawn(async move {
             if !old.is_empty() {
                 bus::call("Daemon1", "ReleaseStream", vec![json!(old)]).await.ok();
@@ -81,27 +82,24 @@ impl SceneEditor {
     }
 
     pub fn cover(self: Pin<&mut Self>, covered: bool) {
-        let output = self.output.to_string();
-        if !output.is_empty() {
-            bus::spawn(async move {
+        let outputs: Vec<String> =
+            [self.output.to_string(), self.halved().unwrap_or_default()].into_iter().filter(|o| !o.is_empty()).collect();
+        bus::spawn(async move {
+            for output in outputs {
                 bus::call("Daemon1", "SetOutputCovered", vec![json!(output), json!(covered)]).await.ok();
-            });
-        }
+            }
+        });
     }
 
     pub fn touch(self: Pin<&mut Self>, x: f64, y: f64, buttons: u32) {
-        let output = self.output.to_string();
-        if !output.is_empty() {
-            bus::spawn(async move {
-                bus::call(
-                    "Inputs1",
-                    "SimulateTouch",
-                    vec![json!(output), json!(x), json!(y), json!(buttons)],
-                )
-                .await
-                .ok();
-            });
-        }
+        let outputs: Vec<String> =
+            [self.output.to_string(), self.halved().unwrap_or_default()].into_iter().filter(|o| !o.is_empty()).collect();
+        bus::spawn(async move {
+            for output in outputs {
+                let args = vec![json!(output), json!(x), json!(y), json!(buttons)];
+                bus::call("Inputs1", "SimulateTouch", args).await.ok();
+            }
+        });
     }
 
     pub fn seek(mut self: Pin<&mut Self>, time: f64, playing: bool) {
@@ -130,11 +128,13 @@ impl SceneEditor {
         }
         let look: Value = serde_json::from_str(&self.look.to_string()).unwrap_or_default();
         let document = crate::scenedoc::document(&project.doc, &project.dir, &look);
+        let plain = self.halved().map(|output| (output, crate::scenesplit::without_glow(&document).to_string()));
         let document = document.to_string();
         let dir = project.dir.to_string_lossy().into_owned();
         let time = if self.playing { -1.0 } else { self.time };
         let mut targets: Vec<(String, String)> = Vec::new();
         targets.extend(streamed.then(|| (self.output.to_string(), document.clone())));
+        targets.extend(plain);
         match (self.live, self.shown) {
             (true, _) => targets.push((String::new(), document)),
             (false, true) => targets.push((String::new(), String::new())),

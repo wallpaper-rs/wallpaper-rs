@@ -18,6 +18,7 @@ pub mod qobject {
         #[qproperty(QString, placed)]
         #[qproperty(QString, look)]
         #[qproperty(QString, levels)]
+        #[qproperty(QString, split)]
         #[qproperty(u32, node)]
         #[qproperty(f64, serial)]
         #[qproperty(f64, time)]
@@ -92,6 +93,8 @@ pub mod qobject {
         #[qinvokable]
         fn cover(self: Pin<&mut SceneEditor>, covered: bool);
         #[qinvokable]
+        fn halve(self: Pin<&mut SceneEditor>, on: bool);
+        #[qinvokable]
         fn simulate_media(self: Pin<&mut SceneEditor>, file: &QString);
         #[qinvokable]
         fn fire(self: Pin<&mut SceneEditor>, trigger: &QString);
@@ -142,6 +145,8 @@ pub struct SceneEditorRust {
     pub placed: QString,
     pub look: QString,
     pub levels: QString,
+    pub split: QString,
+    pub halves: crate::scenesplit::Halves,
     pub sweeping: bool,
     pub node: u32,
     pub serial: f64,
@@ -188,12 +193,5 @@ impl SceneEditor {
         if gesture && let Some(project) = self.rust_mut().project.as_mut() {
             project.held();
         }
-    }
-
-    pub fn changed(mut self: Pin<&mut Self>) {
-        self.as_mut().set_error(QString::default());
-        self.as_mut().refresh();
-        self.as_mut().attach();
-        self.send();
     }
 }

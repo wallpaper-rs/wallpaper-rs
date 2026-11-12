@@ -221,6 +221,8 @@ Para comparar dos niveles, o con y sin brillo:
 1. En **Comparar con** elige el segundo nivel. Marca **Sin el brillo del lienzo** para comparar el mismo nivel sin el brillo.
 2. Mantén pulsado **Mantener para ver el otro lado**. Mientras lo mantienes, la vista previa enseña el segundo aspecto; al soltar, vuelve al primero.
 
+Para ver el brillo partido en vivo sobre el lienzo, pulsa **Comparar el brillo** en la barra del lienzo (solo aparece si la escena tiene brillo). El lienzo se parte con una línea: a la izquierda se ve con el brillo y a la derecha sin él. Arrastra el asa de la línea para mover el corte. Pulsa el botón otra vez para volver a la vista normal. En la terminal: `wprs-ctl scene preview DIR --without-bloom`.
+
 Para guardar lo que ves:
 
 1. Marca, si quieres, **Mover un puntero por el lienzo y hacer clic** (un puntero simulado cruza el lienzo y pulsa hacia la mitad del clip, para que lo que sigue al puntero se mueva también en el archivo) y **Partir la imagen con el otro lado** (la izquierda con el nivel de arriba y la derecha con el de **Comparar con**).

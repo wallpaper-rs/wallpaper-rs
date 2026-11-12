@@ -289,7 +289,7 @@ Algunos efectos, como **Paralaje de profundidad** y **Efecto miniatura**, leen u
 1. Pulsa un lugar del lienzo donde no haya ninguna capa. El inspector muestra los ajustes de la escena.
 2. En **Brillo:** activa **Las partes claras brillan**.
 3. Ajusta **Umbral:** (qué tan claro debe ser algo para brillar), **Fuerza:** y **Radio:**.
-4. Para comparar, abre **Nivel de la vista previa**, marca **Sin el brillo del lienzo** y mantén pulsado **Mantener para ver el otro lado**: la vista previa enseña el otro lado de la comparación sin el brillo.
+4. Para comparar, abre **Nivel de la vista previa**, marca **Sin el brillo del lienzo** y mantén pulsado **Mantener para ver el otro lado**: la vista previa enseña el otro lado de la comparación sin el brillo. O pulsa **Comparar el brillo** en la barra del lienzo para ver el lienzo partido en vivo, con el brillo a la izquierda y sin él a la derecha.
 
 Si un solo grupo de capas debe brillar, usa el efecto **Resplandor** en una capa, o en una capa de ajuste.
 

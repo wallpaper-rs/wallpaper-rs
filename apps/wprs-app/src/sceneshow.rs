@@ -14,6 +14,13 @@ impl SceneEditor {
         self.as_mut().set_fields(fields);
     }
 
+    pub fn changed(mut self: Pin<&mut Self>) {
+        self.as_mut().set_error(QString::default());
+        self.as_mut().refresh();
+        self.as_mut().attach();
+        self.send();
+    }
+
     pub fn refresh(mut self: Pin<&mut Self>) {
         self.as_mut().scoped();
         let Some(project) = self.project.as_ref() else { return };

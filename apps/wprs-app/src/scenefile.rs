@@ -151,9 +151,9 @@ impl Drop for SceneEditorRust {
             Some(project) => drop(project.forget()),
             None => {}
         }
-        let (output, shown) = (self.output.to_string(), self.shown);
+        let (output, shown, split) = (self.output.to_string(), self.shown, self.halves.output.clone());
         let dir = self.project.as_ref().map(|p| p.dir.to_string_lossy().into_owned()).unwrap_or_default();
-        if output.is_empty() && !shown {
+        if output.is_empty() && !shown && split.is_empty() {
             return;
         }
         bus::farewell(async move {
@@ -162,7 +162,7 @@ impl Drop for SceneEditorRust {
                     .await
                     .ok();
             }
-            if !output.is_empty() {
+            for output in [output, split].into_iter().filter(|o| !o.is_empty()) {
                 bus::call("Daemon1", "ReleaseStream", vec![json!(output)]).await.ok();
             }
         });

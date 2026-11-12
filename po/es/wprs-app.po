@@ -16154,3 +16154,25 @@ msgid ""
 "canvas width is 1; hold Shift to set the depth across and the depth up and "
 "down apart"
 msgstr "Profundidad de paralaje de la capa: arrástralo lejos de la capa, un cuarto del ancho del lienzo vale 1; mantén Mayús para fijar por separado la profundidad a lo ancho y en alto"
+
+#: apps/wprs-app/qml/SceneSplitTool.qml
+msgid "Compare the glow"
+msgstr "Comparar el brillo"
+
+#: apps/wprs-app/qml/SceneSplitTool.qml
+msgid ""
+"Show the right part of the canvas without the glow and the left part with "
+"it; drag the line to move the split"
+msgstr "Muestra la parte derecha del lienzo sin el brillo y la izquierda con él; arrastra la línea para mover el corte"
+
+#: apps/wprs-app/qml/SceneGlowGrip.qml
+msgid "With the glow"
+msgstr "Con el brillo"
+
+#: apps/wprs-app/qml/SceneGlowGrip.qml
+msgid "Without the glow"
+msgstr "Sin el brillo"
+
+#: apps/wprs-app/qml/SceneGlowGrip.qml
+msgid "Drag to move the split between the glow and no glow"
+msgstr "Arrastra para mover el corte entre con brillo y sin brillo"

@@ -107,6 +107,9 @@ QtObject {
         Qt.createComponent("SceneFigureCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("SceneSplitCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         Qt.createComponent("SceneGizmoCheck.qml").createObject(page, {
             "page": page
         }).exercise();
