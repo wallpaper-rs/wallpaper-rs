@@ -65,7 +65,6 @@ impl Daemon {
             false => std::fs::remove_file(self.provider_dir(id).join(crate::remote::CREDITS)).ok(),
         };
         lock(&self.remote.health).remove(id);
-        lock(&self.remote.seeds).remove(id);
         tracing::info!(provider = id, "provider removed");
         self.library_changed(Vec::new());
         self.changes.changed("providers", vec![id.to_owned()]);

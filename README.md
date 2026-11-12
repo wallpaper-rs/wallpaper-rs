@@ -927,9 +927,10 @@ opción de `wprs-ctl provider wallhaven add|set` (`--help` las explica; `set` ca
 comprueba el conjunto), un campo de `Providers1` y un control del diálogo «Opciones de búsqueda» de
 la app: casillas para categorías y pureza, botones para proporciones y resoluciones, una paleta de
 colores y, para las colecciones, un selector que las lista con `wprs-ctl provider wallhaven
-collections` (con clave de API incluye las tuyas). Con orden `random` el daemon usa una semilla de la
-sesión para que las páginas no repitan imágenes; `wprs-ctl provider wallhaven reseed` (o «Nuevo orden
-aleatorio» en la app) elige otra y sincroniza. Una sincronización pide solo las páginas
+collections` (con clave de API incluye las tuyas). Con orden `random` el daemon elige una semilla nueva en cada
+sincronización y la usa en todas sus páginas para que no repitan imágenes; `wprs-ctl provider wallhaven
+reseed` (o «Nuevo orden aleatorio» en la app) sincroniza al momento. En la consulta también se puede
+pegar una dirección de búsqueda de wallhaven.cc: sus parámetros pasan a las opciones. Una sincronización pide solo las páginas
 configuradas (una por defecto), nunca pasa de las 45 peticiones por minuto de la API y espera y
 reintenta cuando responde 429. `sketchy` y `nsfw` siguen apagados por defecto y piden la clave de
 API, que solo va en la cabecera `X-API-Key` y se guarda en el llavero. En el teléfono no hay ajustes

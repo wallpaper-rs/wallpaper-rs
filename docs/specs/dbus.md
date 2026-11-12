@@ -1224,8 +1224,9 @@ follows; empty ones are not sent and `GetSchema().providers` lists the allowed v
 | `page`, `pages`, `max_items` | whole numbers (1 to 1000, 1 to 10, 1 to 240) | `page`, first page and how many pages are read per sync; the list stops at `max_items` or the last page |
 
 `similar` and `tag` cannot be combined with each other or with `query` and `uploader`, and a
-`collection` takes no search terms (`InvalidArgs`). With `sorting = random` the daemon sends the
-session `seed` (see `Reseed`) with every page, so pages never repeat pictures. One sync makes
+`collection` takes no search terms (`InvalidArgs`). With `sorting = random` the daemon picks a new
+`seed` for every sync and sends it with every page, so pages never repeat pictures and each
+sync draws a new selection. One sync makes
 `pages` requests, never more than needed; the API key travels only in the `X-API-Key` header, never in a
 URL, the configuration or the logs. A `429` is retried after `Retry-After` or 2, 4 and 8 s and
 then fails the sync, which is retried later like any failed sync.
@@ -1316,10 +1317,9 @@ most 45 requests per minute; the daemon spaces its requests to that limit.
 
 ### `Reseed(s id) → (t job)`
 
-Picks a new seed for a `wallhaven` provider and starts its sync (`Sync` rules). The seed makes
-the pages of `sorting = random` consistent; it is kept in memory for the session, shared by
-every sync of the provider, and dropped when the provider is removed. `InvalidArgs` for another
-kind.
+Starts the sync of a `wallhaven` provider (`Sync` rules). Every sync, scheduled or not, already
+draws a new seed for `sorting = random`, so `Reseed` is the same as `Sync` for this kind.
+`InvalidArgs` for another kind.
 
 ### `SetSecret(s id, s secret)`
 

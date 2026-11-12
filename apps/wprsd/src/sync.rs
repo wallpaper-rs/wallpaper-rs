@@ -13,6 +13,7 @@ use tokio::runtime::Handle;
 use wprs_core::model::{Credit, JobKind, SourceScan, SyncOutput, SyncReport};
 use wprs_library::{ScanReport, Source};
 use wprs_providers::Cache;
+use wprs_providers::wallhaven::new_seed;
 
 const PUBLIC: [&str; 4] = ["bing", "apod", "wikimedia", "wallhaven"];
 
@@ -91,7 +92,7 @@ impl Daemon {
         let (known, _, mut options) = self.provider(id)?;
         let kind = known.kind.as_str();
         if kind == "wallhaven" {
-            options.insert("seed".into(), self.seed_of(id));
+            options.insert("seed".into(), new_seed());
         }
         let runtime = Handle::current();
         let secret = match &known.secret {
