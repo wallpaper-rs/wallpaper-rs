@@ -13,6 +13,7 @@ use wprs_editor::{Problem, Project};
 
 mod fields;
 mod kinds;
+mod levels;
 
 fn state() {
     static STATE: OnceLock<TempDir> = OnceLock::new();

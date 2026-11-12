@@ -29,6 +29,7 @@ pub mod inspect;
 pub mod keys;
 pub mod lamps;
 pub mod layers;
+pub mod levels;
 mod limbs;
 pub mod listing;
 pub mod manual;

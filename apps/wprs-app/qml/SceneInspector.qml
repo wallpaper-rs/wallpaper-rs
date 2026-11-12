@@ -32,19 +32,19 @@ ColumnLayout {
     function shift(by) {
         const to = list + "/" + (index + by);
         page.run("move", {
-            "from": pointer,
-            "to": to
-        });
+                "from": pointer,
+                "to": to
+            });
         page.editor.select(to);
     }
 
     function addEffect(id) {
         page.run("effects", {
-            "add": {
-                "layer": node.id,
-                "effect": id
-            }
-        });
+                "add": {
+                    "layer": node.id,
+                    "effect": id
+                }
+            });
     }
 
     Kirigami.Heading {
@@ -97,8 +97,8 @@ ColumnLayout {
             display: QQC2.AbstractButton.IconOnly
             onClicked: {
                 inspector.page.run("remove", {
-                    "pointer": inspector.pointer
-                });
+                        "pointer": inspector.pointer
+                    });
                 inspector.page.editor.select(inspector.up);
             }
         }
@@ -174,6 +174,11 @@ ColumnLayout {
             SceneEffectCost {
                 Layout.fillWidth: true
                 visible: /\/effects\/\d+$/.test(inspector.pointer)
+                page: inspector.page
+            }
+
+            ScenePropLevels {
+                Layout.fillWidth: true
                 page: inspector.page
             }
 

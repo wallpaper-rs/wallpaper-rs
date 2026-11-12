@@ -133,6 +133,9 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
             let strip = q["clocks"]["strip"].as_u64().unwrap_or(0) as usize;
             crate::clocks::clocks(dir, doc, q["clocks"]["time"].as_f64().unwrap_or(0.0), strip)
         }
+        _ if q.get("levels").is_some() => {
+            crate::levels::effective(doc, q["levels"]["property"].as_str().unwrap_or(id))
+        }
         _ if q.get("spread").is_some() => crate::spread::spread(doc, &q["spread"]),
         _ => rig(dir, doc, id),
     }

@@ -465,6 +465,17 @@ depend on themselves through other properties show under the field, and only a c
 checks is recorded, with `condition`. A problem of a group or a condition points at that field of
 the property, and a problem of a preset at its id or at the value it sets.
 
+A slider, a combo or a flag shows *Values by quality level* in place of raw JSON: one row for Q0,
+Q1, Q2 and Q3 with the widget of the property itself (the slider with its range and unit, the box
+with the choices, the switch), *Default* taking a level out. Each edit is the plain `set` or `remove`
+of `/manifest/properties/<id>/quality/<q0..q3>`, so `wprs-ctl scene act DIR set` does the same; the
+other kinds of property do not change with the quality level and show no rows. Under the rows the
+inspector lists what each level ends up using (the `levels` query of `rig`, `{"levels": {"property":
+"<id>"}}`, which applies the same rule as the runtime: a value set for a level holds for the lower
+levels until one of their own, and on a slider it is a ceiling that never raises the value the user
+chose) next to the quality selector of the preview, the one of the effect costs, so that picking Q0
+to Q3 runs the preview at that level, with the values of that level.
+
 *Add preset* adds a preset without a label (`add_preset`) and shows it. A preset shows its id and
 label and one row per property it may set (not files, folders, secret texts, buttons, groups, labels
 or dividers), with the widget of the kind of the property: a row the preset sets shows its value,

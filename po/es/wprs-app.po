@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-11 00:00+0000\n"
+"POT-Creation-Date: 2026-11-12 00:00+0000\n"
 "PO-Revision-Date: 2026-10-22 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -6645,6 +6645,24 @@ msgstr ""
 msgid "Script console"
 msgstr "Consola de los scripts"
 
+#: apps/wprs-app/qml/ScenePropLevels.qml
+msgid "Value in effect at every level"
+msgstr "Valor vigente en cada nivel"
+
+#: apps/wprs-app/qml/ScenePropLevels.qml
+msgid ""
+"A value set for a level holds for that level and the lower ones until a "
+"level of their own sets another. On a slider it is a ceiling that never "
+"raises the user's value."
+msgstr ""
+"Un valor fijado para un nivel rige para ese nivel y los inferiores, hasta "
+"que alguno de ellos fije otro. En un deslizador es un tope: nunca sube lo "
+"que haya elegido quien usa el fondo."
+
+#: apps/wprs-app/qml/ScenePropLevels.qml
+msgid "%1: %2 (inherited)"
+msgstr "%1: %2 (heredado)"
+
 #: apps/wprs-app/qml/SceneProperties.qml
 msgid "Add property"
 msgstr "Añadir una propiedad"
@@ -6677,18 +6695,22 @@ msgid "Preview quality"
 msgstr "Calidad de la vista previa"
 
 #: apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q0, lowest"
 msgstr "Q0, la más baja"
 
 #: apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q1"
 msgstr "Q1"
 
 #: apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q2"
 msgstr "Q2"
 
 #: apps/wprs-app/qml/SceneQuality.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Q3, highest"
 msgstr "Q3, la más alta"
 

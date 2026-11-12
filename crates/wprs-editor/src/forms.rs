@@ -3,13 +3,18 @@ use crate::listing::{named, ordered, values as options};
 use crate::ops::escape;
 use crate::settings::{candidates, names, properties};
 use serde_json::{Value, json};
-use wprs_scene::Control;
+use wprs_scene::{Control, Property};
 
 pub fn extend(doc: &Value, pointer: &str, out: &mut Vec<Field>) {
     let preset = pointer.strip_prefix("/manifest/presets/").is_some_and(|n| n.parse::<usize>().is_ok());
     if preset {
         out.retain(|f| f.key != "values");
         out.extend(values(doc, pointer));
+    }
+    if let Some((id, "")) = crate::settings::owner(pointer) {
+        let own = format!("{pointer}/quality");
+        out.retain(|f| f.pointer != own && !f.pointer.starts_with(&format!("{own}/")));
+        out.extend(levels(doc, id));
     }
     let value = doc.pointer(pointer).unwrap_or(&Value::Null);
     if let (Some(id), None) = (value.get("prop").and_then(Value::as_str), value.get("keys")) {
@@ -21,6 +26,42 @@ fn group(pointer: String, key: &str) -> Field {
     Field { pointer, key: key.into(), widget: "group".into(), set: true, required: true, ..Field::default() }
 }
 
+pub(crate) fn value_field(
+    doc: &Value,
+    p: &Property,
+    id: &str,
+    pointer: String,
+    current: Option<&Value>,
+    depth: usize,
+) -> Field {
+    let mut f = Field {
+        pointer,
+        title: named(doc, id),
+        value: current.cloned().unwrap_or_default(),
+        default: p.default_value(),
+        set: current.is_some(),
+        depth,
+        key: id.into(),
+        ..Field::default()
+    };
+    f.widget = match &p.control {
+        Control::Slider(s) => {
+            (f.range, f.unit) = (json!([s.min, s.max]), s.unit.clone().unwrap_or_default());
+            if s.integer { "integer" } else { "number" }
+        }
+        Control::Combo { .. } => {
+            (f.options, f.names) = options(doc, &doc["manifest"]["properties"][id]).into_iter().unzip();
+            "ref:option"
+        }
+        Control::Color { alpha: true, .. } => "color",
+        Control::Color { .. } => "rgb",
+        Control::Bool { .. } => "bool",
+        _ => "text",
+    }
+    .into();
+    f
+}
+
 fn values(doc: &Value, pointer: &str) -> Vec<Field> {
     let base = format!("{pointer}/values");
     let set = doc.pointer(&base);
@@ -28,36 +69,26 @@ fn values(doc: &Value, pointer: &str) -> Vec<Field> {
     let shown =
         ordered(doc).into_iter().filter(|id| props.get(id).is_some_and(|p| p.holds_value() && !p.personal()));
     let field = |id: String| {
-        let (p, current) = (&props[&id], set.and_then(|v| v.get(&id)));
-        let mut f = Field {
-            pointer: format!("{base}/{}", escape(&id)),
-            title: named(doc, &id),
-            value: current.cloned().unwrap_or_default(),
-            default: p.default_value(),
-            set: current.is_some(),
-            depth: 1,
-            key: id,
-            ..Field::default()
-        };
-        f.widget = match &p.control {
-            Control::Slider(s) => {
-                (f.range, f.unit) = (json!([s.min, s.max]), s.unit.clone().unwrap_or_default());
-                if s.integer { "integer" } else { "number" }
-            }
-            Control::Combo { .. } => {
-                (f.options, f.names) =
-                    options(doc, &doc["manifest"]["properties"][&f.key]).into_iter().unzip();
-                "ref:option"
-            }
-            Control::Color { alpha: true, .. } => "color",
-            Control::Color { .. } => "rgb",
-            Control::Bool { .. } => "bool",
-            _ => "text",
-        }
-        .into();
-        f
+        let at = format!("{base}/{}", escape(&id));
+        value_field(doc, &props[&id], &id, at, set.and_then(|v| v.get(&id)), 1)
     };
     [group(base.clone(), "values")].into_iter().chain(shown.map(field)).collect()
+}
+
+pub const LEVELS: [&str; 4] = ["q0", "q1", "q2", "q3"];
+
+fn levels(doc: &Value, id: &str) -> Vec<Field> {
+    let props = properties(doc);
+    let Some(p) = props.get(id).filter(|p| ["slider", "combo", "bool"].contains(&p.kind())) else {
+        return Vec::new();
+    };
+    let base = format!("/manifest/properties/{}/quality", escape(id));
+    let held = doc.pointer(&base);
+    let row = |level: &str| {
+        let f = value_field(doc, p, id, format!("{base}/{level}"), held.and_then(|v| v.get(level)), 1);
+        Field { key: level.into(), title: String::new(), ..f }
+    };
+    [group(base.clone(), "quality")].into_iter().chain(LEVELS.into_iter().map(row)).collect()
 }
 
 fn variants(doc: &Value, pointer: &str, id: &str, out: &mut Vec<Field>) {
