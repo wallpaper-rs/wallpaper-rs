@@ -171,26 +171,6 @@ msgid "true when a window covers the output, false when not"
 msgstr "true cuando una ventana cubre la salida, false cuando no"
 
 #: apps/wprs-ctl/src/author.rs
-msgid "Scene folder: manifest.json, scene.json and the assets"
-msgstr "Carpeta de la escena: manifest.json, scene.json y los recursos"
-
-#: apps/wprs-ctl/src/author.rs
-msgid ""
-"JSON Pointer into the document, such as /scene/layers/0/opacity or /manifest/"
-"title"
-msgstr ""
-"JSON Pointer dentro del documento, como /scene/layers/0/opacity o /manifest/"
-"title"
-
-#: apps/wprs-ctl/src/author.rs
-msgid "JSON value; text that is not JSON is taken as a string"
-msgstr "Valor JSON; un texto que no es JSON se toma como cadena"
-
-#: apps/wprs-ctl/src/author.rs
-msgid "Layer id"
-msgstr "Id de la capa"
-
-#: apps/wprs-ctl/src/author.rs
 msgid "Starting point"
 msgstr "Punto de partida"
 
@@ -372,6 +352,26 @@ msgstr "true cuando parpadea o muestra patrones rápidos"
 #: apps/wprs-ctl/src/author.rs apps/wprs-ctl/src/pack.rs
 msgid "Author of a work it is based on"
 msgstr "Autor de una obra en la que se basa"
+
+#: apps/wprs-ctl/src/author_words.rs
+msgid "Scene folder: manifest.json, scene.json and the assets"
+msgstr "Carpeta de la escena: manifest.json, scene.json y los recursos"
+
+#: apps/wprs-ctl/src/author_words.rs
+msgid ""
+"JSON Pointer into the document, such as /scene/layers/0/opacity or /manifest/"
+"title"
+msgstr ""
+"JSON Pointer dentro del documento, como /scene/layers/0/opacity o /manifest/"
+"title"
+
+#: apps/wprs-ctl/src/author_words.rs
+msgid "JSON value; text that is not JSON is taken as a string"
+msgstr "Valor JSON; un texto que no es JSON se toma como cadena"
+
+#: apps/wprs-ctl/src/author_words.rs
+msgid "Layer id"
+msgstr "Id de la capa"
 
 #: apps/wprs-ctl/src/backdrop.rs
 msgid "%1 is not none or THRESHOLD,STRENGTH"

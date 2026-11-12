@@ -6,7 +6,6 @@ use serde_json::{Value, json};
 use std::pin::Pin;
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::time::Duration;
-use wprs_editor::actions::visible;
 
 const THROTTLE: Duration = Duration::from_millis(50);
 const REFRESH: Duration = Duration::from_secs(30);
@@ -133,22 +132,7 @@ impl SceneEditor {
             return;
         }
         let look: Value = serde_json::from_str(&self.look.to_string()).unwrap_or_default();
-        let document = if wprs_editor::pages::paged(&project.doc) {
-            wprs_editor::pages::preview_document(&project.doc, &look)
-        } else if wprs_editor::reels::media(&project.doc) {
-            wprs_editor::reels::preview_document(&project.dir, &project.doc, &look)
-        } else {
-            let mut scene = visible(&project.doc);
-            wprs_editor::swarms::pin_seed(&mut scene);
-            wprs_editor::rigs::preview(&mut scene, &look);
-            wprs_editor::scripts::stamped(&mut scene, &project.dir, &project.doc);
-            let mut document = json!({"manifest": project.doc["manifest"], "scene": scene});
-            if let Some(staged) = wprs_editor::rigs::staged(&look) {
-                document["preview"] = staged;
-            }
-            wprs_editor::tried::stage(&project.doc, &look, &mut document);
-            document
-        };
+        let document = crate::scenedoc::document(&project.doc, &project.dir, &look);
         let document = document.to_string();
         let dir = project.dir.to_string_lossy().into_owned();
         let time = if self.playing { -1.0 } else { self.time };

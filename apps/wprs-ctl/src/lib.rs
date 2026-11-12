@@ -5,6 +5,7 @@ mod animated;
 mod applying;
 mod args;
 pub mod author;
+mod author_words;
 mod authoring;
 mod away;
 mod backdrop;

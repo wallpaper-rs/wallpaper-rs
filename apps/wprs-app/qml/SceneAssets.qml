@@ -76,20 +76,7 @@ ColumnLayout {
         }
     }
 
-    SceneScriptsList {
-        page: panel.page
-    }
-
-    SceneTemplateTree {
-        Layout.fillWidth: true
-        page: panel.page
-    }
-
-    SceneEffectsList {
-        page: panel.page
-    }
-
-    ScenePoolsPanel {
+    SceneAssetParts {
         Layout.fillWidth: true
         page: panel.page
     }

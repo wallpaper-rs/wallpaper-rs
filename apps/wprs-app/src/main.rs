@@ -29,6 +29,7 @@ mod rows;
 mod scene;
 mod scenecode;
 mod scenecopy;
+mod scenedoc;
 mod scenefile;
 mod scenelive;
 mod scenemedia;
