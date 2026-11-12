@@ -137,8 +137,11 @@ alternativas llevan `ND` (por ejemplo `CC-BY-ND-4.0`) o si está vacía. Editar 
 paquete así se rechaza y no se escribe nada, salvo que confirmes que el paquete es tuyo o que su
 autor lo permite:
 
-- en la app, *Editar una copia…* muestra la licencia y una casilla: *Hice este paquete o su autor
-  permite una copia*. Sin marcarla, no sigue;
+- en la app, *Editar una copia…* muestra siempre la licencia del original con una línea que dice qué
+  permite y qué condiciones trae. Si no permite obras derivadas, añade un aviso y una casilla: *Hice
+  este paquete o su autor permite una copia*; sin marcarla, no sigue. Al agregar la copia a un
+  repositorio estático (diálogo *Añadir a un repositorio estático*) el aviso vuelve a salir, con la
+  misma casilla, y `pack check` y el panel *Problemas* lo repiten como advertencia;
 - en la terminal, `wprs-ctl scene open CARPETA --from paquete.wpak --mine`. Sin `--mine` falla con
   «<licencia> does not allow derived works».
 
@@ -311,10 +314,13 @@ wprs-ctl repo keygen autor
 ```
 
 Pide una contraseña (dos veces) y deja `autor.key` y `autor.pub`, e imprime la huella de la clave
-pública. Con `--no-password` la clave secreta queda sin cifrar; hazlo solo para claves de
-automatización. Sin terminal para preguntar, la contraseña se toma de la variable de entorno
-`WPRS_KEY_PASSWORD`. En la app, *Claves de autor* en el diálogo de construir hace lo mismo y guarda
-el par en `$XDG_DATA_HOME/wallpaper-rs/keys` (modo 0700).
+pública. Al terminar dice cuál archivo es el secreto (`autor.key`, no se comparte nunca) y cuál el
+público (`autor.pub`, se entrega a quien deba comprobar tus firmas). Con `--no-password` la clave
+secreta queda sin cifrar; hazlo solo para claves de automatización. Sin terminal para preguntar, la
+contraseña se toma de la variable de entorno `WPRS_KEY_PASSWORD`; con terminal se pregunta y la
+variable, si existe, tiene prioridad. En la app, *Claves de autor* en el diálogo de construir hace
+lo mismo, dice lo mismo al crear el par y guarda el par en `$XDG_DATA_HOME/wallpaper-rs/keys` (modo
+0700).
 
 **Dónde se guarda.** `autor.key` es un archivo con permisos 0600 (solo tú lo lees) y `autor.pub` es
 público. Guarda la clave secreta en un lugar tuyo y con copia de seguridad: si la pierdes, no
@@ -490,11 +496,11 @@ wprs-ctl scene open mi-copia --from reloj.wpak --facts
 wprs-ctl scene open mi-copia --from reloj.wpak
 ```
 
-La primera imprime, sin escribir nada, la licencia, el veredicto (`allowed` o `refused`), las
-condiciones y el id de la copia:
+La primera imprime, sin escribir nada, la licencia con una línea que explica qué permite, el
+veredicto (`allowed` o `refused`), las condiciones (en el idioma del programa) y el id de la copia:
 
 ```
-{"authors":[],"conditions":[],"credits":0,"id":"org.example.reloj","kind":"scene","license":"CC0-1.0","new_id":"org.example.reloj.copy","reason":"","title":"Reloj con script","verdict":"allowed","version":"1.0.0"}
+{"authors":[],"conditions":[],"credits":0,"id":"org.example.reloj","kind":"scene","license":"CC0-1.0","new_id":"org.example.reloj.copy","reason":"","summary":"Public domain: anyone may use, change and share it with no conditions","title":"Reloj con script","verdict":"allowed","version":"1.0.0"}
 ```
 
 La segunda desempaqueta y describe la carpeta. La copia:

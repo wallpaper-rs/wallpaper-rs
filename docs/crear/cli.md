@@ -285,8 +285,10 @@ wprs-ctl repo keygen autor
 ```
 
 Crea `autor.key` (secreta, modo 0600) y `autor.pub` en la carpeta actual y imprime la huella de la
-pública. Pide una contraseña dos veces; sin terminal, la lee de `WPRS_KEY_PASSWORD`. `--no-password`
-deja la clave sin cifrar. **No compartas nunca el `.key`.**
+pública. Pide una contraseña dos veces; sin terminal, la lee de la variable de entorno
+`WPRS_KEY_PASSWORD` (también `pack sign` y `repo sign-root` la usan para abrir la clave), y si no
+está avisa antes de crear nada. `--no-password` deja la clave sin cifrar. Al terminar dice cuál
+archivo es el secreto y cuál el público. **No compartas nunca el `.key`.**
 
 ### `pack sign`
 
@@ -328,9 +330,9 @@ repositorio». Aquí van sus comandos. Ninguno necesita el demonio.
 
 | Comando | Qué hace |
 |---------|----------|
-| `repo init DIR --name N --root-key raiz.pub --online-key enlinea.pub [--author ID=autor.pub]` | Crea el repositorio en una carpeta vacía y escribe `root/1.json`. Imprime su estado (`repo_id`, `signers`, `complete`, `anchor`). |
+| `repo init DIR --name N --root-key raiz.pub --online-key enlinea.pub [--author ID=autor.pub]` | Crea el repositorio en una carpeta vacía y escribe `root/1.json`. Imprime su estado (`repo_id`, `signers`, `complete`, `anchor`, `address`). |
 | `repo sign-root DIR --key raiz.key` | Firma la raíz más nueva con una clave raíz. Hasta que `complete = true`, el repositorio no sirve. |
-| `repo status DIR` | Imprime el estado de firma de la raíz y la consulta de anclaje (`?fingerprint=…&repo_id=…`) que se agrega a la dirección. |
+| `repo status DIR` | Imprime el estado de firma de la raíz, la consulta de anclaje (`?fingerprint=…&repo_id=…`) y `address`, la dirección completa de la carpeta que se pega en *Añadir un repositorio* o en `remote add`. |
 | `repo add DIR paquete.wpak… [--author ID] [--unlisted]` | Añade paquetes al catálogo; después hay que publicar. Imprime `id versión sha256=… author=…`. |
 | `repo publish DIR --key enlinea.key [--days N]` | Firma y escribe el índice. Imprime `index N published with M packages; it expires FECHA`. |
 | `repo refresh DIR --key enlinea.key [--days N]` | Vuelve a firmar el índice sin cambios con una caducidad nueva. |

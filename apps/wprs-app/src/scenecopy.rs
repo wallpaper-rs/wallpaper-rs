@@ -13,6 +13,10 @@ impl SceneEditor {
         answer(wprs_editor::copying::facts(Path::new(&package.to_string())))
     }
 
+    pub fn copy_lineage(&self, package: &QString) -> QString {
+        answer(wprs_editor::copying::lineage(Path::new(&package.to_string())))
+    }
+
     pub fn copy_into(&self, package: &QString, folder: &QString, id: &QString, mine: bool) -> QString {
         let id = Some(id.to_string()).filter(|i| !i.is_empty());
         let made = wprs_editor::copying::extract(

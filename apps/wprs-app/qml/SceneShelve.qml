@@ -17,6 +17,7 @@ Kirigami.Dialog {
     readonly property alias publishing: publishing
     readonly property string built: String(page.notice ?? "").split("\n")[0]
     property string id: ""
+    readonly property alias lineage: lineage
     readonly property bool open_: shown !== null
 
     function take(answer) {
@@ -92,6 +93,11 @@ Kirigami.Dialog {
             }
         }
 
+        RepoAddress {
+            Layout.fillWidth: true
+            text: shelving.shown?.root?.address ?? ""
+        }
+
         Kirigami.FormLayout {
             Layout.fillWidth: true
             enabled: shelving.open_ && !backend.busy
@@ -104,6 +110,7 @@ Kirigami.Dialog {
 
                     Layout.fillWidth: true
                     placeholderText: App.tr("Build the package first")
+                    onTextChanged: lineage.inspect(text)
                 }
 
                 QQC2.Button {
@@ -121,10 +128,16 @@ Kirigami.Dialog {
                 QQC2.ToolTip.visible: hovered
             }
 
+            SceneLineage {
+                id: lineage
+
+                Layout.fillWidth: true
+            }
+
             QQC2.Button {
                 text: App.tr("Add to the repository")
                 icon.name: "list-add"
-                enabled: file.text !== ""
+                enabled: file.text !== "" && lineage.confirmed
                 onClicked: shelving.add()
             }
 

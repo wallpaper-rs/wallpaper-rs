@@ -56,6 +56,7 @@ pub fn problems(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
             e => problem("/manifest", e.message()),
         })
         .collect();
+    out.extend(crate::copying::restricted(&manifest).into_iter().map(|m| warning("/manifest/origin", m)));
     out.extend(dir.map(|d| crate::credits::gaps(d, doc)).unwrap_or_default());
     out.extend(dir.and_then(|d| crate::flashes::suggestion(d, doc)));
     let unread = dir.map(|d| manifest.unread_texts(wprs_format::locale_names(d))).unwrap_or_default();

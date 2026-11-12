@@ -13,14 +13,9 @@ impl Scene {
         self.bounds().into_iter().map(|(l, b)| (std::ptr::from_ref(l), covered(b, view))).collect()
     }
 
-    pub fn heavy(&self) -> Option<String> {
+    pub fn heavy_cost(&self) -> Option<(f32, f32)> {
         let (cost, budget) = (self.cost(Quality::Q2), Tier::T1.budget());
-        (cost > budget).then(|| {
-            format!(
-                "the scene costs {cost:.1} units a frame at quality level 2, more than the {budget} that older \
-                 integrated and phone GPUs have, so they show it with fewer details"
-            )
-        })
+        (cost > budget).then_some((cost, budget))
     }
 
     fn zoom(&self, l: &Layer) -> f32 {

@@ -36,6 +36,8 @@ pub mod qobject {
         #[qinvokable]
         fn copy_facts(self: &SceneEditor, package: &QString) -> QString;
         #[qinvokable]
+        fn copy_lineage(self: &SceneEditor, package: &QString) -> QString;
+        #[qinvokable]
         fn copy_into(
             self: &SceneEditor,
             package: &QString,

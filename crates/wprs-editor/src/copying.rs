@@ -2,8 +2,11 @@ use anyhow::{Result, ensure};
 use serde_json::{Value, json};
 use std::fs;
 use std::path::Path;
+use wprs_core::message::Message;
 use wprs_core::message::said;
-use wprs_format::{Derivatives, Limits, MANIFEST, derivatives, valid_id};
+use wprs_format::{
+    Derivatives, Limits, MANIFEST, Manifest, derivatives, describe_license, license_condition, valid_id,
+};
 
 pub fn new_id(original: &str) -> String {
     let copy = original.rfind(".copy").filter(|i| original[i + 5..].bytes().all(|b| b.is_ascii_digit()));
@@ -23,9 +26,33 @@ pub fn facts(file: &Path) -> Result<Value> {
     Ok(json!({
         "id": m.id, "new_id": new_id(&m.id), "title": m.title_in(&wprs_core::locale::languages()),
         "kind": m.kind.name(), "version": m.version, "license": m.license, "authors": m.authors,
-        "verdict": verdict, "conditions": conditions, "reason": reason,
-        "credits": m.credits.len(),
+        "verdict": verdict, "reason": reason, "credits": m.credits.len(),
+        "summary": describe_license(&m.license).local(),
+        "conditions": conditions.iter().map(|c| license_condition(c).local()).collect::<Vec<_>>(),
     }))
+}
+
+pub fn restricted(manifest: &Manifest) -> Vec<Message> {
+    let ancestors = manifest.origin.iter().flat_map(|o| &o.derived_from);
+    let refused = ancestors.filter_map(|a| {
+        let license = a.license.as_deref()?;
+        matches!(derivatives(license), Derivatives::Refused(_)).then_some((a, license))
+    });
+    refused
+        .map(|(a, license)| {
+            let title = a.title.as_deref().unwrap_or(&a.author);
+            said(
+                "editor.derived_restricted",
+                "%1 by %2 is licensed %3, which allows no changed versions: publish this copy only if its author allows it",
+                &[&title, &a.author, &license],
+            )
+        })
+        .collect()
+}
+
+pub fn lineage(file: &Path) -> Result<Value> {
+    let package = wprs_format::open(file, &Limits::default())?;
+    Ok(json!(restricted(&package.manifest).iter().map(Message::local).collect::<Vec<_>>()))
 }
 
 pub fn extract(file: &Path, dir: &Path, id: Option<&str>, mine: bool) -> Result<String> {

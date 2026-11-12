@@ -8,7 +8,8 @@ Loader {
     sourceComponent: ({
             "package:credits": credits,
             "package:strings": strings,
-            "package:flashes": flashes
+            "package:flashes": flashes,
+            "package:license": licensing
         })[host.field.widget]
 
     Component {
@@ -23,6 +24,14 @@ Loader {
         id: flashes
 
         PackageFlashes {
+            host: fields.host
+        }
+    }
+
+    Component {
+        id: licensing
+
+        PackageLicense {
             host: fields.host
         }
     }

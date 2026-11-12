@@ -10,8 +10,8 @@ QtObject {
 
     function review() {
         const dialog = Qt.createComponent("SceneReview.qml").createObject(page, {
-            "page": page
-        });
+                "page": page
+            });
         dialog.refresh();
         expect(Array.isArray(dialog.report.findings) && dialog.report.signature.state === "unsigned", "the review has no findings list or no signature state");
         expect(Object.keys(dialog.platforms).includes("desktop"), "the review does not say where the package plays");
@@ -27,6 +27,7 @@ QtObject {
         const before = dialog.found.length;
         dialog.backend.create(dialog.where, "check-key", "", false);
         expect(!dialog.failed && dialog.made.endsWith("check-key.key"), "a key pair was not made: " + dialog.message);
+        expect(dialog.message.includes("check-key.key") && dialog.message.includes("check-key.pub") && dialog.message.includes("SECRET"), "the key pair does not say which file is secret: " + dialog.message);
         expect(dialog.found.length === before + 1 && !JSON.stringify(dialog.found).includes("RWR"), "the new key is not listed alone");
         expect(dialog.backend.exists(dialog.where, "check-key"), "the new key pair is not on disk");
         const first = dialog.found.find(k => k.name === "check-key").fingerprint;
@@ -43,8 +44,8 @@ QtObject {
 
     function shelving() {
         const dialog = Qt.createComponent("SceneShelve.qml").createObject(page, {
-            "page": page
-        });
+                "page": page
+            });
         dialog.chosen("/missing/repository");
         expect(dialog.failed && dialog.shown === null, "a folder that is no repository was opened");
         dialog.aboutToShow();
@@ -57,6 +58,14 @@ QtObject {
         const dialog = Qt.createComponent("ItemCopy.qml").createObject(page, {});
         dialog.start(sample.wpak);
         expect(dialog.facts.verdict === "allowed" && dialog.ready, "a package with a free license cannot be copied: " + JSON.stringify(dialog.facts));
+        expect((dialog.facts.summary ?? "") !== "" && Array.isArray(dialog.facts.conditions), "the copy dialog does not explain the license: " + JSON.stringify(dialog.facts));
+        expect(JSON.stringify(JSON.parse(dialog.helper.copyLineage(sample.wpak))) === "[]" && JSON.parse(dialog.helper.copyLineage("/missing/package.wpak")).error !== undefined, "the warning about an original that allows no changes is wrong");
+        const shelf = Qt.createComponent("SceneShelve.qml").createObject(page, {
+                "page": page
+            });
+        shelf.lineage.inspect(sample.wpak);
+        expect(shelf.lineage.restricted.length === 0 && shelf.lineage.confirmed, "a package with a free license is held back when it is published");
+        shelf.destroy();
         expect(dialog.facts.new_id === "org.example.check.copy" && dialog.facts.kind === "image", "the copy does not say what it is");
         const folder = dialog.helper.folderFor("copy check");
         const made = JSON.parse(dialog.helper.copyInto(sample.wpak, folder, "org.example.check.mine", false));

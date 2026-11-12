@@ -187,4 +187,8 @@ fn scenes_too_heavy_for_older_gpus_at_the_middle_level_get_a_warning() {
     let heavy = problems(&project.dir, &project.doc);
     let warned = heavy.iter().find(|p| p.message.contains("older integrated and phone GPUs"));
     assert!(warned.is_some_and(|p| p.warning && p.pointer == "/scene/layers"), "{heavy:?}");
+    assert!(
+        warned.is_some_and(|p| p.message.contains("To lower it") && p.said.id == "format.heavy"),
+        "{heavy:?}"
+    );
 }

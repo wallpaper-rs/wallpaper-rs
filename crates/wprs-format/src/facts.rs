@@ -19,6 +19,7 @@ pub struct Facts {
     pub facets: Vec<String>,
     pub found: Vec<(Input, String)>,
     pub notes: Vec<String>,
+    pub heavy: Option<(String, String)>,
 }
 
 fn builtin_first(id: &str) -> bool {
@@ -122,8 +123,9 @@ pub fn facts(manifest: &Manifest, scene: Option<&Scene>, size: Option<[u32; 2]>)
     let missing = |i: &&Input| manifest.v2() && !manifest.inputs.contains(i);
     let found =
         scene.map_or(Vec::new(), |s| inputs.iter().filter(missing).map(|i| (*i, place(s, *i))).collect());
-    let notes = scene.and_then(Scene::heavy).into_iter().collect();
-    Facts { features, inputs, facets, found, notes }
+    let heavy =
+        scene.and_then(Scene::heavy_cost).map(|(cost, budget)| (format!("{cost:.1}"), budget.to_string()));
+    Facts { features, inputs, facets, found, notes: Vec::new(), heavy }
 }
 
 fn place(scene: &Scene, input: Input) -> String {
@@ -172,6 +174,13 @@ pub fn notes(manifest: &Manifest, facts: &Facts) -> Vec<Message> {
             said("format.unused_feature", "requires.features lists %1, which the package does not use", &[f])
         })
         .chain(inputs)
+        .chain(facts.heavy.iter().map(|(cost, budget)| {
+            said(
+                "format.heavy",
+                "the scene costs %1 units a frame at quality level 2, more than the %2 that older integrated and phone GPUs have, so they show it with fewer details. To lower it, remove the layers and effects you do not need, or make the heaviest effects lighter in the panel of each effect, which shows its cost at every quality level",
+                &[cost, budget],
+            )
+        }))
         .chain(facts.notes.iter().map(|n| said("format.note", "%1", &[n])))
         .collect()
 }

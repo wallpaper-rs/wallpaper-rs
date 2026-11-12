@@ -46,6 +46,14 @@ pub fn adjust(doc: &Value, field: &mut crate::Field) {
         "/manifest/photosensitive" if field.widget == "bool" => field.widget = "package:flashes".into(),
         "/manifest/strings" => field.widget = "package:strings".into(),
         "/manifest/credits" => field.widget = "package:credits".into(),
+        "/manifest/license" => {
+            field.widget = "package:license".into();
+            let summary =
+                |id: &str| json!({ "id": id, "summary": wprs_format::describe_license(id).local() });
+            let mut options: Vec<Value> = wprs_format::KNOWN_LICENSES.iter().map(|id| summary(id)).collect();
+            options.push(json!({ "id": "", "summary": wprs_format::describe_license("-").local() }));
+            field.options = options;
+        }
         "/manifest/requires/features" => {
             field.options = wprs_format::features::CHOSEN.map(Value::from).to_vec()
         }

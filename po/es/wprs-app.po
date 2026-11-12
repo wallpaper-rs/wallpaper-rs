@@ -768,6 +768,11 @@ msgstr ""
 "con epilepsia fotosensible."
 
 #: apps/wprs-app/qml/BrowseRow.qml
+msgctxt "a package that is already installed"
+msgid "Installed"
+msgstr "Instalado"
+
+#: apps/wprs-app/qml/BrowseRow.qml
 msgid "Update"
 msgstr "Actualizar"
 
@@ -2139,6 +2144,10 @@ msgid "Uninstall %1 %2? You can install it again from Browse."
 msgstr "¿Desinstalar %1 %2? Podés instalarlo de nuevo desde Explorar."
 
 #: apps/wprs-app/qml/Installer.qml
+msgid "%1 %2 is installed."
+msgstr "%1 %2 quedó instalado."
+
+#: apps/wprs-app/qml/Installer.qml
 msgid "The repository is out of date"
 msgstr "El repositorio está desactualizado"
 
@@ -2184,8 +2193,22 @@ msgstr ""
 "este paquete o si su autor lo permite."
 
 #: apps/wprs-app/qml/ItemCopy.qml
-msgid "The license %1 asks for: %2."
-msgstr "La licencia %1 pide: %2."
+msgid "License of the original: %1. %2."
+msgstr "Licencia del original: %1. %2."
+
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid ""
+"This license allows a copy. When you share yours you must: %1. Put your own "
+"name among the authors of the copy in the package details; the original "
+"author stays credited."
+msgstr "Esta licencia permite hacer una copia. Cuando compartas la tuya debes: %1. Pon tu propio nombre entre los autores de la copia en los detalles del paquete; el autor original sigue acreditado."
+
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid ""
+"This license allows a copy with no conditions. Put your own name among the "
+"authors of the copy in the package details; the original author stays "
+"credited."
+msgstr "Esta licencia permite hacer una copia sin condiciones. Pon tu propio nombre entre los autores de la copia en los detalles del paquete; el autor original sigue acreditado."
 
 #: apps/wprs-app/qml/ItemCopy.qml
 msgid "I made this package or its author allows a copy"
@@ -3263,6 +3286,15 @@ msgstr "Usa la red (la fijan los orígenes de arriba)"
 msgid "Up"
 msgstr "Subir un nivel"
 
+#: apps/wprs-app/qml/PackageLicense.qml apps/wprs-app/qml/RepoRevoke.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "License"
+msgstr "Licencia"
+
+#: apps/wprs-app/qml/PackageLicense.qml
+msgid "Choose the license that says what others may do with your package."
+msgstr "Elige la licencia que dice qué pueden hacer otras personas con tu paquete."
+
 #: apps/wprs-app/qml/PackageMedia.qml
 msgid "On a screen"
 msgstr "En una pantalla"
@@ -4129,6 +4161,25 @@ msgstr ""
 msgid "%1: %2"
 msgstr "%1: %2"
 
+#: apps/wprs-app/qml/RepoAddress.qml
+msgid ""
+"Address to add this repository. Give it to whoever installs from it. If you "
+"publish the folder on the web, replace the start, up to the question mark, "
+"with its web address."
+msgstr "Dirección para agregar este repositorio. Dásela a quien vaya a instalar desde él. Si publicas la carpeta en la web, cambia el comienzo, hasta el signo de interrogación, por su dirección web."
+
+#: apps/wprs-app/qml/RepoAddress.qml
+msgid "Repository address"
+msgstr "Dirección del repositorio"
+
+#: apps/wprs-app/qml/RepoAddress.qml
+msgid "Copied"
+msgstr "Copiada"
+
+#: apps/wprs-app/qml/RepoAddress.qml
+msgid "Copy the address"
+msgstr "Copiar la dirección"
+
 #: apps/wprs-app/qml/RepoAdmin.qml
 msgid "Revoke %1 %2: clients no longer offer or install it. Publish next."
 msgstr ""
@@ -4366,10 +4417,6 @@ msgstr "Motivo:"
 #: apps/wprs-app/qml/RepoRevoke.qml apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Malware"
 msgstr "Software malicioso"
-
-#: apps/wprs-app/qml/RepoRevoke.qml apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "License"
-msgstr "Licencia"
 
 #: apps/wprs-app/qml/RepoRevoke.qml
 msgid "Takedown"
@@ -6813,12 +6860,18 @@ msgstr ""
 "la siguiente: la altura es la parte del camino, de 0 a 1."
 
 #: apps/wprs-app/qml/SceneKeys.qml
-msgid "Replaced the key pair %1; its fingerprint is %2"
-msgstr "Se reemplazó el par de claves %1; su huella es %2"
+msgid "Replaced the key pair %1; its fingerprint is %2."
+msgstr "Se reemplazó el par de claves %1; su huella es %2."
 
 #: apps/wprs-app/qml/SceneKeys.qml
-msgid "Created the key pair %1; its fingerprint is %2"
-msgstr "Se creó el par de claves %1; su huella es %2"
+msgid "Created the key pair %1; its fingerprint is %2."
+msgstr "Se creó el par de claves %1; su huella es %2."
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid ""
+"%1.key is your SECRET key: never share it, and keep a copy somewhere safe. "
+"%1.pub is the public key: give it to whoever must check your signatures."
+msgstr "%1.key es tu clave SECRETA: no la compartas nunca y guarda una copia en un lugar seguro. %1.pub es la clave pública: entrégala a quien deba comprobar tus firmas."
 
 #: apps/wprs-app/qml/SceneKeys.qml
 msgid "Signed the hand-over from %1 to %2"
@@ -9602,6 +9655,10 @@ msgstr "Ningún repositorio elegido"
 #: apps/wprs-app/qml/SceneShelve.qml
 msgid "Build the package first"
 msgstr "Construye antes el paquete"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "I made the original or its author allows this copy"
+msgstr "Hice el original o su autor permite esta copia"
 
 #: apps/wprs-app/qml/SceneShelve.qml
 msgid "Add to the repository"

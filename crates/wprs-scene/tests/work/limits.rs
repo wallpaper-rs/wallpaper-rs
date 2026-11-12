@@ -90,6 +90,6 @@ fn package_costs_count_their_passes_and_heavy_scenes_warn() {
         .collect();
     let text = json!({ "schema": SCHEMA, "canvas": { "size": [64, 32] }, "layers": layers });
     let heavy = Scene::from_json(&text.to_string()).unwrap();
-    assert!(heavy.heavy().is_some_and(|m| m.contains("older integrated and phone GPUs")));
-    assert!(Scene::new([64, 32]).heavy().is_none());
+    assert!(heavy.heavy_cost().is_some_and(|(cost, budget)| cost > budget));
+    assert!(Scene::new([64, 32]).heavy_cost().is_none());
 }

@@ -1,7 +1,7 @@
 use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
-use wprs_editor::copying::{extract, facts, new_id};
+use wprs_editor::copying::{extract, facts, lineage, new_id};
 
 fn package(root: &Path, license: &str, kind: &str) -> PathBuf {
     let src = root.join(format!("src-{kind}-{license}"));
@@ -29,7 +29,8 @@ fn a_picture_package_is_unpacked_as_a_copy_with_a_new_id_keeping_credits_and_lic
         (told["verdict"].as_str(), told["new_id"].as_str()),
         (Some("allowed"), Some("org.example.sky.copy"))
     );
-    assert_eq!(told["conditions"], json!(["attribution"]));
+    assert_eq!(told["conditions"].as_array().map(Vec::len), Some(1));
+    assert!(told["summary"].as_str().is_some_and(|s| s.contains("credit you")), "{told}");
     let dir = root.path().join("mine");
     assert_eq!(extract(&file, &dir, None, false).unwrap(), "org.example.sky.copy");
     let manifest: Value = serde_json::from_slice(&fs::read(dir.join("manifest.json")).unwrap()).unwrap();
@@ -53,6 +54,15 @@ fn a_package_without_derivatives_is_refused_unless_the_author_says_it_is_theirs(
     assert!(refused.contains("CC-BY-ND-4.0"), "{refused}");
     assert!(!dir.exists() || fs::read_dir(&dir).unwrap().next().is_none(), "a refused copy left files");
     assert_eq!(extract(&file, &dir, Some("org.example.mine"), true).unwrap(), "org.example.mine");
+    assert_eq!(lineage(&file).unwrap(), json!([]), "an original has nothing to warn about");
+    let again = root.path().join("again.wpak");
+    wprs_format::build(&dir, &again, &Default::default()).unwrap();
+    let warned = lineage(&again).unwrap();
+    let text = warned[0].as_str().unwrap_or_default();
+    assert!(
+        text.contains("CC-BY-ND-4.0") && text.contains("Ana") && warned.as_array().unwrap().len() == 1,
+        "{warned}"
+    );
     assert!(extract(&file, &root.path().join("same"), Some("org.example.sky"), true).is_err());
     assert!(extract(&file, &root.path().join("bad"), Some("Not An Id"), true).is_err());
 }

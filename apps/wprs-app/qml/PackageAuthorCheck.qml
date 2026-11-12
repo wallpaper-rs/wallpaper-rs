@@ -11,6 +11,9 @@ QtObject {
         page.editor.select("/manifest");
         if (widget("credits") !== "package:credits" || widget("strings") !== "package:strings")
             throw new Error("the credits and the strings have no panel of their own: " + widget("credits") + " " + widget("strings"));
+        const licenses = page.fields.find(field => field.key === "license");
+        if (licenses?.widget !== "package:license" || licenses.options.length < 8 || !licenses.options.every(o => o.summary !== ""))
+            throw new Error("the license is not offered as a list with an explanation each: " + JSON.stringify(licenses));
         page.run("manifest", {
                 "text": {
                     "key": "greeting",

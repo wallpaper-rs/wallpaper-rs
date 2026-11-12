@@ -72,11 +72,19 @@ Kirigami.Dialog {
             text: App.tr("The license %1 allows no derived works. Edit a copy only if you made this package or its author allows it.", copying.facts.license ?? "")
         }
 
+        QQC2.Label {
+            Layout.fillWidth: true
+            visible: copying.facts.license !== undefined
+            wrapMode: Text.Wrap
+            textFormat: Text.PlainText
+            text: App.tr("License of the original: %1. %2.", copying.facts.license ?? "", copying.facts.summary ?? "")
+        }
+
         Kirigami.InlineMessage {
             Layout.fillWidth: true
-            visible: !copying.refused && (copying.facts.conditions ?? []).length > 0
+            visible: copying.facts.verdict === "allowed"
             type: Kirigami.MessageType.Information
-            text: App.tr("The license %1 asks for: %2.", copying.facts.license ?? "", (copying.facts.conditions ?? []).join(", "))
+            text: (copying.facts.conditions ?? []).length > 0 ? App.tr("This license allows a copy. When you share yours you must: %1. Put your own name among the authors of the copy in the package details; the original author stays credited.", (copying.facts.conditions ?? []).join(", ")) : App.tr("This license allows a copy with no conditions. Put your own name among the authors of the copy in the package details; the original author stays credited.")
         }
 
         QQC2.CheckBox {

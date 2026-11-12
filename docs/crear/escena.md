@@ -255,7 +255,9 @@ batería. Entonces una escena pesada pierde fotogramas en vez de detalle.
 1. Mira la advertencia. `wprs-ctl scene validate` y `wprs-ctl pack check` avisan cuando la escena
    cuesta más de 8 unidades en `q2`:
    `the scene costs 8.3 units a frame at quality level 2, more than the 8 that older integrated
-   and phone GPUs have, so they show it with fewer details`. Eso lo produce
+   and phone GPUs have, so they show it with fewer details`, seguido de cómo bajarlo (quitar capas y
+   efectos que no hacen falta o aligerar los más pesados en el panel de cada efecto, que muestra su
+   costo en cada nivel). En la app el aviso sale en español. Eso lo produce
    [`ejemplos/efectos-apilados`](ejemplos/efectos-apilados/scene.json), con resplandor, desenfoque,
    viñeta y grano sobre toda la escena.
 2. Prefiere pocos efectos de costo bajo. Los efectos pesados (`fluid`, `bloom`, `god_rays`,

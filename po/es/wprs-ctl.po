@@ -553,6 +553,10 @@ msgstr "Segundos que se graban, de 0,1 a 15; 4 sin él"
 msgid "Frames a second of the recording, 1 to 30; 10 without it"
 msgstr "Fotogramas por segundo de la grabación, de 1 a 30; 10 sin él"
 
+#: apps/wprs-ctl/src/caution.rs
+msgid "Installed %1 %2."
+msgstr "Se instaló %1 %2."
+
 #: apps/wprs-ctl/src/cli.rs
 msgid "Output name such as DP-1; every output when omitted"
 msgstr "Nombre de la salida, como DP-1; todas las salidas si se omite"
@@ -2006,7 +2010,7 @@ msgstr ""
 "Archivo del paquete; <id>-<versión>.wpak junto a la carpeta de la escena si "
 "se omite"
 
-#: apps/wprs-ctl/src/folder.rs apps/wprs-ctl/src/pack.rs
+#: apps/wprs-ctl/src/folder.rs
 msgid "Secret key file of the author"
 msgstr "Archivo de clave secreta del autor"
 
@@ -2333,6 +2337,24 @@ msgstr ""
 "Elegir la tarjeta: auto, integrated, dedicated, software, parte de su nombre "
 "o pci: y su id de bus para distinguir tarjetas idénticas; sin ella lista las "
 "tarjetas"
+
+#: apps/wprs-ctl/src/input.rs
+msgid ""
+"the key has a password and there is no terminal to ask for it: set the "
+"environment variable %1 to the password"
+msgstr "la clave tiene contraseña y no hay una terminal para pedirla: pon la contraseña en la variable de entorno %1"
+
+#: apps/wprs-ctl/src/input.rs
+msgid "Key password: "
+msgstr "Contraseña de la clave: "
+
+#: apps/wprs-ctl/src/input.rs
+msgid "Repeat the password: "
+msgstr "Repite la contraseña: "
+
+#: apps/wprs-ctl/src/input.rs
+msgid "the passwords differ"
+msgstr "las contraseñas no coinciden"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid ""
@@ -2719,6 +2741,12 @@ msgstr "Quitar todas las réplicas de la raíz"
 #: apps/wprs-ctl/src/keys.rs
 msgid "Bits of the index shards; 4 in a new repository"
 msgstr "Bits de los fragmentos del índice; 4 en un repositorio nuevo"
+
+#: apps/wprs-ctl/src/keys.rs
+msgid ""
+"%1 is your SECRET key: never share it, and keep a copy somewhere safe. %2 is "
+"the public key: give it to whoever must check your signatures."
+msgstr "%1 es tu clave SECRETA: no la compartas nunca y guarda una copia en un lugar seguro. %2 es la clave pública: entrégala a quien deba comprobar tus firmas."
 
 #: apps/wprs-ctl/src/lamping.rs
 msgid "Add, set, remove, solo or mute a light layer, or plot its falloff"
@@ -4076,6 +4104,12 @@ msgstr ""
 
 #: apps/wprs-ctl/src/pack.rs
 msgid ""
+"Secret key file of the author, the NAME.key made by repo keygen; its "
+"password is asked on the terminal or read from WPRS_KEY_PASSWORD"
+msgstr "Archivo de la clave secreta del autor, el NOMBRE.key que crea repo keygen; su contraseña se pide en la terminal o se lee de WPRS_KEY_PASSWORD"
+
+#: apps/wprs-ctl/src/pack.rs
+msgid ""
 "Sign the hand-over of an online author to a new key with the old key; prints "
 "the signature"
 msgstr ""
@@ -5301,18 +5335,30 @@ msgstr ""
 "Dónde acaba la parte izquierda, de 0 a 1, con --against o --without-bloom"
 
 #: apps/wprs-ctl/src/repo.rs
-msgid "Create a key pair NAME.key and NAME.pub and print its fingerprint"
-msgstr "Crear un par de claves NOMBRE.key y NOMBRE.pub e imprimir su huella"
+msgid ""
+"Create a key pair: NAME.key is SECRET (never share it) and NAME.pub is "
+"public (share it); prints the fingerprint"
+msgstr "Crea un par de claves: NOMBRE.key es SECRETA (no la compartas nunca) y NOMBRE.pub es pública (compártela); imprime la huella"
+
+#: apps/wprs-ctl/src/repo.rs
+msgid ""
+"Create a key pair: NAME.key is SECRET (never share it) and NAME.pub is "
+"public (share it); prints the fingerprint.\n"
+"\n"
+"The secret key is protected by a password that is asked for on the terminal. "
+"Without a terminal, set the environment variable WPRS_KEY_PASSWORD to the "
+"password, or use --no-password for a key without one."
+msgstr "Crea un par de claves: NOMBRE.key es SECRETA (no la compartas nunca) y NOMBRE.pub es pública (compártela); imprime la huella.\n\nLa clave secreta se protege con una contraseña que se pide en la terminal. Sin terminal, pon la contraseña en la variable de entorno WPRS_KEY_PASSWORD, o usa --no-password para una clave sin contraseña."
 
 #: apps/wprs-ctl/src/repo.rs
 msgid "Name of the key files"
 msgstr "Nombre de los archivos de clave"
 
 #: apps/wprs-ctl/src/repo.rs
-msgid "Leave the secret key unencrypted, for online keys used by automation"
-msgstr ""
-"Dejar sin cifrar la clave secreta, para claves en línea que usa la "
-"automatización"
+msgid ""
+"Leave the secret key unencrypted instead of asking for a password, for "
+"online keys used by automation"
+msgstr "Deja la clave secreta sin cifrar en vez de pedir una contraseña, para claves en línea que usa la automatización"
 
 #: apps/wprs-ctl/src/repo.rs
 msgid "Create a repository in a folder; sign its root next"
