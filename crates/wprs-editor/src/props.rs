@@ -3,8 +3,8 @@ use anyhow::{Result, anyhow, ensure};
 use serde_json::{Value, json};
 use wprs_core::message::said;
 
-pub const PROPERTY_KINDS: [&str; 11] =
-    ["slider", "bool", "color", "combo", "text", "file", "folder", "button", "group", "label", "divider"];
+pub const PROPERTY_KINDS: [&str; 12] =
+    ["slider", "bool", "color", "combo", "text", "file", "folder", "shortcut", "button", "group", "label", "divider"];
 
 pub(crate) fn path(id: &str) -> String {
     format!("/manifest/properties/{}", escape(id))
@@ -21,7 +21,7 @@ fn template(kind: &str) -> Option<Value> {
         }
         "text" => json!({"type": kind, "default": ""}),
         "file" | "folder" => json!({"type": kind, "accept": ["image"]}),
-        "button" | "group" | "label" | "divider" => json!({"type": kind}),
+        "shortcut" | "button" | "group" | "label" | "divider" => json!({"type": kind}),
         _ => return None,
     })
 }

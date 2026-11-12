@@ -13,10 +13,12 @@ fn every_kind_of_property_starts_valid_and_the_features_follow() {
     assert_eq!(added.len(), PROPERTY_KINDS.len());
     assert_eq!(added[0], "slider_1");
     assert_eq!(errors(&project.doc), []);
-    assert_eq!(project.doc["manifest"]["requires"]["features"], json!(["folder", "properties2"]));
+    assert_eq!(project.doc["manifest"]["requires"]["features"], json!(["folder", "properties2", "shortcut"]));
     let remove = |project: &mut Project, id: &str| {
         project.act(&action(json!({"remove": {"pointer": format!("/manifest/properties/{id}")}}))).unwrap();
     };
+    assert_eq!(project.doc["manifest"]["properties"]["shortcut_1"]["type"], "shortcut");
+    remove(&mut project, "shortcut_1");
     remove(&mut project, "folder_1");
     assert_eq!(project.doc["manifest"]["requires"]["features"], json!(["properties2"]));
     remove(&mut project, "button_1");
