@@ -159,8 +159,11 @@ impl Project {
         let before = detected(&self.doc, dir);
         let mut done = self.history.record(&mut self.doc, label, ops, at, gesture)?;
         self.recorded = gesture.then_some(at);
-        let follow = sync(&self.doc, &before, dir);
-        if !follow.is_empty() {
+        for _ in 0..2 {
+            let follow = sync(&self.doc, &before, dir);
+            if follow.is_empty() {
+                break;
+            }
             done.extend(self.history.extend(&mut self.doc, follow)?);
         }
         Ok(done)

@@ -104,7 +104,9 @@ pub fn detected(doc: &Value, dir: Option<&Path>) -> BTreeSet<Input> {
 }
 
 pub fn sync(doc: &Value, before: &BTreeSet<Input>, dir: Option<&Path>) -> Vec<Op> {
-    synced(doc, &doc["scene"], before, dir)
+    let mut ops = synced(doc, &doc["scene"], before, dir);
+    ops.extend(crate::rgb::permission(doc));
+    ops
 }
 
 fn synced(doc: &Value, scene: &Value, before: &BTreeSet<Input>, dir: Option<&Path>) -> Vec<Op> {

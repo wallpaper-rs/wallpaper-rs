@@ -8,6 +8,34 @@ fn lit(layers: &Value) -> bool {
     layers.as_array().into_iter().flatten().any(|l| l["rgb"] == true || lit(&l["layers"]))
 }
 
+fn permitted(doc: &Value) -> bool {
+    doc["manifest"]["permissions"]["rgb"] == true
+}
+
+fn grant(m: &mut serde_json::Map<String, Value>, wanted: bool) {
+    let permissions = m.entry("permissions").or_insert_with(|| json!({}));
+    match (wanted, permissions.as_object_mut()) {
+        (true, Some(p)) => drop(p.insert("rgb".into(), json!(true))),
+        (false, Some(p)) => drop(p.remove("rgb")),
+        _ => {}
+    }
+    if permissions.as_object().is_some_and(serde_json::Map::is_empty) {
+        m.remove("permissions");
+    }
+}
+
+pub(crate) fn permission(doc: &Value) -> Vec<Op> {
+    let wanted = lit(&doc["scene"]["layers"]);
+    if !crate::pages::scened(doc) || wanted == permitted(doc) {
+        return Vec::new();
+    }
+    let mut manifest = doc["manifest"].clone();
+    if let Some(m) = manifest.as_object_mut() {
+        grant(m, wanted);
+    }
+    diff(&doc["manifest"], &manifest, "/manifest")
+}
+
 pub(crate) fn act(doc: &Value, e: &RgbEdit) -> Result<Vec<Op>> {
     ensure!(
         e.on.is_some() || e.size.is_some() || e.whole,
@@ -42,17 +70,8 @@ pub(crate) fn act(doc: &Value, e: &RgbEdit) -> Result<Vec<Op>> {
         target.remove("size");
     }
     let wanted = lit(&new["scene"]["layers"]);
-    let manifest = new["manifest"].as_object_mut();
-    if let Some(m) = manifest.filter(|_| wanted || doc["manifest"]["permissions"]["rgb"] == true) {
-        let permissions = m.entry("permissions").or_insert_with(|| json!({}));
-        match (wanted, permissions.as_object_mut()) {
-            (true, Some(p)) => drop(p.insert("rgb".into(), json!(true))),
-            (false, Some(p)) => drop(p.remove("rgb")),
-            _ => {}
-        }
-        if permissions.as_object().is_some_and(serde_json::Map::is_empty) {
-            m.remove("permissions");
-        }
+    if let Some(m) = new["manifest"].as_object_mut().filter(|_| wanted || permitted(doc)) {
+        grant(m, wanted);
     }
     Ok(diff(doc, &new, ""))
 }
