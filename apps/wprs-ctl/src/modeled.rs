@@ -100,6 +100,7 @@ fn edit(command: Modeling) -> Result<(PathBuf, Edit3d)> {
                 params: set,
                 key: key.map(|k| crate::steps::value(&k)),
                 clear,
+                ..MaterialEdit::default()
             };
             (dir, Edit3d::Material(m))
         }
