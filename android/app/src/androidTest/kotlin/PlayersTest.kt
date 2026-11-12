@@ -46,4 +46,20 @@ class PlayersTest {
         allow(true)
         assertTrue("the listener starts again by itself", waitFor { Players.status.let { it.listening && it.track } })
     }
+
+    @Test
+    fun aCoverIsSeenWithTheTrackAndKeptWhileOnlyThePlaybackChanges() {
+        val art = android.graphics.Bitmap.createBitmap(8, 8, android.graphics.Bitmap.Config.ARGB_8888).apply { eraseColor(android.graphics.Color.RED) }
+        session.setMetadata(MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_TITLE, "Tone").putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, art).build())
+        session.setPlaybackState(PlaybackState.Builder().setState(PlaybackState.STATE_PLAYING, 0, 1f).build())
+        session.isActive = true
+        allow(true)
+        Render.call { players.follow(painter, true) }
+        assertTrue("the cover is read", waitFor { Players.status.let { it.track && it.cover } })
+        session.setPlaybackState(PlaybackState.Builder().setState(PlaybackState.STATE_PAUSED, 500, 1f).build())
+        assertTrue("a pause is seen", waitFor { Players.status.let { !it.playing } })
+        assertTrue("the cover stays through a pause", Players.status.cover)
+        session.setMetadata(MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_TITLE, "Other").build())
+        assertTrue("a track without a cover drops it", waitFor { Players.status.let { it.track && !it.cover } })
+    }
 }

@@ -85,4 +85,11 @@ class ShelfTest {
         app.keepStall(DocumentsContract.buildTreeDocumentUri(authority, "other")) { false }
         assertTrue(read(tree).isEmpty())
     }
+
+    @Test
+    fun theFolderPickerOpensInDocumentsBecauseTheSystemRefusesTheTopOfStorage() {
+        val intent = RepoFolder().createIntent(app, null)
+        assertEquals(RepoFolder.DOCUMENTS, intent.getParcelableExtra<android.net.Uri>(DocumentsContract.EXTRA_INITIAL_URI))
+        assertEquals(tree, RepoFolder().createIntent(app, tree).getParcelableExtra<android.net.Uri>(DocumentsContract.EXTRA_INITIAL_URI))
+    }
 }

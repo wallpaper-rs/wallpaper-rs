@@ -1,6 +1,9 @@
 package io.github.wallpaper_rs
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.provider.DocumentsContract
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.activity.result.contract.ActivityResultContracts.OpenMultipleDocuments
@@ -32,6 +35,15 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+
+class RepoFolder : OpenDocumentTree() {
+    override fun createIntent(context: Context, input: Uri?): Intent =
+        super.createIntent(context, input).putExtra(DocumentsContract.EXTRA_INITIAL_URI, input ?: DOCUMENTS)
+
+    companion object {
+        val DOCUMENTS: Uri = DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Documents")
+    }
+}
 
 class Asked(val text: String, val noting: Boolean, val run: (String) -> Unit)
 
@@ -73,7 +85,7 @@ fun Stall(main: Main) {
             }
         }
     }
-    val folder = rememberLauncherForActivityResult(OpenDocumentTree()) { picked ->
+    val folder = rememberLauncherForActivityResult(RepoFolder()) { picked ->
         picked?.let {
             scope.launch(Dispatchers.IO) { main.keepStall(it) }
             tree = it.toString()
@@ -84,6 +96,7 @@ fun Stall(main: Main) {
     Column(Modifier.padding(horizontal = 16.dp), Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.stall), style = MaterialTheme.typography.titleSmall)
         Text(shown?.let { it.getString("name") + " · " + it.getString("repo_id").take(16) } ?: stringResource(R.string.stall_hint))
+        if (shown == null) Text(stringResource(R.string.stall_folder_note), style = MaterialTheme.typography.bodySmall)
         Row(verticalAlignment = Alignment.CenterVertically) {
             TextButton({ folder.launch(null) }, enabled = !busy) { Text(stringResource(R.string.stall_open)) }
             if (shown != null) {

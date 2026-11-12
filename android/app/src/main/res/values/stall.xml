@@ -2,6 +2,7 @@
 <resources>
     <string name="stall">Static repository</string>
     <string name="stall_hint">A folder made with wprs-ctl repo init</string>
+    <string name="stall_folder_note">Android refuses the top of the storage, Download and other system folders. Pick or create a folder of your own inside Documents.</string>
     <string name="stall_open">Open a static repository…</string>
     <string name="stall_add">Add packages…</string>
     <string name="stall_publish">Publish…</string>
