@@ -42,7 +42,11 @@ impl Renderer {
             let offsets = [c.object * SLOT as u32, c.bones * BONES_SLOT as u32, c.draw * SLOT as u32];
             pass.set_bind_group(1, objects, &offsets);
             let own = &gpu.maps[c.maps.min(gpu.maps.len() - 1)];
-            pass.set_bind_group(2, staged.pictured.get(&(c.model, c.maps, c.pictures)).map_or(own, |g| &g.1), &[]);
+            pass.set_bind_group(
+                2,
+                staged.pictured.get(&(c.model, c.maps, c.pictures)).map_or(own, |g| &g.1),
+                &[],
+            );
             pass.set_bind_group(3, &groups[1], &[c.finish * FINISH_SLOT as u32]);
             let shells = if k.shadow { c.cast_shells } else { c.shells.max(1) };
             pass.draw_indexed(c.first..c.first + c.count, 0, 0..shells);

@@ -50,21 +50,24 @@ impl Renderer {
                 if at.2 == 0 || staged.pictured.get(&at).is_some_and(|(seen, _)| *seen == gpu.dressed) {
                     continue;
                 }
-                let (Some(own), Some(comb), Some(uvs)) = (gpu.views.get(at.1), gpu.combs.get(at.1), gpu.uvs.get(at.1))
+                let (Some(own), Some(comb), Some(uvs)) =
+                    (gpu.views.get(at.1), gpu.combs.get(at.1), gpu.uvs.get(at.1))
                 else {
                     continue;
                 };
                 let finish = p.model.materials.get(at.1).unwrap_or(&defaults);
                 let shown = |k: usize| self.picture(images, look.images[k].unwrap_or("white"));
                 let views: [&TextureView; 5] = std::array::from_fn(|k| &own[k]);
-                let group = self.maps_group((views, comb, [shown(0), shown(1), shown(2), shown(3)]), finish, uvs);
+                let group =
+                    self.maps_group((views, comb, [shown(0), shown(1), shown(2), shown(3)]), finish, uvs);
                 staged.pictured.insert(at, (gpu.dressed, group));
             }
         }
         let used = |at: &(u64, usize, u64)| {
             placed.iter().any(|p| {
                 let looks = &frame.looks[p.looks.clone()];
-                drawn(p) == at.0 && looks.iter().any(|l| usize::from(l.material) == at.1 && key(Some(l)) == at.2)
+                drawn(p) == at.0
+                    && looks.iter().any(|l| usize::from(l.material) == at.1 && key(Some(l)) == at.2)
             })
         };
         staged.pictured.retain(|at, _| used(at));

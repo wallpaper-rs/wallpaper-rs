@@ -101,6 +101,17 @@ impl Renderer {
             uv_buffers.push(uvs);
         }
         let combs = vec![solids.no_comb.view.clone(); maps.len()];
-        GpuModel { vertices, indices, paint, skin, morphs, maps, views: kept, uvs: uv_buffers, combs, dressed: 0 }
+        GpuModel {
+            vertices,
+            indices,
+            paint,
+            skin,
+            morphs,
+            maps,
+            views: kept,
+            uvs: uv_buffers,
+            combs,
+            dressed: 0,
+        }
     }
 }
