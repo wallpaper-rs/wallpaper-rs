@@ -65,7 +65,9 @@ Timer {
     }
 
     function turns() {
-        const {combo, slider, button} = scratch;
+        const combo = scratch.combo;
+        const slider = scratch.slider;
+        const button = scratch.button;
         top = scratch.contentY;
         scratch.forceActiveFocus();
         button.forceActiveFocus(Qt.TabFocusReason);
