@@ -37,12 +37,13 @@ pub(crate) fn mix(a: &Value, b: &Value, f: f32) -> Value {
 }
 
 pub fn sample(keys: &[Value], t: f64) -> Option<Value> {
+    wprs_scene::sample_json(keys, t).or_else(|| unread(keys, t))
+}
+
+fn unread(keys: &[Value], t: f64) -> Option<Value> {
     let i = keys.partition_point(|k| time_of(k) <= t);
     match (i.checked_sub(1).and_then(|i| keys.get(i)), keys.get(i)) {
         (Some(a), Some(b)) => {
-            if let Some(v) = crate::handles::curve(a, b, t) {
-                return Some(v);
-            }
             let ease: Ease =
                 serde_json::from_value(a.get(2).cloned().unwrap_or(json!("linear"))).unwrap_or_default();
             let f = ((t - time_of(a)) / (time_of(b) - time_of(a)).max(1e-6)) as f32;

@@ -96,7 +96,9 @@ fn bezier_handles_time_positions_and_colors_as_a_share_of_the_way() {
     act(&mut p, keyed(place, json!({"time": 2, "in_handle": [1, 0]}))).unwrap();
     let keys = at(&p, &format!("{place}/keys"));
     let keys = keys.as_array().unwrap();
-    assert_eq!(wprs_editor::keys::sample(keys, 1.0), Some(json!([50.0, 25.0])));
+    let middle = wprs_editor::keys::sample(keys, 1.0).unwrap();
+    let near = |i: usize, v: f64| (middle[i].as_f64().unwrap() - v).abs() < 1e-3;
+    assert!(near(0, 50.0) && near(1, 25.0), "{middle}");
     let early = wprs_editor::keys::sample(keys, 0.4).unwrap();
     assert!(early[0].as_f64().unwrap() < 10.0 && early[1].as_f64().unwrap() < 5.0, "{early}");
     act(&mut p, keyed(color, json!({"time": 0, "value": "#000000"}))).unwrap();

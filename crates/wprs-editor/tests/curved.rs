@@ -47,3 +47,27 @@ fn a_number_key_of_a_pair_is_written_back_as_the_number_it_was() {
     assert_eq!((triple[0].one, triple[0].v.0, triple[1].one), (Some(0.5), [0.5; 3], None));
     assert!(serde_json::from_value::<Vec<Key<Color>>>(json!([[0, 0.5]])).is_err(), "a color is no number");
 }
+
+#[test]
+fn colors_lists_and_eased_keys_sample_as_the_render_draws_them() {
+    let colors = json!([[0, "#ff0000", {"out": [0.5, 0.8]}], [1, "#0000ff80"], [2, "#00ff00", "in_out_sine"], [3, "#ffffff"]]);
+    let shown: Vec<Key<Color>> = serde_json::from_value(colors.clone()).unwrap();
+    let triples = json!([[0, [0, 1, 2], {"out": [0.3, 0.1]}], [2, [4, -1, 2], {"in": [1, 0.6]}], [3, [1, 1, 1], "out_quad"], [4, [0, 0, 0]]]);
+    let drawn: Vec<Key<Vec3>> = serde_json::from_value(triples.clone()).unwrap();
+    for t in [0.0, 0.2, 0.5, 0.9, 1.4, 2.3, 2.9, 3.5, 5.0] {
+        let edited =
+            Color::parse(value_at(&json!({ "keys": colors }), f64::from(t)).as_str().unwrap()).unwrap();
+        let render = sample(&shown, t);
+        let close = edited.0.iter().zip(render.0).all(|(a, b)| (a - b.clamp(0.0, 1.0)).abs() <= 1.0 / 255.0);
+        assert!(close, "color at {t}: editor {:?}, render {:?}", edited.0, render.0);
+        let edited = value_at(&json!({ "keys": triples }), f64::from(t));
+        let render = sample(&drawn, t).0;
+        let same = (0..3).all(|i| near(edited[i].as_f64().unwrap(), f64::from(render[i])));
+        assert!(same, "triple at {t}: editor {edited}, render {render:?}");
+    }
+    let steps = json!({"keys": [[0, true], [1, false]]});
+    assert_eq!((value_at(&steps, 0.5), value_at(&steps, 1.0)), (json!(true), json!(false)));
+    let eased = json!({"keys": [[0, 0, "in_quad"], [2, 10]]});
+    let render: Vec<Key<f32>> = serde_json::from_value(eased["keys"].clone()).unwrap();
+    assert!(near(value_at(&eased, 1.0).as_f64().unwrap(), f64::from(sample(&render, 1.0))));
+}

@@ -154,6 +154,15 @@ that follows another source. Keyframe times are seconds on the named timeline, o
 clock without one. In the timeline of the app a keyframe is dragged along its track, to the
 hundredth of a second, and dropped with `keyframe` and `from`.
 
+El editor muestrea las claves con el mismo código que el motor (`wprs_scene::sample_json`): lee
+la lista como la lee la escena (números, pares, ternas, colores, interruptores, textos y emisores),
+llama al mismo muestreo con su suavizado y sus asas Bézier y escribe el resultado como JSON, con
+los colores en hexadecimal y mezclados en OKLab como en la pantalla. Así las asas, las vistas
+previas, las luces, los relojes y las estimaciones que el editor calcula a un segundo dado coinciden
+con lo que dibuja el motor; solo una lista que la escena no puede leer se mezcla aparte, parte por
+parte. Una lista de tres números se interpola como una terna (no como color): un color escrito como
+`[r, g, b]` se prefiere en hexadecimal o con cuatro partes.
+
 The template picker of the layers bar shows the scene, or one script template alone on the canvas as
 a copy of it draws (the preview look `template`). While a template is shown, the layers panel lists
 its layers, the canvas puts its move, bone, chain, weight, point and attachment handles on them, and
