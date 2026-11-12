@@ -6920,6 +6920,7 @@ dependencies = [
  "wprs-ktx2",
  "wprs-render",
  "wprs-scene",
+ "wprs-script",
  "wprs-type",
  "wprs-video",
 ]

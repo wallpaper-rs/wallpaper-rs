@@ -11,6 +11,7 @@ mod molds;
 #[cfg(not(target_os = "android"))]
 mod sandbox;
 mod setup;
+mod syntax;
 mod wire;
 
 pub use frame::{Encoder, Frame, Mode};
@@ -22,6 +23,7 @@ pub use local::Local;
 #[cfg(not(target_os = "android"))]
 pub use sandbox::enter as sandbox;
 pub use setup::{Setup, Source};
+pub use syntax::{Fault, syntax};
 pub use wprs_scene::{Touch, TouchKind};
 
 use clock::{Clock, cpu};

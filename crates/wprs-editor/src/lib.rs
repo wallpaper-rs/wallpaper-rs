@@ -91,6 +91,7 @@ mod rigging;
 pub mod rigs;
 pub mod schema;
 pub mod scope;
+pub mod scriptcheck;
 pub mod scripts;
 mod sculpt;
 pub mod seats;

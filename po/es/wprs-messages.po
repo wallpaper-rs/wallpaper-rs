@@ -103,7 +103,8 @@ msgstr "usa 1, 8, 16 o 32 pasos"
 
 #: crates/wprs-core/src/edit/fields.rs crates/wprs-core/src/edit/file.rs
 #: crates/wprs-core/src/edit/set.rs crates/wprs-editor/src/findings.rs
-#: crates/wprs-editor/src/package.rs crates/wprs-scene/src/issue.rs
+#: crates/wprs-editor/src/package.rs crates/wprs-editor/src/scriptcheck.rs
+#: crates/wprs-scene/src/issue.rs
 msgid "%1: %2"
 msgstr "%1: %2"
 
@@ -1735,6 +1736,14 @@ msgstr "no hay ninguna plantilla «%1»"
 msgid "a template holds one layer; add layers inside its group"
 msgstr "una plantilla tiene una sola capa; añade capas dentro de su grupo"
 
+#: crates/wprs-editor/src/scriptcheck.rs
+msgid "%1 is listed in scripts but is not in the folder"
+msgstr "%1 figura en scripts pero no está en la carpeta"
+
+#: crates/wprs-editor/src/scriptcheck.rs
+msgid "%1:%2: %3"
+msgstr "%1:%2: %3"
+
 #: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/scripts/edit.rs
 msgid "the scripts of a scene take at most 1 MiB together"
 msgstr "los scripts de una escena ocupan como mucho 1 MiB entre todos"
@@ -2907,8 +2916,8 @@ msgid ""
 "it signs another version of manifest.json; run pack sign again, or delete it "
 "to build unsigned"
 msgstr ""
-"firma otra versión de manifest.json; vuelve a firmar con pack sign o "
-"bórrala para construir sin firma"
+"firma otra versión de manifest.json; vuelve a firmar con pack sign o bórrala "
+"para construir sin firma"
 
 #: crates/wprs-format/src/catalog.rs
 msgid "package size"

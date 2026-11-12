@@ -97,6 +97,7 @@ pub fn review(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
                     file.notes.iter().map(|n| warning(&at, said("editor.model_file", "%1 %2", &[&path, n]))),
                 );
             }
+            out.extend(dir.iter().flat_map(|d| crate::scriptcheck::problems(&scene, d)));
             let issues = unread.chain(scene.validate(&props)).map(|issue| {
                 let text = issue.to_string();
                 let path = text.split_whitespace().next().filter(|p| p.starts_with('/')).unwrap_or("");

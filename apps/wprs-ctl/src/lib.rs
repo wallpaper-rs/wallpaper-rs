@@ -82,6 +82,7 @@ mod rigging;
 mod rigshow;
 mod ruling;
 mod scoped;
+mod scriptfaults;
 mod seeding;
 pub mod server;
 pub mod serving;

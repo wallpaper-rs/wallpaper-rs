@@ -19,6 +19,8 @@ pub fn check(path: &Path, json: bool) -> Result<()> {
         checked if manifest.v2() => checked?,
         _ => {}
     }
+    let problems: Vec<String> =
+        crate::scriptfaults::of(path, &manifest).iter().map(|f| f.said().local()).collect();
     let listed = manifest.features();
     let (needed, missing) = review::needs(&manifest, &facts);
     let platforms = review::platforms(&manifest, &facts);
@@ -31,12 +33,13 @@ pub fn check(path: &Path, json: bool) -> Result<()> {
         "inputs": manifest.inputs.iter().map(|i| i.name()).collect::<Vec<_>>(),
         "features": needed, "declared": listed, "missing": missing,
         "facets": facts.facets, "languages": manifest.locales(), "platforms": platforms,
-        "warnings": features::warnings(&manifest, &facts),
+        "warnings": features::warnings(&manifest, &facts), "problems": problems,
     });
     match json {
         true => println!("{report}"),
         false => print!("{}", human(&manifest, &facts, &report)),
     }
+    anyhow::ensure!(problems.is_empty(), "{}", crate::authoring::count(problems.len(), "problem"));
     Ok(())
 }
 
@@ -55,7 +58,11 @@ fn human(manifest: &Manifest, facts: &Facts, report: &Value) -> String {
         _ => "plays".into(),
     };
     let reasons = Some(words("reasons")).filter(|r| !r.is_empty()).map(|r| format!(" ({r})"));
-    let head = format!("ok {} {} {} ({})\n", manifest.kind, manifest.id, manifest.version, manifest.schema);
+    let problems = report["problems"].as_array().into_iter().flatten().filter_map(Value::as_str);
+    let problems: String = problems.map(|p| format!("problem: {p}\n")).collect();
+    let state = if problems.is_empty() { "ok" } else { "problems" };
+    let head =
+        format!("{state} {} {} {} ({})\n", manifest.kind, manifest.id, manifest.version, manifest.schema);
     let pairs = [
         ("title", report["title"].as_str().unwrap_or("").to_string()),
         ("rating", rating + &reasons.unwrap_or_default()),
@@ -71,7 +78,7 @@ fn human(manifest: &Manifest, facts: &Facts, report: &Value) -> String {
     ];
     let shown = pairs.into_iter().filter(|(_, v)| !v.is_empty());
     let warnings = report["warnings"].as_array().into_iter().flatten().filter_map(Value::as_str);
-    head + &show::lines(shown) + &warnings.map(|w| format!("warning: {w}\n")).collect::<String>()
+    head + &problems + &show::lines(shown) + &warnings.map(|w| format!("warning: {w}\n")).collect::<String>()
 }
 
 pub fn upgraded(

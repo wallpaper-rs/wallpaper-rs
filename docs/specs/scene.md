@@ -2070,6 +2070,10 @@ frame that failed everything is sent again. Modules that declare something (see 
 declarations") get that frame object itself; a module that declares nothing gets a new copy of it
 on every call, with plain arrays for the bands, as engines always gave it.
 
+The problem list of the editor, `wprs-ctl scene validate` and `wprs-ctl pack check` compile every module
+without running it (`wprs_editor::scriptcheck`, with the engine the scenes use): a syntax error is a problem
+with the file and line (`scripts/spin.js:4: …`), and so is a `scripts` entry whose file is not in the folder.
+
 ### Lifecycle
 
 A module may export these functions; the engine calls each one inside the time of a frame. A module

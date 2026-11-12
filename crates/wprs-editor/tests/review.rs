@@ -109,3 +109,40 @@ fn key_pairs_are_made_listed_replaced_only_on_request_and_rotated() {
     assert!(author_keys::rotate(&secret, None, "nonsense", "studio").is_err());
     assert!(author_keys::rotate(&secret, None, locked["public"].as_str().unwrap(), " ").is_err());
 }
+
+#[test]
+fn scripts_that_do_not_compile_or_are_missing_are_problems_everywhere() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    fs::create_dir_all(p.dir.join("scripts")).unwrap();
+    fs::write(p.dir.join("scripts/ok.js"), "export function update(frame) {\n  return 1;\n}\n").unwrap();
+    fs::write(
+        p.dir.join("scripts/bad.js"),
+        "export function update(frame) {\n  return 1;\n\nlet = = 3;\n}\n",
+    )
+    .unwrap();
+    let listed = ["scripts/ok.js", "scripts/bad.js", "scripts/gone.js"];
+    p.doc["scene"]["scripts"] = json!(listed.map(|path| json!({ "path": path, "events": ["update"] })));
+    let shown = |problems: Vec<wprs_editor::Problem>| {
+        problems
+            .into_iter()
+            .filter(|f| f.pointer.starts_with("/scene/scripts/"))
+            .map(|f| (f.pointer, f.warning, f.said.local()))
+            .collect::<Vec<_>>()
+    };
+    let list = shown(wprs_editor::check::review(&p.doc, Some(&p.dir)));
+    assert_eq!(list.len(), 2, "{list:?}");
+    assert!(
+        list[0].0 == "/scene/scripts/1/path" && !list[0].1 && list[0].2.starts_with("scripts/bad.js:4:"),
+        "{list:?}"
+    );
+    assert!(
+        list[1].0 == "/scene/scripts/2/path" && !list[1].1 && list[1].2.contains("scripts/gone.js"),
+        "{list:?}"
+    );
+    assert_eq!(shown(wprs_editor::package::problems(&p.dir, &p.doc)), list);
+    let said = report(&p.dir, &p.doc);
+    let findings = said["findings"].as_array().unwrap();
+    let bad = findings.iter().find(|f| f["pointer"] == "/scene/scripts/1/path").unwrap();
+    assert_eq!((bad["level"].as_str(), bad["file"].as_str()), (Some("error"), Some("scripts/bad.js")));
+}
