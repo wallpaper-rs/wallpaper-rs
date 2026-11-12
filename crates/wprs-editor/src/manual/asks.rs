@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 50] = [
+pub const ASKS: [(&str, &str, &str); 52] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -54,6 +54,16 @@ pub const ASKS: [(&str, &str, &str); 50] = [
     ("pools", "Mesh pools of the scene with the layers that draw them and the scripts that build them", "{}"),
     ("uses", "What each script declares, what its source uses and what it lacks", "{}"),
     ("spread", "Spread of an emitter", "{}"),
+    (
+        "shader_source",
+        "Descriptor, WGSL, parameter kinds and fields of a package effect or material shader",
+        r#"{"effect": "NAME"}"#,
+    ),
+    (
+        "shader_check",
+        "Check a package effect as readers do, optionally with unsaved descriptor or WGSL text; reports the line and column of an error and the canvas handles",
+        r#"{"effect": "NAME", "wgsl": "TEXT"}"#,
+    ),
     (
         "strings",
         "The table of texts by key: languages, keys with the languages they lack, files and the texts of the engine",

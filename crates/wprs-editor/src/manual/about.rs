@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 79] = [
+pub const ABOUT: [(&str, &str); 80] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),
@@ -105,6 +105,10 @@ pub const ABOUT: [(&str, &str); 79] = [
     (
         "sprites",
         "Cut a picture into frames with a grid or drawn rectangles, or change, add, remove and reorder them",
+    ),
+    (
+        "shader",
+        "Write a package effect or material shader: make one from a template, write its WGSL or descriptor, or edit its parameters, passes and fields",
     ),
     ("undo", "Undo the last change"),
     ("redo", "Redo the last undone change"),
