@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 44] = [
+pub const ASKS: [(&str, &str, &str); 49] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),

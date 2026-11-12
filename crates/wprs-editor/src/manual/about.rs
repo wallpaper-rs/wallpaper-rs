@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 74] = [
+pub const ABOUT: [(&str, &str); 78] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),

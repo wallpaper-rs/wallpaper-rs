@@ -68,6 +68,8 @@ pub enum LayerEdit {
     Depth {
         layer: String,
         depth: [f64; 2],
+        #[serde(default)]
+        replace: bool,
     },
     Instance {
         layer: String,

@@ -17,8 +17,8 @@ mod pools;
 mod reaching;
 mod split;
 mod timing;
-mod uses;
 mod tinted;
+mod uses;
 mod valued;
 mod worded;
 

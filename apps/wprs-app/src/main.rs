@@ -3,6 +3,8 @@ mod app;
 mod args;
 mod backend;
 mod bus;
+#[macro_use]
+mod callmacro;
 mod calls;
 mod choices;
 mod depth;

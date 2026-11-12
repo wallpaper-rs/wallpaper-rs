@@ -1,4 +1,5 @@
 pub use super::declared::{ManifestEdit, Needed, PropertyEdit};
+pub use super::figures::{FigureEdit, Stop};
 pub use super::ids::{Named, PasteEdit, RenameEdit, TranslateEdit};
 pub use super::lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, NormalsMake};
 pub use super::limbs::{
