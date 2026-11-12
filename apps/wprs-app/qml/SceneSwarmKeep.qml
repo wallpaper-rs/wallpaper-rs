@@ -21,12 +21,12 @@ GridLayout {
     SceneRepeater {
         id: listed
 
-        rows: row.ring ? [["target", row.keep.target]] : [["from", row.keep.from_ref], ["to", row.keep.to_ref]]
+        rows: row.ring ? [["target", row.keep?.target]] : [["from", row.keep?.from_ref], ["to", row.keep?.to_ref]]
 
         delegate: QQC2.ComboBox {
             required property int index
             readonly property var modelData: listed.rows[index]
-            readonly property var value: modelData[1]
+            readonly property var value: modelData?.[1]
 
             Layout.fillWidth: true
             Layout.columnSpan: row.ring ? 2 : 1
@@ -41,15 +41,15 @@ GridLayout {
 
     QQC2.Label {
         visible: row.ring
-        text: App.tr("Distance %1 px", Math.round(row.keep.distance ?? 0))
+        text: App.tr("Distance %1 px", Math.round(row.keep?.distance ?? 0))
     }
 
     SceneSlider {
         Layout.fillWidth: true
         visible: row.ring
         from: 0
-        to: Math.max(1000, row.keep.distance ?? 0)
-        value: row.keep.distance ?? 0
+        to: Math.max(1000, row.keep?.distance ?? 0)
+        value: row.keep?.distance ?? 0
         onMoved: row.steer.patch(row.keep, v => v.distance = Math.round(value), true)
     }
 
@@ -61,7 +61,7 @@ GridLayout {
         Layout.fillWidth: true
         from: -50
         to: 50
-        value: row.keep.strength ?? 0
+        value: row.keep?.strength ?? 0
         onMoved: row.steer.patch(row.keep, v => v.strength = Math.round(value * 10) / 10, true)
     }
 
@@ -70,7 +70,7 @@ GridLayout {
         icon.name: "edit-delete"
         text: App.tr("Remove this force")
         onClicked: row.steer.tools.edit("force", {
-                "index": row.keep.index,
+                "index": row.keep?.index,
                 "remove": true
             })
     }
