@@ -40,6 +40,13 @@ impl Painter<'_, '_, '_> {
         self.airs() && (0..glow.count()).any(|k| glow.now.bulbs[k].air[0] > 0.0 && range.contains(&within(k)))
     }
 
+    pub(crate) fn air_meets(&self, range: Range<usize>, clip: Rect) -> bool {
+        let glow = &self.pool.glow;
+        let within = |k: usize| self.frame.lamps.get(k).map_or(usize::MAX, |l| l.within);
+        let meets = |k: usize| glow.now.bulbs[k].air[0] > 0.0 && glow.marks[k].2.meets(clip);
+        self.airs() && (0..glow.count()).any(|k| range.contains(&within(k)) && meets(k))
+    }
+
     pub(crate) fn air_until(&mut self, at: usize, target: Target) {
         if !self.airs() {
             return;

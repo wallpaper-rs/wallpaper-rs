@@ -134,7 +134,7 @@ impl Painter<'_, '_, '_> {
     pub(crate) fn skip(&mut self, i: usize, target: super::paint::Target) -> bool {
         let Some(clip) = self.clip.filter(|_| target.src == super::Src::Canvas) else { return false };
         let d = &self.frame.draws[i];
-        if self.extent(i).is_some_and(|r| r.meets(clip)) {
+        if self.extent(i).is_some_and(|r| r.meets(clip)) || self.air_meets(i..d.end, clip) {
             return false;
         }
         let ids = self.frame.draws[i..d.end].iter().map(|d| std::ptr::from_ref::<Layer>(d.layer) as usize);
