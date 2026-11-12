@@ -5,9 +5,10 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -24,7 +25,7 @@ class Remirror(context: Context, params: WorkerParameters) : Worker(context, par
         runCatching { context.remirror(Mirrors.now(kept, waiting)) }
         if (waiting) return Result.success()
         Mirrors.later(context, kept)
-        Mirrors.watch(context, ExistingWorkPolicy.APPEND_OR_REPLACE)
+        Mirrors.watch(context, ExistingWorkPolicy.APPEND_OR_REPLACE, Mirrors.GAP_S)
         return Result.success()
     }
 }
@@ -32,9 +33,11 @@ class Remirror(context: Context, params: WorkerParameters) : Worker(context, par
 object Mirrors {
     const val WORK = "mirror"
     const val CLOUD = "mirror-cloud"
+    const val DAILY = "mirror-cloud-daily"
     const val WAITING = "waiting"
     private const val SETTLE_S = 10L
     private const val LONGEST_S = 120L
+    const val GAP_S = 600L
     private val LOCAL = setOf("com.android.externalstorage.documents", "com.android.providers.media.documents")
 
     fun plans(): List<JSONObject> {
@@ -62,29 +65,35 @@ object Mirrors {
         return trees.map { DocumentsContract.buildChildDocumentsUriUsingTree(it, DocumentsContract.getTreeDocumentId(it)) } + shared
     }
 
-    fun request(triggers: List<Uri>): OneTimeWorkRequest {
+    fun request(triggers: List<Uri>, delay: Long = 0): OneTimeWorkRequest {
         val constraints = Constraints.Builder().setRequiresBatteryNotLow(true)
             .setTriggerContentUpdateDelay(SETTLE_S, TimeUnit.SECONDS)
             .setTriggerContentMaxDelay(LONGEST_S, TimeUnit.SECONDS)
         triggers.forEach { constraints.addContentUriTrigger(it, true) }
-        return OneTimeWorkRequest.Builder(Remirror::class.java).setConstraints(constraints.build()).build()
+        return OneTimeWorkRequest.Builder(Remirror::class.java).setConstraints(constraints.build()).setInitialDelay(delay, TimeUnit.SECONDS).build()
     }
 
-    fun waiting(): OneTimeWorkRequest {
-        val constraints = Constraints.Builder().setRequiresBatteryNotLow(true).setRequiredNetworkType(NetworkType.UNMETERED).build()
-        return OneTimeWorkRequest.Builder(Remirror::class.java).setConstraints(constraints).setInputData(workDataOf(WAITING to true)).build()
-    }
+    fun waiting(): OneTimeWorkRequest =
+        OneTimeWorkRequest.Builder(Remirror::class.java).setConstraints(Sync.constraints()).setInputData(workDataOf(WAITING to true)).build()
+
+    fun daily(): PeriodicWorkRequest =
+        PeriodicWorkRequest.Builder(Remirror::class.java, 1, TimeUnit.DAYS).setConstraints(Sync.constraints()).setInputData(workDataOf(WAITING to true)).build()
 
     fun later(context: Context, plans: List<JSONObject>) {
         if (plans.any { !local(it) }) WorkManager.getInstance(context).enqueueUniqueWork(CLOUD, ExistingWorkPolicy.KEEP, waiting())
     }
 
-    fun watch(context: Context, policy: ExistingWorkPolicy = ExistingWorkPolicy.REPLACE) {
+    fun watch(context: Context, policy: ExistingWorkPolicy = ExistingWorkPolicy.REPLACE, delay: Long = 0) {
         val kept = kept(context, plans())
         val triggers = triggers(kept)
         val work = WorkManager.getInstance(context)
-        if (triggers.isEmpty()) work.cancelUniqueWork(WORK) else work.enqueueUniqueWork(WORK, policy, request(triggers))
-        if (kept.all(::local)) work.cancelUniqueWork(CLOUD)
+        if (triggers.isEmpty()) work.cancelUniqueWork(WORK) else work.enqueueUniqueWork(WORK, policy, request(triggers, delay))
+        if (kept.all(::local)) {
+            work.cancelUniqueWork(CLOUD)
+            work.cancelUniqueWork(DAILY)
+        } else {
+            work.enqueueUniquePeriodicWork(DAILY, ExistingPeriodicWorkPolicy.UPDATE, daily())
+        }
     }
 }
 

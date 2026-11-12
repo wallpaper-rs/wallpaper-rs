@@ -467,8 +467,9 @@ carpeta o en sus fotos y vídeos: WorkManager espera a que los cambios se calmen
 batería baja y sin consultar nada a intervalos, así que la copia suele ponerse al día en menos de un
 minuto. Los avisos de una nube o de la red no despiertan la copia, porque muchas avisan después de
 cada lectura: su carpeta se pone al día al abrir la app y, en segundo plano, después de cada copia
-de una carpeta del teléfono, solo por Wi-Fi u otra red sin límite de datos (con datos móviles espera
-a una red así, sin consultar nada mientras tanto);
+de una carpeta del teléfono y una vez al día, solo por Wi-Fi u otra red sin límite de datos (salvo
+*Usar también datos móviles en segundo plano*, en los ajustes; sin esa red espera a una, sin consultar nada
+mientras tanto), y la carpeta de una nube que no avisa se pone al día sin abrir la app;
 *Quitar* borra la copia y devuelve el permiso. Como en el escritorio, la escena muestra el archivo
 de la carpeta que toca, en orden o al azar y cada el tiempo que pide, y solo cambia mientras se ve.
 La página de un paquete de vídeo tiene sus ajustes (velocidad, inicio, final, volumen, zoom y
@@ -1186,7 +1187,7 @@ el permiso para descargar modelos; los perfiles, los preajustes y los repositori
 escritorio se conservan sin tocar. Si cambias la clave en un ordenador, el teléfono la recibe solo,
 y si se revoca un equipo, el primero que sincroniza (también el teléfono) cambia la clave. La
 sincronización en segundo plano usa WorkManager cada hora, solo con Wi-Fi u otra red sin límite de
-datos (salvo *Sincronizar también con datos móviles*) y sin batería baja, más una tras abrir la app
+datos (salvo *Usar también datos móviles en segundo plano*, que está en los ajustes del teléfono con o sin servidor) y sin batería baja, más una tras abrir la app
 y otra 30 segundos después de cada cambio; *Sincronizar ahora* la lanza al momento con cualquier
 red. Mientras el teléfono no está enlazado, la app no prepara ninguna tarea ni toca la red al
 arrancar. *Pausar la sincronización* y *Quitar el servidor* (que pide al servidor que olvide el
@@ -1198,8 +1199,8 @@ en cuanto otro equipo guarda un cambio, en unos segundos y sin esperar a la hora
 pregunta además si se perdió algo, así que al encender la pantalla el fondo se pone al día enseguida.
 Un solo canal sirve a la app y al fondo y se abre 2 segundos después de mostrarse, para no abrir y
 cerrar conexiones al pasar de una app a otra. Sigue las mismas reglas que la sincronización de
-cada hora: solo con Wi-Fi u otra red sin límite de datos (salvo *Sincronizar también con datos
-móviles*) y nunca con batería baja; se cierra al pasar a datos móviles o al bajar la batería y se
+cada hora: solo con Wi-Fi u otra red sin límite de datos (salvo *Usar también datos
+móviles en segundo plano*) y nunca con batería baja; se cierra al pasar a datos móviles o al bajar la batería y se
 abre de nuevo al volver la red sin límite o la carga. Si el canal se corta después de abrirse vuelve a
 conectarse a los 5 segundos, solo espera cada vez más (hasta 15 minutos) cuando el servidor no
 responde o cuando la sincronización que pidió un aviso falla (por ejemplo, mientras otra tarea de
@@ -1226,7 +1227,7 @@ repositorio que añadiste, con un hueco gris mientras llega, sin pedir las de ad
 *Mostrar sin difuminar*, y guardadas hasta 16 MiB, que se borran con el repositorio) y los instala en la biblioteca, comprobados con el índice firmado
 del repositorio; un paquete instalado así es el mismo elemento de la biblioteca en el teléfono y
 en el ordenador. Una vez al día, con las mismas reglas de red y batería que la sincronización de
-cada hora (al cambiar *Sincronizar también con datos móviles* cambia también la comprobación que
+cada hora (al cambiar *Usar también datos móviles en segundo plano* cambia también la comprobación que
 espera), solo si hay repositorios y mientras *Buscar actualizaciones en los repositorios cada día*
 (`repos.auto_refresh`, activado de serie como en el escritorio, en los ajustes del teléfono) siga
 activado (también cuando se cambia en el ordenador y llega por la sincronización, sea la de cada hora,

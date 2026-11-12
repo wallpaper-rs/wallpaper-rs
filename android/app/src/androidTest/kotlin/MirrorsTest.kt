@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.work.NetworkType
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import java.util.concurrent.TimeUnit
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -58,14 +59,38 @@ class MirrorsTest {
     }
 
     @Test
+    fun aBusyPhoneDoesNotRelistTheFoldersAtEveryNewPhoto() {
+        val triggers = Mirrors.triggers(listOf(plan("image")))
+        val work = WorkManager.getInstance(context)
+        work.enqueueUniqueWork(TEST, androidx.work.ExistingWorkPolicy.REPLACE, Mirrors.request(triggers, Mirrors.GAP_S)).result.get()
+        val info = work.getWorkInfosForUniqueWork(TEST).get().single()
+        assertEquals(TimeUnit.SECONDS.toMillis(Mirrors.GAP_S), info.initialDelayMillis)
+        assertEquals(triggers.map { it to true }.toSet(), info.constraints.contentUriTriggers.map { it.uri to it.isTriggeredForDescendants }.toSet())
+        work.cancelUniqueWork(TEST).result.get()
+    }
+
+    @Test
+    fun cloudFoldersAreCopiedOnTheirOwnDailySchedule() {
+        val work = WorkManager.getInstance(context)
+        work.enqueueUniquePeriodicWork(TEST, androidx.work.ExistingPeriodicWorkPolicy.REPLACE, Mirrors.daily()).result.get()
+        val info = work.getWorkInfosForUniqueWork(TEST).get().single()
+        assertEquals(TimeUnit.DAYS.toMillis(1), info.periodicityInfo?.repeatIntervalMillis)
+        assertEquals(NetworkType.UNMETERED, info.constraints.requiredNetworkType)
+        assertTrue(info.constraints.requiresBatteryNotLow())
+        assertTrue(info.tags.contains(Remirror::class.java.name))
+        work.cancelUniqueWork(TEST).result.get()
+    }
+
+    @Test
     fun withoutChosenFoldersNothingWaitsForChanges() {
         storage()
         val work = WorkManager.getInstance(context)
         val triggers = listOf(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         work.enqueueUniqueWork(Mirrors.WORK, androidx.work.ExistingWorkPolicy.REPLACE, Mirrors.request(triggers)).result.get()
         work.enqueueUniqueWork(Mirrors.CLOUD, androidx.work.ExistingWorkPolicy.REPLACE, Mirrors.waiting()).result.get()
+        work.enqueueUniquePeriodicWork(Mirrors.DAILY, androidx.work.ExistingPeriodicWorkPolicy.REPLACE, Mirrors.daily()).result.get()
         Mirrors.watch(context)
-        listOf(Mirrors.WORK, Mirrors.CLOUD).forEach { name ->
+        listOf(Mirrors.WORK, Mirrors.CLOUD, Mirrors.DAILY).forEach { name ->
             assertTrue(waitFor { work.getWorkInfosForUniqueWork(name).get().all { it.state == WorkInfo.State.CANCELLED } })
         }
         assertFalse(context.remirror())

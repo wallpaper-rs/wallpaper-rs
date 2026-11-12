@@ -98,13 +98,21 @@ class Syncer(context: Context, params: WorkerParameters) : Worker(context, param
 object Sync {
     private const val PERIODIC = "sync"
     private const val SOON = "sync-soon"
+    const val NETWORK = "sync_network"
+
+    fun network(context: Context) {
+        Heard.recheck()
+        schedule(context)
+        Updates.schedule(context)
+        Mirrors.watch(context, ExistingWorkPolicy.KEEP)
+    }
 
     fun status() = JSONObject(Native.account("{\"op\": \"status\"}"))
 
     fun active() = status().optBoolean("active")
 
     fun constraints() = Constraints.Builder()
-        .setRequiredNetworkType(if (Native.setting("sync_network", null) == "any") NetworkType.CONNECTED else NetworkType.UNMETERED)
+        .setRequiredNetworkType(if (Native.setting(NETWORK, null) == "any") NetworkType.CONNECTED else NetworkType.UNMETERED)
         .setRequiresBatteryNotLow(true)
         .build()
 

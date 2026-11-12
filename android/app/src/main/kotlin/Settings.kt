@@ -62,6 +62,7 @@ private val TOGGLES = listOf(
     Triple(R.string.hide_mature, "library.hide_mature", "true" to "false"),
     Triple(R.string.vote_counts, "repos.vote_counts", "true" to "false"),
     Triple(R.string.auto_refresh, Updates.SETTING, "true" to "false"),
+    Triple(R.string.mobile_data, Sync.NETWORK, "any" to "unmetered"),
     Triple(R.string.show_mature, Unveil.KEY, "true" to "false"),
 )
 private val KEYS = CHOICES.map { it.second } + TOGGLES.map { it.second }
@@ -92,6 +93,7 @@ fun Settings(main: Main) {
             Native.setting(key, value)
             Unveil.load()
             if (key == Updates.SETTING) Updates.schedule(main)
+            if (key == Sync.NETWORK) Sync.network(main)
         }
     }
     LazyColumn {

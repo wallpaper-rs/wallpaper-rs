@@ -28,7 +28,7 @@
     <string name="not_encrypted">Sin cifrado de extremo a extremo: el servidor puede leer los datos sincronizados</string>
     <string name="sync_now">Sincronizar ahora</string>
     <string name="pause_sync">Pausar la sincronización</string>
-    <string name="mobile_data">Sincronizar también con datos móviles</string>
+    <string name="mobile_data">Usar también datos móviles en segundo plano</string>
     <string name="listen_shown">Escuchar los cambios mientras se ve el fondo</string>
     <string name="listen_shown_note">Llegan en segundos mientras se ve la app o el fondo, con las redes y la batería de la sincronización de cada hora; si no, en la sincronización de cada hora, y en cuanto el fondo vuelve a verse.</string>
     <string name="approve_device">Aprobar un dispositivo</string>
