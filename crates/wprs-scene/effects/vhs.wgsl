@@ -4,9 +4,9 @@ fn fs_vhs(in: VertexOut) -> @location(0) vec4<f32> {
     let m = mask_at(in.uv) * param(0u).x;
     let t = frame.time * param(1u).x;
     let line = fract(t * 0.13);
-    let near = 1.0 - smoothstep(0.0, 0.05, abs(l.y - line));
+    let near = (1.0 - smoothstep(0.0, 0.05, abs(l.y - line))) * param(4u).x;
     let row = floor(l.y * 240.0);
-    let tear = (hash(vec2<f32>(row, floor(t * 24.0))) - 0.5) * near * 24.0 + sin(l.y * 9.0 + t * 2.0) * 0.6;
+    let tear = (hash(vec2<f32>(row, floor(t * 24.0))) - 0.5) * near * 24.0 + sin(l.y * 9.0 + t * 2.0) * 0.6 * param(4u).x;
     let shift = px(tear * m).x;
     let split = px(param(3u).x * m).x;
     let at = in.uv + vec2<f32>(shift, 0.0);
@@ -16,5 +16,8 @@ fn fs_vhs(in: VertexOut) -> @location(0) vec4<f32> {
     let snow = (hash(floor(in.uv / px(1.0)) + floor(t * 30.0) * 7.3 + frame.seed) - 0.5) * param(2u).x * m;
     let a = max(g.a, max(r.a, b.a));
     let rgb = clamp(vec3<f32>(r.r, g.g, b.b) + (snow + near * 0.15 * m) * a, vec3<f32>(0.0), vec3<f32>(a));
-    return vec4<f32>(rgb, a);
+    let cell = floor(vec2<f32>(l.x * 24.0, l.y * 180.0)) + floor(t * 24.0) * vec2<f32>(3.1, 7.7) + frame.seed;
+    let streak = step(1.0 - 0.02 * param(5u).x, hash(cell)) * min(m, 1.0);
+    let marked = select(rgb + vec3<f32>(streak * a), mix(rgb, vec3<f32>(a) - rgb, streak), param(6u).x > 0.5);
+    return vec4<f32>(clamp(marked, vec3<f32>(0.0), vec3<f32>(a)), a);
 }

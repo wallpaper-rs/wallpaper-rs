@@ -53,3 +53,22 @@ fn moving_patterns_draw_only_while_they_have_a_speed() {
     }
     Shot::sheet(&sheet).looks_like("patterns");
 }
+
+#[test]
+fn vhs_turns_its_band_off_and_marks_or_inverts_streaks() {
+    let still = |params: Value| Fx::new("vhs", params).input(solid([200; 3])).space("srgb").shot();
+    let quiet = json!({ "speed": 0, "noise": 0, "aberration": 0, "band": 0 });
+    let Some(calm) = still(quiet.clone()) else { return };
+    assert!(calm.diff(&Shot(solid([200; 3]))) < 0.5);
+    let marked = |invert: bool| {
+        let mut p = quiet.clone();
+        p["artifacts"] = json!(3);
+        p["strength"] = json!(2);
+        p["invert"] = json!(invert);
+        still(p)
+    };
+    let (Some(bright), Some(inverted)) = (marked(false), marked(true)) else { return };
+    let count = |s: &Shot, f: &dyn Fn(u8) -> bool| (0..W).flat_map(|x| (0..H).map(move |y| (x, y))).filter(|&(x, y)| f(s.at(x, y)[0])).count();
+    assert!(count(&bright, &|v| v > 250) > 0 && count(&bright, &|v| v < 150) == 0);
+    assert!(count(&inverted, &|v| v < 100) > 0 && count(&inverted, &|v| v > 230) == 0);
+}

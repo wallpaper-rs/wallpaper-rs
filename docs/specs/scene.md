@@ -1407,7 +1407,7 @@ rules are also what a phone or a laptop on battery draws.
 | `spin` | turns the part of the layer around a center, fading out towards `radius` | `center`, `angle` (−360 to 360), `speed` (−720 to 720 °/s, needs time while not zero), `radius` (0 to 2, of the longer side) | light |
 | `trail` | keeps fading copies of what the effects before it drew, the same at any frame rate | `persistence` (0 to 0.99, kept each 1/60 s) | medium, a state of the layer's size; draws while the layer or the effects before it change and until the copies have faded |
 | `transform` | moves, scales, turns or skews the layer after the effects before it, within its box | `offset` (−2 to 2), `scale` (0.01 to 16), `angle` (−360 to 360), `skew` (−89 to 89), `pivot` | light |
-| `vhs` | a rolling tracking line, torn rows, snow and color fringes of a worn tape | `strength` (0 to 1), `speed` (0 to 8, needs time while not zero), `noise` (0 to 1), `aberration` (0 to 16 px) | light |
+| `vhs` | a rolling tracking line, torn rows, snow, streaks and color fringes of a worn tape | `strength` (0 to 2: past 1 the tears, fringes and snow keep growing), `speed` (0 to 8, needs time while not zero), `noise` (0 to 1, the snow), `aberration` (0 to 16 px), `band` (0 to 1, the rolling line with its torn rows and the slow bend of the picture; 0 turns them off), `artifacts` (0 to 3, short bright streaks of a damaged tape, 24 new ones a second), `invert` (the streaks invert the colors under them instead of brightening them) | light |
 
 | Effect | Newer parameters |
 |--------|------------------|
