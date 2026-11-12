@@ -1,3 +1,4 @@
+mod palette;
 mod settings;
 mod web;
 

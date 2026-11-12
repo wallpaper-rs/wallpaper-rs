@@ -122,31 +122,9 @@ QQC2.ScrollView {
                 }
             }
 
-            Row {
+            CoverColors {
                 Kirigami.FormData.label: App.tr("Cover colors")
-                spacing: Kirigami.Units.smallSpacing
-                visible: Array.isArray(player.colors)
-
-                Repeater {
-                    model: [App.tr("Primary"), App.tr("Secondary"), App.tr("Tertiary"), App.tr("Text"), App.tr("Contrast")]
-
-                    delegate: Rectangle {
-                        required property int index
-                        required property string modelData
-
-                        width: Kirigami.Units.gridUnit * 1.5
-                        height: width
-                        radius: Kirigami.Units.smallSpacing
-                        border.color: Kirigami.Theme.textColor
-                        color: (player.colors ?? [])[index] ?? "transparent"
-                        QQC2.ToolTip.text: modelData + " " + (player.colors ?? [])[index]
-                        QQC2.ToolTip.visible: hover.hovered
-
-                        HoverHandler {
-                            id: hover
-                        }
-                    }
-                }
+                colors: player.colors
             }
         }
     }

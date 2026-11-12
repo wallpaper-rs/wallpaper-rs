@@ -10,6 +10,9 @@ ColumnLayout {
     required property var page
     readonly property var media: SceneLook.media ?? SceneLook.sample
     readonly property var pictures: (page.view.files ?? []).filter(f => f.kind === "image" && f.role === "file")
+    readonly property var colors: SceneLook.media === null ? null : JSON.parse(page.editor.rig("", JSON.stringify({
+        "palette": player.media.cover ?? ""
+    })) || "null")
 
     function change(key, value) {
         const next = Object.assign({}, player.media);
@@ -67,6 +70,11 @@ ColumnLayout {
             model: [App.tr("None")].concat(player.pictures.map(p => p.path))
             currentIndex: 1 + player.pictures.findIndex(p => p.path === player.media.cover)
             onActivated: index => player.change("cover", index > 0 ? player.pictures[index - 1].path : "")
+        }
+
+        CoverColors {
+            Kirigami.FormData.label: App.tr("Cover colors")
+            colors: player.colors
         }
 
         QQC2.Button {

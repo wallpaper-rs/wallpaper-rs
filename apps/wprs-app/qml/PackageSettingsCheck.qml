@@ -96,6 +96,7 @@ QtObject {
         });
         player.change("title", "Made-up song");
         expect(SceneLook.media?.title === "Made-up song" && JSON.parse(page.editor.look).media?.title === "Made-up song", "the made-up track was not kept for the preview");
+        expect(player.colors === null, "cover colors were read without a cover picture");
         SceneLook.media = null;
         SceneLook.preview(page);
         expect(JSON.parse(page.editor.look).media === undefined, "the made-up track was not released");
