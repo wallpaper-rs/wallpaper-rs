@@ -176,6 +176,9 @@ pub fn save(path: &Path, layers: &Layers) -> Result<()> {
 
 pub fn load(path: &Path) -> Result<Option<Layers>> {
     let Ok(text) = std::fs::read(json(path)) else { return Ok(None) };
+    if !path.is_file() {
+        return Ok(None);
+    }
     let info: Info = serde_json::from_slice(&text)?;
     ensure!(info.format == FORMAT && !info.depths.is_empty(), "the layer set is not understood");
     let atlas = read_png(path)?.into_rgba8();
