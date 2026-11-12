@@ -77,10 +77,10 @@ Item {
             }
         },
         Kirigami.Action {
-            text: App.tr("Sync the files to my devices")
+            text: App.tr("Send files to my other computers")
             icon.name: "folder-cloud"
             enabled: tools.items.selected > 0
-            onTriggered: App.act("ShareFiles", [tools.take(), true], "Sync1")
+            onTriggered: App.act("ShareFiles", [tools.take(), true], "Sync1", () => applicationWindow().showPassiveNotification(App.tr("Sending the files, encrypted, to your server. Your other computers can then download them from the Library or from Account.")), () => applicationWindow().showPassiveNotification(App.tr("The files were not sent. Link this computer to your server with end-to-end encryption in Account first.")))
         },
         Kirigami.Action {
             text: App.tr("Remove…")

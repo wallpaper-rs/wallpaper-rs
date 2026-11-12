@@ -42,7 +42,15 @@ Kirigami.Page {
     Component.onCompleted: filters.start(query)
     actions: tools.actions
 
-    footer: AwayNote {}
+    footer: Column {
+        SyncedFiles {
+            width: parent.width
+        }
+
+        AwayNote {
+            width: parent.width
+        }
+    }
 
     header: Filters {
         id: filters

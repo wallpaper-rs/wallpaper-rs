@@ -2106,7 +2106,9 @@ wprs-ctl server link --name Escritorio          # muestra un código para /link 
 wprs-ctl server approve BCDF-GHJK                # … en un equipo ya enlazado, tras ver quién lo pide y con la contraseña
 wprs-ctl server join "Device 1" --wait           # equipo nuevo de una cuenta cifrada: muestra sus cifras y pide las del otro
 wprs-ctl server share "Device 2"                 # en el equipo con la clave: muestra sus cifras y pide las del otro
-wprs-ctl server status
+wprs-ctl server status                           # el estado, los equipos de la cuenta y por qué falló el último enlace
+wprs-ctl server revoke "Device 3"                # quita un equipo de la cuenta (también en Cuenta > Quitar equipo…)
+wprs-ctl server access file                      # sin llavero: guarda el acceso en un archivo privado, tras el aviso
 wprs-ctl server rotate                           # clave nueva; los demás equipos la reciben solos
 wprs-ctl server reset                            # sin ningún equipo con la clave: rehace los datos desde este
 wprs-ctl server upload fondo.wpak                # sube un paquete con el token del equipo
@@ -2125,8 +2127,10 @@ wprs-ctl server escrow                           # guarda la clave en el servido
 wprs-ctl server restore                          # equipo nuevo sin ningún otro: recupera la clave con la frase
 ```
 
-La sincronización mueve registros (qué fondo está puesto, listas, ajustes), no archivos de paquetes:
-un paquete que se nombra en un registro se obtiene de un repositorio. Lo que existe solo en un equipo
+La sincronización mueve registros (títulos, etiquetas, valoraciones, favoritos y ediciones de la
+biblioteca, listas, perfiles, preajustes y ajustes), no archivos de paquetes ni lo que está puesto:
+qué fondo hay en cada pantalla y cómo se coloca queda en cada equipo, y un paquete que se nombra en
+un registro se obtiene de un repositorio. Lo que existe solo en un equipo
 (por ejemplo un preajuste hecho a mano y nunca publicado) no aparece en los demás, y lo local no se
 sincroniza solo. Cuando un registro sincronizado nombra algo que este equipo no tiene y que ningún
 repositorio conocido ofrece, la biblioteca, la lista que lo nombra y la pantalla en la que se aplicó
@@ -2134,6 +2138,11 @@ muestran una nota («existe solo en otro equipo; publicarlo en el servidor o en 
 disponible aquí»), en la aplicación, en el teléfono y en `wprs-ctl` (`lib search`, `playlist show`,
 `state` y `server away`). No se descarga nada ni se reintenta en bucle: la nota desaparece en la
 siguiente sincronización, cuando el elemento llega.
+
+Para pasar un archivo a otro equipo, elige los fondos en la biblioteca y pulsa *Enviar los archivos a mis
+otros equipos* (o `wprs-ctl server files share`): se suben cifrados, y el otro equipo los ofrece en su
+biblioteca y en *Cuenta* con un botón *Descargar* (o `wprs-ctl server files fetch`) cuando termina su
+siguiente sincronización. Nada se descarga solo.
 
 Al subir un paquete eliges si es público u oculto (en el diálogo de subida de *Repositorios*, en la
 web del servidor o con `--unlisted`): uno oculto se publica y se firma igual, pero el catálogo y la
@@ -2200,7 +2209,12 @@ distintas se suma, y una parte de más de 64 KiB conserva la última copia envia
 perfiles, los preajustes y los ajustes (salvo el volumen, la caché, el paralaje por
 software y el permiso para descargar modelos, que se quedan en cada equipo), cifrados de extremo a
 extremo; sin cifrar solo con `--plaintext`, que avisa antes. El token y la clave de sincronización
-viven solo en el llavero del sistema; el servidor ve los equipos como `Device 1`, `Device 2`… y el
+viven en el llavero del sistema, y enlazar necesita uno (GNOME Keyring, KWallet…): sin llavero, *Cuenta* lo
+dice con palabras claras y ofrece, con un aviso, guardarlos en un archivo privado de la carpeta de datos
+(`wprs-ctl server access file`); quien pueda leer tus archivos podría usarlos. Un intento de enlace que
+falla no deja equipos fantasma en la cuenta. *Cuenta* lista los equipos y quita cualquiera (*Quitar
+equipo…*, o `wprs-ctl server revoke`); un equipo quitado, o de una cuenta borrada, muestra en toda la
+app un aviso de que el servidor ya no lo acepta; el servidor ve los equipos como `Device 1`, `Device 2`… y el
 nombre real viaja cifrado. Al enlazar se añade también el repositorio del servidor.
 
 Los repositorios que añade un equipo llegan a los demás como propuesta: cada equipo los añade solo

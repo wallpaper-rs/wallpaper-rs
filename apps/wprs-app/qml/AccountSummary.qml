@@ -63,6 +63,27 @@ Kirigami.FormLayout {
     }
 
     QQC2.Label {
+        Kirigami.FormData.label: App.tr("Syncs:")
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
+        wrapMode: Text.Wrap
+        text: App.tr("Titles, tags, ratings, favorites and image edits of your library, playlists, profiles, presets and settings.")
+    }
+
+    QQC2.Label {
+        Kirigami.FormData.label: App.tr("Stays on each computer:")
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
+        wrapMode: Text.Wrap
+        text: App.tr("Which wallpaper is set on each screen and how it is placed, and the settings that depend on the computer.")
+    }
+
+    QQC2.Label {
+        Kirigami.FormData.label: App.tr("Wallpaper files:")
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
+        wrapMode: Text.Wrap
+        text: App.tr("Only the ones you send with “Send files to my other computers”; your other computers download them from the Library or from here.")
+    }
+
+    QQC2.Label {
         Kirigami.FormData.label: App.tr("Skipped records:")
         visible: (summary.account.quarantined ?? 0) > 0
         text: App.tr("%1 records cannot be decrypted with this key and are skipped", summary.account.quarantined ?? 0)
