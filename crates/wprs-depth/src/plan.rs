@@ -86,12 +86,12 @@ impl Plan {
                 continue;
             }
             let need = sample(&self.need[layer], small, self.size, k % w, k / w) * w as f32;
-            limit[k] = (self.shift * need).ceil() + MARGIN;
+            limit[k] = (self.shift * need).ceil() + 2.0 * (MARGIN + matte);
             band[k] = !self.protect[k] && (reached[k] <= limit[k] || self.refill[k]);
             if band[k] {
                 reach = reach.max(limit[k].min(reached[k]));
             } else if need > 0.0 {
-                safe = safe.min(((reached[k] - MARGIN) / need).max(0.0));
+                safe = safe.min(((reached[k] - 2.0 * (MARGIN + matte)) / need).max(0.0));
             }
         }
         Region { known, band, reached, limit, refill: self.refill.clone(), reach, safe, far }

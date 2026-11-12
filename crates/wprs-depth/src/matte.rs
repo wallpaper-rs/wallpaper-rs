@@ -11,7 +11,7 @@ pub struct Matte {
 }
 
 pub fn width(size: Size) -> usize {
-    (2.0 * crate::regions::scale(size)).round().max(2.0) as usize
+    (4.0 * crate::regions::scale(size)).round().max(2.0) as usize
 }
 
 fn means(picture: &RgbImage, core: &[bool], size: Size, r: usize) -> ([Vec<f32>; 3], Vec<f32>) {
