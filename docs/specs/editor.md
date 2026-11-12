@@ -1254,7 +1254,7 @@ range, and never reads the media players or needs the `media` grant. `battery` a
 booleans: the preview then runs as the daemon runs a scene on battery (a lower level, which
 takes Q3 to Q2 whatever the automatic choice would be, and at most 60 frames a second) or with
 reduced motion (parallax and camera shake stand still, as the daemon does with the desktop
-setting). `wprs-ctl scene preview DIR [--battery] [--calm]` sets them.
+setting). `wprs-ctl scene preview DIR [--battery] [--calm] [--without-bloom]` sets them (`--without-bloom` shows the preview without the glow of the canvas, to compare it with the glow).
 
 A preview document that carries `scene.ext.editor.probe` (`{pointer: [x, y], tilt: [x, y]}`, the
 pointer as fractions of the canvas from 0 to 1 and the tilt of a phone from −1 to 1, either

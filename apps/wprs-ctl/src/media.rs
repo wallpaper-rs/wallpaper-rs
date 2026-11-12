@@ -82,7 +82,7 @@ pub(crate) fn preview_document(
     quality: Option<String>,
     restart: bool,
     media: Option<std::path::PathBuf>,
-    [battery, calm]: [bool; 2],
+    [battery, calm, without_bloom]: [bool; 3],
     tried: (Option<std::path::PathBuf>, Option<String>),
 ) -> Result<Value> {
     let nonce = restart.then(|| std::time::UNIX_EPOCH.elapsed().map_or(1, |d| d.as_millis() as u64));
@@ -97,6 +97,9 @@ pub(crate) fn preview_document(
         return Ok(wprs_editor::reels::preview_document(dir, doc, &look));
     }
     let mut document = json!({"manifest": doc["manifest"], "scene": wprs_editor::actions::visible(doc)});
+    if without_bloom {
+        document["scene"]["canvas"].as_object_mut().into_iter().for_each(|c| drop(c.remove("bloom")));
+    }
     wprs_editor::scripts::stamped(&mut document["scene"], dir, doc);
     wprs_editor::rigs::staged(&look).into_iter().for_each(|s| document["preview"] = s);
     wprs_editor::tried::stage(doc, &look, &mut document);
@@ -110,4 +113,19 @@ fn read_values(file: &std::path::Path) -> Result<Value> {
         serde_json::from_str(&text).map_err(|e| anyhow::anyhow!("{}: {e}", file.display()))?;
     anyhow::ensure!(values.is_object(), "{} is not a JSON object of setting values", file.display());
     Ok(values)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_preview_without_the_glow_drops_the_bloom_of_the_canvas_only_when_asked() {
+        let doc = json!({ "manifest": {}, "scene": { "canvas": { "bloom": { "strength": 1.0 } }, "layers": [] } });
+        let dir = std::path::Path::new(".");
+        let with = preview_document(dir, &doc, None, false, None, [false; 3], (None, None)).unwrap();
+        assert!(with["scene"]["canvas"]["bloom"].is_object());
+        let without = preview_document(dir, &doc, None, false, None, [false, false, true], (None, None)).unwrap();
+        assert!(without["scene"]["canvas"].get("bloom").is_none());
+    }
 }

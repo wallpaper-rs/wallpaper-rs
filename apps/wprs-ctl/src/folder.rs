@@ -64,6 +64,8 @@ pub enum Folder {
         battery: bool,
         #[arg(long, help = "Show it as the daemon does with reduced motion")]
         calm: bool,
+        #[arg(long, help = "Show it without the glow of the canvas, to compare it with the glow")]
+        without_bloom: bool,
         #[arg(long, value_name = "FILE", help = crate::media::MEDIA)]
         media: Option<PathBuf>,
         #[arg(long, value_name = "FILE", help = VALUES)]
@@ -148,6 +150,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             restart,
             battery,
             calm,
+            without_bloom,
             media,
             console,
             values,
@@ -161,7 +164,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
                 quality,
                 restart,
                 media,
-                [battery, calm],
+                [battery, calm, without_bloom],
                 (values, preset),
             )?
             .to_string();

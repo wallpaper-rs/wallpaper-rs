@@ -229,7 +229,7 @@ Para guardar lo que ves:
 
 Todo esto se dibuja desde lo que tienes en el editor, guardado o no.
 
-En la terminal: `wprs-ctl scene preview DIR --quality Q [--battery] [--calm] [--restart]` y `wprs-ctl scene render DIR --out ARCHIVO [--time-of-day HORA] [--quality Q] [--battery] [--calm] [--frames N] [--pointer X,Y[:X,Y]] [--click] [--against Q] [--without-bloom] [--split F]`. Mira [cli](cli.md).
+En la terminal: `wprs-ctl scene preview DIR --quality Q [--battery] [--calm] [--without-bloom] [--restart]` y `wprs-ctl scene render DIR --out ARCHIVO [--time-of-day HORA] [--quality Q] [--battery] [--calm] [--frames N] [--pointer X,Y[:X,Y]] [--click] [--against Q] [--without-bloom] [--split F]`. Mira [cli](cli.md).
 
 ## Cómo ver cuánto cuesta algo
 

@@ -93,6 +93,7 @@ if ctl scene act "$craft" remove_layer '{"id": "absent"}' 2>/dev/null; then fail
 ctl scene actions add_layer | grep -q "kind: string (required)" || fail "scene actions did not describe add_layer"
 ctl scene ask "$craft" wind | grep -q strength || fail "scene ask did not answer"
 ctl scene preview "$craft" -o preview:1 --time 0.5 --quality q1 --battery --calm || fail "a preview on battery with reduced motion was refused"
+ctl scene preview "$craft" -o preview:1 --time 0.5 --without-bloom || fail "a preview without the glow was refused"
 ctl scene preview "$craft" -o preview:1 --stop
 shots=$scene/shots
 mkdir -p "$shots"

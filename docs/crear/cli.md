@@ -162,6 +162,7 @@ salidas la muestra y cómo terminarla. Sin `-o`, en todas las salidas.
 | `--time S` | Mantiene fijo ese segundo (hasta 86400). Con un valor negativo, la escena se reproduce. |
 | `--quality q0`…`q3` | El nivel de calidad más alto de la vista previa. |
 | `--battery`, `--calm` | La muestra como el demonio la muestra con batería, o con menos movimiento. |
+| `--without-bloom` | La muestra sin el brillo del lienzo, para compararla con el brillo. |
 | `--values ajustes.json` | Prueba valores de propiedades, como `{"speed": 2}`, sin guardarlos. |
 | `--preset ID` | Parte de un preajuste del paquete antes de aplicar `--values`. |
 | `--media pista.json` | Inventa una pista del reproductor: `title`, `artist`, `album`, `playing`, `position`, `duration`… |
