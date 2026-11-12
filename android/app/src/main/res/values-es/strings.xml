@@ -187,4 +187,12 @@
     <string name="perf_hint">Actívalo, mira el fondo durante 30 segundos, vuelve y copia el informe.</string>
     <string name="perf_copy">Copiar informe de rendimiento</string>
     <string name="perf_copied">Informe de rendimiento copiado</string>
+    <string name="red">Rojo: %1$d</string>
+    <string name="green">Verde: %1$d</string>
+    <string name="blue">Azul: %1$d</string>
+    <string name="opacity">Opacidad: %1$d</string>
+    <string name="choose_color">Elegir</string>
+    <string name="hex_color">Código hexadecimal</string>
+    <string name="save_text">Guardar</string>
+    <string name="text_count">%1$d de %2$d</string>
 </resources>

@@ -189,4 +189,12 @@
     <string name="perf_hint">Turn it on, look at the wallpaper for 30 seconds, then come back and copy the report.</string>
     <string name="perf_copy">Copy performance report</string>
     <string name="perf_copied">Performance report copied</string>
+    <string name="red">Red: %1$d</string>
+    <string name="green">Green: %1$d</string>
+    <string name="blue">Blue: %1$d</string>
+    <string name="opacity">Opacity: %1$d</string>
+    <string name="choose_color">Choose</string>
+    <string name="hex_color">Hex code</string>
+    <string name="save_text">Save</string>
+    <string name="text_count">%1$d of %2$d</string>
 </resources>

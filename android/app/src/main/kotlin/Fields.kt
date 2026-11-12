@@ -65,7 +65,8 @@ fun Field(field: JSONObject, folded: Boolean, fold: () -> Unit, set: (String, An
                 }
             }
         }
-        "color", "text" -> Entry(label, value as? String ?: "", padded, enabled, field.optBoolean("secret"), field.optBoolean("filled")) {
+        "color" -> Tint(label, value as? String ?: "", field.optBoolean("alpha"), padded, enabled) { set(key, it) }
+        "text" -> Entry(label, value as? String ?: "", padded, enabled, field.optBoolean("secret"), field.optBoolean("filled"), Typing.of(field)) {
             if (field.optBoolean("secret")) secret(it) else set(key, it)
         }
         "group" -> Row(Modifier.fillMaxWidth().clickable(onClick = fold).padding(16.dp, 8.dp), verticalAlignment = Alignment.CenterVertically) {
