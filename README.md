@@ -2003,19 +2003,59 @@ dispositivos, cifrada de extremo a extremo por defecto. Es un solo binario en un
 shell, que corre como root por defecto (con una línea `user:` en `compose.yaml` puede correr como otro usuario); todo vive en la carpeta
 `./data`, montada como `/data`, y la copia de seguridad es copiar esa carpeta. No envía telemetría ni se conecta a terceros.
 
+Se levanta de dos maneras, con Docker o sin él, y deja el mismo servidor. Para usarlo no hace falta un
+navegador en el equipo del servidor: todo lo que pide la web de administración tiene su orden de
+terminal, más abajo.
+
+**Con Docker**, con la imagen publicada:
+
 ```sh
 cp .env.sample .env                           # editar WPRS_PUBLIC_URL, la única variable obligatoria
 docker compose up -d                          # baja la imagen publicada y la arranca
-docker compose logs wprs | grep setup         # token de un solo uso del primer administrador
 docker compose exec wprs wprs-server repo init --name "Fondos de casa"
+docker compose exec wprs wprs-server setup-token   # token de un solo uso del primer administrador
 ```
 
-Los datos quedan en `./data`. En `<WPRS_PUBLIC_URL>/setup` (con `http://localhost:8080` si pruebas en
-el mismo equipo) se pega el token y se crea el administrador (si el registro ya
-no lo muestra, `docker compose exec wprs wprs-server setup-token` da otro). `repo init` crea las
-claves del repositorio y muestra una sola vez la clave raíz, que hay que guardar fuera del
-servidor; el servidor solo conserva la clave en línea, con la que vuelve a firmar el índice cada
-día (cada firma caduca a los 7). Desde *Administración* se crean invitaciones y desde *Cuenta*,
+Los datos quedan en `./data`. En el resto de la sección, `wprs-server …` es
+`docker compose exec wprs wprs-server …` si usas Docker.
+
+**Sin Docker**, con el binario `wprs-server`, que se compila con Rust (la versión mínima está en
+`Cargo.toml`) en una copia de este repositorio; la imagen de Docker se construye con solo eso, sin Qt
+ni PipeWire:
+
+```sh
+cargo build --release -p wprs-server          # deja target/release/wprs-server
+export WPRS_DATA=$HOME/fondos-servidor        # sin esto usa /data
+export WPRS_PUBLIC_URL=http://127.0.0.1:8080  # la dirección con la que lo escribirán los equipos
+export WPRS_LISTEN=127.0.0.1:8080             # sin esto escucha en todas las interfaces (0.0.0.0:8080)
+target/release/wprs-server repo init --name "Fondos de casa"
+target/release/wprs-server serve              # queda en primer plano; paralo con Ctrl-C
+```
+
+Mientras no hay ningún administrador, `serve` escribe en su registro una línea como `no admin account
+yet: open http://127.0.0.1:8080/setup and enter the one-time setup token wprs_s_…` (con Docker,
+`docker compose logs wprs | grep setup`); `wprs-server setup-token` da otro token en cualquier
+momento. Con un navegador se abre `<WPRS_PUBLIC_URL>/setup`, se pega el token y se elige el nombre y
+una contraseña de 10 caracteres o más. Sin navegador, la misma página es un formulario que se envía
+con `curl`, y la respuesta `303` dice que el administrador ya existe; `galleta` guarda su sesión para
+los pasos siguientes (`$WPRS_PUBLIC_URL` es la dirección del servidor; si no la tienes exportada, escríbela, por
+ejemplo `http://localhost:8080` con Docker):
+
+```sh
+curl -sS -o /dev/null -w '%{http_code}\n' -c galleta --data-urlencode "token=<token>" \
+  -d handle=admin --data-urlencode "password=<contraseña de 10 caracteres o más>" \
+  "$WPRS_PUBLIC_URL/setup"
+curl -sS -c galleta -o /dev/null -d handle=admin --data-urlencode "password=<contraseña>" \
+  "$WPRS_PUBLIC_URL/login"                    # una sesión nueva, más adelante
+curl -sS -b galleta -H 'content-type: application/json' -d '{"role": "user"}' \
+  "$WPRS_PUBLIC_URL/api/v1/admin/invites"     # una invitación para otra cuenta: imprime su code y su url
+```
+
+`repo init` crea las claves del repositorio y muestra una sola vez la clave raíz, que hay que guardar
+fuera del servidor; si responde `error: a repository already exists`, ese servidor ya tiene su
+repositorio y no hay nada que hacer (`wprs-server repo status` dice su estado y su dirección). El servidor solo conserva la clave en línea, con la
+que vuelve a firmar el índice cada día (cada firma caduca a los 7). Desde *Administración* (o con la
+API, como arriba) se crean invitaciones y desde *Cuenta*,
 tokens, dispositivos enlazados con un código y subidas de paquetes `.wpak` de las dos versiones del
 manifiesto. El servidor acepta los paquetes para adultos que lo declaran en su manifiesto: llevan
 la etiqueta `mature` en el catálogo, en la búsqueda (`content=mature`, `facet=mature`) y en la API, y
@@ -2039,17 +2079,23 @@ ya instalado. Los autores que lista la raíz tienen prioridad.
 
 En el editor, el diálogo de construir tiene *Claves…* (crea el par de claves de autor en la carpeta
 de claves de la aplicación, con permiso solo para ti y contraseña opcional, nunca muestra una clave
-secreta, pregunta antes de reemplazar un par y firma el traspaso de un autor en línea a otra clave) y
+secreta, dice cuál de los dos archivos es el secreto y cuál el público, pregunta antes de reemplazar un par y firma el traspaso de un autor en línea a otra clave) y
 *Revisar el paquete…* (cada hallazgo con su nivel, el archivo y un salto al campo, dónde se reproduce
-el paquete y si la firma de la carpeta o de un `.wpak` coincide con la clave pública del autor). Desde
+el paquete y si la firma de la carpeta o de un `.wpak` coincide con la clave pública del autor). La licencia
+del paquete se elige en una lista de diez, cada una con su explicación, y se puede escribir otra. Desde
 la terminal: `wprs-ctl pack check CARPETA`, `pack validate CARPETA|ARCHIVO --key autor.pub`,
-`repo keygen autor` y `pack rotate-key`.
+`repo keygen autor` (la contraseña se pregunta, o se toma de `WPRS_KEY_PASSWORD` sin terminal) y
+`pack rotate-key`; `pack build` no arma un paquete con una firma de otra versión del manifiesto:
+pide `pack sign` otra vez.
 
-*Editar una copia…*, en la página de cada paquete de la biblioteca y en la lista de *Escenas*, abre
+*Editar una copia…*, en *Detalles* de cada elemento de la biblioteca (al final del panel) y, cuando la
+biblioteca tiene paquetes guardados como archivo `.wpak`, en la lista de *Escenas*, abre
 una copia de cualquier tipo de paquete (escenas, páginas, imágenes y vídeos) en una carpeta nueva y
-con un id nuevo, así que el instalado nunca cambia, y conserva la licencia y los créditos. Si la
-licencia no permite obras derivadas (por ejemplo `CC-BY-ND-4.0`) no la abre, salvo que confirmes que
-el paquete es tuyo o que su autor lo permite. Desde la terminal: `wprs-ctl scene open CARPETA --from
+con un id nuevo, así que el instalado nunca cambia, y conserva la licencia y los créditos. El diálogo
+muestra la licencia del original, qué permite y qué pide (por ejemplo, poner tu nombre en los
+autores). Si la licencia no permite obras derivadas (por ejemplo `CC-BY-ND-4.0`) no la abre, salvo que
+marques la casilla que confirma que el paquete es tuyo o que su autor lo permite, y que solo sale en
+ese caso. Desde la terminal: `wprs-ctl scene open CARPETA --from
 paquete.wpak [--id ID] [--mine] [--facts]`.
 
 `compose.yaml` baja `ghcr.io/wallpaper-rs/wprs-server` con la etiqueta de `WPRS_VERSION` (`latest` si no
@@ -2133,6 +2179,26 @@ wprs-ctl server away                             # lo que otros equipos sincroni
 wprs-ctl server escrow                           # guarda la clave en el servidor, cerrada con una frase
 wprs-ctl server restore                          # equipo nuevo sin ningún otro: recupera la clave con la frase
 ```
+
+**El primer equipo, paso a paso**, también sin navegador (la cuenta del administrador ya existe y
+`galleta` es su sesión, de la sección anterior):
+
+```sh
+wprs-ctl server add http://127.0.0.1:8080              # la dirección del servidor
+wprs-ctl server access file                            # solo sin llavero del sistema, ver abajo
+wprs-ctl server link --name Escritorio --wait          # imprime code = ABCD-EFGH y url = …/link, y espera
+curl -sS -b galleta -H 'content-type: application/json' \
+  -d '{"user_code": "ABCD-EFGH", "approve": true}' \
+  http://127.0.0.1:8080/api/v1/auth/device/approve     # {"approved":true}; con navegador, abre la url y escribe el código
+wprs-ctl server status                                 # state = ready, la cuenta, este equipo y los de la cuenta
+```
+
+`server add` acepta `https://`, y `http://` solo para este mismo equipo: un servidor que está en otro
+equipo necesita HTTPS (más abajo, con su propio certificado o con un proxy). Enlazar necesita un
+llavero del sistema donde guardar el acceso (GNOME Keyring, KWallet…): sin él, `server link` falla al
+momento y lo dice, sin dejar un equipo fantasma en la cuenta, y `server access file` (antes de
+enlazar) lo guarda en un archivo privado tras un aviso. Los equipos siguientes se aprueban desde uno
+ya enlazado con `server approve CÓDIGO`, que pide la contraseña de la cuenta.
 
 La sincronización mueve registros (títulos, etiquetas, valoraciones, favoritos y ediciones de la
 biblioteca, listas, perfiles, preajustes y ajustes), no archivos de paquetes ni lo que está puesto:
@@ -3034,7 +3100,10 @@ interfaz completa; lo esencial:
   `time`, `props`, `audio`, `input`, `scene.layer`, `timeline` y `particles`; si importa algo más,
   exporta `init` u otras funciones del ciclo de vida o usa `console` o los temporizadores, `pack
   build`, `pack check` y el editor lo rechazan y el motor no se lo da.
-- **Errores**: una función que lanza un error lo escribe en la consola y el resto sigue; un módulo
+- **Errores**: `wprs-ctl scene validate`, `pack check` y el editor compilan cada script sin ejecutarlo y
+  dicen, con el archivo y la línea, un error de sintaxis o un script que falta; `wprs-ctl scene render
+  --time-of-day HORA` ejecuta los scripts en su proceso aislado y escribe su consola. Una función que
+  lanza un error lo escribe en la consola y el resto sigue; un módulo
   que falla tres fotogramas seguidos se detiene solo, con sus temporizadores, y la escena sigue sin
   él con un aviso traducido en la app, la bandeja y `wprs-ctl status`. Si los scripts agotan su
   tiempo o su memoria tres fotogramas seguidos, se apagan y la escena sigue sin ellos.
