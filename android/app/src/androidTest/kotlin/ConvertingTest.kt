@@ -1,5 +1,6 @@
 package io.github.wallpaper_rs
 
+import android.media.MediaCodecList
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.os.ParcelFileDescriptor
@@ -11,6 +12,7 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -24,7 +26,21 @@ class ConvertingTest {
 
     private fun stored(name: String): String {
         val file = fixture(name)
-        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { JSONObject(Native.store(it.fd, "clip-${System.nanoTime()}.webm")!!) }.getString("uid")
+        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { JSONObject(Native.store(it.fd, "clip-${System.nanoTime()}.${file.extension}")!!) }.getString("uid")
+    }
+
+    private fun transfer(path: String) = MediaExtractor().run {
+        setDataSource(path)
+        val format = (0 until trackCount).map(::getTrackFormat).first { it.getString(MediaFormat.KEY_MIME).orEmpty().startsWith("video/") }
+        release()
+        if (format.containsKey(MediaFormat.KEY_COLOR_TRANSFER)) format.getInteger(MediaFormat.KEY_COLOR_TRANSFER) else MediaFormat.COLOR_TRANSFER_SDR_VIDEO
+    }
+
+    private fun decodes(name: String) = MediaExtractor().run {
+        setDataSource(fixture(name).path)
+        val mime = getTrackFormat(0).getString(MediaFormat.KEY_MIME).orEmpty()
+        release()
+        MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos.any { !it.isEncoder && it.supportedTypes.any { type -> type.equals(mime, true) } }
     }
 
     private fun item(uid: String) = JSONObject(Native.library(JSONObject().put("op", "item").put("uid", uid).toString()))
@@ -62,6 +78,56 @@ class ConvertingTest {
         assertTrue(waitFor { uid !in Converting.progress })
         assertEquals(path, item(uid).getString("path"))
         assertEquals(videos + 1, count())
+    }
+
+    @Test
+    fun highDynamicRangeVideosBecomeEightBitAvcInStandardRange() {
+        storage()
+        for (name in listOf("pq-64x32.mkv", "hlg-64x32.mkv")) {
+            assumeTrue("$name has no decoder here", decodes(name))
+            val uid = stored(name)
+            Converting.offer(context, Conversion(uid, item(uid).getString("path"), "hdr", false, 64 to 32))
+            assertTrue("$name converts", waitFor { item(uid).getString("path").endsWith(".mp4") })
+            assertTrue(waitFor { uid !in Converting.progress })
+            val after = item(uid).getString("path")
+            assertEquals(name, "video/avc", mime(after))
+            assertEquals(name, MediaFormat.COLOR_TRANSFER_SDR_VIDEO, transfer(after))
+        }
+    }
+
+    @Test
+    fun aConversionCutShortIsTakenUpAgain() {
+        storage()
+        val uid = stored("magenta-64x32.webm")
+        val path = item(uid).getString("path")
+        Pending.add(context, Conversion(uid, path, "clip", false, 64 to 32))
+        assertEquals(listOf(uid), Pending.all(context).map { it.uid })
+        assertEquals(64 to 32, Pending.all(context).single().size)
+        Converting.resume(context)
+        assertTrue("the conversion ends", waitFor { item(uid).getString("path").endsWith(".mp4") })
+        assertTrue("a finished conversion is no longer pending", waitFor { Pending.all(context).none { it.uid == uid } })
+    }
+
+    @Test
+    fun aConversionAsksWorkManagerToKeepTheAppAliveAndToResumeIt() {
+        storage()
+        val uid = stored("magenta-64x32.webm")
+        Converting.offer(context, Conversion(uid, item(uid).getString("path"), "clip", false, 64 to 32))
+        val work = androidx.work.WorkManager.getInstance(context)
+        assertTrue(waitFor { work.getWorkInfosForUniqueWork(Keeper.WORK).get().isNotEmpty() })
+        assertTrue(waitFor { uid !in Converting.progress })
+    }
+
+    @Test
+    fun aPendingConversionOfAVideoThatChangedOrWentIsDropped() {
+        storage()
+        val uid = stored("magenta-64x32.webm")
+        Pending.add(context, Conversion(uid, "/gone/clip.webm", "clip", false, 64 to 32))
+        Pending.add(context, Conversion("missing", item(uid).getString("path"), "clip", false, 64 to 32))
+        Converting.resume(context)
+        assertTrue(Pending.all(context).isEmpty())
+        assertTrue(item(uid).getString("path").endsWith(".webm"))
+        assertFalse(uid in Converting.progress)
     }
 
     @Test

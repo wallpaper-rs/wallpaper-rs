@@ -390,8 +390,12 @@ borra, y conserva sus listas y su elección), *Convertir y conservar el original
 añade como otro vídeo) y *Nunca*. Con el ahorro de energía no convierte nada al añadir y lo avisa;
 la página de ese vídeo dice por qué conviene convertirlo y ofrece *Convertir para este teléfono* y
 *Convertir y conservar el original*, que funcionan también con el ahorro de energía porque lo
-pides tú. La conversión sigue mientras la app esté en marcha; si Android la cierra antes, el vídeo
-queda como estaba. Los vídeos que el teléfono ya decodifica por hardware se reproducen tal cual.
+pides tú. La conversión pide a WorkManager que mantenga viva la app mientras dura (sin
+batería baja) y anota lo que falta en un archivo: si Android cierra la app antes, la conversión se
+retoma desde cero en cuanto arranca otra vez la app o WorkManager la despierta, y se descarta si el
+vídeo ya cambió o no existe. Los vídeos HDR de 10 bits (PQ o HLG) salen siempre en H.264 de 8 bits
+con el rango estándar (mapeo de tonos) y el audio que el contenedor MP4 no admite se recodifica a
+AAC. Los vídeos que el teléfono ya decodifica por hardware se reproducen tal cual.
 
 En la página de una imagen, *Moverse con el teléfono* activa el paralaje. Sigue el giro del teléfono
 con el sensor de rotación que no usa la brújula o, si no lo hay, con el normal: girarlo hacia un

@@ -19,6 +19,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.Presentation
 import androidx.media3.transformer.Composition
 import androidx.media3.transformer.EditedMediaItem
+import androidx.media3.transformer.EditedMediaItemSequence
 import androidx.media3.transformer.Effects
 import androidx.media3.transformer.ExportException
 import androidx.media3.transformer.ExportResult
@@ -55,7 +56,20 @@ object Converting {
     private fun library(op: String, uid: String): String? =
         JSONTokener(Native.library(JSONObject().put("op", op).put("uid", uid).toString())).nextValue() as? String
 
-    fun offer(context: Context, conversion: Conversion) = main.post {
+    fun busy() = progress.isNotEmpty()
+
+    fun resume(context: Context) = Pending.all(context).forEach { conversion ->
+        val current = runCatching { JSONObject(Native.library(JSONObject().put("op", "item").put("uid", conversion.uid).toString())).optString("path") }.getOrDefault("")
+        if (current == conversion.path && File(conversion.path).isFile) offer(context, conversion) else Pending.remove(context, conversion.uid)
+    }
+
+    fun offer(context: Context, conversion: Conversion) {
+        Pending.add(context, conversion)
+        Keeper.keep(context)
+        queued(context, conversion)
+    }
+
+    private fun queued(context: Context, conversion: Conversion) = main.post {
         if (conversion.uid in progress) return@post
         app = context.applicationContext
         names[conversion.uid] = conversion.title
@@ -65,7 +79,10 @@ object Converting {
     }
 
     fun stop(uid: String) = main.post {
-        if (queue.removeAll { it.uid == uid }) progress.remove(uid)
+        if (queue.removeAll { it.uid == uid }) {
+            progress.remove(uid)
+            app?.let { Pending.remove(it, uid) }
+        }
         val (conversion, transformer) = running?.takeIf { it.first.uid == uid } ?: return@post
         transformer.cancel()
         settle(conversion, false)
@@ -107,7 +124,8 @@ object Converting {
         val item = EditedMediaItem.Builder(MediaItem.fromUri(Uri.fromFile(File(conversion.path)))).setEffects(effects).build()
         running = conversion to transformer
         conversion.target = target
-        transformer.start(item, target)
+        val sequence = EditedMediaItemSequence.Builder(item).build()
+        transformer.start(Composition.Builder(sequence).setHdrMode(Composition.HDR_MODE_TONE_MAP_HDR_TO_SDR_USING_OPEN_GL).build(), target)
         main.postDelayed(poll, POLL_MS)
     }
 
@@ -122,6 +140,7 @@ object Converting {
 
     private fun settle(conversion: Conversion, made: Boolean) {
         if (running?.first === conversion) running = null
+        app?.let { Pending.remove(it, conversion.uid) }
         main.removeCallbacks(poll)
         thread(isDaemon = true) {
             val placed = made && runCatching { place(conversion) }.getOrDefault(false)

@@ -45,6 +45,7 @@ class Wprs : Application(), Configuration.Provider {
         thread(isDaemon = true) {
             Mirrors.watch(this, ExistingWorkPolicy.KEEP)
             Updates.schedule(this)
+            Converting.resume(this)
         }
     }
 }
