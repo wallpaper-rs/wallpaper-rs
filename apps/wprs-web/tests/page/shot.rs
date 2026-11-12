@@ -47,6 +47,6 @@ fn a_frame_is_copied_on_request_from_the_page_as_it_is_shown() {
     let mut row = vec![0u8; size.0 as usize * 4];
     let at = u64::from(slot) * u64::from(stride) * u64::from(size.1);
     ring.expect("no frame buffer").read_exact_at(&mut row, at).unwrap();
-    assert!(row.chunks_exact(4).all(|p| p[3] == 255), "the copied frame is not opaque: {:?}", &row[..8]);
+    assert!(row.iter().skip(3).step_by(4).all(|a| *a == 255), "the copied frame is not opaque: {:?}", &row[..8]);
     assert!(row.iter().any(|b| *b != 0), "the copied frame is empty");
 }
