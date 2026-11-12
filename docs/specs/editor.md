@@ -164,6 +164,13 @@ con lo que dibuja el motor; solo una lista que la escena no puede leer se mezcla
 parte. Una lista de tres números se interpola como una terna (no como color): un color escrito como
 `[r, g, b]` se prefiere en hexadecimal o con cuatro partes.
 
+Las ediciones de claves (`keyframe`, `key` y `edit_keys`) se comprueban contra la escena antes de
+aplicarse, también en `actions::plan`, y cuando algo no se puede leer el mensaje nombra el campo y la
+forma que necesita en lugar del texto del intérprete: `ease` lista los suavizados del formato y la
+Bézier cúbica de cuatro números, un valor da la forma de las claves que ya tiene (un número, un color,
+una lista de N números), la base, las asas y la línea de tiempo dicen su propio límite, y una clave de
+clip dice el canal y su rango.
+
 ### Editor de curvas
 
 El botón *Editor de curvas* de la barra de la línea de tiempo (y el de la barra de clips de una malla

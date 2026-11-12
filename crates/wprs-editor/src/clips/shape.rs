@@ -1,14 +1,13 @@
 use crate::action::ClipKey;
 pub(super) use crate::handles::reach;
 use crate::handles::{end, spans};
-use anyhow::{Result, anyhow, ensure};
+use anyhow::{Result, ensure};
 use serde_json::Value;
 use wprs_core::message::said;
-use wprs_scene::Ease;
 
 pub(super) fn check(k: &ClipKey, tracks: usize) -> Result<()> {
     if let Some(e) = &k.ease {
-        serde_json::from_value::<Ease>(e.clone()).map_err(|e| anyhow!("{e}"))?;
+        crate::fits::ease("ease", e)?;
     }
     spans(k.ease.as_ref(), [k.in_handle, k.out_handle])?;
     let handled = k.in_handle.is_some() || k.out_handle.is_some();

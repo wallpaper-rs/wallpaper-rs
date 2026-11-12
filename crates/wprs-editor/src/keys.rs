@@ -72,7 +72,7 @@ pub fn keyframe(doc: &Value, e: &KeyframeEdit) -> Result<Vec<Op>> {
         return crate::straight::straighten(doc, e, time);
     }
     if let Some(ease) = &e.ease {
-        serde_json::from_value::<Ease>(ease.clone()).map_err(|e| anyhow!("{e}"))?;
+        crate::fits::ease("ease", ease)?;
     }
     shaped(e)?;
     let current = doc.pointer(pointer);

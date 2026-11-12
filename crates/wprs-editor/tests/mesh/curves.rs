@@ -89,4 +89,8 @@ fn the_curve_editor_moves_bends_and_reads_the_keys_of_a_clip_channel() {
     assert_eq!(wprs_editor::graph::curves(&p.doc, &row)["list"], json!(channel));
     assert_eq!(curves["tracks"][0]["points"][3], json!([3.0, 45.0]));
     assert!(serde_json::from_value::<wprs_scene::Scene>(p.doc["scene"].clone()).is_ok());
+    let wide = act(&mut p, key(1.0, json!({ "rotation": 1e7 }))).unwrap_err().to_string();
+    assert!(wide.contains("rotation of the key cannot take") && wide.contains("-100000 to 100000"), "{wide}");
+    let eased = act(&mut p, key(1.0, json!({ "rotation": 1, "ease": "bouncy" }))).unwrap_err().to_string();
+    assert!(eased.contains("ease cannot take \"bouncy\""), "{eased}");
 }

@@ -39,3 +39,15 @@ fn differs(like: &Value, value: &Value) -> bool {
         _ => true,
     }
 }
+
+pub(crate) fn ease(field: &str, ease: &Value) -> Result<()> {
+    if serde_json::from_value::<wprs_scene::Ease>(ease.clone()).is_ok() {
+        return Ok(());
+    }
+    let names = wprs_scene::easings().join(", ");
+    bail!(said(
+        "editor.ease_shape",
+        "%1 cannot take %2; give one of %3, or four numbers [x1, y1, x2, y2] of a cubic Bézier",
+        &[&field, ease, &names]
+    ))
+}

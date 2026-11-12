@@ -115,7 +115,15 @@ pub(crate) fn key(dir: &std::path::Path, doc: &Value, k: &ClipKey) -> Result<Vec
                 |x: &Value| x.as_f64().is_some_and(|x| x.is_finite() && x.abs() <= f64::from(track.range));
             let ok = within(&v)
                 || v.as_array().is_some_and(|a| (2..=3).contains(&a.len()) && a.iter().all(within));
-            ensure!(ok, said("editor.key_value", "the key holds a value out of its range", &[]));
+            let channel = track.path.last().cloned().unwrap_or_default();
+            ensure!(
+                ok,
+                said(
+                    "editor.key_range",
+                    "%1 of the key cannot take %2; give a number from -%3 to %3, or a list of 2 or 3 such numbers",
+                    &[&channel, &v, &track.range]
+                )
+            );
             let eased = super::shape::third(k, held, &v)?;
             keys.retain(|k| (time(k) - t).abs() >= 1e-3);
             let k = eased.map_or(json!([t, v]), |x| json!([t, v, x]));
