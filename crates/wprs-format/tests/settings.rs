@@ -4,7 +4,7 @@ use common::{image, manifest as v1, v2};
 use image::ImageFormat;
 use serde_json::json;
 use std::fs;
-use wprs_format::{Display, Error, Kind, Manifest, Playback, Requires, VIDEO_PROPERTIES, features, inspect};
+use wprs_format::{Control, Display, Error, Kind, Manifest, Playback, Requires, VIDEO_PROPERTIES, features, inspect};
 
 fn with(mut manifest: Manifest, properties: serde_json::Value) -> Manifest {
     manifest.properties = serde_json::from_value(properties).unwrap();
@@ -94,6 +94,8 @@ fn video_packages_set_how_their_video_plays() {
         ids.sort();
         ids
     });
+    let long = video.video_properties(&labels, Some(7200.0));
+    assert!(matches!(&long["end"].control, Control::Slider(s) if s.max == 7200.0));
     let default = |id: &str| props[id].default_value();
     assert_eq!(
         [

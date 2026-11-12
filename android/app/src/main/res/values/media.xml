@@ -26,4 +26,7 @@
     <string name="video_x">Horizontal position</string>
     <string name="video_y">Vertical position</string>
     <string name="duck">Silence the wallpaper while another app plays sound</string>
+    <string name="video_trim">Trim</string>
+    <string name="video_frame">Framing</string>
+    <string name="video_frame_help">Drag the frame to choose which part of the picture is shown. Zoom sets its size.</string>
 </resources>

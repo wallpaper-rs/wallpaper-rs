@@ -477,7 +477,7 @@ mientras tanto), y la carpeta de una nube que no avisa se pone al día sin abrir
 *Quitar* borra la copia y devuelve el permiso. Como en el escritorio, la escena muestra el archivo
 de la carpeta que toca, en orden o al azar y cada el tiempo que pide, y solo cambia mientras se ve.
 La página de un paquete de vídeo tiene sus ajustes (velocidad, inicio, final, volumen, zoom y
-posición) y sus preajustes, como en el escritorio; con zoom o posición el vídeo pasa por la
+posición) y sus preajustes, como en el escritorio, con un recorte de dos asas sobre la duración real del vídeo (se mide al abrir la página si la biblioteca no la tiene, sin tope de una hora) y un encuadre que se arrastra sobre el fotograma de portada; con zoom o posición el vídeo pasa por la
 gráfica, y con límite de fotogramas sigue directo en la pantalla, que se pide a esa frecuencia y a la
 que además se le saltan los fotogramas que sobran antes de mostrarlos, así que una pantalla que
 no baja a esa frecuencia tampoco recibe más (el decodificador sigue decodificándolos todos). El límite de fotogramas del autor (en los vídeos, con
@@ -494,7 +494,7 @@ extensión sobre varias pantallas, los sonidos nuevos, lo que no tiene sentido e
 (los sonidos de los scripts) y la iluminación RGB. Los scripts de escena guardan datos, crean formas,
 mueven la cámara, cambian los padres de las capas y listan la carpeta elegida igual que en el
 escritorio. *Ajustes > Filtro* elige el filtro de color de la pantalla de inicio y el de la de
-bloqueo, con los mismos aspectos y deslizadores (fuerza, exposición, contraste, saturación, calidez
+bloqueo, con los mismos aspectos, cada uno con una muestra de colores ya filtrados, y deslizadores (fuerza, exposición, contraste, saturación, calidez
 y tono, con su valor a la vista) que la app de escritorio y *Mostrar tal cual*; la de bloqueo usa el
 de inicio mientras *El mismo filtro que la pantalla de inicio* está activo, y el fondo cambia al
 mover cada control. El filtro y el volteo de imágenes y
@@ -1350,10 +1350,10 @@ eliges tú en los ajustes del fondo: una dirección `https://` (se abre con el p
 un archivo o una carpeta (con el selector) o una aplicación por su id `.desktop` (fuera del
 Flatpak); el fondo nunca ve qué elegiste y solo puede pedir abrirlo dentro de un clic real, como
 mucho una vez por segundo, en una pantalla que acepta clics. En el teléfono eliges en la página
-del paquete una app instalada o una dirección `https://`, y se abre con un toque en la pantalla de
+del paquete una app instalada, una dirección `https://` o un archivo o carpeta del selector de documentos (se guarda con permiso de lectura que sigue tras reiniciar), y se abre con un toque en la pantalla de
 inicio si el paquete tiene permiso para los toques (nunca desde la de bloqueo). Si no se puede abrir
 (la app ya no está instalada, ninguna app abre la dirección o Android lo rechaza) *Ajustes* lo dice en
-una línea hasta que se cierra o un atajo se abre bien; Android no avisa cuando bloquea en silencio que
+una línea hasta que se cierra o un atajo se abre bien, y esa línea se conserva aunque se reinicie el proceso; Android no avisa cuando bloquea en silencio que
 un servicio de fondo de pantalla abra una app, y eso no se puede detectar. Si una escena usa clics en una pantalla
 a la que no llegan (como Plasma dentro del Flatpak), sus ajustes lo avisan. Un paquete que pide
 sombreadores de cálculo avisa antes de aplicarlo si la gráfica no los tiene, y la ficha de cada

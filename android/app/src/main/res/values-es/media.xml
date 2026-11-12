@@ -26,4 +26,7 @@
     <string name="video_x">Posición horizontal</string>
     <string name="video_y">Posición vertical</string>
     <string name="duck">Silenciar el fondo mientras otra app reproduce sonido</string>
+    <string name="video_trim">Recorte</string>
+    <string name="video_frame">Encuadre</string>
+    <string name="video_frame_help">Arrastra el marco para elegir qué parte de la imagen se muestra. El zoom fija su tamaño.</string>
 </resources>

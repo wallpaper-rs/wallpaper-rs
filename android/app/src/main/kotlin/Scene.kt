@@ -92,6 +92,7 @@ fun Scene(main: Main, uid: String, modifier: Modifier = Modifier) {
             TextButton({ reading.launch(arrayOf(JSON, "text/plain")) }) { Text(stringResource(R.string.import_settings)) }
             TextButton({ keeping.launch(arrayOf(JSON, "text/plain")) }) { Text(stringResource(R.string.import_preset)) }
         }
+        if (form.optBoolean("video")) Reeler(main, uid, form, set)
         val fields = form.optJSONArray("fields") ?: JSONArray()
         val renamed = if (form.optBoolean("video")) REEL.keys else if (form.optJSONObject("web")?.optBoolean("own_volume") == false || form.optBoolean("sounds")) setOf("volume") else emptySet()
         val all = (0 until fields.length()).map(fields::getJSONObject).map { if (it.optString("key") in renamed) reeled(it) else it }
