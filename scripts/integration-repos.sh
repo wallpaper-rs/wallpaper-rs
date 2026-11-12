@@ -78,6 +78,10 @@ bus Daemon1 CancelJob t "$stalled" >/dev/null
 [ "$(ctl remote ls --json | jq_ "len(r['repos'])")" = 0 ] || fail "the repository was kept"
 [ ! -e "$preview" ] || fail "the preview was kept with its repository"
 [ ! -e "$moving" ] || fail "the animated preview was kept with its repository"
+ctl remote add "$site/repo?$anchor" --wait >/dev/null
+[ "$(ctl remote ls --json | jq_ "[(x['name'], x['packages']) for x in r['repos']]")" = "[('Example', 2)]" ] ||
+  fail "a repository added from a folder: $(ctl remote ls --json)"
+ctl remote rm "$(ctl remote ls --json | jq_ "r['repos'][0]['repo_id']")"
 echo "repository checks passed"
 looks() {
   read -r b g r _ < <("$BIN/probe" "$1" 3 | sed 's/.*center bgra \[\(.*\)\]/\1/; s/,/ /g')

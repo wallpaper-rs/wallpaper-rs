@@ -57,6 +57,9 @@ Mirrors copy immutable files first and `entry/latest` last.
 - Share URL: `https://example.org/wallpapers/?fingerprint=<root key fingerprint>&repo_id=<repo_id>`.
   At least one of the two parameters is required. `fingerprint` must belong to a key of the
   `root` role of `root/1.json` that signed it; `repo_id` must equal its hash.
+- `wprs-ctl remote add` also takes a folder followed by the same query
+  (`remote add carpeta/?fingerprint=…`): the CLI turns it into the `file://` URL of its absolute path, and
+  the anchor rules are the same as for any URL.
 - The query is stripped before any request. A package is identified by `(repo_id, id)`.
 
 ## Formats

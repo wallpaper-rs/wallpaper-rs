@@ -14,9 +14,11 @@ pub enum Remote {
         #[arg(long, help = JSON)]
         json: bool,
     },
-    #[command(about = "Add a repository by a URL that carries fingerprint= or repo_id=")]
+    #[command(about = "Add a repository by a URL or a folder that carries fingerprint= or repo_id=")]
     Add {
-        #[arg(help = "URL of the repository with its anchor query, or a folder")]
+        #[arg(
+            help = "URL of the repository, or a folder, followed by its anchor query (?fingerprint=... or ?repo_id=...)"
+        )]
         url: String,
         #[command(flatten)]
         wait: Wait,
@@ -62,7 +64,10 @@ pub async fn run(client: &Client, command: Remote) -> Result<()> {
     let repos = &client.repos;
     match command {
         Remote::Ls { json } => show::reply(repos.list().await?, json, list)?,
-        Remote::Add { url, wait } => job(client, repos.add(&url).map_ok(|id| ((), id)), &wait).await?,
+        Remote::Add { url, wait } => {
+            let url = crate::address::repository(&url)?;
+            job(client, repos.add(&url).map_ok(|id| ((), id)), &wait).await?
+        }
         Remote::Refresh { repo, wait } => {
             job(client, repos.refresh(repo.as_deref().unwrap_or("")).map_ok(|id| ((), id)), &wait).await?
         }

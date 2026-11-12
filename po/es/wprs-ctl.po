@@ -5138,12 +5138,19 @@ msgid "List the repositories added to this computer"
 msgstr "Listar los repositorios añadidos a este equipo"
 
 #: apps/wprs-ctl/src/remote.rs
-msgid "Add a repository by a URL that carries fingerprint= or repo_id="
-msgstr "Añadir un repositorio con una URL que lleve fingerprint= o repo_id="
+msgid ""
+"Add a repository by a URL or a folder that carries fingerprint= or repo_id="
+msgstr ""
+"Añadir un repositorio con una URL o una carpeta que lleve fingerprint= o "
+"repo_id="
 
 #: apps/wprs-ctl/src/remote.rs
-msgid "URL of the repository with its anchor query, or a folder"
-msgstr "URL del repositorio con su consulta de anclaje, o una carpeta"
+msgid ""
+"URL of the repository, or a folder, followed by its anchor query (?"
+"fingerprint=... or ?repo_id=...)"
+msgstr ""
+"URL del repositorio, o una carpeta, seguida de su consulta de anclaje (?"
+"fingerprint=... o ?repo_id=...)"
 
 #: apps/wprs-ctl/src/remote.rs
 msgid ""
