@@ -8,8 +8,6 @@ use wprs_editor::{Project, assets, package};
 
 mod parts;
 
-mod parts;
-
 #[derive(Subcommand, Debug)]
 pub enum Folder {
     #[command(about = "Delete the files in assets/ that the scene does not use")]
