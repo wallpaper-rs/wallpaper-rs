@@ -18,8 +18,10 @@ tuned() {
   reply "r['job']['output']['imported'][0]['uid']" Daemon1 GetJob t "$job"
 }
 uid=$(tuned '{"schema": "wallpaper-rs.scene/1", "canvas": {"size": [64, 32], "background": "#000000"},
-  "assets": {"cover": {"path": "red.png", "media": "current"}},
+  "assets": {"cover": {"path": "red.png", "media": "current"}, "before": {"path": "red.png", "media": "previous"}},
   "layers": [{"id": "art", "type": "image", "image": "cover", "size": [64, 32], "transform": {"position": [32, 16]}},
+    {"id": "behind", "type": "image", "image": "before", "size": [64, 32], "transform": {"position": [32, 16]},
+      "opacity": {"media": "playing", "scale": -1, "offset": 1}},
     {"id": "title", "type": "text", "text": {"media": "title"}, "size": 4, "transform": {"position": [2, 2]}},
     {"id": "bar", "type": "solid", "color": "#00ff00", "size": [4, 2], "opacity": {"media": "progress"},
       "transform": {"position": [62, 31]}}]}' 1.0.0)
@@ -75,17 +77,10 @@ wait_for 10 says "r['cover']" False || fail "turning media.remote_covers off kep
 shown "$s21" 255 0 0
 song Morning "$art"
 shown "$s21" 0 0 255
-uid_before=$(tuned '{"schema": "wallpaper-rs.scene/1", "canvas": {"size": [64, 32], "background": "#000000"},
-  "assets": {"before": {"path": "red.png", "media": "previous"}},
-  "layers": [{"id": "art", "type": "image", "image": "before", "size": [64, 32], "transform": {"position": [32, 16]}}]}' 1.0.1)
-ctl lib apply "$uid_before" -o TEST-21
-ctl input grant "$tune" media
+play '{"status": "Paused"}'
 shown "$s21" 255 0 255
-song Evening "$(uri "$WORK/same.png")"
+play '{"status": "Playing"}'
 shown "$s21" 0 0 255
-ctl lib apply "$uid" -o TEST-21
-ctl input grant "$tune" media
-shown "$s21" 255 0 255
 more() { [ "$(grep -c '^gets' "$WORK/player.out")" -gt "$1" ]; }
 asked() {
   local n
@@ -111,7 +106,6 @@ ctl input revoke "$tune" media
 wait_for 10 says "r['listening']" False || fail "the player was read after the permission was taken back"
 shown "$s21" 255 0 0
 leave && ctl release TEST-21 && bus Library1 Remove asb 1 "$uid" false >/dev/null
-bus Library1 Remove asb 1 "$uid_before" false >/dev/null
 tuning=$WORK/scene/tuning
 ctl scene new "$tuning" >/dev/null
 ctl scene set "$tuning" /manifest/inputs '["media"]'
