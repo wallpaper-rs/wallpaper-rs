@@ -2,7 +2,7 @@ use super::*;
 
 fn born(shape: Json, init: Json) -> Vec<Particle> {
     let mut system =
-        still(json!({ "capacity": 2000, "emitters": [{ "shape": shape, "burst": { "count": 2000 } }] }));
+        still(json!({ "capacity": 2000, "emitters": [{ "shape": shape, "bursts": [{ "count": 2000 }] }] }));
     init.as_object().unwrap().iter().for_each(|(k, v)| system["init"][k] = v.clone());
     let mut fly = Fly::of(json!({ "a": system }));
     fly.frame(0.0);

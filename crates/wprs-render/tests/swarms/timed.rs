@@ -24,7 +24,7 @@ fn particles_off_the_screen_keep_simulating_while_nothing_on_it_changes() {
 
 fn simulated(r: &Renderer) -> Option<Run> {
     let mut systems = flow(200_000, 0.0, 40.0);
-    systems["flow"]["emitters"][0]["burst"] = json!({ "count": 200_000 });
+    systems["flow"]["emitters"][0]["bursts"] = json!([{ "count": 200_000 }]);
     let layer = json!([{ "id": "f", "type": "particles", "system": "flow" }]);
     let mut run = Run::new(r, systems, layer, true)?;
     run.frame(r, 1.0 / 60.0);

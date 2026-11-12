@@ -8,8 +8,8 @@ fn layers() -> Value {
 fn kid(more: Value) -> Value {
     let ring = json!({ "circle": { "center": [0, 0], "radius": 3 } });
     let mut s = system(ring, json!({ "life": [3, 3], "speed": [5, 10], "angle": [0, 360] }), more);
-    (s["capacity"], s["emitters"][0]["rate"], s["emitters"][0]["burst"]) =
-        (json!(512), json!(20), json!({ "count": 2 }));
+    (s["capacity"], s["emitters"][0]["rate"], s["emitters"][0]["bursts"]) =
+        (json!(512), json!(20), json!([{ "count": 2 }]));
     s
 }
 
@@ -44,7 +44,7 @@ fn boids_born_at_one_point_agree_on_both_paths_and_spread() {
     let Some(r) = renderer() else { return };
     let flock = json!({ "boids": { "radius": 20, "separation": 3, "alignment": 1, "cohesion": 0.2, "max_speed": 60 } });
     let mut s = system(json!({ "point": [80, 40] }), json!({}), json!({ "forces": [flock] }));
-    s["emitters"][0] = json!({ "shape": { "point": [80, 40] }, "burst": { "count": 24 } });
+    s["emitters"][0] = json!({ "shape": { "point": [80, 40] }, "bursts": [{ "count": 24 }] });
     let Some(first) = both(r, &json!({ "s": s.clone() }), &layers(), 1) else { return };
     agree("stacked boids", &first, 0.05);
     let Some(later) = both(r, &json!({ "s": s }), &layers(), 8) else { return };

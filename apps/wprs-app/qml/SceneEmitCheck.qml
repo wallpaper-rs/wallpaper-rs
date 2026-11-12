@@ -20,10 +20,13 @@ QtObject {
             });
         emission.rate(42, true);
         emission.put({
-                "burst": {
-                    "count": 5,
-                    "every": 2
-                },
+                "bursts": [{
+                        "count": 5,
+                        "every": 2
+                    }, {
+                        "count": 3,
+                        "at": 0.5
+                    }],
                 "delay": 1,
                 "duration": 6,
                 "periodic": {
@@ -34,26 +37,30 @@ QtObject {
                 "inherit": 0.4
             });
         const e = read(base + "/emitters/0");
-        if (e.rate !== 42 || e.burst.every !== 2 || e.delay !== 1 || e.duration !== 6 || e.follow !== "cursor" || e.inherit !== 0.4)
+        if (e.rate !== 42 || e.bursts.length !== 2 || e.bursts[0].every !== 2 || e.bursts[1].at !== 0.5 || e.delay !== 1 || e.duration !== 6 || e.follow !== "cursor" || e.inherit !== 0.4)
             throw new Error("emission: the emitter did not take its emission: " + JSON.stringify(e) + page.editor.error);
         const lane = Qt.createComponent("SceneSwarmEmitLane.qml").createObject(page, {
                 "emission": emission
             });
-        if (lane.span < 7 || lane.delay !== 1 || lane.every !== 2 || lane.ranged([1, 2], 3)[0] !== 2.5)
+        if (lane.span < 7 || lane.delay !== 1 || lane.reach !== 4 || lane.ranged([1, 2], 3)[0] !== 2.5)
             throw new Error("emission: the lane does not lay out the emission");
         const brief = lane.ranged([1, 3], 1.01);
         if (brief[0] < 1 / 60 || brief[1] < brief[0] || lane.ranged([0.5, 0.5], 0)[0] < 1 / 60)
             throw new Error("emission: a dragged span went below the shortest the scene takes: " + brief);
         emission.put({
-                "burst": {
-                    "count": 5,
-                    "every": 0.02
-                },
+                "bursts": [{
+                        "count": 5,
+                        "every": 0.02
+                    }],
                 "delay": 0,
                 "duration": 86400
             });
         lane.width = 400;
-        const begun = Date.now(), ticks = lane.ticks(86400);
+        const begun = Date.now(), ticks = lane.burstMarks.ticks({
+                "burst": {
+                    "every": 0.02
+                }
+            }, 86400);
         if (ticks.length > 1000 || Date.now() - begun > 50)
             throw new Error("emission: a day of bursts drew " + ticks.length + " lines in " + (Date.now() - begun) + " ms");
         lane.destroy();

@@ -3,11 +3,11 @@ use super::*;
 fn deep(children: Json) -> Json {
     still(json!({ "capacity": 4, "perspective": { "focal": 100 },
         "init": { "life": [0.1, 0.1], "speed": [0, 0], "size": [4, 4], "depth": [100, 100] },
-        "emitters": [{ "shape": { "point": [160, 50] }, "burst": { "count": 1 } }], "children": children }))
+        "emitters": [{ "shape": { "point": [160, 50] }, "bursts": [{ "count": 1 }] }], "children": children }))
 }
 
 fn kid(more: Json) -> Json {
-    still(json!({ "capacity": 8, "emitters": [{ "shape": { "point": [0, 0] }, "burst": { "count": 1 } }],
+    still(json!({ "capacity": 8, "emitters": [{ "shape": { "point": [0, 0] }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [5, 5], "speed": [0, 0], "size": [4, 4] } }))
     .as_object()
     .unwrap()
@@ -33,7 +33,7 @@ fn children_of_a_deep_parent_are_born_where_it_is_drawn_or_at_its_depth() {
 #[test]
 fn a_flat_parent_leaves_its_children_where_they_always_were() {
     let flat = still(json!({ "capacity": 4, "init": { "life": [0.1, 0.1], "speed": [0, 0] },
-        "emitters": [{ "shape": { "point": [160, 50] }, "burst": { "count": 1 } }],
+        "emitters": [{ "shape": { "point": [160, 50] }, "bursts": [{ "count": 1 }] }],
         "children": [{ "system": "b", "on": "death" }] }));
     let mut fly = Fly::of(json!({ "a": flat, "b": kid(json!({})) }));
     fly.run(0.4);

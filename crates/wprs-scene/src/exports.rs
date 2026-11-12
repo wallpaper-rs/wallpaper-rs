@@ -91,7 +91,7 @@ pub use crate::particles::{
     Hsv, Inheritable, Init, Instance, KeepBetween, KeepDistance, Kept, MAX_BOIDS, MAX_CHILDREN,
     MAX_COLLIDERS, MAX_COLLIDERS2, MAX_CONTROL, MAX_CURVE, MAX_DEPTH as MAX_GENERATIONS, MAX_EMIT,
     MAX_EMITTERS, MAX_EMITTERS2, MAX_FIELD, MAX_FORCES, MAX_FORCES2, MAX_HATCH, MAX_LONG, MAX_PALETTE,
-    MAX_PARTS, MAX_POINTS, MAX_PREWARM, MAX_PREWARM2, MAX_REMAPS, MAX_ROPE, MAX_STOPS, MAX_TRAIL, Moment,
+    MAX_BURSTS, MAX_PARTS, MAX_POINTS, MAX_PREWARM, MAX_PREWARM2, MAX_REMAPS, MAX_ROPE, MAX_STOPS, MAX_TRAIL, Moment,
     OffsetNoise, Operator, Orient, Oscillate, PARTICLE_EVENTS, Palette, Part, Particle, Periodic,
     Perspective, Placement, Play, REMAP_INPUTS, ROPE_POINTS, Refract, Refresh, Remap, RemapOp, RemapOutput,
     Render, Ring, Rope, STEP, SUBSTEPS, Sim, SlowNear, Source, Spread, Stack, Strand, Stretch, Surface,

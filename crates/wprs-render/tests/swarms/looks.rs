@@ -3,7 +3,7 @@ use image::{Rgba, RgbaImage};
 use wprs_scene::Tier;
 
 fn still(at: [f32; 2], more: Value) -> Value {
-    let mut s = json!({ "capacity": 8, "seed": 5, "emitters": [{ "shape": { "point": at }, "burst": { "count": 1 } }],
+    let mut s = json!({ "capacity": 8, "seed": 5, "emitters": [{ "shape": { "point": at }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [16, 16] } });
     more.as_object().unwrap().iter().for_each(|(k, v)| s[k] = v.clone());
     s
@@ -49,7 +49,7 @@ fn ordered_particles_draw_the_chosen_ones_on_top() {
     let swatch = |x: f32, order: &str| {
         still(
             [x, 40.0],
-            json!({ "emitters": [{ "shape": { "point": [x, 40] }, "burst": { "count": 1, "every": 0.5 } }],
+            json!({ "emitters": [{ "shape": { "point": [x, 40] }, "bursts": [{ "count": 1, "every": 0.5 }] }],
             "init": { "life": [2, 2], "speed": [0, 0], "size": [24, 24] },
             "render": { "order": order, "color_over_life": [[0, "#ff0000"], [1, "#0000ff"]] } }),
         )
@@ -73,7 +73,7 @@ fn particles_bounce_on_the_opaque_part_of_a_mask() {
     let floor =
         RgbaImage::from_fn(SIZE.0, SIZE.1, |_, y| Rgba([255, 255, 255, if y >= 50 { 255 } else { 0 }]));
     let rain = json!({ "capacity": 80, "seed": 2,
-        "emitters": [{ "shape": { "box": { "from": [10, 0], "to": [150, 6] } }, "burst": { "count": 60 } }],
+        "emitters": [{ "shape": { "box": { "from": [10, 0], "to": [150, 6] } }, "bursts": [{ "count": 60 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [2, 2] },
         "forces": [{ "gravity": [0, 300] }],
         "collide": [{ "bounds": { "mask": { "texture": "floor" } }, "bounce": 0.2, "friction": 0.5 }] });
@@ -103,7 +103,7 @@ fn rect_frames_gradients_and_layer_renders_match_their_reference() {
         )
     };
     let mixed = json!({ "capacity": 300, "seed": 7,
-        "emitters": [{ "shape": { "box": { "from": [60, 4], "to": [100, 36] } }, "burst": { "count": 300 } }],
+        "emitters": [{ "shape": { "box": { "from": [60, 4], "to": [100, 36] } }, "bursts": [{ "count": 300 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [2, 2], "gradient": [[0, "#ff0000"], [1, "#0000ff"]] } });
     let streak = still(
         [10.0, 60.0],

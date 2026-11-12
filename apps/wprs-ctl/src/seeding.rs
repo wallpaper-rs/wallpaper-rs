@@ -25,7 +25,7 @@ pub enum Seeding {
     Emitter {
         #[arg(help = "Index of the emitter, 0 first")]
         index: usize,
-        #[arg(long, help = "Particles started at once")]
+        #[arg(long, help = "Particles started at once; replaces every burst of the emitter with this one (several go through scene act)")]
         burst: Option<u32>,
         #[arg(allow_negative_numbers = true, long, requires = "burst", help = "Seconds between bursts")]
         every: Option<f64>,
@@ -47,7 +47,7 @@ pub enum Seeding {
             help = "Share from 0 to 1 of the speed of the emitter the particles take"
         )]
         inherit: Option<f64>,
-        #[arg(long, value_parser = ["burst", "periodic", "duration", "delay", "follow", "audio_gate", "inherit"], help = "Remove a value")]
+        #[arg(long, value_parser = ["bursts", "periodic", "duration", "delay", "follow", "audio_gate", "inherit"], help = "Remove a value")]
         clear: Vec<String>,
     },
     #[command(about = "Let the force at INDEX act only in a window of the life of a particle, or none")]
@@ -137,7 +137,7 @@ pub(crate) fn edit(system: String, what: Seeding) -> P {
                 let mut b = json!({ "count": count });
                 every.iter().for_each(|e| b["every"] = json!(e));
                 on.iter().for_each(|o| b["on"] = json!(o));
-                values.insert("burst".into(), b);
+                values.insert("bursts".into(), json!([b]));
             }
             periodic.iter().for_each(|[on, off]| {
                 drop(values.insert("periodic".into(), json!({ "on": on, "off": off })))

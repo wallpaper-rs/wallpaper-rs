@@ -3,9 +3,9 @@ use super::*;
 pub(super) fn flown() {
     let source = tempfile::tempdir().unwrap();
     let systems = json!({
-        "fuse": { "capacity": 20, "space": "world", "emitters": [{ "shape": { "point": [32, 16] }, "burst": { "count": 4 } }],
+        "fuse": { "capacity": 20, "space": "world", "emitters": [{ "shape": { "point": [32, 16] }, "bursts": [{ "count": 4 }] }],
             "init": { "life": [0.1, 0.1], "speed": [0, 0], "size": [3, 3] }, "children": [{ "system": "spark", "on": "death" }] },
-        "spark": { "capacity": 200, "emitters": [{ "shape": { "circle": { "center": [0, 0], "radius": 6 } }, "burst": { "count": 10 } }],
+        "spark": { "capacity": 200, "emitters": [{ "shape": { "circle": { "center": [0, 0], "radius": 6 } }, "bursts": [{ "count": 10 }] }],
             "init": { "life": [0.3, 0.3], "speed": [0, 0], "size": [4, 4] } }
     });
     let layers = json!([{ "id": "p", "type": "particles", "system": "fuse", "blend": "add", "instance": { "color": "#ff0000" } }]);

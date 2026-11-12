@@ -77,45 +77,9 @@ ColumnLayout {
         emission: emission
     }
 
-    RowLayout {
-        QQC2.CheckBox {
-            text: App.tr("Bursts of")
-            checked: emission.emitter.burst !== undefined
-            onToggled: emission.put({
-                    "burst": checked ? {
-                        "count": 20,
-                        "every": 1
-                    } : null
-                })
-        }
-
-        QQC2.SpinBox {
-            enabled: emission.emitter.burst !== undefined
-            from: 1
-            to: 100000
-            editable: true
-            value: emission.emitter.burst?.count ?? 20
-            onValueModified: emission.put({
-                    "burst": Object.assign({}, emission.emitter.burst, {
-                            "count": value
-                        })
-                })
-        }
-
-        QQC2.ComboBox {
-            enabled: emission.emitter.burst !== undefined
-            model: [App.tr("on time"), App.tr("on the beat"), App.tr("on a click")]
-            currentIndex: Math.max(0, emission.cues.indexOf(emission.emitter.burst?.on ?? ""))
-            onActivated: index => {
-                const burst = Object.assign({}, emission.emitter.burst);
-                delete burst.on;
-                if (index > 0)
-                    burst.on = emission.cues[index];
-                emission.put({
-                        "burst": burst
-                    });
-            }
-        }
+    SceneSwarmBursts {
+        Layout.fillWidth: true
+        emission: emission
     }
 
     RowLayout {

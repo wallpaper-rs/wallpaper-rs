@@ -60,7 +60,7 @@ fn colliders_that_kill_start_death_children() {
     ))
     .unwrap();
     doc["particles"]["dots"]["children"] = json!([{ "system": "puff", "on": "death" }]);
-    doc["particles"]["puff"] = json!({ "capacity": 400, "emitters": [{ "shape": { "point": [0, 0] }, "burst": { "count": 2 } }],
+    doc["particles"]["puff"] = json!({ "capacity": 400, "emitters": [{ "shape": { "point": [0, 0] }, "bursts": [{ "count": 2 }] }],
         "init": { "life": [5, 5], "speed": [0, 0] } });
     let mut rt = runtime(&doc.to_string());
     let bake = Bake::new(&rt.scene, 0, Tier::T3, true, |_| None).unwrap();

@@ -1,7 +1,7 @@
 use super::*;
 
 fn dots(more: Value) -> Value {
-    let mut s = json!({ "capacity": 64, "seed": 9, "emitters": [{ "shape": { "point": [20, 20] }, "burst": { "count": 1 } }],
+    let mut s = json!({ "capacity": 64, "seed": 9, "emitters": [{ "shape": { "point": [20, 20] }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [4, 4], "color": ["#ffffff", "#ffffff"] } });
     more.as_object().unwrap().iter().for_each(|(k, v)| s[k] = v.clone());
     s
@@ -9,16 +9,16 @@ fn dots(more: Value) -> Value {
 
 fn gallery() -> (Value, Value) {
     let systems = json!({
-        "world": dots(json!({ "space": "world", "emitters": [{ "shape": { "point": [80, 40] }, "burst": { "count": 1 } }], "init": { "life": [30, 30], "speed": [0, 0], "size": [6, 6], "color": ["#ff0000", "#ff0000"] } })),
+        "world": dots(json!({ "space": "world", "emitters": [{ "shape": { "point": [80, 40] }, "bursts": [{ "count": 1 }] }], "init": { "life": [30, 30], "speed": [0, 0], "size": [6, 6], "color": ["#ff0000", "#ff0000"] } })),
         "pointed": dots(json!({ "points": [{ "at": [0, 0] }, { "at": [60, 15] }],
-            "emitters": [{ "shape": { "box": { "from": [-4, -4], "to": [4, 4], "inner": [6, 6], "at": "p1" } }, "burst": { "count": 40 } }],
+            "emitters": [{ "shape": { "box": { "from": [-4, -4], "to": [4, 4], "inner": [6, 6], "at": "p1" } }, "bursts": [{ "count": 40 }] }],
             "init": { "life": [30, 30], "speed": [0, 0], "size": [1.5, 1.5], "color": ["#00ff00", "#00ff00"] } })),
-        "half": dots(json!({ "emitters": [{ "shape": { "circle": { "center": [110, 20], "radius": 12, "inner": 11, "sign": [0, 1] } }, "burst": { "count": 60 } }],
+        "half": dots(json!({ "emitters": [{ "shape": { "circle": { "center": [110, 20], "radius": 12, "inner": 11, "sign": [0, 1] } }, "bursts": [{ "count": 60 }] }],
             "init": { "life": [30, 30], "speed": [0, 0], "size": [1.5, 1.5], "hsv": { "hue": [240, 240] } } })),
-        "fuse": dots(json!({ "emitters": [{ "shape": { "point": [40, 60] }, "burst": { "count": 3 } }],
+        "fuse": dots(json!({ "emitters": [{ "shape": { "point": [40, 60] }, "bursts": [{ "count": 3 }] }],
             "init": { "life": [0.1, 0.1], "speed": [0, 0], "size": [3, 3] },
             "children": [{ "system": "spark", "on": "death", "offset": [60, 0], "inherit": ["color"] }] })),
-        "spark": dots(json!({ "emitters": [{ "shape": { "circle": { "center": [0, 0], "radius": 10, "inner": 9 } }, "burst": { "count": 8 } }],
+        "spark": dots(json!({ "emitters": [{ "shape": { "circle": { "center": [0, 0], "radius": 10, "inner": 9 } }, "bursts": [{ "count": 8 }] }],
             "init": { "life": [30, 30], "speed": [0, 0], "size": [2, 2], "palette": { "colors": ["#ffff00"] } } }))
     });
     let layers = json!([
@@ -69,7 +69,7 @@ fn families_agree_on_gpu_and_cpu() {
             "forces": [{ "gravity": [0, 80] }, { "oscillate": { "what": "position", "freq": [1, 2], "scale": [2, 4] } }, { "cap": 90, "window": [0, 0.2, 1, 1] }],
             "collide": [{ "bounds": "canvas", "kill": true }],
             "children": [{ "system": "splash", "on": "death", "probability": 0.5 }, { "system": "mist", "on": "follow" }] },
-        "splash": { "capacity": 900, "emitters": [{ "shape": { "point": [0, 0] }, "burst": { "count": 4 } }],
+        "splash": { "capacity": 900, "emitters": [{ "shape": { "point": [0, 0] }, "bursts": [{ "count": 4 }] }],
             "init": { "life": [0.2, 0.4], "speed": [20, 50], "angle": [200, 340], "size": [1, 2] }, "forces": [{ "gravity": [0, 120] }] },
         "mist": { "capacity": 600, "emitters": [{ "shape": { "point": [0, 0] }, "rate": 20 }], "init": { "life": [0.2, 0.3], "speed": [0, 5] } }
     });

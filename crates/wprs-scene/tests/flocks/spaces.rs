@@ -7,7 +7,7 @@ fn moved(rt: &mut Runtime, at: [f32; 2]) {
 
 #[test]
 fn world_space_particles_stay_where_they_were_born() {
-    let burst = json!([{ "shape": { "point": [100, 50] }, "burst": { "count": 1, "every": 0.5 } }]);
+    let burst = json!([{ "shape": { "point": [100, 50] }, "bursts": [{ "count": 1, "every": 0.5 }] }]);
     for (space, second) in [("world", [60.0, 30.0]), ("local", [100.0, 50.0])] {
         let system = still(json!({ "space": space, "emitters": burst }));
         let layers = json!([{ "id": "p", "type": "particles", "system": "a", "transform": { "position": [150, 50] } }]);
@@ -50,7 +50,7 @@ fn control_points_place_emitters_and_follow_instances() {
     let points = json!([{ "at": [0, 0] }, { "at": [40, 20], "angle": 90 }]);
     let shape = json!({ "box": { "from": [0, 0], "to": [10, 2], "at": "p1" } });
     let system =
-        still(json!({ "points": points, "emitters": [{ "shape": shape, "burst": { "count": 60 } }] }));
+        still(json!({ "points": points, "emitters": [{ "shape": shape, "bursts": [{ "count": 60 }] }] }));
     let mut fly = Fly::of(json!({ "a": system }));
     fly.frame(0.0);
     let born = fly.alive(0);
@@ -124,7 +124,7 @@ fn a_gap_in_the_points_of_an_instance_keeps_the_point_of_the_system() {
     let points = json!([{ "at": [40, 20] }, { "at": [0, 0] }]);
     let shape = json!({ "box": { "from": [0, 0], "to": [0.01, 0.01], "at": "p0" } });
     let system =
-        still(json!({ "points": points, "emitters": [{ "shape": shape, "burst": { "count": 10 } }] }));
+        still(json!({ "points": points, "emitters": [{ "shape": shape, "bursts": [{ "count": 10 }] }] }));
     for (own, x) in [(json!([null, [150, 80]]), 40.0), (json!([[150, 80], null]), 150.0)] {
         let layers =
             json!([{ "id": "p", "type": "particles", "system": "a", "instance": { "points": own } }]);

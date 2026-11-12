@@ -54,7 +54,7 @@ fn ropes_and_textured_long_trails_draw_along_the_path() {
         s["emitters"][0] = json!({ "shape": { "point": [20, 40] }, "rate": 30, "max_per_step": 1 });
         s["init"]["size"] = json!([0, 0]);
         if name == "trail" {
-            s["emitters"][0] = json!({ "shape": { "point": [20, 40] }, "burst": { "count": 1 } });
+            s["emitters"][0] = json!({ "shape": { "point": [20, 40] }, "bursts": [{ "count": 1 }] });
             s["init"]["size"] = json!([8, 8]);
         }
         let layers = json!([{ "id": "p", "type": "particles", "system": "s", "blend": "add" }]);

@@ -2,6 +2,7 @@ use super::{
     EmitShape, MAX_COLLIDERS, MAX_COLLIDERS2, MAX_EMITTERS, MAX_EMITTERS2, MAX_FORCES, MAX_FORCES2,
     MAX_PREWARM, MAX_PREWARM2, MAX_RATE, System,
 };
+use super::MAX_BURSTS;
 use crate::MAX_PARTICLES;
 use crate::validate::{Check, Issue};
 use crate::value::Value;
@@ -29,11 +30,13 @@ impl Check<'_> {
             if let Value::Fixed(rate) = e.rate {
                 self.range(&format!("{q}/rate"), rate, 0.0, MAX_RATE);
             }
-            if let Some(b) = &e.burst {
-                self.range(&format!("{q}/burst/count"), b.count as f32, 1.0, MAX_PARTICLES as f32);
+            self.range(&format!("{q}/bursts"), e.bursts.len() as f32, 0.0, MAX_BURSTS as f32);
+            for (n, b) in e.bursts.iter().enumerate() {
+                self.range(&format!("{q}/bursts/{n}/count"), b.count as f32, 1.0, MAX_PARTICLES as f32);
                 b.every
                     .iter()
-                    .for_each(|t| self.range(&format!("{q}/burst/every"), *t, 1.0 / 60.0, 86_400.0));
+                    .for_each(|t| self.range(&format!("{q}/bursts/{n}/every"), *t, 1.0 / 60.0, 86_400.0));
+                b.at.iter().for_each(|t| self.range(&format!("{q}/bursts/{n}/at"), *t, 0.0, 86_400.0));
             }
             self.range(&format!("{q}/inherit"), e.inherit, 0.0, 4.0);
             let points = match &e.shape {

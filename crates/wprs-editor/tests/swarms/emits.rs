@@ -5,19 +5,19 @@ use serde_json::json;
 fn an_emitter_bursts_pauses_waits_follows_and_listens() {
     let root = tempfile::tempdir().unwrap();
     let mut p = project(&root);
-    let values = json!({"burst": {"count": 10, "every": 2}, "periodic": {"on": [1, 2], "off": [3, 4]},
+    let values = json!({"bursts": [{"count": 10, "every": 2}], "periodic": {"on": [1, 2], "off": [3, 4]},
         "duration": 5, "delay": 1, "follow": "cursor", "audio_gate": true, "inherit": 0.5});
     edit(&mut p, "emit", json!({"emitter": 0, "values": values})).unwrap();
     let e = &system(&p)["emitters"][0];
     assert_eq!(
-        (&e["burst"]["count"], &e["follow"], &e["audio_gate"]),
+        (&e["bursts"][0]["count"], &e["follow"], &e["audio_gate"]),
         (&json!(10), &json!("cursor"), &json!(true))
     );
-    edit(&mut p, "emit", json!({"emitter": 0, "clear": ["burst"], "values": {"audio_gate": false}})).unwrap();
+    edit(&mut p, "emit", json!({"emitter": 0, "clear": ["bursts"], "values": {"audio_gate": false}})).unwrap();
     let e = &system(&p)["emitters"][0];
-    assert!(e.get("burst").is_none() && e.get("audio_gate").is_none() && e["delay"] == json!(1));
+    assert!(e.get("bursts").is_none() && e.get("audio_gate").is_none() && e["delay"] == json!(1));
     assert!(edit(&mut p, "emit", json!({"emitter": 0, "values": {"wobble": 1}})).is_err());
-    assert!(edit(&mut p, "emit", json!({"emitter": 0, "values": {"burst": {"count": "many"}}})).is_err());
+    assert!(edit(&mut p, "emit", json!({"emitter": 0, "values": {"bursts": [{"count": "many"}]}})).is_err());
     assert!(edit(&mut p, "emit", json!({"emitter": 9, "values": {"delay": 1}})).is_err());
     assert!(edit(&mut p, "emit", json!({"emitter": 0, "values": {"delay": -1}})).is_err());
 }

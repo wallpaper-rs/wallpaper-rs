@@ -5,7 +5,7 @@ use serde_json::{Map, Value, json};
 use wprs_core::message::said;
 use wprs_scene::Tunable;
 
-const EMITTED: [&str; 7] = ["burst", "follow", "inherit", "duration", "delay", "periodic", "audio_gate"];
+const EMITTED: [&str; 7] = ["bursts", "follow", "inherit", "duration", "delay", "periodic", "audio_gate"];
 
 pub(super) fn emit(
     doc: &Value,

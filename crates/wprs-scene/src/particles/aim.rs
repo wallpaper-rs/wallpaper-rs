@@ -50,16 +50,19 @@ impl Swarm {
             sim.emitters[4 * e + 2] = [a, b, c, d];
             sim.emitters[4 * e + 3] = motion;
             sim.rates[e] = rate;
-            let once = em.burst.as_ref().filter(|b| b.every.is_none() && b.on.is_none());
-            counts[e] = once.map_or(0, |b| b.count);
-            let Some(b) = em.burst.as_ref().filter(|_| !hatched && !gated) else { continue };
-            let fired = match b.on {
-                Some(Cue::Beat) => cx.audio.beat && !self.beat,
-                Some(Cue::Click) => p.buttons != 0 && self.buttons == 0,
-                None => false,
-            };
+            counts[e] = em.bursts.iter().filter(|b| b.immediate()).fold(0, |n, b| n.saturating_add(b.count));
+            if hatched || gated {
+                continue;
+            }
             let f = &mut self.feeds[k][e];
-            f.pending = f.pending.saturating_add(if fired && f.on { b.count } else { 0 });
+            for b in &em.bursts {
+                let fired = match b.on {
+                    Some(Cue::Beat) => cx.audio.beat && !self.beat,
+                    Some(Cue::Click) => p.buttons != 0 && self.buttons == 0,
+                    None => false,
+                };
+                f.pending = f.pending.saturating_add(if fired && f.on { b.count } else { 0 });
+            }
         }
         if hatched {
             if counts.iter().all(|c| *c == 0) {

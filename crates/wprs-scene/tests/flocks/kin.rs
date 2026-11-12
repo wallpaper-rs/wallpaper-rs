@@ -1,7 +1,7 @@
 use super::*;
 
 fn sparks(more: Json) -> Json {
-    let mut s = json!({ "capacity": 400, "emitters": [{ "shape": { "circle": { "center": [0, 0], "radius": 5 } }, "burst": { "count": 10 } }],
+    let mut s = json!({ "capacity": 400, "emitters": [{ "shape": { "circle": { "center": [0, 0], "radius": 5 } }, "bursts": [{ "count": 10 }] }],
         "init": { "life": [5, 5], "speed": [0, 0] } });
     more.as_object().unwrap().iter().for_each(|(k, v)| s[k] = v.clone());
     s
@@ -11,7 +11,7 @@ fn sparks(more: Json) -> Json {
 fn children_burst_where_their_parents_die() {
     let parent = still(
         json!({ "capacity": 20, "init": { "life": [0.2, 0.2], "speed": [0, 0], "color": ["#00ff00", "#00ff00"] },
-        "emitters": [{ "shape": { "point": [50, 50] }, "burst": { "count": 5 } }],
+        "emitters": [{ "shape": { "point": [50, 50] }, "bursts": [{ "count": 5 }] }],
         "children": [{ "system": "b", "on": "death", "inherit": ["color"], "offset": [10, 0], "scale": 2 }] }),
     );
     let mut fly = Fly::of(json!({ "a": parent, "b": sparks(json!({})) }));
@@ -37,7 +37,7 @@ fn children_burst_where_their_parents_die() {
 fn followers_ride_their_parents_and_die_with_them() {
     let parent =
         still(json!({ "capacity": 4, "init": { "life": [0.5, 0.5], "speed": [60, 60], "angle": [0, 0] },
-        "emitters": [{ "shape": { "point": [20, 50] }, "burst": { "count": 2 } }],
+        "emitters": [{ "shape": { "point": [20, 50] }, "bursts": [{ "count": 2 }] }],
         "children": [{ "system": "b", "on": "follow" }] }));
     let trail = sparks(json!({ "emitters": [{ "shape": { "point": [0, 0] }, "rate": 60 }] }));
     let mut fly = Fly::of(json!({ "a": parent, "b": trail }));

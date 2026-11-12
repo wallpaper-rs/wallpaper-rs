@@ -56,7 +56,7 @@ fn remap_operators_follow_the_age_of_each_particle() {
 fn boids_align_their_flock_and_keep_apart() {
     let flock = json!({ "boids": { "radius": 40, "separation": 2, "alignment": 3, "cohesion": 0.5, "max_speed": 50 } });
     let mut s = steered(json!([flock]), 30.0);
-    s["emitters"][0] = json!({ "shape": { "box": [[60, 30], [140, 70]] }, "burst": { "count": 40 } });
+    s["emitters"][0] = json!({ "shape": { "box": [[60, 30], [140, 70]] }, "bursts": [{ "count": 40 }] });
     let all = alive(s, 180);
     assert_eq!(all.len(), 40);
     assert!(all.iter().all(|p| p.vel[0].hypot(p.vel[1]) <= 50.01), "{all:?}");

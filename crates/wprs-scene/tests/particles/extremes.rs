@@ -2,7 +2,7 @@ use super::*;
 
 #[test]
 fn timed_bursts_keep_their_beat_while_the_scene_sleeps() {
-    let every = json!({ "capacity": 10, "emitters": [{ "shape": "edge", "burst": { "count": 5, "every": 2.0 } }],
+    let every = json!({ "capacity": 10, "emitters": [{ "shape": "edge", "bursts": [{ "count": 5, "every": 2.0 }] }],
         "init": { "life": [0.2, 0.2] } });
     let mut rt = runtime(&scene(every, true));
     let (mut wake, mut t, mut frames, mut bursts) = (rt.frame(VIEW, Quality::Q3).wake, 0.0, 0, vec![0.0]);
@@ -49,8 +49,8 @@ fn particles_keep_real_time_at_low_frame_rates() {
 #[test]
 fn extreme_systems_neither_overflow_nor_panic() {
     let flood = json!({ "capacity": 300, "emitters": [
-            { "shape": "edge", "rate": { "keys": [[0, 1e6], [1, 1e6]], "scale": 1e6 }, "burst": { "count": 200000, "every": 0.02 } },
-            { "shape": "edge", "rate": 1e5, "burst": { "count": 200000, "on": "beat" } }],
+            { "shape": "edge", "rate": { "keys": [[0, 1e6], [1, 1e6]], "scale": 1e6 }, "bursts": [{ "count": 200000, "every": 0.02 }] },
+            { "shape": "edge", "rate": 1e5, "bursts": [{ "count": 200000, "on": "beat" }] }],
         "init": { "life": [200, 200], "speed": [0, 0] },
         "forces": [{ "gravity": [1e6, 0] }, { "turbulence": { "strength": 10, "scale": 1 } }] });
     let text = scene(flood, true);

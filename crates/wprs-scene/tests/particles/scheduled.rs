@@ -39,7 +39,7 @@ fn the_scheduler_knows_when_particles_live() {
         wakes.push(rt.frame(VIEW, Quality::Q3).wake);
     }
     assert_eq!((wakes[0], wakes[29]), (Wake::Frame, Wake::Idle));
-    let every = json!({ "capacity": 10, "emitters": [{ "shape": "edge", "burst": { "count": 5, "every": 2.0 } }],
+    let every = json!({ "capacity": 10, "emitters": [{ "shape": "edge", "bursts": [{ "count": 5, "every": 2.0 }] }],
         "init": { "life": [0.2, 0.2] } });
     let mut rt = runtime(&scene(every, true));
     assert_eq!(rt.frame(VIEW, Quality::Q3).wake, Wake::Frame);
@@ -53,7 +53,7 @@ fn the_scheduler_knows_when_particles_live() {
         rt.wake()
     );
     let long = json!({ "prop": "depth", "scale": 25 });
-    let shrinking = json!({ "capacity": 10, "emitters": [{ "shape": { "point": [10, 10] }, "burst": { "count": 10 } }],
+    let shrinking = json!({ "capacity": 10, "emitters": [{ "shape": { "point": [10, 10] }, "bursts": [{ "count": 10 }] }],
         "init": { "life": [long, long] } });
     let mut rt = runtime(&scene(shrinking, true));
     rt.frame(VIEW, Quality::Q3);
@@ -67,8 +67,8 @@ fn the_scheduler_knows_when_particles_live() {
     let wakes: Vec<Wake> = (0..160).map(|_| wake()).collect();
     assert!(wakes[..148].iter().all(|w| *w == Wake::Frame) && wakes[152..].iter().all(|w| *w == Wake::Idle));
     let cued = json!({ "capacity": 50, "emitters": [
-        { "shape": { "point": [10, 10] }, "burst": { "count": 7, "on": "beat" } },
-        { "shape": { "point": [90, 10] }, "burst": { "count": 3, "on": "click" }, "follow": "cursor" }
+        { "shape": { "point": [10, 10] }, "bursts": [{ "count": 7, "on": "beat" }] },
+        { "shape": { "point": [90, 10] }, "bursts": [{ "count": 3, "on": "click" }], "follow": "cursor" }
     ] });
     let mut rt = runtime(&scene(cued, true));
     assert_eq!((rt.uses().audio, rt.uses().cursor), (true, true));
@@ -108,7 +108,7 @@ fn budgets_follow_the_device_tier_and_masks_place_particles() {
     assert_eq!((t0.trails[0], t3.trails[0]), (0, 0), "no trail is kept for a render without one");
     let masked = with(
         sparks(),
-        json!({ "emitters": [{ "shape": { "mask": { "texture": "dot" } }, "burst": { "count": 300 } }],
+        json!({ "emitters": [{ "shape": { "mask": { "texture": "dot" } }, "bursts": [{ "count": 300 }] }],
         "forces": [], "collide": [], "init": { "speed": [0, 0], "life": [5, 5] } }),
     );
     let rt = runtime(&scene(masked, true));
@@ -120,4 +120,28 @@ fn budgets_follow_the_device_tier_and_masks_place_particles() {
     rt.swarm(0).unwrap().steps.iter().for_each(|s| cloud.step(&bake.apply(0, s), &bake.points));
     let census = Census::of(&cloud.particles);
     assert!(census.alive == 300 && census.max[0] <= 100.0 && census.min[0] >= 0.0, "{census:?}");
+}
+
+#[test]
+fn an_emitter_runs_several_independent_bursts() {
+    let bursts = json!([{ "count": 5 }, { "count": 3, "at": 0.5 }, { "count": 2, "every": 1.0, "at": 0.25 }]);
+    let system = json!({ "capacity": 100, "emitters": [{ "shape": { "point": [10, 10] }, "bursts": bursts }],
+        "init": { "life": [30, 30] } });
+    let mut rt = runtime(&scene(system, true));
+    let mut when = Vec::new();
+    for frame in 0..130 {
+        rt.frame(VIEW, Quality::Q3);
+        let born: u32 = rt.swarm(0).unwrap().steps.iter().map(|s| s.total()).sum();
+        if born > 0 {
+            when.push((frame, born));
+        }
+        rt.advance(1.0 / 60.0);
+    }
+    let seconds: Vec<(f32, u32)> = when.iter().map(|(f, n)| (*f as f32 / 60.0, *n)).collect();
+    assert_eq!(seconds.iter().map(|s| s.1).collect::<Vec<_>>(), [5, 2, 3, 2], "{seconds:?}");
+    let near = |a: f32, b: f32| (a - b).abs() < 0.05;
+    assert!(near(seconds[1].0, 0.25) && near(seconds[2].0, 0.5) && near(seconds[3].0, 1.25), "{seconds:?}");
+    let doc = json!({ "capacity": 10, "emitters": [{ "shape": "edge", "bursts": vec![json!({ "count": 1 }); 9] }] });
+    let found = Scene::from_json(&scene(doc, true)).unwrap().validate(&Default::default());
+    assert!(found.iter().any(|i| matches!(i, Issue::Range { path, .. } if path.ends_with("/bursts"))), "{found:?}");
 }

@@ -25,7 +25,7 @@ fn layer(system: &str) -> Json {
 }
 
 fn still(more: Json) -> Json {
-    let mut s = json!({ "capacity": 400, "seed": 5, "emitters": [{ "shape": { "point": [100, 50] }, "burst": { "count": 50 } }],
+    let mut s = json!({ "capacity": 400, "seed": 5, "emitters": [{ "shape": { "point": [100, 50] }, "bursts": [{ "count": 50 }] }],
         "init": { "life": [10, 10], "speed": [0, 0], "size": [2, 2] } });
     more.as_object().unwrap().iter().for_each(|(k, v)| s[k] = v.clone());
     s

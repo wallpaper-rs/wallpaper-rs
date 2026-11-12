@@ -38,7 +38,7 @@ impl Swarm {
                     _ if self.sim < start => start,
                     _ if f.off => f.flip,
                     _ if !f.on && self.sim < end => self.sim,
-                    _ if f.on && em.burst.as_ref().is_some_and(|b| b.every.is_some()) => f.next,
+                    _ if f.on => f.next.iter().copied().fold(f64::INFINITY, f64::min),
                     _ => f64::INFINITY,
                 });
             }
@@ -92,9 +92,12 @@ impl Swarm {
         }
         let on = self.play == Play::Playing && t >= begin && t < begin + length && !f.off;
         if on && !f.on {
-            let once = em.burst.as_ref().filter(|b| b.every.is_none() && b.on.is_none());
-            f.pending = f.pending.saturating_add(once.map_or(0, |b| b.count));
-            f.next = t;
+            let once = em.bursts.iter().filter(|b| b.immediate());
+            f.pending = once.fold(f.pending, |n, b| n.saturating_add(b.count));
+            for (i, next) in f.next.iter_mut().enumerate() {
+                let timed = em.bursts.get(i).filter(|b| b.timed());
+                *next = timed.map_or(f64::INFINITY, |b| t + f64::from(b.at.unwrap_or(0.0).max(0.0)));
+            }
             if matches!(&em.shape, super::EmitShape::Around(a) if a.restart) {
                 f.sequence = 0;
             }

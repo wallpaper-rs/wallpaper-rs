@@ -105,7 +105,7 @@ fn long_trails_keep_spaced_points_within_the_caps() {
 fn ropes_flocks_and_walls_settle_once_their_particles_are_gone() {
     let mut s =
         roped(json!({ "rope": { "width": 4 }, "trail": { "length": 40, "width": 1, "subdivide": 2 } }), 0.0);
-    s["emitters"][0] = json!({ "shape": { "point": [20, 50] }, "burst": { "count": 30 } });
+    s["emitters"][0] = json!({ "shape": { "point": [20, 50] }, "bursts": [{ "count": 30 }] });
     s["init"]["life"] = json!([0.3, 0.3]);
     s["forces"] = json!([{ "boids": { "radius": 20, "separation": 1, "alignment": 1, "cohesion": 1, "max_speed": 80 } }]);
     s["collide"] =

@@ -34,7 +34,7 @@ fn render(r: &Renderer, runtime: &Runtime, view: &mut SceneView) -> (u32, u32, u
 
 fn sparks(life: f32) -> Value {
     json!({ "sparks": { "capacity": 400, "seed": 3,
-        "emitters": [{ "shape": { "circle": { "center": [40, 40], "radius": 8 } }, "burst": { "count": 200 } }],
+        "emitters": [{ "shape": { "circle": { "center": [40, 40], "radius": 8 } }, "bursts": [{ "count": 200 }] }],
         "init": { "life": [life, life], "speed": [10, 40], "size": [3, 6], "color": ["#ffd27a", "#ff7a3d"] } } })
 }
 

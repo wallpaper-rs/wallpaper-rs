@@ -4609,7 +4609,8 @@ msgstr "Probar el puntero y los clics"
 msgid "Length"
 msgstr "Longitud"
 
-#: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/facade/SceneValues.qml
+#: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneSwarmBursts.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Repeat"
 msgstr "Repetir"
 
@@ -5413,7 +5414,8 @@ msgstr "Sistemas de partículas"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Create, copy, rename and remove the particle systems of the scene"
-msgstr "Crear, copiar, renombrar y quitar los sistemas de partículas de la escena"
+msgstr ""
+"Crear, copiar, renombrar y quitar los sistemas de partículas de la escena"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Group the layers"
@@ -7318,6 +7320,47 @@ msgstr ""
 "partículas con hasta 8 luces y solo refractan desde Q2; el dibujado por "
 "software funciona en el procesador."
 
+#: apps/wprs-app/qml/SceneSwarmBurstMarks.qml
+msgid "Burst %1 starts after %2 s"
+msgstr "La ráfaga %1 empieza a los %2 s"
+
+#: apps/wprs-app/qml/SceneSwarmBurstMarks.qml
+msgid "Burst %1 repeats every %2 s"
+msgstr "La ráfaga %1 se repite cada %2 s"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Bursts"
+msgstr "Ráfagas"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+msgid "Add a burst"
+msgstr "Añadir una ráfaga"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+msgid "on time"
+msgstr "con el tiempo"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+msgid "on the beat"
+msgstr "con el ritmo"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+msgid "on a click"
+msgstr "con un clic"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+msgid "Remove this burst"
+msgstr "Quitar esta ráfaga"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+msgid "After %1 s"
+msgstr "Tras %1 s"
+
+#: apps/wprs-app/qml/SceneSwarmBursts.qml
+msgid "Every %1 s"
+msgstr "Cada %1 s"
+
 #: apps/wprs-app/qml/SceneSwarmCollider.qml
 msgid "%1 %2"
 msgstr "%1 %2"
@@ -7427,22 +7470,6 @@ msgid "Most particles started in one step"
 msgstr "Máximo de partículas que nacen en un paso"
 
 #: apps/wprs-app/qml/SceneSwarmEmission.qml
-msgid "Bursts of"
-msgstr "Ráfagas de"
-
-#: apps/wprs-app/qml/SceneSwarmEmission.qml
-msgid "on time"
-msgstr "con el tiempo"
-
-#: apps/wprs-app/qml/SceneSwarmEmission.qml
-msgid "on the beat"
-msgstr "con el ritmo"
-
-#: apps/wprs-app/qml/SceneSwarmEmission.qml
-msgid "on a click"
-msgstr "con un clic"
-
-#: apps/wprs-app/qml/SceneSwarmEmission.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Only while sound plays"
 msgstr "Solo mientras suena algo"
@@ -7470,10 +7497,6 @@ msgstr ""
 #: apps/wprs-app/qml/SceneSwarmEmitLane.qml
 msgid "Pauses last %1 to %2 s"
 msgstr "Las pausas duran de %1 a %2 s"
-
-#: apps/wprs-app/qml/SceneSwarmEmitLane.qml
-msgid "A burst every %1 s"
-msgstr "Una ráfaga cada %1 s"
 
 #: apps/wprs-app/qml/SceneSwarmEmitLane.qml
 msgid "Stop after a while"
@@ -12214,10 +12237,6 @@ msgstr "Límites"
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Burst"
 msgstr "Ráfaga"
-
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Bursts"
-msgstr "Ráfagas"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Button"

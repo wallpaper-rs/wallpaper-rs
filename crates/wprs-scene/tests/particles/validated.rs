@@ -8,7 +8,7 @@ fn systems_are_validated_against_their_limits() {
     assert_eq!(issues(sparks()), []);
     for bad in [
         json!({ "forces": [{ "attractor": { "target": "mouse", "strength": 1 } }] }),
-        json!({ "emitters": [{ "shape": "edge", "burst": { "count": 1, "on": "clap" } }] }),
+        json!({ "emitters": [{ "shape": "edge", "bursts": [{ "count": 1, "on": "clap" }] }] }),
         json!({ "render": { "frames": "sometimes" } }),
         json!({ "collide": [{ "bounds": "box" }] }),
         json!({ "init": { "glow": [1, 2] } }),

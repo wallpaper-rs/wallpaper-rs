@@ -1,5 +1,5 @@
 use super::swarm::{Feed, Play};
-use super::{Flock, MAX_EMITTERS2, Swarm, System};
+use super::{Flock, MAX_BURSTS, MAX_EMITTERS2, Swarm, System};
 use crate::MAX_PARTICLES;
 use crate::input::ParticleCommand;
 
@@ -27,13 +27,19 @@ impl Swarm {
                         n = f.owed as u32;
                         f.owed -= n as f32;
                         n = n.saturating_add(std::mem::take(&mut f.pending));
-                        let every = em.burst.as_ref().and_then(|b| b.every.map(|t| (b.count, f64::from(t))));
-                        if let Some((burst, every)) = every
-                            && sim_t >= f.next
-                        {
-                            n = n.saturating_add(burst);
-                            let next = f.next + every;
-                            f.next = if next > sim_t { next } else { sim_t + every };
+                        for (i, b) in em.bursts.iter().enumerate().take(MAX_BURSTS) {
+                            if sim_t < f.next[i] {
+                                continue;
+                            }
+                            n = n.saturating_add(b.count);
+                            f.next[i] = match b.every {
+                                Some(every) => {
+                                    let every = f64::from(every);
+                                    let next = f.next[i] + every;
+                                    if next > sim_t { next } else { sim_t + every }
+                                }
+                                None => f64::INFINITY,
+                            };
                         }
                     } else {
                         f.owed = 0.0;

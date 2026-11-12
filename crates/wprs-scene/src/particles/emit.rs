@@ -6,6 +6,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 pub const MAX_STOPS: usize = 8;
+pub const MAX_BURSTS: usize = 8;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
@@ -13,8 +14,8 @@ pub struct Emitter {
     pub shape: EmitShape,
     #[serde(default = "zero")]
     pub rate: Value<f32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub burst: Option<Burst>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub bursts: Vec<Burst>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub follow: Option<Follow>,
     #[serde(default, skip_serializing_if = "is_zero")]
@@ -54,6 +55,19 @@ pub struct Burst {
     pub every: Option<f32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub on: Option<Cue>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[schemars(extend("x-unit" = "s"))]
+    pub at: Option<f32>,
+}
+
+impl Burst {
+    pub fn immediate(&self) -> bool {
+        self.on.is_none() && self.every.is_none() && self.at.is_none_or(|a| a <= 0.0)
+    }
+
+    pub fn timed(&self) -> bool {
+        self.on.is_none() && !self.immediate()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]

@@ -79,7 +79,7 @@ fn a_layer_that_holds_the_system_cannot_be_its_source() {
 #[test]
 fn bursts_around_points_settle_once_their_particles_are_gone() {
     let mut s = shaped(json!({ "around": { "count": 8, "radius": 10 } }), json!({ "life": [0.2, 0.2] }));
-    s["emitters"][0] = json!({ "shape": s["emitters"][0]["shape"], "burst": { "count": 16 } });
+    s["emitters"][0] = json!({ "shape": s["emitters"][0]["shape"], "bursts": [{ "count": 16 }] });
     let mut rt = runtime(&scene(s, true));
     let mut wake = Wake::Frame;
     for _ in 0..30 {

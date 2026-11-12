@@ -37,7 +37,7 @@ fn boids_agree_on_both_paths_while_neighbours_fit() {
     let Some(r) = renderer() else { return };
     let flock = json!({ "boids": { "radius": 12, "separation": 1, "alignment": 2, "cohesion": 0.5, "max_speed": 70 } });
     let mut s = moving(json!({ "forces": [flock] }));
-    s["emitters"] = json!([{ "shape": { "box": [[10, 10], [150, 70]] }, "burst": { "count": 60 } }]);
+    s["emitters"] = json!([{ "shape": { "box": [[10, 10], [150, 70]] }, "bursts": [{ "count": 60 }] }]);
     let Some(found) = both(r, &json!({ "s": s }), &layers(), 8) else { return };
     agree("boids", &found, 0.05);
 }

@@ -4,7 +4,7 @@ use std::sync::Arc;
 use wprs_scene::{Quality, Runtime, SCHEMA, Scene, Values};
 
 fn system(render: Value) -> Value {
-    json!({ "capacity": 4, "seed": 2, "emitters": [{ "shape": { "point": [80, 45] }, "burst": { "count": 1 } }],
+    json!({ "capacity": 4, "seed": 2, "emitters": [{ "shape": { "point": [80, 45] }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [40, 40], "color": ["#ffffff", "#ffffff"] },
         "render": render })
 }

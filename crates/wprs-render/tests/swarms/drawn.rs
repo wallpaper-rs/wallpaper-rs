@@ -2,7 +2,7 @@ use super::*;
 use image::{Rgba, RgbaImage};
 
 fn dot(at: [f32; 2], more: Value) -> Value {
-    let mut s = json!({ "capacity": 4, "seed": 2, "emitters": [{ "shape": { "point": at }, "burst": { "count": 1 } }],
+    let mut s = json!({ "capacity": 4, "seed": 2, "emitters": [{ "shape": { "point": at }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [24, 24], "color": ["#ffffff", "#ffffff"] } });
     more.as_object().into_iter().flatten().for_each(|(k, v)| s[k] = v.clone());
     s

@@ -29,7 +29,7 @@ fn masks_stop_falling_particles_on_their_opaque_part() {
     let floor: Vec<u8> =
         (0..50 * 25).flat_map(|i| [255, 255, 255, if i / 50 >= 15 { 255 } else { 0 }]).collect();
     let system = json!({ "capacity": 100, "seed": 1,
-        "emitters": [{ "shape": { "box": { "from": [20, 0], "to": [180, 10] } }, "burst": { "count": 80 } }],
+        "emitters": [{ "shape": { "box": { "from": [20, 0], "to": [180, 10] } }, "bursts": [{ "count": 80 }] }],
         "init": { "life": [30, 30], "speed": [0, 0], "size": [2, 2] }, "forces": [{ "gravity": [0, 400] }],
         "collide": [{ "bounds": { "mask": { "texture": "floor", "threshold": 0.5 } }, "bounce": 0.3 }] });
     let s = scene(system, json!({ "floor": { "path": "floor.png" } }));
@@ -44,7 +44,7 @@ fn masks_stop_falling_particles_on_their_opaque_part() {
 #[test]
 fn trails_remember_recent_positions_and_forget_the_dead() {
     let system = still(
-        json!({ "capacity": 4, "emitters": [{ "shape": { "point": [10, 50] }, "burst": { "count": 1 } }],
+        json!({ "capacity": 4, "emitters": [{ "shape": { "point": [10, 50] }, "bursts": [{ "count": 1 }] }],
         "init": { "life": [0.5, 0.5], "velocity": [[60, 0], [60, 0]], "size": [3, 3] },
         "render": { "trail": { "length": 6, "width": 0.5 } } }),
     );

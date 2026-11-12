@@ -1,4 +1,4 @@
-use super::{Flock, MAX_EMITTERS2, Part, Sim, System};
+use super::{Flock, MAX_BURSTS, MAX_EMITTERS2, Part, Sim, System};
 
 pub const STEP: f32 = 1.0 / 60.0;
 pub const WARM: f32 = 1.0 / 15.0;
@@ -10,7 +10,7 @@ pub(super) struct Feed {
     pub rate: f32,
     pub owed: f32,
     pub pending: u32,
-    pub next: f64,
+    pub next: [f64; MAX_BURSTS],
     pub flip: f64,
     pub off: bool,
     pub on: bool,

@@ -64,7 +64,7 @@ pub use children::{Child, Inheritable, MAX_CHILDREN, Moment};
 pub use cloud::{Cloud, Particle};
 pub use collide::{Collider, Surface};
 pub use control::{ControlPoint, Handle, MAX_CONTROL, Periodic, Perspective, Placement};
-pub use emit::{Burst, Cue, Emitter, Follow, Init, MAX_STOPS};
+pub use emit::{Burst, Cue, Emitter, Follow, Init, MAX_BURSTS, MAX_STOPS};
 pub use fbm::{fbm, gradient, hash, noise1};
 pub use feed::MAX_EMIT;
 pub use field::{MAX_FIELD, field as distance_field};
@@ -140,7 +140,7 @@ pub struct System {
 
 impl System {
     pub fn listens(&self) -> (bool, bool, bool) {
-        let cue = |c| self.emitters.iter().any(|e| e.burst.as_ref().is_some_and(|b| b.on == Some(c)));
+        let cue = |c| self.emitters.iter().any(|e| e.bursts.iter().any(|b| b.on == Some(c)));
         let pointer = cue(Cue::Click) || self.targets().any(|t| matches!(t, Target::Follow(_)));
         let pointer = pointer || self.emitters.iter().any(|e| e.follow.is_some());
         let pointer = pointer || self.points.iter().any(|p| p.follow.is_some());

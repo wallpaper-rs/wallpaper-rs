@@ -79,7 +79,7 @@ fn layer(blend: &str) -> Value {
 fn fountain() -> Value {
     json!({ "dots": {
         "capacity": 1500, "seed": 11, "prewarm": 1.0,
-        "emitters": [{ "shape": { "circle": { "center": [80, 70], "radius": 6 } }, "rate": 400 }, { "shape": "edge", "burst": { "count": 60, "every": 0.5 } }],
+        "emitters": [{ "shape": { "circle": { "center": [80, 70], "radius": 6 } }, "rate": 400 }, { "shape": "edge", "bursts": [{ "count": 60, "every": 0.5 }] }],
         "init": { "life": [0.4, 1.6], "speed": [30, 90], "angle": [240, 300], "size": [2, 5], "color": ["#ffd27a", "#ff7a3d"] },
         "forces": [{ "gravity": [0, 40] }, { "turbulence": { "strength": 25, "scale": 0.05 } }, { "attractor": { "target": [80, 20], "strength": 1500 } }, { "drag": 0.3 }],
         "collide": [{ "bounds": "canvas", "bounce": 0.4, "friction": 0.1 }, { "bounds": { "circle": { "center": [40, 40], "radius": 10 } }, "kill": true }]
@@ -144,8 +144,8 @@ fn particles_match_their_golden_pixels() {
     let systems = json!({ "dots": {
         "capacity": 8,
         "emitters": [
-            { "shape": { "point": [40, 40] }, "burst": { "count": 1 } },
-            { "shape": { "point": [120, 40] }, "burst": { "count": 2 } }
+            { "shape": { "point": [40, 40] }, "bursts": [{ "count": 1 }] },
+            { "shape": { "point": [120, 40] }, "bursts": [{ "count": 2 }] }
         ],
         "init": { "life": [10, 10], "speed": [0, 0], "size": [24, 24], "color": ["#ff0000", "#ff0000"] },
         "render": { "color_over_life": [[0, "#ffffff"], [1, "#00000000"]] }
@@ -174,7 +174,7 @@ fn particles_match_their_golden_pixels() {
         let pixels = half.frame(r, 0.0);
         assert!(at(&pixels, 40, 40)[0].abs_diff(188) <= 3, "{:?} gpu {gpu}", at(&pixels, 40, 40));
         let textured = json!({ "dots": { "capacity": 2, "render": { "texture": "pair" },
-            "emitters": [{ "shape": { "point": [80, 40] }, "burst": { "count": 1 } }],
+            "emitters": [{ "shape": { "point": [80, 40] }, "bursts": [{ "count": 1 }] }],
             "init": { "life": [10, 10], "speed": [0, 0], "size": [40, 40], "frame": [1, 1] } } });
         let pixels = Run::new(r, textured, layer("normal"), gpu).unwrap().frame(r, 0.0);
         assert_eq!((at(&pixels, 80, 40), at(&pixels, 80, 10)), ([0, 0, 255], [0; 3]), "gpu {gpu}");

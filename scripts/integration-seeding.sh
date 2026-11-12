@@ -4,7 +4,7 @@ declare scene WORK
 craft=$scene/craft
 ctl scene particles "$craft" dust emitter 0 --burst 20 --every 2 --periodic 1,2:0.5,1 --delay 0.5 --follow true --audio-gate true --inherit 0.3 ||
   fail "the emitter was not set"
-ctl scene particles "$craft" dust emitter 0 --clear burst --audio-gate false || fail "the emitter values were not removed"
+ctl scene particles "$craft" dust emitter 0 --clear bursts --audio-gate false || fail "the emitter values were not removed"
 [ "$(ctl scene show "$craft" /scene/particles/dust/emitters/0/follow)" = '"cursor"' ] || fail "the emitter does not follow the pointer"
 if ctl scene particles "$craft" dust emitter 0 --delay -1 2>/dev/null; then fail "a negative delay was kept"; fi
 ctl scene particles "$craft" dust start --hsv 180,240 --saturation 0.5,1 --hue-steps 6 || fail "the particles took no hues"

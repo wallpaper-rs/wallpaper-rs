@@ -13,8 +13,10 @@ ColumnLayout {
     readonly property real length: e.duration ?? 0
     readonly property var on: e.periodic?.on ?? null
     readonly property var off: e.periodic?.off ?? null
-    readonly property real every: e.burst?.every ?? 0
-    readonly property real fitted: Math.max(10, Math.ceil((delay + (length || 0) + (on ? 2 * (on[1] + off[1]) : 0) + every * 2) * 1.2))
+    readonly property real reach: (e.bursts ?? []).reduce((far, b) => Math.max(far, (b.at ?? 0) + (b.every ?? 0) * 2), 0)
+    readonly property real fitted: Math.max(10, Math.ceil((delay + (length || 0) + (on ? 2 * (on[1] + off[1]) : 0) + reach) * 1.2))
+    readonly property var holder: holding
+    readonly property var burstMarks: marks
     property real held: 0
     readonly property real span: held > 0 ? held : fitted
 
@@ -31,11 +33,8 @@ ColumnLayout {
         return [low, Math.min(3600, Math.max(low, Math.round((v + width / 2) * 100) / 100))];
     }
 
-    function ticks(end) {
-        const out = [], last = Math.min(end, span), step = every > 0 ? Math.max(every, 2 * span / Math.max(1, strip.width)) : span + 1;
-        for (let s = delay; s <= last; s += step)
-            out.push(s);
-        return out;
+    function repaint() {
+        art.requestPaint();
     }
 
     onEChanged: art.requestPaint()
@@ -82,23 +81,21 @@ ColumnLayout {
                     ctx.fillRect(lane.place(lane.delay), 4, lane.place(end) - lane.place(lane.delay), h - 8);
                 }
                 ctx.globalAlpha = 1;
-                ctx.strokeStyle = Kirigami.Theme.positiveTextColor;
-                ctx.lineWidth = 2;
-                if (lane.e.burst && !lane.e.burst.on) {
-                    ctx.beginPath();
-                    for (const s of lane.ticks(end)) {
-                        ctx.moveTo(lane.place(s), 0);
-                        ctx.lineTo(lane.place(s), h);
-                    }
-                    ctx.stroke();
-                }
+                marks.paint(ctx, h, end);
             }
+        }
+
+        SceneSwarmBurstMarks {
+            id: marks
+
+            anchors.fill: parent
+            lane: lane
         }
 
         SceneRepeater {
             id: knobs
 
-            rows: [["delay", lane.delay, App.tr("Start after %1 s", lane.delay)], ["duration", lane.length > 0 ? lane.delay + lane.length : -1, App.tr("Stop after %1 s", lane.length)], ["on", lane.on ? lane.delay + (lane.on[0] + lane.on[1]) / 2 : -1, App.tr("Bursts of emission last %1 to %2 s; the top row shows the shortest, the bottom row the longest", lane.on?.[0] ?? 0, lane.on?.[1] ?? 0)], ["off", lane.on ? lane.delay + (lane.on[0] + lane.on[1]) / 2 + (lane.off[0] + lane.off[1]) / 2 : -1, App.tr("Pauses last %1 to %2 s", lane.off?.[0] ?? 0, lane.off?.[1] ?? 0)], ["every", lane.every > 0 && !lane.e.burst?.on ? lane.delay + lane.every : -1, App.tr("A burst every %1 s", lane.every)]]
+            rows: [["delay", lane.delay, App.tr("Start after %1 s", lane.delay)], ["duration", lane.length > 0 ? lane.delay + lane.length : -1, App.tr("Stop after %1 s", lane.length)], ["on", lane.on ? lane.delay + (lane.on[0] + lane.on[1]) / 2 : -1, App.tr("Bursts of emission last %1 to %2 s; the top row shows the shortest, the bottom row the longest", lane.on?.[0] ?? 0, lane.on?.[1] ?? 0)], ["off", lane.on ? lane.delay + (lane.on[0] + lane.on[1]) / 2 + (lane.off[0] + lane.off[1]) / 2 : -1, App.tr("Pauses last %1 to %2 s", lane.off?.[0] ?? 0, lane.off?.[1] ?? 0)]]
 
             delegate: Rectangle {
                 id: knob
@@ -109,7 +106,7 @@ ColumnLayout {
 
                 visible: modelData[1] >= 0
                 x: (moved >= 0 ? moved : lane.place(modelData[1])) - width / 2
-                y: modelData[0] === "every" ? 0 : strip.height - height
+                y: strip.height - height
                 width: Kirigami.Units.gridUnit * 0.7
                 height: width
                 radius: modelData[0] === "delay" || modelData[0] === "duration" ? 0 : width / 2
@@ -141,19 +138,12 @@ ColumnLayout {
                                 "delay": Math.min(86400, at),
                                 "duration": Math.min(86400, Math.max(0.01, at - lane.delay)),
                                 "on": ["on", lane.ranged(lane.on ?? [0, 0], Math.max(0.01, at - lane.delay))],
-                                "off": ["off", lane.ranged(lane.off ?? [0, 0], Math.max(0.01, at - start))],
-                                "every": Math.min(86400, Math.max(0.02, at - lane.delay))
+                                "off": ["off", lane.ranged(lane.off ?? [0, 0], Math.max(0.01, at - start))]
                             })[key];
                         if (key === "on" || key === "off")
                             lane.emission.put({
                                     "periodic": Object.assign({}, lane.e.periodic, {
                                             [value[0]]: value[1]
-                                        })
-                                }, true);
-                        else if (key === "every")
-                            lane.emission.put({
-                                    "burst": Object.assign({}, lane.e.burst, {
-                                            "every": value
                                         })
                                 }, true);
                         else
