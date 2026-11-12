@@ -173,7 +173,7 @@ fn released_layer_fields_keep_their_slider_and_switch() {
         let widget = |key: &str| found.iter().find(|f| f.key == key).map(|f| f.widget.clone());
         assert_eq!(
             (widget("parallax"), widget("solid")),
-            (Some("number".into()), Some("bool".into())),
+            (Some("vec2".into()), Some("bool".into())),
             "{name}"
         );
     }
