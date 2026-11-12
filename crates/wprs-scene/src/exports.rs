@@ -148,7 +148,7 @@ pub use crate::stage::{IMAGES, VIDEOS};
 pub use crate::strikes::{STOPPED, end_trials, forgive_strikes, keep_strikes, strike, struck, tried, trying};
 pub use crate::tier::{Gpu, Tier};
 pub use crate::timeline::{
-    Event, Handles, Key, Loop, MOST_PARTS, Side, Timeline, local, sample, sample_json,
+    Event, Handles, Key, Loop, MOST_PARTS, Side, Timeline, local, sample, sample_json, sample_json_as,
 };
 pub use crate::typeset::{Backing, Glyphs, Layout, MAX_FALLBACK, Outline, Shadow, TextLayer, Valign, Wrap};
 pub use crate::uses::{Uses, needs, source, tells_time, variants};

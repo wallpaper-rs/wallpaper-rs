@@ -916,7 +916,7 @@ Easings are `linear`, `step`, `hold`, `in_`, `out_` or `in_out_` followed by `si
 `cubic`, `quart`, `quint`, `expo`, `circ`, `back`, `elastic` or `bounce`, or a cubic Bézier
 `[x1, y1, x2, y2]`. Colors interpolate in the OKLab space, lightness, chroma and hue apart, the hue
 along the shorter way round, so that red to green passes through orange and not through a dark
-olive, and a grey takes the hue of the other end.
+olive, and a grey takes the hue of the other end; a color field mixes this way however its keys are written, as `"#rrggbb"`, `"#rrggbbaa"`, `[r, g, b]` or `[r, g, b, a]`, and so does a list of three or four numbers in an effect parameter.
 
 `timelines` (at most 64) have `id`, `duration`, `loop` (`once`, `repeat`, `pingpong`), `speed`
 (−100 to 100; below zero the timeline runs backwards from its start without `delay`, so a loop

@@ -6,7 +6,7 @@ mod json;
 mod keys;
 mod side;
 
-pub use json::sample_json;
+pub use json::{sample_json, sample_json_as};
 pub use keys::{Key, local, sample};
 pub use side::{MOST_PARTS, Side};
 

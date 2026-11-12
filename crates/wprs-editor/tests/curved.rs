@@ -94,3 +94,25 @@ fn handles_per_part_bend_the_same_in_the_editor_and_the_render() {
     let red = sample(&shown, 1.0).0;
     assert!(red[0] > red[1] + 0.2 && red[2] > red[1], "each channel follows its own handle: {red:?}");
 }
+
+#[test]
+fn lists_of_three_follow_the_kind_of_their_field() {
+    let keys = json!([[0, [1, 0, 0]], [2, [0, 0, 1]]]);
+    let list = keys.as_array().unwrap();
+    let param: Vec<Key<wprs_scene::Param>> = serde_json::from_value(keys.clone()).unwrap();
+    let wprs_scene::Param::Color(mixed) = sample(&param, 1.0) else { panic!("no color") };
+    let triple: Vec<Key<Vec3>> = serde_json::from_value(keys.clone()).unwrap();
+    for (kind, want) in [
+        (Some("Param"), mixed.0),
+        (Some("Color"), mixed.0),
+        (Some("Vec3"), {
+            let [x, y, z] = sample(&triple, 1.0).0;
+            [x, y, z, 1.0]
+        }),
+        (None, [0.5, 0.0, 0.5, 1.0]),
+    ] {
+        let got = wprs_scene::sample_json_as(list, 1.0, kind).unwrap();
+        let close = (0..3).all(|i| near(got[i].as_f64().unwrap(), f64::from(want[i])));
+        assert!(close, "{kind:?}: {got} {want:?}");
+    }
+}

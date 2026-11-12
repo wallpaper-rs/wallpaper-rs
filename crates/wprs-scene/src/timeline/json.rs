@@ -46,3 +46,13 @@ pub fn sample_json(keys: &[Json], t: f64) -> Option<Json> {
         _ => written(sampled::<Param>(keys, t)?),
     }
 }
+
+pub fn sample_json_as(keys: &[Json], t: f64, kind: Option<&str>) -> Option<Json> {
+    let widths: Vec<Option<usize>> = keys.iter().map(|k| numbers(&k[1])).collect();
+    let width = widths.first().copied().flatten().filter(|n| widths.iter().all(|w| *w == Some(*n)));
+    let colored = matches!((kind, width), (Some("Color" | "Param"), Some(3 | 4)));
+    match (colored, width) {
+        (true, Some(n)) => written(sampled::<Color>(keys, t as f32)?.0[..n].to_vec()),
+        _ => sample_json(keys, t),
+    }
+}

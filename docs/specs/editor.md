@@ -155,14 +155,17 @@ that follows another source. Keyframe times are seconds on the named timeline, o
 clock without one. In the timeline of the app a keyframe is dragged along its track, to the
 hundredth of a second, and dropped with `keyframe` and `from`.
 
-El editor muestrea las claves con el mismo código que el motor (`wprs_scene::sample_json`): lee
+El editor muestrea las claves con el mismo código que el motor (`wprs_scene::sample_json_as`): lee
 la lista como la lee la escena (números, pares, ternas, colores, interruptores, textos y emisores),
 llama al mismo muestreo con su suavizado y sus asas Bézier y escribe el resultado como JSON, con
 los colores en hexadecimal y mezclados en OKLab como en la pantalla. Así las asas, las vistas
 previas, las luces, los relojes y las estimaciones que el editor calcula a un segundo dado coinciden
 con lo que dibuja el motor; solo una lista que la escena no puede leer se mezcla aparte, parte por
-parte. Una lista de tres números se interpola como una terna (no como color): un color escrito como
-`[r, g, b]` se prefiere en hexadecimal o con cuatro partes.
+parte. El tipo lo decide el esquema del campo animado (`wprs_scene::sample_json_as` con el nombre del
+tipo de sus claves): en un campo de color, o en un parámetro de efecto, una lista de tres o cuatro
+números se mezcla como color en OKLab igual que en hexadecimal, y el valor muestreado (una clave
+nueva, lo que muestra el inspector, la curva del editor de curvas) conserva la forma de lista; en un
+campo de tres números, como un ángulo 3D, se interpola parte por parte.
 
 Las ediciones de claves (`keyframe`, `key` y `edit_keys`) se comprueban contra la escena antes de
 aplicarse, también en `actions::plan`, y cuando algo no se puede leer el mensaje nombra el campo y la

@@ -40,6 +40,7 @@ pub mod history;
 pub mod ids;
 pub mod inspect;
 pub mod keys;
+pub mod kinded;
 pub mod lamps;
 pub mod layers;
 pub mod levels;

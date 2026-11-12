@@ -1,6 +1,7 @@
 use super::hands;
 use super::parts::{names, parts};
-use crate::keys::{sample, time_of};
+use crate::keys::time_of;
+use crate::kinded::sample_in;
 use serde_json::{Value, json};
 
 fn handle(keys: &[Value], i: usize, name: &str) -> Value {
@@ -62,7 +63,7 @@ pub fn curves(doc: &Value, q: &Value) -> Value {
         .collect();
     let at = |i: usize| from + (to - from) * i as f64 / (samples - 1) as f64;
     let sampled: Vec<(f64, Option<Vec<f64>>)> =
-        (0..samples).map(|i| (at(i), sample(&keys, at(i)).as_ref().and_then(parts))).collect();
+        (0..samples).map(|i| (at(i), sample_in(doc, &list, &keys, at(i)).as_ref().and_then(parts))).collect();
     let tracks: Vec<Value> = named
         .iter()
         .enumerate()

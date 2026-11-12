@@ -1,4 +1,3 @@
-use crate::keys::value_at;
 use crate::layers::{assets_of, walk};
 use crate::meta::{ORDER, adjust, hidden};
 use crate::schema::{MANIFEST, PROPERTY, at, choose, deref, root_of};
@@ -98,7 +97,7 @@ pub fn fields_from(dir: Option<&Path>, doc: &Value, pointer: &str, time: f64, ow
     let mut out = fields_in(dir, doc, pointer, own);
     for f in &mut out {
         f.shown = match f.source.as_str() {
-            "keys" => value_at(&f.value, time),
+            "keys" => crate::kinded::shown(doc, &f.pointer, &f.value, time),
             "" if f.set => f.value.clone(),
             "" => f.default.clone(),
             _ => Value::Null,

@@ -116,7 +116,9 @@ pub fn keyframe(doc: &Value, e: &KeyframeEdit) -> Result<Vec<Op>> {
                 });
             }
             let kept = at.map(|i| keys[i][1].clone());
-            let value = value.or(kept).or_else(|| sample(&keys, time)).unwrap_or(Value::Null);
+            let list = format!("{pointer}/keys");
+            let value = value.or(kept).or_else(|| crate::kinded::sample_in(doc, &list, &keys, time));
+            let value = value.unwrap_or(Value::Null);
             let third = third.or_else(|| at.and_then(|i| keys[i].get(2).cloned()));
             let third = end(third.as_ref(), e.ease.as_ref(), [e.in_handle, e.out_handle], &value)?;
             let new = key(time, value, third);
