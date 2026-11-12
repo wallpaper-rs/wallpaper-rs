@@ -44,7 +44,7 @@ pub(super) struct Kit {
     pub(super) stage: Option<(u64, wgpu::ShaderModule)>,
     pub(super) shader: Option<String>,
     pub(super) refused: Option<(String, String)>,
-    pub(super) lit: Option<wgpu::BindGroup>,
+    pub(super) lit: Option<[wgpu::TextureView; 2]>,
     pub(super) bend: Option<f32>,
 }
 

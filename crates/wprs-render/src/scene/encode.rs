@@ -122,10 +122,8 @@ impl Renderer {
                             break;
                         }
                         let (shader, slot, mode, tex) = match op {
-                            Op::Particles { system, slot, mode, bend, .. } => {
-                                src.swarms
-                                    .iter()
-                                    .for_each(|s| s.draw(&mut pass, *system, *slot, (*mode, *bend)));
+                            Op::Particles { system, slot, mode, bend, cast, .. } => {
+                                src.particles(self, pool, &mut pass, (*system, *slot), (*mode, *bend), cast);
                                 (stats.draws, k) = (stats.draws + 1, k + 1);
                                 continue;
                             }

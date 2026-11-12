@@ -26,7 +26,8 @@ impl Painter<'_, '_, '_> {
         let Some(back) = self.acquire((w, h)) else { return self.release(shift) };
         self.ops.push(Op::Clear(shift, [0.0; 4]));
         let (system, mode) = (flock, Mode::Normal);
-        self.ops.push(Op::Particles { target: shift, system, slot, mode, timed: 0, bend: true });
+        let cast = [Src::White; 4];
+        self.ops.push(Op::Particles { target: shift, system, slot, mode, timed: 0, bend: true, cast });
         self.ops.push(Op::Copy { from: target.src, to: back, origin: [0, 0], size: (w, h), at: [0, 0] });
         let full = [0.0, 0.0, 1.0, 1.0];
         let mut item = Item { quad: full, uv: full, color: [1.0; 4], ..Item::default() };

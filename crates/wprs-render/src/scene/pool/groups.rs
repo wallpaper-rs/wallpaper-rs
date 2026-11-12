@@ -3,6 +3,17 @@ use super::Pool;
 use wgpu::BindGroup;
 
 impl Pool {
+    pub(crate) fn cached(&mut self, key: super::Key, make: impl FnOnce(&Pool) -> BindGroup) -> BindGroup {
+        if let Some((group, used)) = self.groups.get_mut(&key) {
+            *used = self.frame;
+            return group.clone();
+        }
+        let group = make(self);
+        self.created += 1;
+        self.groups.insert(key, (group.clone(), self.frame));
+        group
+    }
+
     pub(crate) fn own(
         &mut self,
         device: &wgpu::Device,

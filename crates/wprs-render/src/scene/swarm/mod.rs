@@ -14,7 +14,7 @@ mod paint;
 mod seen;
 mod setup;
 mod show;
-pub(crate) use lamp::Lamp;
+pub(crate) use lamp::{Lamp, Lamps};
 pub(crate) use setup::sprites;
 mod sort;
 mod sprite;
@@ -83,6 +83,7 @@ pub(crate) struct Swarms {
     pub(crate) steps: u32,
     pub(crate) micros: u32,
     pub(crate) created: u32,
+    serial: u64,
     gpu: bool,
     profile: bool,
     kits: Vec<Kit>,

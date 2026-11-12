@@ -68,4 +68,23 @@ impl Sources<'_> {
         let pipes = r.scene.get().expect("created with the view");
         pool.group(&r.device, if fx { &pipes.fx } else { &pipes.textures }, fx, &refs[..tex.len()])
     }
+
+    pub(crate) fn particles(
+        &self,
+        r: &Renderer,
+        pool: &mut Pool,
+        pass: &mut wgpu::RenderPass<'_>,
+        (system, slot): (usize, u32),
+        how: (super::pipes::Mode, bool),
+        cast: &[Src; 4],
+    ) {
+        let Some(swarms) = self.swarms else { return };
+        let views: [(u64, wgpu::TextureView); 4] = std::array::from_fn(|k| {
+            let (id, view, _) = self.get(pool, cast[k]);
+            (id, view)
+        });
+        let cast = std::array::from_fn(|k| (views[k].0, &views[k].1));
+        let mut lamps = super::swarm::Lamps { device: &r.device, pool, cast };
+        swarms.draw(pass, system, slot, how, &mut lamps);
+    }
 }

@@ -37,6 +37,7 @@ impl Swarms {
         flock: usize,
         slot: u32,
         (mode, bend): (Mode, bool),
+        lamps: &mut super::Lamps<'_>,
     ) {
         let flight = self.flights.get(flock).and_then(Option::as_ref);
         let pipes = (self.pipelines.get(&mode), self.ribbons.get(&mode));
@@ -47,7 +48,8 @@ impl Swarms {
         };
         let first = (u64::from(slot) / LOOK) as usize;
         for (p, store) in flight.stores.iter().enumerate() {
-            let Some(kit) = self.kitted.get(first + p).and_then(|k| self.kits.get(*k)) else { continue };
+            let Some(&n) = self.kitted.get(first + p) else { continue };
+            let Some(kit) = self.kits.get(n) else { continue };
             if bend != kit.bend.is_some() {
                 continue;
             }
@@ -55,9 +57,10 @@ impl Swarms {
             pass.set_bind_group(0, group, &[slot + (p as u64 * LOOK) as u32]);
             pass.set_bind_group(1, &kit.tex, &[]);
             let (alloc, k) = (u64::from(herd.bake.allocs[p]), u64::from(herd.bake.trails[p]));
-            if let Some((bent, group)) = self.bend.as_ref().zip(kit.lit.as_ref()).filter(|_| bend) {
+            if let Some(bent) = self.bend.as_ref().filter(|_| bend) {
+                let Some(group) = self.lamp(n, lamps) else { continue };
                 pass.set_pipeline(bent);
-                pass.set_bind_group(2, group, &[]);
+                pass.set_bind_group(2, &group, &[]);
                 pass.set_vertex_buffer(0, store.particles.slice(..));
                 pass.draw(0..4, 0..herd.bake.allocs[p]);
                 continue;
@@ -102,7 +105,11 @@ impl Swarms {
                 .and_then(|(key, _)| self.stages.get(&(mode, *key)))
                 .zip(self.framed.as_ref());
             let lit = self.looks.get(first + p).is_some_and(|l| l.light[0] > 0.5);
-            let lamp = kit.lit.as_ref().zip(self.lits.get(&mode)).filter(|_| lit);
+            let lamp = self
+                .lits
+                .get(&mode)
+                .filter(|_| lit && kit.lit.is_some())
+                .and_then(|l| Some((self.lamp(n, lamps)?, l)));
             match (own, lamp) {
                 (Some((stage, framed)), _) => {
                     pass.set_pipeline(stage);
@@ -110,7 +117,7 @@ impl Swarms {
                 }
                 (None, Some((group, lamped))) => {
                     pass.set_pipeline(lamped);
-                    pass.set_bind_group(2, group, &[]);
+                    pass.set_bind_group(2, &group, &[]);
                 }
                 (None, None) => {
                     match self.seen.get(first + p).and_then(Option::as_ref).zip(self.seens.get(&mode)) {

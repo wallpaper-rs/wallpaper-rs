@@ -9,28 +9,7 @@
 @group(2) @binding(8) var gobo_d: texture_2d<f32>;
 
 fn gobo(b: Bulb, l: vec3<f32>) -> vec3<f32> {
-    let slot = u32(b.air.z + 0.5);
-    if slot == 0u || b.color.w < 0.5 || b.color.w > 1.5 {
-        return vec3<f32>(1.0);
-    }
-    let a = b.dir.xyz;
-    let level = length(a.xy) > 1e-4;
-    let side = select(vec3<f32>(1.0, 0.0, 0.0), normalize(vec3<f32>(a.y, -a.x, 0.0)), level);
-    let up = cross(side, a);
-    let w = -l;
-    let wide = sqrt(max(1.0 - b.dir.w * b.dir.w, 1e-6)) / max(b.dir.w, 1e-3);
-    let crop = lights.crops[(slot - 1u) / 2u];
-    let fit = select(crop.xy, crop.zw, (slot - 1u) % 2u == 1u);
-    let uv = clamp(0.5 + 0.5 * vec2<f32>(dot(w, side), dot(w, up)) / (max(dot(w, a), 1e-3) * wide), vec2<f32>(0.0), vec2<f32>(1.0)) * fit;
-    var c = textureSampleLevel(gobo_a, samp, uv, 0.0);
-    if slot == 2u {
-        c = textureSampleLevel(gobo_b, samp, uv, 0.0);
-    } else if slot == 3u {
-        c = textureSampleLevel(gobo_c, samp, uv, 0.0);
-    } else if slot == 4u {
-        c = textureSampleLevel(gobo_d, samp, uv, 0.0);
-    }
-    return c.rgb;
+    return cast_from(cast_at(b, l), gobo_a, gobo_b, gobo_c, gobo_d);
 }
 
 fn facing(at: vec2<f32>) -> vec3<f32> {

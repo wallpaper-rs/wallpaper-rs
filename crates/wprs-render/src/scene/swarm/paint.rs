@@ -90,7 +90,10 @@ impl Painter<'_, '_, '_> {
             swarms.looks.push(look);
             swarms.kitted.push(k);
         }
-        self.ops.push(Op::Particles { target: target.src, system: flock, slot, mode, timed, bend: false });
+        let lit = self.lit_swarms() && self.pool.glow.pictures() > 0;
+        let cast = if lit { self.gobos() } else { [crate::scene::Src::White; 4] };
+        let (to, system, bend) = (target.src, flock, false);
+        self.ops.push(Op::Particles { target: to, system, slot, mode, timed, bend, cast });
         if bent {
             self.bend(target, flock, slot);
         }

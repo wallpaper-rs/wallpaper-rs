@@ -98,3 +98,22 @@ fn refracting_particles_bend_what_is_behind_them_above_the_low_levels() {
     };
     assert!(close(&cpu, &gpu), "the CPU and GPU paths bend differently");
 }
+
+#[test]
+fn lit_particles_take_the_picture_a_spot_projects() {
+    let spot = |texture: Value| {
+        json!({ "id": "spot", "type": "light", "light": "spot", "cone": [80, 90], "radius": 400, "z": 40,
+            "intensity": 2, "transform": { "position": [80, 45], "tilt": [89, 0] }, "texture": texture })
+    };
+    for gpu in [false, true] {
+        let Some(cast) = shot(json!({ "lit": true }), vec![spot(json!("mask"))], gpu, Quality::Q3) else {
+            continue;
+        };
+        let Some(plain) = shot(json!({ "lit": true }), vec![spot(Value::Null)], gpu, Quality::Q3) else {
+            continue;
+        };
+        let (left, right) = (at(&cast, 70, 45), at(&cast, 90, 45));
+        assert!(right[0] > left[0] + 40, "gpu {gpu}: {left:?} {right:?}");
+        assert!(at(&plain, 70, 45)[0] > left[0] + 40, "gpu {gpu}: {:?}", at(&plain, 70, 45));
+    }
+}

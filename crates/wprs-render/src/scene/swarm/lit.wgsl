@@ -1,6 +1,10 @@
 @group(2) @binding(0) var<uniform> lights: Lights;
 @group(2) @binding(1) var normal_map: texture_2d<f32>;
 @group(2) @binding(2) var bend_map: texture_2d<f32>;
+@group(2) @binding(3) var cast_a: texture_2d<f32>;
+@group(2) @binding(4) var cast_b: texture_2d<f32>;
+@group(2) @binding(5) var cast_c: texture_2d<f32>;
+@group(2) @binding(6) var cast_d: texture_2d<f32>;
 
 fn turned(t: vec2<f32>, turn: vec4<f32>) -> vec2<f32> {
     return t.x * turn.xy - t.y * vec2<f32>(-turn.y, turn.x);
@@ -27,7 +31,8 @@ fn fs_lit_particle(in: Corner) -> @location(0) vec4<f32> {
             continue;
         }
         let facing = vec3<f32>(n.xy, select(n.z, -n.z, r.z < 0.0));
-        light += b.color.rgb * max(dot(facing, r.xyz), 0.0) * r.w;
+        let tone = b.color.rgb * cast_from(cast_at(b, r.xyz), cast_a, cast_b, cast_c, cast_d);
+        light += tone * max(dot(facing, r.xyz), 0.0) * r.w;
     }
     let rgb = albedo * light + albedo * look.place.w;
     return vec4<f32>(mix(albedo, rgb, look.place.z) * c.a, c.a);

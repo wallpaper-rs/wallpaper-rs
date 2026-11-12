@@ -70,6 +70,10 @@ pub(super) fn layouts(r: &Renderer) -> [BindGroupLayout; 7] {
             entry(0, S::FRAGMENT, plain(size_of::<crate::scene::lamps::Lights>() as u64)),
             entry(1, S::FRAGMENT, texture),
             entry(2, S::FRAGMENT, texture),
+            entry(3, S::FRAGMENT, texture),
+            entry(4, S::FRAGMENT, texture),
+            entry(5, S::FRAGMENT, texture),
+            entry(6, S::FRAGMENT, texture),
         ]),
     ]
 }

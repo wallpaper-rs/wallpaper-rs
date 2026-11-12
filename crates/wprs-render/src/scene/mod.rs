@@ -101,7 +101,7 @@ pub(crate) enum Op {
     Draw { target: Src, entry: &'static str, mode: Mode, slot: u32, tex: [Src; 3] },
     Lit { target: Src, entry: &'static str, mode: Mode, slot: u32, tex: [Src; 3], maps: [Src; 8] },
     Effect(Fill),
-    Particles { target: Src, system: usize, slot: u32, mode: Mode, timed: u64, bend: bool },
+    Particles { target: Src, system: usize, slot: u32, mode: Mode, timed: u64, bend: bool, cast: [Src; 4] },
     Read { from: Src, map: usize, size: (u32, u32) },
     Strip { from: Src },
 }

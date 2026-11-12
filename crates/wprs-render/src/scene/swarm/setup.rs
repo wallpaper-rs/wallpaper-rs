@@ -50,7 +50,7 @@ impl Swarms {
         (scene, props): (&Scene, &Values),
         assets: &SceneAssets,
         images: &HashMap<String, Image>,
-        (white, lights): (&wgpu::TextureView, &wgpu::Buffer),
+        (white, _): (&wgpu::TextureView, &wgpu::Buffer),
         (format, srgb): (wgpu::TextureFormat, bool),
     ) -> Option<Swarms> {
         let drawn: Vec<&Blend> = scene
@@ -70,7 +70,7 @@ impl Swarms {
         let pixels = |id: &str| masks.get(id).map(|i| (i.width(), i.height(), i.as_raw().as_slice()));
         let sprites = sprites(scene, props);
         let layers = scene.layers().any(|l| l.lighting.is_some() && matches!(l.kind, Kind::Particles { .. }));
-        let lamp = super::Lamp { layout: &layouts[6], lights, images, white, layers };
+        let lamp = super::Lamp { images, white, layers };
         let kits = renders(scene).into_iter().zip(&sprites).map(|((system, layer, render), sprite)| {
             let frames = sprite.as_ref().and_then(|t| cells.get(t)).map_or(&[][..], |c| &c.cells[..]);
             let grid = |t: &str| scene.assets.get(t).and_then(|a| a.atlas).map_or([1, 1], |[a, b]| [b, a]);
@@ -98,6 +98,7 @@ impl Swarms {
             steps: 0,
             micros: 0,
             created: 0,
+            serial: super::lamp::serial(),
             gpu,
             profile: false,
             kits: kits.collect(),
