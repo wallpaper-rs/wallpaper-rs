@@ -1828,7 +1828,7 @@ number: properties sort by it and then by id, and the members of a group follow 
 order; a group cannot be in another group. An option of a combo with an empty label shows its value.
 On the phone a `color` opens a mixer with red, green and blue sliders (and opacity with `alpha`)
 and a box for the hex code; a `multiline` text is a box of several lines saved with its own button,
-and `max_len` stops the typing at that length and shows how many characters are left.
+and `max_len` stops the typing at that length and counts the characters typed against it.
 `icon` is one of `appointment-soon`, `audio-volume-high`, `audio-volume-muted`, `audio-x-generic`,
 `camera-photo`, `dialog-information`, `document-open`, `edit-find`, `emblem-favorite`, `folder`,
 `go-home`, `image-x-generic`, `input-keyboard`, `input-mouse`, `media-playback-start`,
