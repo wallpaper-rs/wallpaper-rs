@@ -5325,6 +5325,14 @@ msgid "Copy the layer to the templates that scripts spawn"
 msgstr "Copia la capa a las plantillas que crean los scripts"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
+msgid "Particle systems"
+msgstr "Sistemas de partículas"
+
+#: apps/wprs-app/qml/SceneLayerTools.qml
+msgid "Create, copy, rename and remove the particle systems of the scene"
+msgstr "Crear, copiar, renombrar y quitar los sistemas de partículas de la escena"
+
+#: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Group the layers"
 msgstr "Agrupar"
 
@@ -7230,6 +7238,10 @@ msgid "Fixed rate"
 msgstr "Ritmo fijo"
 
 #: apps/wprs-app/qml/SceneSwarmEmission.qml
+msgid "Most particles started in one step"
+msgstr "Máximo de partículas que nacen en un paso"
+
+#: apps/wprs-app/qml/SceneSwarmEmission.qml
 msgid "Bursts of"
 msgstr "Ráfagas de"
 
@@ -7610,6 +7622,14 @@ msgstr "Según el movimiento"
 msgid "At a fixed angle"
 msgstr "Con un ángulo fijo"
 
+#: apps/wprs-app/qml/SceneSwarmNamed.qml
+msgid "These lines of the scripts still name %1: %2"
+msgstr "Estas líneas de los scripts todavía nombran %1: %2"
+
+#: apps/wprs-app/qml/SceneSwarmNamed.qml
+msgid "Rewrite the exact names"
+msgstr "Reescribir los nombres exactos"
+
 #: apps/wprs-app/qml/SceneSwarmPalette.qml
 msgid "Remove the color"
 msgstr "Quitar el color"
@@ -7945,16 +7965,24 @@ msgid "Drag to change how far births move"
 msgstr "Arrastra para cambiar cuánto se mueven los nacimientos"
 
 #: apps/wprs-app/qml/SceneSwarmSystems.qml
-msgid "These scripts name %1 and are not rewritten: %2"
-msgstr "Estos scripts nombran %1 y no se reescriben: %2"
-
-#: apps/wprs-app/qml/SceneSwarmSystems.qml
 msgid "Particle systems of the scene"
 msgstr "Sistemas de partículas de la escena"
 
 #: apps/wprs-app/qml/SceneSwarmSystems.qml
+msgid "The scene has no particle systems yet."
+msgstr "La escena todavía no tiene sistemas de partículas."
+
+#: apps/wprs-app/qml/SceneSwarmSystems.qml
 msgid "Edit this system"
 msgstr "Editar este sistema"
+
+#: apps/wprs-app/qml/SceneSwarmSystems.qml
+msgid "Copy this system"
+msgstr "Copiar este sistema"
+
+#: apps/wprs-app/qml/SceneSwarmSystems.qml
+msgid "Add a system that this one starts"
+msgstr "Añadir un sistema que este inicia"
 
 #: apps/wprs-app/qml/SceneSwarmSystems.qml
 msgid "Remove the system"

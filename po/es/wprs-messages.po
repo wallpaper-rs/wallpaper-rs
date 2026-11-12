@@ -124,6 +124,7 @@ msgstr "no se puede leer %1: %2"
 
 #: crates/wprs-core/src/edit/file.rs crates/wprs-editor/src/offer.rs
 #: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/swarms/named.rs
 msgid "cannot write %1: %2"
 msgstr "no se puede escribir %1: %2"
 
@@ -249,7 +250,8 @@ msgstr ""
 #: crates/wprs-editor/src/actions.rs crates/wprs-editor/src/bring.rs
 #: crates/wprs-editor/src/ids/rename.rs crates/wprs-editor/src/props.rs
 #: crates/wprs-editor/src/references.rs crates/wprs-editor/src/rig.rs
-#: crates/wprs-editor/src/swarms/emits.rs crates/wprs-editor/src/swarms/sow.rs
+#: crates/wprs-editor/src/swarms/emits.rs crates/wprs-editor/src/swarms/named.rs
+#: crates/wprs-editor/src/swarms/sow.rs
 msgid "the id %1 is in use"
 msgstr "el id %1 ya está en uso"
 

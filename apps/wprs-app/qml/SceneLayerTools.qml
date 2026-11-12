@@ -105,6 +105,15 @@ Flow {
             })
     }
 
+    QQC2.ToolButton {
+        icon.name: "weather-snow"
+        text: App.tr("Particle systems")
+        display: QQC2.AbstractButton.IconOnly
+        QQC2.ToolTip.text: App.tr("Create, copy, rename and remove the particle systems of the scene")
+        QQC2.ToolTip.visible: hovered
+        onClicked: tools.owner.page.editor.select("/scene/particles")
+    }
+
     SceneTemplates {
         page: tools.owner.page
     }

@@ -43,7 +43,8 @@ ColumnLayout {
 
     SceneSwarmSystems {
         Layout.fillWidth: true
-        tools: tools
+        page: tools.page
+        system: tools.system
     }
 
     Kirigami.Heading {

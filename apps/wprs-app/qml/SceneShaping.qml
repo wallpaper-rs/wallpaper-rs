@@ -26,6 +26,12 @@ ColumnLayout {
         node: shaping.node
     }
 
+    SceneSwarmSystems {
+        Layout.fillWidth: true
+        visible: shaping.pointer === "/scene/particles"
+        page: shaping.page
+    }
+
     SceneEffectMask {
         Layout.fillWidth: true
         page: shaping.page

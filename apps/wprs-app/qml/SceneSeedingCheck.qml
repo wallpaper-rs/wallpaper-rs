@@ -91,15 +91,46 @@ QtObject {
                 }
             });
         const systems = make("SceneSwarmSystems.qml", {
-                "tools": tools
+                "page": page,
+                "system": "flakes"
             });
         systems.rename("lonely", "alone");
         if (read("/scene/particles/alone") === null || read("/scene/particles/lonely") !== null)
             fail("the systems panel did not rename a system");
-        if (page.view.history.done.length !== steps + 9)
+        systems.create({
+                "system": "twin",
+                "from": "alone"
+            }, true);
+        if (read("/scene/particles/twin") === null || page.editor.selected !== "/scene/particles/twin")
+            fail("the systems panel did not copy a system and open the copy");
+        systems.create({
+                "system": "kid",
+                "parent": "alone"
+            }, false);
+        if (read("/scene/particles/alone/children/0/system") !== "kid")
+            fail("the systems panel did not add a system that another one starts");
+        const named = make("SceneSwarmNamed.qml", {
+                "page": page,
+                "renamed": {
+                    "from": "old",
+                    "to": "alone",
+                    "uses": [{
+                            "path": "scripts/a.js",
+                            "line": 3
+                        }]
+                }
+            });
+        if (named.where[0] !== "scripts/a.js:3" || !named.visible)
+            fail("the rename warning does not name the line of the script");
+        let closed = false;
+        named.done.connect(() => closed = true);
+        named.actions[0].trigger();
+        if (page.editor.error !== "" || !closed)
+            fail("the rename warning did not rewrite the names and close");
+        if (page.view.history.done.length !== steps + 11)
             fail("a tool of the particles did not take exactly one undo step");
-        for (let k = 0; k < 9; k++)
+        for (let k = 0; k < 11; k++)
             page.run("undo");
-        [tools, life, tint, bar, fade, windows, systems].forEach(o => o.destroy());
+        [tools, life, tint, bar, fade, windows, systems, named].forEach(o => o.destroy());
     }
 }

@@ -7,41 +7,72 @@ import io.github.wallpaper_rs.app
 ColumnLayout {
     id: systems
 
-    required property var tools
+    required property var page
+    property string system: ""
     readonly property var ids: {
-        tools.info;
-        return Object.keys(JSON.parse(tools.page.editor.value("/scene/particles") || "null") ?? {});
+        page.view;
+        return Object.keys(JSON.parse(page.editor.value("/scene/particles") || "null") ?? {});
+    }
+    property var renamed: null
+
+    function fresh(base) {
+        let n = 1;
+        while (ids.includes(base + "_" + n))
+            n++;
+        return base + "_" + n;
     }
 
-    property string named: ""
+    function uses(name) {
+        return JSON.parse(page.editor.rig("", JSON.stringify({
+                    "script_uses": {
+                        "name": name
+                    }
+                })) || "[]");
+    }
+
+    function open(name) {
+        page.editor.select(SceneSwarmKnobs.pointer(name, ""));
+    }
 
     function rename(from, to) {
         if (to === from || to === "")
             return;
-        const scripts = JSON.parse(tools.page.editor.scripts(from) || "[]");
-        tools.page.run("particles", {
+        const found = uses(from);
+        page.run("particles", {
                 "rename": {
                     "system": from,
                     "to": to
                 }
             });
-        if (tools.page.editor.error !== "")
+        if (page.editor.error !== "")
             return;
-        named = scripts.length ? App.tr("These scripts name %1 and are not rewritten: %2", from, scripts.join(", ")) : "";
-        if (from === tools.system)
-            tools.page.editor.select(SceneSwarmKnobs.pointer(to, ""));
+        renamed = found.length ? {
+                "from": from,
+                "to": to,
+                "uses": found
+            } : null;
+        if (from === system)
+            open(to);
     }
 
-    function fresh() {
-        let n = 1;
-        while (ids.includes("system_" + n))
-            n++;
-        return "system_" + n;
+    function create(args, select) {
+        page.run("particles", {
+                "create": args
+            });
+        if (select && page.editor.error === "")
+            open(args.system);
     }
 
     Kirigami.Heading {
         level: 4
         text: App.tr("Particle systems of the scene")
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        wrapMode: Text.Wrap
+        visible: systems.ids.length === 0
+        text: App.tr("The scene has no particle systems yet.")
     }
 
     SceneRepeater {
@@ -53,13 +84,12 @@ ColumnLayout {
             required property int index
             readonly property var modelData: listed.rows[index]
 
-
             Layout.fillWidth: true
 
             QQC2.TextField {
                 Layout.fillWidth: true
                 text: modelData
-                font.bold: modelData === systems.tools.system
+                font.bold: modelData === systems.system
                 validator: RegularExpressionValidator {
                     regularExpression: /[a-z0-9_]{1,32}/
                 }
@@ -70,15 +100,35 @@ ColumnLayout {
                 icon.name: "document-edit"
                 text: App.tr("Edit this system")
                 display: QQC2.AbstractButton.IconOnly
-                enabled: modelData !== systems.tools.system
-                onClicked: systems.tools.page.editor.select(SceneSwarmKnobs.pointer(modelData, ""))
+                enabled: modelData !== systems.system
+                onClicked: systems.open(modelData)
+            }
+
+            QQC2.ToolButton {
+                icon.name: "edit-copy"
+                text: App.tr("Copy this system")
+                display: QQC2.AbstractButton.IconOnly
+                onClicked: systems.create({
+                        "system": systems.fresh(modelData),
+                        "from": modelData
+                    }, true)
+            }
+
+            QQC2.ToolButton {
+                icon.name: "list-add"
+                text: App.tr("Add a system that this one starts")
+                display: QQC2.AbstractButton.IconOnly
+                onClicked: systems.create({
+                        "system": systems.fresh("child"),
+                        "parent": modelData
+                    }, true)
             }
 
             QQC2.ToolButton {
                 icon.name: "edit-delete"
                 text: App.tr("Remove the system")
                 display: QQC2.AbstractButton.IconOnly
-                onClicked: systems.tools.page.run("particles", {
+                onClicked: systems.page.run("particles", {
                         "delete": {
                             "system": modelData
                         }
@@ -87,25 +137,18 @@ ColumnLayout {
         }
     }
 
-    Kirigami.InlineMessage {
+    SceneSwarmNamed {
         Layout.fillWidth: true
-        visible: systems.named !== ""
-        type: Kirigami.MessageType.Warning
-        text: systems.named
-        showCloseButton: true
-        onVisibleChanged: {
-            if (!visible)
-                systems.named = "";
-        }
+        page: systems.page
+        renamed: systems.renamed
+        onDone: systems.renamed = null
     }
 
     QQC2.Button {
         icon.name: "list-add"
         text: App.tr("Add a system without a layer")
-        onClicked: systems.tools.page.run("particles", {
-                "create": {
-                    "system": systems.fresh()
-                }
-            })
+        onClicked: systems.create({
+                "system": systems.fresh("system")
+            }, true)
     }
 }
