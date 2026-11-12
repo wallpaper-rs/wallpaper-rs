@@ -5936,6 +5936,12 @@ msgstr ""
 "dispositivos de la cuenta"
 
 #: apps/wprs-ctl/src/server.rs
+msgid "List the items other devices synced that exist only on those devices"
+msgstr ""
+"Lista los elementos que otros equipos sincronizaron y que existen solo en "
+"esos equipos"
+
+#: apps/wprs-ctl/src/server.rs
 msgid "Sync now"
 msgstr "Sincronizar ahora"
 

@@ -708,6 +708,14 @@ msgstr "Preajuste:"
 msgid "None"
 msgstr "Ninguno"
 
+#: apps/wprs-app/qml/AwayNote.qml apps/wprs-app/qml/OutputRow.qml
+msgid ""
+"%1 exists only on another device. Publishing it to the server or to a "
+"repository makes it available here."
+msgstr ""
+"%1 existe solo en otro equipo. Publicarlo en el servidor o en un repositorio "
+"lo hace disponible aquí."
+
 #: apps/wprs-app/qml/Browse.qml
 msgid "Showing %1 of %2 packages; refine the search to see others."
 msgstr "Se muestran %1 de %2 paquetes; afina la búsqueda para ver otros."
@@ -2068,6 +2076,10 @@ msgstr "Actualizar todo"
 #: apps/wprs-app/qml/Installed.qml
 msgid "revoked: %1"
 msgstr "revocado: %1"
+
+#: apps/wprs-app/qml/Installed.qml
+msgid "Not updated automatically: it now asks for %1"
+msgstr "No se actualiza sola: ahora pide %1"
 
 #: apps/wprs-app/qml/Installed.qml
 msgid "Update to %1"
@@ -10854,6 +10866,10 @@ msgstr "Mostrar el contenido para adultos sin difuminar"
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "Refresh repositories every day"
 msgstr "Actualizar los repositorios cada día"
+
+#: apps/wprs-app/qml/facade/Labels.qml
+msgid "Update repositories automatically"
+msgstr "Actualizar los repositorios automáticamente"
 
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "Show vote counts from your server in the catalog"
