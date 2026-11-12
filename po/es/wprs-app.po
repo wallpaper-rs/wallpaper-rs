@@ -2736,7 +2736,7 @@ msgstr "Intenso"
 msgid "Subdued"
 msgstr "Apagado"
 
-#: apps/wprs-app/qml/OutputFilter.qml
+#: apps/wprs-app/qml/OutputFilter.qml apps/wprs-app/qml/SceneMaterialDebug.qml
 msgid "Matte"
 msgstr "Mate"
 
@@ -7350,6 +7350,23 @@ msgstr "%1 se compila"
 msgid "%1, line %2, column %3: %4"
 msgstr "%1, línea %2, columna %3: %4"
 
+#: apps/wprs-app/qml/SceneMaterialDebug.qml
+msgid "Debug view"
+msgstr "Vista de depuración"
+
+#: apps/wprs-app/qml/SceneMaterialDebug.qml
+msgid "Sway mask of the vertex colors"
+msgstr "Máscara de balanceo de los colores de vértice"
+
+#: apps/wprs-app/qml/SceneMaterialDebug.qml
+msgid "Where shadows fall"
+msgstr "Dónde caen las sombras"
+
+#: apps/wprs-app/qml/SceneMaterialDebug.qml
+msgid ""
+"Only this material shows it, only in this preview; the wallpaper never does"
+msgstr "Solo este material la muestra, y solo en esta vista previa; el fondo de pantalla nunca la muestra"
+
 #: apps/wprs-app/qml/SceneMaterialShade.qml
 msgid "Shells"
 msgstr "Capas"
@@ -7376,14 +7393,6 @@ msgstr "Color clave"
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Tolerance"
 msgstr "Tolerancia"
-
-#: apps/wprs-app/qml/SceneMaterialShade.qml
-msgid "Show the sway mask of the vertex colors"
-msgstr "Mostrar la máscara de balanceo de los colores de vértice"
-
-#: apps/wprs-app/qml/SceneMaterialShade.qml
-msgid "Show the matte"
-msgstr "Mostrar el mate"
 
 #: apps/wprs-app/qml/SceneMaterialShade.qml
 msgid ""

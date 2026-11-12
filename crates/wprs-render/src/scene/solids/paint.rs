@@ -5,7 +5,14 @@ use super::uniform::scene3;
 use super::{GpuModel, SCENE_SLOT, Staged};
 use crate::{RenderError, Renderer};
 use std::collections::HashMap;
-use wprs_scene::{Frame, MAX_PLANES, Stage3d};
+use std::hash::{DefaultHasher, Hash, Hasher};
+use wprs_scene::{Drafted, Frame, MAX_PLANES, Stage3d};
+
+fn drafted(d: &Drafted) -> u64 {
+    let mut h = DefaultHasher::new();
+    d.only.hash(&mut h);
+    (u64::from(d.debug3d) << 56) ^ if d.debug3d > 0 { h.finish() >> 8 } else { 0 }
+}
 
 impl Renderer {
     pub(crate) fn figures(
@@ -42,7 +49,7 @@ impl Renderer {
             if !fits {
                 view.solids.insert(stage.layer.to_string(), self.staged(size, stage.slices, hdr, room));
             }
-            let key = stage.key ^ (u64::from(view.debug3d) << 56);
+            let key = stage.key ^ drafted(&view.debug3d);
             let ready = |s: &Staged| s.key == key && s.renders > 0 && (s.seen.is_some() || !stage.seen);
             if view.solids.get(stage.layer).is_some_and(ready) {
                 continue;
@@ -66,7 +73,7 @@ impl Renderer {
             let map = env.and_then(|e| view.envs.get(e)).map(|(_, m)| m);
             let staged = view.solids.get_mut(stage.layer).expect("made above");
             let env_view = map.unwrap_or(&self.solids().white);
-            let flags = (map.is_some(), view.debug3d);
+            let flags = (map.is_some(), &view.debug3d);
             let done = self.scoped(|| {
                 self.paint_stage(staged, (&view.models, env_view, &view.uniform), frame, stage, flags)
             })?;
@@ -87,9 +94,9 @@ impl Renderer {
         (models, env, uniform): (&HashMap<u64, GpuModel>, &crate::texture::GpuImage, &wgpu::Buffer),
         frame: &Frame<'_>,
         stage: &Stage3d<'_>,
-        flags: (bool, u8),
+        (env_map, debug): (bool, &Drafted),
     ) -> wgpu::CommandBuffer {
-        plan(staged, frame, stage);
+        plan(staged, frame, stage, debug);
         let shadows = self.shadow_plan(frame, stage);
         let mut bytes = std::mem::take(&mut staged.bytes);
         bytes.clear();
@@ -97,7 +104,7 @@ impl Renderer {
         for (e, eye) in eyes.iter().enumerate() {
             let Some(eye) = eye else { continue };
             for k in 0..stage.slices {
-                let mut s = scene3(frame, (stage, eye), k, flags, self.light_cap());
+                let mut s = scene3(frame, (stage, eye), k, env_map, self.light_cap());
                 shadows
                     .iter()
                     .flatten()
@@ -107,7 +114,7 @@ impl Renderer {
             }
         }
         staged.bytes = bytes;
-        self.shadow_slots(staged, (frame, stage), &shadows, flags);
+        self.shadow_slots(staged, (frame, stage), &shadows, env_map);
         self.queue.write_buffer(&staged.scene, 0, &staged.bytes);
         for (buffer, data) in [
             (&staged.objects, &staged.objects_bytes),

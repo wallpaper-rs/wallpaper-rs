@@ -5,12 +5,15 @@ fn shown(c: vec3<f32>, a: f32) -> vec4<f32> {
 fn lit(s: Surface, in: Out, front: bool) -> vec4<f32> {
     let albedo = s.albedo;
     let n = normalize(s.normal);
-    let debug = scene.fade.y;
+    let debug = finish.more.w;
     if debug > 0.5 && debug < 1.5 {
         return vec4<f32>(vec3<f32>(clamp(in.paint, 0.0, 1.0)), 1.0) * finish.more.x;
     }
     if debug > 1.5 && debug < 2.5 {
         return vec4<f32>(vec3<f32>(albedo.a), 1.0) * finish.more.x;
+    }
+    if finish.flags.y < 0.5 && debug > 2.5 {
+        return vec4<f32>(1.0) * finish.more.x;
     }
     if finish.flags.y < 0.5 {
         return shown(albedo.rgb + s.emissive, albedo.a);

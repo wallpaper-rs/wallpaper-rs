@@ -6,7 +6,8 @@ Item {
 
     required property var stage
     property var info: null
-    readonly property bool shown: (JSON.parse(stage.page.editor.value("/scene/ext/editor/debug3d") || "null") ?? "") === "shadows"
+    readonly property var debug: JSON.parse(stage.page.editor.value("/scene/ext/editor/debug3d") || "null")
+    readonly property bool shown: (debug?.show ?? debug) === "shadows"
 
     function load() {
         info = shown ? JSON.parse(stage.page.editor.rig("", JSON.stringify({

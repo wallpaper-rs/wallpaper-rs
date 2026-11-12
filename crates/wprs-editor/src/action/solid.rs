@@ -39,6 +39,10 @@ pub enum Edit3d {
     Debug {
         #[serde(default)]
         show: Option<String>,
+        #[serde(default)]
+        layer: Option<String>,
+        #[serde(default)]
+        material: Option<String>,
     },
 }
 

@@ -127,6 +127,12 @@ GridLayout {
         row: row
     }
 
+    SceneMaterialDebug {
+        Layout.columnSpan: 2
+        Layout.fillWidth: true
+        row: row
+    }
+
     Flow {
         Layout.columnSpan: 2
         Layout.fillWidth: true

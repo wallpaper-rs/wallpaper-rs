@@ -35,7 +35,7 @@ impl Renderer {
         view.marks.clear();
         view.pool.glow.baked = None;
         (view.hdr, view.tone, view.split) = tones(scene);
-        view.debug3d = scene.draft.debug3d;
+        view.debug3d = scene.draft.clone();
         let same = |id: &String| match (view.sources.get(id), assets.images.get(id)) {
             (Some(was), Some(now)) => Arc::ptr_eq(was, now),
             (was, now) => was.is_none() && now.is_none(),
@@ -188,7 +188,7 @@ impl Renderer {
                 hdr: scene.canvas.hdr,
                 tone: if scene.canvas.hdr { scene.canvas.tonemap.map_or(0, |t| t as u8) } else { 0 },
                 split: scene.draft.split,
-                debug3d: scene.draft.debug3d,
+                debug3d: scene.draft.clone(),
                 timed: false,
             }
         })

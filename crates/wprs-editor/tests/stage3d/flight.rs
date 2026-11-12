@@ -78,7 +78,17 @@ fn shadows_are_switched_sized_biased_and_shown_per_tier() {
     edit(&mut p, json!({ "debug": { "show": "shadows" } })).unwrap();
     assert_eq!(p.doc.pointer("/scene/ext/editor/debug3d"), Some(&json!("shadows")));
     assert!(edit(&mut p, json!({ "debug": { "show": "bones" } })).is_err());
+    edit(&mut p, json!({ "debug": { "show": "matte", "layer": "doll", "material": "trim" } })).unwrap();
+    let one = json!({ "show": "matte", "layer": "doll", "material": "trim" });
+    assert_eq!(p.doc.pointer("/scene/ext/editor/debug3d"), Some(&one));
+    for bad in [
+        json!({ "show": "mask", "layer": "doll" }),
+        json!({ "show": "mask", "layer": "doll", "material": "none" }),
+    ] {
+        assert!(edit(&mut p, json!({ "debug": bad.clone() })).is_err(), "{bad}");
+    }
     edit(&mut p, json!({ "debug": {} })).unwrap();
+    assert!(p.doc.pointer("/scene/ext/editor/debug3d").is_none());
     edit(&mut p, json!({ "shadows": { "layer": "sun", "on": false } })).unwrap();
     assert!(layer(&p, "sun").get("shadows").is_none());
 }

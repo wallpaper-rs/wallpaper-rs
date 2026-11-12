@@ -71,8 +71,16 @@ fn editor_marks_reach_the_renderer_only_through_a_preview() {
         scene(json!({ "ext": { "editor": { "debug3d": "shadows", "tonemap_split": 2 } } }), json!([]));
     assert_eq!(s.draft, Drafted::default(), "a loaded package keeps the editor marks out of the picture");
     s.drafted();
-    assert_eq!(s.draft, Drafted { debug3d: 3, split: 1.0 });
+    assert_eq!(s.draft, Drafted { debug3d: 3, only: None, split: 1.0 });
     s.ext.clear();
     s.drafted();
     assert_eq!(s.draft, Drafted::default());
+    let one = json!({ "show": "matte", "layer": "m", "material": "skin" });
+    s.ext.insert("editor".into(), json!({ "debug3d": one }));
+    s.drafted();
+    assert_eq!(s.draft.only, Some(["m".into(), "skin".into()]));
+    assert_eq!(
+        (s.draft.debug_of("m", "skin"), s.draft.debug_of("m", "coat"), s.draft.debug_of("n", "skin")),
+        (2, 0, 0)
+    );
 }

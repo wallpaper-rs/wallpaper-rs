@@ -7,6 +7,7 @@ use std::path::Path;
 mod bones;
 mod camera;
 mod cost;
+mod debug;
 mod edit;
 mod gizmo;
 mod info;
@@ -59,7 +60,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
         Edit3d::Path(p) => paths::edit(dir, doc, p),
         Edit3d::NewMaterial { name } => newmat::create(dir, doc, name),
         Edit3d::MaterialCode { name, text } => newmat::write(dir, doc, name, text),
-        Edit3d::Debug { show } => camera::debug(doc, show.as_deref()),
+        Edit3d::Debug { show, layer, material } => debug::debug(dir, doc, show.as_deref(), (layer, material)),
     }
 }
 

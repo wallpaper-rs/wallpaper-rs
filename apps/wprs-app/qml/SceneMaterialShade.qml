@@ -11,7 +11,6 @@ ColumnLayout {
     readonly property string shader: row.set.shader ?? "pbr"
     readonly property var params: row.set.params ?? {}
     readonly property var page: row.panel.page
-    readonly property string debug: JSON.parse(page.editor.value("/scene/ext/editor/debug3d") || "null") ?? ""
     readonly property int layers: params.layers ?? 12
 
     function param(key, value) {
@@ -20,14 +19,6 @@ ColumnLayout {
         row.panel.set(row.material.name, {
             "params": p
         });
-    }
-
-    function show(kind, on) {
-        page.run("scene3d", {
-            "debug": on ? {
-                "show": kind
-            } : {}
-        }, true);
     }
 
     visible: ["fur", "foliage", "chroma"].includes(shader) || (row.panel.info?.packages ?? []).includes(shader)
@@ -100,14 +91,6 @@ ColumnLayout {
         }, shade.params)
         rows: [["threshold", App.tr("Tolerance"), 0, 1, 0.01], ["softness", App.tr("Feather"), 0, 1, 0.01]]
         onEdited: (key, value) => shade.param(key, value)
-    }
-
-    QQC2.CheckBox {
-        visible: shade.shader === "foliage" || shade.shader === "chroma"
-        readonly property string kind: shade.shader === "foliage" ? "mask" : "matte"
-        text: shade.shader === "foliage" ? App.tr("Show the sway mask of the vertex colors") : App.tr("Show the matte")
-        checked: shade.debug === kind
-        onToggled: shade.show(kind, checked)
     }
 
     Kirigami.InlineMessage {

@@ -52,7 +52,7 @@ pub struct SceneView {
     pub(super) hdr: bool,
     pub(super) tone: u8,
     pub(super) split: f32,
-    pub(super) debug3d: u8,
+    pub(super) debug3d: wprs_scene::Drafted,
     pub(super) timed: bool,
 }
 

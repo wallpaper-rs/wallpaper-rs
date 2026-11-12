@@ -67,10 +67,10 @@ impl Renderer {
         staged: &mut Staged,
         (frame, stage): (&Frame, &Stage3d),
         plans: &[Option<Plan>; 2],
-        flags: (bool, u8),
+        env: bool,
     ) {
         let mut shades = Shadows::default();
-        let base: Scene3 = scene3(frame, (stage, &stage.eye), 0, flags, self.light_cap());
+        let base: Scene3 = scene3(frame, (stage, &stage.eye), 0, env, self.light_cap());
         for (s, p) in plans.iter().enumerate() {
             let Some(p) = p else { continue };
             shades.info[s] = [p.layers as f32, (s * 6) as f32, 1.0 / p.side as f32, p.bias];

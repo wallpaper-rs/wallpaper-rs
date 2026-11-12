@@ -115,7 +115,7 @@ fn edit(command: Flying) -> Result<(PathBuf, Action)> {
         Flying::Clocks { .. } => anyhow::bail!("clocks only prints"),
         Flying::Debug3d { dir, show } => {
             let show = (show != "none").then_some(show);
-            (dir, Action::Scene3d(Edit3d::Debug { show }))
+            (dir, Action::Scene3d(Edit3d::Debug { show, layer: None, material: None }))
         }
     })
 }

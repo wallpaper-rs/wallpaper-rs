@@ -2337,9 +2337,19 @@ msgstr "el mapeo de tonos necesita hdr"
 msgid "the split goes from 0 to 1"
 msgstr "la división va de 0 a 1"
 
-#: crates/wprs-editor/src/stage3d/camera.rs
+#: crates/wprs-editor/src/stage3d/debug.rs
 msgid "the 3D view shows mask, matte or shadows"
 msgstr "la vista 3D muestra mask, matte o shadows"
+
+#: crates/wprs-editor/src/stage3d/debug.rs
+msgid "a debug view of one material names its layer and material"
+msgstr "una vista de depuración de un material nombra su capa y su material"
+
+#: crates/wprs-editor/src/stage3d/debug.rs
+#: crates/wprs-editor/src/stage3d/material.rs
+#: crates/wprs-editor/src/stage3d/painted.rs
+msgid "the model has no material named %1"
+msgstr "el modelo no tiene ningún material llamado %1"
 
 #: crates/wprs-editor/src/stage3d/edit.rs
 msgid "%1 of a model goes from %2 to %3"
@@ -2374,11 +2384,6 @@ msgstr ""
 #: crates/wprs-editor/src/stage3d/material.rs
 msgid "a material color is #rrggbb or [r, g, b, a]"
 msgstr "un color de material es #rrggbb o [r, g, b, a]"
-
-#: crates/wprs-editor/src/stage3d/material.rs
-#: crates/wprs-editor/src/stage3d/painted.rs
-msgid "the model has no material named %1"
-msgstr "el modelo no tiene ningún material llamado %1"
 
 #: crates/wprs-editor/src/stage3d/material.rs
 msgid "%1 is not a material shader; use pbr, unlit or a package effect"

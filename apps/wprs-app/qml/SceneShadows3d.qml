@@ -11,7 +11,8 @@ ColumnLayout {
     required property var lights
     property var info: null
     readonly property var sizes: [0, 256, 512, 1024, 2048, 4096]
-    readonly property bool shown: (JSON.parse(page.editor.value("/scene/ext/editor/debug3d") || "null") ?? "") === "shadows"
+    readonly property var debug: JSON.parse(page.editor.value("/scene/ext/editor/debug3d") || "null")
+    readonly property bool shown: (debug?.show ?? debug) === "shadows"
 
     function load() {
         info = JSON.parse(page.editor.rig("", JSON.stringify({
@@ -115,7 +116,7 @@ ColumnLayout {
 
     QQC2.CheckBox {
         text: App.tr("Show where shadows fall and the frusta of the maps")
-        checked: shadows.shown
+        checked: shadows.shown && !shadows.debug?.material
         onToggled: shadows.page.run("scene3d", {
             "debug": checked ? {
                 "show": "shadows"

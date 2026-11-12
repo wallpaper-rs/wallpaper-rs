@@ -47,7 +47,7 @@ pub(super) fn rooms(frame: &Frame, stage: &Stage3d) -> (usize, usize, usize) {
     (finishes, draws + 1, bones)
 }
 
-pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d) {
+pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d, debug: &wprs_scene::Drafted) {
     let (mut calls, mut objects, mut finishes) = (
         std::mem::take(&mut s.calls),
         std::mem::take(&mut s.objects_bytes),
@@ -85,7 +85,8 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d) {
             let look = looks.iter().find(|l| usize::from(l.material) == m);
             let opacity = if stage.layer == p.layer.id { 1.0 } else { p.opacity };
             let shape = (opacity, flipped, p.model.radius(), super::looks::grow(p));
-            let (uniform, key, shells) = super::looks::finish(f, look, shape, (s.hdr, skinned));
+            let (mut uniform, key, shells) = super::looks::finish(f, look, shape, (s.hdr, skinned));
+            uniform.more[3] = f32::from(debug.debug_of(&p.layer.id, &f.name));
             put(&mut finishes, u64::from(slot + m as u32) * FINISH_SLOT, &uniform);
             let cast = look.and_then(|l| l.cast).unwrap_or(true) && key.blend == 0;
             let faded = uniform.flags[3] > 0.5 && opacity < 1.0;
