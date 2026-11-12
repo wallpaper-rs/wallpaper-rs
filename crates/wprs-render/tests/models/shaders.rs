@@ -127,3 +127,13 @@ fn a_package_material_shader_shades_the_surface_with_its_params() {
     let c = rgb(&px, 32, 32);
     assert!(c[0] > 200 && c[1] < 10 && c[2] > 200, "{c:?}");
 }
+
+#[test]
+fn a_chroma_key_is_an_srgb_color_like_the_picked_one() {
+    let Some(r) = renderer() else { return };
+    let models = || BTreeMap::from([("card", plane(unlit("skin", [0.5, 0.5, 0.5, 1.0])))]);
+    let grey =
+        json!({ "shader": "chroma", "params": { "key": "#808080", "threshold": 0.05, "softness": 0.02 } });
+    let gone = render(r, scene(json!({}), shaded("card", grey), models()), Quality::Q3);
+    assert!(rgb(&gone, 32, 32).iter().all(|c| *c < 10), "{:?}", rgb(&gone, 32, 32));
+}

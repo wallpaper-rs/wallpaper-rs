@@ -50,7 +50,7 @@ pub(crate) fn albedo(dir: &Path, doc: &Value, h: &Hit) -> Option<[f32; 3]> {
         std::array::from_fn(|i| linear(f32::from(px[i]) / 255.0))
     });
     let tint = serde_json::from_value::<Color>(set["color"].clone()).map_or([1.0; 4], |c| c.0);
-    Some(std::array::from_fn(|i| f.color[i] * texel[i] * linear(tint[i])))
+    Some(std::array::from_fn(|i| linear(f.color[i]) * texel[i] * linear(tint[i])))
 }
 
 pub(crate) fn color_at(dir: &Path, doc: &Value, h: &Hit) -> Value {
