@@ -1,7 +1,9 @@
+use super::files::{Files, moved};
 use super::refs::swap;
 use super::rename::{WORDS, strings};
 use crate::layers::{children, find, taken, unique_among};
 use crate::ops::{Op, escape};
+use crate::shaping::refused;
 use anyhow::{Result, ensure};
 use serde_json::{Map, Value, json};
 use std::collections::BTreeMap;
@@ -54,37 +56,6 @@ fn ids(layer: &Value, out: &mut Vec<String>) {
     layer["layers"].as_array().into_iter().flatten().for_each(|l| ids(l, out));
 }
 
-fn placed(dir: &Path, from: &Path, path: &str, used: &mut Vec<String>) -> Result<String> {
-    wprs_format::check_path(path)?;
-    let bytes = std::fs::read(from.join(path))?;
-    let (stem, ext) = path.rsplit_once('.').map_or((path, ""), |(s, e)| (s, e));
-    for n in 1..10_000 {
-        let name = if n == 1 { path.to_owned() } else { format!("{stem}_{n}.{ext}") };
-        let target = dir.join(&name);
-        let same = std::fs::read(&target).ok().map(|old| old == bytes);
-        match same {
-            Some(true) if !used.contains(&name) => return Ok(name),
-            None if !used.contains(&name) => {
-                std::fs::create_dir_all(target.parent().unwrap_or(dir))?;
-                std::fs::write(&target, &bytes)?;
-                used.push(name.clone());
-                return Ok(name);
-            }
-            _ => {}
-        }
-    }
-    Ok(path.to_owned())
-}
-
-fn moved(dir: &Path, from: &Path, v: &mut Value, keys: &[&str], used: &mut Vec<String>) -> Result<()> {
-    for key in keys {
-        if let Some(path) = v[*key].as_str().map(String::from) {
-            v[*key] = json!(placed(dir, from, &path, used)?);
-        }
-    }
-    Ok(())
-}
-
 pub fn paste(
     dir: &Path,
     doc: &Value,
@@ -92,10 +63,26 @@ pub fn paste(
     into: Option<&str>,
     at: Option<usize>,
 ) -> Result<Vec<Op>> {
+    let mut files = Files::default();
+    let planned = plan(dir, doc, clip, into, at, &mut files).and_then(|ops| refused(dir, doc, ops));
+    if planned.is_err() {
+        files.undo();
+    }
+    planned
+}
+
+fn plan(
+    dir: &Path,
+    doc: &Value,
+    clip: &Value,
+    into: Option<&str>,
+    at: Option<usize>,
+    files: &mut Files,
+) -> Result<Vec<Op>> {
     let layers = clip["layers"].as_array().cloned().unwrap_or_default();
     ensure!(!layers.is_empty(), said("editor.paste_nothing", "there are no layers to paste", &[]));
     let from = PathBuf::from(clip["from"].as_str().unwrap_or_default());
-    let (mut taken_ids, mut names, mut files) = (Vec::new(), BTreeMap::new(), Vec::new());
+    let (mut taken_ids, mut names) = (Vec::new(), BTreeMap::new());
     let fresh = |id: &str, used: &mut Vec<String>| {
         let new = if !taken(doc, id) && !used.contains(&id.to_owned()) {
             id.to_owned()
@@ -123,7 +110,7 @@ pub fn paste(
             if !same {
                 let mut value = value.clone();
                 if section == "assets" {
-                    moved(dir, &from, &mut value, &["path"], &mut files)?;
+                    moved(dir, &from, &mut value, &["path"], files)?;
                 }
                 ops.push((section, new, value));
             }
@@ -132,7 +119,7 @@ pub fn paste(
     for (id, value) in clip["effects"].as_object().into_iter().flatten() {
         if doc["scene"]["effects"].get(id).is_none() {
             let mut value = value.clone();
-            moved(dir, &from, &mut value, &["descriptor", "wgsl"], &mut files)?;
+            moved(dir, &from, &mut value, &["descriptor", "wgsl"], files)?;
             ops.push(("effects", id.clone(), value));
         }
     }

@@ -1,4 +1,5 @@
 mod clip;
+mod files;
 mod gone;
 mod refs;
 mod rename;

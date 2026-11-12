@@ -32,3 +32,33 @@ fn layers_copied_from_one_scene_paste_into_another_with_their_files() {
     assert_eq!(bytes, std::fs::read(from.dir.join(&path)).unwrap());
     assert!(wprs_editor::check::check(&to.doc).is_empty(), "{:?}", wprs_editor::check::check(&to.doc));
 }
+
+#[test]
+fn a_refused_paste_leaves_no_copied_files_behind() {
+    let root = tempfile::tempdir().unwrap();
+    let mut from = scene(&root, "from");
+    let file = picture(&from.dir, "sky.png", 10);
+    act(&mut from, json!({"add_layer": {"kind": "image", "id": "sky", "file": file}})).unwrap();
+    let clip = wprs_editor::rigs::query(&from.dir, &from.doc, "", &json!({"copy": {"ids": ["sky"]}}));
+    let mut to = scene(&root, "to");
+    let before: Vec<_> = walk(&to.dir);
+    assert!(act(&mut to, json!({"paste": {"clip": clip, "into": "nowhere"}})).is_err());
+    assert_eq!(walk(&to.dir), before);
+    act(&mut to, json!({"paste": {"clip": clip}})).unwrap();
+    assert_ne!(walk(&to.dir), before);
+}
+
+fn walk(dir: &std::path::Path) -> Vec<std::path::PathBuf> {
+    let mut out = Vec::new();
+    let mut todo = vec![dir.to_path_buf()];
+    while let Some(d) = todo.pop() {
+        for e in std::fs::read_dir(&d).unwrap().flatten() {
+            out.push(e.path());
+            if e.path().is_dir() {
+                todo.push(e.path());
+            }
+        }
+    }
+    out.sort();
+    out
+}
