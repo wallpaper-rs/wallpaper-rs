@@ -54,7 +54,7 @@ impl SceneState {
 
     pub(in crate::compositor) fn calm(&mut self, asked: bool) -> bool {
         self.quiet = asked;
-        let calm = asked && !self.spec.moving;
+        let calm = (asked || self.spec.pack.calm) && !self.spec.moving;
         let parallax = self.runtime.set_reduced_motion(calm);
         if std::mem::replace(&mut self.hushed, calm) == calm {
             return parallax;

@@ -79,10 +79,11 @@ pub(crate) fn preview_document(
     quality: Option<String>,
     restart: bool,
     media: Option<std::path::PathBuf>,
+    [battery, calm]: [bool; 2],
 ) -> Result<Value> {
     let nonce = restart.then(|| std::time::UNIX_EPOCH.elapsed().map_or(1, |d| d.as_millis() as u64));
     let media = media.map(|f| simulated(&f)).transpose()?;
-    let look = json!({ "quality": quality, "restart": nonce, "media": media });
+    let look = json!({ "quality": quality, "restart": nonce, "media": media, "battery": battery, "calm": calm });
     if wprs_editor::pages::paged(doc) {
         return Ok(wprs_editor::pages::preview_document(doc, &look));
     }

@@ -36,6 +36,8 @@ pub struct ScenePack {
     pub inputs: Option<Uses>,
     pub key: String,
     pub cap: Option<wprs_scene::Quality>,
+    pub battery: bool,
+    pub calm: bool,
 }
 
 pub type Extra = (Vec<(String, Arc<Pixels>)>, Vec<(String, Reel)>);
@@ -68,6 +70,8 @@ impl ScenePack {
             inputs: None,
             key,
             cap: None,
+            battery: false,
+            calm: false,
         }
     }
 }

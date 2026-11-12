@@ -40,3 +40,32 @@ fn a_fixed_level_never_freezes_a_scene_too_heavy_for_the_device_and_automatic_st
     state.level(auto);
     assert!(!state.still && state.quality().quality == "q1", "the own level of the output was not kept");
 }
+
+fn light() -> SceneSpec {
+    let text = json!({ "schema": SCHEMA, "canvas": { "size": [960, 540] }, "layers": [] });
+    let pack = Arc::new(ScenePack::bare(
+        Scene::from_json(&text.to_string()).unwrap(),
+        Default::default(),
+        Vec::new(),
+    ));
+    let (values, extra, clips) = (pack.props.values(&[]), Vec::new(), Vec::new());
+    SceneSpec { values, pack, extra, clips, hold: None, moving: true, quality: None, span: None }
+}
+
+#[test]
+fn a_preview_on_battery_reaches_the_level_the_daemon_gives_a_scene_on_battery() {
+    let mains = Power::new(Tier::T3, false, 60);
+    let on = |battery: bool| {
+        let mut spec = light();
+        let pack = ScenePack { battery, ..Arc::into_inner(spec.pack).unwrap() };
+        spec.pack = Arc::new(pack);
+        let mut state = SceneState::new(spec, mains);
+        state.level(mains);
+        state.quality().quality
+    };
+    let real = Power::new(Tier::T3, true, 60);
+    let mut state = SceneState::new(light(), real);
+    state.level(real);
+    assert_eq!(on(true), state.quality().quality, "the preview and the real battery differ");
+    assert_eq!((on(false), on(true)), ("q3", "q2"));
+}

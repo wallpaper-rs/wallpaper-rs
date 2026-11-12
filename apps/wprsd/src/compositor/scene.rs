@@ -95,7 +95,7 @@ fn after(seconds: f64) -> Duration {
 
 impl SceneState {
     pub(super) fn new(spec: SceneSpec, power: Power) -> SceneState {
-        let power = Power { choice: spec.quality.unwrap_or(power.choice), ..power };
+        let power = level::owned(&spec, power);
         let mut runtime = Runtime::new(spec.pack.scene.clone(), spec.values.clone());
         spec.pack.inputs.into_iter().for_each(|allowed| runtime.declare(allowed));
         runtime.set_language(&spec.pack.locale);

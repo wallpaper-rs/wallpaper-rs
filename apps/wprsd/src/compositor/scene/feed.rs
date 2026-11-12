@@ -30,7 +30,8 @@ impl SceneState {
         if spec.values != self.spec.values {
             (self.listed.due, self.listed.unset) = (None, false);
         }
-        let (moved, leveled) = (spec.moving != self.spec.moving, spec.quality != self.spec.quality);
+        let moved = spec.moving != self.spec.moving || spec.pack.calm != self.spec.pack.calm;
+        let leveled = spec.quality != self.spec.quality || spec.pack.battery != self.spec.pack.battery;
         (self.spec, self.uses) = (spec, self.needs(self.quality));
         changed |= moved && self.calm(self.quiet);
         if changed {

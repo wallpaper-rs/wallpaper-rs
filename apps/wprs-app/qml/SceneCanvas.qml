@@ -72,6 +72,10 @@ ColumnLayout {
                 page: canvas.page
             }
 
+            ScenePreviewLevel {
+                page: canvas.page
+            }
+
             SceneOverwrite {
                 page: canvas.page
             }

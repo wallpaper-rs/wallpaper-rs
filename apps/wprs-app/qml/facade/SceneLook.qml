@@ -4,6 +4,12 @@ import QtQuick
 QtObject {
     property string quality: "q3"
     property int restart: 0
+    property bool battery: false
+    property bool calm: false
+    property bool rival: false
+    property string versus: "q1"
+    property bool versusGlow: false
+    readonly property string effective: battery && levels.indexOf(quality) > 2 ? "q2" : quality
     property var media: null
     readonly property var sample: ({
             "title": "Night Drive",
@@ -17,8 +23,14 @@ QtObject {
 
     function preview(page) {
         const look = JSON.parse(page.editor.look || "{}");
-        look.quality = quality;
+        look.quality = rival ? versus : quality;
         look.restart = restart;
+        look.battery = battery;
+        look.calm = calm;
+        if (rival && versusGlow)
+            look.bloom = false;
+        else
+            delete look.bloom;
         if (media)
             look.media = media;
         else

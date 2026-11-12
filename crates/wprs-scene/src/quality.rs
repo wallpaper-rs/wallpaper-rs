@@ -25,6 +25,10 @@ pub enum Class {
 }
 
 impl Quality {
+    pub fn on_battery(self) -> Quality {
+        self.min(Tier::T3.quality(true))
+    }
+
     pub fn lower(self) -> Quality {
         [Quality::Q0, Quality::Q0, Quality::Q1, Quality::Q2][self as usize]
     }

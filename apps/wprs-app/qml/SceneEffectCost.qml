@@ -44,7 +44,7 @@ ColumnLayout {
             readonly property var modelData: listed.rows[index]
 
             Layout.fillWidth: true
-            font.bold: modelData.quality === SceneLook.quality
+            font.bold: modelData.quality === SceneLook.effective
             text: modelData.units === null ? App.tr("%1: left out of the scene at this level", modelData.quality.toUpperCase()) : App.tr("%1: %2 units of work", modelData.quality.toUpperCase(), modelData.units.toFixed(2))
         }
     }

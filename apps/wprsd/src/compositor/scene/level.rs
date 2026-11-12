@@ -4,9 +4,17 @@ use crate::compositor::power::Power;
 use std::time::Instant;
 use wprs_scene::Quality;
 
+pub(super) fn owned(spec: &super::SceneSpec, power: Power) -> Power {
+    Power {
+        choice: spec.quality.unwrap_or(power.choice),
+        on_battery: power.on_battery || spec.pack.battery,
+        ..power
+    }
+}
+
 impl SceneState {
     pub(super) fn own(&self, power: Power) -> Power {
-        Power { choice: self.spec.quality.unwrap_or(power.choice), ..power }
+        owned(&self.spec, power)
     }
 
     pub(super) fn level(&mut self, power: Power) -> Quality {

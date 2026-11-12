@@ -112,6 +112,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
                 quality,
             )
         }
+        _ if crate::reach::asks(q) => crate::reach::query(dir, doc, q),
         _ if crate::onscreen::asks(q) => crate::onscreen::query(dir, doc, q),
         _ if crate::lamps::asks(q) => crate::lamps::query(dir, doc, id, q),
         _ if crate::stage3d::asks(q) => crate::stage3d::query(dir, doc, id, q),
@@ -156,10 +157,16 @@ pub fn staged(look: &Value) -> Option<Value> {
     let mut staged = json!({ "quality": quality, "restart": restart });
     media.into_iter().for_each(|m| staged["media"] = m.clone());
     fps.into_iter().for_each(|f| staged["fps"] = f.clone());
-    (quality.is_some() || restart.is_some() || media.is_some() || fps.is_some()).then_some(staged)
+    let flags = ["battery", "calm"].map(|k| look[k] == true);
+    ["battery", "calm"].iter().zip(flags).filter(|(_, on)| *on).for_each(|(k, _)| staged[*k] = json!(true));
+    (quality.is_some() || restart.is_some() || media.is_some() || fps.is_some() || flags.contains(&true))
+        .then_some(staged)
 }
 
 pub fn preview(scene: &mut Value, look: &Value) {
+    if look["bloom"] == false {
+        scene["canvas"].as_object_mut().into_iter().for_each(|c| drop(c.remove("bloom")));
+    }
     crate::lamps::preview(scene);
     crate::stage3d::preview(scene);
     if crate::seats::lens::whole(scene) {

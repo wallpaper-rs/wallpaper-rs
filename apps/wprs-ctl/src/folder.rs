@@ -59,6 +59,10 @@ pub enum Folder {
         quality: Option<String>,
         #[arg(long, help = "Start the particle systems and the scene again")]
         restart: bool,
+        #[arg(long, help = "Show it as the daemon does on battery: a lower level and the battery pace")]
+        battery: bool,
+        #[arg(long, help = "Show it as the daemon does with reduced motion")]
+        calm: bool,
         #[arg(long, value_name = "FILE", help = crate::media::MEDIA)]
         media: Option<PathBuf>,
         #[arg(
@@ -130,11 +134,19 @@ pub(crate) fn run(command: Folder) -> Result<()> {
         Folder::Preview { dir, span: span @ crate::spanning::Span { layout: Some(_), .. }, time, .. } => {
             crate::spanning::preview(&dir, &span, (time >= 0.0).then_some(time))?
         }
-        Folder::Preview { dir, output, time, stop, quality, restart, media, console, .. } => {
+        Folder::Preview {
+            dir, output, time, stop, quality, restart, battery, calm, media, console, ..
+        } => {
             let project = Project::open(&dir)?;
-            let document =
-                crate::media::preview_document(&project.dir, &project.doc, quality, restart, media)?
-                    .to_string();
+            let document = crate::media::preview_document(
+                &project.dir,
+                &project.doc,
+                quality,
+                restart,
+                media,
+                [battery, calm],
+            )?
+            .to_string();
             let (dir, document) = (fs::canonicalize(&dir)?, if stop { String::new() } else { document });
             let path = dir.to_str().context("the path is not UTF-8")?.to_owned();
             runtime()?.block_on(async {
