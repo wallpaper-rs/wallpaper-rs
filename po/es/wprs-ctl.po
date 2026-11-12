@@ -278,6 +278,13 @@ msgstr "Valor que se pinta, de 0 (borra) a 1"
 
 #: apps/wprs-ctl/src/author.rs
 msgid ""
+"Paint a flow map: the stroke writes the way it went, scaled by the value"
+msgstr ""
+"Pintar un mapa de flujo: el trazo escribe la dirección que llevó, escalada "
+"por el valor"
+
+#: apps/wprs-ctl/src/author.rs
+msgid ""
 "Set the text of a title, description, change notes, label, option or the "
 "text a media value shows while nothing plays in one language; an empty "
 "language sets the plain text"

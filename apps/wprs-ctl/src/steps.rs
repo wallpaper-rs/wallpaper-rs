@@ -129,7 +129,7 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
             let file = if template.is_some() { file } else { fs::canonicalize(&file).unwrap_or(file) };
             (dir, Action::ImportScript(ScriptFile { file, template }))
         }
-        Author::PaintMask { dir, pointer, points, channel, radius, hardness, value } => {
+        Author::PaintMask { dir, pointer, points, channel, radius, hardness, value, direction } => {
             let pair = |p: &str| {
                 p.split_once(',').and_then(|(x, y)| Some([x.trim().parse().ok()?, y.trim().parse().ok()?]))
             };
@@ -137,7 +137,18 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
                 points.split(';').filter(|p| !p.trim().is_empty()).map(pair).collect::<Option<Vec<_>>>();
             let points = points.unwrap_or_default();
             let channel = channel.and_then(|c| ["r", "g", "b", "a"].iter().position(|n| *n == c));
-            (dir, Action::PaintMask(MaskStroke { pointer, channel, radius, hardness, value, points }))
+            (
+                dir,
+                Action::PaintMask(MaskStroke {
+                    pointer,
+                    channel,
+                    radius,
+                    hardness,
+                    value,
+                    points,
+                    direction: false,
+                }),
+            )
         }
         Author::Translate { dir, pointer, language, text, add, .. } => {
             (dir, Action::Translate(wprs_editor::actions::TranslateEdit { pointer, language, text, add }))

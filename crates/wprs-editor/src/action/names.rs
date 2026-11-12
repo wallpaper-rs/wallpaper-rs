@@ -60,6 +60,8 @@ pub const ACTIONS: [&str; 74] = [
     "lighting",
     "normals",
     "paint_map",
+    "ramp",
+    "depth_map",
     "ambient",
     "scene3d",
     "animate",

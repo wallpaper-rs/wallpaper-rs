@@ -150,3 +150,48 @@ pub enum TemplateEdit {
         name: String,
     },
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct RampStop {
+    pub at: f32,
+    pub color: String,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum RampFormat {
+    #[default]
+    Png,
+    Cube,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct RampEdit {
+    pub stops: Vec<RampStop>,
+    #[serde(default)]
+    pub pointer: Option<String>,
+    #[serde(default)]
+    pub asset: Option<String>,
+    #[serde(default)]
+    pub format: RampFormat,
+    #[serde(default = "wide")]
+    pub width: u32,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct DepthMapEdit {
+    pub asset: String,
+    #[serde(default)]
+    pub id: Option<String>,
+    #[serde(default)]
+    pub pointer: Option<String>,
+    #[serde(default)]
+    pub input: Option<u32>,
+}
+
+fn wide() -> u32 {
+    256
+}

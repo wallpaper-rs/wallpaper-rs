@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 72] = [
+pub const ABOUT: [(&str, &str); 74] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),
@@ -70,6 +70,11 @@ pub const ABOUT: [(&str, &str); 72] = [
     ("lighting", "Set the lighting model of the scene"),
     ("normals", "Make a normal map for a layer"),
     ("paint_map", "Paint a roughness or emissive map"),
+    ("ramp", "Make a gradient picture or color table from color stops and use it in an effect parameter"),
+    (
+        "depth_map",
+        "Make a grey depth map of a picture with the depth model and use it in an effect parameter",
+    ),
     ("ambient", "Set the ambient light"),
     ("scene3d", "Edit a 3D layer: models, materials, camera, view, tones, shadows and camera paths"),
     ("animate", "Edit the animation of a mesh or model layer: clips, presets and morphs"),

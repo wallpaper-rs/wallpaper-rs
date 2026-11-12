@@ -11,7 +11,9 @@ pub use super::names::{
 };
 pub use super::pools::{PoolEdit, UsesEdit};
 pub use super::rigging::*;
-pub use super::shaping::{EffectsEdit, MaskHold, ScriptEdit, TemplateEdit};
+pub use super::shaping::{
+    DepthMapEdit, EffectsEdit, MaskHold, RampEdit, RampFormat, RampStop, ScriptEdit, TemplateEdit,
+};
 pub use super::solid::{
     CameraEdit, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit,
 };

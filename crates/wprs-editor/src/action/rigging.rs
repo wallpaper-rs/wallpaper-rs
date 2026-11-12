@@ -167,6 +167,8 @@ pub struct MaskStroke {
     #[serde(default = "whole")]
     pub value: f32,
     pub points: Vec<[f32; 2]>,
+    #[serde(default)]
+    pub direction: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]

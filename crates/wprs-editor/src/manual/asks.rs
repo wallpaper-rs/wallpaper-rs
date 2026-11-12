@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 42] = [
+pub const ASKS: [(&str, &str, &str); 44] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -41,6 +41,8 @@ pub const ASKS: [(&str, &str, &str); 42] = [
     ("outline", "Outline of the picture of a layer", "{}"),
     ("palette", "Colors of a picture asset", r#""ASSET""#),
     ("wind", "The wind as an arrow", "{}"),
+    ("ramp", "The color stops of a ramp made by the ramp action", r#""ASSET""#),
+    ("depth_model", "Whether the depth model and the library that runs it are installed", "{}"),
     ("rules", "Scheduling rules of the parameters of an effect", r#"{"effect": "NAME"}"#),
     ("effect_cost", "Cost of an effect", r#"{"effect": "NAME", "optional": false}"#),
     ("clocks", "Clock faces and their strips at a time", r#"{"time": 0, "strip": 0}"#),

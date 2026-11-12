@@ -42,6 +42,8 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
                 &Stroke { pointer: &m.pointer, channel, radius, hardness, value, points, direction },
             )
         }
+        Action::Ramp(r) => crate::ramps::make(dir, doc, r),
+        Action::DepthMap(d) => crate::depthmap::make(dir, doc, d),
         action => return crate::rigging::act(dir, doc, action),
     })
 }

@@ -179,6 +179,8 @@ pub enum Action {
     Lighting(LightingEdit),
     Normals(NormalsMake),
     PaintMap(MapStroke),
+    Ramp(RampEdit),
+    DepthMap(DepthMapEdit),
     Ambient(AmbientEdit),
     Scene3d(Edit3d),
     Animate(AnimEdit),

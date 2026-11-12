@@ -141,6 +141,12 @@ ColumnLayout {
             })[input.field.widget] ?? (input.field.widget.startsWith("package:") ? hosts.authoring : /^(refs|map):|^ref:reach$/.test(input.field.widget) ? editors.refs : input.field.widget.startsWith("ref:") ? choiceEditor : editors.raw)
     }
 
+    SceneTextureTools {
+        Layout.fillWidth: true
+        visible: !input.bound && kinds.length > 0
+        input: parent
+    }
+
     Component {
         id: choiceEditor
 

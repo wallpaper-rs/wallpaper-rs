@@ -50,6 +50,7 @@ pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth:
     }
     let labeled = p.kind == ParamKind::Enum && p.values.iter().all(|e| !e.label.is_empty());
     let names = if labeled { p.values.iter().map(|e: &Entry| local(&e.label)).collect() } else { Vec::new() };
+    let tools = crate::textools::of(value["effect"].as_str().unwrap_or_default(), &p.id, p.kind, p.tool);
     let drawn = value["effect"].as_str().filter(|e| PICTURED.contains(&(*e, p.id.as_str())));
     Field {
         pointer: format!("{base}/{}", escape(&p.id)),
@@ -67,7 +68,8 @@ pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth:
         title: local(&p.label),
         sample: match (p.kind, drawn) {
             (ParamKind::Mask, _) => json!({ "channels": p.channels.unwrap_or(1) }),
-            (ParamKind::Texture, _) if p.tool.is_some() => json!({ "channels": 1, "tool": p.tool }),
+            (ParamKind::Texture, _) if p.tool.is_some() => json!({ "channels": 1, "tool": p.tool, "tools": tools }),
+            (ParamKind::Texture | ParamKind::Lut, _) if !tools.is_empty() => json!({ "tools": tools }),
             (_, Some(effect)) => json!({ "effect": effect }),
             _ => Value::Null,
         },

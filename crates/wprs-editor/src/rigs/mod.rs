@@ -145,6 +145,8 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("outline").is_some() => outline(dir, doc, id),
         _ if q.get("palette").is_some() => crate::covers::palette(dir, doc, q["palette"].as_str()),
         _ if q.get("wind").is_some() => wind_arrow(doc),
+        _ if q.get("ramp").is_some() => crate::ramps::stops_of(doc, q["ramp"].as_str().unwrap_or(id)),
+        _ if q.get("depth_model").is_some() => crate::depthmap::state(&wprs_depth::Places::default()),
         _ if q.get("rules").is_some() => {
             crate::shaders::rules(dir, doc, q["rules"]["effect"].as_str().unwrap_or(id))
         }
