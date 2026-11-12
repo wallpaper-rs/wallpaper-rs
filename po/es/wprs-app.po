@@ -1517,6 +1517,10 @@ msgid "%1 layers, cut by the picture itself"
 msgstr "%1 capas, cortadas por la propia imagen"
 
 #: apps/wprs-app/qml/EditDepthCuts.qml
+msgid "%1 regions"
+msgstr "%1 regiones"
+
+#: apps/wprs-app/qml/EditDepthCuts.qml
 msgid "Show the layers on the picture"
 msgstr "Mostrar las capas sobre la imagen"
 
@@ -1534,9 +1538,11 @@ msgstr "Volver a automático"
 
 #: apps/wprs-app/qml/EditDepthCuts.qml
 msgid ""
-"Drag a handle to move a cut, double-click it to remove it, click the strip "
-"to add one."
+"Cuts group the regions of the picture into layers by their depth. Drag a "
+"handle to move a cut, double-click it to remove it, click the strip to add "
+"one."
 msgstr ""
+"Los cortes reparten las regiones de la imagen en capas según su profundidad. "
 "Arrastra un asa para mover un corte, haz doble clic para quitarlo y clic en "
 "la franja para añadir otro."
 

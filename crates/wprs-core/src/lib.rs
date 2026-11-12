@@ -25,7 +25,7 @@ pub mod settings;
 pub mod spread;
 pub mod stash;
 mod store;
-pub mod travel;
+pub use edit::travel;
 
 pub use config::{Config, ConfigError, OutputConfig, Resolved};
 pub use damage::{Ages, Region};

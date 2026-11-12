@@ -659,7 +659,7 @@ Changes one setting and saves the configuration. Keys and their current values a
 | `playback.muted` | `true`, `false`, for videos and scenes with sound | `true` |
 | `playback.max_fps` | `1` to `240`, or `display` (also `0`) for the refresh rate of each output, up to 60 on battery (see "Frame rate") | `display` |
 | `playback.software_parallax` | move depth parallax images even when the GPU is emulated on the CPU (such as llvmpipe), with 8 steps at 15 frames per second at most | `false` |
-| `parallax.fill` | how the layers of a depth parallax picture are filled behind near objects (see "Depth layers"): `lama` (the LaMa model, when it and ONNX Runtime are installed, else `simple`), `simple` (push-pull extension of the nearest background) or `off` (no layers: the single image warp, whose stretched edges may show); not synced, because each device has its own default | `lama` (`simple` on the phone) |
+| `parallax.fill` | how the layers of a depth parallax picture are filled behind near objects (see "Depth layers"): `lama` (the LaMa model, when it and ONNX Runtime are installed, else `simple`), `simple` (push-pull extension of the nearest background) or `off` (no layers: the picture stays still); not synced, because each device has its own default | `lama` (`simple` on the phone) |
 | `parallax.layers` | number of depth layers of a picture, `4` to `6` | `5` |
 | `playback.flash_guard` | measure the brightness of every scene frame and slow down, or stop, a scene that flashes more than three times a second (see "Cost and frame rate" in `scene.md`); it costs a small read back from the GPU per frame | `false` |
 | `playback.scene_sound` | let scenes play their sound layers (see "Scene sound"); `false` keeps every scene silent, whatever its permissions and volume, and leaves the sound of videos alone | `true` |
@@ -2411,9 +2411,12 @@ that cannot be used is ignored with a warning.
   `falloff` from `0` to `1` and `by` from `-1` to `1` added to the adjusted level at the middle
   of the stroke and fading to nothing at its edge; `fills` are marks of the same shape whose `by`
   is `1` (the band behind nearer layers is always filled there) or `-1` (never filled there);
-  `cuts` (1 to 5 growing levels, 0.005 apart at least) sets where the depth layers end, and none
-  leaves it to the clustering. Each list holds at most 256 entries and 3 000 points, and all three
-  are left out of the file while empty. See `editor.md`, "Picture depth tools".
+  `cuts` (1 to 5 growing levels, 0.005 apart at least) sets where the depth layers end, grouping
+  the regions of the picture by their mean depth, and none leaves it to the clustering; `joins`
+  (at most 64 `{a, b}` pairs of `[x, y]` fractions) make the regions under `a` and `b` one region
+  and `splits` (at most 64 strokes of the shape of `strokes`, whose `by` is not used) cut a region
+  along the stroke. Each list holds at most 256 entries and 3 000 points, and all of them are left
+  out of the file while empty. See `editor.md`, "Picture depth tools".
 - `parallax` moves the image in depth on the desktop while `enabled`: `source` is `auto` (a slow
   orbit), `pointer` (the pointer feed of `Inputs1`, back to the centre when the pointer leaves the
   outputs that show the image or rests for 3 s) or `accelerometer` (the IIO accelerometer of the
@@ -2421,9 +2424,11 @@ that cannot be used is ignored with a warning.
   while the parallax is shown, looked for again every 5 s while none answers, with its resting
   tilt slowly recentred); a new source starts from the offset the image has;
   `strength` (`0` to `0.03`) is the largest shift as a fraction of the image width, `focus` (`0`
-  far to `1` near) the depth that stays still, `steps` `1`, `8`, `16` or `32` the quality,
+  far to `1` near) the depth that stays still, `steps` `1`, `8`, `16` or `32` (kept for older
+  edits; the layers do not use it),
   `smoothing_ms` (`0` to `2000`) the time a critically damped spring takes to follow the source and
-  `overscan` (`1` to `1.1`) the zoom that hides the edges.
+  `overscan` (`1` to `1.1`) the least zoom; the zoom that hides the edges is computed for each
+  picture (see "Depth layers").
 - `fit` (`fill`, `fit`, `stretch`, `center` or `tile`) shows this picture with its own fit instead
   of the fit of the output, except on `span` outputs; `GetState().outputs[x].fit` stays the fit of
   the output and `shown_fit` reports the fit in use (`span` also on outputs that show a scene its
@@ -2444,8 +2449,8 @@ image is rendered only while its smoothed offset moves by a quarter of a pixel o
 at the frame rate of the output, under the same pause rules as videos (`pause.when_covered`,
 `pause.on_battery`, `pause.when_locked` and `SetPaused`), and stays still while the desktop asks
 for reduced motion (`reduced-motion` of the Settings portal). With software rendering (a GPU
-emulated on the CPU) the image stays still and flat unless `playback.software_parallax` is set,
-and then moves with 8 steps at most and 15 frames per second at most. On `span` outputs every
+emulated on the CPU) the image stays still unless `playback.software_parallax` is set, and then
+moves at 15 frames per second at most. On `span` outputs every
 screen moves by the same offset; `tile` images stay still. The model and ONNX Runtime are only
 downloaded by `wprs-ctl models download` or the app after showing their size, license and every
 host they may come from, from their pinned address (the manifest may list mirrors, which must
@@ -2459,47 +2464,78 @@ configuration that cannot be read counts as `false`, also when a setting change 
 `wprs-ctl models install` takes files fetched by other means.
 
 **Depth layers.** A picture whose `parallax` is on, with a depth map, `parallax.fill` other than `off` and an edit
-without enabled `ops`, moves as a stack of layers computed once,
-never per frame. The daemon starts a `layers` job (target: the picture path) when it shows such a
-picture and finds no set for its settings; until it ends, and when it fails (once per run), the
-picture moves with the single image warp. The job runs on its own thread at the lowest priority,
-with at most four threads for LaMa, and reloads the screens when it ends. It computes, at 1920
-pixels on the long side at most:
+without enabled `ops`, moves as a stack of layers computed once, never per frame; nothing else moves
+a picture. The daemon starts a `layers` job (target: the picture path) when it shows such a picture
+and finds no set for its settings; until it ends, when it fails, when the fill is `off`, when `ops`
+are enabled (colour edits are drawn by the GPU on the picture, not on the layers) and when the set
+gives no movement of at least one pixel, the picture stays still. A failed build leaves
+`<SHA-256>-<key>.layers.failed` with the error beside the set, and the daemon does not try that
+set again until the cache or the edit changes. The job runs on its own thread at the lowest
+priority, with at most four threads for LaMa, and reloads the screens when it ends. It works at the
+size the output needs, rounded up to 1024, 1920, 2560 or 3840 pixels on the long side (never above
+the picture; `wprs-ctl` and the app build at 1920, the phone at 1920 at most), and computes:
 
 1. the depth map at the size of the picture, refined with a guided filter that takes the picture
-   as its guide (colour guide, radius 8 pixels, epsilon 0.002), then the `near`, `far` and `gamma` of
-   `depth` (`dilate` and `smooth` only serve the single image warp);
-2. `parallax.layers` depth layers, from a one dimensional k-means on the refined depth, each with a
-   mean depth that drives its offset (`(depth - focus) × shift`, as the depth search does) and a soft
-   edge of about 2 pixels; clusters under 0.2 % of the picture are dropped, so a flat picture can
-   have fewer;
-3. for every layer except the nearest, the band that moving can uncover: the pixels under the layers
-   in front of it (and 2 pixels around them, which hold their colours) within
-   `ceil(strength × width × (nearest depth - layer depth)) + 2` pixels of what the layer knows;
-4. the fill of those bands, with `lama` (512 pixel crops around each band, at most 8 per layer, the
-   crops covering 1024 pixels or more and reduced when more are needed, blended back with a feathered
-   edge over a push-pull base) or `simple` (push-pull pyramid from the known pixels followed by a
-   blur of radius 2 over the filled pixels only, so the edge of a near object never stretches). The
-   farthest layer is opaque everywhere.
+   as its guide (colour guide, radius 8 pixels, epsilon 0.002), then the `near`, `far` and `gamma`
+   of `depth` and its `strokes` (`dilate` and `smooth` only serve the depth masks);
+2. the regions: pixels whose depth spans more than 0.08 within 3 pixels (scaled with the size, 1920
+   pixels being 1) are a jump, the rest is flood-filled into connected regions, the `splits` of
+   `depth` are added to the jumps, the jump pixels then join the neighbouring region they reach
+   through the smallest steps of depth (so a thin strand stays with the object it grows from),
+   regions under 0.1 % of the picture join the neighbour they share the longest border with, and
+   the `joins` of `depth` merge the regions under their two points;
+3. `parallax.layers` layers at most, grouping whole regions by their mean depth (a one dimensional
+   k-means on those means, or the `cuts` of `depth`), so a region is never torn between two layers;
+4. for every layer, its depth field: the depth of its own pixels only, smoothed, at a quarter of the
+   size, with its slope capped by the mean of the upper and lower 8-neighbour envelopes of slope
+   `0.04 / (shift × width)` and blurred twice with a box of 6 field pixels, so that at the shift the
+   set is built for the local scale of a layer stays between 0.96 and 1.04 and a steep part flattens
+   towards a rigid card; the field reaches past the layer with the depth of its edge;
+5. for every layer, the band that moving can uncover: the pixels under the layers in front of it
+   (and a matting band of 4 pixels around them, scaled with the size) within
+   `ceil(shift × width × (nearest field − own field)) + 2 × (2 + matting band)` pixels of what the
+   layer knows, where both fields are taken at that pixel; protected marks leave pixels out of it;
+6. the edge of every layer but the farthest against the layers behind it: within the matting band,
+   the transparency is the projection of the colour of the picture on the line between the local
+   colour of the object and the local colour behind it (when they differ by 24 levels or more), and
+   the colour is the object's alone, so no fringe of the background moves with the object;
+7. the fill of those bands from what the layer knows (never the matting band), with `lama` (crops of
+   512 pixels at the size of the picture, as many as the band needs, three quarters apart, blended
+   back with a feathered edge over a push-pull base) or `simple` (push-pull pyramid from the known
+   pixels followed by a blur of radius 2 over the filled pixels only). The farthest layer is opaque
+   everywhere.
 
-The set is one PNG with the layers stacked from the farthest, `<SHA-256>-<key>.layers.png`, and its
-`<SHA-256>-<key>.layers.json` (`format`, `size`, `fill`, `cuts`, `depths` and `bands` with the layer,
-the reach in pixels and the pixels filled), in the cache of depth maps (written first the JSON and
-then the PNG, which the daemon watches). The key hashes the picture, the model, the input size, the
-`near`, `far` and `gamma` of `depth` and its `cuts`, `strokes` and `fills`, the fill actually used, the number of layers, the parallax
-`strength` (rounded to a thousandth), the size and time of the depth map file and the LaMa file; the
-256 MB limit of the cache covers them and trimming a PNG deletes its JSON. `lama` becomes `simple` while LaMa or
-ONNX Runtime is not installed (`wprs-ctl models download lama-big-fp32`, which, like the other models,
-only downloads after showing its size, license and server). At rest the screen shows the original
-picture; while it moves, the GPU draws the layers from the farthest to the nearest in one pass,
-nearest occluding, with the same source, settings and smoothing as the single image warp.
+The set is one PNG with the layers stacked from the farthest, `<SHA-256>-<key>.layers.png`, one
+16-bit grey PNG with their depth fields stacked the same way, `<SHA-256>-<key>.fields.png`, and its
+`<SHA-256>-<key>.layers.json` (`format` 2, `size`, `fill`, `cuts`, `depths`, `bands` with the layer,
+the reach in pixels and the pixels filled, `field` with the size of the fields, `regions`, `built`
+with the shift it was built for and `reach` with the largest safe shift and the lowest and highest
+field), in the cache of depth maps (written first the fields, then the JSON and then the PNG, which
+the daemon watches). The key hashes the format, the picture, the model, the input size, the `near`,
+`far` and `gamma` of `depth` and its `cuts`, `strokes`, `fills`, `joins` and `splits`, the fill
+actually used, the number of layers, the shift (rounded to a thousandth), the long side, the size
+and time of the depth map file and the LaMa file, so sets of an older format are built again; the
+256 MB limit of the cache covers them and trimming a PNG deletes its JSON, fields and failure mark.
+`lama` becomes `simple` while LaMa or ONNX Runtime is not installed (`wprs-ctl models download
+lama-big-fp32`, which, like the other models, only downloads after showing its size, license and
+server). At rest the screen shows the original picture; while it moves, the GPU draws the layers
+from the farthest to the nearest in one pass, nearest occluding, each moved by its own field
+(`uv − shift × (field − focus)`, with the field read where the pixel lands after one step), with
+the same source and smoothing as before.
 
-A `geometry` (crop, rotation, straightening or flip) does not make another set: the daemon turns
-the layers of the set of the whole picture, once and in memory, with the matrix the GPU uses for
-the picture (bilinear, on premultiplied colours, at the size of the layers cropped to the frame), so
-that they line up with the edited picture; strokes, cuts and marks stay in the coordinates of the
-original. An edit with enabled `ops` (colour edits are drawn by the GPU on the picture, not on the
-layers) keeps the single image warp.
+The movement of each picture is computed in one place for the desktop and the phone
+(`wprs_core::travel`): the shift asked for (`strength`, three times the visible share of the
+picture on the phone) is cut to the safe shift of the set, so nothing uncovered passes the band, and
+to what the zoom can hide with a margin of at most 20 % per side; the zoom then follows from the
+shift, the `focus`, the farthest the fields lie from it, the width to height ratio of the picture
+and the window shown, about the centre of the picture as the GPU zooms, and is never below
+`overscan`. The phone builds its set for the shift it applies.
+
+A `geometry` (crop, rotation, straightening or flip) does not make another set: the daemon and the
+phone turn the layers and fields of the set of the whole picture, once and in memory, with the
+matrix the GPU uses for the picture (bilinear, on premultiplied colours, at the size of the layers
+cropped to the frame), so that they line up with the edited picture; strokes, cuts, marks, joins and
+splits stay in the coordinates of the original.
 
 `wprs-ctl edit depth layers FILE [--fill lama|simple|off] [--layers N] [--force] [--list] [--clear]`
 builds the set in its own process (the same code, with the settings of the configuration

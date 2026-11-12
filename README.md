@@ -403,12 +403,12 @@ lado mueve la imagen en horizontal y inclinarlo hacia delante o hacia atrás, en
 con el teléfono de pie. Sin giroscopio sigue la inclinación con el acelerómetro, y si el teléfono no
 tiene ningún sensor o no da datos, el paso de páginas del lanzador. El giro se filtra y se recentra
 solo en unos segundos, con el mismo muelle y el mismo sombreador que el escritorio: con un mapa de
-profundidad lo cercano se mueve más que el fondo, y sin él la imagen entera se desplaza.
+profundidad y sus capas lo cercano se mueve más que el fondo, y sin ellas la imagen queda quieta.
 *Intensidad* y *Enfoque* (la profundidad que se queda quieta) son los mismos valores que en el
 escritorio, pero en el teléfono la intensidad se mide sobre la parte que se ve y vale el triple,
 porque la pantalla es pequeña y se mira de cerca: con los valores por defecto lo cercano se desplaza
 hasta un 4 % del ancho de la pantalla y el fondo hasta un 2 % hacia el otro lado, y la imagen se
-amplía lo justo para no enseñar los bordes. La página muestra si la imagen aún no tiene mapa de
+amplía lo justo para no enseñar los bordes; las capas se calculan para ese movimiento. La página muestra si la imagen aún no tiene mapa de
 profundidad, si se está calculando o si ya está listo, y avisa cuando el movimiento está en pausa
 por el ahorro de energía, por poca batería o por calor; con una batería normal, con o sin cargador,
 nunca se para. El sensor solo se enciende mientras se ve un fondo con paralaje, a los fotogramas por
@@ -1070,7 +1070,7 @@ acelerómetro del equipo, solo mientras el fondo se ve, al ritmo que permite la 
 mismas pausas que el vídeo y quieto si el sistema pide reducir el movimiento. Elegir el puntero
 como fuente para una imagen es tu permiso para seguirlo mientras se ve, igual que en las
 escenas. Con render por software (sin GPU) la imagen queda quieta salvo que actives
-`playback.software_parallax`, que la mueve con 8 pasos y 15 fotogramas por segundo como mucho.
+`playback.software_parallax`, que la mueve a 15 fotogramas por segundo como mucho.
 El mapa puede ser propio (`wprs-ctl edit depth import`, con la misma proporción que la imagen) o
 calcularse en el propio equipo con Depth Anything V2 Small (Apache-2.0) mediante ONNX Runtime, en
 un proceso aparte y nunca dentro del daemon (solo las capas de más abajo se calculan en un trabajo suyo en segundo plano); gana el mapa más reciente y la caché de mapas
@@ -1096,25 +1096,31 @@ wprs-ctl edit depth remove foto.jpg                  # borrar el mapa calculado,
 wprs-ctl edit parallax foto.jpg --source pointer --strength 0.02 --focus 0.3
 ```
 
-*Parallax 3D calculado una vez por imagen.* Desplazar una sola imagen estira los bordes y los
-horizontes entre capas de profundidad. Para que lo que descubre un objeto cercano se rellene con
-fondo plausible, el daemon prepara una vez, en segundo plano (un trabajo `Layers` con su progreso,
-que se ve en `wprs-ctl jobs`) y nunca por fotograma, un juego de capas de la imagen: afina el mapa
-con un filtro guiado por la propia imagen (radio 8 px, épsilon 0,002), lo parte en 4 a 6 capas
-(`parallax.layers`, 5 por defecto) con un corte suave de unos 2 px y una profundidad media por capa
-que manda su desplazamiento, marca en las capas de detrás la franja que el desplazamiento máximo
-puede descubrir y la rellena según `parallax.fill`: `lama` (por defecto en el escritorio) usa el
-modelo de relleno LaMa sobre recortes de 512 px, `simple` extiende por pirámide el fondo más cercano
-sin estirar nunca el borde del objeto, y `off` no calcula capas, con lo que la imagen se mueve como
-antes, como una sola imagen deformada, y los bordes pueden verse estirados. Las capas se guardan en
-la caché de mapas (`~/.cache/wallpaper-rs/depth/<SHA-256>-<clave>.layers.png` y `.layers.json`, dentro
-de los mismos 256 MB) con una clave que reúne la imagen, el modelo, el relleno, el número de capas, la
-fuerza del paralaje y los ajustes del mapa; mientras se calculan, o si no hay mapa, la imagen sigue
-con la deformación de siempre. Al moverse, la GPU dibuja las capas de atrás adelante con el
-desplazamiento de cada una (misma fuente, mismos ajustes y mismo suavizado que antes) y en reposo
-muestra la imagen original; un recorte, giro, enderezado o volteo gira también las capas (el
-daemon las transforma en memoria con la misma matriz que la imagen, sin otro cálculo), pero las
-imágenes con operaciones de color activas siguen con la deformación de una imagen. LaMa (big-lama en ONNX, 208 MB, Apache-2.0) no viene incluido:
+*Parallax 3D calculado una vez por imagen.* Una imagen solo se mueve en capas, sin estirar nada:
+el daemon prepara una vez, en segundo plano (un trabajo `Layers` con su progreso, que se ve en
+`wprs-ctl jobs`) y nunca por fotograma, un juego de capas de la imagen. Afina el mapa con un filtro
+guiado por la propia imagen, busca los saltos de profundidad y parte la imagen en regiones conexas
+entre ellos (lo fino, como un mechón, sigue con su objeto; los pedazos chicos se unen al vecino con
+el que más borde comparten) y reparte regiones enteras en 4 a 6 capas (`parallax.layers`, 5 por
+defecto) según su profundidad media, de modo que una superficie continua nunca se corta. Dentro de
+cada capa la profundidad se suaviza y su pendiente se limita para que nada se estire más de un 4 %
+con la fuerza elegida: un suelo, un puente o una pared se mueven con su profundidad, y lo que no
+cabe en ese límite se aplana hacia una tarjeta rígida. El borde de cada objeto cercano toma la
+transparencia de la propia imagen, sin franjas del fondo, y detrás se marca la franja que el
+movimiento puede descubrir, que se rellena sin copiar el borde del objeto según `parallax.fill`:
+`lama` (por defecto en el escritorio) usa el modelo LaMa en recortes de 512 px a la resolución de
+la imagen, `simple` extiende por pirámide el fondo más cercano, y `off` no calcula capas y la
+imagen queda quieta. El juego se calcula a la resolución que pide la pantalla (1024, 1920, 2560 o
+3840 px de lado mayor) y se guarda en la caché de mapas
+(`~/.cache/wallpaper-rs/depth/<SHA-256>-<clave>.layers.png`, `.fields.png` y `.layers.json`, dentro
+de los mismos 256 MB) con una clave que reúne la imagen, el modelo, el relleno, el número de capas,
+la fuerza, la resolución y los ajustes del mapa. El movimiento se recorta por imagen para no pasar
+nunca de la franja rellenada y la ampliación se calcula con la fuerza, el enfoque y la forma de la
+imagen para que nunca se vea el borde del cuadro. Mientras se calculan las capas, si fallan, si el
+relleno está apagado, si la imagen tiene operaciones de color activas o si su profundidad no permite
+moverla sin estirarla, la imagen queda quieta, y la app, `wprs-ctl edit depth layers` y el teléfono
+dicen por qué en una línea. Al moverse, la GPU dibuja las capas de atrás adelante y en reposo
+muestra la imagen original; un recorte, giro, enderezado o volteo gira también las capas. LaMa (big-lama en ONNX, 208 MB, Apache-2.0) no viene incluido:
 se descarga con `wprs-ctl models download lama-big-fp32` (o desde los ajustes de la app) después de
 mostrar tamaño, licencia y servidor, con las mismas reglas que el modelo de profundidad; sin él, o
 sin ONNX Runtime, se usa `simple`. Corre en el procesador, o en CUDA si `ORT_DYLIB_PATH` apunta a

@@ -184,6 +184,10 @@ msgstr "ninguna operación se llama %1"
 msgid "some of %1 are not operations"
 msgstr "algunas de %1 no son operaciones"
 
+#: crates/wprs-core/src/edit/regions.rs
+msgid "use at most %1 joins and %2 splits"
+msgstr "usa como mucho %1 uniones y %2 divisiones"
+
 #: crates/wprs-core/src/edit/set.rs
 msgid "%1 is not a number"
 msgstr "%1 no es un número"
@@ -240,6 +244,38 @@ msgstr "usa cortes como 0.2,0.45,0.7"
 #: crates/wprs-core/src/edit/touch.rs
 msgid "give the cuts or auto"
 msgstr "da los cortes o auto"
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid "The picture stays still: it has no depth map yet."
+msgstr "La imagen queda quieta: todavía no tiene mapa de profundidad."
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid "The picture stays still: the parallax fill is off."
+msgstr "La imagen queda quieta: el relleno del paralaje está apagado."
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid ""
+"The picture stays still: its colour operations are not drawn on depth layers."
+msgstr ""
+"La imagen queda quieta: sus operaciones de color no se dibujan en las capas "
+"de profundidad."
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid "The picture stays still until its depth layers are built."
+msgstr ""
+"La imagen queda quieta hasta que estén listas sus capas de profundidad."
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid "The picture stays still: its depth layers could not be built."
+msgstr ""
+"La imagen queda quieta: no se pudieron construir sus capas de profundidad."
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid ""
+"The picture stays still: its depth gives no movement that would not stretch "
+"it."
+msgstr ""
+"La imagen queda quieta: su profundidad no permite moverla sin estirarla."
 
 #: crates/wprs-editor/src/actions.rs crates/wprs-editor/src/layers.rs
 msgid "there is no layer \"%1\""

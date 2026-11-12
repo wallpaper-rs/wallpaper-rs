@@ -1688,12 +1688,14 @@ picture, before the crop and the rotation, and a radius is a fraction of its lon
 
 | Action | Fields | `wprs-ctl edit depth …` |
 |--------|--------|-------------------------|
-| `depth_brush` | `points` (a stroke of 1 to 1 024 points, `X,Y;X,Y;...`), `by` (0 to 1, 0.1 by default: the depth added at the middle of the brush, fading to nothing at its edge), `raise` or `lower` (`raise` when neither), `radius` (above 0 and up to 1, 0.05 by default), `falloff` (0 hard to 1 soft, 0.5 by default: how much of the radius fades) and `clear` (removes the earlier strokes first, or alone removes them); adds the stroke to `depth.strokes`, which are applied in order to the adjusted depth map (after `near`, `far`, `gamma`, `dilate` and `smooth`), so every use of the map sees them: the single image warp, the depth masks, the layers and the overlay. At most 256 strokes and 3 000 points in all | `brush FILE X,Y;X,Y;... [--raise\|--lower] [--by V] [--radius R] [--falloff F] [--clear]` |
-| `depth_cuts` | `cuts` (1 to 5 growing levels between 0.005 and 0.995, at least 0.005 apart, `L,L,...`) or `auto`; the layers end at those depths instead of at the ones the clustering finds (a layer left without pixels is dropped, and then the cut that bounded it), so the number of layers follows the cuts and not `parallax.layers`; `auto` goes back to the clustering | `cuts FILE L,L,... \| --auto` |
+| `depth_brush` | `points` (a stroke of 1 to 1 024 points, `X,Y;X,Y;...`), `by` (0 to 1, 0.1 by default: the depth added at the middle of the brush, fading to nothing at its edge), `raise` or `lower` (`raise` when neither), `radius` (above 0 and up to 1, 0.05 by default), `falloff` (0 hard to 1 soft, 0.5 by default: how much of the radius fades) and `clear` (removes the earlier strokes first, or alone removes them); adds the stroke to `depth.strokes`, which are applied in order to the adjusted depth map (after `near`, `far`, `gamma`, `dilate` and `smooth`), so every use of the map sees them: the depth masks, the regions and layers and the overlay. At most 256 strokes and 3 000 points in all | `brush FILE X,Y;X,Y;... [--raise\|--lower] [--by V] [--radius R] [--falloff F] [--clear]` |
+| `depth_cuts` | `cuts` (1 to 5 growing levels between 0.005 and 0.995, at least 0.005 apart, `L,L,...`) or `auto`; the regions of the picture (the connected parts between depth jumps, `dbus.md`, "Depth layers") are grouped into layers by their mean depth at those levels instead of at the ones the clustering finds, so a region is never torn (a layer left without pixels is dropped, and then the cut that bounded it), so the number of layers follows the cuts and not `parallax.layers`; `auto` goes back to the clustering | `cuts FILE L,L,... \| --auto` |
 | `fill_mask` | `points`, `radius` and `falloff` as the brush, `refill` or `protect` (one of them with `points`) and `clear`; marks, in `depth.fills`, where the band of a layer, the pixels behind nearer layers that moving can uncover, ignores its reach and is always filled (`refill`), or where it is never filled (`protect`, the pixels stay transparent in the layers behind); a later mark paints over an earlier one where they meet | `fill-mask FILE X,Y;X,Y;... (--refill\|--protect) [--radius R] [--falloff F] [--clear]` |
 
-The layers (`wprs-ctl edit depth layers`) and the key of their cache follow the strokes, cuts and
-marks, so a change builds a new set and the old one is trimmed with the cache. The map of the app
+The `joins` and `splits` of `depth` (`dbus.md`, "Edits and spanning") merge two regions or cut one along a
+stroke; they are part of the edit format and of the build, and the tools to draw them on the canvas
+come later. The layers (`wprs-ctl edit depth layers`) and the key of their cache follow the
+strokes, cuts, marks, joins and splits, so a change builds a new set and the old one is trimmed with the cache. The map of the app
 and `edit depth export --adjusted` include the strokes. `edit depth show FILE --layer N --out PNG`
 saves one layer with its transparency, `--band PNG` also saves the band of that layer, white on
 black, computed again with the cuts, strokes and marks of the set, and `--fill lama|simple` picks
@@ -1714,13 +1716,17 @@ rotation and the straightening come back with the other tools), and offers:
   every quarter of the radius, and sends the stroke on release as one `depth_brush`; undo removes it
   alone. *Remove the strokes* is `depth_brush` with `clear`.
 - *Layer cuts*: a strip with the histogram of the depth, far on the left, coloured by layer, and a
-  handle for each cut of the layers (the manual ones of `depth.cuts`, else the ones of the newest
+  handle for each cut that groups the regions into layers (the manual ones of `depth.cuts`, else the ones of the newest
   set or the ones the clustering would find). Dragging a handle keeps it at least 0.01 from its
   neighbours and draws, with `Relief.trace`, the outline of every layer tinted on the picture, at 512
   pixels and without building anything; releasing it sends one `depth_cuts`, and the layers are built
   again with those cuts half a second after the last change, a newer change cancelling the build in
   progress. A double click on a handle removes it, a click on the strip or *Add a cut* adds one in the
-  widest gap (at most 5), and *Back to automatic* is `depth_cuts` with `auto`.
+  widest gap (at most 5), and *Back to automatic* is `depth_cuts` with `auto`. The line under the
+  strip counts the layers and the regions of the set, and when the picture stays still it says why
+  in one line (no depth map, fill off, colour operations, set being built, failed build, or depth
+  that gives no movement without stretching); `wprs-ctl edit depth layers` prints the same line
+  after building and `--list` shows the regions, the size, the safe shift and whether each set moves.
 - *Fill brush*: the same brush for `fill_mask`, with *Refill* and *Protect*, size and soft edge (no
   strength: a mark is all or nothing where it covers at least half of the brush). The marks show
   in the layer views as the band they widen or empty, the layers are built again after the last

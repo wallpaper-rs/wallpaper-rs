@@ -13,6 +13,7 @@ mod regions;
 mod set;
 mod tool;
 mod touch;
+pub mod travel;
 
 use crate::Fit;
 pub use action::{ACTIONS, Action, Error};

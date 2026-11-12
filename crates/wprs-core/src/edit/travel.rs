@@ -43,25 +43,28 @@ impl Still {
     }
 
     pub fn message(self) -> Message {
-        let (id, text) = match self {
-            Still::NoMap => ("still.no_map", "The picture stays still: it has no depth map yet."),
-            Still::FillOff => ("still.fill_off", "The picture stays still: the parallax fill is off."),
-            Still::Edited => (
+        match self {
+            Still::NoMap => said("still.no_map", "The picture stays still: it has no depth map yet.", &[]),
+            Still::FillOff => {
+                said("still.fill_off", "The picture stays still: the parallax fill is off.", &[])
+            }
+            Still::Edited => said(
                 "still.edited",
                 "The picture stays still: its colour operations are not drawn on depth layers.",
+                &[],
             ),
             Still::Building => {
-                ("still.building", "The picture stays still until its depth layers are built.")
+                said("still.building", "The picture stays still until its depth layers are built.", &[])
             }
             Still::Failed => {
-                ("still.failed", "The picture stays still: its depth layers could not be built.")
+                said("still.failed", "The picture stays still: its depth layers could not be built.", &[])
             }
-            Still::Flat => (
+            Still::Flat => said(
                 "still.flat",
                 "The picture stays still: its depth gives no movement that would not stretch it.",
+                &[],
             ),
-        };
-        said(id, text, &[])
+        }
     }
 }
 

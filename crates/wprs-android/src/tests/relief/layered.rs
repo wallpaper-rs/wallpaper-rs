@@ -13,7 +13,7 @@ pub(super) fn layered(uid: &str, image: &Path, deep: &dyn Fn(Value) -> Value) {
     assert_eq!(item()["layers"], json!(true));
     assert!(depth::raised(image).is_some_and(|raise| raise.deck.is_some()));
     set("parallax.fill", "off").unwrap();
-    assert_eq!(item()["layers"], json!(false));
+    assert_eq!((item()["layers"].clone(), item()["still"].clone()), (json!(false), json!("fill_off")));
     assert!(deep(json!({ "op": "layers", "uid": uid }))["error"].as_str().unwrap().contains("fill is off"));
     set("parallax.fill", "lama").unwrap();
     let saver = |on: bool| Power { saver: on, ..Power::now() }.set();
