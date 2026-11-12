@@ -2351,7 +2351,7 @@ counted counterclockwise changes its sign.
 | film grain | `film_grain` | `amount`, `size` in pixels |
 | a twirl | `twirl` | `angle`, `radius` in pixels, `center` |
 | a picture that scrolls | `scroll` | `speed` in layers a second |
-| water waves | `waves` | `amplitude` in pixels, `frequency` (waves across the layer), `speed`, `direction` |
+| water waves | `waves` | `amplitude` in canvas pixels, not layer pixels (a layer drawn at scale 3 with amplitude 20 still moves the picture by about 20 pixels of the canvas), `frequency` (waves across the layer), `speed`, `direction` |
 | ripples where the pointer touches water | `water_ripple` | `strength`, `radius` in pixels |
 | a tint with a blend mode | `tint` | `color`, `blend`, `amount` |
 | up to six pictures or layers blended with modes | `blend_texture`, one use each | `texture` (an asset or `{ "layer" }`), `blend`, `amount` |
