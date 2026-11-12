@@ -19,7 +19,7 @@ ColumnLayout {
             "radius": size.value,
             "hardness": Math.round(hard.value * 100) / 100,
             "value": erase.checked ? 0 : Math.round(level.value * 100) / 100,
-            "direction": mask.combing
+            "action": mask.combing ? "comb_flow" : "paint_mask"
         };
     }
 

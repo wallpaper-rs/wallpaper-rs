@@ -1,6 +1,6 @@
 pub const EDITOR: &str = "/scene/ext/editor";
 
-pub const ACTIONS: [&str; 70] = [
+pub const ACTIONS: [&str; 71] = [
     "set",
     "add",
     "remove",
@@ -36,6 +36,7 @@ pub const ACTIONS: [&str; 70] = [
     "effect_rule",
     "add_preset",
     "paint_mask",
+    "comb_flow",
     "mesh_from_picture",
     "bone",
     "mesh_depth",

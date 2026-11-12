@@ -33,9 +33,9 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::Thumbnail { file, animated } => crate::previews::store(dir, doc, file, *animated)
             .and_then(|path| crate::previews::adopt(doc, *animated, &path)),
         Action::Shot(e) => crate::shotting::act(dir, doc, e),
-        Action::PaintMask(m) => {
+        Action::PaintMask(m) | Action::CombFlow(m) => {
             let (channel, radius, hardness, value) = (m.channel, m.radius, m.hardness, m.value);
-            let (points, direction) = (&m.points, m.direction);
+            let (points, direction) = (&m.points, matches!(action, Action::CombFlow(_)));
             paint(
                 dir,
                 doc,

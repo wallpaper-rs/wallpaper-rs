@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 70] = [
+pub const ABOUT: [(&str, &str); 71] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),
@@ -36,10 +36,8 @@ pub const ABOUT: [(&str, &str); 70] = [
     ("condition", "Add, change or remove a condition that shows or hides parts of the scene"),
     ("effect_rule", "Set the scheduling rules of an effect parameter"),
     ("add_preset", "Add a preset of the user properties"),
-    (
-        "paint_mask",
-        "Paint a stroke into the mask picture of an effect parameter, or with direction a flow map that points along the stroke",
-    ),
+    ("paint_mask", "Paint a stroke into the mask picture of an effect parameter"),
+    ("comb_flow", "Comb a flow map of an effect parameter so that it points along the stroke"),
     ("mesh_from_picture", "Make a mesh from the outline of the picture of a layer"),
     ("bone", "Add, move, rename, parent or remove the bones of a mesh"),
     ("mesh_depth", "Paint the depth of a mesh"),

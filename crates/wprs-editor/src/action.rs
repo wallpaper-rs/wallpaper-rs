@@ -153,6 +153,7 @@ pub enum Action {
         label: Option<String>,
     },
     PaintMask(MaskStroke),
+    CombFlow(MaskStroke),
     MeshFromPicture(MeshCut),
     Bone(BoneEdit),
     MeshDepth(DepthStroke),
