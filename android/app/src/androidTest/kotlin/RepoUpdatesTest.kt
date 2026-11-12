@@ -25,6 +25,7 @@ class RepoUpdatesTest {
     @After
     fun closed() {
         scenario?.close()
+        Native.power(false, false, false, 0, 0f, false)
     }
 
     private fun shown(content: @androidx.compose.runtime.Composable (Main) -> Unit) {
