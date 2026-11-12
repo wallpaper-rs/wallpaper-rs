@@ -80,6 +80,6 @@ ColumnLayout {
         visible: !toggle.group && toggle.way !== null && toggle.way.particles && toggle.way.depth_test
         wrapMode: Text.WordWrap
         opacity: 0.8
-        text: toggle.way?.way === "one_by_one" ? App.tr("Each particle hides on its own behind nearer models; at the lowest quality the whole layer hides as one plane.") : App.tr("The whole layer hides as one plane, because %1.").arg(toggle.reasons[toggle.way?.reason] ?? "")
+        text: toggle.way?.way === "one_by_one" ? App.tr("Each particle hides on its own behind nearer models; at the lowest quality the whole layer hides as one plane.") : App.tr("The whole layer hides as one plane, because %1.", toggle.reasons[toggle.way?.reason] ?? "")
     }
 }
