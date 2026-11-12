@@ -61,3 +61,21 @@ fn a_lone_model_at_half_opacity_is_drawn_at_half_once() {
     let px = render(r, scene(json!({}), grouped, models), Quality::Q3);
     assert!(near(rgb(&px, 32, 32), want, 4), "in a 3D group: {:?}", rgb(&px, 32, 32));
 }
+
+#[test]
+fn a_faded_model_in_a_3d_group_shows_only_its_nearest_surface() {
+    let Some(r) = renderer() else { return };
+    let two = Forge::default()
+        .material(unlit("front", [1.0, 0.0, 0.0, 1.0]))
+        .material(unlit("back", [0.0, 0.0, 1.0, 1.0]))
+        .part("front", ForgeShape::Cube, [0.0, 0.0, 1.0], 1.0, 0)
+        .part("back", ForgeShape::Cube, [0.0, 0.0, -1.0], 1.0, 1)
+        .glb();
+    let models = BTreeMap::from([("two", two)]);
+    let faded = world(json!([placed("m", "two", [0.0; 3], json!({ "opacity": 0.5 }))]));
+    for (quality, blue) in [(Quality::Q3, false), (Quality::Q0, true)] {
+        let px = render(r, scene(json!({}), faded.clone(), models.clone()), quality);
+        let c = rgb(&px, 32, 32);
+        assert!(c[0] > 100 && c[0] < 200 && (c[2] > 40) == blue, "{quality:?}: {c:?}");
+    }
+}

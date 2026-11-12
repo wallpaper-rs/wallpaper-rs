@@ -843,8 +843,10 @@ the editor and the validator tell which tiers a scene fits. A tier shows the pos
 models draw more triangles than it takes at the lowest quality, where fur keeps a quarter of its
 shells; other heavy scenes run there at a lower quality, or as their poster when even the lowest
 costs too much. A model inside a 3D group with an `opacity` below 1 is drawn see-through, blended in
-linear light, and no longer hides what lies behind it; a lone model keeps its depth and is faded as a
-whole.
+linear light after the opaque models, farthest first: its depth is drawn first, so only its nearest
+surface shows and its own hidden faces and parts stay hidden, at the cost of drawing its triangles
+twice; the lowest quality skips that depth and lets them show through. A lone model keeps its depth and
+is faded as a whole.
 
 `camera3d` at the root of the scene (`camera3d`) is the camera of models, 3D groups and tilted
 layers: `fov` (1 to 179 degrees, may be bound), `near` and `far` planes, `eye`, `center` (both may be

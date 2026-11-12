@@ -15,6 +15,7 @@ pub(crate) struct Call {
     pub(super) draw: u32,
     pub(super) shells: u32,
     pub(super) cast: bool,
+    pub(super) faded: bool,
     pub(super) key: Key,
     pub(super) far: f32,
 }
@@ -60,7 +61,9 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d) {
     draws.clear();
     put(&mut draws, 0, &DrawSlots::default());
     let (mut slot, mut posed, mut drawn) = (0u32, 0u32, 1u32);
+    let primed = frame.quality != wprs_scene::Quality::Q0;
     for (o, p) in frame.placed[stage.models.clone()].iter().enumerate() {
+        let first = calls.len();
         let (object, flipped) = super::looks::object(p);
         put(&mut objects, o as u64 * SLOT, &object);
         let skinned = p.model.posed();
@@ -85,6 +88,7 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d) {
             let (uniform, key, shells) = super::looks::finish(f, look, shape, (s.hdr, skinned));
             put(&mut finishes, u64::from(slot + m as u32) * FINISH_SLOT, &uniform);
             let cast = look.and_then(|l| l.cast).unwrap_or(true) && key.blend == 0;
+            let faded = uniform.flags[3] > 0.5 && opacity < 1.0;
             let mine =
                 |q: &&wprs_scene::Primitive| q.material.map_or(p.model.materials.len(), usize::from) == m;
             for prim in p.model.primitives.iter().filter(mine) {
@@ -116,12 +120,16 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d) {
                     draw,
                     shells,
                     cast,
+                    faded,
                     key,
                     far,
                 });
             }
         }
         slot += p.model.materials.len() as u32 + 1;
+        if primed && stage.layer != p.layer.id && p.opacity < 1.0 {
+            prime(&mut calls, first);
+        }
     }
     calls.sort_by(|a, b| {
         (a.key.blend > 0).cmp(&(b.key.blend > 0)).then(match a.key.blend > 0 {
@@ -131,4 +139,21 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d) {
     });
     (s.calls, s.objects_bytes, s.finish_bytes, s.bone_bytes, s.draw_bytes) =
         (calls, objects, finishes, bones, draws);
+}
+
+fn prime(calls: &mut Vec<Call>, first: usize) {
+    let faded = |c: &Call| c.key.blend == 1 && !c.key.write && c.faded;
+    let start = calls.len();
+    calls.extend_from_within(first..);
+    let mut kept = start;
+    for k in start..calls.len() {
+        if faded(&calls[k]) {
+            calls[kept] = calls[k];
+            calls[kept].key = Key { prime: true, write: true, ..calls[kept].key };
+            calls[kept].cast = false;
+            kept += 1;
+        }
+    }
+    calls.truncate(kept);
+    calls[first..].rotate_right(kept - start);
 }

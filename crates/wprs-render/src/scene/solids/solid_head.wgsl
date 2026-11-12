@@ -37,7 +37,7 @@ struct In {
 };
 struct Bound { @location(5) joints: vec4<f32>, @location(6) weights: vec4<f32> };
 struct Out {
-    @builtin(position) position: vec4<f32>,
+    @builtin(position) @invariant position: vec4<f32>,
     @location(0) world: vec3<f32>,
     @location(1) normal: vec3<f32>,
     @location(2) uv: vec2<f32>,
