@@ -54,7 +54,7 @@ class CostWarningTest {
     @Test
     fun aFixedLevelMeasuredTooSlowTellsItsFrameTimeInsteadOfTheEstimate() {
         shown("""{ "auto": "lower", "over": null, "slow": [25.0, 16.7], "left_out": [], "step": "steady", "frame_ms": 25.0, "period_ms": 16.7 }""")
-        told(R.string.level_slow, "25.0", "16.7")
+        told(R.string.frames_slow, "25.0", "16.7")
         told(R.string.auto_would_lower)
         compose.onNodeWithText(context.getString(R.string.level_over, "6.0", "4"), substring = true).assertDoesNotExist()
     }
