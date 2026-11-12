@@ -38,6 +38,8 @@ QtObject {
             "polygon": App.tr("Polygon"),
             "pools": App.tr("Shape pools"),
             "position": App.tr("Position"),
+            "aim3d": App.tr("Aim among the models"),
+            "comb": App.tr("Combing"),
             "position3d": App.tr("Place among the models"),
             "poster_time": App.tr("Still frame at"),
             "prewarm": App.tr("Warm-up"),

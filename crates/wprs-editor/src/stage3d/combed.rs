@@ -69,6 +69,7 @@ pub(crate) fn comb(dir: &Path, doc: &Value, c: &CombStroke) -> Result<Vec<Op>> {
                 hardness: c.hardness,
                 value: values[k],
                 points: &[start, end],
+                direction: false,
             };
             stroke(&mut picture, &one);
         }

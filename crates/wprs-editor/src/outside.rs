@@ -25,7 +25,7 @@ pub(crate) fn whole(action: &Action) -> bool {
                 | Action::Property(_)
                 | Action::Condition(_)
                 | Action::EffectRule(_)
-                | Action::AddPreset { .. }
+                | Action::AddPreset(_)
                 | Action::Import { .. }
                 | Action::ImportEffect { .. }
                 | Action::ImportScript(_)

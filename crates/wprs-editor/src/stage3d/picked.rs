@@ -60,7 +60,7 @@ pub(crate) fn color_at(dir: &Path, doc: &Value, h: &Hit) -> Value {
     })
 }
 
-pub(crate) fn key_from(dir: &Path, doc: &Value, k: &crate::action::KeyPick) -> Result<Vec<Op>> {
+pub(crate) fn key_from(dir: &Path, doc: &Value, k: &crate::action::ChromaPick) -> Result<Vec<Op>> {
     let (path, _) = super::edit::model_layer(doc, &k.layer)?;
     let at = format!("{path}/materials/{}", escape(&k.name));
     ensure!(

@@ -17,6 +17,7 @@ mod motion;
 mod names;
 mod pools;
 mod rigging;
+mod shader;
 mod shaping;
 mod solid;
 mod sow;
@@ -149,12 +150,7 @@ pub enum Action {
     },
     Condition(ConditionEdit),
     EffectRule(RuleEdit),
-    AddPreset {
-        #[serde(default)]
-        id: Option<String>,
-        #[serde(default)]
-        label: Option<String>,
-    },
+    AddPreset(PresetAdd),
     PaintMask(MaskStroke),
     CombFlow(MaskStroke),
     MeshFromPicture(MeshCut),

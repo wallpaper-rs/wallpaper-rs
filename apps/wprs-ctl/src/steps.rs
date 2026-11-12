@@ -84,7 +84,7 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
             })
             .for_each(|id| println!("{id}")),
         Action::Import { .. } => added.last().iter().for_each(|id| println!("{id}")),
-        Action::AddPreset { .. } => {
+        Action::AddPreset(_) => {
             let last = project.doc["manifest"]["presets"].as_array().and_then(|l| l.last());
             last.and_then(|p| p["id"].as_str()).iter().for_each(|id| println!("{id}"))
         }

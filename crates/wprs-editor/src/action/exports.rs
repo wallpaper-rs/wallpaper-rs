@@ -1,4 +1,4 @@
-pub use super::declared::{ManifestEdit, Needed, PropertyEdit};
+pub use super::declared::{ManifestEdit, Needed, PresetAdd, PropertyEdit};
 pub use super::figures::{FigureEdit, Stop};
 pub use super::grab::{Grab, Grabbed, Handle, LightPlace};
 pub use super::hulls::{Carve, ColliderEdit, SculptStroke};
@@ -15,10 +15,11 @@ pub use super::names::{
 pub use super::pools::{PoolEdit, UsesEdit};
 pub use super::rigging::*;
 pub use super::shaping::{
-    DepthMapEdit, EffectsEdit, MaskHold, RampEdit, RampFormat, RampStop, ScriptEdit, ShaderEdit, TemplateEdit,
+    DepthMapEdit, EffectsEdit, MaskHold, RampEdit, RampFormat, RampStop, ScriptEdit, TemplateEdit,
 };
+pub use super::shader::ShaderEdit;
 pub use super::solid::{
-    CameraEdit, CombStroke, Edit3d, KeyPick, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit,
+    CameraEdit, ChromaPick, CombStroke, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit,
     ViewEdit,
 };
 pub use super::sow::SowEdit;

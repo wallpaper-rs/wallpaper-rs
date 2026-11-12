@@ -129,3 +129,12 @@ pub struct PropertyEdit {
     #[serde(default)]
     pub order: Option<usize>,
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct PresetAdd {
+    #[serde(default)]
+    pub id: Option<String>,
+    #[serde(default)]
+    pub label: Option<String>,
+}

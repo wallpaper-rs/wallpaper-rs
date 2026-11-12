@@ -9,8 +9,8 @@ use wprs_core::message::said;
 use wprs_format::features;
 
 pub use crate::action::{
-    ACTIONS, Action, AssetEdit, ConditionEdit, EDITOR, ImportAssets, RgbEdit, RuleEdit, ScriptFile, ShotEdit,
-    UpgradeEdit,
+    ACTIONS, Action, AssetEdit, ConditionEdit, EDITOR, ImportAssets, PresetAdd, RgbEdit, RuleEdit, ScriptFile,
+    ShotEdit, UpgradeEdit,
 };
 pub use crate::action::{
     AmbientEdit, AttachEdit, AutoWeights, BodyEdit, BoneEdit, BoneRuleEdit, ClipEdit, ClipKey, DepthSet,
@@ -178,7 +178,7 @@ fn steps(doc: &Value, action: &Action) -> Result<Vec<Op>> {
         Action::RenameProperty { id, to } => crate::references::rename_property(doc, id, to)?,
         Action::RemoveProperty { id } => crate::references::remove_property(doc, id)?,
         Action::Condition(c) => crate::references::condition(doc, &c.id, c.enabled, &c.text)?,
-        Action::AddPreset { id, label } => crate::props::add_preset(doc, id.as_deref(), label.as_deref())?,
+        Action::AddPreset(add) => crate::props::add_preset(doc, add.id.as_deref(), add.label.as_deref())?,
         _ => Vec::new(),
     })
 }

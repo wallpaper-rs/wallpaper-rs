@@ -35,11 +35,7 @@ pub enum Edit3d {
     NewMaterial {
         name: String,
     },
-    MaterialCode {
-        name: String,
-        text: String,
-    },
-    Key(KeyPick),
+    Key(ChromaPick),
     Comb(CombStroke),
     Debug {
         #[serde(default)]
@@ -149,7 +145,7 @@ pub struct MaterialStroke {
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
-pub struct KeyPick {
+pub struct ChromaPick {
     pub layer: String,
     pub name: String,
     pub at: [f32; 2],
