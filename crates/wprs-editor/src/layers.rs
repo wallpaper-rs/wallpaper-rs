@@ -73,7 +73,7 @@ pub fn clean(base: &str) -> String {
     words.join("_").chars().take(26).collect::<String>().trim_end_matches('_').into()
 }
 
-fn unique_among(doc: &Value, base: &str, more: &[String]) -> String {
+pub(crate) fn unique_among(doc: &Value, base: &str, more: &[String]) -> String {
     let clean = clean(base);
     let base = if clean.is_empty() { "layer".into() } else { clean };
     let candidates = (1..).map(|n| if n == 1 { base.clone() } else { format!("{base}_{n}") });

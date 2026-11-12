@@ -13,7 +13,8 @@ pub(crate) fn whole(action: &Action) -> bool {
         Action::Set { pointer, .. }
         | Action::Add { pointer, .. }
         | Action::Remove { pointer }
-        | Action::Translate { pointer, .. } => outside(pointer),
+        | Action::Translate(crate::action::TranslateEdit { pointer, .. }) => outside(pointer),
+        Action::Rename(r) => r.kind != crate::action::Named::Layer,
         Action::Move { from, to } => outside(from) && outside(to),
         _ => matches!(
             action,

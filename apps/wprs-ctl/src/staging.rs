@@ -52,6 +52,51 @@ pub enum Stage {
         replace: bool,
     },
     #[command(
+        about = "Drag a handle of the canvas to a point of the canvas: move, nudge (by X,Y), turn, origin, scale or skew"
+    )]
+    Grip {
+        #[arg(value_parser = ["move", "nudge", "turn", "origin", "scale", "skew"], help = "The handle")]
+        grip: String,
+        #[arg(value_name = XY, value_parser = pair, allow_hyphen_values = true, help = "Pixels of the canvas the handle goes to, or for nudge how far it moves")]
+        to: [f64; 2],
+        #[arg(long, value_name = XY, value_parser = pair, default_value = "1,1", help = "Point of the box a scale or skew holds, in fractions: 1,1 the bottom right corner, 1,0.5 the middle of the right edge")]
+        corner: [f64; 2],
+        #[arg(long, help = "Keep the proportions while scaling")]
+        even: bool,
+        #[arg(
+            long,
+            value_name = "PX",
+            help = "Snap a move to the canvas and the other layers within these pixels"
+        )]
+        snap: Option<f64>,
+        #[arg(long, value_name = "S", help = "Second of the playhead")]
+        at: Option<f64>,
+        #[arg(long, help = crate::sowing::REPLACE)]
+        replace: bool,
+    },
+    #[command(about = "Scale and place the layer so that it covers the canvas, fits inside it or fills it")]
+    Fit {
+        #[arg(value_parser = ["cover", "contain", "stretch"], help = "cover, contain or stretch")]
+        fit: String,
+        #[arg(long, value_name = "S", help = "Second of the playhead")]
+        at: Option<f64>,
+        #[arg(long, help = crate::sowing::REPLACE)]
+        replace: bool,
+    },
+    #[command(
+        about = "Make the layer follow another one, or none without PARENT; --keep leaves it where it is"
+    )]
+    Parent {
+        #[arg(help = "The layer to follow")]
+        parent: Option<String>,
+        #[arg(long, help = "Write the transform that keeps the layer where it is")]
+        keep: bool,
+        #[arg(long, value_name = "S", help = "Second of the playhead")]
+        at: Option<f64>,
+        #[arg(long, help = crate::sowing::REPLACE)]
+        replace: bool,
+    },
+    #[command(
         about = "Blend the layer over what is below it with a mode such as normal, add, multiply or screen"
     )]
     Blend {
@@ -102,6 +147,20 @@ pub(crate) fn edit(layer: String, what: Stage) -> L {
             L::Transform { layer, position, rotation, scale, skew, origin, tilt, z, size, at, replace }
         }
         Stage::Blend { blend } => L::Blend { layer, blend },
+        Stage::Grip { grip, to, corner, even, snap, at, replace } => {
+            let grip = match grip.as_str() {
+                "scale" => json!({ "scale": { "corner": corner, "even": even } }),
+                "skew" => json!({ "skew": { "edge": corner } }),
+                other => json!(other),
+            };
+            let grip = serde_json::from_value(grip).unwrap_or(wprs_editor::actions::Grip::Move);
+            L::Grip { layer, grip, to, snap, at, replace }
+        }
+        Stage::Fit { fit, at, replace } => {
+            let fit = serde_json::from_value(json!(fit)).unwrap_or(wprs_editor::actions::Fit::Contain);
+            L::Fit { layer, fit, at, replace }
+        }
+        Stage::Parent { parent, keep, at, replace } => L::Parent { layer, parent, keep, at, replace },
         Stage::Instance {
             alpha,
             size,

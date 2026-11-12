@@ -35,6 +35,16 @@ ColumnLayout {
                 onClicked: panel.page.editor.select(modelData.pointer)
 
                 QQC2.ToolButton {
+                    anchors.right: packed.left
+                    icon.name: "edit-rename"
+                    text: App.tr("Rename…")
+                    display: QQC2.AbstractButton.IconOnly
+                    onClicked: renaming.ask("asset", row.modelData.id)
+                }
+
+                QQC2.ToolButton {
+                    id: packed
+
                     anchors.right: remove.left
                     visible: row.modelData.kind === "image" && !row.modelData.path.toLowerCase().endsWith(".ktx2")
                     icon.name: "application-x-archive"
@@ -43,6 +53,12 @@ ColumnLayout {
                     QQC2.ToolTip.text: text
                     QQC2.ToolTip.visible: hovered
                     onClicked: packing.show(row.modelData.id, row.modelData.pointer)
+                }
+
+                SceneRename {
+                    id: renaming
+
+                    page: panel.page
                 }
 
                 QQC2.ToolButton {

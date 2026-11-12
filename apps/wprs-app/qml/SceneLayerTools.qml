@@ -109,6 +109,10 @@ Flow {
         page: tools.owner.page
     }
 
+    SceneLayerClip {
+        owner: tools.owner
+    }
+
     QQC2.ToolButton {
         icon.name: "object-group"
         text: App.tr("Group the layers")

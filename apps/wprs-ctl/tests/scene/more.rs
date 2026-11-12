@@ -60,7 +60,7 @@ fn user_properties_and_presets_are_edited_from_the_command_line() {
     ok(dir, &["scene", "set", "snow", "/scene/scripts", r#"[{"path": "scripts/look.js"}]"#]);
     let renamed = run(dir, &["scene", "rename-property", "snow", "mood", "weather"]);
     let warned = String::from_utf8(renamed.stderr).unwrap();
-    assert!(renamed.status.success() && warned.contains("scripts/look.js names \"mood\""), "{warned}");
+    assert!(renamed.status.success() && warned.contains("scripts/look.js:1 names \"mood\""), "{warned}");
     let named = fails(dir, &["scene", "remove-property", "snow", "weather"]);
     assert!(named.contains("/manifest/properties/button_1/enabled_if"), "{named}");
     ok(dir, &["scene", "condition", "snow", "button_1", "", "--enabled"]);
@@ -88,7 +88,7 @@ fn renaming_a_particle_system_warns_about_the_scripts_that_name_it() {
     ok(dir, &["scene", "set", "snow", "/scene/scripts", r#"[{"path": "scripts/flakes.js"}]"#]);
     let renamed = run(dir, &["scene", "particles", "snow", "flakes", "rename", "embers"]);
     let warned = String::from_utf8(renamed.stderr).unwrap();
-    assert!(renamed.status.success() && warned.contains("scripts/flakes.js names \"flakes\""), "{warned}");
+    assert!(renamed.status.success() && warned.contains("scripts/flakes.js:1 names \"flakes\""), "{warned}");
     assert_eq!(show(dir, "/scene/layers/1/system"), json!("embers"));
 }
 

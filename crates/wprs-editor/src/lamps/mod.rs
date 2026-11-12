@@ -41,6 +41,9 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::Animate(e) => crate::motion::act(dir, doc, e),
         Action::Effects(e) => crate::shaping::effects(dir, doc, e),
         Action::Layer(e) => crate::shaping::layers::edit(dir, doc, e),
+        Action::Rename(r) => crate::ids::rename(dir, doc, r.kind, &r.id, &r.to),
+        Action::Paste(p) => crate::ids::paste(dir, doc, &p.clip, p.into.as_deref(), p.at)
+            .and_then(|ops| crate::shaping::refused(dir, doc, ops)),
         Action::Manifest(e) => crate::shaping::marks::manifest(dir, doc, e),
         Action::Property(e) => crate::shaping::marks::property(dir, doc, e),
         Action::Canvas(e) => crate::shaping::canvas::canvas(dir, doc, e),

@@ -175,7 +175,7 @@ fn scripts_that_name_a_property_are_found() {
     let mut doc = sample();
     doc["scene"]["scripts"] =
         json!([{"path": "scripts/a.js"}, {"path": "scripts/b.js"}, {"path": "../x.js"}]);
-    assert_eq!(scripts(tmp.path(), &doc, "wind"), ["scripts/a.js"]);
-    assert_eq!(scripts(tmp.path(), &doc, "windy"), ["scripts/b.js"]);
+    assert_eq!(scripts(tmp.path(), &doc, "wind"), ["scripts/a.js:1"]);
+    assert_eq!(scripts(tmp.path(), &doc, "windy"), ["scripts/b.js:1"]);
     assert!(scripts(tmp.path(), &doc, "mood").is_empty());
 }

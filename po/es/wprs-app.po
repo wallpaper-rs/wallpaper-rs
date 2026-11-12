@@ -3222,7 +3222,8 @@ msgstr "Activar"
 msgid "Automatic rules"
 msgstr "Reglas automáticas"
 
-#: apps/wprs-app/qml/ProfileCard.qml apps/wprs-app/qml/SceneSettingMenu.qml
+#: apps/wprs-app/qml/ProfileCard.qml apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneSettingMenu.qml
 #: apps/wprs-app/qml/SceneTimelineMenu.qml
 msgid "Rename…"
 msgstr "Cambiar el nombre…"
@@ -4441,7 +4442,10 @@ msgid ""
 "A dragged layer snaps to the edges and the middle of the canvas and of the "
 "other layers; hold Alt to place it freely, use the arrow keys (Shift for 10 "
 "px) to nudge it"
-msgstr "Una capa arrastrada se ajusta a los bordes y al centro del lienzo y de las demás capas; mantén Alt para colocarla libremente y usa las flechas (con Mayús, de 10 en 10 px) para moverla poco a poco"
+msgstr ""
+"Una capa arrastrada se ajusta a los bordes y al centro del lienzo y de las "
+"demás capas; mantén Alt para colocarla libremente y usa las flechas (con "
+"Mayús, de 10 en 10 px) para moverla poco a poco"
 
 #: apps/wprs-app/qml/SceneCanvasTools.qml
 msgid "Fit to the canvas"
@@ -4471,7 +4475,8 @@ msgstr "Toca en el lienzo la capa que seguirá %1; Escape cancela"
 msgid ""
 "Pick on the canvas the layer that the selected one follows, keeping it where "
 "it is"
-msgstr "Elige en el lienzo la capa que sigue la seleccionada, sin moverla de su sitio"
+msgstr ""
+"Elige en el lienzo la capa que sigue la seleccionada, sin moverla de su sitio"
 
 #: apps/wprs-app/qml/SceneCanvasTools.qml
 #: apps/wprs-app/qml/SceneTemplateFollow.qml
@@ -5172,6 +5177,28 @@ msgstr "Un mapa cúbico hecho con seis imágenes cuadradas"
 #: apps/wprs-app/qml/SceneKtx2Shape.qml
 msgid "Face %1"
 msgstr "Cara %1"
+
+#: apps/wprs-app/qml/SceneLayerClip.qml
+msgid "Copy the layers"
+msgstr "Copiar las capas"
+
+#: apps/wprs-app/qml/SceneLayerClip.qml
+msgid ""
+"Copy the selected layer and the ones picked with Ctrl, with what they use, "
+"to paste them here or in another scene"
+msgstr "Copiar la capa elegida y las marcadas con Ctrl, con lo que usan, para pegarlas aquí o en otra escena"
+
+#: apps/wprs-app/qml/SceneLayerClip.qml
+msgid "Paste the layers"
+msgstr "Pegar las capas"
+
+#: apps/wprs-app/qml/SceneLayerClip.qml
+msgid "Paste the copied layers with free ids, copying the files they use"
+msgstr "Pegar las capas copiadas con ids libres, copiando los archivos que usan"
+
+#: apps/wprs-app/qml/SceneLayerClip.qml
+msgid "Rename the layer"
+msgstr "Cambiar el id de la capa"
 
 #: apps/wprs-app/qml/SceneLayerFiles.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
@@ -6360,6 +6387,20 @@ msgstr "Carátula anterior (%1)"
 #: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneTemplateFollow.qml
 msgid "Bone %1"
 msgstr "Hueso %1"
+
+#: apps/wprs-app/qml/SceneRename.qml
+msgid "Rename %1"
+msgstr "Cambiar el id de %1"
+
+#: apps/wprs-app/qml/SceneRename.qml
+msgid ""
+"Bindings, parents, masks, effects, triggers and timelines that name it "
+"follow the new id."
+msgstr "Los vínculos, padres, máscaras, efectos, disparadores y líneas de tiempo que lo nombran siguen al id nuevo."
+
+#: apps/wprs-app/qml/SceneRename.qml
+msgid "These lines of scripts name %1 and are not rewritten: %2"
+msgstr "Estas líneas de scripts nombran %1 y no se reescriben: %2"
 
 #: apps/wprs-app/qml/SceneRgb.qml apps/wprs-app/qml/SettingsPage.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml

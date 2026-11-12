@@ -247,9 +247,9 @@ msgstr ""
 "locale_files"
 
 #: crates/wprs-editor/src/actions.rs crates/wprs-editor/src/bring.rs
-#: crates/wprs-editor/src/props.rs crates/wprs-editor/src/references.rs
-#: crates/wprs-editor/src/rig.rs crates/wprs-editor/src/swarms/emits.rs
-#: crates/wprs-editor/src/swarms/sow.rs
+#: crates/wprs-editor/src/ids/rename.rs crates/wprs-editor/src/props.rs
+#: crates/wprs-editor/src/references.rs crates/wprs-editor/src/rig.rs
+#: crates/wprs-editor/src/swarms/emits.rs crates/wprs-editor/src/swarms/sow.rs
 msgid "the id %1 is in use"
 msgstr "el id %1 ya está en uso"
 
@@ -762,6 +762,14 @@ msgid "Translate a text"
 msgstr "Traducir un texto"
 
 #: crates/wprs-editor/src/history.rs
+msgid "Rename an id"
+msgstr "Cambiar un id"
+
+#: crates/wprs-editor/src/history.rs
+msgid "Paste layers"
+msgstr "Pegar capas"
+
+#: crates/wprs-editor/src/history.rs
 msgid "Change the preview"
 msgstr "Cambiar la vista previa"
 
@@ -800,6 +808,23 @@ msgstr "Varios cambios"
 #: crates/wprs-editor/src/history.rs
 msgid "Update what the package uses"
 msgstr "Actualizar lo que usa el paquete"
+
+#: crates/wprs-editor/src/ids/clip.rs
+msgid "there are no layers to paste"
+msgstr "no hay capas para pegar"
+
+#: crates/wprs-editor/src/ids/gone.rs
+msgid "%1 is still used by %2; change them first"
+msgstr "%2 todavía usa %1; cámbialo antes"
+
+#: crates/wprs-editor/src/ids/rename.rs
+msgid "an id is 1 to 32 small letters, digits or _"
+msgstr "un id tiene de 1 a 32 minúsculas, cifras o _"
+
+#: crates/wprs-editor/src/ids/rename.rs
+#: crates/wprs-editor/src/packing/source.rs
+msgid "there is no asset %1"
+msgstr "no hay ningún recurso %1"
 
 #: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/straight.rs
 msgid "%1 has no keyframe at %2 s"
@@ -1069,10 +1094,6 @@ msgstr "no hay carpeta de datos"
 #: crates/wprs-editor/src/packing.rs
 msgid "say what to change in %1, such as ktx2"
 msgstr "di qué cambiar en %1, como ktx2"
-
-#: crates/wprs-editor/src/packing/source.rs
-msgid "there is no asset %1"
-msgstr "no hay ningún recurso %1"
 
 #: crates/wprs-editor/src/packing/source.rs
 msgid "%1 is not a still picture that can become KTX2"
@@ -1362,7 +1383,9 @@ msgstr "la capa %1 no está colocada en el lienzo"
 msgid ""
 "%1 cannot follow %2: it is itself, not drawn, follows %1 already or the "
 "chain would pass 8 layers"
-msgstr "%1 no puede seguir a %2: es la misma capa, no se dibuja, ya sigue a %1 o la cadena pasaría de 8 capas"
+msgstr ""
+"%1 no puede seguir a %2: es la misma capa, no se dibuja, ya sigue a %1 o la "
+"cadena pasaría de 8 capas"
 
 #: crates/wprs-editor/src/shaping/keyed.rs
 msgid "a part of %1 follows another source; write over it with replace"

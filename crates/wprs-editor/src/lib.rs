@@ -24,6 +24,7 @@ mod fits;
 pub mod forms;
 mod handles;
 pub mod history;
+pub mod ids;
 pub mod inspect;
 pub mod keys;
 pub mod lamps;

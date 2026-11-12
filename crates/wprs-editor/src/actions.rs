@@ -23,6 +23,7 @@ pub use crate::action::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, T
 pub use crate::action::{
     CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, TimelineEdit, TimelineEvent,
 };
+pub use crate::action::{Fit, Grip, Named, PasteEdit, RenameEdit, TranslateEdit};
 
 pub fn layer<'a>(doc: &'a Value, id: &str) -> Result<(String, &'a Value)> {
     let path = find(doc, id)?;
@@ -78,7 +79,7 @@ pub fn plan(doc: &Value, action: &Action) -> Result<Vec<Op>> {
     if let Action::Set { .. }
     | Action::Add { .. }
     | Action::Remove { .. }
-    | Action::Translate { .. }
+    | Action::Translate(_)
     | Action::Move { .. } = action
     {
         computed(doc, &ops)?;
@@ -112,7 +113,8 @@ fn steps(doc: &Value, action: &Action) -> Result<Vec<Op>> {
         }
         Action::RemoveLayer { id } => {
             let (path, value) = layer(doc, id)?;
-            let mut ops = vec![Op::Remove { path }];
+            let mut ops = crate::ids::forget(doc, &arrange::ids(value), &path)?;
+            ops.push(Op::Remove { path });
             ops.extend(arrange::forget(doc, value));
             if solo(doc) == Some(id) {
                 ops.push(Op::Remove { path: format!("{EDITOR}/solo") });
@@ -154,8 +156,8 @@ fn steps(doc: &Value, action: &Action) -> Result<Vec<Op>> {
             None => Vec::new(),
         },
         Action::Keyframe(k) => crate::shaping::checked(None, doc, keyframe(doc, k)?)?,
-        Action::Translate { pointer, language, text, add } => {
-            crate::texts::translate(doc, pointer, language, text.as_deref(), *add)?
+        Action::Translate(t) => {
+            crate::texts::translate(doc, &t.pointer, &t.language, t.text.as_deref(), t.add)?
         }
         Action::Upgrade(u) => {
             crate::meta::upgrade(doc, u.rating, &u.reasons, u.photosensitive, &u.derived_from)?

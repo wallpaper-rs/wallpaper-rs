@@ -44,7 +44,9 @@ pub fn duplicate(doc: &Value, id: &str) -> Result<Vec<Op>> {
     let (path, value) = layer(doc, id)?;
     let (list, i) = parent(&path);
     let mut made = Vec::new();
-    let copy = renamed(doc, value, &mut made);
+    let mut copy = renamed(doc, value, &mut made);
+    let names = ids(value).into_iter().zip(made.iter().cloned()).collect();
+    crate::ids::swap(&mut copy, &names);
     let kept = ids(value)
         .into_iter()
         .zip(made)

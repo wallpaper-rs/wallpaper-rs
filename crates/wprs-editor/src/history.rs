@@ -169,6 +169,8 @@ pub fn step(name: &str) -> Message {
         "remove_effect" => said("editor.step.remove_effect", "Remove an effect", &[]),
         "import_script" => said("editor.step.import_script", "Import a script", &[]),
         "translate" => said("editor.step.translate", "Translate a text", &[]),
+        "rename" => said("editor.step.rename", "Rename an id", &[]),
+        "paste" => said("editor.step.paste", "Paste layers", &[]),
         "thumbnail" => said("editor.step.thumbnail", "Change the preview", &[]),
         "upgrade" => said("editor.step.upgrade", "Upgrade the manifest", &[]),
         "add_property" => said("editor.step.add_property", "Add a property", &[]),

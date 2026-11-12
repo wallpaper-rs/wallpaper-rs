@@ -35,6 +35,10 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
                     .map(|p| (p, id.clone()))
                     .collect()
             }
+            Action::Rename(r) => references::scripts(&project.dir, &project.doc, &r.id)
+                .into_iter()
+                .map(|p| (p, r.id.clone()))
+                .collect(),
             _ => Vec::new(),
         })
         .collect();
@@ -119,7 +123,7 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
             (dir, Action::PaintMask(MaskStroke { pointer, channel, radius, hardness, value, points }))
         }
         Author::Translate { dir, pointer, language, text, add, .. } => {
-            (dir, Action::Translate { pointer, language, text, add })
+            (dir, Action::Translate(wprs_editor::actions::TranslateEdit { pointer, language, text, add }))
         }
         Author::Thumbnail { dir, file, animated } => {
             (dir, Action::Thumbnail { file: fs::canonicalize(&file).unwrap_or(file), animated })
@@ -138,6 +142,7 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
         Author::Lamping(command) => return crate::lamped::action(command),
         Author::Modeling(command) => return crate::modeled::action(command),
         Author::Flying(command) => return crate::animated::action(command),
+        Author::Naming(command) => return crate::naming::action(command),
         other => return Err(Box::new(other)),
     })
 }

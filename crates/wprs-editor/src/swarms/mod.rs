@@ -30,6 +30,10 @@ pub use looks::{controls, sources};
 pub use salt::{pin_seed, preview_seed};
 pub use walls::response;
 
+pub(crate) fn rename_system(doc: &Value, at: &str, old: &str, to: &str) -> Result<Vec<crate::ops::Op>> {
+    emits::rename(doc, at, old, to)
+}
+
 pub(crate) fn system(doc: &Value, id: &str) -> Result<String> {
     let path = format!("/scene/particles/{}", escape(id));
     ensure!(

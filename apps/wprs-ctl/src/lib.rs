@@ -52,6 +52,7 @@ mod modeled;
 mod modeling;
 pub mod models;
 pub mod moderate;
+mod naming;
 pub mod pack;
 mod paging;
 pub mod pkg;

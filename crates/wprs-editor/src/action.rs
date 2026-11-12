@@ -4,6 +4,7 @@ use std::path::PathBuf;
 
 mod glows;
 mod grips;
+mod ids;
 mod lamps;
 mod limbs;
 mod marks;
@@ -16,6 +17,7 @@ mod sow;
 mod swarm;
 mod tend;
 mod timing;
+pub use ids::{Named, PasteEdit, RenameEdit, TranslateEdit};
 pub use lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, NormalsMake};
 pub use limbs::{AttachEdit, BodyEdit, BoneRuleEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit};
 pub use marks::{CanvasEdit, Fit, Grip, LayerEdit, ManifestEdit, PropertyEdit};
@@ -121,14 +123,9 @@ pub enum Action {
     ImportAssets(ImportAssets),
     Asset(AssetEdit),
     Rgb(RgbEdit),
-    Translate {
-        pointer: String,
-        language: String,
-        #[serde(default)]
-        text: Option<String>,
-        #[serde(default)]
-        add: bool,
-    },
+    Translate(TranslateEdit),
+    Rename(RenameEdit),
+    Paste(PasteEdit),
     Thumbnail {
         file: PathBuf,
         #[serde(default)]

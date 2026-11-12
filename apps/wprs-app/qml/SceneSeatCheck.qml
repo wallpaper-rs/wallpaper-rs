@@ -93,5 +93,8 @@ QtObject {
             throw new Error("seats: stretching to the canvas left " + JSON.stringify(seat("seat_kid").outline));
         while (page.view.history.done.length > steps)
             page.run("undo");
+        Qt.createComponent("SceneIdsCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
     }
 }

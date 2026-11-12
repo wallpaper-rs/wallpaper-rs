@@ -96,12 +96,14 @@ fn bound(value: &Value, pointer: &str, id: &str, out: &mut Vec<String>) {
 pub fn scripts(dir: &Path, doc: &Value, id: &str) -> Vec<String> {
     let quoted = ['"', '\'', '`'].map(|q| format!("{q}{id}{q}"));
     let list = doc["scene"]["scripts"].as_array().into_iter().flatten().filter_map(|s| s["path"].as_str());
-    let reads = |path: &&str| {
+    let lines = |path: &str| {
         let text =
             wprs_format::check_path(path).ok().and_then(|_| std::fs::read_to_string(dir.join(path)).ok());
-        text.is_some_and(|text| quoted.iter().any(|q| text.contains(q)))
+        let text = text.unwrap_or_default();
+        let found = text.lines().enumerate().filter(|(_, l)| quoted.iter().any(|q| l.contains(q.as_str())));
+        found.map(|(n, _)| format!("{path}:{}", n + 1)).collect::<Vec<_>>()
     };
-    list.filter(reads).map(String::from).collect()
+    list.flat_map(lines).collect()
 }
 
 pub fn condition(doc: &Value, id: &str, enabled: bool, text: &str) -> Result<Vec<Op>> {

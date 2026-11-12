@@ -85,6 +85,10 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("pose").is_some() => pose(dir, doc, id, &q["pose"]),
         _ if q.get("keys").is_some() => keys(dir, doc, id, q["keys"].as_str().unwrap_or_default()),
         _ if q.get("handles").is_some() => handles(dir, doc, id),
+        _ if q.get("copy").is_some() => {
+            let ids: Vec<String> = serde_json::from_value(q["copy"]["ids"].clone()).unwrap_or_default();
+            crate::ids::copy(dir, doc, &ids).unwrap_or_else(|e| json!({ "error": e.to_string() }))
+        }
         _ if q.get("particles").is_some() => {
             let p = &q["particles"];
             let (t, sound) = (p["time"].as_f64().unwrap_or(0.0), p["sound"].as_f64().unwrap_or(0.0) as f32);
