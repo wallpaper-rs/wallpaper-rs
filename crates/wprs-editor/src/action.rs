@@ -22,7 +22,8 @@ pub use ids::{Named, PasteEdit, RenameEdit, TranslateEdit};
 pub use lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, NormalsMake};
 pub use limbs::{AttachEdit, BodyEdit, BoneRuleEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit};
 pub use marks::{
-    CameraHold, CanvasEdit, ClockSet, Fit, Grip, LayerEdit, ManifestEdit, Needed, PropertyEdit, SCREENS, Takes,
+    CameraHold, CanvasEdit, ClockSet, Fit, Grip, LayerEdit, ManifestEdit, Needed, PropertyEdit, SCREENS,
+    Takes,
 };
 pub use motion::{AnimEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use names::{
@@ -32,9 +33,7 @@ pub use rigging::{
     AutoWeights, BoneEdit, ClipEdit, ClipKey, DepthStroke, ExpressionEdit, MaskStroke, MeshCut, WeightStroke,
 };
 pub use shaping::{EffectsEdit, MaskHold, ScriptEdit, TemplateEdit};
-pub use solid::{
-    CameraEdit, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit,
-};
+pub use solid::{CameraEdit, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit};
 pub use sow::SowEdit;
 pub use swarm::{ParticleEdit, Response, Strand, SwarmLight, TendEdit};
 pub use timing::{KeyframeEdit, TimelineEdit, TimelineEvent};

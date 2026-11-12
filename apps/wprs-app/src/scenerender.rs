@@ -44,9 +44,9 @@ pub fn wanted(spec: &Value) -> (Rehearsal, Option<Versus>) {
 pub fn shoot(dir: &Path, doc: &Value, out: &Path, spec: &Value) -> anyhow::Result<String> {
     let (rehearsal, versus) = wanted(spec);
     let open = |bloom: bool| -> anyhow::Result<wprs_render::Opened> {
-        let (scene, props) = wprs_editor::levels::open(doc, bloom)?;
+        let (scene, props) = wprs_editor::reach::open(doc, bloom)?;
         let assets =
-            SceneAssets::read(&scene, wprs_editor::levels::reader(dir)).map_err(anyhow::Error::msg)?;
+            SceneAssets::read(&scene, wprs_editor::reach::reader(dir)).map_err(anyhow::Error::msg)?;
         Ok((scene, assets, props))
     };
     let reel = Renderer::shared()?.rehearse_versus(open, &rehearsal, versus.as_ref())?;
