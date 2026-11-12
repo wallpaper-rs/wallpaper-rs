@@ -40,6 +40,7 @@ mod orphans;
 mod outside;
 mod packages;
 mod pages;
+mod particles;
 mod picks;
 mod pixels;
 mod playback;

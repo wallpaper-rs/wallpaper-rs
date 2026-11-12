@@ -7758,6 +7758,22 @@ msgstr ""
 "sistema con una segunda capa para pintarlas también."
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "the graphics card runs compute shaders"
+msgstr "la tarjeta gráfica ejecuta shaders de cómputo"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "the graphics are drawn by software, without a graphics card"
+msgstr "los gráficos se dibujan por software, sin tarjeta gráfica"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "the graphics card has no compute shaders"
+msgstr "la tarjeta gráfica no tiene shaders de cómputo"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "it was chosen so"
+msgstr "así se eligió"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
 msgid "Particle budget"
 msgstr "Presupuesto de partículas"
 
@@ -7766,13 +7782,36 @@ msgid "Restart systems"
 msgstr "Reiniciar los sistemas"
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "the graphics card"
+msgstr "la tarjeta gráfica"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "the processor"
+msgstr "el procesador"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "In the preview: %1 alive of %2 slots, simulated on %3 because %4"
+msgstr "En la vista previa: %1 vivas de %2 espacios, simulados en %3 porque %4"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid "The preview draws at quality %1 on a graphics card of class %2"
+msgstr "La vista previa se dibuja con calidad %1 en una tarjeta gráfica de clase %2"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
+msgid ""
+"No preview is running, so the counts below are an estimate made by the editor"
+msgstr "No hay vista previa en marcha, así que las cuentas de abajo son una estimación del editor"
+
+#: apps/wprs-app/qml/SceneSwarmBudget.qml
 msgid "Simulate on the processor and show the particles over the preview"
 msgstr ""
 "Simular en el procesador y mostrar las partículas sobre la vista previa"
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
-msgid "%1 alive of %2 at %3 s; %4 slots on the processor"
-msgstr "%1 vivas de %2 a los %3 s; %4 plazas en el procesador"
+msgid ""
+"Estimate of the editor, not of the preview: %1 alive of %2 at %3 s; %4 slots "
+"on the processor"
+msgstr "Estimación del editor, no de la vista previa: %1 vivas de %2 a los %3 s; %4 espacios en el procesador"
 
 #: apps/wprs-app/qml/SceneSwarmBudget.qml
 msgid ""
@@ -8544,7 +8583,9 @@ msgstr "Solo la capa %1"
 msgid ""
 "This layer follows the render of the system. Your first change below gives "
 "it a render of its own, copied from the system's."
-msgstr "Esta capa sigue el dibujo del sistema. Tu primer cambio de abajo le da un dibujo propio, copiado del del sistema."
+msgstr ""
+"Esta capa sigue el dibujo del sistema. Tu primer cambio de abajo le da un "
+"dibujo propio, copiado del del sistema."
 
 #: apps/wprs-app/qml/SceneSwarmScope.qml
 msgid "This layer has its own render. It differs from the system's in: %1"

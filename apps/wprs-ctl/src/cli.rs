@@ -69,6 +69,11 @@ pub enum Command {
     Restart,
     #[command(about = "Draw again the effects left out after they stopped the graphics card or a program")]
     RetryEffects,
+    #[command(about = "Print the particles alive on an output, the path that simulates them and why, as JSON")]
+    ParticleStats {
+        #[arg(long, help = "The output that shows the scene, such as a preview output")]
+        output: String,
+    },
     #[command(about = "Print the daemon state as JSON")]
     State {
         #[arg(long, help = "Accepted for symmetry: the state is always JSON")]

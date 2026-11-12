@@ -76,6 +76,10 @@ impl State {
                     o.dirty = true;
                 }
             }
+            Command::Count(output, done) => {
+                let scene = self.outputs.get(&output).and_then(|o| o.shown.scene.as_ref());
+                done.send(scene.and_then(|s| s.counted(self.renderer))).ok();
+            }
             Command::Wake => {}
             Command::Clear(dir, done) => self.clear_page(dir, done),
             Command::Quit => return false,

@@ -58,6 +58,10 @@ fn the_state_says_where_particles_run() {
     plain.render(renderer, ((32, 18), 60), power, &HashMap::new(), true, at).unwrap();
     let path = if renderer.compute() && !renderer.software() { "gpu" } else { "cpu" };
     assert_eq!((scene.particles(), plain.particles()), (path, ""));
+    let counted = scene.counted(renderer).unwrap();
+    assert_eq!((counted.path, counted.systems.len()), (path, 1));
+    assert!(counted.slots > 0 && counted.alive <= counted.slots, "{counted:?}");
+    assert!(plain.counted(renderer).is_none());
 }
 
 #[test]

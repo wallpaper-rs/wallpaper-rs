@@ -45,6 +45,7 @@ pub trait Daemon1 {
     fn export_scene_values(&self, output: &str, preset: &str) -> Result<String>;
     fn import_scene_values(&self, output: &str, json: &str, name: &str) -> Result<Vec<String>>;
     fn press_scene_button(&self, output: &str, id: &str) -> Result<()>;
+    fn get_particle_stats(&self, output: &str) -> Result<String>;
     fn share_scene_values(&self, output: &str, shared: bool) -> Result<()>;
     fn reload(&self) -> Result<()>;
     fn restart(&self) -> Result<()>;

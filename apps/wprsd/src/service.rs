@@ -159,6 +159,11 @@ impl Service {
         self.d()?.run(move |d| d.import_scene_values(&output, &json, &name)).await
     }
 
+    #[zbus(out_args("json"))]
+    async fn get_particle_stats(&self, output: String) -> Result<String> {
+        self.d()?.render(move |d| d.particle_stats(&output)).await
+    }
+
     async fn press_scene_button(&self, output: String, id: String) -> Result<()> {
         self.d()?.render(move |d| d.press_scene_button(&output, &id)).await
     }

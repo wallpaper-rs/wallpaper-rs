@@ -660,6 +660,13 @@ render has now and lists the values that differ from the system's, and *Use the 
 again* drops it (`particles` `scope`, reached with `wprs-ctl scene act`). Without a layer picked the
 panel shows the render of the system even when a layer draws it with its own.
 
+The particle budget of the inspector reads the real numbers of the running preview when there is
+one: `GetParticleStats` of the daemon for the output of the preview gives the particles alive, the
+slots, the path that simulates them (graphics card or processor) and why, and the quality and card
+class the preview draws at, refreshed every two seconds and after each edit. Only when no preview
+runs does the panel show the count of its own simulation, labelled as an estimate; the box that
+shows the particles over the preview always uses that simulation.
+
 The particle budget of the inspector simulates the system on the processor up to the time of the
 timeline (at most 10 seconds), as the CPU path of the engine does, and tells how many particles live
 of its capacity, the slots it keeps on the GPU and on the processor for each device tier (phones and

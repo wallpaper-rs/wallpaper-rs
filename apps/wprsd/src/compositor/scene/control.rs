@@ -2,7 +2,7 @@
 use super::super::scripts::Link;
 use super::SceneState;
 use std::time::Instant;
-use wprs_render::SceneView;
+use wprs_render::{Renderer, SceneView};
 use wprs_scene::Uses;
 
 impl SceneState {
@@ -79,6 +79,22 @@ impl SceneState {
             Some(false) => "cpu",
             None => "",
         }
+    }
+
+    pub(in crate::compositor) fn counted(&self, renderer: &Renderer) -> Option<super::super::Counted> {
+        let view = self.view.as_ref()?;
+        let gpu = view.gpu_particles()?;
+        let found = renderer.census(view).ok()?;
+        let systems: Vec<(String, u32)> = found.into_iter().map(|(id, c)| (id, c.alive)).collect();
+        let reason = match (gpu, renderer.software(), renderer.compute()) {
+            (true, ..) => "compute",
+            (false, true, _) => "software",
+            (false, false, false) => "no_compute",
+            _ => "chosen",
+        };
+        let path = if gpu { "gpu" } else { "cpu" };
+        let alive = systems.iter().map(|s| s.1).sum();
+        Some(super::super::Counted { path, reason, alive, slots: view.stats().particles, systems })
     }
 
     pub(in crate::compositor) fn flashes(&self) -> &'static str {

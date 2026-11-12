@@ -56,6 +56,7 @@ calls! {
         ExportSceneValues export_scene_values(output: str, preset: str);
         ImportSceneValues import_scene_values(output: str, json: str, name: str);
         PressSceneButton press_scene_button(output: str, id: str);
+        GetParticleStats get_particle_stats(output: str) json;
         ShareSceneValues share_scene_values(output: str, shared: bool);
         Reload reload();
         Restart restart();

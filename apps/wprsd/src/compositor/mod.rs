@@ -1,3 +1,4 @@
+mod counted;
 mod feed;
 mod frames;
 mod guard;
@@ -23,6 +24,7 @@ pub(crate) mod stops;
 mod surface;
 
 use crate::fatal;
+pub use counted::Counted;
 pub use light::Hdr;
 pub use output::Tone;
 pub use spec::*;
@@ -52,6 +54,7 @@ enum Command {
     Press(String, String),
     Retry,
     Again(String),
+    Count(String, mpsc::Sender<Option<Counted>>),
     Wake,
     Clear(std::path::PathBuf, mpsc::Sender<std::io::Result<()>>),
     Quit,

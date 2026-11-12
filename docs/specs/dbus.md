@@ -601,6 +601,18 @@ Presses the `button` setting `id` of the scene shown on `output` (`""` = every o
 it): timelines whose `trigger` is `prop:<id>` start again and the scripts of the scene see the press
 in their next frame (`scene.md`). Nothing is stored.
 
+### `GetParticleStats(s output) → (s json)`
+
+Counts the particles of the scene that `output` draws now, for the editor of scenes and
+`wprs-ctl particle-stats --output`. The reply is `{ output, path, reason, alive, slots, systems,
+quality, quality_reason, tier, tier_measured }`: `path` is `"gpu"` or `"cpu"`, the place that
+simulates the particles, and `reason` why (`"compute"`: the card runs compute shaders,
+`"software"`: the renderer is software, `"no_compute"`: the card lacks them, `"chosen"`);
+`alive` counts the live particles read back from the simulation, `slots` those the scene holds at
+this tier and `systems` lists `{ id, alive }` for every system; `quality` and `quality_reason` are
+those of the output in `GetState`. Nothing is counted until it is asked, so a scene that nobody
+asks about does no extra work. `NotFound` when the output does not exist or draws no particles.
+
 ### `ShareSceneValues(s output, b shared)`
 
 With `shared`, the screen `output` stops having its own values for the package it shows: they move

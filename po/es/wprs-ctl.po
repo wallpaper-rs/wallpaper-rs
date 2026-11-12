@@ -632,6 +632,16 @@ msgstr ""
 "la tarjeta gráfica o un programa"
 
 #: apps/wprs-ctl/src/cli.rs
+msgid ""
+"Print the particles alive on an output, the path that simulates them and "
+"why, as JSON"
+msgstr ""
+
+#: apps/wprs-ctl/src/cli.rs
+msgid "The output that shows the scene, such as a preview output"
+msgstr ""
+
+#: apps/wprs-ctl/src/cli.rs
 msgid "Print the daemon state as JSON"
 msgstr "Imprimir el estado del daemon como JSON"
 

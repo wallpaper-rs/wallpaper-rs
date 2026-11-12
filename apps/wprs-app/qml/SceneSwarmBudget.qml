@@ -14,6 +14,33 @@ ColumnLayout {
         return g && (g.lit || g.refract) ? g : null;
     }
 
+    readonly property string output: tools.page.editor.output
+    readonly property var here: (live?.systems ?? []).find(s => s.id === tools.system) ?? null
+    readonly property var ways: ({
+            "compute": App.tr("the graphics card runs compute shaders"),
+            "software": App.tr("the graphics are drawn by software, without a graphics card"),
+            "no_compute": App.tr("the graphics card has no compute shaders"),
+            "chosen": App.tr("it was chosen so")
+        })
+    property var live: null
+
+    function ask() {
+        if (output === "") {
+            live = null;
+            return;
+        }
+        App.query("GetParticleStats", [output], "Daemon1", reply => {
+            if (budget)
+                budget.live = reply;
+        }, () => {
+            if (!budget)
+                return;
+            budget.live = null;
+            if (budget.census === null)
+                budget.measure();
+        });
+    }
+
     function measure() {
         SceneSwarmCensus.measure(tools.page, tools.system, null);
     }
@@ -25,6 +52,16 @@ ColumnLayout {
         }
 
         target: budget.tools.page.editor
+    }
+
+    Component.onCompleted: ask()
+    onOutputChanged: ask()
+
+    Timer {
+        interval: 2000
+        repeat: true
+        running: budget.output !== "" && budget.visible
+        onTriggered: budget.ask()
     }
 
     Timer {
@@ -45,6 +82,29 @@ ColumnLayout {
         onPicked: budget.measure()
     }
 
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: budget.here !== null
+        wrapMode: Text.Wrap
+        text: budget.live ? App.tr("In the preview: %1 alive of %2 slots, simulated on %3 because %4", budget.here?.alive ?? 0, budget.live.slots, budget.live.path === "gpu" ? App.tr("the graphics card") : App.tr("the processor"), budget.ways[budget.live.reason] ?? budget.live.reason) : ""
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: budget.live !== null
+        wrapMode: Text.Wrap
+        font: Kirigami.Theme.smallFont
+        text: budget.live ? App.tr("The preview draws at quality %1 on a graphics card of class %2", String(budget.live.quality).toUpperCase(), String(budget.live.tier).slice(1)) : ""
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: budget.live === null
+        wrapMode: Text.Wrap
+        font: Kirigami.Theme.smallFont
+        text: App.tr("No preview is running, so the counts below are an estimate made by the editor")
+    }
+
     QQC2.CheckBox {
         text: App.tr("Simulate on the processor and show the particles over the preview")
         checked: SceneSwarmCensus.shown
@@ -57,9 +117,9 @@ ColumnLayout {
 
     QQC2.Label {
         Layout.fillWidth: true
-        visible: budget.census !== null
+        visible: budget.census !== null && (SceneSwarmCensus.shown || budget.live === null)
         wrapMode: Text.Wrap
-        text: App.tr("%1 alive of %2 at %3 s; %4 slots on the processor", budget.census?.alive ?? 0, budget.census?.capacity ?? 0, Math.round((budget.census?.time ?? 0) * 10) / 10, budget.census?.slots ?? 0)
+        text: App.tr("Estimate of the editor, not of the preview: %1 alive of %2 at %3 s; %4 slots on the processor", budget.census?.alive ?? 0, budget.census?.capacity ?? 0, Math.round((budget.census?.time ?? 0) * 10) / 10, budget.census?.slots ?? 0)
     }
 
     SceneRepeater {
