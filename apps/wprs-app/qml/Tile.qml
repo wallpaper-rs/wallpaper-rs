@@ -25,10 +25,24 @@ QQC2.ItemDelegate {
     readonly property bool veiled: mature && !App.unveiled
     required property bool flashing
 
+    readonly property bool current: GridView.isCurrentItem && GridView.view.activeFocus
+
     signal picked(bool only)
     signal opened
 
     highlighted: selected
+    focusPolicy: Qt.NoFocus
+    Keys.onSpacePressed: event => GridView.view.choose(event.modifiers)
+
+    Rectangle {
+        anchors.fill: parent
+        z: 1
+        visible: tile.current
+        color: "transparent"
+        border.width: 2
+        border.color: Kirigami.Theme.focusColor
+        radius: Kirigami.Units.smallSpacing
+    }
 
     QQC2.ToolTip {
         id: tip

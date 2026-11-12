@@ -42,17 +42,13 @@ Kirigami.OverlayDrawer {
             if (first)
                 App.query("Thumbnail", [uid, 1024], "Library1", path => drawer && drawer.uid === uid && (drawer.preview = path[0] ?? ""), () => {});
             if (reply.installed)
-                App.query("List", [], "Repos1", list => {
-                    if (!drawer)
-                        return;
-                    if (drawer.uid === uid)
-                        drawer.repo = list.repos.find(repo => repo.repo_id === reply.installed.repo_id)?.name ?? "";
-                });
+                App.query("List", [], "Repos1", list => drawer && drawer.uid === uid && (drawer.repo = list.repos.find(repo => repo.repo_id === reply.installed.repo_id)?.name ?? ""));
         });
     }
 
     edge: Qt.RightEdge
     modal: true
+    focus: true
     handleVisible: false
     width: Math.min(Kirigami.Units.gridUnit * 24, parent ? parent.width : 0)
 

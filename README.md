@@ -3082,6 +3082,10 @@ las herramientas de máscaras, partículas y fuerzas; en una carpeta temporal cr
 estático con claves de prueba desde la pestaña *Repositorio estático* (diálogos *Repositorio
 nuevo…*, *Raíz…*, *Revocar* y *Publicar…*), añade un paquete, revoca y retira la revocación de una
 versión, publica y comprueba que la página se dibuja.
+Además recorre cada página solo con el teclado (Tab, Intro, espacio y Escape) y falla si un control
+no se alcanza con Tab, si no se pueden elegir ni aplicar los elementos de la biblioteca, si el menú
+lateral no se abre con Intro o no se cierra con Escape, o si la rueda del ratón cambia un
+desplegable o un deslizador que no se ha pulsado.
 Los archivos QML siguen el formato de `qmlformat` de Qt 6.12.
 
 APK de Android (con el SDK, el NDK 28 o posterior y `cargo install cargo-ndk`):

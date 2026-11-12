@@ -11,6 +11,7 @@ Item {
     required property ItemModel items
     property var uids: []
     property var playlists: []
+    readonly property bool applying: apply.visible
     readonly property list<QtObject> actions: [
         Kirigami.Action {
             text: App.tr("Import…")
@@ -109,7 +110,19 @@ Item {
         inspect(uid);
         if (!drawer.visible)
             throw new Error("the item drawer did not open");
+        let hid = false;
+        const note = () => hid = true;
+        drawer.aboutToHide.connect(note);
+        App.backend.press(Qt.Key_Escape, 0);
+        drawer.aboutToHide.disconnect(note);
+        if (!hid)
+            throw new Error("the Escape key does not close the details panel");
         apply.show(uid);
+    }
+
+    function applyTo(uid) {
+        if (uid)
+            apply.show(uid);
     }
 
     function renameTag(name) {

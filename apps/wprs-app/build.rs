@@ -39,6 +39,7 @@ fn main() {
         "src/depth.rs",
         "src/editor.rs",
         "src/items.rs",
+        "src/keyboard.rs",
         "src/packer.rs",
         "src/relief.rs",
         "src/scene.rs",

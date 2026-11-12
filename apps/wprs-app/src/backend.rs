@@ -68,6 +68,10 @@ pub mod qobject {
         #[qinvokable]
         fn claim(self: &Backend, unit: &QString) -> bool;
         #[qinvokable]
+        fn press(self: &Backend, key: i32, modifiers: i32);
+        #[qinvokable]
+        fn wheel(self: &Backend, x: f64, y: f64, delta: i32);
+        #[qinvokable]
         fn path(self: &Backend, url: &QString) -> QString;
         #[qinvokable]
         fn markup(self: &Backend, text: &QString) -> QString;
@@ -125,6 +129,7 @@ pub struct BackendRust {
 impl cxx_qt::Initialize for Backend {
     fn initialize(mut self: Pin<&mut Self>) {
         self.as_mut().set_checking(bus::checking());
+        crate::keyboard::install_keys();
         bus::listen(self.qt_thread(), Backend::event);
     }
 }

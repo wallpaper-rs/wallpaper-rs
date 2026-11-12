@@ -20,6 +20,7 @@ mod events;
 mod fetch;
 mod grid;
 mod items;
+mod keyboard;
 mod landing;
 mod library;
 mod packer;

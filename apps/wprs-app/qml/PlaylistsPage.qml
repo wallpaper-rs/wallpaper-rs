@@ -65,6 +65,7 @@ Kirigami.Page {
             delegate: QQC2.ItemDelegate {
                 required property var modelData
 
+                focusPolicy: Qt.StrongFocus
                 width: ListView.view.width
                 text: modelData.name
                 icon.name: modelData.query === null ? "view-media-playlist" : "tag-folder"

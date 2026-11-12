@@ -93,6 +93,7 @@ ColumnLayout {
                     required property bool mature
                     readonly property bool veiled: mature && !App.unveiled
 
+                    focusPolicy: Qt.StrongFocus
                     width: list.width
                     contentItem: RowLayout {
                         Kirigami.ListItemDragHandle {

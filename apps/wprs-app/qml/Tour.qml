@@ -2,6 +2,8 @@ import QtQuick
 import io.github.wallpaper_rs.app
 
 Timer {
+    id: tour
+
     required property var host
     property int step: 0
     property var opened: null
@@ -20,15 +22,28 @@ Timer {
             throw new Error("a request for the " + page + " page replaced the page shown");
     }
 
+    readonly property KeyWalk walking: KeyWalk {
+        host: tour.host
+    }
+    readonly property KeyProbe probing: KeyProbe {
+        host: tour.host
+        walk: tour.walking
+    }
+
     interval: 300
     repeat: true
     running: App.checking
     onTriggered: {
-        if (Object.keys(App.pending).length > 0)
+        if (Object.keys(App.pending).length > 0 || probing.running)
             return;
+        if (!probing.finished)
+            return probing.begin();
         const at = step++;
-        if (at > 0 && at <= host.pages.length && owns(at))
+        if (at > 0 && at <= host.pages.length && owns(at)) {
+            walking.check(host.names[at - 1]);
+            host.pageStack.currentItem.keys?.();
             host.pageStack.currentItem.exercise?.();
+        }
         if (at < host.pages.length) {
             host.showPage(at);
             keeps(host.names[at]);

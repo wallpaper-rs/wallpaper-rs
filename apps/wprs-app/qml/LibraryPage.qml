@@ -33,6 +33,28 @@ Kirigami.Page {
         library.visible(top * columns, Math.min(grid.count, bottom * columns) - 1);
     }
 
+    function applyCurrent() {
+        const uid = grid.currentIndex >= 0 ? library.uid(grid.currentIndex) : "";
+        if (!uid)
+            return;
+        if (!grid.currentItem.selected)
+            grid.pick(true);
+        tools.applyTo(uid);
+    }
+
+    function keys() {
+        if (grid.count === 0)
+            throw new Error("the library shows no item to choose with the keyboard");
+        grid.forceActiveFocus(Qt.TabFocusReason);
+        App.backend.press(Qt.Key_Space, 0);
+        if (library.selected !== 1 || !grid.currentItem?.current)
+            throw new Error("the Space key does not choose the focused item of the library");
+        App.backend.press(Qt.Key_Return, 0);
+        if (!tools.applying)
+            throw new Error("the Enter key does not offer to apply the focused item");
+        App.backend.press(Qt.Key_Escape, 0);
+    }
+
     function exercise() {
         tools.exercise(library.uid(0));
     }
@@ -65,8 +87,21 @@ Kirigami.Page {
         GridView {
             id: grid
 
+            function pick(only) {
+                if (currentIndex >= 0)
+                    library.toggle(currentIndex, only);
+            }
+
+            function choose(modifiers) {
+                if (currentIndex >= 0)
+                    pick(!(modifiers & Qt.ControlModifier) && !currentItem.selected);
+            }
+
             cellWidth: page.cell
             cellHeight: page.cell
+            activeFocusOnTab: true
+            keyNavigationEnabled: true
+            currentIndex: -1
             reuseItems: true
             cacheBuffer: page.cell * 2
             model: ItemModel {
@@ -80,6 +115,13 @@ Kirigami.Page {
                 height: page.cell
                 onPicked: only => library.toggle(index, only)
                 onOpened: tools.inspect(uid)
+            }
+            Keys.onSpacePressed: event => choose(event.modifiers)
+            Keys.onReturnPressed: page.applyCurrent()
+            Keys.onEnterPressed: page.applyCurrent()
+            onActiveFocusChanged: {
+                if (activeFocus && currentIndex < 0 && count > 0)
+                    currentIndex = 0;
             }
             onContentYChanged: page.look()
             onHeightChanged: page.look()
