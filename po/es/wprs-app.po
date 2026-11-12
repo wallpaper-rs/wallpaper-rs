@@ -14816,6 +14816,10 @@ msgid "Colors"
 msgstr "Colores"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Combing"
+msgstr "Peinado"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Choice"
 msgstr "Selección"
 

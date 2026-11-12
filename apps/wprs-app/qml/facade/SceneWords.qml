@@ -95,6 +95,7 @@ QtObject {
             "color_b": App.tr("Second color"),
             "color_over_life": App.tr("Color over life"),
             "colors": App.tr("Colors"),
+            "comb": App.tr("Combing"),
             "combo": App.tr("Choice"),
             "cone": App.tr("Cone"),
             "contrast": App.tr("Contrast"),

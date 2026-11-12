@@ -2345,7 +2345,9 @@ msgstr "solo se peina un material de pelo"
 msgid ""
 "a comb stroke has 2 to %1 points, a radius in pixels and a strength from 0 "
 "to 1"
-msgstr "un trazo de peinado tiene de 2 a %1 puntos, un radio en píxeles y una fuerza de 0 a 1"
+msgstr ""
+"un trazo de peinado tiene de 2 a %1 puntos, un radio en píxeles y una fuerza "
+"de 0 a 1"
 
 #: crates/wprs-editor/src/stage3d/combed.rs
 msgid "the stroke does not cross that material"
@@ -2392,7 +2394,9 @@ msgstr "solo las capas dentro de un grupo 3D prueban la profundidad"
 msgid ""
 "%1 is not a map of a material; use base, orm, normal, occlusion, emissive or "
 "comb"
-msgstr "%1 no es un mapa de un material; usa base, orm, normal, occlusion, emissive o comb"
+msgstr ""
+"%1 no es un mapa de un material; usa base, orm, normal, occlusion, emissive "
+"o comb"
 
 #: crates/wprs-editor/src/stage3d/material.rs
 msgid "a material color is #rrggbb or [r, g, b, a]"
