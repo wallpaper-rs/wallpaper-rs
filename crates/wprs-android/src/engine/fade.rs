@@ -32,10 +32,6 @@ impl Fading {
     }
 }
 
-pub(super) fn same(a: &Look, b: &Look) -> bool {
-    (a.fit, a.background, a.fade, a.flip, a.grade) == (b.fit, b.background, b.fade, b.flip, b.grade)
-}
-
 pub(super) fn direct(look: &Look) -> bool {
     matches!(look.fit, Fit::Fill | Fit::Stretch) && look.flip == [false; 2] && look.grade.is_none()
 }
@@ -51,7 +47,7 @@ impl Engine {
         let shown = shown.map(|shown| shown.path);
         let current = self.direct.clone().or_else(|| self.film.clone());
         let look = settings::Look { flip, ..settings::look(self.lock) };
-        if shown.is_some() && shown == current && !same(&look, &self.look) {
+        if shown.is_some() && shown == current && look != self.look {
             (self.look, self.dirty) = (look, true);
         } else if shown != current {
             let fps = Power::now().fps(self.preview);

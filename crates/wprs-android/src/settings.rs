@@ -26,6 +26,7 @@ const OWN: &str = "settings.toml";
 
 static CONFIG: Mutex<Option<Config>> = Mutex::new(None);
 
+#[derive(PartialEq)]
 pub(crate) struct Look {
     pub(crate) fit: Fit,
     pub(crate) background: [u8; 3],
