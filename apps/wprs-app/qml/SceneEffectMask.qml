@@ -9,10 +9,10 @@ Kirigami.FormLayout {
 
     required property var page
     required property string pointer
-    readonly property var found: pointer.match(/^(.*\/layers\/\d+)\/effects\/(\d+)(\/mask(\/.*)?)?$/)
-    readonly property var owner: found ? (page.view.layers ?? []).find(item => item.pointer === found[1]) ?? null : null
-    readonly property int index: found ? Number(found[2]) : -1
-    readonly property var mask: owner ? (page.view, JSON.parse(page.editor.value(found[1] + "/effects/" + found[2] + "/mask") || "null")) : null
+    readonly property var found: pointer.match(/^(.*\/layers\/\d+)(?:\/effects\/(\d+))?(\/mask(\/.*)?)?$/)
+    readonly property var owner: found ? (page.view.layers ?? []).find(item => item.pointer === found[1] && !["sound", "light"].includes(item.type)) ?? null : null
+    readonly property int index: found && found[2] !== undefined ? Number(found[2]) : -1
+    readonly property var mask: owner ? (page.view, JSON.parse(page.editor.value(found[1] + (index >= 0 ? "/effects/" + index : "") + "/mask") || "null")) : null
     readonly property var gizmo: owner ? (page.view.gizmos ?? []).find(g => g.pointer === found[1]) ?? null : null
     readonly property string source: mask === null ? "" : typeof mask === "string" ? "texture" : ["texture", "layer", "shape"].find(k => mask[k] !== undefined) ?? ""
     readonly property string kind: source === "shape" ? Object.keys(mask.shape)[0] : ""
@@ -23,7 +23,7 @@ Kirigami.FormLayout {
         page.run("effects", {
                 "mask": Object.assign({
                         "layer": owner.id,
-                        "index": index
+                        "index": index >= 0 ? index : null
                     }, fields)
             }, gesture === true);
     }
@@ -74,7 +74,7 @@ Kirigami.FormLayout {
     visible: owner !== null
 
     QQC2.ComboBox {
-        Kirigami.FormData.label: App.tr("Mask of the effect:")
+        Kirigami.FormData.label: panel.index >= 0 ? App.tr("Mask of the effect:") : App.tr("Mask of the layer:")
         model: [App.tr("None"), App.tr("A picture"), App.tr("A layer"), App.tr("A shape")]
         currentIndex: ["", "texture", "layer", "shape"].indexOf(panel.source)
         onActivated: index => {
@@ -117,6 +117,15 @@ Kirigami.FormLayout {
         onActivated: index => panel.put({
                     "shape": panel.shaped(["rect", "ellipse", "ring", "polygon", "star", "line"][index])
                 })
+    }
+
+    SceneMaskThumb {
+        Kirigami.FormData.label: App.tr("Looks like:")
+        visible: panel.source !== ""
+        active: visible
+        page: panel.page
+        layerId: panel.owner?.id ?? ""
+        index: panel.index
     }
 
     SceneEffectMaskTune {
