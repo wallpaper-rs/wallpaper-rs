@@ -107,6 +107,7 @@ Item {
         }
     }
 
+    Component {
         id: triggerEditor
 
         SceneTrigger {
