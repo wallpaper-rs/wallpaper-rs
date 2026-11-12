@@ -603,12 +603,12 @@ inside, and `approximate` is true when nothing could be read). A force that keep
 draws a ring of that distance around its target, with a handle on the target and one on the ring;
 one that keeps particles between two points draws the line between them with a handle on each end;
 an `attractor`, a `vortex`, an `orbit` and a `slow_near` (the `pulls` of the query: `index`, `kind`,
-`field`, `ref`, `at` and `rings` of `{key, value, px, at}`) draw a dashed ring for each reach they
+`field`, `ref`, `at`, `falloff` and `rings` of `{key, value, px, at}`) draw a dashed ring for each reach they
 have (`radius`, `inner`, `outer` and the `ring` of a vortex) with a handle on its top, which sets
 it, and a handle on their center or target; and an end or a target that names a control point
 moves that point (the pointer has no handle). The steering section of the inspector adds any of
 these forces and lists them with the point they follow, their strength (the speed a `slow_near`
-keeps) and a slider for each reach. The inspector lists the
+keeps), a picker of the `falloff` and a slider for each reach. The inspector lists the
 colliders with a picker of the response (bounce, slide, stop, stick or kill) and the bounce and
 friction it uses, whether a circle or a box keeps particles inside, a picker of the layers it may
 collide with and, for a picture mask, its picture and the opacity from which it is solid; the kept distances with pickers of their targets (a control point, the pointer or a fixed point whose X and Y are typed in pixels of the system, the same picker for the `from`, `to`, `target` and `center` of every force) and sliders for the distance and the strength; a toggle and sliders for the neighbour radius,

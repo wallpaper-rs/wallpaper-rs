@@ -7882,6 +7882,26 @@ msgid "Speed kept %1"
 msgstr "Velocidad conservada %1"
 
 #: apps/wprs-app/qml/SceneSwarmPull.qml
+msgid "Weaker with distance"
+msgstr "Se debilita con la distancia"
+
+#: apps/wprs-app/qml/SceneSwarmPull.qml
+msgid "As the force does by default"
+msgstr "Como lo hace la fuerza por defecto"
+
+#: apps/wprs-app/qml/SceneSwarmPull.qml
+msgid "Not at all"
+msgstr "No se debilita"
+
+#: apps/wprs-app/qml/SceneSwarmPull.qml
+msgid "In proportion"
+msgstr "En proporción"
+
+#: apps/wprs-app/qml/SceneSwarmPull.qml
+msgid "With the square"
+msgstr "Con el cuadrado"
+
+#: apps/wprs-app/qml/SceneSwarmPull.qml
 msgid "%1: %2 px"
 msgstr "%1: %2 px"
 
@@ -7975,7 +7995,8 @@ msgstr "El sitio donde nacieron"
 #: apps/wprs-app/qml/SceneSwarmSettings.qml
 msgid ""
 "The layer and the control points only place particles when they are born"
-msgstr "La capa y los puntos de control solo colocan las partículas cuando nacen"
+msgstr ""
+"La capa y los puntos de control solo colocan las partículas cuando nacen"
 
 #: apps/wprs-app/qml/SceneSwarmSettings.qml
 msgid "Particles move with the layer that draws them"

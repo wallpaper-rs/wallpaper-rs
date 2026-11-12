@@ -28,7 +28,7 @@ pub(super) fn pulls(s: &Value, f: &Frame, spots: &[Value]) -> Vec<Value> {
             .collect();
         Some(
             json!({ "index": k, "kind": kind, "field": field, "ref": v[*field], "at": at.map(|c| f.round(c)),
-            "strength": v["strength"], "factor": v["factor"], "rings": rings }),
+            "strength": v["strength"], "factor": v["factor"], "falloff": v["falloff"], "rings": rings }),
         )
     })
     .collect()

@@ -106,6 +106,11 @@ fn pulls_show_their_center_and_rings_where_the_preview_draws_them() {
         json!({ "orbit": { "center": "cursor", "strength": 10 } }),
         json!({ "slow_near": { "target": [0, 0], "inner": 10, "outer": 20, "factor": 0.5 } }),
     ];
+    let falloff = json!({ "attractor": { "target": "p0", "strength": 30, "falloff": "inverse_square" } });
+    edit(&mut p, "force", json!({ "force": falloff })).unwrap();
+    assert_eq!(handles(&p)["pulls"][0]["falloff"], "inverse_square");
+    let last = system(&p)["forces"].as_array().unwrap().len() - 1;
+    edit(&mut p, "force", json!({ "index": last, "remove": true })).unwrap();
     for force in forces {
         edit(&mut p, "force", json!({ "force": force })).unwrap();
     }

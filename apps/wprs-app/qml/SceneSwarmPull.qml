@@ -9,6 +9,7 @@ GridLayout {
     required property var steer
     required property var pull
     readonly property var value: pull.ref
+    readonly property var falloffs: ["", "constant", "linear", "inverse_square"]
 
     columns: 2
 
@@ -41,6 +42,24 @@ GridLayout {
                 else
                     v.strength = Math.round(value);
             }, true)
+    }
+
+    QQC2.Label {
+        visible: row.pull.kind !== "slow_near"
+        text: App.tr("Weaker with distance")
+    }
+
+    QQC2.ComboBox {
+        Layout.fillWidth: true
+        visible: row.pull.kind !== "slow_near"
+        model: [App.tr("As the force does by default"), App.tr("Not at all"), App.tr("In proportion"), App.tr("With the square")]
+        currentIndex: Math.max(0, row.falloffs.indexOf(row.pull.falloff ?? ""))
+        onActivated: index => row.steer.patch(row.pull, v => {
+                if (index === 0)
+                    delete v.falloff;
+                else
+                    v.falloff = row.falloffs[index];
+            })
     }
 
     SceneRepeater {
