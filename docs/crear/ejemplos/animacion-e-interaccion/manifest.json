@@ -1,0 +1,36 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.animacion-e-interaccion",
+  "inputs": [
+    "pointer",
+    "clicks"
+  ],
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "requires": {
+    "features": [
+      "animated_textures",
+      "inputs.clicks",
+      "inputs.pointer",
+      "layer_events",
+      "layer_playback",
+      "parent",
+      "sound",
+      "sound2",
+      "texture_options",
+      "timeline_events"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Animación e interacción",
+  "version": "0.1.0"
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#101828" },
+  "layers": [
+    { "id": "fondo", "type": "solid", "color": "#101828" },
+    { "id": "panel", "type": "shape", "shape": { "rect": { "size": [1200, 500], "radius": 40 } },
+      "gradient": { "from": [0, 0], "to": [0, 1], "stops": [[0, "#2b3a67"], [1, "#101828"]] },
+      "stroke": { "color": "#8aa4ff", "width": 4 } },
+    { "id": "luna", "type": "shape", "shape": { "ellipse": { "size": [180, 180] } },
+      "fill": "#fff3c4", "transform": { "position": [560, 540] } },
+    { "id": "aro", "type": "shape", "shape": { "ring": { "size": [260, 260], "width": 14 } },
+      "fill": "#ffb347", "transform": { "position": [800, 540] } },
+    { "id": "hexagono", "type": "shape", "shape": { "polygon": { "sides": 6, "size": 110 } },
+      "fill": "#6ee7b7", "transform": { "position": [1040, 540], "rotation": 15 } },
+    { "id": "estrella", "type": "shape", "shape": { "star": { "points": 5, "size": 120, "inner": 0.45 } },
+      "fill": "#f472b6", "transform": { "position": [1280, 540] } },
+    { "id": "raya", "type": "shape", "shape": { "line": { "to": [300, 0], "width": 8 } },
+      "fill": "#ffffff", "transform": { "position": [660, 760] } },
+    { "id": "brillo", "type": "shape", "shape": { "ellipse": { "size": [700, 700] } }, "blend": "add",
+      "gradient": { "radial": true, "from": [0.5, 0.5], "to": [1, 0.5],
+        "stops": [[0, "#ffffff60"], [0.5, "#5b7cff30"], [1, "#5b7cff00"]] } }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#000000" },
+  "assets": { "cuadros": { "path": "assets/cuadros.webm" } },
+  "layers": [
+    { "id": "pelicula", "type": "video", "video": "cuadros", "size": [1920, 960],
+      "playback": { "rate": 1, "loop": true, "start": 0 } },
+    { "id": "pequena", "type": "video", "video": "cuadros", "size": [384, 192],
+      "transform": { "position": [1700, 960] },
+      "playback": { "own_clock": true, "rate": 0.5 } }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#10141f" },
+  "assets": {
+    "bola": { "path": "assets/bola.png", "atlas": [1, 4], "frames": 4, "fps": 6, "filter": "nearest" },
+    "toque": { "path": "assets/zumbido.wav" }
+  },
+  "layers": [
+    { "id": "baile", "type": "image", "image": "bola", "size": [256, 256],
+      "transform": { "position": [700, 540] },
+      "playback": { "rate": 1, "loop": true } },
+    { "id": "boton", "type": "shape", "shape": { "rect": { "size": [360, 140], "radius": 70 } }, "fill": "#3b82f6",
+      "solid": true, "transform": { "position": [1250, 540],
+        "scale": { "timeline": "pulsar", "keys": [[0, 1], [0.15, 0.9, "out_quad"], [0.4, 1, "out_back"]] } } },
+    { "id": "etiqueta", "type": "text", "text": "Toca aquí", "font": "sans-serif", "size": 54, "color": "#ffffff",
+      "parent": "boton", "inherit": ["transform", "visible"] },
+    { "id": "sonido", "type": "sound", "sound": "toque", "loop": false, "play_on": "event:golpe", "volume": 0.6 }
+  ],
+  "timelines": [
+    { "id": "pulsar", "duration": 0.4, "loop": "once", "autoplay": false, "trigger": "click:boton",
+      "events": [{ "t": 0.15, "name": "golpe" }] }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#0b1020" },
+  "assets": { "cielo": { "path": "assets/cielo.png" } },
+  "layers": [
+    { "id": "fondo", "type": "image", "image": "cielo", "size": [1920, 1080] },
+    { "id": "ventana", "type": "group", "clip": true,
+      "layers": [
+        { "id": "marco", "type": "shape", "shape": { "rect": { "size": [700, 420], "radius": 60 } }, "fill": "#ffffff" },
+        { "id": "interior", "type": "image", "image": "cielo", "size": [1400, 790],
+          "transform": { "position": { "timeline": "paseo", "keys": [[0, [760, 540]], [8, [1160, 540]]] } },
+          "effects": [{ "effect": "color_adjust", "params": { "saturation": 1.6, "contrast": 1.2 } }] }
+      ] },
+    { "id": "foco", "type": "shape", "shape": { "ellipse": { "size": [500, 500] } }, "fill": "#ffffff", "visible": false },
+    { "id": "halo", "type": "solid", "color": "#ffd27a", "blend": "add", "opacity": 0.35,
+      "mask": { "layer": "foco", "channel": "a", "feather": 0.4 } },
+    { "id": "planeta", "type": "shape", "shape": { "ellipse": { "size": [120, 120] } }, "fill": "#ff7a59",
+      "anchor": "top_left", "transform": { "position": [200, 160] } },
+    { "id": "luna", "type": "shape", "shape": { "ellipse": { "size": [40, 40] } }, "fill": "#ffffff",
+      "parent": "planeta", "inherit": ["transform", "visible"],
+      "transform": { "position": { "timeline": "orbita",
+        "keys": [[0, [90, 0]], [3, [0, 90]], [6, [-90, 0]], [9, [0, -90]], [12, [90, 0]]] } } },
+    { "id": "retoque", "type": "adjustment", "size": [900, 500],
+      "transform": { "position": [960, 540] },
+      "effects": [{ "effect": "vignette", "params": { "intensity": 0.5 } }] }
+  ],
+  "timelines": [
+    { "id": "paseo", "duration": 8, "loop": "pingpong" },
+    { "id": "orbita", "duration": 12, "loop": "repeat" }
+  ]
+}

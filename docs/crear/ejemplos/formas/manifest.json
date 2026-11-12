@@ -1,0 +1,18 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.formas",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Formas",
+  "version": "0.1.0"
+}

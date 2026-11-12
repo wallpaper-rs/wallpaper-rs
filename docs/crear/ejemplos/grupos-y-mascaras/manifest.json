@@ -1,0 +1,24 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.grupos-y-mascaras",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "requires": {
+    "features": [
+      "capture",
+      "parent"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Grupos y máscaras",
+  "version": "0.1.0"
+}
