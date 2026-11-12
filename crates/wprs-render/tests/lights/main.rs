@@ -11,6 +11,7 @@ mod beams;
 mod cached;
 mod cropped;
 mod gobos;
+mod ordered;
 mod shafts;
 mod surfaces;
 mod swarm;

@@ -3,6 +3,7 @@ use super::super::pipes::Mode;
 use super::super::{Op, Src};
 use super::{Painter, Target};
 use std::hash::{DefaultHasher, Hash, Hasher};
+use std::ops::Range;
 use wprs_scene::Content;
 
 const AIR: usize = 1;
@@ -33,13 +34,36 @@ impl Painter<'_, '_, '_> {
         if self.airs() { airy.map(|k| self.slot(k)).min().unwrap_or(usize::MAX) } else { usize::MAX }
     }
 
-    pub(crate) fn air_until(&mut self, at: usize, root: Target) {
+    pub(crate) fn holds_air(&self, range: Range<usize>) -> bool {
+        let glow = &self.pool.glow;
+        let within = |k: usize| self.frame.lamps.get(k).map_or(usize::MAX, |l| l.within);
+        self.airs() && (0..glow.count()).any(|k| glow.now.bulbs[k].air[0] > 0.0 && range.contains(&within(k)))
+    }
+
+    pub(crate) fn air_until(&mut self, at: usize, target: Target) {
         if !self.airs() {
             return;
         }
-        while self.aired.0 < self.pool.glow.count() && self.slot(self.aired.0) <= at {
-            self.aired.0 += 1;
-            self.air(self.aired.0 - 1, root);
+        while self.aired < self.pool.glow.count() && self.slot(self.aired) <= at {
+            self.aired += 1;
+            self.air(self.aired - 1, target);
+        }
+    }
+
+    pub(crate) fn air_closing(&mut self, range: Range<usize>, target: Target) {
+        let draws = &self.frame.draws;
+        let group = range
+            .start
+            .checked_sub(1)
+            .filter(|&g| matches!(draws[g].content, Content::Group { .. }) && draws[g].end == range.end);
+        let Some(group) = group.filter(|_| self.airs()) else { return };
+        let inside = |p: &Self, k: usize| p.frame.lamps.get(k).is_some_and(|l| l.within == group);
+        while self.aired < self.pool.glow.count()
+            && self.slot(self.aired) <= range.end
+            && inside(self, self.aired)
+        {
+            self.aired += 1;
+            self.air(self.aired - 1, target);
         }
     }
 

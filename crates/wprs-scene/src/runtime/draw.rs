@@ -114,18 +114,20 @@ impl Runtime {
             looks,
         };
         let root = (camera, None);
-        match self.arranged() {
-            Some(top) => walk(&cx, top, root, quality, &mut frame, canvas),
+        let top = self.arranged();
+        match &top {
+            Some(top) => walk(&cx, top.iter().copied(), root, quality, &mut frame, canvas),
             None => walk(&cx, &self.scene.layers, root, quality, &mut frame, canvas),
         }
         if let Some(glow) = crate::glow::pick(&self.glow, quality, self.battery) {
             walk(&cx, [glow], (Affine::IDENTITY, None), quality, &mut frame, canvas);
         }
         let Frame { draws, lamps, .. } = &mut frame;
-        let mut found = crate::eval::lamps::Gather { out: lamps, draws, next: 0 };
-        crate::eval::lamps::lamps(&cx, &self.scene.layers, root, (true, self.lit), quality, &mut found);
-        if self.script.order.is_some() {
-            frame.lamps.iter_mut().for_each(|l| l.slot = frame.draws.len());
+        let mut found = crate::eval::lamps::Gather { out: lamps, draws, next: 0, within: usize::MAX };
+        let lit = (true, self.lit);
+        match &top {
+            Some(top) => crate::eval::lamps::lamps(&cx, top.iter().copied(), root, lit, quality, &mut found),
+            None => crate::eval::lamps::lamps(&cx, &self.scene.layers, root, lit, quality, &mut found),
         }
         plan(&self.swarms, (&self.systems, &self.flocks), &cx, &frame, quality, self.t);
         crate::eval::staged::seal(&cx, &mut frame);

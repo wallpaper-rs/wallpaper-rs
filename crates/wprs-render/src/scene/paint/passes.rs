@@ -16,6 +16,7 @@ impl<'a> Painter<'a, '_, '_> {
         while !self.frame.keep
             && i < draws.len().min(first)
             && !draws[i].dynamic
+            && !self.holds_air(i..draws[i].end)
             && !self.shifting(i..draws[i].end)
         {
             let (key, moving) = self.feeding(i..draws[i].end);
@@ -26,7 +27,7 @@ impl<'a> Painter<'a, '_, '_> {
             static_end = i;
         }
         let root = Target { src: canvas, rect: self.full };
-        self.aired = (0, Some(canvas));
+        self.aired = 0;
         let (origin, size) =
             self.clip.map_or(([0, 0], self.full.size()), |c| ([c.x as u32, c.y as u32], c.size()));
         if static_end == 0 {
@@ -71,9 +72,7 @@ impl<'a> Painter<'a, '_, '_> {
     pub(crate) fn list(&mut self, range: Range<usize>, target: Target, clip: bool) {
         let mut i = range.start;
         while i < range.end {
-            if self.aired.1 == Some(target.src) {
-                self.air_until(i, target);
-            }
+            self.air_until(i, target);
             let frame = self.frame;
             let d = &frame.draws[i];
             let atop = clip && i > range.start;
@@ -88,6 +87,7 @@ impl<'a> Painter<'a, '_, '_> {
             }
             i = d.end;
         }
+        self.air_closing(range, target);
     }
 
     pub(crate) fn apart(&mut self, i: usize, target: Target, atop: bool) {
@@ -115,6 +115,7 @@ impl<'a> Painter<'a, '_, '_> {
         let id = d.layer as *const Layer as usize;
         let (fed, moving) = self.feeding(i..d.end);
         let still = !d.dynamic && self.backdrop.is_none() && !moving && !self.shifting(i..d.end);
+        let still = still && !self.holds_air(i..d.end);
         let key = still.then(|| self.digest(i..d.end, (rect, self.srgb, fed, dense.to_bits(), size)));
         if key.is_some() && self.caches.get(&id).map(|c| c.key) == key {
             self.reused += 1;

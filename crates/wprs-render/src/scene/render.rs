@@ -89,7 +89,7 @@ impl Renderer {
             backdrop: None,
             flocks: &scratch.flocks,
             flat: std::cell::Cell::new(None),
-            aired: (0, None),
+            aired: 0,
             density: 1.0,
             virt: None,
         };

@@ -26,6 +26,7 @@ pub struct Lamp<'a> {
     pub air: Option<[f32; 3]>,
     pub picture: Option<Picture<'a>>,
     pub slot: usize,
+    pub within: usize,
     pub shadow: Option<(Option<u32>, f32)>,
 }
 
@@ -52,11 +53,12 @@ pub(crate) struct Gather<'a, 'b> {
     pub(crate) out: &'b mut Vec<Lamp<'a>>,
     pub(crate) draws: &'b [super::Draw<'a>],
     pub(crate) next: usize,
+    pub(crate) within: usize,
 }
 
 pub(crate) fn lamps<'a>(
     cx: &Context<'a>,
-    layers: &'a [Layer],
+    layers: impl IntoIterator<Item = &'a Layer>,
     outer: (Affine, Option<Lean>),
     (shown, lit): (bool, bool),
     quality: Quality,
@@ -69,7 +71,11 @@ pub(crate) fn lamps<'a>(
         match &layer.kind {
             Kind::Group { layers, .. } => {
                 let p = cx.place(layer, outer);
+                let drawn = g.next.checked_sub(1).filter(|&k| std::ptr::eq(g.draws[k].layer, layer));
+                let inner = drawn.unwrap_or(g.within);
+                let outside = std::mem::replace(&mut g.within, inner);
                 lamps(cx, layers, (p.world, p.lean), (shown && p.visible, lit), quality, g);
+                g.within = outside;
             }
             Kind::Light(l) if g.out.len() < MAX_LIGHTS => {
                 let before = cx.wake.replace(Wake::Idle);
@@ -77,8 +83,8 @@ pub(crate) fn lamps<'a>(
                 let seen = lit || l.volumetric.is_some();
                 let wake = if quality == Quality::Q0 || !seen { before } else { before.min(cx.wake.get()) };
                 cx.wake.set(wake);
-                let slot = g.next;
-                g.out.extend(found.map(|f| Lamp { slot, ..f }));
+                let (slot, within) = (g.next, g.within);
+                g.out.extend(found.map(|f| Lamp { slot, within, ..f }));
             }
             _ => {}
         }
@@ -122,6 +128,7 @@ fn lamp<'a>(
             .map(|v| [v.density.clamp(0.0, 1.0), v.samples.clamp(4, 64) as f32, v.shafts.clamp(0.0, 1.0)]),
         picture,
         slot: 0,
+        within: usize::MAX,
         shadow: l
             .shadows
             .then(|| (l.shadow_resolution, l.shadow_bias.unwrap_or(SHADOW_BIAS).clamp(0.0, 1.0))),

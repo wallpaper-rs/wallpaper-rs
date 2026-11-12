@@ -137,3 +137,22 @@ fn lamps_know_where_they_sit_among_the_drawn_layers() {
     let slots: Vec<usize> = frame.lamps.iter().map(|l| l.slot).collect();
     assert_eq!(slots, [1, 3, 4]);
 }
+
+#[test]
+fn lamps_follow_the_order_a_script_gives_and_know_their_group() {
+    let wall = |id: &str| json!({ "id": id, "type": "image", "image": "wall" });
+    let group = json!({ "id": "g", "type": "group", "layers": [wall("b"), lamp("inner", json!({}))] });
+    let layers = json!([wall("a"), lamp("first", json!({})), group]);
+    let mut runtime = Runtime::new(Arc::new(scene(layers)), Values::new());
+    let frame = runtime.frame([0.0, 0.0, 200.0, 100.0], Quality::Q3);
+    let within: Vec<usize> = frame.lamps.iter().map(|l| l.within).collect();
+    assert_eq!(within, [usize::MAX, 1]);
+    let order = ["g", "first", "a"].map(String::from).to_vec();
+    runtime.set_script(ScriptOutputs { order: Some(order), ..ScriptOutputs::default() });
+    let frame = runtime.frame([0.0, 0.0, 200.0, 100.0], Quality::Q3);
+    let ids: Vec<&str> = frame.draws.iter().map(|d| d.layer.id.as_str()).collect();
+    assert_eq!(ids, ["g", "b", "a"]);
+    let found: Vec<(&str, usize, usize)> =
+        frame.lamps.iter().map(|l| (l.layer.id.as_str(), l.slot, l.within)).collect();
+    assert_eq!(found, [("inner", 2, 0), ("first", 2, usize::MAX)]);
+}

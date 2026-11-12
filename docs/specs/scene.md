@@ -598,7 +598,10 @@ of the screen changes or the scene is loaded again, and lit layers are kept as s
 frames. Scripts read and set `scene.ambient` and `scene.sky` as colors, like `scene.background`.
 
 A `volumetric` light glows in the air within its radius, added where the light layer is among the
-layers: the layers below it show through the glow and the layers above it cover it. Each pixel
+layers: the layers below it show through the glow and the layers above it cover it. Inside a group
+drawn apart (with effects, a mask, an opacity under 1 or a cache) the glow goes between the children
+of the group, where the light is, and the group is then drawn again each frame instead of kept; when a
+script reorders the layers the glow follows the new order. Each pixel
 gathers, at `samples` points on the line from the pixel towards the light, the fade, the cone and
 the projected picture of the light there; `density` is the part of the line it walks and also how
 strongly the air glows, and the glow fades to nothing at the radius. With `shafts`, each of those
