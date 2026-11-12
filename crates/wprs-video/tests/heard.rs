@@ -82,11 +82,11 @@ fn playing(rx: &Receiver<Event>, within: impl Fn(Duration) -> bool) {
 fn speed(seen: &[(Instant, Duration)], percent: f64) -> f64 {
     let run = seen.chunk_by(|a, b| b.1 >= a.1).max_by_key(|run| run.len()).unwrap_or_default();
     let Some(&(start, _)) = run.first() else { return 0.0 };
-    let late = |(at, pts): &(Instant, Duration)| {
-        (*at - start).as_secs_f64() - pts.as_secs_f64() * 100.0 / percent
-    };
+    let late =
+        |(at, pts): &(Instant, Duration)| (*at - start).as_secs_f64() - pts.as_secs_f64() * 100.0 / percent;
     let third = (run.len() / 3).max(1);
-    let on_time = |part: &[(Instant, Duration)]| part.iter().copied().min_by(|a, b| late(a).total_cmp(&late(b)));
+    let on_time =
+        |part: &[(Instant, Duration)]| part.iter().copied().min_by(|a, b| late(a).total_cmp(&late(b)));
     let (Some(a), Some(b)) = (on_time(&run[..third]), on_time(&run[run.len() - third..])) else { return 0.0 };
     (b.1.as_secs_f64() - a.1.as_secs_f64()) / (b.0 - a.0).as_secs_f64() * 100.0
 }
