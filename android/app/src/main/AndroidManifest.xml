@@ -38,6 +38,10 @@
         android:label="${label}"
         android:theme="@style/App">
 
+        <profileable
+            android:enabled="${profileable}"
+            android:shell="true" />
+
         <meta-data
             android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />

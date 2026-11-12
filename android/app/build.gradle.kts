@@ -32,6 +32,7 @@ android {
         }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         applicationIdSuffix = testSuffix?.let { ".$it" }
+        manifestPlaceholders["profileable"] = (testSuffix != null).toString()
         manifestPlaceholders["label"] = testSuffix?.let { "wallpaper-rs $it" } ?: "@string/app_name"
     }
     splits.abi {
