@@ -119,7 +119,7 @@ sin filtro no cuesta nada. Los perfiles guardan y ponen el filtro de cada pantal
 de imágenes o el de escenas tenga cambios sin guardar: entonces solo se muestra la ventana y el
 editor sigue abierto.
 
-Requisitos: KDE Plasma 6.4 o posterior, PipeWire, GStreamer 1.24 o posterior (con los plugins base
+Requisitos: glibc 2.39 o posterior para los binarios de las versiones (se compilan en Ubuntu 24.04; no corren en Debian 12, que trae la 2.36, y una compilación local pide la glibc del sistema donde se hizo; `install.sh` avisa si la de este sistema es más antigua), KDE Plasma 6.4 o posterior, PipeWire, GStreamer 1.24 o posterior (con los plugins base
 y good y el de PipeWire, que lleva el sonido de los vídeos y de las escenas desde su versión 1.2;
 sin él o con uno anterior, el sonido va a la salida por defecto; si aún no hay ninguna salida de sonido, el fondo
 suena en cuanto aparece una) y un controlador Vulkan u OpenGL. `install.sh` avisa si no encuentra

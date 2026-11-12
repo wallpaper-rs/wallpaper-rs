@@ -29,6 +29,10 @@ gst=$(readlink -f "$gst" 2>/dev/null || true) && gst=${gst##*/libgstreamer-1.0.s
 [[ $gst =~ ^[0-9]+$ ]] && ((gst >= 2400)) ||
   echo "WARNING: GStreamer 1.24 or newer was not found; videos and the sound of scenes need it" >&2
 
+if ! run=$("$HERE/bin/wprsd" --version 2>&1) && [[ $run == *GLIBC* ]]; then
+  echo "WARNING: the C library of this system is older than the one these binaries need (glibc 2.39 or newer)" >&2
+fi
+
 echo "Installing binaries to $BINDIR"
 install -Dm755 "$HERE/bin/wprsd" "$BINDIR/wprsd"
 install -Dm755 "$HERE/bin/wprs-ctl" "$BINDIR/wprs-ctl"
