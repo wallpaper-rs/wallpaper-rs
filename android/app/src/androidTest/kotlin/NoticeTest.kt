@@ -19,6 +19,14 @@ class NoticeConvertTest {
 
     private fun shown() = manager.activeNotifications.filter { it.id == Notice.ID }
 
+    private fun gone(): Boolean {
+        repeat(50) {
+            if (shown().isEmpty()) return true
+            Thread.sleep(100)
+        }
+        return false
+    }
+
     private fun allow(on: Boolean) {
         val automation = instrumentation.uiAutomation
         if (on) automation.grantRuntimePermission(context.packageName, POST_NOTIFICATIONS)
@@ -38,7 +46,7 @@ class NoticeConvertTest {
         assertEquals(40, posted.notification.extras.getInt(Notification.EXTRA_PROGRESS))
         assertEquals(NotificationManager.IMPORTANCE_LOW, manager.getNotificationChannel("convert").importance)
         Notice.update(context, null, "", 0, 0) {}
-        assertTrue(shown().isEmpty())
+        assertTrue(gone())
     }
 
     @Test
