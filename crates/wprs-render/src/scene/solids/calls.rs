@@ -106,7 +106,7 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d) {
                 let (first, count, maps, object, finish) =
                     (prim.first, prim.count, m, o as u32, slot + m as u32);
                 calls.push(Call {
-                    model: p.model.digest,
+                    model: super::dress::drawn(p),
                     first,
                     count,
                     maps,

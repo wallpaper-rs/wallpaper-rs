@@ -97,6 +97,8 @@ pub(crate) fn material(dir: &Path, doc: &Value, e: &MaterialEdit) -> Result<Vec<
         }
         block["params"][id] = json!(v);
     }
+    super::maps::maps(doc, &mut block, &e.maps)?;
+    let mut ops = super::maps::files(dir, doc, &mut block, &e.files)?;
     if let Some(k) = &e.key {
         ensure!(
             shader == "chroma",
@@ -104,7 +106,8 @@ pub(crate) fn material(dir: &Path, doc: &Value, e: &MaterialEdit) -> Result<Vec<
         );
         block["params"]["key"] = color(k)?;
     }
-    Ok(set(doc, &at, block))
+    ops.extend(set(doc, &at, block));
+    Ok(ops)
 }
 
 pub(crate) fn listing(dir: &Path, doc: &Value, id: &str) -> Value {
@@ -129,6 +132,7 @@ pub(crate) fn listing(dir: &Path, doc: &Value, id: &str) -> Value {
                 .collect();
             json!({ "name": m.name, "pointer": format!("{path}/materials/{}", escape(&m.name)),
                 "file": super::info::finish(m), "set": set, "maps": maps,
+                "chosen": super::maps::chosen(doc, set),
                 "sphere": super::sphere::sphere(doc, m, set) })
         })
         .collect();

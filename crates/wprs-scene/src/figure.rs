@@ -122,6 +122,8 @@ pub struct Material {
     pub depth_write: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blend: Option<Coverage>,
+    #[serde(skip_serializing_if = "crate::finish_maps::MaterialMaps::is_empty")]
+    pub maps: crate::finish_maps::MaterialMaps,
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
     pub params: BTreeMap<String, Value<Param>>,
 }

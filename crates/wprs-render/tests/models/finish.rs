@@ -92,3 +92,19 @@ fn an_env_picture_tints_a_shiny_ball_and_the_lowest_quality_drops_its_reflection
     assert!(h[2] > h[0] + 40, "{h:?}");
     assert!(h[2] > l[2] + 20, "{h:?} {l:?}");
 }
+
+#[test]
+fn a_map_chosen_by_the_scene_replaces_the_map_of_the_file() {
+    let Some(r) = renderer() else { return };
+    let mut m = unlit("paint", [1.0; 4]);
+    m.maps[0] = Some(png([255, 0, 0, 255], 8));
+    let over = json!({ "materials": { "paint": { "maps": { "base": "blue" } } } });
+    let mut layer = json!({ "id": "ball", "type": "model", "model": "ball" });
+    let plain = scene(json!({}), json!([layer.clone()]), ball(m.clone()));
+    assert!(near(rgb(&render(r, plain, Quality::Q3), 32, 32), [255, 0, 0], 3));
+    layer["materials"] = over["materials"].clone();
+    let s = scene(json!({ "assets": { "blue": { "path": "blue.png" } } }), json!([layer]), ball(m));
+    let blue = Pixels::new(RgbaImage::from_pixel(8, 8, Rgba([0, 0, 255, 255])));
+    let px = shoot(r, s, &[("blue", blue)]).frame(r, 0.0, Quality::Q3);
+    assert!(near(rgb(&px, 32, 32), [0, 0, 255], 3), "{:?}", rgb(&px, 32, 32));
+}

@@ -7,6 +7,7 @@ use wgpu::BufferUsages as B;
 use wgpu::TextureFormat as Format;
 use wprs_scene::Model;
 
+#[derive(Clone)]
 pub(crate) struct GpuModel {
     pub(crate) vertices: wgpu::Buffer,
     pub(crate) indices: wgpu::Buffer,
@@ -14,6 +15,9 @@ pub(crate) struct GpuModel {
     pub(crate) skin: Option<wgpu::Buffer>,
     pub(crate) morphs: Option<wgpu::TextureView>,
     pub(crate) maps: Vec<wgpu::BindGroup>,
+    pub(crate) views: Vec<[wgpu::TextureView; 5]>,
+    pub(crate) uvs: Vec<wgpu::Buffer>,
+    pub(crate) dressed: u64,
 }
 
 pub(super) fn morph_texture(r: &Renderer, morphs: &[[f32; 4]]) -> wgpu::TextureView {
@@ -79,16 +83,21 @@ impl Renderer {
                 .clone()
         };
         let mut maps = Vec::with_capacity(model.materials.len() + 1);
+        let (mut kept, mut uv_buffers) =
+            (Vec::with_capacity(maps.capacity()), Vec::with_capacity(maps.capacity()));
         let defaults = wprs_scene::Finish::default();
         for m in model.materials.iter().chain([&defaults]) {
             let linear = [false, true, true, true, false];
             let found: Vec<Option<Image>> = (0..5).map(|k| picture(m.maps[k], linear[k])).collect();
             let fallback = |k: usize| if k == 2 { &solids.flat.view } else { &solids.white.view };
-            let views = std::array::from_fn(|k| found[k].as_ref().map_or(fallback(k), |i| &i.0.view));
+            let views: [&wgpu::TextureView; 5] =
+                std::array::from_fn(|k| found[k].as_ref().map_or(fallback(k), |i| &i.0.view));
             let rows = super::maps::uv_rows(m);
             let uvs = fill("wprs-render solid uvs", bytemuck::cast_slice(&rows), B::UNIFORM);
             maps.push(self.maps_group(views, m, &uvs));
+            kept.push(views.map(Clone::clone));
+            uv_buffers.push(uvs);
         }
-        GpuModel { vertices, indices, paint, skin, morphs, maps }
+        GpuModel { vertices, indices, paint, skin, morphs, maps, views: kept, uvs: uv_buffers, dressed: 0 }
     }
 }

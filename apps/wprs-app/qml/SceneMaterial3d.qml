@@ -137,21 +137,11 @@ GridLayout {
 
             rows: row.material.maps ?? []
 
-            delegate: ColumnLayout {
+            delegate: SceneMapSlot {
                 required property int index
-                readonly property var modelData: listed.rows[index]
 
-                Image {
-                    Layout.preferredWidth: Kirigami.Units.gridUnit * 2.5
-                    Layout.preferredHeight: Layout.preferredWidth
-                    source: modelData.thumb ?? ""
-                    visible: modelData.thumb !== null
-                }
-
-                QQC2.Label {
-                    text: row.names[modelData.slot] + (modelData.thumb === null ? " " + App.tr("(none)") : "")
-                    font: Kirigami.Theme.smallFont
-                }
+                owner: row
+                map: listed.rows[index]
             }
         }
     }

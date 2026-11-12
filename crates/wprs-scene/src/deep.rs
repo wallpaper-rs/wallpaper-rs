@@ -102,6 +102,9 @@ impl<'a> Check<'a> {
     fn material(&mut self, q: &str, mat: &Material) {
         mat.color.iter().for_each(|c| self.value(&format!("{q}/color"), c));
         mat.emissive.iter().for_each(|e| self.value(&format!("{q}/emissive"), e));
+        for (slot, id) in crate::MAP_SLOTS.iter().zip(mat.maps.slots()) {
+            id.iter().for_each(|id| self.picture(&format!("{q}/maps/{slot}"), id));
+        }
         self.uses(mat.cast_shadows == Some(true) || mat.receive_shadows == Some(true), "shadows");
         let shader = mat.shader.as_deref().unwrap_or("pbr");
         let built = MATERIALS.contains(&shader);

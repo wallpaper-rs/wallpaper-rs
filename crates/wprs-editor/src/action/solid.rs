@@ -81,6 +81,8 @@ pub struct MaterialEdit {
     pub emissive: Option<Value>,
     pub params: BTreeMap<String, f64>,
     pub key: Option<Value>,
+    pub maps: BTreeMap<String, Option<String>>,
+    pub files: BTreeMap<String, std::path::PathBuf>,
     pub clear: bool,
 }
 

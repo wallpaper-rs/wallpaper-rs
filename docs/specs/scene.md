@@ -767,7 +767,7 @@ do (`model_animation`, see "Animated models" below), and:
 | `position`, `rotation`, `scale` | three numbers each (or one for all three), in the units of the model and degrees (turned around x, then y, then z), which may be bound |
 | `root_motion` | `true` lets the animation of the root move the layer; needs `clips` |
 | `env` | a picture reflected by the materials, read as an equirectangular panorama: blurred for the light around and sharper for shiny materials; the lowest quality keeps only the light around |
-| `materials` | per material name of the file, at most 64 of `{ "shader", "color", "emissive", "lit", "double_sided", "cast_shadows", "receive_shadows", "cull": "back" \| "front" \| "none", "depth_test", "depth_write", "blend": "opaque" \| "mask" \| "blend" \| "add", "params" }` |
+| `materials` | per material name of the file, at most 64 of `{ "shader", "color", "emissive", "lit", "double_sided", "cast_shadows", "receive_shadows", "cull": "back" \| "front" \| "none", "depth_test", "depth_write", "blend": "opaque" \| "mask" \| "blend" \| "add", "maps", "params" }` |
 
 The materials of the file give the color, metal, roughness, normal, occlusion and glow maps with their
 factors (`KHR_materials_emissive_strength` multiplies the glow), the alpha mode and cutoff, and both
@@ -784,6 +784,11 @@ Primitives without a material take a white one. Textures may be PNG, JPEG or Web
 but `pbr` and `unlit`); `fur` also takes `comb_x`, `comb_y` and `comb_z` from −1 to 1, and all but `unlit`
 take the numbers of `pbr`. Shadows of lights and materials name `shadows`; both `cast_shadows` and
 `receive_shadows` are `true` unless set, which changes nothing until a light casts shadows.
+`maps` replaces maps of the file with pictures of the scene: `{ "base", "orm", "normal",
+"occlusion", "emissive" }`, each the id of a picture asset; a replaced map keeps the texture
+coordinates, the transform and the sampler of the slot it replaces (the first set unmoved,
+repeated and smooth where the file had no map) and should be `linear` for
+`orm`, `normal` and `occlusion`. A picture that is not loaded leaves the map of the file.
 
 - **`fur`** draws its primitives again as shells pushed out along the normal, `layers` of them (12 by
   default) at Q3, three quarters at Q2, half at Q1 and a quarter at Q0 (at least one); `length` is how

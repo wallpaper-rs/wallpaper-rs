@@ -36,6 +36,7 @@ mod fence;
 mod fields;
 mod figure;
 mod film;
+mod finish_maps;
 mod flash;
 mod footage;
 mod form;

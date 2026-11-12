@@ -54,6 +54,7 @@ pub fn seal<'a>(cx: &Context<'a>, frame: &mut Frame<'a>) {
             floats(&mut h, &p.matrix);
             h.write_u32(p.opacity.to_bits());
             h.write(p.env.unwrap_or_default().as_bytes());
+            h.write_u64(p.maps);
             let looks = &frame.looks[p.looks.clone()];
             sways |= looks.iter().any(|l| l.shade == Shade::Foliage && l.extra[0] > 0.0);
             let lively = |k: u64| cx.scene.loaded.values().any(|d| d.key == k && d.animates());

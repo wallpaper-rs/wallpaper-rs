@@ -1,5 +1,6 @@
 use super::super::SceneView;
 use super::calls::{plan, put, rooms, sized};
+use super::dress::drawn;
 use super::uniform::scene3;
 use super::{GpuModel, SCENE_SLOT, Staged};
 use crate::{RenderError, Renderer};
@@ -49,6 +50,7 @@ impl Renderer {
                 if let std::collections::hash_map::Entry::Vacant(e) = view.models.entry(p.model.digest) {
                     e.insert(self.scoped(|| self.gpu_model(p.model))?);
                 }
+                self.dress(&mut view.models, p, &view.images);
             }
             let looks = &frame.looks;
             self.packages(scene, looks.iter().map(|l| l.package).filter(|k| *k != 0));
@@ -73,7 +75,7 @@ impl Renderer {
         }
         let live: Vec<&str> = frame.stages.iter().map(|s| s.layer).collect();
         view.solids.retain(|k, _| live.contains(&k.as_str()));
-        view.models.retain(|d, _| frame.placed.iter().any(|p| p.model.digest == *d));
+        view.models.retain(|d, _| frame.placed.iter().any(|p| p.model.digest == *d || drawn(p) == *d));
         view.envs.retain(|k, _| frame.placed.iter().any(|p| p.env == Some(k.as_str())));
         Ok(())
     }
@@ -122,8 +124,8 @@ impl Renderer {
         }
         self.stage_groups(staged, env, uniform);
         for p in &frame.placed[stage.models.clone()] {
-            if let Some(gpu) = models.get(&p.model.digest) {
-                self.object_group(staged, p.model.digest, gpu);
+            if let Some(gpu) = models.get(&drawn(p)) {
+                self.object_group(staged, drawn(p), gpu);
             }
         }
         let mut encoder = self.device.create_command_encoder(&Default::default());

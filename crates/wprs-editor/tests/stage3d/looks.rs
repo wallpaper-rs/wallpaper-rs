@@ -1,4 +1,5 @@
-use super::{ask, edit, project};
+use super::{ask, edit, layer, project, undone};
+use image::{Rgba, RgbaImage};
 use serde_json::json;
 
 #[test]
@@ -47,4 +48,34 @@ fn the_cost_panel_counts_triangles_texture_memory_and_tiers_per_quality() {
     assert!(cost["tiers"][0]["memory"].as_u64().unwrap() > 0);
     let lit = ask(&p, json!({ "lighting": { "time": 0, "quality": "q1" } }));
     assert_eq!(lit["models"]["models"][0]["id"], "doll");
+}
+
+#[test]
+fn a_material_map_is_chosen_from_the_pictures_imported_into_its_slot_and_removed() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    edit(&mut p, json!({ "model": { "add": { "asset": "toy", "id": "doll" } } })).unwrap();
+    let before = p.doc.clone();
+    let pick = json!({ "material": { "layer": "doll", "name": "paint", "maps": { "base": "sky" } } });
+    edit(&mut p, pick).unwrap();
+    assert_eq!(layer(&p, "doll")["materials"]["paint"]["maps"], json!({ "base": "sky" }));
+    undone(&mut p, &before);
+    let wrong = json!({ "material": { "layer": "doll", "name": "paint", "maps": { "shine": "sky" } } });
+    assert!(edit(&mut p, wrong).is_err());
+    let missing = json!({ "material": { "layer": "doll", "name": "paint", "maps": { "orm": "toy" } } });
+    assert!(edit(&mut p, missing).is_err(), "a model is not a picture");
+    let bumps = root.path().join("bumps.png");
+    RgbaImage::from_pixel(4, 4, Rgba([128, 128, 255, 255])).save(&bumps).unwrap();
+    let file = json!({ "material": { "layer": "doll", "name": "paint", "files": { "normal": bumps } } });
+    edit(&mut p, file).unwrap();
+    let id = layer(&p, "doll")["materials"]["paint"]["maps"]["normal"].as_str().unwrap().to_owned();
+    assert_eq!(p.doc["scene"]["assets"][&id]["linear"], json!(true), "a normal map is read as data");
+    let list = ask(&p, json!({ "materials3d": { "layer": "doll" } }));
+    let chosen = &list["materials"][0]["chosen"];
+    assert_eq!((chosen[1]["slot"].clone(), chosen[1]["warn"].clone()), (json!("normal"), json!(false)));
+    let gone = json!({ "material": { "layer": "doll", "name": "paint", "maps": { "normal": null } } });
+    edit(&mut p, gone).unwrap();
+    let base = json!({ "material": { "layer": "doll", "name": "paint", "maps": { "base": null } } });
+    edit(&mut p, base).unwrap();
+    assert!(layer(&p, "doll")["materials"]["paint"].get("maps").is_none());
 }

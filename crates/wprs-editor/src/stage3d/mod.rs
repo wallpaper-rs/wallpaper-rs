@@ -10,6 +10,7 @@ mod cost;
 mod edit;
 mod gizmo;
 mod info;
+mod maps;
 mod material;
 mod newmat;
 mod paths;
