@@ -31,7 +31,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import java.text.DateFormat
 import java.util.Date
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -62,8 +61,7 @@ fun Account(main: Main) {
             } finally {
                 task = null
                 changes++
-                Sync.schedule(main)
-                withContext(NonCancellable + Dispatchers.IO) { Updates.schedule(main) }
+                Updates.settled(main)
             }
         }
     }

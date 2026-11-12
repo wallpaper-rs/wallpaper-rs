@@ -11,6 +11,9 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -39,7 +42,14 @@ object Updates {
         return ListenableWorker.Result.success()
     }
 
-    fun schedule(context: Context, repos: Int = repos()) {
+    var counted: () -> Int = { repos() }
+
+    suspend fun settled(context: Context) {
+        Sync.schedule(context)
+        withContext(NonCancellable + Dispatchers.IO) { schedule(context) }
+    }
+
+    fun schedule(context: Context, repos: Int = counted()) {
         val work = WorkManager.getInstance(context)
         if (repos == 0 || !on()) {
             work.cancelUniqueWork(WORK)

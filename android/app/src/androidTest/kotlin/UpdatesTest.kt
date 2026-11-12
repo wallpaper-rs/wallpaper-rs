@@ -8,6 +8,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -77,6 +78,28 @@ class UpdatesTest {
             assertTrue("a synced switch stops the daily wakeup", waitFor { states().all { it == WorkInfo.State.CANCELLED } })
         } finally {
             Native.setting(Updates.SETTING, "true")
+            work.cancelUniqueWork(Updates.WORK).result.get()
+        }
+    }
+
+    @Test
+    fun syncingRestoringAndLinkingScheduleTheDailyCheckWhenThereAreRepositories() {
+        storage()
+        val work = WorkManager.getInstance(context)
+        val states = { work.getWorkInfosForUniqueWork(Updates.WORK).get().map { it.state } }
+        try {
+            Updates.counted = { 1 }
+            Sync.network(context)
+            assertTrue("a change of network rules schedules it", waitFor { states() == listOf(WorkInfo.State.ENQUEUED) })
+            work.cancelUniqueWork(Updates.WORK).result.get()
+            assertTrue(waitFor { states().all { it == WorkInfo.State.CANCELLED } })
+            runBlocking { Updates.settled(context) }
+            assertTrue("the end of a sync, restore or link schedules it", waitFor { states().any { it == WorkInfo.State.ENQUEUED } })
+            Updates.counted = { 0 }
+            runBlocking { Updates.settled(context) }
+            assertTrue("without repositories nothing stays", waitFor { states().all { it == WorkInfo.State.CANCELLED } })
+        } finally {
+            Updates.counted = { Updates.repos() }
             work.cancelUniqueWork(Updates.WORK).result.get()
         }
     }
