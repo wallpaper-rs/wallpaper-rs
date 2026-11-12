@@ -31,4 +31,10 @@ mod tests {
         assert_eq!(probed(&doc(json!({}))), None);
         assert_eq!(probed(&json!({ "scene": {} })), None);
     }
+
+    #[test]
+    fn the_probe_the_editor_canvas_action_writes_is_read_as_it_was_set() {
+        let written = json!({ "scene": { "ext": { "editor": { "probe": { "pointer": [0.5, 0.5], "tilt": [0.0, 1.0] } } } } });
+        assert_eq!(probed(&written), Some(([0.5, 0.5], [0.0, 1.0])));
+    }
 }
