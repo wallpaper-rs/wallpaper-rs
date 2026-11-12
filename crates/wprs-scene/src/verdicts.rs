@@ -4,7 +4,7 @@ use crate::{MAX_BUILD, MAX_INLINED, MAX_LOOP, MAX_MEMORY, MAX_OPS, MAX_SHADER_NO
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
-use std::sync::{Mutex, PoisonError};
+use std::sync::{Mutex, OnceLock, PoisonError};
 
 const SALT: &str = "wprs-scene checked-effects 1";
 const FILE: &str = "checked-effects";
@@ -15,6 +15,7 @@ type Known = (BTreeMap<String, (Refusal, u64)>, u64);
 
 static KNOWN: Mutex<Known> = Mutex::new((BTreeMap::new(), 0));
 static PASSED: Mutex<BTreeSet<u64>> = Mutex::new(BTreeSet::new());
+static CONTRACT: OnceLock<[u8; 32]> = OnceLock::new();
 
 pub(crate) fn hash(id: &str, json: &str, wgsl: &str) -> String {
     let limits = [MAX_WGSL, MAX_SHADER_NODES, MAX_ARGUMENTS, MAX_BRACKETS, MAX_OPERANDS].map(|n| n as u64);
@@ -22,6 +23,7 @@ pub(crate) fn hash(id: &str, json: &str, wgsl: &str) -> String {
     let mut digest =
         Sha256::new().chain_update(SALT).chain_update([0]).chain_update(env!("CARGO_PKG_VERSION"));
     limits.for_each(|n| digest.update(n.to_le_bytes()));
+    digest.update(CONTRACT.get_or_init(|| Sha256::digest(crate::CONTRACT).into()));
     for part in [id, json, wgsl] {
         digest.update([0]);
         digest.update(part);
