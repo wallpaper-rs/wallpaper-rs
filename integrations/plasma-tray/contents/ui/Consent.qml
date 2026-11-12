@@ -13,10 +13,10 @@ Kirigami.InlineMessage {
     readonly property bool quiet: listed(inputs.quiet)
     readonly property string asked: [ask.scene, ask.key].concat(ask.inputs).join(" ")
     readonly property var explained: ({
-            "audio": [daemon.tr("Follow the sound that plays"), daemon.tr("The sound is turned into levels on this computer while the scene is shown; nothing is recorded, kept or sent, and the desktop may show a microphone indicator.")],
-            "pointer": [daemon.tr("Follow the pointer"), daemon.tr("Only the latest pointer position over this screen reaches the scene; positions are never kept and keys are never read.")],
-            "clicks": [daemon.tr("Take clicks and taps"), daemon.tr("Only real clicks and taps on the wallpaper of this screen reach the scene; they are never kept and keys are never read.")],
-            "media": [daemon.tr("Show what the media player plays"), daemon.tr("While the scene is shown, the title, artist, album, cover and progress of what a media player on this computer plays reach it; nothing of it is kept, logged or sent.")],
+            "audio": [daemon.tr("Follow the sound that plays"), daemon.tr("The sound is turned into levels on this computer while the wallpaper is shown; nothing is recorded, kept or sent, and the desktop may show a microphone indicator.")],
+            "pointer": [daemon.tr("Follow the pointer"), daemon.tr("Only the latest pointer position over this screen reaches the wallpaper; positions are never kept and keys are never read.")],
+            "clicks": [daemon.tr("Take clicks and taps"), daemon.tr("Only real clicks and taps on the wallpaper of this screen reach it; they are never kept and keys are never read.")],
+            "media": [daemon.tr("Show what the media player plays"), daemon.tr("While the wallpaper is shown, the title, artist, album, cover and progress of what a media player on this computer plays reach it; nothing of it is kept, logged or sent.")],
             "media_network": [daemon.tr("Show what plays even though it can reach the network"), daemon.tr("This web wallpaper may also reach the sites it names, so the title, artist and cover of what plays could leave this computer. Allow it only if you trust it with them.")],
             "audio_network": [daemon.tr("Follow the sound even though it can reach the network"), daemon.tr("This web wallpaper may also reach the sites it names, so what it hears, the sound that plays or the microphone, could leave this computer. Allow it only if you trust it with that.")],
             "rgb": [daemon.tr("Send its colors to the RGB lighting"), daemon.tr("Up to 64 × 16 colors of the wallpaper go to your keyboard, mouse and other lights through the OpenRGB server set in Settings, on this computer unless you set another address, and only while RGB lighting is on there.")]
@@ -70,7 +70,7 @@ Kirigami.InlineMessage {
     }
     visible: ask.inputs.length > 0
     type: problem ? Kirigami.MessageType.Error : Kirigami.MessageType.Information
-    text: [daemon.tr("The scene %1 asks for your permission:", String(ask.title).replace(/</g, "‹").replace(/>/g, "›"))].concat(ask.inputs.map(input => explained[input].join(": "))).concat(pending ? [daemon.tr("Confirm it in the desktop notification.")] : []).concat(quiet && !pending ? [daemon.tr("The notification was closed without an answer; try again in a few minutes.")] : []).concat(problem ? [problem] : []).join("\n")
+    text: [daemon.tr("The wallpaper %1 asks for your permission:", String(ask.title).replace(/</g, "‹").replace(/>/g, "›"))].concat(ask.inputs.map(input => explained[input].join(": "))).concat(pending ? [daemon.tr("Confirm it in the desktop notification.")] : []).concat(quiet && !pending ? [daemon.tr("The notification was closed without an answer; try again in a few minutes.")] : []).concat(problem ? [problem] : []).join("\n")
     actions: [
         Kirigami.Action {
             text: consent.daemon.tr("Allow")

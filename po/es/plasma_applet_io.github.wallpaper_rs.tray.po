@@ -18,13 +18,10 @@ msgstr "Seguir el sonido que se reproduce"
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid ""
-"The sound is turned into levels on this computer while the scene is shown; "
-"nothing is recorded, kept or sent, and the desktop may show a microphone "
-"indicator."
-msgstr ""
-"Mientras se muestra la escena, el sonido se convierte en niveles en este "
-"equipo; no se graba, no se guarda ni se envía, y el escritorio puede mostrar "
-"un indicador de micrófono."
+"The sound is turned into levels on this computer while the wallpaper is "
+"shown; nothing is recorded, kept or sent, and the desktop may show a "
+"microphone indicator."
+msgstr "Mientras se muestra el fondo, el sonido se convierte en niveles en este equipo; no se graba, no se guarda ni se envía, y el escritorio puede mostrar un indicador de micrófono."
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid "Follow the pointer"
@@ -32,11 +29,9 @@ msgstr "Seguir el puntero"
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid ""
-"Only the latest pointer position over this screen reaches the scene; "
+"Only the latest pointer position over this screen reaches the wallpaper; "
 "positions are never kept and keys are never read."
-msgstr ""
-"A la escena solo le llega la última posición del puntero sobre esta "
-"pantalla; las posiciones nunca se guardan y las teclas nunca se leen."
+msgstr "Al fondo solo le llega la última posición del puntero sobre esta pantalla; las posiciones nunca se guardan y las teclas nunca se leen."
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid "Take clicks and taps"
@@ -44,11 +39,9 @@ msgstr "Recibir clics y toques"
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid ""
-"Only real clicks and taps on the wallpaper of this screen reach the scene; "
-"they are never kept and keys are never read."
-msgstr ""
-"Solo llegan a la escena los clics y toques reales sobre el fondo de esta "
-"pantalla; nunca se guardan y nunca se leen las teclas."
+"Only real clicks and taps on the wallpaper of this screen reach it; they are "
+"never kept and keys are never read."
+msgstr "Solo le llegan al fondo los clics y toques reales sobre esta pantalla; nunca se guardan y nunca se leen las teclas."
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid "Show what the media player plays"
@@ -56,13 +49,10 @@ msgstr "Mostrar lo que suena"
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid ""
-"While the scene is shown, the title, artist, album, cover and progress of "
-"what a media player on this computer plays reach it; nothing of it is kept, "
-"logged or sent."
-msgstr ""
-"Mientras la escena se ve, le llegan el título, el artista, el álbum, la "
-"carátula y el avance de lo que suena en un reproductor de este equipo; nada "
-"de eso se guarda, se registra ni se envía."
+"While the wallpaper is shown, the title, artist, album, cover and progress "
+"of what a media player on this computer plays reach it; nothing of it is "
+"kept, logged or sent."
+msgstr "Mientras el fondo se ve, le llegan el título, el artista, el álbum, la carátula y el avance de lo que suena en un reproductor de este equipo; nada de eso se guarda, se registra ni se envía."
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid "Show what plays even though it can reach the network"
@@ -108,8 +98,8 @@ msgstr ""
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 #, kde-format
-msgid "The scene %1 asks for your permission:"
-msgstr "La escena %1 te pide permiso:"
+msgid "The wallpaper %1 asks for your permission:"
+msgstr "El fondo %1 te pide permiso:"
 
 #: integrations/plasma-tray/contents/ui/Consent.qml
 msgid "Confirm it in the desktop notification."

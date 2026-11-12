@@ -155,7 +155,7 @@ Kirigami.ScrollablePage {
 
             Kirigami.Separator {
                 Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("Scene permissions")
+                Kirigami.FormData.label: App.tr("Wallpaper permissions")
             }
 
             SettingsGrants {

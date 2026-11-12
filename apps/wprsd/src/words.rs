@@ -101,12 +101,12 @@ pub fn request(title: &str, input: wprs_core::model::Input) -> (String, String) 
             tr("Let “%1” show the title, artist, album, cover and progress of what the media player plays? Nothing of it is kept, logged or sent.").replace("%1", &title),
         ),
         wprs_core::model::Input::Audio => (
-            tr("Let a scene follow the sound?"),
+            tr("Let a wallpaper follow the sound?"),
             tr("Let “%1” follow the sound that plays? The sound is turned into levels on this computer; nothing is recorded, kept or sent.").replace("%1", &title),
         ),
         _ => (
-            tr("Let a scene follow the pointer?"),
-            tr("Let “%1” follow the pointer? Only its latest position over the screen reaches the scene, and it is never kept.").replace("%1", &title),
+            tr("Let a wallpaper follow the pointer?"),
+            tr("Let “%1” follow the pointer? Only its latest position over the screen reaches the wallpaper, and it is never kept.").replace("%1", &title),
         ),
     }
 }
@@ -175,4 +175,17 @@ pub fn gpu_unusable(name: &str) -> String {
 pub fn incomplete(missing: &str) -> String {
     tr("The package is installed but incomplete: it could not install %1, which it needs.")
         .replace("%1", missing)
+}
+
+#[cfg(test)]
+mod tests {
+    use wprs_core::model::Input;
+
+    #[test]
+    fn consent_texts_speak_of_wallpapers_not_only_scenes() {
+        for input in [Input::Media, Input::Audio, Input::Pointer] {
+            let (title, body) = super::request("Page", input);
+            assert!(!title.contains("scene") && !body.contains("scene"));
+        }
+    }
 }

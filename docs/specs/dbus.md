@@ -1681,7 +1681,7 @@ Takes `input` back from `scene` and stops it at once if that scene was using it.
 that the user declined `input` for `scene`, in `inputs-declined.json` next to `inputs.json` (mode
 `0600`), so that clients stop asking; `Grant` and `GrantPackage` clear that record.
 
-Clients ask once per scene: when `shown` lists an input that is neither in its `granted` nor
+Clients ask once per wallpaper, scene or web page, and every text speaks of the wallpaper: when `shown` lists an input that is neither in its `granted` nor
 declined for the scene, whether the scene was applied from a client, a playlist or `wprs-ctl`, the app and
 the tray explain what is captured and that nothing is stored or sent, and offer *Allow*
 (`GrantPackage` with the `key` of that output) or *Not now* (`Revoke`); while the notification
