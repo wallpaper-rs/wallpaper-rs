@@ -2,7 +2,7 @@ use crate::show::{clean, table};
 use crate::told::{fill, told};
 use anyhow::Result;
 use clap::Args;
-pub use notes::{measured, note, notes};
+pub use notes::{measured, note, notes, sandbox_lines};
 use serde_json::json;
 use wprs_client::Client;
 use wprs_core::model::{OutputState, State};

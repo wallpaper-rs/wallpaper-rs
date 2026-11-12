@@ -142,7 +142,8 @@ Every layer applies to every page:
 
 `OutputState.sandbox` is `"on"` when every layer is in place and `"reduced"` when WebKit could not
 start its sandbox or the namespaces could not be made (some containers forbid them); clients show
-it next to the privacy notice.
+it next to the privacy notice. `wprs-ctl` prints the same notice, on standard error, after `lib apply`,
+`playlist start`, `next` and `prev` (for the screens they touch) and in `state` when run in a terminal.
 
 ## Privacy
 

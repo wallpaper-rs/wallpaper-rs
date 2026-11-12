@@ -1,4 +1,5 @@
 use crate::told::{fill, told, tr};
+use std::collections::BTreeMap;
 use wprs_core::model::{Input, InputsReply, OutputState, State};
 
 const SHOWN_ERRORS: usize = 5;
@@ -76,6 +77,11 @@ pub fn sandbox_note(o: &OutputState) -> Option<String> {
 const STOPPED: &str = told(
     "this scene is too heavy for this device and automatic quality keeps it still at its poster; a fixed level such as wprs-ctl quality q0 plays it anyway, with fewer frames per second and more battery use",
 );
+pub fn sandbox_lines(outputs: &BTreeMap<String, OutputState>, ours: impl Fn(&String) -> bool) -> Vec<String> {
+    let reduced = outputs.iter().filter(|(name, _)| ours(name));
+    reduced.filter_map(|(name, o)| Some(format!("{name}: {}", sandbox_note(o)?))).collect()
+}
+
 const TRIANGLES: &str = "this scene draws more model triangles than this device holds: frames may drop and battery use rise; automatic quality would keep it still at its poster";
 const WORDS: [&str; 2] = ["effect stays", "effects stay"];
 

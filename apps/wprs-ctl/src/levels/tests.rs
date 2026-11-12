@@ -1,5 +1,5 @@
 use super::hdr;
-use super::notes::{measured, note, off, page_notes, sandbox_note};
+use super::notes::{measured, note, off, page_notes, sandbox_lines, sandbox_note};
 use serde_json::json;
 use wprs_core::model::{OutputState, SceneInputs};
 
@@ -74,6 +74,18 @@ fn a_web_page_whose_sandbox_could_not_fully_start_warns_about_it() {
         sandbox_note(&reduced),
         Some("its web engine runs without part of its sandbox on this computer".to_owned())
     );
+}
+
+#[test]
+fn the_reduced_sandbox_line_names_only_the_screens_asked_about() {
+    let mut reduced = shown("user", 0.0, "");
+    reduced.sandbox = "reduced".into();
+    let mut state = std::collections::BTreeMap::new();
+    state.insert("DP-1".into(), reduced);
+    state.insert("DP-2".into(), shown("user", 0.0, ""));
+    assert_eq!(sandbox_lines(&state, |_| true).len(), 1);
+    assert!(sandbox_lines(&state, |n| n == "DP-2").is_empty());
+    assert!(sandbox_lines(&state, |n| n == "DP-1")[0].starts_with("DP-1: its web engine"));
 }
 
 #[test]
