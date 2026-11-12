@@ -9,7 +9,6 @@ GridLayout {
     required property var steer
     required property var keep
     readonly property bool ring: keep?.kind === "keep_distance"
-    readonly property var targets: steer?.targets ?? []
 
     columns: 2
 
@@ -21,21 +20,18 @@ GridLayout {
     SceneRepeater {
         id: listed
 
-        rows: row.ring ? [["target", row.keep?.target]] : [["from", row.keep?.from_ref], ["to", row.keep?.to_ref]]
+        rows: row.ring ? [["target", row.keep?.target, row.keep?.at]] : [["from", row.keep?.from_ref, row.keep?.from], ["to", row.keep?.to_ref, row.keep?.to]]
 
-        delegate: QQC2.ComboBox {
+        delegate: SceneTargetPicker {
             required property int index
             readonly property var modelData: listed.rows[index]
-            readonly property var value: modelData?.[1]
 
             Layout.fillWidth: true
             Layout.columnSpan: row.ring ? 2 : 1
-            model: row.targets.concat(Array.isArray(value) ? [App.tr("a point")] : [])
-            currentIndex: Array.isArray(value) ? row.targets.length : row.targets.indexOf(value)
-            onActivated: index => {
-                if (index < row.targets.length)
-                    row.steer.patch(row.keep, v => v[modelData[0]] = row.targets[index]);
-            }
+            info: row.steer.tools.info
+            value: modelData?.[1]
+            at: modelData?.[2]
+            onPicked: target => row.steer.patch(row.keep, v => v[modelData[0]] = target)
         }
     }
 

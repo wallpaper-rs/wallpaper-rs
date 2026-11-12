@@ -611,8 +611,7 @@ these forces and lists them with the point they follow, their strength (the spee
 keeps) and a slider for each reach. The inspector lists the
 colliders with a picker of the response (bounce, slide, stop, stick or kill) and the bounce and
 friction it uses, whether a circle or a box keeps particles inside, a picker of the layers it may
-collide with and, for a picture mask, its picture and the opacity from which it is solid; the kept distances with pickers of their targets among the control points and the
-pointer and sliders for the distance and the strength; a toggle and sliders for the neighbour radius,
+collide with and, for a picture mask, its picture and the opacity from which it is solid; the kept distances with pickers of their targets (a control point, the pointer or a fixed point whose X and Y are typed in pixels of the system, the same picker for the `from`, `to`, `target` and `center` of every force) and sliders for the distance and the strength; a toggle and sliders for the neighbour radius,
 the separation, the alignment, the cohesion and the most speed of a flock; the remap operators with
 the same editor as the remaps of the starting values and `age` as one more input; and the rope and
 the trail of the render with their fields, live on the preview, and a picker of the texture among

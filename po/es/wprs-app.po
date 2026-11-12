@@ -7550,8 +7550,7 @@ msgstr "Entre dos puntos"
 msgid "From a layer"
 msgstr "Desde una capa"
 
-#: apps/wprs-app/qml/SceneSwarmEmitter.qml apps/wprs-app/qml/SceneSwarmKeep.qml
-#: apps/wprs-app/qml/SceneSwarmPull.qml
+#: apps/wprs-app/qml/SceneSwarmEmitter.qml
 msgid "a point"
 msgstr "un punto"
 
@@ -8256,6 +8255,14 @@ msgid ""
 msgstr ""
 "De izquierda a derecha, la vida de una partícula; la fuerza aparece, actúa "
 "por completo y se desvanece donde la forma sube, se mantiene y baja"
+
+#: apps/wprs-app/qml/SceneTargetPicker.qml
+msgid "a fixed point"
+msgstr "un punto fijo"
+
+#: apps/wprs-app/qml/SceneTargetPicker.qml
+msgid "Coordinate %1 of the fixed point, in pixels of the system"
+msgstr "Coordenada %1 del punto fijo, en píxeles del sistema"
 
 #: apps/wprs-app/qml/SceneTemplateFollow.qml
 msgid "Follow a mesh of the scene"

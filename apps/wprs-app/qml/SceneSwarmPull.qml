@@ -8,7 +8,6 @@ GridLayout {
 
     required property var steer
     required property var pull
-    readonly property var targets: steer.targets
     readonly property var value: pull.ref
 
     columns: 2
@@ -17,14 +16,12 @@ GridLayout {
         text: SceneWords.value(row.pull.kind)
     }
 
-    QQC2.ComboBox {
+    SceneTargetPicker {
         Layout.fillWidth: true
-        model: row.targets.concat(Array.isArray(row.value) ? [App.tr("a point")] : [])
-        currentIndex: Array.isArray(row.value) ? row.targets.length : row.targets.indexOf(row.value)
-        onActivated: index => {
-            if (index < row.targets.length)
-                row.steer.patch(row.pull, v => v[row.pull.field] = row.targets[index]);
-        }
+        info: row.steer.tools.info
+        value: row.value
+        at: row.pull.at
+        onPicked: target => row.steer.patch(row.pull, v => v[row.pull.field] = target)
     }
 
     QQC2.Label {

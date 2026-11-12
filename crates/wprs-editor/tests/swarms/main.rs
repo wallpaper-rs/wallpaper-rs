@@ -15,6 +15,7 @@ mod named;
 mod owns;
 mod reaches;
 mod sows;
+mod targets;
 mod tends;
 
 fn state() {

@@ -49,7 +49,6 @@ ColumnLayout {
             }
         }]
     readonly property var flock: tools.info?.boids ?? null
-    readonly property var targets: (tools.info?.points ?? []).map(p => p.name).concat(["cursor"])
 
     function force(index) {
         return JSON.parse(tools.page.editor.value(SceneSwarmKnobs.pointer(tools.system, "/forces/" + index)) || "null");
