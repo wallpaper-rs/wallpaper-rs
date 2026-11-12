@@ -137,10 +137,10 @@ pub unsafe extern "C" fn message(_manager: Ptr, value: Ptr, data: Ptr) {
     if let Some(prop) = message.get("open").and_then(Value::as_str) {
         send(&FromWeb::Open { view, prop: prop.chars().take(64).collect() });
     }
-    if let Some(error) = message.get("error").and_then(Value::as_str) {
-        if live(|l| l.said.allow()) {
-            send(&FromWeb::Console { view, line: error.chars().take(512).collect() });
-        }
+    if let Some(error) = message.get("error").and_then(Value::as_str)
+        && live(|l| l.said.allow())
+    {
+        send(&FromWeb::Console { view, line: error.chars().take(512).collect() });
     }
 }
 

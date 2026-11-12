@@ -1,4 +1,4 @@
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 const BURST: f64 = 50.0;
 const PER_SECOND: f64 = 10.0;
@@ -29,6 +29,7 @@ impl Said {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::Duration;
 
     #[test]
     fn a_flood_is_cut_but_later_lines_show() {
