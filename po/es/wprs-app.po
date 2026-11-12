@@ -973,6 +973,9 @@ msgstr "Volver"
 #: apps/wprs-app/qml/EditActions.qml apps/wprs-app/qml/PackagePage.qml
 #: apps/wprs-app/qml/SceneEntry.qml apps/wprs-app/qml/SceneMaterialCode.qml
 #: apps/wprs-app/qml/ScenePage.qml apps/wprs-app/qml/SceneScriptCode.qml
+
+#: apps/wprs-app/qml/SceneEntry.qml apps/wprs-app/qml/ScenePage.qml
+#: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneShaderCode.qml
 msgid "Save"
 msgstr "Guardar"
 
@@ -5840,6 +5843,100 @@ msgstr "%1: se deja fuera de la escena en este nivel"
 msgid "%1: %2 units of work"
 msgstr "%1: %2 unidades de trabajo"
 
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "Declared cost: taps, passes and scale"
+msgstr "Costo declarado: lecturas, pasadas y escala"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+#: apps/wprs-app/qml/SceneEffectPass.qml
+msgid "%1 %"
+msgstr "%1 %"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
+msgid "Mask"
+msgstr "Máscara"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "Blend the result by the mask"
+msgstr "Mezclar el resultado según la máscara"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "The shader scales itself by mask_at"
+msgstr "El shader se escala solo con mask_at"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "Fused as"
+msgstr "Fusionado como"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "Not fused"
+msgstr "Sin fusionar"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "A bend of the picture (uv_)"
+msgstr "Una deformación de la imagen (uv_)"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "A change of color (color_)"
+msgstr "Un cambio de color (color_)"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml
+msgid "Grows the layer by"
+msgstr "Agranda la capa según"
+
+#: apps/wprs-app/qml/SceneEffectFields.qml apps/wprs-app/qml/SceneLightCast.qml
+#: apps/wprs-app/qml/SceneModelTools.qml
+#: apps/wprs-app/qml/SceneTimelinePanel.qml
+#: apps/wprs-app/qml/SceneWakeRules.qml
+msgid "Nothing"
+msgstr "Nada"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Descriptor of %1"
+msgstr "Descriptor de %1"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml apps/wprs-app/qml/SceneShaderCode.qml
+msgid "Checking…"
+msgstr "Comprobando…"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Builds"
+msgstr "Compila"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Parameters"
+msgstr "Parámetros"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Id of a new parameter"
+msgstr "Id de un parámetro nuevo"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Add the parameter"
+msgstr "Añadir el parámetro"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Passes"
+msgstr "Pasadas"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Add a pass"
+msgstr "Añadir una pasada"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Cost when a layer marks it optional"
+msgstr "Costo cuando una capa lo marca como opcional"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "dropped"
+msgstr "se omite"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "Cost per quality level: %1"
+msgstr "Costo por nivel de calidad: %1"
+
 #: apps/wprs-app/qml/SceneEffectMask.qml
 msgid "Mask of the effect:"
 msgstr "Máscara del efecto:"
@@ -5912,6 +6009,78 @@ msgstr "Invertir: aplicar el efecto donde la máscara está vacía"
 msgid "%1 px"
 msgstr "%1 px"
 
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "a point on the canvas"
+msgstr "un punto sobre el lienzo"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "a corner on the canvas"
+msgstr "una esquina sobre el lienzo"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "an arrow on the canvas"
+msgstr "una flecha sobre el lienzo"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "a dial on the canvas"
+msgstr "un dial sobre el lienzo"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+#: apps/wprs-app/qml/SceneScriptParam.qml
+msgid "Min"
+msgstr "Mín."
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+#: apps/wprs-app/qml/SceneScriptParam.qml
+msgid "Max"
+msgstr "Máx."
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "Degrees"
+msgstr "Grados"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml apps/wprs-app/qml/SceneShadows3d.qml
+#: apps/wprs-app/qml/WallhavenDialog.qml
+msgid "none"
+msgstr "ninguna"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "Tools by its id: %1"
+msgstr "Herramientas según su id: %1"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "Gradient stops"
+msgstr "Paradas de degradado"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "Grey brush"
+msgstr "Pincel gris"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "Grey and direction brushes"
+msgstr "Pinceles gris y de dirección"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "Grey brush and depth map"
+msgstr "Pincel gris y mapa de profundidad"
+
+#: apps/wprs-app/qml/SceneEffectParam.qml
+msgid "%1, paired with %2"
+msgstr "%1, en pareja con %2"
+
+#: apps/wprs-app/qml/SceneEffectPass.qml
+msgid "Entry point"
+msgstr "Punto de entrada"
+
+#: apps/wprs-app/qml/SceneEffectPass.qml
+msgid "Inputs, such as previous, pass:0 or target:soft"
+msgstr "Entradas, como previous, pass:0 o target:soft"
+
+#: apps/wprs-app/qml/SceneEffectPass.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Target"
+msgstr "Objetivo"
+
 #: apps/wprs-app/qml/SceneEffectPointOverlay.qml
 msgid "Turn the angle around its point"
 msgstr "Girar el ángulo alrededor de su punto"
@@ -5931,6 +6100,16 @@ msgstr "Colocar este punto"
 #: apps/wprs-app/qml/SceneEffectPointOverlay.qml
 msgid "Move the whole line"
 msgstr "Mover toda la línea"
+
+#: apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/SceneNewMaterial.qml
+msgid "Edit the WGSL code…"
+msgstr "Editar el código WGSL…"
+
+#: apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/SceneNewMaterial.qml
+msgid "Edit the descriptor…"
+msgstr "Editar el descriptor…"
 
 #: apps/wprs-app/qml/SceneEffectsList.qml
 msgid "Reimport…"
@@ -6964,12 +7143,6 @@ msgstr ""
 "Los teléfonos y los ordenadores más antiguos iluminan el aire a un cuarto "
 "del tamaño; la vista previa muestra el nivel elegido abajo."
 
-#: apps/wprs-app/qml/SceneLightCast.qml apps/wprs-app/qml/SceneModelTools.qml
-#: apps/wprs-app/qml/SceneTimelinePanel.qml
-#: apps/wprs-app/qml/SceneWakeRules.qml
-msgid "Nothing"
-msgstr "Nada"
-
 #: apps/wprs-app/qml/SceneLightCast.qml
 msgid "%1 (video)"
 msgstr "%1 (vídeo)"
@@ -7881,6 +8054,34 @@ msgstr "Arrastra lejos del modelo para agrandarlo"
 msgid "The scale follows a binding; change it in the inspector"
 msgstr "La escala sigue un enlace; cámbiala en el inspector"
 
+#: apps/wprs-app/qml/SceneNewEffect.qml
+msgid "Id of a new effect"
+msgstr "Id de un efecto nuevo"
+
+#: apps/wprs-app/qml/SceneNewEffect.qml
+msgid "A change of color"
+msgstr "Un cambio de color"
+
+#: apps/wprs-app/qml/SceneNewEffect.qml
+msgid "A bend around a point"
+msgstr "Una deformación alrededor de un punto"
+
+#: apps/wprs-app/qml/SceneNewEffect.qml
+msgid "Two passes"
+msgstr "Dos pasadas"
+
+#: apps/wprs-app/qml/SceneNewEffect.qml
+msgid "A material shader"
+msgstr "Un shader de material"
+
+#: apps/wprs-app/qml/SceneNewEffect.qml
+msgid "A particle shader"
+msgstr "Un shader de partículas"
+
+#: apps/wprs-app/qml/SceneNewEffect.qml
+msgid "New effect"
+msgstr "Efecto nuevo"
+
 #: apps/wprs-app/qml/SceneNewMaterial.qml
 msgid "Name of a new material shader"
 msgstr "Nombre de un shader de material nuevo"
@@ -7892,10 +8093,13 @@ msgstr "Shader de material nuevo"
 #: apps/wprs-app/qml/SceneNewMaterial.qml
 msgid ""
 "Material shaders write fn material(s: Surface) -> Surface in effects/NAME."
-"wgsl of the package; they read frame and param(0u) to param(7u)."
+"wgsl of the package; they read frame, param(0u) to param(7u) and up to four "
+"pictures of their texture parameters with image0(uv) to image3(uv)."
 msgstr ""
 "Los shaders de material escriben fn material(s: Surface) -> Surface en "
-"effects/NOMBRE.wgsl del paquete; leen frame y de param(0u) a param(7u)."
+"effects/NOMBRE.wgsl del paquete; leen frame, de param(0u) a param(7u) y "
+"hasta cuatro imágenes de sus parámetros de textura con image0(uv) a "
+"image3(uv)."
 
 #: apps/wprs-app/qml/SceneNewMaterial.qml
 msgid "Edit code…"
@@ -8891,6 +9095,15 @@ msgstr "Declarado y no usado: %1"
 msgid "Declare what it uses"
 msgstr "Declarar lo que usa"
 
+
+#: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneShaderCode.qml
+msgid "%1 (not saved)"
+msgstr "%1 (sin guardar)"
+
+#: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneScriptRow.qml
+msgid "Open in your editor…"
+msgstr "Abrirlo en tu editor…"
+
 #: apps/wprs-app/qml/SceneScriptCode.qml
 msgid "API reference…"
 msgstr "Referencia de la API…"
@@ -8898,14 +9111,6 @@ msgstr "Referencia de la API…"
 #: apps/wprs-app/qml/SceneScriptParam.qml
 msgid "On by default"
 msgstr "Activado por defecto"
-
-#: apps/wprs-app/qml/SceneScriptParam.qml
-msgid "Min"
-msgstr "Mín."
-
-#: apps/wprs-app/qml/SceneScriptParam.qml
-msgid "Max"
-msgstr "Máx."
 
 #: apps/wprs-app/qml/SceneScriptParams.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
@@ -9088,6 +9293,26 @@ msgstr "Actualizar"
 msgid "User properties"
 msgstr "Propiedades de usuario"
 
+#: apps/wprs-app/qml/SceneShaderCode.qml
+msgid "Use on the selected layer"
+msgstr "Usar en la capa elegida"
+
+#: apps/wprs-app/qml/SceneShaderCode.qml
+msgid "Builds; costs %1 units"
+msgstr "Compila; cuesta %1 unidades"
+
+#: apps/wprs-app/qml/SceneShaderCode.qml
+msgid "Line %1, column %2: %3"
+msgstr "Línea %1, columna %2: %3"
+
+#: apps/wprs-app/qml/SceneShaderCode.qml
+msgid "Go to the line"
+msgstr "Ir a la línea"
+
+#: apps/wprs-app/qml/SceneShaderCode.qml
+msgid "Preview while typing: write each version that builds"
+msgstr "Vista previa al escribir: guardar cada versión que compila"
+
 #: apps/wprs-app/qml/SceneShadows3d.qml apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Shadows"
 msgstr "Sombras"
@@ -9107,10 +9332,6 @@ msgstr "Sesgo"
 #: apps/wprs-app/qml/SceneShadows3d.qml
 msgid "%1 px, %2 px on phones, %3 px at Q0"
 msgstr "%1 px, %2 px en teléfonos, %3 px en Q0"
-
-#: apps/wprs-app/qml/SceneShadows3d.qml apps/wprs-app/qml/WallhavenDialog.qml
-msgid "none"
-msgstr "ninguna"
 
 #: apps/wprs-app/qml/SceneShadows3d.qml
 msgid "Show where shadows fall and the frusta of the maps"
@@ -13349,10 +13570,6 @@ msgid "Taper"
 msgstr "Afinado"
 
 #: apps/wprs-app/qml/facade/SceneLabels.qml
-msgid "Target"
-msgstr "Objetivo"
-
-#: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Textured"
 msgstr "Con textura"
 
@@ -13606,10 +13823,6 @@ msgstr "Panorama"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Paper color"
 msgstr "Color del papel"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Parameters"
-msgstr "Parámetros"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Parent"
@@ -14251,10 +14464,6 @@ msgstr "Mapa"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Maps"
 msgstr "Mapas"
-
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-msgid "Mask"
-msgstr "Máscara"
 
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Maximum length"

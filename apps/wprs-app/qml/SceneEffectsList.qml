@@ -34,6 +34,30 @@ ColumnLayout {
             text: [modelData.id, App.bytes(modelData.size)].join(" · ")
 
             QQC2.ToolButton {
+                id: codeEffect
+
+                anchors.right: formEffect.left
+                icon.name: "document-edit"
+                text: App.tr("Edit the WGSL code…")
+                display: QQC2.AbstractButton.IconOnly
+                QQC2.ToolTip.text: text
+                QQC2.ToolTip.visible: hovered
+                onClicked: code.show(effect.modelData.id)
+            }
+
+            QQC2.ToolButton {
+                id: formEffect
+
+                anchors.right: reimportEffect.left
+                icon.name: "configure"
+                text: App.tr("Edit the descriptor…")
+                display: QQC2.AbstractButton.IconOnly
+                QQC2.ToolTip.text: text
+                QQC2.ToolTip.visible: hovered
+                onClicked: describer.show(effect.modelData.id)
+            }
+
+            QQC2.ToolButton {
                 id: reimportEffect
 
                 anchors.right: removeEffect.left
@@ -53,8 +77,8 @@ ColumnLayout {
                 text: App.tr("Remove")
                 display: QQC2.AbstractButton.IconOnly
                 onClicked: panel.page.run("remove_effect", {
-                    "effect": effect.modelData.id
-                })
+                        "effect": effect.modelData.id
+                    })
             }
         }
     }
@@ -63,6 +87,23 @@ ColumnLayout {
         text: App.tr("Import an effect…")
         icon.name: "special-effects-symbolic"
         onClicked: files.open()
+    }
+
+    SceneNewEffect {
+        Layout.fillWidth: true
+        page: panel.page
+    }
+
+    SceneShaderCode {
+        id: code
+
+        page: panel.page
+    }
+
+    SceneEffectForm {
+        id: describer
+
+        page: panel.page
     }
 
     FileDialog {
@@ -76,11 +117,11 @@ ColumnLayout {
             const wgsl = paths.find(path => path.endsWith(".wgsl"));
             if (descriptor)
                 panel.page.run("import_effect", wgsl ? {
-                    "descriptor": descriptor,
-                    "wgsl": wgsl
-                } : {
-                    "descriptor": descriptor
-                });
+                        "descriptor": descriptor,
+                        "wgsl": wgsl
+                    } : {
+                        "descriptor": descriptor
+                    });
         }
     }
 }

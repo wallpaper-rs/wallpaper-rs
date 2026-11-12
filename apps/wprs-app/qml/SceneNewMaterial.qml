@@ -15,18 +15,11 @@ ColumnLayout {
     function check() {
         const out = {};
         packages.forEach(name => out[name] = JSON.parse(page.editor.rig("", JSON.stringify({
-                "material_check": {
-                    "name": name
-                }
-            })) || "null"));
+                                "material_check": {
+                                    "name": name
+                                }
+                            })) || "null"));
         checks = out;
-    }
-
-    SceneMaterialCode {
-        id: code
-
-        page: made.page
-        onClosed: made.check()
     }
 
     onPackagesChanged: check()
@@ -49,10 +42,10 @@ ColumnLayout {
             enabled: name.acceptableInput
             onClicked: {
                 made.page.run("scene3d", {
-                    "new_material": {
-                        "name": name.text
-                    }
-                });
+                        "new_material": {
+                            "name": name.text
+                        }
+                    });
                 name.text = "";
             }
         }
@@ -63,7 +56,7 @@ ColumnLayout {
         visible: made.packages.length > 0
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
-        text: App.tr("Material shaders write fn material(s: Surface) -> Surface in effects/NAME.wgsl of the package; they read frame and param(0u) to param(7u).")
+        text: App.tr("Material shaders write fn material(s: Surface) -> Surface in effects/NAME.wgsl of the package; they read frame, param(0u) to param(7u) and up to four pictures of their texture parameters with image0(uv) to image3(uv).")
     }
 
     SceneRepeater {
@@ -83,9 +76,14 @@ ColumnLayout {
             text: found?.ok ? App.tr("%1 builds", modelData) : found?.line ? App.tr("%1, line %2, column %3: %4", modelData, found.line, found.column, found.error ?? "") : App.tr("%1: %2", modelData, found?.error ?? "")
             actions: [
                 Kirigami.Action {
-                    text: App.tr("Edit code…")
+                    text: App.tr("Edit the WGSL code…")
                     icon.name: "document-edit"
                     onTriggered: code.show(modelData)
+                },
+                Kirigami.Action {
+                    text: App.tr("Edit the descriptor…")
+                    icon.name: "configure"
+                    onTriggered: describer.show(modelData)
                 },
                 Kirigami.Action {
                     text: App.tr("Check again")
@@ -94,5 +92,17 @@ ColumnLayout {
                 }
             ]
         }
+    }
+
+    SceneShaderCode {
+        id: code
+
+        page: made.page
+    }
+
+    SceneEffectForm {
+        id: describer
+
+        page: made.page
     }
 }

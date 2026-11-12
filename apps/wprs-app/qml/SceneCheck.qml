@@ -117,7 +117,7 @@ QtObject {
                 ran("SceneLightsCheck.qml", "particles");
             }
             if (kind === "empty")
-                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml", "SceneTouchCheck.qml", "SceneBandCheck.qml", "SceneLevelCheck.qml", "SceneLightsCheck.qml", "SceneHearingCheck.qml"])
+                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml", "SceneTouchCheck.qml", "SceneBandCheck.qml", "SceneLevelCheck.qml", "SceneLightsCheck.qml", "SceneHearingCheck.qml", "SceneShaderCheck.qml"])
                     ran(check);
             if (kind === "parallax") {
                 ran("SceneManifestCheck.qml");

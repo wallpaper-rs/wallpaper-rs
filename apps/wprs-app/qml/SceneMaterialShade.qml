@@ -107,6 +107,12 @@ ColumnLayout {
         onEdited: (key, value) => shade.param(key, value)
     }
 
+    SceneMaterialPackage {
+        Layout.fillWidth: true
+        visible: (shade.row.panel.info?.packages ?? []).includes(shade.shader)
+        shade: shade
+    }
+
     Kirigami.InlineMessage {
         Layout.fillWidth: true
         visible: (shade.row.panel.info?.packages ?? []).includes(shade.shader)
