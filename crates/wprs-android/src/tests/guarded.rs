@@ -52,6 +52,11 @@ fn hidden_zones_and_languages_stay_hidden_through_every_argument() {
         ("new Intl.NumberFormat('ja-JP').resolvedOptions().locale", "ja-JP", "ja-JP"),
         ("(5).toLocaleString([])", "es-AR", "en-US"),
         ("new Intl.DateTimeFormat(null)", "TypeError", "TypeError"),
+        (
+            "(() => { for (let i = 0; i < 5; i++) (5).toLocaleString('ja-JP', { style: 'currency' }); return globalThis.built; })()",
+            "undefined",
+            "1",
+        ),
         ("new Date('2020-01-01T00:00').getTime() - Date.UTC(2020, 0, 1)", HOURS, "0"),
         ("Date.parse('2020-01-01T00:00:00.000') - Date.UTC(2020, 0, 1)", HOURS, "0"),
         ("Date.parse('01/01/2024 09:00:00') - Date.UTC(2024, 0, 1, 9)", HOURS, "0"),

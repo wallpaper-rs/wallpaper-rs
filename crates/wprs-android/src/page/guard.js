@@ -4,7 +4,32 @@
   const peers = ["RTCPeerConnection", "webkitRTCPeerConnection", "RTCDataChannel", "RTCIceCandidate", "RTCSessionDescription"];
   const formats = ["DateTimeFormat", "NumberFormat", "Collator", "PluralRules", "RelativeTimeFormat", "ListFormat", "DisplayNames", "Segmenter", "DurationFormat"];
   const listed = language && Intl.getCanonicalLocales;
-  const pick = (locales) => (language ? [...listed(locales), tag] : locales);
+  const kept = new Map();
+  const keep = (id, make) => {
+    let made = kept.get(id);
+    if (made === undefined) {
+      made = make();
+      if (kept.size >= 128) kept.clear();
+      kept.set(id, made);
+    }
+    return made;
+  };
+  const plain = (locales) => locales === undefined || typeof locales === "string";
+  const pick = (locales) => {
+    if (!language) return locales;
+    if (!plain(locales)) return [...listed(locales), tag];
+    return keep(`l|${locales}`, () => Object.freeze([...listed(locales), tag]));
+  };
+  const numbered = (Real, kind, locales, given) => {
+    let text = "";
+    try {
+      text = given === undefined ? "" : JSON.stringify(given);
+    } catch (_) {
+      text = undefined;
+    }
+    if (!plain(locales) || typeof text !== "string") return new Real(pick(locales), given);
+    return keep(`${kind}|${locales}|${text}`, () => new Real(pick(locales), given));
+  };
   const timed = (given) => {
     if (!zone || given === null) return given;
     const at = given === undefined ? undefined : given.timeZone;
@@ -16,6 +41,7 @@
     if (proto && typeof proto[name] === "function") proto[name] = wrap(proto[name]);
   };
   const hide = (g) => {
+    const Format = g.Intl.NumberFormat;
     for (const name of formats) {
       const Real = g.Intl[name];
       if (!Real) continue;
@@ -42,7 +68,10 @@
     const located = (real) => function (locales, given) {
       return real.call(this, pick(locales), given);
     };
-    [g.Number, g.BigInt].forEach((kind) => replace(kind && kind.prototype, "toLocaleString", located));
+    [g.Number, g.BigInt].forEach((kind) => replace(kind && kind.prototype, "toLocaleString", (real) => function (locales, given) {
+      if (!language || !Format) return real.call(this, pick(locales), given);
+      return numbered(Format, kind === g.Number ? "n" : "b", locales, given).format(this.valueOf());
+    }));
     ["toLocaleUpperCase", "toLocaleLowerCase"].forEach((name) => replace(g.String.prototype, name, located));
     replace(g.String.prototype, "localeCompare", (real) => function (that, locales, given) {
       return real.call(this, that, pick(locales), given);

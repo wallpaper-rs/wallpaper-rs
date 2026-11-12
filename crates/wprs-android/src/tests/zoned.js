@@ -18,11 +18,15 @@ function Format(l, o) {
 Format.prototype.resolvedOptions = function () {
   return { ...this.options };
 };
+Format.prototype.format = function () {
+  return this.options.locale;
+};
 const shown = (l, o) => Object.values(new Format(l, o).resolvedOptions()).join(" ");
 globalThis.Intl = {
   getCanonicalLocales: canonical,
   DateTimeFormat: Format,
   NumberFormat: function (l, o) {
+    globalThis.built = (globalThis.built || 0) + 1;
     return new Format(l, o);
   },
 };
