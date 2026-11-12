@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare BIN ROOT pages web
+declare ROOT pages
 ctl pack build "$ROOT/tests/fixtures/boom" -o "$pages/boom.wpak" >/dev/null && ctl lib import "$pages/boom.wpak" --wait >/dev/null
 boom=$(uid org.example.boom)
 ctl lib apply "$boom" -o TEST-W 2>/dev/null
