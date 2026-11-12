@@ -34,13 +34,13 @@ Timer {
             }, () => (stall.shown?.packages ?? []).length === 1], [() => {
                 stall.revoke(pkg, "1.0.0");
                 stall.admin.revoking.accept();
-            }, () => stall.shown.packages[0].versions[0].revoked === true], [() => stall.unrevoke(pkg, "1.0.0"), () => stall.shown.packages[0].versions[0].revoked === false], [() => {
+            }, () => stall.shown.packages[0].versions[0].revoked === true], [() => stall.unrevoke(pkg, "1.0.0"), () => stall.shown.packages[0].versions[0].revoked === false], [() => stall.list(pkg, "", false), () => stall.shown.packages[0].versions[0].listed === false], [() => stall.list(pkg, "", true), () => stall.shown.packages[0].versions[0].listed === true], [() => stall.feature(pkg, "Calm mornings", true), () => stall.shown.packages[0].featured === true && stall.shown.packages[0].note === "Calm mornings"], [() => stall.feature(pkg, "", false), () => stall.shown.packages[0].featured === false], [() => {
                 const publishing = stall.publishing;
                 publishing.open();
                 publishing.key = sample.online_key;
                 publishing.secret = "check";
                 publishing.accept();
-            }, () => stall.shown?.published?.packages === 1]]
+            }, () => stall.shown?.published?.packages === 1], [() => stall.backend.revokeKey(stall.folder, "ab".repeat(32), "other"), () => (stall.shown?.revoked_keys ?? []).includes("ab".repeat(32))]]
 
     function start() {
         host.waiting++;

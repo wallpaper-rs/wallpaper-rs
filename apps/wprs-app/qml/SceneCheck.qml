@@ -176,12 +176,10 @@ QtObject {
                     }).exercise();
             if (kind === "parallax") {
                 manifest();
-                Qt.createComponent("SceneSettingsCheck.qml").createObject(page, {
-                    "page": page
-                }).exercise();
-                Qt.createComponent("SceneTryCheck.qml").createObject(page, {
-                    "page": page
-                }).exercise();
+                for (const check of ["SceneSettingsCheck.qml", "SceneTryCheck.qml", "SceneAuthorCheck.qml"])
+                    Qt.createComponent(check).createObject(page, {
+                        "page": page
+                    }).exercise();
             }
             page.jump("/scene/layers/0/opacity");
             page.editor.seek(0.5, false);

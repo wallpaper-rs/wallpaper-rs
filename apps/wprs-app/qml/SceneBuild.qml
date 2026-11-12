@@ -49,6 +49,12 @@ Kirigami.Dialog {
                     text: App.tr("Choose…")
                     onClicked: keys.open()
                 }
+
+                QQC2.Button {
+                    icon.name: "dialog-password"
+                    text: App.tr("Keys…")
+                    onClicked: keyring.open()
+                }
             }
 
             Kirigami.PasswordField {
@@ -56,6 +62,20 @@ Kirigami.Dialog {
 
                 Kirigami.FormData.label: App.tr("Key password:")
                 enabled: key.text !== ""
+            }
+
+            QQC2.Button {
+                Kirigami.FormData.label: App.tr("Before building:")
+                text: App.tr("Review the package…")
+                icon.name: "view-list-details"
+                onClicked: reviewing.open()
+            }
+
+            QQC2.Button {
+                Kirigami.FormData.label: App.tr("Publish:")
+                text: App.tr("Add to a repository…")
+                icon.name: "document-send"
+                onClicked: shelving.open()
             }
 
             QQC2.Button {
@@ -82,6 +102,24 @@ Kirigami.Dialog {
                 onClicked: dialog.page.editor.apply(target.currentIndex > 0 ? App.outputs[target.currentIndex - 1] : "")
             }
         }
+    }
+
+    SceneReview {
+        id: reviewing
+
+        page: dialog.page
+    }
+
+    SceneShelve {
+        id: shelving
+
+        page: dialog.page
+    }
+
+    SceneKeys {
+        id: keyring
+
+        onPicked: secret => key.text = secret
     }
 
     FileDialog {

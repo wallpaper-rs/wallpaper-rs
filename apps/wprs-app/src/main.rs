@@ -35,6 +35,7 @@ mod scenerender;
 mod scenework;
 mod secret;
 mod shelf;
+mod signing;
 mod stall;
 mod stallcheck;
 mod stallwork;

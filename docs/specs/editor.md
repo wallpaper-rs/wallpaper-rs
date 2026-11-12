@@ -1297,6 +1297,35 @@ without it, and packs the folder with the code of `wprs-ctl pack build` into `-o
 `$XDG_DATA_HOME/wallpaper-rs/scenes/`, imports it into the library and shows it on an output, or
 on every output.
 
+*Review the package…* in the build dialog shows what `wprs_editor::review::report` returns, which
+`rig` answers for `{"review": {}}`: every finding of the problems list (level `error`, `warning` or
+`note`, message, the JSON Pointer to jump to and the file that holds it: `manifest.json`,
+`scene.json` or the missing asset), the notes of `wprs-ctl pack check`, the platforms that refuse the
+package or play it without a feature, the features a build adds, and the signature state of the
+folder. *Check the signature* answers `{"signature": {"path", "keys"}}` for a built `.wpak` or the
+folder, given the public key of the author: `valid` with the fingerprints that signed, `invalid` with
+the reason, `unsigned`, or `unchecked` while no key is given. `wprs-ctl pack check DIR|FILE` prints the
+same facts and `wprs-ctl pack validate DIR|FILE --key PUB` checks the signature of a folder as well
+as of a package.
+
+*Keys…* in the build dialog manages author keys. A pair is two files, `NAME.key` (secret, mode 0600)
+and `NAME.pub`, in the keys folder of the app (`$XDG_DATA_HOME/wallpaper-rs/keys`, mode 0700); a key
+may be encrypted with a password, which is asked only to create it and to sign. The app never shows or
+logs a secret key, replaces a pair only after asking and warning that the old secret key is lost for
+good, and gives a key to the build dialog by its path, as `--key` does. The same dialog signs the
+hand-over of an online author to a new key (`wprs-ctl pack rotate-key OLD.key NEW.pub --author ID`)
+and shows the signature to paste in the account. `wprs-ctl repo keygen NAME` makes the same pair in
+the current folder, with the code of `wprs_editor::author_keys`.
+
+*Add to a repository…* in the build dialog is the publishing step of the editor. It opens the folder
+of a static repository (made in *Repositories* or with `wprs-ctl repo init`), adds the built package
+to it, also unlisted, features it with a note of up to 140 characters or stops featuring it, and
+publishes the repository with the secret online key and the days its index lasts. It calls the same
+`wprs_format::stall` operations as the *Static repository* tab of *Repositories*, which also keeps the
+operations of the root: new repository, signing the root, rotating it, revoking a package or a key and
+the author keys. The command line has them as `wprs-ctl repo add [--unlisted]`, `unlist`, `list-again`,
+`feature`, `unfeature`, `revoke`, `unrevoke`, `revoke-key`, `init`, `sign-root`, `rotate-root` and `publish`.
+
 ## Picture depth tools
 
 The *Depth* page of the picture editor in the app and `wprs-ctl edit depth` shape the depth layers

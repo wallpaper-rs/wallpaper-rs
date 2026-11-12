@@ -1,5 +1,5 @@
 use crate::keys::{key_text, signer};
-use anyhow::{Result, ensure};
+use anyhow::{Result, bail, ensure};
 use clap::Subcommand;
 use serde_json::json;
 use std::fs;
@@ -61,7 +61,7 @@ pub enum Pack {
     },
     #[command(about = "Check packages and, with --key, their author signature")]
     Validate {
-        #[arg(required = true, value_name = "FILE", help = "Package file to validate")]
+        #[arg(required = true, value_name = "FILE", help = "Package file or folder to validate")]
         files: Vec<PathBuf>,
         #[arg(long = "key", value_name = "PUB", help = "Public key file or text of an accepted author")]
         keys: Vec<String>,
@@ -136,7 +136,22 @@ fn report(file: &Path, keys: &[(&str, &str)], json: bool) -> (bool, String) {
     (checked.is_ok(), line)
 }
 
+fn folder(dir: &Path, keys: &[(&str, &str)]) -> Result<(Manifest, Option<String>)> {
+    let manifest = wprs_format::inspect(dir)?.0;
+    let texts: Vec<String> = keys.iter().map(|(_, key)| (*key).to_owned()).collect();
+    let signed = (!keys.is_empty()).then(|| wprs_editor::review::signature(dir, &texts));
+    let Some(signed) = signed else { return Ok((manifest, None)) };
+    match signed["state"].as_str() {
+        Some("valid") => Ok((manifest, signed["signers"][0].as_str().map(str::to_owned))),
+        Some("unsigned") => bail!("the folder is not signed"),
+        _ => bail!("{}", signed["error"].as_str().unwrap_or("the signature is not valid")),
+    }
+}
+
 fn check(file: &Path, keys: &[(&str, &str)]) -> Result<(Manifest, Option<String>)> {
+    if file.is_dir() {
+        return folder(file, keys);
+    }
     let mut package = open(file, &Limits::default())?;
     let signer = (!keys.is_empty()).then(|| verify_package(&mut package, keys)).transpose()?;
     Ok((package.manifest, signer))

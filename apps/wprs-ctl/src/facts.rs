@@ -2,9 +2,8 @@ use crate::show::{self, list, text};
 use anyhow::Result;
 use serde_json::{Value, json};
 use std::path::Path;
-use wprs_format::{
-    Content, Error, Facts, Limits, Manifest, Origin, Platform, features, inspect, open, upgrade,
-};
+use wprs_editor::review;
+use wprs_format::{Content, Error, Facts, Limits, Manifest, Origin, features, inspect, open, upgrade};
 
 pub fn check(path: &Path, json: bool) -> Result<()> {
     let (manifest, facts) = match path.is_dir() {
@@ -21,14 +20,8 @@ pub fn check(path: &Path, json: bool) -> Result<()> {
         _ => {}
     }
     let listed = manifest.features();
-    let missing = facts.features.iter().filter(|f| manifest.v2() && !listed.contains(f));
-    let why = |f: &String| json!({"name": f, "why": features::explain(f)});
-    let plays = |p: Platform| {
-        let refused = features::playable(&manifest, &facts, p).err().map(|e| e.to_string());
-        json!({"refused": refused, "without": features::lacks(p.name(), &facts.features)})
-    };
-    let platforms: serde_json::Map<String, Value> =
-        Platform::ALL.into_iter().map(|p| (p.name().to_owned(), plays(p))).collect();
+    let (needed, missing) = review::needs(&manifest, &facts);
+    let platforms = review::platforms(&manifest, &facts);
     let report = json!({
         "path": path, "schema": manifest.schema, "id": manifest.id, "version": manifest.version,
         "kind": manifest.kind, "title": manifest.title_in(&wprs_core::locale::languages()),
@@ -36,8 +29,7 @@ pub fn check(path: &Path, json: bool) -> Result<()> {
         "reasons": manifest.content.iter().flat_map(|c| &c.descriptors).map(text).collect::<Vec<_>>(),
         "photosensitive": manifest.photosensitive, "origin": manifest.origin.as_ref().map(|o| text(&o.kind)),
         "inputs": manifest.inputs.iter().map(|i| i.name()).collect::<Vec<_>>(),
-        "features": facts.features.iter().map(why).collect::<Vec<_>>(), "declared": listed,
-        "missing": missing.map(why).collect::<Vec<_>>(),
+        "features": needed, "declared": listed, "missing": missing,
         "facets": facts.facets, "languages": manifest.locales(), "platforms": platforms,
         "warnings": features::warnings(&manifest, &facts),
     });

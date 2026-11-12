@@ -107,3 +107,15 @@ ctl scene render "$craft" --out "$shots/versus.png" --size 96 --time 0.5 --again
 [ -s "$shots/versus.png" ] || fail "the comparison picture is empty"
 if ctl scene render "$craft" --out "$shots/bad.png" --pointer 2,0.5 2>/dev/null; then fail "a pointer outside the canvas was taken"; fi
 if ctl scene render "$craft" --out "$shots/bad.txt" 2>/dev/null; then fail "a picture was written with an unknown extension"; fi
+lic=$scene/licensed
+ctl scene new "$lic" --id org.example.licensed >/dev/null
+ctl scene set "$lic" /manifest/license '"CC-BY-SA-4.0"' >/dev/null
+mkdir -p "$scene/author-keys"
+(cd "$scene/author-keys" && ctl repo keygen ana --no-password >/dev/null && ctl repo keygen bo --no-password >/dev/null)
+if (cd "$scene/author-keys" && ctl repo keygen ana --no-password 2>/dev/null); then fail "a key pair was replaced unasked"; fi
+ctl scene build "$lic" -o "$scene/licensed.wpak" --key "$scene/author-keys/ana.key" >/dev/null || fail "the signed scene was not built"
+ctl pack validate "$lic" --key "$scene/author-keys/ana.pub" | grep -q "^ok scene org.example.licensed" || fail "the signature of the folder was not accepted"
+ctl pack validate "$scene/licensed.wpak" --key "$scene/author-keys/ana.pub" | grep -q "signer=" || fail "the signature of the package was not accepted"
+if ctl pack validate "$scene/licensed.wpak" --key "$scene/author-keys/bo.pub" 2>/dev/null; then fail "another key vouched for the package"; fi
+ctl pack check "$lic" --json | grep -q '"warnings"' || fail "pack check of the folder gave no report"
+echo "package review and key checks passed"

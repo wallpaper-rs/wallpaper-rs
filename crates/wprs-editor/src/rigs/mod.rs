@@ -83,6 +83,16 @@ fn body(dir: &Path, doc: &Value, layer: &Value) -> Value {
 
 pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
     match () {
+        _ if q.get("review").is_some() => crate::review::report(dir, doc),
+        _ if q.get("signature").is_some() => {
+            let keys: Vec<String> =
+                serde_json::from_value(q["signature"]["keys"].clone()).unwrap_or_default();
+            let path = q["signature"]["path"]
+                .as_str()
+                .filter(|p| !p.is_empty())
+                .map_or_else(|| dir.to_path_buf(), Into::into);
+            crate::review::signature(&path, &keys)
+        }
         _ if q.get("tried").is_some() => crate::tried::query(doc, &q["tried"]),
         _ if q.get("weights").is_some() => heat(dir, doc, id, q["weights"].as_str()),
         _ if q.get("pose").is_some() => pose(dir, doc, id, &q["pose"]),

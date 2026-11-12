@@ -43,6 +43,7 @@ fn main() {
         "src/relief.rs",
         "src/scene.rs",
         "src/shelf.rs",
+        "src/signing.rs",
         "src/strips.rs",
         "src/stall.rs",
     ])

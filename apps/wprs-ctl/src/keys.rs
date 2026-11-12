@@ -1,11 +1,9 @@
 use crate::input::password;
 use crate::usage;
-use anyhow::{Result, ensure};
+use anyhow::Result;
 use clap::Args;
 use std::collections::BTreeMap;
-use std::fs::{self, OpenOptions};
-use std::io::Write;
-use std::os::unix::fs::OpenOptionsExt;
+use std::fs;
 use std::path::Path;
 use wprs_format::{Charter, Signer};
 
@@ -73,22 +71,9 @@ impl Policy {
 }
 
 pub fn keygen(name: &str, no_password: bool) -> Result<String> {
-    let (secret, public) = (format!("{name}.key"), format!("{name}.pub"));
-    ensure!(
-        !Path::new(&secret).exists() && !Path::new(&public).exists(),
-        "{secret} or {public} already exists"
-    );
     let password = (!no_password).then(|| password(true)).transpose()?;
-    ensure!(password.as_ref().is_none_or(|p| !p.is_empty()), "the password is empty; use --no-password");
-    let pair = wprs_format::keygen(password)?;
-    create(&secret, &pair.secret, 0o600)?;
-    create(&public, &pair.public, 0o644)?;
-    Ok(pair.fingerprint)
-}
-
-fn create(path: &str, text: &str, mode: u32) -> Result<()> {
-    let mut file = OpenOptions::new().write(true).create_new(true).mode(mode).open(path)?;
-    Ok(file.write_all(text.as_bytes())?)
+    let made = wprs_editor::author_keys::create(Path::new("."), name, password, false)?;
+    Ok(made["fingerprint"].as_str().unwrap_or_default().to_owned())
 }
 
 pub fn key_text(key: &str) -> Result<String> {
