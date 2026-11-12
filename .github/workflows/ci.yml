@@ -246,7 +246,8 @@ jobs:
           shared-key: dev
           save-if: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+      - id: models
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: |
             ~/.local/share/wallpaper-rs/models
@@ -265,6 +266,14 @@ jobs:
         run: |
           cargo build --locked -p wprs-ctl
           scripts/docs-examples.sh target/debug
+
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        if: github.ref == 'refs/heads/master' && steps.models.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ~/.local/share/wallpaper-rs/models
+            ~/.local/share/wallpaper-rs/runtime
+          key: depth-anything-v2-small-46c4e8ee-onnxruntime-1.31.0
 
   e2e:
     name: End-to-end test (D-Bus + PipeWire + daemon)
