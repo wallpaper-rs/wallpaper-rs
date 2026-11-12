@@ -1,5 +1,6 @@
 use crate::author::Author;
 use crate::flying::{AnimCmd, Flying, PathCmd};
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result};
 use serde_json::{Value, json};
 use std::path::PathBuf;
@@ -13,7 +14,7 @@ pub(crate) fn three(text: &str) -> Option<[f32; 3]> {
 
 fn wide(text: &Option<String>) -> Result<Option<[f64; 3]>> {
     let Some(t) = text else { return Ok(None) };
-    let found = three(t).with_context(|| format!("{t} is not 3 numbers apart by commas"))?;
+    let found = three(t).with_context(|| fill(told("%1 is not 3 numbers apart by commas"), &[&t]))?;
     Ok(Some(found.map(f64::from)))
 }
 
@@ -65,7 +66,7 @@ fn animate(layer: String, what: AnimCmd) -> Result<AnimEdit> {
         AnimCmd::Morph { shape, weight } => {
             let weight = match weight.as_str() {
                 "none" => None,
-                w => Some(w.parse::<f64>().with_context(|| format!("{w} is not a number"))?),
+                w => Some(w.parse::<f64>().with_context(|| fill(told("%1 is not a number"), &[&w]))?),
             };
             AnimEdit::Morph { layer, shape, weight }
         }
@@ -111,8 +112,8 @@ fn edit(command: Flying) -> Result<(PathBuf, Action)> {
             let param = param.unwrap_or_default();
             (dir, Action::EffectRule(RuleEdit { effect, param, uses, waits_for, yields_to }))
         }
-        Flying::EffectCost { .. } => anyhow::bail!("effect-cost only prints"),
-        Flying::Clocks { .. } => anyhow::bail!("clocks only prints"),
+        Flying::EffectCost { .. } => anyhow::bail!("{}", tr(told("effect-cost only prints"))),
+        Flying::Clocks { .. } => anyhow::bail!("{}", tr(told("clocks only prints"))),
         Flying::Debug3d { dir, show } => {
             let show = (show != "none").then_some(show);
             (dir, Action::Scene3d(Edit3d::Debug { show, layer: None, material: None }))
@@ -125,7 +126,7 @@ pub(crate) fn action(command: Flying) -> Result<(PathBuf, Action), Box<Author>> 
         return Err(Box::new(Author::Flying(command)));
     }
     edit(command).map_err(|e| {
-        eprintln!("wprs-ctl: {e:#}");
+        eprintln!("wprs-ctl: {}", crate::foreign::said(&format!("{e:#}")));
         std::process::exit(2)
     })
 }
@@ -138,7 +139,11 @@ pub(crate) fn run(command: Flying) -> Result<()> {
         Flying::Animate { dir, layer, .. } => {
             let p = Project::open(&dir)?;
             let known = wprs_editor::rigs::known(&p.dir, &p.doc, &layer);
-            anyhow::ensure!(!known.is_null(), "there is no mesh or model layer {layer:?}");
+            anyhow::ensure!(
+                !known.is_null(),
+                "{}",
+                fill(told("there is no mesh or model layer %1"), &[&format!("{layer:?}")])
+            );
             println!("{}", serde_json::to_string_pretty(&*known)?);
             return Ok(());
         }
@@ -152,14 +157,17 @@ pub(crate) fn run(command: Flying) -> Result<()> {
             (dir, json!({ "effect_cost": { "effect": effect, "optional": optional } }))
         }
         Flying::Clocks { dir, time, strip } => (dir, json!({ "clocks": { "time": time, "strip": strip } })),
-        other => anyhow::bail!("{other:?} changes the scene"),
+        other => anyhow::bail!("{}", fill(told("%1 changes the scene"), &[&format!("{other:?}")])),
     };
     let p = Project::open(&dir)?;
     let found: Value = wprs_editor::rigs::query(&p.dir, &p.seen(), "", &q);
-    anyhow::ensure!(!found.is_null(), "there is nothing to show");
+    anyhow::ensure!(!found.is_null(), "{}", tr(told("there is nothing to show")));
     println!("{}", serde_json::to_string_pretty(&found)?);
     if found["ok"] == false {
-        anyhow::bail!("the shader does not build: {}", found["error"].as_str().unwrap_or_default());
+        anyhow::bail!(
+            "{}",
+            fill(told("the shader does not build: %1"), &[&found["error"].as_str().unwrap_or_default()])
+        );
     }
     Ok(())
 }

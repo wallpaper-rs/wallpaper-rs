@@ -72,7 +72,7 @@ fn a_web_page_whose_sandbox_could_not_fully_start_warns_about_it() {
     reduced.sandbox = "reduced".into();
     assert_eq!(
         sandbox_note(&reduced),
-        Some("its web engine runs without part of its sandbox on this computer")
+        Some("its web engine runs without part of its sandbox on this computer".to_owned())
     );
 }
 

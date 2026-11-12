@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use anyhow::Result;
 use clap::Args;
 use tokio::signal::unix::{SignalKind, signal};
@@ -57,7 +58,7 @@ impl Placement {
         let Placement { output, pos, size, scale, density, identity } = self;
         let point =
             pos.split_once(',').and_then(|(x, y)| Some((x.trim().parse().ok()?, y.trim().parse().ok()?)));
-        let (x, y) = point.ok_or_else(|| crate::usage(format!("{pos} is not X,Y")))?;
+        let (x, y) = point.ok_or_else(|| crate::usage(fill(told("%1 is not X,Y"), &[&pos])))?;
         let (width, height) = crate::editing::dimensions(&size)?;
         Ok(daemon.set_output_info(&output, x, y, width, height, scale, density, &identity).await?)
     }

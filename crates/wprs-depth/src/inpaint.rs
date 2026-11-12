@@ -6,6 +6,7 @@ use ort::environment::Environment;
 use ort::session::Session;
 use ort::value::Tensor;
 use std::path::{Path, PathBuf};
+use wprs_core::message::said;
 
 const SIDE: usize = crate::windows::CROP as usize;
 
@@ -17,7 +18,10 @@ pub struct Inpainter {
 
 impl Inpainter {
     pub fn open(places: &Places, library: Option<&Path>, threads: usize, device: Device) -> Result<Self> {
-        let model = places.installed(&LAMA).context("LaMa is not installed; see wprs-ctl models list")?;
+        let model = places.installed(&LAMA).context(
+            said("depth.lama_is_not_installed_see", "LaMa is not installed; see wprs-ctl models list", &[])
+                .local(),
+        )?;
         Self::from_file(&model, &places.library(library), threads, device)
     }
 
@@ -42,11 +46,15 @@ impl Inpainter {
         let outputs = self.session.run(ort::inputs!["image" => picture, "mask" => hole]).map_err(text)?;
         let (shape, values) = outputs[0].try_extract_tensor::<f32>().map_err(text)?;
         if shape.len() != 4 || values.len() != 3 * plane {
-            bail!("LaMa gave an unexpected shape");
+            bail!(
+                "{}",
+                said("depth.lama_gave_an_unexpected_shape", "LaMa gave an unexpected shape", &[]).local()
+            );
         }
         let byte = |v: f32| v.round().clamp(0.0, 255.0) as u8;
         let interleaved: Vec<u8> =
             (0..plane).flat_map(|i| (0..3).map(move |c| byte(values[c * plane + i]))).collect();
-        RgbImage::from_raw(SIDE as u32, SIDE as u32, interleaved).context("LaMa gave a torn picture")
+        RgbImage::from_raw(SIDE as u32, SIDE as u32, interleaved)
+            .context(said("depth.lama_gave_a_torn_picture", "LaMa gave a torn picture", &[]).local())
     }
 }

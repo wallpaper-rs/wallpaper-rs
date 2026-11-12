@@ -7,6 +7,7 @@ use std::fs::{File, OpenOptions};
 use std::io::{Read, Write};
 use std::path::Path;
 use std::time::Duration;
+use wprs_core::message::said;
 
 pub const AGENT: &str = concat!("wallpaper-rs/", env!("CARGO_PKG_VERSION"));
 
@@ -47,7 +48,8 @@ pub fn download(urls: &[&str], dest: &Path, bytes: u64, sha: &str, progress: Pro
         .connect_timeout(Duration::from_secs(30))
         .timeout(Duration::from_secs(60))
         .build()?;
-    let mut failure = anyhow!("no address to download from");
+    let mut failure =
+        anyhow!("{}", said("depth.no_address_to_download_from", "no address to download from", &[]).local());
     for url in urls.iter().filter(|u| !u.is_empty()) {
         match get(&client, url, &part, bytes, progress) {
             Ok(hash) if hash == sha => {
@@ -57,10 +59,22 @@ pub fn download(urls: &[&str], dest: &Path, bytes: u64, sha: &str, progress: Pro
             }
             Ok(_) => {
                 std::fs::remove_file(&part).ok();
-                failure = anyhow!("the file from {} has another SHA-256 and was deleted", host(url));
+                failure = anyhow!(
+                    "{}",
+                    said(
+                        "depth.the_file_from_has_another",
+                        "the file from %1 has another SHA-256 and was deleted",
+                        &[&host(url)]
+                    )
+                    .local()
+                );
             }
             Err(e) if e.is::<Cancelled>() => return Err(e),
-            Err(e) => failure = e.context(format!("cannot download from {}", host(url))),
+            Err(e) => {
+                failure = e.context(
+                    said("depth.cannot_download_from", "cannot download from %1", &[&host(url)]).local(),
+                )
+            }
         }
     }
     Err(failure)
@@ -95,11 +109,22 @@ fn get(
         false => have = 0,
     }
     let length = response.content_length().unwrap_or_default();
-    ensure!(have + length <= bytes, "{} offers more than {bytes} bytes", host(url));
+    ensure!(
+        have + length <= bytes,
+        "{}",
+        said("depth.offers_more_than_bytes", "%1 offers more than %2 bytes", &[&host(url), &bytes]).local()
+    );
     let mut file =
         OpenOptions::new().create(true).write(true).append(resumed).truncate(!resumed).open(part)?;
     let (mut done, mut chunk) = (have, vec![0; 1 << 16]);
-    let stopped = |done| format!("the download stopped after {done} of {bytes} bytes; it resumes next time");
+    let stopped = |done| {
+        said(
+            "depth.the_download_stopped_after_of",
+            "the download stopped after %1 of %2 bytes; it resumes next time",
+            &[&done, &bytes],
+        )
+        .local()
+    };
     loop {
         let n = match response.read(&mut chunk) {
             Ok(0) => break,
@@ -113,7 +138,15 @@ fn get(
         if done > bytes {
             drop(file);
             std::fs::remove_file(part).ok();
-            bail!("{} sent more than {bytes} bytes; the file was deleted", host(url));
+            bail!(
+                "{}",
+                said(
+                    "depth.sent_more_than_bytes_the",
+                    "%1 sent more than %2 bytes; the file was deleted",
+                    &[&host(url), &bytes]
+                )
+                .local()
+            );
         }
         file.write_all(&chunk[..n])?;
         hash.update(&chunk[..n]);

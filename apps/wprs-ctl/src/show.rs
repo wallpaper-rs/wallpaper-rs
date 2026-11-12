@@ -1,3 +1,4 @@
+use crate::told::{fill, told, tr};
 use anyhow::{Result, bail};
 use chrono::{Local, TimeZone};
 use serde::Serialize;
@@ -50,7 +51,10 @@ pub fn pick(pairs: Vec<(&str, String)>, key: Option<&str>) -> Result<String> {
     let Some(key) = key else { return Ok(lines(pairs)) };
     match pairs.iter().find(|(k, _)| *k == key) {
         Some((_, value)) => Ok(clean(value) + "\n"),
-        None => bail!("unknown key {key}; the keys are {}", list(pairs.iter().map(|(k, _)| *k))),
+        None => bail!(
+            "{}",
+            fill(told("unknown key %1; the keys are %2"), &[&key, &list(pairs.iter().map(|(k, _)| *k))])
+        ),
     }
 }
 
@@ -103,11 +107,14 @@ pub fn schema(s: Schema) -> String {
     for p in &s.providers {
         let secret = match &p.secret {
             Some(secret) if secret.required => secret.name.clone(),
-            Some(secret) => format!("{}, optional", secret.name),
+            Some(secret) => fill(told("%1, optional"), &[&secret.name]),
             None => "none".into(),
         };
-        let hosts = if p.hosts.is_empty() { "its server".into() } else { list(&p.hosts) };
-        out += &fields(&format!("provider {} (secret: {secret}; contacts: {hosts})", p.kind), &p.options);
+        let hosts = if p.hosts.is_empty() { tr(told("its server")) } else { list(&p.hosts) };
+        out += &fields(
+            &fill(told("provider %1 (secret: %2; contacts: %3)"), &[&p.kind, &secret, &hosts]),
+            &p.options,
+        );
     }
     let keys = s.query.iter().map(|k| vec![k.key.clone(), k.hint.clone()]);
     out += &section("query", table(&["KEY", "MEANING"], keys));
@@ -158,14 +165,14 @@ pub fn summary(job: &Job) -> String {
     let output = job.output.clone().unwrap_or_default();
     let detail = match job.kind {
         JobKind::RepoAdd => {
-            from_value(output).ok().map(|r: Repo| format!("{} ({} packages)", r.name, r.packages))
+            from_value(output).ok().map(|r: Repo| fill(told("%1 (%2 packages)"), &[&r.name, &r.packages]))
         }
         JobKind::Install => from_value(output).ok().map(|p: InstalledPackage| {
             let needs = p.missing.join(", ");
             let note = if needs.is_empty() {
                 String::new()
             } else {
-                format!(" (incomplete: could not install {needs})")
+                fill(told(" (incomplete: could not install %1)"), &[&needs])
             };
             format!("{} {}{note}", p.id, p.version)
         }),

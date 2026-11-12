@@ -5,6 +5,7 @@ use crate::private;
 use crate::providers::patient;
 use crate::server::Server;
 use crate::show;
+use crate::told::{told, tr};
 use anyhow::{Result, bail};
 use futures_util::TryFutureExt;
 use std::io::{self, IsTerminal};
@@ -31,8 +32,10 @@ pub async fn run(client: &Client, command: Server) -> Result<()> {
         Server::Link { name, plaintext, wait } => {
             if plaintext {
                 eprintln!("{PLAINTEXT}");
-                if io::stdin().is_terminal() && !confirm("Link without end-to-end encryption?").await? {
-                    bail!("not linked");
+                if io::stdin().is_terminal()
+                    && !confirm(&tr(told("Link without end-to-end encryption?"))).await?
+                {
+                    bail!("{}", tr(told("not linked")));
                 }
             }
             let start = sync.link(&name, plaintext).map_ok(|(code, url, id)| {
@@ -64,8 +67,8 @@ pub async fn run(client: &Client, command: Server) -> Result<()> {
         Server::Rotate { wait } => job(client, sync.rotate().map_ok(|id| ((), id)), &wait).await?,
         Server::Reset { yes, wait } => {
             eprintln!("{RESET}");
-            if !yes && !confirm("Reset the synced data of the account?").await? {
-                bail!("nothing was reset");
+            if !yes && !confirm(&tr(told("Reset the synced data of the account?"))).await? {
+                bail!("{}", tr(told("nothing was reset")));
             }
             job(client, sync.reset().map_ok(|id| ((), id)), &wait).await?
         }

@@ -4,6 +4,7 @@ use image::{GrayImage, RgbImage};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::AtomicBool;
 use wprs_core::edit::{Depth, Edit, Parallax};
+use wprs_core::message::said;
 use wprs_core::{Config, Fill};
 
 pub fn settings(places: &Places, edit: &Edit, fill: Option<Fill>) -> Settings {
@@ -27,7 +28,14 @@ impl Places {
         stop: &AtomicBool,
     ) -> Result<PathBuf> {
         let dest = self.layer_set(image, sha, depth, set);
-        let dest = dest.context("the image has no depth map; generate or import one first")?;
+        let dest = dest.context(
+            said(
+                "depth.the_image_has_no_depth",
+                "the image has no depth map; generate or import one first",
+                &[],
+            )
+            .local(),
+        )?;
         if dest.is_file() && !force && load(&dest).is_ok_and(|l| l.is_some()) {
             return Ok(dest);
         }
@@ -35,7 +43,9 @@ impl Places {
         let mut lama =
             (set.fill == Fill::Lama).then(|| Inpainter::open(self, None, threads(), device)).transpose()?;
         let mut paint = |image: &RgbImage, mask: &GrayImage| {
-            lama.as_mut().context("LaMa is not loaded")?.run(image, mask)
+            lama.as_mut()
+                .context(said("depth.lama_is_not_loaded", "LaMa is not loaded", &[]).local())?
+                .run(image, mask)
         };
         let inpaint: Option<&mut Inpaint<'_>> = (set.fill == Fill::Lama).then_some(&mut paint);
         self.build_layers((image, sha), (depth, set), inpaint, progress, stop)

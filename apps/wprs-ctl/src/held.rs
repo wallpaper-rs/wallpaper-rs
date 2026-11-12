@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use wprs_core::model::InstalledPackage;
 
 pub fn asked(packages: &[InstalledPackage]) -> String {
@@ -5,10 +6,7 @@ pub fn asked(packages: &[InstalledPackage]) -> String {
     held.map(|p| {
         let new = p.update.as_deref().unwrap_or_default();
         let asks = p.asks.join(", ");
-        format!(
-            "\n{} {new} asks for new permissions ({asks}) and is not updated automatically; run `pkg install {}/{}` to allow them\n",
-            p.id, p.repo_id, p.id
-        )
+        fill(told("\n%1 %2 asks for new permissions (%3) and is not updated automatically; run `pkg install %4/%5` to allow them\n"), &[&p.id, &new, &asks, &p.repo_id, &p.id])
     })
     .collect()
 }

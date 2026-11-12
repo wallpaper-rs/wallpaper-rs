@@ -1,4 +1,4 @@
-use crate::told::{fill, told};
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result, anyhow, ensure};
 use image::{Rgba, RgbaImage, imageops};
 use std::collections::BTreeMap;
@@ -36,12 +36,13 @@ pub struct Span {
 
 fn monitors(layout: &str, bezel: f64, screen: [f64; 2]) -> Result<Vec<Monitor>> {
     if layout != "mine" {
-        return sized(layout, bezel, screen)
-            .ok_or_else(|| anyhow!("{layout} is not dual, triple, vertical or mine"));
+        return sized(layout, bezel, screen).ok_or_else(|| {
+            anyhow!("{}", fill(told("%1 is not dual, triple, vertical or mine"), &[&layout]))
+        });
     }
     let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build()?;
     let placed = runtime.block_on(mine())?;
-    ensure!(!placed.is_empty(), "the desktop has not told where its screens are yet");
+    ensure!(!placed.is_empty(), "{}", tr(told("the desktop has not told where its screens are yet")));
     checked(placed).map_err(|e| anyhow!(e))
 }
 
@@ -54,7 +55,7 @@ fn poster(dir: &Path, edge: u32, time: Option<f64>) -> Result<RgbaImage> {
     let scene = wprs_scene::Scene::from_json(&visible(&project.doc).to_string())?;
     let read = |path: &str| match inside(path) {
         true => std::fs::read(project.dir.join(path)).map_err(|e| format!("{path}: {e}")),
-        false => Err(format!("{path} is outside the scene folder")),
+        false => Err(fill(told("%1 is outside the scene folder"), &[&path])),
     };
     let assets = SceneAssets::read(&scene, read).map_err(|e| anyhow!(e))?;
     let assets =
@@ -85,7 +86,7 @@ pub fn compose(canvas: &RgbaImage, monitors: &[Monitor], edge: u32) -> RgbaImage
 
 pub fn preview(dir: &Path, span: &Span, time: Option<f64>) -> Result<()> {
     let (Some(layout), Some(out)) = (&span.layout, &span.out) else {
-        return Err(anyhow!("--layout needs --out"));
+        return Err(anyhow!("{}", tr(told("--layout needs --out"))));
     };
     let config = || wprs_core::Config::default_path().and_then(|p| wprs_core::Config::load(&p));
     let bezel = span.bezel.unwrap_or_else(|| config().map_or(0.0, |c| c.layout.bezel_mm));
@@ -93,7 +94,7 @@ pub fn preview(dir: &Path, span: &Span, time: Option<f64>) -> Result<()> {
     let monitors = monitors(layout, bezel, screen)?;
     let canvas = poster(dir, EDGE * 2, time)?;
     let image = compose(&canvas, &monitors, EDGE);
-    wprs_render::save(&image, out, 95).with_context(|| format!("cannot write {}", out.display()))?;
+    wprs_render::save(&image, out, 95).with_context(|| fill(told("cannot write %1"), &[&out.display()]))?;
     println!("{}", out.display());
     Ok(())
 }
@@ -108,8 +109,8 @@ pub(crate) fn second(text: &str) -> Result<f64, String> {
 
 pub(crate) fn bezel(text: &str) -> Result<f64, String> {
     let most = wprs_core::Layout::MAX_BEZEL_MM;
-    let mm: f64 = text.parse().map_err(|_| format!("{text} is not a number of millimetres"))?;
+    let mm: f64 = text.parse().map_err(|_| fill(told("%1 is not a number of millimetres"), &[&text]))?;
     (mm.is_finite() && (0.0..=most).contains(&mm))
         .then_some(mm)
-        .ok_or_else(|| format!("the frame is 0 to {most} mm, not {text}"))
+        .ok_or_else(|| fill(told("the frame is 0 to %1 mm, not %2"), &[&most, &text]))
 }

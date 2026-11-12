@@ -2,6 +2,7 @@ use super::Repo;
 use crate::input::now;
 use crate::keys::{keygen, signer};
 use crate::show::{either, lines, list};
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::Result;
 use std::path::Path;
@@ -21,7 +22,13 @@ pub async fn run(command: Repo) -> Result<()> {
             let mut settings = Settings::default();
             charter.apply(&mut settings)?;
             root(&init(&dir, &settings, now()?)?, json)?;
-            eprintln!("sign the root next: wprs-ctl repo sign-root {} --key <root key>", dir.display())
+            eprintln!(
+                "{}",
+                fill(
+                    told("sign the root next: wprs-ctl repo sign-root %1 --key <root key>"),
+                    &[&dir.display()]
+                )
+            )
         }
         Repo::SignRoot { dir, key, json } => root(&sign_root(&dir, &signer(&key)?)?, json)?,
         Repo::Status { dir, json } => root(&status(&dir)?, json)?,
@@ -32,7 +39,7 @@ pub async fn run(command: Repo) -> Result<()> {
         Repo::Add { dir, files, author, unlisted, json } => {
             let remote = [&dir].into_iter().chain(&files).any(|p| p.to_string_lossy().contains("://"));
             if remote {
-                return Err(usage("use wprs-ctl remote add to add a repository to this computer"));
+                return Err(usage(tr(told("use wprs-ctl remote add to add a repository to this computer"))));
             }
             for file in files {
                 let added = add(&dir, &file, author.as_deref(), now()?)?;
@@ -40,8 +47,10 @@ pub async fn run(command: Repo) -> Result<()> {
                     wprs_format::list(&dir, &added.id, Some(&added.release.version), false)?;
                 }
                 let (release, author) = (&added.release, added.author.as_deref().unwrap_or("-"));
-                let text =
-                    format!("{} {} sha256={} author={author}", added.id, release.version, release.sha256);
+                let text = fill(
+                    told("%1 %2 sha256=%3 author=%4"),
+                    &[&added.id, &release.version, &release.sha256, &author],
+                );
                 either(&added, json, text)?
             }
         }
@@ -53,9 +62,9 @@ pub async fn run(command: Repo) -> Result<()> {
         }
         Repo::Publish(p) | Repo::Refresh(p) => {
             let published = publish(&p.dir, &signer(&p.key)?, p.days, now()?)?;
-            let text = format!(
-                "index {} published with {} packages; it expires {}",
-                published.version, published.packages, published.expires
+            let text = fill(
+                told("index %1 published with %2 packages; it expires %3"),
+                &[&published.version, &published.packages, &published.expires],
             );
             either(&published, p.json, text)?
         }
@@ -65,7 +74,10 @@ pub async fn run(command: Repo) -> Result<()> {
             let mut settings = settings(&dir)?;
             charter.apply(&mut settings)?;
             root(&rotate_root(&dir, &settings, now()?)?, json)?;
-            eprintln!("sign the new root with keys of the old and of the new root, then publish");
+            eprintln!(
+                "{}",
+                tr(told("sign the new root with keys of the old and of the new root, then publish"))
+            );
         }
         Repo::Unrevoke { dir, id, version } => unrevoke(&dir, &id, version.as_deref().unwrap_or("*"))?,
         Repo::Verify { url, json } => {
@@ -76,13 +88,13 @@ pub async fn run(command: Repo) -> Result<()> {
                 Ok(verify(&HttpFetch::new(Arc::default())?, &url, at)?)
             })
             .await??;
-            info.warnings.iter().for_each(|warning| eprintln!("warning: {warning}"));
+            info.warnings.iter().for_each(|warning| eprintln!("{}", fill(told("warning: %1"), &[&warning])));
             let text = lines([
                 ("repo_id", info.repo_id.clone()),
                 ("name", info.name.clone()),
                 ("hosts", list(&info.hosts)),
-                ("root", format!("version {}, expires {}", info.root_version, info.root_expires)),
-                ("index", format!("version {}, expires {}", info.entry_version, info.entry_expires)),
+                ("root", fill(told("version %1, expires %2"), &[&info.root_version, &info.root_expires])),
+                ("index", fill(told("version %1, expires %2"), &[&info.entry_version, &info.entry_expires])),
                 ("packages", info.packages.to_string()),
                 ("stale", info.stale.to_string()),
             ]);

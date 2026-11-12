@@ -1,6 +1,7 @@
 use crate::input::secret;
 use crate::keys::key_text;
 use crate::show::either;
+use crate::told::{told, tr};
 use anyhow::Result;
 use clap::Subcommand;
 use percent_encoding::{NON_ALPHANUMERIC, utf8_percent_encode};
@@ -46,7 +47,7 @@ pub enum AuthorCommand {
 async fn api(server: &str) -> Result<Api> {
     let token = match std::env::var("WPRS_SERVER_TOKEN") {
         Ok(token) => token,
-        Err(_) => secret("Personal token with the upload scope: ", false)?,
+        Err(_) => secret(&tr(told("Personal token with the upload scope: ")), false)?,
     };
     Ok(Api::new(server)?.with_token(token.trim()))
 }

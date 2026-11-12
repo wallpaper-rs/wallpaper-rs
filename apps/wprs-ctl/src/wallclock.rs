@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
 
 const DAY: f64 = 86_400.0;
@@ -8,7 +9,7 @@ pub fn parse(text: &str) -> Result<f64, String> {
 
 fn parse_on(text: &str, now: f64) -> Result<f64, String> {
     let text = text.trim();
-    let bad = || format!("{text} is not a time: use HH:MM, HH:MM:SS or YYYY-MM-DD HH:MM");
+    let bad = || fill(told("%1 is not a time: use HH:MM, HH:MM:SS or YYYY-MM-DD HH:MM"), &[&text]);
     for format in ["%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M"] {
         if let Ok(at) = NaiveDateTime::parse_from_str(text, format) {
             return Ok(at.and_utc().timestamp() as f64);

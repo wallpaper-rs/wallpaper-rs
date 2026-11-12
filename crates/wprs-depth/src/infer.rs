@@ -1,3 +1,4 @@
+use crate::runtime::environment;
 use crate::{Map, normalize, tensor};
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use image::RgbImage;
@@ -6,9 +7,9 @@ use ort::ep::ExecutionProvider;
 use ort::session::{RunOptions, Session};
 use ort::value::Tensor;
 use std::path::{Path, PathBuf};
-use std::sync::OnceLock;
 use std::sync::atomic::{AtomicBool, Ordering::Relaxed};
 use std::time::Duration;
+use wprs_core::message::said;
 
 pub const TELEMETRY: &str = "ORT_DISABLE_TELEMETRY";
 
@@ -35,7 +36,9 @@ impl std::str::FromStr for Device {
             "auto" => Ok(Device::Auto),
             "cpu" => Ok(Device::Cpu),
             "cuda" => Ok(Device::Cuda),
-            _ => bail!("{text} is not auto, cpu or cuda"),
+            _ => {
+                bail!("{}", said("depth.is_not_auto_cpu_or", "%1 is not auto, cpu or cuda", &[&text]).local())
+            }
         }
     }
 }
@@ -62,21 +65,6 @@ pub fn threads() -> usize {
 
 pub fn background() {
     unsafe { libc::setpriority(libc::PRIO_PROCESS, 0, 19) };
-}
-
-fn environment(libraries: &[PathBuf]) -> Result<Environment> {
-    static SHARED: OnceLock<Environment> = OnceLock::new();
-    if let Some(environment) = SHARED.get() {
-        return Ok(environment.clone());
-    }
-    let mut failure = anyhow!("ONNX Runtime is not installed; see wprs-ctl models list");
-    unsafe { std::env::set_var(TELEMETRY, "1") };
-    let loaded = libraries.iter().find_map(|lib| {
-        ort::init_from(lib).inspect_err(|e| failure = anyhow!("cannot load ONNX Runtime: {e}")).ok()
-    });
-    let built =
-        loaded.ok_or(failure)?.with_name("wallpaper-rs").with_telemetry(false).build().map_err(text)?;
-    Ok(SHARED.get_or_init(|| built).clone())
 }
 
 pub(crate) struct Opened {
@@ -110,13 +98,34 @@ pub(crate) fn open_session(
     let cuda = device != Device::Cpu && ort::ep::CUDA::is_available().unwrap_or(false);
     let (session, device) = match (device, cuda) {
         (Device::Cuda, false) => {
-            bail!("this ONNX Runtime cannot use CUDA; give one built with CUDA in ORT_DYLIB_PATH")
+            bail!(
+                "{}",
+                said(
+                    "depth.this_onnx_runtime_cannot_use",
+                    "this ONNX Runtime cannot use CUDA; give one built with CUDA in ORT_DYLIB_PATH",
+                    &[]
+                )
+                .local()
+            )
         }
-        (Device::Cuda, true) => (session(true).context("cannot run the model with CUDA")?, Device::Cuda),
+        (Device::Cuda, true) => (
+            session(true).context(
+                said("depth.cannot_run_the_model_with", "cannot run the model with CUDA", &[]).local(),
+            )?,
+            Device::Cuda,
+        ),
         (_, true) => match session(true) {
             Ok(session) => (session, Device::Cuda),
             Err(e) => {
-                eprintln!("the model runs on the processor: {e:#}");
+                eprintln!(
+                    "{}",
+                    said(
+                        "depth.the_model_runs_on_the",
+                        "the model runs on the processor: %1",
+                        &[&format!("{e:#}")]
+                    )
+                    .local()
+                );
                 (session(false)?, Device::Cpu)
             }
         },
@@ -160,7 +169,9 @@ impl Estimator {
         ensure!(!stop.load(Relaxed), Stopped);
         let outputs = outputs.map_err(text)?;
         let (shape, values) = outputs[0].try_extract_tensor::<f32>().map_err(text)?;
-        let &[.., oh, ow] = &shape[..] else { bail!("the model gave no depth") };
+        let &[.., oh, ow] = &shape[..] else {
+            bail!("{}", said("depth.the_model_gave_no_depth", "the model gave no depth", &[]).local())
+        };
         Ok(normalize(values, (ow as u32, oh as u32), image.dimensions(), input))
     }
 }

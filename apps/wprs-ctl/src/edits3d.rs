@@ -1,3 +1,4 @@
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result};
 use serde_json::{Value, json};
 use wprs_editor::actions::Edit3d;
@@ -67,9 +68,10 @@ impl Edits3d {
             ("comb", self.comb),
         ];
         let given: Vec<(&str, String)> = all.into_iter().filter_map(|(k, v)| Some((k, v?))).collect();
-        anyhow::ensure!(given.len() == 1, "give exactly one of the 3D edits");
+        anyhow::ensure!(given.len() == 1, "{}", tr(told("give exactly one of the 3D edits")));
         let (key, text) = &given[0];
-        let value: Value = serde_json::from_str(text).with_context(|| format!("{text} is not JSON"))?;
+        let value: Value =
+            serde_json::from_str(text).with_context(|| fill(told("%1 is not JSON"), &[&text]))?;
         Ok(serde_json::from_value(json!({ *key: value }))?)
     }
 }

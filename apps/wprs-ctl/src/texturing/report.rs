@@ -1,4 +1,5 @@
 use crate::show::bytes;
+use crate::told::{fill, told, tr};
 use anyhow::{Result, anyhow};
 use serde_json::{Value, json};
 use wprs_editor::pictures;
@@ -6,10 +7,13 @@ use wprs_ktx2::TARGETS;
 
 pub(super) fn shown(dir: &std::path::Path, doc: &Value, id: &str) -> Result<Value> {
     let asset = doc.pointer(&format!("/scene/assets/{}", wprs_editor::ops::escape(id)));
-    let path = asset.and_then(|a| a["path"].as_str()).ok_or_else(|| anyhow!("there is no asset {id}"))?;
+    let path = asset
+        .and_then(|a| a["path"].as_str())
+        .ok_or_else(|| anyhow!("{}", fill(told("there is no asset %1"), &[&id])))?;
     let file = dir.join(path);
     let size = std::fs::metadata(&file)?.len();
-    let (w, h) = pictures::dimensions(&file).map_err(|e| anyhow!("the picture cannot be read: {e}"))?;
+    let (w, h) = pictures::dimensions(&file)
+        .map_err(|e| anyhow!("{}", fill(told("the picture cannot be read: %1"), &[&e])))?;
     let packed = std::fs::read(&file).ok().and_then(|b| wprs_ktx2::info(&b).ok());
     let mips = asset.is_some_and(|a| a["mipmaps"] != false);
     let gpu = |t: wprs_ktx2::Target| match &packed {
@@ -24,14 +28,14 @@ pub(super) fn shown(dir: &std::path::Path, doc: &Value, id: &str) -> Result<Valu
         "cube": packed.map(|i| i.cube), "classes": classes }))
 }
 
-pub(super) fn told(v: &Value) -> String {
+pub(super) fn described(v: &Value) -> String {
     let classes = v["classes"].as_array().into_iter().flatten().map(|c| {
         let by = match c["drawn"].as_str() {
-            Some("gpu") => " (crop drawn by this card)",
-            Some("cpu") => " (crop decoded on the processor)",
-            _ => "",
+            Some("gpu") => tr(told(" (crop drawn by this card)")),
+            Some("cpu") => tr(told(" (crop decoded on the processor)")),
+            _ => String::new(),
         };
-        let kept = if c["plain"] == true { " (kept uncompressed)" } else { "" };
+        let kept = if c["plain"] == true { tr(told(" (kept uncompressed)")) } else { String::new() };
         format!(
             "{} {} {}{kept}{by}",
             c["class"].as_str().unwrap_or("?"),
@@ -40,12 +44,12 @@ pub(super) fn told(v: &Value) -> String {
         )
     });
     let shape = match (v["cube"] == true, v["frames"].as_u64().unwrap_or(1)) {
-        (true, _) => ", a cube map shown as a panorama".to_string(),
-        (_, 2..) => format!(", {} frames in a grid", v["frames"]),
+        (true, _) => tr(told(", a cube map shown as a panorama")).to_string(),
+        (_, 2..) => fill(told(", %1 frames in a grid"), &[&v["frames"]]),
         _ => String::new(),
     };
     let codec = match v["codec"].as_str() {
-        Some(c) => format!(", KTX2 {c} with {} levels{shape}", v["levels"]),
+        Some(c) => fill(told(", KTX2 %1 with %2 levels%3"), &[&c, &v["levels"], &shape]),
         None => String::new(),
     };
     let size = format!("{}x{}", v["size"][0], v["size"][1]);
@@ -56,12 +60,10 @@ pub(super) fn told(v: &Value) -> String {
         v["path"].as_str().unwrap_or("?")
     );
     if let Some(before) = v["before"].as_u64() {
-        text += &format!(
-            "as KTX2 {}: {} before, {} after\n",
-            v["codec"].as_str().unwrap_or("?"),
-            bytes(before),
-            file
+        text += &fill(
+            told("as KTX2 %1: %2 before, %3 after\n"),
+            &[&v["codec"].as_str().unwrap_or("?"), &bytes(before), &file],
         );
     }
-    text + "on the graphics card: " + &classes.collect::<Vec<_>>().join(", ")
+    text + &tr(told("on the graphics card: ")) + &classes.collect::<Vec<_>>().join(", ")
 }

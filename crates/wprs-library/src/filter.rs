@@ -1,5 +1,6 @@
 use crate::{Error, Kind, Result};
 use rusqlite::types::Value;
+use wprs_core::message::{Message, said};
 use wprs_schedule::parse_interval;
 
 const COLOR_DISTANCE: i64 = 3 * 40 * 40;
@@ -24,40 +25,69 @@ const ORIENTATIONS: [(&str, &str); 3] = [
 ];
 const FACETED: &str = "' ' || i.facets || ' ' LIKE '% ' || ? || ' %'";
 const MAX_UIDS: usize = 500;
-const KEYS: [(&str, &str); 18] = [
-    ("tag", "a tag name"),
-    ("kind", "image, video, package, scene or assets"),
-    ("fav", "nothing, yes or no"),
-    ("rating", "a rating from 0 to 5 with an optional >=, <=, >, < or ="),
-    ("res", "a size like >=3840x2160, 4k, 1440p or 1080p"),
-    ("orient", "portrait, landscape or square"),
-    ("dur", "a duration like <30s, >2m or <=1h"),
-    ("audio", "yes or no"),
-    ("source", "a source id"),
-    ("in", "a manual playlist uid or name"),
-    ("added", "an age like <7d"),
-    ("used", "never or an age like <7d"),
-    ("missing", "nothing, yes or no"),
-    ("color", "a color like #3366ff"),
-    ("content", "general, mature or unrated"),
-    ("facet", "a package facet such as audio, pointer, sound, customizable, photosensitive or 4k"),
-    ("sort", "added, title, rating, used, random or random:<seed>, with a - suffix for descending"),
-    ("uid", "up to 500 item uids separated by commas"),
-];
+fn keys() -> [(&'static str, Message); 18] {
+    [
+        ("tag", said("library.key_tag", "a tag name", &[])),
+        ("kind", said("library.key_kind", "image, video, package, scene or assets", &[])),
+        ("fav", said("library.key_fav", "nothing, yes or no", &[])),
+        (
+            "rating",
+            said("library.key_rating", "a rating from 0 to 5 with an optional >=, <=, >, < or =", &[]),
+        ),
+        ("res", said("library.key_res", "a size like >=3840x2160, 4k, 1440p or 1080p", &[])),
+        ("orient", said("library.key_orient", "portrait, landscape or square", &[])),
+        ("dur", said("library.key_dur", "a duration like <30s, >2m or <=1h", &[])),
+        ("audio", said("library.key_audio", "yes or no", &[])),
+        ("source", said("library.key_source", "a source id", &[])),
+        ("in", said("library.key_in", "a manual playlist uid or name", &[])),
+        ("added", said("library.key_added", "an age like <7d", &[])),
+        ("used", said("library.key_used", "never or an age like <7d", &[])),
+        ("missing", said("library.key_missing", "nothing, yes or no", &[])),
+        ("color", said("library.key_color", "a color like #3366ff", &[])),
+        ("content", said("library.key_content", "general, mature or unrated", &[])),
+        (
+            "facet",
+            said(
+                "library.key_facet",
+                "a package facet such as audio, pointer, sound, customizable, photosensitive or 4k",
+                &[],
+            ),
+        ),
+        (
+            "sort",
+            said(
+                "library.key_sort",
+                "added, title, rating, used, random or random:<seed>, with a - suffix for descending",
+                &[],
+            ),
+        ),
+        ("uid", said("library.key_uid", "up to 500 item uids separated by commas", &[])),
+    ]
+}
 
-pub fn query_keys() -> &'static [(&'static str, &'static str)] {
-    &KEYS
+pub fn query_keys() -> Vec<(&'static str, String)> {
+    keys().into_iter().map(|(key, hint)| (key, hint.local())).collect()
 }
 
 pub(crate) fn invalid(key: &str, value: &str) -> Error {
-    let expected = KEYS.iter().find(|(k, _)| *k == key).map_or("", |(_, hint)| hint);
-    Error::Query(format!("invalid value in \"{key}:{value}\", expected {expected}"))
+    let expected = keys().into_iter().find(|(k, _)| *k == key).map(|(_, hint)| hint.local());
+    let invalid = said(
+        "library.invalid_value",
+        "invalid value in \"%1:%2\", expected %3",
+        &[&key, &value, &expected.unwrap_or_default()],
+    );
+    Error::query(invalid)
 }
 
 pub(crate) fn condition(key: &str, value: &str, now: i64) -> Result<(String, Vec<Value>)> {
-    if !KEYS.iter().any(|(k, _)| *k == key) {
-        let known: Vec<&str> = KEYS.iter().map(|(k, _)| *k).collect();
-        return Err(Error::Query(format!("unknown key \"{key}:\", expected one of {}", known.join(", "))));
+    if !keys().iter().any(|(k, _)| *k == key) {
+        let known: Vec<&str> = keys().iter().map(|(k, _)| *k).collect();
+        let unknown = said(
+            "library.unknown_key",
+            "unknown key \"%1:\", expected one of %2",
+            &[&key, &known.join(", ")],
+        );
+        return Err(Error::query(unknown));
     }
     parse(key, value, now).ok_or_else(|| invalid(key, value))
 }

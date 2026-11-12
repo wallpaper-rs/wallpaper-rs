@@ -6,6 +6,7 @@ use anyhow::{Context, Result, anyhow, bail, ensure};
 use std::fs::File;
 use std::io::Read;
 use std::path::{Path, PathBuf};
+use wprs_core::message::said;
 
 const TEMPORARY: [&str; 2] = [".install-", ".unpack-"];
 
@@ -17,7 +18,9 @@ fn notes(asset: &Asset, dir: &Path) -> Result<()> {
 impl Places {
     pub fn download(&self, asset: &Asset, progress: Progress<'_>) -> Result<PathBuf> {
         let dest = self.file(asset);
-        let dir = dest.parent().context("no folder for the download")?;
+        let dir = dest
+            .parent()
+            .context(said("depth.no_folder_for_the_download", "no folder for the download", &[]).local())?;
         folder(dir)?;
         sweep(dir, &TEMPORARY);
         if asset.member.is_empty() {
@@ -34,10 +37,22 @@ impl Places {
     }
 
     pub fn install(&self, asset: &Asset, file: &Path) -> Result<PathBuf> {
-        let wrong = || anyhow!("{} is not {}: its SHA-256 differs", file.display(), asset.title);
+        let wrong = || {
+            anyhow!(
+                "{}",
+                said(
+                    "depth.is_not_its_sha_256",
+                    "%1 is not %2: its SHA-256 differs",
+                    &[&file.display(), &asset.title]
+                )
+                .local()
+            )
+        };
         ensure!(sha256(file)? == asset.sha256, wrong());
         let dest = self.file(asset);
-        let dir = dest.parent().context("no folder for the file")?;
+        let dir = dest
+            .parent()
+            .context(said("depth.no_folder_for_the_file", "no folder for the file", &[]).local())?;
         folder(dir)?;
         sweep(dir, &TEMPORARY);
         match asset.member.is_empty() {
@@ -54,7 +69,9 @@ impl Places {
     }
 
     fn unpack(&self, asset: &Asset, archive: &Path, dest: &Path) -> Result<()> {
-        let dir = dest.parent().context("no folder for the library")?;
+        let dir = dest
+            .parent()
+            .context(said("depth.no_folder_for_the_library", "no folder for the library", &[]).local())?;
         let mut tar = tar::Archive::new(flate2::read::GzDecoder::new(File::open(archive)?));
         let (mut library, mut notices) = (None, None);
         for entry in tar.entries()? {
@@ -71,12 +88,21 @@ impl Places {
             *found = Some(out);
         }
         let (Some(library), Some(notices)) = (library, notices) else {
-            bail!("the archive does not hold {} and its notices", asset.member)
+            bail!(
+                "{}",
+                said(
+                    "depth.the_archive_does_not_hold",
+                    "the archive does not hold %1 and its notices",
+                    &[&asset.member]
+                )
+                .local()
+            )
         };
         ensure!(
             sha256(library.path())? == asset.file_sha256,
-            "{} in the archive has another SHA-256",
-            asset.file
+            "{}",
+            said("depth.in_the_archive_has_another", "%1 in the archive has another SHA-256", &[&asset.file])
+                .local()
         );
         notices.persist(dir.join(NOTICES)).map_err(|e| e.error)?;
         library.persist(dest).map(drop).map_err(|e| e.error.into())

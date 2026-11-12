@@ -3,6 +3,7 @@ use crate::cli::{JSON, Wait};
 use crate::daemon::job;
 use crate::input::{pairs, secret};
 use crate::show::{self, bytes, list, table, text, when};
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result, ensure};
 use clap::Subcommand;
 use futures_util::TryFutureExt;
@@ -92,13 +93,19 @@ pub async fn run(client: &Client, command: Provider) -> Result<()> {
             providers.set(&id, &key, &value).await?;
             if had && !has_secret(client, &id).await? {
                 eprintln!(
-                    "the secret of {id} was deleted; store a new one with wprs-ctl provider secret {id}"
+                    "{}",
+                    fill(
+                        told(
+                            "the secret of %1 was deleted; store a new one with wprs-ctl provider secret %2"
+                        ),
+                        &[&id, &id]
+                    )
                 );
             }
         }
         Provider::Secret { id, secret_stdin } => {
-            let secret = secret(&format!("secret of {id}: "), secret_stdin)?;
-            ensure!(!secret.is_empty(), Usage("the secret is empty".into()));
+            let secret = secret(&fill(told("secret of %1: "), &[&id]), secret_stdin)?;
+            ensure!(!secret.is_empty(), Usage(tr(told("the secret is empty"))));
             patient(providers.set_secret(&id, &secret)).await?
         }
         Provider::ForgetSecret { id } => providers.forget_secret(&id).await?,
@@ -122,7 +129,7 @@ pub async fn add(
     let schema: Schema = parse(&client.daemon.get_schema().await?)?;
     let kinds = || list(schema.providers.iter().map(|p| &p.kind));
     let known = schema.providers.iter().find(|p| p.kind == kind);
-    let unknown = || Usage(format!("unknown provider kind {kind}; the kinds are {}", kinds()));
+    let unknown = || Usage(fill(told("unknown provider kind %1; the kinds are %2"), &[&kind, &kinds()]));
     let known = known.ok_or_else(unknown)?;
     options.keys().try_for_each(|key| public(key))?;
     if allow_plain_http {
@@ -137,22 +144,22 @@ pub async fn add(
 fn public(key: &str) -> Result<()> {
     ensure!(
         !SECRETS.contains(&key),
-        Usage(format!("{key} is a secret; it is asked for, never given as an argument"))
+        Usage(fill(told("%1 is a secret; it is asked for, never given as an argument"), &[&key]))
     );
     Ok(())
 }
 
 fn ask(field: &SecretField, id: &str, kind: &str, stdin: bool) -> Result<String> {
-    let optional = if field.required { "" } else { " (empty for none)" };
+    let optional = if field.required { String::new() } else { tr(told(" (empty for none)")) };
     let secret = secret(&format!("{} of {id}{optional}: ", field.name.replace('_', " ")), stdin)?;
-    let hint = format!("{kind} needs its {}; use --no-secret to add it without one", field.name);
+    let hint = fill(told("%1 needs its %2; use --no-secret to add it without one"), &[&kind, &field.name]);
     ensure!(!field.required || !secret.is_empty(), Usage(hint));
     Ok(secret)
 }
 
 pub async fn patient<T>(call: impl Future<Output = zbus::Result<T>>) -> Result<T> {
     let answer = tokio::time::timeout(PATIENCE, call).await;
-    answer.context("wprsd did not answer within 120 s")?.map_err(explain)
+    answer.context(tr(told("wprsd did not answer within 120 s")))?.map_err(explain)
 }
 
 async fn has_secret(client: &Client, id: &str) -> Result<bool> {
@@ -163,9 +170,10 @@ async fn has_secret(client: &Client, id: &str) -> Result<bool> {
 pub fn list_providers(reply: ProvidersReply) -> String {
     let rows = reply.providers.into_iter().map(|p| {
         let (state, items, cache) = (text(&p.state), p.items.to_string(), bytes(p.cache_bytes));
-        let orphan =
-            p.orphan_secret.then_some("an older secret waits in the locked keyring until it is unlocked");
-        let error = p.last_error.into_iter().chain(orphan.map(String::from)).collect::<Vec<_>>().join(", ");
+        let orphan = p
+            .orphan_secret
+            .then_some(tr(told("an older secret waits in the locked keyring until it is unlocked")));
+        let error = p.last_error.into_iter().chain(orphan).collect::<Vec<_>>().join(", ");
         vec![p.id, p.kind, state, items, cache, when(p.last_sync), when(p.next_sync), error]
     });
     table(&["PROVIDER", "KIND", "STATE", "ITEMS", "CACHE", "SYNCED", "NEXT", "ERROR"], rows)

@@ -1,4 +1,5 @@
 use crate::show::{self, bytes, list, prefix, short, table, text, time, when};
+use crate::told::{fill, told, tr};
 use wprs_core::model::{ItemDetails, ItemSummary, SearchPage, SourcesReply, TagsReply};
 
 pub fn sources(reply: SourcesReply) -> String {
@@ -22,7 +23,7 @@ pub fn search(page: SearchPage) -> String {
 
 pub fn range(offset: u32, count: usize, total: u32) -> String {
     match count {
-        0 => format!("none of {total}"),
+        0 => fill(told("none of %1"), &[&total]),
         1 => format!("{} of {total}", offset + 1),
         _ => format!("{}-{} of {total}", offset + 1, offset as usize + count),
     }
@@ -71,7 +72,7 @@ pub fn details(reply: ItemDetails) -> String {
         ("rating", Some(i.rating.to_string())),
         ("favorite", Some(i.favorite.to_string())),
         ("added", Some(time(i.added_at))),
-        ("used", i.used_at.map(|at| format!("{} ({} times)", time(at), i.use_count))),
+        ("used", i.used_at.map(|at| fill(told("%1 (%2 times)"), &[&time(at), &i.use_count]))),
         ("missing", i.missing.then(|| "true".into())),
         ("error", i.error),
         ("package", package.as_ref().map(|p| format!("{} {} ({}, {})", p.id, p.version, p.kind, p.license))),
@@ -82,19 +83,18 @@ pub fn details(reply: ItemDetails) -> String {
         ("playlists", Some(list(reply.playlists.iter().map(|p| &p.name))).filter(|p| !p.is_empty())),
         ("thumb", reply.thumb.map(|t| t.display().to_string())),
         ("privacy", package.as_ref().and_then(|p| wprs_format::web_notice(&p.exposes)).map(|m| m.local())),
-        ("not shown here", package.as_ref().and_then(|p| p.unshown.clone())),
+        (&tr(told("not shown here")), package.as_ref().and_then(|p| p.unshown.clone())),
         (
-            "works on",
+            &tr(told("works on")),
             package
                 .as_ref()
                 .map(|p| list(p.facets.iter().filter(|f| ["desktop", "android"].contains(&f.as_str())))),
         ),
         (
-            "preset of",
-            package
-                .as_ref()
-                .and_then(|p| p.base.clone())
-                .map(|b| reply.base.map_or(format!("{b} (not installed)"), |i| format!("{} ({b})", i.uid))),
+            &tr(told("preset of")),
+            package.as_ref().and_then(|p| p.base.clone()).map(|b| {
+                reply.base.map_or(fill(told("%1 (not installed)"), &[&b]), |i| format!("{} ({b})", i.uid))
+            }),
         ),
         (
             "variants",

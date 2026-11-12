@@ -19,6 +19,7 @@ mod caution;
 pub mod cli;
 mod clipkey;
 mod clipping;
+mod confirming;
 mod consent;
 mod console;
 mod copying;
@@ -37,6 +38,7 @@ mod flights;
 mod flying;
 mod folder;
 mod forcing;
+mod foreign;
 mod glowing;
 mod gpus;
 mod held;
@@ -73,6 +75,7 @@ pub mod props;
 pub mod propsets;
 pub mod providers;
 mod pulling;
+mod quiet;
 pub mod refusing;
 pub mod remote;
 mod rendering;
@@ -90,6 +93,7 @@ mod shading;
 mod shaping;
 pub mod shelving;
 pub mod show;
+mod sourcing;
 mod sowed;
 mod sowing;
 pub mod spanning;
@@ -147,6 +151,7 @@ fn quiet_on_closed_pipe() {
 }
 
 pub fn main() -> ExitCode {
+    quiet::libraries();
     wprs_render::serve_script_host();
     quiet_on_closed_pipe();
     wprs_scene::serve_check();
@@ -179,7 +184,7 @@ pub fn main() -> ExitCode {
         return ExitCode::SUCCESS;
     };
     let error = error.downcast::<zbus::Error>().map_or_else(|e| e, explain);
-    eprintln!("Error: {}", show::clean(&wprs_editor::told(&error)));
+    eprintln!("Error: {}", show::clean(&foreign::said(&wprs_editor::told(&error))));
     let code = if misused(&error) { 2 } else { 1 };
     wprs_render::finish_builds(i32::from(code));
     ExitCode::from(code)

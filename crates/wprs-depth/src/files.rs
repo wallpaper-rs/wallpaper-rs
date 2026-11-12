@@ -7,6 +7,7 @@ use std::io::{Read, Write};
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
+use wprs_core::message::said;
 
 const MAX_EDGE: u32 = 8192;
 const PICTURE_EDGE: u32 = 2048;
@@ -46,21 +47,28 @@ pub fn read(path: &Path) -> Result<Map> {
 
 pub(crate) fn read_png(path: &Path) -> Result<image::DynamicImage> {
     let mut reader = ImageReader::open(path)
-        .with_context(|| format!("cannot open {}", path.display()))?
+        .with_context(|| said("depth.cannot_open", "cannot open %1", &[&path.display()]).local())?
         .with_guessed_format()?;
     let mut limits = Limits::default();
     (limits.max_image_width, limits.max_image_height, limits.max_alloc) =
         (Some(MAX_EDGE), Some(MAX_EDGE), Some(MAX_BYTES));
     reader.limits(limits);
-    reader.decode().with_context(|| format!("{} is not a picture", path.display()))
+    reader
+        .decode()
+        .with_context(|| said("depth.is_not_a_picture", "%1 is not a picture", &[&path.display()]).local())
 }
 
 pub fn shape(image: &Path) -> Result<(u32, u32)> {
-    wprs_render::image_size(image).with_context(|| format!("{} is not a picture", image.display()))
+    wprs_render::image_size(image)
+        .with_context(|| said("depth.is_not_a_picture", "%1 is not a picture", &[&image.display()]).local())
 }
 
 pub fn write(map: &Map, path: &Path) -> Result<()> {
-    ensure!(map.width() > 0 && map.height() > 0, "the depth map is empty");
+    ensure!(
+        map.width() > 0 && map.height() > 0,
+        "{}",
+        said("depth.the_depth_map_is_empty", "the depth map is empty", &[]).local()
+    );
     let dir = path.parent().filter(|d| !d.as_os_str().is_empty()).unwrap_or(Path::new("."));
     folder(dir)?;
     sweep(dir, &[".depth-"]);
@@ -97,7 +105,7 @@ pub fn decode(path: &Path) -> Result<RgbImage> {
 
 pub fn decode_edge(path: &Path, edge: u32) -> Result<RgbImage> {
     let decoded = wprs_render::decode_unoriented(ImageReader::open(path)?, wprs_render::picture_limits());
-    let refused = || format!("{} is not a picture", path.display());
+    let refused = || said("depth.is_not_a_picture", "%1 is not a picture", &[&path.display()]).local();
     let Ok((mut image, orientation)) = decoded else {
         let image = wprs_render::decode_image(path, edge).with_context(refused)?;
         return Ok(image::DynamicImage::ImageRgba8(image).into_rgb8());

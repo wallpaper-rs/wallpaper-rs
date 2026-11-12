@@ -1,4 +1,5 @@
 use crate::show;
+use crate::told::{fill, told};
 use anyhow::Result;
 use serde_json::{Value, json};
 use std::pin::pin;
@@ -17,7 +18,7 @@ pub async fn watch(client: &Client, json: bool) -> Result<()> {
     let progressed = daemon.receive_job_progress().await?.filter_map(|s| {
         let a = s.args().ok()?;
         let value = json!({"signal": "JobProgress", "job": a.job, "done": a.done, "total": a.total});
-        Some(line(value, format!("job {} {}/{}", a.job, a.done, a.total)))
+        Some(line(value, fill(told("job %1 %2/%3"), &[&a.job, &a.done, &a.total])))
     });
     let finished = daemon.receive_job_finished().await?.filter_map(|s| {
         let a = s.args().ok()?;

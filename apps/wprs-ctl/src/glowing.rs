@@ -1,3 +1,4 @@
+use crate::told::{told, tr};
 use clap::Args;
 use std::path::Path;
 use wprs_editor::Project;
@@ -79,7 +80,7 @@ pub(crate) fn bend(system: String, b: &Bend) -> SwarmLight {
 
 pub(crate) fn print(dir: &Path, show: impl Fn(&Project) -> serde_json::Value) -> anyhow::Result<()> {
     let found = show(&Project::open(dir)?);
-    anyhow::ensure!(!found.is_null(), "there is nothing to show");
+    anyhow::ensure!(!found.is_null(), "{}", tr(told("there is nothing to show")));
     println!("{}", serde_json::to_string_pretty(&found)?);
     Ok(())
 }

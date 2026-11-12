@@ -1,15 +1,17 @@
 use crate::show::{short, table};
+use crate::told::{fill, told, tr};
 use wprs_core::model::{Away, AwayReply};
 
-const WHERE: &str =
-    "exists only on another device; publishing it to the server or to a repository makes it available here";
+const WHERE: &str = told(
+    "exists only on another device; publishing it to the server or to a repository makes it available here",
+);
 
 fn name(away: &Away) -> String {
     if away.title.is_empty() { short(&away.key) } else { away.title.clone() }
 }
 
 pub fn note(title: &str) -> String {
-    format!("{title} {WHERE}")
+    format!("{title} {}", tr(WHERE))
 }
 
 pub fn notes(away: &[Away]) -> String {
@@ -29,5 +31,5 @@ pub fn listing(reply: AwayReply) -> String {
         .collect();
     let empty = rows.is_empty();
     let text = table(&["RECORD", "TITLE", "PLAYLISTS", "SCREENS"], rows);
-    if empty { text } else { text + &format!("\nThese items {WHERE}.\n") }
+    if empty { text } else { text + &fill(told("\nThese items %1.\n"), &[&tr(WHERE)]) }
 }

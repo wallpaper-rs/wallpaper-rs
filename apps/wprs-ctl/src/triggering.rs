@@ -1,4 +1,5 @@
 use crate::author::DIR;
+use crate::told::{fill, told};
 use anyhow::{Result, bail};
 use clap::Subcommand;
 use serde_json::{Value, json};
@@ -36,17 +37,26 @@ fn place(doc: &Value, target: &str) -> Result<String> {
     let layers = wprs_editor::layers::walk(doc);
     match layers.into_iter().find(|(_, l)| l["id"] == target) {
         Some((pointer, l)) if l["type"] == "sound" => Ok(format!("{pointer}/play_on")),
-        Some(_) => bail!("{target} is not a sound layer; only timelines and sound layers have triggers"),
-        None => bail!("there is no timeline or sound layer {target}"),
+        Some(_) => bail!(
+            "{}",
+            fill(told("%1 is not a sound layer; only timelines and sound layers have triggers"), &[&target])
+        ),
+        None => bail!("{}", fill(told("there is no timeline or sound layer %1"), &[&target])),
     }
 }
 
 fn known(trigger: &str) -> Result<()> {
     match trigger.split_once(':') {
         Some(("media", what)) if !MEDIA_TRIGGERS.contains(&what) => {
-            bail!("{what} is not a media trigger; use media:{}", MEDIA_TRIGGERS.join(", media:"))
+            bail!(
+                "{}",
+                fill(
+                    told("%1 is not a media trigger; use media:%2"),
+                    &[&what, &MEDIA_TRIGGERS.join(", media:")]
+                )
+            )
         }
-        Some((_, "")) => bail!("{trigger} names nothing after the colon"),
+        Some((_, "")) => bail!("{}", fill(told("%1 names nothing after the colon"), &[&trigger])),
         _ => Ok(()),
     }
 }

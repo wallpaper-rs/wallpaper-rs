@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use crate::usage;
 use anyhow::Result;
 use clap::{Args, Subcommand};
@@ -51,7 +52,7 @@ pub enum Shelving {
 fn pairs(list: &[String]) -> Result<BTreeMap<String, String>> {
     let pair = |t: &String| match t.split_once('=') {
         Some((key, value)) => Ok((Pick::parse(key)?.key(), value.to_owned())),
-        None => Err(usage(format!("expected KIND:ID=VALUE, not {t}"))),
+        None => Err(usage(fill(told("expected KIND:ID=VALUE, not %1"), &[&t]))),
     };
     list.iter().map(pair).collect()
 }

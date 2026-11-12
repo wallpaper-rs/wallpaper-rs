@@ -1,5 +1,6 @@
 use crate::author::DIR;
 use crate::steps::edit_all;
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::Result;
 use clap::Subcommand;
@@ -75,7 +76,7 @@ fn given(args: Option<String>, file: Option<PathBuf>) -> Result<Value> {
         (Some(text), _) => text.to_owned(),
         (None, None) => return Ok(json!({})),
     };
-    serde_json::from_str(&text).map_err(|e| usage(format!("the arguments are not JSON: {e}")))
+    serde_json::from_str(&text).map_err(|e| usage(fill(told("the arguments are not JSON: %1"), &[&e])))
 }
 
 fn actions(name: &str, args: Value) -> Result<Vec<Action>> {
@@ -84,10 +85,10 @@ fn actions(name: &str, args: Value) -> Result<Vec<Action>> {
         return Ok(vec![each(json!({ name: args }))?]);
     }
     let Value::Array(list) = args else {
-        return Err(usage("batch takes a JSON list of {action: arguments}"));
+        return Err(usage(tr(told("batch takes a JSON list of {action: arguments}"))));
     };
     let all = list.into_iter().map(each).collect::<Result<Vec<_>>>()?;
-    anyhow::ensure!(!all.is_empty(), usage("batch takes at least one action"));
+    anyhow::ensure!(!all.is_empty(), usage(tr(told("batch takes at least one action"))));
     Ok(all)
 }
 
@@ -113,7 +114,10 @@ fn example_text(kind: &str, name: &str) -> String {
 
 fn described(name: &str, json: bool) -> Result<()> {
     let Some(schema) = manual::schema(name) else {
-        return Err(usage(format!("there is no action {name:?}; wprs-ctl scene actions lists them")));
+        return Err(usage(fill(
+            told("there is no action %1; wprs-ctl scene actions lists them"),
+            &[&format!("{name:?}")],
+        )));
     };
     if json {
         println!("{}", serde_json::to_string_pretty(&schema)?);
@@ -126,8 +130,9 @@ fn described(name: &str, json: bool) -> Result<()> {
 
 fn asked(name: &str, json: bool) -> Result<()> {
     let Some(about) = manual::ask_about(name) else {
-        return Err(usage(format!(
-            "there is no query {name:?}; wprs-ctl scene actions --queries lists them"
+        return Err(usage(fill(
+            told("there is no query %1; wprs-ctl scene actions --queries lists them"),
+            &[&format!("{name:?}")],
         )));
     };
     let lines = manual::example_lines("ask", name).unwrap_or_default();
@@ -152,7 +157,10 @@ pub fn run(command: Acting) -> Result<()> {
             let args = given(args, file)?;
             anyhow::ensure!(
                 manual::ask_about(&query).is_some(),
-                usage(format!("there is no query {query:?}; wprs-ctl scene actions --queries lists them"))
+                usage(fill(
+                    told("there is no query %1; wprs-ctl scene actions --queries lists them"),
+                    &[&format!("{query:?}")]
+                ))
             );
             let project = Project::open(&dir)?;
             let found = project.ask(&layer, &manual::question(&query, args));

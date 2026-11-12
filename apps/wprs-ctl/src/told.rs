@@ -14,6 +14,12 @@ pub fn tr(text: &str) -> String {
     FOUND.get().and_then(|f| f.get(text)).cloned().unwrap_or_else(|| text.to_owned())
 }
 
+#[cfg(test)]
+pub(crate) fn speaking(language: &str) -> impl Fn(&str) -> String {
+    let found = wprs_core::locale::catalog(CATALOGS, &[language.to_owned()]);
+    move |text| found.get(text).cloned().unwrap_or_else(|| text.to_owned())
+}
+
 pub fn fill(text: &str, args: &[&dyn std::fmt::Display]) -> String {
     let mut out = tr(text);
     for (i, a) in args.iter().enumerate().rev() {

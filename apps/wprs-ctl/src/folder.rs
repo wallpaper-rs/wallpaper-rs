@@ -1,5 +1,6 @@
 use crate::author::DIR;
 use crate::media::VALUES;
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result, ensure};
 use clap::Subcommand;
 use std::fs;
@@ -126,11 +127,11 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             let (done, undone) = project.history.labels();
             let step = |label: &&str| wprs_editor::history::step(label).local();
             done.iter().for_each(|label| println!("{}", step(label)));
-            undone.iter().for_each(|label| println!("{} (undone)", step(label)));
+            undone.iter().for_each(|label| println!("{}", fill(told("%1 (undone)"), &[&step(label)])));
         }
         Folder::Recover { dir, discard } => {
             let mut project = Project::open(&dir)?;
-            ensure!(project.pending.is_some(), "there are no unsaved changes to recover");
+            ensure!(project.pending.is_some(), "{}", tr(told("there are no unsaved changes to recover")));
             project.recover(!discard)?;
             if !discard {
                 project.save()?;
@@ -169,7 +170,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             )?
             .to_string();
             let (dir, document) = (fs::canonicalize(&dir)?, if stop { String::new() } else { document });
-            let path = dir.to_str().context("the path is not UTF-8")?.to_owned();
+            let path = dir.to_str().context(tr(told("the path is not UTF-8")))?.to_owned();
             runtime()?.block_on(async {
                 let client = Client::connect().await?;
                 let before = parts::drafted(&client).await?;

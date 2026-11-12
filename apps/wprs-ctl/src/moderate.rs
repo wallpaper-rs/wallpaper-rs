@@ -1,6 +1,7 @@
 use crate::cli::JSON;
 use crate::input::secret;
 use crate::show::{table, when};
+use crate::told::{told, tr};
 use anyhow::Result;
 use clap::{Args, Subcommand};
 use percent_encoding::{NON_ALPHANUMERIC, utf8_percent_encode};
@@ -42,7 +43,7 @@ pub enum Action {
 pub async fn run(m: Moderate) -> Result<()> {
     let token = match std::env::var("WPRS_SERVER_TOKEN") {
         Ok(token) => token,
-        Err(_) => secret("Personal token of a moderator with the mod scope: ", false)?,
+        Err(_) => secret(&tr(told("Personal token of a moderator with the mod scope: ")), false)?,
     };
     let api = Api::new(&m.server)?.with_token(token.trim());
     let path = |id: &str| format!("/api/v1/mod/hidden/{}", utf8_percent_encode(id, NON_ALPHANUMERIC));

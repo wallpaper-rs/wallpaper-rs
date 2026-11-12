@@ -5,6 +5,7 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::AtomicBool;
 use std::time::{Duration, Instant};
 use wprs_core::edit::Depth;
+use wprs_core::message::said;
 
 pub struct Bench {
     pub device: Device,
@@ -13,8 +14,14 @@ pub struct Bench {
 }
 
 pub fn bench(places: &Places, image: &Path, depth: &Depth, device: Device, runs: usize) -> Result<Bench> {
-    let model =
-        places.installed(&MODEL).context("the depth model is not installed; see wprs-ctl models list")?;
+    let model = places.installed(&MODEL).context(
+        said(
+            "depth.the_depth_model_is_not",
+            "the depth model is not installed; see wprs-ctl models list",
+            &[],
+        )
+        .local(),
+    )?;
     let started = Instant::now();
     let mut estimator = Estimator::open(&model, &places.library(None), threads(), device)?;
     let (pixels, load) = (decode(image)?, started.elapsed());
@@ -44,11 +51,28 @@ pub fn generate_until(
     stage: &mut dyn FnMut(Stage),
     stop: &AtomicBool,
 ) -> Result<PathBuf> {
-    let model =
-        places.installed(&MODEL).context("the depth model is not installed; see wprs-ctl models list")?;
+    let model = places.installed(&MODEL).context(
+        said(
+            "depth.the_depth_model_is_not",
+            "the depth model is not installed; see wprs-ctl models list",
+            &[],
+        )
+        .local(),
+    )?;
     let fits = (196..=1036).contains(&depth.input) && depth.input.is_multiple_of(14);
-    ensure!(fits, "the model input must be a multiple of 14 from 196 to 1036");
-    let dest = places.generated(sha256, depth).context("the image has no valid SHA-256")?;
+    ensure!(
+        fits,
+        "{}",
+        said(
+            "depth.the_model_input_must_be",
+            "the model input must be a multiple of 14 from 196 to 1036",
+            &[]
+        )
+        .local()
+    );
+    let dest = places
+        .generated(sha256, depth)
+        .context(said("depth.the_image_has_no_valid", "the image has no valid SHA-256", &[]).local())?;
     stage(Stage::Loading);
     let mut estimator = Estimator::open(&model, &places.library(library), threads(), device)?;
     let pixels = decode(image)?;

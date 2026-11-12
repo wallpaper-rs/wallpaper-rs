@@ -97,7 +97,7 @@ async fn a_grant_names_one_package_and_the_status_shows_what_each_screen_may_use
     let (code, _, err) = grant(&[]);
     assert!(code == 2 && err.contains("choose one with --output (DP-1, DP-2)"), "{err}");
     assert!(!bus.log.has("GrantPackage"));
-    assert_eq!(grant(&["-o", "DP-1"]), (0, String::new(), String::new()));
+    assert_eq!(grant(&["-o", "DP-1"]), (0, "org.example.sea may use audio\n".into(), String::new()));
     assert!(bus.log.has("GrantPackage org.example.sea key:signer audio"));
     let (code, out, err) = grant(&["--output", "DP-2"]);
     assert_eq!((code, out.as_str()), (0, ""), "{err}");

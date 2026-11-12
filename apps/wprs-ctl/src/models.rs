@@ -1,4 +1,5 @@
 use crate::consent::{consent, list, progress};
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Context, Result, bail};
 use clap::Subcommand;
@@ -47,7 +48,7 @@ pub enum Models {
 
 fn asset(id: &str) -> Result<Asset> {
     let known = assets().iter().map(|a| a.id).collect::<Vec<_>>().join(", ");
-    find(id).ok_or_else(|| usage(format!("{id} is not one of {known}")))
+    find(id).ok_or_else(|| usage(fill(told("%1 is not one of %2"), &[&id, &known])))
 }
 
 pub fn run(command: Models) -> Result<()> {
@@ -73,10 +74,10 @@ pub fn run(command: Models) -> Result<()> {
                 None => assets().into_iter().filter(|a| places.installed(a).is_some()).collect(),
             };
             for a in chosen {
-                let fine = places.verify(&a).with_context(|| format!("cannot read {}", a.id))?;
-                println!("{}: {}", a.id, if fine { "ok" } else { "missing or damaged" });
+                let fine = places.verify(&a).with_context(|| fill(told("cannot read %1"), &[&a.id]))?;
+                println!("{}: {}", a.id, if fine { "ok".to_owned() } else { tr(told("missing or damaged")) });
                 if !fine {
-                    bail!("{} needs to be downloaded or installed again", a.id);
+                    bail!("{}", fill(told("%1 needs to be downloaded or installed again"), &[&a.id]));
                 }
             }
         }

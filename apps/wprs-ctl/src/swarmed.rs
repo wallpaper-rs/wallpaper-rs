@@ -2,6 +2,7 @@ use crate::author::Author;
 use crate::glowing::{Bend, Lit};
 use crate::steps::value;
 use crate::swarming::{Particle, Remap, Swarming};
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use serde_json::json;
 use std::path::PathBuf;
@@ -101,7 +102,7 @@ pub(crate) fn run(command: Swarming) -> Result<()> {
             if let Some(seed) = seed {
                 doc["scene"]["clock"]["seed"] = seed.into();
             }
-            anyhow::ensure!((0.0..=1.0).contains(&sound), "the sound level goes from 0 to 1");
+            anyhow::ensure!((0.0..=1.0).contains(&sound), "{}", tr(told("the sound level goes from 0 to 1")));
             wprs_editor::swarms::heard(&project.dir, &doc, &system, layer.as_deref(), (time, sound))
         }
         Particle::Budget { time, quality, layer } => {
@@ -125,7 +126,13 @@ pub(crate) fn run(command: Swarming) -> Result<()> {
             if !off && uneven > 0 {
                 let dir = dir.display();
                 eprintln!(
-                    "{uneven} emitters may start more than one particle a step, which bunches the rope; wprs-ctl scene particles {dir} {system} pace --max-per-step 1 spaces it evenly"
+                    "{}",
+                    fill(
+                        told(
+                            "%1 emitters may start more than one particle a step, which bunches the rope; wprs-ctl scene particles %2 %3 pace --max-per-step 1 spaces it evenly"
+                        ),
+                        &[&uneven, &dir, &system]
+                    )
                 );
             }
             return Ok(());
@@ -135,7 +142,11 @@ pub(crate) fn run(command: Swarming) -> Result<()> {
         }
         _ => return Ok(()),
     };
-    anyhow::ensure!(!found.is_null(), "there is no particle system {system:?}");
+    anyhow::ensure!(
+        !found.is_null(),
+        "{}",
+        fill(told("there is no particle system %1"), &[&format!("{system:?}")])
+    );
     println!("{}", serde_json::to_string_pretty(&found)?);
     Ok(())
 }

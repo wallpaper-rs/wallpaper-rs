@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use anyhow::{Context, Result};
 use serde_json::Value;
 use std::path::Path;
@@ -6,7 +7,7 @@ use wprs_render::SceneAssets;
 
 pub(crate) fn load(path: &Path) -> Result<(wprs_scene::Scene, wprs_scene::Values, SceneAssets)> {
     let mut package =
-        open(path, &Limits::default()).with_context(|| format!("cannot open {}", path.display()))?;
+        open(path, &Limits::default()).with_context(|| fill(told("cannot open %1"), &[&path.display()]))?;
     let scene = package.scene()?;
     let mut assets = SceneAssets::read(&scene, |path| package.read_file(path).map_err(|e| e.to_string()))
         .map_err(anyhow::Error::msg)?;

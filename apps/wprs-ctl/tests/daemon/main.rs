@@ -76,6 +76,7 @@ impl Bus {
     fn spawn(&self, args: &[&str], stdin: &str) -> Child {
         let mut child = Command::new(env!("CARGO_BIN_EXE_wprs-ctl"))
             .args(args)
+            .env("LC_ALL", "C")
             .env("DBUS_SESSION_BUS_ADDRESS", &self.address)
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())

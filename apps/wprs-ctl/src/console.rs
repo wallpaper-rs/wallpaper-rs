@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use anyhow::Result;
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -35,7 +36,7 @@ pub async fn watch(client: &Client, output: &str) -> Result<()> {
         let state: Value = serde_json::from_str(&client.daemon.get_state().await?)?;
         for (failed, line) in news(&state, output, &mut seen) {
             match failed {
-                true => eprintln!("error: {line}"),
+                true => eprintln!("{}", fill(told("error: %1"), &[&line])),
                 false => println!("{line}"),
             }
         }

@@ -1,4 +1,5 @@
 use crate::show::{self, list, text};
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use serde_json::{Value, json};
 use std::path::Path;
@@ -39,7 +40,7 @@ pub fn check(path: &Path, json: bool) -> Result<()> {
         true => println!("{report}"),
         false => print!("{}", human(&manifest, &facts, &report)),
     }
-    anyhow::ensure!(problems.is_empty(), "{}", crate::authoring::count(problems.len(), "problem"));
+    anyhow::ensure!(problems.is_empty(), "{}", crate::authoring::problems_of(problems.len()));
     Ok(())
 }
 
@@ -53,13 +54,13 @@ fn human(manifest: &Manifest, facts: &Facts, report: &Value) -> String {
     let plays = |on: &Value| match (on["refused"].as_str(), on["without"].as_array()) {
         (Some(reason), _) => format!("refused: {reason}"),
         (None, Some(without)) if !without.is_empty() => {
-            format!("plays without {}", list(without.iter().filter_map(Value::as_str)))
+            fill(told("plays without %1"), &[&list(without.iter().filter_map(Value::as_str))])
         }
         _ => "plays".into(),
     };
     let reasons = Some(words("reasons")).filter(|r| !r.is_empty()).map(|r| format!(" ({r})"));
     let problems = report["problems"].as_array().into_iter().flatten().filter_map(Value::as_str);
-    let problems: String = problems.map(|p| format!("problem: {p}\n")).collect();
+    let problems: String = problems.map(|p| fill(told("problem: %1\n"), &[&p])).collect();
     let state = if problems.is_empty() { "ok" } else { "problems" };
     let head =
         format!("{state} {} {} {} ({})\n", manifest.kind, manifest.id, manifest.version, manifest.schema);
@@ -70,7 +71,7 @@ fn human(manifest: &Manifest, facts: &Facts, report: &Value) -> String {
         ("origin", report["origin"].as_str().unwrap_or("-").to_string()),
         ("inputs", words("inputs")),
         ("needs", needs("features")),
-        ("build adds", needs("missing")),
+        (&tr(told("build adds")), needs("missing")),
         ("facets", list(&facts.facets)),
         ("desktop", plays(&report["platforms"]["desktop"])),
         ("android", plays(&report["platforms"]["android"])),
@@ -78,7 +79,9 @@ fn human(manifest: &Manifest, facts: &Facts, report: &Value) -> String {
     ];
     let shown = pairs.into_iter().filter(|(_, v)| !v.is_empty());
     let warnings = report["warnings"].as_array().into_iter().flatten().filter_map(Value::as_str);
-    head + &problems + &show::lines(shown) + &warnings.map(|w| format!("warning: {w}\n")).collect::<String>()
+    head + &problems
+        + &show::lines(shown)
+        + &warnings.map(|w| format!("{}\n", fill(told("warning: %1"), &[&w]))).collect::<String>()
 }
 
 pub fn upgraded(
@@ -91,7 +94,13 @@ pub fn upgraded(
     let content: Content = serde_json::from_value(json!({"rating": rating, "descriptors": reasons}))?;
     let (manifest, renames) = upgrade(dir, content, photosensitive, Origin::by(from))?;
     let inputs = list(manifest.inputs.iter().map(|i| i.name()));
-    println!("{} {} is now {} (inputs: {})", manifest.id, manifest.version, manifest.schema, inputs);
-    renames.iter().for_each(|(old, new)| println!("property {old} is now {new}"));
+    println!(
+        "{}",
+        fill(
+            told("%1 %2 is now %3 (inputs: %4)"),
+            &[&manifest.id, &manifest.version, &manifest.schema, &inputs]
+        )
+    );
+    renames.iter().for_each(|(old, new)| println!("{}", fill(told("property %1 is now %2"), &[&old, &new])));
     Ok(())
 }

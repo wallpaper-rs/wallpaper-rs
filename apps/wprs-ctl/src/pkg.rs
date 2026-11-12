@@ -3,6 +3,7 @@ use crate::daemon::finished;
 use crate::input::confirm;
 use crate::items::range;
 use crate::show::{self, bytes, list, prefix, short, table, text};
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result, bail, ensure};
 use clap::Subcommand;
 use futures_util::{StreamExt, TryFutureExt};
@@ -82,8 +83,8 @@ pub async fn run(client: &Client, command: Pkg) -> Result<()> {
         Pkg::Reveal { spec } => repos.reveal(&spec).await?,
         Pkg::Preview { spec, animated } => {
             let path = tokio::time::timeout(Duration::from_secs(60), preview(client, &spec, animated)).await;
-            let path = path.context("no preview arrived within 60 s")??;
-            ensure!(!path.is_empty(), "no preview");
+            let path = path.context(tr(told("no preview arrived within 60 s")))??;
+            ensure!(!path.is_empty(), "{}", tr(told("no preview")));
             println!("{path}")
         }
         Pkg::Install { spec, allow_stale, downgrade, wait } => {
@@ -124,7 +125,7 @@ async fn preview(client: &Client, spec: &str, animated: bool) -> Result<String> 
             return Ok(args.path.into());
         }
     }
-    bail!("the connection to the session bus was closed")
+    bail!("{}", tr(told("the connection to the session bus was closed")))
 }
 
 async fn install(
@@ -139,7 +140,8 @@ async fn install(
     let (_, done) = match finished(client, start(allow_stale), wait).await {
         Err(e) if !allow_stale && error_name(&e) == Some(STALE) => {
             let (repo, name) = offered_by(client, spec).await?;
-            let question = format!("Repository {name} is stale (its signed index expired). Install anyway?");
+            let question =
+                fill(told("Repository %1 is stale (its signed index expired). Install anyway?"), &[&name]);
             let yes = match asked.get(&repo) {
                 Some(yes) => *yes,
                 None => confirm(&question).await?,
@@ -163,7 +165,8 @@ async fn offered_by(client: &Client, spec: &str) -> Result<(String, String)> {
 pub fn browse(page: BrowsePage) -> String {
     let count = range(page.offset, page.packages.len(), page.total);
     let rows = page.packages.into_iter().map(|p| {
-        let installed = list(&p.installed) + if p.update { " (update available)" } else { "" };
+        let update = if p.update { tr(told(" (update available)")) } else { String::new() };
+        let installed = list(&p.installed) + &update;
         let flashing = (p.photosensitive == Some(true)).then_some("photosensitive");
         let shown = (p.revealed && p.content.as_deref() == Some("mature")).then_some("shown");
         let content = list([p.content.as_deref().or(Some("unrated")), flashing, shown].into_iter().flatten());
@@ -180,7 +183,7 @@ pub fn installed(reply: InstalledReply) -> String {
         .filter(|p| p.update.is_some() && !p.changes.is_empty())
         .map(|p| {
             let new = p.update.as_deref().unwrap_or_default();
-            format!("\nWhat's new in {} {new}:\n{}\n", p.id, wprs_core::markup::plain(&p.changes))
+            fill(told("\nWhat's new in %1 %2:\n%3\n"), &[&p.id, &new, &wprs_core::markup::plain(&p.changes)])
         })
         .collect();
     let held = crate::held::asked(&reply.packages);

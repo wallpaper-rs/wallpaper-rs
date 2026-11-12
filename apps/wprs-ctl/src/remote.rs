@@ -1,6 +1,7 @@
 use crate::cli::{JSON, Wait};
 use crate::daemon::job;
 use crate::show::{self, prefix, table, text, time};
+use crate::told::{fill, told};
 use anyhow::Result;
 use clap::Subcommand;
 use futures_util::TryFutureExt;
@@ -85,7 +86,7 @@ pub async fn run(client: &Client, command: Remote) -> Result<()> {
 
 pub fn list(reply: ReposReply) -> String {
     let rows = reply.repos.into_iter().map(|r| {
-        let broken = r.broken.map(|why| format!("broken, refresh or remove it: {why}"));
+        let broken = r.broken.map(|why| fill(told("broken, refresh or remove it: %1"), &[&why]));
         let status = broken.into_iter().chain(r.warnings.iter().map(text)).chain(r.last_error);
         let status = status.collect::<Vec<_>>().join(", ");
         let (packages, checked, expires) = (r.packages.to_string(), time(r.checked), time(r.entry_expires));

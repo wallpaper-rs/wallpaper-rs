@@ -1,11 +1,13 @@
 use crate::input::confirm;
-use crate::told::{fill, told};
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use wprs_client::{Client, error_name};
 use wprs_core::dbus::error::UNCONFIRMED;
 
-pub const FLASHING: &str = "Warning: this wallpaper flashes or shows fast patterns that can trigger seizures \
-    in people with photosensitive epilepsy.";
+pub const FLASHING: &str = told(
+    "Warning: this wallpaper flashes or shows fast patterns that can trigger seizures \
+    in people with photosensitive epilepsy.",
+);
 
 pub async fn apply(client: &Client, uid: &str, output: &str, fit: &str, preset: &str) -> Result<()> {
     let lib = &client.library;
@@ -13,10 +15,11 @@ pub async fn apply(client: &Client, uid: &str, output: &str, fit: &str, preset: 
     let applied = crate::inputs::asking(client, output, lib.apply(uid, output, fit, preset)).await;
     match applied {
         Err(e) if error_name(&e) == Some(UNCONFIRMED) => {
-            eprintln!("{FLASHING}");
+            eprintln!("{}", tr(FLASHING));
             anyhow::ensure!(
-                confirm("Show it anyway? You will not be asked again for this package.").await?,
-                "not applied; run wprs-ctl lib confirm photosensitive {uid} to allow it"
+                confirm(&tr(told("Show it anyway? You will not be asked again for this package."))).await?,
+                "{}",
+                fill(told("not applied; run wprs-ctl lib confirm photosensitive %1 to allow it"), &[&uid])
             );
             lib.confirm(&[uid], "photosensitive").await?;
             crate::inputs::asking(client, output, lib.apply(uid, output, fit, preset)).await

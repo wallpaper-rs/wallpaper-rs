@@ -904,12 +904,18 @@ la orden y `wprs-ctl release <salida>` lo destruye. Con `--wait`, el flujo dura 
 orden, igual que el de un escritorio.
 
 La biblioteca, las listas, los perfiles, los proveedores y los paquetes se manejan igual
-(`wprs-ctl <grupo> --help` muestra cada orden):
+(`wprs-ctl <grupo> --help` muestra cada orden). Las órdenes que cambian algo (`set`, `mute`,
+`covered`, `input grant`, `lib rate`, `playlist rm`…) confirman con una línea lo que hicieron. Los
+mensajes de error, los avisos de `scene check` y la salida de las órdenes salen en el idioma del
+sistema; `scripts/translations.sh check` falla si en `apps/wprs-ctl` aparece un texto fijo en
+inglés sin pasar por la traducción. La CLI apaga el ruido de la biblioteca gráfica (`libEGL
+warning`) con `EGL_LOG_LEVEL=fatal` salvo que la variable ya esté definida.
 
 ```sh
 wprs-ctl lib add ~/Imágenes --wait              # añadir una carpeta y esperar al escaneo
 wprs-ctl lib search 'tag:mar sort:random'       # buscar; los elementos se nombran por su uid
 wprs-ctl lib apply 1R1AB2 -o DP-1               # mostrar un elemento (uid o sus últimos 6+)
+wprs-ctl lib sources                            # las carpetas; `lib scan` y `lib unsource` aceptan el id corto que muestra o la ruta
 wprs-ctl playlist new Mar --query tag:mar       # lista inteligente
 wprs-ctl playlist start Mar && wprs-ctl next    # rotar una lista y avanzar
 wprs-ctl profile save Escritorio                # guardar lo que muestra cada pantalla

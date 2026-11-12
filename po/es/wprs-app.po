@@ -1277,6 +1277,7 @@ msgstr "Todos los canales"
 
 #: apps/wprs-app/qml/EditCurves.qml apps/wprs-app/qml/SceneEffectMaskTune.qml
 #: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/facade/LabelTags.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Red"
@@ -1284,6 +1285,7 @@ msgstr "Rojo"
 
 #: apps/wprs-app/qml/EditCurves.qml apps/wprs-app/qml/SceneEffectMaskTune.qml
 #: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/facade/LabelTags.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Green"
@@ -1291,6 +1293,7 @@ msgstr "Verde"
 
 #: apps/wprs-app/qml/EditCurves.qml apps/wprs-app/qml/SceneEffectMaskTune.qml
 #: apps/wprs-app/qml/SceneGraph.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/facade/LabelTags.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Blue"
@@ -1478,20 +1481,20 @@ msgid "Highlight the band that moving can uncover"
 msgstr "Resaltar la franja que el movimiento puede descubrir"
 
 #: apps/wprs-app/qml/EditDepthCompare.qml
-msgid "Compare LaMa with the simple fill"
-msgstr "Comparar LaMa con el relleno simple"
+msgid "Compare the smart fill (LaMa) with the simple fill"
+msgstr "Comparar el relleno inteligente (LaMa) con el relleno simple"
 
 #: apps/wprs-app/qml/EditDepthCompare.qml
 msgid ""
-"LaMa is not installed, so there is nothing to compare. Download it in the "
-"settings."
+"The smart fill (LaMa) is not installed, so there is nothing to compare. "
+"Download it in the settings."
 msgstr ""
-"LaMa no está instalado, así que no hay nada que comparar. Descárgalo en los "
-"ajustes."
+"El relleno inteligente (LaMa) no está instalado, así que no hay nada que "
+"comparar. Descárgalo en los ajustes."
 
 #: apps/wprs-app/qml/EditDepthCompare.qml
-msgid "Where LaMa ends"
-msgstr "Dónde termina LaMa"
+msgid "Where the smart fill ends"
+msgstr "Dónde termina el relleno inteligente"
 
 #: apps/wprs-app/qml/EditDepthCompare.qml
 msgid "Building the layers…"
@@ -1548,8 +1551,8 @@ msgstr ""
 "la franja para añadir otro."
 
 #: apps/wprs-app/qml/EditDepthLayers.qml
-msgid "LaMa"
-msgstr "LaMa"
+msgid "Smart fill (LaMa)"
+msgstr "Relleno inteligente (LaMa)"
 
 #: apps/wprs-app/qml/EditDepthLayers.qml
 msgid "Simple fill"
@@ -2088,33 +2091,34 @@ msgstr "Extender esta imagen por todas las pantallas"
 
 #: apps/wprs-app/qml/FillNote.qml
 msgid ""
-"LaMa is not installed, so pictures use the simple fill. It is downloaded "
-"once from %1 (%2, license %3), checked against its SHA-256 and runs on this "
-"computer; computing the layers of a picture takes a few minutes."
+"The smart fill (LaMa) is not installed, so pictures use the simple fill. It "
+"is downloaded once from %1 (%2, license %3), checked against its SHA-256 and "
+"runs on this computer; computing the layers of a picture takes a few minutes."
 msgstr ""
-"LaMa no está instalado, así que las imágenes usan el relleno simple. Se "
-"descarga una vez de %1 (%2, licencia %3), se comprueba con su SHA-256 y "
-"funciona en este equipo; calcular las capas de una imagen tarda unos minutos."
+"El relleno inteligente (LaMa) no está instalado, así que las imágenes usan "
+"el relleno simple. Se descarga una vez de %1 (%2, licencia %3), se comprueba "
+"con su SHA-256 y funciona en este equipo; calcular las capas de una imagen "
+"tarda unos minutos."
 
 #: apps/wprs-app/qml/FillNote.qml
-msgid "Download LaMa"
-msgstr "Descargar LaMa"
+msgid "Download the smart fill (LaMa)"
+msgstr "Descargar el relleno inteligente (LaMa)"
 
 #: apps/wprs-app/qml/FillNote.qml
 msgid "Downloads are turned off in the settings."
 msgstr "Las descargas están desactivadas en los ajustes."
 
 #: apps/wprs-app/qml/FillNote.qml
-msgid "Check LaMa"
-msgstr "Comprobar LaMa"
+msgid "Check the smart fill (LaMa)"
+msgstr "Comprobar el relleno inteligente (LaMa)"
 
 #: apps/wprs-app/qml/FillNote.qml
-msgid "Remove LaMa"
-msgstr "Quitar LaMa"
+msgid "Remove the smart fill (LaMa)"
+msgstr "Quitar el relleno inteligente (LaMa)"
 
 #: apps/wprs-app/qml/FillNote.qml
-msgid "LaMa is whole"
-msgstr "LaMa está entero"
+msgid "The smart fill (LaMa) is whole"
+msgstr "El relleno inteligente (LaMa) está completo"
 
 #: apps/wprs-app/qml/FillNote.qml
 msgid "Rebuild the layers"
@@ -2153,8 +2157,8 @@ msgid "virtual"
 msgstr "virtual"
 
 #: apps/wprs-app/qml/GpuPicker.qml
-msgid "software"
-msgstr "por software"
+msgid "drawn by the processor, slow"
+msgstr "dibujado por el procesador, lento"
 
 #: apps/wprs-app/qml/GpuPicker.qml
 msgid "other kind"
@@ -2173,8 +2177,8 @@ msgid "Any dedicated card"
 msgstr "Cualquier tarjeta dedicada"
 
 #: apps/wprs-app/qml/GpuPicker.qml
-msgid "Software rendering, for tests"
-msgstr "Render por software, para pruebas"
+msgid "Drawn by the processor instead of a graphics card, for tests"
+msgstr "Dibujado por el procesador en vez de una tarjeta gráfica, para pruebas"
 
 #: apps/wprs-app/qml/GpuPicker.qml
 msgid "%1 · on PCI bus %2"
@@ -2212,6 +2216,14 @@ msgid ""
 msgstr ""
 "Una tarjeta dedicada dibuja las escenas pesadas con más calidad y gasta más "
 "energía."
+
+#: apps/wprs-app/qml/GpuPicker.qml
+msgid ""
+"Vulkan and OpenGL ES are the two ways the program talks to the card; the "
+"automatic choice is almost always the right one."
+msgstr ""
+"Vulkan y OpenGL ES son las dos formas en que el programa habla con la "
+"tarjeta; la elección automática casi siempre es la correcta."
 
 #: apps/wprs-app/qml/GpuPicker.qml
 msgid "In use: %1 (%2)."
@@ -2751,12 +2763,18 @@ msgid "Quality %1 of 3"
 msgstr "Calidad %1 de 3"
 
 #: apps/wprs-app/qml/LeftOut.qml
-msgid "graphics card class %1 of 3, measured"
-msgstr "tarjeta gráfica de clase %1 de 3, medida"
+msgid ""
+"graphics card power %1 of 3 (3 is the strongest), measured on this computer"
+msgstr ""
+"potencia de la tarjeta gráfica %1 de 3 (3 es la más potente), medida en este "
+"equipo"
 
 #: apps/wprs-app/qml/LeftOut.qml
-msgid "graphics card class %1 of 3, from its model"
-msgstr "tarjeta gráfica de clase %1 de 3, según su modelo"
+msgid ""
+"graphics card power %1 of 3 (3 is the strongest), estimated from its model"
+msgstr ""
+"potencia de la tarjeta gráfica %1 de 3 (3 es la más potente), estimada según "
+"su modelo"
 
 #: apps/wprs-app/qml/LeftOut.qml apps/wprs-app/qml/SettingsCheck.qml
 msgid "The level comes from the estimate until frames are measured."
@@ -3054,7 +3072,7 @@ msgstr "Menta"
 msgid "Rose"
 msgstr "Rosa"
 
-#: apps/wprs-app/qml/OutputFilter.qml
+#: apps/wprs-app/qml/OutputFilter.qml apps/wprs-app/qml/facade/LabelTags.qml
 msgid "Night"
 msgstr "Noche"
 
@@ -3124,14 +3142,15 @@ msgstr "Fotogramas por segundo automáticos"
 
 #: apps/wprs-app/qml/PacePicker.qml
 msgid ""
-"Applies to phones and to wprs-ctl scene bench; this computer keeps its own "
-"controller, so nothing changes here. With the automatic quality, a heavy "
-"scene may run at half the frame rate (never below 30) to keep a higher level."
+"Applies to phones and to the performance measurements made on a scene; this "
+"computer keeps its own controller, so nothing changes here. With the "
+"automatic quality, a heavy scene may run at half the frame rate (never below "
+"30) to keep a higher level."
 msgstr ""
-"Vale para teléfonos y para wprs-ctl scene bench; este ordenador conserva su "
-"propio control, así que aquí no cambia nada. Con la calidad automática, una "
-"escena pesada puede ir a la mitad de fotogramas (nunca menos de 30) para "
-"conservar un nivel más alto."
+"Vale para teléfonos y para las mediciones de rendimiento de una escena; este "
+"equipo conserva su propio control, así que aquí no cambia nada. Con la "
+"calidad automática, una escena pesada puede ir a la mitad de fotogramas "
+"(nunca menos de 30) para conservar un nivel más alto."
 
 #: apps/wprs-app/qml/PackageAbout.qml
 msgid "%1 by %2"
@@ -7320,6 +7339,7 @@ msgstr "importa antes un archivo de este tipo"
 
 #: apps/wprs-app/qml/SceneLayerAdd.qml apps/wprs-app/qml/SceneLightTools.qml
 #: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneSwarmScope.qml
+#: apps/wprs-app/qml/facade/LabelTags.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
@@ -11096,6 +11116,7 @@ msgstr "Estela"
 
 #: apps/wprs-app/qml/SceneSwarmScope.qml
 #: apps/wprs-app/qml/SceneSwarmStrands.qml
+#: apps/wprs-app/qml/facade/LabelTags.qml
 #: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Texture"
@@ -11173,6 +11194,7 @@ msgid "Start with"
 msgstr "Empezar con"
 
 #: apps/wprs-app/qml/SceneSwarmSettings.qml
+#: apps/wprs-app/qml/facade/LabelTags.qml
 msgid "Snow"
 msgstr "Nieve"
 
@@ -11181,6 +11203,7 @@ msgid "Sparks"
 msgstr "Chispas"
 
 #: apps/wprs-app/qml/SceneSwarmSettings.qml
+#: apps/wprs-app/qml/facade/LabelTags.qml
 msgid "Rain"
 msgstr "Lluvia"
 
@@ -12202,8 +12225,8 @@ msgid "Frame rate:"
 msgstr "Fotogramas:"
 
 #: apps/wprs-app/qml/SettingsPage.qml
-msgid "HDR:"
-msgstr "HDR:"
+msgid "HDR (extra bright colors):"
+msgstr "HDR (colores extra brillantes):"
 
 #: apps/wprs-app/qml/SettingsPage.qml
 msgid "Draw with:"
@@ -12998,6 +13021,279 @@ msgstr ""
 #: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sends its colors to RGB lighting"
 msgstr "envía sus colores a la iluminación RGB"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Abstract"
+msgstr "Abstracto"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Animals"
+msgstr "Animales"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+#: apps/wprs-app/qml/facade/WallhavenWords.qml
+msgid "Anime"
+msgstr "Anime"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Architecture"
+msgstr "Arquitectura"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Art"
+msgstr "Arte"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Autumn"
+msgstr "Otoño"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Beach"
+msgstr "Playa"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Black"
+msgstr "Negro"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Car"
+msgstr "Coche"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Cars"
+msgstr "Coches"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Cat"
+msgstr "Gato"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "City"
+msgstr "Ciudad"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Clouds"
+msgstr "Nubes"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Colorful"
+msgstr "Colorido"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Cyberpunk"
+msgstr "Ciberpunk"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Dark"
+msgstr "Oscuro"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Desert"
+msgstr "Desierto"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Dog"
+msgstr "Perro"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Dragon"
+msgstr "Dragón"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Dream"
+msgstr "Sueño"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Fantasy"
+msgstr "Fantasía"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
+msgid "Fire"
+msgstr "Fuego"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Flowers"
+msgstr "Flores"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Forest"
+msgstr "Bosque"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Galaxy"
+msgstr "Galaxia"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Game"
+msgstr "Juego"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Games"
+msgstr "Juegos"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Geometric"
+msgstr "Geométrico"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
+msgid "Gradient"
+msgstr "Degradado"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Lake"
+msgstr "Lago"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Landscape"
+msgstr "Paisaje"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Lo-fi"
+msgstr "Lo-fi"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Minimal"
+msgstr "Minimalista"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Minimalism"
+msgstr "Minimalismo"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Minimalist"
+msgstr "Minimalista"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Moon"
+msgstr "Luna"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Mountain"
+msgstr "Montaña"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Mountains"
+msgstr "Montañas"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Music"
+msgstr "Música"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Nature"
+msgstr "Naturaleza"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Neon"
+msgstr "Neón"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Ocean"
+msgstr "Océano"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Orange"
+msgstr "Naranja"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Pastel"
+msgstr "Pastel"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Pink"
+msgstr "Rosa"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Pixel art"
+msgstr "Arte de píxeles"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Portrait"
+msgstr "Retrato"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Purple"
+msgstr "Morado"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Retro"
+msgstr "Retro"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "River"
+msgstr "Río"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Robot"
+msgstr "Robot"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Sci-fi"
+msgstr "Ciencia ficción"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Sea"
+msgstr "Mar"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Sky"
+msgstr "Cielo"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Space"
+msgstr "Espacio"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Stars"
+msgstr "Estrellas"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Summer"
+msgstr "Verano"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Sunrise"
+msgstr "Amanecer"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Sunset"
+msgstr "Atardecer"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Technology"
+msgstr "Tecnología"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Train"
+msgstr "Tren"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Trees"
+msgstr "Árboles"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Water"
+msgstr "Agua"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
+msgid "Waves"
+msgstr "Ondas"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "White"
+msgstr "Blanco"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Winter"
+msgstr "Invierno"
+
+#: apps/wprs-app/qml/facade/LabelTags.qml
+msgid "Yellow"
+msgstr "Amarillo"
 
 #: apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
@@ -13952,10 +14248,6 @@ msgid "Film grain"
 msgstr "Grano de película"
 
 #: apps/wprs-app/qml/facade/SceneEffects.qml
-msgid "Fire"
-msgstr "Fuego"
-
-#: apps/wprs-app/qml/facade/SceneEffects.qml
 msgid "Flow"
 msgstr "Flujo"
 
@@ -14058,10 +14350,6 @@ msgstr "Anillos en el agua"
 #: apps/wprs-app/qml/facade/SceneEffects.qml
 msgid "Water ripples"
 msgstr "Ondulaciones del agua"
-
-#: apps/wprs-app/qml/facade/SceneEffects.qml
-msgid "Waves"
-msgstr "Ondas"
 
 #: apps/wprs-app/qml/facade/SceneEffects.qml
 msgid "Whole number"
@@ -14628,10 +14916,6 @@ msgid "Light source"
 msgstr "Fuente de luz"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Space"
-msgstr "Espacio"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Part of the line"
 msgstr "Tramo de la línea"
 
@@ -14871,10 +15155,6 @@ msgstr "Separación"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Ghosts"
 msgstr "Reflejos"
-
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-msgid "Gradient"
-msgstr "Degradado"
 
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Gravity"
@@ -16037,10 +16317,6 @@ msgstr "Páginas por sincronización"
 #: apps/wprs-app/qml/facade/WallhavenWords.qml
 msgid "Most pictures"
 msgstr "Máximo de imágenes"
-
-#: apps/wprs-app/qml/facade/WallhavenWords.qml
-msgid "Anime"
-msgstr "Anime"
 
 #: apps/wprs-app/qml/facade/WallhavenWords.qml
 msgid "People"

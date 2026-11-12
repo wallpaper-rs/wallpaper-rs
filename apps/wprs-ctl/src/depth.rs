@@ -1,4 +1,5 @@
 use crate::editing::open;
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result};
 use clap::Subcommand;
 use std::path::{Path, PathBuf};
@@ -110,16 +111,18 @@ pub fn run(command: Maps) -> Result<()> {
         Maps::Import { path, file } => Some(places.import(&file, &path, &sha)?),
         Maps::Remove { path } => {
             let removed = places.unmap(&path, &sha, &depth);
-            anyhow::ensure!(removed > 0, "the image has no depth map");
-            println!("{removed} depth maps removed");
+            anyhow::ensure!(removed > 0, "{}", tr(told("the image has no depth map")));
+            println!("{}", fill(told("%1 depth maps removed"), &[&removed]));
             None
         }
         Maps::Export { path, file, adjusted, colour } => {
-            let from = found.context("the image has no depth map; generate or import one first")?;
+            let from = found.context(tr(told("the image has no depth map; generate or import one first")))?;
             let to = match file {
                 Some(file) => file,
                 None if adjusted || colour => {
-                    return Err(crate::usage("name the file: --adjusted and --colour never replace the map"));
+                    return Err(crate::usage(tr(told(
+                        "name the file: --adjusted and --colour never replace the map",
+                    ))));
                 }
                 None => beside(&path),
             };
@@ -145,11 +148,18 @@ fn bench(places: &Places, path: &Path, depth: &Depth, device: &str, runs: usize)
     times.sort_by(f64::total_cmp);
     let (median, fastest) = (times[times.len() / 2], times[0]);
     println!(
-        "{}: loaded in {:.2} s, estimated at {} in {median:.3} s (median of {}, fastest {fastest:.3} s)",
-        found.device.name(),
-        found.load.as_secs_f64(),
-        depth.input,
-        times.len()
+        "{}",
+        fill(
+            told("%1: loaded in %2 s, estimated at %3 in %4 s (median of %5, fastest %6 s)"),
+            &[
+                &found.device.name(),
+                &format!("{:.2}", found.load.as_secs_f64()),
+                &depth.input,
+                &format!("{:.3}", median),
+                &times.len(),
+                &format!("{:.3}", fastest)
+            ]
+        )
     );
     Ok(())
 }
@@ -158,10 +168,10 @@ fn generate(places: &Places, path: &Path, sha: &str, depth: &Depth, device: Devi
     wprs_depth::background();
     let started = std::time::Instant::now();
     let made = wprs_depth::generate(places, (path, sha), depth, (None, device), &mut |stage| match stage {
-        Stage::Loading => eprintln!("loading the depth model"),
-        Stage::Estimating => eprintln!("estimating depth"),
-        Stage::Saving => eprintln!("saving the depth map"),
+        Stage::Loading => eprintln!("{}", tr(told("loading the depth model"))),
+        Stage::Estimating => eprintln!("{}", tr(told("estimating depth"))),
+        Stage::Saving => eprintln!("{}", tr(told("saving the depth map"))),
     })?;
-    eprintln!("done in {:.1} s", started.elapsed().as_secs_f32());
+    eprintln!("{}", fill(told("done in %1 s"), &[&format!("{:.1}", started.elapsed().as_secs_f32())]));
     Ok(made)
 }

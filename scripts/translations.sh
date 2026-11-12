@@ -66,7 +66,7 @@ xgettext --c++ --from-code=UTF-8 -k -ktr:1 --add-location=file --force-po --pack
   -o "$TMP/wprsd.pot" apps/wprsd/src/words.rs
 catalog wprsd ""
 
-mapfile -t sources < <(find crates/wprs-scene/src crates/wprs-format/src crates/wprs-editor/src crates/wprs-core/src/edit -name '*.rs' | LC_ALL=C sort)
+mapfile -t sources < <(find crates/wprs-scene/src crates/wprs-format/src crates/wprs-editor/src crates/wprs-depth/src crates/wprs-library/src crates/wprs-core/src/edit -name '*.rs' | LC_ALL=C sort)
 for f in "${sources[@]}"; do
   mkdir -p "$TMP/rs/$(dirname "$f")"
   sed -E "s/'([a-z_]+)([^a-z_'])/\2/g" "$f" >"$TMP/rs/$f"

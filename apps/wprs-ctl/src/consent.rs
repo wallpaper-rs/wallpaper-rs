@@ -1,3 +1,4 @@
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Result, bail};
 use serde_json::json;
@@ -11,22 +12,31 @@ pub fn megabytes(bytes: u64) -> String {
 pub fn consent(asset: &Asset, yes: bool) -> Result<()> {
     if !wprs_depth::allowed() {
         let hint = format!("use wprs-ctl models install {} --file", asset.id);
-        bail!("downloads are turned off by models.allow_download or a broken config; {hint}");
+        bail!(
+            "{}",
+            fill(told("downloads are turned off by models.allow_download or a broken config; %1"), &[&hint])
+        );
     }
     let (size, hosts) = (megabytes(asset.bytes), asset.hosts());
-    eprintln!("{}: {size} from {hosts}, license {} ({})", asset.title, asset.license, asset.license_url);
+    eprintln!(
+        "{}",
+        fill(
+            told("%1: %2 from %3, license %4 (%5)"),
+            &[&asset.title, &size, &hosts, &asset.license, &asset.license_url]
+        )
+    );
     if yes {
         return Ok(());
     }
     if !io::stdin().is_terminal() {
-        return Err(usage("add --yes to accept the download"));
+        return Err(usage(tr(told("add --yes to accept the download"))));
     }
-    eprint!("Download it now? [y/N] ");
+    eprint!("{}", tr(told("Download it now? [y/N] ")));
     let mut answer = String::new();
     io::stdin().lock().read_line(&mut answer)?;
     match answer.trim() {
         "y" | "Y" | "yes" => Ok(()),
-        _ => bail!("nothing was downloaded"),
+        _ => bail!("{}", tr(told("nothing was downloaded"))),
     }
 }
 

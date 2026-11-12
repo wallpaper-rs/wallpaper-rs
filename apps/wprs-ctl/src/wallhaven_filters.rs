@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use crate::usage;
 use anyhow::Result;
 use clap::Args;
@@ -83,15 +84,19 @@ fn bits(flag: &str, text: &str, names: &[&str]) -> Result<String> {
     }
     let wanted: Vec<&str> = text.split(',').map(str::trim).filter(|name| !name.is_empty()).collect();
     let unknown = wanted.iter().find(|name| !names.contains(name));
-    let hint =
-        || usage(format!("--{flag} takes {} separated by commas, or digits like 101", names.join(", ")));
+    let hint = || {
+        usage(fill(
+            told("--%1 takes %2 separated by commas, or digits like 101"),
+            &[&flag, &names.join(", ")],
+        ))
+    };
     unknown.map_or(Ok(()), |_| Err(hint()))?;
     Ok(names.iter().map(|name| if wanted.contains(name) { '1' } else { '0' }).collect())
 }
 
 fn choice(flag: &str, text: &str, allowed: &[&str]) -> Result<()> {
     let ok = allowed.contains(&text);
-    ok.then_some(()).ok_or_else(|| usage(format!("--{flag} must be one of {}", allowed.join(", "))))
+    ok.then_some(()).ok_or_else(|| usage(fill(told("--%1 must be one of %2"), &[&flag, &allowed.join(", ")])))
 }
 
 impl Filters {
@@ -133,7 +138,7 @@ impl Filters {
         }
         for (key, value) in &pairs {
             if let Some(hint) = option_hint(key, value) {
-                return Err(usage(format!("--{}: expected {hint}", key.replace('_', "-"))));
+                return Err(usage(fill(told("--%1: expected %2"), &[&key.replace('_', "-"), &hint])));
             }
         }
         Ok(pairs)

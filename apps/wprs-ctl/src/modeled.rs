@@ -1,5 +1,6 @@
 use crate::author::Author;
 use crate::modeling::{GroupCmd, ModelCmd, Modeling};
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result};
 use serde_json::{Value, json};
 use std::path::PathBuf;
@@ -13,7 +14,7 @@ fn numbers<const N: usize>(text: &Option<String>) -> Result<Option<[f64; N]>> {
     let list: Vec<f64> =
         t.split(',').map(|v| v.trim().parse::<f64>()).collect::<Result<_, _>>().ok().unwrap_or_default();
     let found: Option<[f64; N]> = list.try_into().ok();
-    found.map(Some).with_context(|| format!("{t} is not {N} numbers apart by commas"))
+    found.map(Some).with_context(|| fill(told("%1 is not %2 numbers apart by commas"), &[&t, &N]))
 }
 
 fn color(text: Option<String>) -> Option<Value> {
@@ -81,13 +82,13 @@ fn edit(command: Modeling) -> Result<(PathBuf, Edit3d)> {
             let (mut set, mut values) =
                 (std::collections::BTreeMap::new(), std::collections::BTreeMap::new());
             for p in params {
-                let (id, v) = p.split_once('=').with_context(|| format!("{p} is not ID=VALUE"))?;
+                let (id, v) = p.split_once('=').with_context(|| fill(told("%1 is not ID=VALUE"), &[&p]))?;
                 match v.trim().parse::<f64>() {
                     Ok(n) => drop(set.insert(id.trim().to_owned(), n)),
                     Err(_) => drop(values.insert(id.trim().to_owned(), crate::steps::value(v.trim()))),
                 }
             }
-            let name = name.context("name the material, or use --list")?;
+            let name = name.context(tr(told("name the material, or use --list")))?;
             let m = MaterialEdit {
                 layer,
                 name,
@@ -136,7 +137,7 @@ pub(crate) fn action(command: Modeling) -> Result<(PathBuf, Action), Box<Author>
     match edit(command) {
         Ok((dir, e)) => Ok((dir, Action::Scene3d(e))),
         Err(e) => {
-            eprintln!("wprs-ctl: {e:#}");
+            eprintln!("wprs-ctl: {}", crate::foreign::said(&format!("{e:#}")));
             std::process::exit(2);
         }
     }
@@ -166,9 +167,9 @@ pub(crate) fn run(command: Modeling) -> Result<()> {
         Modeling::Cost3d { dir, quality } => {
             ask(&dir, json!({ "cost3d": { "quality": quality.unwrap_or("q3".into()) } }))?
         }
-        other => anyhow::bail!("{other:?} changes the scene"),
+        other => anyhow::bail!("{}", fill(told("%1 changes the scene"), &[&format!("{other:?}")])),
     };
-    anyhow::ensure!(!found.is_null(), "there is nothing to show");
+    anyhow::ensure!(!found.is_null(), "{}", tr(told("there is nothing to show")));
     anyhow::ensure!(found.get("error").is_none(), "{}", found["error"].as_str().unwrap_or_default());
     println!("{}", serde_json::to_string_pretty(&found)?);
     Ok(())

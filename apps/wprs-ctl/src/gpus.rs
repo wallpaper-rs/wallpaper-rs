@@ -1,4 +1,5 @@
 use crate::show::{clean, table};
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use clap::Args;
 use futures_util::StreamExt;
@@ -17,7 +18,7 @@ pub struct GpuArgs {
     pub json: bool,
 }
 
-pub const LATER: &str = "the change takes effect the next time the daemon starts (wprs-ctl restart)";
+pub const LATER: &str = told("the change takes effect the next time the daemon starts (wprs-ctl restart)");
 
 pub async fn restart(client: &Client) -> Result<()> {
     let bus = zbus::fdo::DBusProxy::new(&client.bus).await?;
@@ -36,9 +37,13 @@ pub async fn restart(client: &Client) -> Result<()> {
         false
     };
     let started = tokio::time::timeout(std::time::Duration::from_secs(30), back).await;
-    anyhow::ensure!(matches!(started, Ok(true)), "the daemon did not start again within 30 seconds");
+    anyhow::ensure!(
+        matches!(started, Ok(true)),
+        "{}",
+        tr(told("the daemon did not start again within 30 seconds"))
+    );
     let state: State = serde_json::from_str(&client.daemon.get_state().await?)?;
-    println!("the daemon started again on {}", clean(&state.adapter));
+    println!("{}", fill(told("the daemon started again on %1"), &[&clean(&state.adapter)]));
     Ok(())
 }
 
@@ -61,15 +66,15 @@ pub async fn run(client: &Client, args: GpuArgs) -> Result<()> {
         vec![used.into(), desktop.into(), a.name.clone(), a.kind.clone(), a.backend.clone(), bus]
     });
     print!("{}", table(&["USED", "DESKTOP", "NAME", "KIND", "BACKEND", "BUS"], rows));
-    println!("render.gpu = {}", clean(&chosen));
+    println!("{}", fill(told("render.gpu = %1"), &[&clean(&chosen)]));
     if let Some(warning) = &state.gpu_warning {
-        println!("warning: {}", clean(warning));
+        println!("{}", fill(told("warning: %1"), &[&clean(warning)]));
     }
     if let Some(note) = &state.gpu_note {
-        println!("note: {}", clean(note));
+        println!("{}", fill(told("note: %1"), &[&clean(note)]));
     }
     if state.gpu_restart {
-        println!("{LATER}");
+        println!("{}", tr(LATER));
     }
     Ok(())
 }
@@ -80,7 +85,7 @@ pub async fn notice(client: &Client, key: &str) -> Result<()> {
     }
     let state: State = serde_json::from_str(&client.daemon.get_state().await?)?;
     if key == "render.gpu" && state.gpu_restart {
-        println!("{LATER}");
+        println!("{}", tr(LATER));
     }
     if key == LayerNamespace::KEY {
         in_use(&state.layer_shell);
@@ -90,12 +95,12 @@ pub async fn notice(client: &Client, key: &str) -> Result<()> {
 
 pub fn in_use(layer: &LayerShellState) {
     if layer.restart {
-        println!("{LATER}");
+        println!("{}", tr(LATER));
     }
     if let Some(namespace) = layer.namespace.as_deref() {
-        println!("in use: {} (from {})", clean(namespace), clean(&layer.from));
+        println!("{}", fill(told("in use: %1 (from %2)"), &[&clean(namespace), &clean(&layer.from)]));
         if let Some(ignored) = &layer.ignored {
-            println!("warning: {}", clean(ignored));
+            println!("{}", fill(told("warning: %1"), &[&clean(ignored)]));
         }
     }
 }

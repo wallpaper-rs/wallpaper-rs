@@ -4,6 +4,7 @@ use crate::items::{SELECT_ITEMS, item_row};
 use crate::{Error, Item, Library, Result};
 use rusqlite::params_from_iter;
 use rusqlite::types::Value;
+use wprs_core::message::said;
 
 const MATCHES: &str = "i.id IN (SELECT rowid FROM items_fts WHERE items_fts MATCH ?)";
 
@@ -43,7 +44,9 @@ pub fn shown(query: &str, hide_mature: bool) -> String {
 }
 
 pub(crate) fn compile(query: &str, now: i64) -> Result<Compiled> {
-    ensure(query.matches('"').count().is_multiple_of(2), || Error::Query("a quote is not closed".into()))?;
+    ensure(query.matches('"').count().is_multiple_of(2), || {
+        Error::query(said("library.quote_open", "a quote is not closed", &[]))
+    })?;
     let order = "i.added_at DESC, i.id DESC".to_string();
     let mut compiled = Compiled { filter: "1".into(), params: Vec::new(), order };
     let terms = terms(query);
@@ -53,7 +56,9 @@ pub(crate) fn compile(query: &str, now: i64) -> Result<Compiled> {
     for Term { negated, key, value, quoted } in terms {
         let (sql, params) = match key.as_deref() {
             Some("sort") => {
-                ensure(!negated, || Error::Query("sort: cannot be negated".into()))?;
+                ensure(!negated, || {
+                    Error::query(said("library.sort_negated", "sort: cannot be negated", &[]))
+                })?;
                 compiled.order = sort(&value.to_ascii_lowercase()).ok_or_else(|| invalid("sort", &value))?;
                 continue;
             }

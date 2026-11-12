@@ -1,4 +1,5 @@
 use crate::cli::JSON;
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use clap::Subcommand;
 use serde_json::{Value, json};
@@ -11,8 +12,8 @@ const PLACES: &str = "x y w h as parts of the picture from 0 to 1, then right, l
 
 fn covered(s: &Value) -> String {
     let choice = s["when_covered"].as_str().unwrap_or("pause");
-    let now = if s["held"] == true { ", paused now" } else { "" };
-    format!("while covered ({}): {choice}{now}", Covered::KEY)
+    let now = if s["held"] == true { tr(told(", paused now")) } else { String::new() };
+    fill(told("while covered (%1): %2%3"), &[&Covered::KEY, &choice, &now])
 }
 
 #[derive(Subcommand, Debug)]
@@ -67,32 +68,41 @@ pub enum Rgb {
     },
 }
 
-fn waiting(why: &str) -> &'static str {
+fn waiting(why: &str) -> String {
     match why {
-        "locked" => "the session is locked and the wallpaper pauses while locked",
-        "battery" => "the computer is on battery and the wallpaper pauses on battery",
-        "colorless" => "the covered output shows something that sends no colors",
-        "ungranted" => "the package shown there does not hold the rgb grant",
-        _ => "the wallpaper is paused",
+        "locked" => tr(told("the session is locked and the wallpaper pauses while locked")),
+        "battery" => tr(told("the computer is on battery and the wallpaper pauses on battery")),
+        "colorless" => tr(told("the covered output shows something that sends no colors")),
+        "ungranted" => tr(told("the package shown there does not hold the rgb grant")),
+        _ => tr(told("the wallpaper is paused")),
     }
 }
 
 fn status(s: &Value) -> String {
     let on = if s["enabled"] == true { "on" } else { "off" };
-    let place = if s["local"] == true { "this computer" } else { "another computer on the network" };
-    let mut lines =
-        vec![format!("RGB lighting: {on}, OpenRGB server {} ({place})", s["server"].as_str().unwrap_or("?"))];
+    let place = if s["local"] == true {
+        tr(told("this computer"))
+    } else {
+        tr(told("another computer on the network"))
+    };
+    let mut lines = vec![fill(
+        told("RGB lighting: %1, OpenRGB server %2 (%3)"),
+        &[&on, &s["server"].as_str().unwrap_or("?"), &place],
+    )];
     lines.push(match (s["connected"] == true, s["error"].as_str()) {
-        (true, _) => format!("connected, {} devices", s["devices"].as_array().map_or(0, Vec::len)),
-        (false, Some(e)) => format!("not connected: {e}"),
-        (false, None) => "not connected".into(),
+        (true, _) => fill(told("connected, %1 devices"), &[&s["devices"].as_array().map_or(0, Vec::len)]),
+        (false, Some(e)) => fill(told("not connected: %1"), &[&e]),
+        (false, None) => tr(told("not connected")),
     });
     lines.push(covered(s));
     for (output, why) in s["waiting"].as_object().into_iter().flatten() {
-        lines.push(format!("{output}: the lights wait because {}", waiting(why.as_str().unwrap_or(""))));
+        lines.push(fill(
+            told("%1: the lights wait because %2"),
+            &[&output, &waiting(why.as_str().unwrap_or(""))],
+        ));
     }
     if let Some(source) = s["source"].as_str() {
-        lines.push(format!("colors from {source}, {} frames sent", s["frames"]));
+        lines.push(fill(told("colors from %1, %2 frames sent"), &[&source, &s["frames"]]));
     }
     lines.join("\n")
 }
@@ -101,14 +111,14 @@ fn devices(s: &Value) -> String {
     let rows = s["devices"].as_array().into_iter().flatten().map(|d| {
         let kind = d["kind"].as_str().unwrap_or("?");
         let own = d["own_mode"].as_str().map_or(String::new(), |m| match d["taken"] == true {
-            true => format!(", own mode {m} comes back when the lights stop"),
-            false => format!(", own mode {m}"),
+            true => fill(told(", own mode %1 comes back when the lights stop"), &[&m]),
+            false => fill(told(", own mode %1"), &[&m]),
         });
         let name = d["key"].as_str().or(d["name"].as_str()).unwrap_or("?");
         format!("{:>3}  {kind:<14} {name}  ({} lights{own})", d["index"], d["leds"])
     });
     let list: Vec<String> = rows.collect();
-    if list.is_empty() { "no devices".into() } else { list.join("\n") }
+    if list.is_empty() { tr(told("no devices")) } else { list.join("\n") }
 }
 
 pub async fn run(client: &Client, command: Rgb) -> Result<()> {
@@ -145,10 +155,10 @@ pub async fn run(client: &Client, command: Rgb) -> Result<()> {
             };
             match json {
                 true => println!("{}", Value::Object(shown.into_iter().collect())),
-                false if shown.is_empty() => println!("every device takes the whole picture"),
-                false => {
-                    shown.iter().for_each(|(k, v)| println!("{k}: {}", v.as_str().unwrap_or("whole picture")))
-                }
+                false if shown.is_empty() => println!("{}", tr(told("every device takes the whole picture"))),
+                false => shown
+                    .iter()
+                    .for_each(|(k, v)| println!("{k}: {}", v.as_str().unwrap_or(&tr(told("whole picture"))))),
             }
         }
         Rgb::Strip { output, json } => {

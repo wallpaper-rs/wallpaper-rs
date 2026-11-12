@@ -1,6 +1,7 @@
 use crate::cli::{JSON, OUTPUT};
 use crate::propsets::{self, PropPreset};
 use crate::show::{self, table};
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Context, Result, ensure};
 use clap::Subcommand;
@@ -86,10 +87,12 @@ pub fn value(text: &str) -> String {
 
 pub fn path(text: &str, base: &Path) -> Result<String> {
     let text = serde_json::from_str::<String>(text).unwrap_or_else(|_| text.to_owned());
-    ensure!(!text.trim().is_empty(), "a file or folder setting takes a path or null");
+    ensure!(!text.trim().is_empty(), "{}", tr(told("a file or folder setting takes a path or null")));
     let found = match Path::new(&text).is_absolute() {
         true => PathBuf::from(&text),
-        false => std::fs::canonicalize(base.join(&text)).with_context(|| format!("cannot find {text}"))?,
+        false => {
+            std::fs::canonicalize(base.join(&text)).with_context(|| fill(told("cannot find %1"), &[&text]))?
+        }
     };
     Ok(Value::String(found.to_string_lossy().into_owned()).to_string())
 }
@@ -103,7 +106,7 @@ pub async fn run(client: &Client, command: Prop) -> Result<()> {
             let found = reply
                 .values
                 .get(&id)
-                .ok_or_else(|| usage(format!("{} has no setting {id}", reply.package)))?;
+                .ok_or_else(|| usage(fill(told("%1 has no setting %2"), &[&reply.package, &id])))?;
             println!("{found}");
         }
         Prop::Set { id, value: text, output } => {
@@ -135,7 +138,7 @@ pub async fn run(client: &Client, command: Prop) -> Result<()> {
 fn applications(reply: ApplicationsReply) -> String {
     let note = match reply.available {
         true => String::new(),
-        false => "applications open only outside the Flatpak\n".to_owned(),
+        false => tr(told("applications open only outside the Flatpak\n")).to_owned(),
     };
     let rows = reply.applications.iter().map(|a| vec![a.id.clone(), a.name.clone()]);
     note + &table(&["ID", "NAME"], rows)
@@ -163,9 +166,9 @@ fn list(reply: SceneProperties) -> String {
         vec![f.key.clone(), label, f.kind.clone(), value, range]
     });
     let scope = match (reply.output.is_empty(), reply.shared) {
-        (true, _) => "every screen",
-        (false, true) => "shared with every screen",
-        (false, false) => "this screen only",
+        (true, _) => tr(told("every screen")),
+        (false, true) => tr(told("shared with every screen")),
+        (false, false) => tr(told("this screen only")),
     };
     let head = format!("{} ({}, {scope})\n", reply.title, reply.package);
     let named = |p: &wprs_core::model::SceneOption| match p.value.as_str().unwrap_or_default() {
@@ -179,6 +182,7 @@ fn list(reply: SceneProperties) -> String {
     ];
     let tail: String =
         presets.iter().filter(|(_, n)| !n.is_empty()).map(|(k, n)| format!("{k}: {n}\n")).collect();
-    let warnings: String = reply.warnings.iter().map(|w| format!("warning: {w}\n")).collect();
+    let warnings: String =
+        reply.warnings.iter().map(|w| format!("{}\n", fill(told("warning: %1"), &[&w]))).collect();
     head + &table(&["SETTING", "LABEL", "TYPE", "VALUE", "RANGE"], rows) + &tail + &warnings
 }

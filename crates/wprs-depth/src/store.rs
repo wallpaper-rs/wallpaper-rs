@@ -4,6 +4,7 @@ use anyhow::{Context, Result, ensure};
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 use wprs_core::edit::Depth;
+use wprs_core::message::said;
 
 pub const CACHE_BYTES: u64 = 256 << 20;
 const MAX_ASPECT: f64 = 0.02;
@@ -42,13 +43,21 @@ impl Places {
         let (mw, mh) = map.dimensions();
         ensure!(
             off.abs() <= MAX_ASPECT,
-            "the map is {mw}x{mh} and the image {w}x{h}: their shapes differ by over 2 %"
+            "{}",
+            said(
+                "depth.the_map_is_x_and",
+                "the map is %1x%2 and the image %3x%4: their shapes differ by over 2 %",
+                &[&mw, &mh, &w, &h]
+            )
+            .local()
         );
         let near = beside(image);
         if !near.is_symlink() && write(&map, &near).is_ok() {
             return Ok(near);
         }
-        let own = self.own(sha256).context("the image has no valid SHA-256")?;
+        let own = self
+            .own(sha256)
+            .context(said("depth.the_image_has_no_valid", "the image has no valid SHA-256", &[]).local())?;
         write(&map, &own).map(|()| own)
     }
 

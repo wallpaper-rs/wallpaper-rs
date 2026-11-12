@@ -1,5 +1,6 @@
 use crate::cli::{Command, Wait};
 use crate::input::path_arg;
+use crate::told::{fill, told, tr};
 use crate::{inputs, library, pkg, playlists, profiles, props, providers, remote, serving, show};
 use anyhow::{Context, Result, bail};
 use futures_util::TryFutureExt;
@@ -12,6 +13,7 @@ use wprs_core::Fit;
 pub async fn run(command: Command) -> Result<()> {
     let client = &Client::connect().await?;
     let daemon = &client.daemon;
+    let done = crate::confirming::said(&command);
     match command {
         Command::Set { path, output, fit } => {
             daemon.set_wallpaper(&path_arg(&path)?, &output, fit.map_or("", Fit::as_str)).await?
@@ -54,7 +56,7 @@ pub async fn run(command: Command) -> Result<()> {
                 true => daemon.request_stream(&output, width, height).await?,
                 false => daemon.hold_stream(&output, width, height).await?,
             };
-            println!("node {node} serial {serial}");
+            println!("{}", fill(told("node %1 serial %2"), &[&node, &serial]));
             if let Some(interrupted) = interrupted {
                 interrupted.await;
                 daemon.release_stream(&output).await?
@@ -106,6 +108,9 @@ pub async fn run(command: Command) -> Result<()> {
             unreachable!("local commands never connect")
         }
     }
+    if let Some(line) = done {
+        println!("{line}");
+    }
     Ok(())
 }
 
@@ -144,8 +149,11 @@ pub async fn finished<T>(
     }
     let (value, job) = match (finished, started.get()) {
         (Some(finished), _) => finished?,
-        (None, Some(id)) => bail!("stopped waiting; job {id} keeps running (wprs-ctl cancel {id} stops it)"),
-        (None, None) => bail!("stopped waiting"),
+        (None, Some(id)) => bail!(
+            "{}",
+            fill(told("stopped waiting; job %1 keeps running (wprs-ctl cancel %2 stops it)"), &[&id, &id])
+        ),
+        (None, None) => bail!("{}", tr(told("stopped waiting"))),
     };
     println!("{}", if wait.json { serde_json::to_string(&job)? } else { show::summary(&job) });
     Ok((value, Some(job)))
@@ -153,11 +161,12 @@ pub async fn finished<T>(
 
 fn options(state: &str, filter: Option<&str>, json: bool) -> Result<()> {
     let state: Value = serde_json::from_str(state)?;
-    let options = state["options"].as_object().context("the daemon did not report its settings")?;
+    let options = state["options"].as_object().context(tr(told("the daemon did not report its settings")))?;
     if filter.is_some_and(|key| crate::levels::own(&state, key, json)) {
         return Ok(());
     }
-    let unknown = |k: &str| format!("unknown setting '{k}'; the settings are {}", show::list(options.keys()));
+    let unknown =
+        |k: &str| fill(told("unknown setting '%1'; the settings are %2"), &[&k, &show::list(options.keys())]);
     if let Some(key) = filter.filter(|key| !options.contains_key(*key)) {
         return Err(crate::usage(unknown(key)));
     }

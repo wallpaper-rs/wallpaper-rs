@@ -102,7 +102,9 @@ pub enum Playlist {
         #[command(flatten)]
         out: Out,
     },
-    #[command(about = "Stop the playlist of the outputs, keeping the item shown now")]
+    #[command(
+        about = "Stop whatever playlist runs on -o OUTPUT, or on every output when left out (it takes no playlist name), keeping the item shown now"
+    )]
     Stop(Out),
     #[command(about = "Print the items an output showed, newest first")]
     History {

@@ -37,10 +37,15 @@ msgid "%1: unknown field"
 msgstr "%1: campo desconocido"
 
 #: crates/wprs-core/src/edit/check.rs crates/wprs-core/src/edit/fields.rs
+
 #: crates/wprs-core/src/edit/perform.rs crates/wprs-core/src/edit/set.rs
+
 #: crates/wprs-core/src/edit/tool.rs crates/wprs-editor/src/check.rs
+
 #: crates/wprs-editor/src/findings.rs crates/wprs-editor/src/history.rs
+
 #: crates/wprs-editor/src/presets.rs crates/wprs-format/src/facts.rs
+
 #: crates/wprs-format/src/features.rs
 msgid "%1"
 msgstr "%1"
@@ -102,8 +107,11 @@ msgid "use 1, 8, 16 or 32 steps"
 msgstr "usa 1, 8, 16 o 32 pasos"
 
 #: crates/wprs-core/src/edit/fields.rs crates/wprs-core/src/edit/file.rs
+
 #: crates/wprs-core/src/edit/set.rs crates/wprs-editor/src/findings.rs
+
 #: crates/wprs-editor/src/package.rs crates/wprs-editor/src/scriptcheck.rs
+
 #: crates/wprs-scene/src/issue.rs
 msgid "%1: %2"
 msgstr "%1: %2"
@@ -117,17 +125,25 @@ msgid "%1 is too large"
 msgstr "%1 es demasiado grande"
 
 #: crates/wprs-core/src/edit/file.rs crates/wprs-editor/src/assets.rs
+
 #: crates/wprs-editor/src/author_keys.rs crates/wprs-editor/src/offer.rs
+
 #: crates/wprs-editor/src/package.rs crates/wprs-editor/src/packing/source.rs
+
 #: crates/wprs-editor/src/pages.rs crates/wprs-editor/src/presets.rs
+
 #: crates/wprs-editor/src/previews.rs crates/wprs-editor/src/project.rs
+
 #: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/scripts/audit.rs
+
 #: crates/wprs-editor/src/scripts/edit.rs crates/wprs-editor/src/shaders.rs
+
 #: crates/wprs-editor/src/wgsl/mod.rs
 msgid "cannot read %1: %2"
 msgstr "no se puede leer %1: %2"
 
 #: crates/wprs-core/src/edit/file.rs crates/wprs-editor/src/offer.rs
+
 #: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/shaders.rs
 msgid "cannot write %1: %2"
 msgstr "no se puede escribir %1: %2"
@@ -213,6 +229,7 @@ msgid "%1 is not rgb, r, g or b"
 msgstr "%1 no es rgb, r, g ni b"
 
 #: crates/wprs-core/src/edit/touch.rs crates/wprs-editor/src/sculpt.rs
+
 #: crates/wprs-editor/src/stage3d/carve.rs
 msgid "a stroke has 1 to %1 points"
 msgstr "un trazo tiene de 1 a %1 puntos"
@@ -287,6 +304,171 @@ msgid ""
 msgstr ""
 "La imagen queda quieta: su profundidad no permite moverla sin estirarla."
 
+#: crates/wprs-depth/src/build.rs crates/wprs-depth/src/rebuild.rs
+msgid "LaMa is not loaded"
+msgstr "LaMa no está cargado"
+
+#: crates/wprs-depth/src/build.rs
+msgid "the fill mode is off: there are no layers to build"
+msgstr "el relleno está desactivado: no hay capas que crear"
+
+#: crates/wprs-depth/src/build.rs
+msgid "the set has %1 layers"
+msgstr "el conjunto tiene %1 capas"
+
+#
+
+#: crates/wprs-depth/src/build.rs
+msgid "the layer set does not match the depth map"
+msgstr "el conjunto de capas no coincide con el mapa de profundidad"
+
+#: crates/wprs-depth/src/build.rs
+msgid "the image has no depth map"
+msgstr "la imagen no tiene mapa de profundidad"
+
+#: crates/wprs-depth/src/fetch.rs
+msgid "no address to download from"
+msgstr "no hay ninguna dirección desde la que descargar"
+
+#: crates/wprs-depth/src/fetch.rs
+msgid "the file from %1 has another SHA-256 and was deleted"
+msgstr "el archivo de %1 tiene otro SHA-256 y se borró"
+
+#: crates/wprs-depth/src/fetch.rs
+msgid "cannot download from %1"
+msgstr "no se puede descargar desde %1"
+
+#: crates/wprs-depth/src/fetch.rs
+msgid "%1 offers more than %2 bytes"
+msgstr "%1 ofrece más de %2 bytes"
+
+#: crates/wprs-depth/src/fetch.rs
+msgid "the download stopped after %1 of %2 bytes; it resumes next time"
+msgstr "la descarga se detuvo tras %1 de %2 bytes; continúa la próxima vez"
+
+#: crates/wprs-depth/src/fetch.rs
+msgid "%1 sent more than %2 bytes; the file was deleted"
+msgstr "%1 envió más de %2 bytes; el archivo se borró"
+
+#: crates/wprs-depth/src/files.rs
+msgid "cannot open %1"
+msgstr "no se puede abrir %1"
+
+#: crates/wprs-depth/src/files.rs
+msgid "%1 is not a picture"
+msgstr "%1 no es una imagen"
+
+#: crates/wprs-depth/src/files.rs
+msgid "the depth map is empty"
+msgstr "el mapa de profundidad está vacío"
+
+#: crates/wprs-depth/src/infer.rs
+msgid "%1 is not auto, cpu or cuda"
+msgstr "%1 no es auto, cpu ni cuda"
+
+#: crates/wprs-depth/src/infer.rs
+msgid ""
+"this ONNX Runtime cannot use CUDA; give one built with CUDA in ORT_DYLIB_PATH"
+msgstr ""
+"este ONNX Runtime no puede usar CUDA; indica uno compilado con CUDA en "
+"ORT_DYLIB_PATH"
+
+#: crates/wprs-depth/src/infer.rs
+msgid "cannot run the model with CUDA"
+msgstr "no se puede ejecutar el modelo con CUDA"
+
+#: crates/wprs-depth/src/infer.rs
+msgid "the model runs on the processor: %1"
+msgstr "el modelo se ejecuta en el procesador: %1"
+
+#: crates/wprs-depth/src/infer.rs
+msgid "the model gave no depth"
+msgstr "el modelo no dio profundidad"
+
+#: crates/wprs-depth/src/inpaint.rs
+msgid "LaMa is not installed; see wprs-ctl models list"
+msgstr "LaMa no está instalado; mira wprs-ctl models list"
+
+#: crates/wprs-depth/src/inpaint.rs
+msgid "LaMa gave an unexpected shape"
+msgstr "LaMa devolvió una forma inesperada"
+
+#: crates/wprs-depth/src/inpaint.rs
+msgid "LaMa gave a torn picture"
+msgstr "LaMa devolvió una imagen rota"
+
+#: crates/wprs-depth/src/install.rs
+msgid "no folder for the download"
+msgstr "no hay carpeta para la descarga"
+
+#: crates/wprs-depth/src/install.rs
+msgid "%1 is not %2: its SHA-256 differs"
+msgstr "%1 no es %2: su SHA-256 es distinto"
+
+#: crates/wprs-depth/src/install.rs
+msgid "no folder for the file"
+msgstr "no hay carpeta para el archivo"
+
+#: crates/wprs-depth/src/install.rs
+msgid "no folder for the library"
+msgstr "no hay carpeta para la biblioteca"
+
+#: crates/wprs-depth/src/install.rs
+msgid "the archive does not hold %1 and its notices"
+msgstr "el archivo comprimido no contiene %1 ni sus avisos"
+
+#: crates/wprs-depth/src/install.rs
+msgid "%1 in the archive has another SHA-256"
+msgstr "%1 del archivo comprimido tiene otro SHA-256"
+
+#: crates/wprs-depth/src/made.rs
+msgid "the depth model is not installed; see wprs-ctl models list"
+msgstr "el modelo de profundidad no está instalado; mira wprs-ctl models list"
+
+#: crates/wprs-depth/src/made.rs
+msgid "the model input must be a multiple of 14 from 196 to 1036"
+msgstr "la entrada del modelo debe ser un múltiplo de 14 entre 196 y 1036"
+
+#: crates/wprs-depth/src/made.rs crates/wprs-depth/src/store.rs
+msgid "the image has no valid SHA-256"
+msgstr "la imagen no tiene un SHA-256 válido"
+
+#: crates/wprs-depth/src/rebuild.rs
+msgid "the image has no depth map; generate or import one first"
+msgstr "la imagen no tiene mapa de profundidad; genera o importa uno primero"
+
+#: crates/wprs-depth/src/runtime.rs
+msgid "ONNX Runtime is not installed; see wprs-ctl models list"
+msgstr "ONNX Runtime no está instalado; mira wprs-ctl models list"
+
+#: crates/wprs-depth/src/runtime.rs
+msgid "cannot load ONNX Runtime: %1"
+msgstr "no se puede cargar ONNX Runtime: %1"
+
+#: crates/wprs-depth/src/stack.rs
+msgid "the layers differ in size"
+msgstr "las capas tienen tamaños distintos"
+
+#: crates/wprs-depth/src/stack.rs
+msgid "no folder for the layers"
+msgstr "no hay carpeta para las capas"
+
+#: crates/wprs-depth/src/stack.rs
+msgid "the layer set is not understood"
+msgstr "no se entiende el conjunto de capas"
+
+#
+
+#: crates/wprs-depth/src/stack.rs
+msgid "the layer set is torn"
+msgstr "el conjunto de capas está roto"
+
+#: crates/wprs-depth/src/store.rs
+msgid "the map is %1x%2 and the image %3x%4: their shapes differ by over 2 %"
+msgstr ""
+"el mapa mide %1x%2 y la imagen %3x%4: sus proporciones difieren en más de un "
+"2 %"
+
 #: crates/wprs-editor/src/actions.rs crates/wprs-editor/src/layers.rs
 msgid "there is no layer \"%1\""
 msgstr "no hay ninguna capa «%1»"
@@ -299,9 +481,13 @@ msgstr ""
 "locale_files"
 
 #: crates/wprs-editor/src/actions.rs crates/wprs-editor/src/bring.rs
+
 #: crates/wprs-editor/src/ids/rename.rs crates/wprs-editor/src/props.rs
+
 #: crates/wprs-editor/src/references.rs crates/wprs-editor/src/rig.rs
+
 #: crates/wprs-editor/src/swarms/emits.rs
+
 #: crates/wprs-editor/src/swarms/named.rs crates/wprs-editor/src/swarms/sow.rs
 msgid "the id %1 is in use"
 msgstr "el id %1 ya está en uso"
@@ -335,6 +521,7 @@ msgid "only layers of the same group can be grouped"
 msgstr "solo se pueden agrupar capas del mismo grupo"
 
 #: crates/wprs-editor/src/arrange.rs crates/wprs-editor/src/layers.rs
+
 #: crates/wprs-editor/src/props.rs crates/wprs-editor/src/stage3d/edit.rs
 msgid "%1 is not a group"
 msgstr "%1 no es un grupo"
@@ -360,7 +547,9 @@ msgid "the sound %1"
 msgstr "el sonido %1"
 
 #: crates/wprs-editor/src/assets.rs crates/wprs-editor/src/cutter.rs
+
 #: crates/wprs-editor/src/packing/source.rs crates/wprs-editor/src/previews.rs
+
 #: crates/wprs-editor/src/rig.rs
 msgid "the picture cannot be read: %1"
 msgstr "no se puede leer la imagen: %1"
@@ -447,8 +636,11 @@ msgid "a layer is moved by two numbers of pixels"
 msgstr "una capa se mueve con dos números de píxeles"
 
 #: crates/wprs-editor/src/attach/nudge.rs crates/wprs-editor/src/clips/keyed.rs
+
 #: crates/wprs-editor/src/limbs.rs crates/wprs-editor/src/motion/play.rs
+
 #: crates/wprs-editor/src/motion/presets.rs crates/wprs-editor/src/rig.rs
+
 #: crates/wprs-editor/src/skin/mod.rs
 msgid "there is no bone \"%1\""
 msgstr "no hay ningún hueso «%1»"
@@ -636,9 +828,22 @@ msgid "%1 %2"
 msgstr "%1 %2"
 
 #: crates/wprs-editor/src/check.rs crates/wprs-editor/src/pages.rs
+
 #: crates/wprs-editor/src/presets.rs
 msgid "%1 is not in the folder"
 msgstr "%1 no está en la carpeta"
+
+#: crates/wprs-editor/src/check.rs
+msgid "%1 signs an earlier version; a build without a key removes it"
+msgstr "%1 firma una versión anterior; una compilación sin clave la quita"
+
+#: crates/wprs-editor/src/check.rs
+msgid ""
+"%1 is not used by the scene but goes into the package; remove it from the "
+"folder to make the package smaller, or use it in the scene"
+msgstr ""
+"la escena no usa %1, pero entra en el paquete; quítalo de la carpeta para "
+"que el paquete pese menos, o úsalo en la escena"
 
 #: crates/wprs-editor/src/clips.rs
 msgid "a clip id has 1 to 32 small letters, digits or _"
@@ -654,7 +859,9 @@ msgstr ""
 "solo un clip que se añade empieza a sonar en una capa de animación nueva"
 
 #: crates/wprs-editor/src/clips.rs crates/wprs-editor/src/motion/mod.rs
+
 #: crates/wprs-editor/src/scripts/rigcalls.rs
+
 #: crates/wprs-editor/src/skin/mod.rs
 msgid "the layer is not a mesh or a model"
 msgstr "la capa no es una malla ni un modelo"
@@ -676,9 +883,13 @@ msgid "the file has no animation \"%1\""
 msgstr "el archivo no tiene ninguna animación «%1»"
 
 #: crates/wprs-editor/src/clips.rs crates/wprs-editor/src/clips/keyed.rs
+
 #: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/lamps/edit.rs
+
 #: crates/wprs-editor/src/shaping/layers.rs
+
 #: crates/wprs-editor/src/shaping/lens.rs
+
 #: crates/wprs-editor/src/stage3d/paths.rs
 msgid "the time must be 0 or more seconds"
 msgstr "el tiempo debe ser de 0 segundos o más"
@@ -708,6 +919,7 @@ msgid "a key is for one bone, blend shape or part order"
 msgstr "una clave es de un solo hueso, forma de mezcla u orden de parte"
 
 #: crates/wprs-editor/src/clips/keyed.rs crates/wprs-editor/src/motion/mod.rs
+
 #: crates/wprs-editor/src/shapes.rs
 msgid "there is no blend shape \"%1\""
 msgstr "no hay ninguna forma de mezcla «%1»"
@@ -741,6 +953,7 @@ msgstr ""
 "esta copia solo si su autor lo permite"
 
 #: crates/wprs-editor/src/copying.rs crates/wprs-editor/src/diverged.rs
+
 #: crates/wprs-editor/src/offer.rs crates/wprs-editor/src/project.rs
 msgid "%1 is not an empty folder"
 msgstr "%1 no es una carpeta vacía"
@@ -863,6 +1076,7 @@ msgid "the model input is a multiple of 14 from 196 to 1036"
 msgstr "la entrada del modelo es un múltiplo de 14 de 196 a 1036"
 
 #: crates/wprs-editor/src/depthmap.rs crates/wprs-editor/src/lamps/lit.rs
+
 #: crates/wprs-editor/src/stage3d/maps.rs
 msgid "%1 is not a picture of the scene"
 msgstr "%1 no es una imagen de la escena"
@@ -872,35 +1086,45 @@ msgid "a ramp goes to a parameter of an effect"
 msgstr "una rampa va a un parámetro de un efecto"
 
 #
+
 #: crates/wprs-editor/src/figures/drag.rs
 msgid "the layer %1 has no handle %2"
 msgstr "la capa %1 no tiene el asa %2"
 
 #: crates/wprs-editor/src/figures/mod.rs
+
 #: crates/wprs-editor/src/figures/place.rs
+
 #: crates/wprs-editor/src/lettering/width.rs
+
 #: crates/wprs-editor/src/onscreen/mask.rs
+
 #: crates/wprs-editor/src/onscreen/place.rs
+
 #: crates/wprs-editor/src/shaping/grips.rs
 msgid "the layer %1 is not placed on the canvas"
 msgstr "la capa %1 no está colocada en el lienzo"
 
 #
+
 #: crates/wprs-editor/src/figures/stops.rs
 msgid "the layer %1 has no gradient"
 msgstr "la capa %1 no tiene degradado"
 
 #
+
 #: crates/wprs-editor/src/figures/stops.rs
 msgid "the gradient has no stop %1"
 msgstr "el degradado no tiene la parada %1"
 
 #
+
 #: crates/wprs-editor/src/figures/stops.rs
 msgid "a gradient has at most %1 stops"
 msgstr "un degradado tiene como mucho %1 paradas"
 
 #
+
 #: crates/wprs-editor/src/figures/stops.rs
 msgid "a gradient keeps at least 2 stops"
 msgstr "un degradado conserva al menos 2 paradas"
@@ -989,11 +1213,13 @@ msgstr ""
 "claves"
 
 #: crates/wprs-editor/src/graph/mod.rs crates/wprs-editor/src/keys.rs
+
 #: crates/wprs-editor/src/straight.rs
 msgid "%1 has no keyframes"
 msgstr "%1 no tiene fotogramas clave"
 
 #: crates/wprs-editor/src/graph/mod.rs crates/wprs-editor/src/keys.rs
+
 #: crates/wprs-editor/src/straight.rs
 msgid "%1 has no keyframe at %2 s"
 msgstr "%1 no tiene ningún fotograma clave en %2 s"
@@ -1242,6 +1468,7 @@ msgid "the offset of a collider is three numbers within 10000"
 msgstr "el desplazamiento de un colisionador son tres números dentro de 10000"
 
 #: crates/wprs-editor/src/hulls.rs crates/wprs-editor/src/motion/mod.rs
+
 #: crates/wprs-editor/src/stage3d/edit.rs
 msgid "%1 is not a model layer"
 msgstr "%1 no es una capa de modelo"
@@ -1271,6 +1498,7 @@ msgid "an id is 1 to 32 small letters, digits or _"
 msgstr "un id tiene de 1 a 32 minúsculas, cifras o _"
 
 #: crates/wprs-editor/src/ids/rename.rs
+
 #: crates/wprs-editor/src/packing/source.rs
 msgid "there is no asset %1"
 msgstr "no hay ningún recurso %1"
@@ -1426,11 +1654,13 @@ msgid "%1 is not a layer type; use one of %2"
 msgstr "%1 no es un tipo de capa; usa uno de %2"
 
 #
+
 #: crates/wprs-editor/src/lettering/mod.rs
 msgid "the layer %1 is not a text layer"
 msgstr "la capa %1 no es una capa de texto"
 
 #
+
 #: crates/wprs-editor/src/lettering/mod.rs
 msgid "a text has at most %1 fallback fonts"
 msgstr "un texto tiene como mucho %1 fuentes de respaldo"
@@ -1534,7 +1764,9 @@ msgid "the layer %1 captures no region"
 msgstr "la capa %1 no captura ninguna región"
 
 #: crates/wprs-editor/src/onscreen/grip.rs
+
 #: crates/wprs-editor/src/onscreen/maskgrip.rs
+
 #: crates/wprs-editor/src/seats/grips.rs
 msgid "the layer %1 has no size to hold by a corner or an edge"
 msgstr "la capa %1 no tiene tamaño para tomarla por una esquina o un borde"
@@ -1544,7 +1776,9 @@ msgid "the parameter %1 of the effect %2 has no handle on the canvas"
 msgstr "el parámetro %1 del efecto %2 no tiene asa en el lienzo"
 
 #: crates/wprs-editor/src/onscreen/mask.rs
+
 #: crates/wprs-editor/src/onscreen/place.rs
+
 #: crates/wprs-editor/src/shaping/effects.rs
 msgid "the layer %1 has no effect %2"
 msgstr "la capa %1 no tiene el efecto %2"
@@ -1726,6 +1960,7 @@ msgid "%1 is not a kind of property: %2"
 msgstr "%1 no es un tipo de propiedad: %2"
 
 #: crates/wprs-editor/src/props.rs crates/wprs-editor/src/references.rs
+
 #: crates/wprs-editor/src/shaping/marks.rs
 msgid "there is no property \"%1\""
 msgstr "no hay ninguna propiedad «%1»"
@@ -1847,12 +2082,15 @@ msgid "%1 is not a text file: %2"
 msgstr "%1 no es un archivo de texto: %2"
 
 #: crates/wprs-editor/src/scripts/audit.rs
+
 #: crates/wprs-editor/src/scripts/edit.rs
+
 #: crates/wprs-editor/src/scripts/params.rs crates/wprs-editor/src/usage.rs
 msgid "the scene has no script %1"
 msgstr "la escena no tiene el script %1"
 
 #: crates/wprs-editor/src/scripts/audit.rs
+
 #: crates/wprs-editor/src/scripts/edit.rs
 msgid "%1 is not a path of the package"
 msgstr "%1 no es una ruta del paquete"
@@ -2435,6 +2673,7 @@ msgid "a zoom is a factor above 0"
 msgstr "un zoom es un factor mayor que 0"
 
 #: crates/wprs-editor/src/stage3d/camera.rs
+
 #: crates/wprs-editor/src/stage3d/grab.rs
 msgid "%1 is not a model that is shown"
 msgstr "%1 no es un modelo que se muestre"
@@ -2508,7 +2747,9 @@ msgid "a debug view of one material names its layer and material"
 msgstr "una vista de depuración de un material nombra su capa y su material"
 
 #: crates/wprs-editor/src/stage3d/debug.rs
+
 #: crates/wprs-editor/src/stage3d/material.rs
+
 #: crates/wprs-editor/src/stage3d/painted.rs
 msgid "the model has no material named %1"
 msgstr "el modelo no tiene ningún material llamado %1"
@@ -2553,11 +2794,13 @@ msgid "a drag goes between two points on the view"
 msgstr "un arrastre va entre dos puntos de la vista"
 
 #: crates/wprs-editor/src/stage3d/grab/aimed.rs
+
 #: crates/wprs-editor/src/stage3d/paths.rs
 msgid "there is no camera path \"%1\""
 msgstr "no hay ningún recorrido de cámara «%1»"
 
 #: crates/wprs-editor/src/stage3d/grab/aimed.rs
+
 #: crates/wprs-editor/src/stage3d/paths.rs
 msgid "the path has no key at %1 s"
 msgstr "el recorrido no tiene ninguna clave a los %1 s"
@@ -2595,6 +2838,7 @@ msgid "%1 of a material goes from %2 to %3"
 msgstr "%1 de un material va de %2 a %3"
 
 #: crates/wprs-editor/src/stage3d/material.rs
+
 #: crates/wprs-editor/src/stage3d/valued.rs
 msgid "%1 is not a parameter of %2"
 msgstr "%1 no es un parámetro de %2"
@@ -2738,7 +2982,9 @@ msgid "%1 is not an assets package"
 msgstr "%1 no es un paquete de recursos"
 
 #: crates/wprs-editor/src/swarms/emits.rs
+
 #: crates/wprs-editor/src/swarms/fields.rs crates/wprs-editor/src/swarms/sow.rs
+
 #: crates/wprs-editor/src/swarms/spots.rs
 msgid "the system has no emitter %1"
 msgstr "el sistema no tiene el emisor %1"
@@ -2969,6 +3215,7 @@ msgid "is not a root key of this or the previous root"
 msgstr "no es una clave raíz de esta raíz ni de la anterior"
 
 #: crates/wprs-format/src/archive.rs crates/wprs-format/src/source.rs
+
 #: crates/wprs-format/src/validate.rs
 msgid "file size"
 msgstr "tamaño del archivo"
@@ -3241,6 +3488,22 @@ msgstr ""
 "teléfonos, así que las muestran con menos detalle. Para bajarlo, quita las "
 "capas y los efectos que no necesites, o aligera los efectos más pesados en "
 "el panel de cada efecto, que muestra su costo en cada nivel de calidad"
+
+#: crates/wprs-format/src/facts.rs
+msgid ""
+"the scene costs %1 units a frame at quality level 2, more than the %2 that "
+"older integrated and phone GPUs have, so they show it with fewer details. "
+"The layers that weigh the most (with their units) are %3. To lower it, "
+"remove those layers or the effects you do not need on them, or make their "
+"effects lighter in the panel of each effect, which shows its cost at every "
+"quality level"
+msgstr ""
+"la escena cuesta %1 unidades por fotograma en el nivel de calidad 2, más que "
+"las %2 que tienen las tarjetas gráficas integradas antiguas y las de los "
+"teléfonos, así que las muestran con menos detalle. Las capas que más pesan "
+"(con sus unidades) son %3. Para bajarlo, quita esas capas o los efectos que "
+"no necesites en ellas, o aligera sus efectos en el panel de cada efecto, que "
+"muestra su costo en cada nivel de calidad"
 
 #: crates/wprs-format/src/featured.rs
 msgid "expected a wpak-repo-featured/1.0 of this repository"
@@ -4296,6 +4559,110 @@ msgstr "Este fondo web usa %1. Puedes restringir cada cosa en sus ajustes."
 msgid "Restrict them with: %1"
 msgstr "Restríngelos con: %1"
 
+#: crates/wprs-library/src/filter.rs
+msgid "a tag name"
+msgstr "el nombre de una etiqueta"
+
+#: crates/wprs-library/src/filter.rs
+msgid "image, video, package, scene or assets"
+msgstr "image, video, package, scene o assets"
+
+#: crates/wprs-library/src/filter.rs
+msgid "nothing, yes or no"
+msgstr "nada, yes o no"
+
+#: crates/wprs-library/src/filter.rs
+msgid "a rating from 0 to 5 with an optional >=, <=, >, < or ="
+msgstr "una valoración de 0 a 5 con un >=, <=, >, < o = opcional"
+
+#: crates/wprs-library/src/filter.rs
+msgid "a size like >=3840x2160, 4k, 1440p or 1080p"
+msgstr "un tamaño como >=3840x2160, 4k, 1440p o 1080p"
+
+#: crates/wprs-library/src/filter.rs
+msgid "portrait, landscape or square"
+msgstr "portrait, landscape o square"
+
+#: crates/wprs-library/src/filter.rs
+msgid "a duration like <30s, >2m or <=1h"
+msgstr "una duración como <30s, >2m o <=1h"
+
+#: crates/wprs-library/src/filter.rs
+msgid "yes or no"
+msgstr "yes o no"
+
+#: crates/wprs-library/src/filter.rs
+msgid "a source id"
+msgstr "el id de una carpeta"
+
+#: crates/wprs-library/src/filter.rs
+msgid "a manual playlist uid or name"
+msgstr "el uid o el nombre de una lista manual"
+
+#: crates/wprs-library/src/filter.rs
+msgid "an age like <7d"
+msgstr "una antigüedad como <7d"
+
+#: crates/wprs-library/src/filter.rs
+msgid "never or an age like <7d"
+msgstr "never o una antigüedad como <7d"
+
+#: crates/wprs-library/src/filter.rs
+msgid "a color like #3366ff"
+msgstr "un color como #3366ff"
+
+#: crates/wprs-library/src/filter.rs
+msgid "general, mature or unrated"
+msgstr "general, mature o unrated"
+
+#: crates/wprs-library/src/filter.rs
+msgid ""
+"a package facet such as audio, pointer, sound, customizable, photosensitive "
+"or 4k"
+msgstr ""
+"una faceta del paquete, como audio, pointer, sound, customizable, "
+"photosensitive o 4k"
+
+#: crates/wprs-library/src/filter.rs
+msgid ""
+"added, title, rating, used, random or random:<seed>, with a - suffix for "
+"descending"
+msgstr ""
+"added, title, rating, used, random o random:<semilla>, con el sufijo - para "
+"orden descendente"
+
+#: crates/wprs-library/src/filter.rs
+msgid "up to 500 item uids separated by commas"
+msgstr "hasta 500 uids de elementos separados por comas"
+
+#: crates/wprs-library/src/filter.rs
+msgid "invalid value in \"%1:%2\", expected %3"
+msgstr "valor no válido en \"%1:%2\"; se esperaba %3"
+
+#: crates/wprs-library/src/filter.rs
+msgid "unknown key \"%1:\", expected one of %2"
+msgstr "clave desconocida \"%1:\"; las claves válidas son %2"
+
+#: crates/wprs-library/src/lib.rs
+msgid "invalid query: %1"
+msgstr "consulta no válida: %1"
+
+#: crates/wprs-library/src/query.rs
+msgid "a quote is not closed"
+msgstr "hay unas comillas sin cerrar"
+
+#: crates/wprs-library/src/query.rs
+msgid "sort: cannot be negated"
+msgstr "sort: no se puede negar"
+
+#: crates/wprs-library/src/resolve.rs
+msgid "no playlist named %1"
+msgstr "no hay ninguna lista llamada %1"
+
+#: crates/wprs-library/src/resolve.rs
+msgid "in: needs a manual playlist"
+msgstr "in: necesita una lista manual"
+
 #: crates/wprs-scene/src/bones.rs
 msgid "clip"
 msgstr "clip"
@@ -4305,8 +4672,11 @@ msgid "bone of the chain"
 msgstr "hueso de la cadena"
 
 #: crates/wprs-scene/src/bones.rs crates/wprs-scene/src/links.rs
+
 #: crates/wprs-scene/src/particles/checks.rs
+
 #: crates/wprs-scene/src/particles/pulls.rs crates/wprs-scene/src/projected.rs
+
 #: crates/wprs-scene/src/rules/shapes.rs
 msgid "layer"
 msgstr "capa"
@@ -4336,7 +4706,9 @@ msgid "the LUT has %1 entries, expected %2"
 msgstr "la LUT tiene %1 entradas y se esperaban %2"
 
 #: crates/wprs-scene/src/deep.rs crates/wprs-scene/src/fields.rs
+
 #: crates/wprs-scene/src/particles/rules.rs crates/wprs-scene/src/rules.rs
+
 #: crates/wprs-scene/src/sound.rs crates/wprs-scene/src/validate.rs
 msgid "asset"
 msgstr "recurso"
@@ -4528,6 +4900,7 @@ msgid "shader"
 msgstr "sombreador"
 
 #: crates/wprs-scene/src/particles/lineage.rs
+
 #: crates/wprs-scene/src/rules/kinds.rs
 msgid "particle system"
 msgstr "sistema de partículas"
@@ -4567,3 +4940,15 @@ msgstr "capa que recibe el puntero"
 #: crates/wprs-scene/src/validate.rs
 msgid "trigger"
 msgstr "disparador"
+
+#: crates/wprs-depth/src/stack.rs
+msgid "each layer needs its depth field"
+msgstr "cada capa necesita su campo de profundidad"
+
+#: crates/wprs-depth/src/stack.rs
+msgid "the depth fields differ in size"
+msgstr "los campos de profundidad difieren en tamaño"
+
+#: crates/wprs-depth/src/stack.rs
+msgid "the depth fields are torn"
+msgstr "los campos de profundidad están rotos"

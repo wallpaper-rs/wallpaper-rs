@@ -1,28 +1,32 @@
 use crate::show::list;
+use crate::told::{fill, told};
 use std::collections::BTreeSet;
 use wprs_core::model::{Input, InputsReply};
 
 pub(super) fn status(reply: InputsReply) -> String {
     let on = |on| if on { "on" } else { "off" };
-    let mut lines =
-        vec![format!("audio capture: {}", on(reply.capturing)), format!("pointer: {}", on(reply.tracking))];
+    let mut lines = vec![
+        fill(told("audio capture: %1"), &[&on(reply.capturing)]),
+        format!("pointer: {}", on(reply.tracking)),
+    ];
     let inputs = |set: &BTreeSet<Input>| match set.is_empty() {
         true => "none".to_owned(),
         false => list(set.iter().map(|i| i.as_str())),
     };
     let granted = |(scene, set): (&String, &BTreeSet<Input>)| {
-        format!("granted to some version or signer of {scene}: {}", inputs(set))
+        fill(told("granted to some version or signer of %1: %2"), &[&scene, &inputs(set)])
     };
     lines.extend(reply.grants.iter().map(granted));
-    let declined =
-        |(scene, set): (&String, &BTreeSet<Input>)| format!("declined for {scene}: {}", inputs(set));
+    let declined = |(scene, set): (&String, &BTreeSet<Input>)| {
+        fill(told("declined for %1: %2"), &[&scene, &inputs(set)])
+    };
     lines.extend(reply.declined.iter().map(declined));
     let asked = |(scene, set): (&String, &BTreeSet<Input>)| {
-        format!("asked in a desktop notification for {scene}: {}", inputs(set))
+        fill(told("asked in a desktop notification for %1: %2"), &[&scene, &inputs(set)])
     };
     lines.extend(reply.asking.iter().map(asked));
     let quiet = |(scene, set): (&String, &BTreeSet<Input>)| {
-        format!("not asked again for a few minutes for {scene}: {}", inputs(set))
+        fill(told("not asked again for a few minutes for %1: %2"), &[&scene, &inputs(set)])
     };
     lines.extend(reply.quiet.iter().map(quiet));
     lines.extend(reply.shown.iter().map(|(output, shown)| {
@@ -34,40 +38,47 @@ pub(super) fn status(reply: InputsReply) -> String {
         let more = more.into_iter().chain(both);
         let used = used.into_iter().chain(more);
         let used: BTreeSet<Input> = used.filter_map(|(on, input)| on.then_some(input)).collect();
-        format!(
-            "{output} shows {} using {} (allowed: {})",
-            shown.scene,
-            inputs(&used),
-            inputs(&shown.granted)
+        fill(
+            told("%1 shows %2 using %3 (allowed: %4)"),
+            &[&output, &shown.scene, &inputs(&used), &inputs(&shown.granted)],
         )
     }));
-    let follows = |output: &String| format!("{output} shows an image whose parallax follows the pointer");
+    let follows =
+        |output: &String| fill(told("%1 shows an image whose parallax follows the pointer"), &[&output]);
     lines.extend(reply.parallax.iter().map(follows));
     let screens = |set: &BTreeSet<String>| if set.is_empty() { "none".to_owned() } else { list(set.iter()) };
-    lines.push(format!("clicks reach the wallpaper on: {}", screens(&reply.clicks)));
-    lines.push(format!("taking clicks now: {}", screens(&reply.clicking)));
+    lines.push(fill(told("clicks reach the wallpaper on: %1"), &[&screens(&reply.clicks)]));
+    lines.push(fill(told("taking clicks now: %1"), &[&screens(&reply.clicking)]));
     if !reply.unreached.is_empty() {
-        lines.push(format!("clicks cannot reach the wallpaper here on: {}", screens(&reply.unreached)));
+        lines
+            .push(fill(told("clicks cannot reach the wallpaper here on: %1"), &[&screens(&reply.unreached)]));
     }
     lines.join("\n") + "\n"
 }
 
 pub(super) const AUDIO: &str =
-    "the sound that plays (turned into levels on this computer, never recorded or sent)";
+    told("the sound that plays (turned into levels on this computer, never recorded or sent)");
 
-pub(super) const POINTER: &str = "the pointer (only its latest position over the screen, never kept)";
+pub(super) const POINTER: &str = told("the pointer (only its latest position over the screen, never kept)");
 
 pub(super) const CLICKS: &str =
-    "clicks and taps on the screen (only real ones, never kept; keys are never read)";
+    told("clicks and taps on the screen (only real ones, never kept; keys are never read)");
 
-pub(super) const SLOW: &str = "its particles run on the processor, so fewer of them are shown";
+pub(super) const SLOW: &str = told("its particles run on the processor, so fewer of them are shown");
 
 pub(super) const NETWORK: &str =
-    "the network, to reach the sites it names (they can learn that it runs on this computer)";
+    told("the network, to reach the sites it names (they can learn that it runs on this computer)");
 
-pub(super) const MEDIA: &str =
-    "what the media player plays (title, artist, album, cover and progress, never kept, logged or sent)";
+pub(super) const MEDIA: &str = told(
+    "what the media player plays (title, artist, album, cover and progress, never kept, logged or sent)",
+);
 
-pub(super) const RGB: &str = "the RGB lighting, to color it through the OpenRGB server set with rgb.server (only while rgb.enabled is on)";
-pub(super) const MEDIA_NETWORK: &str = "what plays even though it can reach the network, where the title, artist and cover could leave this computer (a second confirmation besides media)";
-pub(super) const AUDIO_NETWORK: &str = "the sound that plays even though it can reach the network, where what it hears (the sound of the computer or the microphone) could leave this computer (a second confirmation besides audio)";
+pub(super) const RGB: &str = told(
+    "the RGB lighting, to color it through the OpenRGB server set with rgb.server (only while rgb.enabled is on)",
+);
+pub(super) const MEDIA_NETWORK: &str = told(
+    "what plays even though it can reach the network, where the title, artist and cover could leave this computer (a second confirmation besides media)",
+);
+pub(super) const AUDIO_NETWORK: &str = told(
+    "the sound that plays even though it can reach the network, where what it hears (the sound of the computer or the microphone) could leave this computer (a second confirmation besides audio)",
+);

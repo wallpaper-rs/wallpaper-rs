@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use anyhow::{Result, bail};
 use clap::Args;
 use wprs_client::Client;
@@ -32,7 +33,7 @@ pub fn filter(args: &FilterArgs) -> Result<Filter> {
         None => Look::None,
         Some(name) => match Look::parse(name) {
             Some(look) => look,
-            None => bail!("unknown look '{name}'; see wprs-ctl filter --list"),
+            None => bail!("{}", fill(told("unknown look '%1'; see wprs-ctl filter --list"), &[&name])),
         },
     };
     let mut filter = Filter { look, ..Filter::default() };

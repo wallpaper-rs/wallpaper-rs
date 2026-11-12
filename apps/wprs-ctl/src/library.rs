@@ -29,14 +29,16 @@ pub enum Lib {
     },
     #[command(about = "Scan one folder, or every folder when omitted")]
     Scan {
-        #[arg(help = "Source folder to scan; every source when left out")]
+        #[arg(
+            help = "Library folder to scan, by the id that lib sources shows or its path; every folder when left out"
+        )]
         source: Option<String>,
         #[command(flatten)]
         wait: Wait,
     },
     #[command(about = "Remove a folder and its items from the library")]
     Unsource {
-        #[arg(help = "Source folder to stop watching")]
+        #[arg(help = "Library folder to stop watching: the id that lib sources shows, or its path")]
         source: String,
     },
     #[command(about = "Import image, video or package files")]
@@ -158,9 +160,10 @@ pub async fn run(client: &Client, command: Lib) -> Result<()> {
         }
         Lib::Sources { json } => show::reply(lib.list_sources().await?, json, sources)?,
         Lib::Scan { source, wait } => {
-            job(client, lib.rescan(source.as_deref().unwrap_or("")).map_ok(|id| ((), id)), &wait).await?
+            let source = crate::sourcing::scanned(client, source).await?;
+            job(client, lib.rescan(&source).map_ok(|id| ((), id)), &wait).await?
         }
-        Lib::Unsource { source } => lib.remove_source(&source).await?,
+        Lib::Unsource { source } => crate::sourcing::unsource(client, &source).await?,
         Lib::Import { files, copy, wait } => {
             let paths = files.iter().map(|file| path_arg(file)).collect::<Result<Vec<_>>>()?;
             job(client, lib.import(&strs(&paths), copy).map_ok(|id| ((), id)), &wait).await?

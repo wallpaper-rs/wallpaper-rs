@@ -1,6 +1,7 @@
 use crate::cli::JSON;
 use crate::keys::{key_text, signer};
 use crate::providers::patient;
+use crate::told::{told, tr};
 use anyhow::{Result, ensure};
 use clap::Subcommand;
 use serde_json::Value;
@@ -58,7 +59,11 @@ pub async fn run(client: &Client, command: AuthorKey) -> Result<()> {
         AuthorKey::Rotate { old, new, author } => {
             let signer = signer(&old)?;
             let key = key_text(&new)?;
-            ensure!(!author.trim().is_empty(), "name the author id that the repository shows");
+            ensure!(
+                !author.trim().is_empty(),
+                "{}",
+                tr(told("name the author id that the repository shows"))
+            );
             let signature = wprs_format::sign_rotation(&signer, author.trim(), &key)?;
             println!("{}", patient(sync.rotate_author_key(&signer.fingerprint, &key, &signature)).await?)
         }

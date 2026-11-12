@@ -1,12 +1,13 @@
 use crate::keys::{key_text, signer};
+use crate::told::{fill, told, tr};
 use anyhow::{Result, bail, ensure};
 use clap::Subcommand;
 use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};
 use wprs_format::{
-    Limits, MANIFEST, Manifest, build_with, features, fill, fingerprint, open, public_key, sha256_file,
-    sign_source, verify_package,
+    Limits, MANIFEST, Manifest, build_with, features, fill as filled, fingerprint, open, public_key,
+    sha256_file, sign_source, verify_package,
 };
 
 #[derive(Subcommand, Debug)]
@@ -88,10 +89,13 @@ pub fn run(command: Pack) -> Result<()> {
             let manifest = Manifest::from_json(&fs::read(dir.join(MANIFEST))?)?;
             let out = out.unwrap_or_else(|| format!("{}-{}.wpak", manifest.id, manifest.version).into());
             for note in manifest.unread_texts(wprs_format::locale_names(&dir)) {
-                eprintln!("note: {note}");
+                eprintln!("{}", fill(told("note: %1"), &[&note]));
             }
-            for added in fill(&dir)? {
-                eprintln!("requires.features += {added} ({})", features::explain(&added));
+            for added in filled(&dir)? {
+                eprintln!(
+                    "{}",
+                    fill(told("requires.features += %1 (%2)"), &[&added, &features::explain(&added)])
+                );
             }
             let keys = keys.iter().map(|k| key_text(k)).collect::<Result<Vec<_>>>()?;
             let keys =
@@ -120,7 +124,11 @@ pub fn run(command: Pack) -> Result<()> {
             let reports: Vec<(bool, String)> = files.iter().map(|file| report(file, &pairs, json)).collect();
             reports.iter().for_each(|(_, line)| println!("{line}"));
             let invalid = reports.iter().filter(|(valid, _)| !valid).count();
-            ensure!(invalid == 0, "{invalid} of {} packages are invalid", files.len());
+            ensure!(
+                invalid == 0,
+                "{}",
+                fill(told("%1 of %2 packages are invalid"), &[&invalid, &files.len()])
+            );
         }
     }
     Ok(())
@@ -131,7 +139,7 @@ fn report(file: &Path, keys: &[(&str, &str)], json: bool) -> (bool, String) {
     let line = match (&checked, json) {
         (Ok((m, signer)), false) => {
             let (sha256, signer) = (sha256.unwrap_or_default(), signer.as_deref().unwrap_or("-"));
-            format!("ok {} {} {} sha256={sha256} signer={signer}", m.kind, m.id, m.version)
+            fill(told("ok %1 %2 %3 sha256=%4 signer=%5"), &[&m.kind, &m.id, &m.version, &sha256, &signer])
         }
         (Err(e), false) => format!("{}: {e}", file.display()),
         (_, true) => {
@@ -157,8 +165,8 @@ fn folder(dir: &Path, keys: &[(&str, &str)]) -> Result<(Manifest, Option<String>
     let Some(signed) = signed else { return Ok((manifest, None)) };
     match signed["state"].as_str() {
         Some("valid") => Ok((manifest, signed["signers"][0].as_str().map(str::to_owned))),
-        Some("unsigned") => bail!("the folder is not signed"),
-        _ => bail!("{}", signed["error"].as_str().unwrap_or("the signature is not valid")),
+        Some("unsigned") => bail!("{}", tr(told("the folder is not signed"))),
+        _ => bail!("{}", signed["error"].as_str().unwrap_or(&tr(told("the signature is not valid")))),
     }
 }
 

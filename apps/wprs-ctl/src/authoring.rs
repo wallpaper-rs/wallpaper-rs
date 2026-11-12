@@ -1,5 +1,6 @@
 use crate::author::Author;
 use crate::steps::{action, edit};
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Context, Result, bail};
 use std::fs;
@@ -20,25 +21,44 @@ fn describe(project: &Project, json: bool) -> Result<()> {
     }
     let text = |k: &str| m[k].as_str().unwrap_or("?").to_owned();
     let title = wprs_editor::meta::title(&project.doc, &wprs_core::locale::languages());
-    let (layers, errors) = (count(layers, "layer"), count(errors, "problem"));
+    let (layers, errors) = (layers_of(layers), problems_of(errors));
     if !wprs_editor::pages::scened(&project.doc) {
         let kind = wprs_editor::pages::kind(&project.doc);
         println!("{title} ({} {}, {kind}): {errors}", text("id"), text("version"));
         for file in wprs_editor::pages::files(&project.dir, &project.doc) {
             let (path, role) = (file["path"].as_str().unwrap_or(""), file["role"].as_str().unwrap_or(""));
-            println!("  {path}: {role}, {}, {} bytes", file["kind"].as_str().unwrap_or(""), file["size"]);
+            println!(
+                "{}",
+                fill(
+                    told("  %1: %2, %3, %4 bytes"),
+                    &[&path, &role, &file["kind"].as_str().unwrap_or(""), &file["size"]]
+                )
+            );
         }
     } else {
         println!("{title} ({} {}): {layers}, {errors}", text("id"), text("version"));
     }
     if pending {
-        println!("the app kept unsaved changes; wprs-ctl scene recover restores or drops them");
+        println!(
+            "{}",
+            tr(told("the app kept unsaved changes; wprs-ctl scene recover restores or drops them"))
+        );
     }
     Ok(())
 }
 
-pub(crate) fn count(n: usize, what: &str) -> String {
-    format!("{n} {what}{}", if n == 1 { "" } else { "s" })
+pub(crate) fn layers_of(n: usize) -> String {
+    match n {
+        1 => tr(told("1 layer")).to_owned(),
+        n => fill(told("%1 layers"), &[&n]),
+    }
+}
+
+pub(crate) fn problems_of(n: usize) -> String {
+    match n {
+        1 => tr(told("1 problem")).to_owned(),
+        n => fill(told("%1 problems"), &[&n]),
+    }
 }
 
 pub fn run(command: Author) -> Result<()> {
@@ -51,7 +71,7 @@ pub fn run(command: Author) -> Result<()> {
             let name = fs::canonicalize(
                 dir.parent().filter(|p| !p.as_os_str().is_empty()).unwrap_or(Path::new(".")),
             )?
-            .join(dir.file_name().context("name the new folder")?);
+            .join(dir.file_name().context(tr(told("name the new folder")))?);
             let folder = name.file_name().unwrap_or_default().to_string_lossy().into_owned();
             let id = id.unwrap_or_else(|| default_id(&folder));
             let locale = locale.unwrap_or_else(wprs_editor::starters::locale);
@@ -74,7 +94,7 @@ pub fn run(command: Author) -> Result<()> {
             let shown = project
                 .doc
                 .pointer(pointer.as_deref().unwrap_or(""))
-                .context("nothing is at that pointer")?;
+                .context(tr(told("nothing is at that pointer")))?;
             println!("{}", serde_json::to_string_pretty(shown)?);
         }
         Author::Fields { dir, pointer } => {
@@ -98,7 +118,7 @@ pub fn run(command: Author) -> Result<()> {
         Author::Acting(command) => crate::acting::run(command)?,
         Author::Naming(command) => crate::naming::run(command)?,
         Author::Rendering(command) => crate::rendering::run(command)?,
-        other => bail!("{other:?} is not a scene command"),
+        other => bail!("{}", fill(told("%1 is not a scene command"), &[&format!("{other:?}")])),
     }
     Ok(())
 }

@@ -118,6 +118,6 @@ pub fn run(command: Texturing) -> Result<()> {
         }
         _ => report::shown(&a.dir, &Project::open(&a.dir)?.doc, &a.asset)?,
     };
-    println!("{}", if a.json { report.to_string() } else { report::told(&report) });
+    println!("{}", if a.json { report.to_string() } else { report::described(&report) });
     Ok(())
 }

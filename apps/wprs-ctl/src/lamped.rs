@@ -1,5 +1,6 @@
 use crate::author::Author;
 use crate::lamping::{Lamp, Lamping, Lit};
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use serde_json::{Value, json};
 use std::path::PathBuf;
@@ -136,9 +137,9 @@ pub(crate) fn run(command: Lamping) -> Result<()> {
             wprs_editor::lamps::heat(&p.dir, &p.doc, &layer, &format!("{map}_map"))
         }
         Lamping::Ambient { dir, .. } => wprs_editor::lamps::hemisphere(&open(&dir)?.doc),
-        other => anyhow::bail!("{other:?} changes the scene"),
+        other => anyhow::bail!("{}", fill(told("%1 changes the scene"), &[&format!("{other:?}")])),
     };
-    anyhow::ensure!(!found.is_null(), "there is nothing to show");
+    anyhow::ensure!(!found.is_null(), "{}", tr(told("there is nothing to show")));
     println!("{}", serde_json::to_string_pretty(&found)?);
     Ok(())
 }

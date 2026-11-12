@@ -46,4 +46,5 @@ for path in sys.argv[1:]:
             print(f"{path}: {', '.join(problems)}: {text[:60]!r}", file=sys.stderr)
 sys.exit(bad)
 PY
+python3 -I scripts/translations-rust.py || fail=1
 exit $fail

@@ -54,6 +54,13 @@ const DEPTH_MAP: &str = ".depth.png";
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
 
+impl Error {
+    pub(crate) fn query(reason: wprs_core::message::Message) -> Self {
+        let said = wprs_core::message::said("library.invalid_query", "invalid query: %1", &[&reason.local()]);
+        Error::Query(said.local())
+    }
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("database error: {0}")]
@@ -68,7 +75,7 @@ pub enum Error {
     Exists(&'static str, String),
     #[error("invalid {0}: {1}")]
     Invalid(&'static str, String),
-    #[error("invalid query: {0}")]
+    #[error("{0}")]
     Query(String),
     #[error("the database uses schema version {0} but this build only knows up to {1}")]
     Newer(u32, u32),

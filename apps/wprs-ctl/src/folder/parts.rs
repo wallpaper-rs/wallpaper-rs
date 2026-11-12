@@ -1,5 +1,5 @@
-use crate::authoring::count;
-use crate::told::{fill, told};
+use crate::authoring::problems_of;
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use serde_json::Value;
 use serde_json::json;
@@ -19,12 +19,16 @@ pub(super) fn validate(dir: &Path, json: bool) -> Result<()> {
         match json {
             true => println!("{}", serde_json::to_string(p)?),
             false => {
-                println!("{}{}: {}", if p.warning { "warning: " } else { "" }, p.pointer, p.said.local())
+                let said = p.said.local();
+                match p.warning {
+                    true => println!("{}", fill(told("warning: %1: %2"), &[&p.pointer, &said])),
+                    false => println!("{}: {said}", p.pointer),
+                }
             }
         }
     }
     let errors = problems.iter().filter(|p| !p.warning).count();
-    ensure!(errors == 0, "{}", count(errors, "problem"));
+    ensure!(errors == 0, "{}", problems_of(errors));
     Ok(())
 }
 
@@ -65,8 +69,10 @@ pub(super) async fn apply(path: &str, output: &str, fit: &str, doc: &Value) -> R
     waiting.abort();
     let report = imported?.1.output.unwrap_or_default();
     let uid = report["imported"][0]["uid"].as_str().map(String::from);
-    let failed =
-        report["failed"][0]["error"].as_str().unwrap_or("the library refused the package").to_owned();
+    let failed = report["failed"][0]["error"]
+        .as_str()
+        .unwrap_or(&tr(told("the library refused the package")))
+        .to_owned();
     let uid = uid.ok_or_else(|| anyhow!(failed))?;
     say(told("Showing it on the screen…"), &[]);
     client.library.apply(&uid, output, fit, "").await?;
@@ -119,12 +125,12 @@ pub(super) async fn previewed(
 
 pub(super) fn apply_folder(dir: &Path, output: &str, span: bool) -> Result<()> {
     let mut project = Project::open(dir)?;
-    ensure!(!project.dirty() && project.pending.is_none(), "save the scene first");
+    ensure!(!project.dirty() && project.pending.is_none(), "{}", tr(told("save the scene first")));
     let out = package::applied(&project.doc)?;
     project.settle()?;
     eprintln!("{}", fill(told("Building the package…"), &[]));
     applying::build(&project.dir, &project.doc, &out)?;
-    let path = out.to_str().context("the path is not UTF-8")?.to_owned();
+    let path = out.to_str().context(tr(told("the path is not UTF-8")))?.to_owned();
     let fit = if span { "span" } else { "" };
     super::runtime()?.block_on(apply(&path, output, fit, &project.doc))
 }

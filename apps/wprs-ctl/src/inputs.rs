@@ -1,5 +1,6 @@
 use crate::cli::JSON;
 use crate::show::{self, list};
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Result, bail};
 use clap::{Subcommand, ValueEnum};
@@ -9,9 +10,11 @@ use wprs_core::dbus::error::UNCONFIRMED;
 use wprs_core::model::{Input, InputsReply};
 
 mod asking;
+mod position;
 mod shown;
 
 pub use asking::asking;
+use position::at_fraction;
 use shown::status;
 
 #[derive(Subcommand, Debug)]
@@ -118,7 +121,7 @@ pub enum Switch {
 }
 
 impl Kind {
-    fn name(self) -> &'static str {
+    pub(crate) fn name(self) -> &'static str {
         match self {
             Kind::Audio => Input::Audio.as_str(),
             Kind::Pointer => Input::Pointer.as_str(),
@@ -155,12 +158,6 @@ pub async fn run(client: &Client, command: Inputs) -> Result<()> {
     Ok(())
 }
 
-fn at_fraction(at: &str) -> Result<(f64, f64)> {
-    let (x, y) = at.split_once(',').ok_or_else(|| usage("expected X,Y"))?;
-    let parsed = |s: &str| s.trim().parse::<f64>().map_err(|_| usage(format!("{s} is not a number")));
-    Ok((parsed(x)?, parsed(y)?))
-}
-
 #[cfg(test)]
 mod tests;
 
@@ -170,20 +167,31 @@ async fn grant(client: &Client, scene: &str, input: &str, output: Option<&str>) 
     let keys: BTreeSet<&str> = shown.map(|(_, s)| s.key.as_str()).filter(|k| !k.is_empty()).collect();
     let sent = match (Vec::from_iter(keys).as_slice(), output) {
         ([key], _) => client.inputs.grant_package(scene, key, input).await,
-        ([], Some(output)) => bail!("{output} does not show {scene}"),
+        ([], Some(output)) => bail!("{}", fill(told("%1 does not show %2"), &[&output, &scene])),
         ([], None) => client.inputs.grant(scene, input).await,
         _ => {
             let outputs = reply.shown.iter().filter(|(_, s)| s.scene == scene).map(|(name, _)| name);
-            let many =
-                format!("more than one package with the id {scene} is shown; choose one with --output");
+            let many = fill(
+                told("more than one package with the id %1 is shown; choose one with --output"),
+                &[&scene],
+            );
             return Err(usage(format!("{many} ({})", list(outputs))));
         }
     };
     match sent.map_err(wprs_client::explain) {
         Err(e) if error_name(&e) == Some(UNCONFIRMED) => {
-            eprintln!("Asked in a desktop notification: the scene gets the input once you allow it there.");
+            eprintln!(
+                "{}",
+                tr(told(
+                    "Asked in a desktop notification: the scene gets the input once you allow it there."
+                ))
+            );
             Ok(())
         }
-        sent => sent,
+        sent => {
+            sent?;
+            println!("{}", fill(told("%1 may use %2"), &[&scene, &input]));
+            Ok(())
+        }
     }
 }

@@ -13,6 +13,7 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering::Relaxed};
 use wprs_core::Fill;
 use wprs_core::edit::Depth;
+use wprs_core::message::said;
 use wprs_core::travel::Reach;
 
 pub const VERSION: u32 = 2;
@@ -66,7 +67,9 @@ fn one(
         (true, _) => simple(cx.picture, known),
     };
     if has && cx.fill == Fill::Lama && band.contains(&true) {
-        let Some(inpaint) = inpaint else { bail!("LaMa is not loaded") };
+        let Some(inpaint) = inpaint else {
+            bail!("{}", said("depth.lama_is_not_loaded", "LaMa is not loaded", &[]).local())
+        };
         lama(&mut filled, band, inpaint, stop)?;
     }
     let (w, h) = cx.size;
@@ -117,7 +120,11 @@ pub fn layers(
     progress: &mut dyn FnMut(u64),
     stop: &AtomicBool,
 ) -> Result<Layers> {
-    ensure!(set.fill != Fill::Off, "the fill mode is off: there are no layers to build");
+    ensure!(
+        set.fill != Fill::Off,
+        "{}",
+        said("depth.the_fill_mode_is_off", "the fill mode is off: there are no layers to build", &[]).local()
+    );
     let (size, levels) = leveled(picture, map, depth);
     progress(10);
     let plan = Plan::new(&levels, size, depth, (set.count, set.shift));
@@ -163,8 +170,14 @@ impl Places {
         progress: &mut dyn FnMut(u64),
         stop: &AtomicBool,
     ) -> Result<PathBuf> {
-        let dest = self.layer_set(image, sha256, depth, set).context("the image has no depth map")?;
-        let map = read(&self.find(image, sha256, depth).context("the image has no depth map")?)?;
+        let dest = self
+            .layer_set(image, sha256, depth, set)
+            .context(said("depth.the_image_has_no_depth", "the image has no depth map", &[]).local())?;
+        let map = read(
+            &self
+                .find(image, sha256, depth)
+                .context(said("depth.the_image_has_no_depth", "the image has no depth map", &[]).local())?,
+        )?;
         progress(2);
         let picture = fitted(crate::files::decode_edge(image, set.edge)?, set.edge);
         let made = layers(&picture, &map, (depth, set), inpaint, progress, stop);

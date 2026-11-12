@@ -1,4 +1,5 @@
 use crate::show::{clean, table};
+use crate::told::{fill, told};
 use anyhow::Result;
 use clap::Args;
 pub use notes::{measured, note, notes};
@@ -32,9 +33,9 @@ const HDR: &str = "Show colors brighter than white on HDR screens: auto (on main
 
 fn hdr(o: &OutputState) -> String {
     let h = &o.hdr;
-    let peak = h.peak_nits.map(|n| format!(", {n} nits")).unwrap_or_default();
+    let peak = h.peak_nits.map(|n| fill(told(", %1 nits"), &[&n])).unwrap_or_default();
     let way = match (h.active, h.encoding.as_str(), h.max_cll) {
-        (true, "pq-own", Some(cll)) => format!(", PQ with its own description, MaxCLL {cll}"),
+        (true, "pq-own", Some(cll)) => fill(told(", PQ with its own description, MaxCLL %1"), &[&cll]),
         (true, "pq", _) => ", PQ".to_string(),
         (true, "scrgb", _) => ", scRGB".to_string(),
         _ => String::new(),
@@ -90,7 +91,7 @@ pub async fn run(client: &Client, args: QualityArgs) -> Result<()> {
     println!("{} = {}", QualityChoice::KEY, clean(&general(&state)));
     if !output.is_empty() && !state.outputs.contains_key(output) {
         let own = state.qualities.get(output).map_or("none", String::as_str);
-        println!("{}{output} = {}, not connected", QualityChoice::OWN, clean(own));
+        println!("{}", fill(told("%1%2 = %3, not connected"), &[&QualityChoice::OWN, &output, &clean(own)]));
     }
     rows.iter().filter_map(|(name, o)| Some((name, note(o)?))).for_each(|(name, n)| println!("{name}: {n}"));
     Ok(())

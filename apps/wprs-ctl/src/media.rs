@@ -1,5 +1,6 @@
 use crate::cli::JSON;
 use crate::show::list;
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use clap::Subcommand;
 use serde_json::{Value, json};
@@ -32,15 +33,20 @@ pub enum Media {
 fn status(s: &MediaStatus) -> String {
     let yes = |on: bool| if on { "yes" } else { "no" };
     let mut lines = vec![match s.listening {
-        true => format!("media player: read for {}", list(s.using.iter())),
-        false => "media player: not read (no shown wallpaper allowed to use it needs it)".to_owned(),
+        true => fill(told("media player: read for %1"), &[&list(s.using.iter())]),
+        false => {
+            tr(told("media player: not read (no shown wallpaper allowed to use it needs it)")).to_owned()
+        }
     }];
     if s.listening {
         lines.push(format!("players: {}", s.players));
-        lines.push(format!("track: {}, playing: {}, cover: {}", yes(s.track), yes(s.playing), yes(s.cover)));
+        lines.push(fill(
+            told("track: %1, playing: %2, cover: %3"),
+            &[&yes(s.track), &yes(s.playing), &yes(s.cover)],
+        ));
     }
     let remote = if s.remote_covers { "on" } else { "off" };
-    lines.push(format!("covers from the internet (media.remote_covers): {remote}"));
+    lines.push(fill(told("covers from the internet (media.remote_covers): %1"), &[&remote]));
     lines.join("\n") + "\n"
 }
 
@@ -55,8 +61,9 @@ pub async fn run(client: &Client, command: Media) -> Result<()> {
             let cover = match track.as_object_mut().and_then(|t| t.remove("cover")) {
                 Some(serde_json::Value::String(path)) if !path.is_empty() => {
                     let path = file.parent().unwrap_or(std::path::Path::new(".")).join(path);
-                    std::fs::read(&path)
-                        .map_err(|e| anyhow::anyhow!("cannot read {}: {e}", path.display()))?
+                    std::fs::read(&path).map_err(|e| {
+                        anyhow::anyhow!("{}", fill(told("cannot read %1: %2"), &[&path.display(), &e]))
+                    })?
                 }
                 _ => Vec::new(),
             };
@@ -107,11 +114,15 @@ pub(crate) fn preview_document(
 }
 
 fn read_values(file: &std::path::Path) -> Result<Value> {
-    let text =
-        std::fs::read_to_string(file).map_err(|e| anyhow::anyhow!("cannot read {}: {e}", file.display()))?;
+    let text = std::fs::read_to_string(file)
+        .map_err(|e| anyhow::anyhow!("{}", fill(told("cannot read %1: %2"), &[&file.display(), &e])))?;
     let values: Value =
         serde_json::from_str(&text).map_err(|e| anyhow::anyhow!("{}: {e}", file.display()))?;
-    anyhow::ensure!(values.is_object(), "{} is not a JSON object of setting values", file.display());
+    anyhow::ensure!(
+        values.is_object(),
+        "{}",
+        fill(told("%1 is not a JSON object of setting values"), &[&file.display()])
+    );
     Ok(values)
 }
 

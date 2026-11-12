@@ -128,13 +128,14 @@ fn query_keys_describe_every_key() {
     let Fixture { library, .. } = fixture();
     let keys = query_keys();
     assert_eq!(keys.len(), 18);
-    assert!(keys.contains(&("content", "general, mature or unrated")));
-    assert!(keys.contains(&("in", "a manual playlist uid or name")));
-    assert!(keys.contains(&(
+    let has = |key: &str, hint: &str| keys.iter().any(|(k, h)| *k == key && h == hint);
+    assert!(has("content", "general, mature or unrated"));
+    assert!(has("in", "a manual playlist uid or name"));
+    assert!(has(
         "sort",
         "added, title, rating, used, random or random:<seed>, with a - suffix for descending"
-    )));
-    for (key, _) in keys {
+    ));
+    for (key, _) in &keys {
         let unknown =
             library.count(&format!("{key}:%"), NOW).is_err_and(|e| e.to_string().contains("unknown key"));
         assert!(!unknown, "{key}");

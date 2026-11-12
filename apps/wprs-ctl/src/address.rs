@@ -1,3 +1,4 @@
+use crate::told::{fill, told};
 use crate::usage;
 use anyhow::Result;
 use std::path::Path;
@@ -8,7 +9,7 @@ pub fn repository(text: &str) -> Result<String> {
     }
     let (folder, query) = text.split_once('?').map_or((text, None), |(folder, query)| (folder, Some(query)));
     if !Path::new(folder).is_dir() {
-        return Err(usage(format!("{folder} is neither a folder nor a URL")));
+        return Err(usage(fill(told("%1 is neither a folder nor a URL"), &[&folder])));
     }
     let absolute = std::path::absolute(folder)?;
     let base = format!("file://{}/", absolute.display().to_string().trim_end_matches('/'));

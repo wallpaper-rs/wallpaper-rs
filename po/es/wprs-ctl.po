@@ -12,6 +12,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: apps/wprs-ctl/src/about.rs
+msgid "yes, allowed"
+msgstr "sí, permitido"
+
+#: apps/wprs-ctl/src/about.rs
+msgid "yes, asks before it is shown"
+msgstr "sí, pregunta antes de mostrarse"
+
+#: apps/wprs-ctl/src/about.rs
+msgid "Description:"
+msgstr "Descripción:"
+
+#: apps/wprs-ctl/src/about.rs
+msgid "Changes:"
+msgstr "Cambios:"
+
 #: apps/wprs-ctl/src/account.rs
 msgid ""
 "Item names on the server are keyed hashes: a device that once held the names "
@@ -21,6 +37,130 @@ msgstr ""
 "Los nombres de los elementos en el servidor son hashes con clave: un "
 "dispositivo que tuvo la clave de nombres y tiene el mismo archivo aún puede "
 "saber que la cuenta lo guarda, incluso después de revocarlo."
+
+#: apps/wprs-ctl/src/account.rs
+msgid ""
+"Approve only a code that your own new device shows on its screen: someone "
+"who sends you a code is trying to get into your account."
+msgstr ""
+"Aprueba solo un código que tu propio dispositivo nuevo muestre en su "
+"pantalla: quien te envía un código intenta entrar en tu cuenta."
+
+#: apps/wprs-ctl/src/account.rs
+msgid ""
+"No keyring is available to keep the access of this computer. Start or unlock "
+"the system keyring and link again, or keep the access in a private file with "
+"`wprs-ctl server access file` (whoever can read your files could then use "
+"it)."
+msgstr ""
+"No hay un llavero para guardar el acceso de este equipo. Inicia o desbloquea "
+"el llavero del sistema y vuelve a vincular, o guarda el acceso en un archivo "
+"privado con `wprs-ctl server access file` (quien pueda leer tus archivos "
+"podría usarlo)."
+
+#: apps/wprs-ctl/src/account.rs
+msgid ""
+"The device can no longer sync with this account, and the sync key is "
+"replaced."
+msgstr ""
+"El dispositivo ya no puede sincronizar con esta cuenta y la clave de "
+"sincronización se cambia."
+
+#: apps/wprs-ctl/src/account.rs
+msgid "Remove %1 from the account?"
+msgstr "¿Quitar %1 de la cuenta?"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "nothing was removed"
+msgstr "no se quitó nada"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "Password of the account: "
+msgstr "Contraseña de la cuenta: "
+
+#: apps/wprs-ctl/src/account.rs
+msgid "no server is added\n"
+msgstr "no hay ningún servidor añadido\n"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "off: the server can read every record"
+msgstr "desactivado: el servidor puede leer todos los registros"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "end to end"
+msgstr "de extremo a extremo"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "pinned, fingerprint %1"
+msgstr "fijada, huella %1"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "a private file"
+msgstr "un archivo privado"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "the system keyring"
+msgstr "el llavero del sistema"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "not applied"
+msgstr "no aplicado"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "%1 %2 %3 (fingerprint %4, id %5)"
+msgstr "%1 %2 %3 (huella %4, id %5)"
+
+#: apps/wprs-ctl/src/account.rs apps/wprs-ctl/src/rgb.rs
+msgid "this computer"
+msgstr "este equipo"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "not given"
+msgstr "no indicado"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "Approve this device?"
+msgstr "¿Aprobar este dispositivo?"
+
+#: apps/wprs-ctl/src/account.rs
+msgid "not approved"
+msgstr "no aprobado"
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid "code = %1"
+msgstr "código = %1"
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid "Confirm this code on %1, and here the code that %2 shows."
+msgstr "Confirma este código en %1 y escribe aquí el código que muestre %2."
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid "Type the code that %1 shows, or nothing to stop: "
+msgstr "Escribe el código que muestra %1, o nada para parar: "
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid "the key was not taken"
+msgstr "no se tomó la clave"
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid "Confirm with: wprs-ctl server join %1 --code <the code shown on %2>"
+msgstr ""
+"Confirma con: wprs-ctl server join %1 --code <el código que muestra %2>"
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid "the join stopped"
+msgstr "la vinculación se detuvo"
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid ""
+"Send the key with: wprs-ctl server share %1 --code <the code shown on %2>"
+msgstr ""
+"Envía la clave con: wprs-ctl server share %1 --code <el código que muestra "
+"%2>"
+
+#: apps/wprs-ctl/src/account/linking.rs
+msgid "the key was not shared"
+msgstr "no se compartió la clave"
 
 #: apps/wprs-ctl/src/acting.rs
 msgid ""
@@ -98,6 +238,68 @@ msgid "Layer the query is about when its arguments do not name one"
 msgstr ""
 "Capa sobre la que trata la consulta cuando sus argumentos no nombran una"
 
+#: apps/wprs-ctl/src/acting.rs
+msgid "the arguments are not JSON: %1"
+msgstr "los argumentos no son JSON: %1"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "batch takes a JSON list of {action: arguments}"
+msgstr "batch recibe una lista JSON de {acción: argumentos}"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "batch takes at least one action"
+msgstr "batch necesita al menos una acción"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "there is no action %1; wprs-ctl scene actions lists them"
+msgstr "no existe la acción %1; wprs-ctl scene actions las lista"
+
+#: apps/wprs-ctl/src/acting.rs
+msgid "there is no query %1; wprs-ctl scene actions --queries lists them"
+msgstr "no existe la consulta %1; wprs-ctl scene actions --queries las lista"
+
+#: apps/wprs-ctl/src/address.rs
+msgid "%1 is neither a folder nor a URL"
+msgstr "%1 no es una carpeta ni una dirección web"
+
+#: apps/wprs-ctl/src/animated.rs
+msgid "%1 is not 3 numbers apart by commas"
+msgstr "%1 no son 3 números separados por comas"
+
+#: apps/wprs-ctl/src/animated.rs apps/wprs-ctl/src/inputs/position.rs
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "%1 is not a number"
+msgstr "%1 no es un número"
+
+#: apps/wprs-ctl/src/animated.rs
+msgid "effect-cost only prints"
+msgstr "effect-cost solo muestra datos"
+
+#: apps/wprs-ctl/src/animated.rs
+msgid "clocks only prints"
+msgstr "clocks solo muestra datos"
+
+#: apps/wprs-ctl/src/animated.rs
+msgid "there is no mesh or model layer %1"
+msgstr "no hay una capa de malla ni de modelo %1"
+
+#: apps/wprs-ctl/src/animated.rs apps/wprs-ctl/src/lamped.rs
+
+#: apps/wprs-ctl/src/modeled.rs
+msgid "%1 changes the scene"
+msgstr "%1 cambia la escena"
+
+#: apps/wprs-ctl/src/animated.rs apps/wprs-ctl/src/glowing.rs
+
+#: apps/wprs-ctl/src/lamped.rs apps/wprs-ctl/src/modeled.rs
+msgid "there is nothing to show"
+msgstr "no hay nada que mostrar"
+
+#: apps/wprs-ctl/src/animated.rs
+msgid "the shader does not build: %1"
+msgstr "el sombreador no se compila: %1"
+
 #: apps/wprs-ctl/src/applying.rs
 msgid "Spread it over every screen, as --fit span"
 msgstr "Extenderlo sobre todas las pantallas, como --fit span"
@@ -162,6 +364,10 @@ msgstr "Píxeles físicos por milímetro, 0 si no se sabe"
 #: apps/wprs-ctl/src/args.rs
 msgid "Maker, model and serial number of the screen"
 msgstr "Fabricante, modelo y número de serie de la pantalla"
+
+#: apps/wprs-ctl/src/args.rs
+msgid "%1 is not X,Y"
+msgstr "%1 no es X,Y"
 
 #: apps/wprs-ctl/src/args.rs
 msgid "Name of the output, such as TEST-1"
@@ -379,6 +585,61 @@ msgstr "Valor JSON; un texto que no es JSON se toma como cadena"
 msgid "Layer id"
 msgstr "Id de la capa"
 
+#: apps/wprs-ctl/src/authoring.rs
+msgid "  %1: %2, %3, %4 bytes"
+msgstr "  %1: %2, %3, %4 bytes"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid ""
+"the app kept unsaved changes; wprs-ctl scene recover restores or drops them"
+msgstr ""
+"la aplicación guardó cambios sin confirmar; wprs-ctl scene recover los "
+"recupera o los descarta"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid "1 layer"
+msgstr "1 capa"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid "%1 layers"
+msgstr "%1 capas"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid "1 problem"
+msgstr "1 problema"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid "%1 problems"
+msgstr "%1 problemas"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid "name the new folder"
+msgstr "indica el nombre de la carpeta nueva"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid "nothing is at that pointer"
+msgstr "no hay nada en esa posición del documento"
+
+#: apps/wprs-ctl/src/authoring.rs
+msgid "%1 is not a scene command"
+msgstr "%1 no es una orden de escena"
+
+#: apps/wprs-ctl/src/away.rs
+msgid ""
+"exists only on another device; publishing it to the server or to a "
+"repository makes it available here"
+msgstr ""
+"existe solo en otro dispositivo; publicarlo en el servidor o en un "
+"repositorio lo deja disponible aquí"
+
+#: apps/wprs-ctl/src/away.rs
+msgid ""
+"\n"
+"These items %1.\n"
+msgstr ""
+"\n"
+"Estos elementos %1.\n"
+
 #: apps/wprs-ctl/src/backdrop.rs
 msgid "%1 is not none or THRESHOLD,STRENGTH"
 msgstr "%1 no es none ni UMBRAL,FUERZA"
@@ -404,7 +665,9 @@ msgid "Pixels from 0 to 128"
 msgstr "Píxeles de 0 a 128"
 
 #: apps/wprs-ctl/src/backdrop.rs apps/wprs-ctl/src/cli.rs
+
 #: apps/wprs-ctl/src/edit.rs apps/wprs-ctl/src/manifesting.rs
+
 #: apps/wprs-ctl/src/paging.rs
 msgid "Color as #rrggbb"
 msgstr "Color como #rrggbb"
@@ -540,6 +803,10 @@ msgstr ""
 "Dibujar en tiempo real a --fps durante este tiempo en lugar de fotograma "
 "tras fotograma"
 
+#: apps/wprs-ctl/src/benching.rs
+msgid "cannot open %1"
+msgstr "no se puede abrir %1"
+
 #: apps/wprs-ctl/src/capturing.rs
 msgid "A picture, or with --animated a gif or webp"
 msgstr "Una imagen, o con --animated un gif o webp"
@@ -568,6 +835,24 @@ msgstr "Segundos que se graban, de 0,1 a 15; 4 sin él"
 #: apps/wprs-ctl/src/capturing.rs
 msgid "Frames a second of the recording, 1 to 30; 10 without it"
 msgstr "Fotogramas por segundo de la grabación, de 1 a 30; 10 sin él"
+
+#: apps/wprs-ctl/src/caution.rs
+msgid ""
+"Warning: this wallpaper flashes or shows fast patterns that can trigger "
+"seizures in people with photosensitive epilepsy."
+msgstr ""
+"Aviso: este fondo parpadea o muestra patrones rápidos que pueden provocar "
+"convulsiones en personas con epilepsia fotosensible."
+
+#: apps/wprs-ctl/src/caution.rs
+msgid "Show it anyway? You will not be asked again for this package."
+msgstr ""
+"¿Mostrarlo de todos modos? No se volverá a preguntar para este paquete."
+
+#: apps/wprs-ctl/src/caution.rs
+msgid "not applied; run wprs-ctl lib confirm photosensitive %1 to allow it"
+msgstr ""
+"no aplicado; ejecuta wprs-ctl lib confirm photosensitive %1 para permitirlo"
 
 #: apps/wprs-ctl/src/caution.rs
 msgid "Installed %1 %2."
@@ -764,8 +1049,11 @@ msgid "Milliseconds to wait, at most 20000"
 msgstr "Milisegundos de espera, como mucho 20000"
 
 #: apps/wprs-ctl/src/cli.rs apps/wprs-ctl/src/folder.rs
+
 #: apps/wprs-ctl/src/pack.rs apps/wprs-ctl/src/repo.rs
+
 #: apps/wprs-ctl/src/repo/authors.rs apps/wprs-ctl/src/server.rs
+
 #: apps/wprs-ctl/src/shelving.rs
 msgid "Print the result as JSON"
 msgstr "Imprimir el resultado como JSON"
@@ -1038,6 +1326,225 @@ msgstr "Un nombre nuevo"
 msgid "Remove the expression"
 msgstr "Quitar la expresión"
 
+#: apps/wprs-ctl/src/confirming.rs apps/wprs-ctl/src/props.rs
+msgid "every screen"
+msgstr "todas las pantallas"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "title set to %1"
+msgstr "título cambiado a %1"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "rating %1 given to %2 items"
+msgstr "valoración %1 dada a %2 elementos"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 items marked as favorites"
+msgstr "%1 elementos marcados como favoritos"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 items are no longer favorites"
+msgstr "%1 elementos ya no son favoritos"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "tags changed on %1 items: %2 added, %3 removed"
+msgstr "etiquetas cambiadas en %1 elementos: %2 añadidas, %3 quitadas"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "tag %1 renamed to %2"
+msgstr "etiqueta %1 renombrada a %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 items removed from the library"
+msgstr "%1 elementos quitados de la biblioteca"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 confirmed for %2 items"
+msgstr "%1 confirmado para %2 elementos"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 no longer confirmed for %2 items"
+msgstr "%1 ya no está confirmado para %2 elementos"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "the data of %1 items was cleared"
+msgstr "se borraron los datos de %1 elementos"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "playlist %1 renamed to %2"
+msgstr "lista %1 renombrada a %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "playlist %1 now follows the query %2"
+msgstr "la lista %1 ahora sigue la consulta %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "playlist %1 deleted"
+msgstr "lista %1 eliminada"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 items added to playlist %2"
+msgstr "%1 elementos añadidos a la lista %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 items removed from playlist %2"
+msgstr "%1 elementos quitados de la lista %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 entries removed from playlist %2"
+msgstr "%1 entradas quitadas de la lista %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "entry %1 of playlist %2 moved to %3"
+msgstr "la entrada %1 de la lista %2 pasó a la posición %3"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "rule %1 of playlist %2 set to %3"
+msgstr "la regla %1 de la lista %2 quedó en %3"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "playlist stopped on %1"
+msgstr "lista detenida en %1"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "profile %1 is active"
+msgstr "el perfil %1 está activo"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "no profile is active"
+msgstr "ningún perfil está activo"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "profile %1 renamed to %2"
+msgstr "perfil %1 renombrado a %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "profile %1 deleted"
+msgstr "perfil %1 eliminado"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "rule %1 of profile %2 set to %3"
+msgstr "la regla %1 del perfil %2 quedó en %3"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 can no longer use %2"
+msgstr "%1 ya no puede usar %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "on"
+msgstr "activado"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "off"
+msgstr "desactivado"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "clicks on %1: %2"
+msgstr "clics en %1: %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "pointer reported at %1,%2"
+msgstr "puntero indicado en %1,%2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "wallpaper set: %1 on %2"
+msgstr "fondo puesto: %1 en %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "wallpaper cleared on %1"
+msgstr "fondo quitado en %1"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "previous wallpaper restored on %1"
+msgstr "fondo anterior restaurado en %1"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "fit %1 on %2"
+msgstr "ajuste %1 en %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "background %1 on %2"
+msgstr "color de fondo %1 en %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 set to %2"
+msgstr "%1 quedó en %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "settings reloaded"
+msgstr "ajustes recargados"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "effects tried again"
+msgstr "efectos intentados de nuevo"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "paused"
+msgstr "en pausa"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "playing again"
+msgstr "reproduciendo otra vez"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "volume %1 %"
+msgstr "volumen %1 %"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "muted"
+msgstr "silenciado"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "sound on"
+msgstr "sonido activado"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "covered"
+msgstr "tapada"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "not covered"
+msgstr "no tapada"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "%1 marked as %2"
+msgstr "%1 marcada como %2"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "stream released on %1"
+msgstr "transmisión liberada en %1"
+
+#: apps/wprs-ctl/src/confirming.rs
+msgid "job %1 cancelled"
+msgstr "tarea %1 cancelada"
+
+#: apps/wprs-ctl/src/consent.rs
+msgid ""
+"downloads are turned off by models.allow_download or a broken config; %1"
+msgstr ""
+"las descargas están desactivadas por models.allow_download o por una "
+"configuración dañada; %1"
+
+#: apps/wprs-ctl/src/consent.rs
+msgid "%1: %2 from %3, license %4 (%5)"
+msgstr "%1: %2 desde %3, licencia %4 (%5)"
+
+#: apps/wprs-ctl/src/consent.rs
+msgid "add --yes to accept the download"
+msgstr "añade --yes para aceptar la descarga"
+
+#: apps/wprs-ctl/src/consent.rs
+msgid "Download it now? [y/N] "
+msgstr "¿Descargarlo ahora? [s/N] "
+
+#: apps/wprs-ctl/src/consent.rs
+msgid "nothing was downloaded"
+msgstr "no se descargó nada"
+
+#: apps/wprs-ctl/src/console.rs
+msgid "error: %1"
+msgstr "error: %1"
+
 #: apps/wprs-ctl/src/copying.rs
 msgid "Id of the copy; the id of the package followed by .copy when omitted"
 msgstr "Id de la copia; el id del paquete seguido de .copy si se omite"
@@ -1055,7 +1562,9 @@ msgid "Only print what the license allows and the id of the copy"
 msgstr "Solo mostrar lo que permite la licencia y el id de la copia"
 
 #: apps/wprs-ctl/src/cropping.rs apps/wprs-ctl/src/depth.rs
+
 #: apps/wprs-ctl/src/edit.rs apps/wprs-ctl/src/stacking.rs
+
 #: apps/wprs-ctl/src/touching.rs
 msgid "Image file"
 msgstr "Archivo de imagen"
@@ -1091,6 +1600,28 @@ msgstr "Voltear en horizontal (h), en vertical (v), en ambos (hv) o no (none)"
 msgid "Output name or monitor identity that shows only this rectangle"
 msgstr ""
 "Nombre de salida o identidad del monitor que muestra solo este rectángulo"
+
+#: apps/wprs-ctl/src/daemon.rs
+msgid "node %1 serial %2"
+msgstr "nodo %1 serie %2"
+
+#: apps/wprs-ctl/src/daemon.rs
+msgid "stopped waiting; job %1 keeps running (wprs-ctl cancel %2 stops it)"
+msgstr ""
+"se dejó de esperar; la tarea %1 sigue en marcha (wprs-ctl cancel %2 la "
+"detiene)"
+
+#: apps/wprs-ctl/src/daemon.rs
+msgid "stopped waiting"
+msgstr "se dejó de esperar"
+
+#: apps/wprs-ctl/src/daemon.rs
+msgid "the daemon did not report its settings"
+msgstr "el daemon no informó de sus ajustes"
+
+#: apps/wprs-ctl/src/daemon.rs
+msgid "unknown setting '%1'; the settings are %2"
+msgstr "ajuste desconocido '%1'; los ajustes son %2"
 
 #: apps/wprs-ctl/src/depth.rs
 msgid ""
@@ -1201,6 +1732,45 @@ msgid ""
 msgstr ""
 "Pintar dónde el relleno debe llegar siempre (refill) o nunca (protect) "
 "detrás de los objetos cercanos"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "the image has no depth map"
+msgstr "la imagen no tiene mapa de profundidad"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "%1 depth maps removed"
+msgstr "%1 mapas de profundidad eliminados"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "the image has no depth map; generate or import one first"
+msgstr "la imagen no tiene mapa de profundidad; genera o importa uno primero"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "name the file: --adjusted and --colour never replace the map"
+msgstr "indica el archivo: --adjusted y --colour nunca reemplazan el mapa"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid ""
+"%1: loaded in %2 s, estimated at %3 in %4 s (median of %5, fastest %6 s)"
+msgstr ""
+"%1: cargado en %2 s, estimado en %3 en %4 s (mediana de %5, el más rápido %6 "
+"s)"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "loading the depth model"
+msgstr "cargando el modelo de profundidad"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "estimating depth"
+msgstr "estimando la profundidad"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "saving the depth map"
+msgstr "guardando el mapa de profundidad"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "done in %1 s"
+msgstr "hecho en %1 s"
 
 #: apps/wprs-ctl/src/edit.rs
 msgid ""
@@ -1422,12 +1992,62 @@ msgstr "Calidad de un archivo con pérdida, de 1 a 100"
 msgid "Size of the file; the size of the edited image when omitted"
 msgstr "Tamaño del archivo; el de la imagen editada si se omite"
 
+#: apps/wprs-ctl/src/editing.rs
+msgid "%1 is not WIDTHxHEIGHT"
+msgstr "%1 no es ANCHOxALTO"
+
+#: apps/wprs-ctl/src/editing.rs
+msgid "%1 is not a picture"
+msgstr "%1 no es una imagen"
+
+#: apps/wprs-ctl/src/editing.rs apps/wprs-ctl/src/props.rs
+msgid "cannot find %1"
+msgstr "no se encuentra %1"
+
+#: apps/wprs-ctl/src/editing.rs
+msgid "warning: %1 changed after it was edited"
+msgstr "aviso: %1 cambió después de editarse"
+
+#: apps/wprs-ctl/src/editing.rs apps/wprs-ctl/src/steps.rs
+msgid "there is nothing to undo"
+msgstr "no hay nada que deshacer"
+
+#: apps/wprs-ctl/src/editing.rs apps/wprs-ctl/src/steps.rs
+msgid "there is nothing to redo"
+msgstr "no hay nada que rehacer"
+
+#: apps/wprs-ctl/src/editing.rs apps/wprs-ctl/src/models.rs
+
+#: apps/wprs-ctl/src/propsets.rs
+msgid "cannot read %1"
+msgstr "no se puede leer %1"
+
+#: apps/wprs-ctl/src/editing.rs apps/wprs-ctl/src/folder.rs
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "the path is not UTF-8"
+msgstr "la ruta no es UTF-8"
+
+#: apps/wprs-ctl/src/editing.rs apps/wprs-ctl/src/propsets.rs
+
+#: apps/wprs-ctl/src/rendering.rs apps/wprs-ctl/src/spanning.rs
+msgid "cannot write %1"
+msgstr "no se puede escribir %1"
+
 #: apps/wprs-ctl/src/edits3d.rs
 msgid "One edit as JSON, as the app sends it (see docs/specs/editor.md)"
 msgstr ""
 "Una edición como JSON, tal como la envía la app (ver docs/specs/editor.md)"
 
-#: apps/wprs-ctl/src/effected.rs
+#: apps/wprs-ctl/src/edits3d.rs
+msgid "give exactly one of the 3D edits"
+msgstr "indica exactamente una de las ediciones 3D"
+
+#: apps/wprs-ctl/src/edits3d.rs
+msgid "%1 is not JSON"
+msgstr "%1 no es JSON"
+
+#: apps/wprs-ctl/src/effected.rs apps/wprs-ctl/src/input.rs
 msgid "%1 is not KEY=VALUE"
 msgstr "%1 no es CLAVE=VALOR"
 
@@ -1539,7 +2159,36 @@ msgstr "Cuánto retiene la máscara, de 0 a 1"
 msgid "Remove the mask"
 msgstr "Quitar la máscara"
 
+#: apps/wprs-ctl/src/facts.rs
+msgid "plays without %1"
+msgstr "funciona sin %1"
+
+#: apps/wprs-ctl/src/facts.rs
+msgid "problem: %1\n"
+msgstr "problema: %1\n"
+
+#: apps/wprs-ctl/src/facts.rs
+msgid "build adds"
+msgstr "la compilación añade"
+
+#: apps/wprs-ctl/src/facts.rs apps/wprs-ctl/src/gpus.rs
+
+#: apps/wprs-ctl/src/props.rs apps/wprs-ctl/src/propsets.rs
+
+#: apps/wprs-ctl/src/repo/act.rs
+msgid "warning: %1"
+msgstr "aviso: %1"
+
+#: apps/wprs-ctl/src/facts.rs
+msgid "%1 %2 is now %3 (inputs: %4)"
+msgstr "%1 %2 ahora es %3 (entradas: %4)"
+
+#: apps/wprs-ctl/src/facts.rs
+msgid "property %1 is now %2"
+msgstr "la propiedad %1 ahora es %2"
+
 #: apps/wprs-ctl/src/fielding.rs apps/wprs-ctl/src/staging.rs
+
 #: apps/wprs-ctl/src/swarming.rs
 msgid "Degrees from -360 to 360"
 msgstr "Grados de -360 a 360"
@@ -1581,6 +2230,7 @@ msgid "Remove the turbulent start"
 msgstr "Quitar el inicio turbulento"
 
 #: apps/wprs-ctl/src/fielding.rs apps/wprs-ctl/src/sowing.rs
+
 #: apps/wprs-ctl/src/tending.rs
 msgid "Pixels"
 msgstr "Píxeles"
@@ -1652,6 +2302,10 @@ msgstr "Giro del tono en grados, de -180 a 180"
 #: apps/wprs-ctl/src/filtering.rs
 msgid "List the looks"
 msgstr "Listar los estilos"
+
+#: apps/wprs-ctl/src/filtering.rs
+msgid "unknown look '%1'; see wprs-ctl filter --list"
+msgstr "aspecto desconocido '%1'; mira wprs-ctl filter --list"
 
 #: apps/wprs-ctl/src/flights.rs
 msgid ""
@@ -1850,7 +2504,9 @@ msgid "Print the paths with their keys and splines in the authoring view"
 msgstr "Imprimir los recorridos con sus claves y curvas en la vista de autoría"
 
 #: apps/wprs-ctl/src/flights.rs apps/wprs-ctl/src/glowing.rs
+
 #: apps/wprs-ctl/src/lamping.rs apps/wprs-ctl/src/posing.rs
+
 #: apps/wprs-ctl/src/swarming.rs
 msgid "Seconds into the scene"
 msgstr "Segundos desde el inicio de la escena"
@@ -2115,6 +2771,18 @@ msgstr "Solo los efectos de esta categoría"
 msgid "Print one JSON object per effect"
 msgstr "Imprimir un objeto JSON por efecto"
 
+#: apps/wprs-ctl/src/folder.rs
+msgid "%1 (undone)"
+msgstr "%1 (deshecho)"
+
+#: apps/wprs-ctl/src/folder.rs
+msgid "there are no unsaved changes to recover"
+msgstr "no hay cambios sin guardar que recuperar"
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "warning: %1: %2"
+msgstr "aviso: %1: %2"
+
 #: apps/wprs-ctl/src/folder/parts.rs
 msgid "Adding the package to the library…"
 msgstr "Añadiendo el paquete a la biblioteca…"
@@ -2126,6 +2794,10 @@ msgid ""
 msgstr ""
 "Sigue añadiéndose a la biblioteca (%1 s); el demonio puede estar ocupado con "
 "otros trabajos."
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "the library refused the package"
+msgstr "la biblioteca rechazó el paquete"
 
 #: apps/wprs-ctl/src/folder/parts.rs
 msgid "Showing it on the screen…"
@@ -2144,6 +2816,10 @@ msgid "Previewing %1 on %2 for 60 seconds. End it with scene preview --stop."
 msgstr ""
 "Mostrando %1 en %2 durante 60 segundos como vista previa. Termínala con "
 "scene preview --stop."
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "save the scene first"
+msgstr "guarda la escena primero"
 
 #: apps/wprs-ctl/src/folder/parts.rs
 msgid "Building the package…"
@@ -2294,6 +2970,186 @@ msgstr "Su lugar en la lista de sistemas hijos, 0 el primero"
 msgid "Remove the child system at INDEX"
 msgstr "Quitar el sistema hijo en INDEX"
 
+#: apps/wprs-ctl/src/foreign.rs
+msgid "missing field `%1`"
+msgstr "falta el campo `%1`"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "duplicate field `%1`"
+msgstr "el campo `%1` está repetido"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "unknown field `%1`, expected one of %2"
+msgstr "campo desconocido `%1`; los válidos son %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "unknown field `%1`, there are no fields"
+msgstr "campo desconocido `%1`; no hay campos"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "unknown field `%1`, expected %2"
+msgstr "campo desconocido `%1`; se esperaba %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "unknown variant `%1`, expected one of %2"
+msgstr "variante desconocida `%1`; las válidas son %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "unknown variant `%1`, expected %2"
+msgstr "variante desconocida `%1`; se esperaba %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "invalid type: %1, expected %2"
+msgstr "tipo no válido: %1; se esperaba %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "invalid value: %1, expected %2"
+msgstr "valor no válido: %1; se esperaba %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "invalid length %1, expected %2"
+msgstr "longitud no válida %1; se esperaba %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "data did not match any variant of the untagged enum %1"
+msgstr "los datos no encajan con ninguna variante de %1"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "expected value"
+msgstr "se esperaba un valor"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "expected `,` or `}`"
+msgstr "se esperaba `,` o `}`"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "expected `,` or `]`"
+msgstr "se esperaba `,` o `]`"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "expected `:`"
+msgstr "se esperaba `:`"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "expected ident"
+msgstr "se esperaba un nombre"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "expected string"
+msgstr "se esperaba un texto"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "key must be a string"
+msgstr "la clave debe ser un texto"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "trailing characters"
+msgstr "sobran caracteres al final"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "trailing comma"
+msgstr "sobra una coma al final"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "EOF while parsing a value"
+msgstr "el texto termina antes de acabar un valor"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "EOF while parsing an object"
+msgstr "el texto termina antes de acabar un objeto"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "EOF while parsing a list"
+msgstr "el texto termina antes de acabar una lista"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "EOF while parsing a string"
+msgstr "el texto termina antes de acabar una cadena"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "invalid escape"
+msgstr "secuencia de escape no válida"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "invalid number"
+msgstr "número no válido"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "number out of range"
+msgstr "número fuera de rango"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "control character (\\u0000-\\u001F) found while parsing a string"
+msgstr "hay un carácter de control dentro de un texto"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid " at line %1 column %2"
+msgstr " en la línea %1, columna %2"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "No such file or directory"
+msgstr "No existe el archivo o la carpeta"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Permission denied"
+msgstr "Permiso denegado"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "File exists"
+msgstr "El archivo ya existe"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Not a directory"
+msgstr "No es una carpeta"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Is a directory"
+msgstr "Es una carpeta"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Directory not empty"
+msgstr "La carpeta no está vacía"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "No space left on device"
+msgstr "No queda espacio en el disco"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Read-only file system"
+msgstr "El sistema de archivos es de solo lectura"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Connection refused"
+msgstr "Conexión rechazada"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Broken pipe"
+msgstr "Se cortó la conexión"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Invalid argument"
+msgstr "Argumento no válido"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "Too many open files"
+msgstr "Demasiados archivos abiertos"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "cannot make an empty path absolute"
+msgstr "no se puede completar una ruta vacía"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "failed to fill whole buffer"
+msgstr "el archivo terminó antes de lo esperado"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid "stream did not contain valid UTF-8"
+msgstr "el contenido no es texto UTF-8 válido"
+
+#: apps/wprs-ctl/src/foreign.rs
+msgid " (os error %1)"
+msgstr " (error del sistema %1)"
+
 #: apps/wprs-ctl/src/glowing.rs
 msgid "How far the light reaches into the air, 0 to 1"
 msgstr "Hasta dónde llega la luz en el aire, de 0 a 1"
@@ -2346,6 +3202,7 @@ msgid "Stop lighting the particles"
 msgstr "Dejar de iluminar las partículas"
 
 #: apps/wprs-ctl/src/glowing.rs apps/wprs-ctl/src/sowing.rs
+
 #: apps/wprs-ctl/src/swarming.rs apps/wprs-ctl/src/tending.rs
 msgid "A particles layer whose own render changes"
 msgstr "Una capa de partículas cuyo propio dibujo cambia"
@@ -2382,6 +3239,50 @@ msgstr ""
 "o pci: y su id de bus para distinguir tarjetas idénticas; sin ella lista las "
 "tarjetas"
 
+#: apps/wprs-ctl/src/gpus.rs
+msgid ""
+"the change takes effect the next time the daemon starts (wprs-ctl restart)"
+msgstr ""
+"el cambio se aplica la próxima vez que arranque el daemon (wprs-ctl restart)"
+
+#: apps/wprs-ctl/src/gpus.rs
+msgid "the daemon did not start again within 30 seconds"
+msgstr "el daemon no volvió a arrancar en 30 segundos"
+
+#: apps/wprs-ctl/src/gpus.rs
+msgid "the daemon started again on %1"
+msgstr "el daemon volvió a arrancar con %1"
+
+#: apps/wprs-ctl/src/gpus.rs
+msgid "render.gpu = %1"
+msgstr "render.gpu = %1"
+
+#: apps/wprs-ctl/src/gpus.rs apps/wprs-ctl/src/pack.rs
+msgid "note: %1"
+msgstr "nota: %1"
+
+#: apps/wprs-ctl/src/gpus.rs
+msgid "in use: %1 (from %2)"
+msgstr "en uso: %1 (de %2)"
+
+#: apps/wprs-ctl/src/held.rs
+msgid ""
+"\n"
+"%1 %2 asks for new permissions (%3) and is not updated automatically; run "
+"`pkg install %4/%5` to allow them\n"
+msgstr ""
+"\n"
+"%1 %2 pide permisos nuevos (%3) y no se actualiza sola; ejecuta `pkg install "
+"%4/%5` para permitirlos\n"
+
+#: apps/wprs-ctl/src/input.rs
+msgid "%1 is not a local file"
+msgstr "%1 no es un archivo local"
+
+#: apps/wprs-ctl/src/input.rs
+msgid "wprsd resolved no item"
+msgstr "wprsd no encontró ningún elemento"
+
 #: apps/wprs-ctl/src/input.rs
 msgid ""
 "the key has a password and there is no terminal to ask for it: set the "
@@ -2401,6 +3302,14 @@ msgstr "Repite la contraseña: "
 #: apps/wprs-ctl/src/input.rs
 msgid "the passwords differ"
 msgstr "las contraseñas no coinciden"
+
+#: apps/wprs-ctl/src/input.rs
+msgid "the terminal closed"
+msgstr "la terminal se cerró"
+
+#: apps/wprs-ctl/src/input.rs
+msgid "stopped without an answer"
+msgstr "se detuvo sin respuesta"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid ""
@@ -2531,10 +3440,110 @@ msgstr ""
 msgid "The screen, such as a preview output named preview:1"
 msgstr "La pantalla, por ejemplo una salida de vista previa llamada preview:1"
 
+#: apps/wprs-ctl/src/inputs.rs
+msgid "%1 does not show %2"
+msgstr "%1 no muestra %2"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "more than one package with the id %1 is shown; choose one with --output"
+msgstr "se muestra más de un paquete con el id %1; elige uno con --output"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid ""
+"Asked in a desktop notification: the scene gets the input once you allow it "
+"there."
+msgstr ""
+"Se preguntó en una notificación del escritorio: la escena recibe la entrada "
+"en cuanto la permitas allí."
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "%1 may use %2"
+msgstr "%1 puede usar %2"
+
+#: apps/wprs-ctl/src/inputs/asking.rs
+msgid " && wprs-ctl input clicks on -o %1"
+msgstr " && wprs-ctl input clicks on -o %1"
+
+#: apps/wprs-ctl/src/inputs/asking.rs
+msgid "%1 follows %2 once you allow it: %3"
+msgstr "%1 sigue %2 en cuanto lo permitas: %3"
+
+#: apps/wprs-ctl/src/inputs/position.rs
+msgid "expected X,Y"
+msgstr "se esperaba X,Y"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "audio capture: %1"
+msgstr "captura de audio: %1"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "granted to some version or signer of %1: %2"
+msgstr "permitido a alguna versión o firmante de %1: %2"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "declined for %1: %2"
+msgstr "rechazado para %1: %2"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "asked in a desktop notification for %1: %2"
+msgstr "preguntado en una notificación del escritorio para %1: %2"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "not asked again for a few minutes for %1: %2"
+msgstr "no se vuelve a preguntar durante unos minutos para %1: %2"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "%1 shows %2 using %3 (allowed: %4)"
+msgstr "%1 muestra %2, que usa %3 (permitido: %4)"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "%1 shows an image whose parallax follows the pointer"
+msgstr "%1 muestra una imagen cuyo paralaje sigue al puntero"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "clicks reach the wallpaper on: %1"
+msgstr "los clics llegan al fondo en: %1"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "taking clicks now: %1"
+msgstr "recibiendo clics ahora: %1"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "clicks cannot reach the wallpaper here on: %1"
+msgstr "los clics no pueden llegar aquí al fondo en: %1"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid ""
+"the sound that plays (turned into levels on this computer, never recorded or "
+"sent)"
+msgstr ""
+"el sonido que se reproduce (se convierte en niveles en este equipo; nunca se "
+"graba ni se envía)"
+
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid "the pointer (only its latest position over the screen, never kept)"
 msgstr ""
 "el puntero (solo su última posición sobre la pantalla, nunca se guarda)"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid ""
+"clicks and taps on the screen (only real ones, never kept; keys are never "
+"read)"
+msgstr ""
+"los clics y toques en la pantalla (solo los reales, sin guardarlos; nunca se "
+"leen las teclas)"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "its particles run on the processor, so fewer of them are shown"
+msgstr "sus partículas se calculan en el procesador, así que se muestran menos"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid ""
+"the network, to reach the sites it names (they can learn that it runs on "
+"this computer)"
+msgstr ""
+"la red, para llegar a los sitios que nombra (pueden enterarse de que se "
+"ejecuta en este equipo)"
 
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid ""
@@ -2543,6 +3552,57 @@ msgid ""
 msgstr ""
 "lo que reproduce el reproductor multimedia (título, artista, álbum, portada "
 "y progreso, nunca se guarda, registra ni envía)"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid ""
+"the RGB lighting, to color it through the OpenRGB server set with rgb.server "
+"(only while rgb.enabled is on)"
+msgstr ""
+"la iluminación RGB, para colorearla mediante el servidor OpenRGB indicado en "
+"rgb.server (solo mientras rgb.enabled esté activado)"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid ""
+"what plays even though it can reach the network, where the title, artist and "
+"cover could leave this computer (a second confirmation besides media)"
+msgstr ""
+"lo que suena aunque pueda llegar a la red, por donde el título, el artista y "
+"la portada podrían salir de este equipo (una segunda confirmación además de "
+"la del reproductor)"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid ""
+"the sound that plays even though it can reach the network, where what it "
+"hears (the sound of the computer or the microphone) could leave this "
+"computer (a second confirmation besides audio)"
+msgstr ""
+"el sonido que se reproduce aunque pueda llegar a la red, por donde lo que "
+"oye (el sonido del equipo o el micrófono) podría salir de este equipo (una "
+"segunda confirmación además de la del audio)"
+
+#: apps/wprs-ctl/src/items.rs
+msgid "none of %1"
+msgstr "ninguno de %1"
+
+#: apps/wprs-ctl/src/items.rs
+msgid "%1 (%2 times)"
+msgstr "%1 (%2 veces)"
+
+#: apps/wprs-ctl/src/items.rs
+msgid "not shown here"
+msgstr "no se muestra aquí"
+
+#: apps/wprs-ctl/src/items.rs
+msgid "works on"
+msgstr "funciona en"
+
+#: apps/wprs-ctl/src/items.rs
+msgid "preset of"
+msgstr "preajuste de"
+
+#: apps/wprs-ctl/src/items.rs
+msgid "%1 (not installed)"
+msgstr "%1 (no instalado)"
 
 #: apps/wprs-ctl/src/keyed.rs
 msgid "List the keys registered for your online author id"
@@ -2583,6 +3643,10 @@ msgstr "Quita una clave registrada"
 #: apps/wprs-ctl/src/keyed.rs
 msgid "Fingerprint of the key, as list prints it"
 msgstr "Huella de la clave, tal como la imprime list"
+
+#: apps/wprs-ctl/src/keyed.rs
+msgid "name the author id that the repository shows"
+msgstr "indica el id de autor que muestra el repositorio"
 
 #: apps/wprs-ctl/src/keying.rs
 msgid ""
@@ -2787,6 +3851,10 @@ msgstr "Quitar todas las réplicas de la raíz"
 #: apps/wprs-ctl/src/keys.rs
 msgid "Bits of the index shards; 4 in a new repository"
 msgstr "Bits de los fragmentos del índice; 4 en un repositorio nuevo"
+
+#: apps/wprs-ctl/src/keys.rs
+msgid "%1 is not ID=PUB"
+msgstr "%1 no es ID=PUB"
 
 #: apps/wprs-ctl/src/keys.rs
 msgid ""
@@ -3221,6 +4289,80 @@ msgstr ""
 "corriente y en el nivel más alto), on u off; con --output, none sigue el "
 "ajuste general"
 
+#: apps/wprs-ctl/src/levels.rs
+msgid ", %1 nits"
+msgstr ", %1 nits"
+
+#: apps/wprs-ctl/src/levels.rs
+msgid ", PQ with its own description, MaxCLL %1"
+msgstr ", PQ con su propia descripción, MaxCLL %1"
+
+#: apps/wprs-ctl/src/levels.rs
+msgid "%1%2 = %3, not connected"
+msgstr "%1%2 = %3, no conectado"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid "keep it still at its poster"
+msgstr "la dejará quieta en su imagen de portada"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid "lower it"
+msgstr "la bajará"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid ""
+"this scene costs %1 units a frame at %2, more than the %3 this device is "
+"estimated to hold: frames may drop and battery use rise; automatic quality "
+"would %4"
+msgstr ""
+"esta escena cuesta %1 unidades por fotograma en %2, más que las %3 que se "
+"estima que aguanta este dispositivo: pueden perderse fotogramas y subir el "
+"uso de batería; la calidad automática %4"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid ""
+"its frames take %1 ms on the graphics card at %2, more than the %3 ms a "
+"frame has at %4 frames a second: frames drop and battery use rises; "
+"automatic quality would lower it"
+msgstr ""
+"sus fotogramas tardan %1 ms en la tarjeta gráfica en %2, más que los %3 ms "
+"que tiene cada fotograma a %4 fotogramas por segundo: se pierden fotogramas "
+"y sube el uso de batería; la calidad automática la bajaría"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid "%1; %2 %3 out at every level to protect the graphics card"
+msgstr "%1; %2 %3 fuera en todos los niveles para proteger la tarjeta gráfica"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid ", half pace"
+msgstr ", a la mitad de fotogramas"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid "not yet%1, %2"
+msgstr "todavía no%1, %2"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid "its web engine runs without part of its sandbox on this computer"
+msgstr "su motor web funciona sin una parte de su aislamiento en este equipo"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid ""
+"this scene is too heavy for this device and automatic quality keeps it still "
+"at its poster; a fixed level such as wprs-ctl quality q0 plays it anyway, "
+"with fewer frames per second and more battery use"
+msgstr ""
+"esta escena es demasiado pesada para este dispositivo y la calidad "
+"automática la deja quieta en su imagen de portada; un nivel fijo como wprs-"
+"ctl quality q0 la reproduce igual, con menos fotogramas por segundo y más "
+"uso de batería"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid ""
+"%1: %2 wants %3 but it is not granted here, so that part of the scene is off"
+msgstr ""
+"%1: %2 quiere %3 pero aquí no está permitido, así que esa parte de la escena "
+"queda apagada"
+
 #: apps/wprs-ctl/src/library.rs
 msgid "Add a folder and scan it; prints the source uid, then the job id"
 msgstr ""
@@ -3244,16 +4386,23 @@ msgid "Scan one folder, or every folder when omitted"
 msgstr "Escanear una carpeta, o todas si se omite"
 
 #: apps/wprs-ctl/src/library.rs
-msgid "Source folder to scan; every source when left out"
-msgstr "Carpeta de origen que se escanea; todas las fuentes si se omite"
+msgid ""
+"Library folder to scan, by the id that lib sources shows or its path; every "
+"folder when left out"
+msgstr ""
+"Carpeta de la biblioteca que se escanea, por el id que muestra lib sources o "
+"por su ruta; todas las carpetas si se omite"
 
 #: apps/wprs-ctl/src/library.rs
 msgid "Remove a folder and its items from the library"
 msgstr "Quitar una carpeta y sus elementos de la biblioteca"
 
 #: apps/wprs-ctl/src/library.rs
-msgid "Source folder to stop watching"
-msgstr "Carpeta de origen que se deja de vigilar"
+msgid ""
+"Library folder to stop watching: the id that lib sources shows, or its path"
+msgstr ""
+"Carpeta de la biblioteca que se deja de vigilar: el id que muestra lib "
+"sources, o su ruta"
 
 #: apps/wprs-ctl/src/library.rs
 msgid "Import image, video or package files"
@@ -3802,6 +4951,28 @@ msgid "Stop the simulated playback"
 msgstr "Detener la reproducción simulada"
 
 #: apps/wprs-ctl/src/media.rs
+msgid "media player: read for %1"
+msgstr "reproductor: se lee para %1"
+
+#: apps/wprs-ctl/src/media.rs
+msgid "media player: not read (no shown wallpaper allowed to use it needs it)"
+msgstr ""
+"reproductor: no se lee (ningún fondo mostrado con permiso para usarlo lo "
+"necesita)"
+
+#: apps/wprs-ctl/src/media.rs
+msgid "track: %1, playing: %2, cover: %3"
+msgstr "pista: %1, reproduciendo: %2, portada: %3"
+
+#: apps/wprs-ctl/src/media.rs
+msgid "covers from the internet (media.remote_covers): %1"
+msgstr "portadas desde internet (media.remote_covers): %1"
+
+#: apps/wprs-ctl/src/media.rs
+msgid "cannot read %1: %2"
+msgstr "no se puede leer %1: %2"
+
+#: apps/wprs-ctl/src/media.rs
 msgid ""
 "JSON file of setting values to try in the preview only, such as {\"speed\": "
 "2}; nothing is saved"
@@ -3818,6 +4989,22 @@ msgstr ""
 "Archivo JSON de una pista inventada que se muestra en vez de un reproductor: "
 "title, artist, album, album_artist, subtitle, genres, playing, position, "
 "duration, rate y cover (una imagen de la carpeta)"
+
+#: apps/wprs-ctl/src/media.rs
+msgid "%1 is not a JSON object of setting values"
+msgstr "%1 no es un objeto JSON de valores de ajustes"
+
+#: apps/wprs-ctl/src/modeled.rs
+msgid "%1 is not %2 numbers apart by commas"
+msgstr "%1 no son %2 números separados por comas"
+
+#: apps/wprs-ctl/src/modeled.rs
+msgid "%1 is not ID=VALUE"
+msgstr "%1 no es ID=VALOR"
+
+#: apps/wprs-ctl/src/modeled.rs
+msgid "name the material, or use --list"
+msgstr "indica el material, o usa --list"
 
 #: apps/wprs-ctl/src/modeling.rs
 msgid "Add, place, remove or describe a 3D model layer"
@@ -4045,6 +5232,18 @@ msgstr ""
 msgid "The model file, or the ONNX Runtime release archive"
 msgstr "El archivo del modelo, o el archivo de la versión de ONNX Runtime"
 
+#: apps/wprs-ctl/src/models.rs
+msgid "%1 is not one of %2"
+msgstr "%1 no es uno de %2"
+
+#: apps/wprs-ctl/src/models.rs
+msgid "missing or damaged"
+msgstr "falta o está dañado"
+
+#: apps/wprs-ctl/src/models.rs
+msgid "%1 needs to be downloaded or installed again"
+msgstr "%1 debe descargarse o instalarse otra vez"
+
 #: apps/wprs-ctl/src/moderate.rs apps/wprs-ctl/src/repo/authors.rs
 msgid "Address of the server, such as https://wallpapers.example.org"
 msgstr "Dirección del servidor, como https://wallpapers.example.org"
@@ -4058,6 +5257,7 @@ msgstr ""
 "con sus actualizaciones"
 
 #: apps/wprs-ctl/src/moderate.rs apps/wprs-ctl/src/pkg.rs
+
 #: apps/wprs-ctl/src/repo.rs apps/wprs-ctl/src/server.rs
 msgid "Package id"
 msgstr "Id del paquete"
@@ -4073,6 +5273,10 @@ msgstr "Volver a mostrar un paquete oculto en el catálogo y la búsqueda"
 #: apps/wprs-ctl/src/moderate.rs
 msgid "List the hidden packages and why"
 msgstr "Listar los paquetes ocultos y por qué"
+
+#: apps/wprs-ctl/src/moderate.rs
+msgid "Personal token of a moderator with the mod scope: "
+msgstr "Token personal de un moderador con el alcance mod: "
 
 #: apps/wprs-ctl/src/naming.rs
 msgid ""
@@ -4207,6 +5411,26 @@ msgstr "Archivo o texto de clave pública de un autor aceptado"
 #: apps/wprs-ctl/src/pack.rs
 msgid "Print one JSON object per file"
 msgstr "Imprimir un objeto JSON por archivo"
+
+#: apps/wprs-ctl/src/pack.rs
+msgid "requires.features += %1 (%2)"
+msgstr "requires.features += %1 (%2)"
+
+#: apps/wprs-ctl/src/pack.rs
+msgid "%1 of %2 packages are invalid"
+msgstr "%1 de %2 paquetes no son válidos"
+
+#: apps/wprs-ctl/src/pack.rs
+msgid "ok %1 %2 %3 sha256=%4 signer=%5"
+msgstr "correcto %1 %2 %3 sha256=%4 firmante=%5"
+
+#: apps/wprs-ctl/src/pack.rs
+msgid "the folder is not signed"
+msgstr "la carpeta no está firmada"
+
+#: apps/wprs-ctl/src/pack.rs
+msgid "the signature is not valid"
+msgstr "la firma no es válida"
 
 #: apps/wprs-ctl/src/paging.rs
 msgid ""
@@ -4381,6 +5605,38 @@ msgstr "Versión que se desinstala; todas las versiones instaladas si se omite"
 msgid "List the installed packages"
 msgstr "Listar los paquetes instalados"
 
+#: apps/wprs-ctl/src/pkg.rs
+msgid "no preview arrived within 60 s"
+msgstr "no llegó ninguna vista previa en 60 s"
+
+#: apps/wprs-ctl/src/pkg.rs
+msgid "no preview"
+msgstr "sin vista previa"
+
+#: apps/wprs-ctl/src/pkg.rs
+msgid "the connection to the session bus was closed"
+msgstr "se cerró la conexión con el bus de sesión"
+
+#: apps/wprs-ctl/src/pkg.rs
+msgid "Repository %1 is stale (its signed index expired). Install anyway?"
+msgstr ""
+"El repositorio %1 está desactualizado (caducó su índice firmado). ¿Instalar "
+"de todos modos?"
+
+#: apps/wprs-ctl/src/pkg.rs
+msgid " (update available)"
+msgstr " (hay una actualización)"
+
+#: apps/wprs-ctl/src/pkg.rs
+msgid ""
+"\n"
+"What's new in %1 %2:\n"
+"%3\n"
+msgstr ""
+"\n"
+"Novedades de %1 %2:\n"
+"%3\n"
+
 #: apps/wprs-ctl/src/playlists.rs
 msgid "Playlist uid or name"
 msgstr "Uid o nombre de la lista"
@@ -4410,6 +5666,7 @@ msgid "Rename a playlist"
 msgstr "Renombrar una lista"
 
 #: apps/wprs-ctl/src/playlists.rs apps/wprs-ctl/src/profiles.rs
+
 #: apps/wprs-ctl/src/propsets.rs
 msgid "New name"
 msgstr "Nombre nuevo"
@@ -4472,9 +5729,12 @@ msgid "Show a playlist on the outputs"
 msgstr "Mostrar una lista en las salidas"
 
 #: apps/wprs-ctl/src/playlists.rs
-msgid "Stop the playlist of the outputs, keeping the item shown now"
+msgid ""
+"Stop whatever playlist runs on -o OUTPUT, or on every output when left out "
+"(it takes no playlist name), keeping the item shown now"
 msgstr ""
-"Detener la lista de las salidas, conservando el elemento que se muestra ahora"
+"Detiene la lista que se reproduce en -o SALIDA, o en todas las salidas si se "
+"omite (no lleva nombre de lista), y conserva el elemento que se muestra ahora"
 
 #: apps/wprs-ctl/src/playlists.rs
 msgid "Print the items an output showed, newest first"
@@ -4487,6 +5747,10 @@ msgstr "Nombre de la salida, como DP-1"
 #: apps/wprs-ctl/src/playlists.rs
 msgid "Number of entries to print"
 msgstr "Número de entradas que se imprimen"
+
+#: apps/wprs-ctl/src/playlists/act.rs
+msgid "the playlist has no entry %1"
+msgstr "la lista no tiene la entrada %1"
 
 #: apps/wprs-ctl/src/posing.rs
 msgid "Add a model layer from a model asset"
@@ -4513,6 +5777,7 @@ msgid "Place a model layer or change its asset and reflection picture"
 msgstr "Ubicar una capa de modelo o cambiar su recurso y su imagen de reflejo"
 
 #: apps/wprs-ctl/src/posing.rs apps/wprs-ctl/src/sowing.rs
+
 #: apps/wprs-ctl/src/staging.rs
 msgid "Degrees"
 msgstr "Grados"
@@ -4618,6 +5883,31 @@ msgid "Preset uid, ITEM:NAME, or -:NAME for a global preset"
 msgstr ""
 "Uid del preajuste, ELEMENTO:NOMBRE, o -:NOMBRE para un preajuste global"
 
+#: apps/wprs-ctl/src/presets.rs
+msgid "no preset named %1"
+msgstr "no hay ningún preajuste llamado %1"
+
+#: apps/wprs-ctl/src/private.rs
+msgid ""
+"A file that is on no device any more, for example one of a lost computer, is "
+"lost for good once it leaves the server."
+msgstr ""
+"Un archivo que ya no está en ningún dispositivo, por ejemplo uno de un "
+"equipo perdido, se pierde para siempre cuando sale del servidor."
+
+#: apps/wprs-ctl/src/private.rs
+msgid ""
+"The server will keep the sync key locked with this passphrase, so that a new "
+"device can get it when no device is left. Whoever gets a copy of the "
+"server's data can try to guess the passphrase without limit: use several "
+"unrelated words that you use nowhere else, and keep them somewhere safe."
+msgstr ""
+"El servidor guardará la clave de sincronización cerrada con esta frase, para "
+"que un dispositivo nuevo pueda obtenerla cuando no quede ningún dispositivo. "
+"Quien consiga una copia de los datos del servidor puede intentar adivinar la "
+"frase sin límite: usa varias palabras sin relación que no uses en ningún "
+"otro sitio y guárdalas en un lugar seguro."
+
 #: apps/wprs-ctl/src/private.rs
 msgid "List the private files on the server and those waiting to upload"
 msgstr "Listar los archivos privados del servidor y los que esperan subirse"
@@ -4652,6 +5942,54 @@ msgstr "Descargar un archivo privado del servidor a la biblioteca"
 #: apps/wprs-ctl/src/private.rs
 msgid "Id or name of the private file"
 msgstr "Id o nombre del archivo privado"
+
+#: apps/wprs-ctl/src/private.rs
+msgid "shared from here"
+msgstr "compartido desde aquí"
+
+#: apps/wprs-ctl/src/private.rs
+msgid "on the server"
+msgstr "en el servidor"
+
+#: apps/wprs-ctl/src/private.rs
+msgid "Delete these files from the server?"
+msgstr "¿Borrar estos archivos del servidor?"
+
+#: apps/wprs-ctl/src/private.rs
+msgid "nothing was deleted"
+msgstr "no se borró nada"
+
+#: apps/wprs-ctl/src/private.rs
+msgid "declined; other devices keep it"
+msgstr "rechazado; los otros dispositivos lo conservan"
+
+#: apps/wprs-ctl/src/private.rs
+msgid ""
+"Without the escrow, only a device that holds the sync key can give it to a "
+"new one."
+msgstr ""
+"Sin la custodia, solo un dispositivo que tenga la clave de sincronización "
+"puede dársela a uno nuevo."
+
+#: apps/wprs-ctl/src/private.rs
+msgid "Delete the escrow from the server?"
+msgstr "¿Borrar la custodia del servidor?"
+
+#: apps/wprs-ctl/src/private.rs
+msgid "the escrow was kept"
+msgstr "la custodia se conservó"
+
+#: apps/wprs-ctl/src/private.rs
+msgid "Recovery passphrase: "
+msgstr "Frase de recuperación: "
+
+#: apps/wprs-ctl/src/private.rs
+msgid "Repeat the passphrase: "
+msgstr "Repite la frase: "
+
+#: apps/wprs-ctl/src/private.rs
+msgid "the passphrases differ"
+msgstr "las frases no coinciden"
 
 #: apps/wprs-ctl/src/profiles.rs
 msgid "List the profiles"
@@ -4790,6 +6128,26 @@ msgstr "Darle a la pantalla su propia copia de los valores"
 msgid "Presets of the package and the ones you saved"
 msgstr "Preajustes del paquete y los que guardaste"
 
+#: apps/wprs-ctl/src/props.rs
+msgid "a file or folder setting takes a path or null"
+msgstr "un ajuste de archivo o carpeta recibe una ruta o null"
+
+#: apps/wprs-ctl/src/props.rs
+msgid "%1 has no setting %2"
+msgstr "%1 no tiene el ajuste %2"
+
+#: apps/wprs-ctl/src/props.rs
+msgid "applications open only outside the Flatpak\n"
+msgstr "las aplicaciones solo se abren fuera de Flatpak\n"
+
+#: apps/wprs-ctl/src/props.rs
+msgid "shared with every screen"
+msgstr "compartido con todas las pantallas"
+
+#: apps/wprs-ctl/src/props.rs
+msgid "this screen only"
+msgstr "solo esta pantalla"
+
 #: apps/wprs-ctl/src/propsets.rs
 msgid ""
 "List the presets of the package shown on an output and the ones you saved"
@@ -4851,6 +6209,10 @@ msgstr "Archivo escrito por export, o - para la entrada estándar"
 msgid "Save the values as a preset of this name instead of applying them"
 msgstr ""
 "Guardar los valores como un preajuste con este nombre en vez de aplicarlos"
+
+#: apps/wprs-ctl/src/propsets.rs
+msgid "%1 has no saved preset %2"
+msgstr "%1 no tiene el preajuste guardado %2"
 
 #: apps/wprs-ctl/src/providers.rs
 msgid "Read the secret from the first line of standard input instead of asking"
@@ -4942,6 +6304,46 @@ msgstr "Quitar un proveedor y sus elementos"
 #: apps/wprs-ctl/src/providers.rs
 msgid "Also delete the downloaded files"
 msgstr "Borrar también los archivos descargados"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid ""
+"the secret of %1 was deleted; store a new one with wprs-ctl provider secret "
+"%2"
+msgstr ""
+"el secreto de %1 se borró; guarda uno nuevo con wprs-ctl provider secret %2"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid "secret of %1: "
+msgstr "secreto de %1: "
+
+#: apps/wprs-ctl/src/providers.rs
+msgid "the secret is empty"
+msgstr "el secreto está vacío"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid "unknown provider kind %1; the kinds are %2"
+msgstr "tipo de proveedor desconocido %1; los tipos son %2"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid "%1 is a secret; it is asked for, never given as an argument"
+msgstr "%1 es un secreto; se pide al ejecutar, nunca se da como argumento"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid " (empty for none)"
+msgstr " (vacío si no hay)"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid "%1 needs its %2; use --no-secret to add it without one"
+msgstr "%1 necesita su %2; usa --no-secret para añadirlo sin él"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid "wprsd did not answer within 120 s"
+msgstr "wprsd no respondió en 120 s"
+
+#: apps/wprs-ctl/src/providers.rs
+msgid "an older secret waits in the locked keyring until it is unlocked"
+msgstr ""
+"un secreto anterior espera en el llavero bloqueado hasta que se desbloquee"
 
 #: apps/wprs-ctl/src/pulling.rs
 msgid "Shake the particles at random, in pixels a second squared"
@@ -5312,6 +6714,10 @@ msgid "Package ids, or REPO/ID; ids of other repositories are never sent"
 msgstr ""
 "Ids de paquetes, o REPO/ID; los ids de otros repositorios nunca se envían"
 
+#: apps/wprs-ctl/src/remote.rs
+msgid "broken, refresh or remove it: %1"
+msgstr "dañado; actualízalo o quítalo: %1"
+
 #: apps/wprs-ctl/src/rendering.rs
 msgid ""
 "Picture file (.png, .jpg, .webp or .avif), an animated .gif, or with --"
@@ -5393,6 +6799,18 @@ msgid ""
 "Where the left part ends, from 0 to 1, with --against or --without-bloom"
 msgstr ""
 "Dónde acaba la parte izquierda, de 0 a 1, con --against o --without-bloom"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "from 0 to 1"
+msgstr "de 0 a 1"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "script: %1"
+msgstr "script: %1"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "script stopped: %1"
+msgstr "script detenido: %1"
 
 #: apps/wprs-ctl/src/repo.rs
 msgid ""
@@ -5609,6 +7027,34 @@ msgstr "Archivo secreto de una clave en línea"
 msgid "Days until the signed index expires"
 msgstr "Días hasta que caduca el índice firmado"
 
+#: apps/wprs-ctl/src/repo/act.rs
+msgid "sign the root next: wprs-ctl repo sign-root %1 --key <root key>"
+msgstr ""
+"firma la raíz a continuación: wprs-ctl repo sign-root %1 --key <clave raíz>"
+
+#: apps/wprs-ctl/src/repo/act.rs
+msgid "use wprs-ctl remote add to add a repository to this computer"
+msgstr "usa wprs-ctl remote add para añadir un repositorio a este equipo"
+
+#: apps/wprs-ctl/src/repo/act.rs
+msgid "%1 %2 sha256=%3 author=%4"
+msgstr "%1 %2 sha256=%3 autor=%4"
+
+#: apps/wprs-ctl/src/repo/act.rs
+msgid "index %1 published with %2 packages; it expires %3"
+msgstr "índice %1 publicado con %2 paquetes; caduca el %3"
+
+#: apps/wprs-ctl/src/repo/act.rs
+msgid ""
+"sign the new root with keys of the old and of the new root, then publish"
+msgstr ""
+"firma la raíz nueva con las claves de la raíz anterior y de la nueva, y "
+"luego publica"
+
+#: apps/wprs-ctl/src/repo/act.rs
+msgid "version %1, expires %2"
+msgstr "versión %1, caduca el %2"
+
 #: apps/wprs-ctl/src/repo/authors.rs
 msgid ""
 "Register a public key as an online author, with a personal token of the "
@@ -5638,6 +7084,10 @@ msgstr ""
 "Quitar una clave de autor registrada; se rechaza mientras una rotación la "
 "siga nombrando"
 
+#: apps/wprs-ctl/src/repo/authors.rs
+msgid "Personal token with the upload scope: "
+msgstr "Token personal con el alcance upload: "
+
 #: apps/wprs-ctl/src/rgb.rs
 msgid ""
 "follow keeps the lights following the scene without drawing it while the "
@@ -5659,6 +7109,14 @@ msgstr ""
 "x y w h como partes de la imagen de 0 a 1, luego right, left, down o up "
 "según hacia dónde corre una línea de luces; off deja el dispositivo en paz "
 "(una zona queda apagada); none vuelve a tomar la imagen entera"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid ", paused now"
+msgstr ", en pausa ahora"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "while covered (%1): %2%3"
+msgstr "mientras está tapado (%1): %2%3"
 
 #: apps/wprs-ctl/src/rgb.rs
 msgid ""
@@ -5719,6 +7177,74 @@ msgid "Print the colors a screen sends to RGB lighting, at most 64 by 16"
 msgstr ""
 "Imprimir los colores que una pantalla envía a la iluminación RGB, como mucho "
 "64 por 16"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "the session is locked and the wallpaper pauses while locked"
+msgstr "la sesión está bloqueada y el fondo se pausa mientras está bloqueada"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "the computer is on battery and the wallpaper pauses on battery"
+msgstr "el equipo funciona con batería y el fondo se pausa con batería"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "the covered output shows something that sends no colors"
+msgstr "la salida tapada muestra algo que no envía colores"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "the package shown there does not hold the rgb grant"
+msgstr "el paquete que se muestra allí no tiene el permiso de rgb"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "the wallpaper is paused"
+msgstr "el fondo está en pausa"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "another computer on the network"
+msgstr "otro equipo de la red"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "RGB lighting: %1, OpenRGB server %2 (%3)"
+msgstr "iluminación RGB: %1, servidor OpenRGB %2 (%3)"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "connected, %1 devices"
+msgstr "conectado, %1 dispositivos"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "not connected: %1"
+msgstr "no conectado: %1"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "not connected"
+msgstr "no conectado"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "%1: the lights wait because %2"
+msgstr "%1: las luces esperan porque %2"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "colors from %1, %2 frames sent"
+msgstr "colores de %1, %2 fotogramas enviados"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid ", own mode %1 comes back when the lights stop"
+msgstr ", su propio modo %1 vuelve cuando las luces se detienen"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid ", own mode %1"
+msgstr ", su propio modo %1"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "no devices"
+msgstr "sin dispositivos"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "every device takes the whole picture"
+msgstr "cada dispositivo toma la imagen completa"
+
+#: apps/wprs-ctl/src/rgb.rs
+msgid "whole picture"
+msgstr "imagen completa"
 
 #: apps/wprs-ctl/src/rigging.rs
 msgid ""
@@ -5857,6 +7383,10 @@ msgid ""
 msgstr ""
 "Imprimir cada vértice de una capa de malla con su lugar, su parte y sus "
 "pesos de hueso como JSON"
+
+#: apps/wprs-ctl/src/rigshow.rs
+msgid "there is no mesh layer %1 with that"
+msgstr "no hay una capa de malla %1 con eso"
 
 #: apps/wprs-ctl/src/ruling.rs
 msgid ""
@@ -6382,6 +7912,22 @@ msgstr ""
 "cuenta cifrada, leer los datos sincronizados. Úsalo solo en un equipo sin "
 "llavero."
 
+#: apps/wprs-ctl/src/serving.rs
+msgid "Link without end-to-end encryption?"
+msgstr "¿Vincular sin cifrado de extremo a extremo?"
+
+#: apps/wprs-ctl/src/serving.rs
+msgid "not linked"
+msgstr "no vinculado"
+
+#: apps/wprs-ctl/src/serving.rs
+msgid "Reset the synced data of the account?"
+msgstr "¿Restablecer los datos sincronizados de la cuenta?"
+
+#: apps/wprs-ctl/src/serving.rs
+msgid "nothing was reset"
+msgstr "no se restableció nada"
+
 #: apps/wprs-ctl/src/shading.rs
 msgid ""
 "Copy an effect descriptor and its WGSL shader into the folder as an effect"
@@ -6563,6 +8109,43 @@ msgstr ""
 #: apps/wprs-ctl/src/shelving.rs
 msgid "Assets package file"
 msgstr "Archivo del paquete de recursos"
+
+#: apps/wprs-ctl/src/shelving.rs
+msgid "expected KIND:ID=VALUE, not %1"
+msgstr "se esperaba TIPO:ID=VALOR, no %1"
+
+#: apps/wprs-ctl/src/show.rs
+msgid "unknown key %1; the keys are %2"
+msgstr "clave desconocida %1; las claves son %2"
+
+#: apps/wprs-ctl/src/show.rs
+msgid "%1, optional"
+msgstr "%1, opcional"
+
+#: apps/wprs-ctl/src/show.rs
+msgid "its server"
+msgstr "su servidor"
+
+#: apps/wprs-ctl/src/show.rs
+msgid "provider %1 (secret: %2; contacts: %3)"
+msgstr "proveedor %1 (secreto: %2; contacta con: %3)"
+
+#: apps/wprs-ctl/src/show.rs
+msgid "%1 (%2 packages)"
+msgstr "%1 (%2 paquetes)"
+
+#: apps/wprs-ctl/src/show.rs
+msgid " (incomplete: could not install %1)"
+msgstr " (incompleto: no se pudo instalar %1)"
+
+#: apps/wprs-ctl/src/sourcing.rs
+msgid "%1 matches more than one library folder; use more characters"
+msgstr ""
+"%1 coincide con más de una carpeta de la biblioteca; usa más caracteres"
+
+#: apps/wprs-ctl/src/sourcing.rs
+msgid "removed the folder %1 from the library"
+msgstr "la carpeta %1 se quitó de la biblioteca"
 
 #: apps/wprs-ctl/src/sowed.rs
 msgid "%1 is not two numbers A,B"
@@ -6818,8 +8401,32 @@ msgstr ""
 "como 24in o 34in@21:9 (16:9 sin proporción); sin él, 527x296"
 
 #: apps/wprs-ctl/src/spanning.rs
+msgid "%1 is not dual, triple, vertical or mine"
+msgstr "%1 no es dual, triple, vertical ni mine"
+
+#: apps/wprs-ctl/src/spanning.rs
+msgid "the desktop has not told where its screens are yet"
+msgstr "el escritorio todavía no ha indicado dónde están sus pantallas"
+
+#: apps/wprs-ctl/src/spanning.rs
+msgid "%1 is outside the scene folder"
+msgstr "%1 está fuera de la carpeta de la escena"
+
+#: apps/wprs-ctl/src/spanning.rs
+msgid "--layout needs --out"
+msgstr "--layout necesita --out"
+
+#: apps/wprs-ctl/src/spanning.rs
 msgid "the time is a finite number of seconds up to %1, not %2"
 msgstr "el tiempo es un número finito de segundos hasta %1, no %2"
+
+#: apps/wprs-ctl/src/spanning.rs
+msgid "%1 is not a number of millimetres"
+msgstr "%1 no es un número de milímetros"
+
+#: apps/wprs-ctl/src/spanning.rs
+msgid "the frame is 0 to %1 mm, not %2"
+msgstr "el marco va de 0 a %1 mm, no %2"
 
 #: apps/wprs-ctl/src/stacking.rs
 msgid ""
@@ -6893,6 +8500,69 @@ msgstr "Dónde la imagen pasa de LaMa al relleno simple, de 0 a 1"
 #: apps/wprs-ctl/src/stacking.rs
 msgid "Where LaMa runs"
 msgstr "Dónde corre LaMa"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "building the %1 layers: %2 %"
+msgstr "creando las %1 capas: %2 %"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "the image has no depth layers"
+msgstr "la imagen no tiene capas de profundidad"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "%1 layer sets removed"
+msgstr "%1 conjuntos de capas eliminados"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "%1  %2 layers, fill %3"
+msgstr "%1  %2 capas, relleno %3"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "the fill off builds no layers: pictures stay still"
+msgstr ""
+"con el relleno desactivado no se crean capas: las imágenes quedan quietas"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid ""
+"LaMa or ONNX Runtime is not installed: using the simple fill (see wprs-ctl "
+"models list)"
+msgstr ""
+"LaMa u ONNX Runtime no está instalado: se usa el relleno simple (mira wprs-"
+"ctl models list)"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "building the layers: %1 %"
+msgstr "creando las capas: %1 %"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid ""
+"the image has no layers filled with %1; build them with edit depth layers"
+msgstr ""
+"la imagen no tiene capas rellenadas con %1; créalas con edit depth layers"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "the image has no depth layers; build them with edit depth layers"
+msgstr "la imagen no tiene capas de profundidad; créalas con edit depth layers"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "the image has %1 layers, 0 to %2"
+msgstr "la imagen tiene %1 capas, de 0 a %2"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "--at is a fraction from 0 to 1"
+msgstr "--at es una fracción de 0 a 1"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "LaMa or ONNX Runtime is not installed: see wprs-ctl models list"
+msgstr "LaMa u ONNX Runtime no está instalado: mira wprs-ctl models list"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "the layer set is damaged"
+msgstr "el conjunto de capas está dañado"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "the sets have %1 layers, 0 to %2"
+msgstr "los conjuntos tienen %1 capas, de 0 a %2"
 
 #: apps/wprs-ctl/src/staged.rs
 msgid "%1 is not K=X,Y"
@@ -7170,6 +8840,31 @@ msgstr ""
 "ajustes), daytime (exporta daylight y hour), setting (exporta el valor de un "
 "ajuste de quien usa el fondo) o launches (cuenta cuántas veces arrancó la "
 "escena)"
+
+#: apps/wprs-ctl/src/steps.rs
+msgid "warning: %1 names %2; scripts are not rewritten"
+msgstr "aviso: %1 nombra a %2; los scripts no se reescriben"
+
+#: apps/wprs-ctl/src/steps.rs
+msgid "to rewrite the exact names: scene act DIR particles '%1'"
+msgstr "para reescribir los nombres exactos: scene act DIR particles '%1'"
+
+#: apps/wprs-ctl/src/swarmed.rs
+msgid "the sound level goes from 0 to 1"
+msgstr "el nivel de sonido va de 0 a 1"
+
+#: apps/wprs-ctl/src/swarmed.rs
+msgid ""
+"%1 emitters may start more than one particle a step, which bunches the rope; "
+"wprs-ctl scene particles %2 %3 pace --max-per-step 1 spaces it evenly"
+msgstr ""
+"%1 emisores pueden lanzar más de una partícula por paso, lo que amontona la "
+"cuerda; wprs-ctl scene particles %2 %3 pace --max-per-step 1 la reparte de "
+"forma pareja"
+
+#: apps/wprs-ctl/src/swarmed.rs
+msgid "there is no particle system %1"
+msgstr "no hay un sistema de partículas %1"
 
 #: apps/wprs-ctl/src/swarming.rs
 msgid ""
@@ -7776,6 +9471,46 @@ msgstr "Capturar esta región alrededor de la capa"
 msgid "Capture the whole canvas"
 msgstr "Capturar todo el lienzo"
 
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid "there is no asset %1"
+msgstr "no hay un recurso %1"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid "the picture cannot be read: %1"
+msgstr "no se puede leer la imagen: %1"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid " (crop drawn by this card)"
+msgstr " (recorte dibujado por esta tarjeta)"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid " (crop decoded on the processor)"
+msgstr " (recorte decodificado en el procesador)"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid " (kept uncompressed)"
+msgstr " (se deja sin comprimir)"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid ", a cube map shown as a panorama"
+msgstr ", un mapa cúbico mostrado como panorama"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid ", %1 frames in a grid"
+msgstr ", %1 fotogramas en una cuadrícula"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid ", KTX2 %1 with %2 levels%3"
+msgstr ", KTX2 %1 con %2 niveles%3"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid "as KTX2 %1: %2 before, %3 after\n"
+msgstr "como KTX2 %1: %2 antes, %3 después\n"
+
+#: apps/wprs-ctl/src/texturing/report.rs
+msgid "on the graphics card: "
+msgstr "en la tarjeta gráfica: "
+
 #: apps/wprs-ctl/src/told.rs
 msgid "default"
 msgstr "predeterminado"
@@ -7900,6 +9635,24 @@ msgstr "Quitar el disparador"
 msgid "List the triggers offered for it"
 msgstr "Listar los disparadores que se ofrecen para ella"
 
+#: apps/wprs-ctl/src/triggering.rs
+msgid "%1 is not a sound layer; only timelines and sound layers have triggers"
+msgstr ""
+"%1 no es una capa de sonido; solo las líneas de tiempo y las capas de sonido "
+"tienen disparadores"
+
+#: apps/wprs-ctl/src/triggering.rs
+msgid "there is no timeline or sound layer %1"
+msgstr "no hay una línea de tiempo ni una capa de sonido %1"
+
+#: apps/wprs-ctl/src/triggering.rs
+msgid "%1 is not a media trigger; use media:%2"
+msgstr "%1 no es un disparador de medios; usa media:%2"
+
+#: apps/wprs-ctl/src/triggering.rs
+msgid "%1 names nothing after the colon"
+msgstr "%1 no nombra nada después de los dos puntos"
+
 #: apps/wprs-ctl/src/undoing.rs
 msgid "Undo the last change"
 msgstr "Deshacer el último cambio"
@@ -8002,6 +9755,10 @@ msgstr "Id del preajuste; preset_<n> si se omite"
 #: apps/wprs-ctl/src/userprops.rs
 msgid "Label in the default language"
 msgstr "Etiqueta en el idioma por defecto"
+
+#: apps/wprs-ctl/src/wallclock.rs
+msgid "%1 is not a time: use HH:MM, HH:MM:SS or YYYY-MM-DD HH:MM"
+msgstr "%1 no es una hora: usa HH:MM, HH:MM:SS o AAAA-MM-DD HH:MM"
 
 #: apps/wprs-ctl/src/wallhaven.rs
 msgid ""
@@ -8148,3 +9905,31 @@ msgstr "Espacio en disco para las imágenes, en MB (16 a 65536)"
 #: apps/wprs-ctl/src/folder.rs
 msgid "Show it without the glow of the canvas, to compare it with the glow"
 msgstr "Mostrarla sin el brillo del lienzo, para compararla con el brillo"
+
+#: apps/wprs-ctl/src/wallhaven_filters.rs
+msgid "--%1 takes %2 separated by commas, or digits like 101"
+msgstr "--%1 recibe %2 separados por comas, o dígitos como 101"
+
+#: apps/wprs-ctl/src/wallhaven_filters.rs
+msgid "--%1 must be one of %2"
+msgstr "--%1 debe ser uno de %2"
+
+#: apps/wprs-ctl/src/wallhaven_filters.rs
+msgid "--%1: expected %2"
+msgstr "--%1: se esperaba %2"
+
+#: apps/wprs-ctl/src/watching.rs
+msgid "job %1 %2/%3"
+msgstr "tarea %1 %2/%3"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "%1  %2 layers from %3 regions, fill %4, %5x%6, safe shift %7, %8"
+msgstr "%1  %2 capas de %3 regiones, relleno %4, %5x%6, desplazamiento seguro %7, %8"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "moves"
+msgstr "se mueve"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid "stays still"
+msgstr "queda quieta"

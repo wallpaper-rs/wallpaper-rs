@@ -1,27 +1,30 @@
 use crate::cli::Wait;
 use crate::daemon::job;
-use crate::input::{confirm, secret, typed};
+use crate::input::{confirm, secret};
 use crate::show::{self, bytes, table, text, when};
+use crate::told::{fill, told, tr};
 use anyhow::{Result, bail};
 use futures_util::TryFutureExt;
-use std::io::{self, IsTerminal};
-use std::time::Duration;
-use wprs_client::{Client, explain, parse};
-use wprs_core::model::{AccountReply, JobReply, JobState};
+use wprs_client::Client;
+use wprs_core::model::AccountReply;
 
 pub const NAMES: &str = "Item names on the server are keyed hashes: a device that once held the names key \
                          and has the same file can still tell that the account stores it, even after it is \
                          revoked.";
-const OWN: &str = "Approve only a code that your own new device shows on its screen: \
-                   someone who sends you a code is trying to get into your account.";
+const OWN: &str = told(
+    "Approve only a code that your own new device shows on its screen: \
+                   someone who sends you a code is trying to get into your account.",
+);
 
-const NO_KEYRING: &str = "No keyring is available to keep the access of this computer. Start or unlock the \
+const NO_KEYRING: &str = told(
+    "No keyring is available to keep the access of this computer. Start or unlock the \
                           system keyring and link again, or keep the access in a private file with `wprs-ctl \
-                          server access file` (whoever can read your files could then use it).";
+                          server access file` (whoever can read your files could then use it).",
+);
 
 pub fn keyring_hint(error: &anyhow::Error) {
     if wprs_client::error_name(error) == Some(wprs_core::dbus::error::KEYRING_UNAVAILABLE) {
-        eprintln!("{NO_KEYRING}");
+        eprintln!("{}", tr(NO_KEYRING));
     }
 }
 
@@ -35,19 +38,22 @@ fn state_note(state: String) -> String {
 }
 
 pub async fn revoke(client: &Client, device: &str, yes: bool, wait: &Wait) -> Result<()> {
-    eprintln!("The device can no longer sync with this account, and the sync key is replaced.");
-    if !yes && !confirm(&format!("Remove {device} from the account?")).await? {
-        bail!("nothing was removed");
+    eprintln!(
+        "{}",
+        tr(told("The device can no longer sync with this account, and the sync key is replaced."))
+    );
+    if !yes && !confirm(&fill(told("Remove %1 from the account?"), &[&device])).await? {
+        bail!("{}", tr(told("nothing was removed")));
     }
-    let password = zeroize::Zeroizing::new(secret("Password of the account: ", false)?);
+    let password = zeroize::Zeroizing::new(secret(&tr(told("Password of the account: ")), false)?);
     job(client, client.sync.revoke_device(device, &password).map_ok(|id| ((), id)), wait).await
 }
 
 pub fn status(reply: AccountReply) -> String {
-    let Some(a) = reply.account else { return "no server is added\n".into() };
+    let Some(a) = reply.account else { return tr(told("no server is added\n")) };
     let encryption = match a.encrypted {
-        Some(false) => "off: the server can read every record".into(),
-        Some(true) => "end to end".into(),
+        Some(false) => tr(told("off: the server can read every record")),
+        Some(true) => tr(told("end to end")),
         None => "-".into(),
     };
     let device = a.device.map_or("-".into(), |name| format!("{name} ({})", a.label));
@@ -63,16 +69,22 @@ pub fn status(reply: AccountReply) -> String {
         ("device", device),
         ("state", state_note(text(&a.state))),
         ("encryption", encryption),
-        ("certificate", a.pin.map_or_else(|| "-".into(), |pin| format!("pinned, fingerprint {pin}"))),
+        (
+            "certificate",
+            a.pin.map_or_else(|| "-".into(), |pin| fill(told("pinned, fingerprint %1"), &[&pin])),
+        ),
         ("synced", when(a.last_sync)),
         ("records", a.records.to_string()),
         ("storage", storage),
         ("warning", a.warning.unwrap_or("-".into())),
         ("error", a.last_error.unwrap_or("-".into())),
-        ("access kept in", if a.file_secrets { "a private file" } else { "the system keyring" }.into()),
+        (
+            "access kept in",
+            if a.file_secrets { tr(told("a private file")) } else { tr(told("the system keyring")) },
+        ),
         ("link problem", a.link_error.unwrap_or("-".into())),
         ("quarantined", a.quarantined.to_string()),
-        ("not applied", a.unapplied.to_string()),
+        (&tr(told("not applied")), a.unapplied.to_string()),
         ("comparison", comparison),
         ("recovery", recovery(text(&a.recovery))),
         ("shared secrets", if a.secrets.is_empty() { "-".into() } else { a.secrets.join(", ") }),
@@ -82,12 +94,15 @@ pub fn status(reply: AccountReply) -> String {
         let fingerprint = o.fingerprints.first().map_or("-", |f| &f[..f.len().min(16)]).to_owned();
         (
             "repository to confirm",
-            format!("{} {} {} (fingerprint {fingerprint}, id {})", o.name, o.url, o.repo_id, o.id),
+            fill(
+                told("%1 %2 %3 (fingerprint %4, id %5)"),
+                &[&o.name, &o.url, &o.repo_id, &fingerprint, &o.id],
+            ),
         )
     });
     let rows = a.devices.into_iter().map(|d| {
-        let here = if d.current { "this computer" } else { "" };
-        vec![d.name, d.label.unwrap_or("-".into()), d.platform, when(d.seen_at), here.into()]
+        let here = if d.current { tr(told("this computer")) } else { String::new() };
+        vec![d.name, d.label.unwrap_or("-".into()), d.platform, when(d.seen_at), here]
     });
     show::lines(pairs) + &show::lines(offers) + &table(&["DEVICE", "NAME", "PLATFORM", "SEEN", ""], rows)
 }
@@ -105,9 +120,11 @@ pub async fn approve(client: &Client, code: &str, yes: bool, wait: &Wait) -> Res
     let sync = &client.sync;
     let (_, found) = client.run_job(sync.preview_code(code).map_ok(|id| ((), id)), |_, _| {}).await?;
     let found = found.output.unwrap_or_default();
-    let field = |key: &str| found[key].as_str().filter(|t| !t.is_empty()).unwrap_or("not given").to_owned();
+    let field = |key: &str| {
+        found[key].as_str().filter(|t| !t.is_empty()).unwrap_or(&tr(told("not given"))).to_owned()
+    };
     let requested = when(found["requested_at"].as_i64().map(|ms| ms / 1000));
-    eprintln!("{OWN}");
+    eprintln!("{}", tr(OWN));
     print!(
         "{}",
         show::lines([
@@ -116,68 +133,13 @@ pub async fn approve(client: &Client, code: &str, yes: bool, wait: &Wait) -> Res
             ("requested", requested)
         ])
     );
-    if !yes && !confirm("Approve this device?").await? {
-        bail!("not approved");
+    if !yes && !confirm(&tr(told("Approve this device?"))).await? {
+        bail!("{}", tr(told("not approved")));
     }
-    let password = zeroize::Zeroizing::new(secret("Password of the account: ", false)?);
+    let password = zeroize::Zeroizing::new(secret(&tr(told("Password of the account: ")), false)?);
     job(client, sync.approve_device(code, &password).map_ok(|id| ((), id)), wait).await
 }
 
-pub async fn join(client: &Client, device: &str, wait: &Wait) -> Result<()> {
-    let id = client.sync.join(device).await.map_err(explain)?;
-    if !wait.wait {
-        println!("{id}");
-        return Ok(());
-    }
-    let mut shown = false;
-    loop {
-        let reply: AccountReply = parse(&client.sync.get_status().await.map_err(explain)?)?;
-        if let Some(code) = reply.account.and_then(|a| a.pairing?.code).filter(|_| !shown) {
-            println!("code = {code}");
-            eprintln!("Confirm this code on {device}, and here the code that {device} shows.");
-            shown = true;
-            match io::stdin().is_terminal() {
-                true => {
-                    eprint!("Type the code that {device} shows, or nothing to stop: ");
-                    let typed = typed().await?;
-                    if typed.trim().is_empty() {
-                        client.daemon.cancel_job(id).await.map_err(explain)?;
-                        bail!("the key was not taken");
-                    }
-                    client.sync.confirm_share(device, typed.trim()).await.map_err(explain)?;
-                }
-                false => eprintln!(
-                    "Confirm with: wprs-ctl server join {device:?} --code <the code shown on {device}>"
-                ),
-            }
-        }
-        let JobReply { job, .. } = parse(&client.daemon.get_job(id).await.map_err(explain)?)?;
-        match job.state {
-            JobState::Done => {
-                println!("{}", if wait.json { serde_json::to_string(&job)? } else { show::summary(&job) });
-                return Ok(());
-            }
-            JobState::Failed | JobState::Cancelled => {
-                bail!("{}", job.error.map_or("the join stopped".into(), |e| e.message))
-            }
-            _ => tokio::time::sleep(Duration::from_millis(300)).await,
-        }
-    }
-}
+mod linking;
 
-pub async fn share(client: &Client, device: &str, wait: &Wait) -> Result<()> {
-    let sync = &client.sync;
-    let (_, compared) = client.run_job(sync.share_key(device).map_ok(|id| ((), id)), |_, _| {}).await?;
-    let code = compared.output.as_ref().and_then(|o| o["code"].as_str()).unwrap_or_default().to_owned();
-    println!("code = {code}");
-    if !io::stdin().is_terminal() {
-        eprintln!("Send the key with: wprs-ctl server share {device:?} --code <the code shown on {device}>");
-        return Ok(());
-    }
-    eprint!("Type the code that {device} shows, or nothing to stop: ");
-    let typed = typed().await?;
-    if typed.trim().is_empty() {
-        bail!("the key was not shared");
-    }
-    job(client, sync.confirm_share(device, typed.trim()).map_ok(|id| ((), id)), wait).await
-}
+pub use linking::{join, share};

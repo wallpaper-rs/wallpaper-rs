@@ -1,4 +1,5 @@
 use crate::author::DIR;
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result};
 use clap::Subcommand;
 use std::path::PathBuf;
@@ -48,8 +49,8 @@ pub enum Rendering {
 }
 
 fn fraction(text: &str) -> Result<f32, String> {
-    let v: f32 = text.parse().map_err(|_| format!("{text} is not a number"))?;
-    (0.0..=1.0).contains(&v).then_some(v).ok_or_else(|| "from 0 to 1".to_owned())
+    let v: f32 = text.parse().map_err(|_| fill(told("%1 is not a number"), &[&text]))?;
+    (0.0..=1.0).contains(&v).then_some(v).ok_or_else(|| tr(told("from 0 to 1")).to_owned())
 }
 
 fn point(text: &str) -> Result<[f32; 2], String> {
@@ -113,10 +114,10 @@ pub fn run(command: Rendering) -> Result<()> {
         split,
     });
     let reel = renderer.rehearse_versus(open, &wanted, versus.as_ref())?;
-    let written = reel.write(&out).with_context(|| format!("cannot write {}", out.display()))?;
+    let written = reel.write(&out).with_context(|| fill(told("cannot write %1"), &[&out.display()]))?;
     written.iter().for_each(|p: &PathBuf| println!("{}", p.display()));
     reel.left_out.iter().for_each(|l| eprintln!("{l}"));
-    reel.console.iter().for_each(|l| eprintln!("script: {l}"));
-    reel.stopped.iter().for_each(|l| eprintln!("script stopped: {l}"));
+    reel.console.iter().for_each(|l| eprintln!("{}", fill(told("script: %1"), &[&l])));
+    reel.stopped.iter().for_each(|l| eprintln!("{}", fill(told("script stopped: %1"), &[&l])));
     Ok(())
 }

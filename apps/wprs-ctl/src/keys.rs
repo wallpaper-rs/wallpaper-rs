@@ -53,7 +53,8 @@ impl Policy {
     pub fn charter(self) -> Result<Charter> {
         let mut authors = BTreeMap::<String, Vec<String>>::new();
         for author in &self.authors {
-            let (id, key) = author.split_once('=').ok_or_else(|| usage(format!("{author} is not ID=PUB")))?;
+            let (id, key) =
+                author.split_once('=').ok_or_else(|| usage(fill(told("%1 is not ID=PUB"), &[&author])))?;
             authors.entry(id.into()).or_default().push(key.into());
         }
         Ok(Charter {

@@ -109,9 +109,8 @@ pub fn schema(serial: u64) -> Schema {
         values(field("fit", FieldKind::Enum, Value::Null), &fits),
         field("background", FieldKind::Color, Value::Null),
     ];
-    let query = wprs_library::query_keys()
-        .iter()
-        .map(|(key, hint)| QueryKey { key: key.to_string(), hint: hint.to_string() });
+    let query =
+        wprs_library::query_keys().into_iter().map(|(key, hint)| QueryKey { key: key.to_string(), hint });
     Schema {
         model: MODEL,
         serial,

@@ -10,7 +10,7 @@ use wprs_client::{Client, explain};
 use wprs_core::dbus::uri_scheme;
 
 pub fn path_arg(text: &str) -> Result<String> {
-    let local = || usage(format!("{text} is not a local file"));
+    let local = || usage(fill(told("%1 is not a local file"), &[&text]));
     match uri_scheme(text).filter(|_| !Path::new(text).exists()) {
         Some(scheme) if scheme.eq_ignore_ascii_case("file") => {
             let rest = &text[scheme.len() + 1..];
@@ -33,7 +33,7 @@ pub async fn resolve(client: &Client, items: &[String]) -> Result<Vec<String>> {
 }
 
 pub async fn one(client: &Client, item: &str) -> Result<String> {
-    resolve(client, &[item.into()]).await?.pop().context("wprsd resolved no item")
+    resolve(client, &[item.into()]).await?.pop().context(tr(told("wprsd resolved no item")))
 }
 
 pub fn strs(items: &[String]) -> Vec<&str> {
@@ -43,7 +43,7 @@ pub fn strs(items: &[String]) -> Vec<&str> {
 pub fn pairs(items: &[String]) -> Result<HashMap<&str, &str>> {
     items
         .iter()
-        .map(|item| item.split_once('=').ok_or_else(|| usage(format!("{item} is not KEY=VALUE"))))
+        .map(|item| item.split_once('=').ok_or_else(|| usage(fill(told("%1 is not KEY=VALUE"), &[&item]))))
         .collect()
 }
 
@@ -117,10 +117,10 @@ pub async fn typed() -> Result<String> {
         tx.send(io::stdin().lock().read_line(&mut line).map(|_| line))
     });
     tokio::select! {
-        line = rx => Ok(line.context("the terminal closed")??),
+        line = rx => Ok(line.context(tr(told("the terminal closed")))??),
         _ = tokio::signal::ctrl_c() => {
             eprintln!();
-            bail!("stopped without an answer")
+            bail!("{}", tr(told("stopped without an answer")))
         }
     }
 }

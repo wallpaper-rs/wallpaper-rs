@@ -1,5 +1,6 @@
 use super::shown::{AUDIO, AUDIO_NETWORK, CLICKS, MEDIA, MEDIA_NETWORK, NETWORK, POINTER, RGB, SLOW};
 use crate::show;
+use crate::told::{fill, told, tr};
 use anyhow::Result;
 use std::collections::BTreeSet;
 use std::time::{Duration, Instant};
@@ -48,7 +49,7 @@ async fn asks(client: &Client, output: &str, mut serial: u64) -> Result<BTreeSet
         after = parse(&client.daemon.get_state().await?)?;
     }
     let slow = after.outputs.iter().filter(|(name, o)| ours(name) && o.particles == "cpu");
-    let slow = slow.map(|(name, _)| format!("{name}: {SLOW}"));
+    let slow = slow.map(|(name, _)| format!("{name}: {}", tr(SLOW)));
     let declined =
         |scene: &String, input: Input| reply.declined.get(scene).is_some_and(|set| set.contains(&input));
     let twins = |s: &SceneInputs| reply.shown.values().any(|o| o.scene == s.scene && o.key != s.key);
@@ -56,14 +57,14 @@ async fn asks(client: &Client, output: &str, mut serial: u64) -> Result<BTreeSet
     let asks = shown.flat_map(|(name, s)| {
         let title = if s.title.is_empty() { &s.scene } else { &s.title };
         let used = [
-            (s.audio, Input::Audio, AUDIO),
-            (s.pointer, Input::Pointer, POINTER),
-            (s.clicks, Input::Clicks, CLICKS),
-            (s.network, Input::Network, NETWORK),
-            (s.rgb, Input::Rgb, RGB),
-            (s.media, Input::Media, MEDIA),
-            (s.media && s.network, Input::MediaNetwork, MEDIA_NETWORK),
-            (s.audio && s.network, Input::AudioNetwork, AUDIO_NETWORK),
+            (s.audio, Input::Audio, tr(AUDIO)),
+            (s.pointer, Input::Pointer, tr(POINTER)),
+            (s.clicks, Input::Clicks, tr(CLICKS)),
+            (s.network, Input::Network, tr(NETWORK)),
+            (s.rgb, Input::Rgb, tr(RGB)),
+            (s.media, Input::Media, tr(MEDIA)),
+            (s.media && s.network, Input::MediaNetwork, tr(MEDIA_NETWORK)),
+            (s.audio && s.network, Input::AudioNetwork, tr(AUDIO_NETWORK)),
         ];
         let decided = move |input: Input| s.granted.contains(&input) || declined(&s.scene, input);
         let open = used.into_iter().filter(move |(on, input, _)| *on && !decided(*input));
@@ -72,9 +73,9 @@ async fn asks(client: &Client, output: &str, mut serial: u64) -> Result<BTreeSet
         open.map(move |(_, input, what)| {
             let mut grant = format!("wprs-ctl input grant {} {}{output}", s.scene, input.as_str());
             if input == Input::Clicks && screen {
-                grant += &format!(" && wprs-ctl input clicks on -o {name}");
+                grant += &fill(told(" && wprs-ctl input clicks on -o %1"), &[&name]);
             }
-            format!("{title} follows {what} once you allow it: {grant}")
+            fill(told("%1 follows %2 once you allow it: %3"), &[&title, &what, &grant])
         })
     });
     Ok(asks.chain(slow).collect())

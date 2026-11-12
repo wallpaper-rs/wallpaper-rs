@@ -2,6 +2,7 @@ use crate::cli::{JSON, Wait};
 use crate::daemon::job;
 use crate::input::{confirm, one, secret, strs};
 use crate::show::{self, bytes, table};
+use crate::told::{told, tr};
 use anyhow::{Result, bail};
 use clap::Subcommand;
 use futures_util::TryFutureExt;
@@ -11,12 +12,16 @@ use wprs_client::{Client, explain};
 use wprs_core::model::FilesReply;
 use zeroize::Zeroizing;
 
-const STOP: &str = "A file that is on no device any more, for example one of a lost computer, is lost for good \
-                    once it leaves the server.";
-const ESCROW: &str = "The server will keep the sync key locked with this passphrase, so that a new device can get \
+const STOP: &str = told(
+    "A file that is on no device any more, for example one of a lost computer, is lost for good \
+                    once it leaves the server.",
+);
+const ESCROW: &str = told(
+    "The server will keep the sync key locked with this passphrase, so that a new device can get \
                       it when no device is left. Whoever gets a copy of the server's data can try to guess the \
                       passphrase without limit: use several unrelated words that you use nowhere else, and keep \
-                      them somewhere safe.";
+                      them somewhere safe.",
+);
 
 #[derive(Subcommand, Debug)]
 pub enum Files {
@@ -54,12 +59,12 @@ fn listing(reply: FilesReply) -> String {
     let folders = reply.folders.into_iter().map(|f| ("folder", f));
     let rows = reply.files.into_iter().map(|f| {
         let state = match (f.stored, f.shared) {
-            (false, _) => "waiting",
-            (true, true) => "shared from here",
-            (true, false) => "on the server",
+            (false, _) => "waiting".to_owned(),
+            (true, true) => tr(told("shared from here")),
+            (true, false) => tr(told("on the server")),
         };
         let id = if f.id.is_empty() { "-".into() } else { f.id };
-        vec![id, f.name, bytes(f.size), f.item.unwrap_or("-".into()), state.into()]
+        vec![id, f.name, bytes(f.size), f.item.unwrap_or("-".into()), state]
     });
     show::lines(folders) + &table(&["FILE", "NAME", "SIZE", "ITEM", "STATE"], rows)
 }
@@ -83,9 +88,9 @@ pub async fn run(client: &Client, command: Files) -> Result<()> {
                 resolved.push(target(client, text).await?);
             }
             if stop {
-                eprintln!("{STOP}");
-                if !yes && !confirm("Delete these files from the server?").await? {
-                    bail!("nothing was deleted");
+                eprintln!("{}", tr(STOP));
+                if !yes && !confirm(&tr(told("Delete these files from the server?"))).await? {
+                    bail!("{}", tr(told("nothing was deleted")));
                 }
             }
             job(client, sync.share_files(&strs(&resolved), !stop).map_ok(|id| ((), id)), &wait).await?
@@ -100,7 +105,7 @@ pub async fn run(client: &Client, command: Files) -> Result<()> {
 pub async fn repo(client: &Client, repo: &str, decline: bool, wait: &Wait) -> Result<()> {
     let id = client.sync.confirm_repo(repo, !decline).await.map_err(explain)?;
     if decline {
-        println!("declined; other devices keep it");
+        println!("{}", tr(told("declined; other devices keep it")));
         return Ok(());
     }
     job(client, async { Ok(((), id)) }, wait).await
@@ -109,19 +114,26 @@ pub async fn repo(client: &Client, repo: &str, decline: bool, wait: &Wait) -> Re
 pub async fn escrow(client: &Client, remove: bool, yes: bool, wait: &Wait) -> Result<()> {
     let passphrase = match remove {
         true => {
-            eprintln!("Without the escrow, only a device that holds the sync key can give it to a new one.");
-            if !yes && !confirm("Delete the escrow from the server?").await? {
-                bail!("the escrow was kept");
+            eprintln!(
+                "{}",
+                tr(told(
+                    "Without the escrow, only a device that holds the sync key can give it to a new one."
+                ))
+            );
+            if !yes && !confirm(&tr(told("Delete the escrow from the server?"))).await? {
+                bail!("{}", tr(told("the escrow was kept")));
             }
             Zeroizing::new(String::new())
         }
         false => {
-            eprintln!("{ESCROW}");
-            let first = Zeroizing::new(secret("Recovery passphrase: ", false)?);
-            let again =
-                io::stdin().is_terminal().then(|| secret("Repeat the passphrase: ", false)).transpose()?;
+            eprintln!("{}", tr(ESCROW));
+            let first = Zeroizing::new(secret(&tr(told("Recovery passphrase: ")), false)?);
+            let again = io::stdin()
+                .is_terminal()
+                .then(|| secret(&tr(told("Repeat the passphrase: ")), false))
+                .transpose()?;
             if again.is_some_and(|again| *again != *first) {
-                bail!("the passphrases differ");
+                bail!("{}", tr(told("the passphrases differ")));
             }
             first
         }
@@ -130,6 +142,6 @@ pub async fn escrow(client: &Client, remove: bool, yes: bool, wait: &Wait) -> Re
 }
 
 pub async fn restore(client: &Client, wait: &Wait) -> Result<()> {
-    let passphrase = Zeroizing::new(secret("Recovery passphrase: ", false)?);
+    let passphrase = Zeroizing::new(secret(&tr(told("Recovery passphrase: ")), false)?);
     job(client, client.sync.restore(&passphrase).map_ok(|id| ((), id)), wait).await
 }

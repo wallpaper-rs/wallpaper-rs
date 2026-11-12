@@ -1,4 +1,5 @@
 use crate::show::{clean, list};
+use crate::told::{told, tr};
 use wprs_core::markup::plain;
 use wprs_core::model::{About, PackageInfo};
 use wprs_format::SCHEMA_V1;
@@ -8,8 +9,8 @@ pub fn fields(about: &About, package: Option<&PackageInfo>) -> Vec<(&'static str
     let reasons = Some(list(&about.descriptors)).filter(|r| !r.is_empty()).map(|r| format!(" ({r})"));
     let content = about.content.clone().unwrap_or("unrated".into()) + &reasons.unwrap_or_default();
     let flashing = about.photosensitive.map(|on| match (on, confirmed("photosensitive")) {
-        (true, true) => "yes, allowed".into(),
-        (true, false) => "yes, asks before it is shown".into(),
+        (true, true) => tr(told("yes, allowed")),
+        (true, false) => tr(told("yes, asks before it is shown")),
         (false, _) => "no".into(),
     });
     let work = |w: &wprs_core::model::Work| {
@@ -50,5 +51,5 @@ pub fn texts(about: &About) -> String {
         "" => String::new(),
         text => format!("\n{head}\n{}\n", marked(text).lines().map(clean).collect::<Vec<_>>().join("\n")),
     };
-    block("Description:", &about.description) + &block("Changes:", &about.changes)
+    block(&tr(told("Description:")), &about.description) + &block(&tr(told("Changes:")), &about.changes)
 }

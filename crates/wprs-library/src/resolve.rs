@@ -4,6 +4,7 @@ use crate::{Error, Item, Kind, Library, PlaylistInfo, Result};
 use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
+use wprs_core::message::said;
 use wprs_schedule::Playlist;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -68,10 +69,16 @@ impl Library {
             match key.as_deref() {
                 Some("in") => {
                     let playlist = match self.playlist(&value) {
-                        Err(Error::NotFound(..)) => Err(Error::Query(format!("no playlist named {value:?}"))),
+                        Err(Error::NotFound(..)) => Err(Error::query(said(
+                            "library.no_playlist",
+                            "no playlist named %1",
+                            &[&format!("{value:?}")],
+                        ))),
                         other => other,
                     }?;
-                    ensure(playlist.query.is_none(), || Error::Query("in: needs a manual playlist".into()))?;
+                    ensure(playlist.query.is_none(), || {
+                        Error::query(said("library.needs_manual", "in: needs a manual playlist", &[]))
+                    })?;
                     (value, quoted) = (playlist.uid, false);
                 }
                 Some("sort") if matches!(value.to_ascii_lowercase().as_str(), "random" | "random-") => {

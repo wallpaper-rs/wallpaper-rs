@@ -1,5 +1,6 @@
 use crate::author::Author;
 use crate::capturing::Capture;
+use crate::told::{fill, told, tr};
 use anyhow::{Result, ensure};
 use serde_json::{Value, json};
 use std::fs;
@@ -52,9 +53,22 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
     let ops = if single { project.act(&action)? } else { project.act_all(&actions)? };
     let after = wprs_editor::check::review(&project.doc, Some(&project.dir));
     let problems = wprs_editor::check::introduced(&before, &after);
-    ensure!(!(undoing && ops.is_empty()), "there is nothing to {}", action.name());
+    ensure!(
+        !(undoing && ops.is_empty()),
+        "{}",
+        tr(if matches!(action, Action::Redo {}) {
+            told("there is nothing to redo")
+        } else {
+            told("there is nothing to undo")
+        })
+    );
     project.save()?;
-    named.iter().for_each(|(path, id)| eprintln!("warning: {path} names {id:?}; scripts are not rewritten"));
+    named.iter().for_each(|(path, id)| {
+        eprintln!(
+            "{}",
+            fill(told("warning: %1 names %2; scripts are not rewritten"), &[&path, &format!("{id:?}")])
+        )
+    });
     for p in &problems {
         eprintln!("{}: {}: {}", if p.warning { "warning" } else { "problem" }, p.pointer, p.said.local());
     }
@@ -62,8 +76,11 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
         (&action, named.is_empty())
     {
         eprintln!(
-            "to rewrite the exact names: scene act DIR particles '{}'",
-            json!({ "scripts": { "from": system, "to": to } })
+            "{}",
+            fill(
+                told("to rewrite the exact names: scene act DIR particles '%1'"),
+                &[&json!({ "scripts": { "from": system, "to": to } })]
+            )
         );
     }
     if matches!(action, Action::ImportScript(_)) {

@@ -2,6 +2,7 @@ use crate::cli::JSON;
 use crate::input::{one, pairs};
 use crate::profiles::named;
 use crate::show::{self, short, table};
+use crate::told::{fill, told};
 use anyhow::{Context, Result};
 use clap::Subcommand;
 use wprs_client::{Client, parse};
@@ -55,7 +56,7 @@ pub async fn preset(client: &Client, command: Preset) -> Result<()> {
                     let mut found =
                         reply.presets.into_iter().filter(|p| p.item.as_deref().unwrap_or("") == item);
                     let found = found.find(|p| p.name.eq_ignore_ascii_case(name));
-                    found.map(|p| p.uid).with_context(|| format!("no preset named {name}"))?
+                    found.map(|p| p.uid).with_context(|| fill(told("no preset named %1"), &[&name]))?
                 }
                 None => preset,
             };

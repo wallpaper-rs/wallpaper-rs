@@ -1,4 +1,5 @@
 use crate::edit::Edits;
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Context, Result, ensure};
 use std::path::{Path, PathBuf};
@@ -10,44 +11,44 @@ fn text(e: String) -> anyhow::Error {
     anyhow::Error::msg(e)
 }
 
-fn told(e: wprs_core::message::Message) -> anyhow::Error {
+fn local(e: wprs_core::message::Message) -> anyhow::Error {
     anyhow::Error::msg(e.local())
 }
 
 fn refused(e: edit::Error) -> anyhow::Error {
     match e {
         edit::Error::Usage(message) => usage(message.local()),
-        edit::Error::Invalid(message) => told(message),
+        edit::Error::Invalid(message) => local(message),
     }
 }
 
 pub fn dimensions(size: &str) -> Result<(u32, u32)> {
     let parsed =
         size.split_once('x').and_then(|(w, h)| Some((w.trim().parse().ok()?, h.trim().parse().ok()?)));
-    parsed.ok_or_else(|| usage(format!("{size} is not WIDTHxHEIGHT")))
+    parsed.ok_or_else(|| usage(fill(told("%1 is not WIDTHxHEIGHT"), &[&size])))
 }
 
 fn source(path: &Path) -> Result<Source> {
-    let (w, h) =
-        wprs_render::image_size(path).with_context(|| format!("{} is not a picture", path.display()))?;
+    let (w, h) = wprs_render::image_size(path)
+        .with_context(|| fill(told("%1 is not a picture"), &[&path.display()]))?;
     Ok(Source::read(path, [w, h])?)
 }
 
 pub fn open(path: &Path) -> Result<Edit> {
-    ensure!(path.is_file(), "cannot find {}", path.display());
-    let Some((_, edit)) = edit::load(path, &edit::dir()).map_err(told)? else {
+    ensure!(path.is_file(), "{}", fill(told("cannot find %1"), &[&path.display()]));
+    let Some((_, edit)) = edit::load(path, &edit::dir()).map_err(local)? else {
         return Ok(Edit { source: source(path)?, ..Edit::default() });
     };
     let bytes = std::fs::metadata(path)?.len();
     let pixels = wprs_render::image_size(path).map(|(w, h)| [w, h]).unwrap_or_default();
     if edit.source.changed(bytes, pixels) {
-        eprintln!("warning: {} changed after it was edited", path.display());
+        eprintln!("{}", fill(told("warning: %1 changed after it was edited"), &[&path.display()]));
     }
     Ok(edit)
 }
 
 pub fn keep(path: &Path, before: &Edit, after: &Edit) -> Result<()> {
-    edit::commit(after, path, &edit::dir()).map_err(told)?;
+    edit::commit(after, path, &edit::dir()).map_err(local)?;
     let mut history = History::load(path);
     history.record(before, after);
     history.save(path).map_err(text)
@@ -63,19 +64,20 @@ pub fn change(path: &Path, action: Action) -> Result<()> {
 pub fn step(path: &Path, back: bool) -> Result<()> {
     let (current, mut history) = (open(path)?, History::load(path));
     let found = if back { history.undo(&current) } else { history.redo(&current) };
-    let edit =
-        found.with_context(|| format!("there is nothing to {}", if back { "undo" } else { "redo" }))?;
-    edit::commit(&edit, path, &edit::dir()).map_err(told)?;
+    let edit = found.with_context(|| {
+        tr(if back { told("there is nothing to undo") } else { told("there is nothing to redo") })
+    })?;
+    edit::commit(&edit, path, &edit::dir()).map_err(local)?;
     history.save(path).map_err(text)
 }
 
 pub fn apply(path: &Path, file: &str) -> Result<()> {
     let json = match file {
         "-" => std::io::read_to_string(std::io::stdin())?,
-        file => std::fs::read_to_string(file).with_context(|| format!("cannot read {file}"))?,
+        file => std::fs::read_to_string(file).with_context(|| fill(told("cannot read %1"), &[&file]))?,
     };
-    ensure!(path.is_file(), "cannot find {}", path.display());
-    let mut edit = Edit::parse(&json).map_err(told)?;
+    ensure!(path.is_file(), "{}", fill(told("cannot find %1"), &[&path.display()]));
+    let mut edit = Edit::parse(&json).map_err(local)?;
     if edit.source == Source::default() {
         edit.source = source(path)?;
     }
@@ -83,11 +85,14 @@ pub fn apply(path: &Path, file: &str) -> Result<()> {
 }
 
 pub fn preview(path: &Path, changes: Vec<String>, stop: bool) -> Result<()> {
-    let path = std::fs::canonicalize(path).with_context(|| format!("cannot find {}", path.display()))?;
+    let path =
+        std::fs::canonicalize(path).with_context(|| fill(told("cannot find %1"), &[&path.display()]))?;
     let mut edit = if stop { None } else { Some(open(&path)?) };
     edit.as_mut().map_or(Ok(()), |edit| edit.act(Action::Set { changes }).map_err(refused))?;
-    let (path, json) =
-        (path.to_str().context("the path is not UTF-8")?, edit.map(|e| e.to_json()).unwrap_or_default());
+    let (path, json) = (
+        path.to_str().context(tr(told("the path is not UTF-8")))?,
+        edit.map(|e| e.to_json()).unwrap_or_default(),
+    );
     let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build()?;
     runtime.block_on(async { Ok(Client::connect().await?.daemon.preview_edit(path, &json).await?) })
 }
@@ -102,7 +107,7 @@ pub fn export(path: &Path, out: &Path, before: bool, quality: u8, size: Option<&
     let pixels = renderer.export_edit(&image, &edit, depth.as_ref(), size)?;
     wprs_render::save(&pixels, out, quality).map_err(|e| match e.kind() {
         std::io::ErrorKind::InvalidInput => usage(e.to_string()),
-        _ => anyhow::Error::from(e).context(format!("cannot write {}", out.display())),
+        _ => anyhow::Error::from(e).context(fill(told("cannot write %1"), &[&out.display()])),
     })
 }
 
@@ -157,7 +162,7 @@ pub fn run(command: Edits) -> Result<()> {
         Edits::Show { path } => print!("{}", open(&path)?.to_json()),
         Edits::Reset { path, ids } if ids.is_empty() => match open(&path) {
             Ok(before) => keep(&path, &before, &Edit { source: before.source.clone(), ..Edit::default() })?,
-            Err(_) => drop(edit::remove(&path, &edit::dir()).map_err(told)?),
+            Err(_) => drop(edit::remove(&path, &edit::dir()).map_err(local)?),
         },
         Edits::Apply { path, file } => apply(&path, &file)?,
         Edits::Preview { path, changes, stop } => preview(&path, changes, stop)?,

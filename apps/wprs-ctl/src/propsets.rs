@@ -1,5 +1,6 @@
 use crate::cli::{JSON, OUTPUT};
 use crate::show::{self, table};
+use crate::told::{fill, told};
 use anyhow::{Context, Result};
 use clap::Subcommand;
 use std::io::Read;
@@ -70,7 +71,7 @@ async fn saved(client: &Client, output: &str, preset: &str) -> Result<String> {
     let reply: SceneProperties = wprs_client::parse(&client.daemon.get_scene_properties(output).await?)?;
     let named = |p: &&SceneOption| p.label.eq_ignore_ascii_case(preset) || p.value.as_str() == Some(preset);
     let found = reply.user_presets.iter().find(named).and_then(|p| p.value.as_str().map(String::from));
-    found.with_context(|| format!("{} has no saved preset {preset:?}", reply.package))
+    found.with_context(|| fill(told("%1 has no saved preset %2"), &[&reply.package, &format!("{preset:?}")]))
 }
 
 pub async fn run(client: &Client, command: PropPreset) -> Result<()> {
@@ -91,9 +92,8 @@ pub async fn run(client: &Client, command: PropPreset) -> Result<()> {
             let text =
                 daemon.export_scene_values(&output, preset.as_deref().unwrap_or_default()).await? + "\n";
             match file {
-                Some(file) => {
-                    std::fs::write(&file, text).with_context(|| format!("cannot write {}", file.display()))?
-                }
+                Some(file) => std::fs::write(&file, text)
+                    .with_context(|| fill(told("cannot write %1"), &[&file.display()]))?,
                 None => print!("{text}"),
             }
         }
@@ -103,12 +103,12 @@ pub async fn run(client: &Client, command: PropPreset) -> Result<()> {
                 Some("-") => drop(std::io::stdin().read_to_string(&mut text)?),
                 _ => {
                     text = std::fs::read_to_string(&file)
-                        .with_context(|| format!("cannot read {}", file.display()))?
+                        .with_context(|| fill(told("cannot read %1"), &[&file.display()]))?
                 }
             }
             let warnings =
                 daemon.import_scene_values(&output, &text, save.as_deref().unwrap_or_default()).await?;
-            warnings.iter().for_each(|w| eprintln!("warning: {}", show::clean(w)));
+            warnings.iter().for_each(|w| eprintln!("{}", fill(told("warning: %1"), &[&show::clean(w)])));
         }
     }
     Ok(())

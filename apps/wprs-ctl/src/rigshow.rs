@@ -1,4 +1,5 @@
 use crate::rigging::Rigging;
+use crate::told::{fill, told};
 use anyhow::Result;
 use wprs_editor::Project;
 
@@ -9,7 +10,11 @@ pub(crate) fn print(
 ) -> Result<()> {
     let project = Project::open(dir)?;
     let found = read(&project);
-    anyhow::ensure!(!found.is_null(), "there is no mesh layer {layer:?} with that");
+    anyhow::ensure!(
+        !found.is_null(),
+        "{}",
+        fill(told("there is no mesh layer %1 with that"), &[&format!("{layer:?}")])
+    );
     println!("{}", serde_json::to_string_pretty(&found)?);
     Ok(())
 }

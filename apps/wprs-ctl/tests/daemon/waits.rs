@@ -60,6 +60,7 @@ async fn ctrl_c_stops_the_stale_question_after_waiting() {
     let command = format!("{} pkg install org.example.dawn --wait", env!("CARGO_BIN_EXE_wprs-ctl"));
     let mut child = Command::new("script")
         .args(["-qfec", &command, "/dev/null"])
+        .env("LC_ALL", "C")
         .env("DBUS_SESSION_BUS_ADDRESS", &bus.address)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())

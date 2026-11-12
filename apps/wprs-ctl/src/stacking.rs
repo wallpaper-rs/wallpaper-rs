@@ -1,5 +1,6 @@
 use crate::depth::key;
 use crate::editing::open;
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Context, Result, ensure};
 use std::path::{Path, PathBuf};
@@ -78,7 +79,7 @@ fn ensure_set(
     let mut shown = u64::MAX;
     let mut progress = |done: u64| {
         if done / 10 != shown / 10 {
-            eprintln!("building the {} layers: {done} %", set.fill.as_str());
+            eprintln!("{}", fill(told("building the %1 layers: %2 %"), &[&set.fill.as_str(), &done]));
         }
         shown = done;
     };
@@ -93,38 +94,43 @@ pub fn make(args: Make) -> Result<()> {
     let (sha, depth) = (key(&args.path, &edit)?, edit.depth.clone().unwrap_or_default());
     if args.clear {
         let removed = places.unlayer(&sha);
-        ensure!(removed > 0, "the image has no depth layers");
-        println!("{removed} layer sets removed");
+        ensure!(removed > 0, "{}", tr(told("the image has no depth layers")));
+        println!("{}", fill(told("%1 layer sets removed"), &[&removed]));
         return Ok(());
     }
     if args.list {
         for path in places.layers_of(&sha) {
             let Some(i) = load(&path)?.map(|l| l.info) else { continue };
-            let (count, regions, most) = (i.depths.len(), i.regions, i.reach.shift);
-            let moves = if i.reach.moves(i.size[0]) { "moves" } else { "stays still" };
-            println!(
-                "{}  {count} layers from {regions} regions, fill {}, {}x{}, safe shift {most:.4}, {moves}",
-                path.display(),
-                i.fill,
-                i.size[0],
-                i.size[1]
-            );
+            let (count, regions, most) = (i.depths.len(), i.regions, format!("{:.4}", i.reach.shift));
+            let moves = match i.reach.moves(i.size[0]) {
+                true => tr(told("moves")),
+                false => tr(told("stays still")),
+            };
+            let (wide, high) = (i.size[0], i.size[1]);
+            let line = told("%1  %2 layers from %3 regions, fill %4, %5x%6, safe shift %7, %8");
+            let path = path.display();
+            println!("{}", fill(line, &[&path, &count, &regions, &i.fill, &wide, &high, &most, &moves]));
         }
         return Ok(());
     }
     let config = Config::default_path().and_then(|p| Config::load(&p)).unwrap_or_default().parallax;
     let wanted = args.fill.as_deref().map_or(Ok(config.fill), Fill::parse).map_err(usage)?;
-    ensure!(wanted != Fill::Off, "the fill off builds no layers: pictures stay still");
+    ensure!(wanted != Fill::Off, "{}", tr(told("the fill off builds no layers: pictures stay still")));
     let mut set = settings(&places, &edit, Some(wanted));
     if set.fill != wanted {
-        eprintln!("LaMa or ONNX Runtime is not installed: using the simple fill (see wprs-ctl models list)");
+        eprintln!(
+            "{}",
+            tr(told(
+                "LaMa or ONNX Runtime is not installed: using the simple fill (see wprs-ctl models list)"
+            ))
+        );
     }
     set.count = usize::from(args.layers.unwrap_or(config.layers));
     let device = args.device.parse().unwrap_or(Device::Auto);
     let mut shown = u64::MAX;
     let mut progress = |done: u64| {
         if done / 10 != shown / 10 {
-            eprintln!("building the layers: {done} %");
+            eprintln!("{}", fill(told("building the layers: %1 %"), &[&done]));
         }
         shown = done;
     };
@@ -138,17 +144,17 @@ pub fn make(args: Make) -> Result<()> {
     Ok(())
 }
 
-fn pick(places: &Places, sha: &str, fill: Option<&str>) -> Result<Layers> {
+fn pick(places: &Places, sha: &str, wanted: Option<&str>) -> Result<Layers> {
     let dated = |p: PathBuf| Some((std::fs::metadata(&p).ok()?.modified().ok()?, p));
     let mut sets: Vec<_> = places.layers_of(sha).into_iter().filter_map(dated).collect();
     sets.sort();
     let found = sets.into_iter().rev().filter_map(|(_, path)| load(&path).ok().flatten());
-    let mut found = found.filter(|set| fill.is_none_or(|word| set.info.fill == word));
-    found.next().with_context(|| match fill {
+    let mut found = found.filter(|set| wanted.is_none_or(|word| set.info.fill == word));
+    found.next().with_context(|| match wanted {
         Some(word) => {
-            format!("the image has no layers filled with {word}; build them with edit depth layers")
+            fill(told("the image has no layers filled with %1; build them with edit depth layers"), &[&word])
         }
-        None => "the image has no depth layers; build them with edit depth layers".into(),
+        None => tr(told("the image has no depth layers; build them with edit depth layers")).to_owned(),
     })
 }
 
@@ -159,7 +165,8 @@ pub fn peek(args: Peek) -> Result<()> {
     let set = pick(&places, &sha, args.fill.as_deref())?;
     let count = set.images.len();
     let layer = set.images.get(args.layer);
-    let layer = layer.with_context(|| format!("the image has {count} layers, 0 to {}", count - 1))?;
+    let layer =
+        layer.with_context(|| fill(told("the image has %1 layers, 0 to %2"), &[&count, &(count - 1)]))?;
     layer.save_with_format(&args.out, image::ImageFormat::Png)?;
     println!("{}", args.out.display());
     if let Some(file) = &args.band {
@@ -172,20 +179,24 @@ pub fn peek(args: Peek) -> Result<()> {
 }
 
 pub fn compare(args: Compare) -> Result<()> {
-    ensure!((0.0..=1.0).contains(&args.at), "--at is a fraction from 0 to 1");
+    ensure!((0.0..=1.0).contains(&args.at), "{}", tr(told("--at is a fraction from 0 to 1")));
     let places = Places::default();
     let edit = open(&args.path)?;
     let (sha, device) = (key(&args.path, &edit)?, args.device.parse().unwrap_or(Device::Auto));
     let mut sets = Vec::new();
     for fill in [Fill::Lama, Fill::Simple] {
         let (path, set) = ensure_set(&places, &edit, Some(fill), (&args.path, &sha), device)?;
-        ensure!(set.fill == fill, "LaMa or ONNX Runtime is not installed: see wprs-ctl models list");
-        sets.push(load(&path)?.context("the layer set is damaged")?);
+        ensure!(
+            set.fill == fill,
+            "{}",
+            tr(told("LaMa or ONNX Runtime is not installed: see wprs-ctl models list"))
+        );
+        sets.push(load(&path)?.context(tr(told("the layer set is damaged")))?);
     }
     let count = sets[0].images.len().min(sets[1].images.len());
     let widest = (0..count).max_by_key(|k| sets[0].info.bands[*k].pixels).unwrap_or(0);
     let layer = args.layer.unwrap_or(widest);
-    ensure!(layer < count, "the sets have {count} layers, 0 to {}", count - 1);
+    ensure!(layer < count, "{}", fill(told("the sets have %1 layers, 0 to %2"), &[&count, &(count - 1)]));
     halves(&sets[0].images[layer], &sets[1].images[layer], args.at)
         .save_with_format(&args.out, image::ImageFormat::Png)?;
     println!("{}", args.out.display());
