@@ -7,6 +7,7 @@ mod capped;
 mod drifts;
 mod extremes;
 mod fields;
+mod longseek;
 mod scheduled;
 mod steering;
 mod strands;
