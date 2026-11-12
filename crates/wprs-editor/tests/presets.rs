@@ -69,3 +69,47 @@ fn only_a_preset_package_takes_preset_values() {
     project.doc["manifest"]["kind"] = json!("web");
     assert!(act(&mut project, json!({"manifest": {"preset": {"values": {"a": 1}}}})).is_err());
 }
+
+#[test]
+fn the_settings_of_the_base_come_with_their_widgets_and_what_the_preset_sets() {
+    let root = tempfile::tempdir().unwrap();
+    let mut project = preset(root.path());
+    let mut doc = starter("particles", "org.example.dusk", "Dusk", "en").unwrap();
+    doc["manifest"]["properties"] = json!({
+        "tint": {"type": "color", "default": "#ffffff", "order": 1},
+        "speed": {"type": "slider", "min": 0.5, "max": 4, "default": 1, "unit": "x", "order": 2},
+        "mood": {"type": "combo", "options": [{"value": "calm", "label": "Calm"}, {"value": "storm", "label": "Storm"}],
+            "default": "calm", "order": 3},
+        "snow": {"type": "bool", "default": true, "order": 4},
+        "name": {"type": "text", "default": "", "order": 5},
+        "photo": {"type": "file", "accept": ["image"], "order": 6},
+        "go": {"type": "button", "order": 7}
+    });
+    let base = Project::create(&root.path().join("base"), doc).unwrap();
+    act(&mut project, json!({"manifest": {"preset": {"values": {"speed": 2.5}}}})).unwrap();
+    let found = wprs_editor::bases::settings(&base.dir, &project.doc["preset"]);
+    assert_eq!((found["id"].as_str(), found["version"].as_str()), (Some("org.example.dusk"), Some("0.1.0")));
+    let rows = found["fields"].as_array().unwrap();
+    let widgets: Vec<(&str, &str)> =
+        rows.iter().map(|f| (f["key"].as_str().unwrap(), f["widget"].as_str().unwrap())).collect();
+    let wanted =
+        [("tint", "rgb"), ("speed", "number"), ("mood", "ref:option"), ("snow", "bool"), ("name", "text")];
+    assert_eq!(widgets, wanted, "files, buttons and groups are not values");
+    let speed = &rows[1];
+    assert_eq!(
+        (&speed["range"], &speed["unit"], &speed["set"]),
+        (&json!([0.5, 4.0]), &json!("x"), &json!(true))
+    );
+    assert_eq!((&speed["value"], &speed["pointer"]), (&json!(2.5), &json!("/preset/values/speed")));
+    assert_eq!((&rows[0]["set"], &rows[0]["default"]), (&json!(false), &json!("#ffffff")));
+    assert_eq!(rows[2]["names"], json!(["Calm", "Storm"]));
+    let photos = found["files"].as_array().unwrap();
+    assert_eq!(
+        (photos.len(), photos[0]["id"].as_str(), photos[0]["accept"].clone()),
+        (1, Some("photo"), json!(["image"]))
+    );
+    assert_eq!(wprs_editor::bases::settings(&root.path().join("missing"), &Value::Null), Value::Null);
+    let asked =
+        wprs_editor::rigs::query(&project.dir, &project.doc, "", &json!({"base": {"file": base.dir}}));
+    assert_eq!(asked, found, "the editor query answers the same");
+}

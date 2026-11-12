@@ -14,6 +14,9 @@ ColumnLayout {
     readonly property var values: document.values ?? ({})
     readonly property var files: document.files ?? ({})
     readonly property var found: library.list.find(item => item.id === entry.editText.trim())
+    readonly property var installedBase: library.list.find(item => item.id === (base.id ?? ""))
+    property string basePath
+    property var catalog: null
 
     function use() {
         const id = entry.editText.trim();
@@ -28,37 +31,33 @@ ColumnLayout {
             });
     }
 
-    function typed(text) {
-        try {
-            return JSON.parse(text);
-        } catch (e) {
-            return text;
+    function resolve() {
+        basePath = "";
+        if (!installedBase)
+            return;
+        App.query("GetItem", [installedBase.uid], "Library1", reply => {
+                if (preset)
+                    preset.basePath = String(reply?.path ?? "");
+            }, () => {});
+    }
+
+    function load() {
+        catalog = basePath ? JSON.parse(page.editor.rig("", JSON.stringify({
+                        "base": {
+                            "file": basePath
+                        }
+                    })) || "null") : null;
+    }
+
+    onInstalledBaseChanged: resolve()
+    onBasePathChanged: load()
+
+    Connections {
+        function onViewChanged() {
+            preset.load();
         }
-    }
 
-    function setValue() {
-        const values = {};
-        values[name.text.trim()] = typed(value.text.trim());
-        page.manifestEdit("preset", {
-                "values": values
-            });
-        name.text = "";
-        value.text = "";
-    }
-
-    function setFile(url) {
-        const files = {};
-        files[name.text.trim()] = App.path(url);
-        page.manifestEdit("preset", {
-                "files": files
-            });
-        name.text = "";
-    }
-
-    function drop(id) {
-        page.manifestEdit("preset", {
-                "clear": [id]
-            });
+        target: preset.page.editor
     }
 
     PackageInstalled {
@@ -103,82 +102,25 @@ ColumnLayout {
         }
     }
 
-    Repeater {
-        model: Object.keys(preset.values).concat(Object.keys(preset.files))
-
-        delegate: RowLayout {
-            id: row
-
-            required property string modelData
-            readonly property bool file: preset.files[modelData] !== undefined
-
-            Layout.fillWidth: true
-
-            QQC2.Label {
-                Layout.fillWidth: true
-                elide: Text.ElideMiddle
-                textFormat: Text.PlainText
-                text: row.modelData + ": " + (row.file ? preset.files[row.modelData] : JSON.stringify(preset.values[row.modelData]))
-            }
-
-            QQC2.ToolButton {
-                icon.name: "edit-delete"
-                text: App.tr("Remove")
-                display: QQC2.AbstractButton.IconOnly
-                QQC2.ToolTip.text: text
-                QQC2.ToolTip.visible: hovered
-                onClicked: preset.drop(row.modelData)
-            }
-        }
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: (preset.base.id ?? "") !== "" && !preset.catalog
+        wrapMode: Text.Wrap
+        color: Kirigami.Theme.disabledTextColor
+        text: preset.installedBase ? App.tr("Reading the settings of the base package…") : App.tr("Install the base package to choose the settings this preset sets.")
     }
 
-    RowLayout {
+    PresetSettings {
         Layout.fillWidth: true
-
-        QQC2.TextField {
-            id: name
-
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 8
-            placeholderText: App.tr("Setting id")
-            Accessible.name: App.tr("Setting id")
-        }
-
-        QQC2.TextField {
-            id: value
-
-            Layout.fillWidth: true
-            placeholderText: App.tr("Value, such as #3d5aff or 0.4")
-            Accessible.name: App.tr("Value")
-            onAccepted: if (name.text.trim() !== "")
-                preset.setValue()
-        }
-
-        QQC2.Button {
-            text: App.tr("Set value")
-            icon.name: "list-add"
-            enabled: name.text.trim() !== "" && value.text.trim() !== ""
-            onClicked: preset.setValue()
-        }
-
-        QQC2.Button {
-            text: App.tr("Picture or video…")
-            icon.name: "document-open"
-            enabled: name.text.trim() !== ""
-            onClicked: chooser.open()
-        }
+        visible: !!preset.catalog
+        page: preset.page
+        catalog: preset.catalog
     }
 
     QQC2.Label {
         Layout.fillWidth: true
         wrapMode: Text.Wrap
         color: Kirigami.Theme.disabledTextColor
-        text: App.tr("Values are the settings of the base package this preset sets; a picture or video is copied into the package. Title, license and the preview picture are in the package details.")
-    }
-
-    FileDialog {
-        id: chooser
-
-        nameFilters: [App.tr("Pictures and videos (*.png *.jpg *.jpeg *.webp *.gif *.webm *.mp4 *.mkv)")]
-        onAccepted: preset.setFile(selectedFile)
+        text: App.tr("Each setting of the base package has its own control; the ones in bold are set by this preset, and a picture or video is copied into the package. Title, license and the preview picture are in the package details.")
     }
 }

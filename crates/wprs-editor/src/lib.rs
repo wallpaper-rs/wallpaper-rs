@@ -3,6 +3,7 @@ pub mod actions;
 pub mod arrange;
 pub mod assets;
 mod attach;
+pub mod bases;
 mod batch;
 mod blend;
 mod bodies;

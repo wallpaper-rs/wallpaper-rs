@@ -979,6 +979,20 @@ and removed with the last, so the declared input and the origins never disagree;
 add or remove `network` by itself. Only a web page takes origins. The same action is
 `wprs-ctl scene manifest DIR network ORIGIN... [--add|--remove]`.
 
+A preset package (*Preset* in the settings) chooses its base from the installed packages and then lists
+the real settings of that base, in its order, each with the control of the property itself: a color
+picker for a color, a slider with the range and unit of a slider, a switch, a box with the labelled
+choices of a combo, a field for a text, and *Picture or video…* for each `file` property (the file is
+copied into `assets/`). A setting the preset sets is shown in bold and *Default* takes it out; the
+others show the default of the base. Every control sends the `manifest` action `preset` (`values` or
+`files`, `clear`), so `wprs-ctl scene act DIR manifest '{"preset": {"values": {"speed": 0.4}}}'`
+does the same. The list comes from the `base` query of `rig`, `{"base": {"file": "<package or
+folder>"}}`, which reads the manifest of the base package, and answers `{id, version, fields, files}`:
+the fields are those of the inspector (`widget`, `range`, `unit`, `options`, `names`, `default`,
+`value` and `set` from the values of the preset, with `/preset/values/<id>` as pointer) and `files`
+the `file` properties with their `accept` and the picture the preset gives. A base that is not
+installed shows no settings and asks to install it.
+
 *Required packages* (in the *Settings* tab of every kind of package) lists `requires.packages`, one row
 each with a remove button, and a picker to add one: a box that lists the installed packages of the
 library (assets packages included, never the package itself) and also takes an id typed by hand, and
