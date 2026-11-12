@@ -834,6 +834,14 @@ and `clear`, so `wprs-ctl scene act DIR manifest '{"web": {"values": {"storage_k
 same and so does `wprs-ctl scene manifest DIR web`; a color that is not `#rrggbb`, a size over
 5120 KiB or a preload that is not in the folder is refused like any other invalid manifest.
 
+*Network* lists the https origins the page may reach, one row each with a remove button, and a field
+with *Add origin* (at most 8). It sends the `manifest` action `network` (`origins`, with `add` or
+`remove` to change the list instead of replacing it): origins are written in lower case without a
+trailing slash, a repeated one is kept once, and `network` is added to `inputs` with the first origin
+and removed with the last, so the declared input and the origins never disagree; `inputs` refuses to
+add or remove `network` by itself. Only a web page takes origins. The same action is
+`wprs-ctl scene manifest DIR network ORIGIN... [--add|--remove]`.
+
 ## Starting points, building and applying
 
 `wprs-ctl scene new DIR --from empty|particles|parallax|clock|web [--id ID] [--title TITLE] [--locale

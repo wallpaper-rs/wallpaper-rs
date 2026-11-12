@@ -24,7 +24,20 @@ QtObject {
         expect(page.manifest.web?.preload === undefined && page.manifest.web?.background === "#102030", "a page setting was not cleared");
     }
 
+    function network() {
+        page.manifestEdit("network", {
+            "origins": ["https://API.example.org/"]
+        });
+        expect(page.manifest.permissions?.network?.allow?.[0] === "https://api.example.org" && page.manifest.inputs?.includes("network"), "an origin was not kept with the network input");
+        page.manifestEdit("network", {
+            "origins": ["https://api.example.org"],
+            "remove": true
+        });
+        expect(page.manifest.permissions === undefined && !(page.manifest.inputs ?? []).includes("network"), "the last origin left the network input behind");
+    }
+
     function exercise() {
         web();
+        network();
     }
 }
