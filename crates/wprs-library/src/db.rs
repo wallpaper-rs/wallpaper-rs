@@ -5,9 +5,6 @@ use serde::de::DeserializeOwned;
 use std::fs::{self, DirBuilder, OpenOptions, Permissions};
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt, PermissionsExt};
 use std::path::Path;
-use std::time::Duration;
-
-const BUSY: Duration = Duration::from_secs(60);
 
 const MIGRATIONS: [&str; 6] = [
     include_str!("schema.sql"),
@@ -48,7 +45,6 @@ impl Library {
     pub fn open_read_only(path: impl AsRef<Path>) -> Result<Self> {
         let flags = OpenFlags::SQLITE_OPEN_READ_ONLY | OpenFlags::SQLITE_OPEN_NO_MUTEX;
         let db = Connection::open_with_flags(path, flags)?;
-        db.busy_timeout(BUSY)?;
         match version(&db)? {
             SCHEMA_VERSION => Ok(Self { db }),
             newer if newer > SCHEMA_VERSION => Err(Error::Newer(newer, SCHEMA_VERSION)),
@@ -61,7 +57,6 @@ impl Library {
     }
 
     fn setup(mut db: Connection) -> Result<Self> {
-        db.busy_timeout(BUSY)?;
         db.set_transaction_behavior(TransactionBehavior::Immediate);
         db.execute_batch(
             "PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL; PRAGMA foreign_keys = ON;",
@@ -156,6 +151,7 @@ pub(crate) fn json<T: DeserializeOwned>(row: &Row<'_>, index: usize) -> rusqlite
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::Duration;
 
     #[test]
     fn a_second_writer_waits_for_the_first_instead_of_failing() {
