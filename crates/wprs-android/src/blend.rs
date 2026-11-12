@@ -12,6 +12,10 @@ pub(crate) fn rests(once: bool, shown: bool, over: bool, since_new_ns: i64) -> b
     once && shown && over && since_new_ns > STILL_NS
 }
 
+pub(crate) fn redo(new: bool, (converted, then): (bool, f32), headroom: f32) -> bool {
+    new || !converted || then != headroom
+}
+
 pub(crate) fn plays(path: &Path, film: Option<&Path>, direct: Option<&Path>) -> bool {
     film.or(direct) == Some(path)
 }
@@ -60,6 +64,14 @@ mod tests {
             !rests(true, false, true, STILL_NS * 10),
             "a video that has not given its first frame is waited for"
         );
+    }
+
+    #[test]
+    fn a_held_frame_is_converted_again_for_a_new_gpu_or_a_new_headroom() {
+        assert!(redo(true, (true, 1.0), 1.0), "a new frame");
+        assert!(!redo(false, (true, 1.0), 1.0), "an unchanged frame is not converted twice");
+        assert!(redo(false, (false, 1.0), 1.0), "the frame of a finished video comes back on a new gpu");
+        assert!(redo(false, (true, 1.0), 2.5), "the frame held at the end follows the new headroom");
     }
 
     #[test]

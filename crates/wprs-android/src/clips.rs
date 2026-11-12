@@ -17,8 +17,10 @@ static LAST: Mutex<String> = Mutex::new(String::new());
 struct Clip {
     path: PathBuf,
     coding: Coding,
+    last: Option<Image>,
     reader: ImageReader,
     yuv: Option<Yuv>,
+    headroom: f32,
     chroma: Vec<u8>,
     epoch: u64,
     warned: bool,
@@ -79,6 +81,21 @@ fn planes<'a>(
     })
 }
 
+fn convert(
+    r: &Renderer,
+    (coding, path): (Coding, &Path),
+    image: &Image,
+    chroma: &mut Vec<u8>,
+    yuv: &mut Option<Yuv>,
+    headroom: f32,
+) -> Result<bool, Error> {
+    let coding = crate::media::shown_as(path, coding);
+    let planes = planes(image, chroma, (coding, headroom))?;
+    crate::counted::gpu(|| r.convert_yuv(yuv, &planes).map(drop)).map_err(Error::from)?;
+    SHOWN.fetch_add(1, Relaxed);
+    Ok(true)
+}
+
 impl Clips {
     pub(crate) fn open(&mut self, path: &Path) -> Result<NativeWindow, Error> {
         if let Some(clip) = self.0.iter().find(|c| c.path == path) {
@@ -89,8 +106,10 @@ impl Clips {
         self.0.push(Clip {
             path: path.to_owned(),
             coding: crate::media::coding(path),
+            last: None,
             reader,
             yuv: None,
+            headroom: 1.0,
             chroma: Vec::new(),
             epoch: 0,
             warned: false,
@@ -112,21 +131,24 @@ impl Clips {
             if clip.epoch != epoch {
                 (clip.yuv, clip.epoch) = (None, epoch);
             }
-            let converted = match clip.reader.acquire_latest_image() {
+            let acquired = match clip.reader.acquire_latest_image() {
                 Ok(AcquireResult::Image(image)) => {
-                    let coding = crate::media::shown_as(&clip.path, clip.coding);
-                    planes(&image, &mut clip.chroma, (coding, headroom)).and_then(|planes| {
-                        crate::counted::gpu(|| r.convert_yuv(&mut clip.yuv, &planes).map(drop))
-                            .map_err(Error::from)
-                            .map(|()| {
-                                SHOWN.fetch_add(1, Relaxed);
-                                true
-                            })
-                    })
+                    clip.last = Some(image);
+                    Ok(true)
                 }
                 Ok(_) => Ok(false),
                 Err(e) => Err(media(e)),
             };
+            let converted = acquired.and_then(|new| {
+                let held = (clip.yuv.is_some(), clip.headroom);
+                match clip.last.as_ref().filter(|_| crate::blend::redo(new, held, headroom)) {
+                    Some(image) => {
+                        convert(r, (clip.coding, &clip.path), image, &mut clip.chroma, &mut clip.yuv, headroom)
+                    }
+                    None => Ok(false),
+                }
+            });
+            clip.headroom = if converted.as_ref().is_ok_and(|fresh| *fresh) { headroom } else { clip.headroom };
             clip.fresh = converted.as_ref().is_ok_and(|fresh| *fresh);
             if let Err(e) = converted {
                 failed(&e, &mut clip.warned);
