@@ -19,6 +19,7 @@ mod made;
 mod matte;
 pub mod models;
 mod normals;
+mod persist;
 mod plan;
 mod process;
 #[cfg(feature = "infer")]
