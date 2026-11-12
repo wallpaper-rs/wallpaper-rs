@@ -12,11 +12,14 @@ Kirigami.Dialog {
     property var shown: null
 
     function args() {
-        return {
+        const made = {
             "layer": node.id,
             "strength": Math.round(strength.value * 10) / 10,
             "blur": Math.round(blur.value * 10) / 10
         };
+        if (node?.type === "video")
+            made.time = Math.round(frame.seconds * 100) / 100;
+        return made;
     }
 
     function load() {
@@ -25,7 +28,7 @@ Kirigami.Dialog {
         })) || "null");
     }
 
-    title: node?.type === "video" ? App.tr("Generate normals from the first frame") : node?.type === "text" ? App.tr("Generate normals from the letters") : App.tr("Generate normals from the picture")
+    title: node?.type === "video" ? App.tr("Generate normals from a frame") : node?.type === "text" ? App.tr("Generate normals from the letters") : App.tr("Generate normals from the picture")
     standardButtons: Kirigami.Dialog.Cancel
     onOpened: load()
     customFooterActions: [
@@ -40,6 +43,15 @@ Kirigami.Dialog {
     ]
 
     ColumnLayout {
+        SceneNormalsFrame {
+            id: frame
+
+            visible: dialog.node?.type === "video"
+            page: dialog.page
+            Layout.fillWidth: true
+            onPicked: again.restart()
+        }
+
         GridLayout {
             columns: 2
 

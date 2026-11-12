@@ -17,7 +17,7 @@ fn path_of(doc: &Value, id: &str) -> Option<String> {
     doc.pointer(&format!("/scene/assets/{}/path", escape(id))).and_then(Value::as_str).map(String::from)
 }
 
-fn video(dir: &Path, doc: &Value, layer: &Value) -> Result<Source> {
+fn video(dir: &Path, doc: &Value, layer: &Value, time: Option<f64>) -> Result<Source> {
     let id = match &layer["video"] {
         Value::String(v) => Some(v.clone()),
         v => v["map"].as_object().and_then(|m| m.values().find_map(Value::as_str)).map(String::from),
@@ -26,11 +26,11 @@ fn video(dir: &Path, doc: &Value, layer: &Value) -> Result<Source> {
         id.ok_or_else(|| anyhow!(said("editor.normals_video", "the video layer names no video", &[])))?;
     let path = path_of(doc, &id)
         .ok_or_else(|| anyhow!(said("editor.normals_video", "the video layer names no video", &[])))?;
-    let still =
-        wprs_video::still(&dir.join(&path)).ok().and_then(|s| RgbaImage::from_raw(s.width, s.height, s.rgba));
-    let picture = still.ok_or_else(|| {
-        anyhow!(said("editor.normals_frame", "the first frame of %1 could not be read", &[&id]))
-    })?;
+    let still = wprs_video::still_at(&dir.join(&path), Some(time.unwrap_or(0.0)))
+        .ok()
+        .and_then(|s| RgbaImage::from_raw(s.width, s.height, s.rgba));
+    let picture = still
+        .ok_or_else(|| anyhow!(said("editor.normals_frame", "a frame of %1 could not be read", &[&id])))?;
     Ok(Source { id, path: None, picture })
 }
 
@@ -60,7 +60,7 @@ pub(super) fn source(dir: &Path, doc: &Value, m: &NormalsMake) -> Result<Source>
     let from = m.layer.as_deref().and_then(|l| crate::actions::layer(doc, l).ok()).map(|(_, l)| l);
     match from {
         Some(l) if l["image"].is_string() => named(l["image"].as_str().unwrap_or_default()),
-        Some(l) if l["type"] == "video" => video(dir, doc, l),
+        Some(l) if l["type"] == "video" => video(dir, doc, l, m.time),
         Some(l) if l["type"] == "text" => text(dir, doc, l),
         _ => {
             Err(anyhow!(said("editor.normals_from", "name a picture or an image, video or text layer", &[])))

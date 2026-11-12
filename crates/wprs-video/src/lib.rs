@@ -21,7 +21,7 @@ pub use feed::Disk;
 pub use player::Player;
 pub use probe::probe;
 pub use sound::Soundtrack;
-pub use still::{Still, still};
+pub use still::{Still, still, still_at};
 pub use strip::{MAX_STRIP, strip};
 pub use wprs_mix::{Clip, Mix, RATE, Source, Track};
 

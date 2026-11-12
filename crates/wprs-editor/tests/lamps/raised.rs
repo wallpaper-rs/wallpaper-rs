@@ -19,7 +19,7 @@ fn text_layers_raise_their_own_letters_into_normals() {
 }
 
 #[test]
-fn video_layers_raise_their_first_frame_and_say_when_it_cannot_be_read() {
+fn video_layers_raise_a_frame_and_say_when_it_cannot_be_read() {
     let root = tempfile::tempdir().unwrap();
     let mut p = project(&root);
     std::fs::write(p.dir.join("clip.mp4"), b"").unwrap();
@@ -28,5 +28,5 @@ fn video_layers_raise_their_first_frame_and_say_when_it_cannot_be_read() {
     let clip = json!({ "id": "film", "type": "video", "video": "clip" });
     act(&mut p, json!({ "add": { "pointer": "/scene/layers/-", "value": clip } })).unwrap();
     let error = act(&mut p, json!({ "normals": { "layer": "film" } })).unwrap_err().to_string();
-    assert!(error.contains("first frame of clip"), "{error}");
+    assert!(error.contains("a frame of clip"), "{error}");
 }

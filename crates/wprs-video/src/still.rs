@@ -19,6 +19,10 @@ pub struct Still {
 }
 
 pub fn still(path: &Path) -> Result<Still, Error> {
+    still_at(path, None)
+}
+
+pub fn still_at(path: &Path, seconds: Option<f64>) -> Result<Still, Error> {
     crate::init()?;
     let uri = local_uri(path)?;
     let playbin = make("playbin")?;
@@ -30,18 +34,25 @@ pub fn still(path: &Path) -> Result<Still, Error> {
     playbin.set_property_from_str("flags", "video+audio");
     playbin.set_property("audio-sink", make("fakesink")?);
     playbin.set_property("video-sink", &bin);
-    let still = grab(&playbin, &sink);
+    let still = grab(&playbin, &sink, seconds);
     let _ = playbin.set_state(gst::State::Null);
     still
 }
 
-fn grab(playbin: &gst::Element, sink: &gst_app::AppSink) -> Result<Still, Error> {
+fn grab(playbin: &gst::Element, sink: &gst_app::AppSink, seconds: Option<f64>) -> Result<Still, Error> {
     preroll(playbin)?;
     let duration = playbin.query_duration::<gst::ClockTime>().filter(|d| !d.is_zero());
     let audio = playbin.property::<i32>("n-audio") > 0;
     if let Some(duration) = duration {
-        let at =
-            (duration / 10).clamp(gst::ClockTime::SECOND, gst::ClockTime::from_seconds(30)).min(duration / 2);
+        let picked = seconds.filter(|s| s.is_finite() && *s >= 0.0).map(gst::ClockTime::from_seconds_f64);
+        let at = picked.map_or_else(
+            || {
+                (duration / 10)
+                    .clamp(gst::ClockTime::SECOND, gst::ClockTime::from_seconds(30))
+                    .min(duration / 2)
+            },
+            |t| t.min(duration.saturating_sub(gst::ClockTime::MSECOND)),
+        );
         let flags = gst::SeekFlags::FLUSH | gst::SeekFlags::ACCURATE;
         playbin.seek_simple(flags, at).map_err(|e| Error::Decode(e.to_string()))?;
         preroll(playbin)?;

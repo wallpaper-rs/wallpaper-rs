@@ -96,6 +96,8 @@ pub struct NormalsMake {
     pub blur: f32,
     #[serde(default)]
     pub id: Option<String>,
+    #[serde(default)]
+    pub time: Option<f64>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]

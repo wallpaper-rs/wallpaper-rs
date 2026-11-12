@@ -131,6 +131,10 @@ fn stills_come_from_inside_the_video() {
     let center = &still.rgba[(16 * 64 + 32) * 4..][..3];
     assert!(center[0] > 160 && center[1] < 80 && center[2] > 60, "{center:?}");
     assert!(wprs_video::still(Path::new(concat!(env!("CARGO_MANIFEST_DIR"), "/Cargo.toml"))).is_err());
+    for at in [0.0, 1e6] {
+        let picked = wprs_video::still_at(Path::new(FIXTURE), Some(at)).unwrap();
+        assert_eq!((picked.width, picked.height), (64, 32), "a frame at {at} s, the last one past the end");
+    }
 }
 
 #[test]

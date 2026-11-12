@@ -8110,8 +8110,8 @@ msgid "Check again"
 msgstr "Comprobar de nuevo"
 
 #: apps/wprs-app/qml/SceneNormals.qml
-msgid "Generate normals from the first frame"
-msgstr "Generar normales a partir del primer fotograma"
+msgid "Generate normals from a frame"
+msgstr "Generar normales a partir de un fotograma"
 
 #: apps/wprs-app/qml/SceneNormals.qml
 msgid "Generate normals from the letters"
@@ -8132,6 +8132,14 @@ msgid ""
 msgstr ""
 "El relieve se ilumina desde arriba a la izquierda; el mapa se guarda como "
 "imagen del paquete."
+
+#: apps/wprs-app/qml/SceneNormalsFrame.qml
+msgid "Frame at %1 s"
+msgstr "Fotograma a los %1 s"
+
+#: apps/wprs-app/qml/SceneNormalsFrame.qml
+msgid "Playhead"
+msgstr "Cabezal"
 
 #: apps/wprs-app/qml/SceneNotes.qml
 msgid "This folder has unsaved changes from an earlier session."
