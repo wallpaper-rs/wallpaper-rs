@@ -451,7 +451,7 @@ declares `network` in `inputs`, and only then. Pages receive their settings thro
 
 | Member | What the page gets |
 |--------|--------------------|
-| `properties`, `onProperties(cb)` | the values of every property when it loads, then only the changed ones; colors as `#rrggbb[aa]` and `{r, g, b, a}` from 0 to 1, combos with their value and `label` |
+| `properties`, `onProperties(cb)` | the values of every property when it loads, then only the changed ones; colors as `#rrggbb[aa]` and `{hex, r, g, b, a}` with `r`, `g`, `b` and `a` from 0 to 1, combos with their value and `label` |
 | `fps`, `quality`, `locale`, `volume`, `onSettings(cb)` | the frame rate it may draw at, and `{fps, quality, locale, volume}` when they change: the quality level (0 to 3), the language picked among those of the package and the wallpaper volume (0 to 1) for its own sound |
 | `onPause(cb)` | `true` while it is hidden or paused, when animation frames stop too |
 | `onAudio(cb)` | 64 bands per channel while `audio` is allowed, silence otherwise |
