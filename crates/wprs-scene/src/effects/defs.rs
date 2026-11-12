@@ -1,4 +1,4 @@
-use super::{Entry, ParamKind, PassBlend, Use, full, previous};
+use super::{Entry, ParamKind, PassBlend, Unit, Use, full, previous};
 use crate::value::Param;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
@@ -16,6 +16,8 @@ pub struct ParamDef {
     pub max: Option<f32>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub uses: Option<Use>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unit: Option<Unit>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub label: BTreeMap<String, String>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]

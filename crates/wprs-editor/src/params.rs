@@ -67,7 +67,7 @@ pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth:
             _ => Value::Null,
         },
         help: local(&p.help),
-        dial: p.kind == ParamKind::Float && p.id == "angle",
+        dial: p.kind == ParamKind::Float && p.unit == Some(wprs_scene::Unit::Degrees),
         ..Field::default()
     }
 }

@@ -6,6 +6,7 @@ use wprs_editor::actions::Action;
 use wprs_editor::seats::{Seat, seats};
 use wprs_editor::starters::starter;
 
+mod effect_points;
 mod grips;
 mod kin;
 mod placed;

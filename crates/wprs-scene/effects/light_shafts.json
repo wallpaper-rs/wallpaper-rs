@@ -15,7 +15,7 @@
         { "value": 2, "label": { "en": "Corner", "es": "Esquina" } }
       ]
     },
-    { "id": "angle", "type": "float", "default": 30, "min": -360, "max": 360 },
+    { "id": "angle", "type": "float", "unit": "degrees", "default": 30, "min": -360, "max": 360 },
     { "id": "center", "type": "position", "default": [0.5, 0] },
     { "id": "color", "type": "color", "default": "#fff2cc" },
     { "id": "gradient", "type": "texture", "default": "" },

@@ -38,6 +38,18 @@ pub enum EffectsEdit {
         index: usize,
         to: usize,
     },
+    Grip {
+        layer: String,
+        index: usize,
+        param: String,
+        to: [f64; 2],
+        #[serde(default)]
+        both: bool,
+        #[serde(default)]
+        at: Option<f64>,
+        #[serde(default)]
+        replace: bool,
+    },
     Mask {
         layer: String,
         index: usize,

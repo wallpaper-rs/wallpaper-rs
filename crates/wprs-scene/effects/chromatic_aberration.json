@@ -18,7 +18,7 @@
         { "value": 3, "label": { "en": "Barrel", "es": "Barril" } }
       ]
     },
-    { "id": "angle", "type": "float", "default": 0, "min": -360, "max": 360 }
+    { "id": "angle", "type": "float", "unit": "degrees", "default": 0, "min": -360, "max": 360 }
   ],
   "passes": [{ "entry": "fs_chromatic_aberration" }],
   "reach": "amount"

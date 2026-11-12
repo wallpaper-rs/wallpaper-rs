@@ -14,7 +14,7 @@ use serde_json::Value;
 use std::path::Path;
 use wprs_core::message::said;
 
-pub(crate) use effects::effects;
+pub(crate) use effects::{effects, known};
 
 pub(crate) fn own(dir: &Path, doc: &Value) -> crate::inspect::Own {
     let Ok(mut scene) = serde_json::from_value::<wprs_scene::Scene>(doc["scene"].clone()) else {

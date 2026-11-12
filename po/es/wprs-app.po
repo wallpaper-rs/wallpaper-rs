@@ -4934,6 +4934,26 @@ msgstr "Invertir: aplicar el efecto donde la máscara está vacía"
 msgid "%1 px"
 msgstr "%1 px"
 
+#: apps/wprs-app/qml/SceneEffectPointOverlay.qml
+msgid "Turn the angle around its point"
+msgstr "Girar el ángulo alrededor de su punto"
+
+#: apps/wprs-app/qml/SceneEffectPointOverlay.qml
+msgid "Aim the direction"
+msgstr "Apuntar la dirección"
+
+#: apps/wprs-app/qml/SceneEffectPointOverlay.qml
+msgid "Place this end; hold Shift to move the whole line"
+msgstr "Colocar este extremo; con Mayús se mueve toda la línea"
+
+#: apps/wprs-app/qml/SceneEffectPointOverlay.qml
+msgid "Place this point"
+msgstr "Colocar este punto"
+
+#: apps/wprs-app/qml/SceneEffectPointOverlay.qml
+msgid "Move the whole line"
+msgstr "Mover toda la línea"
+
 #: apps/wprs-app/qml/SceneEffectsList.qml
 msgid "Reimport…"
 msgstr "Reimportar…"

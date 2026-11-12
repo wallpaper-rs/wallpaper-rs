@@ -23,7 +23,7 @@
         { "value": 2, "label": { "en": "Star", "es": "Estrella" } }
       ]
     },
-    { "id": "angle", "type": "float", "default": 90, "min": -360, "max": 360 },
+    { "id": "angle", "type": "float", "unit": "degrees", "default": 90, "min": -360, "max": 360 },
     { "id": "noise", "type": "float", "default": 0, "min": 0, "max": 1, "uses": "time" },
     { "id": "edges", "type": "int", "default": 6, "min": 2, "max": 16 }
   ],

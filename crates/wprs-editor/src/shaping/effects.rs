@@ -8,7 +8,7 @@ use std::path::Path;
 use wprs_core::message::said;
 use wprs_scene::{Descriptor, described};
 
-fn known(dir: &Path, doc: &Value, id: &str) -> Result<Descriptor> {
+pub(crate) fn known(dir: &Path, doc: &Value, id: &str) -> Result<Descriptor> {
     let own = super::own(dir, doc);
     let found = own.get(id).map(|d| (**d).clone()).or_else(|| described(id).cloned());
     found.ok_or_else(|| anyhow!(said("editor.unknown_effect", "there is no effect \"%1\"", &[&id])))
@@ -113,6 +113,10 @@ pub(crate) fn effects(dir: &Path, doc: &Value, e: &E) -> Result<Vec<Op>> {
             } else {
                 vec![Op::Move { from: at, path: format!("{list}/{to}") }]
             })
+        }
+        E::Grip { layer: id, index, param, to, both, at, replace } => {
+            let t = at.unwrap_or(0.0);
+            crate::onscreen::grip(dir, doc, (id, *index, param), *to, *both, (t, *replace))
         }
         E::Mask { .. } => super::masks::mask(dir, doc, e),
     }

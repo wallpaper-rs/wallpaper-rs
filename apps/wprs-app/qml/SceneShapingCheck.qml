@@ -101,6 +101,9 @@ QtObject {
         Qt.createComponent("SceneMaskCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("SceneFxPointCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         Qt.createComponent("SceneGizmoCheck.qml").createObject(page, {
             "page": page
         }).exercise();
