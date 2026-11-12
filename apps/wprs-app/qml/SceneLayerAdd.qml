@@ -28,11 +28,7 @@ QQC2.ToolButton {
                 enabled: !["image", "video", "sound", "mesh", "model"].includes(modelData) || (tools.owner.page.view.assets ?? []).some(asset => asset.kind === (modelData === "mesh" ? "model" : modelData))
                 text: SceneWords.kind(modelData) + (enabled ? "" : " (" + App.tr("import a file of this kind first") + ")")
                 icon.name: tools.owner.icon(modelData)
-                onTriggered: tools.owner.page.run("add_layer", {
-                        "kind": modelData,
-                        "name": SceneWords.kind(modelData),
-                        "into": tools.owner.current?.type === "group" ? tools.owner.current.id : undefined
-                    })
+                onTriggered: choice.offer(modelData)
             }
         }
 
@@ -66,6 +62,12 @@ QQC2.ToolButton {
             enabled: (tools.owner.page.view.assets ?? []).some(asset => asset.kind === "image")
             onTriggered: cutter.open()
         }
+    }
+
+    SceneAssetChoice {
+        id: choice
+
+        owner: tools.owner
     }
 
     SceneMeshCut {

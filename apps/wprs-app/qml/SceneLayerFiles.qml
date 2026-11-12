@@ -8,8 +8,8 @@ QQC2.Menu {
 
     required property var owner
     readonly property var filters: ({
-            "image": App.tr("Pictures") + " (*.png *.jpg *.jpeg *.webp *.gif *.bmp *.ktx2)",
-            "video": App.tr("Videos") + " (*.webm *.mp4 *.mkv)",
+            "image": App.tr("Pictures") + " (*.png *.jpg *.jpeg *.webp *.gif *.bmp *.ktx2 *.hdr *.exr)",
+            "video": App.tr("Videos") + " (*.webm *.mp4 *.m4v *.mkv *.mov *.avi *.ogv *.mpg *.mpeg)",
             "sound": App.tr("Sounds") + " (*.ogg *.opus *.flac *.wav *.mp3)",
             "mesh": App.tr("Binary glTF meshes") + " (*.glb)"
         })
