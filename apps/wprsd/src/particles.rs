@@ -9,7 +9,8 @@ impl Daemon {
             .count_particles(output)
             .ok_or_else(|| not_found(format!("{output:?} shows no particles")))?;
         let level = self.compositor.status().get(output).map(|s| s.level).unwrap_or_default();
-        let systems: Vec<_> = counted.systems.iter().map(|(id, alive)| json!({ "id": id, "alive": alive })).collect();
+        let systems: Vec<_> =
+            counted.systems.iter().map(|(id, alive)| json!({ "id": id, "alive": alive })).collect();
         Ok(json!({
             "output": output, "path": counted.path, "reason": counted.reason, "alive": counted.alive,
             "slots": counted.slots, "systems": systems, "quality": level.quality,

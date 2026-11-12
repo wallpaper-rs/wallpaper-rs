@@ -6,7 +6,10 @@ use wprs_core::message::said;
 
 pub(super) fn drawers<'a>(doc: &'a Value, system: &str) -> Vec<&'a str> {
     let layers = crate::layers::walk(doc).into_iter().map(|(_, l)| l);
-    layers.filter(|l| l["type"] == "particles" && l["system"] == system).filter_map(|l| l["id"].as_str()).collect()
+    layers
+        .filter(|l| l["type"] == "particles" && l["system"] == system)
+        .filter_map(|l| l["id"].as_str())
+        .collect()
 }
 
 pub(super) fn differing(system: &Value, own: &Value) -> Vec<String> {
@@ -33,6 +36,9 @@ pub(super) fn switch(doc: &Value, sys: &str, layer: &str, own: bool) -> Result<V
     let (path, found) = crate::actions::layer(doc, layer)?;
     let name = unescape(sys.rsplit('/').next().unwrap_or_default());
     let fits = found["type"] == "particles" && found["system"] == name.as_str();
-    ensure!(fits, said("editor.not_particles", "the layer \"%1\" draws no particles of this system", &[&layer]));
+    ensure!(
+        fits,
+        said("editor.not_particles", "the layer \"%1\" draws no particles of this system", &[&layer])
+    );
     Ok(super::put(doc, &format!("{path}/render"), None))
 }
