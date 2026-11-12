@@ -80,6 +80,7 @@ pub mod reach;
 pub mod reels;
 pub mod references;
 mod rename;
+mod repair;
 pub mod response;
 pub mod review;
 mod revisions;

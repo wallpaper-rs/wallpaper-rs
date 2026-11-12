@@ -104,7 +104,7 @@ impl Seat {
     }
 }
 
-fn parsed(scene: &Value) -> Option<Scene> {
+pub(crate) fn parsed(scene: &Value) -> Option<Scene> {
     let mut scene = scene.clone();
     if scene.get("schema").is_none() {
         scene["schema"] = json!(wprs_scene::SCHEMA);
@@ -115,14 +115,11 @@ fn parsed(scene: &Value) -> Option<Scene> {
     if let Ok(found) = Scene::from_json(&scene.to_string()) {
         return Some(found);
     }
-    fn keep(list: &mut Value) {
-        if let Some(items) = list.as_array_mut() {
-            items.retain(|l| serde_json::from_value::<wprs_scene::Layer>(l.clone()).is_ok());
-            items.iter_mut().for_each(|l| keep(&mut l["layers"]));
-        }
+    crate::repair::mend_all(&mut scene["layers"]);
+    if let Ok(found) = Scene::from_json(&scene.to_string()) {
+        return Some(found);
     }
-    let mut bare = json!({ "schema": scene["schema"], "canvas": scene["canvas"], "layers": scene["layers"] });
-    keep(&mut bare["layers"]);
+    let bare = json!({ "schema": scene["schema"], "canvas": scene["canvas"], "layers": scene["layers"] });
     Scene::from_json(&bare.to_string()).ok()
 }
 

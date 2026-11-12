@@ -77,7 +77,13 @@ pub fn review(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
         return out;
     }
     match serde_json::from_value::<Scene>(doc["scene"].clone()) {
-        Err(e) => out.push(problem(locate(&doc["scene"]), said("editor.scene", "%1", &[&e]))),
+        Err(e) => {
+            let colors = crate::repair::problems(&doc["scene"]["layers"], "/scene/layers");
+            if colors.is_empty() {
+                out.push(problem(locate(&doc["scene"]), said("editor.scene", "%1", &[&e])));
+            }
+            out.extend(colors);
+        }
         Ok(mut scene) => {
             let unread = dir.and_then(|d| crate::cache::read_files(&mut scene, d)).into_iter();
             for (id, file) in &scene.models {
