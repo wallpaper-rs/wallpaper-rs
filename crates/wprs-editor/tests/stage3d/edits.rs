@@ -83,3 +83,16 @@ fn materials_change_by_name_and_check_their_values() {
     edit(&mut p, json!({ "material": { "layer": "doll", "name": "paint", "clear": true } })).unwrap();
     assert!(layer(&p, "doll")["materials"].get("paint").is_none());
 }
+
+#[test]
+fn a_glb_file_becomes_a_model_layer_in_one_step() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    let file = root.path().join("crate.glb");
+    std::fs::write(&file, super::glb()).unwrap();
+    let before = p.doc.clone();
+    act(&mut p, json!({ "add_layer": { "kind": "model", "name": "crate", "file": file } })).unwrap();
+    assert_eq!(layer(&p, "crate")["type"], "model");
+    assert_eq!(layer(&p, "crate")["model"], "crate_file");
+    undone(&mut p, &before);
+}

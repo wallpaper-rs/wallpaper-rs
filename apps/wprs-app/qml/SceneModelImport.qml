@@ -23,35 +23,23 @@ Kirigami.Dialog {
     }
 
     function name() {
-        const base = file.split("/").pop().replace(/\.glb$/i, "").toLowerCase().replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "");
-        const taken = (page.view.assets ?? []).map(a => a.id).concat((page.view.layers ?? []).map(l => l.id));
-        let id = base || "model", n = 1;
-        while (taken.includes(id))
-            id = (base || "model") + "_" + (++n);
-        return id;
+        return file.split("/").pop().replace(/\.glb$/i, "").toLowerCase().replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "") || "model";
     }
 
     title: App.tr("3D model from a file")
     standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-    onOpened: files.open()
-    onAccepted: {
-        if (!file || info?.error)
-            return;
-        const id = name();
-        page.run("import", {
-            "file": file,
-            "id": id
-        });
-        page.run("scene3d", {
-            "model": {
-                "add": {
-                    "asset": id,
-                    "id": id + "_layer",
-                    "into": into || undefined
-                }
-            }
-        });
+    onOpened: {
+        file = "";
+        info = null;
+        files.open();
+        standardButton(Kirigami.Dialog.Ok).enabled = Qt.binding(() => dialog.file !== "" && !dialog.info?.error);
     }
+    onAccepted: page.run("add_layer", {
+            "kind": "model",
+            "file": file,
+            "name": name(),
+            "into": into || undefined
+        })
 
     ColumnLayout {
         QQC2.Button {
