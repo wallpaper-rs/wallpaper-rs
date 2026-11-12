@@ -23,14 +23,14 @@ Item {
         Kirigami.Action {
             text: App.tr("Undo")
             icon.name: "edit-undo"
-            shortcut: StandardKey.Undo
+            shortcut: "Ctrl+Z"
             enabled: bar.editor.canUndo
             onTriggered: bar.editor.undo()
         },
         Kirigami.Action {
             text: App.tr("Redo")
             icon.name: "edit-redo"
-            shortcut: StandardKey.Redo
+            shortcut: "Ctrl+Shift+Z"
             enabled: bar.editor.canRedo
             onTriggered: bar.editor.redo()
         },

@@ -77,7 +77,7 @@ Kirigami.Page {
         Kirigami.Action {
             text: App.tr("Undo")
             icon.name: "edit-undo"
-            shortcut: StandardKey.Undo
+            shortcut: "Ctrl+Z"
             tooltip: page.view.history?.undo ? App.tr("Undo: %1", page.view.history.undo) : ""
             enabled: (page.view.history?.done ?? []).length > 0
             onTriggered: page.run("undo")
@@ -85,7 +85,7 @@ Kirigami.Page {
         Kirigami.Action {
             text: App.tr("Redo")
             icon.name: "edit-redo"
-            shortcut: StandardKey.Redo
+            shortcut: "Ctrl+Shift+Z"
             tooltip: page.view.history?.redo ? App.tr("Redo: %1", page.view.history.redo) : ""
             enabled: (page.view.history?.undone ?? []).length > 0
             onTriggered: page.run("redo")
@@ -93,7 +93,7 @@ Kirigami.Page {
         Kirigami.Action {
             text: App.tr("Save")
             icon.name: "document-save"
-            shortcut: StandardKey.Save
+            shortcut: "Ctrl+S"
             enabled: editor.dirty && !editor.busy
             onTriggered: editor.save()
         },
