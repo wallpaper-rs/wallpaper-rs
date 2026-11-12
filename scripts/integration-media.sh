@@ -79,10 +79,12 @@ uid_before=$(tuned '{"schema": "wallpaper-rs.scene/1", "canvas": {"size": [64, 3
   "assets": {"before": {"path": "red.png", "media": "previous"}},
   "layers": [{"id": "art", "type": "image", "image": "before", "size": [64, 32], "transform": {"position": [32, 16]}}]}' 1.0.1)
 ctl lib apply "$uid_before" -o TEST-21
+ctl input grant "$tune" media
 shown "$s21" 255 0 255
 song Evening "$(uri "$WORK/same.png")"
 shown "$s21" 0 0 255
 ctl lib apply "$uid" -o TEST-21
+ctl input grant "$tune" media
 shown "$s21" 255 0 255
 more() { [ "$(grep -c '^gets' "$WORK/player.out")" -gt "$1" ]; }
 asked() {
