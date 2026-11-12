@@ -2,7 +2,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-11 00:00+0000\n"
 "POT-Creation-Date: 2026-11-12 00:00+0000\n"
 "PO-Revision-Date: 2026-10-22 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
@@ -542,6 +541,9 @@ msgstr "%1 de %2"
 #, kde-format
 msgid "Try again"
 msgstr "Probar de nuevo"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+#, kde-format
 msgid ""
 "%1 exists only on another device. Publishing it to the server or to a "
 "repository makes it available here."

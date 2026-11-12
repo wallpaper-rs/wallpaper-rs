@@ -336,7 +336,10 @@ msgid ""
 "Copy a picture into assets/ as the thumbnail of the package, made smaller "
 "when it is over 1024 pixels or 1 MiB, or with --animated as its animated "
 "preview; with --capture draw the scene instead of giving a picture"
-msgstr "Copia una imagen en assets/ como miniatura del paquete, reducida si pasa de 1024 píxeles o 1 MiB, o con --animated como su vista previa animada; con --capture dibuja la escena en vez de dar una imagen"
+msgstr ""
+"Copia una imagen en assets/ como miniatura del paquete, reducida si pasa de "
+"1024 píxeles o 1 MiB, o con --animated como su vista previa animada; con --"
+"capture dibuja la escena en vez de dar una imagen"
 
 #: apps/wprs-ctl/src/author.rs
 msgid "A gif or webp of at most 640 pixels a side, 15 s and 8 MiB"
@@ -539,11 +542,14 @@ msgstr "Una imagen, o con --animated un gif o webp"
 msgid ""
 "Draw the scene on the graphics card and keep a frame, or with --animated a "
 "recording of it"
-msgstr "Dibuja la escena con la tarjeta gráfica y conserva un fotograma, o con --animated una grabación"
+msgstr ""
+"Dibuja la escena con la tarjeta gráfica y conserva un fotograma, o con --"
+"animated una grabación"
 
 #: apps/wprs-ctl/src/capturing.rs
 msgid "Second of the scene to keep; its poster time without it"
-msgstr "Segundo de la escena que se conserva; sin él, el segundo de su fotograma fijo"
+msgstr ""
+"Segundo de la escena que se conserva; sin él, el segundo de su fotograma fijo"
 
 #: apps/wprs-ctl/src/capturing.rs
 msgid "Second where the recording starts; 0 without it"
@@ -1033,8 +1039,12 @@ msgid "Id of the copy; the id of the package followed by .copy when omitted"
 msgstr "Id de la copia; el id del paquete seguido de .copy si se omite"
 
 #: apps/wprs-ctl/src/copying.rs
-msgid "Unpack even though its license allows no derived works: you made it or its author allows it"
-msgstr "Desempaquetar aunque su licencia no permita obras derivadas: lo hiciste tú o su autor lo permite"
+msgid ""
+"Unpack even though its license allows no derived works: you made it or its "
+"author allows it"
+msgstr ""
+"Desempaquetar aunque su licencia no permita obras derivadas: lo hiciste tú o "
+"su autor lo permite"
 
 #: apps/wprs-ctl/src/copying.rs
 msgid "Only print what the license allows and the id of the copy"
@@ -2030,10 +2040,6 @@ msgid "Start the particle systems and the scene again"
 msgstr "Volver a empezar los sistemas de partículas y la escena"
 
 #: apps/wprs-ctl/src/folder.rs
-msgid "Start from this preset of the package before --values"
-msgstr "Partir de este preajuste del paquete antes de aplicar --values"
-
-#: apps/wprs-ctl/src/folder.rs
 msgid ""
 "Show it as the daemon does on battery: a lower level and the battery pace"
 msgstr ""
@@ -2043,6 +2049,10 @@ msgstr ""
 #: apps/wprs-ctl/src/folder.rs
 msgid "Show it as the daemon does with reduced motion"
 msgstr "Mostrarla como la muestra el demonio con menos movimiento"
+
+#: apps/wprs-ctl/src/folder.rs
+msgid "Start from this preset of the package before --values"
+msgstr "Partir de este preajuste del paquete antes de aplicar --values"
 
 #: apps/wprs-ctl/src/folder.rs
 msgid ""
@@ -2449,8 +2459,12 @@ msgid "Public key file or text of the key"
 msgstr "Archivo o texto de la clave pública"
 
 #: apps/wprs-ctl/src/keyed.rs
-msgid "Hand your online author over from an old key to a new one, signing with the old key"
-msgstr "Traspasa tu autor en línea de una clave vieja a una nueva, firmando con la vieja"
+msgid ""
+"Hand your online author over from an old key to a new one, signing with the "
+"old key"
+msgstr ""
+"Traspasa tu autor en línea de una clave vieja a una nueva, firmando con la "
+"vieja"
 
 #: apps/wprs-ctl/src/keyed.rs apps/wprs-ctl/src/pack.rs
 msgid "Secret key file that signed the earlier versions"
