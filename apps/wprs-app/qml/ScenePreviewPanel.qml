@@ -42,6 +42,15 @@ ColumnLayout {
         Layout.fillWidth: true
     }
 
+    ScenePreviewCompare {
+        Layout.fillWidth: true
+        page: panel.page
+    }
+
+    Kirigami.Separator {
+        Layout.fillWidth: true
+    }
+
     ScenePreviewSave {
         Layout.fillWidth: true
         page: panel.page
