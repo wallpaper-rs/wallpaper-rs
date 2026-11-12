@@ -21,7 +21,7 @@ fn a_key_placed_near_a_whole_second_shows_its_own_value_in_the_field() {
         let shown = fields_at(&doc, "/scene/layers/1", time)
             .into_iter()
             .find(|f| f.pointer == rotation)
-            .map(|f| f.shown);
-        assert_eq!(shown, Some(json!(360)), "at {time}");
+            .and_then(|f| f.shown.as_f64());
+        assert_eq!(shown, Some(360.0), "at {time}");
     }
 }
