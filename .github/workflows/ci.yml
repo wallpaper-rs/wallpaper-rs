@@ -107,6 +107,9 @@ jobs:
       - name: Shell scripts
         run: shellcheck apps/wprs-server/skeleton.sh packaging/*.sh packaging/flatpak/*.sh scripts/*.sh
 
+      - name: Cache cleanup selection
+        run: scripts/ci-cache-clean-test.sh
+
       - name: QML syntax
         run: |
           for f in integrations/*/metadata.json; do python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$f"; done
@@ -1239,3 +1242,24 @@ jobs:
           VERSION: ${{ needs.version.outputs.semver }}
           SIGN: ${{ github.repository_owner == 'wallpaper-rs' }}
         run: scripts/release-flatpak.sh bundles
+
+  cache-cleanup:
+    name: Cache cleanup
+    needs: [version, workflows, lint, clippy, test, render-gl, depth, e2e, web, sway, x11, sync, build, package, android-native, android, android-lint, android-emulator, rpm, flatpak, flatpak-daemon, app-check, plasma, server, release, image, flatpak-release]
+    if: ${{ !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    continue-on-error: true
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+
+      - name: Delete the caches of older generations and the ones not read for three days
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/ci-cache-clean.sh
