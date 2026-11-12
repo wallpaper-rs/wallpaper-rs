@@ -47,6 +47,8 @@ pub(crate) struct Staged {
     pub(crate) draw_bytes: Vec<u8>,
     pub(crate) renders: u64,
     pub(crate) shadow_renders: u64,
+    pub(crate) cross_key: u64,
+    pub(crate) cross_renders: u64,
 }
 
 impl Renderer {
@@ -108,6 +110,8 @@ impl Renderer {
             draw_bytes: Vec::new(),
             renders: 0,
             shadow_renders: 0,
+            cross_key: 0,
+            cross_renders: 0,
         }
     }
 }

@@ -11,7 +11,7 @@ mod key;
 mod looks;
 pub mod paths;
 
-pub use key::seal;
+pub use key::{cross_key, seal};
 pub(crate) use looks::eye;
 pub use looks::{CHROMA_KEY, FUR_LAYERS, FUR_LENGTH};
 pub use paths::Flight;
@@ -76,7 +76,7 @@ pub struct Stage3d<'a> {
     pub planes: [f32; MAX_PLANES],
     pub slices: usize,
     pub key: u64,
-    pub fade: f32,
+    pub still: u64,
     pub cross: Option<(Eye, f32)>,
     pub wind: [f32; 2],
     pub time: f32,
@@ -138,7 +138,7 @@ pub(crate) fn after<'a>(
     }
 }
 
-pub(crate) fn camera(cx: &Context, aspect: f32, q: crate::Quality) -> (Eye, f32, Option<(Eye, f32)>) {
+pub(crate) fn camera(cx: &Context, aspect: f32, q: crate::Quality) -> (Eye, Option<(Eye, f32)>) {
     let (eye, flight) = eye(cx);
     let fix = |e: Eye| Eye { aspect, near: eye.near, far: eye.far, ..e };
     match flight {
@@ -146,9 +146,9 @@ pub(crate) fn camera(cx: &Context, aspect: f32, q: crate::Quality) -> (Eye, f32,
             if f.moving {
                 cx.paced(crate::Wake::Frame, (q == crate::Quality::Q0).then_some(30));
             }
-            (fix(eye), f.fade, f.cross.map(|(e, k)| (fix(e), k)))
+            (fix(eye), f.cross.map(|(e, k)| (fix(e), k)))
         }
-        None => (fix(eye), 0.0, None),
+        None => (fix(eye), None),
     }
 }
 
@@ -157,7 +157,7 @@ pub(crate) fn lone<'a>(cx: &Context<'a>, frame: &mut Frame<'a>, p: usize) {
     let d = &frame.draws[at];
     let Content::Model { layer, size, .. } = d.content else { return };
     let stage = frame.stages.len();
-    let (eye, fade, cross) = camera(cx, size[0] / size[1].max(1e-3), frame.quality);
+    let (eye, cross) = camera(cx, size[0] / size[1].max(1e-3), frame.quality);
     let (world, origin) = (d.world, d.origin);
     let planes = [0.0; MAX_PLANES];
     let (wind, time) = ([0.0; 2], cx.t);
@@ -173,7 +173,7 @@ pub(crate) fn lone<'a>(cx: &Context<'a>, frame: &mut Frame<'a>, p: usize) {
         planes,
         slices,
         key: 0,
-        fade,
+        still: 0,
         cross,
         wind,
         time,

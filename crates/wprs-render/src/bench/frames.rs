@@ -141,8 +141,9 @@ impl<'a> Run<'a> {
                 self.runtime.advance(step.as_secs_f64());
                 (since, at) = (since + step, at + step);
             }
+            let rate = f64::from(self.runtime.pace());
             let due = match self.wake {
-                Wake::Frame => true,
+                Wake::Frame => since.as_secs_f64() + 1e-6 >= 1.0 / rate,
                 Wake::At(s) => since.as_secs_f64() >= s,
                 Wake::Idle => false,
             };

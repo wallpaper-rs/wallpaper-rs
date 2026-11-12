@@ -39,12 +39,7 @@ pub fn seal<'a>(cx: &Context<'a>, frame: &mut Frame<'a>) {
     for s in &mut frame.stages {
         let mut h = DefaultHasher::new();
         h.write_u64(lights);
-        eye(&mut h, &s.eye);
-        floats(&mut h, &[s.size[0], s.size[1], s.slices as f32, s.fade]);
-        if let Some((e, k)) = &s.cross {
-            eye(&mut h, e);
-            floats(&mut h, &[*k]);
-        }
+        floats(&mut h, &[s.size[0], s.size[1], s.slices as f32]);
         floats(&mut h, &s.planes);
         floats(&mut h, &s.world.0);
         let mut sways = false;
@@ -69,13 +64,29 @@ pub fn seal<'a>(cx: &Context<'a>, frame: &mut Frame<'a>) {
             floats(&mut h, &[wind[0], wind[1], s.time]);
             cx.note(crate::Wake::Frame);
         }
-        s.key = h.finish();
+        s.still = h.finish();
+        let mut k = DefaultHasher::new();
+        k.write_u64(s.still);
+        eye(&mut k, &s.eye);
+        if let Some((e, f)) = &s.cross {
+            eye(&mut k, e);
+            floats(&mut k, &[*f]);
+        }
+        s.key = k.finish();
     }
     for d in &mut frame.draws {
         if let Content::Model { stage, key, .. } = &mut d.content {
             *key = frame.stages.get(*stage).map_or(0, |s| s.key);
         }
     }
+}
+
+pub fn cross_key(s: &crate::eval::Stage3d) -> Option<u64> {
+    let (e, _) = s.cross.as_ref()?;
+    let mut h = DefaultHasher::new();
+    h.write_u64(s.still);
+    eye(&mut h, e);
+    Some(h.finish())
 }
 
 struct Writer<'h>(&'h mut DefaultHasher);

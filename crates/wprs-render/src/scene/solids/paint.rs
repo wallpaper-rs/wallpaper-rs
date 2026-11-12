@@ -147,15 +147,22 @@ impl Renderer {
         if let Some((_, f)) = stage.cross {
             if staged.cross.len() != stage.slices {
                 staged.cross = self.slice_images(staged.size, staged.hdr, stage.slices);
-                staged.cross_groups.clear();
+                (staged.cross_groups, staged.cross_key) = (Vec::new(), 0);
             }
             if staged.cross_groups.len() != stage.slices {
                 staged.cross_groups = staged.cross.iter().map(|c| self.mix_group(c)).collect();
             }
+            let key = wprs_scene::cross_key(stage).unwrap_or_default();
+            let fresh = std::mem::replace(&mut staged.cross_key, key) != key;
+            staged.cross_renders += u64::from(fresh);
             for k in 0..stage.slices {
-                self.stage_pass(&mut encoder, staged, models, (k, 1));
+                if fresh {
+                    self.stage_pass(&mut encoder, staged, models, (k, 1));
+                }
                 self.mix_slices(&mut encoder, &staged.cross_groups[k], &staged.slices[k], f);
             }
+        } else {
+            staged.cross_key = 0;
         }
         encoder.finish()
     }

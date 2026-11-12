@@ -10,6 +10,7 @@ use std::sync::Arc;
 
 mod adopted;
 mod clock;
+mod dark;
 mod draw;
 mod feed;
 mod puppets;
@@ -69,6 +70,7 @@ pub struct Runtime {
     flocks: Vec<Flock>,
     systems: Vec<System>,
     pub(crate) glow: crate::glow::Glows,
+    veil: dark::Veil,
     battery: bool,
     pub(crate) tapes: Vec<crate::Tape>,
     pub(crate) ended: Vec<String>,
@@ -114,6 +116,7 @@ impl Runtime {
         let tapes = crate::footage::tapes(&scene);
         let mut runtime = Runtime {
             glow,
+            veil: dark::veil(&scene),
             battery: false,
             tapes,
             ended: Vec::new(),

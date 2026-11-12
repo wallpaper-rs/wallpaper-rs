@@ -1,5 +1,5 @@
 fn shown(c: vec3<f32>, a: f32) -> vec4<f32> {
-    return vec4<f32>(c * (1.0 - scene.fade.x) * a, a) * finish.more.x;
+    return vec4<f32>(c * a, a) * finish.more.x;
 }
 
 fn lit(s: Surface, in: Out, front: bool) -> vec4<f32> {

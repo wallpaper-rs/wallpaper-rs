@@ -123,6 +123,15 @@ impl Runtime {
         if let Some(glow) = crate::glow::pick(&self.glow, quality, self.battery) {
             walk(&cx, [glow], (Affine::IDENTITY, None), quality, &mut frame, canvas);
         }
+        if let Some(veil) = self.veil.as_deref() {
+            let dark = super::dark::dark(&cx, quality);
+            if dark > 0.0 {
+                walk(&cx, [veil], (Affine::IDENTITY, None), quality, &mut frame, canvas);
+                if let Some(d) = frame.draws.last_mut().filter(|d| std::ptr::eq(d.layer, veil)) {
+                    d.opacity = dark;
+                }
+            }
+        }
         let Frame { draws, lamps, .. } = &mut frame;
         let mut found = crate::eval::lamps::Gather { out: lamps, draws, next: 0, within: usize::MAX };
         let lit = (true, self.lit);

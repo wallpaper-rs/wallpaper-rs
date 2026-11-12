@@ -136,7 +136,7 @@ pub(crate) fn scene3(
         up: [u[0], u[1], u[2], 0.0],
         slice: [near, far, f32::from(u8::from(env)), f32::from(u8::from(shine && env))],
         wind: wind(stage, eye),
-        fade: [stage.fade, 0.0, 0.0, 0.0],
+        fade: [0.0; 4],
         lights,
     }
 }

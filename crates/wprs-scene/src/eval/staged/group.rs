@@ -74,7 +74,7 @@ pub(super) fn gather<'a>(
         return;
     }
     let stage = frame.stages.len();
-    let (eye, fade, cross) = super::camera(cx, canvas[0] / canvas[1].max(1e-3), frame.quality);
+    let (eye, cross) = super::camera(cx, canvas[0] / canvas[1].max(1e-3), frame.quality);
     let end = frame.draws[at].end;
     let mut blocks: Vec<(std::ops::Range<usize>, Option<f32>)> = Vec::new();
     let (mut i, mut seen) = (at + 1, false);
@@ -166,7 +166,7 @@ pub(super) fn gather<'a>(
         planes: cut,
         slices,
         key: 0,
-        fade,
+        still: 0,
         cross,
         wind: [0.0; 2],
         time: cx.t,

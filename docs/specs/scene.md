@@ -883,10 +883,14 @@ last key, without a jump in place or heading, and `ease` shapes the time along o
 plays once and holds its last key, asking for no more frames; one looping path loops for good; several
 paths play one after another, each once (a looping one for one turn), `sequential` in their order or
 `random` in a new order each round, and then start again. `fade` joins them: `black` darkens the last
-half of `duration` of a path and brightens the first half of the next one (the models of the stage fade
-to black, their alpha kept), and `cross` draws the last `duration` of a path over the start of the next
-one, mixing both pictures. Moving paths ask for frames, within `max_fps` and at most 30 a second at the
-lowest quality.
+half of `duration` of a path and brightens the first half of the next one (the whole picture of the
+scene fades to black, flat layers included, as one black layer over everything that costs one
+full-canvas draw at every quality level and only while it is not clear), and `cross` draws the last
+`duration` of a path over the start of the next one, mixing both pictures of the models: the start of
+the next path is rendered once and kept while its models, lights and camera stay the same, so a cross
+fade costs one more render of the models when it begins and one mix a slice each frame. Moving paths ask
+for frames, within `max_fps` and at most 30 a second at the lowest quality, and `scene bench` counts as
+needed only the frames that pace asks for.
 
 #### Animated models
 

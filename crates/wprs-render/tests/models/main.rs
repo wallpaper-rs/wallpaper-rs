@@ -12,6 +12,7 @@ mod combs;
 mod coverage;
 mod debug;
 mod depth;
+mod fades;
 mod finish;
 mod light;
 mod paths;

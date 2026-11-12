@@ -155,6 +155,10 @@ impl SceneView {
         (self.models.len(), self.envs.len())
     }
 
+    pub fn cross_renders(&self) -> u64 {
+        self.solids.values().map(|s| s.cross_renders).sum()
+    }
+
     pub fn shadow_renders(&self) -> u64 {
         self.solids.values().map(|s| s.shadow_renders).sum()
     }
