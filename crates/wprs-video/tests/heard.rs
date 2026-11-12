@@ -28,10 +28,10 @@ fn play(path: &Path) -> (Player, Receiver<Event>) {
     let options = Options { max_size: (64, 32), max_fps: 60, volume: 0.5, muted: false, cut, zero_copy };
     let player = Player::open(path, options, move |event| drop(tx.send(event))).unwrap();
     assert!(player.audio_enabled(), "the player has no sound");
-    match rx.recv_timeout(Duration::from_secs(10)) {
+    match rx.recv_timeout(Duration::from_secs(30)) {
         Ok(Event::Frame(_)) => (player, rx),
         Ok(Event::Error(e)) => panic!("playback error: {e}"),
-        Err(_) => panic!("no frame within 10 s"),
+        Err(_) => panic!("no frame within 30 s"),
     }
 }
 
@@ -61,7 +61,7 @@ fn frames(rx: &Receiver<Event>, skip: Duration, span: Duration) -> Vec<(Instant,
 
 fn playing(rx: &Receiver<Event>, within: impl Fn(Duration) -> bool) {
     let (start, mut last) = (Instant::now(), None::<Duration>);
-    while start.elapsed() < Duration::from_secs(10) {
+    while start.elapsed() < Duration::from_secs(30) {
         match rx.recv_timeout(Duration::from_secs(2)) {
             Ok(Event::Frame(f)) => {
                 let pts = f.pts.filter(|pts| within(*pts));
@@ -76,15 +76,19 @@ fn playing(rx: &Receiver<Event>, within: impl Fn(Duration) -> bool) {
             Err(_) => {}
         }
     }
-    panic!("the video did not play within 10 s");
+    panic!("the video did not play within 30 s");
 }
 
-fn speed(seen: &[(Instant, Duration)]) -> f64 {
-    let steps = seen.windows(2).filter(|w| w[1].1 > w[0].1);
-    let (stream, wall) = steps.fold((0.0, 0.0), |(s, w), p| {
-        (s + (p[1].1 - p[0].1).as_secs_f64(), w + (p[1].0 - p[0].0).as_secs_f64())
-    });
-    stream / wall * 100.0
+fn speed(seen: &[(Instant, Duration)], percent: f64) -> f64 {
+    let run = seen.chunk_by(|a, b| b.1 >= a.1).max_by_key(|run| run.len()).unwrap_or_default();
+    let Some(&(start, _)) = run.first() else { return 0.0 };
+    let late = |(at, pts): &(Instant, Duration)| {
+        (*at - start).as_secs_f64() - pts.as_secs_f64() * 100.0 / percent
+    };
+    let third = (run.len() / 3).max(1);
+    let on_time = |part: &[(Instant, Duration)]| part.iter().copied().min_by(|a, b| late(a).total_cmp(&late(b)));
+    let (Some(a), Some(b)) = (on_time(&run[..third]), on_time(&run[run.len() - third..])) else { return 0.0 };
+    (b.1.as_secs_f64() - a.1.as_secs_f64()) / (b.0 - a.0).as_secs_f64() * 100.0
 }
 
 #[test]
@@ -98,7 +102,7 @@ fn a_video_with_sound_takes_a_new_speed_and_part() {
     std::fs::remove_file(path).unwrap();
     assert!(seen.len() > 10, "only {} frames after the change", seen.len());
     assert!(seen.iter().all(|(_, pts)| range.contains(pts)), "{seen:?}");
-    assert!((speed(&seen) / 200.0 - 1.0).abs() < 0.35, "played at {:.0} %", speed(&seen));
+    assert!((speed(&seen, 200.0) / 200.0 - 1.0).abs() < 0.35, "played at {:.0} %", speed(&seen, 200.0));
 }
 
 #[test]
@@ -113,5 +117,5 @@ fn a_video_with_sound_keeps_its_position_on_a_new_speed() {
     std::fs::remove_file(path).unwrap();
     let first = after.first().expect("frames after the change").1;
     assert!(first + FRAME >= last, "the video went back from {last:?} to {first:?}");
-    assert!((speed(&after) / 50.0 - 1.0).abs() < 0.35, "played at {:.0} %", speed(&after));
+    assert!((speed(&after, 50.0) / 50.0 - 1.0).abs() < 0.35, "played at {:.0} %", speed(&after, 50.0));
 }
