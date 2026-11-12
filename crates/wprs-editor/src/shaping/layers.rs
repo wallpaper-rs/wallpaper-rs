@@ -134,6 +134,10 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &L) -> Result<Vec<Op>> {
             let (path, found) = layer(doc, id)?;
             instance(doc, &path, found, values, *clear)?
         }
+        L::Touch { layer: id, takes, alpha } => {
+            let (path, found) = layer(doc, id)?;
+            crate::touch::edit(doc, &path, found, *takes, *alpha)?
+        }
     };
     refused(dir, doc, ops)
 }

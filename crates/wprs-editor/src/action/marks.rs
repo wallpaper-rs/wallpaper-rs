@@ -72,6 +72,30 @@ pub enum LayerEdit {
         #[serde(default)]
         clear: bool,
     },
+    Touch {
+        layer: String,
+        takes: Takes,
+        #[serde(default)]
+        alpha: Option<f64>,
+    },
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Takes {
+    Off,
+    All,
+    Alpha,
+}
+
+impl Takes {
+    pub fn name(self) -> &'static str {
+        match self {
+            Takes::Off => "off",
+            Takes::All => "all",
+            Takes::Alpha => "alpha",
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]

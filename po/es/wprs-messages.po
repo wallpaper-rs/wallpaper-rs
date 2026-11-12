@@ -386,6 +386,37 @@ msgstr "no hay ningún hueso «%1»"
 #: crates/wprs-editor/src/batch.rs
 msgid "undo and redo cannot be part of a step with other actions"
 msgstr "deshacer y rehacer no pueden ser parte de un paso con otras acciones"
+#: crates/wprs-editor/src/bands.rs
+msgid "bands are counted out of 16, 32 or 64"
+msgstr "las bandas se cuentan sobre 16, 32 o 64"
+
+#: crates/wprs-editor/src/bands.rs
+msgid "a band goes from 0 to %1"
+msgstr "una banda va de 0 a %1"
+
+#: crates/wprs-editor/src/bands.rs
+msgid "%1 is not bass, mid, treble, level or beat"
+msgstr "%1 no es graves, medios, agudos, nivel ni pulso"
+
+#: crates/wprs-editor/src/bands.rs
+msgid "the first band is not above the last"
+msgstr "la primera banda no está por encima de la última"
+
+#: crates/wprs-editor/src/bands.rs
+msgid "bands are reduced by mean or max"
+msgstr "las bandas se reducen por promedio o por máximo"
+
+#: crates/wprs-editor/src/bands.rs
+msgid "give a name, a band or a range of two bands"
+msgstr "da un nombre, una banda o un rango de dos bandas"
+
+#: crates/wprs-editor/src/bands.rs
+msgid "the channel is average, left or right"
+msgstr "el canal es ambos, izquierdo o derecho"
+
+#: crates/wprs-editor/src/bands.rs
+msgid "%1 is not x, y, inside or speed"
+msgstr "%1 no es x, y, inside ni speed"
 
 #: crates/wprs-editor/src/blend.rs
 msgid "a number such as 0.5"
@@ -2215,6 +2246,10 @@ msgstr "no hay ninguna línea de tiempo «%1»"
 #: crates/wprs-editor/src/timelines/mod.rs
 msgid "add or remove a timeline, not both"
 msgstr "añade o quita una línea de tiempo, no ambas cosas"
+
+#: crates/wprs-editor/src/touch.rs
+msgid "the opacity that takes the pointer goes from 0 to 1"
+msgstr "la opacidad que toma el puntero va de 0 a 1"
 
 #: crates/wprs-format/src/admin.rs
 msgid "no folder was given for the repository"

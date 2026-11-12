@@ -18,6 +18,17 @@ QQC2.ToolButton {
             });
     }
 
+    function sourced(request) {
+        const base = field.source === "audio" || field.source === "cursor" ? field.value : ({});
+        const reply = JSON.parse(page.editor.rig("", JSON.stringify({
+                    "bands": Object.assign({
+                        "base": base
+                    }, request)
+                })) || "null");
+        if (reply?.source)
+            bound(reply.source);
+    }
+
     function follow(prop) {
         if (!listed)
             return bound({
@@ -45,6 +56,13 @@ QQC2.ToolButton {
     QQC2.ToolTip.text: field.source ? App.tr("Follows %1", SceneWords.binding(field.value)) : App.tr("Fixed value")
     QQC2.ToolTip.visible: hovered
     onClicked: menu.popup()
+
+    SceneBandPicker {
+        id: bands
+
+        page: bind.page
+        onChosen: source => bind.bound(source)
+    }
 
     QQC2.Menu {
         id: menu
@@ -122,9 +140,19 @@ QQC2.ToolButton {
                     required property var modelData
 
                     text: modelData[1]
-                    onTriggered: bind.bound({
-                            "audio": modelData[0]
+                    onTriggered: bind.sourced({
+                            "pick": modelData[0]
                         })
+                }
+            }
+
+            QQC2.MenuSeparator {}
+
+            QQC2.MenuItem {
+                text: App.tr("A band or a range of bands…")
+                onTriggered: {
+                    bands.base = bind.field.source === "audio" ? bind.field.value : ({});
+                    bands.open();
                 }
             }
         }
@@ -161,8 +189,8 @@ QQC2.ToolButton {
                     required property var modelData
 
                     text: modelData[1]
-                    onTriggered: bind.bound({
-                            "cursor": modelData[0]
+                    onTriggered: bind.sourced({
+                            "direction": modelData[0]
                         })
                 }
             }

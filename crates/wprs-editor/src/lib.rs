@@ -3,6 +3,7 @@ pub mod actions;
 pub mod arrange;
 pub mod assets;
 mod attach;
+pub mod bands;
 pub mod bases;
 mod batch;
 mod blend;
@@ -86,6 +87,7 @@ pub mod templates;
 pub mod texts;
 mod tidy;
 mod timelines;
+pub mod touch;
 
 pub use actions::{ACTIONS, Action};
 pub use findings::{Problem, told, told_with};

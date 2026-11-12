@@ -20,7 +20,7 @@ mod timing;
 pub use ids::{Named, PasteEdit, RenameEdit, TranslateEdit};
 pub use lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, NormalsMake};
 pub use limbs::{AttachEdit, BodyEdit, BoneRuleEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit};
-pub use marks::{CanvasEdit, ClockSet, Fit, Grip, LayerEdit, ManifestEdit, Needed, PropertyEdit, SCREENS};
+pub use marks::{CanvasEdit, ClockSet, Fit, Grip, LayerEdit, ManifestEdit, Needed, PropertyEdit, SCREENS, Takes};
 pub use motion::{AnimEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use names::{
     ACTIONS, AssetEdit, ConditionEdit, EDITOR, ImportAssets, RgbEdit, RuleEdit, ScriptFile, UpgradeEdit,

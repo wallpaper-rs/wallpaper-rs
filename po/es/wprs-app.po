@@ -1677,7 +1677,7 @@ msgid "Slow orbit"
 msgstr "Órbita lenta"
 
 #: apps/wprs-app/qml/EditParallax.qml apps/wprs-app/qml/SceneCanvasLook.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
+#: apps/wprs-app/qml/SceneTouch.qml apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Pointer"
 msgstr "Puntero"
 
@@ -4540,6 +4540,104 @@ msgstr "Un módulo JavaScript de la escena"
 msgid "Drag to move %1 along what it follows"
 msgstr "Arrastra para mover %1 a lo largo de lo que sigue"
 
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneSwarmFields.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Bass"
+msgstr "Graves"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Mids"
+msgstr "Medios"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneSwarmFields.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Treble"
+msgstr "Agudos"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneSwarmFields.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Level"
+msgstr "Nivel"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+#: apps/wprs-app/qml/SceneSwarmFields.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Beat"
+msgstr "Pulso"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "Click a band, or drag over several"
+msgstr "Pulsa una banda o arrastra sobre varias"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneRigRules.qml
+msgid "%1 to %2"
+msgstr "%1 a %2"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "Band %1: %2"
+msgstr "Banda %1: %2"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "Bands %1 to %2: %3"
+msgstr "Bandas %1 a %2: %3"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml apps/wprs-app/qml/SceneBind.qml
+msgid "Follow the sound"
+msgstr "Seguir el sonido"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Bands"
+msgstr "Bandas"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "16 bands"
+msgstr "16 bandas"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "32 bands"
+msgstr "32 bandas"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "64 bands"
+msgstr "64 bandas"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "Several bands count as"
+msgstr "Varias bandas cuentan como"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "Their average"
+msgstr "Su promedio"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "The loudest"
+msgstr "La más fuerte"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+#: apps/wprs-app/qml/SceneEffectMaskTune.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Channel"
+msgstr "Canal"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+msgid "Both"
+msgstr "Ambos"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Left"
+msgstr "Izquierda"
+
+#: apps/wprs-app/qml/SceneBandPicker.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Right"
+msgstr "Derecha"
+
 #: apps/wprs-app/qml/SceneBind.qml apps/wprs-app/qml/SceneInput.qml
 #: apps/wprs-app/qml/SceneSwarmSpread.qml
 msgid "Follows %1"
@@ -4570,32 +4668,8 @@ msgid "Follow a user property"
 msgstr "Seguir una propiedad de usuario"
 
 #: apps/wprs-app/qml/SceneBind.qml
-msgid "Follow the sound"
-msgstr "Seguir el sonido"
-
-#: apps/wprs-app/qml/SceneBind.qml apps/wprs-app/qml/SceneSwarmFields.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Bass"
-msgstr "Graves"
-
-#: apps/wprs-app/qml/SceneBind.qml apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Mids"
-msgstr "Medios"
-
-#: apps/wprs-app/qml/SceneBind.qml apps/wprs-app/qml/SceneSwarmFields.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Treble"
-msgstr "Agudos"
-
-#: apps/wprs-app/qml/SceneBind.qml apps/wprs-app/qml/SceneSwarmFields.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Level"
-msgstr "Nivel"
-
-#: apps/wprs-app/qml/SceneBind.qml apps/wprs-app/qml/SceneSwarmFields.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Beat"
-msgstr "Pulso"
+msgid "A band or a range of bands…"
+msgstr "Una banda o un rango de bandas…"
 
 #: apps/wprs-app/qml/SceneBind.qml
 msgid "Follow the media player"
@@ -5214,11 +5288,6 @@ msgid ""
 msgstr ""
 "El lienzo muestra la máscara sobre la capa: arrastra las asas de una forma "
 "para darle tamaño y el punto junto a su borde para suavizarlo."
-
-#: apps/wprs-app/qml/SceneEffectMaskTune.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Channel"
-msgstr "Canal"
 
 #: apps/wprs-app/qml/SceneEffectMaskTune.qml
 #: apps/wprs-app/qml/SceneSwarmInstance.qml
@@ -7086,10 +7155,6 @@ msgid "Rules that hand a bone to another parent"
 msgstr "Reglas que pasan un hueso a otro padre"
 
 #: apps/wprs-app/qml/SceneRigRules.qml
-msgid "%1 to %2"
-msgstr "%1 a %2"
-
-#: apps/wprs-app/qml/SceneRigRules.qml
 msgid "New parent"
 msgstr "Nuevo padre"
 
@@ -8953,6 +9018,28 @@ msgstr ""
 #: apps/wprs-app/qml/SceneTones.qml
 msgid "HDR is on for: %1"
 msgstr "HDR activado en: %1"
+
+#: apps/wprs-app/qml/SceneTouch.qml
+msgid "Lets the pointer through"
+msgstr "Deja pasar el puntero"
+
+#: apps/wprs-app/qml/SceneTouch.qml
+msgid "Takes the pointer over its whole box"
+msgstr "Toma el puntero en toda su caja"
+
+#: apps/wprs-app/qml/SceneTouch.qml
+msgid "Takes the pointer where it is opaque"
+msgstr "Toma el puntero donde es opaca"
+
+#: apps/wprs-app/qml/SceneTouch.qml
+msgid "Opaque from %1%"
+msgstr "Opaca desde el %1%"
+
+#: apps/wprs-app/qml/SceneTouch.qml
+msgid ""
+"Clicks and the pointer entering or leaving trigger timelines, sounds and "
+"scripts, with the pointer permission. The area shows over the canvas."
+msgstr "Los clics y la entrada o salida del puntero activan líneas de tiempo, sonidos y scripts, con el permiso del puntero. El área se ve sobre el lienzo."
 
 #: apps/wprs-app/qml/SceneWakeRules.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
@@ -12261,10 +12348,6 @@ msgid "Pointer leaves"
 msgstr "Sale el puntero"
 
 #: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Left"
-msgstr "Izquierda"
-
-#: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Lighten"
 msgstr "Aclarar"
 
@@ -12384,10 +12467,6 @@ msgstr "Reflejar"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Resized"
 msgstr "Al cambiar de tamaño"
-
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Right"
-msgstr "Derecha"
 
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Rigid"
@@ -12641,10 +12720,6 @@ msgstr "Banda de sonido"
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Play at start"
 msgstr "Reproducir al empezar"
-
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Bands"
-msgstr "Bandas"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Base value"

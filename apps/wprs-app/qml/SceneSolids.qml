@@ -14,6 +14,12 @@ ColumnLayout {
         node: solids.node
     }
 
+    SceneTouch {
+        Layout.fillWidth: true
+        page: solids.page
+        node: solids.node
+    }
+
     SceneDepthToggle {
         Layout.fillWidth: true
         page: solids.page

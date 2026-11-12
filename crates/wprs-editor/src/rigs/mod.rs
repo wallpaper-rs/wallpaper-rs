@@ -141,6 +141,8 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("levels").is_some() => {
             crate::levels::effective(doc, q["levels"]["property"].as_str().unwrap_or(id))
         }
+        _ if q.get("bands").is_some() => crate::bands::query(&q["bands"]),
+        _ if q.get("touch").is_some() => crate::touch::areas(doc),
         _ if q.get("spread").is_some() => crate::spread::spread(doc, &q["spread"]),
         _ => rig(dir, doc, id),
     }
