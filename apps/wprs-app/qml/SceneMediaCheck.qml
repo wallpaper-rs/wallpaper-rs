@@ -15,7 +15,7 @@ QtObject {
             player.skip();
             seen[i + 1] = SceneLook.media.title;
         }
-        if (seen[1] !== SceneMediaWords.tracks[1] || seen[count] !== SceneMediaWords.tracks[0] || new Set(seen).size !== count)
+        if (seen[1] !== SceneMediaWords.tracks[1] || seen[count] !== SceneMediaWords.tracks[0] || new Set(seen.slice(1)).size !== count)
             throw new Error("media: Next track did not walk the titles: " + JSON.stringify(seen));
         if (SceneLook.media.position !== 0)
             throw new Error("media: Next track kept the position");
