@@ -31,7 +31,6 @@ QtObject {
         swatch.hex = "#ff8800";
         swatch.field.text = "00ff00";
         swatch.field.focus = false;
-        swatch.field.editingFinished();
         same(picked.join(), "#ff8800,#00ff00", "leaving the hex field");
         swatch.field.text = "nonsense";
         swatch.field.editingFinished();
