@@ -17,7 +17,7 @@ Item {
                     "reading": reading,
                     "of": of
                 }
-            })) || "{}")
+            })) || "{}") ?? ({})
     readonly property var bands: reply.bands ?? []
 
     onLiveChanged: page.editor.hear(live)
