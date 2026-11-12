@@ -15,7 +15,7 @@ fn operator_commands_parse() {
     let cases = [
         (
             "pack build src -o out.wpak --json",
-            r#"Pack(Build { dir: "src", out: Some("out.wpak"), json: true })"#,
+            r#"Pack(Build { dir: "src", out: Some("out.wpak"), keys: [], json: true })"#,
         ),
         ("pack sign src --key author.key", r#"Pack(Sign { dir: "src", key: "author.key" })"#),
         (
