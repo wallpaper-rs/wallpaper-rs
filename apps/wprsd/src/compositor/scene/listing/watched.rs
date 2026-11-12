@@ -1,4 +1,4 @@
-use super::tests::{listed, state};
+use super::tests::{listed, picture, state};
 use super::*;
 use std::sync::atomic::AtomicUsize;
 
@@ -23,10 +23,6 @@ fn watched(dir: &std::path::Path) -> Option<(SceneState, Arc<AtomicUsize>, Insta
 fn told(state: &SceneState) -> bool {
     let changed = || state.listed.watch.as_ref().is_some_and(|w| w.changed.load(Ordering::Acquire));
     (0..2000).any(|_| changed() || (std::thread::sleep(Duration::from_millis(5)), false).1)
-}
-
-fn picture(dir: &std::path::Path, name: &str) {
-    image::RgbaImage::new(2, 2).save(dir.join(name)).unwrap();
 }
 
 #[test]
@@ -111,11 +107,13 @@ fn hidden_files_wake_nothing_and_a_burst_of_changes_settles_before_a_look() {
     std::thread::sleep(Duration::from_millis(200));
     let pending = |state: &SceneState| state.listed.watch.as_ref().and_then(|w| w.pending(Instant::now()));
     assert_eq!(pending(&state), None, "a hidden file woke the listing");
+    let before = Instant::now();
     picture(dir.path(), "b.png");
     assert!(told(&state), "no change notice arrived");
-    let wait = pending(&state).unwrap_or_default();
-    assert!(wait > 0.0 && wait <= 0.5, "the look waits for the copy to settle: {wait}");
-    state.listing(Instant::now());
+    let since = before.elapsed().as_secs_f64();
+    let wait = state.listed.watch.as_ref().and_then(|w| w.pending(before)).unwrap_or_default();
+    assert!(wait >= 0.49 && wait <= since + 0.51, "the look waits for the copy to settle: {wait} s");
+    state.listing(before);
     assert!(state.listed.scanning.is_none(), "a look started while files were still arriving");
     assert!(listed(&mut state, later) && state.listed.text.contains("b.png"));
 }

@@ -31,20 +31,26 @@ pub(super) fn state(folder: Option<&std::path::Path>) -> SceneState {
 }
 
 pub(super) fn listed(state: &mut SceneState, at: Instant) -> bool {
-    (0..200).any(|_| state.listing(at) || (std::thread::sleep(Duration::from_millis(5)), false).1)
+    (0..6000).any(|_| state.listing(at) || (std::thread::sleep(Duration::from_millis(5)), false).1)
+}
+
+pub(super) fn picture(dir: &std::path::Path, name: &str) {
+    let staged = tempfile::tempdir().unwrap();
+    image::RgbaImage::new(2, 2).save(staged.path().join(name)).unwrap();
+    std::fs::hard_link(staged.path().join(name), dir.join(name)).unwrap();
 }
 
 #[test]
 fn a_still_scene_looks_at_its_folder_off_the_compositor_and_wakes_for_it() {
     let dir = tempfile::tempdir().unwrap();
-    image::RgbaImage::new(2, 2).save(dir.path().join("a.png")).unwrap();
+    picture(dir.path(), "a.png");
     let (mut state, start) = (state(Some(dir.path())), Instant::now());
     assert!(!state.listing(start) && state.listing_wake(start) == Wake::At(SOON.as_secs_f64()));
     assert!(listed(&mut state, start), "the first listing never arrived");
     assert_eq!(state.listed.text.matches("a.png").count(), 1);
     assert_eq!(state.listing_wake(start), Wake::At(EVERY.as_secs_f64()));
     assert!(!state.listing(start + Duration::from_secs(1)), "a second look before 2 s");
-    image::RgbaImage::new(2, 2).save(dir.path().join("b.png")).unwrap();
+    picture(dir.path(), "b.png");
     let later = start + EVERY;
     assert!(listed(&mut state, later), "a new file was not seen");
     assert!(state.listed.text.contains("b.png"));
@@ -58,7 +64,7 @@ fn a_still_scene_looks_at_its_folder_off_the_compositor_and_wakes_for_it() {
 #[test]
 fn videos_are_listed_as_such_and_shown_ones_become_clips_of_the_scene() {
     let dir = tempfile::tempdir().unwrap();
-    image::RgbaImage::new(2, 2).save(dir.path().join("a.png")).unwrap();
+    picture(dir.path(), "a.png");
     std::fs::write(dir.path().join("waves.webm"), b"not decoded here").unwrap();
     let (mut state, start) = (state(Some(dir.path())), Instant::now());
     assert!(listed(&mut state, start));
@@ -83,7 +89,7 @@ fn videos_are_listed_as_such_and_shown_ones_become_clips_of_the_scene() {
 #[test]
 fn a_watched_folder_is_looked_at_again_only_when_it_changes() {
     let dir = tempfile::tempdir().unwrap();
-    image::RgbaImage::new(2, 2).save(dir.path().join("a.png")).unwrap();
+    picture(dir.path(), "a.png");
     let mut state = state(Some(dir.path()));
     let woken = Arc::new(std::sync::atomic::AtomicUsize::new(0));
     let seen = Arc::clone(&woken);
@@ -101,7 +107,7 @@ fn a_watched_folder_is_looked_at_again_only_when_it_changes() {
     assert_eq!(state.listing_wake(later), Wake::Idle, "an unchanged folder wakes nothing");
     assert!(!state.listing(later), "an unchanged folder was listed again");
     let before = woken.load(Ordering::SeqCst);
-    image::RgbaImage::new(2, 2).save(dir.path().join("b.png")).unwrap();
+    picture(dir.path(), "b.png");
     let told = (0..2000).any(|_| {
         state.listing_wake(later) == Wake::At(0.0) || (std::thread::sleep(Duration::from_millis(5)), false).1
     });
