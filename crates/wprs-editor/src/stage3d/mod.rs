@@ -12,6 +12,7 @@ mod debug;
 mod edit;
 mod gizmo;
 mod grab;
+mod hulls;
 mod info;
 mod maps;
 mod material;

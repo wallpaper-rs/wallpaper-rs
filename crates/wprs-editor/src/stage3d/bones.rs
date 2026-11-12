@@ -17,6 +17,9 @@ pub(super) fn bones(rt: &Runtime, seen: &Seen, p: &Placed, doc: &Value, mut out:
     let pointer = out["pointer"].as_str().unwrap_or_default().to_owned();
     let raw = doc.pointer(&pointer).cloned().unwrap_or_default();
     out["swing"] = json!(super::swing::arcs(rt, seen, p, &raw));
+    out["colliders"] = json!(super::hulls::colliders(seen, p, (rig, worlds), &raw));
+    out["slides"] = json!(super::hulls::slides(seen, p, worlds, rig, &raw));
+    out["reach"] = json!(super::hulls::reach(seen, &raw));
     out["clips"] =
         json!(raw["clips"].as_array().into_iter().flatten().map(|c| c["id"].clone()).collect::<Vec<_>>());
     let path = puppet.course(p.layer, 2.0);

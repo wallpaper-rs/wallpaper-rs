@@ -1152,6 +1152,35 @@ msgstr "Varios cambios"
 msgid "Update what the package uses"
 msgstr "Actualizar lo que usa el paquete"
 
+#: crates/wprs-editor/src/hulls.rs
+msgid "the model has no bone named %1"
+msgstr "el modelo no tiene ningún hueso llamado %1"
+
+#: crates/wprs-editor/src/hulls.rs
+msgid "the radius of a collider goes from 0 to 100 units"
+msgstr "el radio de un colisionador va de 0 a 100 unidades"
+
+#: crates/wprs-editor/src/hulls.rs
+msgid "the offset of a collider is three numbers within 10000"
+msgstr "el desplazamiento de un colisionador son tres números dentro de 10000"
+
+#: crates/wprs-editor/src/hulls.rs crates/wprs-editor/src/motion/mod.rs
+#: crates/wprs-editor/src/stage3d/edit.rs
+msgid "%1 is not a model layer"
+msgstr "%1 no es una capa de modelo"
+
+#: crates/wprs-editor/src/hulls.rs
+msgid "the layer has no collider %1"
+msgstr "la capa no tiene el colisionador %1"
+
+#: crates/wprs-editor/src/hulls.rs
+msgid "a model has at most %1 colliders"
+msgstr "un modelo tiene como mucho %1 colisionadores"
+
+#: crates/wprs-editor/src/hulls.rs
+msgid "a new collider names its bone"
+msgstr "un colisionador nuevo nombra su hueso"
+
 #: crates/wprs-editor/src/ids/clip.rs
 msgid "there are no layers to paste"
 msgstr "no hay capas para pegar"
@@ -1394,6 +1423,7 @@ msgstr ""
 #: crates/wprs-editor/src/motion/mod.rs crates/wprs-editor/src/stage3d/edit.rs
 msgid "%1 is not a model layer"
 msgstr "%1 no es una capa de modelo"
+
 
 #: crates/wprs-editor/src/motion/mod.rs
 msgid "root motion needs a clip that moves the root"

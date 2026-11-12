@@ -50,6 +50,7 @@ pub const ACTIONS: [&str; 78] = [
     "expression",
     "ik",
     "physics",
+    "collider",
     "bone_rule",
     "wind",
     "attach",

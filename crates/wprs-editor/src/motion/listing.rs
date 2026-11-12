@@ -49,5 +49,6 @@ pub fn motion(dir: &Path, doc: &Value, id: &str) -> Value {
     json!({ "layer": id, "pointer": pointer, "model": l["type"] == "model", "clips": clips, "files": files,
         "layers": plays, "bones": bones, "shapes": rig.shapes, "defaults": rig.defaults,
         "weights": l["shapes"].clone(), "root_motion": l["root_motion"] == true, "physics": l["physics"].clone(),
+        "colliders": l["colliders"].clone(), "ik": l["ik"].clone(),
         "presets": presets })
 }

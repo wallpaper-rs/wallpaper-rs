@@ -118,6 +118,16 @@ ColumnLayout {
         motion: motion
     }
 
+    SceneModelColliders {
+        Layout.fillWidth: true
+        motion: motion
+    }
+
+    SceneModelReach {
+        Layout.fillWidth: true
+        motion: motion
+    }
+
     SceneSliders {
         Layout.fillWidth: true
         visible: (motion.info?.shapes ?? []).length > 0

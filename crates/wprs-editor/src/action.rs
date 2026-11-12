@@ -8,6 +8,7 @@ mod figures;
 mod glows;
 mod grab;
 mod grips;
+mod hulls;
 mod ids;
 mod lamps;
 mod limbs;
@@ -169,6 +170,7 @@ pub enum Action {
     Expression(ExpressionEdit),
     Ik(IkEdit),
     Physics(BodyEdit),
+    Collider(ColliderEdit),
     BoneRule(BoneRuleEdit),
     Wind(WindEdit),
     Attach(AttachEdit),

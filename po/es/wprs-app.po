@@ -1253,8 +1253,9 @@ msgstr "Capa %1, la más lejana"
 msgid "Layer %1, the nearest"
 msgstr "Capa %1, la más cercana"
 
-#: apps/wprs-app/qml/EditDepthCompare.qml apps/wprs-app/qml/SceneRefs.qml
-#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/facade/SceneOptions.qml
+#: apps/wprs-app/qml/EditDepthCompare.qml apps/wprs-app/qml/SceneModelReach.qml
+#: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneRigIk.qml
+#: apps/wprs-app/qml/facade/SceneOptions.qml
 msgid "Layer %1"
 msgstr "Capa %1"
 
@@ -4755,8 +4756,9 @@ msgstr "Encendido"
 msgid "Adds"
 msgstr "Suma"
 
-#: apps/wprs-app/qml/SceneAnimLayers.qml apps/wprs-app/qml/SceneRigIk.qml
-#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/facade/SceneLabels.qml
+#: apps/wprs-app/qml/SceneAnimLayers.qml apps/wprs-app/qml/SceneModelReach.qml
+#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneRigRules.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Weight"
 msgstr "Peso"
 
@@ -5172,6 +5174,14 @@ msgstr "Suavizar los cambios…"
 msgid "Drag up or down to set the gravity of %1"
 msgstr "Arrastra hacia arriba o abajo para fijar la gravedad de %1"
 
+#: apps/wprs-app/qml/SceneBoneHulls3d.qml
+msgid "Collider on %1"
+msgstr "Colisionador en %1"
+
+#: apps/wprs-app/qml/SceneBoneHulls3d.qml
+msgid "Drag to set how wide the collider is"
+msgstr "Arrastra para elegir el ancho del colisionador"
+
 #: apps/wprs-app/qml/SceneBonePick.qml
 msgid "(all)"
 msgstr "(todos)"
@@ -5199,13 +5209,28 @@ msgstr ""
 "Arrastra para mover el hueso en la vista; pone una clave en el clip en el "
 "cursor de reproducción"
 
+#: apps/wprs-app/qml/SceneBoneReach3d.qml
+msgid "Target of %1"
+msgstr "Objetivo de %1"
+
+#: apps/wprs-app/qml/SceneBoneReach3d.qml
+msgid "Drag the point the chain reaches for"
+msgstr "Arrastra el punto que busca la cadena"
+
+#: apps/wprs-app/qml/SceneBoneSlide3d.qml
 #: apps/wprs-app/qml/SceneBoneSwing3d.qml
 msgid "Least"
 msgstr "Mínimo"
 
+#: apps/wprs-app/qml/SceneBoneSlide3d.qml
 #: apps/wprs-app/qml/SceneBoneSwing3d.qml
 msgid "Most"
 msgstr "Máximo"
+
+#: apps/wprs-app/qml/SceneBoneSlide3d.qml
+msgid "Drag to bound how far the head of the bone slides each way"
+msgstr ""
+"Arrastra para limitar cuánto se desliza la cabeza del hueso hacia cada lado"
 
 #: apps/wprs-app/qml/SceneBoneSwing3d.qml
 msgid "Drag to bound how far the bone swings, in its own plane"
@@ -7517,6 +7542,37 @@ msgstr "Se calcula a partir de lo que usa el paquete: %1"
 msgid "No picture"
 msgstr "Sin imagen"
 
+#: apps/wprs-app/qml/SceneModelColliders.qml
+#: apps/wprs-app/qml/SceneSwarmColliders.qml
+msgid "Colliders"
+msgstr "Colisionadores"
+
+#: apps/wprs-app/qml/SceneModelColliders.qml
+msgid "Add a collider on %1"
+msgstr "Añadir un colisionador en %1"
+
+#: apps/wprs-app/qml/SceneModelColliders.qml
+msgid "Pick a bone to add a collider"
+msgstr "Elige un hueso para añadir un colisionador"
+
+#: apps/wprs-app/qml/SceneModelColliders.qml
+msgid "Capsule along the bone"
+msgstr "Cápsula a lo largo del hueso"
+
+#: apps/wprs-app/qml/SceneModelColliders.qml
+msgid "Sphere at its head"
+msgstr "Esfera en su cabeza"
+
+#: apps/wprs-app/qml/SceneModelColliders.qml
+msgid ""
+"Swinging bones stay out of the colliders: all of them at the two higher "
+"quality levels, the first two at the second lowest and none at the lowest, "
+"where bones keep their animation."
+msgstr ""
+"Los huesos que se balancean quedan fuera de los colisionadores: todos en los "
+"dos niveles de calidad más altos, los dos primeros en el penúltimo y ninguno "
+"en el más bajo, donde los huesos conservan su animación."
+
 #: apps/wprs-app/qml/SceneModelCost.qml
 msgid "shadow maps of %1 megapixels"
 msgstr "mapas de sombra de %1 megapíxeles"
@@ -7667,6 +7723,42 @@ msgid ""
 msgstr ""
 "Arrastra hacia arriba para alejar el modelo por la línea de visión, hacia "
 "abajo para acercarlo"
+
+#: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneRefs.qml
+#: apps/wprs-app/qml/SceneRigIk.qml
+msgid "A point"
+msgstr "Un punto"
+
+#: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneRefs.qml
+#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneWakeRules.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "The pointer"
+msgstr "El puntero"
+
+#: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneRefs.qml
+#: apps/wprs-app/qml/SceneTemplateFollow.qml
+msgid "Bone %1"
+msgstr "Hueso %1"
+
+#: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneRigIk.qml
+msgid "Chains that reach"
+msgstr "Cadenas que alcanzan"
+
+#: apps/wprs-app/qml/SceneModelReach.qml
+msgid "New chain from %1 to %2"
+msgstr "Cadena nueva de %1 a %2"
+
+#: apps/wprs-app/qml/SceneModelReach.qml
+msgid "Pick a bone that has a parent"
+msgstr "Elige un hueso que tenga padre"
+
+#: apps/wprs-app/qml/SceneModelReach.qml
+msgid ""
+"A point, a layer or the pointer is seen through the camera; drag the point "
+"on the view."
+msgstr ""
+"Un punto, una capa o el puntero se ven a través de la cámara; arrastra el "
+"punto sobre la vista."
 
 #: apps/wprs-app/qml/SceneModelSwing.qml
 msgid "Hair"
@@ -8312,6 +8404,7 @@ msgstr "Un punto"
 msgid "The pointer"
 msgstr "El puntero"
 
+
 #: apps/wprs-app/qml/SceneRefs.qml
 msgid "Cover of what plays (%1)"
 msgstr "Carátula de lo que suena (%1)"
@@ -8319,10 +8412,6 @@ msgstr "Carátula de lo que suena (%1)"
 #: apps/wprs-app/qml/SceneRefs.qml
 msgid "Previous cover (%1)"
 msgstr "Carátula anterior (%1)"
-
-#: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneTemplateFollow.qml
-msgid "Bone %1"
-msgstr "Hueso %1"
 
 #: apps/wprs-app/qml/SceneRename.qml
 msgid "Rename %1"
@@ -8510,10 +8599,6 @@ msgstr ""
 "Los trazos sobre la malla acercan sus vértices al espectador, o los alejan "
 "por debajo de cero; con la profundidad activa, los vértices más cercanos "
 "tapan a los más lejanos."
-
-#: apps/wprs-app/qml/SceneRigIk.qml
-msgid "Chains that reach"
-msgstr "Cadenas que alcanzan"
 
 #: apps/wprs-app/qml/SceneRigIk.qml
 msgid "Bend the other way"
@@ -9771,10 +9856,6 @@ msgstr "Segmento"
 #: apps/wprs-app/qml/SceneSwarmColliders.qml
 msgid "Picture mask"
 msgstr "Máscara de imagen"
-
-#: apps/wprs-app/qml/SceneSwarmColliders.qml
-msgid "Colliders"
-msgstr "Colisionadores"
 
 #: apps/wprs-app/qml/SceneSwarmColliders.qml
 msgid "Add a collider"

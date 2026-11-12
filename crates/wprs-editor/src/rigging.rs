@@ -52,6 +52,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::Expression(e) => crate::shapes::expression(dir, doc, e),
         Action::Ik(k) => crate::limbs::ik(dir, doc, k),
         Action::Physics(b) => crate::bodies::physics(dir, doc, b),
+        Action::Collider(c) => crate::hulls::collider(dir, doc, c),
         Action::BoneRule(r) => crate::bodies::rule(dir, doc, r),
         Action::Wind(w) => crate::limbs::wind(doc, w),
         Action::Attach(a) => crate::attach::attach(dir, doc, a),

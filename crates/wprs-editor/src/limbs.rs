@@ -131,7 +131,7 @@ pub(crate) fn ik(dir: &Path, doc: &Value, k: &IkEdit) -> Result<Vec<Op>> {
             let (Some(root), Some(tip)) = (&k.root, &k.tip) else {
                 bail!(said("editor.chain_ends", "a new chain names its root and tip bones", &[]))
             };
-            let rest = crate::rigs::rest_end(dir, doc, &k.layer, tip);
+            let rest = crate::rigs::rest_end(dir, doc, &k.layer, tip).or_else(|| middle(doc, layer));
             let point = json!(rest.map_or([0.0; 2], |p| p.map(|v| (f64::from(v) * 100.0).round() / 100.0)));
             let mut c = json!({ "chain": chain(&j, root, tip)?, "target": point });
             edit(&mut c, k, &j, doc)?;
@@ -170,4 +170,9 @@ pub(crate) fn wind(doc: &Value, w: &WindEdit) -> Result<Vec<Op>> {
         ops.extend(set(doc, "/scene/canvas/gusts", num(g)));
     }
     Ok(ops)
+}
+
+fn middle(doc: &Value, layer: &Value) -> Option<[f32; 2]> {
+    let size = layer["size"].as_array().or(doc["scene"]["canvas"]["size"].as_array())?;
+    Some([0, 1].map(|k| size.get(k).and_then(Value::as_f64).unwrap_or(0.0) as f32 / 2.0))
 }

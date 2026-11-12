@@ -39,6 +39,7 @@ pub mod gallery;
 pub mod graph;
 mod handles;
 pub mod history;
+mod hulls;
 pub mod ids;
 pub mod inspect;
 pub mod keys;

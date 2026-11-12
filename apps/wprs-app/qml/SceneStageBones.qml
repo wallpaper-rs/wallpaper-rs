@@ -39,6 +39,21 @@ Item {
         bones: bones
     }
 
+    SceneBoneSlide3d {
+        anchors.fill: parent
+        bones: bones
+    }
+
+    SceneBoneHulls3d {
+        anchors.fill: parent
+        bones: bones
+    }
+
+    SceneBoneReach3d {
+        anchors.fill: parent
+        bones: bones
+    }
+
     SceneRepeater {
         id: listed
 

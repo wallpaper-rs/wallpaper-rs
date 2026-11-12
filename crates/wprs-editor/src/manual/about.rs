@@ -60,6 +60,7 @@ pub const ABOUT: [(&str, &str); 78] = [
     ("expression", "Add, change or remove a facial expression of a rig"),
     ("ik", "Add, change or remove an inverse kinematics chain"),
     ("physics", "Make bones follow physics: stiffness, damping and mode"),
+    ("collider", "Add, change or remove a capsule or sphere that keeps the swinging bones of a model out"),
     ("bone_rule", "Add, change or remove a rule that drives a bone from another"),
     ("wind", "Set the wind that moves the physical bones and particles"),
     ("attach", "Attach a layer to a bone or to a point of another layer"),
