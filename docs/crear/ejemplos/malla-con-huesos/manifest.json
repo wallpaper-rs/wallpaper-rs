@@ -1,0 +1,27 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.malla-con-huesos",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "requires": {
+    "features": [
+      "blend_shapes",
+      "bone_physics",
+      "bone_rules",
+      "ik",
+      "mesh"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Malla con huesos",
+  "version": "0.1.0"
+}

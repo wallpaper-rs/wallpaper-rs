@@ -1,0 +1,20 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#101820" },
+  "assets": { "muneco": { "path": "assets/muneco.glb" }, "cielo": { "path": "assets/cielo.png" } },
+  "layers": [
+    { "id": "figura", "type": "mesh", "mesh": "muneco", "texture": "cielo", "size": [100, 100], "transform": { "scale": 8 },
+      "clips": [
+        { "id": "asentir", "loop": "pingpong",
+          "bones": { "neck": { "rotation": [[0, -12], [0.8, 12, "in_out_sine"]] } },
+          "shapes": { "smile": [[0, 0], [0.8, 1]] },
+          "events": [{ "t": 0.4, "name": "mitad" }] }
+      ],
+      "animations": [{ "clip": "asentir", "weight": 1, "rate": 1, "blend_in": 0.3 }],
+      "physics": [{ "bone": "neck", "mode": "spring", "stiffness": 0.6, "damping": 0.4, "inertia": 0.5 }],
+      "ik": [{ "chain": ["hip", "neck"], "target": [60, 20], "limits": { "neck": [-30, 30] }, "weight": 0.3, "bend": "clockwise" }],
+      "rules": [{ "bone": "neck", "parent": "hip", "weight": 1 }],
+      "parts": { "chest": { "order": 1 }, "legs": { "order": 0 } },
+      "shapes": { "smile": 0.2 } }
+  ]
+}
