@@ -24,7 +24,7 @@ import java.io.FileInputStream
 import org.json.JSONObject
 
 @SuppressLint("SetJavaScriptEnabled")
-class Page(private val context: Context, private val handle: Long, spec: JSONObject, val surface: Surface, size: Pair<Int, Int>, private val gone: () -> Unit, private val heard: () -> Unit, private val measured: () -> Unit) {
+class Page(private val context: Context, private val handle: Long, spec: JSONObject, val surface: Surface, size: Pair<Int, Int>, private val gone: () -> Unit, private val heard: () -> Unit, private val measured: () -> Unit, private val sounding: (Boolean) -> Unit) {
     val key: String = spec.getString("key")
     private val origin = spec.getString("origin")
     private val host = spec.getString("url").removePrefix("https://").trimEnd('/')
@@ -124,6 +124,7 @@ class Page(private val context: Context, private val handle: Long, spec: JSONObj
         if (message.startsWith(AUDIO) || message.startsWith(MEDIA)) heard()
         if (message.startsWith(KEPT) || message.startsWith(USED)) measured()
         if (message.startsWith(WROTE)) web.post(::measure)
+        if (message.startsWith(SOUNDING)) sounding(message.contains("true"))
         reply ?: return
         web.post { web.evaluateJavascript(reply, null) }
     }
@@ -142,6 +143,7 @@ class Page(private val context: Context, private val handle: Long, spec: JSONObj
         private const val KEPT = "{\"kept\""
         private const val USED = "{\"used\""
         private const val WROTE = "{\"wrote\""
+        private const val SOUNDING = "{\"sounding\""
 
         fun answer(text: String): WebResourceResponse? {
             val reply = JSONObject(text)

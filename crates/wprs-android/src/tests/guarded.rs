@@ -1,6 +1,8 @@
 use crate::page::script::guarded;
 use rquickjs::{Context, Runtime};
 
+mod sounding;
+
 const ZONED: &str = include_str!("zoned.js");
 const AWAY: &str = "America/Argentina/Buenos_Aires";
 const HOURS: &str = "10800000";

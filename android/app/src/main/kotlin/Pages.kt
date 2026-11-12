@@ -26,12 +26,20 @@ class Pages(private val context: Context) : Ducked {
         var page: Page? = null
         var visible = false
         var crashes = 0
+        var sounding = true
         val sleep = Runnable { page?.close(); page = null }
 
         fun open() {
             if (page != null || crashes > MAX_CRASHES || !surface.isValid) return
             val wake = { Render.post(painter::wake) }
-            page = Page(context, painter.handle, spec, surface, size, ::crashed, wake) { Render.post(painter::refresh) }.also { it.visible(visible) }
+            val measured = { Render.post(painter::refresh) }
+            sounding = true
+            page = Page(context, painter.handle, spec, surface, size, ::crashed, wake, measured, ::sounds).also { it.visible(visible) }
+        }
+
+        fun sounds(on: Boolean) = main.post {
+            sounding = on
+            if (shown[painter] === this) heard(this)
         }
 
         fun crashed() = main.post {
@@ -58,11 +66,13 @@ class Pages(private val context: Context) : Ducked {
 
     private fun show(entry: Shown, visible: Boolean) {
         entry.visible = visible
-        Duck.want(context, entry.painter, visible && Native.setting(SOUND, null) == "false")
+        heard(entry)
         main.removeCallbacks(entry.sleep)
         if (visible) entry.open() else main.postDelayed(entry.sleep, SLEEP_MS)
         entry.page?.visible(visible)
     }
+
+    private fun heard(entry: Shown) = Duck.want(context, entry.painter, entry.visible && entry.sounding && Native.setting(SOUND, null) == "false")
 
     fun visible(painter: Painter, visible: Boolean) = main.post { shown[painter]?.let { show(it, visible) } }
 

@@ -249,7 +249,11 @@ these are the differences:
 - **Sound.** The page's own sound follows the phone's sound setting for videos: `wprs.volume` is 0,
   and the page muted, unless video sound is on; then it is the page's *Volume* setting (from the
   author's `playback.volume`, or 0 with `muted`, unless the page has a `volume` property of its own)
-  times the fade of `playback.duck`. `playback.max_fps` caps `settings.fps` as on the desktop.
+  times the fade of `playback.duck`. For that fade a page counts as the wallpaper's own sound only
+  while one of its `audio` or `video` elements plays unmuted with a volume above 0 or one of its
+  `AudioContext` runs: the page tells the app when that changes, so a silent page no longer hides
+  another app playing; a player of the wallpaper that stops still counts as its own for 1 s while
+  its stream goes away. `playback.max_fps` caps `settings.fps` as on the desktop.
   `wprs.openShortcut(prop)` opens the app or `https://` address the user chose, within 2 s of a tap
   on the home screen and with the taps grant, at most once a second. `onAudio` reads the Visualizer of Android, as scenes
   do, at most 30 times a second.
