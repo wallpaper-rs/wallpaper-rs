@@ -183,11 +183,12 @@ fn opening_the_library_again_keeps_the_locks_of_the_open_connections() {
     let mut first = Library::open(&path).unwrap();
     first.add_folder(dir.path(), false).unwrap();
     let inode = format!(":{} ", fs::metadata(&path).unwrap().ino());
-    let held = || {
+    let ours = format!(" {} ", std::process::id());
+    let listed = || {
         let locks = fs::read_to_string("/proc/locks").unwrap();
-        let ours = format!(" {} ", std::process::id());
         locks.lines().any(|line| line.contains(&ours) && line.contains(&inode))
     };
+    let held = || (0..50).any(|_| listed());
     assert!(held());
     let _second = Library::open(&path).unwrap();
     assert!(held());
