@@ -79,6 +79,7 @@ pub struct Saved {
     pub unapplied: BTreeMap<String, i64>,
     pub declined: BTreeSet<String>,
     pub offers: Vec<RepoOffer>,
+    pub away: Vec<wprs_core::model::Away>,
     pub share: BTreeMap<String, bool>,
     pub shared: BTreeSet<String>,
     pub recovery: Option<i64>,

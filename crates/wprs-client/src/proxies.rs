@@ -42,6 +42,7 @@ pub trait Sync1 {
     fn restore(&self, passphrase: &str) -> Result<u64>;
     fn share_files(&self, targets: &[&str], share: bool) -> Result<u64>;
     fn list_files(&self) -> Result<String>;
+    fn list_away(&self) -> Result<String>;
     fn fetch_file(&self, file: &str) -> Result<u64>;
     fn upload(&self, path: &str) -> Result<u64>;
     fn upload_as(&self, path: &str, visibility: &str) -> Result<u64>;

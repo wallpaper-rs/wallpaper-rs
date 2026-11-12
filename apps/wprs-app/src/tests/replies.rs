@@ -165,3 +165,8 @@ fn the_installed_applications_fixture_follows_the_data_model() {
         wprs_client::parse(&crate::args::fixture("Daemon1", "ListApplications")).unwrap();
     assert!(found.available && found.applications.len() == 2);
 }
+
+#[test]
+fn the_away_fixture_follows_the_data_model() {
+    wprs_client::parse::<wprs_core::model::AwayReply>(&crate::args::fixture("Sync1", "ListAway")).unwrap();
+}

@@ -80,7 +80,7 @@ impl Daemon {
         if limit > MAX_PAGE {
             return Err(invalid(format!("limit must be at most {MAX_PAGE}")));
         }
-        let serial = self.changes.serial();
+        let (serial, away) = (self.changes.serial(), self.away_page(query, offset));
         let seed = (RandomState::new().hash_one(serial) % 2_147_483_646) as u32 + 1;
         let hide = self.state().config.library.hide_mature;
         let (query, total, items) = self.store.read(|lib| {
@@ -91,7 +91,7 @@ impl Daemon {
             Ok::<_, wprs_library::Error>((query, total, items))
         })?;
         let items = items.into_iter().map(|item| self.summary(item)).collect::<Result<_>>()?;
-        reply(SearchPage { model: MODEL, serial, query, total, offset, items })
+        reply(SearchPage { model: MODEL, serial, query, total, offset, items, away })
     }
 
     pub fn get_item(&self, uid: &str) -> Result<String> {

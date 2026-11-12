@@ -30,6 +30,7 @@ pub fn page(page: PlaylistPage) -> String {
     let fields = [("playlist", p.uid), ("name", p.name)].into_iter().chain(p.query.map(|q| ("query", q)));
     show::lines(fields.chain([("outputs", list(&p.outputs)), ("items", count)]))
         + &items(&page.items, Some(page.offset))
+        + &crate::away::notes(&page.away)
 }
 
 pub fn history(reply: HistoryReply) -> String {

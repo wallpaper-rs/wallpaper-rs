@@ -100,6 +100,11 @@ pub(crate) fn offers(local: &Local, replica: &Replica) -> Vec<Offer> {
     found.map(offer).filter(|o| shared(&o.url) && o.repo_id.len() == 64).collect()
 }
 
+pub(crate) fn offered(ids: &Ids) -> std::collections::HashSet<String> {
+    let found = dir().ok().and_then(|d| wprs_format::browse_with(&d, "", true).ok()).unwrap_or_default();
+    found.into_iter().map(|i| ids.library(&i.repo_id, &i.id)).collect()
+}
+
 pub(crate) fn fetch() -> Result<HttpFetch, Error> {
     HttpFetch::new(Arc::default())
         .map_err(|e| said("android.web_client", "web connections cannot start: %1", &[&e]))

@@ -135,6 +135,8 @@ model! {
         pub filter: Option<Filter>,
         #[serde(default)]
         pub hdr: HdrState,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub away: Option<String>,
     }
 
     #[derive(Copy, Eq, Hash)]

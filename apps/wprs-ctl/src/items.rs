@@ -15,7 +15,9 @@ pub fn sources(reply: SourcesReply) -> String {
 
 pub fn search(page: SearchPage) -> String {
     let count = range(page.offset, page.items.len(), page.total);
-    show::lines([("query", page.query), ("items", count)]) + &items(&page.items, None)
+    show::lines([("query", page.query), ("items", count)])
+        + &items(&page.items, None)
+        + &crate::away::notes(&page.away)
 }
 
 pub fn range(offset: u32, count: usize, total: u32) -> String {

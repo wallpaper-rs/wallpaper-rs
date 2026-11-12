@@ -61,6 +61,7 @@ fun Entries(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) 
         Column(Modifier.weight(1f)) { Header(list?.name.orEmpty(), close) }
         IconButton({ naming = true }, enabled = list != null) { Icon(Icons.Default.Edit, stringResource(R.string.rename_playlist)) }
     }
+    list?.away.orEmpty().forEach { AwayLine(it, Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) }
     LazyColumn(contentPadding = PaddingValues(bottom = 16.dp)) {
         if (chosen.isEmpty()) item {
             val intervals = INTERVALS.map { (value, label) -> value to stringResource(label) }

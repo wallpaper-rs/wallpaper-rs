@@ -125,13 +125,14 @@ RowLayout {
             reduced: row.info.sandbox === "reduced"
         }
 
-        QQC2.Label {
-            Layout.fillWidth: true
+        SmallNote {
+            visible: !!row.info.away
+            text: row.daemon.tr("%1 exists only on another device. Publishing it to the server or to a repository makes it available here.", row.info.away ?? "")
+        }
+
+        SmallNote {
             visible: row.mature
-            wrapMode: Text.Wrap
             text: row.daemon.tr("Mature content: click the picture to always show this package")
-            color: Kirigami.Theme.disabledTextColor
-            font: Kirigami.Theme.smallFont
         }
 
         QQC2.Label {
@@ -163,33 +164,19 @@ RowLayout {
             }
         }
 
-        QQC2.Label {
-            Layout.fillWidth: true
+        SmallNote {
             visible: row.info.particles === "cpu"
-            wrapMode: Text.Wrap
             text: row.daemon.tr("Its particles run on the processor, so fewer of them are shown")
-            color: Kirigami.Theme.disabledTextColor
-            font: Kirigami.Theme.smallFont
         }
 
-        QQC2.Label {
-            Layout.fillWidth: true
+        SmallNote {
             visible: !!row.info.quality
-            wrapMode: Text.Wrap
             text: row.info.quality ? reasons.level(row.info, row.daemon.state) : ""
-            textFormat: Text.PlainText
-            color: Kirigami.Theme.disabledTextColor
-            font: Kirigami.Theme.smallFont
         }
 
-        QQC2.Label {
-            Layout.fillWidth: true
+        SmallNote {
             visible: (row.info.shown_fit ?? row.info.fit) !== row.info.fit
-            wrapMode: Text.Wrap
             text: row.daemon.tr("This picture has its own placement: %1", row.daemon.value(row.info.shown_fit ?? ""))
-            textFormat: Text.PlainText
-            color: Kirigami.Theme.disabledTextColor
-            font: Kirigami.Theme.smallFont
         }
 
         OutputControls {

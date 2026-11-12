@@ -71,6 +71,19 @@ model! {
         pub stored: bool,
     }
 
+    pub struct AwayProfile { pub profile: Uid, pub output: String }
+
+    pub struct Away {
+        pub key: String,
+        pub title: String,
+        #[serde(default)]
+        pub playlists: Vec<Uid>,
+        #[serde(default)]
+        pub profiles: Vec<AwayProfile>,
+    }
+
+    pub struct AwayReply { pub model: u32, pub serial: u64, pub items: Vec<Away> }
+
     pub struct FilesReply { pub model: u32, pub serial: u64, pub folders: Vec<String>, pub files: Vec<PrivateFile> }
 
     pub struct UploadOutput {

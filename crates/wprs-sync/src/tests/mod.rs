@@ -1,3 +1,4 @@
+mod away;
 mod clash;
 mod crypto;
 mod engine;

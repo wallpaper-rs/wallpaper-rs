@@ -128,6 +128,16 @@ ColumnLayout {
 
             PlasmaComponents3.Label {
                 Layout.fillWidth: true
+                visible: !!row.info.away
+                text: i18n("%1 exists only on another device. Publishing it to the server or to a repository makes it available here.", row.info.away ?? "")
+                textFormat: Text.PlainText
+                wrapMode: Text.Wrap
+                font: Kirigami.Theme.smallFont
+                color: Kirigami.Theme.disabledTextColor
+            }
+
+            PlasmaComponents3.Label {
+                Layout.fillWidth: true
                 visible: row.info.particles === "cpu"
                 text: i18n("Its particles run on the processor, so fewer of them are shown")
                 wrapMode: Text.Wrap

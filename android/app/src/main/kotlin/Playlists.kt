@@ -47,7 +47,10 @@ fun Playlists(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) 
         items(lists, key = Playlist::uid) { list ->
             ListItem(
                 headlineContent = { Text(list.name) },
-                supportingContent = { Text(summary(list)) },
+                supportingContent = {
+                    Text(summary(list))
+                    list.away.forEach { AwayLine(it) }
+                },
                 trailingContent = { if (list.current) Icon(Icons.Default.Check, stringResource(R.string.in_use)) },
                 modifier = Modifier.clickable { open(list.uid) },
             )

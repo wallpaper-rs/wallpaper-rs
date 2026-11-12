@@ -35,6 +35,11 @@ ColumnLayout {
     onUidChanged: load()
     Component.onCompleted: load()
 
+    AwayNote {
+        Layout.fillWidth: true
+        playlist: entries.uid
+    }
+
     QQC2.TabBar {
         id: tabs
 

@@ -114,6 +114,11 @@ impl Sync {
         self.d()?.run(|d| d.list_files()).await
     }
 
+    #[zbus(out_args("json"))]
+    async fn list_away(&self) -> Result<String> {
+        self.d()?.run(|d| d.list_away()).await
+    }
+
     #[zbus(out_args("job"))]
     async fn fetch_file(&self, file: String) -> Result<u64> {
         self.d()?.run(move |d| d.fetch_file(&file)).await

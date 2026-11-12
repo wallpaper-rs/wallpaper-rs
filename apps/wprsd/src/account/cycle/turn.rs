@@ -60,6 +60,7 @@ impl Daemon {
         let errors = self.apply_remote(&local, applied, &mut links, &replica, &mut kept);
         self.copy_playlists(&local, synced.copies, &mut links, &ids);
         let unapplied = hold(&mut replica, &start, &local, &errors, &now);
+        let away = wprs_sync::away(&replica, &local, &links, &self.offered_keys(&ids));
         self.settle_secrets(&replica)?;
         if secrets.split(&mut replica) {
             self.store_secrets(&secrets)?;
@@ -95,7 +96,7 @@ impl Daemon {
             s.quarantine.retain(|k, seq| base(k).is_none_or(|(base, _)| base < seq));
             (s.replica, s.links, s.clock, s.legacy, s.kept) = (replica, links, clock, legacy, kept);
             s.removed.retain(|key, _| !removed.contains_key(key));
-            (s.present, s.offers, s.unapplied) = (present, offers, unapplied);
+            (s.present, s.offers, s.unapplied, s.away) = (present, offers, unapplied, away);
             s.warning = state["warning"].as_str().map(String::from);
             (s.used_bytes, s.quota_bytes) = (number("used_bytes"), number("quota_bytes"));
             (s.files_bytes, s.files_quota) = (number("files_bytes"), number("files_quota_bytes"));

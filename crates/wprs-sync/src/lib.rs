@@ -1,4 +1,5 @@
 mod api;
+mod away;
 mod blob;
 mod doc;
 mod engine;
@@ -22,6 +23,7 @@ mod vault;
 mod views;
 
 pub use api::{AGENT, Api, MAIL, PAGE, SMALL, check_url};
+pub use away::away;
 pub use blob::{SEALED, SEGMENT, open_segment, seal_segment, sealed_size};
 pub use doc::{Doc, View};
 pub use engine::{Change, Key, LIFETIME_MS, Outcome, Page, Remote, Replica, Synced, rekey, sync};

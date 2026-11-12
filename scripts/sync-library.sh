@@ -91,6 +91,29 @@ settings() { b prop preset ls --json | jq_ "[p['label'] for p in r['user_presets
 a prop preset rename Mine Leaf
 for d in a b; do "$d" server sync --wait >/dev/null; done
 [ "$(settings)" = "['Leaf']" ] || fail "the renamed preset kept its old name: $(b prop preset ls)"
+cp "$ROOT/tests/fixtures/green-64x32.png" "$WORK/only-here.png"
+a lib import "$WORK/only-here.png" --wait >/dev/null
+only=$(a lib search only-here --json | jq_ "r['items'][0]['uid']")
+a lib tag "$only" --add handmade >/dev/null
+a playlist new "Only here" >/dev/null
+a playlist add "Only here" "$only" >/dev/null
+away_here() {
+  for d in a b a; do "$d" server sync --wait >/dev/null; done
+  [ "$(b server away --json | jq_ "[(i['title'], len(i['playlists'])) for i in r['items']]")" = "[('only-here', 1)]" ]
+}
+for _ in 1 2 3 4 5 6; do away_here && break; sleep 2; done
+away_here || fail "the item that exists on one device only is not listed: $(b server away --json)"
+[ "$(a server away --json | jq_ "len(r['items'])")" = 0 ] || fail "the device that owns the item shows a note: $(a server away)"
+b lib search "" | grep -q "only-here exists only on another device" || fail "the library does not say so: $(b lib search '')"
+b playlist show "Only here" | grep -q "only-here exists only on another device" ||
+  fail "the playlist does not say so: $(b playlist show 'Only here')"
+b lib import "$WORK/only-here.png" --wait >/dev/null
+for d in b a b; do "$d" server sync --wait >/dev/null; done
+[ "$(b server away --json | jq_ "len(r['items'])")" = 0 ] || fail "the note stayed after the item arrived: $(b server away)"
+a playlist rm "Only here" >/dev/null
+a lib rm "$only" >/dev/null
+for d in a b a b; do "$d" server sync --wait >/dev/null; done
+echo "local-only item checks passed"
 echo "sync checks passed"
 
 sleep 8

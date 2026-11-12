@@ -1,5 +1,6 @@
 mod apply;
 mod author;
+mod away;
 mod cycle;
 mod escrow;
 mod fetch;
@@ -29,6 +30,7 @@ mod upload;
 mod votes;
 mod watch;
 
+pub use away::away_title;
 pub use watch::start;
 pub use wprs_sync::DOWNLOADS;
 pub use wprs_sync::{removed_blob, removed_package};

@@ -22,8 +22,10 @@ fn settings_sections() {
 #[test]
 fn options_are_listed_and_validated() {
     let mut c = Config::default();
-    assert_eq!(c.options().len(), 32);
-    assert!(!c.media.remote_covers && c.repos.vote_counts);
+    assert_eq!(c.options().len(), 33);
+    assert!(!c.media.remote_covers && c.repos.vote_counts && !c.repos.auto_update);
+    c.set_option("repos.auto_update", "true").unwrap();
+    assert!(c.repos.auto_update && c.set_option("repos.auto_update", "soon").is_err());
     c.set_option("media.remote_covers", "true").unwrap();
     assert!(c.media.remote_covers && c.set_option("media.remote_covers", "maybe").is_err());
     c.set_option("repos.vote_counts", "false").unwrap();

@@ -50,6 +50,7 @@ pub(crate) struct Saved {
     pub(crate) pin: Option<String>,
     pub(crate) files: crate::private::Files,
     pub(crate) offers: Vec<crate::repos::Offer>,
+    pub(crate) away: Vec<wprs_core::model::Away>,
     pub(crate) declined: BTreeSet<String>,
     pub(crate) shared: Vec<String>,
     pub(crate) repo_id: Option<String>,

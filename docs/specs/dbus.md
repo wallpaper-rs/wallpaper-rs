@@ -2113,6 +2113,26 @@ A `FilesReply`: the chosen folders and every private file, those on the server (
 local item when this computer has the same file and `shared` when it is chosen here) and those
 waiting to upload. It reads no network.
 
+### `ListAway() → (s json)`
+
+An `AwayReply`: the items that other devices synced and that exist only there. An item counts
+when a synced record names it (its own library record, an entry of a playlist, a screen of a
+profile, or a preset made for it), this computer has no item for it, the record carries no
+private file (`ListFiles` lists those) and no repository added here offers a package that its
+name stands for. An item whose own record never synced (one without tags, rating or favorite
+sends none) is named by the records that refer to it and has an empty `title`.
+Sync moves records, not package files: a package or file that one device holds only locally, for
+example a preset made by hand and never published, never reaches the others, and local things are
+not synced on their own; the other devices get it only when the user publishes it to the server
+(`Upload`, `ShareFiles`) or to a repository. Nothing is downloaded or retried for these records.
+Each entry has the `title` of the record, the `playlists` that name it and the `profiles` that
+put it on a screen (`output`). The list is rebuilt at the end of every sync and persists in
+`sync.json`, so an item whose package is installed or published disappears at the next sync. It
+reads no network. Clients show the same note where the item would be: `Search` (unfiltered, first
+page) and `GetPlaylist` carry the entries in `away`, and `GetState` gives each screen of the
+active profile the `away` title. The note says that the item exists only on another device and
+that publishing it to the server or a repository makes it available here.
+
 ### `FetchFile(s file) → (t job)`
 
 Downloads the private file `file` (its `id` in `ListFiles`) in an `upload` job whose output is
@@ -2709,7 +2729,7 @@ struct OutputState {
     buffers: String, sound: String, shown_fit: Fit, flashes: String, left_out: Vec<String>,
     particles: String, quality: String, quality_reason: String, quality_choice: Option<String>,
     quality_cost: f64, quality_budget: f64, quality_auto: String, sandbox: String,
-    accent: Option<String>, filter: Option<Filter>, hdr: HdrState,
+    accent: Option<String>, filter: Option<Filter>, hdr: HdrState, away: Option<String>,
 }
 struct PreviewState { error: Option<String>, console: Vec<String> }
 struct HdrState {
@@ -2794,7 +2814,9 @@ struct ItemSummary {
     missing: bool, error: Option<String>, revoked: Option<Reason>, removable: bool, imported: bool,
     thumb: Option<PathBuf>, package: Option<PackageInfo>,
 }
-struct SearchPage { model: u32, serial: u64, query: String, total: u32, offset: u32, items: Vec<ItemSummary> }
+struct SearchPage {
+    model: u32, serial: u64, query: String, total: u32, offset: u32, items: Vec<ItemSummary>, away: Vec<Away>,
+}
 struct ItemDetails {
     model: u32, serial: u64, item: Item, thumb: Option<PathBuf>, presets: Vec<Preset>,
     playlists: Vec<PlaylistRef>, credit: Option<Credit>, installed: Option<InstalledPackage>,
@@ -2824,7 +2846,9 @@ struct Rules {
 }
 struct Playlist { uid: Uid, name: String, query: Option<String>, rules: Rules, count: u32, outputs: Vec<String> }
 struct PlaylistsReply { model: u32, serial: u64, playlists: Vec<Playlist> }
-struct PlaylistPage { model: u32, serial: u64, playlist: Playlist, total: u32, offset: u32, items: Vec<ItemSummary> }
+struct PlaylistPage {
+    model: u32, serial: u64, playlist: Playlist, total: u32, offset: u32, items: Vec<ItemSummary>, away: Vec<Away>,
+}
 struct HistoryEntry { at: Time, item: Option<ItemSummary> }
 struct HistoryReply { model: u32, serial: u64, output: String, entries: Vec<HistoryEntry> }
 struct ProfileOutput {
@@ -2914,6 +2938,9 @@ struct Account {
 }
 struct AccountReply { model: u32, serial: u64, account: Option<Account> }
 struct PrivateFile { id: String, name: String, size: u64, item: Option<Uid>, shared: bool, stored: bool }
+struct AwayProfile { profile: Uid, output: String }
+struct Away { key: String, title: String, playlists: Vec<Uid>, profiles: Vec<AwayProfile> }
+struct AwayReply { model: u32, serial: u64, items: Vec<Away> }
 struct FilesReply { model: u32, serial: u64, folders: Vec<String>, files: Vec<PrivateFile> }
 struct UploadOutput { id: String, state: String, package: Option<String>, version: Option<String>, errors: Vec<String> }
 ```

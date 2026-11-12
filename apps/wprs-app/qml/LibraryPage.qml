@@ -42,6 +42,8 @@ Kirigami.Page {
     Component.onCompleted: filters.start(query)
     actions: tools.actions
 
+    footer: AwayNote {}
+
     header: Filters {
         id: filters
 

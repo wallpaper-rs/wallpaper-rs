@@ -37,6 +37,8 @@ model! {
         pub total: u32,
         pub offset: u32,
         pub items: Vec<ItemSummary>,
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        pub away: Vec<super::Away>,
     }
 
     pub struct HistoryEntry { pub at: Time, pub item: Option<ItemSummary> }

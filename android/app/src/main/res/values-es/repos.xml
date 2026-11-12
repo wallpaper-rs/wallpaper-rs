@@ -17,4 +17,6 @@
     <string name="repo_update_asks">No se actualiza sola: ahora pide %1$s</string>
     <string name="repo_check">Buscar actualizaciones</string>
     <string name="needs_failed">Este paquete quedó incompleto: no se pudo instalar %1$s, así que puede no funcionar.</string>
+    <string name="auto_update">Actualizar los repositorios automáticamente</string>
+    <string name="away_note">%1$s existe solo en otro equipo. Publicarlo en el servidor o en un repositorio lo hace disponible aquí.</string>
 </resources>

@@ -17,4 +17,6 @@
     <string name="repo_update_asks">Not updated automatically: it now asks for %1$s</string>
     <string name="repo_check">Check for updates</string>
     <string name="needs_failed">This package is incomplete: %1$s could not be installed, so it may not work.</string>
+    <string name="auto_update">Update repositories automatically</string>
+    <string name="away_note">%1$s exists only on another device. Publishing it to the server or to a repository makes it available here.</string>
 </resources>

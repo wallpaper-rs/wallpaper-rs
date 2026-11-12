@@ -8,7 +8,7 @@ use crate::show;
 use anyhow::{Result, bail};
 use futures_util::TryFutureExt;
 use std::io::{self, IsTerminal};
-use wprs_client::Client;
+use wprs_client::{Client, explain};
 
 const PLAINTEXT: &str =
     "Plain-text sync lets the operator of the server read your library, playlists and settings.";
@@ -63,6 +63,9 @@ pub async fn run(client: &Client, command: Server) -> Result<()> {
         Server::Secret { provider, stop } => sync.share_secret(&provider, !stop).await?,
         Server::Escrow { remove, yes, wait } => private::escrow(client, remove, yes, &wait).await?,
         Server::Restore { wait } => private::restore(client, &wait).await?,
+        Server::Away { json } => {
+            show::reply(sync.list_away().await.map_err(explain)?, json, crate::away::listing)?
+        }
         Server::Files(files) => private::run(client, files).await?,
         Server::Upload { file, unlisted, wait } => {
             let visibility = if unlisted { "unlisted" } else { "public" };

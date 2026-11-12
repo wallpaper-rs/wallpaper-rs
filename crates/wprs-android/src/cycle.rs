@@ -93,6 +93,7 @@ async fn cycle(conflict: &str) -> Result<Value, Error> {
     let here =
         local.items.iter().filter_map(|(key, uids)| Some((key.clone(), uids.first()?.clone()))).collect();
     let offers = repos::offers(&local, &replica);
+    let away = wprs_sync::away(&replica, &local, &links, &repos::offered(&ids));
     let shared = secrets.records.values().filter_map(|(_, doc)| {
         let view = doc.view().filter(|v| v.contains_key("secret"))?;
         view.get("provider")?.as_str().map(String::from)
@@ -111,7 +112,7 @@ async fn cycle(conflict: &str) -> Result<Value, Error> {
         (s.present, s.unapplied) = (present, unapplied);
         s.removed.retain(|key, _| !saved.removed.contains_key(key));
         s.warning = state["warning"].as_str().map(String::from);
-        (s.files.here, s.offers, s.shared) = (here, offers, shared);
+        (s.files.here, s.offers, s.shared, s.away) = (here, offers, shared, away);
     })?;
     if encrypted && (state["rotate"] == true || left) {
         rotation::rotate(&api, &mut secrets, true).await?;

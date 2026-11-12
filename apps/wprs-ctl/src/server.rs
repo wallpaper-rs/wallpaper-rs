@@ -46,6 +46,11 @@ pub enum Server {
         #[arg(long, help = JSON)]
         json: bool,
     },
+    #[command(about = "List the items other devices synced that exist only on those devices")]
+    Away {
+        #[arg(long, help = JSON)]
+        json: bool,
+    },
     #[command(about = "Sync now")]
     Sync {
         #[command(flatten)]

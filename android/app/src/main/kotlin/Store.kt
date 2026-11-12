@@ -75,6 +75,7 @@ class Playlist(json: JSONObject) {
     val uid: String = info.getString("uid")
     val name: String = info.getString("name")
     val rules: JSONObject = info.getJSONObject("rules")
+    val away: List<String> = json.optJSONArray("away")?.let { list -> List(list.length(), list::getString) }.orEmpty()
 }
 
 fun Playlist.ruled(key: String, value: Any): JSONObject =

@@ -2121,9 +2121,20 @@ wprs-ctl server repo 1a2b3c4d                    # añade un repositorio que otr
 wprs-ctl server secret wallhaven                 # sincroniza la clave de un proveedor, cifrada
 wprs-ctl server files share ./fondos             # sube tus propios fondos, cifrados; en otro equipo:
 wprs-ctl server files ls                         # … los lista y `server files fetch <id>` descarga uno
+wprs-ctl server away                             # lo que otros equipos sincronizaron y solo existe en ellos
 wprs-ctl server escrow                           # guarda la clave en el servidor, cerrada con una frase
 wprs-ctl server restore                          # equipo nuevo sin ningún otro: recupera la clave con la frase
 ```
+
+La sincronización mueve registros (qué fondo está puesto, listas, ajustes), no archivos de paquetes:
+un paquete que se nombra en un registro se obtiene de un repositorio. Lo que existe solo en un equipo
+(por ejemplo un preajuste hecho a mano y nunca publicado) no aparece en los demás, y lo local no se
+sincroniza solo. Cuando un registro sincronizado nombra algo que este equipo no tiene y que ningún
+repositorio conocido ofrece, la biblioteca, la lista que lo nombra y la pantalla en la que se aplicó
+muestran una nota («existe solo en otro equipo; publicarlo en el servidor o en un repositorio lo hace
+disponible aquí»), en la aplicación, en el teléfono y en `wprs-ctl` (`lib search`, `playlist show`,
+`state` y `server away`). No se descarga nada ni se reintenta en bucle: la nota desaparece en la
+siguiente sincronización, cuando el elemento llega.
 
 Al subir un paquete eliges si es público u oculto (en el diálogo de subida de *Repositorios*, en la
 web del servidor o con `--unlisted`): uno oculto se publica y se firma igual, pero el catálogo y la

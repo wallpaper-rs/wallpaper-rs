@@ -6,6 +6,7 @@ mod applying;
 mod args;
 pub mod author;
 mod authoring;
+mod away;
 mod backdrop;
 mod bench;
 mod benching;

@@ -28,12 +28,13 @@ pub(super) fn remove(lib: &mut Library, uids: &[String], now: i64) -> Result<Val
 }
 
 pub(super) fn playlists(lib: &Library, now: i64) -> Result<Value, Error> {
-    let config = settings::config();
+    let (config, away) = (settings::config(), crate::state::read(|s| s.away.clone()));
     let on = |uid: &str, screen: &str| config.resolve(screen).playlist.as_deref() == Some(uid);
     let listed = lib.playlists()?.into_iter().map(|p| {
         let count = lib.playlist_items(&p.uid, now)?.len();
         let (home, lock) = (on(&p.uid, ""), on(&p.uid, crate::choice::LOCK));
-        Ok(json!({ "count": count, "current": home || lock, "home": home, "lock": lock, "playlist": p }))
+        let away: Vec<&str> = away.iter().filter(|a| a.playlists.contains(&p.uid)).map(|a| a.title.as_str()).collect();
+        Ok(json!({ "count": count, "current": home || lock, "home": home, "lock": lock, "playlist": p, "away": away }))
     });
     Ok(Value::Array(listed.collect::<Result<_, Error>>()?))
 }

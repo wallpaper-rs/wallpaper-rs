@@ -91,6 +91,7 @@ fun Library(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
             TextButton(main::openPackage) { Text(stringResource(R.string.open_package)) }
         }
         Importing(main)
+        if (query.isEmpty()) AwayNotes(main)
         if (items?.isEmpty() == true) Text(stringResource(R.string.empty), Modifier.padding(16.dp))
         LazyVerticalGrid(
             columns = GridCells.Adaptive(112.dp),

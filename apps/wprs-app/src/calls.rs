@@ -180,6 +180,7 @@ calls! {
         Restore restore(passphrase: str);
         ShareFiles share_files(targets: strs, share: bool);
         ListFiles list_files() json;
+        ListAway list_away() json;
         FetchFile fetch_file(file: str);
         Upload upload(path: str);
         UploadAs upload_as(path: str, visibility: str);

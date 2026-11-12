@@ -99,8 +99,8 @@ pub fn notes(state: &str, inputs: &str) {
     };
     state.outputs.iter().for_each(|(name, o)| {
         note(o).into_iter().for_each(|n| eprintln!("{name}: {n}"));
-        sandbox_note(o).into_iter().for_each(|n| eprintln!("{name}: {n}"));
-        o.error.iter().for_each(|error| eprintln!("{name}: {error}"));
+        let more = sandbox_note(o).map(String::from).into_iter().chain(o.error.clone());
+        more.chain(o.away.as_deref().map(crate::away::note)).for_each(|n| eprintln!("{name}: {n}"));
     });
     let Ok(inputs) = serde_json::from_str::<InputsReply>(inputs) else {
         return;

@@ -149,6 +149,7 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Sync1", "Restore", "server restore", &["prompt"]),
     ("Sync1", "ShareFiles", "server files share", &["TARGETS", "--stop"]),
     ("Sync1", "ListFiles", "server files ls", &[]),
+    ("Sync1", "ListAway", "server away", &[]),
     ("Sync1", "FetchFile", "server files fetch", &["FILE"]),
     ("Sync1", "Upload", "server upload", &["FILE"]),
     ("Sync1", "UploadAs", "server upload", &["FILE", "--unlisted"]),
