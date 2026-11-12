@@ -97,6 +97,7 @@ pub(crate) fn material(dir: &Path, doc: &Value, e: &MaterialEdit) -> Result<Vec<
         }
         block["params"][id] = json!(v);
     }
+    super::valued::values(dir, doc, &shader, &e.values, &mut block)?;
     super::maps::maps(doc, &mut block, &e.maps)?;
     let mut ops = super::maps::files(dir, doc, &mut block, &e.files)?;
     if let Some(k) = &e.key {

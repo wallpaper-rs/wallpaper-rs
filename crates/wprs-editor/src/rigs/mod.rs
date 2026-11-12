@@ -134,6 +134,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if crate::onscreen::asks(q) => crate::onscreen::query(dir, doc, q),
         _ if crate::lamps::asks(q) => crate::lamps::query(dir, doc, id, q),
         _ if crate::stage3d::asks(q) => crate::stage3d::query(dir, doc, id, q),
+        _ if crate::wgsl::asks(q) => crate::wgsl::query(dir, doc, q),
         _ if q.get("motion").is_some() => {
             crate::motion::motion(dir, doc, q["motion"]["layer"].as_str().unwrap_or(id))
         }

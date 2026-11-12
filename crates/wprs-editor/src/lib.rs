@@ -121,6 +121,7 @@ pub mod touch;
 pub mod tried;
 pub mod usage;
 pub mod wander;
+pub mod wgsl;
 
 pub use actions::{ACTIONS, Action};
 pub use findings::{Problem, told, told_with};

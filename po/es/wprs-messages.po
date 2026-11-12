@@ -122,6 +122,7 @@ msgstr "%1 es demasiado grande"
 #: crates/wprs-editor/src/previews.rs crates/wprs-editor/src/project.rs
 #: crates/wprs-editor/src/scripts.rs crates/wprs-editor/src/scripts/audit.rs
 #: crates/wprs-editor/src/scripts/edit.rs crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/wgsl/mod.rs
 msgid "cannot read %1: %2"
 msgstr "no se puede leer %1: %2"
 
@@ -2057,7 +2058,7 @@ msgstr ""
 msgid "%1 is larger than %2 KiB"
 msgstr "%1 ocupa más de %2 KiB"
 
-#: crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/shaders.rs crates/wprs-editor/src/wgsl/mod.rs
 msgid "the descriptor is not valid JSON: %1"
 msgstr "el descriptor no es un JSON válido: %1"
 
@@ -2065,7 +2066,7 @@ msgstr "el descriptor no es un JSON válido: %1"
 msgid "the descriptor has no id"
 msgstr "el descriptor no tiene id"
 
-#: crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/shaders.rs crates/wprs-editor/src/wgsl/mod.rs
 msgid "the effect %1 %2"
 msgstr "el efecto %1 %2"
 
@@ -2074,6 +2075,8 @@ msgid "a scene has at most %1 effects of its own"
 msgstr "una escena tiene como mucho %1 efectos propios"
 
 #: crates/wprs-editor/src/shaders.rs crates/wprs-editor/src/stage3d/newmat.rs
+
+#: crates/wprs-editor/src/shaders.rs crates/wprs-editor/src/wgsl/mod.rs
 msgid "%1 is no effect of this package"
 msgstr "%1 no es un efecto de este paquete"
 
@@ -2081,7 +2084,7 @@ msgstr "%1 no es un efecto de este paquete"
 msgid "%1 is still used by %2; remove it from there first"
 msgstr "%1 todavía lo usa %2; quítalo de ahí primero"
 
-#: crates/wprs-editor/src/shaders.rs
+#: crates/wprs-editor/src/shaders.rs crates/wprs-editor/src/wgsl/form.rs
 msgid "%1 has no parameter %2"
 msgstr "%1 no tiene el parámetro %2"
 
@@ -2513,6 +2516,7 @@ msgid "%1 of a material goes from %2 to %3"
 msgstr "%1 de un material va de %2 a %3"
 
 #: crates/wprs-editor/src/stage3d/material.rs
+#: crates/wprs-editor/src/stage3d/valued.rs
 msgid "%1 is not a parameter of %2"
 msgstr "%1 no es un parámetro de %2"
 
@@ -2601,6 +2605,18 @@ msgstr "el desplazamiento va de 0 a 1"
 #: crates/wprs-editor/src/stage3d/store.rs
 msgid "%1 is not a model of the scene"
 msgstr "%1 no es un modelo de la escena"
+
+#: crates/wprs-editor/src/stage3d/valued.rs
+msgid "only a package material shader takes these values"
+msgstr "solo un shader de material del paquete acepta estos valores"
+
+#: crates/wprs-editor/src/stage3d/valued.rs
+msgid "%1 does not take %2"
+msgstr "%1 no acepta %2"
+
+#: crates/wprs-editor/src/stage3d/valued.rs
+msgid "%1 is no picture of the package"
+msgstr "%1 no es una imagen del paquete"
 
 #: crates/wprs-editor/src/starters.rs
 msgid "%1 is not a starting point; use one of %2"
@@ -2830,6 +2846,28 @@ msgstr "la opacidad que toma el puntero va de 0 a 1"
 #: crates/wprs-editor/src/usage.rs
 msgid "%1 uses %2 but does not declare it; declare it in its uses"
 msgstr "%1 usa %2 pero no lo declara; decláralo en sus usos"
+
+#: crates/wprs-editor/src/wgsl/form.rs
+msgid "%1 is not a field this form edits"
+msgstr "%1 no es un campo que edite este formulario"
+
+#: crates/wprs-editor/src/wgsl/form.rs
+msgid "there is already a parameter %1"
+msgstr "ya hay un parámetro %1"
+
+#: crates/wprs-editor/src/wgsl/form.rs
+msgid "there is no pass %1"
+msgstr "no hay ninguna pasada %1"
+
+#: crates/wprs-editor/src/wgsl/mod.rs
+msgid "there is no shader template %1"
+msgstr "no hay ninguna plantilla de shader %1"
+
+#: crates/wprs-editor/src/wgsl/mod.rs
+msgid "a shader is at most 64 KiB and the shaders of a scene 256 KiB together"
+msgstr ""
+"un shader ocupa como mucho 64 KiB y los shaders de una escena, 256 KiB en "
+"total"
 
 #: crates/wprs-format/src/admin.rs
 msgid "no folder was given for the repository"

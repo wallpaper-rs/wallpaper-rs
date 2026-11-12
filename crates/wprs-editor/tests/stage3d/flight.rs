@@ -161,3 +161,23 @@ fn material_shaders_take_their_params_and_package_ones_report_their_lines() {
     assert_eq!(levels[1]["fur_shadow_triangles"], 0);
     assert_eq!(levels[1]["left_out"].as_array().unwrap().len(), 1);
 }
+
+#[test]
+fn package_material_shaders_take_pictures_of_the_package_for_their_images() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    edit(&mut p, json!({ "model": { "add": { "asset": "toy", "id": "doll" } } })).unwrap();
+    edit(&mut p, json!({ "new_material": { "name": "glaze" } })).unwrap();
+    let set = |values: serde_json::Value| json!({ "material": { "layer": "doll", "name": "paint", "shader": "glaze", "values": values } });
+    edit(&mut p, set(json!({ "picture": "sky", "tint": "#ff0000" }))).unwrap();
+    let params = &layer(&p, "doll")["materials"]["paint"]["params"];
+    assert_eq!((params["picture"].clone(), params["tint"].clone()), (json!("sky"), json!("#ff0000")));
+    edit(&mut p, set(json!({ "picture": "noise" }))).unwrap();
+    assert!(edit(&mut p, set(json!({ "picture": "toy" }))).is_err(), "a model is no picture");
+    assert!(edit(&mut p, set(json!({ "picture": 3 }))).is_err());
+    assert!(edit(&mut p, set(json!({ "nothing": 1 }))).is_err());
+    edit(&mut p, set(json!({ "picture": null }))).unwrap();
+    assert!(layer(&p, "doll")["materials"]["paint"]["params"].get("picture").is_none());
+    let pbr = json!({ "material": { "layer": "doll", "name": "trim", "values": { "picture": "sky" } } });
+    assert!(edit(&mut p, pbr).is_err(), "only package shaders take values");
+}

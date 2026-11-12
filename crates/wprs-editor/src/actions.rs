@@ -24,7 +24,7 @@ pub use crate::action::{
     TonesEdit, ViewEdit,
 };
 pub use crate::action::{
-    CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, ScriptEdit, Takes, TemplateEdit,
+    CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, ScriptEdit, ShaderEdit, Takes, TemplateEdit,
     TimelineEdit, TimelineEvent,
 };
 pub use crate::action::{ClockSet, Fit, Grip, Named, PasteEdit, RenameEdit, SCREENS, TranslateEdit};

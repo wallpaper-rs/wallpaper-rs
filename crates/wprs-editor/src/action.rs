@@ -198,6 +198,7 @@ pub enum Action {
     Uses(UsesEdit),
     Film(crate::films::FilmEdit),
     Sprites(crate::cutter::SpriteEdit),
+    Shader(ShaderEdit),
     Undo {},
     Redo {},
 }

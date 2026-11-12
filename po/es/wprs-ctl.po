@@ -3793,11 +3793,9 @@ msgstr "Color de brillo como #ff8800, o none"
 msgid ""
 "metallic, roughness, normal_scale, occlusion, or layers, length, density, "
 "comb_x, comb_y, comb_z of fur, strength and speed of foliage, threshold and "
-"softness of chroma"
-msgstr ""
-"metallic, roughness, normal_scale, occlusion, o layers, length, density, "
-"comb_x, comb_y, comb_z del pelaje, strength y speed del follaje, threshold y "
-"softness del croma"
+"softness of chroma, or any parameter of a package material shader, such as a "
+"picture asset for its images"
+msgstr "metallic, roughness, normal_scale, occlusion, o layers, length, density, comb_x, comb_y, comb_z del pelo, strength y speed del follaje, threshold y softness del croma, o cualquier parámetro de un shader de material del paquete, como una imagen del paquete para sus imágenes"
 
 #: apps/wprs-ctl/src/modeling.rs
 msgid "Key color of a chroma material such as #00ff00"
@@ -6192,6 +6190,21 @@ msgstr "El descriptor, un archivo .json"
 #: apps/wprs-ctl/src/shading.rs
 msgid "The shader; the .wgsl file next to the descriptor when omitted"
 msgstr "El shader; el archivo .wgsl junto al descriptor si se omite"
+
+#: apps/wprs-ctl/src/shading.rs
+msgid "Make an effect or a material shader of the package from a template"
+msgstr "Crear un efecto o un shader de material del paquete a partir de una plantilla"
+
+#: apps/wprs-ctl/src/shading.rs
+msgid "Id of the new effect, [a-z0-9_]{1,32}"
+msgstr "Id del efecto nuevo, [a-z0-9_]{1,32}"
+
+#: apps/wprs-ctl/src/shading.rs
+msgid ""
+"color (a fused tint), distort (a fused bend around a point), passes (two "
+"passes, a blur along an angle), material (a material shader that samples a "
+"picture) or particle (a particle shader)"
+msgstr "color (un tinte fusionado), distort (una deformación fusionada alrededor de un punto), passes (dos pasadas, un desenfoque a lo largo de un ángulo), material (un shader de material que lee una imagen) o particle (un shader de partículas)"
 
 #: apps/wprs-ctl/src/shading.rs
 msgid "Remove an effect of the package; refused while a layer still uses it"

@@ -78,13 +78,14 @@ fn edit(command: Modeling) -> Result<(PathBuf, Edit3d)> {
             clear,
             ..
         } => {
-            let mut set = std::collections::BTreeMap::new();
+            let (mut set, mut values) =
+                (std::collections::BTreeMap::new(), std::collections::BTreeMap::new());
             for p in params {
                 let (id, v) = p.split_once('=').with_context(|| format!("{p} is not ID=VALUE"))?;
-                set.insert(
-                    id.trim().to_owned(),
-                    v.trim().parse::<f64>().with_context(|| format!("{v} is not a number"))?,
-                );
+                match v.trim().parse::<f64>() {
+                    Ok(n) => drop(set.insert(id.trim().to_owned(), n)),
+                    Err(_) => drop(values.insert(id.trim().to_owned(), crate::steps::value(v.trim()))),
+                }
             }
             let name = name.context("name the material, or use --list")?;
             let m = MaterialEdit {
@@ -98,6 +99,7 @@ fn edit(command: Modeling) -> Result<(PathBuf, Edit3d)> {
                 color: color(c),
                 emissive: color(emissive),
                 params: set,
+                values,
                 key: key.map(|k| crate::steps::value(&k)),
                 clear,
                 ..MaterialEdit::default()

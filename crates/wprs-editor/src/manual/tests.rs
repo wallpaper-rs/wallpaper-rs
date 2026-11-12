@@ -40,7 +40,7 @@ fn every_query_is_listed_once() {
         assert!(seen.insert(name) && !about.is_empty(), "{name}");
         assert!(serde_json::from_str::<Value>(args).is_ok(), "{name}");
     }
-    let routed = crate::lamps::QUERIES.iter().chain(&crate::stage3d::QUERIES);
+    let routed = crate::lamps::QUERIES.iter().chain(&crate::stage3d::QUERIES).chain(&crate::wgsl::QUERIES);
     for name in routed {
         assert!(seen.contains(name), "query {name} is not listed");
     }

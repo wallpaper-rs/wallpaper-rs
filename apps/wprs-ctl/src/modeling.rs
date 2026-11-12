@@ -47,7 +47,7 @@ pub enum Modeling {
         #[arg(
             long = "param",
             value_name = "ID=VALUE",
-            help = "metallic, roughness, normal_scale, occlusion, or layers, length, density, comb_x, comb_y, comb_z of fur, strength and speed of foliage, threshold and softness of chroma"
+            help = "metallic, roughness, normal_scale, occlusion, or layers, length, density, comb_x, comb_y, comb_z of fur, strength and speed of foliage, threshold and softness of chroma, or any parameter of a package material shader, such as a picture asset for its images"
         )]
         params: Vec<String>,
         #[arg(long, help = "Key color of a chroma material such as #00ff00")]

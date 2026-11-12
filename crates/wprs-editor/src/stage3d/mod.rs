@@ -33,12 +33,12 @@ mod surface;
 mod swing;
 mod thumbs;
 mod turns;
+mod valued;
 mod view;
 
 pub use cost::cost;
 pub use gizmo::stage;
 pub use info::info;
-pub use newmat::TEMPLATE;
 pub use store::file;
 pub use view::{View, preview};
 
