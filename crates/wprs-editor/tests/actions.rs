@@ -67,7 +67,11 @@ fn layer_actions_keep_the_scene_valid() {
     assert_eq!((&shown["layers"][3].get("visible"), &shown["layers"][2]["visible"]), (&None, &json!(false)));
     act(&mut doc, json!({"set": {"pointer": "/scene/layers/3/opacity", "value": 0.5}}));
     let found = check(&doc);
-    assert!(found.iter().all(|p| p.warning && p.pointer == "/manifest/requires/features"), "{found:?}");
+    let covered: Vec<&str> =
+        found.iter().filter(|p| p.message.contains("never shows")).map(|p| p.pointer.as_str()).collect();
+    assert_eq!(covered, ["/scene/layers/0", "/scene/layers/1"], "{found:?}");
+    let others = found.iter().filter(|p| !p.message.contains("never shows"));
+    assert!(others.clone().all(|p| p.warning && p.pointer == "/manifest/requires/features"), "{found:?}");
     let bad: Action = serde_json::from_value(json!({"group": {"ids": ["sky", "nope"]}})).unwrap();
     assert!(plan(&doc, &bad).is_err());
     act(&mut doc, json!({"lock": {"id": "sun", "locked": true}}));
@@ -83,9 +87,9 @@ fn layer_actions_keep_the_scene_valid() {
     assert_eq!(ids(&doc, "/scene/layers")[6..], ["titulo", "color_solido", "shape", "titulo_2"]);
     assert_eq!(doc["scene"]["layers"][6]["text"], "Título");
     assert!(
-        check(&doc)
-            .iter()
-            .all(|p| p.pointer == "/scene/layers/0/visible" || p.pointer == "/manifest/requires/features")
+        check(&doc).iter().filter(|p| !p.message.contains("never shows")).all(|p| {
+            p.pointer == "/scene/layers/0/visible" || p.pointer == "/manifest/requires/features"
+        })
     );
 }
 
