@@ -139,10 +139,10 @@ case $(field "s['adapter']") in
   llvmpipe*) expect "s['outputs']['TEST-11']['parallax']" False ;;
 esac
 ctl config playback.software_parallax true
-expect "s['outputs']['TEST-11']['parallax']" True
 consume "$deep"
-shown_layers() { ctl edit depth layers "$WORK/relief.png" --list | grep -q "layers, fill simple"; }
+shown_layers() { ctl edit depth layers "$WORK/relief.png" --list | grep -q "fill simple, .* moves$"; }
 wait_for 60 shown_layers || fail "the daemon did not build the depth layers: $(ctl jobs)"
+expect "s['outputs']['TEST-11']['parallax']" True
 frames() { field "s['outputs']['TEST-11']['frames']"; }
 past() { [ "$(frames)" -gt "$1" ]; }
 moves() { wait_for "$1" past "$(frames)"; }
@@ -185,7 +185,7 @@ ctl edit depth layers "$WORK/relief.png" --clear >/dev/null
 layers=$(ctl edit depth layers "$WORK/relief.png" --fill simple --layers 4) || fail "the depth layers were not built"
 for file in "$layers" "${layers%.png}.json"; do [ -f "$file" ] || fail "the depth layers were not saved"; done
 [ "$(ctl edit depth layers "$WORK/relief.png" --fill simple --layers 4)" = "$layers" ] || fail "built layers are not kept"
-ctl edit depth layers "$WORK/relief.png" --list | grep "layers, fill simple" >/dev/null || fail "the layers are not listed"
+ctl edit depth layers "$WORK/relief.png" --list | grep "regions, fill simple" >/dev/null || fail "the layers are not listed"
 ctl edit depth show "$WORK/relief.png" --layer 0 --out "$WORK/layer0.png" >/dev/null; [ -s "$WORK/layer0.png" ] || fail "a layer was not saved"
 if ctl edit depth show "$WORK/relief.png" --layer 9 --out "$WORK/none.png" 2>/dev/null; then fail "a layer that does not exist was saved"; fi
 if ctl edit depth layers "$WORK/relief.png" --fill off 2>/dev/null; then fail "the fill off built layers"; fi
