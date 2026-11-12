@@ -29,6 +29,7 @@ pub(crate) struct OutputInfo {
     pub(crate) video: Option<std::sync::Arc<crate::sceneprops::Props>>,
     pub(crate) accent: Option<String>,
     pub(crate) spread: bool,
+    pub(crate) idle: bool,
 }
 
 impl OutputInfo {

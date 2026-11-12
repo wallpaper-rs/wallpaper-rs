@@ -3107,14 +3107,6 @@ msgid "Repositories"
 msgstr "Repositorios"
 
 #: apps/wprs-app/qml/OutputControls.qml
-msgid "Remove wallpaper"
-msgstr "Quitar el fondo"
-
-#: apps/wprs-app/qml/OutputControls.qml
-msgid "Show only the background color. You can bring the wallpaper back."
-msgstr "Muestra solo el color de fondo. Puedes recuperar el fondo."
-
-#: apps/wprs-app/qml/OutputControls.qml
 msgid "Bring back the wallpaper"
 msgstr "Recuperar el fondo"
 
@@ -4333,6 +4325,29 @@ msgstr ""
 "nunca se mandan. En el escritorio devuelve false y no manda nada hasta que "
 "enciendas la iluminación RGB y lo permitas para este paquete."
 
+#: apps/wprs-app/qml/PlasmaBack.qml
+msgid "Use Plasma's own wallpaper"
+msgstr ""
+"Usar el fondo propio de Plasma"
+
+#: apps/wprs-app/qml/PlasmaBack.qml
+msgid ""
+"Switch the screens back to the wallpaper type you had in Plasma. Choosing a "
+"wallpaper here uses wallpaper-rs again."
+msgstr ""
+"Devuelve las pantallas al tipo de fondo que tenías en Plasma. Si "
+"eliges un fondo aquí, se vuelve a usar wallpaper-rs."
+
+#: apps/wprs-app/qml/PlasmaHint.qml
+msgid ""
+"Plasma shows the background color here. To use another Plasma wallpaper "
+"type, press «Use Plasma's own wallpaper» or choose it in the desktop "
+"settings."
+msgstr ""
+"Plasma muestra aquí el color de fondo. Para usar otro tipo de fondo de "
+"Plasma, pulsa «Usar el fondo propio de Plasma» o elígelo en los "
+"ajustes del escritorio."
+
 #: apps/wprs-app/qml/PlaylistEditor.qml apps/wprs-app/qml/PlaylistsPage.qml
 
 #: apps/wprs-app/qml/PresetDialog.qml apps/wprs-app/qml/ProfilesPage.qml
@@ -4680,6 +4695,22 @@ msgstr ""
 #: apps/wprs-app/qml/ScenePropLevels.qml apps/wprs-app/qml/SceneScriptAudit.qml
 msgid "%1: %2"
 msgstr "%1: %2"
+
+#: apps/wprs-app/qml/RemoveButton.qml
+msgid "Remove wallpaper"
+msgstr "Quitar el fondo"
+
+#: apps/wprs-app/qml/RemoveButton.qml
+msgid "Show only the background color. You can bring the wallpaper back."
+msgstr "Muestra solo el color de fondo. Puedes recuperar el fondo."
+
+#: apps/wprs-app/qml/RemoveButton.qml
+msgid ""
+"Give the screen back to the desktop's own wallpaper. You can bring the "
+"wallpaper back."
+msgstr ""
+"Devuelve la pantalla al fondo propio del escritorio. Puedes recuperar "
+"el fondo."
 
 #: apps/wprs-app/qml/RepoAddress.qml
 msgid ""

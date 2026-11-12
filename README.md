@@ -218,7 +218,17 @@ WAYLAND_DISPLAY && systemctl --user restart wprsd` (en Hyprland, importa tambié
 
 `wprsd` elige solo: con Plasma (`plasmashell` en el bus o `KDE` en `XDG_CURRENT_DESKTOP`) usa los
 streams del plugin y en otro escritorio Wayland con `wlr-layer-shell`, sus propias superficies.
-`wprsd --backend streams|layer-shell|x11` lo fuerza. Las pantallas se llaman como las anuncia el
+`wprsd --backend streams|layer-shell|x11` lo fuerza. Mientras no hay fondo elegido (primer arranque,
+o después de *Quitar el fondo* o `wprs-ctl clear`) `wprsd` no pone nada en la pantalla: en
+layer-shell destruye su superficie, así que se ve el fondo del propio escritorio, y en X11 destruye
+la ventana y devuelve a la ventana raíz lo que mostraba antes de que `wprsd` dibujara (el pixmap de
+`_XROOTPMAP_ID`, o una copia de lo que se veía; X no dice el color liso de `xsetroot`, por eso vuelve
+como copia). Sin fondo no hay fotogramas, temporizadores ni trabajo de GPU en esa pantalla, y la
+superficie se crea de nuevo al poner o recuperar un fondo. En Plasma el plugin no puede apartarse
+solo: muestra el color de fondo, y *Usar el fondo propio de Plasma* (o `wprs-ctl plasma-back`) pide a
+Plasma, con su interfaz de scripts, que vuelva al tipo de fondo que tenía; poner o recuperar un
+fondo en wprs-ctl lo vuelve a activar. Quitar de la biblioteca el elemento que es el fondo actual
+también deja libres sus pantallas. Las pantallas se llaman como las anuncia el
 compositor (`DP-1`, `HDMI-A-1`…; las muestran `swaymsg -t get_outputs`, `hyprctl monitors`,
 `niri msg outputs` o `wlr-randr`) y esos nombres son los de `-o` y de la configuración. Las
 pantallas que se conectan o se quitan con la sesión abierta se siguen solas, y la escala
@@ -618,7 +628,8 @@ wprs-ctl set ~/Vídeos/mar.mp4 -o DP-1 -f fit    # una pantalla, modo de ajuste
 wprs-ctl fit center                             # solo el modo de ajuste, mismo fondo
 wprs-ctl fit tile -o DP-1                       # el modo de ajuste de una pantalla
 wprs-ctl background '#203040'                   # color alrededor del fondo
-wprs-ctl clear                                  # quita el fondo: queda solo el color de fondo
+wprs-ctl clear                                  # quita el fondo y devuelve la pantalla al escritorio (en Plasma: color de fondo)
+wprs-ctl plasma-back                            # en Plasma: vuelve al tipo de fondo propio de Plasma
 wprs-ctl clear -o DP-1 && wprs-ctl restore -o DP-1   # quitar el fondo de una pantalla y recuperarlo
 wprs-ctl filter warm --strength 0.6 -o DP-1      # filtro de color de una pantalla (none lo quita)
 wprs-ctl filter --list                          # los filtros que hay

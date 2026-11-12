@@ -492,21 +492,54 @@ per-output fits, with or without a path. An empty `path` and an empty `fit` retu
 
 ### `ClearWallpaper(s output)`
 
-Removes the wallpaper of `output`, or of every output when `output` is empty, and shows only the
-background color (`SetBackground`, black by default). A playlist assigned to the affected outputs
-stops. What was shown is kept in the configuration (`blank` of the section) until a new wallpaper is
-set; `GetState().outputs[x].blank` is true while an output shows no wallpaper and `previous` while
+Removes the wallpaper of `output`, or of every output when `output` is empty, and gives the screen
+back to the desktop. A playlist assigned to the affected outputs stops. What was shown is kept in
+the configuration (`blank` of the section) until a new wallpaper is set;
+`GetState().outputs[x].blank` is true while an output shows no wallpaper and `previous` while
 `RestoreWallpaper` has something to bring back. Clearing again keeps the first wallpaper, not the
-empty one. What the screen shows then depends on how the daemon presents: with the Plasma plugin,
-layer-shell surfaces and X11 windows it is the background color drawn by the daemon (to give the
-screen back to the desktop's own wallpaper, choose another wallpaper type in the desktop settings or
-stop the daemon); with streams for another program it is a stream of that color.
+empty one. What the screen shows then depends on how the daemon presents:
+
+- Layer-shell surfaces: the daemon destroys the layer surface of the output, so the compositor
+  shows whatever the desktop itself has there (its own background). No frames, timers or GPU work
+  remain for that output, and `GetState().outputs[x].released` is true. The surface is created
+  again when a wallpaper is set or restored.
+- X11 windows: the daemon destroys the desktop window of the monitor and gives the root window
+  back what it showed before the daemon first drew: the pixmap that `_XROOTPMAP_ID` and
+  `ESETROOT_PMAP_ID` named, or, when the root window had none, a copy of what the root window showed
+  at that moment (without other programs' windows). X cannot report a plain root color, so a color
+  set with `xsetroot` comes back as that copy. If another program changed the root background in
+  the meantime, it is left alone. `released` is true as for layer-shell.
+- Plasma (the daemon draws through its wallpaper plugin): the plugin cannot switch itself away, so
+  the screen shows the background color (`SetBackground`, black by default). `GetState().plasma` is
+  true in this case. `HandBackToPlasma` switches to Plasma's own wallpaper type when the person asks.
+- Streams for another program: a stream of the background color.
+
+On a first start, with nothing chosen yet, the daemon shows nothing: layer-shell and X11 outputs
+are listed in `GetState` with `released` and `blank` true but get no surface, so the desktop's own
+background stays. In Plasma the plugin only runs where the person chose it in the desktop settings;
+the daemon never changes the wallpaper type by itself.
+
+Removing from the library an item that is the current wallpaper (`Library1.Remove`) clears the
+outputs that showed it in the same way, and `RestoreWallpaper` brings it back while its file still
+exists (`the earlier wallpaper's file is no longer there, so it cannot be brought back` otherwise).
 
 ### `RestoreWallpaper(s output)`
 
 Brings back what `ClearWallpaper` removed from `output` (every output when empty). With nothing to
 bring back it returns `InvalidArgs` (`there is no earlier wallpaper to bring back`) and changes
-nothing.
+nothing. Layer-shell surfaces and X11 windows are created again.
+
+### `HandBackToPlasma() → (u screens)`
+
+Returns `screens`, the number of screens switched. Only in a Plasma session (otherwise `InvalidArgs`:
+removing the wallpaper already shows the desktop's own). Runs `ClearWallpaper` for every output and
+asks Plasma, through `org.kde.PlasmaShell.evaluateScript`, to change the wallpaper plugin of every
+desktop that uses `io.github.wallpaper_rs` to `org.kde.image`, which shows the picture Plasma had
+configured for that type. A new wallpaper or `RestoreWallpaper` switches the desktops that use
+`org.kde.image` back to the wallpaper-rs plugin; this is remembered in a small file next to the
+library, so it survives a daemon restart. It cannot choose screens one by one: the scripting
+interface names desktops by number, not by output name. `Failed` when Plasma does not answer (for
+example from a sandbox that cannot reach it).
 
 ### `SetBackground(s color, s output)`
 

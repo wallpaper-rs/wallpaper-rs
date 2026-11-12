@@ -6,6 +6,13 @@ use x11rb::xcb_ffi::XCBConnection;
 
 const PUT_IMAGE_HEADER: usize = 24;
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub(crate) struct Original {
+    pub(crate) rootpmap: Option<u32>,
+    pub(crate) esetroot: Option<u32>,
+    pub(crate) snapshot: Option<u32>,
+}
+
 impl X11 {
     pub(crate) fn backdrop(&self, desk: Window, at: (i32, i32), size: (u32, u32), stride: u32, data: &[u8]) {
         if let Err(e) = self.paint(desk, at, size, stride as usize, data) {
@@ -28,6 +35,11 @@ impl X11 {
         let current = self.property(root, a._XROOTPMAP_ID)?.first().copied();
         let esetroot = self.property(root, a.ESETROOT_PMAP_ID)?.first().copied();
         let mut held = self.pixmap.lock().unwrap_or_else(|e| e.into_inner());
+        let original = *self.before.lock().unwrap_or_else(|e| e.into_inner()).get_or_insert(Original {
+            rootpmap: current,
+            esetroot,
+            snapshot: None,
+        });
         let pixmap = match *held {
             Some((pixmap, at)) if at == size && current == Some(pixmap) => pixmap,
             old => {
@@ -72,7 +84,9 @@ impl X11 {
         for atom in [a._XROOTPMAP_ID, a.ESETROOT_PMAP_ID] {
             c.change_property32(PropMode::REPLACE, root, atom, AtomEnum::PIXMAP, &[pixmap])?;
         }
-        if let Some(old) = esetroot.filter(|old| current == Some(*old) && *old != pixmap) {
+        if let Some(old) =
+            esetroot.filter(|old| current == Some(*old) && *old != pixmap && original.esetroot != Some(*old))
+        {
             c.kill_client(old)?;
         }
         Ok(c.flush()?)

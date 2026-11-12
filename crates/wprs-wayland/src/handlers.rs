@@ -28,10 +28,12 @@ impl OutputHandler for State {
     }
 
     fn update_output(&mut self, _: &Connection, _: &Queue, output: WlOutput) {
+        self.rest_again(&output);
         self.changed(|s| s.output == output, |_| {})
     }
 
     fn output_destroyed(&mut self, _: &Connection, _: &Queue, output: WlOutput) {
+        self.forget_idle(&output);
         self.remove(|s| s.output == output)
     }
 }

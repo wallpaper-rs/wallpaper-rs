@@ -39,6 +39,20 @@ pub fn nothing_before() -> String {
     tr("There is no earlier wallpaper to bring back.")
 }
 
+pub fn not_plasma() -> String {
+    tr(
+        "This only works in a Plasma session; elsewhere, removing the wallpaper already shows the desktop's own.",
+    )
+}
+
+pub fn plasma_unreachable() -> String {
+    tr("Plasma did not answer; change the wallpaper type in the desktop settings instead.")
+}
+
+pub fn earlier_gone() -> String {
+    tr("The earlier wallpaper's file is no longer there, so it cannot be brought back.")
+}
+
 pub fn no_settings(screen: &str) -> String {
     match screen.is_empty() {
         true => tr("No screen shows a wallpaper with settings: apply a scene or a video first."),

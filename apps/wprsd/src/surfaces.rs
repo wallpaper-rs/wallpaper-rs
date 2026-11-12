@@ -26,7 +26,7 @@ impl<T> Settle<T> {
 
 fn placed(event: &Event) -> Option<&str> {
     match event {
-        Event::Output(name, _) | Event::Gone(name) => Some(name),
+        Event::Output(name, _) | Event::Idle(name, _) | Event::Gone(name) => Some(name),
         _ => None,
     }
 }
@@ -35,14 +35,19 @@ pub fn start(session: Session, daemon: Arc<Daemon>) -> anyhow::Result<()> {
     let (tx, rx) = mpsc::channel();
     let (frame, repaint) = (daemon.compositor.framer(), daemon.compositor.repainter());
     let (backdrop, region) = (daemon.compositor.backdropper(), daemon.compositor.regioner());
-    session.start(move |event| match event {
-        Event::Frame(output) => frame(&output),
-        Event::Exposed(output) => repaint(&output),
-        Event::Backdrop(output) => backdrop(&output),
-        Event::Pointer(output, pos, buttons) => crate::inputs::surface_pointer(&output, pos, buttons),
-        Event::Input(output) => region(&output),
-        event => drop(tx.send(event)),
-    })?;
+    let wants = daemon.clone();
+    let control = session.start(
+        move |output| wants.wants_surface(output),
+        move |event| match event {
+            Event::Frame(output) => frame(&output),
+            Event::Exposed(output) => repaint(&output),
+            Event::Backdrop(output) => backdrop(&output),
+            Event::Pointer(output, pos, buttons) => crate::inputs::surface_pointer(&output, pos, buttons),
+            Event::Input(output) => region(&output),
+            event => drop(tx.send(event)),
+        },
+    )?;
+    crate::rest::CONTROL.set(control).ok();
     let follow = move || {
         let (mut covers, mut settle) = (HashMap::new(), Settle(HashMap::new()));
         loop {
@@ -74,6 +79,9 @@ impl Daemon {
     fn follow_surface(&self, covers: &mut HashMap<String, u8>, event: Event) -> anyhow::Result<()> {
         match event {
             Event::Output(output, window) => {
+                if crate::rest::CONTROL.get().is_some() && !self.wants_surface(&output) {
+                    return Ok(());
+                }
                 let (size, screen, refresh) = (window.size(), crate::edits::screen_of(&window), window.hz());
                 crate::inputs::window(&output, Some(window.clone()));
                 self.compositor.attach(&output, window);
@@ -81,6 +89,7 @@ impl Daemon {
                     let mut st = self.state();
                     let info = st.outputs.entry(output.clone()).or_default();
                     (info.size, info.screen, info.refresh) = (size, Some(screen), refresh);
+                    info.idle = false;
                     let streamed = info.claims.keys().any(|claim| claim != SURFACE);
                     info.claims.retain(|claim, _| claim == SURFACE);
                     info.claims.entry(SURFACE.into()).or_default();
@@ -92,6 +101,12 @@ impl Daemon {
                 }
                 self.configure_all();
                 self.set_covered(&output, SURFACE, covers.get(&output).is_some_and(|c| *c != 0))
+            }
+            Event::Idle(output, placed) => {
+                crate::inputs::window(&output, None);
+                self.compositor.remove(&output);
+                self.rest_output(&output, &placed);
+                Ok(())
             }
             Event::Covered(output, cover, covered) => {
                 let bits = covers.entry(output.clone()).or_default();

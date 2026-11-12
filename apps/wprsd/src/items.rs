@@ -175,6 +175,10 @@ impl Daemon {
             Ok((lib.remove_items(&refs)?, hashes))
         })?;
         self.forget_synced(hashes);
+        let files: Vec<_> = removed.iter().map(|item| item.path.clone()).collect();
+        if let Err(e) = self.clear_removed(&files) {
+            tracing::warn!("cannot clear the screens that showed a removed item: {e}");
+        }
         self.forget_files(&removed);
         self.forget_data(&removed);
         removed.iter().filter(|_| delete_files).for_each(|item| drop(std::fs::remove_file(&item.path)));

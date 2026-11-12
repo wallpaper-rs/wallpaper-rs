@@ -128,6 +128,7 @@ impl Daemon {
                 page_errors: s.problems,
                 blank: st.config.is_blank(name),
                 previous: st.config.has_previous(name),
+                released: info.idle,
                 sandbox: s.sandbox.into(),
                 helper: s.helper,
                 accent: info.accent.clone(),
@@ -171,6 +172,7 @@ impl Daemon {
             qualities: st.config.own_qualities(),
             hdrs: st.config.own_hdrs(),
             layer_shell: crate::layers::state(&st.config),
+            plasma: crate::plasma::PLASMA.load(std::sync::atomic::Ordering::Relaxed),
         };
         serde_json::to_string(&state).unwrap_or_default()
     }

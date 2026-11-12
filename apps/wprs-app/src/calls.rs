@@ -13,6 +13,7 @@ calls! {
         SetWallpaper set_wallpaper(path: str, output: str, fit: str);
         ClearWallpaper clear_wallpaper(output: str);
         RestoreWallpaper restore_wallpaper(output: str);
+        HandBackToPlasma hand_back_to_plasma();
         SetBackground set_background(color: str, output: str);
         SetFilter set_filter(filter: str, output: str);
         SetOption set_option(key: str, value: str);

@@ -15,7 +15,7 @@ x11rb::atom_manager! {
         _NET_WM_DESKTOP, _NET_WM_WINDOW_TYPE, _NET_WM_WINDOW_TYPE_DESKTOP, _NET_WM_STATE,
         _NET_WM_STATE_BELOW, _NET_WM_STATE_STICKY, _NET_WM_STATE_SKIP_TASKBAR, _NET_WM_STATE_SKIP_PAGER,
         _NET_WM_STATE_FULLSCREEN, _NET_WM_STATE_MAXIMIZED_VERT, _NET_WM_STATE_MAXIMIZED_HORZ,
-        _NET_WM_STATE_HIDDEN, _NET_RESTACK_WINDOW, _XROOTPMAP_ID, ESETROOT_PMAP_ID,
+        _NET_WM_STATE_HIDDEN, _NET_RESTACK_WINDOW, _XROOTPMAP_ID, ESETROOT_PMAP_ID, _WPRS_REFRESH,
     }
 }
 
@@ -67,6 +67,8 @@ pub struct X11 {
     pub(crate) gc: Gcontext,
     pub(crate) depth: Option<u8>,
     pub(crate) pixmap: Mutex<Option<(Pixmap, (u16, u16))>>,
+    pub(crate) before: Mutex<Option<crate::backdrop::Original>>,
+    pub(crate) black: u32,
 }
 
 impl X11 {
@@ -88,7 +90,9 @@ impl X11 {
         let changes = NotifyMask::SCREEN_CHANGE | NotifyMask::CRTC_CHANGE | NotifyMask::OUTPUT_CHANGE;
         randr::select_input(&conn, root, changes)?;
         let (depth, pixmap) = (packed.then_some(depth), Mutex::new(None));
-        let x = Self { conn, screen, root, atoms, managed: AtomicBool::new(false), gc, depth, pixmap };
+        let before = Mutex::new(None);
+        let managed = AtomicBool::new(false);
+        let x = Self { conn, screen, root, atoms, managed, gc, depth, pixmap, before, black };
         x.managed.store(x.manager()?.0, Relaxed);
         tracing::debug!(managed = x.managed(), "connected to the X server");
         Ok(Arc::new(x))

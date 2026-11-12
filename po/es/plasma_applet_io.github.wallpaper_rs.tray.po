@@ -514,8 +514,27 @@ msgstr "Quitar"
 
 #: integrations/plasma-tray/contents/ui/ScreenButtons.qml
 #, kde-format
-msgid "Remove the wallpaper and show only the background color"
-msgstr "Quita el fondo y muestra solo el color de fondo"
+msgid ""
+"Remove the wallpaper and show only the background color. Use Plasma's own "
+"wallpaper to go back to the one Plasma had."
+msgstr ""
+"Quita el fondo y muestra solo el color de fondo. Con «El de Plasma» "
+"vuelve el fondo que tenía Plasma."
+
+#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
+#, kde-format
+msgid "Plasma's own"
+msgstr ""
+"El de Plasma"
+
+#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
+#, kde-format
+msgid ""
+"Switch the screens back to the wallpaper type you had in Plasma. Choosing a "
+"wallpaper here uses wallpaper-rs again."
+msgstr ""
+"Devuelve las pantallas al tipo de fondo que tenías en Plasma. Si "
+"eliges un fondo aquí, se vuelve a usar wallpaper-rs."
 
 #: integrations/plasma-tray/contents/ui/ScreenButtons.qml
 #, kde-format

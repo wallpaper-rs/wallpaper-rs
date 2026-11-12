@@ -872,9 +872,16 @@ msgstr "Imagen o vídeo local, como ruta o URI file://"
 
 #: apps/wprs-ctl/src/cli.rs
 msgid ""
-"Remove the wallpaper and show only the background color; restore brings it "
-"back"
-msgstr "Quita el fondo y muestra solo el color de fondo; restore lo recupera"
+"Remove the wallpaper and give the screen back to the desktop; restore brings "
+"it back"
+msgstr ""
+"Quita el fondo y devuelve la pantalla al escritorio; restore lo "
+"recupera"
+
+#: apps/wprs-ctl/src/cli.rs
+msgid "In Plasma, switch the screens back to Plasma's own wallpaper type"
+msgstr ""
+"En Plasma, devuelve las pantallas al tipo de fondo propio de Plasma"
 
 #: apps/wprs-ctl/src/cli.rs
 msgid "Bring back the wallpaper that clear removed"

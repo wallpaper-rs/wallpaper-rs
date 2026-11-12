@@ -1,8 +1,8 @@
-use super::{Monitor, changes, monitors};
+use super::Monitor;
 use crate::desk::{Desk, Felt, felt};
 use crate::stacking::{Rations, clients, covered, notices, relevant};
 use crate::x11::{Rect, X11};
-use crate::{Cover, Event, Sink};
+use crate::{Cover, Event, Sink, Wanted};
 use std::collections::HashSet;
 use std::convert::Infallible;
 use std::sync::Arc;
@@ -12,16 +12,18 @@ use x11rb::protocol::Event as Received;
 use x11rb::protocol::xproto::Visibility;
 
 pub(super) struct Screen {
-    monitor: Monitor,
-    desk: Arc<Desk>,
-    covered: bool,
-    hidden: bool,
-    buttons: u8,
+    pub(super) monitor: Monitor,
+    pub(super) desk: Arc<Desk>,
+    pub(super) covered: bool,
+    pub(super) hidden: bool,
+    pub(super) buttons: u8,
 }
 
 pub(super) struct Watch {
     pub(super) x: Arc<X11>,
     pub(super) sink: Sink,
+    pub(super) wanted: Wanted,
+    pub(super) known: Vec<Monitor>,
     pub(super) screens: Vec<Screen>,
     pub(super) clients: HashSet<u32>,
     pub(super) check: Option<u32>,
@@ -31,13 +33,13 @@ pub(super) struct Watch {
 
 impl Watch {
     pub(super) fn run(&mut self) -> Result<Infallible, ReplyOrIdError> {
-        let (mut monitors, mut stacking, mut manager) = (true, true, true);
+        let (mut monitors, mut stacking, mut manager, mut refresh) = (true, true, true, false);
         loop {
             if manager {
                 self.manager()?;
             }
             if monitors {
-                self.monitors()?;
+                self.monitors(std::mem::take(&mut refresh))?;
             }
             if monitors || stacking || manager {
                 self.stacking()?;
@@ -46,6 +48,7 @@ impl Watch {
             let more = std::iter::from_fn(|| x.conn.poll_for_event().transpose());
             let (a, mut exposed, mut resized) = (&x.atoms, HashSet::new(), false);
             (monitors, stacking, manager) = (false, false, false);
+            refresh = false;
             for event in std::iter::once(Ok(first)).chain(more) {
                 match event? {
                     Received::RandrScreenChangeNotify(_) | Received::RandrNotify(_) => monitors = true,
@@ -75,6 +78,10 @@ impl Watch {
                     Received::DestroyNotify(e) => {
                         self.rations.forget(e.window);
                         manager |= self.check == Some(e.window);
+                    }
+                    Received::PropertyNotify(e) if e.atom == a._WPRS_REFRESH => {
+                        monitors = true;
+                        refresh = true;
                     }
                     Received::PropertyNotify(e)
                         if [a._NET_SUPPORTING_WM_CHECK, a._NET_SUPPORTED].contains(&e.atom) =>
@@ -126,36 +133,6 @@ impl Watch {
             *desk = Arc::new(Desk::new(&self.x, monitor.area)?);
             let window = desk.window(monitor, self.sink.clone());
             (self.sink)(Event::Output(monitor.name.clone(), window));
-        }
-        Ok(())
-    }
-
-    fn monitors(&mut self) -> Result<(), ReplyOrIdError> {
-        let old: Vec<Monitor> = self.screens.iter().map(|s| s.monitor.clone()).collect();
-        let (gone, changed) = changes(&old, &monitors(&self.x)?);
-        for name in gone {
-            self.screens.retain(|s| s.monitor.name != name);
-            (self.sink)(Event::Gone(name));
-        }
-        for monitor in changed {
-            let desk = match self.screens.iter_mut().find(|s| s.monitor.name == monitor.name) {
-                Some(screen) => {
-                    screen.desk.place(monitor.area)?;
-                    screen.monitor = monitor.clone();
-                    screen.desk.clone()
-                }
-                None => {
-                    let desk = Arc::new(Desk::new(&self.x, monitor.area)?);
-                    tracing::info!(output = monitor.name, "desktop window created");
-                    let (covered, hidden) = (false, false);
-                    let screen =
-                        Screen { monitor: monitor.clone(), desk: desk.clone(), covered, hidden, buttons: 0 };
-                    self.screens.push(screen);
-                    desk
-                }
-            };
-            let window = desk.window(&monitor, self.sink.clone());
-            (self.sink)(Event::Output(monitor.name, window));
         }
         Ok(())
     }

@@ -19,7 +19,14 @@ pub async fn run(command: Command) -> Result<()> {
             daemon.set_wallpaper(&path_arg(&path)?, &output, fit.map_or("", Fit::as_str)).await?
         }
         Command::Fit { fit, output } => daemon.set_wallpaper("", &output, fit.as_str()).await?,
-        Command::Clear(out) => daemon.clear_wallpaper(&out.output).await?,
+        Command::Clear(out) => {
+            daemon.clear_wallpaper(&out.output).await?;
+            crate::blanks::note(client).await
+        }
+        Command::PlasmaBack => {
+            let screens = daemon.hand_back_to_plasma().await?;
+            println!("{}", crate::blanks::handed(screens))
+        }
         Command::Restore(out) => daemon.restore_wallpaper(&out.output).await?,
         Command::Background { color, output } => daemon.set_background(&color, &output).await?,
         Command::Filter(args) => crate::filtering::run(client, args).await?,

@@ -115,6 +115,7 @@ impl Daemon {
     ) -> anyhow::Result<()> {
         self.update_config(change)?;
         self.state().held.retain(|name, _| !output.is_empty() && name != output);
+        self.take_back_from_plasma();
         let all = output.is_empty() || crate::edits::spans(&self.state());
         match all {
             true => self.configure_all(),

@@ -29,8 +29,10 @@ pub enum Command {
         #[arg(short, long, help = FIT)]
         fit: Option<Fit>,
     },
-    #[command(about = "Remove the wallpaper and show only the background color; restore brings it back")]
+    #[command(about = "Remove the wallpaper and give the screen back to the desktop; restore brings it back")]
     Clear(Out),
+    #[command(about = "In Plasma, switch the screens back to Plasma's own wallpaper type")]
+    PlasmaBack,
     #[command(about = "Bring back the wallpaper that clear removed")]
     Restore(Out),
     #[command(about = "Change only the placement of the current wallpaper")]

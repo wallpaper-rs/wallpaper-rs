@@ -8,7 +8,6 @@ export XDG_RUNTIME_DIR=$WORK/run XDG_CONFIG_HOME=$WORK/config XDG_DATA_HOME=$WOR
 unset WAYLAND_DISPLAY DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
 mkdir -p "$XDG_RUNTIME_DIR" "$XDG_CONFIG_HOME"
 chmod 700 "$XDG_RUNTIME_DIR"
-
 pids=()
 cleanup() {
   for p in "${pids[@]}"; do kill "$p" 2>/dev/null || true; done
@@ -19,7 +18,6 @@ cleanup() {
   rm -rf "$WORK"
 }
 trap cleanup EXIT
-
 wait_for() {
   local seconds=$1; shift
   for _ in $(seq $((seconds * 10))); do "$@" >/dev/null 2>&1 && return 0; sleep 0.1; done
@@ -82,7 +80,7 @@ pids+=($!)
 wait_for 60 test -s "$WORK/display" || fail "Xvfb did not start"
 DISPLAY=:$(cat "$WORK/display")
 export DISPLAY
-
+desktop='#804020'; xsetroot -solid "$desktop"
 log=${WPRS_IT_LOG:-debug},naga=warn,wgpu_core=warn,wgpu_hal=warn
 start_daemon "$WORK/wprsd.log" --backend x11
 wprsd=$daemon
@@ -91,8 +89,8 @@ expect "[s['outputs']['screen'][k] for k in ('width', 'height', 'refresh')]" "[1
 grep -q "presentation backend chosen.*x11" "$WORK/wprsd.log" || fail "X11 not chosen"
 
 green='#00ff00' blue='#2040c0' magenta='#d02060' full=1280x720+0+0
+source "$(dirname "$0")"/x11-first.sh "$full" "$desktop"
 ctl background "$blue"
-check "$full" "0.5,0.5,$blue" "0.02,0.98,$blue"
 ctl set "$ROOT/tests/fixtures/green-64x32.png" --fit fit
 expect "s['outputs']['screen']['kind']" image
 check "$full" "0.5,0.5,$green" "0.02,0.02,$blue" "0.98,0.98,$blue"
@@ -106,6 +104,7 @@ exposed() {
 }
 wait_for 3 exposed || fail "a window left its trace on the wallpaper"
 echo "color, image, root pixmap and exposure checks passed"
+source "$(dirname "$0")"/x11-clear.sh "$full" "$desktop" "$green"
 
 xrandr --setmonitor DP-1 640/169x720/190+0+0 screen >/dev/null
 xrandr --setmonitor DP-2 640/169x720/190+640+0 none

@@ -1,5 +1,5 @@
 use crate::x11::{Rect, X11};
-use crate::{Event, Sink};
+use crate::{Event, Placed, Sink, Wanted};
 use std::collections::HashMap;
 use std::sync::Arc;
 use x11rb::connection::Connection as _;
@@ -7,6 +7,7 @@ use x11rb::errors::{ReplyError, ReplyOrIdError};
 use x11rb::protocol::randr::{self, ModeFlag, ModeInfo, MonitorInfo};
 use x11rb::protocol::xproto::ConnectionExt as _;
 
+mod reconcile;
 mod watch;
 
 use watch::Watch;
@@ -19,11 +20,12 @@ pub(crate) struct Monitor {
     pub(crate) refresh: u32,
 }
 
-pub(crate) fn start(x: Arc<X11>, sink: Sink) -> anyhow::Result<()> {
+pub(crate) fn start(x: Arc<X11>, sink: Sink, wanted: Wanted) -> anyhow::Result<()> {
     let setup = &x.conn.setup().roots[x.screen];
     let root = (setup.width_in_pixels, setup.height_in_pixels);
     let (screens, clients, check, rations) = Default::default();
-    let mut watch = Watch { x, sink, screens, clients, check, root, rations };
+    let known = Vec::new();
+    let mut watch = Watch { x, sink, wanted, screens, known, clients, check, root, rations };
     std::thread::Builder::new().name("wprs-x11".into()).spawn(move || {
         let Err(error) = watch.run();
         (watch.sink)(Event::Lost(error.to_string()))
@@ -71,6 +73,21 @@ fn monitor(
     let mm = (m.width_in_millimeters, m.height_in_millimeters);
     let refresh = m.outputs.iter().filter_map(|o| rates.get(o)).copied().max().unwrap_or(0);
     (area.width > 0 && area.height > 0).then_some(Monitor { name, area, mm, refresh })
+}
+
+impl Monitor {
+    pub(crate) fn placed(&self) -> Placed {
+        let Rect { x, y, width, height } = self.area;
+        Placed {
+            logical: (width, height),
+            pixels: (width, height),
+            scale: crate::scale::UNIT,
+            refresh: self.refresh,
+            position: (x, y),
+            mm: self.mm,
+            identity: String::new(),
+        }
+    }
 }
 
 fn changes(old: &[Monitor], new: &[Monitor]) -> (Vec<String>, Vec<Monitor>) {

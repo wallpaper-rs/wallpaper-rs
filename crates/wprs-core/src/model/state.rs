@@ -46,6 +46,8 @@ model! {
         pub hdrs: BTreeMap<String, String>,
         #[serde(default)]
         pub layer_shell: LayerShellState,
+        #[serde(default)]
+        pub plasma: bool,
     }
 
     pub struct PreviewState {
@@ -117,6 +119,8 @@ model! {
         pub blank: bool,
         #[serde(default)]
         pub previous: bool,
+        #[serde(default)]
+        pub released: bool,
         #[serde(default)]
         pub particles: String,
         #[serde(default)]

@@ -10,6 +10,10 @@ ColumnLayout {
     required property var host
     readonly property bool restorable: host.name === "" ? Object.values(host.daemon.state?.outputs ?? {}).some(o => o.previous === true) : host.info.previous === true
 
+    PlasmaHint {
+        host: controls.host
+    }
+
     Flow {
         Layout.fillWidth: true
         spacing: Kirigami.Units.smallSpacing
@@ -20,13 +24,12 @@ ColumnLayout {
             onClicked: files.open()
         }
 
-        QQC2.Button {
-            visible: host.info.blank !== true
-            text: host.daemon.tr("Remove wallpaper")
-            icon.name: "edit-clear"
-            QQC2.ToolTip.text: host.daemon.tr("Show only the background color. You can bring the wallpaper back.")
-            QQC2.ToolTip.visible: hovered
-            onClicked: host.daemon.act("ClearWallpaper", [host.name])
+        RemoveButton {
+            host: controls.host
+        }
+
+        PlasmaBack {
+            host: controls.host
         }
 
         QQC2.Button {

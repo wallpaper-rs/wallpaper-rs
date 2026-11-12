@@ -15,6 +15,7 @@ QtObject {
             "Daemon1.SetWallpaper": "(sss)",
             "Daemon1.ClearWallpaper": "(s)",
             "Daemon1.RestoreWallpaper": "(s)",
+            "Daemon1.HandBackToPlasma": "()",
             "Daemon1.SetPaused": "(b)",
             "Daemon1.SetVolume": "(d)",
             "Daemon1.SetMuted": "(b)",

@@ -106,6 +106,11 @@ impl Service {
         self.d()?.render(move |d| d.restore_wallpaper(&output)).await
     }
 
+    #[zbus(out_args("screens"))]
+    async fn hand_back_to_plasma(&self) -> Result<u32> {
+        self.d()?.run(|d| d.hand_back_to_plasma()).await
+    }
+
     async fn set_background(&self, color: String, output: String) -> Result<()> {
         self.d()?.render(move |d| d.set_background(&color, &output)).await
     }

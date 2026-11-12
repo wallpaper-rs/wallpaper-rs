@@ -34,6 +34,7 @@ pub async fn select(
     let sandboxed = crate::flatpak::app_id().is_some();
     let plasma = backend == Backend::Auto
         && (sandboxed || kde(&desktop) || bus.name_has_owner(PLASMA.try_into()?).await?);
+    crate::plasma::PLASMA.store(plasma, std::sync::atomic::Ordering::Relaxed);
     let set = |name| std::env::var_os(name).is_some_and(|v| !v.is_empty());
     let x11 = set("DISPLAY") && !std::env::var("XDG_SESSION_TYPE").is_ok_and(|t| t == "wayland");
     let session = match plan(backend, plasma, set("WAYLAND_DISPLAY"), x11) {

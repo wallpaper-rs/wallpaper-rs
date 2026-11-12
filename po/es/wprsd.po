@@ -56,6 +56,30 @@ msgstr "No hay un fondo anterior que recuperar."
 
 #: apps/wprsd/src/words.rs
 msgid ""
+"This only works in a Plasma session; elsewhere, removing the wallpaper "
+"already shows the desktop's own."
+msgstr ""
+"Esto solo funciona en una sesión de Plasma; en otros escritorios, al "
+"quitar el fondo ya se ve el del propio escritorio."
+
+#: apps/wprsd/src/words.rs
+msgid ""
+"Plasma did not answer; change the wallpaper type in the desktop settings "
+"instead."
+msgstr ""
+"Plasma no ha respondido; cambia el tipo de fondo en los ajustes del "
+"escritorio."
+
+#: apps/wprsd/src/words.rs
+msgid ""
+"The earlier wallpaper's file is no longer there, so it cannot be brought "
+"back."
+msgstr ""
+"El archivo del fondo anterior ya no está, así que no se puede "
+"recuperar."
+
+#: apps/wprsd/src/words.rs
+msgid ""
 "No screen shows a wallpaper with settings: apply a scene or a video first."
 msgstr ""
 "Ninguna pantalla muestra un fondo con ajustes: aplica antes una escena o un "

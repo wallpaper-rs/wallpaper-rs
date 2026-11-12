@@ -81,7 +81,7 @@ macro_rules! out {
     ($($t:ty),*) => {$(impl Out for $t { fn out(self) -> Value { json!([self]) } })*};
 }
 
-out!(String, u64, HashMap<String, String>, Vec<String>);
+out!(String, u32, u64, HashMap<String, String>, Vec<String>);
 
 impl Out for (u32, u64) {
     fn out(self) -> Value {

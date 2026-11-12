@@ -38,9 +38,20 @@ RowLayout {
         visible: host.info.blank !== true
         icon.name: "edit-clear"
         text: i18n("Remove")
-        PlasmaComponents3.ToolTip.text: i18n("Remove the wallpaper and show only the background color")
+        PlasmaComponents3.ToolTip.text: i18n("Remove the wallpaper and show only the background color. Use Plasma's own wallpaper to go back to the one Plasma had.")
         PlasmaComponents3.ToolTip.visible: hovered
         onClicked: host.daemon.act("ClearWallpaper", [host.name])
+    }
+
+    PlasmaComponents3.Button {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 1
+        visible: host.info.blank === true
+        icon.name: "preferences-desktop-wallpaper"
+        text: i18n("Plasma's own")
+        PlasmaComponents3.ToolTip.text: i18n("Switch the screens back to the wallpaper type you had in Plasma. Choosing a wallpaper here uses wallpaper-rs again.")
+        PlasmaComponents3.ToolTip.visible: hovered
+        onClicked: host.daemon.act("HandBackToPlasma", [])
     }
 
     PlasmaComponents3.Button {

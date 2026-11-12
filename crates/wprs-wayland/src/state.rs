@@ -3,7 +3,7 @@ use crate::presented::Rate;
 use crate::scale::Scaling;
 use crate::toplevel::Toplevel;
 use crate::window::Parts;
-use crate::{Cover, Event, Sink};
+use crate::{Cover, Event, Sink, Wanted};
 use smithay_client_toolkit::compositor::{CompositorState, Region};
 use smithay_client_toolkit::output::{OutputInfo, OutputState};
 use smithay_client_toolkit::reexports::client::backend::ObjectId;
@@ -21,7 +21,10 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
+mod idle;
 mod screens;
+
+pub(crate) use idle::name_of;
 
 const REOPENED: usize = 3;
 const REOPEN_WINDOW: Duration = Duration::from_secs(60);
@@ -72,6 +75,8 @@ pub(crate) struct State {
     pub(crate) reopened: HashMap<String, Vec<Instant>>,
     pub(crate) reopen: Vec<WlOutput>,
     pub(crate) sink: Sink,
+    pub(crate) wanted: Wanted,
+    pub(crate) idle: Vec<(WlOutput, String)>,
     conn: Connection,
     qh: QueueHandle<State>,
     namespace: String,
@@ -83,6 +88,7 @@ impl State {
         globals: &GlobalList,
         qh: &QueueHandle<Self>,
         sink: Sink,
+        wanted: Wanted,
         namespace: String,
     ) -> anyhow::Result<Self> {
         let state = Self {
@@ -106,6 +112,8 @@ impl State {
             reopened: HashMap::new(),
             reopen: Vec::new(),
             sink,
+            wanted,
+            idle: Vec::new(),
             conn,
             qh: qh.clone(),
             namespace,
@@ -116,7 +124,12 @@ impl State {
 
     pub(crate) fn add(&mut self, output: WlOutput) {
         let Some(info) = self.outputs.info(&output) else { return };
-        let name = info.name.clone().unwrap_or_else(|| format!("wayland-{}", info.id));
+        let name = name_of(&info);
+        if !(self.wanted)(&name) {
+            self.rest(output);
+            return;
+        }
+        self.idle.retain(|(o, _)| *o != output);
         let (qh, surface) = (&self.qh, self.compositor.create_surface(&self.qh));
         let layer = self.layers.create_layer_surface(
             qh,
@@ -138,8 +151,20 @@ impl State {
         let (wanted, light) = Default::default();
         let feedback = crate::color::watch(self.color.as_ref(), layer.wl_surface(), qh, &name);
         let (color, own) = (self.color.clone(), Default::default());
-        let parts =
-            Parts { layer, viewport, fractional, empty, presentation, wanted, light, feedback, color, own };
+        let flush = crate::window::Flusher(self.conn.clone());
+        let parts = Parts {
+            layer,
+            viewport,
+            fractional,
+            empty,
+            presentation,
+            wanted,
+            light,
+            feedback,
+            color,
+            own,
+            _flush: flush,
+        };
         let parts = Arc::new(parts);
         let (name, integer, fractional, rate) = (name.clone(), info.scale_factor, None, Rate::default());
         let screen = Screen {

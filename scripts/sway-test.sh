@@ -81,7 +81,8 @@ expect "sorted(s['outputs'])" "['HEADLESS-1', 'HEADLESS-2']"
 expect "[s['outputs'][o]['height'] for o in ('HEADLESS-1', 'HEADLESS-2')]" "[360, 360]"
 grep -q "presentation backend chosen.*layer-shell" "$WORK/wprsd.log" || fail "layer-shell not chosen"
 
-green='#00ff00' blue='#2040c0' magenta='#d02060'
+green='#00ff00' blue='#2040c0' magenta='#d02060' desktop='#3f3f3f'
+source "$(dirname "$0")"/sway-first.sh
 ctl background "$blue"
 ctl set "$ROOT/tests/fixtures/green-64x32.png" --fit fit
 expect "s['outputs']['HEADLESS-1']['kind']" image
@@ -161,6 +162,7 @@ echo "video output flap checks passed"
 
 source "$(dirname "$0")"/sway-namespace.sh
 source "$(dirname "$0")"/sway-spread.sh
+source "$(dirname "$0")"/sway-clear.sh
 source "$(dirname "$0")"/sway-inputs.sh
 
 status=0

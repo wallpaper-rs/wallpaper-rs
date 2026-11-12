@@ -49,6 +49,37 @@ impl Config {
         }
     }
 
+    pub fn shown_among(&self, outputs: &[String], files: &[PathBuf]) -> Vec<String> {
+        let shows = |name: &str| self.resolve(name).image.is_some_and(|i| files.contains(&i));
+        let mut found: Vec<String> = Vec::new();
+        for name in self.outputs.keys().chain(outputs) {
+            if shows(name) && !found.contains(name) {
+                found.push(name.clone());
+            }
+        }
+        if self.default.image.as_ref().is_some_and(|i| files.contains(i)) {
+            found.push(String::new());
+        }
+        found
+    }
+
+    pub fn clear_shown(&mut self, outputs: &[String], files: &[PathBuf]) {
+        for name in self.shown_among(outputs, files) {
+            match name.is_empty() {
+                true => self.default.put_away(None),
+                false => self.clear_content(&name),
+            }
+        }
+    }
+
+    pub fn restored_files(&self, output: &str) -> Vec<PathBuf> {
+        let images = |o: &OutputConfig| o.image.clone();
+        match output {
+            "" => std::iter::once(&self.default).chain(self.outputs.values()).filter_map(images).collect(),
+            name => self.resolve(name).image.into_iter().collect(),
+        }
+    }
+
     pub fn clear_content(&mut self, output: &str) {
         if output.is_empty() {
             self.default.put_away(None);
@@ -79,5 +110,24 @@ impl Config {
         }
         self.outputs.retain(|_, o| *o != OutputConfig::default());
         back
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn clearing_removed_files_blanks_only_the_screens_showing_them() {
+        let mut config = Config::default();
+        config.set_image("", "/a.png".into(), None);
+        config.set_image("DP-2", "/b.png".into(), None);
+        let known = vec!["DP-1".to_owned(), "DP-2".to_owned()];
+        assert_eq!(config.shown_among(&known, &["/a.png".into()]), ["DP-1", ""]);
+        config.clear_shown(&known, &["/a.png".into()]);
+        assert!(config.is_blank("DP-1") && !config.is_blank("DP-2") && config.default.image.is_none());
+        assert!(config.has_previous("DP-1"));
+        assert!(config.restore_content("DP-1"));
+        assert_eq!(config.restored_files("DP-1"), [PathBuf::from("/a.png")]);
     }
 }

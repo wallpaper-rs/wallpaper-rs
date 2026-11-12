@@ -5,6 +5,7 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Daemon1", "SetWallpaper", "set", &["PATH", "--output", "--fit"]),
     ("Daemon1", "ClearWallpaper", "clear", &["--output"]),
     ("Daemon1", "RestoreWallpaper", "restore", &["--output"]),
+    ("Daemon1", "HandBackToPlasma", "plasma-back", &[]),
     ("Daemon1", "SetBackground", "background", &["COLOR", "--output"]),
     ("Daemon1", "SetFilter", "filter", &["LOOK", "--output"]),
     ("Daemon1", "SetOption", "config", &["KEY", "VALUE"]),

@@ -27,7 +27,7 @@ impl Daemon {
             let (resolved, chosen) = (st.config.resolve(output), st.config.chosen(output));
             (info.size, resolved, chosen, info.uploaded.clone(), st.refresh(output), st.config.filter(output))
         };
-        if self.show_pattern(output, size, refresh) {
+        if self.surface_rests(output) || self.show_pattern(output, size, refresh) {
             return None;
         }
         let (image, mut transition) =

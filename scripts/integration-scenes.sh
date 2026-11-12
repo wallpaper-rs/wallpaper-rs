@@ -73,6 +73,11 @@ expect "s['outputs']['TEST-11']['kind'], s['outputs']['TEST-11']['blank'], s['ou
 shown "$s11" 0 0 255
 if ctl restore -o TEST-11 2>"$WORK/restore.err"; then fail "restore with nothing removed"; fi
 grep -q "no earlier wallpaper" "$WORK/restore.err" || fail "restore message: $(cat "$WORK/restore.err")"
+cp "$ROOT/tests/fixtures/green-64x32.png" "$WORK/gone.png"
+ctl lib import "$WORK/gone.png" --wait >/dev/null && ctl set "$WORK/gone.png" -o TEST-11 && ctl lib rm "$WORK/gone.png"
+expect "s['outputs']['TEST-11']['blank'], s['outputs']['TEST-11']['previous']" "(True, True)"
+ctl restore -o TEST-11 && expect "s['outputs']['TEST-11']['kind']" image
+ctl lib apply "$glow" -o TEST-11 && shown "$s11" 0 0 255
 ctl prop preset load warm -o TEST-11
 shown "$s11" 255 0 0
 sleep 1

@@ -30,6 +30,15 @@ pub(crate) struct Parts {
     pub(crate) feedback: Option<crate::color::Feedback>,
     pub(crate) color: Option<crate::color::Manager>,
     pub(crate) own: std::sync::Mutex<crate::described::Own>,
+    pub(crate) _flush: Flusher,
+}
+
+pub(crate) struct Flusher(pub(crate) Connection);
+
+impl Drop for Flusher {
+    fn drop(&mut self) {
+        let _ = self.0.flush();
+    }
 }
 
 impl Drop for Parts {
