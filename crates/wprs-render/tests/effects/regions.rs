@@ -41,6 +41,8 @@ fn masked_effects_draw_only_where_their_mask_can_change_the_picture() {
 
 #[test]
 fn scenes_that_blend_in_srgb_draw_no_more_passes_than_linear_ones() {
+    let Some(r) = super::super::renderer() else { return };
+    let resolve = u32::from(!r.reads_srgb_through_views());
     let passes = |space: &'static str| {
         let mut run =
             Fx::chain(json!([{ "effect": "tint", "params": { "color": "#ff0000" } }])).space(space).run()?;
@@ -48,7 +50,7 @@ fn scenes_that_blend_in_srgb_draw_no_more_passes_than_linear_ones() {
         Some((run.stats().passes, shot))
     };
     let (Some((srgb, a)), Some((linear, _))) = (passes("srgb"), passes("linear")) else { return };
-    assert!(srgb <= linear && a.at(32, 16) != [0, 0, 0], "{srgb} passes in srgb, {linear} in linear");
+    assert!(srgb <= linear + resolve && a.at(32, 16) != [0, 0, 0], "{srgb} passes in srgb, {linear} in linear");
 }
 
 fn after_waves(effect: Value, strength: f32) -> Option<Shot> {
