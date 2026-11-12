@@ -1,5 +1,5 @@
 use serde_json::{Value, json};
-use wprs_scene::ScriptEvent;
+use wprs_scene::{ScriptApi, ScriptEvent};
 
 pub(super) const BLIND: [&str; 5] = ["clicks", "geometry", "animations", "shortcuts", "hierarchy"];
 
@@ -30,7 +30,10 @@ pub fn declaration(source: &str) -> Value {
     }
     events.sort();
     events.dedup();
-    let uses = crate::usage::detect(source);
+    let mut uses = crate::usage::detect(source);
+    uses.extend(super::played::played(source).then_some(ScriptApi::Animations));
+    uses.sort();
+    uses.dedup();
     let mut entry = json!({});
     if events.iter().any(|e| *e != ScriptEvent::Update) {
         entry["events"] = json!(events);

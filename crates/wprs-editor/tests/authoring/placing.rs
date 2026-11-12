@@ -81,3 +81,20 @@ fn a_refused_import_leaves_no_copy_in_the_assets_folder() {
     refused(&mut p, json!({"import": {"file": picture, "id": "again", "atlas": [0, 4]}}));
     assert!(p.dir.join("assets/pic.png").is_file(), "a copy the scene uses stays");
 }
+
+#[test]
+fn a_script_that_plays_a_video_or_waits_for_its_end_declares_animations() {
+    let uses = |source: &str| wprs_editor::scripts::declaration(source)["uses"].to_string();
+    for played in [
+        "export function update() { scene.layer(\"clip\").video.play(); }",
+        "export function init() { const v = scene.layer('clip').video; }",
+        "export function init() { clip.on( 'ended', () => {}); }",
+        "export function init() { clip.on(`ended`, done); }",
+    ] {
+        assert!(uses(played).contains("animations"), "{played}");
+    }
+    for other in ["const videos = 1;", "a.videos = 1;", "clip.on(\"click\", f);", "x.videoX = 2;"] {
+        let source = format!("export function update() {{ {other} }}");
+        assert!(!uses(&source).contains("animations"), "{other}");
+    }
+}

@@ -4,6 +4,7 @@ mod declare;
 mod edit;
 mod listing;
 mod params;
+mod played;
 mod reference;
 mod revert;
 mod rigcalls;
