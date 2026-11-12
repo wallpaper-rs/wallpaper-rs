@@ -6,6 +6,12 @@ Timer {
     property int step: 0
     property var opened: null
     property bool edited: false
+    property bool imaged: false
+
+    function owns(at) {
+        const name = host.names[at - 1];
+        return name === "scenes" || App.backend.claim("page." + name);
+    }
 
     function keeps(page) {
         const shown = host.pageStack.currentItem;
@@ -21,36 +27,43 @@ Timer {
         if (Object.keys(App.pending).length > 0)
             return;
         const at = step++;
-        if (at > 0 && at <= host.pages.length)
+        if (at > 0 && at <= host.pages.length && owns(at))
             host.pageStack.currentItem.exercise?.();
         if (at < host.pages.length) {
             host.showPage(at);
             keeps(host.names[at]);
         } else if (at === host.pages.length) {
-            return Qt.createComponent("RepoCheck.qml").createObject(host, {
-                "host": host
-            }).start();
+            if (App.backend.claim("repo"))
+                Qt.createComponent("RepoCheck.qml").createObject(host, {
+                    "host": host
+                }).start();
+            return;
         } else if (at === host.pages.length + 1) {
+            imaged = App.backend.claim("image");
+            if (!imaged)
+                return;
             return App.query("GetItem", [""], "Library1", reply => {
                 if (!host)
                     return;
                 App.edit(reply.item);
                 opened = host.pageStack.currentItem;
             });
-        } else if (opened?.editor?.ready !== true || host.pageStack.currentItem !== opened) {
+        } else if (imaged && (opened?.editor?.ready !== true || host.pageStack.currentItem !== opened)) {
             return;
-        } else if (!edited) {
+        } else if (imaged && !edited) {
             edited = true;
         } else if (host.waiting > 0) {
             return;
         } else {
             stop();
             Qt.quit();
+            if (!imaged)
+                return;
             if (opened.editor.dirty !== true)
                 throw new Error("the editor has no unsaved edits to keep");
             return keeps("settings");
         }
-        if (at > host.pages.length + 1)
+        if (imaged && at > host.pages.length + 1)
             host.pageStack.currentItem.exercise?.();
     }
 }

@@ -8,7 +8,7 @@ pub mod qobject {
     unsafe extern "C++" {
         include!("wprs-app/settle.h");
         #[rust_name = "reap_deleted"]
-        fn reapDeleted();
+        pub fn reapDeleted();
     }
 
     #[auto_cxx_name]
@@ -65,6 +65,8 @@ pub mod qobject {
         fn requested(self: &Backend) -> QString;
         #[qinvokable]
         fn reap(self: &Backend);
+        #[qinvokable]
+        fn claim(self: &Backend, unit: &QString) -> bool;
         #[qinvokable]
         fn path(self: &Backend, url: &QString) -> QString;
         #[qinvokable]
@@ -148,10 +150,6 @@ impl Backend {
 
     pub fn tr(&self, text: &QString) -> QString {
         QString::from(&tr::tr(&text.to_string()))
-    }
-
-    pub fn reap(&self) {
-        qobject::reap_deleted();
     }
 
     pub fn requested(&self) -> QString {

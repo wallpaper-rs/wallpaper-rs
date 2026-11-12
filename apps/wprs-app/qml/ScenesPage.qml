@@ -13,9 +13,9 @@ Kirigami.ScrollablePage {
     readonly property var starters: [["empty", "document-new"], ["particles", "weather-snow"], ["parallax", "view-list-details"], ["clock", "clock"], ["web", "text-html"], ["preset", "color-management"], ["image", "image-x-generic"], ["video", "video-x-generic"], ["assets", "package-x-generic"]]
 
     function exercise() {
-        App.compose(helper.folderFor("page"), "web", "");
-        App.compose(helper.folderFor("clip"), "video", "");
-        App.compose(helper.folderFor("still"), "image", "");
+        for (const part of [["page", "web"], ["clip", "video"], ["still", "image"]])
+            if (App.backend.claim("compose." + part[0]))
+                App.compose(helper.folderFor(part[0]), part[1], "");
         App.compose(helper.folderFor("check"), "empty", "");
     }
 

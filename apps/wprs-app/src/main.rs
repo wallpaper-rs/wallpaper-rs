@@ -43,6 +43,7 @@ mod scenesweep;
 mod scenewave;
 mod scenework;
 mod secret;
+mod shards;
 mod shelf;
 mod signing;
 mod stall;
