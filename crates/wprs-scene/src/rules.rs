@@ -55,7 +55,10 @@ impl Check<'_> {
         t.origin.iter().for_each(|o| Vec2::probe(self, &format!("{p}/transform/origin"), &Vec2(*o)));
         self.value(&format!("{p}/parallax"), &layer.parallax.0);
         if let Value::Fixed(Vec2(depth)) = layer.parallax.0 {
-            depth.iter().enumerate().for_each(|(i, v)| self.range(&format!("{p}/parallax/{i}"), *v, -10.0, 10.0));
+            depth
+                .iter()
+                .enumerate()
+                .for_each(|(i, v)| self.range(&format!("{p}/parallax/{i}"), *v, -10.0, 10.0));
         }
         if let Some(mask) = &layer.mask {
             self.mask(&format!("{p}/mask"), mask);

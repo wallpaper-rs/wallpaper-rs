@@ -178,7 +178,8 @@ fn a_flow_map_is_combed_along_the_stroke_from_a_still_picture() {
     let dir = root.path().join("comb");
     let mut project =
         Project::create(&dir, starter("empty", "org.example.comb", "Comb", "en").unwrap()).unwrap();
-    let layer = json!([{ "id": "fill", "type": "solid", "color": "#ffffff", "effects": [{ "effect": "shake" }] }]);
+    let layer =
+        json!([{ "id": "fill", "type": "solid", "color": "#ffffff", "effects": [{ "effect": "shake" }] }]);
     act(&mut project, json!({ "set": { "pointer": "/scene/layers", "value": layer } })).unwrap();
     let pointer = "/scene/layers/0/effects/0/params/flow";
     let comb = json!({ "paint_mask": { "pointer": pointer, "radius": 0.1, "hardness": 0.9, "direction": true,

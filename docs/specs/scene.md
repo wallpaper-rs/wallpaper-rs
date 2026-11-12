@@ -645,7 +645,7 @@ showing steps, and draws that picture like
 any other layer, with its transform, effects, masks and blend mode; it draws it again only when the
 pose, the blend shapes, the order of the parts or a video texture changed, and a still or settled
 skeleton asks for no frames. A hidden `mesh` layer that masks or feeds an effect of another layer is
-posed and drawn every frame like a shown one, so a mask that is a mesh follows its clips. Parts moved out of the box are cut at its edge, so `size` leaves them
+posed and drawn every frame like a shown one, so a mask that is a mesh follows its clips. A picture mask of a `mesh` layer, its own `mask` or the `mask` of one of its effects, is read over the sheet, not over the box: the engine adds, when the scene loads, one hidden copy of the mesh for each such picture, with the picture as its texture and without tint, light, mask or effects, and points the mask at it with the channel it had (luminance by default), so a mask painted over the picture of the mesh stays on the same parts as they move. Each copy costs one more posed mesh of the size of the layer, drawn in the same pass as the mesh it copies, and counts in the cost like a layer that masks others, but not among the 16 `mesh` and `model` layers; copies made inside templates and bones driven by scripts on the original are not copied. Parts moved out of the box are cut at its edge, so `size` leaves them
 room.
 
 Files are refused that have a bone cycle or a node with two parents, a vertex whose weights do not

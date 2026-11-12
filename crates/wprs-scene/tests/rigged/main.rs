@@ -11,6 +11,7 @@ mod points;
 mod pose;
 mod reach;
 mod settle;
+mod sheets;
 mod sketch;
 mod spawned;
 mod swing;

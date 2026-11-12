@@ -90,7 +90,10 @@ impl StageSet {
             amount: within(g.amount, 0.0, 4.0),
             delay: within(g.delay, 0.0, 2.0),
             pointer: within(g.pointer, 0.0, 1.0),
-            offset: g.offset.filter(|o| o.iter().all(|v| v.is_finite())).map(|o| o.map(|v| v.clamp(-1.0, 1.0))),
+            offset: g
+                .offset
+                .filter(|o| o.iter().all(|v| v.is_finite()))
+                .map(|o| o.map(|v| v.clamp(-1.0, 1.0))),
         };
         let bloom = |b: BloomSet| BloomSet {
             threshold: within(b.threshold, 0.0, 4.0),

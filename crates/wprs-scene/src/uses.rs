@@ -46,8 +46,11 @@ fn levels(scene: &Scene, props: Option<&Values>) -> [Uses; 4] {
     }
     let listens = scene.drawable().any(|l| matches!(l.kind, Kind::Spectrum(_)))
         || scene.timelines.iter().any(|t| t.trigger.as_deref() == Some("beat"));
-    let follows =
-        scene.canvas.parallax.as_ref().is_none_or(|f| !matches!(f.pointer, crate::Value::Fixed(v) if v <= 0.0));
+    let follows = scene
+        .canvas
+        .parallax
+        .as_ref()
+        .is_none_or(|f| !matches!(f.pointer, crate::Value::Fixed(v) if v <= 0.0));
     let parallax = follows && scene.layers().any(|l| !l.parallax.is_zero());
     let heard = scene.particles.values().map(|s| s.listens());
     let (beat, pointer, clicks) =

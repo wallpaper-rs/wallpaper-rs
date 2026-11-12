@@ -60,6 +60,9 @@ pub struct Scene {
     #[serde(skip)]
     #[schemars(skip)]
     pub draft: crate::Drafted,
+    #[serde(skip)]
+    #[schemars(skip)]
+    pub sheets: std::collections::BTreeSet<String>,
 }
 
 impl Default for Color {
@@ -71,7 +74,7 @@ impl Default for Color {
 impl Scene {
     pub fn new(size: [u32; 2]) -> Scene {
         let (assets, layers, particles, timelines, scripts, effects, audio, ext, loaded) = Default::default();
-        let (camera3d, templates, pools, models, rigs, solids, draft) = Default::default();
+        let (camera3d, templates, pools, models, rigs, solids, draft, sheets) = Default::default();
         Scene {
             schema: SCHEMA.into(),
             canvas: Canvas::new(size),
@@ -92,6 +95,7 @@ impl Scene {
             rigs,
             solids,
             draft,
+            sheets,
         }
     }
 
@@ -111,10 +115,13 @@ impl Scene {
     }
 
     pub fn load(text: &str, props: &BTreeMap<String, Property>) -> Result<Scene, SceneError> {
-        let scene = Scene::from_json(text)?;
+        let mut scene = Scene::from_json(text)?;
         match scene.validate(props).into_iter().next() {
             Some(issue) => Err(SceneError::Invalid(issue)),
-            None => Ok(scene),
+            None => {
+                scene.pose_sheet_masks();
+                Ok(scene)
+            }
         }
     }
 

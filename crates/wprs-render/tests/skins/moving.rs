@@ -107,7 +107,7 @@ fn waves_on_a_mesh_whose_pose_changes_every_frame_bend_it_as_they_do_on_a_group_
 }
 
 #[test]
-fn a_hidden_mesh_that_masks_an_effect_is_posed_every_frame_and_the_wave_follows_it() {
+fn a_hidden_mesh_that_masks_an_effect_is_posed_every_frame_and_a_picture_mask_follows_the_sheet_alike() {
     let Some(_) = renderer() else { return };
     let Ok(r) = Renderer::new() else { return };
     for tiled in [false, true] {
@@ -116,10 +116,9 @@ fn a_hidden_mesh_that_masks_an_effect_is_posed_every_frame_and_the_wave_follows_
         assert!(poses.windows(2).all(|w| w[0] < w[1]), "the pose of the matte stood still: {poses:?}");
         let (layer, _) = frames(&r, 8.0, false, Mask::Layer);
         let (picture, _) = frames(&r, 8.0, false, Mask::Picture);
+        let (still, _) = frames(&r, 0.0, false, Mask::Picture);
         let apart = moved(&layer[FRAMES - 1], &picture[FRAMES - 1]);
-        assert!(
-            apart > 20,
-            "a matte that moves with the arm acts like one that does not, tiled {tiled}: {apart}"
-        );
+        assert!(apart <= 4, "a picture mask on a mesh stays in its box, tiled {tiled}: {apart}");
+        assert!(moved(&still[FRAMES - 1], &picture[FRAMES - 1]) > 20, "the masked wave drew nothing");
     }
 }

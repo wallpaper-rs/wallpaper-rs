@@ -61,7 +61,9 @@ fn compiled(id: &str, json: &str, wgsl: &str) -> Compiled {
 impl Scene {
     pub fn adopt(&mut self, props: &BTreeMap<String, Property>, files: impl Files) -> Result<(), SceneError> {
         self.read_files(files)?;
-        self.validate(props).into_iter().next().map_or(Ok(()), |issue| Err(SceneError::Invalid(issue)))
+        self.validate(props).into_iter().next().map_or(Ok(()), |issue| Err(SceneError::Invalid(issue)))?;
+        self.pose_sheet_masks();
+        Ok(())
     }
 
     pub fn read_files(&mut self, mut files: impl Files) -> Result<(), SceneError> {
