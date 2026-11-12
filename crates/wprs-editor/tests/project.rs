@@ -191,4 +191,6 @@ fn scenes_too_heavy_for_older_gpus_at_the_middle_level_get_a_warning() {
         warned.is_some_and(|p| p.message.contains("To lower it") && p.said.id == "format.heavy"),
         "{heavy:?}"
     );
+    let named = warned.is_some_and(|p| p.message.contains("weigh the most (with their units) are b"));
+    assert!(named, "the warning must say which layers weigh the most: {heavy:?}");
 }

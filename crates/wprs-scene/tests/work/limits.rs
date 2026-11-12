@@ -91,5 +91,11 @@ fn package_costs_count_their_passes_and_heavy_scenes_warn() {
     let text = json!({ "schema": SCHEMA, "canvas": { "size": [64, 32] }, "layers": layers });
     let heavy = Scene::from_json(&text.to_string()).unwrap();
     assert!(heavy.heavy_cost().is_some_and(|(cost, budget)| cost > budget));
+    let weighed = heavy.heaviest(Quality::Q2, 3);
+    assert_eq!(weighed.len(), 3);
+    assert!(
+        weighed.windows(2).all(|w| w[0].1 >= w[1].1) && weighed.iter().all(|(id, _)| id.starts_with('l'))
+    );
+    assert!(Scene::new([64, 32]).heaviest(Quality::Q2, 3).is_empty());
     assert!(Scene::new([64, 32]).heavy_cost().is_none());
 }

@@ -18,6 +18,21 @@ impl Scene {
         (cost > budget).then_some((cost, budget))
     }
 
+    pub fn heaviest(&self, quality: Quality, count: usize) -> Vec<(String, f32)> {
+        let areas = self.areas();
+        let whole = self.canvas.camera.is_some();
+        let area = |l: &Layer| areas.get(&std::ptr::from_ref(l)).copied().filter(|_| !whole).unwrap_or(1.0);
+        let mut weighed: Vec<(String, f32)> = self
+            .layers()
+            .filter(|l| l.flat())
+            .map(|l| (l.id.clone(), self.units(l, quality, 1.0) * area(l)))
+            .filter(|(_, units)| *units > 0.0)
+            .collect();
+        weighed.sort_by(|a, b| b.1.total_cmp(&a.1));
+        weighed.truncate(count);
+        weighed
+    }
+
     fn zoom(&self, l: &Layer) -> f32 {
         match &l.transform.scale {
             crate::Value::Fixed(crate::Vec2([x, y])) => (x * y).abs().sqrt().max(1e-3),

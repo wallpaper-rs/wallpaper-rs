@@ -152,8 +152,12 @@ pub fn check_files(dir: &Path, doc: &Value) -> Vec<Problem> {
         }
     }
     if found.iter().any(|(p, _)| p == SIGNATURE) {
-        let text = "%1 signs an earlier version; a build without a key removes it";
-        out.push(warning("/manifest", said("editor.signature", text, &[&SIGNATURE])));
+        let signed = said(
+            "editor.signature",
+            "%1 signs an earlier version; a build without a key removes it",
+            &[&SIGNATURE],
+        );
+        out.push(warning("/manifest", signed));
     }
     let head = |path: &str| {
         let file = std::fs::File::open(dir.join(path)).ok()?;
@@ -173,11 +177,13 @@ pub fn check_files(dir: &Path, doc: &Value) -> Vec<Problem> {
         out.push(problem(format!("/scene/scripts/{i}"), said("editor.script", "%1", &[message])));
     }
     out.extend(crate::usage::problems(dir, doc, undeclared.map(|(i, _)| i)));
-    let text = "%1 is not used by the scene but goes into the package";
-    out.extend(
-        unused(dir, doc)
-            .into_iter()
-            .map(|path| warning("/scene/assets", said("editor.unused", text, &[&path]))),
-    );
+    out.extend(unused(dir, doc).into_iter().map(|path| {
+        let unused = said(
+            "editor.unused",
+            "%1 is not used by the scene but goes into the package; remove it from the folder to make the package smaller, or use it in the scene",
+            &[&path],
+        );
+        warning("/scene/assets", unused)
+    }));
     out
 }
