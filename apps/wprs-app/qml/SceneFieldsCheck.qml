@@ -69,7 +69,10 @@ QtObject {
                 "id": "tinted"
             });
         const layer = page.view.layers.find(item => item.id === "tinted");
-        const count = () => (JSON.parse(page.editor.value(layer.pointer + "/effects") || "null") ?? []).length;
+        const count = () => {
+            const list = JSON.parse(page.editor.value(layer.pointer + "/effects") || "null");
+            return Array.isArray(list) ? list.length : 0;
+        };
         page.editor.select(layer.pointer);
         const field = page.fields.find(item => item.key === "effects");
         if (!field)
