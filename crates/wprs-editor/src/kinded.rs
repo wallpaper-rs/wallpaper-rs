@@ -16,7 +16,10 @@ pub fn sample_in(doc: &Value, list: &str, keys: &[Value], t: f64) -> Option<Valu
 
 pub fn shown(doc: &Value, pointer: &str, value: &Value, t: f64) -> Value {
     match value.get("keys").and_then(Value::as_array) {
-        Some(keys) => sample_in(doc, &format!("{pointer}/keys"), keys, t).unwrap_or(Value::Null),
+        Some(keys) => {
+            let t = (t * 1000.0).round() / 1000.0;
+            sample_in(doc, &format!("{pointer}/keys"), keys, t).unwrap_or(Value::Null)
+        }
         None => value.clone(),
     }
 }
