@@ -168,7 +168,7 @@ pub fn keyframe(doc: &Value, e: &KeyframeEdit) -> Result<Vec<Op>> {
     Ok(ops)
 }
 
-fn reads(doc: &Value) -> bool {
+pub(crate) fn reads(doc: &Value) -> bool {
     serde_json::from_value::<wprs_scene::Scene>(doc["scene"].clone()).is_ok()
 }
 
@@ -189,7 +189,7 @@ fn fits(doc: &Value, e: &KeyframeEdit, ops: &[Op]) -> Result<()> {
     })
 }
 
-fn taken(doc: &Value, pointer: &str) -> Option<Value> {
+pub(crate) fn taken(doc: &Value, pointer: &str) -> Option<Value> {
     let shapes =
         [json!("#ff8800"), json!([1, 1]), json!([1, 1, 1]), json!([1, 1, 1, 1]), json!(0.5), json!(true)];
     shapes.into_iter().find(|shape| {

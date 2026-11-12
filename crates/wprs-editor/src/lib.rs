@@ -20,6 +20,7 @@ pub mod curves;
 mod cutouts;
 mod files;
 pub mod findings;
+mod fits;
 pub mod forms;
 mod handles;
 pub mod history;

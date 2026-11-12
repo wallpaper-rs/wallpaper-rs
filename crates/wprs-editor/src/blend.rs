@@ -41,8 +41,8 @@ pub(crate) fn added(base: &Value, value: &Value) -> Option<Value> {
     })
 }
 
-pub(crate) fn fitting(pointer: &str, value: &Value, like: &Value) -> Message {
-    let shape = match like {
+pub(crate) fn shape(like: &Value) -> Message {
+    match like {
         Value::Number(_) => said("editor.shape_number", "a number such as 0.5", &[]),
         Value::Bool(_) => said("editor.shape_switch", "true or false", &[]),
         Value::String(text) if Color::parse(text).is_some() => {
@@ -54,7 +54,11 @@ pub(crate) fn fitting(pointer: &str, value: &Value, like: &Value) -> Message {
             said("editor.shape_list", "a list of %1 numbers such as [%2]", &[&list.len(), &ones])
         }
         _ => said("editor.shape_like", "a value like %1", &[&like]),
-    };
+    }
+}
+
+pub(crate) fn fitting(pointer: &str, value: &Value, like: &Value) -> Message {
+    let shape = shape(like);
     let unfit = said(
         "editor.keyframe_unfit",
         "%1 cannot take the keyframe value %2; give %3",

@@ -82,6 +82,7 @@ pub fn plan(doc: &Value, action: &Action) -> Result<Vec<Op>> {
     | Action::Move { .. } = action
     {
         computed(doc, &ops)?;
+        crate::fits::scene(doc, action, &ops)?;
     }
     Ok(ops)
 }

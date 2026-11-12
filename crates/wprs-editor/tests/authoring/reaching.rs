@@ -119,3 +119,22 @@ fn a_keyframe_on_a_field_left_at_its_default_is_refused_with_the_shape_it_needs(
     act(&mut p, at("tilt", json!([10, 0]))).unwrap();
     sound(&p);
 }
+
+#[test]
+fn setting_a_value_the_scene_cannot_read_is_refused_with_the_shape_it_needs() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    let set = |pointer: &str, value: serde_json::Value| json!({"set": {"pointer": pointer, "value": value}});
+    act(&mut p, set("/scene/layers/0/transform/scale", json!([1, 1]))).unwrap();
+    let listed = refused(&mut p, set("/scene/layers/0/transform/scale", json!("1,1")));
+    assert!(
+        listed.contains("a list of 2 numbers such as [1, 1]") && !listed.contains("untagged"),
+        "{listed}"
+    );
+    let number = refused(&mut p, set("/scene/layers/0/opacity", json!("x")));
+    assert!(number.contains("a number such as 0.5") && !number.contains("untagged"), "{number}");
+    let fresh = refused(&mut p, set("/scene/layers/0/transform/skew", json!("1,1")));
+    assert!(fresh.contains("a list of 2 numbers") && !fresh.contains("untagged"), "{fresh}");
+    act(&mut p, set("/scene/layers/0/opacity", json!(0.5))).unwrap();
+    sound(&p);
+}
