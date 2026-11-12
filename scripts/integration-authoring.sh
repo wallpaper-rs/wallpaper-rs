@@ -82,3 +82,13 @@ if ctl scene canvas "$craft" parallax --delay 9 2>/dev/null; then fail "a parall
 ctl scene import "$craft" "$ROOT/tests/fixtures/green-64x32.png" --id sheet --atlas 2,4 >/dev/null || fail "no sprite sheet was imported"
 ctl scene import "$craft" "$ROOT/tests/fixtures/green-64x32.png" --id bumps --linear >/dev/null || fail "no linear picture was imported"
 ctl scene preview "$craft" -o preview:1 --time 0.5 || fail "a scene with authored layers, canvas and manifest was not previewed"
+ctl scene act "$craft" add_layer '{"kind": "solid", "id": "generic"}' >/dev/null || fail "scene act added no layer"
+ctl scene act "$craft" set '{"pointer": "/scene/canvas/background", "value": "#204060"}' || fail "scene act set no value"
+[ "$(ctl scene show "$craft" /scene/canvas/background)" = '"#204060"' ] || fail "scene act did not change the background"
+echo '[{"hide": {"id": "generic", "hidden": true}}, {"lock": {"id": "generic", "locked": true}}]' | ctl scene act "$craft" batch - || fail "scene act did not apply a list from the standard input"
+ctl scene show "$craft" /scene/ext/editor | grep -q generic || fail "the batch did not lock the layer"
+ctl scene act "$craft" undo || fail "a batch was not undone"
+if ctl scene show "$craft" /scene/ext/editor 2>/dev/null | grep -q generic; then fail "a batch was not undone as one step"; fi
+if ctl scene act "$craft" remove_layer '{"id": "absent"}' 2>/dev/null; then fail "scene act removed a layer that is not there"; fi
+ctl scene actions add_layer | grep -q "kind: string (required)" || fail "scene actions did not describe add_layer"
+ctl scene ask "$craft" wind | grep -q strength || fail "scene ask did not answer"
