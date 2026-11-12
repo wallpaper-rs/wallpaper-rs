@@ -90,7 +90,7 @@ wprs.onSettings(({ fps, locale, volume }) => ajustar(fps, locale, volume));
 | Miembro | Qué da |
 |---------|--------|
 | `properties`, `onProperties(f)` | Todas las propiedades cuando registras `f`, y después solo las que cambian. Un color llega como `{ hex, r, g, b, a }` (de 0 a 1), un combo como `{ value, label }`, un archivo como una dirección `wpak-user://` y una carpeta como `wpak-user://<id>/`. |
-| `fps`, `quality`, `locale`, `volume`, `onSettings(f)` | El ritmo de cuadros al que se dibuja la página, el nivel de calidad (0 a 3), el idioma elegido entre los del paquete y el volumen del fondo (0 a 1) para el sonido de la página. `f` recibe `{ fps, quality, locale, volume }` al registrarla y cuando cambia algo. |
+| `fps`, `quality`, `locale`, `volume`, `onSettings(f)` | El ritmo de cuadros al que se dibuja la página, el nivel de calidad (0 a 3), el idioma elegido entre los del paquete, siempre como una etiqueta de idioma válida (`es-AR`, `en-US`) que se puede pasar a `Intl`, y el volumen del fondo (0 a 1) para el sonido de la página. `f` recibe `{ fps, quality, locale, volume }` al registrarla y cuando cambia algo. |
 | `paused`, `onPause(f)` | `true` mientras la página está oculta o en pausa. |
 | `onAudio(f)` | 64 bandas por canal, `{ left, right }`, de graves a agudos, unas 30 veces por segundo. Hace falta `audio` en `inputs` y que el usuario lo permita; sin él, llega silencio. |
 | puntero y clics | Eventos normales del navegador: `pointermove` si declaras `pointer`; `click`, solo de clics reales y en las pantallas donde el usuario los activa, si declaras `clicks`. El teclado nunca llega. |

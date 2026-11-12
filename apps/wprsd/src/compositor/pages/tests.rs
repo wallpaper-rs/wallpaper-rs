@@ -61,7 +61,7 @@ pub(in crate::compositor) fn page(language: bool, more: Json) -> PageSpec {
 fn a_page_that_may_not_see_the_language_gets_plain_english() {
     let (shown, hidden) = (spec(true), spec(false));
     let (locale, shape) = language(&shown);
-    assert_eq!((locale.as_str(), &shape["labels"]["mood"]["calm"]), ("es_AR.UTF-8", &json!("Calma")));
+    assert_eq!((locale.as_str(), &shape["labels"]["mood"]["calm"]), ("es-AR", &json!("Calma")));
     let (locale, shape) = language(&hidden);
     assert_eq!((locale.as_str(), &shape["labels"]["mood"]["calm"]), ("en-US", &json!("Calm")));
 }

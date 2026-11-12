@@ -16,7 +16,7 @@ use shape::color;
 pub use shape::shape;
 
 pub const HIDES: [&str; 4] = ["hide_zone", "hide_language", "hide_gpu", "hide_storage"];
-pub const PLAIN: &str = "en-US";
+pub use wprs_core::locale::PLAIN;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct Privacy {

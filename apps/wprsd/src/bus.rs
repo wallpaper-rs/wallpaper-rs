@@ -101,7 +101,12 @@ impl Daemon {
                 mm: placed.iter().find(|m| m.id == *name).map(|m| m.mm),
                 follows: st.config.layout.follow.get(name).cloned(),
                 parallax: s.parallax,
-                still: r.image.as_deref().filter(|_| !s.parallax).and_then(|i| st.decks.still(i)),
+                still: r
+                    .image
+                    .as_deref()
+                    .filter(|_| !s.parallax)
+                    .and_then(|i| st.decks.still(i))
+                    .or(s.software_still.then_some(wprs_core::travel::Still::Software)),
                 frames: s.frames,
                 page_frames: s.page_frames,
                 refresh: st.refresh(name),
@@ -120,6 +125,7 @@ impl Daemon {
                 decode: s.decode.into(),
                 drafted: st.drafts.contains_key(name),
                 left_out: s.left_out,
+                page_errors: s.problems,
                 blank: st.config.is_blank(name),
                 previous: st.config.has_previous(name),
                 sandbox: s.sandbox.into(),

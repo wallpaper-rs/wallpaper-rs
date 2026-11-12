@@ -13,3 +13,14 @@ fn a_fuzzy_or_empty_entry_is_not_used() {
     let po = "#, fuzzy\nmsgid \"A\"\nmsgstr \"B\"\n\nmsgid \"C\"\nmsgstr \"\"\n";
     assert!(parse(po).is_empty());
 }
+
+#[test]
+fn a_system_locale_becomes_a_valid_language_tag() {
+    use wprs_core::locale::bcp47;
+    assert_eq!(bcp47("es_AR.UTF-8"), "es-AR");
+    assert_eq!(bcp47("sr_RS@latin"), "sr-RS");
+    assert_eq!(bcp47("de"), "de");
+    for plain in ["", "C", "POSIX", "C.UTF-8", "x", "en_US_extra_long_part_x"] {
+        assert_eq!(bcp47(plain), "en-US", "{plain}");
+    }
+}

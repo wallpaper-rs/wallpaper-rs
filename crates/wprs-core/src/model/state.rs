@@ -112,6 +112,8 @@ model! {
         #[serde(default)]
         pub left_out: Vec<String>,
         #[serde(default)]
+        pub page_errors: Vec<String>,
+        #[serde(default)]
         pub blank: bool,
         #[serde(default)]
         pub previous: bool,

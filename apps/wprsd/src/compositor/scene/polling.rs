@@ -26,6 +26,7 @@ impl SceneState {
         let (keeper, folders) = (&self.keeper, self.folders());
         let setup = || {
             let mut setup = Setup::new(&pack.scene, &pack.scripts, self.runtime.seed, named);
+            setup.locale = wprs_core::locale::bcp47(&setup.locale);
             setup.storage = keeper.as_ref().map_or(serde_json::Value::Null, wprs_core::stash::Keeper::scopes);
             setup.folders = folders;
             setup

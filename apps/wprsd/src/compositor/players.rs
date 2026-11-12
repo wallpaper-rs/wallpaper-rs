@@ -138,6 +138,8 @@ impl State {
                     same(s)
                         && (s.sandbox, s.helper, s.hdr) == (sandbox.0, sandbox.1, o.hdr)
                         && s.console.iter().eq(lines())
+                        && s.problems == self.page_problems(name, o)
+                        && s.software_still == self.held_by_software(o)
                 })
             });
         if !unchanged {
@@ -169,6 +171,9 @@ impl State {
                     decode,
                     left_out,
                     console,
+                    problems: self.page_problems(name, o),
+                    software_still: self.held_by_software(o),
+                    package: self.page_package(o),
                     sandbox,
                     helper,
                     hdr: o.hdr,

@@ -1,5 +1,5 @@
 use super::hdr;
-use super::notes::{measured, note, off, sandbox_note};
+use super::notes::{measured, note, off, page_notes, sandbox_note};
 use serde_json::json;
 use wprs_core::model::{OutputState, SceneInputs};
 
@@ -88,4 +88,15 @@ fn the_hdr_line_says_how_the_colors_reach_the_desktop() {
     assert_eq!(hdr(&o), "on on (on, 800 nits, scRGB)");
     o.hdr.active = false;
     assert_eq!(hdr(&o), "on off (on, 800 nits)");
+}
+
+#[test]
+fn a_page_that_threw_and_a_picture_held_by_software_say_so_in_the_state_notes() {
+    let mut o = shown("user", 0.0, "");
+    assert!(page_notes(&o).is_empty());
+    o.page_errors = vec!["RangeError: Incorrect locale information provided".into()];
+    o.still = Some(wprs_core::travel::Still::Software);
+    let said = page_notes(&o);
+    assert!(said[0].starts_with("the page reported an error and may not be drawing: RangeError"), "{said:?}");
+    assert!(said[1].contains("playback.software_parallax true"), "{said:?}");
 }

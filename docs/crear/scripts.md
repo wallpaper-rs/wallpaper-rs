@@ -197,7 +197,7 @@ Todo sale de `import { ... } from "wprs"`.
 | `time`, `dt` | El tiempo de la escena y lo que pasó desde el cuadro anterior, en segundos. |
 | `daytime` | La hora local del día, de 0 (medianoche) a casi 1. |
 | `fps`, `quality` | El ritmo de cuadros y el nivel de calidad (0 a 3). |
-| `locale`, `language` | El idioma elegido entre los del paquete, en minúsculas, o `""`. |
+| `locale`, `language` | El idioma elegido entre los del paquete, como una etiqueta de idioma válida (`es`, `en-US`); `en-US` si el paquete no trae ninguno. |
 | `canvas`, `screen` | `[ancho, alto]` del lienzo y de la pantalla, sin nombres de salidas. |
 | `device` | `desktop` o `mobile`. |
 | `mode` | `wallpaper`, `lockscreen`, `screensaver`, `editor` o `preview`. |

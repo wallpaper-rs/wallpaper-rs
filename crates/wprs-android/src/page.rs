@@ -88,7 +88,7 @@ pub(crate) fn ducking() -> f32 {
 
 pub(crate) fn settings(pack: &Pack, preview: bool, privacy: Privacy) -> Value {
     let power = Power::now();
-    let locale = languages(pack, privacy).first().cloned().unwrap_or_default();
+    let locale = wprs_core::locale::bcp47(languages(pack, privacy).first().map_or("", String::as_str));
     let muted = settings::setting("playback.muted", None).map_or(true, |m| m != "false");
     let added = pack.web.as_ref().filter(|w| !w.own_volume).map(|_| props::values(pack));
     let own =

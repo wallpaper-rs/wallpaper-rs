@@ -1,0 +1,15 @@
+{
+  "schema": "wallpaper-rs.wpak/2",
+  "id": "org.example.boom",
+  "version": "1.0.0",
+  "title": "Boom",
+  "license": "CC0-1.0",
+  "origin": { "kind": "original" },
+  "content": { "rating": "general" },
+  "photosensitive": false,
+  "kind": "web",
+  "entry": "index.html",
+  "inputs": [],
+  "web": { "background": "#000000", "storage_kib": 0 },
+  "requires": { "features": ["web"] }
+}

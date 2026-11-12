@@ -21,9 +21,18 @@ const fill = () => {
   lights = Array.from({ length: props.count }, (_, i) => lights[i] || spawn(i));
 };
 
+const hours = { hour: "2-digit", minute: "2-digit" };
+
+const formatter = () => {
+  try {
+    return new Intl.DateTimeFormat(wprs.locale || undefined, hours);
+  } catch {
+    return new Intl.DateTimeFormat(undefined, hours);
+  }
+};
+
 const time = () => {
-  const now = new Intl.DateTimeFormat(wprs.locale || undefined, { hour: "2-digit", minute: "2-digit" });
-  clock.textContent = props.clock ? now.format(new Date()) : "";
+  clock.textContent = props.clock ? formatter().format(new Date()) : "";
 };
 
 const step = (now) => {

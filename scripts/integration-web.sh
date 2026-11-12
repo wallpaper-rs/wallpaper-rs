@@ -57,6 +57,7 @@ else
   wait_for 10 fresh "$old" || fail "the page did not start again after its data was cleared: $(helper)"
   seen "$web" "0, 255, 0"
   source "$(dirname "$0")"/integration-web-keep.sh
+  source "$(dirname "$0")"/integration-web-errors.sh
   ctl lib apply "$tint" -o TEST-W 2>/dev/null
   seen "$web" "0, 255, 0"
   old=$(helper)

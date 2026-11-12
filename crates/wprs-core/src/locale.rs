@@ -11,6 +11,21 @@ pub fn languages() -> Vec<String> {
     preferred.split(':').filter(|l| !l.is_empty()).map(String::from).chain([locale]).collect()
 }
 
+pub const PLAIN: &str = "en-US";
+
+pub fn bcp47(raw: &str) -> String {
+    let name = raw.split(['.', '@']).next().unwrap_or_default().replace('_', "-");
+    let mut parts = name.split('-');
+    let language = parts.next().unwrap_or_default();
+    let rest: Vec<&str> = parts.collect();
+    let valid = (2..=3).contains(&language.len())
+        && language.bytes().all(|b| b.is_ascii_alphabetic())
+        && !matches!(language, "C" | "POSIX")
+        && rest.len() <= 3
+        && rest.iter().all(|p| (1..=8).contains(&p.len()) && p.bytes().all(|b| b.is_ascii_alphanumeric()));
+    if valid { name } else { PLAIN.into() }
+}
+
 pub fn names(languages: &[String]) -> impl Iterator<Item = &str> {
     let names = languages.iter().map(|l| l.split(['.', '@']).next().unwrap_or_default());
     names.flat_map(|l| [l, l.split('_').next().unwrap_or_default()])

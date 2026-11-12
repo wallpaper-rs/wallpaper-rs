@@ -1,6 +1,16 @@
 use crate::told::{fill, told, tr};
 use wprs_core::model::{Input, InputsReply, OutputState, State};
 
+const SHOWN_ERRORS: usize = 5;
+
+pub fn page_notes(o: &OutputState) -> Vec<String> {
+    let first = o.page_errors.len().saturating_sub(SHOWN_ERRORS);
+    let line = |l: &String| fill(told("the page reported an error and may not be drawing: %1"), &[l]);
+    let errors = o.page_errors[first..].iter().map(line);
+    let still = o.still.map(|s| wprs_depth::still_note(&wprs_depth::Places::default(), s).local());
+    errors.chain(still).collect()
+}
+
 pub fn note(o: &OutputState) -> Option<String> {
     let over = o.quality_budget > 0.0 && o.quality_cost > o.quality_budget;
     let would = |auto: &str| {
@@ -97,7 +107,8 @@ pub fn notes(state: &str, inputs: &str) {
     state.outputs.iter().for_each(|(name, o)| {
         note(o).into_iter().for_each(|n| eprintln!("{name}: {n}"));
         let more = sandbox_note(o).into_iter().chain(o.error.clone());
-        more.chain(o.away.as_deref().map(crate::away::note)).for_each(|n| eprintln!("{name}: {n}"));
+        let more = more.chain(o.away.as_deref().map(crate::away::note)).chain(page_notes(o));
+        more.for_each(|n| eprintln!("{name}: {n}"));
     });
     let Ok(inputs) = serde_json::from_str::<InputsReply>(inputs) else {
         return;

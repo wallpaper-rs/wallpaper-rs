@@ -65,7 +65,7 @@ pub(super) fn folders(spec: &PageSpec, salt: &[u8; 32]) -> Vec<Folder> {
 
 pub(super) fn language(spec: &PageSpec) -> (String, &Json) {
     match spec.privacy.language {
-        true => (spec.pack.props.languages.first().cloned().unwrap_or_default(), &spec.pack.shape),
+        true => (wprs_core::locale::bcp47(spec.pack.props.languages.first().map_or("", String::as_str)), &spec.pack.shape),
         false => (crate::pages::PLAIN.into(), &spec.pack.plain),
     }
 }

@@ -110,6 +110,12 @@ RowLayout {
             textFormat: Text.PlainText
         }
 
+        OutputNotes {
+            Layout.fillWidth: true
+            info: row.info
+            daemon: row.daemon
+        }
+
         QQC2.Label {
             Layout.fillWidth: true
             visible: row.pkg.photosensitive === true

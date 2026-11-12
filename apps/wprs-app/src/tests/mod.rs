@@ -8,6 +8,7 @@ mod grid;
 mod keys;
 mod labels;
 mod landing;
+mod notes;
 mod pages;
 mod picture;
 mod replies;

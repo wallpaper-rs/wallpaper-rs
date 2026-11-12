@@ -52,7 +52,7 @@ impl Daemon {
     }
 
     pub fn summary(&self, item: Item) -> Result<ItemSummary> {
-        let installed = self.installed(&item);
+        let (installed, path) = (self.installed(&item), item.path.clone());
         let removable = installed.is_none() && !rescanned(&item);
         let (imported, thumb) = (item.path.starts_with(self.store.files()), self.thumbs.cached(&item, 256));
         let revoked = installed.and_then(|i| i.revoked);
@@ -60,6 +60,7 @@ impl Daemon {
         let extra = json!({"revoked": revoked, "removable": removable, "imported": imported, "thumb": thumb});
         let mut summary: ItemSummary = merged(item, extra)?;
         summary.package.iter_mut().for_each(|p| (p.exposes, p.unshown) = (exposes.clone(), unshown(&p.kind)));
+        summary.error = summary.error.or_else(|| self.page_problem(&path));
         Ok(summary)
     }
 
@@ -114,6 +115,7 @@ impl Daemon {
         let (exposes, (variants, base)) = (self.exposes(&item), self.kin(&item));
         let mut item: wprs_core::model::Item = merged(item, Value::Null)?;
         item.package.iter_mut().for_each(|p| (p.exposes, p.unshown) = (exposes.clone(), unshown(&p.kind)));
+        item.error = item.error.or_else(|| self.page_problem(&item.path));
         reply(ItemDetails {
             model,
             serial,

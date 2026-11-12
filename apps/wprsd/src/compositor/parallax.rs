@@ -13,6 +13,10 @@ impl State {
         }
     }
 
+    pub(super) fn held_by_software(&self, output: &Output) -> bool {
+        output.shown.relief.is_some() && self.relief_limits().is_none()
+    }
+
     pub(super) fn moves(&self, output: &Output) -> bool {
         output.shown.relief.is_some() && !self.motion.calm && self.relief_limits().is_some()
     }

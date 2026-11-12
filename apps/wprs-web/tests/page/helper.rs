@@ -21,6 +21,7 @@ pub struct Page {
     pub frames: u32,
     pub crashed: u32,
     pub broken: bool,
+    pub problems: Vec<String>,
 }
 
 impl Page {
@@ -33,7 +34,7 @@ impl Page {
         let properties = start.properties.clone();
         link.send(&ToWeb::Start(Box::new(start)), &[]).unwrap();
         link.send(&ToWeb::Open { view: 1, size: (320, 180), scale: 1.0, properties }, &[]).unwrap();
-        Page { link, child, said: BTreeMap::new(), frames: 0, crashed: 0, broken: false }
+        Page { link, child, said: BTreeMap::new(), frames: 0, crashed: 0, broken: false, problems: Vec::new() }
     }
 
     pub fn pump(&mut self, until: Instant) {
@@ -60,7 +61,9 @@ impl Page {
                 self.link.send(&ToWeb::Freed { view, slot }, &[]).unwrap();
             }
             FromWeb::Said(text) | FromWeb::Console { line: text, .. } => {
-                let Some(rest) = text.strip_prefix("log: probe ") else { return };
+                let Some(rest) = text.strip_prefix("log: probe ") else {
+                    return self.problems.push(text);
+                };
                 let (name, value) = rest.split_once(' ').unwrap();
                 self.said.entry(name.into()).or_default().push(serde_json::from_str(value).unwrap());
             }

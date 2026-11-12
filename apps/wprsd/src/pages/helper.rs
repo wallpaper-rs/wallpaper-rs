@@ -1,4 +1,5 @@
-use std::path::PathBuf;
+use crate::daemon::Daemon;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 const NAME: &str = "wprs-web";
@@ -38,6 +39,15 @@ pub fn available() -> Result<String, String> {
 
 pub fn unavailable() -> Option<String> {
     available().err()
+}
+
+impl Daemon {
+    pub(crate) fn page_problem(&self, path: &Path) -> Option<String> {
+        let status = self.compositor.status();
+        let shown = status.values().filter(|s| s.package.as_deref() == Some(path));
+        let last = shown.flat_map(|s| s.problems.last()).next_back()?;
+        Some(crate::words::web_page_error(last))
+    }
 }
 
 #[cfg(test)]

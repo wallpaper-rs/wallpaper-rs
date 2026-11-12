@@ -120,6 +120,10 @@ pub fn web_broken(why: &str) -> String {
     tr("Web wallpapers cannot be shown here: the web helper does not start (%1).").replace("%1", why)
 }
 
+pub fn web_page_error(line: &str) -> String {
+    tr("The page reported an error and may not be drawing: %1").replace("%1", line)
+}
+
 pub fn web_failed() -> String {
     tr("The web page stopped three times in a row and is off; the background color shows instead.")
 }
