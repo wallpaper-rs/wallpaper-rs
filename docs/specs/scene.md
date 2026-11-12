@@ -1129,6 +1129,39 @@ fn uv_nudge(uv: vec2<f32>) -> vec2<f32> {
 | `state` | `{ "scale", "settle", "fade" }`, persistent textures for simulations, see below |
 | `solve` | `homography`: the first four parameters are `vec2` corners (top left, top right, bottom right, bottom left, as fractions of the layer) and the three slots after the parameters hold the rows of the matrix that takes a layer point back to the unit square; such an effect is not fused |
 | `quality` | overrides per level, `{ "q1": { "params": { "taps": 8 }, "scale": 0.5 } }`, applied at that level and below; a number is an upper limit for the value the scene sets, other values replace it, `scale` shrinks the inner passes and the state, and `"freeze": true` keeps an effect that would be dropped at that level: its state stops and it shows its last picture without asking for frames |
+| `lighter` | a cheaper variant of the effect for low quality levels, `{ "passes": [...], "cost": {...}, "up_to": "q1" }`, see "Lighter variants" below |
+
+#### Lighter variants
+
+```json
+"lighter": {
+  "passes": [{ "entry": "fs_blur_lite", "scale": 0.5 }, { "entry": "fs_blur_lite_mix", "inputs": ["previous", "input"] }],
+  "cost": { "taps": 2, "passes": 2, "scale": 0.5 },
+  "up_to": "q0"
+}
+```
+
+An effect may carry a lighter variant that the engine draws instead of leaving the effect out, so
+that a heavy scene still looks close to itself on a slow device. Its `passes` are entry points of
+the same shader file, written as the passes of the effect are (same inputs, targets, state and
+limits); its `cost` is its own, and both the declared cost and, for a package effect, the measured
+one must be lower than those of the effect, or the reader refuses the descriptor. Everything else
+(parameters, mask mode, `reach`, `state`, `quality` overrides, `uses`) is that of the effect. An
+effect that is fused (`fuse`) cannot have one. A descriptor without `lighter` behaves as before.
+
+At each quality level the engine picks one form of each use, the same at an automatic level and at
+one the user fixed: at `up_to` and below (if it is given) the variant whenever it fits that level;
+otherwise the full effect when it fits the level, and the variant where the level would leave the
+effect out (medium effects at Q0, `optional` ones at Q1, as in the table of costs below); an effect
+whose variant does not fit either keeps its `freeze` or is left out as before. The hard budget of a
+view tries the variant of a use that does not fit before it leaves the use out, and notes it as
+`the effect <id> on <layer> was drawn with its lighter variant: <reason>` instead of `... was left
+out: <reason>`; `wprs-ctl pack check` prints the same notes. The cost of a scene at a level counts
+the form drawn there. Pipelines of variants are built when the scene loads, as those of the full
+effects are, and choosing one allocates nothing while frames are drawn. The editor shows the form
+each level draws in the cost of an effect (the query `effect_cost` gives `form`: `full`,
+`lighter`, `frozen` or `out`, per level). A package effect with a lighter variant names the feature
+`lighter_effects`.
 
 Every shader starts from one prelude. `frame` holds `time`, `dt`, `resolution`, `cursor` and
 `cursor_delta` (fractions of the output), `buttons` (the pressed pointer buttons as a bit mask),
@@ -1447,6 +1480,7 @@ parts do not move together, and `gradient` parameters are pictures of one row re
 right. An effect that has a `phase` picture is not fused with its neighbours. Costs are the units
 of "Cost and frame rate": light effects run at every quality level, medium ones are dropped at Q0
 (and at Q1 when `optional`), heavy ones run their inner passes at a quarter of their size at Q1;
+effects with a lighter variant draw it where they would be dropped (`blur` and `bloom`, below);
 the quality level falls on battery, with software rendering or when frames take too long, so these
 rules are also what a phone or a laptop on battery draws.
 
@@ -1470,8 +1504,8 @@ rules are also what a phone or a laptop on battery draws.
 
 | Effect | Newer parameters |
 |--------|------------------|
-| `bloom` | `tint` (white) colors the glow, as `canvas.bloom` does; it blurs at a quarter of the layer size, and on an adjustment layer at full opacity it adds the glow onto what lies below by blending instead of copying the result back |
-| `blur` | `blend` (`normal`) and `amount` (0 to 1) mix the blurred picture back into the sharp one |
+| `bloom` | `tint` (white) colors the glow, as `canvas.bloom` does; it blurs at a quarter of the layer size, and on an adjustment layer at full opacity it adds the glow onto what lies below by blending instead of copying the result back; a lighter variant (1 unit instead of 3) gathers the bright parts with nine taps at a quarter of the size in one pass and adds them in a second, drawn at Q0 and at Q1 when `optional` instead of dropping the glow, also for `canvas.bloom` |
+| `blur` | `blend` (`normal`) and `amount` (0 to 1) mix the blurred picture back into the sharp one; a lighter variant (1 unit instead of 6) blurs with nine taps at half the size and scales the result up, drawn at Q0 and at Q1 when `optional` instead of leaving the picture sharp |
 | `blur_motion` | `follow`, `shutter` (0 to 0.5 s) |
 | `chromatic_aberration` | `mode` (0 grows with the distance from `center`, 1 the same shift along `angle`, 2 the same shift away from `center`, 3 grows with the square of the distance), `angle` (−360 to 360) |
 | `depth_parallax` | `scale` (−1 to 1 on each axis, 1 by default; a vector handle on the canvas), `smooth` (follows the pointer as `canvas.parallax` eases it) |

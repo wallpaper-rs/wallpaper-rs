@@ -2693,7 +2693,9 @@ its own sandbox or the page could not get its own empty network, so clients can 
 other content or while no helper runs.
 `flashes` is `""`, or `"slowed"` or `"paused"` once `playback.flash_guard` slowed or stopped the
 scene of that output. `left_out` lists the package effects the scene of that output plays without,
-as `the effect <id> was left out: <reason>`; it is a note, not a failure. `particles` is `"gpu"`
+as `the effect <id> was left out: <reason>`, and the uses the hard budget drew with their lighter
+variant as `the effect <id> on <layer> was drawn with its lighter variant: <reason>`; it is a note,
+not a failure. `particles` is `"gpu"`
 or `"cpu"` for a scene with particles, and `""` otherwise. `quality` is the quality level the scene
 of that output draws at (`"q0"` to `"q3"`, `""` for other content) and `quality_reason` why:
 `"full"` (the highest), `"device"` (the most its graphics card class allows), `"cost"` (the scene is
