@@ -293,7 +293,9 @@ msgstr "Traspasar…"
 #: apps/wprs-app/qml/SceneEffectsList.qml
 #: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneFontPicker.qml
 #: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/SceneInspector.qml
-#: apps/wprs-app/qml/SceneLayerTools.qml apps/wprs-app/qml/SceneModelSwing.qml
+#: apps/wprs-app/qml/SceneLayerTools.qml
+#: apps/wprs-app/qml/SceneModelColliders.qml
+#: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneModelSwing.qml
 #: apps/wprs-app/qml/ScenePairs.qml apps/wprs-app/qml/ScenePools.qml
 #: apps/wprs-app/qml/SceneProperties.qml apps/wprs-app/qml/SceneRigIk.qml
 #: apps/wprs-app/qml/SceneRigPhysics.qml apps/wprs-app/qml/SceneRigRow.qml
@@ -712,12 +714,10 @@ msgstr "Preajuste:"
 #: apps/wprs-app/qml/EditDepthCompare.qml apps/wprs-app/qml/OutputFilter.qml
 #: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/PackageTrack.qml
 #: apps/wprs-app/qml/PackageWeb.qml apps/wprs-app/qml/SceneEffectMask.qml
-#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/ScenePoolEdit.qml
-
 #: apps/wprs-app/qml/SceneMaterialDebug.qml apps/wprs-app/qml/SceneMedia.qml
-#: apps/wprs-app/qml/SceneRig.qml apps/wprs-app/qml/SceneSwarmKin.qml
-#: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneTones.qml
-#: apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/ScenePoolEdit.qml apps/wprs-app/qml/SceneRig.qml
+#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmLight.qml
+#: apps/wprs-app/qml/SceneTones.qml apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "None"
@@ -973,9 +973,6 @@ msgid "Back"
 msgstr "Volver"
 
 #: apps/wprs-app/qml/EditActions.qml apps/wprs-app/qml/PackagePage.qml
-#: apps/wprs-app/qml/SceneEntry.qml apps/wprs-app/qml/SceneMaterialCode.qml
-#: apps/wprs-app/qml/ScenePage.qml apps/wprs-app/qml/SceneScriptCode.qml
-
 #: apps/wprs-app/qml/SceneEntry.qml apps/wprs-app/qml/ScenePage.qml
 #: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneShaderCode.qml
 msgid "Save"
@@ -1220,16 +1217,11 @@ msgstr "Tamaño del pincel"
 #: apps/wprs-app/qml/OutputFilter.qml apps/wprs-app/qml/SceneCanvasLook.qml
 #: apps/wprs-app/qml/SceneEffectMaskTune.qml
 #: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
-#: apps/wprs-app/qml/SceneNormals.qml apps/wprs-app/qml/SceneRigWeights.qml
-#: apps/wprs-app/qml/SceneRigWind.qml apps/wprs-app/qml/SceneShapeSculpt.qml
-#: apps/wprs-app/qml/SceneSwarmKeep.qml apps/wprs-app/qml/SceneSwarmPull.qml
-#: apps/wprs-app/qml/SceneTextureBrush.qml
+#: apps/wprs-app/qml/SceneModelSculpt.qml apps/wprs-app/qml/SceneNormals.qml
+#: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneRigWind.qml
+#: apps/wprs-app/qml/SceneShapeSculpt.qml apps/wprs-app/qml/SceneSwarmKeep.qml
+#: apps/wprs-app/qml/SceneSwarmPull.qml apps/wprs-app/qml/SceneTextureBrush.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
-
-#: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneModelSculpt.qml
-#: apps/wprs-app/qml/SceneNormals.qml apps/wprs-app/qml/SceneRigWeights.qml
-#: apps/wprs-app/qml/SceneRigWind.qml apps/wprs-app/qml/SceneSwarmKeep.qml
-#: apps/wprs-app/qml/SceneSwarmPull.qml apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Strength"
 msgstr "Fuerza"
 
@@ -1685,10 +1677,9 @@ msgid "Paint on the picture; each stroke is one step to undo."
 msgstr "Pinta sobre la imagen; cada trazo es un paso que se puede deshacer."
 
 #: apps/wprs-app/qml/EditMasks.qml apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/SceneMaterialBrush.qml
 #: apps/wprs-app/qml/SceneShapeSculpt.qml
 #: apps/wprs-app/qml/SceneTextureBrush.qml
-
-#: apps/wprs-app/qml/SceneMaterialBrush.qml
 msgid "Erase"
 msgstr "Borrar"
 
@@ -1729,27 +1720,6 @@ msgstr "Subir"
 msgid "Move down"
 msgstr "Bajar"
 
-
-#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/PackageInspector.qml
-#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackagePresets.qml
-#: apps/wprs-app/qml/PackageRequires.qml apps/wprs-app/qml/PlaylistItems.qml
-#: apps/wprs-app/qml/SceneAssets.qml apps/wprs-app/qml/SceneBoneRow.qml
-#: apps/wprs-app/qml/SceneEffectsList.qml
-#: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
-#: apps/wprs-app/qml/SceneModelColliders.qml
-#: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneModelSwing.qml
-#: apps/wprs-app/qml/ScenePairs.qml apps/wprs-app/qml/SceneProperties.qml
-#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneRigPhysics.qml
-#: apps/wprs-app/qml/SceneRigRow.qml apps/wprs-app/qml/SceneRigRules.qml
-#: apps/wprs-app/qml/SceneScriptParam.qml apps/wprs-app/qml/SceneScriptRow.qml
-#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneShapes.qml
-#: apps/wprs-app/qml/SceneSwarmPoints.qml
-#: apps/wprs-app/qml/SceneTemplateTree.qml
-#: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
-msgid "Remove"
-msgstr "Quitar"
-
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/RgbBoard.qml
 msgid "Whole picture"
 msgstr "Toda la imagen"
@@ -1780,9 +1750,7 @@ msgid "Masks"
 msgstr "Máscaras"
 
 #: apps/wprs-app/qml/EditPage.qml apps/wprs-app/qml/SceneCanvasLook.qml
-
-#: apps/wprs-app/qml/SceneModelRings.qml apps/wprs-app/qml/SceneRigTouch.qml
-#: apps/wprs-app/qml/SceneSwarmDepth.qml
+#: apps/wprs-app/qml/SceneModelRings.qml apps/wprs-app/qml/SceneSwarmDepth.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Depth"
@@ -4149,9 +4117,8 @@ msgstr ""
 "y en escenas pesadas; una escena más pesada de lo que aguanta esta tarjeta "
 "gráfica muestra entonces menos fotogramas por segundo."
 
-#: apps/wprs-app/qml/QualityPicker.qml apps/wprs-app/qml/SceneMaterialCode.qml
-#: apps/wprs-app/qml/SceneNewMaterial.qml apps/wprs-app/qml/ScenePropLevels.qml
-#: apps/wprs-app/qml/SceneScriptAudit.qml
+#: apps/wprs-app/qml/QualityPicker.qml apps/wprs-app/qml/SceneNewMaterial.qml
+#: apps/wprs-app/qml/ScenePropLevels.qml apps/wprs-app/qml/SceneScriptAudit.qml
 msgid "%1: %2"
 msgstr "%1: %2"
 
@@ -6992,8 +6959,7 @@ msgstr "Profundidad del paralaje:"
 
 #: apps/wprs-app/qml/SceneLayerDepth.qml
 msgid "Follows a binding or keyframes; change it from its bindings"
-msgstr ""
-"Sigue un enlace o fotogramas clave; cámbialo desde sus enlaces."
+msgstr "Sigue un enlace o fotogramas clave; cámbialo desde sus enlaces."
 
 #: apps/wprs-app/qml/SceneLayerDepth.qml
 msgid "Parallax range:"
@@ -7579,26 +7545,6 @@ msgstr "Metal"
 msgid "Relief"
 msgstr "Relieve"
 
-#: apps/wprs-app/qml/SceneMaterialCode.qml
-#: apps/wprs-app/qml/SceneScriptCode.qml
-msgid "%1 (not saved)"
-msgstr "%1 (sin guardar)"
-
-#: apps/wprs-app/qml/SceneMaterialCode.qml
-#: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneScriptRow.qml
-msgid "Open in your editor…"
-msgstr "Abrirlo en tu editor…"
-
-#: apps/wprs-app/qml/SceneMaterialCode.qml
-#: apps/wprs-app/qml/SceneNewMaterial.qml
-msgid "%1 builds"
-msgstr "%1 se compila"
-
-#: apps/wprs-app/qml/SceneMaterialCode.qml
-#: apps/wprs-app/qml/SceneNewMaterial.qml
-msgid "%1, line %2, column %3: %4"
-msgstr "%1, línea %2, columna %3: %4"
-
 #: apps/wprs-app/qml/SceneMaterialBrush.qml
 msgid "Comb on the model"
 msgstr "Peinar sobre el modelo"
@@ -7989,6 +7935,7 @@ msgid "Pull"
 msgstr "Hundir"
 
 #: apps/wprs-app/qml/SceneModelSculpt.qml apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneShapeSculpt.qml
 msgid "Smooth"
 msgstr "Suavizar"
 
@@ -8125,8 +8072,12 @@ msgstr ""
 "image3(uv)."
 
 #: apps/wprs-app/qml/SceneNewMaterial.qml
-msgid "Edit code…"
-msgstr "Editar el código…"
+msgid "%1 builds"
+msgstr "%1 se compila"
+
+#: apps/wprs-app/qml/SceneNewMaterial.qml
+msgid "%1, line %2, column %3: %4"
+msgstr "%1, línea %2, columna %3: %4"
 
 #: apps/wprs-app/qml/SceneNewMaterial.qml
 msgid "Check again"
@@ -8676,17 +8627,6 @@ msgstr ""
 msgid "Change the stops to make a gradient picture and use it here."
 msgstr "Cambia las paradas para hacer una imagen de degradado y usarla aquí."
 
-#: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneRigIk.qml
-msgid "A point"
-msgstr "Un punto"
-
-#: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneRigIk.qml
-#: apps/wprs-app/qml/SceneWakeRules.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "The pointer"
-msgstr "El puntero"
-
-
 #: apps/wprs-app/qml/SceneRefs.qml
 msgid "Cover of what plays (%1)"
 msgstr "Carátula de lo que suena (%1)"
@@ -9013,11 +8953,6 @@ msgstr "Pincel"
 msgid "Subtract"
 msgstr "Restar"
 
-#: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneShapeSculpt.qml
-msgid "Smooth"
-msgstr "Suavizar"
-
-
 #: apps/wprs-app/qml/SceneRigWeights.qml
 msgid "Normalise"
 msgstr "Normalizar"
@@ -9126,12 +9061,12 @@ msgstr "Declarado y no usado: %1"
 msgid "Declare what it uses"
 msgstr "Declarar lo que usa"
 
-
 #: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneShaderCode.qml
 msgid "%1 (not saved)"
 msgstr "%1 (sin guardar)"
 
 #: apps/wprs-app/qml/SceneScriptCode.qml apps/wprs-app/qml/SceneScriptRow.qml
+#: apps/wprs-app/qml/SceneShaderCode.qml
 msgid "Open in your editor…"
 msgstr "Abrirlo en tu editor…"
 
@@ -13921,9 +13856,12 @@ msgid "Polygon"
 msgstr "Polígono"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Aim among the models"
+msgstr "Mira entre los modelos"
 
-msgid "Shape pools"
-msgstr "Reservas de formas"
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Combing"
+msgstr "Peinado"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Place among the models"
@@ -15097,10 +15035,6 @@ msgid "Add on top"
 msgstr "Sumar encima"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Aim among the models"
-msgstr "Mira entre los modelos"
-
-#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Transparency"
 msgstr "Transparencia"
 
@@ -15304,10 +15238,6 @@ msgstr "Primer color"
 #: apps/wprs-app/qml/facade/WallhavenWords.qml
 msgid "Colors"
 msgstr "Colores"
-
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Combing"
-msgstr "Peinado"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Choice"
