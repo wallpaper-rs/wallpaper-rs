@@ -29,6 +29,7 @@ pub mod curves;
 mod cutouts;
 pub mod cutter;
 mod depthmap;
+mod diverged;
 mod figures;
 mod files;
 pub mod films;

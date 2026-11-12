@@ -70,6 +70,12 @@ pub mod qobject {
         #[qinvokable]
         fn recover(self: Pin<&mut SceneEditor>, keep: bool);
         #[qinvokable]
+        fn diverged(self: &SceneEditor) -> bool;
+        #[qinvokable]
+        fn follow_folder(self: Pin<&mut SceneEditor>);
+        #[qinvokable]
+        fn settle_outside(self: Pin<&mut SceneEditor>, choice: &QString, folder: &QString);
+        #[qinvokable]
         fn prune(self: Pin<&mut SceneEditor>);
         #[qinvokable]
         fn autosave(self: Pin<&mut SceneEditor>);
@@ -147,6 +153,7 @@ pub struct SceneEditorRust {
     pub imports: Vec<Action>,
     pub report: Vec<String>,
     pub watched: u64,
+    pub seen: u64,
     pub files: Vec<Problem>,
     pub persisted: String,
     pub sending: bool,

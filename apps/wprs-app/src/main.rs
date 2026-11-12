@@ -38,6 +38,7 @@ mod scenehear;
 mod scenelive;
 mod scenemedia;
 mod scenerender;
+mod scenesettle;
 mod sceneshow;
 mod scenesweep;
 mod scenewave;
