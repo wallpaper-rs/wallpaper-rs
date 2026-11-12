@@ -21,6 +21,12 @@ wprs-ctl scene act DIR import '{"file":"model.glb"}'
 wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"model","id":"doll"}}}'
 wprs-ctl scene ask DIR surface3d '{"at":[960,540]}'
 
+ask depth3d
+wprs-ctl scene act DIR scene3d '{"group":{"id":"world"}}'
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"card","into":"world"}'
+wprs-ctl scene act DIR scene3d '{"depth_test":{"layer":"card","on":true}}'
+wprs-ctl scene ask DIR depth3d '{"layer":"card"}'
+
 ask stage3d
 wprs-ctl scene act DIR import '{"file":"figure.glb"}'
 wprs-ctl scene act DIR scene3d '{"model":{"add":{"asset":"figure","id":"cube"}}}'
