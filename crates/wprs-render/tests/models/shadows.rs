@@ -65,6 +65,14 @@ fn spot_and_point_lights_cast_shadows_with_their_own_maps() {
         let darker = (20..44).flat_map(|y| (20..44).map(move |x| (x, y)));
         let most = darker.map(|(x, y)| dim(&bare, x, y).saturating_sub(dim(&px, x, y))).max();
         assert!(most > Some(30), "{kind} {most:?}");
+        let edge = (0..64).flat_map(|y| [0, 1, 62, 63].map(move |x| (x, y)));
+        let lit: Vec<_> = edge.filter(|&(x, y)| dim(&bare, x, y) > 30).collect();
+        let kept = lit.iter().filter(|&&(x, y)| dim(&px, x, y) + 6 >= dim(&bare, x, y)).count();
+        assert!(
+            !lit.is_empty() && kept * 2 > lit.len(),
+            "{kind}: {kept} of {} open pixels stay lit",
+            lit.len()
+        );
     }
 }
 
