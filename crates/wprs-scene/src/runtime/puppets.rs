@@ -67,7 +67,9 @@ impl Runtime {
             let [x, y] = wind.map_or([0.0; 2], |w| w.get(&cx).0);
             let gust = self.scene.canvas.gusts.map_or([0.65, 0.35], |g| [1.0 - g, g]);
             let frozen = self.level == Quality::Q0;
-            let sim = Sim { frozen, h: 0.0, wind: [x, -y], gust, t: self.t as f32, unit: 1.0 };
+            let colliders =
+                if self.level == Quality::Q1 { crate::LOW_BONE_COLLIDERS } else { crate::MAX_BONE_COLLIDERS };
+            let sim = Sim { frozen, h: 0.0, wind: [x, -y], gust, t: self.t as f32, unit: 1.0, colliders };
             let pointer = self.pointer.pos.filter(|_| self.uses().cursor);
             for (i, p) in puppets.iter_mut().enumerate() {
                 let shown = i >= 64 || seen & (1 << i) != 0;

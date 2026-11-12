@@ -4,6 +4,7 @@ use crate::{Layer, Wake};
 use std::sync::Arc;
 
 mod arc;
+mod collide;
 mod course;
 mod cues;
 mod drive;
@@ -19,6 +20,7 @@ pub(crate) mod mount;
 mod pose;
 mod reach;
 mod root;
+mod solid;
 mod sway;
 mod swing;
 mod touch;
@@ -102,6 +104,8 @@ pub struct Puppet {
     pub(crate) dirty: bool,
     pub(crate) chains: Vec<reach::Chain>,
     pub(crate) bodies: Vec<swing::Body>,
+    pub(crate) solids: Vec<solid::Solid>,
+    pub(crate) shapes: collide::Shapes,
     pub(crate) lag: f32,
     pub(crate) root: Option<u16>,
 }
@@ -122,11 +126,16 @@ impl Puppet {
         let rules = if order.len() == rig.joints.len() { rules } else { Vec::new() };
         let order = if rules.is_empty() { rig.order.clone() } else { order };
         let n = rig.joints.len();
-        let (chains, bodies) = (reach::chains(&rig, m), swing::bodies(&rig, m, &order));
+        let (chains, solid) = (reach::chains(&rig, m), m.unit != 1.0);
+        let bodies = if solid { Vec::new() } else { swing::bodies(&rig, m, &order) };
+        let solids = if solid { solid::solids(&rig, m, &order) } else { Vec::new() };
+        let shapes = collide::shapes(&rig, m);
         let wide = rig.motions.iter().flat_map(|m| &m.channels).map(|c| c.width()).max().unwrap_or(0);
         Some(Puppet {
             chains,
             bodies,
+            solids,
+            shapes,
             lag: 0.0,
             root: root::bone(&rig),
             layer: layer.id.clone(),
@@ -157,7 +166,7 @@ impl Puppet {
     }
 
     pub fn settled(&self) -> bool {
-        self.bodies.iter().all(swing::Body::still)
+        self.bodies.iter().all(swing::Body::still) && self.solids.iter().all(solid::Solid::still)
     }
 
     pub(crate) fn pose(&mut self, cx: &crate::resolve::Context, m: &Fig, (seat, sim): (&Seat, &Sim)) {
@@ -174,6 +183,9 @@ impl Puppet {
         }
         if !self.bodies.is_empty() {
             self.swing(cx, m, sim);
+        }
+        if !self.solids.is_empty() {
+            self.sway(cx, m, sim);
         }
         self.finish(cx, m);
     }

@@ -12,6 +12,7 @@ mod limits;
 mod pictures;
 mod posing;
 mod reading;
+mod swaying;
 mod walking;
 
 pub fn cube() -> Vec<u8> {

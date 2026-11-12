@@ -4,8 +4,10 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
+mod colliders;
 mod tracks;
 
+pub use colliders::{BoneCollider, Hull, LOW_BONE_COLLIDERS, MAX_BONE_COLLIDERS};
 pub use tracks::BoneKeys;
 
 pub const MAX_CLIPS_PER_MODEL: usize = 64;
@@ -26,6 +28,8 @@ pub struct Rig {
     pub ik: Vec<IkChain>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub physics: Vec<BonePhysics>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub colliders: Vec<BoneCollider>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub rules: Vec<BoneRule>,
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]

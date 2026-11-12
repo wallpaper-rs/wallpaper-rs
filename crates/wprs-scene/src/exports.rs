@@ -115,8 +115,9 @@ pub use crate::puppet::{
 pub use crate::quality::{Class, Quality, Why};
 pub use crate::released::{newer_manifest_keys, newer_scene_keys};
 pub use crate::rig::{
-    AnimClip, AnimLayer, Bend, Body, BoneKeys, BonePhysics, BoneRule, IkChain, MAX_ANIMATION_LAYERS,
-    MAX_BODIES, MAX_CHAIN, MAX_CHAINS, MAX_CLIPS_PER_MODEL, MAX_EXPRESSIONS, Reach, Rig,
+    AnimClip, AnimLayer, Bend, Body, BoneCollider, BoneKeys, BonePhysics, BoneRule, Hull, IkChain,
+    LOW_BONE_COLLIDERS, MAX_ANIMATION_LAYERS, MAX_BODIES, MAX_BONE_COLLIDERS, MAX_CHAIN, MAX_CHAINS,
+    MAX_CLIPS_PER_MODEL, MAX_EXPRESSIONS, Reach, Rig,
 };
 pub use crate::rigged::math as mesh_math;
 pub use crate::rigged::math::{Mat, Quat, Trs};

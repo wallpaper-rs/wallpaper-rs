@@ -51,6 +51,9 @@ impl Puppet {
         for (name, [x, y]) in &set.impulses {
             let Some(n) = self.rig.joint(name) else { continue };
             self.bodies.iter_mut().for_each(|b| b.push(n as u16, [*x, -*y]));
+            self.solids
+                .iter_mut()
+                .for_each(|b| b.push(n as u16, [*x * super::MODEL_UNIT, -*y * super::MODEL_UNIT]));
             self.dirty = true;
         }
     }

@@ -31,6 +31,7 @@ pub(crate) struct Sim {
     pub gust: [f32; 2],
     pub t: f32,
     pub unit: f32,
+    pub colliders: usize,
 }
 
 pub(super) fn bodies(rig: &Rigged, m: &Fig, order: &[u16]) -> Vec<Body> {

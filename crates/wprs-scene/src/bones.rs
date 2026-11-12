@@ -102,6 +102,17 @@ impl Check<'_> {
                 self.range(&format!("{q}/{name}/1"), hi, lo, max);
             }
         }
+        self.count(&format!("{p}/colliders"), rig.colliders.len(), crate::MAX_BONE_COLLIDERS);
+        self.uses(!rig.colliders.is_empty(), "bone_physics");
+        for (i, c) in rig.colliders.iter().enumerate() {
+            let q = format!("{p}/colliders/{i}");
+            bone(self, format!("{q}/bone"), &c.bone);
+            self.range(&format!("{q}/radius"), c.radius, 0.0, 100.0);
+            c.offset
+                .iter()
+                .enumerate()
+                .for_each(|(k, v)| self.range(&format!("{q}/offset/{k}"), *v, -1e4, 1e4));
+        }
         self.count(&format!("{p}/rules"), rig.rules.len(), MAX_BODIES);
         self.uses(!rig.rules.is_empty(), "bone_rules");
         for (i, r) in rig.rules.iter().enumerate() {
