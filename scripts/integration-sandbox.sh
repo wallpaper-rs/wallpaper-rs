@@ -5,6 +5,7 @@ unshare --user --map-root-user --mount true 2>/dev/null || fail "no user namespa
 kill "$daemon"
 wait "$daemon" 2>/dev/null || true
 wait_for 10 name_free || fail "the daemon kept its name"
+portal_asks=$(grep -c 'background portal' "$WORK/restarted.log" || true)
 MAP_UID=$(id -u)
 MAP_GID=$(id -g)
 export BIN WORK MAP_UID MAP_GID
@@ -42,8 +43,8 @@ kill "$claim" 2>/dev/null || true
 kill "$sandboxed"
 wait "$sandboxed" 2>/dev/null || true
 wait_for 10 name_free || fail "the sandboxed daemon kept its name"
-RUST_LOG=$log "$BIN/wprsd" >>"$WORK/wprsd.log" 2>&1 & daemon=$!; pids+=("$daemon")
+RUST_LOG=$log "$BIN/wprsd" >>"$WORK/restarted.log" 2>&1 & daemon=$!; pids+=("$daemon")
 wait_for 30 ctl state || fail "the daemon did not start again outside the sandbox"
 ! ctl input pointer 1 1 2>&1 | grep -q 'inside the Flatpak' || fail "the pointer of wprs-ctl was refused outside the sandbox"
-! grep -q 'background portal' "$WORK/wprsd.log" || fail "a daemon outside the sandbox asked the background portal"
+[ "$(grep -c 'background portal' "$WORK/restarted.log" || true)" = "$portal_asks" ] || fail "a daemon outside the sandbox asked the background portal"
 echo "daemon inside the sandbox checks passed"
