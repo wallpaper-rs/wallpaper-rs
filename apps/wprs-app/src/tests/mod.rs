@@ -8,7 +8,6 @@ mod landing;
 mod pages;
 mod picture;
 mod replies;
-mod shards;
 mod stall;
 mod tables;
 mod words;
