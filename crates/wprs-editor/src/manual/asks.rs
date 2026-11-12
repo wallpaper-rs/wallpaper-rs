@@ -29,7 +29,11 @@ pub const ASKS: [(&str, &str, &str); 44] = [
     ("cost3d", "Cost of the 3D stage at a quality level", r#"{"quality": "q2"}"#),
     ("shadows3d", "Shadows of the 3D stage at a time", r#"{"time": 0}"#),
     ("paths3d", "Camera paths of the 3D stage at a time", r#"{"time": 0}"#),
-    ("material_check", "Check the code of a package material shader, saved or a draft given as text", r#"{"name": "NAME", "text": "DRAFT"}"#),
+    (
+        "material_check",
+        "Check the code of a package material shader, saved or a draft given as text",
+        r#"{"name": "NAME", "text": "DRAFT"}"#,
+    ),
     ("bone3d", "A bone of a 3D model", "{}"),
     ("bound3d", "Bounds of a 3D model", "{}"),
     ("motion", "Clips and motion of a mesh or model layer", r#"{"layer": "ID"}"#),

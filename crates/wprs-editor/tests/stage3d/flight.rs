@@ -120,9 +120,13 @@ fn material_shaders_take_their_params_and_package_ones_report_their_lines() {
     let fixed = "fn material(s: Surface) -> Surface {\n    var o = s;\n    o.albedo = o.albedo * 0.5;\n    return o;\n}\n";
     let draft = ask(&p, json!({ "material_check": { "name": "glaze_coat", "text": fixed } }));
     assert_eq!(draft["ok"], true, "{draft}");
-    let draft = ask(&p, json!({ "material_check": { "name": "glaze_coat", "text": "fn material(s: Surface) -> Surface {\n    return nope;\n}\n" } }));
+    let draft = ask(
+        &p,
+        json!({ "material_check": { "name": "glaze_coat", "text": "fn material(s: Surface) -> Surface {\n    return nope;\n}\n" } }),
+    );
     assert_eq!((draft["ok"].clone(), draft["line"].clone()), (json!(false), json!(2)), "{draft}");
-    let wgsl = |p: &wprs_editor::Project| std::fs::read_to_string(p.dir.join("effects/glaze_coat.wgsl")).unwrap();
+    let wgsl =
+        |p: &wprs_editor::Project| std::fs::read_to_string(p.dir.join("effects/glaze_coat.wgsl")).unwrap();
     let broken_text = wgsl(&p);
     edit(&mut p, json!({ "material_code": { "name": "glaze_coat", "text": fixed } })).unwrap();
     assert_eq!(wgsl(&p), fixed);
