@@ -22,6 +22,7 @@ pub struct Travel {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Still {
+    NoModel,
     NoMap,
     FillOff,
     Edited,
@@ -33,6 +34,7 @@ pub enum Still {
 impl Still {
     pub fn word(self) -> &'static str {
         match self {
+            Still::NoModel => "no_model",
             Still::NoMap => "no_map",
             Still::FillOff => "fill_off",
             Still::Edited => "edited",
@@ -43,7 +45,16 @@ impl Still {
     }
 
     pub fn message(self) -> Message {
+        self.sized("")
+    }
+
+    pub fn sized(self, size: &str) -> Message {
         match self {
+            Still::NoModel => said(
+                "still.no_model",
+                "The picture stays still: the depth model is not installed. Download it (%1) with wprs-ctl models download depth-anything-v2-small or from the app; nothing is downloaded until you ask.",
+                &[&size],
+            ),
             Still::NoMap => said("still.no_map", "The picture stays still: it has no depth map yet.", &[]),
             Still::FillOff => {
                 said("still.fill_off", "The picture stays still: the parallax fill is off.", &[])

@@ -82,7 +82,7 @@ impl Daemon {
             let mut state = OutputState {
                 width,
                 height,
-                image: r.image,
+                image: r.image.clone(),
                 fit: r.fit,
                 shown_fit: info.shown_fit(r.fit),
                 background: format!("#{red:02x}{green:02x}{blue:02x}"),
@@ -101,6 +101,7 @@ impl Daemon {
                 mm: placed.iter().find(|m| m.id == *name).map(|m| m.mm),
                 follows: st.config.layout.follow.get(name).cloned(),
                 parallax: s.parallax,
+                still: r.image.as_deref().filter(|_| !s.parallax).and_then(|i| st.decks.still(i)),
                 frames: s.frames,
                 page_frames: s.page_frames,
                 refresh: st.refresh(name),

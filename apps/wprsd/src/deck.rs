@@ -9,6 +9,7 @@ use std::sync::{Arc, Weak};
 use wprs_core::Fill;
 use wprs_core::edit::{Depth, Edit, Geometry};
 use wprs_core::model::JobKind;
+use wprs_core::travel::Still;
 use wprs_depth::{Device, Inpainter, Layers, Places, Settings};
 
 const THREADS: usize = 4;
@@ -18,7 +19,21 @@ pub(crate) struct Memory {
     sets: HashMap<PathBuf, Weak<Layers>>,
     turned: HashMap<(PathBuf, String), Weak<Layers>>,
     failed: HashSet<PathBuf>,
+    still: HashMap<PathBuf, Still>,
     me: Weak<Daemon>,
+}
+
+impl Memory {
+    pub(crate) fn still(&self, file: &Path) -> Option<Still> {
+        self.still.get(file).copied()
+    }
+
+    pub(crate) fn mark(&mut self, file: &Path, still: Option<Still>) {
+        match still {
+            Some(still) => drop(self.still.insert(file.to_owned(), still)),
+            None => drop(self.still.remove(file)),
+        }
+    }
 }
 
 pub(crate) fn start(daemon: &Arc<Daemon>) {
@@ -67,10 +82,25 @@ impl Daemon {
         edit: &Edit,
         (places, edge): (&Places, u32),
     ) -> Option<Deck> {
-        let moving = edit.moving()?;
+        let made = self.deck_or_still(file, sha, edit, (places, edge));
+        let still = made.as_ref().err().copied().flatten();
+        self.state().decks.mark(file, still);
+        made.ok()
+    }
+
+    fn deck_or_still(
+        &self,
+        file: &Path,
+        sha: &str,
+        edit: &Edit,
+        (places, edge): (&Places, u32),
+    ) -> Result<Deck, Option<Still>> {
+        let moving = edit.moving().ok_or(None)?;
         let config = self.state().config.parallax.clone();
-        if edit.operates() || config.fill == Fill::Off {
-            return None;
+        match () {
+            _ if edit.operates() => return Err(Some(Still::Edited)),
+            _ if config.fill == Fill::Off => return Err(Some(Still::FillOff)),
+            _ => {}
         }
         let depth = edit.depth.clone().unwrap_or_default();
         let set = Settings {
@@ -79,7 +109,7 @@ impl Daemon {
             shift: moving.strength * wprs_core::travel::gain(false, 1.0),
             edge: wprs_depth::edge_for(edge),
         };
-        let path = places.layer_set(file, sha, &depth, &set)?;
+        let path = places.layer_set(file, sha, &depth, &set).ok_or(Some(Still::NoMap))?;
         let known = self.state().decks.sets.get(&path).and_then(Weak::upgrade);
         let found = match known {
             Some(layers) => Some(layers),
@@ -94,15 +124,19 @@ impl Daemon {
             },
         };
         let Some(layers) = found else {
+            let failed = self.state().decks.failed.contains(&path) || wprs_depth::has_failed(&path);
             self.build_deck(file, sha, (depth, set), path);
-            return None;
+            return Err(Some(if failed { Still::Failed } else { Still::Building }));
         };
+        if !layers.info.reach.moves(layers.info.size[0]) {
+            return Err(Some(Still::Flat));
+        }
         {
             let mut st = self.state();
             st.decks.sets.retain(|_, weak| weak.strong_count() > 0);
             st.decks.sets.insert(path.clone(), Arc::downgrade(&layers));
         }
-        Some(Deck { layers: self.turned(&path, layers, &edit.geometry), file: path })
+        Ok(Deck { layers: self.turned(&path, layers, &edit.geometry), file: path })
     }
 
     fn turned(&self, path: &Path, layers: Arc<Layers>, geometry: &Geometry) -> Arc<Layers> {

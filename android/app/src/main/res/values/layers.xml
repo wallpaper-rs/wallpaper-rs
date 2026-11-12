@@ -19,4 +19,6 @@
     <string name="still_building">The picture stays still until its depth layers are built.</string>
     <string name="still_failed">The picture stays still: its depth layers could not be built.</string>
     <string name="still_flat">The picture stays still: its depth gives no movement that would not stretch it.</string>
+    <string name="still_no_model">The picture stays still: the depth model is not installed. It is downloaded only if you ask (%s), then the map is made on this phone.</string>
+    <string name="get_depth_model">Download the depth model</string>
 </resources>

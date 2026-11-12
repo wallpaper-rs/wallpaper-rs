@@ -2468,7 +2468,10 @@ without enabled `ops`, moves as a stack of layers computed once, never per frame
 a picture. The daemon starts a `layers` job (target: the picture path) when it shows such a picture
 and finds no set for its settings; until it ends, when it fails, when the fill is `off`, when `ops`
 are enabled (colour edits are drawn by the GPU on the picture, not on the layers) and when the set
-gives no movement of at least one pixel, the picture stays still. A failed build leaves
+gives no movement of at least one pixel, the picture stays still; without a depth map it stays still
+too, and when the depth model is not installed the app (the parallax tool, as soon as it is turned on),
+`wprs-ctl edit parallax` and the phone say so with the download size and the action that downloads
+it, which only runs when the person asks. A failed build leaves
 `<SHA-256>-<key>.layers.failed` with the error beside the set, and the daemon does not try that
 set again until the cache or the edit changes. The job runs on its own thread at the lowest
 priority, with at most four threads for LaMa, and reloads the screens when it ends. It works at the
@@ -2758,7 +2761,9 @@ removing, renaming or retyping something increases it. Times are Unix seconds; `
 `mm` is `[x, y, w, h]`, where the screen sits on the canvas in millimetres (see "Edits and
 spanning"), or `null` before `SetOutputInfo`. `calibrating` tells whether `ShowCalibration` shows
 its pattern.
-`parallax` tells whether the image moves in depth and `frames` counts the frames rendered for the
+`parallax` tells whether the image moves in depth; while it does not and its edit asks for it, `still`
+says why (`no_model`, `no_map`, `fill_off`, `edited`, `building`, `failed` or `flat`, see "Depth
+layers"), else `null`. `frames` counts the frames rendered for the
 output since it appeared; `page_frames` counts the frames the web page of the output drew (`0` for
 other wallpapers), which the frame rate cap limits. `refresh` is the refresh rate of its screen in Hz (`0` while unknown)
 and `fps` the most frames per second it renders now (see "Frame rate"). `buffers` is `"dmabuf"`

@@ -92,6 +92,8 @@ model! {
         #[serde(default)]
         pub parallax: bool,
         #[serde(default)]
+        pub still: Option<crate::travel::Still>,
+        #[serde(default)]
         pub frames: u64,
         #[serde(default)]
         pub page_frames: u64,

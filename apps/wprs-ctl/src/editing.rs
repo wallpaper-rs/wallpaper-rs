@@ -142,6 +142,16 @@ fn action(command: Edits) -> Option<(PathBuf, Action)> {
     })
 }
 
+fn tell_still(path: &std::path::Path) {
+    let places = wprs_depth::Places::default();
+    let Ok(edit) = open(path) else { return };
+    let Ok(sha) = crate::depth::key(path, &edit) else { return };
+    let set = wprs_depth::settings(&places, &edit, None);
+    if let Some(still) = places.still((path, &sha), &edit, &set) {
+        eprintln!("{}", wprs_depth::still_note(&places, still).local());
+    }
+}
+
 pub fn run(command: Edits) -> Result<()> {
     match command {
         Edits::Show { path } => print!("{}", open(&path)?.to_json()),
@@ -157,7 +167,15 @@ pub fn run(command: Edits) -> Result<()> {
             export(&path, &out, before, quality, size.as_deref())?
         }
         Edits::Depth { map: Some(map), .. } => crate::depth::run(map)?,
-        command => action(command).map_or(Ok(()), |(path, action)| change(&path, action))?,
+        command => {
+            let moving = matches!(command, Edits::Parallax { .. });
+            if let Some((path, action)) = action(command) {
+                change(&path, action)?;
+                if moving {
+                    tell_still(&path);
+                }
+            }
+        }
     }
     Ok(())
 }

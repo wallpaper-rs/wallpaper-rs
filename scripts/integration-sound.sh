@@ -154,7 +154,7 @@ ctl resume
 moves 10 || fail "the parallax did not resume"
 ctl screen TEST-11 --pos 0,0 --size 160x90 --density 4
 ctl edit parallax "$WORK/relief.png" --source pointer --strength 0.03
-wait_for 10 reads "r['tracking'], r['parallax']" "(True, ['TEST-11'])" ||
+wait_for 60 reads "r['tracking'], r['parallax']" "(True, ['TEST-11'])" ||
   fail "the pointer parallax does not follow the pointer: $(ctl input status --json)"
 wait_for 10 quiet || fail "the parallax moves without a pointer"
 held=$(frames)

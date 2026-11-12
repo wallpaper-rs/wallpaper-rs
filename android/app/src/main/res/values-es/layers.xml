@@ -19,4 +19,6 @@
     <string name="still_building">La imagen queda quieta hasta que estén listas sus capas de profundidad.</string>
     <string name="still_failed">La imagen queda quieta: no se pudieron construir sus capas de profundidad.</string>
     <string name="still_flat">La imagen queda quieta: su profundidad no permite moverla sin estirarla.</string>
+    <string name="still_no_model">La imagen queda quieta: el modelo de profundidad no está instalado. Solo se descarga si lo pides (%s) y después el mapa se hace en el teléfono.</string>
+    <string name="get_depth_model">Descargar el modelo de profundidad</string>
 </resources>

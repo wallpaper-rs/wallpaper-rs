@@ -22,7 +22,10 @@ impl Places {
     pub fn still(&self, (image, sha256): (&Path, &str), edit: &Edit, set: &Settings) -> Option<Still> {
         edit.moving()?;
         let depth = edit.depth.clone().unwrap_or_default();
-        let Some(path) = self.layer_set(image, sha256, &depth, set) else { return Some(Still::NoMap) };
+        let Some(path) = self.layer_set(image, sha256, &depth, set) else {
+            let ready = self.installed(&crate::MODEL).is_some() && !self.library(None).is_empty();
+            return Some(if ready { Still::NoMap } else { Still::NoModel });
+        };
         let found = match () {
             _ if set.fill == Fill::Off => return Some(Still::FillOff),
             _ if edit.operates() => return Some(Still::Edited),
@@ -35,4 +38,15 @@ impl Places {
             Some(_) => None,
         }
     }
+}
+
+pub fn model_size(places: &Places) -> String {
+    let runtime = crate::RUNTIME.filter(|_| places.library(None).is_empty());
+    let parts = [Some(crate::MODEL), runtime].into_iter().flatten();
+    let parts: Vec<String> = parts.map(|a| format!("{:.0} MB", a.bytes as f64 / 1e6)).collect();
+    parts.join(" + ")
+}
+
+pub fn still_note(places: &Places, still: Still) -> wprs_core::message::Message {
+    still.sized(&model_size(places))
 }

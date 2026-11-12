@@ -133,7 +133,7 @@ pub fn make(args: Make) -> Result<()> {
     let made = places.ensure_layers((&args.path, &sha), sets, (device, args.force), &mut progress, &stop)?;
     println!("{}", made.display());
     if let Some(still) = places.still((&args.path, &sha), &edit, &set) {
-        eprintln!("{}", still.message().local());
+        eprintln!("{}", wprs_depth::still_note(&places, still).local());
     }
     Ok(())
 }

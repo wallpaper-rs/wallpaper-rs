@@ -60,6 +60,10 @@ fun Relief(main: Main, uid: String, state: JSONObject) {
     val tune = { change: Pair<String, Any> -> main.act { withContext(Dispatchers.IO) { depth("parallax", "uid" to uid, change) } } }
     val moving = state.optBoolean("parallax")
     Toggle(stringResource(R.string.parallax), moving) { tune("on" to it) }
+    if (moving && state.optString("still") == "no_model") {
+        Note(stringResource(R.string.still_no_model, state.optString("model_size")), MaterialTheme.colorScheme.error)
+        TextButton(make, Modifier.padding(horizontal = 8.dp), enabled = busy == null) { Text(stringResource(R.string.get_depth_model)) }
+    }
     if (moving) {
         Level(stringResource(R.string.strength), state.optDouble("strength", 0.02).toFloat(), MIN_STRENGTH..MAX_STRENGTH) { tune("strength" to it) }
         Level(stringResource(R.string.focus), state.optDouble("focus", 0.3).toFloat(), 0f..1f) { tune("focus" to it) }

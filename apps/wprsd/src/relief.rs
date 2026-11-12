@@ -4,6 +4,7 @@ use std::path::Path;
 use std::sync::{Arc, Weak};
 use std::time::SystemTime;
 use wprs_core::edit::{self, Edit, Source};
+use wprs_core::travel::Still;
 use wprs_depth::Places;
 use wprs_render::DepthMap;
 
@@ -19,7 +20,12 @@ impl Daemon {
             sha => sha.to_owned(),
         };
         let places = Places { data: self.store.data.clone(), cache: self.store.cache.clone() };
-        let found = places.find(file, &sha, &settings)?;
+        let Some(found) = places.find(file, &sha, &settings) else {
+            let ready = places.installed(&wprs_depth::MODEL).is_some() && !places.library(None).is_empty();
+            let still = edit.moving().map(|_| if ready { Still::NoMap } else { Still::NoModel });
+            self.state().decks.mark(file, still);
+            return None;
+        };
         let modified = std::fs::metadata(&found).and_then(|m| m.modified()).ok();
         let cached = self.state().depths.get(&found).and_then(|(time, used, map)| {
             (*time == modified && *used == settings).then(|| map.upgrade()).flatten()

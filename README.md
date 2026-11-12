@@ -1118,8 +1118,9 @@ la fuerza, la resolución y los ajustes del mapa. El movimiento se recorta por i
 nunca de la franja rellenada y la ampliación se calcula con la fuerza, el enfoque y la forma de la
 imagen para que nunca se vea el borde del cuadro. Mientras se calculan las capas, si fallan, si el
 relleno está apagado, si la imagen tiene operaciones de color activas o si su profundidad no permite
-moverla sin estirarla, la imagen queda quieta, y la app, `wprs-ctl edit depth layers` y el teléfono
-dicen por qué en una línea. Al moverse, la GPU dibuja las capas de atrás adelante y en reposo
+moverla sin estirarla, la imagen queda quieta, y la app, `wprs-ctl edit parallax`, `wprs-ctl edit depth
+layers` y el teléfono dicen por qué en una línea; si falta el modelo de profundidad lo dicen al activar
+el paralaje, con su tamaño y el botón o la orden que lo descarga (nunca se descarga solo). Al moverse, la GPU dibuja las capas de atrás adelante y en reposo
 muestra la imagen original; un recorte, giro, enderezado o volteo gira también las capas. LaMa (big-lama en ONNX, 208 MB, Apache-2.0) no viene incluido:
 se descarga con `wprs-ctl models download lama-big-fp32` (o desde los ajustes de la app) después de
 mostrar tamaño, licencia y servidor, con las mismas reglas que el modelo de profundidad; sin él, o

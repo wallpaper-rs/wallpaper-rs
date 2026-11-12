@@ -44,7 +44,15 @@ fn the_phone_and_the_desktop_share_the_gain_and_the_shift() {
 
 #[test]
 fn still_reasons_have_words_and_messages() {
-    for still in [Still::NoMap, Still::FillOff, Still::Edited, Still::Building, Still::Failed, Still::Flat] {
+    for still in [
+        Still::NoModel,
+        Still::NoMap,
+        Still::FillOff,
+        Still::Edited,
+        Still::Building,
+        Still::Failed,
+        Still::Flat,
+    ] {
         let word = serde_json::to_value(still).unwrap();
         assert_eq!(word.as_str(), Some(still.word()));
         assert!(still.message().to_string().starts_with("The picture stays still"));

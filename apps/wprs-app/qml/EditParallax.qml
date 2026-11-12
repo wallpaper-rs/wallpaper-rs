@@ -12,11 +12,20 @@ ColumnLayout {
     readonly property bool moving: parallax.enabled ?? false
     readonly property var sources: ["auto", "pointer", "accelerometer"]
     readonly property var steps: [1, 8, 16, 32]
+    readonly property var missing: JSON.parse(maps.assets || "[]").filter(asset => !asset.installed && !asset.inpaint)
+    readonly property string sizes: missing.map(asset => asset.size).join(" + ")
 
     function send(key, value) {
         const args = {};
         args[key] = value;
         tool.page.run("parallax", args);
+    }
+
+    DepthMaps {
+        id: maps
+
+        Component.onCompleted: open(tool.page.item.path ?? "")
+        onMapChanged: tool.page.editor.refresh()
     }
 
     QQC2.Switch {
@@ -25,6 +34,36 @@ ColumnLayout {
         onToggled: tool.page.run("parallax", {
             "off": !checked
         })
+    }
+
+    Kirigami.InlineMessage {
+        Layout.fillWidth: true
+        type: Kirigami.MessageType.Warning
+        visible: tool.moving && maps.map === "" && !maps.busy
+        text: maps.ready ? App.tr("The picture stays still: it has no depth map yet. Make one in Depth above.") : App.tr("The picture stays still: the depth model is not installed. It is downloaded only if you ask (%1), then the map is made on this computer.", tool.sizes)
+        actions: [
+            Kirigami.Action {
+                text: maps.ready ? App.tr("Generate the map") : App.tr("Download the depth model…")
+                icon.name: maps.ready ? "view-preview" : "download"
+                onTriggered: maps.ready ? maps.generate(tool.page.values.depth?.input ?? 518) : consent.open()
+            }
+        ]
+    }
+
+    RowLayout {
+        visible: maps.busy
+
+        QQC2.ProgressBar {
+            Layout.fillWidth: true
+            value: Math.max(0, maps.progress)
+            indeterminate: maps.progress < 0
+        }
+
+        QQC2.ToolButton {
+            icon.name: "process-stop"
+            text: App.tr("Cancel")
+            onClicked: maps.cancel()
+        }
     }
 
     QQC2.ComboBox {
@@ -65,5 +104,11 @@ ColumnLayout {
         text: App.tr("Turn on Show on the desktop to try it. The parallax needs a depth map, pauses like videos and stays still when the system asks for reduced motion.")
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
+    }
+
+    DepthDialog {
+        id: consent
+
+        maps: maps
     }
 }

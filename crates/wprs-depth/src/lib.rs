@@ -56,7 +56,7 @@ pub use rebuild::{settings, sized};
 pub use regions::{JUMP, Regions, regions};
 pub use split::{Split, cut, distance, indices, mask, soft, split};
 pub use stack::{Band, FIELDS, FORMAT, Info, Layers, SUFFIX, Settings, fields_of, load, save};
-pub use still::{failed_of, has_failed, mark_failed};
+pub use still::{failed_of, has_failed, mark_failed, model_size, still_note};
 pub use store::CACHE_BYTES;
 pub use views::{band_mask, halves, histogram, hue, outlines, tint};
 pub use warp::turned;

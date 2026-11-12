@@ -246,6 +246,16 @@ msgid "give the cuts or auto"
 msgstr "da los cortes o auto"
 
 #: crates/wprs-core/src/edit/travel.rs
+msgid ""
+"The picture stays still: the depth model is not installed. Download it (%1) "
+"with wprs-ctl models download depth-anything-v2-small or from the app; "
+"nothing is downloaded until you ask."
+msgstr ""
+"La imagen queda quieta: el modelo de profundidad no está instalado. "
+"Descárgalo (%1) con wprs-ctl models download depth-anything-v2-small o desde "
+"la app; no se descarga nada hasta que lo pidas."
+
+#: crates/wprs-core/src/edit/travel.rs
 msgid "The picture stays still: it has no depth map yet."
 msgstr "La imagen queda quieta: todavía no tiene mapa de profundidad."
 

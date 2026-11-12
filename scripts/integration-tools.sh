@@ -17,7 +17,7 @@ PNG
 tools=$WORK/tools.png
 ctl edit depth import "$tools" "$WORK/tools-depth.png" >/dev/null
 plain=$(ctl edit depth layers "$tools" --fill simple --layers 4) || fail "the generated picture has no layers"
-sets() { ctl edit depth layers "$tools" --list | grep -c "layers, fill simple" || true; }
+sets() { ctl edit depth layers "$tools" --list | grep -c "regions, fill simple" || true; }
 ctl edit depth brush "$tools" "0.1,0.1;0.2,0.1" --raise --by 0.5 --radius 0.1 >/dev/null
 ctl edit depth cuts "$tools" 0.3,0.7 >/dev/null
 ctl edit depth fill-mask "$tools" "0.42,0.5" --refill --radius 0.05 >/dev/null

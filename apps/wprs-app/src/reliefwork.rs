@@ -66,7 +66,7 @@ pub fn survey(places: &Places, target: &Target) -> Result<String> {
         "sets": {"lama": built(Fill::Lama).is_some(), "simple": built(Fill::Simple).is_some()},
         "lama": places.fill(Fill::Lama) == Fill::Lama,
         "strokes": depth.strokes.len(), "marks": depth.fills.len(), "regions": regions,
-        "still": still.map(|s| s.message().local()).unwrap_or_default()
+        "still": still.map(|s| wprs_depth::still_note(places, s).local()).unwrap_or_default()
     })
     .to_string())
 }
