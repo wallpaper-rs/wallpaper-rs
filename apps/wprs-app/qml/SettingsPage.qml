@@ -16,6 +16,10 @@ Kirigami.ScrollablePage {
         App.query("GetInputs", [], "Inputs1", reply => page && (page.inputs = reply));
     }
 
+    function exercise() {
+        Qt.createComponent("SettingsCheck.qml").createObject(page).exercise();
+    }
+
     title: App.tr("Settings")
     Component.onCompleted: load()
     actions: [

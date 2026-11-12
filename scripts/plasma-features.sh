@@ -98,5 +98,7 @@ echo "===== the tray and the app blur a mature thumbnail until it is clicked or 
 ln -sfn "$ui" "$WORK/ui"
 QT_QPA_PLATFORM=offscreen timeout 60 /usr/lib/qt6/bin/qmltestrunner -input "$WORK/tray-row.qml" >"$OUT/tray-row.log" 2>&1 ||
   fail "the screen thumbnails: $(grep -A 3 FAIL "$OUT/tray-row.log")"
+QT_QPA_PLATFORM=offscreen timeout 60 /usr/lib/qt6/bin/qmltestrunner -input "$WORK/tray-left-out.qml" >"$OUT/tray-left-out.log" 2>&1 ||
+  fail "the cost notes of the tray: $(grep -A 3 FAIL "$OUT/tray-left-out.log")"
 
 echo "plasma test passed"

@@ -9,7 +9,7 @@ ColumnLayout {
 
     property var status: ({})
     property string problem: ""
-    readonly property var options: App.state.options ?? {}
+    property var options: App.state.options ?? {}
     readonly property bool on: options["rgb.enabled"] === true
     readonly property string server: String(options["rgb.server"] ?? "127.0.0.1:6742")
     readonly property string covered: String(options["rgb.when_covered"] ?? "pause")
