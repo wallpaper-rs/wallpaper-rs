@@ -64,6 +64,8 @@ pub struct LightSet {
     pub at: Option<[f64; 2]>,
     pub aim: Option<[f64; 2]>,
     pub tilt: Option<f64>,
+    pub time: Option<f64>,
+    pub replace: bool,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]

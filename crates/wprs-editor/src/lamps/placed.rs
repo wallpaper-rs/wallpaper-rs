@@ -51,7 +51,8 @@ pub fn local(layer: &Value, t: f64) -> Affine {
 }
 
 pub fn placed(dir: &Path, doc: &Value, t: f64) -> Vec<Placed> {
-    let _ = dir;
+    let frames: std::collections::HashMap<String, Affine> =
+        crate::seats::seats(dir, doc, t).into_iter().map(|s| (s.id, s.frame)).collect();
     let mut scene = doc["scene"].clone();
     if let Some(list) = scene.get_mut("layers") {
         shown(list);
@@ -72,7 +73,10 @@ pub fn placed(dir: &Path, doc: &Value, t: f64) -> Vec<Placed> {
                 id: l.layer.id.clone(),
                 beam: l.beam,
                 world,
-                parent: world.then(local(&json, t).inverse()).inverse(),
+                parent: frames.get(&l.layer.id).map_or_else(
+                    || world.then(local(&json, t).inverse()).inverse(),
+                    |f| camera.then(*f).inverse(),
+                ),
                 heading: l.heading(),
                 color: l.color.0,
                 intensity: l.intensity,

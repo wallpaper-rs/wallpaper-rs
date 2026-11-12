@@ -93,7 +93,9 @@ ColumnLayout {
         onEdited: (key, value) => {
             if (key === "tilt")
                 tools.set({
-                    "tilt": value
+                    "tilt": value,
+                    "time": tools.page.editor.time,
+                    "replace": tools.page.overwrite
                 });
             else if (key === "inner" || key === "outer")
                 tools.page.change(tools.node.pointer + "/cone", key === "inner" ? [Math.min(value, tools.light.cone[1]), tools.light.cone[1]] : [tools.light.cone[0], Math.max(value, tools.light.cone[0])], true);

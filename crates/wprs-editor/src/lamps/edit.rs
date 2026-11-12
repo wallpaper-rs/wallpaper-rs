@@ -96,24 +96,39 @@ pub(crate) fn change(dir: &Path, doc: &Value, s: &LightSet) -> Result<Vec<Op>> {
         only(beam, Beam::Tube, "length")?;
         put("length", json!(ranged("length", v, 1.0, 1e5)?));
     }
+    let mut moves = Vec::new();
     if let Some(v) = s.tilt {
-        put("transform/tilt", json!([ranged("tilt", v, -89.0, 89.0)?, 0]));
+        moves.push(("tilt", json!([ranged("tilt", v, -89.0, 89.0)?, 0])));
     }
+    let t = s.time.unwrap_or(0.0);
+    ensure!(
+        t.is_finite() && t >= 0.0,
+        said("editor.time_must_more", "the time must be 0 or more seconds", &[])
+    );
     if s.at.is_some() || s.aim.is_some() {
-        let found = placed(dir, doc, 0.0).into_iter().find(|l| l.id == s.layer);
+        let found = placed(dir, doc, t).into_iter().find(|l| l.id == s.layer);
         let p = found.ok_or_else(|| {
             anyhow!(said("editor.light_unplaced", "the light %1 is not shown", &[&s.layer]))
         })?;
         let to_local = |q: [f64; 2]| p.parent.apply([q[0] as f32, q[1] as f32]);
         let at = s.at.map_or_else(|| p.parent.apply(p.at()), to_local);
         if s.at.is_some() {
-            put("transform/position", json!(at.map(|v| (f64::from(v) * 100.0).round() / 100.0)));
+            moves.push(("position", json!(at.map(|v| (f64::from(v) * 100.0).round() / 100.0))));
         }
         if let Some(aim) = s.aim.map(to_local) {
             let angle = (aim[1] - at[1]).atan2(aim[0] - at[0]).to_degrees() - p.base();
-            put("transform/rotation", json!((f64::from(angle) * 100.0).round() / 100.0));
+            moves.push(("rotation", json!((f64::from(angle) * 100.0).round() / 100.0)));
         }
     }
+    if moves.is_empty() {
+        return Ok(ops);
+    }
+    let base = format!("{path}/transform");
+    let mut work = doc.clone();
+    for (field, v) in moves {
+        crate::shaping::keyed::write(&mut work, &format!("{base}/{field}"), v, s.time, s.replace)?;
+    }
+    ops.extend(set(doc, &base, work.pointer(&base).cloned().unwrap_or_default()));
     Ok(ops)
 }
 

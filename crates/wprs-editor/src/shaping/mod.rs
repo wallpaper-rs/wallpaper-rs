@@ -2,7 +2,7 @@ pub(crate) mod canvas;
 mod effects;
 mod glide;
 mod grips;
-mod keyed;
+pub(crate) mod keyed;
 pub(crate) mod layers;
 mod lens;
 pub(crate) mod marks;

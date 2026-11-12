@@ -20,20 +20,28 @@ Item {
         owner.page.change(light.pointer + "/" + field, value, true);
     }
 
+    function keyed(args) {
+        owner.page.run("light", {
+            "set": Object.assign({
+                "layer": light.id,
+                "time": owner.page.editor.time,
+                "replace": owner.page.overwrite
+            }, args)
+        }, true);
+    }
+
     function aim(to) {
-        const a = local(at), b = local(to);
-        put("transform/rotation", Math.round((Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI - light.base) * 10) / 10);
+        keyed({
+            "aim": to.map(v => Math.round(v * 100) / 100)
+        });
     }
 
     function tilt(to) {
         const aim = light.aim, dx = aim[0] - at[0], dy = aim[1] - at[1];
         const along = ((to[0] - at[0]) * dx + (to[1] - at[1]) * dy) / Math.max(dx * dx + dy * dy, 1e-6);
-        owner.page.run("light", {
-            "set": {
-                "layer": light.id,
-                "tilt": Math.max(-89, Math.min(89, Math.round(90 - 180 * (along - 0.1) / 0.8)))
-            }
-        }, true);
+        keyed({
+            "tilt": Math.max(-89, Math.min(89, Math.round(90 - 180 * (along - 0.1) / 0.8)))
+        });
     }
 
     function cone(to, inner) {
@@ -93,8 +101,16 @@ Item {
         tip: App.tr("Drag to move the light")
         onMoved: (to, done) => {
             gizmo.owner.page.editor.select(gizmo.light.pointer);
-            gizmo.put("transform/position", gizmo.local(to));
+            seat.grip("move", to, true);
         }
+    }
+
+    SceneSeat {
+        id: seat
+
+        page: gizmo.owner.page
+        ratio: gizmo.ratio
+        layerId: gizmo.light.id
     }
 
     SceneLightKnobs {

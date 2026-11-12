@@ -13,6 +13,7 @@ mod gizmos;
 mod linear;
 mod maps;
 mod raised;
+mod seated;
 mod shared;
 mod surfaces;
 mod swarm;

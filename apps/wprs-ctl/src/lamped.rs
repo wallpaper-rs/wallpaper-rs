@@ -38,6 +38,8 @@ fn light(layer: String, what: Lamp) -> LightEdit {
             at: s.at.as_deref().and_then(pair),
             aim: s.aim.as_deref().and_then(pair),
             tilt: s.tilt,
+            time: None,
+            replace: false,
         }),
         Lamp::Remove => LightEdit::Remove { layer },
         Lamp::Solo { off } => LightEdit::Solo { layer: (!off).then_some(layer) },
