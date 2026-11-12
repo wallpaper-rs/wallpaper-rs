@@ -76,7 +76,8 @@ impl Scripted {
             ..Frame::at(rt.time())
         };
         let answer = script.update(&frame);
-        (self.fired.clear(), self.ended.clear());
+        self.fired.clear();
+        self.ended.clear();
         match answer {
             Ok(mut out) => {
                 self.console.append(&mut out.console);
