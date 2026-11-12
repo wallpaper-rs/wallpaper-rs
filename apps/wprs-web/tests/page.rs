@@ -1,7 +1,7 @@
-#[path = "page/folders.rs"]
-mod folders;
 #[path = "page/errors.rs"]
 mod errors;
+#[path = "page/folders.rs"]
+mod folders;
 #[path = "page/heard.rs"]
 mod heard;
 #[path = "page/helper.rs"]

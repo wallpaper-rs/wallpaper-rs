@@ -34,7 +34,15 @@ impl Page {
         let properties = start.properties.clone();
         link.send(&ToWeb::Start(Box::new(start)), &[]).unwrap();
         link.send(&ToWeb::Open { view: 1, size: (320, 180), scale: 1.0, properties }, &[]).unwrap();
-        Page { link, child, said: BTreeMap::new(), frames: 0, crashed: 0, broken: false, problems: Vec::new() }
+        Page {
+            link,
+            child,
+            said: BTreeMap::new(),
+            frames: 0,
+            crashed: 0,
+            broken: false,
+            problems: Vec::new(),
+        }
     }
 
     pub fn pump(&mut self, until: Instant) {

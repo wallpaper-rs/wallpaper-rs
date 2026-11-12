@@ -90,5 +90,8 @@ fn an_open_capture_without_sound_draws_no_levels() {
     let doc = json!({ "scene": {} });
     let quiet = json!({ "granted": true, "listening": true, "sound": false });
     let out = ask(&doc, json!({ "meter": { "source": { "audio": "bass" }, "reading": quiet } }));
-    assert_eq!((out["granted"].clone(), out["listening"].clone(), out["bands"].clone()), (json!(true), json!(false), Value::Null));
+    assert_eq!(
+        (out["granted"].clone(), out["listening"].clone(), out["bands"].clone()),
+        (json!(true), json!(false), Value::Null)
+    );
 }
