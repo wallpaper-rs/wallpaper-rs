@@ -145,6 +145,12 @@ Item {
         ratio: overlays.ratio
     }
 
+    SceneFollowedRig {
+        z: 6
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
     Repeater {
         model: (overlays.page.view.gizmos ?? []).length
 

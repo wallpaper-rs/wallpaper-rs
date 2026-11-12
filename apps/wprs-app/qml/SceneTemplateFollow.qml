@@ -31,6 +31,12 @@ ColumnLayout {
     }
 
     visible: node !== null && meshes.length > 0
+    Binding {
+        target: follow.page
+        property: "following"
+        value: follow.visible ? follow.mesh : ""
+    }
+
     onAttachedChanged: {
         if (attached && meshes.includes(attached.layer))
             mesh = attached.layer;

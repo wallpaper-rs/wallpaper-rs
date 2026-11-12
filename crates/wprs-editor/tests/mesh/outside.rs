@@ -19,6 +19,12 @@ fn layers_inside_a_template_follow_reach_for_and_mask_by_layers_of_the_scene() {
     assert_eq!(copied["attach"], json!({ "layer": "net", "bone": "arm" }), "{copied}");
     let outline = wprs_editor::outline::outline(&p, 0.0, &[]);
     assert!(outline["outside"].as_array().unwrap().iter().any(|l| l["id"] == "net" && l["type"] == "mesh"));
+    let shown = outline["followed"].as_array().unwrap();
+    assert!(shown.iter().any(|g| g["id"] == "net" && g["kind"] == "mesh"), "{shown:?}");
+    assert!(shown.iter().all(|g| g["pointer"].as_str().unwrap().starts_with("/scene/layers/")));
+    p.scope = None;
+    assert!(wprs_editor::outline::outline(&p, 0.0, &[])["followed"].as_array().unwrap().is_empty());
+    p.scope = Some(badge.clone());
     assert_eq!(
         wprs_editor::rigs::query(&p.dir, &p.holding("net"), "net", &json!({}))["bones"][1]["name"],
         "arm"

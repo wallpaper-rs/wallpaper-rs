@@ -21,6 +21,7 @@ Kirigami.Page {
     property bool overwrite
     property bool magnets: true
     property string picking
+    property string following
     property var brush: null
     property var emitterEntry: ({})
     property bool lightBoxes
