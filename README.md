@@ -3231,6 +3231,9 @@ pantalla, los archivos exportados (lanzador, icono, metainfo y servicios D-Bus),
 `wprs-plasma` y que una edición hecha dentro del Flatpak llega a `~/.local/share/wallpaper-rs/edits/`.
 Instala en el sistema y toca esa carpeta, así que fuera de la CI conviene usarlo en un contenedor
 desechable.
+El demonio dentro del sandbox lo prueba otro job en el runner sin contenedor, con el paquete ya
+construido: `scripts/private-audio.sh packaging/flatpak/serve-check.sh` (la imagen de construcción no
+trae servidor de sonido, y el demonio lo necesita siempre).
 
 Todas las acciones de GitHub están fijadas por el SHA completo de su commit, las imágenes de
 contenedor por su resumen y las herramientas que descarga la CI (`scripts/tools.sh`: actionlint,
