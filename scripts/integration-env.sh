@@ -5,6 +5,8 @@ WORK=$(mktemp -d /tmp/wprs-it.XXXXXX)
 export XDG_RUNTIME_DIR=$WORK/run XDG_CONFIG_HOME=$WORK/config XDG_DATA_HOME=$WORK/data XDG_CACHE_HOME=$WORK/cache XDG_STATE_HOME=$WORK/state
 mkdir -p "$XDG_RUNTIME_DIR" "$XDG_CONFIG_HOME"
 chmod 700 "$XDG_RUNTIME_DIR"
+unset LANGUAGE LC_MESSAGES
+export LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 pids=()
 ended() {
