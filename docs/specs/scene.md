@@ -1802,7 +1802,7 @@ positions as its own `trail` asks for, or none.
 
 A `particles` layer may also set `instance` (`alpha`, `size`, `count`, `speed`, `life`, `time_scale`,
 `brightness`, `color` and `points`, which may be bound and multiply or move what the system does for
-that layer only, unless the system locks them) and a `render` of its own that replaces the one of
+that layer only, unless the system locks them; `count`, 0 to 4, multiplies the births and the room of the system, and above 1 the layer reserves that many times its `capacity` when the scene loads: the literal value, the upper end of the `clamp` of a binding, or 4 for a binding without one, so a count bound to a property should clamp it) and a `render` of its own that replaces the one of
 the system (`particles2`). Each end of the `init` ranges of numbers (`life`, `speed`, `angle`,
 `size`, `rotation`, `spin`, `frame`, `alpha`, `radial`, `depth`, `depth_speed`) and the numbers of
 emitter shapes (`radius` and `inner` of `circle`, `threshold` of `layer`, `arc`, `radius` and

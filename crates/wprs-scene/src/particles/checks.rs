@@ -8,7 +8,7 @@ impl Check<'_> {
         let numbers = [
             ("alpha", &i.alpha, 1.0),
             ("size", &i.size, 100.0),
-            ("count", &i.count, 1.0),
+            ("count", &i.count, super::flock::MAX_COUNT),
             ("speed", &i.speed, 100.0),
             ("life", &i.life, 100.0),
             ("time_scale", &i.time_scale, 100.0),

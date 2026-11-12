@@ -61,7 +61,8 @@ impl Swarm {
             let sim = &mut self.frames[k];
             *sim = self.bases[k];
             super::bound::bound(sim, s, cx);
-            sim.ids[3] = ((s.capacity as f32 * share) as u32).clamp(1, s.capacity.max(1));
+            let peak = super::tune::instance(layer).map_or(1.0, super::Instance::peak);
+            sim.ids[3] = ((s.capacity as f32 * share) as u32).clamp(1, ((s.capacity as f32 * peak) as u32).max(1));
             sim.init[0][0] *= tune.life;
             sim.init[0][1] *= tune.life;
             [2, 3].iter().for_each(|&i| sim.init[0][i] *= tune.speed);

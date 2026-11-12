@@ -93,6 +93,23 @@ fn instances_scale_births_time_and_looks() {
 }
 
 #[test]
+fn an_instance_count_above_one_reserves_more_room_and_births() {
+    let flowing =
+        still(json!({ "capacity": 300, "emitters": [{ "shape": { "point": [100, 50] }, "rate": 300 }] }));
+    let layers = |count: Json| json!([{ "id": "p", "type": "particles", "system": "a", "instance": { "count": count } }]);
+    let mut fly = Fly::new(runtime(json!({ "a": flowing.clone() }), layers(json!(2.5))));
+    assert_eq!(fly.bake.allocs[0], 750);
+    fly.run(1.0);
+    assert_eq!(fly.rt.swarm(0).unwrap().sim(0, 0).ids[3], 750);
+    assert!((650..=850).contains(&fly.births), "two and a half times the rate: {}", fly.births);
+    let bound = json!({ "cursor": "x", "scale": 2, "clamp": [0, 2] });
+    let fly = Fly::new(runtime(json!({ "a": flowing.clone() }), layers(bound)));
+    assert_eq!(fly.bake.allocs[0], 600);
+    let fly = Fly::new(runtime(json!({ "a": flowing }), layers(json!({ "cursor": "x" }))));
+    assert_eq!(fly.bake.allocs[0], 1200);
+}
+
+#[test]
 fn scripts_pause_emit_stop_and_play_particles() {
     let flowing = still(json!({ "emitters": [{ "shape": { "point": [100, 50] }, "rate": 60 }] }));
     let mut fly = Fly::of(json!({ "a": flowing }));

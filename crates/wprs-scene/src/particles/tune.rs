@@ -15,7 +15,7 @@ pub(crate) struct Tuned {
     pub color: Option<[f32; 4]>,
 }
 
-fn instance(layer: Option<&Layer>) -> Option<&Instance> {
+pub(super) fn instance(layer: Option<&Layer>) -> Option<&Instance> {
     match &layer?.kind {
         Kind::Particles { instance, .. } => instance.as_deref(),
         _ => None,
@@ -35,7 +35,7 @@ pub(crate) fn tuned(cx: &Context, layer: Option<&Layer>, s: &System) -> Tuned {
     Tuned {
         alpha: pick(Tunable::Alpha, script.alpha, field(|i| &i.alpha), 1.0),
         size: pick(Tunable::Size, script.size, field(|i| &i.size), 100.0),
-        count: pick(Tunable::Count, script.count, field(|i| &i.count), 1.0),
+        count: pick(Tunable::Count, script.count, field(|i| &i.count), own.map_or(1.0, Instance::peak)),
         speed: pick(Tunable::Speed, script.speed, field(|i| &i.speed), 100.0),
         life: pick(Tunable::Life, script.life, field(|i| &i.life), 100.0),
         time_scale: pick(Tunable::TimeScale, script.time_scale, field(|i| &i.time_scale), 100.0),

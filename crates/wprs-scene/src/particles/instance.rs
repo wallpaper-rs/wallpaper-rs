@@ -27,7 +27,7 @@ pub struct Instance {
     #[schemars(extend("x-range" = [0, 100]))]
     pub size: Option<Value<f32>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[schemars(extend("x-range" = [0, 1]))]
+    #[schemars(extend("x-range" = [0, 4]))]
     pub count: Option<Value<f32>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[schemars(extend("x-range" = [0, 100]))]

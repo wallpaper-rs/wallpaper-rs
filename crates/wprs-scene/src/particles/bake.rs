@@ -72,8 +72,8 @@ impl Bake {
                 scene.layers().filter(|l| matches!(&l.kind, Kind::Particles { system, .. } if system == id));
             if f.layer.is_some() { 1 } else { shared.count().max(1) as u64 }
         };
-        let weight =
-            |f: &Flock| f.parts.iter().map(|p| u64::from(systems[p.system].capacity)).sum::<u64>() * draws(f);
+        let room = |f: &Flock, s: &System| (s.capacity as f32 * super::flock::peak(scene, f)).ceil() as u64;
+        let weight = |f: &Flock| f.parts.iter().map(|p| room(f, systems[p.system])).sum::<u64>() * draws(f);
         let total: u64 = all.iter().map(weight).sum();
         let cap = u64::from(if cpu { tier.particles().min(CPU_PARTICLES) } else { tier.particles() });
         let mut bake = Bake { tier: Some(tier), ..Bake::default() };
@@ -81,8 +81,7 @@ impl Bake {
         let on = |s: &System, m| s.children.iter().any(|c| c.on == m);
         for part in &f.parts {
             let s = systems[part.system];
-            let alloc =
-                (u64::from(s.capacity) * cap / total.max(cap)).clamp(1, u64::from(s.capacity.max(1))) as u32;
+            let alloc = (room(f, s) * cap / total.max(cap)).clamp(1, room(f, s).max(1)) as u32;
             let alloc = if cpu && boids(s) { alloc.min(CPU_BOIDS) } else { alloc };
             let spread =
                 s.overdraw(scene.canvas.size) * alloc as f32 / s.capacity.max(1) as f32 * draws(f) as f32;

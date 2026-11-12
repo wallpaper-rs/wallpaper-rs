@@ -3,6 +3,7 @@ use crate::{Kind, Scene, ScriptApi};
 
 pub const MAX_PARTS: usize = 64;
 pub const MAX_DEPTH: usize = 2;
+pub const MAX_COUNT: f32 = 4.0;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Part {
@@ -21,6 +22,15 @@ pub struct Flock {
 }
 
 impl Instance {
+    pub fn peak(&self) -> f32 {
+        let top = match &self.count {
+            None => 1.0,
+            Some(crate::Value::Fixed(v)) => *v,
+            Some(crate::Value::Bound(b)) => b.clamp.map_or(MAX_COUNT, |[lo, hi]| lo.max(hi)),
+        };
+        if top.is_finite() { top.clamp(1.0, MAX_COUNT) } else { 1.0 }
+    }
+
     pub fn moves(&self) -> bool {
         let set = [&self.count, &self.speed, &self.life, &self.time_scale];
         set.iter().any(|v| v.is_some()) || self.points.iter().any(Option::is_some)
@@ -47,6 +57,11 @@ pub fn flocks(scene: &Scene) -> Vec<Flock> {
         out.extend(own.into_iter().map(|layer| Flock { system: i, layer: Some(layer), parts: tree.clone() }));
     }
     out
+}
+
+pub(crate) fn peak(scene: &Scene, f: &Flock) -> f32 {
+    let layer = f.layer.as_ref().and_then(|id| scene.layers().find(|l| &l.id == id));
+    super::tune::instance(layer).map_or(1.0, Instance::peak)
 }
 
 pub(crate) fn flock_of(flocks: &[Flock], system: usize, layer: &str) -> usize {
