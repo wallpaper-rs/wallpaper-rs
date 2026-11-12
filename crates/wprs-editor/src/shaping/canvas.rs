@@ -1,8 +1,8 @@
 use super::effects::put;
 use super::refused;
 use crate::action::CanvasEdit as C;
-use crate::ops::Op;
-use anyhow::{Result, bail};
+use crate::ops::{Op, set};
+use anyhow::{Result, bail, ensure};
 use serde_json::{Map, Value, json};
 use std::path::Path;
 use wprs_core::message::said;
@@ -35,6 +35,33 @@ fn merged<T: serde::Serialize + Default>(doc: &Value, at: &str) -> Map<String, V
 
 pub(crate) fn canvas(dir: &Path, doc: &Value, e: &C) -> Result<Vec<Op>> {
     let ops = match e {
+        C::Size { size } => {
+            let fits = size.iter().all(|v| (1..=wprs_scene::MAX_SIZE).contains(v));
+            ensure!(fits, said("editor.canvas_size", "a side of the canvas is 1 to 16384 pixels", &[]));
+            set(doc, "/scene/canvas/size", json!(size))
+        }
+        C::Clock(c) => {
+            let mut ops = Vec::new();
+            if let Some(t) = c.poster {
+                let max = f64::from(wprs_scene::MAX_POSTER_TIME);
+                ensure!(
+                    (0.0..=max).contains(&t),
+                    said("editor.poster_range", "the still frame is from 0 to %1 seconds", &[&max])
+                );
+                ops.extend(set(doc, "/scene/clock/poster_time", json!((t * 1000.0).round() / 1000.0)));
+            }
+            ensure!(
+                !(c.fresh && c.seed.is_some()),
+                said("editor.seed_or_fresh", "give a seed or ask for a new one each start, not both", &[])
+            );
+            let seed = if c.fresh { Some(Value::Null) } else { c.seed.map(|s| json!(s)) };
+            if let Some(seed) = seed {
+                let mut staged = doc.clone();
+                crate::ops::apply(&mut staged, &ops)?;
+                ops.extend(set(&staged, "/scene/clock/seed", seed));
+            }
+            ops
+        }
         C::Bloom { off: true, .. } => put(doc, "/scene/canvas/bloom", None),
         C::Bloom { threshold, strength, radius, tint, hdr, .. } => {
             let mut next = merged::<wprs_scene::Bloom>(doc, "/scene/canvas/bloom");

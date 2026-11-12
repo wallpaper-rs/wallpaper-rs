@@ -1352,6 +1352,18 @@ msgid "an expression weighs each blend shape from -1 to 1"
 msgstr "una expresión pesa cada forma de mezcla de -1 a 1"
 
 #: crates/wprs-editor/src/shaping/canvas.rs
+msgid "a side of the canvas is 1 to 16384 pixels"
+msgstr "un lado del lienzo mide de 1 a 16384 píxeles"
+
+#: crates/wprs-editor/src/shaping/canvas.rs
+msgid "the still frame is from 0 to %1 seconds"
+msgstr "el fotograma fijo va de 0 a %1 segundos"
+
+#: crates/wprs-editor/src/shaping/canvas.rs
+msgid "give a seed or ask for a new one each start, not both"
+msgstr "da una semilla o pide una nueva en cada inicio, no ambas cosas"
+
+#: crates/wprs-editor/src/shaping/canvas.rs
 msgid "the glare of a glow is none or a threshold and a strength"
 msgstr "el destello de un resplandor es none o un umbral y una intensidad"
 

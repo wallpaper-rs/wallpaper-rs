@@ -3,7 +3,7 @@ use serde_json::{Map, Value};
 use wprs_format::OriginKind;
 use wprs_scene::Blend;
 
-pub use super::grips::{Fit, Grip};
+pub use super::grips::{ClockSet, Fit, Grip, SCREENS};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
@@ -157,6 +157,10 @@ pub struct PropertyEdit {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum CanvasEdit {
+    Size {
+        size: [u32; 2],
+    },
+    Clock(ClockSet),
     Bloom {
         #[serde(default)]
         threshold: Option<f64>,

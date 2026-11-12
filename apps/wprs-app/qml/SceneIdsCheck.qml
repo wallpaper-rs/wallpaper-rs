@@ -55,6 +55,23 @@ QtObject {
         });
         if (read(layer("ids_kid").pointer + "/parent") !== null)
             throw new Error("ids: removing a parent left its child following it");
+        const clock = Qt.createComponent("SceneCanvasClock.qml").createObject(page, {
+            "page": page
+        });
+        const phone = (page.view.screen_sizes ?? []).find(s => s.size[1] > s.size[0]);
+        clock.canvas({
+            "size": {
+                "size": phone.size
+            }
+        });
+        clock.canvas({
+            "clock": {
+                "fresh": true
+            }
+        });
+        if (JSON.stringify(page.view.canvas?.size) !== JSON.stringify(phone.size) || !clock.fresh)
+            throw new Error("ids: the canvas did not take a phone size and a fresh seed: " + page.editor.error);
+        clock.destroy();
         while (page.view.history.done.length > steps)
             page.run("undo");
     }

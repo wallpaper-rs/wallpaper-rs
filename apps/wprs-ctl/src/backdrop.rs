@@ -34,6 +34,20 @@ pub enum Backdrop {
         #[arg(long, help = "Remove the glow")]
         off: bool,
     },
+    #[command(about = "Set the size of the canvas in pixels, such as 1920,1080 or 1080,2340 for a phone")]
+    Size {
+        #[arg(value_name = "W,H", value_parser = crate::sowed::pair, help = "Pixels from 1 to 16384 each")]
+        size: [f64; 2],
+    },
+    #[command(about = "Set the still frame and the seed of the scene clock")]
+    Clock {
+        #[arg(long, value_name = "S", help = "Second of the scene shown as its still frame and thumbnail")]
+        poster: Option<f64>,
+        #[arg(long, help = "Seed of the procedural effects and particles")]
+        seed: Option<u64>,
+        #[arg(long, conflicts_with = "seed", help = "Pick a new seed each time the scene starts")]
+        fresh: bool,
+    },
     #[command(about = "Move layers in depth with the pointer or the tilt of a phone, or --off")]
     Parallax {
         #[arg(allow_negative_numbers = true, long, help = "From 0 to 4")]
@@ -54,6 +68,10 @@ pub(crate) fn edit(what: Backdrop) -> C {
         Backdrop::Bloom { threshold, strength, radius, tint, hdr, off } => {
             let hdr = hdr.map(|h| crate::sowed::pair(&h).map_or(json!(h), |p| json!(p)));
             C::Bloom { threshold, strength, radius, tint, hdr, off }
+        }
+        Backdrop::Size { size } => C::Size { size: size.map(|v| v.max(0.0) as u32) },
+        Backdrop::Clock { poster, seed, fresh } => {
+            C::Clock(wprs_editor::actions::ClockSet { poster, seed, fresh })
         }
         Backdrop::Parallax { amount, delay, pointer, gyro, off } => {
             C::Parallax { amount, delay, pointer, gyro, off }

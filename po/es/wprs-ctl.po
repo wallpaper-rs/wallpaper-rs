@@ -416,6 +416,32 @@ msgid "Remove the glow"
 msgstr "Quitar el brillo"
 
 #: apps/wprs-ctl/src/backdrop.rs
+msgid ""
+"Set the size of the canvas in pixels, such as 1920,1080 or 1080,2340 for a "
+"phone"
+msgstr "Fijar el tamaño del lienzo en píxeles, como 1920,1080 o 1080,2340 para un teléfono"
+
+#: apps/wprs-ctl/src/backdrop.rs
+msgid "Pixels from 1 to 16384 each"
+msgstr "Píxeles de 1 a 16384 cada uno"
+
+#: apps/wprs-ctl/src/backdrop.rs
+msgid "Set the still frame and the seed of the scene clock"
+msgstr "Fijar el fotograma fijo y la semilla del reloj de la escena"
+
+#: apps/wprs-ctl/src/backdrop.rs
+msgid "Second of the scene shown as its still frame and thumbnail"
+msgstr "Segundo de la escena que se muestra como fotograma fijo y miniatura"
+
+#: apps/wprs-ctl/src/backdrop.rs
+msgid "Seed of the procedural effects and particles"
+msgstr "Semilla de los efectos procedurales y las partículas"
+
+#: apps/wprs-ctl/src/backdrop.rs
+msgid "Pick a new seed each time the scene starts"
+msgstr "Elegir una semilla nueva cada vez que empieza la escena"
+
+#: apps/wprs-ctl/src/backdrop.rs
 msgid "Move layers in depth with the pointer or the tilt of a phone, or --off"
 msgstr ""
 "Mover las capas en profundidad con el puntero o la inclinación de un "
@@ -3837,7 +3863,10 @@ msgstr "Listar los paquetes ocultos y por qué"
 msgid ""
 "Give a layer, timeline, asset or particle system a new id; what names it "
 "follows, scripts are not rewritten and each line that names it is printed"
-msgstr "Dar un id nuevo a una capa, línea de tiempo, asset o sistema de partículas; lo que lo nombra lo sigue, los scripts no se reescriben y se imprime cada línea que lo nombra"
+msgstr ""
+"Dar un id nuevo a una capa, línea de tiempo, asset o sistema de partículas; "
+"lo que lo nombra lo sigue, los scripts no se reescriben y se imprime cada "
+"línea que lo nombra"
 
 #: apps/wprs-ctl/src/naming.rs
 msgid "layer, timeline, asset or system"
@@ -3855,7 +3884,9 @@ msgstr "El id nuevo"
 msgid ""
 "Print layers with the assets, systems and effects they use as a clip for "
 "paste"
-msgstr "Imprimir capas con los assets, sistemas y efectos que usan como un recorte para paste"
+msgstr ""
+"Imprimir capas con los assets, sistemas y efectos que usan como un recorte "
+"para paste"
 
 #: apps/wprs-ctl/src/naming.rs
 msgid "The layers to copy"
@@ -3865,7 +3896,9 @@ msgstr "Las capas que se copian"
 msgid ""
 "Paste a clip that copy printed, from this or another scene, with free ids "
 "and its files"
-msgstr "Pegar un recorte que imprimió copy, de esta u otra escena, con ids libres y sus archivos"
+msgstr ""
+"Pegar un recorte que imprimió copy, de esta u otra escena, con ids libres y "
+"sus archivos"
 
 #: apps/wprs-ctl/src/naming.rs
 msgid "The clip as JSON, or a file that holds it"
@@ -6456,7 +6489,9 @@ msgstr ""
 msgid ""
 "Drag a handle of the canvas to a point of the canvas: move, nudge (by X,Y), "
 "turn, origin, scale or skew"
-msgstr "Arrastrar un asa del lienzo hasta un punto del lienzo: move, nudge (en X,Y), turn, origin, scale o skew"
+msgstr ""
+"Arrastrar un asa del lienzo hasta un punto del lienzo: move, nudge (en X,Y), "
+"turn, origin, scale o skew"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid "The handle"
@@ -6470,7 +6505,9 @@ msgstr "Píxeles del lienzo adonde va el asa, o con nudge cuánto se mueve"
 msgid ""
 "Point of the box a scale or skew holds, in fractions: 1,1 the bottom right "
 "corner, 1,0.5 the middle of the right edge"
-msgstr "Punto de la caja que toma scale o skew, en fracciones: 1,1 la esquina inferior derecha, 1,0.5 el centro del borde derecho"
+msgstr ""
+"Punto de la caja que toma scale o skew, en fracciones: 1,1 la esquina "
+"inferior derecha, 1,0.5 el centro del borde derecho"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid "Keep the proportions while scaling"
@@ -6478,7 +6515,9 @@ msgstr "Mantener las proporciones al escalar"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid "Snap a move to the canvas and the other layers within these pixels"
-msgstr "Ajustar un movimiento al lienzo y a las demás capas a esta cantidad de píxeles"
+msgstr ""
+"Ajustar un movimiento al lienzo y a las demás capas a esta cantidad de "
+"píxeles"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid "Second of the playhead"
@@ -6488,7 +6527,8 @@ msgstr "Segundo del cabezal"
 msgid ""
 "Scale and place the layer so that it covers the canvas, fits inside it or "
 "fills it"
-msgstr "Escalar y colocar la capa para que cubra el lienzo, quepa dentro o lo llene"
+msgstr ""
+"Escalar y colocar la capa para que cubra el lienzo, quepa dentro o lo llene"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid "cover, contain or stretch"
@@ -6498,7 +6538,9 @@ msgstr "cover, contain o stretch"
 msgid ""
 "Make the layer follow another one, or none without PARENT; --keep leaves it "
 "where it is"
-msgstr "Hacer que la capa siga a otra, o a ninguna sin PARENT; --keep la deja donde está"
+msgstr ""
+"Hacer que la capa siga a otra, o a ninguna sin PARENT; --keep la deja donde "
+"está"
 
 #: apps/wprs-ctl/src/staging.rs
 msgid "The layer to follow"

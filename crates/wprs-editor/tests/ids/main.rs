@@ -5,6 +5,7 @@ use wprs_editor::Project;
 use wprs_editor::actions::Action;
 use wprs_editor::starters::starter;
 
+mod canvas;
 mod clip;
 mod names;
 

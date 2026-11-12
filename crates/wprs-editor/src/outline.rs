@@ -121,7 +121,7 @@ pub fn outline(project: &Project, time: f64, files: &[Problem]) -> Value {
         "properties": crate::listing::rows(doc), "presets": crate::listing::presets(doc),
         "property_kinds": crate::props::PROPERTY_KINDS, "timelines": timelines, "tracks": tracks, "length": length, "systems": systems,
         "history": {"done": done, "undone": undone, "undo": undo, "redo": redo}, "dirty": project.dirty(), "recoverable": project.pending.is_some(),
-        "kinds": KINDS, "starters": STARTERS, "easings": wprs_scene::easings(),
+        "kinds": KINDS, "screen_sizes": crate::action::SCREENS.map(|(name, size)| json!({"name": name, "size": size})), "starters": STARTERS, "easings": wprs_scene::easings(),
         "effects": wprs_scene::builtin().iter().map(|d| d.id.as_str()).chain(own(doc)).collect::<Vec<_>>(),
         "effect_names": names(project), "effect_catalog": catalog(project),
         "kind": crate::pages::kind(doc), "page_starters": crate::pages::PAGE_STARTERS,

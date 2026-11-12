@@ -23,7 +23,7 @@ pub use crate::action::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, T
 pub use crate::action::{
     CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, TimelineEdit, TimelineEvent,
 };
-pub use crate::action::{Fit, Grip, Named, PasteEdit, RenameEdit, TranslateEdit};
+pub use crate::action::{ClockSet, Fit, Grip, Named, PasteEdit, RenameEdit, SCREENS, TranslateEdit};
 
 pub fn layer<'a>(doc: &'a Value, id: &str) -> Result<(String, &'a Value)> {
     let path = find(doc, id)?;
