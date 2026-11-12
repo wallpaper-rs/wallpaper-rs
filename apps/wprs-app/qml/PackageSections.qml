@@ -75,4 +75,17 @@ ColumnLayout {
         visible: sections.web
         page: sections.page
     }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        visible: sections.web
+        level: 4
+        text: App.tr("Playback")
+    }
+
+    PagePlayback {
+        Layout.fillWidth: true
+        visible: sections.web
+        page: sections.page
+    }
 }

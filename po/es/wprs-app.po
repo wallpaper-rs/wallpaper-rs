@@ -2814,6 +2814,12 @@ msgstr "Red"
 msgid "Inputs"
 msgstr "Entradas"
 
+#: apps/wprs-app/qml/PackageSections.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Playback"
+msgstr "Reproducción"
+
 #: apps/wprs-app/qml/PageInputs.qml
 msgid "Hears the sound that plays"
 msgstr "Escucha el sonido que se reproduce"
@@ -2821,7 +2827,8 @@ msgstr "Escucha el sonido que se reproduce"
 #: apps/wprs-app/qml/PageInputs.qml
 msgid ""
 "The page reads window.wprs.audio; it is asked for before it hears anything."
-msgstr "La página lee window.wprs.audio; se pide permiso antes de que oiga nada."
+msgstr ""
+"La página lee window.wprs.audio; se pide permiso antes de que oiga nada."
 
 #: apps/wprs-app/qml/PageInputs.qml apps/wprs-app/qml/SceneSwarmPoints.qml
 msgid "Follows the pointer"
@@ -2847,13 +2854,17 @@ msgstr "Sigue al reproductor multimedia"
 msgid ""
 "The page reads the track, cover and position that window.wprs.onMedia "
 "reports."
-msgstr "La página lee la pista, la carátula y la posición que informa window.wprs.onMedia."
+msgstr ""
+"La página lee la pista, la carátula y la posición que informa window.wprs."
+"onMedia."
 
 #: apps/wprs-app/qml/PageInputs.qml
 msgid ""
 "A page cannot tell which inputs it uses, so declare them here; the user is "
 "asked before the page gets any of them."
-msgstr "Una página no puede saber qué entradas usa, así que decláralas aquí; se pregunta al usuario antes de que la página reciba alguna."
+msgstr ""
+"Una página no puede saber qué entradas usa, así que decláralas aquí; se "
+"pregunta al usuario antes de que la página reciba alguna."
 
 #: apps/wprs-app/qml/PageInputs.qml
 msgid "Reaches the network (set by the origins above)"
@@ -2925,6 +2936,48 @@ msgstr ""
 msgid "At most %1 origins; the network input is declared for you."
 msgstr "Como máximo %1 orígenes; la entrada de red se declara sola."
 
+#: apps/wprs-app/qml/PagePlayback.qml
+msgid "Highest frame rate:"
+msgstr "Fotogramas máximos:"
+
+#: apps/wprs-app/qml/PagePlayback.qml apps/wprs-app/qml/SceneEditors.qml
+#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/SceneLighting.qml
+#: apps/wprs-app/qml/SceneMask.qml
+msgid "Not set"
+msgstr "Sin fijar"
+
+#: apps/wprs-app/qml/PagePlayback.qml
+msgid "Follow the screen"
+msgstr "Seguir la pantalla"
+
+#: apps/wprs-app/qml/PagePlayback.qml
+msgid "%1 frames a second"
+msgstr "%1 fotogramas por segundo"
+
+#: apps/wprs-app/qml/PagePlayback.qml
+msgid "Volume:"
+msgstr "Volumen:"
+
+#: apps/wprs-app/qml/PagePlayback.qml apps/wprs-app/qml/PageWeb.qml
+#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePropertyRange.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Default"
+msgstr "Valor por defecto"
+
+#: apps/wprs-app/qml/PagePlayback.qml
+msgid "Sound:"
+msgstr "Sonido:"
+
+#: apps/wprs-app/qml/PagePlayback.qml
+msgid "Start without sound"
+msgstr "Empezar sin sonido"
+
+#: apps/wprs-app/qml/PagePlayback.qml
+msgid "What the user sets for the screen always wins over these defaults."
+msgstr ""
+"Lo que el usuario fija para la pantalla siempre prevalece sobre estos "
+"valores por defecto."
+
 #: apps/wprs-app/qml/PageWeb.qml
 msgid "Script before the page:"
 msgstr "Script antes de la página:"
@@ -2936,12 +2989,6 @@ msgstr "Añadir un script…"
 #: apps/wprs-app/qml/PageWeb.qml
 msgid "Color while it loads:"
 msgstr "Color mientras carga:"
-
-#: apps/wprs-app/qml/PageWeb.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/ScenePropertyRange.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Default"
-msgstr "Valor por defecto"
 
 #: apps/wprs-app/qml/PageWeb.qml
 msgid "Kept data:"
@@ -4515,11 +4562,6 @@ msgstr "Ocultarse tras los modelos más cercanos"
 #: apps/wprs-app/qml/SceneSwarmPoints.qml
 msgid "Turn %1°"
 msgstr "Giro de %1°"
-
-#: apps/wprs-app/qml/SceneEditors.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
-msgid "Not set"
-msgstr "Sin fijar"
 
 #: apps/wprs-app/qml/SceneEditors.qml
 msgid "Yes"
@@ -9662,11 +9704,6 @@ msgstr "Destellos o patrones rápidos"
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Made for"
 msgstr "Hecho para"
-
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-#: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Playback"
-msgstr "Reproducción"
 
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Script loaded first"

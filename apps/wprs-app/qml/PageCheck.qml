@@ -49,8 +49,25 @@ QtObject {
         expect(!(page.manifest.inputs ?? []).includes("audio"), "a declared input was not removed");
     }
 
+    function playback() {
+        page.manifestEdit("playback", {
+            "values": {
+                "max_fps": 30,
+                "volume": 0.4,
+                "muted": true
+            }
+        });
+        const set = page.manifest.playback ?? {};
+        expect(set.max_fps === 30 && set.volume === 0.4 && set.muted === true, "the playback was not kept");
+        page.manifestEdit("playback", {
+            "clear": ["max_fps", "volume", "muted"]
+        });
+        expect(page.manifest.playback === undefined, "the playback was not cleared");
+    }
+
     function exercise() {
         web();
+        playback();
         inputs();
         network();
     }

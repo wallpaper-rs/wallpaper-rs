@@ -62,3 +62,38 @@ fn declared_inputs_are_checked_and_never_drop_the_network_one_alone() {
     assert!(manifest(&mut project, json!({"inputs": {"inputs": ["lasers"], "add": true}})).is_err());
     assert!(manifest(&mut project, json!({"inputs": {"inputs": ["network"], "add": true}})).is_err());
 }
+
+#[test]
+fn a_page_sets_its_playback() {
+    let root = tempfile::tempdir().unwrap();
+    let mut project = page(root.path());
+    let values = json!({"playback": {"values": {"max_fps": 30, "volume": 0.4, "muted": true}}});
+    manifest(&mut project, values).unwrap();
+    let playback = json!({"max_fps": 30, "volume": 0.4, "muted": true});
+    assert_eq!(project.doc["manifest"]["playback"], playback);
+    manifest(&mut project, json!({"playback": {"values": {"max_fps": "display"}}})).unwrap();
+    assert_eq!(project.doc["manifest"]["playback"]["max_fps"], "display");
+    for refused in [
+        json!({"playback": {"values": {"speed": 2.0}}}),
+        json!({"playback": {"values": {"max_fps": 500}}}),
+        json!({"playback": {"values": {"volume": 3.0}}}),
+    ] {
+        assert!(manifest(&mut project, refused.clone()).is_err(), "{refused} was accepted");
+    }
+    manifest(&mut project, json!({"playback": {"clear": ["max_fps", "volume", "muted"]}})).unwrap();
+    assert!(project.doc["manifest"].get("playback").is_none());
+}
+
+#[test]
+fn the_preview_of_a_page_carries_its_manifest_quality_rate_and_reload() {
+    let root = tempfile::tempdir().unwrap();
+    let project = page(root.path());
+    assert!(wprs_editor::pages::paged(&project.doc));
+    let look = json!({"quality": "q1", "fps": 30, "restart": 2, "media": {"title": "Song"}});
+    let document = wprs_editor::pages::preview_document(&project.doc, &look);
+    assert_eq!(document["manifest"], project.doc["manifest"]);
+    assert_eq!(document["preview"], json!({"quality": "q1", "restart": 2, "fps": 30, "media": {"title": "Song"}}));
+    assert!(document.get("scene").is_none());
+    let plain = wprs_editor::pages::preview_document(&project.doc, &json!({}));
+    assert!(plain.get("preview").is_none());
+}

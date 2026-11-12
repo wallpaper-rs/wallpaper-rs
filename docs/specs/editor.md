@@ -847,6 +847,13 @@ the tools: `audio`, `pointer`, `clicks` and `media`; the `network` box is read-o
 origins. A box sends the `manifest` action `inputs` with `add` or `remove`, which refuses a name that
 is not an input. The same action is `wprs-ctl scene manifest DIR inputs NAME... [--add|--remove]`.
 
+*Playback* sets how the page plays by default: the highest frame rate (not set, follow the
+screen, or 10 to 240 frames a second), the volume as a slider with *Default* to remove it, and
+whether it starts without sound. It sends the `manifest` action `playback` with `values` and
+`clear`; `speed`, `start`, `end` and `loop` are only for videos and a page refuses them. What the
+user sets for a screen (frame rate, volume, muting) always wins over these defaults. The same
+action is `wprs-ctl scene manifest DIR playback --max-fps N --volume V --muted true`.
+
 ## Starting points, building and applying
 
 `wprs-ctl scene new DIR --from empty|particles|parallax|clock|web [--id ID] [--title TITLE] [--locale

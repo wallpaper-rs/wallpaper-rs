@@ -131,9 +131,11 @@ pub fn staged(look: &Value) -> Option<Value> {
     let quality = look.get("quality").filter(|q| q.is_string());
     let restart = look.get("restart").filter(|r| r.is_u64());
     let media = look.get("media").filter(|m| m.is_object());
+    let fps = look.get("fps").filter(|f| f.is_u64());
     let mut staged = json!({ "quality": quality, "restart": restart });
     media.into_iter().for_each(|m| staged["media"] = m.clone());
-    (quality.is_some() || restart.is_some() || media.is_some()).then_some(staged)
+    fps.into_iter().for_each(|f| staged["fps"] = f.clone());
+    (quality.is_some() || restart.is_some() || media.is_some() || fps.is_some()).then_some(staged)
 }
 
 pub fn preview(scene: &mut Value, look: &Value) {

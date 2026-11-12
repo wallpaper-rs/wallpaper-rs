@@ -16,6 +16,16 @@ pub fn scened(doc: &Value) -> bool {
     matches!(doc["manifest"]["kind"].as_str(), None | Some("scene" | "assets"))
 }
 
+pub fn paged(doc: &Value) -> bool {
+    kind(doc) == "web"
+}
+
+pub fn preview_document(doc: &Value, look: &Value) -> Value {
+    let mut document = json!({"manifest": doc["manifest"]});
+    crate::rigs::staged(look).into_iter().for_each(|s| document["preview"] = s);
+    document
+}
+
 pub fn kind(doc: &Value) -> &str {
     doc["manifest"]["kind"].as_str().unwrap_or("scene")
 }
