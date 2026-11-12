@@ -54,3 +54,17 @@ pub fn starter(name: &str, template: &str) -> Option<(Value, String)> {
     let text = serde_json::to_string(&descriptor).unwrap_or_default().replace("NAME", name);
     Some((serde_json::from_str(&text).unwrap_or(descriptor), wgsl.replace("NAME", name)))
 }
+
+pub(crate) fn lighter(
+    dir: &std::path::Path,
+    doc: &Value,
+    name: &str,
+    path: &str,
+) -> anyhow::Result<Vec<crate::ops::Op>> {
+    let code = std::fs::read_to_string(dir.join(path)).unwrap_or_default();
+    if code.contains(&format!("fn fs_{name}_lite(")) {
+        return Ok(Vec::new());
+    }
+    let more = include_str!("starters/lighter.wgsl").replace("NAME", name);
+    crate::scripts::save(dir, doc, path, &format!("{}\n{more}", code.trim_end()))
+}

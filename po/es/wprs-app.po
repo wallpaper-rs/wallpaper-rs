@@ -5826,8 +5826,16 @@ msgid "Cost"
 msgstr "Coste"
 
 #: apps/wprs-app/qml/SceneEffectCost.qml
+msgid "%1: frozen on its last picture at this level"
+msgstr "%1: queda quieto en su última imagen en este nivel"
+
+#: apps/wprs-app/qml/SceneEffectCost.qml
 msgid "%1: left out of the scene at this level"
 msgstr "%1: se deja fuera de la escena en este nivel"
+
+#: apps/wprs-app/qml/SceneEffectCost.qml
+msgid "%1: drawn with its lighter variant, %2 units of work"
+msgstr "%1: se dibuja con su variante liviana, %2 unidades de trabajo"
 
 #: apps/wprs-app/qml/SceneEffectCost.qml
 msgid "%1: %2 units of work"
@@ -5838,6 +5846,7 @@ msgid "Declared cost: taps, passes and scale"
 msgstr "Costo declarado: lecturas, pasadas y escala"
 
 #: apps/wprs-app/qml/SceneEffectFields.qml
+#: apps/wprs-app/qml/SceneEffectLighter.qml
 #: apps/wprs-app/qml/SceneEffectPass.qml
 msgid "%1 %"
 msgstr "%1 %"
@@ -5912,6 +5921,7 @@ msgid "Passes"
 msgstr "Pasadas"
 
 #: apps/wprs-app/qml/SceneEffectForm.qml
+#: apps/wprs-app/qml/SceneEffectLighter.qml
 msgid "Add a pass"
 msgstr "Añadir una pasada"
 
@@ -5924,8 +5934,74 @@ msgid "dropped"
 msgstr "se omite"
 
 #: apps/wprs-app/qml/SceneEffectForm.qml
+msgid "lighter %1"
+msgstr "liviana %1"
+
+#: apps/wprs-app/qml/SceneEffectForm.qml
 msgid "Cost per quality level: %1"
 msgstr "Costo por nivel de calidad: %1"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "full"
+msgstr "completo"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "lighter variant"
+msgstr "variante liviana"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "frozen"
+msgstr "quieto"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "left out"
+msgstr "se omite"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "Lighter variant for low quality levels"
+msgstr "Variante liviana para los niveles de calidad bajos"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid ""
+"Without one, the effect is left out at the levels whose budget it does not "
+"fit."
+msgstr "Sin ella, el efecto se omite en los niveles cuyo presupuesto supera."
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "Add a lighter variant"
+msgstr "Agregar una variante liviana"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "Its cost: taps, passes and scale"
+msgstr "Su costo: lecturas, pasadas y escala"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "Replaces the effect"
+msgstr "Reemplaza al efecto"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "Only where the effect would be left out"
+msgstr "Solo donde el efecto se omitiría"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "At Q0"
+msgstr "En Q0"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "At Q1 and below"
+msgstr "En Q1 y por debajo"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "At Q2 and below"
+msgstr "En Q2 y por debajo"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "Remove the lighter variant"
+msgstr "Quitar la variante liviana"
+
+#: apps/wprs-app/qml/SceneEffectLighter.qml
+msgid "Drawn at each level: %1"
+msgstr "Lo que se dibuja en cada nivel: %1"
 
 #: apps/wprs-app/qml/SceneEffectMask.qml
 msgid "Mask of the effect:"

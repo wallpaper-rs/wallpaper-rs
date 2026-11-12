@@ -41,6 +41,8 @@ pub fn check(id: &str, json: &str, wgsl: &str) -> Value {
     json!({ "effect": id, "ok": error.is_none(), "stage": stage.as_deref().unwrap_or("layer"),
         "error": error, "line": at.map(|a| a.0), "column": at.map(|a| a.1),
         "units": built.map(Descriptor::units), "uses": built.map(|d| json!(d.uses)),
+        "lighter": built.and_then(Descriptor::lighter_units),
+        "levels": built.map(|d| crate::shaders::levels(d, false)).unwrap_or_default(),
         "handles": built.map(handles).unwrap_or_default() })
 }
 

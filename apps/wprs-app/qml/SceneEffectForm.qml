@@ -52,10 +52,13 @@ Kirigami.Dialog {
                 }, args));
     }
 
-    function pass(index, args) {
-        edit("pass", index === null ? args : Object.assign({
+    function pass(index, args, lighter) {
+        const more = Object.assign({}, args, lighter ? {
+                "lighter": true
+            } : {});
+        edit("pass", index === null ? more : Object.assign({
                     "index": index
-                }, args));
+                }, more));
     }
 
     function field(name, value) {
@@ -163,6 +166,11 @@ Kirigami.Dialog {
             form: form
         }
 
+        SceneEffectLighter {
+            Layout.fillWidth: true
+            form: form
+        }
+
         QQC2.CheckBox {
             id: optional
 
@@ -173,7 +181,7 @@ Kirigami.Dialog {
         QQC2.Label {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            text: form.costs ? App.tr("Cost per quality level: %1", (form.costs.levels ?? []).map(l => l.quality + " " + (l.units === null ? App.tr("dropped") : Math.round(l.units * 100) / 100)).join(", ")) : ""
+            text: form.costs ? App.tr("Cost per quality level: %1", (form.costs.levels ?? []).map(l => l.quality + " " + (l.units === null ? App.tr("dropped") : (l.form === "lighter" ? App.tr("lighter %1", Math.round(l.units * 100) / 100) : Math.round(l.units * 100) / 100))).join(", ")) : ""
         }
     }
 }

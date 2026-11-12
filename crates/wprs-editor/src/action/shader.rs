@@ -40,6 +40,15 @@ pub enum ShaderEdit {
         clear: Vec<String>,
         #[serde(default)]
         remove: bool,
+        #[serde(default)]
+        lighter: bool,
+    },
+    Lighter {
+        effect: String,
+        #[serde(default)]
+        set: Map<String, Value>,
+        #[serde(default)]
+        remove: bool,
     },
     Field {
         effect: String,

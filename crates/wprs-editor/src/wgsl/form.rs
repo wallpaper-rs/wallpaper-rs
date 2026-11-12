@@ -6,7 +6,7 @@ pub const KINDS: [&str; 12] = [
     "float", "vec2", "color", "bool", "texture", "lut", "int", "enum", "blend", "position", "mask",
     "emitters",
 ];
-pub const FIELDS: [&str; 18] = [
+pub const FIELDS: [&str; 19] = [
     "name",
     "category",
     "description",
@@ -25,6 +25,7 @@ pub const FIELDS: [&str; 18] = [
     "targets",
     "options",
     "compose",
+    "lighter",
 ];
 const PARAM_KEYS: [&str; 14] = [
     "type",
@@ -125,22 +126,52 @@ pub(crate) fn param(json: &mut Value, c: &ParamChange) -> Result<()> {
     Ok(())
 }
 
-pub(crate) fn pass(
-    json: &mut Value,
-    index: Option<usize>,
-    set: &Map<String, Value>,
-    clear: &[String],
-    remove: bool,
-) -> Result<()> {
+pub(crate) fn lighter(json: &mut Value, set: &Map<String, Value>, remove: bool) -> Result<bool> {
     let id = json["id"].as_str().unwrap_or_default().to_owned();
-    let passes = list(json, "passes");
+    if remove {
+        drop(json.as_object_mut().and_then(|o| o.remove("lighter")));
+        return Ok(false);
+    }
+    let made = !json["lighter"].is_object();
+    if made {
+        let cost = json!({ "taps": 1, "passes": 1, "scale": 1 });
+        json["lighter"] = json!({ "passes": [{ "entry": format!("fs_{id}_lite") }], "cost": cost });
+    }
+    for (k, v) in set {
+        keyed(k, &["cost", "up_to"])?;
+        match v {
+            Value::Null => drop(json["lighter"].as_object_mut().and_then(|o| o.remove(k))),
+            v => json["lighter"][k] = v.clone(),
+        }
+    }
+    Ok(made)
+}
+
+pub(crate) struct PassChange<'a> {
+    pub index: Option<usize>,
+    pub set: &'a Map<String, Value>,
+    pub clear: &'a [String],
+    pub remove: bool,
+    pub lighter: bool,
+}
+
+pub(crate) fn pass(json: &mut Value, c: &PassChange) -> Result<()> {
+    let PassChange { index, set, clear, remove, lighter } = *c;
+    let id = json["id"].as_str().unwrap_or_default().to_owned();
+    if lighter && !json["lighter"].is_object() {
+        self::lighter(json, &Map::new(), false)?;
+    }
+    let (passes, entry) = match lighter {
+        true => (list(&mut json["lighter"], "passes"), format!("fs_{id}_lite_")),
+        false => (list(json, "passes"), format!("fs_{id}_")),
+    };
     let missing = || anyhow!(said("editor.no_pass", "there is no pass %1", &[&index.unwrap_or_default()]));
     let at = match index {
         Some(i) if i < passes.len() => i,
         Some(_) => return Err(missing()),
         None if remove => return Err(missing()),
         None => {
-            passes.push(json!({ "entry": format!("fs_{id}_{}", passes.len()) }));
+            passes.push(json!({ "entry": format!("{entry}{}", passes.len()) }));
             passes.len() - 1
         }
     };

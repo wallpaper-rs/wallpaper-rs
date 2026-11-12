@@ -10,13 +10,14 @@ RowLayout {
     required property var form
     required property var pass
     required property int index
+    property bool lighter: false
 
     function set(key, value) {
         const set = {};
         set[key] = value;
         form.pass(row.index, {
                 "set": set
-            });
+            }, row.lighter);
     }
 
     QQC2.TextField {
@@ -47,13 +48,13 @@ RowLayout {
         text: row.pass.target ?? ""
         onEditingFinished: text === "" ? row.form.pass(row.index, {
                 "clear": ["target"]
-            }) : row.set("target", text)
+            }, row.lighter) : row.set("target", text)
     }
 
     QQC2.ToolButton {
         icon.name: "edit-delete"
         onClicked: row.form.pass(row.index, {
                 "remove": true
-            })
+            }, row.lighter)
     }
 }

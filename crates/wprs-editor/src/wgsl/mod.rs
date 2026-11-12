@@ -60,7 +60,8 @@ fn valid(id: &str, json: &Value) -> Result<String> {
     ensure!(text.len() <= MAX_WGSL, fail(&format!("has a descriptor larger than {} KiB", MAX_WGSL >> 10)));
     let d: Descriptor = serde_json::from_value(json.clone()).map_err(|e| fail(&e))?;
     ensure!(d.params.len() <= MAX_PARAMS, fail(&format!("has more than {MAX_PARAMS} parameters")));
-    ensure!(d.passes.len() <= MAX_PASSES, fail(&format!("has more than {MAX_PASSES} passes")));
+    let lighter = d.lighter.as_ref().map_or(0, |l| l.passes.len());
+    ensure!(d.passes.len().max(lighter) <= MAX_PASSES, fail(&format!("has more than {MAX_PASSES} passes")));
     if let Some(p) = d.params.iter().find(|p| !p.accepts(&p.default)) {
         return Err(fail(&format!("gives {} a default that does not fit its type", p.id)));
     }
@@ -103,6 +104,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &E) -> Result<Vec<Op>> {
         E::Write { effect, .. }
         | E::Param { effect, .. }
         | E::Pass { effect, .. }
+        | E::Lighter { effect, .. }
         | E::Field { effect, .. } => effect,
         E::New { .. } => unreachable!("handled above"),
     };
@@ -139,7 +141,14 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &E) -> Result<Vec<Op>> {
             form::param(&mut json, &change)?;
             more = to.as_deref().map(|to| renamed(doc, effect, id, to)).unwrap_or_default();
         }
-        E::Pass { index, set, clear, remove, .. } => form::pass(&mut json, *index, set, clear, *remove)?,
+        E::Pass { index, set, clear, remove, lighter, .. } => {
+            let (index, remove, lighter) = (*index, *remove, *lighter);
+            form::pass(&mut json, &form::PassChange { index, set, clear, remove, lighter })?;
+        }
+        E::Lighter { set, remove, .. } if form::lighter(&mut json, set, *remove)? => {
+            more = starters::lighter(dir, doc, effect, &wgsl)?;
+        }
+        E::Lighter { .. } => {}
         E::Field { field, value, .. } => form::field(&mut json, field, value)?,
         _ => {}
     }

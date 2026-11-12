@@ -48,6 +48,23 @@ QtObject {
         form.load();
         if ((form.parsed.params ?? []).some(p => p.id === "spin"))
             throw new Error("shaders: undo kept the parameter");
+        form.edit("lighter", {
+                "set": {
+                    "up_to": "q1"
+                }
+            });
+        if (form.parsed.lighter?.passes?.[0]?.entry !== "fs_bend_lite" || form.parsed.lighter?.up_to !== "q1")
+            throw new Error("shaders: the form made no lighter variant: " + JSON.stringify(form.parsed));
+        const lite = Qt.createComponent("SceneEffectLighter.qml").createObject(page, {
+                "form": form
+            });
+        if (lite === null || lite.variant === null)
+            throw new Error("shaders: the lighter section does not show the variant");
+        lite.destroy();
+        page.run("undo");
+        form.load();
+        if (form.parsed.lighter !== undefined)
+            throw new Error("shaders: undo kept the lighter variant");
         form.close();
         form.destroy();
         page.run("remove_effect", {

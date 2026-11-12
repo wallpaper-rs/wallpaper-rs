@@ -127,11 +127,18 @@ pub fn cost(dir: &Path, doc: &Value, id: &str, optional: bool) -> Value {
     crate::cache::read_files(&mut scene, dir);
     let found = scene.loaded.get(id).map(|d| (**d).clone()).or_else(|| wprs_scene::descriptor(id).cloned());
     let Some(d) = found else { return Value::Null };
-    let levels = [Quality::Q0, Quality::Q1, Quality::Q2, Quality::Q3].into_iter().map(|quality| {
-        let scale = quality.effect_scale(d.class(), optional).map(|s| s * d.scale_at(quality));
-        json!({ "quality": quality, "units": scale.map(|s| d.units() * s * s) })
-    });
-    json!({ "effect": id, "units": d.units(), "levels": levels.collect::<Vec<_>>() })
+    json!({ "effect": id, "units": d.units(), "lighter": d.lighter_units(), "levels": levels(&d, optional) })
+}
+
+pub fn levels(d: &wprs_scene::Descriptor, optional: bool) -> Vec<Value> {
+    let level = |quality: Quality| {
+        let drawn = d.live(quality, optional);
+        let scale =
+            drawn.and_then(|l| quality.effect_scale(l.class(), optional).map(|s| s * l.scale_at(quality)));
+        let units = drawn.zip(scale).map(|(l, s)| l.units() * s * s);
+        json!({ "quality": quality, "units": units, "form": d.form(quality, optional) })
+    };
+    [Quality::Q0, Quality::Q1, Quality::Q2, Quality::Q3].into_iter().map(level).collect()
 }
 
 pub fn rules(dir: &Path, doc: &Value, id: &str) -> Value {

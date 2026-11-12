@@ -45,7 +45,7 @@ ColumnLayout {
 
             Layout.fillWidth: true
             font.bold: modelData.quality === SceneLook.effective
-            text: modelData.units === null ? App.tr("%1: left out of the scene at this level", modelData.quality.toUpperCase()) : App.tr("%1: %2 units of work", modelData.quality.toUpperCase(), modelData.units.toFixed(2))
+            text: modelData.units === null ? (modelData.form === "frozen" ? App.tr("%1: frozen on its last picture at this level", modelData.quality.toUpperCase()) : App.tr("%1: left out of the scene at this level", modelData.quality.toUpperCase())) : modelData.form === "lighter" ? App.tr("%1: drawn with its lighter variant, %2 units of work", modelData.quality.toUpperCase(), modelData.units.toFixed(2)) : App.tr("%1: %2 units of work", modelData.quality.toUpperCase(), modelData.units.toFixed(2))
         }
     }
 }

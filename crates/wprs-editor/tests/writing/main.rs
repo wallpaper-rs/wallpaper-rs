@@ -1,5 +1,6 @@
 mod checking;
 mod form;
+mod lighter;
 mod starting;
 
 use serde_json::{Value, json};

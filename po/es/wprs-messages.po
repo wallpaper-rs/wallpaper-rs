@@ -3777,6 +3777,12 @@ msgid "runs effect shaders that use newer fields or helpers"
 msgstr "ejecuta shaders de efectos con campos o funciones de ayuda más nuevos"
 
 #: crates/wprs-format/src/scenery.rs
+msgid "draws lighter variants of its effect shaders at low quality levels"
+msgstr ""
+"dibuja variantes livianas de sus shaders de efectos en los niveles de "
+"calidad bajos"
+
+#: crates/wprs-format/src/scenery.rs
 msgid "bends pictures with a skeleton"
 msgstr "deforma imágenes con un esqueleto"
 
