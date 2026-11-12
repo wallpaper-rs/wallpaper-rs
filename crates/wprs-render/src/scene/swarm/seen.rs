@@ -1,4 +1,5 @@
-use super::{PARTICLE, Swarms};
+use super::Swarms;
+use super::lamped::{SPRITE, VS, slots};
 use crate::Renderer;
 use crate::scene::paint::Painter;
 use crate::scene::pipes::Mode;
@@ -27,10 +28,9 @@ impl Swarms {
         if self.seens.contains_key(&mode) {
             return;
         }
-        let sprites = wgpu::vertex_attr_array![0 => Float32x4, 1 => Float32x4, 2 => Float32x4, 3 => Float32x4, 4 => Float32x4, 5 => Float32x4];
         let layouts = [&self.layouts[1], &self.layouts[2], &r.solids().seen];
-        let shader = (&self.module, ("vs_particle", "fs_seen"));
-        let made = self.build(r, mode, shader, &layouts, &[(PARTICLE, &sprites)]);
+        let shader = (&self.module, (VS[SPRITE], "fs_seen"));
+        let made = self.build(r, mode, shader, &layouts, &slots(SPRITE));
         self.seens.insert(mode, made);
         self.created += 1;
     }

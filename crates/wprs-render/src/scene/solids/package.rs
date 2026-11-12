@@ -2,6 +2,8 @@ use crate::Renderer;
 use std::collections::BTreeMap;
 use std::sync::PoisonError;
 
+const FALLBACK: &str = "its models are shaded with pbr instead, since ";
+
 const OWN: [&str; 61] = [
     "Light",
     "Scene3",
