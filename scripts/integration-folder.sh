@@ -33,9 +33,11 @@ ctl scene preview "$folder" -o TEST-20 --stop 2>"$WORK/stop.err" || fail "the pr
 grep -q "Ended the preview on TEST-20" "$WORK/stop.err" || fail "stopping the preview said nothing: $(cat "$WORK/stop.err")"
 expect "s['outputs']['TEST-20']['drafted']" "False"
 shown "$s20" 255 0 0
-printf '%s\n' 'import { scene } from "wprs";' '' 'export function update() {' '  scene.layer("nothing").opacity = 1;' '}' >"$WORK/folder-bad.js"
+printf '%s\n' 'export function update() {' '' '  console.log("before the error");' '  throw new Error("boom");' '}' >"$WORK/folder-bad.js"
 ctl scene import-script "$folder" "$WORK/folder-bad.js" >/dev/null || fail "the failing script was not imported"
 frames "scripts/folder-bad.js line 4" || fail "a script error did not name its line: $(cat "$WORK/folder.out")"
 ctl scene render "$folder" -o "$WORK/folder-render.png" --size 64 --time-of-day 15:42 >/dev/null 2>"$WORK/render.err" || fail "the folder was not rendered: $(cat "$WORK/render.err")"
 grep -q "script" "$WORK/render.err" || fail "a render did not run or report the scripts: $(cat "$WORK/render.err")"
+mine=$(reply "[i['uid'] for i in r['items'] if i['title'] == 'Applied'][0]" Library1 Search suu "Applied" 0 5)
+ctl release TEST-20 && bus Library1 Remove asb 1 "$mine" false >/dev/null
 echo "folder checks passed"
