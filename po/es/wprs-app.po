@@ -5663,8 +5663,7 @@ msgstr "Eventos"
 
 #: apps/wprs-app/qml/SceneClipEvents.qml
 msgid "Double-click the lane to add an event"
-msgstr ""
-"Doble clic en la franja para añadir un evento"
+msgstr "Doble clic en la franja para añadir un evento"
 
 #: apps/wprs-app/qml/SceneClipRow.qml apps/wprs-app/qml/SceneModelMotion.qml
 msgid "Shape %1"
@@ -12857,6 +12856,10 @@ msgstr "Retirado"
 #: apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Other reason"
 msgstr "Otro motivo"
+
+#: apps/wprs-app/qml/facade/LabelWords.qml
+msgid "Unknown"
+msgstr "Desconocido"
 
 #: apps/wprs-app/qml/facade/Labels.qml apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Volume"

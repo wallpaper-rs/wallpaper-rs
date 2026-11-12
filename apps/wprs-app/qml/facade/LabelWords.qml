@@ -80,6 +80,7 @@ QtObject {
             "license": App.tr("License problem"),
             "takedown": App.tr("Taken down"),
             "broken": App.tr("Broken"),
-            "other": App.tr("Other reason")
+            "other": App.tr("Other reason"),
+            "unknown": App.tr("Unknown")
         })
 }
