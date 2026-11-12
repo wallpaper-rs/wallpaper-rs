@@ -80,12 +80,6 @@ Kirigami.Dialog {
             onTriggered: dialog.write(false)
         },
         Kirigami.Action {
-            text: App.tr("Open in your editor…")
-            icon.name: "document-open"
-            enabled: dialog.path !== ""
-            onTriggered: Qt.openUrlExternally("file://" + dialog.page.editor.folder + "/" + dialog.path)
-        },
-        Kirigami.Action {
             text: App.tr("Use on the selected layer")
             icon.name: "list-add"
             visible: dialog.stage === "layer"
@@ -130,10 +124,23 @@ Kirigami.Dialog {
             ]
         }
 
-        QQC2.CheckBox {
-            id: live
+        RowLayout {
+            Layout.fillWidth: true
 
-            text: App.tr("Preview while typing: write each version that builds")
+            QQC2.CheckBox {
+                id: live
+
+                Layout.fillWidth: true
+                text: App.tr("Preview while typing: write each version that builds")
+            }
+
+            QQC2.Button {
+                flat: true
+                icon.name: "document-open"
+                text: App.tr("Open in your editor…")
+                enabled: dialog.path !== ""
+                onClicked: Qt.openUrlExternally("file://" + dialog.page.editor.folder + "/" + dialog.path)
+            }
         }
 
         QQC2.ScrollView {
