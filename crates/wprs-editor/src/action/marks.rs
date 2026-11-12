@@ -66,6 +66,10 @@ pub enum LayerEdit {
         layer: String,
         blend: Blend,
     },
+    Depth {
+        layer: String,
+        depth: [f64; 2],
+    },
     Instance {
         layer: String,
         #[serde(default)]

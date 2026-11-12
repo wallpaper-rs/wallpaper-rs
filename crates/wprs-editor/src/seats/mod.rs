@@ -141,6 +141,10 @@ pub fn seats(dir: &Path, doc: &Value, t: f64) -> Vec<Seat> {
     let rt = {
         let mut rt = Runtime::new(Arc::new(scene), Values::new());
         rt.advance(t.max(0.0));
+        if let Some((pointer, tilt)) = lens::probed(&doc["scene"]) {
+            rt.hold_pointer(pointer);
+            rt.set_tilt(tilt);
+        }
         rt
     };
     let view = [0.0, 0.0, canvas[0] as f32, canvas[1] as f32];

@@ -38,6 +38,7 @@ pub(crate) fn canvas(dir: &Path, doc: &Value, e: &C) -> Result<Vec<Op>> {
         C::Camera { .. } | C::CameraGrip { .. } | C::CameraView { .. } => {
             return super::lens::edit(dir, doc, e);
         }
+        C::Probe { pointer, tilt, off } => super::glide::probe(doc, *pointer, *tilt, *off)?,
         C::Size { size } => {
             let fits = size.iter().all(|v| (1..=wprs_scene::MAX_SIZE).contains(v));
             ensure!(fits, said("editor.canvas_size", "a side of the canvas is 1 to 16384 pixels", &[]));

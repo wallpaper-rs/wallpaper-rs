@@ -86,6 +86,17 @@ impl Runtime {
         changed
     }
 
+    pub fn hold_pointer(&mut self, at: [f32; 2]) {
+        let held = PointerState {
+            pos: Some(at),
+            smooth: at,
+            inside: true,
+            presence: 1.0,
+            ..PointerState::default()
+        };
+        (self.pointer, self.glide, self.glided) = (held, held, self.t);
+    }
+
     pub fn set_tilt(&mut self, tilt: [f32; 2]) -> bool {
         let tilt = tilt.map(|v| v.clamp(-1.0, 1.0));
         let changed =

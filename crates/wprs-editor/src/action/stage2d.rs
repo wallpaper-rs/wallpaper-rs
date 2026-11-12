@@ -60,6 +60,14 @@ pub enum CanvasEdit {
     CameraView {
         whole: bool,
     },
+    Probe {
+        #[serde(default)]
+        pointer: Option<[f64; 2]>,
+        #[serde(default)]
+        tilt: Option<[f64; 2]>,
+        #[serde(default)]
+        off: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]

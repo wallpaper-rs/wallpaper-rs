@@ -78,3 +78,12 @@ pub fn held(doc: &Value, hold: &CameraHold, to: [f64; 2], t: f64) -> Held {
         }
     }
 }
+
+pub fn probed(scene: &Value) -> Option<([f32; 2], [f32; 2])> {
+    let p = scene.pointer("/ext/editor/probe")?;
+    let pair = |k: &str, d: f32| {
+        let v = &p[k];
+        [0, 1].map(|i| v.get(i).and_then(Value::as_f64).map_or(d, |x| x as f32))
+    };
+    Some((pair("pointer", 0.5), pair("tilt", 0.0)))
+}

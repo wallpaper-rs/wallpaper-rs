@@ -9,6 +9,7 @@ use wprs_editor::starters::starter;
 mod capture;
 mod depth;
 mod effect_points;
+mod glide;
 mod grips;
 mod kin;
 mod lens;

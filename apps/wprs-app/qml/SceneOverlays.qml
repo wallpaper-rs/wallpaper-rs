@@ -110,6 +110,13 @@ Item {
         ratio: overlays.ratio
     }
 
+    SceneProbe {
+        anchors.fill: parent
+        z: 8
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
     SceneSnapGuides {
         anchors.fill: parent
         z: 7

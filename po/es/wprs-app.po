@@ -5504,19 +5504,25 @@ msgstr ""
 msgid ""
 "Tilt around the width %1°: drag this end of the upright axis toward or away "
 "from the pivot"
-msgstr "Inclinación sobre el ancho %1°: arrastra este extremo del eje vertical hacia el pivote o lejos de él"
+msgstr ""
+"Inclinación sobre el ancho %1°: arrastra este extremo del eje vertical hacia "
+"el pivote o lejos de él"
 
 #: apps/wprs-app/qml/SceneGizmoDepth.qml
 msgid ""
 "Tilt around the height %1°: drag this end of the level axis toward or away "
 "from the pivot"
-msgstr "Inclinación sobre el alto %1°: arrastra este extremo del eje horizontal hacia el pivote o lejos de él"
+msgstr ""
+"Inclinación sobre el alto %1°: arrastra este extremo del eje horizontal "
+"hacia el pivote o lejos de él"
 
 #: apps/wprs-app/qml/SceneGizmoDepth.qml
 msgid ""
 "Depth %1 px: drag along the line out of the layer to bring it toward the "
 "viewer or send it back"
-msgstr "Profundidad %1 px: arrastra a lo largo de la línea que sale de la capa para acercarla a quien mira o alejarla"
+msgstr ""
+"Profundidad %1 px: arrastra a lo largo de la línea que sale de la capa para "
+"acercarla a quien mira o alejarla"
 
 #: apps/wprs-app/qml/SceneGizmoKnobs.qml
 msgid "Scale from the pivot; Shift keeps the proportions"
@@ -5809,6 +5815,26 @@ msgstr ""
 #: apps/wprs-app/qml/SceneLayerClip.qml
 msgid "Rename the layer"
 msgstr "Cambiar el id de la capa"
+
+#: apps/wprs-app/qml/SceneLayerDepth.qml
+msgid "Parallax range:"
+msgstr "Rango del paralaje:"
+
+#: apps/wprs-app/qml/SceneLayerDepth.qml
+msgid "Same depth across and up and down"
+msgstr "Misma profundidad a lo ancho y a lo alto"
+
+#: apps/wprs-app/qml/SceneLayerDepth.qml
+msgid "Parallax depth:"
+msgstr "Profundidad del paralaje:"
+
+#: apps/wprs-app/qml/SceneLayerDepth.qml
+msgid "Depth across:"
+msgstr "Profundidad a lo ancho:"
+
+#: apps/wprs-app/qml/SceneLayerDepth.qml
+msgid "Depth up and down:"
+msgstr "Profundidad a lo alto:"
 
 #: apps/wprs-app/qml/SceneLayerFiles.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
@@ -6930,6 +6956,30 @@ msgstr "Los mismos ajustes en todas las pantallas"
 #: apps/wprs-app/qml/ScenePresets.qml
 msgid "Save the current settings as a preset"
 msgstr "Guardar los ajustes actuales como preajuste"
+
+#: apps/wprs-app/qml/SceneProbe.qml
+msgid "Simulated pointer: drag it and every layer moves by its parallax depth"
+msgstr "Puntero simulado: arrástralo y cada capa se mueve según su profundidad de paralaje"
+
+#: apps/wprs-app/qml/SceneProbe.qml apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Tilt"
+msgstr "Inclinación"
+
+#: apps/wprs-app/qml/SceneProbe.qml
+msgid ""
+"Simulated tilt of a phone: drag it away from the middle to lean the phone "
+"that way"
+msgstr "Inclinación simulada de un teléfono: aléjala del centro para inclinar el teléfono hacia ese lado"
+
+#: apps/wprs-app/qml/SceneProbeTool.qml
+msgid "Try the parallax"
+msgstr "Probar el paralaje"
+
+#: apps/wprs-app/qml/SceneProbeTool.qml
+msgid ""
+"Move a simulated pointer, or the tilt of a phone, on the canvas and watch "
+"every layer shift by its parallax depth"
+msgstr "Mueve un puntero simulado, o la inclinación de un teléfono, sobre el lienzo y mira cómo cada capa se desplaza según su profundidad de paralaje"
 
 #: apps/wprs-app/qml/SceneProblems.qml
 msgid "Problems (%1)"
@@ -11362,10 +11412,6 @@ msgstr "Objetivo"
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Textured"
 msgstr "Con textura"
-
-#: apps/wprs-app/qml/facade/SceneLabels.qml
-msgid "Tilt"
-msgstr "Inclinación"
 
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Time scale"

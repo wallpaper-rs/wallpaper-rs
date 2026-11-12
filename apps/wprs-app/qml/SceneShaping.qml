@@ -14,6 +14,13 @@ ColumnLayout {
         node: shaping.node
     }
 
+    SceneLayerDepth {
+        Layout.fillWidth: true
+        page: shaping.page
+        node: shaping.node
+        pointer: shaping.pointer
+    }
+
     SceneCanvasLook {
         Layout.fillWidth: true
         visible: shaping.pointer === "/scene/canvas"
