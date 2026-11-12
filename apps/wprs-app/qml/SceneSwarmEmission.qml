@@ -19,6 +19,13 @@ ColumnLayout {
             }, gesture);
     }
 
+    function pace(most) {
+        tools.edit("pace", {
+                "emitter": index,
+                "max_per_step": most
+            });
+    }
+
     function rate(value, replace, gesture) {
         tools.edit("settings", {
                 "emitter": index,
@@ -45,6 +52,23 @@ ColumnLayout {
             visible: emission.driven
             text: App.tr("Fixed rate")
             onClicked: emission.rate(10, true)
+        }
+    }
+
+    RowLayout {
+        QQC2.CheckBox {
+            text: App.tr("Most particles started in one step")
+            checked: emission.emitter.max_per_step !== undefined
+            onToggled: emission.pace(checked ? 1 : null)
+        }
+
+        QQC2.SpinBox {
+            enabled: emission.emitter.max_per_step !== undefined
+            from: 1
+            to: 1000
+            editable: true
+            value: emission.emitter.max_per_step ?? 1
+            onValueModified: emission.pace(value)
         }
     }
 
