@@ -79,6 +79,28 @@ fn playing(rx: &Receiver<Event>, within: impl Fn(Duration) -> bool) {
     panic!("the video did not play within 30 s");
 }
 
+fn confirmed(rx: &Receiver<Event>, percent: f64) {
+    let (start, mut recent) = (Instant::now(), Vec::<(Instant, Duration)>::new());
+    let slow = |pair: &[(Instant, Duration)]| {
+        let (wall, pts) = ((pair[1].0 - pair[0].0).as_secs_f64(), pair[1].1.as_secs_f64() - pair[0].1.as_secs_f64());
+        pts > 0.0 && (0.7..1.5).contains(&(wall / pts * percent / 100.0))
+    };
+    while start.elapsed() < Duration::from_secs(30) {
+        match rx.recv_timeout(Duration::from_secs(2)) {
+            Ok(Event::Frame(f)) => {
+                recent.extend([(Instant::now(), f.pts.expect("a pts"))]);
+                recent.drain(..recent.len().saturating_sub(4));
+                if recent.len() == 4 && recent.windows(2).all(slow) {
+                    return;
+                }
+            }
+            Ok(Event::Error(e)) => panic!("playback error: {e}"),
+            Err(_) => {}
+        }
+    }
+    panic!("the video did not show the speed {percent} % within 30 s");
+}
+
 fn speed(seen: &[(Instant, Duration)], percent: f64) -> f64 {
     let run = seen.chunk_by(|a, b| b.1 >= a.1).max_by_key(|run| run.len()).unwrap_or_default();
     let Some(&(start, _)) = run.first() else { return 0.0 };
@@ -112,7 +134,7 @@ fn a_video_with_sound_keeps_its_position_on_a_new_speed() {
     let before = frames(&rx, Duration::from_millis(100), Duration::from_millis(200));
     let last = before.last().expect("frames before the change").1;
     player.set_cut(Cut { speed: 50, start: 0, end: 0 });
-    playing(&rx, |_| true);
+    confirmed(&rx, 50.0);
     let after = frames(&rx, Duration::from_millis(400), Duration::from_millis(800));
     std::fs::remove_file(path).unwrap();
     let first = after.first().expect("frames after the change").1;
