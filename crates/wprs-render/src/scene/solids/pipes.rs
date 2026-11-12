@@ -26,7 +26,7 @@ impl Key {
             | u16::from(self.skinned) << 7
             | u16::from(self.shadow) << 8
             | u16::from(self.shadow && self.cut) << 9
-            | u16::from(self.prime && !self.shadow) << 10;
+            | u16::from(self.prime) << 10;
         (bits, if self.shadow { 0 } else { self.package })
     }
 }
@@ -95,11 +95,12 @@ impl Solids {
         });
         let format = if key.hdr { Format::Rgba16Float } else { Format::Rgba8UnormSrgb };
         let cull = match key.cull {
-            1 if !key.shadow => Some(wgpu::Face::Back),
-            2 if !key.shadow => Some(wgpu::Face::Front),
+            1 if !key.shadow || key.prime => Some(wgpu::Face::Back),
+            2 if !key.shadow || key.prime => Some(wgpu::Face::Front),
             _ => None,
         };
         let compare = match (key.shadow, key.test) {
+            (true, _) if key.prime => wgpu::CompareFunction::GreaterEqual,
             (true, _) => wgpu::CompareFunction::LessEqual,
             (false, true) => wgpu::CompareFunction::GreaterEqual,
             (false, false) => wgpu::CompareFunction::Always,
@@ -122,7 +123,7 @@ impl Solids {
         let colored =
             [Some(wgpu::ColorTargetState { blend: blend(key), write_mask: writes, ..format.into() })];
         let targets: &[Option<wgpu::ColorTargetState>] = if key.shadow { &[] } else { &colored };
-        let bias = match key.shadow {
+        let bias = match key.shadow && !key.prime {
             true => wgpu::DepthBiasState { constant: 2, slope_scale: 2.0, clamp: 0.0 },
             false => Default::default(),
         };

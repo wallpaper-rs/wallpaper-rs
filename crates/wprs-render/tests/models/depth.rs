@@ -80,3 +80,27 @@ fn a_3d_group_inside_another_shares_its_depth() {
     assert!(near(rgb(&px, 58, 32), [255, 0, 0], 3), "{:?}", rgb(&px, 58, 32));
     assert!(near(rgb(&px, 2, 32), [0, 255, 0], 3), "{:?}", rgb(&px, 2, 32));
 }
+
+fn sparks(depth: f32) -> Value {
+    json!({ "particles": { "s": { "capacity": 4, "seed": 1, "perspective": { "focal": 100 },
+        "emitters": [{ "shape": { "point": [32, 32] }, "burst": { "count": 1 } }],
+        "init": { "life": [50, 50], "speed": [0, 0], "size": [20, 20], "color": ["#00ff00", "#00ff00"], "depth": [depth, depth] } } } })
+}
+
+#[test]
+fn particles_in_a_3d_group_hide_one_by_one_behind_the_models_in_front_of_them() {
+    let Some(r) = renderer() else { return };
+    let models = BTreeMap::from([("red", cube(unlit("paint", [1.0, 0.0, 0.0, 1.0])))]);
+    let group = json!([{ "id": "world", "type": "group", "space": "3d", "layers": [
+        model("cube", "red", [0.0; 3]),
+        { "id": "p", "type": "particles", "system": "s", "depth_test": true }] }]);
+    for (depth, quality, want) in [
+        (-50.0, Quality::Q3, [0, 255, 0]),
+        (50.0, Quality::Q3, [255, 0, 0]),
+        (-50.0, Quality::Q0, [255, 0, 0]),
+    ] {
+        let mut shot = shoot(r, scene(sparks(depth), group.clone(), models.clone()), &[]);
+        let px = (0..3).map(|_| shot.frame(r, 0.05, quality)).last().unwrap();
+        assert!(near(rgb(&px, 32, 32), want, 8), "{depth} {quality:?}: {:?}", rgb(&px, 32, 32));
+    }
+}

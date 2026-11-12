@@ -24,6 +24,7 @@ impl Swarms {
         self.stamp = Stamp { set: stamp.cloned(), ..Stamp::default() };
         (self.steps, self.created, self.quality) = (0, 0, quality);
         self.looks.clear();
+        self.seen.clear();
         let mut jobs = Vec::new();
         self.kitted.clear();
         for i in 0..self.herds.len() {

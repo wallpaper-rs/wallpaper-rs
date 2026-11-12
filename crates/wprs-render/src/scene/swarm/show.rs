@@ -112,7 +112,15 @@ impl Swarms {
                     pass.set_pipeline(lamped);
                     pass.set_bind_group(2, group, &[]);
                 }
-                (None, None) => pass.set_pipeline(pipeline),
+                (None, None) => {
+                    match self.seen.get(first + p).and_then(Option::as_ref).zip(self.seens.get(&mode)) {
+                        Some((group, seen)) => {
+                            pass.set_pipeline(seen);
+                            pass.set_bind_group(2, group, &[]);
+                        }
+                        None => pass.set_pipeline(pipeline),
+                    }
+                }
             }
             pass.set_vertex_buffer(0, sorted.map_or(&store.particles, |s| &s.sorted).slice(..));
             pass.draw(0..if kit.look.hull[1][0] > 0.0 { 8 } else { 4 }, 0..herd.bake.allocs[p]);

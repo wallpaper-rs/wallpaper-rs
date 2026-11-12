@@ -27,6 +27,8 @@ pub(super) struct Look {
     pub(super) crops: [f32; 4],
     pub(super) sizes: [[f32; 4]; 16],
     pub(super) colors: [[f32; 4]; 64],
+    pub(super) seen: [[f32; 4]; 2],
+    pub(super) window: [f32; 4],
 }
 
 pub(super) struct Kit {

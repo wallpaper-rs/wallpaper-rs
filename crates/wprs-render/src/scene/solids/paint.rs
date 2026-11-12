@@ -43,7 +43,8 @@ impl Renderer {
                 view.solids.insert(stage.layer.to_string(), self.staged(size, stage.slices, hdr, room));
             }
             let key = stage.key ^ (u64::from(view.debug3d) << 56);
-            if view.solids.get(stage.layer).is_some_and(|s| s.key == key && s.renders > 0) {
+            let ready = |s: &Staged| s.key == key && s.renders > 0 && (s.seen.is_some() || !stage.seen);
+            if view.solids.get(stage.layer).is_some_and(ready) {
                 continue;
             }
             for p in &frame.placed[stage.models.clone()] {
@@ -130,6 +131,9 @@ impl Renderer {
         }
         let mut encoder = self.device.create_command_encoder(&Default::default());
         self.shadow_passes(&mut encoder, staged, models, due);
+        if stage.seen {
+            self.seen_pass(&mut encoder, staged, models);
+        }
         for k in 0..stage.slices {
             self.stage_pass(&mut encoder, staged, models, (k, 0));
         }

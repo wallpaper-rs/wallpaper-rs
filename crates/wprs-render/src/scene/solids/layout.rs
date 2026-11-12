@@ -29,6 +29,14 @@ fn depth(view_dimension: wgpu::TextureViewDimension) -> wgpu::BindingType {
     }
 }
 
+pub(crate) fn seen(device: &wgpu::Device) -> wgpu::BindGroupLayout {
+    let entries = [entry(7, S::FRAGMENT, depth(wgpu::TextureViewDimension::D2))];
+    device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+        label: Some("wprs-render seen"),
+        entries: &entries,
+    })
+}
+
 pub(super) fn layouts(device: &wgpu::Device) -> [wgpu::BindGroupLayout; 4] {
     let sampler = wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering);
     let compare = wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Comparison);

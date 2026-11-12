@@ -18,6 +18,9 @@ struct Look {
     crops: vec4<f32>,
     sizes: array<vec4<f32>, 16>,
     colors: array<vec4<f32>, 64>,
+    seen_a: vec4<f32>,
+    seen_b: vec4<f32>,
+    window: vec4<f32>,
 };
 
 struct Corner {
@@ -26,6 +29,7 @@ struct Corner {
     @location(1) color: vec4<f32>,
     @location(2) @interpolate(flat) frames: vec3<f32>,
     @location(3) @interpolate(flat) turn: vec4<f32>,
+    @location(4) @interpolate(flat) scale: f32,
 };
 
 @group(0) @binding(0) var<uniform> look: Look;
@@ -107,6 +111,7 @@ fn vs_particle(
     out.position = vec4<f32>(dot(look.m0.xyz, p), dot(look.m1.xyz, p), 0.0, 1.0);
     out.uv = s.uv;
     out.color = s.color;
+    out.scale = k;
     let spun = radians(s.rotation) + look.turn.z;
     out.turn = vec4<f32>(cos(spun), sin(spun), s.size * look.light.w, 0.0);
     let n = max(look.atlas.x * look.atlas.y, 1.0);

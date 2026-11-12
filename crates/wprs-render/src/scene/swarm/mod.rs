@@ -11,6 +11,7 @@ mod lamp;
 mod looks;
 mod maps;
 mod paint;
+mod seen;
 mod setup;
 mod show;
 pub(crate) use lamp::Lamp;
@@ -97,6 +98,8 @@ pub(crate) struct Swarms {
     sorts: Option<[wgpu::ComputePipeline; 3]>,
     pipelines: HashMap<Mode, wgpu::RenderPipeline>,
     lits: HashMap<Mode, wgpu::RenderPipeline>,
+    seens: HashMap<Mode, wgpu::RenderPipeline>,
+    seen: Vec<Option<BindGroup>>,
     bend: Option<wgpu::RenderPipeline>,
     ribbons: HashMap<Mode, wgpu::RenderPipeline>,
     cords: HashMap<Mode, [wgpu::RenderPipeline; 2]>,

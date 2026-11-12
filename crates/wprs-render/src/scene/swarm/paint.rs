@@ -19,10 +19,17 @@ impl Painter<'_, '_, '_> {
         if mask.is_some() || !blend.fixed() || self.lean(i).is_some() {
             return self.apart(i, target, atop);
         }
+        let seen = match d.content {
+            Content::Particles { seen: Some((stage, far)), .. } => self.seen(stage, far),
+            _ => None,
+        };
         let (r, screen, srgb) = (self.r, self.screen, self.srgb);
         let Some(swarms) = self.swarms.as_deref_mut() else { return };
         let mode = mode(blend, atop);
         swarms.pipeline(r, mode);
+        if seen.is_some() {
+            swarms.seen_pipeline(r, mode);
+        }
         let Some(herd) = swarms.herds.get(flock) else { return };
         let [w, h] = swarms.canvas;
         let m = match herd.world {
@@ -76,6 +83,10 @@ impl Painter<'_, '_, '_> {
             look.strand[0] = q.subdivide(look.strand[0] as u32) as f32;
             let scroll = |v: f32| (f64::from(v) * f64::from(frame.time)).rem_euclid(1.0) as f32;
             (look.strand[2], look.cord[2]) = (scroll(look.strand[2]), scroll(look.cord[2]));
+            if let Some((_, rows, window)) = &seen {
+                (look.seen, look.window) = (*rows, *window);
+            }
+            swarms.seen.push(seen.as_ref().map(|s| s.0.clone()));
             swarms.looks.push(look);
             swarms.kitted.push(k);
         }

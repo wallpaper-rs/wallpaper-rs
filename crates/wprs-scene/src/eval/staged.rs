@@ -80,6 +80,7 @@ pub struct Stage3d<'a> {
     pub cross: Option<(Eye, f32)>,
     pub wind: [f32; 2],
     pub time: f32,
+    pub seen: bool,
 }
 
 impl Stage3d<'_> {
@@ -176,6 +177,7 @@ pub(crate) fn lone<'a>(cx: &Context<'a>, frame: &mut Frame<'a>, p: usize) {
         cross,
         wind,
         time,
+        seen: false,
     });
     frame.placed[p].stage = stage;
     if let Content::Model { stage: s, .. } = &mut frame.draws[at].content {

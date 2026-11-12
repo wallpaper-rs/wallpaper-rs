@@ -2,7 +2,7 @@ use super::{MAX_PLANES, Stage3d};
 use crate::eval::{Content, Draw, Frame};
 use crate::figure::Space;
 use crate::resolve::Context;
-use crate::{Affine, Blend, Color, Kind, Layer};
+use crate::{Affine, Blend, Color, Kind, Layer, Quality};
 
 fn plane(cx: &Context, layer: &Layer, eye: &crate::eye::Eye, height: f32) -> f32 {
     let z = layer.transform.z.as_ref().map_or(0.0, |z| z.get(cx));
@@ -18,6 +18,20 @@ fn loose(cx: &Context, d: &Draw) -> bool {
         && d.opacity >= 1.0
         && d.blend == Blend::Normal
         && !cx.mattes.contains(&d.layer.id)
+}
+
+fn apart(cx: &Context, layer: &Layer) -> bool {
+    let Kind::Particles { system, render, .. } = &layer.kind else { return false };
+    let Some(s) = cx.scene.particles.get(system) else { return false };
+    let plain = |r: &crate::Render| {
+        r.shader.is_none() && !r.lit && r.refract.is_none() && r.trail.is_none() && r.rope.is_none()
+    };
+    let mut kids = s.children.iter().filter_map(|c| cx.scene.particles.get(&c.system));
+    let kids = kids.all(|k| plain(&k.render) && k.children.is_empty());
+    s.perspective.is_some()
+        && layer.lighting.is_none()
+        && plain(render.as_deref().unwrap_or(&s.render))
+        && kids
 }
 
 fn holds(outer: &Layer, inner: &Layer) -> bool {
@@ -63,7 +77,7 @@ pub(super) fn gather<'a>(
     let (eye, fade, cross) = super::camera(cx, canvas[0] / canvas[1].max(1e-3), frame.quality);
     let end = frame.draws[at].end;
     let mut blocks: Vec<(std::ops::Range<usize>, Option<f32>)> = Vec::new();
-    let mut i = at + 1;
+    let (mut i, mut seen) = (at + 1, false);
     while i < end {
         let d = &frame.draws[i];
         if loose(cx, d) && !d.layer.depth_test {
@@ -72,8 +86,15 @@ pub(super) fn gather<'a>(
             continue;
         }
         let deep = d.layer.depth_test && !matches!(d.content, Content::Model { .. });
-        blocks.push((i..d.end, deep.then(|| plane(cx, d.layer, &eye, canvas[1]))));
-        i = d.end;
+        let (far, next, one) = (deep.then(|| plane(cx, d.layer, &eye, canvas[1])), d.end, apart(cx, d.layer));
+        match (far, &mut frame.draws[i].content) {
+            (Some(far), Content::Particles { seen: s, .. }) if one && frame.quality != Quality::Q0 => {
+                (*s, seen) = (Some((stage, far)), true);
+                blocks.push((i..next, None));
+            }
+            _ => blocks.push((i..next, far)),
+        }
+        i = next;
     }
     let mut planes: Vec<f32> = blocks.iter().filter_map(|b| b.1).collect();
     planes.sort_by(|a, b| b.total_cmp(a));
@@ -149,5 +170,6 @@ pub(super) fn gather<'a>(
         cross,
         wind: [0.0; 2],
         time: cx.t,
+        seen,
     });
 }

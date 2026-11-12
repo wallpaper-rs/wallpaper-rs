@@ -16,6 +16,7 @@ mod package;
 mod paint;
 mod pass;
 mod pipes;
+mod seen;
 mod shadows;
 mod staged;
 mod uniform;
@@ -33,6 +34,7 @@ pub(crate) const SOURCE: [&str; 3] =
 
 pub(crate) struct Solids {
     pub(crate) layouts: [wgpu::BindGroupLayout; 4],
+    pub(crate) seen: wgpu::BindGroupLayout,
     pub(crate) pipes: Mutex<HashMap<(u16, u64), wgpu::RenderPipeline>>,
     pub(crate) packages: Mutex<HashMap<u64, Option<wgpu::ShaderModule>>>,
     pub(crate) module: OnceLock<wgpu::ShaderModule>,
@@ -83,6 +85,7 @@ impl crate::Renderer {
             });
             Solids {
                 layouts: layout::layouts(&self.device),
+                seen: layout::seen(&self.device),
                 pipes: Mutex::new(HashMap::new()),
                 packages: Mutex::new(HashMap::new()),
                 module: OnceLock::new(),
