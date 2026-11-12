@@ -20,7 +20,9 @@ Pasos:
 1. Pulsa **Añadir una capa**, abre **Capa desde un archivo** y elige **Modelo 3D desde un archivo .glb…**.
 2. En el diálogo **Modelo 3D desde un archivo**, pulsa **Elegir un archivo glTF binario** y elige un archivo `.glb`.
 3. Antes de aceptar, el diálogo cuenta cuántos triángulos, materiales, texturas, huesos y clips tiene el archivo. Por cada nivel de equipo dice si **cabe** o es **demasiado pesado**, qué tamaño máximo de textura conserva y cuánta memoria de texturas usa.
-4. Acepta. El archivo se importa a la escena y se añade una capa de modelo. Si tenías un grupo elegido, el modelo entra en él.
+4. Acepta. El archivo se importa a la escena y se añade, en un solo paso, una capa de modelo con el nombre del archivo; **Deshacer** quita las dos cosas a la vez. Si el archivo no se puede leer, el diálogo dice por qué y **Aceptar** queda desactivado. Si tenías un grupo elegido, el modelo entra en él.
+
+Si no tienes ningún modelo a mano, la app trae uno propio: la escena de ejemplo **Caja que gira** (`solids`), con una caja, su luz y su sombra. En **Escenas** pulsa **Editar una copia** sobre ella y tendrás una escena 3D lista para probar; su modelo, `crate.glb`, es de dominio público (CC0) y está en `assets/` de la copia, así que también sirve para importarlo en otras escenas. Los archivos de `scenes/solids/assets` del repositorio son los mismos.
 
 Los archivos FBX y OBJ no se leen directamente: ábrelos en Blender y expórtalos como glTF binario (`.glb`).
 

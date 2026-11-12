@@ -445,7 +445,7 @@ importa un mapa hecho en el escritorio, el PNG de 16 bits que guarda junto a la 
 profundidad* (`models.allow_download`) bloquea la descarga, y ahí mismo se puede borrar el modelo.
 
 Los filtros *Escenas* y *Páginas web* de la biblioteca tienen *Añadir las escenas de ejemplo*, que
-instala las cinco escenas y la página web *Luces* que trae el APK (los mismos ejemplos que el
+instala las seis escenas y la página web *Luces* que trae el APK (los mismos ejemplos que el
 escritorio), y *Abrir un paquete*, que importa un `.wpak` con el selector de documentos de Android.
 Se admiten los cuatro tipos de paquete que son un fondo, como en el escritorio: los de imagen se
 muestran como una foto más (con su ajuste, su encuadre, su edición y su paralaje), los de vídeo como
@@ -1283,7 +1283,7 @@ respaldo (tu idioma, su idioma base, el idioma del paquete); los scripts de una 
 idioma elegido. La descripción y las notas admiten párrafos, listas, negrita, cursiva y enlaces
 `https`, que la app abre solo con un clic y tras confirmarlo; el resto de textos se muestran tal
 cual y no pueden llevar `<` ni `>`. Los paquetes de la primera versión siguen funcionando igual,
-su descripción se muestra tal cual y aparecen *Sin clasificar*. Las cinco escenas de ejemplo se
+su descripción se muestra tal cual y aparecen *Sin clasificar*. Las seis escenas de ejemplo se
 describen en inglés y en español, y `pulse` avisa de que destella con el ritmo.
 
 La app y la bandeja difuminan las miniaturas de los paquetes para adultos hasta que decides
@@ -2428,12 +2428,12 @@ se cambia en ella cambia en todas. Un paquete de vídeo ofrece velocidad (sin ca
 dibujar más fotogramas), el tramo que se repite, volumen propio, zoom y posición, con los valores
 por defecto que elige el autor, y se aplican sin volver a empezar el vídeo.
 
-La carpeta `scenes/` guarda cinco escenas de ejemplo de dominio público (CC0):
+La carpeta `scenes/` guarda seis escenas de ejemplo de dominio público (CC0):
 capas, modos de fusión, máscaras, línea de tiempo y profundidad que sigue al puntero o una órbita
 lenta con un mapa calculado a partir de sus formas (`dusk`), partículas, efectos, el sonido del
 viento y las imágenes de una carpeta que elijas tras la nieve (`snowfall`), análisis del sonido
 con la carátula, el título y el artista de lo que suena en el centro (`pulse`), puntero y el sonido del agua (`pond`) y un script con una imagen o un vídeo de fondo que
-eliges (`orbits`). `scripts/ambient-sounds.sh` sintetiza esos dos sonidos (ruido filtrado y gotas,
+eliges (`orbits`) y un modelo 3D propio de menos de 64 KiB, una caja con su pomo, que gira bajo una luz con sombra (`solids`, con el modelo en `scenes/solids/assets/crate.glb`: así quien edita puede probar el 3D copiando esa escena, sin buscar un archivo). `scripts/ambient-sounds.sh` sintetiza esos dos sonidos (ruido filtrado y gotas,
 también CC0) y los guarda como Ogg Vorbis.
 
 Las escenas pueden tener sonido propio: capas `sound` con sonidos Ogg Vorbis, Opus, FLAC o WAV del

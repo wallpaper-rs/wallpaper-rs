@@ -1,0 +1,20 @@
+{
+  "schema": "wallpaper-rs.wpak/2",
+  "id": "io.github.wallpaper_rs.example.solids",
+  "version": "1.0.0",
+  "default_locale": "en",
+  "title": { "en": "Turning crate", "es": "Caja que gira" },
+  "description": { "en": "A small 3D model of its own turning under a light that casts its shadow. Open a copy in the editor to try 3D layers, lights and the camera.",
+                   "es": "Un pequeño modelo 3D propio que gira bajo una luz que proyecta su sombra. Abre una copia en el editor para probar capas 3D, luces y la cámara." },
+  "changes": { "en": "First version.", "es": "Primera versión." },
+  "authors": ["wallpaper-rs contributors"],
+  "license": "CC0-1.0",
+  "origin": { "kind": "original" },
+  "content": { "rating": "general" },
+  "photosensitive": false,
+  "kind": "scene",
+  "entry": "scene.json",
+  "previews": { "thumbnail": "preview.jpg" },
+  "tags": ["example", "3d"],
+  "requires": { "features": ["ambient_light", "camera3d", "lights", "model3d", "shadows"] }
+}
