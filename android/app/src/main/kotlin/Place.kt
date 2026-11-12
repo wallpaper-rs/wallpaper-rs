@@ -2,8 +2,10 @@ package io.github.wallpaper_rs
 
 import android.app.WallpaperManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
@@ -23,8 +25,10 @@ private val TARGETS = listOf(HOME to R.string.home_screen, LOCK to R.string.lock
 fun separate() = Build.VERSION.SDK_INT >= 34
 
 fun Main.setWallpaper() {
-    if (separate()) placing.value = true else place(BOTH)
+    if (separate() && (active(HOME) || active(LOCK))) placing.value = true else place(BOTH)
 }
+
+fun Context.announce() = Toast.makeText(this, R.string.applied, Toast.LENGTH_LONG).show()
 
 fun Main.place(target: String) {
     placing.value = false
@@ -64,7 +68,7 @@ private fun Main.commit(target: String) = Render.post {
     Wallpaper.reload(Native.commit(target))
     runOnUiThread {
         revision.intValue++
-        toast(getString(R.string.applied))
+        announce()
     }
 }
 

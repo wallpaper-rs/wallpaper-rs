@@ -55,6 +55,7 @@ class Wallpaper : WallpaperService() {
             commitWhenLive?.takeIf { !isPreview }?.let { target ->
                 commitWhenLive = null
                 Render.call { Wallpaper.reload(Native.commit(target)) }
+                mainExecutor.execute { announce() }
             }
             colors = Render.call { painter.colors() }
         }
