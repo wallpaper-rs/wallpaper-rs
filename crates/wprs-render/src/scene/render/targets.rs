@@ -26,7 +26,7 @@ pub(super) fn retarget(r: &Renderer, view: &mut SceneView, size: (u32, u32)) {
     let output = match shared {
         false => {
             let Tex { texture, view, id } = pool.take(&r.device, size, wanted);
-            GpuImage { texture, view, id, format: wanted, crop: [1.0; 2], levels: None }
+            GpuImage { texture, view, id, format: wanted, crop: [1.0; 2], levels: None, fields: None }
         }
         true => {
             let format = Some(wanted);
@@ -39,6 +39,7 @@ pub(super) fn retarget(r: &Renderer, view: &mut SceneView, size: (u32, u32)) {
                 format: wanted,
                 crop: [1.0; 2],
                 levels: None,
+                fields: None,
             }
         }
     };

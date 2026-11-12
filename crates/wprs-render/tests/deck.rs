@@ -80,21 +80,35 @@ fn row(
     all[(H / 2 * W) as usize..((H / 2 + 1) * W) as usize].to_vec()
 }
 
-fn stacked(r: &Renderer, shift: f32) -> Vec<[u8; 3]> {
-    row(r, |_| (r.upload_layers(&[back(), middle(), front()], &[0.0, 0.5, 1.0]).unwrap(), shift))
+fn level(value: f32) -> DepthMap {
+    ImageBuffer::from_pixel(W / 4, H / 4, Luma([(value * 65535.0) as u16]))
 }
 
-fn warped(r: &Renderer, shift: f32) -> Vec<[u8; 3]> {
-    let depth: DepthMap = ImageBuffer::from_fn(W, H, |x, y| {
-        Luma([if square(x, y) {
-            u16::MAX
-        } else if patch(x, y) {
-            32768
-        } else {
-            0
-        }])
-    });
-    row(r, |_| (r.upload_depth(&depth, None).unwrap(), shift))
+fn stacked(r: &Renderer, shift: f32) -> Vec<[u8; 3]> {
+    let fields = [level(0.0), level(0.5), level(1.0)];
+    row(r, |_| (r.upload_layers(&[back(), middle(), front()], &fields, &[0.0, 0.5, 1.0]).unwrap(), shift))
+}
+
+fn ramped(r: &Renderer, shift: f32) -> Vec<[u8; 3]> {
+    let slope: DepthMap = ImageBuffer::from_fn(W / 4, H / 4, |x, _| Luma([(x * 65535 / (W / 4 - 1)) as u16]));
+    let marks = RgbaImage::from_fn(W, H, |x, _| Rgba([if x % 16 == 0 { 255 } else { 0 }, 0, 0, 255]));
+    let image = r.upload_rgba(marks.as_raw(), W, H, W * 4).unwrap();
+    let deck = r.upload_layers(&[marks], &[slope], &[0.5]).unwrap();
+    let relief = Relief { depth: &deck, shift: [shift / W as f32, 0.0], focus: 0.0, steps: 1, overscan: 1.0 };
+    let layer = Layer {
+        image: Some(&image),
+        fit: Fit::Stretch,
+        background: [0; 3],
+        opacity: 1.0,
+        uv: None,
+        relief: Some(relief),
+        flip: [false; 2],
+        grade: None,
+    };
+    let (mut target, mut pixels) = (r.create_target(W, H).unwrap(), Vec::new());
+    r.render_layers(&mut target, &[layer], &mut pixels).unwrap();
+    let all: Vec<[u8; 3]> = pixels.as_chunks::<4>().0.iter().map(|p| [p[2], p[1], p[0]]).collect();
+    all[(H / 2 * W) as usize..((H / 2 + 1) * W) as usize].to_vec()
 }
 
 #[test]
@@ -105,8 +119,19 @@ fn what_a_near_object_uncovers_shows_the_filled_background() {
         assert!(near(moved[x], ground(x as u32)), "x {x}: {:?} wants {:?}", moved[x], ground(x as u32));
     }
     assert!(near(moved[36], [255; 3]) && near(moved[46], [255; 3]) && near(moved[50], ground(50)));
-    let old = warped(r, 8.0);
-    assert!((25..32).any(|x| !near(old[x], ground(x as u32))), "the single image warp stretches here");
+}
+
+#[test]
+fn a_layer_moves_by_its_own_gentle_depth_without_tearing() {
+    let Some(r) = renderer() else { return };
+    let moved = ramped(r, 4.0);
+    let marks: Vec<usize> = (0..W as usize).filter(|x| moved[*x][0] > 120).collect();
+    let starts: Vec<usize> =
+        marks.iter().copied().filter(|x| !marks.contains(&(x.wrapping_sub(1)))).collect();
+    assert_eq!(starts.len(), 4, "{marks:?}");
+    let gaps: Vec<usize> = starts.windows(2).map(|w| w[1] - w[0]).collect();
+    assert!(gaps.iter().all(|g| (16..=18).contains(g)), "the layer stretches evenly: {gaps:?}");
+    assert!(starts[0] <= 1 && starts[3] >= 50, "the near side moves further: {starts:?}");
 }
 
 #[test]

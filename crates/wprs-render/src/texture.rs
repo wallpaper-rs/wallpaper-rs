@@ -12,6 +12,7 @@ pub struct GpuImage {
     pub(crate) format: wgpu::TextureFormat,
     pub(crate) crop: [f32; 2],
     pub(crate) levels: Option<std::sync::Arc<[f32]>>,
+    pub(crate) fields: Option<wgpu::TextureView>,
 }
 
 impl GpuImage {
@@ -147,6 +148,7 @@ pub(crate) fn cropped(texture: wgpu::Texture, crop: [f32; 2]) -> GpuImage {
         format,
         crop,
         levels: None,
+        fields: None,
     }
 }
 

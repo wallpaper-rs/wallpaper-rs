@@ -1,5 +1,5 @@
-use crate::Places;
 use crate::files::{folder, read_png, sweep};
+use crate::{Map, Places};
 use anyhow::{Context, Result, ensure};
 use image::codecs::png::PngEncoder;
 use image::{ExtendedColorType, ImageEncoder, RgbaImage};
@@ -9,15 +9,18 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 use wprs_core::Fill;
 use wprs_core::edit::Depth;
+use wprs_core::travel::Reach;
 
 pub const SUFFIX: &str = ".layers.png";
-const FORMAT: u32 = 1;
+pub const FIELDS: &str = ".fields.png";
+pub const FORMAT: u32 = 2;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Settings {
     pub fill: Fill,
     pub count: usize,
     pub shift: f32,
+    pub edge: u32,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -35,28 +38,43 @@ pub struct Info {
     pub cuts: Vec<f32>,
     pub depths: Vec<f32>,
     pub bands: Vec<Band>,
+    pub field: [u32; 2],
+    pub regions: usize,
+    pub built: f32,
+    pub reach: Reach,
 }
 
 #[derive(Clone)]
 pub struct Layers {
     pub info: Info,
     pub images: Vec<RgbaImage>,
+    pub fields: Vec<Map>,
+}
+
+fn renamed(path: &Path, to: &str) -> PathBuf {
+    let name = path.file_name().map(|n| n.to_string_lossy().replace(SUFFIX, to));
+    path.with_file_name(name.unwrap_or_default())
 }
 
 fn json(path: &Path) -> PathBuf {
-    let name = path.file_name().map(|n| n.to_string_lossy().replace(SUFFIX, ".layers.json"));
-    path.with_file_name(name.unwrap_or_default())
+    renamed(path, ".layers.json")
+}
+
+pub fn fields_of(path: &Path) -> PathBuf {
+    renamed(path, FIELDS)
 }
 
 pub(crate) fn unjson(png: &Path) {
     if png.to_string_lossy().ends_with(SUFFIX) {
         std::fs::remove_file(json(png)).ok();
+        std::fs::remove_file(fields_of(png)).ok();
+        std::fs::remove_file(crate::failed_of(png)).ok();
     }
 }
 
 impl Settings {
     pub fn named(&self) -> String {
-        format!("{}-{}-{:.0}", self.fill.as_str(), self.count, self.shift * 1000.0)
+        format!("{}-{}-{:.0}-{}", self.fill.as_str(), self.count, self.shift * 1000.0, self.edge)
     }
 }
 
@@ -74,7 +92,8 @@ impl Places {
             meta.len(),
             crate::models::LAMA.id,
             crate::build::VERSION,
-            serde_json::to_string(&(&depth.cuts, &depth.strokes, &depth.fills)).unwrap_or_default()
+            serde_json::to_string(&(&depth.cuts, &depth.strokes, &depth.fills, &depth.joins, &depth.splits))
+                .unwrap_or_default()
         );
         let hash: String =
             Sha256::digest(used.as_bytes()).iter().take(8).map(|b| format!("{b:02x}")).collect();
@@ -99,7 +118,7 @@ impl Places {
 
     pub fn layer_bytes(&self) -> u64 {
         let size = |p: &PathBuf| std::fs::metadata(p).map_or(0, |m| m.len());
-        self.layer_files().iter().map(|p| size(p) + size(&json(p))).sum()
+        self.layer_files().iter().map(|p| size(p) + size(&json(p)) + size(&fields_of(p))).sum()
     }
 
     pub fn unlayer_all(&self) -> Result<usize> {
@@ -116,15 +135,22 @@ impl Places {
 
     pub fn unlayer(&self, sha256: &str) -> usize {
         let sets = self.layers_of(sha256);
-        let gone = |p: &PathBuf| std::fs::remove_file(json(p)).is_ok() | std::fs::remove_file(p).is_ok();
+        let gone = |p: &PathBuf| {
+            std::fs::remove_file(fields_of(p)).ok();
+            std::fs::remove_file(crate::failed_of(p)).ok();
+            std::fs::remove_file(json(p)).is_ok() | std::fs::remove_file(p).is_ok()
+        };
         sets.iter().filter(|p| gone(p)).count()
     }
 }
 
 pub fn save(path: &Path, layers: &Layers) -> Result<()> {
-    let Layers { info, images } = layers;
+    let Layers { info, images, fields } = layers;
     let (w, h) = (info.size[0], info.size[1]);
     ensure!(images.iter().all(|i| i.dimensions() == (w, h)), "the layers differ in size");
+    let (fw, fh) = (info.field[0], info.field[1]);
+    ensure!(fields.len() == images.len(), "each layer needs its depth field");
+    ensure!(fields.iter().all(|f| f.dimensions() == (fw, fh)), "the depth fields differ in size");
     let dir = path.parent().context("no folder for the layers")?;
     folder(dir)?;
     sweep(dir, &[".layers-"]);
@@ -134,6 +160,11 @@ pub fn save(path: &Path, layers: &Layers) -> Result<()> {
         file.as_file().sync_all()?;
         file.persist(name).map(drop).map_err(|e| e.error.into())
     };
+    let deep: Vec<u8> = fields.iter().flat_map(|f| f.as_raw().iter().flat_map(|v| v.to_ne_bytes())).collect();
+    publish(&fields_of(path), &mut |f| {
+        let encoder = PngEncoder::new(std::io::BufWriter::new(&mut *f));
+        Ok(encoder.write_image(&deep, fw, fh * fields.len() as u32, ExtendedColorType::L16)?)
+    })?;
     publish(&json(path), &mut |f| Ok(f.write_all(&serde_json::to_vec(info)?)?))?;
     let atlas: Vec<u8> = images.iter().flat_map(|i| i.as_raw().iter().copied()).collect();
     let rows = h * images.len() as u32;
@@ -151,5 +182,10 @@ pub fn load(path: &Path) -> Result<Option<Layers>> {
     let (w, h) = (info.size[0], info.size[1]);
     ensure!(atlas.width() == w && atlas.height() == h * info.depths.len() as u32, "the layer set is torn");
     let cut = |k: u32| image::imageops::crop_imm(&atlas, 0, k * h, w, h).to_image();
-    Ok(Some(Layers { images: (0..info.depths.len() as u32).map(cut).collect(), info }))
+    let deep = read_png(&fields_of(path))?.into_luma16();
+    let (fw, fh, n) = (info.field[0], info.field[1], info.depths.len() as u32);
+    ensure!(deep.width() == fw && deep.height() == fh * n, "the depth fields are torn");
+    let field = |k: u32| image::imageops::crop_imm(&deep, 0, k * fh, fw, fh).to_image();
+    let (images, fields) = ((0..n).map(cut).collect(), (0..n).map(field).collect());
+    Ok(Some(Layers { images, fields, info }))
 }

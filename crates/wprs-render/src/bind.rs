@@ -26,10 +26,6 @@ pub(crate) struct Slot {
 }
 
 impl Slot {
-    pub(crate) fn deep(&self) -> bool {
-        self.key.2.is_some() && !self.key.3
-    }
-
     pub(crate) fn decked(&self) -> bool {
         self.key.3
     }
@@ -40,7 +36,7 @@ impl Renderer {
         let uv = layer.image.map_or(UvRect::compute(Fit::Stretch, (1, 1), (1, 1)), |image| {
             layer.uv.unwrap_or_else(|| UvRect::compute(layer.fit, image.size(), target))
         });
-        let relief = layer.relief.filter(|_| layer.image.is_some());
+        let relief = layer.relief.filter(|r| layer.image.is_some() && r.depth.fields.is_some());
         let uv = flipped(relief.map_or(uv, |r| zoom(uv, r.overscan)), layer.flip);
         let turned = |s: [f32; 2]| [0, 1].map(|i| if layer.flip[i] { -s[i] } else { s[i] });
         let [r, g, b] = layer.background.map(srgb_to_linear);
@@ -88,12 +84,12 @@ impl Renderer {
         depth: Option<&GpuImage>,
     ) -> wgpu::BindGroup {
         let sampler = if repeat && depth.is_none() { &self.repeat } else { &self.clamp };
-        let layout = match depth {
-            Some(d) if d.levels.is_some() => &self.decks().layout,
-            Some(_) => &self.reliefs().layout,
-            None => &self.layers.layout,
-        };
-        let views = std::iter::once(image).chain(depth).map(|i| wgpu::BindingResource::TextureView(&i.view));
+        let layout = if depth.is_some() { &self.decks().layout } else { &self.layers.layout };
+        let fields = depth.and_then(|d| d.fields.as_ref());
+        let views = std::iter::once(&image.view)
+            .chain(depth.map(|d| &d.view))
+            .chain(fields)
+            .map(wgpu::BindingResource::TextureView);
         let resources = std::iter::once(uniform.as_entire_binding())
             .chain(views)
             .chain([wgpu::BindingResource::Sampler(sampler)]);

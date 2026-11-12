@@ -65,6 +65,7 @@ impl Places {
         let mut maps: Vec<(SystemTime, u64, PathBuf)> = entries
             .map(|e| e.path())
             .filter(|p| p.extension().is_some_and(|x| x == "png") && p != keep)
+            .filter(|p| !p.to_string_lossy().ends_with(crate::stack::FIELDS))
             .filter_map(|p| Some((modified(&p)?, std::fs::metadata(&p).ok()?.len(), p)))
             .collect();
         maps.sort();

@@ -62,7 +62,12 @@ fn spanned_screens_stay_continuous_under_overscan() {
     let image = RgbaImage::from_fn(W, H, |x, _| Rgba([(x * 4) as u8, 0, 128, 255]));
     let (image, depth) = (
         r.upload_rgba(image.as_raw(), W, H, W * 4).unwrap(),
-        r.upload_depth(&halves(|_| false), None).unwrap(),
+        r.upload_layers(
+            std::slice::from_ref(&image),
+            &[ImageBuffer::from_pixel(W / 4, H / 4, Luma([0]))],
+            &[0.0],
+        )
+        .unwrap(),
     );
     let half = |x: f32| {
         let relief = Relief { depth: &depth, shift: [0.05, 0.0], focus: 0.5, steps: 8, overscan: 1.1 };

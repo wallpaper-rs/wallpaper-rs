@@ -1,3 +1,4 @@
+use crate::Map;
 use crate::stack::{Info, Layers};
 use image::{Rgba, RgbaImage};
 use wprs_core::edit::Geometry;
@@ -38,5 +39,26 @@ pub fn turned(layers: &Layers, geometry: &Geometry) -> Layers {
         })
     };
     let images = layers.images.iter().map(turn).collect();
-    Layers { info: Info { size: [fw, fh], ..layers.info.clone() }, images }
+    let (gw, gh) = (layers.info.field[0], layers.info.field[1]);
+    let (tw, th) = geometry.frame((gw, gh));
+    let n = geometry.matrix((gw, gh));
+    let level = |field: &Map| {
+        Map::from_fn(tw, th, |x, y| {
+            let (u, v) = ((f64::from(x) + 0.5) / f64::from(tw), (f64::from(y) + 0.5) / f64::from(th));
+            let (sx, sy) = (n[0][0] * u + n[0][1] * v + n[0][2], n[1][0] * u + n[1][1] * v + n[1][2]);
+            let (px, py) = (sx * f64::from(gw) - 0.5, sy * f64::from(gh) - 0.5);
+            let (x0, y0) = (px.floor(), py.floor());
+            let (fx, fy) = (px - x0, py - y0);
+            let at = |dx: f64, dy: f64| {
+                let cx = (x0 + dx).clamp(0.0, f64::from(gw) - 1.0) as u32;
+                let cy = (y0 + dy).clamp(0.0, f64::from(gh) - 1.0) as u32;
+                f64::from(field.get_pixel(cx, cy)[0])
+            };
+            let top = at(0.0, 0.0) * (1.0 - fx) + at(1.0, 0.0) * fx;
+            let bottom = at(0.0, 1.0) * (1.0 - fx) + at(1.0, 1.0) * fx;
+            image::Luma([(top * (1.0 - fy) + bottom * fy).round() as u16])
+        })
+    };
+    let fields = layers.fields.iter().map(level).collect();
+    Layers { info: Info { size: [fw, fh], field: [tw, th], ..layers.info.clone() }, images, fields }
 }

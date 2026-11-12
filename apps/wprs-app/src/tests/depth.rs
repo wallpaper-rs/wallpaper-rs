@@ -113,8 +113,10 @@ fn the_layer_sets_are_counted_cleared_and_lama_is_checked_and_removed() {
         depth: Depth::default(),
         device: Default::default(),
     };
-    let info = wprs_depth::Info { format: 1, size: [2, 2], depths: vec![0.5], ..Default::default() };
-    let made = wprs_depth::Layers { info, images: vec![image::RgbaImage::new(2, 2)] };
+    let info =
+        wprs_depth::Info { format: 2, size: [2, 2], field: [1, 1], depths: vec![0.5], ..Default::default() };
+    let fields = vec![wprs_depth::Map::new(1, 1)];
+    let made = wprs_depth::Layers { info, images: vec![image::RgbaImage::new(2, 2)], fields };
     wprs_depth::save(
         &places.cache.join("depth").join(format!("{}-0123456789abcdef.layers.png", "ab".repeat(32))),
         &made,

@@ -1,25 +1,34 @@
 use crate::brush::lift;
+use crate::field::field_size;
 use crate::fill::{push_pull, simple};
 use crate::guided::{Size, refine};
+use crate::matte::{Matte, matte};
 use crate::plan::{Plan, Region};
-use crate::split::{CUT_PIXELS, Split, soft};
-use crate::stack::{Band, Info, Layers, Settings, save};
+use crate::stack::{Band, FORMAT, Info, Layers, Settings, save};
 use crate::windows::{Inpaint, lama};
-use crate::{CACHE_BYTES, Map, Places, adjust, decode, read};
+use crate::{CACHE_BYTES, Map, Places, adjust, read};
 use anyhow::{Context, Result, bail, ensure};
 use image::{Luma, RgbImage, Rgba, RgbaImage};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering::Relaxed};
 use wprs_core::Fill;
 use wprs_core::edit::Depth;
+use wprs_core::travel::Reach;
 
-pub const VERSION: u32 = 1;
+pub const VERSION: u32 = 2;
 pub const EDGE: u32 = 1920;
+pub const MOST_EDGE: u32 = 3840;
 pub const MARGIN: f32 = 2.0;
 
-pub(crate) fn fitted(image: RgbImage) -> RgbImage {
-    match image.width().max(image.height()) > EDGE {
-        true => image::DynamicImage::ImageRgb8(image).thumbnail(EDGE, EDGE).into_rgb8(),
+pub const TIERS: [u32; 4] = [1024, EDGE, 2560, MOST_EDGE];
+
+pub fn edge_for(wanted: u32) -> u32 {
+    TIERS.into_iter().find(|t| *t >= wanted).unwrap_or(MOST_EDGE)
+}
+
+pub(crate) fn fitted(image: RgbImage, edge: u32) -> RgbImage {
+    match image.width().max(image.height()) > edge {
+        true => image::DynamicImage::ImageRgb8(image).thumbnail(edge, edge).into_rgb8(),
         false => image,
     }
 }
@@ -36,11 +45,6 @@ fn leveled(picture: &RgbImage, map: &Map, depth: &Depth) -> (Size, Vec<f32>) {
     (size, levels)
 }
 
-pub fn reach(shift: f32, width: usize, split: &Split, layer: usize) -> f32 {
-    let far = split.depths.last().copied().unwrap_or(0.0) - split.depths[layer];
-    (shift * width as f32 * far).ceil().max(0.0) + MARGIN
-}
-
 struct Source<'a> {
     picture: &'a RgbImage,
     size: Size,
@@ -49,11 +53,12 @@ struct Source<'a> {
 
 fn one(
     cx: &Source,
-    (region, soft): (&Region, &[f32]),
+    region: &Region,
+    edge: Option<&Matte>,
     inpaint: Option<&mut Inpaint<'_>>,
     stop: &AtomicBool,
-) -> Result<(RgbaImage, Band)> {
-    let Region { known, band, reached, refill, reach, far } = region;
+) -> Result<RgbaImage> {
+    let Region { known, band, reached, limit, refill, far, .. } = region;
     let has = known.contains(&true);
     let mut filled = match (has, cx.fill) {
         (false, _) => cx.picture.clone(),
@@ -66,27 +71,42 @@ fn one(
     }
     let (w, h) = cx.size;
     let mut layer = RgbaImage::new(w as u32, h as u32);
+    let raw = cx.picture.as_raw();
     for (k, p) in layer.pixels_mut().enumerate() {
-        let rgb = if known[k] {
-            cx.picture.as_raw()[k * 3..k * 3 + 3].to_vec()
-        } else {
-            filled.as_raw()[k * 3..k * 3 + 3].to_vec()
+        let feather = ((limit[k] + 2.0 - reached[k]) / 2.0).clamp(0.0, 1.0);
+        let from_band = if band[k] { if refill[k] { 1.0 } else { feather } } else { 0.0 };
+        let (mut rgb, mut alpha) = match (known[k], edge) {
+            (true, Some(m)) => (m.colour[k], m.alpha[k]),
+            (true, None) => ([raw[k * 3], raw[k * 3 + 1], raw[k * 3 + 2]], 1.0),
+            (false, Some(m)) if m.alpha[k] > 0.0 && !band[k] => (m.colour[k], m.alpha[k]),
+            _ => {
+                let f = filled.as_raw();
+                ([f[k * 3], f[k * 3 + 1], f[k * 3 + 2]], 0.0)
+            }
         };
-        let feather = ((reach + CUT_PIXELS as f32 * 2.0 - reached[k]) / 2.0).clamp(0.0, 1.0);
+        if band[k] && from_band >= alpha {
+            let f = filled.as_raw();
+            (rgb, alpha) = ([f[k * 3], f[k * 3 + 1], f[k * 3 + 2]], from_band);
+        }
         let alpha = if *far {
             1.0
-        } else if known[k] {
-            soft[k]
-        } else if band[k] {
-            if refill[k] { 1.0 } else { feather.max(soft[k]) }
+        } else if has {
+            alpha
         } else {
             0.0
         };
-        let alpha = if has { alpha } else { 0.0 };
+        if *far && !known[k] {
+            let f = filled.as_raw();
+            rgb = [f[k * 3], f[k * 3 + 1], f[k * 3 + 2]];
+        }
         *p = Rgba([rgb[0], rgb[1], rgb[2], (alpha * 255.0).round() as u8]);
     }
-    let pixels = band.iter().filter(|b| **b).count();
-    Ok((layer, Band { layer: 0, reach: *reach, pixels }))
+    Ok(layer)
+}
+
+fn quantized(values: &[f32], (w, h): Size) -> Map {
+    let steps = values.iter().map(|v| (v.clamp(0.0, 1.0) * 65535.0).round() as u16).collect();
+    Map::from_raw(w as u32, h as u32, steps).unwrap_or_default()
 }
 
 pub fn layers(
@@ -100,37 +120,47 @@ pub fn layers(
     ensure!(set.fill != Fill::Off, "the fill mode is off: there are no layers to build");
     let (size, levels) = leveled(picture, map, depth);
     progress(10);
-    let plan = Plan::new(&levels, size, depth, set.count);
+    let plan = Plan::new(&levels, size, depth, (set.count, set.shift));
     let cx = Source { picture, size, fill: set.fill };
-    let (mut images, mut bands) = (Vec::new(), Vec::new());
+    let (mut images, mut bands, mut safe) = (Vec::new(), Vec::new(), set.shift);
+    let mut below = vec![false; size.0 * size.1];
     for i in 0..plan.parts.count() {
         ensure!(!stop.load(Relaxed), "cancelled");
-        let edge = soft(&plan.masks[i], size);
-        let region = plan.region(i, reach(set.shift, size.0, &plan.parts, i));
-        let (image, mut band) = one(&cx, (&region, &edge), inpaint.as_deref_mut(), stop)?;
-        band.layer = i;
-        images.push(image);
-        bands.push(band);
+        let region = plan.region(i);
+        let edge = (i > 0).then(|| matte(picture, &plan.masks[i], &below, size));
+        images.push(one(&cx, &region, edge.as_ref(), inpaint.as_deref_mut(), stop)?);
+        let pixels = region.band.iter().filter(|b| **b).count();
+        bands.push(Band { layer: i, reach: region.reach, pixels });
+        safe = safe.min(region.safe);
+        below.iter_mut().zip(&plan.masks[i]).for_each(|(b, m)| *b |= *m);
         progress(10 + 90 * (i as u64 + 1) / plan.parts.count() as u64);
     }
+    let small = field_size(size);
+    let fields: Vec<Map> = plan.fields.iter().map(|f| quantized(f, small)).collect();
+    let all = plan.fields.iter().flatten();
+    let (low, high) = all.fold((f32::MAX, f32::MIN), |(lo, hi), v| (lo.min(*v), hi.max(*v)));
     let info = Info {
-        format: 1,
+        format: FORMAT,
         size: [size.0 as u32, size.1 as u32],
         fill: set.fill.as_str().into(),
         cuts: plan.parts.cuts,
         depths: plan.parts.depths,
         bands,
+        field: [small.0 as u32, small.1 as u32],
+        regions: plan.regions,
+        built: set.shift,
+        reach: Reach { shift: safe.max(0.0), low: low.clamp(0.0, 1.0), high: high.clamp(0.0, 1.0) },
     };
-    Ok(Layers { info, images })
+    Ok(Layers { info, images, fields })
 }
 
 pub fn band(picture: &RgbImage, map: &Map, depth: &Depth, info: &Info, layer: usize) -> Result<Vec<bool>> {
     ensure!(layer < info.depths.len(), "the set has {} layers", info.depths.len());
     let (size, levels) = leveled(picture, map, depth);
     let fixed = Depth { cuts: Some(info.cuts.clone()), ..depth.clone() };
-    let plan = Plan::new(&levels, size, &fixed, info.depths.len());
+    let plan = Plan::new(&levels, size, &fixed, (info.depths.len(), info.built));
     ensure!(plan.parts.count() == info.depths.len(), "the layer set does not match the depth map");
-    Ok(plan.region(layer, info.bands.get(layer).map_or(MARGIN, |b| b.reach)).band)
+    Ok(plan.region(layer).band)
 }
 
 impl Places {
@@ -145,8 +175,15 @@ impl Places {
         let dest = self.layer_set(image, sha256, depth, set).context("the image has no depth map")?;
         let map = read(&self.find(image, sha256, depth).context("the image has no depth map")?)?;
         progress(2);
-        let picture = fitted(decode(image)?);
-        let made = layers(&picture, &map, (depth, set), inpaint, progress, stop)?;
+        let picture = fitted(crate::files::decode_edge(image, set.edge)?, set.edge);
+        let made = layers(&picture, &map, (depth, set), inpaint, progress, stop);
+        if let Err(e) = &made
+            && !stop.load(Relaxed)
+        {
+            crate::mark_failed(&dest, e);
+        }
+        let made = made?;
+        std::fs::remove_file(crate::failed_of(&dest)).ok();
         save(&dest, &made)?;
         self.trim(&dest, CACHE_BYTES)?;
         Ok(dest)
@@ -159,7 +196,8 @@ impl Places {
         (info, layer): (&Info, usize),
     ) -> Result<(Vec<bool>, (u32, u32))> {
         let map = read(&self.find(image, sha256, depth).context("the image has no depth map")?)?;
-        let picture = fitted(decode(image)?);
+        let edge = info.size[0].max(info.size[1]);
+        let picture = fitted(crate::files::decode_edge(image, edge)?, edge);
         let found = band(&picture, &map, depth, info, layer)?;
         Ok((found, picture.dimensions()))
     }

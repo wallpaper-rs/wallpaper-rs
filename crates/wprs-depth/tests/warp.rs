@@ -8,8 +8,9 @@ fn picture() -> RgbaImage {
 }
 
 fn layers(image: &RgbaImage) -> Layers {
-    let info = Info { format: 1, size: [24, 12], depths: vec![0.5], ..Info::default() };
-    Layers { info, images: vec![image.clone()] }
+    let info = Info { format: 2, size: [24, 12], field: [6, 3], depths: vec![0.5], ..Info::default() };
+    let field = wprs_depth::Map::from_fn(6, 3, |x, _| image::Luma([x as u16 * 10000]));
+    Layers { info, images: vec![image.clone()], fields: vec![field] }
 }
 
 #[test]
@@ -19,6 +20,9 @@ fn an_identity_geometry_keeps_the_layers_and_the_others_change_their_frame() {
     assert_eq!((same.info.size, same.images[0].clone()), ([24, 12], image.clone()));
     let rotated = turned(&layers(&image), &Geometry { rotate: 90, ..Geometry::default() });
     assert_eq!((rotated.info.size, rotated.images[0].dimensions()), ([12, 24], (12, 24)));
+    assert_eq!((rotated.info.field, rotated.fields[0].dimensions()), ([3, 6], (3, 6)));
+    let column = |l: &Layers, y: u32| l.fields[0].get_pixel(1, y)[0];
+    assert!(column(&rotated, 0).abs_diff(column(&rotated, 5)) > 30000, "the field turns with the layers");
     let cropped =
         turned(&layers(&image), &Geometry { crop: Some([0.5, 0.0, 0.5, 0.5]), ..Geometry::default() });
     assert_eq!(cropped.images[0].dimensions(), (12, 6));

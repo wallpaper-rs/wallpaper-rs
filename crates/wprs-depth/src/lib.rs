@@ -2,8 +2,10 @@ mod brush;
 mod build;
 #[cfg(feature = "fetch")]
 mod fetch;
+mod field;
 mod files;
 mod fill;
+mod grow;
 mod guided;
 #[cfg(feature = "infer")]
 mod infer;
@@ -13,24 +15,28 @@ mod inpaint;
 mod install;
 #[cfg(feature = "infer")]
 mod made;
+mod matte;
 pub mod models;
 mod normals;
 mod plan;
 mod process;
 #[cfg(feature = "infer")]
 mod rebuild;
+mod regions;
 mod split;
 mod stack;
+mod still;
 mod store;
 mod views;
 mod warp;
 mod windows;
 
 pub use brush::{lift, lift_map, marks, stamp};
-pub use build::{EDGE, MARGIN, band, layers, reach};
+pub use build::{EDGE, MARGIN, MOST_EDGE, TIERS, band, edge_for, layers};
 #[cfg(feature = "fetch")]
 pub use fetch::{AGENT, Cancelled, allowed, download};
-pub use files::{beside, decode, read, sha256, shape, write};
+pub use field::{BEND, FIELD, field, field_size, sample, slope};
+pub use files::{beside, decode, decode_edge, read, sha256, shape, write};
 pub use fill::{push_pull, simple};
 pub use guided::{EPSILON, RADIUS, filter, planes, refine};
 #[cfg(feature = "infer")]
@@ -39,13 +45,16 @@ pub use infer::{Device, Estimator, Stage, Stopped, TELEMETRY, background, thread
 pub use inpaint::Inpainter;
 #[cfg(feature = "infer")]
 pub use made::{Bench, bench, generate, generate_until};
+pub use matte::{Matte, matte};
 pub use models::{Asset, LAMA, MODEL, Part, RUNTIME};
 pub use normals::{MAX_BLUR, MAX_STRENGTH, normals, relief, sphere};
 pub use process::{adjust, coloured, input_size, normalize, shrink, tensor};
 #[cfg(feature = "infer")]
-pub use rebuild::settings;
+pub use rebuild::{settings, sized};
+pub use regions::{JUMP, Regions, regions};
 pub use split::{Split, cut, distance, indices, mask, soft, split};
-pub use stack::{Band, Info, Layers, SUFFIX, Settings, load, save};
+pub use stack::{Band, FIELDS, FORMAT, Info, Layers, SUFFIX, Settings, fields_of, load, save};
+pub use still::{failed_of, has_failed, mark_failed};
 pub use store::CACHE_BYTES;
 pub use views::{band_mask, halves, histogram, hue, outlines, tint};
 pub use warp::turned;

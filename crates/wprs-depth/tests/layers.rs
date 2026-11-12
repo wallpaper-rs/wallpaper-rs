@@ -65,7 +65,7 @@ fn the_simple_fill_never_lets_the_foreground_bleed_into_the_band() {
 
 fn stack(fill: Fill) -> Layers {
     let (picture, depth) = scene(96, 64);
-    let set = Settings { fill, count: 2, shift: 0.1 };
+    let set = Settings { fill, count: 2, shift: 0.1, edge: 1920 };
     layers(&picture, &depth, (&Depth::default(), &set), None, &mut |_| {}, &AtomicBool::new(false)).unwrap()
 }
 
@@ -93,7 +93,7 @@ fn the_cache_key_follows_the_picture_the_mode_and_the_settings() {
     let image = dir.path().join("p.png");
     scene(8, 8).0.save(&image).unwrap();
     wprs_depth::write(&scene(8, 8).1, &wprs_depth::beside(&image)).unwrap();
-    let (depth, set) = (Depth::default(), Settings { fill: Fill::Simple, count: 5, shift: 0.02 });
+    let (depth, set) = (Depth::default(), Settings { fill: Fill::Simple, count: 5, shift: 0.02, edge: 1920 });
     let key = |sha: &str, depth: &Depth, set: &Settings| places.layer_set(&image, sha, depth, set).unwrap();
     let first = key(&sha, &depth, &set);
     assert_eq!(first, key(&sha, &depth, &set));
@@ -106,8 +106,14 @@ fn the_cache_key_follows_the_picture_the_mode_and_the_settings() {
         key(&sha, &depth, &Settings { fill: Fill::Lama, ..set }),
         key(&sha, &depth, &Settings { count: 4, ..set }),
         key(&sha, &depth, &Settings { shift: 0.03, ..set }),
+        key(&sha, &depth, &Settings { edge: 3840, ..set }),
+        key(
+            &sha,
+            &Depth { joins: vec![wprs_core::edit::Join { a: [0.1; 2], b: [0.9; 2] }], ..depth.clone() },
+            &set,
+        ),
     ];
-    assert!(others.iter().all(|o| *o != first) && (1..5).all(|i| others[i] != others[i - 1]));
+    assert!(others.iter().all(|o| *o != first) && (1..7).all(|i| others[i] != others[i - 1]));
     assert_eq!(places.layer_set(&image, "not a hash", &depth, &set), None);
 }
 
@@ -119,7 +125,8 @@ fn a_saved_layer_set_comes_back_and_is_trimmed_with_its_cache() {
     wprs_depth::save(&path, &made).unwrap();
     let back = wprs_depth::load(&path).unwrap().unwrap();
     assert_eq!(back.info, made.info);
-    assert!(back.images.iter().zip(&made.images).all(|(a, b)| a == b));
+    assert!(back.images.iter().zip(&made.images).all(|(a, b)| a == b) && back.fields == made.fields);
+    assert!(wprs_depth::fields_of(&path).is_file());
     let places = Places { data: dir.path().join("d"), cache: dir.path().to_path_buf() };
     std::fs::rename(&path, dir.path().join("x")).unwrap();
     std::fs::create_dir_all(dir.path().join("depth")).unwrap();
@@ -137,7 +144,7 @@ fn a_saved_layer_set_comes_back_and_is_trimmed_with_its_cache() {
 fn the_inpainter_only_touches_the_band_and_runs_a_few_times() {
     let mut image = RgbImage::from_pixel(1600, 900, Rgb([10, 10, 10]));
     let band: Vec<bool> = (0..1600 * 900).map(|i| (i % 1600 > 700) && (i % 1600 < 740)).collect();
-    assert!(plan((1600, 900), &band).len() <= 8);
+    assert!((2..=3).contains(&plan((1600, 900), &band).len()));
     let runs = std::cell::Cell::new(0);
     let mut paint = |_: &RgbImage, mask: &GrayImage| {
         runs.set(runs.get() + 1);
