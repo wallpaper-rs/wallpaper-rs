@@ -137,3 +137,33 @@ fn a_seek_far_ahead_lands_on_the_value_of_its_timeline() {
     assert!((at(&mut rt, 2.0).draws[0].opacity - 2.0 / 3.0).abs() < 1e-3);
     assert!(started.elapsed() < std::time::Duration::from_secs(60), "{:?}", started.elapsed());
 }
+
+#[test]
+fn handles_per_part_shape_each_part_in_its_own_units() {
+    let place = |keys: Json| {
+        json!([{ "id": "s", "type": "solid", "color": "#ffffff", "size": [10, 10],
+            "transform": { "position": { "keys": keys } } }])
+    };
+    let split = json!([[0, [0, 0], { "out": [[1, 0], [0.5, 30]] }], [2, [40, 0]]]);
+    let world = at(&mut runtime(place(split)), 1.0).draws[0].world.0;
+    assert!((world[4] - 20.0).abs() > 1.0 && world[5] > 5.0, "a flat part bends on its own: {world:?}");
+    let short = json!([[0, [0, 0], { "out": [1, 0] }], [2, [40, 20]]]);
+    let parts = json!([[0, [0, 0], { "out": [[1, 0], [1, 0]] }], [2, [40, 20]]]);
+    for t in [0.3, 1.0, 1.7] {
+        let a = at(&mut runtime(place(short.clone())), t).draws[0].world.0;
+        let b = at(&mut runtime(place(parts.clone())), t).draws[0].world.0;
+        assert!((a[4] - b[4]).abs() < 1e-2 && (a[5] - b[5]).abs() < 1e-2, "{t}: {a:?} {b:?}");
+    }
+    let wide = json!([[0, [0, 0], { "out": [[1, 0], [1, 0], [1, 0], [1, 0], [1, 0]] }], [2, [1, 1]]]);
+    assert!(
+        Scene::load(
+            &json!({ "schema": SCHEMA, "canvas": { "size": [100, 50] }, "layers": place(wide) }).to_string(),
+            &BTreeMap::new()
+        )
+        .is_err()
+    );
+    let keys: Vec<wprs_scene::Key<wprs_scene::Vec2>> =
+        serde_json::from_value(json!([[0, [0, 0], { "in": [0.5, 1], "out": [[1, 2], [0.5, 3]] }]])).unwrap();
+    let back = serde_json::to_value(&keys).unwrap();
+    assert_eq!(back, json!([[0.0, [0.0, 0.0], { "in": [0.5, 1.0], "out": [[1.0, 2.0], [0.5, 3.0]] }]]));
+}

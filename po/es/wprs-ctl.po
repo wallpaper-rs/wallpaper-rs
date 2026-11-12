@@ -2437,7 +2437,9 @@ msgstr "Detener el puntero simulado"
 msgid ""
 "Fire a trigger on the scene of a screen, such as event:boom, click:button or "
 "media:play, starting the timelines and sounds it starts"
-msgstr "Dispara un disparador en la escena de una pantalla, como event:boom, click:button o media:play, y arranca las líneas de tiempo y los sonidos que arranca"
+msgstr ""
+"Dispara un disparador en la escena de una pantalla, como event:boom, click:"
+"button o media:play, y arranca las líneas de tiempo y los sonidos que arranca"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid "The screen, a preview stream included"
@@ -2445,7 +2447,8 @@ msgstr "La pantalla, también una transmisión de vista previa"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid "The trigger, as a timeline or a sound layer names it"
-msgstr "El disparador, tal como lo nombra una línea de tiempo o una capa de sonido"
+msgstr ""
+"El disparador, tal como lo nombra una línea de tiempo o una capa de sonido"
 
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid "the pointer (only its latest position over the screen, never kept)"

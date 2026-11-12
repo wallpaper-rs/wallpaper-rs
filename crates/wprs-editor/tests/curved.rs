@@ -71,3 +71,26 @@ fn colors_lists_and_eased_keys_sample_as_the_render_draws_them() {
     let render: Vec<Key<f32>> = serde_json::from_value(eased["keys"].clone()).unwrap();
     assert!(near(value_at(&eased, 1.0).as_f64().unwrap(), f64::from(sample(&render, 1.0))));
 }
+
+#[test]
+fn handles_per_part_bend_the_same_in_the_editor_and_the_render() {
+    let triples = json!([[0, [0, 1, 2], {"out": [[0.5, 3], [1, -2], [0.2, 0]]}], [2, [4, 1, 2], {"in": [[0.5, 1], [0.5, 0.5], [1, 1]]}], [3, [0, 0, 0]]]);
+    let drawn: Vec<Key<Vec3>> = serde_json::from_value(triples.clone()).unwrap();
+    let colors = json!([[0, "#000000", {"out": [[1, 0.9], [0.5, 0], [0.5, 0.2], [0.5, 0]]}], [2, "#ffffff"]]);
+    let shown: Vec<Key<Color>> = serde_json::from_value(colors.clone()).unwrap();
+    for t in [0.1, 0.5, 1.0, 1.6, 2.4] {
+        let edited = value_at(&json!({ "keys": triples }), f64::from(t));
+        let render = sample(&drawn, t).0;
+        assert!(
+            (0..3).all(|i| near(edited[i].as_f64().unwrap(), f64::from(render[i]))),
+            "{t}: {edited} {render:?}"
+        );
+        let edited =
+            Color::parse(value_at(&json!({ "keys": colors }), f64::from(t)).as_str().unwrap()).unwrap();
+        let render = sample(&shown, t);
+        let close = edited.0.iter().zip(render.0).all(|(a, b)| (a - b.clamp(0.0, 1.0)).abs() <= 1.0 / 255.0);
+        assert!(close, "color at {t}: editor {:?}, render {:?}", edited.0, render.0);
+    }
+    let red = sample(&shown, 1.0).0;
+    assert!(red[0] > red[1] + 0.2 && red[2] > red[1], "each channel follows its own handle: {red:?}");
+}

@@ -54,9 +54,14 @@ MouseArea {
             return;
         const sign = held.side === "out" ? 1 : -1;
         const dt = Math.max(0, Math.min(h.room, sign * (plot.time(px) - k.t)));
+        const rise = sign * (plot.value(tr, py) - k.parts[tr.p]);
+        if (!graph.linked && graph.shown[held.s].tracks.length > 1) {
+            graph.ops.bend(held.s, held.t, held.side, [dt, rise], tr.p);
+            return;
+        }
         const gain = h.gains[tr.p] ?? 1;
-        const dv = Math.abs(gain) < 1e-9 ? h.dv : sign * (plot.value(tr, py) - k.parts[tr.p]) / gain;
-        graph.bend(held.s, held.t, held.side, [dt, dv]);
+        const dv = Math.abs(gain) < 1e-9 ? h.dv : rise / gain;
+        graph.ops.bend(held.s, held.t, held.side, [dt, dv]);
     }
 
     function finish() {
@@ -66,14 +71,14 @@ MouseArea {
         else if (mode === "move" && (plot.dx !== 0 || plot.dy !== 0)) {
             const lift = held.lift ? plot.value(tr, y0 + plot.dy) - plot.value(tr, y0) : 0;
             const parts = graph.shown[held.s].tracks.length;
-            graph.move(plot.time(x0 + plot.dx) - plot.time(x0), 1, 0, lift, parts > 1 ? held.p : null);
+            graph.ops.move(plot.time(x0 + plot.dx) - plot.time(x0), 1, 0, lift, parts > 1 ? held.p : null);
         } else if (mode === "move" && !held.adding)
             graph.chosen = [{
                     "s": held.s,
                     "t": held.t
                 }];
         else if (mode === "scale" && plot.stretch !== 1)
-            graph.move(0, Math.round(plot.stretch * 1000) / 1000, plot.box[0], 0, null);
+            graph.ops.move(0, Math.round(plot.stretch * 1000) / 1000, plot.box[0], 0, null);
         else if (mode === "band" && plot.band) {
             const band = plot.band;
             const l = Math.min(band[0], band[2]), t = Math.min(band[1], band[3]), r = Math.max(band[0], band[2]), b = Math.max(band[1], band[3]);

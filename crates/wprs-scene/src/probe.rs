@@ -138,9 +138,16 @@ impl Check<'_> {
             let before = i.checked_sub(1).map_or(0.0, |j| k.t - keys[j].t);
             let after = keys.get(i + 1).map_or(0.0, |n| n.t - k.t);
             for (name, handle, room) in [("in", h.before, before), ("out", h.out, after)] {
-                let Some([dt, dv]) = handle else { continue };
-                self.range(&format!("{path}/keys/{i}/2/{name}/0"), dt, 0.0, room.max(0.0));
-                self.range(&format!("{path}/keys/{i}/2/{name}/1"), dv, -1e6, 1e6);
+                let Some(side) = handle else { continue };
+                for (j, [dt, dv]) in side.each().iter().copied().enumerate() {
+                    let at = if side.split() {
+                        format!("{path}/keys/{i}/2/{name}/{j}")
+                    } else {
+                        format!("{path}/keys/{i}/2/{name}")
+                    };
+                    self.range(&format!("{at}/0"), dt, 0.0, room.max(0.0));
+                    self.range(&format!("{at}/1"), dv, -1e6, 1e6);
+                }
             }
         }
     }

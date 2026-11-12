@@ -1,25 +1,22 @@
-use super::parts::{names, parts, side};
+use super::hands;
+use super::parts::{names, parts};
 use crate::keys::{sample, time_of};
 use serde_json::{Value, json};
 
 fn handle(keys: &[Value], i: usize, name: &str) -> Value {
-    let key = &keys[i];
-    let j = if name == "in" { i.checked_sub(1) } else { Some(i + 1) };
-    let Some(other) = j.and_then(|j| keys.get(j)) else { return Value::Null };
-    let (here, there) = (parts(&key[1]), parts(&other[1]));
-    let (Some(here), Some(there)) = (here, there) else { return Value::Null };
-    let scalar = key[1].is_number() && other[1].is_number();
-    let gains: Vec<f64> = match scalar {
-        true => vec![1.0],
-        false => here.iter().zip(&there).map(|(a, b)| b - a).collect(),
+    let (Some((pairs, seg)), Some(here)) = (hands::each(keys, i, name), parts(&keys[i][1])) else {
+        return Value::Null;
     };
-    let span = (time_of(other) - time_of(key)).abs();
-    let given = side(key, name);
-    let [dt, dv] = given.unwrap_or([span / 3.0, if scalar { (there[0] - here[0]) / 3.0 } else { 1.0 / 3.0 }]);
-    let sign = if name == "in" { -1.0 } else { 1.0 };
+    let given = hands::hand(&keys[i], name);
+    let split = given.as_ref().is_some_and(|h| h.split);
+    let short = given.as_ref().filter(|h| !h.split).map(|h| h.pairs[0]);
+    let [dt, dv] = short.unwrap_or_else(|| hands::linked(&pairs, &seg, 0));
+    let gains: Vec<f64> = if seg.units { vec![1.0; seg.ways.len()] } else { seg.ways.clone() };
+    let (t, sign) = (time_of(&keys[i]), if name == "in" { -1.0 } else { 1.0 });
     let points: Vec<Value> =
-        here.iter().zip(&gains).map(|(v, g)| json!([time_of(key) + sign * dt, v + sign * dv * g])).collect();
-    json!({ "dt": dt, "dv": dv, "set": given.is_some(), "room": span, "share": !scalar, "gains": gains, "at": points })
+        here.iter().zip(&pairs).map(|(v, [pdt, pdv])| json!([t + sign * pdt, v + sign * pdv])).collect();
+    json!({ "dt": dt, "dv": dv, "set": given.is_some(), "split": split, "room": seg.room, "share": !seg.units,
+        "gains": gains, "each": pairs, "at": points })
 }
 
 fn channel(doc: &Value, q: &Value) -> anyhow::Result<(String, f64)> {

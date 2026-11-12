@@ -98,6 +98,7 @@ pub struct KeysEdit {
     pub in_handle: Option<[f64; 2]>,
     pub out_handle: Option<[f64; 2]>,
     pub aligned: bool,
+    pub link: bool,
     pub straighten: bool,
     pub remove: bool,
     pub at: Option<f64>,

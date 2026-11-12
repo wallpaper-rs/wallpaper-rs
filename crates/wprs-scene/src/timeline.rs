@@ -1,11 +1,14 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+mod bend;
 mod json;
 mod keys;
+mod side;
 
 pub use json::sample_json;
 pub use keys::{Key, local, sample};
+pub use side::{MOST_PARTS, Side};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -57,9 +60,9 @@ pub struct Event {
 #[serde(default, deny_unknown_fields)]
 pub struct Handles {
     #[serde(rename = "in", skip_serializing_if = "Option::is_none")]
-    pub before: Option<[f32; 2]>,
+    pub before: Option<Side>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub out: Option<[f32; 2]>,
+    pub out: Option<Side>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Default)]

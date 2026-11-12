@@ -14,7 +14,7 @@ ColumnLayout {
     function stretch(text) {
         const factor = Number(String(text).replace(",", "."));
         if (isFinite(factor) && factor > 0 && factor !== 1)
-            graph.move(0, factor, first, 0, null);
+            graph.ops.move(0, factor, first, 0, null);
     }
 
     RowLayout {
@@ -29,10 +29,24 @@ ColumnLayout {
         }
 
         QQC2.ToolButton {
+            icon.name: "link"
+            text: tools.graph.linked ? App.tr("Linked parts") : App.tr("Separate parts")
+            checkable: true
+            checked: tools.graph.linked
+            onToggled: {
+                tools.graph.linked = checked;
+                if (checked && tools.lone && tools.graph.ops.split(tools.graph.chosen[0].s, tools.graph.chosen[0].t))
+                    tools.graph.ops.link();
+            }
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.text: App.tr("Linked: a handle dragged on one track of a position or a color bends every part of it. Separate: each track keeps handles of its own. Linking again gives the picked key the shape of its first part.")
+        }
+
+        QQC2.ToolButton {
             icon.name: "draw-line"
             text: App.tr("Straighten")
             enabled: tools.lone
-            onClicked: tools.graph.act({
+            onClicked: tools.graph.ops.act({
                     "straighten": true
                 })
         }
@@ -42,7 +56,7 @@ ColumnLayout {
             text: App.tr("Copy")
             display: QQC2.AbstractButton.IconOnly
             enabled: tools.graph.chosen.length > 0
-            onClicked: tools.graph.copy()
+            onClicked: tools.graph.ops.copy()
         }
 
         QQC2.ToolButton {
@@ -50,7 +64,7 @@ ColumnLayout {
             text: App.tr("Paste at the playhead")
             display: QQC2.AbstractButton.IconOnly
             enabled: tools.graph.copied.length > 0
-            onClicked: tools.graph.paste()
+            onClicked: tools.graph.ops.paste()
         }
 
         QQC2.ToolButton {
@@ -58,7 +72,7 @@ ColumnLayout {
             text: App.tr("Remove the picked keys")
             display: QQC2.AbstractButton.IconOnly
             enabled: tools.graph.chosen.length > 0
-            onClicked: tools.graph.act({
+            onClicked: tools.graph.ops.act({
                     "remove": true
                 })
         }
@@ -129,19 +143,19 @@ ColumnLayout {
     Shortcut {
         sequences: [StandardKey.Copy]
         enabled: tools.graph.visible && tools.graph.chosen.length > 0
-        onActivated: tools.graph.copy()
+        onActivated: tools.graph.ops.copy()
     }
 
     Shortcut {
         sequences: [StandardKey.Paste]
         enabled: tools.graph.visible && tools.graph.copied.length > 0
-        onActivated: tools.graph.paste()
+        onActivated: tools.graph.ops.paste()
     }
 
     Shortcut {
         sequences: [StandardKey.Delete]
         enabled: tools.graph.visible && tools.graph.chosen.length > 0
-        onActivated: tools.graph.act({
+        onActivated: tools.graph.ops.act({
                 "remove": true
             })
     }

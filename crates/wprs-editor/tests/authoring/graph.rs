@@ -150,6 +150,8 @@ fn the_curves_query_splits_keys_into_parts_with_handles_and_the_sampled_curve() 
         (json!(true), json!(true), json!([1.0, 50.0]))
     );
     assert_eq!(curves["keys"][1]["in"]["set"], json!(false));
+    let back = curves["keys"][1]["in"]["at"][0][1].as_f64().unwrap();
+    assert!((back - 66.6667).abs() < 1e-3, "an in handle points back: {back}");
     assert!(
         wprs_editor::graph::curves(&p.doc, &json!({"pointer": "/scene/layers/0/opacity"}))["error"]
             .is_string()

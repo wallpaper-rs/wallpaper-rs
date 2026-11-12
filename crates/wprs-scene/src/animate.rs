@@ -112,6 +112,12 @@ impl Animate for Vec3 {
     fn from_signal(x: f32) -> Option<Vec3> {
         Some(Vec3([x; 3]))
     }
+    fn parts(&self) -> ([f32; 4], usize) {
+        ([self.0[0], self.0[1], self.0[2], 0.0], 3)
+    }
+    fn with_parts(&self, p: [f32; 4]) -> Vec3 {
+        Vec3([p[0], p[1], p[2]])
+    }
 }
 
 impl Animate for Color {

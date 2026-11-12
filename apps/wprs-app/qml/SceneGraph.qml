@@ -15,6 +15,10 @@ Kirigami.Dialog {
     property var chosen: []
     readonly property var copied: SceneGraphSources.copied
     property bool aligned: true
+    property bool linked: true
+    readonly property SceneGraphKeys ops: SceneGraphKeys {
+        graph: graph
+    }
     readonly property var watch: page.view
     readonly property var span: {
         const all = shown.map(c => c.range ?? [0, 1]);
@@ -61,86 +65,6 @@ Kirigami.Dialog {
                 "s": s,
                 "t": t
             }]);
-    }
-
-    function picks() {
-        const out = [];
-        chosen.forEach(c => {
-            const pointer = shown[c.s].pointer;
-            const pick = out.find(p => p.pointer === pointer);
-            if (pick)
-                pick.times.push(c.t);
-            else
-                out.push({
-                    "pointer": pointer,
-                    "times": [c.t]
-                });
-        });
-        return out;
-    }
-
-    function act(args, gesture) {
-        page.run("edit_keys", Object.assign({
-            "picks": picks()
-        }, args), gesture === true);
-    }
-
-    function move(shift, scale, pivot, lift, part) {
-        const args = {
-            "shift": Math.round(shift * 1000) / 1000,
-            "scale": scale,
-            "pivot": pivot
-        };
-        if (lift !== 0) {
-            args.lift = lift;
-            if (part !== null)
-                args.part = part;
-        }
-        const before = page.view.history?.done?.length ?? 0;
-        act(args);
-        if ((page.view.history?.done?.length ?? 0) !== before)
-            chosen = chosen.map(c => ({
-                        "s": c.s,
-                        "t": Math.round((pivot + (c.t - pivot) * scale + shift) * 1000) / 1000
-                    }));
-    }
-
-    function bend(s, t, side, pair) {
-        const args = {
-            "picks": [{
-                    "pointer": shown[s].pointer,
-                    "times": [t]
-                }],
-            "aligned": aligned
-        };
-        args[side + "_handle"] = pair.map(n => Math.round(n * 1e6) / 1e6);
-        page.run("edit_keys", args, true);
-    }
-
-    function raw(s) {
-        return JSON.parse(page.editor.value(shown[s].list) || "[]");
-    }
-
-    function copy() {
-        SceneGraphSources.copied = picks().map(p => {
-            const s = shown.findIndex(c => c.pointer === p.pointer);
-            return {
-                "pointer": p.pointer,
-                "keys": raw(s).filter(k => p.times.some(t => Math.abs(k[0] - t) < 1e-3))
-            };
-        });
-    }
-
-    function paste() {
-        const lone = copied.length === 1 && shown.length > 0 && !shown.some(c => c.pointer === copied[0].pointer);
-        const target = lone ? (chosen.length ? shown[chosen[0].s].pointer : shown[0].pointer) : null;
-        page.run("edit_keys", {
-            "picks": copied.map(c => ({
-                        "pointer": target ?? c.pointer,
-                        "keys": c.keys
-                    })),
-            "at": Math.round((now + (shown[0]?.offset ?? 0)) * 1000) / 1000
-        });
     }
 
     title: App.tr("Curve editor")

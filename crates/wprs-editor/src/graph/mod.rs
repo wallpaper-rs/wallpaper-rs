@@ -1,4 +1,6 @@
+mod bend;
 mod curves;
+pub(crate) mod hands;
 pub(crate) mod parts;
 mod paste;
 
@@ -36,7 +38,7 @@ pub(crate) fn sorted(pointer: &str, keys: &mut [Value]) -> Result<()> {
     if let Some(w) = met {
         bail!(said("editor.keys_meet", "two keys of %1 would meet at %2 s", &[&pointer, &time_of(&w[1])]));
     }
-    parts::clamp(keys);
+    hands::clamp(keys);
     Ok(())
 }
 
@@ -52,8 +54,8 @@ pub(crate) fn edit(doc: &Value, e: &KeysEdit) -> Result<Vec<Op>> {
     );
     let ops = if e.picks.iter().any(|p| !p.keys.is_empty()) {
         paste::paste(doc, e)?
-    } else if e.in_handle.is_some() || e.out_handle.is_some() || e.straighten {
-        bend(doc, e)?
+    } else if e.in_handle.is_some() || e.out_handle.is_some() || e.straighten || e.link {
+        bend::bend(doc, e)?
     } else {
         let mut ops = Vec::new();
         for pick in &e.picks {
@@ -94,7 +96,7 @@ fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit) -> Result<Vec<Op>> {
                 &[&pointer]
             )
         );
-        parts::clamp(&mut left);
+        hands::clamp(&mut left);
         crate::handles::reach(pointer, &old, &left)?;
         return Ok(set(doc, &at, Value::Array(left)));
     }
@@ -107,7 +109,7 @@ fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit) -> Result<Vec<Op>> {
             said("editor.keys_before_zero", "the keys of %1 would move before 0 s", &[&pointer])
         );
         keys[i][0] = json!(new);
-        parts::stretch(&mut keys[i], scale);
+        hands::stretch(&mut keys[i], scale);
         if valued {
             let v = &keys[i][1];
             ensure!(
@@ -129,46 +131,6 @@ fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit) -> Result<Vec<Op>> {
         }
     }
     sorted(pointer, &mut keys)?;
-    crate::handles::reach(pointer, &old, &keys)?;
-    Ok(set(doc, &at, Value::Array(keys)))
-}
-
-fn bend(doc: &Value, e: &KeysEdit) -> Result<Vec<Op>> {
-    let one = e.picks.len() == 1 && e.picks[0].times.len() == 1;
-    ensure!(one, said("editor.keys_one_bent", "handles bend one key at a time: one pick with one time", &[]));
-    let (pointer, t) = (e.picks[0].pointer.as_str(), e.picks[0].times[0]);
-    let (at, old) = list(doc, pointer)?;
-    let i = index(&old, pointer, t)?;
-    let mut keys = old.clone();
-    if e.straighten {
-        let alone = e.in_handle.is_none() && e.out_handle.is_none() && !e.aligned;
-        ensure!(
-            alone,
-            said(
-                "editor.straighten_alone",
-                "straighten the curve after a keyframe on its own, without other changes",
-                &[]
-            )
-        );
-        keys[i] = crate::straight::cut(&old[i], "out");
-        if let Some(next) = old.get(i + 1) {
-            keys[i + 1] = crate::straight::cut(next, "in");
-        }
-        return Ok(set(doc, &at, Value::Array(keys)));
-    }
-    let room = |j: Option<usize>| j.and_then(|j| old.get(j)).map_or(0.0, |k| (time_of(k) - t).abs());
-    let (before, after) = (room(i.checked_sub(1)), room(Some(i + 1)));
-    let mut pair = [e.in_handle, e.out_handle];
-    if e.aligned {
-        match pair {
-            [None, Some(out)] => pair[0] = parts::aligned(out, parts::side(&old[i], "in"), before),
-            [Some(back), None] => pair[1] = parts::aligned(back, parts::side(&old[i], "out"), after),
-            _ => {}
-        }
-    }
-    crate::handles::spans(None, pair)?;
-    let third = crate::handles::end(old[i].get(2), None, pair, &old[i][1])?;
-    keys[i] = crate::handles::key(time_of(&old[i]), old[i][1].clone(), third);
     crate::handles::reach(pointer, &old, &keys)?;
     Ok(set(doc, &at, Value::Array(keys)))
 }

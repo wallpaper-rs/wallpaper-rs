@@ -31,44 +31,11 @@ pub fn local(t: f32, d: f32, mode: Loop) -> f32 {
 pub fn sample<T: Animate>(keys: &[Key<T>], t: f32) -> T {
     let i = keys.partition_point(|k| k.t <= t);
     match (i.checked_sub(1).map(|i| &keys[i]), keys.get(i)) {
-        (Some(a), Some(b)) => {
-            curve(a, b, t).unwrap_or_else(|| a.v.lerp(&b.v, a.ease.apply((t - a.t) / (b.t - a.t).max(1e-6))))
-        }
+        (Some(a), Some(b)) => super::bend::curve(a, b, t)
+            .unwrap_or_else(|| a.v.lerp(&b.v, a.ease.apply((t - a.t) / (b.t - a.t).max(1e-6)))),
         (Some(k), None) | (None, Some(k)) => k.v.clone(),
         (None, None) => T::default(),
     }
-}
-
-fn curve<T: Animate>(a: &Key<T>, b: &Key<T>, t: f32) -> Option<T> {
-    let (out, back) = (a.handles.and_then(|h| h.out), b.handles.and_then(|h| h.before));
-    if out.is_none() && back.is_none() {
-        return None;
-    }
-    let (([v0, ..], n), ([v1, ..], _)) = (a.v.comps(), b.v.comps());
-    let lone = a.one.zip(b.one).filter(|_| n != 1);
-    let (v0, v1) = match lone {
-        Some(ends) => ends,
-        None if n == 1 => (v0, v1),
-        None => (0.0, 1.0),
-    };
-    let third = [(b.t - a.t) / 3.0, (v1 - v0) / 3.0];
-    let ([dt0, dv0], [dt1, dv1]) = (out.unwrap_or(third), back.unwrap_or(third));
-    let at = |p: [f32; 4], s: f32| {
-        let r = 1.0 - s;
-        r * r * r * p[0] + 3.0 * r * r * s * p[1] + 3.0 * r * s * s * p[2] + s * s * s * p[3]
-    };
-    let xs = [a.t, a.t + dt0, b.t - dt1, b.t];
-    let (mut lo, mut hi) = (0.0, 1.0);
-    for _ in 0..24 {
-        let mid = (lo + hi) / 2.0;
-        (lo, hi) = if at(xs, mid) < t { (mid, hi) } else { (lo, mid) };
-    }
-    let v = at([v0, v0 + dv0, v1 - dv1, v1], (lo + hi) / 2.0);
-    Some(match lone {
-        Some(_) => T::from_json(&serde_json::Value::from(v)).unwrap_or_else(|| a.v.clone()),
-        None if n == 1 => a.v.with_comps([v, 0.0, 0.0, 0.0]),
-        None => a.v.lerp(&b.v, v),
-    })
 }
 
 impl<T: Serialize> Serialize for Key<T> {

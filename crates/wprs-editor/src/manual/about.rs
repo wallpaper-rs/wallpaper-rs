@@ -47,7 +47,7 @@ pub const ABOUT: [(&str, &str); 72] = [
     ("key", "Set or remove a key of a bone in a clip"),
     (
         "edit_keys",
-        "Edit keys picked in the curve editor: move, scale, lift or set a part of them, bend or straighten handles, remove, or paste copied keys",
+        "Edit keys picked in the curve editor: move, scale, lift or set a part of them, bend or straighten handles of every part or of one part, link the parts of the handles, remove, or paste copied keys",
     ),
     ("expression", "Add, change or remove a facial expression of a rig"),
     ("ik", "Add, change or remove an inverse kinematics chain"),

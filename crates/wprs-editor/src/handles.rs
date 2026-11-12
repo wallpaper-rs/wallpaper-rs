@@ -7,11 +7,6 @@ use wprs_core::message::said;
 
 const SPAN: f64 = 1e6;
 
-fn handle(key: &Value, side: &str) -> Option<[f64; 2]> {
-    let pair = key.get(2)?.get(side)?.as_array()?;
-    Some([pair.first()?.as_f64()?, pair.get(1)?.as_f64()?])
-}
-
 pub(crate) fn spans(ease: Option<&Value>, handles: [Option<[f64; 2]>; 2]) -> Result<()> {
     let fine = |[dt, dv]: [f64; 2]| dt.is_finite() && dt >= 0.0 && (-SPAN..=SPAN).contains(&dv);
     ensure!(
@@ -46,7 +41,7 @@ fn strays(keys: &[Value]) -> Vec<(f64, &'static str, f32)> {
         let before = i.checked_sub(1).map_or(0.0, |j| at(k) as f32 - at(&keys[j]) as f32);
         let after = keys.get(i + 1).map_or(0.0, |n| at(n) as f32 - at(k) as f32);
         for (side, room) in [("in", before.max(0.0)), ("out", after.max(0.0))] {
-            if handle(k, side).is_some_and(|[dt, _]| dt as f32 > room) {
+            if crate::graph::hands::longest(k, side).is_some_and(|dt| dt as f32 > room) {
                 out.push((at(k), side, room));
             }
         }

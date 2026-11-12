@@ -76,21 +76,34 @@ QtObject {
                 "t": 4
             }];
         const before = page.view.history.done.length;
-        graph.move(0, 2, 3, 0, null);
+        graph.ops.move(0, 2, 3, 0, null);
         if (page.view.history.done.length !== before + 1 || JSON.stringify(times(pointer)) !== "[0,3,5]")
             fail("stretching two keys took more than one step or missed: " + JSON.stringify(times(pointer)));
         page.editor.hold(true);
-        graph.bend(0, 3, "out", [0.5, 0.1]);
-        graph.bend(0, 3, "out", [1, 0.2]);
+        graph.ops.bend(0, 3, "out", [0.5, 0.1]);
+        graph.ops.bend(0, 3, "out", [1, 0.2]);
         page.editor.hold(false);
         const key = read(pointer + "/keys/1");
         if (page.view.history.done.length !== before + 2 || JSON.stringify(key[2]) !== "{\"in\":[1,0.2],\"out\":[1,0.2]}")
             fail("one drag of an aligned handle was not one step: " + JSON.stringify(key));
-        graph.copy();
-        graph.paste();
+        const both = graph.chosen;
+        graph.ops.bend(0, 3, "out", [0.5, 30], 1);
+        const split = read(pointer + "/keys/1")[2];
+        if (!Array.isArray(split.out[0]) || split.out[1][1] !== 30 || split.out[0][1] === 30)
+            fail("a handle of one part bent more than its track: " + JSON.stringify(split));
+        graph.chosen = [both[0]];
+        graph.load();
+        if (!graph.ops.split(0, 3))
+            fail("the curves did not tell the handles apart: " + JSON.stringify(graph.shown[0].keys[1]));
+        graph.ops.link();
+        if (Array.isArray(read(pointer + "/keys/1")[2].out[0]))
+            fail("linking the parts kept one handle per part");
+        graph.chosen = both;
+        graph.ops.copy();
+        graph.ops.paste();
         if (JSON.stringify(times(pointer)) !== "[0,3,5,6,8]")
             fail("pasting at the playhead missed: " + JSON.stringify(times(pointer)));
-        graph.act({
+        graph.ops.act({
             "remove": true
         });
         if (times(pointer).length !== 3)
