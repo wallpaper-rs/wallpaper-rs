@@ -1,0 +1,24 @@
+{
+  "schema": "wallpaper-rs.wpak/2",
+  "id": "org.example.grupo_por_ajuste",
+  "version": "1.0.0",
+  "kind": "scene",
+  "entry": "scene.json",
+  "default_locale": "en",
+  "title": { "en": "Day or night", "es": "Día o noche" },
+  "license": "CC0-1.0",
+  "origin": { "kind": "original" },
+  "content": { "rating": "general" },
+  "photosensitive": false,
+  "properties": {
+    "momento": {
+      "type": "combo", "default": "auto",
+      "label": { "en": "Moment", "es": "Momento" },
+      "options": [
+        { "value": "auto", "label": { "en": "By the time of day", "es": "Según la hora" } },
+        { "value": "dia", "label": { "en": "Day", "es": "Día" } },
+        { "value": "noche", "label": { "en": "Night", "es": "Noche" } }
+      ]
+    }
+  }
+}

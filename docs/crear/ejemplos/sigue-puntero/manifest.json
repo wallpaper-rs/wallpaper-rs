@@ -1,0 +1,14 @@
+{
+  "schema": "wallpaper-rs.wpak/2",
+  "id": "org.example.sigue_puntero",
+  "version": "1.0.0",
+  "kind": "scene",
+  "entry": "scene.json",
+  "default_locale": "en",
+  "title": { "en": "Pointer follower", "es": "Sigue al puntero" },
+  "license": "CC0-1.0",
+  "origin": { "kind": "original" },
+  "content": { "rating": "general" },
+  "photosensitive": false,
+  "inputs": ["pointer"]
+}

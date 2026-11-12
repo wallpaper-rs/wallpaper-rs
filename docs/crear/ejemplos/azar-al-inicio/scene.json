@@ -1,0 +1,12 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "fit": "fill", "background": "#000000" },
+  "clock": { "max_fps": "display", "seed": null },
+  "scripts": [{ "path": "scripts/azar.js", "events": ["init"] }],
+  "layers": [
+    { "id": "fondo", "type": "shape", "shape": { "rect": { "size": [1920, 1080] } }, "gradient": { "stops": [[0, "#101828"], [1, "#283a5c"]] } },
+    { "id": "circulo", "type": "shape", "shape": { "ellipse": { "size": [400, 400] } }, "fill": "#ff7a59" },
+    { "id": "cuadrado", "type": "shape", "shape": { "rect": { "size": [360, 360] } }, "fill": "#7bd88f" },
+    { "id": "anillo", "type": "shape", "shape": { "ring": { "size": [420, 420], "width": 40 } }, "fill": "#8fb8ff" }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "fit": "fill", "background": "#000000" },
+  "clock": { "max_fps": "display" },
+  "scripts": [{ "path": "scripts/momento.js", "events": ["properties"], "uses": ["timers"] }],
+  "layers": [
+    { "id": "dia", "type": "group", "layers": [
+      { "id": "cielo_dia", "type": "shape", "shape": { "rect": { "size": [1920, 1080] } },
+        "gradient": { "stops": [[0, "#5aa9ff"], [1, "#cfeaff"]] } },
+      { "id": "sol", "type": "shape", "shape": { "ellipse": { "size": [260, 260] } }, "fill": "#ffd84a",
+        "transform": { "position": [1400, 300] } }
+    ] },
+    { "id": "noche", "type": "group", "visible": false, "layers": [
+      { "id": "cielo_noche", "type": "shape", "shape": { "rect": { "size": [1920, 1080] } },
+        "gradient": { "stops": [[0, "#050816"], [1, "#1b2a55"]] } },
+      { "id": "luna", "type": "shape", "shape": { "ellipse": { "size": [200, 200] } }, "fill": "#e8eeff",
+        "transform": { "position": [520, 280] } }
+    ] }
+  ]
+}

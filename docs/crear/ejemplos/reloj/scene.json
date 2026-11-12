@@ -1,0 +1,12 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "fit": "fill", "background": "#000000" },
+  "clock": { "max_fps": "display" },
+  "scripts": [{ "path": "scripts/reloj.js" }],
+  "layers": [
+    { "id": "fondo", "type": "shape", "shape": { "rect": { "size": [1920, 1080] } }, "gradient": { "stops": [[0, "#101828"], [1, "#283a5c"]] } },
+    { "id": "hora", "type": "text", "text": "--:--", "size": 220, "anchor": "center", "color": "#f2f5ff" },
+    { "id": "fecha", "type": "text", "text": "", "size": 56, "anchor": "center", "color": "#c9d4f0",
+      "transform": { "position": [0, 170] } }
+  ]
+}

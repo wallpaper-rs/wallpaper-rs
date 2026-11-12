@@ -1,0 +1,15 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "fit": "fill", "background": "#000000" },
+  "clock": { "max_fps": "display" },
+  "scripts": [{ "path": "scripts/semaforo.js", "events": ["init", "update"] }],
+  "layers": [
+    { "id": "fondo", "type": "shape", "shape": { "rect": { "size": [1920, 1080] } }, "gradient": { "stops": [[0, "#101828"], [1, "#283a5c"]] } },
+    { "id": "caja", "type": "shape", "anchor": "center", "shape": { "rect": { "size": [260, 720] } }, "fill": "#0b0e14" },
+    { "id": "roja", "type": "shape", "anchor": "center", "shape": { "ellipse": { "size": [180, 180] } }, "fill": "#ff3b30",
+      "transform": { "position": [0, -230] } },
+    { "id": "ambar", "type": "shape", "anchor": "center", "shape": { "ellipse": { "size": [180, 180] } }, "fill": "#ffcc00" },
+    { "id": "verde", "type": "shape", "anchor": "center", "shape": { "ellipse": { "size": [180, 180] } }, "fill": "#34c759",
+      "transform": { "position": [0, 230] } }
+  ]
+}
