@@ -6,6 +6,7 @@ Canvas {
 
     property var curve: null
     property var marks: []
+    property var shaded: null
     readonly property var points: curve?.points ?? []
 
     function spot(p) {
@@ -16,6 +17,7 @@ Canvas {
     implicitHeight: Kirigami.Units.gridUnit * 4
     onCurveChanged: requestPaint()
     onMarksChanged: requestPaint()
+    onShadedChanged: requestPaint()
     onWidthChanged: requestPaint()
     onPaint: {
         const ctx = getContext("2d");
@@ -37,6 +39,16 @@ Canvas {
         ctx.lineWidth = 2;
         ctx.beginPath();
         points.forEach((p, i) => {
+            const s = plot.spot(p);
+            i ? ctx.lineTo(s[0], s[1]) : ctx.moveTo(s[0], s[1]);
+        });
+        ctx.stroke();
+        if (!plot.shaded)
+            return;
+        ctx.setLineDash([4, 2]);
+        ctx.strokeStyle = Kirigami.Theme.neutralTextColor;
+        ctx.beginPath();
+        plot.shaded.forEach((p, i) => {
             const s = plot.spot(p);
             i ? ctx.lineTo(s[0], s[1]) : ctx.moveTo(s[0], s[1]);
         });

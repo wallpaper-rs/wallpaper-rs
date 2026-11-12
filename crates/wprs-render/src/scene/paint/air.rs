@@ -96,7 +96,7 @@ impl Painter<'_, '_, '_> {
         if reuse {
             self.reused += 1;
         } else {
-            let back = if shafts { self.under(rect, root) } else { None };
+            let back = if shafts { self.shrunk(rect, size, root) } else { None };
             self.breathe(out, (i, rect, size), (step, share), back);
         }
         if !live {
@@ -110,6 +110,20 @@ impl Painter<'_, '_, '_> {
         if live {
             self.release(out);
         }
+    }
+
+    fn shrunk(&mut self, rect: Rect, size: (u32, u32), from: Target) -> Option<Src> {
+        let out = self.acquire(size)?;
+        self.ops.push(Op::Clear(out, [0.0; 4]));
+        let t = from.rect;
+        let mut item = quad();
+        item.uv = [(rect.x - t.x) / t.w, (rect.y - t.y) / t.h, rect.w / t.w, rect.h / t.h];
+        let whole = Rect { x: 0.0, y: 0.0, w: size.0 as f32, h: size.1 as f32 };
+        (item.m0, item.m1) = ndc(whole, whole.affine());
+        let slot = self.pool.push(&item);
+        let tex = [from.src, Src::White, Src::Clear];
+        self.ops.push(Op::Draw { target: out, entry: "fs_texture", mode: Mode::Replace, slot, tex });
+        Some(out)
     }
 
     fn breathe(

@@ -606,7 +606,10 @@ gathers, at `samples` points on the line from the pixel towards the light, the f
 the projected picture of the light there; `density` is the part of the line it walks and also how
 strongly the air glows, and the glow fades to nothing at the radius. With `shafts`, each of those
 points also takes how bright the layers below the light are there, so their dark parts hold back the
-glow and cast shafts: 0 leaves the glow as it is and 1 lets only bright parts glow. The air is worked
+glow and cast shafts: 0 leaves the glow as it is and 1 lets only bright parts glow. Dark and bright
+are measured against the brightest of five points around the light, so a background that is evenly
+dark still glows and only what is darker than around the light holds it back. The shafts read a copy
+of the layers below made at the size of the air, not of the screen. The air is worked
 out at half the size of the screen (Q3 and Q2) or a quarter (Q1, and on T0 and T1 devices), with
 half the samples at Q1, and not at all at Q0; it is kept while the light and, with `shafts`, the
 layers below it stay still, and drawn again only in the box of its radius when one of them moves.

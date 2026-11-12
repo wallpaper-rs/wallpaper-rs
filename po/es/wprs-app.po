@@ -6011,11 +6011,10 @@ msgstr "Haces"
 
 #: apps/wprs-app/qml/SceneLightAir.qml
 msgid ""
-"Shafts let the dark parts of the layers below the light hold back its glow; "
-"layers above the light cover it."
-msgstr ""
-"Los haces dejan que las partes oscuras de las capas de debajo de la luz "
-"frenen su resplandor; las capas de encima lo tapan."
+"Shafts let the parts of the layers below the light that are darker than "
+"around the light hold back its glow; the dashed line is the glow over such a "
+"dark part. Layers above the light cover it."
+msgstr "Los rayos hacen que las partes de las capas de abajo más oscuras que el entorno de la luz frenen su resplandor; la línea de trazos es el resplandor sobre una de esas partes oscuras. Las capas de arriba de la luz lo tapan."
 
 #: apps/wprs-app/qml/SceneLightAir.qml
 msgid ""
@@ -6220,6 +6219,10 @@ msgstr "aire a %1 del tamaño, %2 lecturas"
 #: apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "no air"
 msgstr "sin aire"
+
+#: apps/wprs-app/qml/SceneLightsPanel.qml
+msgid "shafts copy %1 pixels of the layers below"
+msgstr "los rayos copian %1 píxeles de las capas de abajo"
 
 #: apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "%1 lit particle lights"

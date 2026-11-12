@@ -35,6 +35,8 @@ ColumnLayout {
         const out = [];
         if ((cost?.volumetric ?? 0) > 0)
             out.push(row.air ? App.tr("air at %1 of the size, %2 taps", row.air.scale === 0.5 ? App.tr("half") : App.tr("a quarter"), Math.round(row.air_taps)) : App.tr("no air"));
+        if (row.air && (row.shaft_copy ?? 0) > 0)
+            out.push(App.tr("shafts copy %1 pixels of the layers below", Math.round(row.shaft_copy)));
         if ((cost?.lit_systems ?? []).length > 0)
             out.push(App.tr("%1 lit particle lights", Math.round(row.lit_particles)));
         if ((cost?.refracting ?? []).length > 0)

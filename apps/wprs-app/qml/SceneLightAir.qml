@@ -71,13 +71,14 @@ ColumnLayout {
         visible: air.info?.on === true
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
-        text: App.tr("Shafts let the dark parts of the layers below the light hold back its glow; layers above the light cover it.")
+        text: App.tr("Shafts let the parts of the layers below the light that are darker than around the light hold back its glow; the dashed line is the glow over such a dark part. Layers above the light cover it.")
     }
 
     SceneCurvePlot {
         Layout.fillWidth: true
         visible: air.info?.on === true
         curve: air.info?.curve ?? null
+        shaded: air.info?.shaded ?? null
         marks: air.info?.marks ?? []
     }
 

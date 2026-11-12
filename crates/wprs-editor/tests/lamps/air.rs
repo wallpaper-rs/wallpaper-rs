@@ -20,6 +20,10 @@ fn volumetrics_are_set_checked_undone_and_dropped_with_the_type() {
         wprs_editor::lamps::air(&p.dir, &p.doc, "s", 0.0)["shafts"].as_f64().map(|v| (v * 100.0).round()),
         Some(70.0)
     );
+    let shown = wprs_editor::lamps::air(&p.dir, &p.doc, "s", 0.0);
+    let (full, dark) = (&shown["curve"]["points"][0][1], &shown["shaded"][0][1]);
+    let k = dark.as_f64().unwrap() / full.as_f64().unwrap();
+    assert!((k - 0.3).abs() < 1e-3, "over a dark part the glow keeps what the shafts let through: {k}");
     light(&mut p, json!({ "volumetric": { "layer": "s", "shafts": 0 } })).unwrap();
     assert_eq!(layer(&p, "s")["volumetric"], json!({ "density": 0.4, "samples": 8 }));
     for bad in [
@@ -67,6 +71,11 @@ fn the_air_preview_shows_its_curve_and_what_each_level_keeps() {
     assert_eq!(cost["volumetric"], 1);
     assert_eq!(cost["levels"][0]["air_taps"], 0.0);
     assert!(cost["levels"][3]["air_taps"].as_f64() > cost["phone"][3]["air_taps"].as_f64());
+    assert_eq!(cost["levels"][3]["shaft_copy"], 0.0, "no shafts, no copy of the layers below");
+    light(&mut p, json!({ "volumetric": { "layer": "l", "shafts": 0.5 } })).unwrap();
+    let cost = wprs_editor::lamps::cost(&p.dir, &p.doc, 0.0, wprs_scene::Quality::Q3);
+    let copy = |row: &serde_json::Value| row["shaft_copy"].as_f64().unwrap();
+    assert!(copy(&cost["levels"][3]) > copy(&cost["levels"][1]) && copy(&cost["levels"][0]) == 0.0, "{cost}");
     let all = wprs_editor::lamps::lights(&p.dir, &p.doc, 0.0);
     assert_eq!(all["lights"][0]["volumetric"]["samples"], 32);
 }

@@ -71,3 +71,17 @@ fn still_shafts_are_drawn_once_and_a_moving_layer_behind_redraws_the_air() {
     let region = moving.view.damage().unwrap();
     assert!(region.width >= 60 && region.width < 80, "the box of the light is redrawn: {region:?}");
 }
+
+#[test]
+fn an_evenly_dark_background_still_lets_the_shafts_glow() {
+    let dim = json!({ "id": "dim", "type": "shape", "shape": { "rect": { "size": [160, 90] } }, "fill": "#181818",
+        "transform": { "position": [80, 45] } });
+    let (Some(plain), Some(cut)) = (shot(json!([dim.clone()])), shot(json!([dim, lamp(1.0)]))) else {
+        return;
+    };
+    assert!(
+        glow(&cut, &plain, 64) > 40,
+        "only parts darker than around the light hold it back: {}",
+        glow(&cut, &plain, 64)
+    );
+}

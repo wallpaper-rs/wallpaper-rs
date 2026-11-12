@@ -39,12 +39,13 @@ pub fn cost(dir: &Path, doc: &Value, t: f64, quality: Quality) -> Value {
     let pixels: f64 = lit.iter().map(|g| (g.size[0] * g.scale[0] * g.size[1] * g.scale[1]).abs()).sum();
     let layers = crate::layers::walk(doc);
     let animated = layers.iter().any(|(_, l)| l["type"] == "light" && super::moving(l));
-    let airy: Vec<(f64, f64)> = all
+    let airy: Vec<(f64, f64, bool)> = all
         .iter()
         .filter_map(|p| {
             let (_, l) = crate::actions::layer(doc, &p.id).ok()?;
             let samples = l["volumetric"]["samples"].as_f64().or(l.get("volumetric").map(|_| 16.0))?;
-            Some((f64::from(super::report::reach(p)[2..].iter().product::<f32>()), samples))
+            let shafts = l["volumetric"]["shafts"].as_f64().is_some_and(|s| s > 0.0);
+            Some((f64::from(super::report::reach(p)[2..].iter().product::<f32>()), samples, shafts))
         })
         .collect();
     let (lit_swarms, bent) = swarms(doc);
@@ -55,7 +56,10 @@ pub fn cost(dir: &Path, doc: &Value, t: f64, quality: Quality) -> Value {
         let baked = q == Quality::Q0;
         let per_frame = if baked || !animated { 0.0 } else { pixels * lights as f64 };
         let air = q.air(tier).map_or(0.0, |(s, k)| {
-            airy.iter().map(|(px, n)| px / f64::from(s * s) * n * f64::from(k)).sum::<f64>()
+            airy.iter().map(|(px, n, _)| px / f64::from(s * s) * n * f64::from(k)).sum::<f64>()
+        });
+        let copied = q.air(tier).map_or(0.0, |(s, _)| {
+            airy.iter().filter(|a| a.2).map(|(px, ..)| px / f64::from(s * s)).sum::<f64>()
         });
         let cap = if tier <= Tier::T1 { super::FEW } else { MAX_LIGHTS };
         let shaded: f64 = lit_swarms.iter().map(|(_, n)| n * lights.min(super::FEW) as f64).sum();
@@ -63,6 +67,7 @@ pub fn cost(dir: &Path, doc: &Value, t: f64, quality: Quality) -> Value {
         json!({ "quality": q, "baked": baked, "lights": lights.min(cap), "lit_layers": lit.len(),
             "shaded": round(pixels as f32 * lights as f32), "per_frame": round(per_frame as f32),
             "air": q.air(tier).map(|(s, k)| json!({ "scale": 1.0 / s, "samples": k })), "air_taps": round(air as f32),
+            "shaft_copy": round(copied as f32),
             "lit_particles": round(shaded as f32), "refract": q.bend().filter(|_| !bent.is_empty()),
             "refract_pixels": round(bend as f32) })
     };

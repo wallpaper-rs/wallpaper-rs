@@ -728,14 +728,14 @@ in the preview with a brush size, hardness and gray while the map shows over it 
 `ambient --preview` print the same data.
 
 A point or spot light has a Light the air part: a switch for `volumetric`, sliders for density,
-samples and shafts, the glow plotted against the distance, and for each quality level whether the air is off
+samples and shafts, the glow plotted against the distance (with shafts, a dashed line shows the glow over a part of the layers below darker than around the light), and for each quality level whether the air is off
 (Q0), worked out at a quarter of the size with half the samples (Q1) or at half the size (Q2 and Q3),
 with a note that phones work at a quarter; the preview shows the glow live at the picked level, and
 the selected light shades the ring of the lit air. A spot light has a Projects picker that lists the
 pictures and videos of the scene and the layers it may project without a loop, with a thumbnail of
 the picture; the preview draws the picture inside the cone where it lands on the canvas, with a
 dashed outline. The list of lights marks lights that light the air or project, and the cost of each
-quality level adds the samples of the air, the lights shaded on particles and the pixels refraction
+quality level adds the samples of the air, the pixels of the layers below that the shafts copy (`shaft_copy`, at the size of the air; once while they stay still, each frame while one moves), the lights shaded on particles and the pixels refraction
 reads, with the same rows for phones.
 
 The particle tools have a Light part: Take the lights of the scene, a normal map picker and a preview

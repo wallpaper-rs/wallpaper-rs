@@ -65,10 +65,12 @@ pub fn air(dir: &Path, doc: &Value, id: &str, t: f64) -> Value {
         f64::from(sum / n as f32 * reach * edge)
     };
     let curve = crate::curves::plot([0.0, f64::from(l.radius)], 48, glow);
+    let open = 1.0 - f64::from(v.shafts.clamp(0.0, 1.0));
+    let shaded: Vec<[f64; 2]> = curve.points.iter().map(|p| [p[0], p[1] * open]).collect();
     let pixels = super::report::reach(&l)[2..].iter().product::<f32>();
     let taps = [Quality::Q1, Quality::Q2, Quality::Q3]
         .map(|q| q.air(Tier::T3).map_or(0.0, |(s, k)| round(pixels / (s * s) * v.samples as f32 * k)));
     json!({ "on": true, "fits": true, "density": v.density, "samples": v.samples, "shafts": v.shafts, "curve": curve,
-        "marks": [round(l.radius * (1.0 - reach))], "box": super::report::reach(&l).map(round),
+        "shaded": (v.shafts > 0.0).then_some(shaded), "marks": [round(l.radius * (1.0 - reach))], "box": super::report::reach(&l).map(round),
         "levels": levels(v.samples, Tier::T3), "phone": levels(v.samples, Tier::T1), "taps": taps })
 }
