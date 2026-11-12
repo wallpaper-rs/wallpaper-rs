@@ -2,7 +2,7 @@ mod budget;
 mod emits;
 mod ends;
 mod fields;
-mod glyphs;
+pub(crate) mod glyphs;
 mod handles;
 mod looks;
 mod named;

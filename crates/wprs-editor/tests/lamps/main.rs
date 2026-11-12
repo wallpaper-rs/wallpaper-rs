@@ -12,6 +12,7 @@ mod edits;
 mod gizmos;
 mod linear;
 mod maps;
+mod raised;
 mod shared;
 mod surfaces;
 mod swarm;

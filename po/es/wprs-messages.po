@@ -982,10 +982,6 @@ msgid "%1 is #rrggbb or [r, g, b, a]"
 msgstr "%1 es #rrggbb o [r, g, b, a]"
 
 #: crates/wprs-editor/src/lamps/maps.rs
-msgid "name a picture or an image layer"
-msgstr "indica una imagen o una capa de imagen"
-
-#: crates/wprs-editor/src/lamps/maps.rs
 msgid "strength goes from 0 to %1 and blur from 0 to %2"
 msgstr "la fuerza va de 0 a %1 y el desenfoque de 0 a %2"
 
@@ -996,6 +992,22 @@ msgstr "%1 ya nombra otro recurso"
 #: crates/wprs-editor/src/lamps/maps.rs crates/wprs-editor/src/paint.rs
 msgid "a stroke has 1 to %1 points and a channel from 0 to 3"
 msgstr "un trazo tiene de 1 a %1 puntos y un canal de 0 a 3"
+
+#: crates/wprs-editor/src/lamps/source.rs
+msgid "the video layer names no video"
+msgstr "la capa de vídeo no indica ningún vídeo"
+
+#: crates/wprs-editor/src/lamps/source.rs
+msgid "the first frame of %1 could not be read"
+msgstr "no se pudo leer el primer fotograma de %1"
+
+#: crates/wprs-editor/src/lamps/source.rs
+msgid "the text layer has no letters to raise"
+msgstr "la capa de texto no tiene letras que poner en relieve"
+
+#: crates/wprs-editor/src/lamps/source.rs
+msgid "name a picture or an image, video or text layer"
+msgstr "indica una imagen o una capa de imagen, vídeo o texto"
 
 #: crates/wprs-editor/src/lamps/swarm.rs
 msgid "refraction needs a normal map"

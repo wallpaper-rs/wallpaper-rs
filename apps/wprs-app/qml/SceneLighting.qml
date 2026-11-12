@@ -39,7 +39,7 @@ ColumnLayout {
         }
 
         QQC2.Button {
-            visible: lit.block !== null && lit.node?.type === "image"
+            visible: lit.block !== null && ["image", "video", "text"].includes(lit.node?.type ?? "")
             text: App.tr("Generate normals…")
             icon.name: "draw-cuboid"
             onClicked: normals.open()

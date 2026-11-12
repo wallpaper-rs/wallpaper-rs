@@ -6712,6 +6712,14 @@ msgid "Check again"
 msgstr "Comprobar de nuevo"
 
 #: apps/wprs-app/qml/SceneNormals.qml
+msgid "Generate normals from the first frame"
+msgstr "Generar normales a partir del primer fotograma"
+
+#: apps/wprs-app/qml/SceneNormals.qml
+msgid "Generate normals from the letters"
+msgstr "Generar normales a partir de las letras"
+
+#: apps/wprs-app/qml/SceneNormals.qml
 msgid "Generate normals from the picture"
 msgstr "Generar normales a partir de la imagen"
 

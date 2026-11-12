@@ -53,8 +53,12 @@ fn packaged(dir: &Path, doc: &Value, name: &str) -> Option<FontArc> {
 }
 
 pub(super) fn raster(dir: &Path, doc: &Value, font: &str, text: &str) -> Option<RgbaImage> {
+    sized(dir, doc, font, text, SCALE)
+}
+
+pub(crate) fn sized(dir: &Path, doc: &Value, font: &str, text: &str, size: f32) -> Option<RgbaImage> {
     let font = packaged(dir, doc, font).or_else(|| system(font))?;
-    let scale = PxScale::from(SCALE);
+    let scale = PxScale::from(size.clamp(4.0, 512.0));
     let scaled = font.as_scaled(scale);
     let chars: Vec<char> = text.chars().filter(|c| !c.is_control()).take(MAX_CHARS).collect();
     if chars.is_empty() {

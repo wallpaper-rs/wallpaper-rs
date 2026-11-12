@@ -1,8 +1,8 @@
-use super::lit::{lit_layer, picture};
+use super::lit::lit_layer;
 use crate::action::{MapStroke, NormalsMake};
 use crate::ops::{Op, escape, set};
 use crate::paint::{POINTS, Stroke, stroke};
-use anyhow::{Result, anyhow, ensure};
+use anyhow::{Result, ensure};
 use image::{Rgba, RgbaImage, imageops};
 use serde_json::{Value, json};
 use std::path::Path;
@@ -16,19 +16,7 @@ fn path_of<'a>(doc: &'a Value, id: &str) -> Option<&'a str> {
     doc.pointer(&format!("/scene/assets/{}/path", escape(id))).and_then(Value::as_str)
 }
 
-fn source(doc: &Value, m: &NormalsMake) -> Result<String> {
-    let from_layer = || -> Option<String> {
-        let (_, l) = crate::actions::layer(doc, m.layer.as_deref()?).ok()?;
-        l["image"].as_str().map(String::from)
-    };
-    let id = m.asset.clone().or_else(from_layer);
-    let id =
-        id.ok_or_else(|| anyhow!(said("editor.normals_from", "name a picture or an image layer", &[])))?;
-    picture(doc, &id)?;
-    Ok(id)
-}
-
-fn made(dir: &Path, doc: &Value, m: &NormalsMake) -> Result<(String, RgbaImage)> {
+fn made(dir: &Path, doc: &Value, m: &NormalsMake) -> Result<(String, Option<String>, RgbaImage)> {
     let fits = |v: f32, hi: f32| v.is_finite() && (0.0..=hi).contains(&v);
     ensure!(
         fits(m.strength, wprs_depth::MAX_STRENGTH) && fits(m.blur, wprs_depth::MAX_BLUR),
@@ -38,9 +26,8 @@ fn made(dir: &Path, doc: &Value, m: &NormalsMake) -> Result<(String, RgbaImage)>
             &[&wprs_depth::MAX_STRENGTH, &wprs_depth::MAX_BLUR]
         )
     );
-    let id = source(doc, m)?;
-    let picture = crate::pictures::asset(dir, doc, &id)?.into_rgba8();
-    Ok((id, wprs_depth::normals(&picture, m.strength, m.blur)))
+    let from = super::source::source(dir, doc, m)?;
+    Ok((from.id, from.path, wprs_depth::normals(&from.picture, m.strength, m.blur)))
 }
 
 fn saved(dir: &Path, (folder, name): (&str, &str), image: &RgbaImage, like: Option<&str>) -> Result<String> {
@@ -67,11 +54,11 @@ pub(crate) fn normals(dir: &Path, doc: &Value, m: &NormalsMake) -> Result<Vec<Op
             said("editor.normals_taken", "%1 already names another asset", &[&id])
         );
     }
-    let (from, image) = made(dir, doc, m)?;
+    let (from, like, image) = made(dir, doc, m)?;
     let base =
         m.id.clone().unwrap_or_else(|| format!("{}_normals", from.chars().take(24).collect::<String>()));
     let id = if m.id.is_some() { base } else { crate::layers::unique(doc, &base) };
-    let path = saved(dir, ("normals", &id), &image, path_of(doc, &from))?;
+    let path = saved(dir, ("normals", &id), &image, like.as_deref())?;
     let mut ops =
         set(doc, &format!("/scene/assets/{}", escape(&id)), json!({ "path": path, "linear": true }));
     if let Some(layer) = &m.layer {
@@ -90,7 +77,7 @@ fn small(image: &RgbaImage) -> RgbaImage {
 }
 
 pub fn preview(dir: &Path, doc: &Value, m: &NormalsMake) -> Value {
-    let Ok((from, image)) = made(dir, doc, m) else { return Value::Null };
+    let Ok((from, _, image)) = made(dir, doc, m) else { return Value::Null };
     let shown = small(&image);
     json!({ "from": from, "size": [shown.width(), shown.height()], "normals": crate::rigs::url(&shown),
         "relief": crate::rigs::url(&wprs_depth::relief(&shown, LIGHT)),

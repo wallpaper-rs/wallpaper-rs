@@ -13,6 +13,7 @@ mod lit;
 mod maps;
 mod placed;
 mod report;
+mod source;
 mod swarm;
 
 pub use air::{air, levels as air_levels};
