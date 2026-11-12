@@ -7844,12 +7844,12 @@ msgid ""
 "Add a Wallhaven provider with its search options; prints its library source "
 "uid"
 msgstr ""
-"Agregar un proveedor Wallhaven con sus opciones de búsqueda; imprime el uid "
+"Añadir un proveedor Wallhaven con sus opciones de búsqueda; imprime el uid "
 "de su fuente de la biblioteca"
 
 #: apps/wprs-ctl/src/wallhaven.rs
 msgid "Add the provider without an API key"
-msgstr "Agregar el proveedor sin clave de API"
+msgstr "Añadir el proveedor sin clave de API"
 
 #: apps/wprs-ctl/src/wallhaven.rs
 msgid "Change several search options of a Wallhaven provider at once"

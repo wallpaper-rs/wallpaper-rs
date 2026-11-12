@@ -5664,9 +5664,7 @@ msgstr "Eventos"
 #: apps/wprs-app/qml/SceneClipEvents.qml
 msgid "Double-click the lane to add an event"
 msgstr ""
-"Doble clic en la franja para añadir un eventoHaz doble clic en la franja "
-"para añadir ahí un evento; los disparadores y los scripts arrancan con su "
-"nombre."
+"Doble clic en la franja para añadir un evento"
 
 #: apps/wprs-app/qml/SceneClipRow.qml apps/wprs-app/qml/SceneModelMotion.qml
 msgid "Shape %1"
@@ -5971,7 +5969,7 @@ msgstr "Sin ella, el efecto se omite en los niveles cuyo presupuesto supera."
 
 #: apps/wprs-app/qml/SceneEffectLighter.qml
 msgid "Add a lighter variant"
-msgstr "Agregar una variante liviana"
+msgstr "Añadir una variante liviana"
 
 #: apps/wprs-app/qml/SceneEffectLighter.qml
 msgid "Its cost: taps, passes and scale"
@@ -6193,11 +6191,11 @@ msgstr "Un descriptor de efecto y su shader WGSL cuando no está a su lado"
 
 #: apps/wprs-app/qml/SceneEmitterList.qml
 msgid "Add a point emitter"
-msgstr "Agregar un emisor de punto"
+msgstr "Añadir un emisor de punto"
 
 #: apps/wprs-app/qml/SceneEmitterList.qml
 msgid "Add a line emitter"
-msgstr "Agregar un emisor de línea"
+msgstr "Añadir un emisor de línea"
 
 #: apps/wprs-app/qml/SceneEmitterList.qml
 msgid "Place these emitters on the canvas"
@@ -6570,7 +6568,7 @@ msgstr "Editor de curvas"
 
 #: apps/wprs-app/qml/SceneGraph.qml
 msgid "No keys to show: add keyframes to a value first."
-msgstr "No hay claves que mostrar: primero agrega fotogramas clave a un valor."
+msgstr "No hay claves que mostrar: primero añade fotogramas clave a un valor."
 
 #: apps/wprs-app/qml/SceneGraph.qml
 msgid ""
@@ -6972,7 +6970,7 @@ msgstr "Añadir una capa"
 
 #: apps/wprs-app/qml/SceneLayerAdd.qml
 msgid "add a pool first"
-msgstr "agrega una reserva primero"
+msgstr "añade una reserva primero"
 
 #: apps/wprs-app/qml/SceneLayerAdd.qml
 msgid "import a file of this kind first"
@@ -8421,7 +8419,7 @@ msgstr "la dibuja %1"
 
 #: apps/wprs-app/qml/ScenePools.qml
 msgid "Add a shapes layer"
-msgstr "Agregar una capa de formas"
+msgstr "Añadir una capa de formas"
 
 #: apps/wprs-app/qml/ScenePools.qml
 msgid "Change the pool…"
@@ -8429,7 +8427,7 @@ msgstr "Cambiar la reserva…"
 
 #: apps/wprs-app/qml/ScenePools.qml
 msgid "Add a pool…"
-msgstr "Agregar una reserva…"
+msgstr "Añadir una reserva…"
 
 #: apps/wprs-app/qml/ScenePoseKnob.qml
 msgid "Move the bone"
@@ -11510,7 +11508,7 @@ msgstr "le falta %1"
 
 #: apps/wprs-app/qml/SceneUses.qml
 msgid "Adds %1 to the uses of the script"
-msgstr "Agrega %1 a los usos del script"
+msgstr "Añade %1 a los usos del script"
 
 #: apps/wprs-app/qml/SceneWakeRules.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
