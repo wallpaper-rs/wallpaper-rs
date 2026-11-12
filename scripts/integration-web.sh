@@ -72,7 +72,7 @@ else
   ctl rgb covered follow >/dev/null && ctl covered TEST-W true && expect "s['outputs']['TEST-W']['active']" False
   wait_for 10 sends || fail "the lights stopped following a covered page: $(ctl rgb status)"
   frames() { field "s['outputs']['TEST-W']['page_frames']"; }
-  runs() { local before; before=$(frames); sleep 1; [ "$(frames)" "$1" "$before" ]; }
+  runs() { local before; before=$(frames); sleep 1; test "$(frames)" "$1" "$before"; }
   wait_for 10 runs -gt || fail "a covered page the lights follow did not keep running: $(ctl state)"
   ctl config rgb.server "127.0.0.1:1" >/dev/null
   wait_for 15 runs = || fail "a covered page kept running for lights no server receives: $(ctl rgb status)"
