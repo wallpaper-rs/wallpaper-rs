@@ -87,83 +87,8 @@ ColumnLayout {
     Repeater {
         model: sounds.layers
 
-        delegate: ColumnLayout {
-            id: row
-
-            required property var modelData
-
-            Layout.fillWidth: true
-
-            RowLayout {
-                Layout.fillWidth: true
-
-                Kirigami.Icon {
-                    source: "audio-x-generic"
-                    implicitWidth: Kirigami.Units.iconSizes.small
-                    implicitHeight: implicitWidth
-                }
-
-                QQC2.Label {
-                    Layout.fillWidth: true
-                    text: row.modelData.id + (row.modelData.muted ? " (" + App.tr("muted") + ")" : "")
-                    elide: Text.ElideRight
-                    font.bold: true
-                }
-
-                QQC2.Label {
-                    text: sounds.trigger(row.modelData)
-                    color: Kirigami.Theme.disabledTextColor
-                }
-
-                QQC2.ToolButton {
-                    checkable: true
-                    checked: sounds.same(sounds.heard, row.modelData.id)
-                    icon.name: checked ? "media-playback-stop" : "media-playback-start"
-                    text: checked ? App.tr("Stop listening") : App.tr("Listen")
-                    display: QQC2.AbstractButton.IconOnly
-                    QQC2.ToolTip.text: text
-                    QQC2.ToolTip.visible: hovered
-                    onClicked: sounds.listen(row.modelData.id)
-                }
-
-                QQC2.ToolButton {
-                    visible: sounds.root
-                    icon.name: "go-next"
-                    text: App.tr("Edit the sound layer")
-                    display: QQC2.AbstractButton.IconOnly
-                    onClicked: sounds.page.editor.select(row.modelData.pointer)
-                }
-            }
-
-            Repeater {
-                model: row.modelData.sounds
-
-                delegate: ColumnLayout {
-                    id: clip
-
-                    required property int index
-                    required property string modelData
-
-                    Layout.fillWidth: true
-
-                    QQC2.Label {
-                        text: clip.modelData + (sounds.wave(clip.modelData).seconds ? " · " + App.tr("%1 s", Number(sounds.wave(clip.modelData).seconds).toFixed(1)) : "")
-                        color: Kirigami.Theme.disabledTextColor
-                    }
-
-                    SceneWave {
-                        Layout.fillWidth: true
-                        wave: sounds.wave(clip.modelData)
-                        fadeIn: clip.index === 0 ? row.modelData.fade_in : 0
-                        fadeOut: clip.index === row.modelData.sounds.length - 1 ? row.modelData.fade_out : 0
-                        fades: clip.index === 0 || clip.index === row.modelData.sounds.length - 1
-                        onFaded: (key, seconds) => sounds.page.run("set", {
-                                "pointer": row.modelData.pointer + "/" + key,
-                                "value": seconds
-                            })
-                    }
-                }
-            }
+        delegate: SceneSoundLayer {
+            owner: sounds
         }
     }
 
@@ -176,43 +101,8 @@ ColumnLayout {
     Repeater {
         model: sounds.spare
 
-        delegate: ColumnLayout {
-            id: loose
-
-            required property var modelData
-
-            Layout.fillWidth: true
-
-            RowLayout {
-                Layout.fillWidth: true
-
-                QQC2.Label {
-                    Layout.fillWidth: true
-                    text: loose.modelData.name
-                    elide: Text.ElideRight
-                }
-
-                QQC2.ToolButton {
-                    checkable: true
-                    checked: sounds.same(sounds.heard, {
-                        "asset": loose.modelData.name
-                    })
-                    icon.name: checked ? "media-playback-stop" : "media-playback-start"
-                    text: checked ? App.tr("Stop listening") : App.tr("Listen")
-                    display: QQC2.AbstractButton.IconOnly
-                    QQC2.ToolTip.text: text
-                    QQC2.ToolTip.visible: hovered
-                    onClicked: sounds.listen({
-                        "asset": loose.modelData.name
-                    })
-                }
-            }
-
-            SceneWave {
-                Layout.fillWidth: true
-                wave: sounds.wave(loose.modelData.name)
-                fades: false
-            }
+        delegate: SceneSoundSpare {
+            owner: sounds
         }
     }
 }
