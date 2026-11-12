@@ -156,7 +156,8 @@ impl Scene {
     }
 
     pub fn paths(&self) -> BTreeSet<&str> {
-        let assets = self.assets.values().map(|a| a.path.as_str());
+        let shapes = self.assets.values().flat_map(|a| a.shapes.values().map(String::as_str));
+        let assets = self.assets.values().map(|a| a.path.as_str()).chain(shapes);
         let effects = self.effects.values().flat_map(|f| [f.descriptor.as_str(), f.wgsl.as_str()]);
         assets.chain(self.scripts.iter().map(|s| s.path.as_str())).chain(effects).collect()
     }

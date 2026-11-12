@@ -41,7 +41,10 @@ impl Scene {
             let Some(asset) = self.assets.get(&id).filter(|a| a.extension() == "glb") else { continue };
             let (path, at) = (asset.path.clone(), format!("/assets/{id}"));
             let (mesh, solid, posed) = paths.get(&path).copied().unwrap_or_default();
-            if let Some((file, rig, model)) = read.get(&path) {
+            let carved: Vec<(String, String)> =
+                asset.shapes.clone().into_iter().filter(|_| solid && posed).collect();
+            let key = format!("{path}\n{carved:?}");
+            if let Some((file, rig, model)) = read.get(&key) {
                 self.models.insert(id.clone(), file.clone());
                 rig.iter().for_each(|r| _ = self.rigs.insert(id.clone(), r.clone()));
                 model.iter().for_each(|m| _ = self.solids.insert(id.clone(), m.clone()));
@@ -76,7 +79,9 @@ impl Scene {
                     MAX_MODELS_JSON >> 20
                 )));
             }
-            let file = Arc::new(ModelFile::parse_head(&bytes, total, &mut left).map_err(wrong)?);
+            let mut file = ModelFile::parse_head(&bytes, total, &mut left).map_err(wrong)?;
+            file.shapes.extend(asset.shapes.keys().cloned());
+            let file = Arc::new(file);
             if solid {
                 drawn = (drawn.0 + file.triangles, drawn.1 + file.vertices);
                 if drawn.0 > crate::MAX_TRIANGLES || drawn.1 > crate::MAX_MODEL_VERTICES as u64 {
@@ -88,11 +93,17 @@ impl Scene {
             }
             let rig = mesh.then(|| Rigged::decode(&bytes).map(Arc::new)).transpose().map_err(wrong)?;
             let bytes = Arc::new(bytes);
+            let mut shapes = Vec::with_capacity(carved.len());
+            for (name, from) in &carved {
+                let bytes = files.read(from, MAX_MODEL_BYTES).map_err(|e| fail(at.clone(), e.to_string()))?;
+                shapes.push((name.clone(), bytes));
+            }
+            let shaped = |mut m: Model| m.carve(&shapes).map(|_| m);
             let model = solid
-                .then(|| Model::shared(bytes.clone(), posed).map(Arc::new))
+                .then(|| Model::shared(bytes.clone(), posed).and_then(shaped).map(Arc::new))
                 .transpose()
                 .map_err(wrong)?;
-            read.insert(path, (file.clone(), rig.clone(), model.clone()));
+            read.insert(key, (file.clone(), rig.clone(), model.clone()));
             self.models.insert(id.clone(), file);
             model.into_iter().for_each(|m| _ = self.solids.insert(id.clone(), m));
             if let Some(rig) = rig {

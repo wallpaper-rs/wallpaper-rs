@@ -102,6 +102,7 @@ The scene may also set `audio: { "attack" (0.001 to 2 s), "release" (0.01 to 10 
 | `animated` | `true` plays the frames of an animated GIF or WebP with their own durations (at most 256 frames and 64 MiB once decoded; a frame shorter than 20 ms lasts 100 ms, as in browsers) | `animated_textures` |
 | `face` | which font of a `.ttc` or `.otc` collection (0 to 255) | `fonts2` |
 | `media` | `current` or `previous`: the cover of what the media player plays now or played before, usable wherever a picture is; `path` is then the picture shown while nothing plays | `media_info` |
+| `shapes` | on a `.glb`, at most 64 blend shapes sculpted beside the model, each name of a shape to the path of its file (`WPSH`, then the version 1 and the count as 32-bit little-endian numbers, then per vertex its node and primitive as 16-bit numbers, its vertex as a 32-bit number and the change of its place and normal as six 32-bit floats, in the space of the primitive); an animated model takes them as blend shapes of the file, with the weight 0 until `shapes` or keys set one; a name the file already has is refused | `model_animation` |
 
 An `image` layer that shows a sheet plays its frames on the scene clock, so that every layer showing
 the same sheet at the same rate shows the same frame; its `playback` sets the rate, the range, whether

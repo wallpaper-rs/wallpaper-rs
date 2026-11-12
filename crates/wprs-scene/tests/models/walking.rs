@@ -76,3 +76,31 @@ fn a_still_model_bakes_the_blend_shapes_its_file_sets() {
     let (flat, turned) = (tangent(&thin), tangent(&still([0.0, 1.0])));
     assert!(flat.iter().zip(&turned).all(|(x, y)| (x + y).abs() < 1e-4), "{flat:?} {turned:?}");
 }
+
+#[test]
+fn sculpted_shapes_beside_a_model_join_its_blend_shapes() {
+    let carved: Vec<Carved> = (0..36)
+        .map(|v| Carved { node: 2, primitive: 0, vertex: v, at: [0.5, 0.0, 0.0], normal: [0.0; 3] })
+        .collect();
+    let (glb, shape) = (ForgeRig::new(2.0, 0.5).glb(), carve_encode(&carved));
+    assert_eq!(carve_decode(&shape).unwrap(), carved);
+    assert!(carve_decode(&shape[..20]).is_err());
+    let doc = json!({ "schema": SCHEMA, "canvas": { "size": [200, 100] },
+        "assets": { "toy": { "path": "toy.glb", "shapes": { "smile": "toy-smile-1.wpsh" } } },
+        "layers": [model("m", json!({ "shapes": { "smile": 1 } }))] });
+    let mut scene = Scene::from_json(&doc.to_string()).unwrap();
+    assert!(scene.paths().contains("toy-smile-1.wpsh"));
+    let read = move |path: &str, _: usize| {
+        Ok::<_, String>(if path.ends_with(".glb") { glb.clone() } else { shape.clone() })
+    };
+    scene.adopt(&BTreeMap::new(), read).unwrap();
+    let m = &scene.solids["toy"];
+    let rig = m.rig.as_ref().unwrap();
+    assert_eq!(rig.shapes, ["bulge", "smile"]);
+    let base = rig.pieces[0].targets[1].1 as usize;
+    assert_eq!(m.morphs[base], [0.5, 0.0, 0.0, 0.0]);
+    let mut rt = runtime(scene);
+    rt.frame([0.0, 0.0, 200.0, 100.0], Quality::Q3);
+    let slots = rt.puppet("m").unwrap().posed().morphs[0];
+    assert!(slots.contains(&(base as u32, 1.0)), "{slots:?}");
+}

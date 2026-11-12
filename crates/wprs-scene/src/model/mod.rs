@@ -3,6 +3,7 @@ mod forge;
 mod morphs;
 mod pictures;
 mod posed;
+mod sculpt;
 mod surface;
 mod tiers;
 mod uvs;
@@ -15,6 +16,7 @@ use std::sync::Arc;
 
 pub use forge::{Forge, ForgeMaterial, ForgeRig, ForgeShape};
 pub use pictures::picture_size;
+pub use sculpt::{Carved, MAX_SCULPTS, carve_decode, carve_encode};
 pub use surface::{Alpha, Finish, SLOTS};
 pub use tiers::{ModelCaps, Verdict, caps, fur_shells, shadow_side, verdict};
 pub use uvs::{MapUv, MapWrap, SAME_UV, Sampling};

@@ -43,6 +43,13 @@ impl Check<'_> {
                     self.issues.push(Issue::Type(format!("{p}/media")));
                 }
             }
+            if !a.shapes.is_empty() {
+                self.uses(true, "model_animation");
+                if ext != "glb" {
+                    self.issues.push(Issue::Type(format!("{p}/shapes")));
+                }
+                self.count(&format!("{p}/shapes"), a.shapes.len(), crate::MAX_SCULPTS);
+            }
             a.face.iter().for_each(|f| self.range(&format!("{p}/face"), *f as f32, 0.0, 255.0));
             self.count(&format!("{p}/rects"), a.rects.len(), MAX_FRAMES as usize);
             for (i, r) in a.rects.iter().enumerate() {

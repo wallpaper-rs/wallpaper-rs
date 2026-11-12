@@ -37,6 +37,8 @@ pub struct Asset {
     pub animated: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub media: Option<crate::Cover>,
+    #[serde(default, skip_serializing_if = "std::collections::BTreeMap::is_empty")]
+    pub shapes: std::collections::BTreeMap<String, String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize, JsonSchema)]
