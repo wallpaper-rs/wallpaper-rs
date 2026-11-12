@@ -18,6 +18,7 @@ mod split;
 mod timing;
 mod uses;
 mod tinted;
+mod valued;
 mod worded;
 
 fn state() {

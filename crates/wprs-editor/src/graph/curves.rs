@@ -75,5 +75,8 @@ pub fn curves(doc: &Value, q: &Value) -> Value {
             json!({ "part": p, "name": name, "points": points })
         })
         .collect();
-    json!({ "pointer": pointer, "list": list, "offset": offset, "range": [from, to], "keys": rows, "tracks": tracks })
+    let unit = crate::schema::at(doc, pointer).and_then(|s| s["x-unit"].as_str().map(String::from));
+    let kind = crate::kinded::kind(doc, &list);
+    json!({ "pointer": pointer, "list": list, "offset": offset, "range": [from, to], "keys": rows, "tracks": tracks,
+        "kind": kind, "unit": unit.unwrap_or_default() })
 }

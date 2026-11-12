@@ -60,8 +60,8 @@ Canvas {
         const picked = graph.picked(tr.s, k.t) && (dx !== 0 || dy !== 0 || stretch !== 1);
         const pivot = box ? box[0] : k.t;
         const px = tx(pivot + (k.t - pivot) * (picked ? stretch : 1)) + (picked ? dx : 0);
-        const lifted = picked && mouse.held?.lift && mouse.held.s === tr.s && mouse.held.p === tr.p;
-        return [px, vy(tr, k.parts[tr.p]) + (lifted ? dy : 0)];
+        const lifted = picked && mouse.touches(tr);
+        return [px, vy(tr, lifted ? mouse.changed(k.parts[tr.p]) : k.parts[tr.p])];
     }
 
     function handles(tr) {

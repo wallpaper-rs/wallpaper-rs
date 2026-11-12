@@ -3,6 +3,7 @@ mod curves;
 pub(crate) mod hands;
 pub(crate) mod parts;
 mod paste;
+mod values;
 
 pub use curves::curves;
 
@@ -48,18 +49,30 @@ pub(crate) fn edit(doc: &Value, e: &KeysEdit) -> Result<Vec<Op>> {
         said("editor.keys_picks", "picks names the keys to change: a pointer and the times of its keys", &[])
     );
     let numbers = [e.shift, e.pivot, e.lift].into_iter().chain(e.value).chain(e.at);
+    let numbers = numbers.chain(e.value_scale).chain(e.value_pivot);
     ensure!(
         numbers.into_iter().all(f64::is_finite),
-        said("editor.keys_finite", "shift, pivot, lift, value and at are finite numbers", &[])
+        said(
+            "editor.keys_finite",
+            "shift, pivot, lift, value, value_scale, value_pivot and at are finite numbers",
+            &[]
+        )
     );
     let ops = if e.picks.iter().any(|p| !p.keys.is_empty()) {
         paste::paste(doc, e)?
     } else if e.in_handle.is_some() || e.out_handle.is_some() || e.straighten || e.link {
         bend::bend(doc, e)?
     } else {
+        if values::sized(e) && e.picks.len() > 1 {
+            values::alike(doc, &e.picks)?;
+        }
+        let mids = match e.value_scale.is_some() && e.value_pivot.is_none() {
+            true => values::middles(doc, &e.picks),
+            false => Vec::new(),
+        };
         let mut ops = Vec::new();
         for pick in &e.picks {
-            ops.extend(moved(doc, pick, e)?);
+            ops.extend(moved(doc, pick, e, &mids)?);
         }
         ops
     };
@@ -67,7 +80,7 @@ pub(crate) fn edit(doc: &Value, e: &KeysEdit) -> Result<Vec<Op>> {
     Ok(ops)
 }
 
-fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit) -> Result<Vec<Op>> {
+fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit, mids: &[f64]) -> Result<Vec<Op>> {
     let pointer = pick.pointer.as_str();
     let (at, old) = list(doc, pointer)?;
     ensure!(
@@ -100,7 +113,6 @@ fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit) -> Result<Vec<Op>> {
         crate::handles::reach(pointer, &old, &left)?;
         return Ok(set(doc, &at, Value::Array(left)));
     }
-    let valued = e.lift != 0.0 || e.value.is_some();
     for &i in &chosen {
         let t = time_of(&keys[i]);
         let new = ((e.pivot + (t - e.pivot) * scale + e.shift) * 1000.0).round() / 1000.0;
@@ -110,7 +122,7 @@ fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit) -> Result<Vec<Op>> {
         );
         keys[i][0] = json!(new);
         hands::stretch(&mut keys[i], scale);
-        if valued {
+        if values::sized(e) {
             let v = &keys[i][1];
             ensure!(
                 e.value.is_none() || e.part.is_some() || v.is_number(),
@@ -120,14 +132,14 @@ fn moved(doc: &Value, pick: &KeyPick, e: &KeysEdit) -> Result<Vec<Op>> {
                     &[]
                 )
             );
-            let lift = |x: f64| e.value.unwrap_or(x) + e.lift;
-            keys[i][1] = parts::changed(v, e.part, lift).ok_or_else(|| {
+            keys[i][1] = values::valued(v, e, mids).ok_or_else(|| {
                 anyhow!(said(
                     "editor.keys_unvalued",
                     "the key of %1 at %2 s has no part %3",
                     &[&pointer, &t, &e.part.unwrap_or(0)]
                 ))
             })?;
+            values::risen(&mut keys[i], e);
         }
     }
     sorted(pointer, &mut keys)?;

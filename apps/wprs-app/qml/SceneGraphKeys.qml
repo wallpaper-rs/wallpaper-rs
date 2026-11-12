@@ -46,6 +46,30 @@ QtObject {
                     }));
     }
 
+    function alike(s) {
+        const c = graph.shown[s];
+        return graph.chosen.every(o => {
+            const d = graph.shown[o.s];
+            return d.kind === c.kind && d.unit === c.unit && d.tracks.length === c.tracks.length;
+        });
+    }
+
+    function middle(p) {
+        const all = graph.chosen.map(c => graph.shown[c.s].keys.find(k => Math.abs(k.t - c.t) < 1e-3)?.parts?.[p]).filter(v => v !== undefined);
+        return all.length ? (Math.min.apply(null, all) + Math.max.apply(null, all)) / 2 : 0;
+    }
+
+    function rescale(factor, pivot, part) {
+        const args = {
+            "value_scale": Math.round(factor * 1e6) / 1e6
+        };
+        if (pivot !== null)
+            args.value_pivot = Math.round(pivot * 1e6) / 1e6;
+        if (part !== null)
+            args.part = part;
+        act(args);
+    }
+
     function bend(s, t, side, pair, part) {
         const args = {
             "picks": [{

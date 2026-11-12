@@ -92,6 +92,27 @@ ColumnLayout {
             }
         }
 
+        QQC2.Label {
+            text: App.tr("Scale values ×")
+            enabled: values.enabled
+        }
+
+        QQC2.TextField {
+            id: values
+
+            implicitWidth: Kirigami.Units.gridUnit * 3
+            enabled: tools.graph.chosen.length > 1 && tools.graph.ops.alike(tools.graph.chosen[0].s)
+            placeholderText: "0.5"
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.text: App.tr("Scales the values of the picked keys around the middle of each part, for keys of values of one kind and unit. Alt and drag a picked key does the same on its track.")
+            onAccepted: {
+                const factor = Number(String(text).replace(",", "."));
+                if (isFinite(factor) && factor !== 1)
+                    tools.graph.ops.rescale(factor, null, null);
+                text = "";
+            }
+        }
+
         Item {
             Layout.fillWidth: true
         }

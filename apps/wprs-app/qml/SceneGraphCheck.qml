@@ -79,12 +79,15 @@ QtObject {
         graph.ops.move(0, 2, 3, 0, null);
         if (page.view.history.done.length !== before + 1 || JSON.stringify(times(pointer)) !== "[0,3,5]")
             fail("stretching two keys took more than one step or missed: " + JSON.stringify(times(pointer)));
+        graph.ops.rescale(2, 0, 1);
+        if (JSON.stringify(read(pointer + "/keys").map(k => k[1][1])) !== "[0,200,100]")
+            fail("scaling the y of two keys missed: " + JSON.stringify(read(pointer + "/keys")));
         page.editor.hold(true);
         graph.ops.bend(0, 3, "out", [0.5, 0.1]);
         graph.ops.bend(0, 3, "out", [1, 0.2]);
         page.editor.hold(false);
         const key = read(pointer + "/keys/1");
-        if (page.view.history.done.length !== before + 2 || JSON.stringify(key[2]) !== "{\"in\":[1,0.2],\"out\":[1,0.2]}")
+        if (page.view.history.done.length !== before + 3 || JSON.stringify(key[2]) !== "{\"in\":[1,0.2],\"out\":[1,0.2]}")
             fail("one drag of an aligned handle was not one step: " + JSON.stringify(key));
         const both = graph.chosen;
         graph.ops.bend(0, 3, "out", [0.5, 30], 1);

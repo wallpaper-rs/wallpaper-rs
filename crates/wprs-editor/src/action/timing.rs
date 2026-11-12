@@ -95,6 +95,8 @@ pub struct KeysEdit {
     pub part: Option<usize>,
     pub lift: f64,
     pub value: Option<f64>,
+    pub value_scale: Option<f64>,
+    pub value_pivot: Option<f64>,
     pub in_handle: Option<[f64; 2]>,
     pub out_handle: Option<[f64; 2]>,
     pub aligned: bool,

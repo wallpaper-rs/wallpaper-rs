@@ -98,7 +98,7 @@ Kirigami.Dialog {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
             color: Kirigami.Theme.disabledTextColor
-            text: graph.shown.length === 0 ? App.tr("No keys to show: add keyframes to a value first.") : App.tr("Click a key to pick it, Ctrl+click to add it, drag around keys to pick several. Drag picked keys to move them in time and value, the grip at the right of the selection to stretch their times, and the round handles to bend the curve. Each track is drawn on its own scale.")
+            text: graph.shown.length === 0 ? App.tr("No keys to show: add keyframes to a value first.") : App.tr("Click a key to pick it, Ctrl+click to add it, drag around keys to pick several. Drag picked keys to move them in time and value (keys of several values too, when they are of one kind and unit), Alt and drag to scale their values, the grip at the right of the selection to stretch their times, and the round handles to bend the curve. Each track is drawn on its own scale.")
         }
     }
 }

@@ -9,6 +9,17 @@ MouseArea {
     property var held: null
     property real x0: 0
     property real y0: 0
+    property real delta: 0
+    property real factor: 1
+    property real mid: 0
+
+    function touches(tr) {
+        return held?.lift === true && (graph.shown[held.s].tracks.length > 1 ? tr.p === held.p : true);
+    }
+
+    function changed(v) {
+        return held.values ? mid + (v - mid) * factor : v + delta;
+    }
 
     function near(a, b) {
         return Math.hypot(a[0] - b[0], a[1] - b[1]) <= 7;
@@ -69,9 +80,11 @@ MouseArea {
         if (mode === "handle")
             graph.page.editor.hold(false);
         else if (mode === "move" && (plot.dx !== 0 || plot.dy !== 0)) {
-            const lift = held.lift ? plot.value(tr, y0 + plot.dy) - plot.value(tr, y0) : 0;
             const parts = graph.shown[held.s].tracks.length;
-            graph.ops.move(plot.time(x0 + plot.dx) - plot.time(x0), 1, 0, lift, parts > 1 ? held.p : null);
+            if (held.values && factor !== 1)
+                graph.ops.rescale(factor, mid, parts > 1 ? held.p : null);
+            else if (!held.values)
+                graph.ops.move(plot.time(x0 + plot.dx) - plot.time(x0), 1, 0, held.lift ? delta : 0, parts > 1 ? held.p : null);
         } else if (mode === "move" && !held.adding)
             graph.chosen = [{
                     "s": held.s,
@@ -95,6 +108,8 @@ MouseArea {
             graph.chosen = [];
         plot.dx = 0;
         plot.dy = 0;
+        delta = 0;
+        factor = 1;
         plot.stretch = 1;
         plot.band = null;
         mode = "";
@@ -111,14 +126,21 @@ MouseArea {
             graph.page.editor.hold(true);
         if (mode === "move" && (held.adding || !graph.picked(held.s, held.t)))
             graph.choose(held.s, held.t, held.adding);
-        held.lift = mode === "move" && graph.chosen.every(c => c.s === held.s);
+        held.lift = mode === "move" && graph.ops.alike(held.s);
+        held.values = held.lift && (event.modifiers & Qt.AltModifier) !== 0;
+        if (held.values)
+            mid = graph.ops.middle(held.p);
     }
     onPositionChanged: event => {
         if (mode === "handle")
             bend(event.x, event.y);
         else if (mode === "move") {
-            plot.dx = event.x - x0;
+            const tr = plot.tracks.find(tr => tr.s === held.s && tr.p === held.p);
+            const v0 = graph.shown[held.s].keys.find(k => Math.abs(k.t - held.t) < 1e-3)?.parts?.[held.p] ?? mid;
+            plot.dx = held.values ? 0 : event.x - x0;
             plot.dy = held.lift && Math.abs(event.y - y0) > 4 ? event.y - y0 : 0;
+            delta = plot.dy !== 0 && tr ? plot.value(tr, y0 + plot.dy) - plot.value(tr, y0) : 0;
+            factor = held.values && plot.dy !== 0 && tr && Math.abs(v0 - mid) > 1e-9 ? (plot.value(tr, plot.vy(tr, v0) + plot.dy) - mid) / (v0 - mid) : 1;
         } else if (mode === "scale" && plot.box)
             plot.stretch = Math.max(0.05, (plot.time(event.x) - plot.box[0]) / Math.max(1e-6, plot.box[1] - plot.box[0]));
         else if (mode === "band")
