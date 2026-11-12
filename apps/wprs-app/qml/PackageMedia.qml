@@ -11,7 +11,7 @@ ColumnLayout {
     required property var page
     readonly property bool placed: panel.page.editor.placed !== ""
 
-    PageMedia {
+    PackageTrack {
         Layout.fillWidth: true
         page: panel.page
     }

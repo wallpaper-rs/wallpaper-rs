@@ -44,7 +44,7 @@ ColumnLayout {
         text: App.tr("Page")
     }
 
-    PageWeb {
+    PackageWeb {
         Layout.fillWidth: true
         visible: sections.web
         page: sections.page
@@ -57,7 +57,7 @@ ColumnLayout {
         text: App.tr("Network")
     }
 
-    PageNetwork {
+    PackageNetwork {
         Layout.fillWidth: true
         visible: sections.web
         page: sections.page
@@ -70,7 +70,7 @@ ColumnLayout {
         text: App.tr("Inputs")
     }
 
-    PageInputs {
+    PackageInputs {
         Layout.fillWidth: true
         visible: sections.web
         page: sections.page
@@ -83,7 +83,7 @@ ColumnLayout {
         text: App.tr("Playback")
     }
 
-    PagePlayback {
+    PackagePlayback {
         Layout.fillWidth: true
         visible: sections.web
         page: sections.page

@@ -67,7 +67,7 @@ QtObject {
     }
 
     function preview() {
-        const shown = Qt.createComponent("PagePreview.qml").createObject(page, {
+        const shown = Qt.createComponent("PackagePreview.qml").createObject(page, {
             "page": page
         });
         shown.rate(30);
@@ -91,7 +91,7 @@ QtObject {
     }
 
     function media() {
-        const player = Qt.createComponent("PageMedia.qml").createObject(page, {
+        const player = Qt.createComponent("PackageTrack.qml").createObject(page, {
             "page": page
         });
         player.change("title", "Made-up song");

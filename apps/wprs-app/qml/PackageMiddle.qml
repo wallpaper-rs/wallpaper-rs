@@ -49,7 +49,7 @@ ColumnLayout {
             page: middle.page
         }
 
-        PagePreview {
+        PackagePreview {
             page: middle.page
         }
     }
