@@ -5,6 +5,7 @@ import android.media.MediaCodecList
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.os.ParcelFileDescriptor
+import androidx.media3.common.util.GlUtil
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
@@ -51,6 +52,19 @@ class ConvertingTest {
         }
     }
 
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+    private fun readsYuvTargets(): Boolean {
+        val display = GlUtil.getDefaultEglDisplay()
+        val egl = GlUtil.createEglContext(display)
+        val surface = GlUtil.createFocusedPlaceholderEglSurface(egl, display)
+        return try {
+            GlUtil.isYuvTargetExtensionSupported()
+        } finally {
+            GlUtil.destroyEglSurface(display, surface)
+            GlUtil.destroyEglContext(display, egl)
+        }
+    }
+
     private fun item(uid: String) = JSONObject(Native.library(JSONObject().put("op", "item").put("uid", uid).toString()))
 
     private fun mime(path: String) = MediaExtractor().run {
@@ -93,6 +107,7 @@ class ConvertingTest {
         storage()
         for (name in listOf("pq-64x32.mkv", "hlg-64x32.mkv")) {
             assumeTrue("$name has no ten-bit decoder here", decodes(name))
+            assumeTrue("the graphics driver cannot read decoded video as a YUV target", readsYuvTargets())
             val uid = stored(name)
             Converting.offer(context, Conversion(uid, item(uid).getString("path"), "hdr", false, 64 to 32))
             assertTrue("$name converts", waitFor { item(uid).getString("path").endsWith(".mp4") })
