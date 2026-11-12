@@ -42,8 +42,10 @@ pub struct Binding<T> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cursor: Option<Axis>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[schemars(extend("x-format" = true))]
     pub clock: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[schemars(extend("x-format" = true))]
     pub date: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub script: Option<String>,

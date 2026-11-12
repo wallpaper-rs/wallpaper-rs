@@ -716,6 +716,40 @@ msgstr "el orden de una parte va de -1000 a 1000"
 msgid "a part shows over another part, not over itself"
 msgstr "una parte se ve sobre otra parte, no sobre sí misma"
 
+#: crates/wprs-editor/src/figures/drag.rs
+#
+msgid "the layer %1 has no handle %2"
+msgstr "la capa %1 no tiene el asa %2"
+
+#: crates/wprs-editor/src/figures/mod.rs
+#: crates/wprs-editor/src/figures/place.rs
+#: crates/wprs-editor/src/lettering/width.rs
+#: crates/wprs-editor/src/onscreen/mask.rs
+#: crates/wprs-editor/src/onscreen/place.rs
+#: crates/wprs-editor/src/shaping/grips.rs
+msgid "the layer %1 is not placed on the canvas"
+msgstr "la capa %1 no está colocada en el lienzo"
+
+#: crates/wprs-editor/src/figures/stops.rs
+#
+msgid "the layer %1 has no gradient"
+msgstr "la capa %1 no tiene degradado"
+
+#: crates/wprs-editor/src/figures/stops.rs
+#
+msgid "the gradient has no stop %1"
+msgstr "el degradado no tiene la parada %1"
+
+#: crates/wprs-editor/src/figures/stops.rs
+#
+msgid "a gradient has at most %1 stops"
+msgstr "un degradado tiene como mucho %1 paradas"
+
+#: crates/wprs-editor/src/figures/stops.rs
+#
+msgid "a gradient keeps at least 2 stops"
+msgstr "un degradado conserva al menos 2 paradas"
+
 #: crates/wprs-editor/src/findings.rs
 msgid "%1: refused: %2"
 msgstr "%1: rechazado: %2"
@@ -1091,6 +1125,16 @@ msgstr "agrega una reserva primero"
 msgid "%1 is not a layer type; use one of %2"
 msgstr "%1 no es un tipo de capa; usa uno de %2"
 
+#: crates/wprs-editor/src/lettering/mod.rs
+#
+msgid "the layer %1 is not a text layer"
+msgstr "la capa %1 no es una capa de texto"
+
+#: crates/wprs-editor/src/lettering/mod.rs
+#
+msgid "a text has at most %1 fallback fonts"
+msgstr "un texto tiene como mucho %1 fuentes de respaldo"
+
 #: crates/wprs-editor/src/limbs.rs
 msgid "a chain goes from a bone down to one that hangs below it, 2 to %1 bones"
 msgstr ""
@@ -1212,12 +1256,6 @@ msgstr "la capa %1 no tiene el efecto %2"
 #: crates/wprs-editor/src/onscreen/mask.rs
 msgid "the layer %1 has no mask there"
 msgstr "la capa %1 no tiene máscara ahí"
-
-#: crates/wprs-editor/src/onscreen/mask.rs
-#: crates/wprs-editor/src/onscreen/place.rs
-#: crates/wprs-editor/src/shaping/grips.rs
-msgid "the layer %1 is not placed on the canvas"
-msgstr "la capa %1 no está colocada en el lienzo"
 
 #: crates/wprs-editor/src/onscreen/maskgrip.rs
 msgid "the mask of the layer %1 is not a shape"

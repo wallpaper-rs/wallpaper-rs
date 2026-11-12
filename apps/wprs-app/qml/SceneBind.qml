@@ -178,6 +178,12 @@ QQC2.ToolButton {
             }
         }
 
+        SceneBindTime {
+            page: bind.page
+            field: bind.field
+            onPicked: source => bind.bound(source)
+        }
+
         QQC2.Menu {
             title: App.tr("Follow the pointer")
             enabled: !bind.listed

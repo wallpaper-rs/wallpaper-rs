@@ -18,7 +18,7 @@ use walk::Walk;
 pub type Own = BTreeMap<String, Arc<Descriptor>>;
 static NONE: Own = BTreeMap::new();
 
-pub(crate) const SOURCES: [&str; 7] = ["keys", "prop", "audio", "cursor", "clock", "script", "media"];
+pub(crate) const SOURCES: [&str; 8] = ["keys", "prop", "audio", "cursor", "clock", "date", "script", "media"];
 const HIDDEN: [&str; 4] = ["type", "layers", "id", "schema"];
 #[derive(Debug, Clone, Default, PartialEq, Serialize)]
 pub struct Field {
