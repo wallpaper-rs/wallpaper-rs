@@ -52,8 +52,25 @@ fn the_cone_preview_lands_the_picture_on_the_canvas() {
     let m = wprs_editor::lamps::homography([[0.0, 0.0], [10.0, 0.0], [10.0, 10.0], [0.0, 10.0]]);
     assert!((m[0] - 10.0).abs() < 1e-4 && (m[5] - 10.0).abs() < 1e-4 && m[12].abs() < 1e-6, "{m:?}");
     light(&mut p, json!({ "set": { "layer": "s", "tilt": 0 } })).unwrap();
-    assert!(
-        wprs_editor::lamps::cast(&p.dir, &p.doc, "s", 0.0)["quad"].is_null(),
-        "a level beam lands nowhere"
-    );
+    let level = wprs_editor::lamps::cast(&p.dir, &p.doc, "s", 0.0);
+    assert_eq!(level["landed"], false, "a level beam does not land on the canvas");
+    let quad: Vec<[f64; 2]> = serde_json::from_value(level["quad"].clone()).unwrap();
+    let at = &wprs_editor::lamps::lights(&p.dir, &p.doc, 0.0)["lights"][0]["at"];
+    let far = quad.iter().map(|q| (q[0] - at[0].as_f64().unwrap()).hypot(q[1] - at[1].as_f64().unwrap()));
+    let far = far.fold(0.0, f64::max);
+    assert!((far - 900.0).abs() < 1.0, "the far edge is drawn out to the radius: {quad:?}");
+}
+
+#[test]
+fn the_cone_preview_shows_a_projected_layer() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    light(&mut p, json!({ "add": { "light": "spot", "id": "s" } })).unwrap();
+    light(&mut p, json!({ "set": { "layer": "s", "tilt": 89, "z": 200 } })).unwrap();
+    let title = json!({ "id": "title", "type": "text", "text": "Hi", "size": 64 });
+    act(&mut p, json!({ "add": { "pointer": "/scene/layers/-", "value": title } })).unwrap();
+    light(&mut p, json!({ "projection": { "layer": "s", "from": "title" } })).unwrap();
+    let cast = wprs_editor::lamps::cast(&p.dir, &p.doc, "s", 0.0);
+    assert_eq!((cast["kind"].as_str(), cast["landed"].as_bool()), (Some("layer"), Some(true)));
+    assert!(cast["image"].as_str().unwrap().starts_with("data:image/png"), "{cast}");
 }

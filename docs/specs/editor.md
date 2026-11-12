@@ -737,8 +737,11 @@ samples and shafts, the glow plotted against the distance (with shafts, a dashed
 with a note that phones work at a quarter; the preview shows the glow live at the picked level, and
 the selected light shades the ring of the lit air. A spot light has a Projects picker that lists the
 pictures and videos of the scene and the layers it may project without a loop, with a thumbnail of
-the picture; the preview draws the picture inside the cone where it lands on the canvas, with a
-dashed outline. The list of lights marks lights that light the air or project, and the cost of each
+the picture; the preview draws what the light projects inside the cone where it lands on the
+canvas, with a dashed outline: the picture, the frame of the video at the playhead (from the cached
+strip of 16 frames) or, for a projected image, video or text layer, its picture, frame or letters (other
+layer kinds show only the outline). When part of the beam runs along the canvas the footprint is drawn
+out to the radius of the light, fainter, with a note. The list of lights marks lights that light the air or project, and the cost of each
 quality level adds the samples of the air, the pixels of the layers below that the shafts copy (`shaft_copy`, at the size of the air; once while they stay still, each frame while one moves), the lights shaded on particles and the pixels refraction
 reads, with the same rows for phones.
 

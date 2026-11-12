@@ -936,10 +936,6 @@ msgid "give a picture, a video or a layer to project"
 msgstr "indica una imagen, un vídeo o una capa para proyectar"
 
 #: crates/wprs-editor/src/lamps/edit.rs
-msgid "%1 is not a light type; use point, spot, tube or directional"
-msgstr "%1 no es un tipo de luz; usa point, spot, tube o directional"
-
-#: crates/wprs-editor/src/lamps/edit.rs
 msgid "%1 of a light goes from %2 to %3"
 msgstr "%1 de una luz va de %2 a %3"
 
@@ -1016,6 +1012,10 @@ msgstr "la refracción necesita un mapa de normales"
 #: crates/wprs-editor/src/lamps/swarm.rs
 msgid "the amount of refraction goes from 0 to 1"
 msgstr "la cantidad de refracción va de 0 a 1"
+
+#: crates/wprs-editor/src/lamps/template.rs
+msgid "%1 is not a light type; use point, spot, tube or directional"
+msgstr "%1 no es un tipo de luz; usa point, spot, tube o directional"
 
 #: crates/wprs-editor/src/layers.rs
 msgid "import %1 %2 first"

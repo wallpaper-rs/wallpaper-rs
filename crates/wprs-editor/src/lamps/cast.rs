@@ -62,7 +62,7 @@ pub(crate) fn projection(
     }
 }
 
-fn hit(l: &Placed, u: f32, v: f32) -> Option<[f32; 2]> {
+fn hit(l: &Placed, u: f32, v: f32) -> ([f32; 2], bool) {
     let a = l.heading;
     let level = a[0].hypot(a[1]) > 1e-4;
     let n = a[0].hypot(a[1]).max(1e-6);
@@ -74,7 +74,13 @@ fn hit(l: &Placed, u: f32, v: f32) -> Option<[f32; 2]> {
     let (s, t) = ((2.0 * u - 1.0) * wide, (2.0 * v - 1.0) * wide);
     let w: [f32; 3] = std::array::from_fn(|k| a[k] + s * side[k] + t * up[k]);
     let at = l.at();
-    (w[2] < -1e-4 && l.z > 0.0).then(|| [at[0] - l.z / w[2] * w[0], at[1] - l.z / w[2] * w[1]])
+    let flat = w[0].hypot(w[1]).max(1e-6);
+    let far = [at[0] + w[0] / flat * l.radius, at[1] + w[1] / flat * l.radius];
+    let landed = (w[2] < -1e-4 && l.z > 0.0).then(|| [at[0] - l.z / w[2] * w[0], at[1] - l.z / w[2] * w[1]]);
+    match landed {
+        Some(p) if (p[0] - at[0]).hypot(p[1] - at[1]) <= l.radius => (p, true),
+        _ => (far, false),
+    }
 }
 
 pub fn homography(q: [[f32; 2]; 4]) -> [f32; 16] {
@@ -87,11 +93,6 @@ pub fn homography(q: [[f32; 2]; 4]) -> [f32; 16] {
     let (a, b, c) = (p1[0] - p0[0] + g * p1[0], p3[0] - p0[0] + h * p3[0], p0[0]);
     let (d, e, f) = (p1[1] - p0[1] + g * p1[1], p3[1] - p0[1] + h * p3[1], p0[1]);
     [a, b, 0.0, c, d, e, 0.0, f, 0.0, 0.0, 1.0, 0.0, g, h, 0.0, 1.0]
-}
-
-fn thumb(dir: &Path, doc: &Value, id: &str) -> Option<String> {
-    let image = crate::pictures::asset(dir, doc, id).ok()?.thumbnail(128, 128).into_rgba8();
-    Some(crate::rigs::url(&image))
 }
 
 pub fn cast(dir: &Path, doc: &Value, id: &str, t: f64) -> Value {
@@ -108,10 +109,11 @@ pub fn cast(dir: &Path, doc: &Value, id: &str, t: f64) -> Value {
         }
     }
     let corners = [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]].map(|[u, v]| hit(&l, u, v));
-    let quad = corners.iter().all(Option::is_some).then(|| corners.map(|c| c.unwrap_or_default()));
-    let shown = texture.as_str().filter(|a| kind(doc, a) == Some("picture"));
+    let landed = corners.iter().all(|c| c.1);
+    let quad = (l.beam == Beam::Spot).then(|| corners.map(|c| c.0));
+    let found = texture.as_str().and_then(|a| kind(doc, a)).or(texture.get("layer").map(|_| "layer"));
     json!({ "spot": l.beam == Beam::Spot, "current": texture, "pictures": pictures, "videos": videos,
         "layers": layers(doc), "quad": quad.map(|q| q.map(|p| p.map(round))),
-        "matrix": quad.map(homography), "image": shown.and_then(|a| thumb(dir, doc, a)),
-        "kind": texture.as_str().and_then(|a| kind(doc, a)).or(texture.get("layer").map(|_| "layer")) })
+        "matrix": quad.map(homography), "landed": landed,
+        "image": found.and_then(|k| super::shown::cast(dir, doc, texture, Some(k), t)), "kind": found })
 }

@@ -13,6 +13,7 @@ mod lit;
 mod maps;
 mod placed;
 mod report;
+mod shown;
 mod source;
 mod swarm;
 mod template;

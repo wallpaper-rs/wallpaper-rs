@@ -38,7 +38,7 @@ Item {
         visible: cone.gizmo.chosen && !!cone.info?.matrix && !!cone.info?.image
         width: 1
         height: 1
-        opacity: 0.55
+        opacity: cone.info?.landed ? 0.55 : 0.35
         source: cone.info?.image ?? ""
         smooth: true
         transform: [

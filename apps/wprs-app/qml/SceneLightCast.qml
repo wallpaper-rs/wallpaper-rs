@@ -88,6 +88,6 @@ ColumnLayout {
         visible: cast.current > 0
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
-        text: cast.info?.quad ? App.tr("The cone on the preview shows where the picture lands.") : App.tr("The beam does not reach the canvas; tilt it toward the canvas to see where the picture lands.")
+        text: cast.info?.landed ? App.tr("The cone on the preview shows where the picture lands.") : App.tr("The beam runs along the canvas; the preview draws the picture out to the radius of the light, where the light ends.")
     }
 }

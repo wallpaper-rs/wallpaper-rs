@@ -6014,7 +6014,10 @@ msgid ""
 "Shafts let the parts of the layers below the light that are darker than "
 "around the light hold back its glow; the dashed line is the glow over such a "
 "dark part. Layers above the light cover it."
-msgstr "Los rayos hacen que las partes de las capas de abajo más oscuras que el entorno de la luz frenen su resplandor; la línea de trazos es el resplandor sobre una de esas partes oscuras. Las capas de arriba de la luz lo tapan."
+msgstr ""
+"Los rayos hacen que las partes de las capas de abajo más oscuras que el "
+"entorno de la luz frenen su resplandor; la línea de trazos es el resplandor "
+"sobre una de esas partes oscuras. Las capas de arriba de la luz lo tapan."
 
 #: apps/wprs-app/qml/SceneLightAir.qml
 msgid ""
@@ -6048,11 +6051,9 @@ msgstr "El cono en la vista previa muestra dónde cae la imagen."
 
 #: apps/wprs-app/qml/SceneLightCast.qml
 msgid ""
-"The beam does not reach the canvas; tilt it toward the canvas to see where "
-"the picture lands."
-msgstr ""
-"El haz no llega al lienzo; inclínalo hacia el lienzo para ver dónde cae la "
-"imagen."
+"The beam runs along the canvas; the preview draws the picture out to the "
+"radius of the light, where the light ends."
+msgstr "El haz corre a lo largo del lienzo; la vista previa dibuja la imagen hasta el radio de la luz, donde la luz termina."
 
 #: apps/wprs-app/qml/SceneLightGizmo.qml
 msgid "Drag to move the light"
