@@ -11,6 +11,7 @@ Kirigami.Dialog {
     property string effect: ""
     property string saved: ""
     property string descriptor: ""
+    property string path: ""
     property string stage: "layer"
     property var report: ({})
     readonly property bool changed: area.text !== dialog.saved
@@ -25,6 +26,7 @@ Kirigami.Dialog {
                     })) || "null") ?? {};
         dialog.saved = source.wgsl ?? "";
         dialog.descriptor = source.descriptor ?? "";
+        dialog.path = source.wgsl_path ?? "";
         dialog.stage = source.stage ?? "layer";
         area.text = dialog.saved;
         checker.check(dialog.effect, dialog.descriptor, area.text);
@@ -76,6 +78,12 @@ Kirigami.Dialog {
             icon.name: "document-save"
             enabled: dialog.changed
             onTriggered: dialog.write(false)
+        },
+        Kirigami.Action {
+            text: App.tr("Open in your editor…")
+            icon.name: "document-open"
+            enabled: dialog.path !== ""
+            onTriggered: Qt.openUrlExternally("file://" + dialog.page.editor.folder + "/" + dialog.path)
         },
         Kirigami.Action {
             text: App.tr("Use on the selected layer")

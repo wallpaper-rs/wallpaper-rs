@@ -127,26 +127,6 @@ fn material_shaders_take_their_params_and_package_ones_report_their_lines() {
     assert_eq!(broken["ok"], false);
     assert_eq!(broken["line"], 3, "{broken}");
     assert!(edit(&mut p, json!({ "new_material": { "name": "glaze_coat" } })).is_err(), "taken");
-    let fixed = "fn material(s: Surface) -> Surface {\n    var o = s;\n    o.albedo = o.albedo * 0.5;\n    return o;\n}\n";
-    let draft = ask(&p, json!({ "material_check": { "name": "glaze_coat", "text": fixed } }));
-    assert_eq!(draft["ok"], true, "{draft}");
-    let draft = ask(
-        &p,
-        json!({ "material_check": { "name": "glaze_coat", "text": "fn material(s: Surface) -> Surface {\n    return nope;\n}\n" } }),
-    );
-    assert_eq!((draft["ok"].clone(), draft["line"].clone()), (json!(false), json!(2)), "{draft}");
-    let wgsl =
-        |p: &wprs_editor::Project| std::fs::read_to_string(p.dir.join("effects/glaze_coat.wgsl")).unwrap();
-    let broken_text = wgsl(&p);
-    edit(&mut p, json!({ "material_code": { "name": "glaze_coat", "text": fixed } })).unwrap();
-    assert_eq!(wgsl(&p), fixed);
-    assert_eq!(ask(&p, json!({ "material_check": { "name": "glaze_coat" } }))["ok"], true);
-    act(&mut p, json!({ "undo": {} })).unwrap();
-    assert_eq!(wgsl(&p), broken_text);
-    act(&mut p, json!({ "redo": {} })).unwrap();
-    assert_eq!(wgsl(&p), fixed);
-    assert!(edit(&mut p, json!({ "material_code": { "name": "missing", "text": "x" } })).is_err());
-    std::fs::write(p.dir.join("effects/glaze_coat.wgsl"), &broken_text).unwrap();
     let cost = ask(&p, json!({ "cost3d": { "quality": "q3" } }));
     let levels = cost["levels"].as_array().unwrap();
     assert!(levels[3]["fur_shells"].as_u64().unwrap() > levels[0]["fur_shells"].as_u64().unwrap());

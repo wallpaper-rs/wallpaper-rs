@@ -98,6 +98,7 @@ ColumnLayout {
         id: code
 
         page: made.page
+        onClosed: made.check()
     }
 
     SceneEffectForm {

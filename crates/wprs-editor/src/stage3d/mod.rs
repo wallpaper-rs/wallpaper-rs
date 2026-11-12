@@ -72,7 +72,6 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
         Edit3d::Grab(g) => grab::grab(dir, doc, g),
         Edit3d::Light(l) => grab::place(dir, doc, l),
         Edit3d::NewMaterial { name } => newmat::create(dir, doc, name),
-        Edit3d::MaterialCode { name, text } => newmat::write(dir, doc, name, text),
         Edit3d::Key(k) => picked::key_from(dir, doc, k),
         Edit3d::Comb(c) => combed::comb(dir, doc, c),
         Edit3d::Debug { show, layer, material } => debug::debug(dir, doc, show.as_deref(), (layer, material)),
@@ -106,8 +105,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("surface3d").is_some() => surface::surface(dir, doc, &q["surface3d"]),
         _ if q.get("paths3d").is_some() => paths::paths(dir, doc, t(&q["paths3d"])),
         _ if q.get("material_check").is_some() => {
-            let c = &q["material_check"];
-            newmat::check(dir, doc, c["name"].as_str().unwrap_or_default(), c["text"].as_str())
+            newmat::check(dir, doc, q["material_check"]["name"].as_str().unwrap_or_default())
         }
         _ if q.get("materials3d").is_some() => {
             material::listing(dir, doc, q["materials3d"]["layer"].as_str().unwrap_or(id))
