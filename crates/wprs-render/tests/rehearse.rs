@@ -102,7 +102,7 @@ fn a_render_runs_the_scripts_at_the_clock_it_was_given() {
     };
     let day = r.rehearse(&scene, &assets, &Default::default(), &at(15.5)).unwrap();
     let night = r.rehearse(&scene, &assets, &Default::default(), &at(3.5)).unwrap();
-    assert!(day.console.len() > 0, "{:?} {:?}", day.console, day.stopped);
+    assert!(!day.console.is_empty(), "{:?} {:?}", day.console, day.stopped);
     assert_eq!(day.frames[0].get_pixel(16, 9).0[0], 255, "{:?}", day.console);
     assert_eq!(night.frames[0].get_pixel(16, 9).0[0], 0);
     assert!(day.console.iter().any(|l| l == "log scripts/hour.js: hour 15"), "{:?}", day.console);
