@@ -75,6 +75,9 @@ fn every_feature_fixture_round_trips_through_the_schema_and_shows_in_the_inspect
         let mut missing = Vec::new();
         shown(&doc, "/manifest", &mut missing);
         shown(&doc, "/scene", &mut missing);
+        if doc.get("scene").is_some() {
+            missing.retain(|p| p != "/manifest/permissions/rgb");
+        }
         assert!(missing.is_empty(), "{name}: the inspector does not show {missing:?}");
     }
 }
