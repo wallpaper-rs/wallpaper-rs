@@ -48,7 +48,7 @@ forest_thumb=$(bus Library1 RequestThumbnails asu 1 "$forest" 512 | out "d[0]['$
 serial=$(busctl --user --json=short get-property io.github.wallpaper_rs.Daemon /io/github/wallpaper_rs/Daemon \
   io.github.wallpaper_rs.Daemon1 Serial | out "d")
 bus Library1 SetTitle ss "$dunes" "Dunes at noon" >/dev/null
-seen=$(for _ in 1 2 3 4 5 6; do
+seen=$(ends=$((SECONDS + 60)); while [ "$SECONDS" -lt "$ends" ]; do
   r=$(bus Daemon1 WaitChanged tu "$serial" 5000); topics=$(echo "$r" | out "d[1]"); echo "$topics"
   case $topics in *library*) break ;; esac
   serial=$(echo "$r" | out "d[0]")
