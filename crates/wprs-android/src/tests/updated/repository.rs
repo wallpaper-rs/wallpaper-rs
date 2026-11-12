@@ -61,11 +61,18 @@ fn wpak(dir: &Path, id: &str, version: &str, kind: &str, needs: &[(&str, &str)])
 }
 
 pub(super) fn operate(repo: &Path, op: Value) -> Value {
-    let mut op = op;
-    op["dir"] = json!(repo);
-    let reply: Value = serde_json::from_str(&crate::stall::request(&op.to_string())).unwrap();
-    assert!(reply["error"].is_null(), "{reply}");
-    reply
+    let now = crate::library::now();
+    match op["op"].as_str() {
+        Some("add") => {
+            let files: Vec<PathBuf> = serde_json::from_value(op["files"].clone()).unwrap();
+            wprs_format::stall::added(repo, &files, false, now).unwrap()
+        }
+        _ => {
+            let key = zeroize::Zeroizing::new(op["key"].as_str().unwrap().to_owned());
+            let signer = Signer::new(&key, op["password"].as_str().map(str::to_owned)).unwrap();
+            wprs_format::stall::published(repo, &signer, op["days"].as_u64().unwrap() as u32, now).unwrap()
+        }
+    }
 }
 
 pub(super) fn account(request: Value) -> Value {

@@ -339,12 +339,3 @@ paths copied locally in chunks of 64 KiB, a 10 s connect timeout, and an abort
 (`io::ErrorKind::TimedOut`) when less than 8 KiB arrive in 30 s. The transfer runs on its own
 thread; a shared cancel flag, checked for every chunk and at least every 100 ms while waiting for
 the server, fails the transfer with `io::ErrorKind::Interrupted` at once, local copies included.
-
-## Static repository on the phone
-
-The phone opens a static repository folder through the system folder picker. The app keeps the
-folder with a lasting read and write grant, so it is still open after a restart; the grant is
-dropped when another folder is picked, and a folder whose grant was lost is forgotten. Android
-itself refuses the top of the storage, the Download folder and other system folders ("Can't use
-this folder"), so the picker opens in Documents and the page says to pick or create a folder of the
-user's own there. Instrumented tests: `ShelfTest` (copy in, write back, lasting grant, picker start).

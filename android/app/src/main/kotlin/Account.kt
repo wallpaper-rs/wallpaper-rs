@@ -82,7 +82,6 @@ fun Account(main: Main) {
                 item { PrivateFiles(main, status, run) }
             }
         }
-        item { Stall(main) }
     }
     Pairing(main, status, run)
     if (approving) Approve(main, run) { approving = false }

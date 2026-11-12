@@ -65,7 +65,6 @@ mod server;
 mod settings;
 mod sound;
 mod stage;
-mod stall;
 mod state;
 mod store;
 #[cfg(test)]
@@ -77,7 +76,7 @@ mod vault;
 mod votes;
 
 pub mod host {
-    use crate::{Error, account, depth, library, settings, stall, store};
+    use crate::{Error, account, depth, library, settings, store};
     use serde_json::json;
 
     pub fn prepare(files: &str) -> Result<(), String> {
@@ -94,10 +93,6 @@ pub mod host {
 
     pub fn depth(request: &str) -> String {
         depth::request(request)
-    }
-
-    pub fn stall(request: &str) -> String {
-        stall::request(request)
     }
 
     pub fn import(path: &str) -> String {

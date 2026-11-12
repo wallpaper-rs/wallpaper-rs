@@ -2280,19 +2280,11 @@ para varias claves); la raíz nueva dura lo mismo que la anterior salvo que diga
 las réplicas salvo que des otras con `--mirror`, y `--no-mirrors` (o vaciar el campo en el diálogo) las
 quita todas. Cada cambio del catálogo
 trabaja fuera de la ventana, uno detrás de otro, y mientras dura los demás cambios y *Abrir* esperan
-desactivados. En el teléfono, *Publicar tu propio repositorio (avanzado)* de
-*Dispositivos* hace lo mismo con una carpeta que eliges en el selector del sistema (por ejemplo la que
-sincronizas con tu servidor): añade paquetes (también ocultos), oculta o vuelve a mostrar, destaca o
-deja de destacar con la misma confirmación y publica con un archivo de clave en línea; trabaja sobre
-una copia temporal sin los paquetes ni las vistas previas y escribe en la carpeta solo los archivos
-que cambiaron. Recuerda la carpeta elegida, también tras cerrar la app, mientras Android mantenga el
-permiso de lectura y escritura que le da el selector; al elegir otra suelta el permiso de la anterior,
-salvo el de lectura si un ajuste de carpeta de un fondo copia esa misma carpeta (y quitar ese ajuste
-tampoco le quita el permiso a la carpeta del repositorio).
+desactivados. En el teléfono no hay herramientas de autor: solo se usan repositorios (añadir, explorar, instalar, actualizar, quitar).
 Cada paso deja los botones desactivados hasta que terminan todos los que estén en marcha.
 
 En el catálogo de *Repositorios* (y en *Explorar* del teléfono) los paquetes que destaca el operador
-del repositorio salen primero, en su propia sección (los firma en el repositorio con `wprs-ctl repo feature REPO ID --note …` o la pestaña *Repositorio estático*, o desde
+del repositorio salen primero, en su propia sección (los firma en el repositorio con `wprs-ctl repo feature REPO ID --note …` o la pestaña *Repositorio estático* de la app de escritorio, o desde
 `/admin/featured` del servidor), y, con un servidor enlazado, cada paquete del repositorio de ese servidor muestra sus votos a favor y
 en contra, con tu voto marcado, y botones para votar (`wprs-ctl remote vote ID up|down|none`, `remote votes ID…`,
 también como `REPO/ID`); los paquetes de otros repositorios no muestran votos y sus ids nunca se
@@ -3298,15 +3290,6 @@ plugin es anterior a 1.2. En el teléfono,
 comprueba sus valores, el color que dibuja, la pausa, el límite de fotogramas, lo que oculta cada
 ajuste de privacidad, el borrado de sus datos, los archivos elegidos, los clics solo con permiso y
 que no llega a la red, a otros paquetes ni a archivos del teléfono.
-`ShelfTest` prueba el repositorio estático del teléfono a través de un proveedor de documentos de
-prueba (`Folder` y `Seeder`, solo en el APK de pruebas y en Java, porque ese APK corre sus
-proveedores en su propio proceso sin la biblioteca de Kotlin) que da un permiso de árbol como el
-selector del sistema:
-la copia de la carpeta, la escritura de vuelta de lo que cambió, que los paquetes ya escritos se
-leen en el paso siguiente y que la carpeta elegida se recuerda mientras dura su permiso. `Seeder`
-y `StallTest` arman el repositorio de prueba desde `tests/fixtures/stall` y copian la raíz firmada
-`tests/fixtures/stall-anchor.json` a `root/1.json` al prepararlo, para que ninguna ruta guardada en el
-repositorio parezca una carpeta del sistema (`root/`).
 
 La CI ejecuta además `scripts/plasma-test.sh` en un contenedor con Plasma 6: instala el
 paquete con `install.sh`, arranca una sesión Wayland sin pantalla (KWin y plasmashell sobre

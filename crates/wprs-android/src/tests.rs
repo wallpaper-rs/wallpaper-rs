@@ -32,7 +32,6 @@ mod saved;
 mod scenes;
 mod screens;
 mod sounded;
-mod stall;
 mod steady;
 mod stopped;
 mod tilted;

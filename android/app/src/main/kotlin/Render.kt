@@ -93,7 +93,6 @@ object Native {
 
     external fun account(request: String): String
 
-    external fun stall(request: String): String
 
     external fun commit(target: String): Boolean
 
