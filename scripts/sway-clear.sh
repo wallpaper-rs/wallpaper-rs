@@ -17,7 +17,6 @@ ctl clear
 for output in HEADLESS-1 HEADLESS-2; do expect "s['outputs']['$output']['released']" True; done
 check HEADLESS-1 "0.5,0.5,$desktop" "0.9,0.9,$desktop"
 expect "s['outputs']['HEADLESS-1']['previous']" True
-settled() { local start; start=$(ticks); sleep 0.5; [ $(($(ticks) - start)) -le 2 ]; }
 wait_for 10 settled || fail "the daemon did not settle after clearing"
 before=$(ticks); sleep 2
 [ $(($(ticks) - before)) -le 10 ] || fail "the daemon kept working with no wallpaper"
