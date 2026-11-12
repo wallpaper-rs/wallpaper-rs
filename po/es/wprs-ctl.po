@@ -1999,6 +1999,15 @@ msgstr "Volver a empezar los sistemas de partículas y la escena"
 
 #: apps/wprs-ctl/src/folder.rs
 msgid ""
+"Show it as the daemon does on battery: a lower level and the battery pace"
+msgstr "Mostrarla como la muestra el demonio con batería: un nivel más bajo y el ritmo de la batería"
+
+#: apps/wprs-ctl/src/folder.rs
+msgid "Show it as the daemon does with reduced motion"
+msgstr "Mostrarla como la muestra el demonio con menos movimiento"
+
+#: apps/wprs-ctl/src/folder.rs
+msgid ""
 "Print the console of its scripts and report its error as they change, until "
 "stopped"
 msgstr ""
@@ -5082,6 +5091,69 @@ msgstr ""
 msgid "Package ids, or REPO/ID; ids of other repositories are never sent"
 msgstr ""
 "Ids de paquetes, o REPO/ID; los ids de otros repositorios nunca se envían"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid ""
+"Picture file (.png, .jpg, .webp or .avif), an animated .gif, or with --"
+"frames the first of an image sequence named NAME-0001.EXT"
+msgstr "Archivo de imagen (.png, .jpg, .webp o .avif), un .gif animado o, con --frames, el primero de una secuencia de imágenes llamada NOMBRE-0001.EXT"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid ""
+"Render the scene to a picture, an animated picture or an image sequence as "
+"the daemon would at a level, without a desktop"
+msgstr "Dibuja la escena en una imagen, una imagen animada o una secuencia de imágenes como la dibujaría el demonio en un nivel, sin escritorio"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Second of the scene clock of the first frame"
+msgstr "Segundo del reloj de la escena del primer cuadro"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Highest quality level"
+msgstr "Nivel de calidad más alto"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Render as on battery: a lower level and at most 60 frames a second"
+msgstr "Dibujar como con batería: un nivel más bajo y como mucho 60 cuadros por segundo"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Render with reduced motion"
+msgstr "Dibujar con menos movimiento"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Number of frames; more than one makes a clip"
+msgstr "Número de cuadros; más de uno hace un clip"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Frames a second of the clip"
+msgstr "Cuadros por segundo del clip"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Longest side of the picture in pixels"
+msgstr "Lado mayor de la imagen en píxeles"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid ""
+"Make-believe pointer at these fractions of the canvas, moving to the second "
+"pair over the clip"
+msgstr "Puntero simulado en estas fracciones del lienzo, que se mueve al segundo par a lo largo del clip"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Press the pointer over the middle of the clip"
+msgstr "Pulsar el puntero hacia la mitad del clip"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Show the right part at this level instead of the left one's"
+msgstr "Mostrar la parte derecha en este nivel en vez del de la izquierda"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid "Show the right part without the glow of the canvas"
+msgstr "Mostrar la parte derecha sin el brillo del lienzo"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid ""
+"Where the left part ends, from 0 to 1, with --against or --without-bloom"
+msgstr "Dónde acaba la parte izquierda, de 0 a 1, con --against o --without-bloom"
 
 #: apps/wprs-ctl/src/repo.rs
 msgid "Create a key pair NAME.key and NAME.pub and print its fingerprint"

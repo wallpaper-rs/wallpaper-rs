@@ -5301,7 +5301,7 @@ msgstr "Máscara del efecto:"
 msgid "Mask of the layer:"
 msgstr "Máscara de la capa:"
 
-#: apps/wprs-app/qml/SceneEffectMask.qml
+#: apps/wprs-app/qml/SceneEffectMask.qml apps/wprs-app/qml/ScenePreviewSave.qml
 msgid "A picture"
 msgstr "Una imagen"
 
@@ -6980,6 +6980,112 @@ msgid ""
 "Move a simulated pointer, or the tilt of a phone, on the canvas and watch "
 "every layer shift by its parallax depth"
 msgstr "Mueve un puntero simulado, o la inclinación de un teléfono, sobre el lienzo y mira cómo cada capa se desplaza según su profundidad de paralaje"
+#: apps/wprs-app/qml/ScenePreviewCompare.qml
+msgid "Compare with"
+msgstr "Comparar con"
+
+#: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+msgid "Q0, lowest"
+msgstr "Q0, la más baja"
+
+#: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+msgid "Q1"
+msgstr "Q1"
+
+#: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+msgid "Q2"
+msgstr "Q2"
+
+#: apps/wprs-app/qml/ScenePreviewCompare.qml apps/wprs-app/qml/SceneQuality.qml
+msgid "Q3, highest"
+msgstr "Q3, la más alta"
+
+#: apps/wprs-app/qml/ScenePreviewCompare.qml
+msgid "Without the glow of the canvas"
+msgstr "Sin el brillo del lienzo"
+
+#: apps/wprs-app/qml/ScenePreviewCompare.qml
+msgid "Hold to see the other side"
+msgstr "Mantener para ver el otro lado"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid "Drawn as %1 at %2 % of the size, with %3 effects left out"
+msgstr "Dibujada como %1 al %2 % del tamaño, con %3 efectos dejados fuera"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid ""
+"On battery the daemon lowers Q3 to Q2 and draws at most 60 frames a second"
+msgstr "Con batería el demonio baja Q3 a Q2 y dibuja como mucho 60 cuadros por segundo"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid "With reduced motion the parallax and the camera shake stand still"
+msgstr "Con menos movimiento el paralaje y el temblor de la cámara se quedan quietos"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid "The glare above white is drawn"
+msgstr "Se dibuja el resplandor por encima del blanco"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid "The glare above white is left out"
+msgstr "El resplandor por encima del blanco se deja fuera"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid "Following the pointer, try them with Test the pointer and clicks: %1"
+msgstr "Siguen al puntero; pruébalos con Probar el puntero y los clics: %1"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid "%1 on %2: %3 units of work"
+msgstr "%1 en %2: %3 unidades de trabajo"
+
+#: apps/wprs-app/qml/ScenePreviewEffects.qml
+msgid "%1 on %2: left out of the scene at this level"
+msgstr "%1 en %2: se deja fuera de la escena en este nivel"
+
+#: apps/wprs-app/qml/ScenePreviewLevel.qml
+msgid "Preview level"
+msgstr "Nivel de la vista previa"
+
+#: apps/wprs-app/qml/ScenePreviewLevel.qml
+msgid ""
+"Show the preview as the daemon draws it at a quality level, on battery or "
+"with reduced motion, and compare two levels"
+msgstr "Muestra la vista previa como la dibuja el demonio en un nivel de calidad, con batería o con menos movimiento, y compara dos niveles"
+
+#: apps/wprs-app/qml/ScenePreviewPanel.qml
+msgid "On battery"
+msgstr "Con batería"
+
+#: apps/wprs-app/qml/ScenePreviewPanel.qml
+msgid "Reduced motion"
+msgstr "Menos movimiento"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "Move a pointer across and click"
+msgstr "Mover un puntero por el lienzo y hacer clic"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "Split the picture with the other side"
+msgstr "Partir la imagen con el otro lado"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "Save a picture…"
+msgstr "Guardar una imagen…"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "Save a clip…"
+msgstr "Guardar un clip…"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "Saved: %1"
+msgstr "Guardado: %1"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "An animated picture"
+msgstr "Una imagen animada"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "A picture; a clip becomes an image sequence"
+msgstr "Una imagen; un clip se guarda como secuencia de imágenes"
 
 #: apps/wprs-app/qml/SceneProblems.qml
 msgid "Problems (%1)"

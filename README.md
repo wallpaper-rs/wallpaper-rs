@@ -1915,6 +1915,13 @@ simula una pista (título, artista, álbum, si suena y carátula) para diseñar 
 previa, sin pedir permiso ni leer los reproductores. Desde la terminal, `wprs-ctl scene preview
 CARPETA --media pista.json` hace lo mismo con un JSON de esos campos.
 
+El botón *Nivel de la vista previa* de la barra del lienzo dibuja la vista previa como la dibuja el demonio en Q0, Q1, Q2 o Q3,
+con batería y con menos movimiento, y para cada efecto dice qué se deja fuera y cuánto cuesta en ese nivel. Ahí mismo se
+compara con otro nivel o sin el brillo del lienzo (mantener pulsado el botón enseña el otro lado), se guarda una imagen o un
+clip a archivo, con un puntero simulado si hace falta, y se nombran los efectos y emisores que siguen al puntero, para probarlos
+con *Probar el puntero y los clics*, que ahora dibuja un aro donde está el puntero y un destello en cada clic. Desde la terminal,
+`wprs-ctl scene preview CARPETA --battery --calm` y `wprs-ctl scene render CARPETA --out archivo` hacen lo mismo.
+
 La carátula es un recurso de imagen con `media: current` (la de lo que suena) o `media: previous`
 (la anterior), que vale donde vale una imagen; su archivo es lo que se ve mientras no suena nada o
 sin permiso. El selector de imagen del editor ofrece *Carátula de lo que suena* y *Carátula
@@ -2808,6 +2815,10 @@ wprs-ctl scene validate mar                             # problemas, cada uno co
 wprs-ctl scene preview mar -o DP-1 --time 2             # verla en el escritorio 60 s sin aplicarla
 wprs-ctl scene preview mar --layout dual --out dual.png # extendida sobre dos pantallas, sin escritorio
 wprs-ctl scene preview mar --layout dual --out dual.png --time 4   # el segundo 4 en vez del póster
+wprs-ctl scene preview mar --quality q1 --battery --calm   # como la dibuja el demonio en el nivel Q1, con batería y menos movimiento
+wprs-ctl scene render mar --out mar.png --quality q1 --battery      # un fotograma a archivo, sin escritorio
+wprs-ctl scene render mar --out mar.gif --frames 90 --pointer 0.2,0.5:0.8,0.5 --click   # un clip con un puntero simulado
+wprs-ctl scene render mar --out brillo.png --against q0 --without-bloom   # comparar niveles o el brillo, partido por la mitad
 wprs-ctl scene build mar --key autor.key                # firmar y crear el .wpak
 wprs-ctl scene apply mar -o DP-1                        # añadirla a la biblioteca y mostrarla
 wprs-ctl scene apply mar --span                         # mostrarla extendida sobre todas las pantallas

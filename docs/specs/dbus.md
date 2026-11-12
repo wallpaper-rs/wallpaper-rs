@@ -453,7 +453,9 @@ properties, the presets and the scene itself, while texts, rating, origin and cr
 incomplete; an invalid document, a path outside `dir` or an asset over the limits return
 `InvalidArgs`. Calls replace the preview of the
 output and reuse the decoded assets of the previous one, without a crossfade; a playing preview
-of the same folder keeps its clock, so an edit does not restart it. An empty `document` ends it,
+of the same folder keeps its clock, so an edit does not restart it. A preview document may carry
+`preview: { quality, restart, media, battery, calm }` (`editor.md`); `battery` and `calm` make the output run as on
+battery and with reduced motion. An empty `document` ends it,
 and so do 60 s without a call or the output going away. Outputs whose name starts with
 `preview:` are virtual: a client creates one with `RequestStream` to show the preview inside its
 own window, and it is left out of `GetState` (but for the time its console has lines, which is how a client reads them), of the conditions and holds of profiles, of

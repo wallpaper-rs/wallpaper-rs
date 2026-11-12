@@ -851,9 +851,61 @@ most 64 KiB (`title`, `artist`, `album`, `album_artist`, `subtitle`, `genres`, t
 words or lists of words, `playing`, `position` and `duration` in seconds from 0 to 10 000 000 and
 `rate` from −100 to 100, `cover`, a picture inside the folder; texts of at most 512 characters
 without control characters) instead of a
-media player. The document of a preview may carry `preview: { quality, restart, media }`, which the
+media player. The document of a preview may carry `preview: { quality, restart, media, battery, calm }`, which the
 daemon reads only for previews; `media` is refused, naming the field, when a value is out of
-range, and never reads the media players or needs the `media` grant.
+range, and never reads the media players or needs the `media` grant. `battery` and `calm` are
+booleans: the preview then runs as the daemon runs a scene on battery (a lower level, which
+takes Q3 to Q2 whatever the automatic choice would be, and at most 60 frames a second) or with
+reduced motion (parallax and camera shake stand still, as the daemon does with the desktop
+setting). `wprs-ctl scene preview DIR [--battery] [--calm]` sets them.
+
+*Preview level*, a button of the canvas toolbar, opens the panel that sets what the preview
+shows. It has the same quality selector as the cost panels (Q0, Q1, Q2, Q3 and Restart), *On
+battery* and *Reduced motion*, and every change sends the preview again. Under them the panel
+answers the editor query `{"level": {"quality", "battery", "calm"}}` (`rigs::query`,
+`levels::query`): `quality` is the level the daemon reaches (`asked` is the cap that was
+chosen), `render_scale`, `density` and `particles` are what that level keeps of the resolution,
+the crowd and the particles, `bloom` says whether the canvas has a glow (`on`), whether it has a
+glare above white (`hdr`) and whether this level draws it (`glare`: Q3, or Q2 off battery),
+`effects` has one row per effect use with its `layer`, `effect`, whether it is `kept`, its
+`scale`, its `units` of work at this level (null when it is left out), the `full_units` it costs
+at Q3, the `levels` of all four levels as the effect-cost panel shows them and `follows` when it
+reacts to the pointer, `pointer.emitters` are the particle systems that follow the pointer,
+`left_out` counts the effects left out and `units` adds up the work that stays. The panel
+writes the same rows, in bold when an effect is left out, and names what follows the pointer so
+that it can be tried with *Test the pointer and clicks*. The cost panel of an effect marks the
+level the daemon would reach, not the one that was asked for.
+
+While *Test the pointer and clicks* is on, the preview shows a ring where the pointer is, red
+while a button is held, and every press sends out a pulse from the point it fell on, so that the
+author sees where a click reached the scene.
+
+*Compare with* picks a second level and *Without the glow of the canvas* the same frame with the
+bloom taken out (`look.bloom: false` leaves `canvas.bloom` out of the previewed document, never
+out of the saved one). Holding *Hold to see the other side* shows that second look in the same
+preview and letting go returns to the first, so two levels, or the glow on and off, can be
+told apart on the same frame; *Split the picture with the other side* in the panel writes both
+looks into one picture, the first on the left and the second on the right.
+
+*Save a picture…* and *Save a clip…* render the scene to a file without the desktop, from the
+unsaved document, with the same code as `wprs-ctl scene render` (`Renderer::rehearse` of
+`wprs-render`): the scene is drawn at the level, with the render scale of that level, battery and
+reduced motion that the panel shows, from the second the playhead is at. A picture is one
+frame (.png, .jpg, .webp or .avif); a clip is 90 frames at 30 a second, written as an animated
+.gif or, for any other extension, as an image sequence named `NAME-0001.EXT`. *Move a pointer
+across and click* adds a made-up pointer that crosses the canvas and presses over the middle of
+the clip, so that what follows the pointer moves in the file too. The app tells where the files
+went with the `rendered` signal.
+
+`wprs-ctl scene render DIR --out FILE [--time S] [--quality Q] [--battery] [--calm] [--frames N
+--fps F] [--size PX] [--pointer X,Y[:X,Y] [--click]] [--against Q] [--without-bloom] [--split
+F]` does the same from the saved folder: a picture for one frame, an animated .gif or an image
+sequence for more (up to 600 frames), a made-up pointer at fractions of the canvas that moves to
+the second pair over the clip and presses over its middle with `--click`, and with `--against`
+or `--without-bloom` the right of the picture from that level or without the glow, joined at
+`--split` (0 to 1) of the width. It prints the files it wrote and, on the error output, the
+effects the renderer left out. `wprs-ctl scene bench PACKAGE --quality Q --shot FILE` gives the
+frame of a built package at a level together with its timings.
 
 The lines its scripts pass to `console.log` and the kind, and the error of a script or layer that
 stopped, are part of `GetState().outputs[OUTPUT]` (`console`, `error`); the Problems panel shows
