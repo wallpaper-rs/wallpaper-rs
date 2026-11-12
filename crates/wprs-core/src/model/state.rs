@@ -27,6 +27,8 @@ model! {
         pub options: BTreeMap<String, Value>,
         pub outputs: BTreeMap<String, OutputState>,
         #[serde(default)]
+        pub previews: BTreeMap<String, PreviewState>,
+        #[serde(default)]
         pub calibrating: bool,
         #[serde(default)]
         pub compute: bool,
@@ -44,6 +46,11 @@ model! {
         pub hdrs: BTreeMap<String, String>,
         #[serde(default)]
         pub layer_shell: LayerShellState,
+    }
+
+    pub struct PreviewState {
+        pub error: Option<String>,
+        pub console: Vec<String>,
     }
 
     pub struct GpuAdapter {
@@ -118,8 +125,6 @@ model! {
         pub quality_auto: String,
         #[serde(default)]
         pub decode: String,
-        #[serde(default)]
-        pub console: Vec<String>,
         #[serde(default)]
         pub sandbox: String,
         #[serde(default)]

@@ -21,6 +21,19 @@ pub fn virtual_output(name: &str) -> bool {
     name.starts_with(PREVIEW)
 }
 
+pub(crate) fn previews(
+    status: &std::collections::BTreeMap<String, crate::compositor::OutputStatus>,
+) -> std::collections::BTreeMap<String, wprs_core::model::PreviewState> {
+    let shown = status
+        .iter()
+        .filter(|(name, s)| virtual_output(name) && (s.error.is_some() || !s.console.is_empty()));
+    let state = |s: &crate::compositor::OutputStatus| wprs_core::model::PreviewState {
+        error: s.error.clone(),
+        console: s.console.clone(),
+    };
+    shown.map(|(name, s)| (name.clone(), state(s))).collect()
+}
+
 pub(crate) fn forget_previews(config: &mut wprs_core::Config) -> bool {
     let before = config.outputs.len();
     config.outputs.retain(|name, _| !virtual_output(name));

@@ -2467,7 +2467,7 @@ otra página no cierra un editor con cambios sin guardar.
   cambiar los ids guardados. Un punto de partida creado en un idioma que sus etiquetas no tienen
   usa ese idioma, el del título, como idioma predeterminado y copia en él las etiquetas en inglés
   para traducirlas. Debajo, la consola de los scripts muestra las últimas 50 líneas que
-  escribieron en la vista previa (`wprs-ctl state` las da en `console` de la salida `preview:`).
+  escribieron en la vista previa (`wprs-ctl state` las da en `console` de `previews`, bajo el nombre de la salida `preview:`).
 
 El editor de escenas pinta también las máscaras de los efectos que las piden por canal: junto a
 cada parámetro de máscara hay un botón para pintar, el canal (rojo, verde, azul o alfa), un modo

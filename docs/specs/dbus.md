@@ -2608,10 +2608,10 @@ in the configuration, connected or not, to that value, and `hdrs` does the same 
 description of its own, `"sdr"`, or empty on streams), `max_cll` and `max_fall` (the metadata of
 that description, `null` otherwise) and `reason`: `"auto"`, `"on"`, `"off"`, `"display"`
 (the screen, the desktop or the driver offers no HDR, with `auto` also when the desktop does not say the screen shows HDR, and always on streams), `"battery"` or
-`"quality"` (no scene with `canvas.hdr` and a tone map is shown, or it draws below `q3`). `console` holds, only for
-the `preview:` outputs of the scene editor, the last 50 lines its scripts wrote with `console`, as
-`<level> <module>: <text>`; other outputs leave it empty so that scripts that write often never wake
-the bus.
+`"quality"` (no scene with `canvas.hdr` and a tone map is shown, or it draws below `q3`). `previews` holds, only for the
+`preview:` outputs of the scene editor (which `outputs` leaves out) that have either, their `error` and the
+`console`: the last 50 lines their scripts wrote, as `<level> <module>: <text>`; other outputs have no
+console so that scripts that write often never wake the bus.
 
 ```rust
 struct State {
@@ -2620,7 +2620,7 @@ struct State {
     library_error: Option<String>, serial: u64, paused: bool, on_battery: bool, locked: bool,
     volume: f64, muted: bool, profile: Option<Uid>, jobs: u32,
     options: BTreeMap<String, Value>,
-    outputs: BTreeMap<String, OutputState>, calibrating: bool, compute: bool,
+    outputs: BTreeMap<String, OutputState>, previews: BTreeMap<String, PreviewState>, calibrating: bool, compute: bool,
     adapters: Vec<GpuAdapter>, gpu_warning: Option<String>, gpu_note: Option<String>, gpu_restart: bool,
     qualities: BTreeMap<String, String>, hdrs: BTreeMap<String, String>, layer_shell: LayerShellState,
 }
@@ -2633,9 +2633,10 @@ struct OutputState {
     edited: bool, screen: Option<Screen>, mm: Option<[f64; 4]>, parallax: bool, frames: u64, page_frames: u64, refresh: u32, fps: u32,
     buffers: String, sound: String, shown_fit: Fit, flashes: String, left_out: Vec<String>,
     particles: String, quality: String, quality_reason: String, quality_choice: Option<String>,
-    quality_cost: f64, quality_budget: f64, quality_auto: String, console: Vec<String>, sandbox: String,
+    quality_cost: f64, quality_budget: f64, quality_auto: String, sandbox: String,
     accent: Option<String>, filter: Option<Filter>, hdr: HdrState,
 }
+struct PreviewState { error: Option<String>, console: Vec<String> }
 struct HdrState {
     choice: String, own: Option<String>, active: bool, offered: bool, display: bool,
     peak_nits: Option<f64>, reference_nits: Option<f64>, reason: String, encoding: String,

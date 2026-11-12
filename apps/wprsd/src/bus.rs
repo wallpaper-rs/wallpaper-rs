@@ -149,7 +149,6 @@ impl Daemon {
                 quality_auto: s.level.automatic.into(),
                 decode: s.decode.into(),
                 left_out: s.left_out,
-                console: s.console,
                 sandbox: s.sandbox.into(),
                 helper: s.helper,
                 accent: info.accent.clone(),
@@ -183,6 +182,7 @@ impl Daemon {
                 .and_then(serde_json::from_value)
                 .unwrap_or_default(),
             outputs: shown.map(output).collect(),
+            previews: crate::drafts::previews(&status),
             calibrating: crate::calibration::calibrating(&st),
             compute: self.compute,
             adapters: self.gpus.adapters(),

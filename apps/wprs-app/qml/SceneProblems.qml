@@ -10,8 +10,8 @@ ColumnLayout {
     required property var page
     readonly property var problems: page.view.problems ?? []
     readonly property string output: page.editor.output
-    readonly property var scriptLines: App.state.outputs?.[panel.output]?.console ?? []
-    readonly property string scriptError: App.state.outputs?.[panel.output]?.error ?? ""
+    readonly property var scriptLines: App.state.previews?.[panel.output]?.console ?? []
+    readonly property string scriptError: App.state.previews?.[panel.output]?.error ?? ""
     property var inputs: ({})
     readonly property var uses: (inputs.shown ?? {})[panel.output] ?? {}
     readonly property var off: panel.unmet(panel.uses)
