@@ -1,6 +1,6 @@
 use crate::{Kind, Layer, Model, Quality, Scene, Value, fur_shells};
 
-pub const TRIANGLE_UNIT: f32 = 60_000.0;
+pub const TRIANGLE_UNIT: f32 = 200_000.0;
 
 fn layers(m: &crate::Material) -> u32 {
     match m.params.get("layers") {
@@ -23,6 +23,14 @@ impl Scene {
             u64::from(fur_shells(layers(x), q)) * model.material(name).map_or(0, |i| of(model, i))
         });
         model.triangles + more.sum::<u64>()
+    }
+
+    pub fn shadow_draws(&self) -> u32 {
+        let casts = self.layers().filter_map(|l| match &l.kind {
+            Kind::Light(x) if x.shadows && x.light != crate::Beam::Tube => Some(x.light),
+            _ => None,
+        });
+        casts.take(2).map(|b| if b == crate::Beam::Point { 6 } else { 1 }).sum()
     }
 
     pub fn model_triangles(&self, q: Quality) -> u64 {

@@ -33,7 +33,7 @@ mod placed;
 mod pool;
 mod poster;
 mod probe;
-mod profile;
+pub(crate) mod profile;
 mod rasters;
 mod ready;
 mod region;

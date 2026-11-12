@@ -33,7 +33,8 @@ pub fn cost(dir: &Path, doc: &Value, quality: Quality) -> Value {
         .iter()
         .map(|q| {
             let k = q.render_scale();
-            let unit = |id: &&str| scene.layer(id).map_or(0.0, |l| scene.drawn_triangles(l, *q) as f32 / TRIANGLE_UNIT + 1.0);
+            let draws = u64::from(1 + scene.shadow_draws());
+            let unit = |id: &&str| scene.layer(id).map_or(0.0, |l| (scene.drawn_triangles(l, *q) * draws) as f32 / TRIANGLE_UNIT + 1.0);
             let units: f32 = shown.iter().map(|(id, _)| unit(id)).sum::<f32>() * k * k;
             let (shadows, fur) = (super::spend::shadow_texels(&scene, *q), super::spend::fur(&scene, *q));
             let colliders = super::spend::colliders(&scene, *q);

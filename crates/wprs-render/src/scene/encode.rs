@@ -31,14 +31,14 @@ impl Renderer {
         ops: &[Op],
         resolve: Option<(u32, &'static str)>,
         (clock, timing): (&Clock, Timing),
-        (view, serial, timed): (usize, u64, bool),
+        (view, serial, _): (usize, u64, bool),
     ) -> (SceneStats, wgpu::SubmissionIndex, Instant) {
         let pipes = self.scene.get().expect("created with the view");
         let mut encoder = self.device.create_command_encoder(&Default::default());
         pool.ahead.splice(0..0, clock.open(self, timing));
         let mut stats = SceneStats::default();
         let frame = pool.frame_groups().clone();
-        let (mut k, mut profile) = (0, super::profile::Profile::begin(&self.device, timed));
+        let (mut k, mut profile) = (0, pool.profile.take());
         while k < ops.len() {
             if let Some(p) = profile.as_mut() {
                 let (op, target) = (&ops[k], super::profile::target(&ops[k]));

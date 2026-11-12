@@ -1,4 +1,5 @@
 use super::super::SceneView;
+use super::super::profile::Profile;
 use super::calls::{plan, put, rooms, sized};
 use super::dress::drawn;
 use super::uniform::scene3;
@@ -23,6 +24,7 @@ impl Renderer {
         scale: [f32; 6],
     ) -> Result<(), RenderError> {
         let reach = scale[0].abs().max(scale[3].abs());
+        view.pool.profile = super::super::profile::Profile::begin(&self.device, view.timed);
         self.skins(view, (runtime, frame), videos, reach)?;
         self.solid_stages(view, (&runtime.scene, frame), reach)
     }
@@ -76,8 +78,10 @@ impl Renderer {
             self.pictured(staged, (&view.models, &view.images), frame, stage);
             let env_view = map.unwrap_or(&self.solids().white);
             let flags = (map.is_some(), &view.debug3d);
+            let timed = &mut view.pool.profile;
             let done = self.scoped(|| {
-                self.paint_stage(staged, (&view.models, env_view, &view.uniform), frame, stage, flags)
+                let with = (&view.models, env_view, &view.uniform);
+                self.paint_stage(staged, with, (frame, stage), flags, timed.as_mut())
             })?;
             view.pool.defer(done);
             staged.key = key;
@@ -94,9 +98,9 @@ impl Renderer {
         &self,
         staged: &mut Staged,
         (models, env, uniform): (&HashMap<u64, GpuModel>, &crate::texture::GpuImage, &wgpu::Buffer),
-        frame: &Frame<'_>,
-        stage: &Stage3d<'_>,
+        (frame, stage): (&Frame<'_>, &Stage3d<'_>),
         (env_map, debug): (bool, &Drafted),
+        mut timed: Option<&mut Profile>,
     ) -> wgpu::CommandBuffer {
         plan(staged, frame, stage, debug);
         let shadows = self.shadow_plan(frame, stage);
@@ -139,13 +143,29 @@ impl Renderer {
             }
         }
         let mut encoder = self.device.create_command_encoder(&Default::default());
+        let (w, h) = staged.size;
+        let mut span = |encoder: &mut wgpu::CommandEncoder, what: &str, open: bool| {
+            if let Some(p) = timed.as_mut() {
+                match open {
+                    true => p.start(encoder, || format!("3d {what} {w}x{h} of a stage")),
+                    false => p.end(encoder),
+                }
+            }
+        };
+        let shadows = due.contains(&true);
+        span(&mut encoder, "shadow maps", shadows);
         self.shadow_passes(&mut encoder, staged, models, due);
+        span(&mut encoder, "shadow maps", false);
         if stage.seen {
+            span(&mut encoder, "depth for particles", true);
             self.seen_pass(&mut encoder, staged, models);
+            span(&mut encoder, "depth for particles", false);
         }
+        span(&mut encoder, "models", true);
         for k in 0..stage.slices {
             self.stage_pass(&mut encoder, staged, models, (k, 0));
         }
+        span(&mut encoder, "models", false);
         if let Some((_, f)) = stage.cross {
             if staged.cross.len() != stage.slices {
                 staged.cross = self.slice_images(staged.size, staged.hdr, stage.slices);
@@ -157,12 +177,14 @@ impl Renderer {
             let key = wprs_scene::cross_key(stage).unwrap_or_default();
             let fresh = std::mem::replace(&mut staged.cross_key, key) != key;
             staged.cross_renders += u64::from(fresh);
+            span(&mut encoder, "second camera and cross-fade", true);
             for k in 0..stage.slices {
                 if fresh {
                     self.stage_pass(&mut encoder, staged, models, (k, 1));
                 }
                 self.mix_slices(&mut encoder, &staged.cross_groups[k], &staged.slices[k], f);
             }
+            span(&mut encoder, "second camera and cross-fade", false);
         } else {
             staged.cross_key = 0;
         }

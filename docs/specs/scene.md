@@ -10,7 +10,8 @@ with the JSON path of the field, such as `/layers/2/effects/0/params/radius is 3
 what each frame costs, how long the scene takes to load and draw its first frame, and the GPU and
 main memory it holds (`--screens 2` shows it on two screens at once; `--passes` times each render
 pass with GPU timestamps, where the GPU has them inside command encoders, every 15th frame, and lists
-the passes from the dearest, as the performance report of the phone does; `--shot frame.png` saves
+the passes from the dearest, the passes of each 3D group among them (`3d shadow maps`, `3d depth for
+particles`, `3d models` and `3d second camera and cross-fade`, with the size of the group's picture), as the performance report of the phone does; `--shot frame.png` saves
 the last frame, so two builds can be compared picture by picture; `--quality auto` steers the level
 by measured GPU time as the phone does, starting where the phone would and listing every step;
 `--paced 30` renders in real time at `--fps` for 30 seconds, with at most two frames on the GPU like
@@ -861,7 +862,12 @@ plain still draws its own picture, and the models of the outer one then draw alo
 A model whose values do not move renders once and its picture is kept; a 3D group renders again only
 when a model, the camera, a light, the light around or the size changes, so that a still scene asks
 for no frames. The work of a model counts the triangles it draws, fur shells included, toward the
-cost of the scene, one unit for every 60 000. Device tiers take at most 50 000 triangles (T0), 150 000
+cost of the scene, one unit for every 200 000, and again for each shadow map they are drawn into
+(the first two lights with `shadows`, six maps for a point light). That ratio was measured on a discrete
+graphics card, where 60 000 triangles took 0.29 units (a full-screen pass of 1920×1080 at 0.016 ms)
+and a directional shadow map about as much as the triangles themselves; the test
+`the_3d_stage_costs_on_this_gpu` of `crates/wprs-render/tests/models` (run with `--ignored`) prints
+those numbers for any graphics card. Device tiers take at most 50 000 triangles (T0), 150 000
 (T1), 500 000 (T2) and 2 000 000 (T3), skins of at most 256 bones and shadows of 0, 0, 1 and 2 lights;
 the editor and the validator tell which tiers a scene fits. A tier shows the poster of a scene whose
 models draw more triangles than it takes at the lowest quality, where fur keeps a quarter of its

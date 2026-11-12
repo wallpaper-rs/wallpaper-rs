@@ -64,3 +64,19 @@ fn moving_paths_ask_for_half_the_frames_at_the_lowest_quality() {
     assert_eq!(high, 40);
     assert!((19..=21).contains(&low), "at most 30 a second of 60: {low}");
 }
+
+#[test]
+fn timed_passes_name_the_passes_of_a_3d_stage() {
+    let Some(r) = renderer() else { return };
+    let bench = wprs_render::Bench { frames: 64, size: (SIDE, SIDE), passes: true, ..Default::default() };
+    let runtime = Runtime::new(Arc::new(two("cross")), Values::new());
+    let report = wprs_render::scene_bench(r, runtime, Default::default(), &bench).unwrap();
+    let passes = report["pass_ms"]["passes"].as_array().cloned().unwrap_or_default();
+    if passes.is_empty() {
+        eprintln!("skipping: the device times no passes");
+        return;
+    }
+    let named = |what: &str| passes.iter().any(|p| p[0].as_str().is_some_and(|l| l.starts_with(what)));
+    assert!(named("3d models"), "{passes:?}");
+    assert!(passes.iter().all(|p| p[1].as_f64().is_some_and(|ms| ms >= 0.0)), "{passes:?}");
+}
