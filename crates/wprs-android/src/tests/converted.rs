@@ -60,3 +60,21 @@ pub(super) fn converted_videos_take_the_place_of_their_original() {
     assert_eq!(ask(json!({ "op": "remove", "uids": [clip, still] })), Value::Null);
     assert!(!target.exists(), "removing a video leaves its conversion behind");
 }
+
+pub(super) fn identical_conversions_of_two_videos_keep_both_files() {
+    let (first, _) = store::store(&mut open("magenta-64x32.webm"), "first.webm").unwrap();
+    let (second, _) = store::store(&mut open("quadrants-64x32.webm"), "second.webm").unwrap();
+    let mut placed = Vec::new();
+    for uid in [&first, &second] {
+        let target = ask(json!({ "op": "convert_to", "uid": uid }));
+        let target = PathBuf::from(target.as_str().unwrap_or_else(|| panic!("{target}")));
+        fs::copy(Path::new(FIXTURES).join("quadrants-64x32.webm"), &target).unwrap();
+        let reply = ask(json!({ "op": "converted", "uid": uid }));
+        assert!(reply.is_string(), "{reply}");
+        placed.push(path(uid));
+    }
+    assert!(placed[0] != placed[1] && placed.iter().all(|p| p.is_file() && p.extension().unwrap() == "mp4"));
+    assert_eq!(fs::read(&placed[0]).unwrap(), fs::read(&placed[1]).unwrap());
+    assert_eq!(ask(json!({ "op": "remove", "uids": [first, second] })), Value::Null);
+    assert!(placed.iter().all(|p| !p.exists()), "removing a video leaves its converted file behind");
+}

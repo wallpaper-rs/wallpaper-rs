@@ -162,6 +162,7 @@ fn the_library_imports_rotates_and_keeps_settings() {
     tilted::scenes_follow_the_phone();
     chosen::chosen_files_and_folders();
     converted::converted_videos_take_the_place_of_their_original();
+    converted::identical_conversions_of_two_videos_keep_both_files();
     refused::packages_the_phone_cannot_play_are_refused();
     pages::pages_are_served_from_their_package_only();
     capped::pages_keep_no_more_than_they_declared();

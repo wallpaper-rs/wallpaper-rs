@@ -68,7 +68,11 @@ fn replace(uid: &str) -> Result<Value, Error> {
         return Err(said("android.convert_failed", "the converted video of %1 cannot be read", &[&uid]));
     }
     let hash: String = qhash(&made)?[..8].iter().map(|b| format!("{b:02x}")).collect();
-    let path = store::dir()?.join(store::MEDIA).join(format!("{hash}.mp4"));
+    let media_dir = store::dir()?.join(store::MEDIA);
+    let mut path = media_dir.join(format!("{hash}.mp4"));
+    if path.exists() {
+        path = media_dir.join(format!("{hash}-{uid}.mp4"));
+    }
     fs::rename(&made, &path)?;
     let path = library::with(|lib| {
         lib.relink_item(uid, &path, library::now())?;
