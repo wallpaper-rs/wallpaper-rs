@@ -6387,6 +6387,7 @@ msgid "Chroma key"
 msgstr "Croma"
 
 #: apps/wprs-app/qml/SceneMaterial3d.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Metal and roughness"
 msgstr "Metal y rugosidad"
 
@@ -6395,6 +6396,7 @@ msgid "Normals"
 msgstr "Normales"
 
 #: apps/wprs-app/qml/SceneMaterial3d.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Occlusion"
 msgstr "Oclusión"
 
@@ -12465,6 +12467,10 @@ msgstr "Tabla de color"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Map"
 msgstr "Mapa"
+
+#: apps/wprs-app/qml/facade/SceneTerms.qml
+msgid "Maps"
+msgstr "Mapas"
 
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Mask"

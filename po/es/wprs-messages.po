@@ -1965,7 +1965,8 @@ msgstr "solo las capas dentro de un grupo 3D prueban la profundidad"
 #: crates/wprs-editor/src/stage3d/painted.rs
 msgid ""
 "%1 is not a map of a material; use base, orm, normal, occlusion or emissive"
-msgstr "%1 no es un mapa de un material; usa base, orm, normal, occlusion o emissive"
+msgstr ""
+"%1 no es un mapa de un material; usa base, orm, normal, occlusion o emissive"
 
 #: crates/wprs-editor/src/stage3d/material.rs
 msgid "a material color is #rrggbb or [r, g, b, a]"
