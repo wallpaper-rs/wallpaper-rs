@@ -37,4 +37,22 @@ class DuckTest {
         assertEquals(1f, Ducking.next(0.95f, 1f))
         assertEquals(0.5f, Ducking.next(0.4f, 1f), 1e-6f)
     }
+
+    @Test
+    fun anOwnPlayerThatStopsStillCountsUntilItsStreamIsGone() {
+        val owners = Owners(1000)
+        val video = Any()
+        owners.want(video, true, 0)
+        assertEquals(1, owners.count(10))
+        owners.want(video, false, 100)
+        assertFalse(owners.any())
+        assertFalse("our stream may still be reported", Ducking.others(1, owners.count(500)))
+        assertEquals(0, owners.count(1100))
+        owners.want(video, false, 1200)
+        assertEquals("a player that was never heard does not count", 0, owners.count(1300))
+        owners.want(video, true, 1400)
+        owners.want(video, false, 1500)
+        owners.want(video, true, 1600)
+        assertEquals("playing again cancels the grace", 1, owners.count(3000))
+    }
 }
