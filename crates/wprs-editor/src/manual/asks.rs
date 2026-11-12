@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 36] = [
+pub const ASKS: [(&str, &str, &str); 37] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -42,5 +42,10 @@ pub const ASKS: [(&str, &str, &str); 36] = [
     ("pools", "Mesh pools of the scene with the layers that draw them and the scripts that build them", "{}"),
     ("uses", "What each script declares, what its source uses and what it lacks", "{}"),
     ("spread", "Spread of an emitter", "{}"),
+    (
+        "strings",
+        "The table of texts by key: languages, keys with the languages they lack, files and the texts of the engine",
+        "{}",
+    ),
     ("credits", "The files of the package that can be credited, the credits and the files with none", "{}"),
 ];

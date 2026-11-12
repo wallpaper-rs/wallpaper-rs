@@ -88,6 +88,10 @@ ColumnLayout {
             onAccepted: add.clicked()
         }
 
+        TextsKeys {
+            host: texts.host
+        }
+
         QQC2.Button {
             id: add
 

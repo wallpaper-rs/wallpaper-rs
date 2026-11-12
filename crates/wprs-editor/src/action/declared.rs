@@ -76,6 +76,26 @@ pub enum ManifestEdit {
         #[serde(default)]
         files: Map<String, Value>,
     },
+    Credit {
+        paths: Vec<String>,
+        license: String,
+        attribution: String,
+        #[serde(default)]
+        url: Option<String>,
+    },
+    Uncredit {
+        paths: Vec<String>,
+    },
+    Text {
+        key: String,
+        language: String,
+        #[serde(default)]
+        text: Option<String>,
+    },
+    Locale {
+        language: String,
+        file: bool,
+    },
     AddFile {
         file: std::path::PathBuf,
         #[serde(default)]

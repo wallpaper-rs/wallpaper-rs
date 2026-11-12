@@ -2782,11 +2782,14 @@ msgstr "Fin %1 s"
 msgid ""
 "%1 files have no credit. Choose the ones someone else made and say who and "
 "under which license."
-msgstr "%1 archivos no tienen crédito. Elige los que hizo otra persona e indica quién y con qué licencia."
+msgstr ""
+"%1 archivos no tienen crédito. Elige los que hizo otra persona e indica "
+"quién y con qué licencia."
 
 #: apps/wprs-app/qml/PackageCredits.qml
 msgid "Every picture, sound, font and model of the package has a credit."
-msgstr "Todas las imágenes, sonidos, fuentes y modelos del paquete tienen crédito."
+msgstr ""
+"Todas las imágenes, sonidos, fuentes y modelos del paquete tienen crédito."
 
 #: apps/wprs-app/qml/PackageCredits.qml
 msgid "Show the files that already have a credit"
@@ -3363,6 +3366,61 @@ msgstr "Preajuste"
 msgid "Required packages"
 msgstr "Paquetes necesarios"
 
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid ""
+"No texts by key yet. A text that starts with @ takes its words from this "
+"table, so one key can be translated once and used in many places."
+msgstr ""
+"Aún no hay textos por clave. Un texto que empieza con @ toma sus palabras de "
+"esta tabla, así una clave se traduce una vez y se usa en muchos lugares."
+
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid "%1 texts are missing in some language."
+msgstr "Faltan %1 textos en algún idioma."
+
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid "Every key has a text in every language."
+msgstr "Cada clave tiene un texto en cada idioma."
+
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid "In its own file"
+msgstr "En su propio archivo"
+
+#: apps/wprs-app/qml/PackageStrings.qml
+#, c-format
+msgid ""
+"Keep the texts of this language in locale/%1.json instead of the manifest"
+msgstr ""
+"Guarda los textos de este idioma en locale/%1.json en vez de en el manifiesto"
+
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid "not used"
+msgstr "sin usar"
+
+#: apps/wprs-app/qml/PackageStrings.qml apps/wprs-app/qml/ScenePathRow.qml
+msgid "Remove this key"
+msgstr "Quitar esta clave"
+
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid "Missing"
+msgstr "Falta"
+
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid "New key, such as greeting"
+msgstr "Clave nueva, como saludo"
+
+#: apps/wprs-app/qml/PackageStrings.qml
+msgid "Its text"
+msgstr "Su texto"
+
+#: apps/wprs-app/qml/PackageStrings.qml apps/wprs-app/qml/ProviderDialog.qml
+#: apps/wprs-app/qml/SceneBoneTree.qml apps/wprs-app/qml/SceneEditors.qml
+#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePairs.qml
+#: apps/wprs-app/qml/SceneRefs.qml apps/wprs-app/qml/SceneRigTouch.qml
+#: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneSwarmRemap.qml
+msgid "Add"
+msgstr "Añadir"
+
 #: apps/wprs-app/qml/PackageTrack.qml
 msgid ""
 "Try the page in the preview with a made-up track for window.wprs.onMedia "
@@ -3688,14 +3746,6 @@ msgstr "Próxima sincronización:"
 #: apps/wprs-app/qml/ProviderDialog.qml
 msgid "Add provider"
 msgstr "Añadir un proveedor"
-
-#: apps/wprs-app/qml/ProviderDialog.qml apps/wprs-app/qml/SceneBoneTree.qml
-#: apps/wprs-app/qml/SceneEditors.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/ScenePairs.qml apps/wprs-app/qml/SceneRefs.qml
-#: apps/wprs-app/qml/SceneRigTouch.qml apps/wprs-app/qml/SceneRigWeights.qml
-#: apps/wprs-app/qml/SceneSwarmRemap.qml
-msgid "Add"
-msgstr "Añadir"
 
 #: apps/wprs-app/qml/ProviderDialog.qml
 msgid "lowercase letters, digits, - and _"
@@ -6918,10 +6968,6 @@ msgid "%1, %2 s"
 msgstr "%1, %2 s"
 
 #: apps/wprs-app/qml/ScenePathRow.qml
-msgid "Remove this key"
-msgstr "Quitar esta clave"
-
-#: apps/wprs-app/qml/ScenePathRow.qml
 msgid "Key the view at %1 s"
 msgstr "Clave de la vista a los %1 s"
 
@@ -9998,6 +10044,22 @@ msgstr "No hay tareas"
 #: apps/wprs-app/qml/StatusBar.qml
 msgid "The job failed without giving a reason"
 msgstr "El trabajo falló sin dar ningún motivo"
+
+#: apps/wprs-app/qml/StringsEngine.qml
+msgid "Texts of the engine"
+msgstr "Textos del motor"
+
+#: apps/wprs-app/qml/StringsEngine.qml
+msgid ""
+"The engine translates these for every user. Pick one with Use a text by key "
+"on a title or a label."
+msgstr ""
+"El motor los traduce para cada usuario. Elige uno con Usar un texto por "
+"clave en un título o una etiqueta."
+
+#: apps/wprs-app/qml/TextsKeys.qml
+msgid "Use a text by key"
+msgstr "Usar un texto por clave"
 
 #: apps/wprs-app/qml/Tile.qml
 msgid "Mature content: open the details to show it"

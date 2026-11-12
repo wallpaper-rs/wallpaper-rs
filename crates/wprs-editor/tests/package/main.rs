@@ -1,4 +1,5 @@
 mod credits;
+mod strings;
 
 use serde_json::{Value, json};
 use std::sync::OnceLock;

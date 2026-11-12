@@ -9,18 +9,8 @@ use wprs_format::{
     Content, Descriptor, Facts, Input, Manifest, Origin, Rating, Requires, Scene, Text, newer_names,
 };
 
-const TOP: [&str; 10] = [
-    "schema",
-    "kind",
-    "entry",
-    "properties",
-    "strings",
-    "preview",
-    "playback",
-    "web",
-    "permissions",
-    "presets",
-];
+const TOP: [&str; 9] =
+    ["schema", "kind", "entry", "properties", "preview", "playback", "web", "permissions", "presets"];
 const FIRST: [&str; 8] = ["title", "description", "version", "id", "authors", "license", "preview", "tags"];
 pub const ORDER: &str = "title description changes version id authors license content rating descriptors \
     photosensitive origin kind derived_from credits preview previews thumbnail animated links homepage source \
@@ -53,6 +43,7 @@ pub fn adjust(doc: &Value, field: &mut crate::Field) {
     match field.pointer.as_str() {
         "/manifest/inputs" => field.fixed = used(doc),
         "/manifest/default_locale" => field.required = true,
+        "/manifest/strings" => field.widget = "package:strings".into(),
         "/manifest/credits" => field.widget = "package:credits".into(),
         "/manifest/requires/features" => {
             field.options = wprs_format::features::CHOSEN.map(Value::from).to_vec()

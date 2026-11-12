@@ -119,7 +119,7 @@ fn the_inspector_shows_the_manifest_from_its_schema() {
     let shown = fields(&doc, "/manifest");
     let top: Vec<&str> = shown.iter().filter(|f| f.depth == 0).map(|f| f.key.as_str()).collect();
     assert_eq!(top[..5], ["title", "description", "changes", "version", "id"]);
-    assert!(!top.iter().any(|k| ["schema", "kind", "entry", "properties", "strings", "preview"].contains(k)));
+    assert!(!top.iter().any(|k| ["schema", "kind", "entry", "properties", "preview"].contains(k)));
     let field = |key: &str| shown.iter().find(|f| f.key == key).unwrap_or_else(|| panic!("{key}"));
     let widgets =
         ["title", "description", "authors", "inputs", "descriptors", "rating", "features", "thumbnail"]

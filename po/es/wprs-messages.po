@@ -643,7 +643,9 @@ msgstr "un paquete deriva de 64 obras como mucho"
 msgid ""
 "%1 files have no credit: %2 and %3 more; credit them, or their folder, if "
 "someone else made them"
-msgstr "%1 archivos no tienen crédito: %2 y %3 más; acredítalos, o su carpeta, si los hizo otra persona"
+msgstr ""
+"%1 archivos no tienen crédito: %2 y %3 más; acredítalos, o su carpeta, si "
+"los hizo otra persona"
 
 #: crates/wprs-editor/src/credits.rs
 msgid "a credit needs files, a license and who it is attributed to"
@@ -1065,6 +1067,22 @@ msgstr "el viento sopla de 0 a 10000 píxeles por segundo"
 #: crates/wprs-editor/src/limbs.rs
 msgid "gusts go from 0 to 1"
 msgstr "las ráfagas van de 0 a 1"
+
+#: crates/wprs-editor/src/locales.rs
+msgid "a locale file has at most 512 KiB"
+msgstr "un archivo de idioma tiene como mucho 512 KiB"
+
+#: crates/wprs-editor/src/locales.rs
+msgid "texts by key need %1 and a language such as en or pt-BR"
+msgstr "los textos por clave necesitan %1 y un idioma como en o pt-BR"
+
+#: crates/wprs-editor/src/locales.rs
+msgid ""
+"a key has up to 64 letters, digits, _, . or -, and wprs. keys belong to the "
+"engine"
+msgstr ""
+"una clave tiene hasta 64 letras, dígitos, _, . o -, y las claves wprs. son "
+"del motor"
 
 #: crates/wprs-editor/src/motion/mod.rs crates/wprs-editor/src/stage3d/edit.rs
 msgid "%1 is not a model layer"

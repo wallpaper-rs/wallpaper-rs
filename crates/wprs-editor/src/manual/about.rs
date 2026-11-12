@@ -63,7 +63,7 @@ pub const ABOUT: [(&str, &str); 69] = [
     ("layer", "Edit the transform, blend or instancing of a layer"),
     (
         "manifest",
-        "Edit the manifest: origin, license, tags, authors, credits, display, playback, web, network, inputs",
+        "Edit the manifest: origin, license, tags, authors, credits, texts by key, locale files, display, playback, web, network, inputs",
     ),
     ("property", "Edit a user property of the manifest"),
     ("canvas", "Edit the canvas: bloom and parallax"),

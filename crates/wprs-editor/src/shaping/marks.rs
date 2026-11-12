@@ -26,6 +26,12 @@ fn display(doc: &Value, values: &Map<String, Value>, clear: &[String]) -> Result
     Ok(super::effects::put(doc, "/manifest/display", (!next.is_empty()).then_some(Value::Object(next))))
 }
 
+fn written(dir: &Path, doc: &Value, (ops, writes): (Vec<Op>, Vec<crate::locales::Write>)) -> Result<Vec<Op>> {
+    let ops = refused(dir, doc, ops)?;
+    crate::locales::apply(&writes)?;
+    Ok(ops)
+}
+
 pub(crate) fn manifest(dir: &Path, doc: &Value, e: &M) -> Result<Vec<Op>> {
     let m = &doc["manifest"];
     let ops = match e {
@@ -72,6 +78,12 @@ pub(crate) fn manifest(dir: &Path, doc: &Value, e: &M) -> Result<Vec<Op>> {
             crate::credits::credit(dir, doc, paths, license, attribution, url.as_deref())?
         }
         M::Uncredit { paths } => crate::credits::uncredit(doc, paths),
+        M::Text { key, language, text } => {
+            return written(dir, doc, crate::locales::text(dir, doc, (key, language), text.as_deref())?);
+        }
+        M::Locale { language, file } => {
+            return written(dir, doc, crate::locales::locale(dir, doc, language, *file)?);
+        }
         M::AddFile { file, to } => return super::page::add_file(dir, doc, file, to.as_deref()),
         M::Media { file } => super::page::media(dir, doc, file)?,
     };

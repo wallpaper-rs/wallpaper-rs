@@ -148,6 +148,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("touch").is_some() => crate::touch::areas(doc),
         _ if q.get("pools").is_some() => crate::pools::list(doc),
         _ if q.get("uses").is_some() => crate::usage::report(dir, doc),
+        _ if q.get("strings").is_some() => crate::strings::query(dir, doc),
         _ if q.get("credits").is_some() => crate::credits::query(dir, doc),
         _ if q.get("spread").is_some() => crate::spread::spread(doc, &q["spread"]),
         _ => rig(dir, doc, id),
