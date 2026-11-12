@@ -99,10 +99,10 @@ fn split(keys: &mut [Value], old: &[Value], i: usize, p: usize, e: &KeysEdit) ->
         let Some(h) = given else { continue };
         placed(keys, old, i, side, p, h)?;
         let free = if other == "in" { e.in_handle.is_none() } else { e.out_handle.is_none() };
-        if let Some((pairs, seg)) = hands::each(old, i, other).filter(|_| e.aligned && free) {
-            if let Some(turned) = hands::aligned(h, pairs.get(p).copied(), seg.room) {
-                placed(keys, old, i, other, p, turned)?;
-            }
+        if let Some((pairs, seg)) = hands::each(old, i, other).filter(|_| e.aligned && free)
+            && let Some(turned) = hands::aligned(h, pairs.get(p).copied(), seg.room)
+        {
+            placed(keys, old, i, other, p, turned)?;
         }
     }
     Some(())
