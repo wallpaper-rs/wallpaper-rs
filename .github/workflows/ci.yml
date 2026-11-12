@@ -279,7 +279,7 @@ jobs:
         run: |
           cargo build --locked -p wprsd -p wprs-ctl -p wprs-web
           cargo build --locked -p wprs-pipewire --example probe
-          cargo build --locked -p wprsd --example timedate
+          cargo build --locked -p wprsd --examples
           cp target/debug/examples/probe target/debug/probe
           scripts/integration-test.sh target/debug
 
