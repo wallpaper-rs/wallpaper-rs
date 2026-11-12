@@ -293,6 +293,22 @@ msgstr ""
 "La imagen queda quieta hasta que estén listas sus capas de profundidad."
 
 #: crates/wprs-core/src/edit/travel.rs
+msgid ""
+"The picture stays still until its depth layers are built. They are built "
+"with the simple fill because LaMa, which fills the hidden parts better, is "
+"not installed. To get it (%1) run wprs-ctl models download lama-big-fp32 or "
+"use the app; nothing is downloaded until you ask."
+msgstr "La imagen queda quieta hasta que se construyan sus capas de profundidad. Se construyen con el relleno simple porque LaMa, que rellena mejor las partes ocultas, no está instalado. Para tenerlo (%1) ejecuta wprs-ctl models download lama-big-fp32 o usa la app; no se descarga nada hasta que lo pidas."
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid ""
+"The picture stays still: this computer draws with its processor, so depth "
+"movement is off. Turn it on with wprs-ctl config playback.software_parallax "
+"true or in the settings; it then moves in 8 steps at up to 15 frames per "
+"second."
+msgstr "La imagen queda quieta: este equipo dibuja con el procesador, así que el movimiento en profundidad está apagado. Actívalo con wprs-ctl config playback.software_parallax true o en los ajustes; entonces se mueve en 8 pasos y a lo sumo 15 cuadros por segundo."
+
+#: crates/wprs-core/src/edit/travel.rs
 msgid "The picture stays still: its depth layers could not be built."
 msgstr ""
 "La imagen queda quieta: no se pudieron construir sus capas de profundidad."
@@ -468,6 +484,17 @@ msgid "the map is %1x%2 and the image %3x%4: their shapes differ by over 2 %"
 msgstr ""
 "el mapa mide %1x%2 y la imagen %3x%4: sus proporciones difieren en más de un "
 "2 %"
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid ""
+"LaMa or ONNX Runtime is not installed. Install it from the depth tool or "
+"with wprs-ctl models download lama-big-fp32; nothing is downloaded until you "
+"ask."
+msgstr "LaMa o ONNX Runtime no está instalado. Instálalo desde la herramienta de profundidad o con wprs-ctl models download lama-big-fp32; no se descarga nada hasta que lo pidas."
+
+#: crates/wprs-core/src/edit/travel.rs
+msgid "The chosen fill is not installed."
+msgstr "El relleno elegido no está instalado."
 
 #: crates/wprs-editor/src/actions.rs crates/wprs-editor/src/layers.rs
 msgid "there is no layer \"%1\""

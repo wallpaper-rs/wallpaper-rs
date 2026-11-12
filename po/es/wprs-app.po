@@ -2679,7 +2679,7 @@ msgstr "Archivo:"
 msgid "Problem:"
 msgstr "Problema:"
 
-#: apps/wprs-app/qml/ItemFacts.qml
+#: apps/wprs-app/qml/ItemFacts.qml apps/wprs-app/qml/Tile.qml
 msgid "The file is missing"
 msgstr "Falta el archivo"
 
@@ -3247,6 +3247,25 @@ msgstr "Filtro:"
 #: apps/wprs-app/qml/OutputFilter.qml
 msgid "Show as it is"
 msgstr "Mostrar tal cual"
+
+#: apps/wprs-app/qml/OutputNotes.qml
+msgid ""
+"The picture stays still: this computer draws with its processor, so depth "
+"movement is off. Turn it on with Depth parallax with software rendering in "
+"the settings; it then moves in 8 steps at up to 15 frames per second."
+msgstr "La imagen queda quieta: este equipo dibuja con el procesador, así que el movimiento en profundidad está apagado. Actívalo con «Paralaje de profundidad con renderizado por software» en los ajustes; entonces se mueve en 8 pasos y a lo sumo 15 cuadros por segundo."
+
+#: apps/wprs-app/qml/OutputNotes.qml
+msgid ""
+"The picture stays still until its depth layers are built. They are built "
+"with the simple fill because LaMa, which fills the hidden parts better, is "
+"not installed. You can download it from the depth tool of the editor; "
+"nothing is downloaded until you ask."
+msgstr "La imagen queda quieta hasta que se construyan sus capas de profundidad. Se construyen con el relleno simple porque LaMa, que rellena mejor las partes ocultas, no está instalado. Puedes descargarlo desde la herramienta de profundidad del editor; no se descarga nada hasta que lo pidas."
+
+#: apps/wprs-app/qml/OutputNotes.qml
+msgid "The page reported an error and may not be drawing: %1"
+msgstr "La página informó de un error y puede que no se esté dibujando: %1"
 
 #: apps/wprs-app/qml/OutputRow.qml apps/wprs-app/qml/SceneBuild.qml
 msgid "Every screen"
@@ -7219,6 +7238,18 @@ msgid ""
 "Pivot: drag to move the origin of the layer; the layer stays where it is"
 msgstr "Pivote: arrastra para mover el origen de la capa; la capa no se mueve"
 
+#: apps/wprs-app/qml/SceneGlowGrip.qml
+msgid "With the glow"
+msgstr "Con el brillo"
+
+#: apps/wprs-app/qml/SceneGlowGrip.qml
+msgid "Without the glow"
+msgstr "Sin el brillo"
+
+#: apps/wprs-app/qml/SceneGlowGrip.qml
+msgid "Drag to move the split between the glow and no glow"
+msgstr "Arrastra para mover el corte entre con brillo y sin brillo"
+
 #: apps/wprs-app/qml/SceneGradientBar.qml
 msgid "Remove the stop"
 msgstr "Quitar la parada"
@@ -9078,6 +9109,32 @@ msgstr "Deshacer: %1"
 msgid "Redo: %1"
 msgstr "Rehacer: %1"
 
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid "Parallax center"
+msgstr "Centro del paralaje"
+
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid ""
+"Where the parallax rests: drag it away from the middle of the canvas to "
+"shift the whole picture"
+msgstr ""
+"Dónde reposa el paralaje: arrástralo lejos del centro del lienzo para "
+"desplazar toda la imagen"
+
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid "Depth %1, %2"
+msgstr "Profundidad %1, %2"
+
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid ""
+"Parallax depth of the layer: drag it away from the layer, a quarter of the "
+"canvas width is 1; hold Shift to set the depth across and the depth up and "
+"down apart"
+msgstr ""
+"Profundidad de paralaje de la capa: arrástralo lejos de la capa, un cuarto "
+"del ancho del lienzo vale 1; mantén Mayús para fijar por separado la "
+"profundidad a lo ancho y en alto"
+
 #: apps/wprs-app/qml/SceneParts.qml
 msgid "Parts, from back to front"
 msgstr "Partes, de atrás hacia delante"
@@ -10559,6 +10616,18 @@ msgstr "Dos apiladas"
 #: apps/wprs-app/qml/SceneSpanPick.qml
 msgid "My screens"
 msgstr "Mis pantallas"
+
+#: apps/wprs-app/qml/SceneSplitTool.qml
+msgid "Compare the glow"
+msgstr "Comparar el brillo"
+
+#: apps/wprs-app/qml/SceneSplitTool.qml
+msgid ""
+"Show the right part of the canvas without the glow and the left part with "
+"it; drag the line to move the split"
+msgstr ""
+"Muestra la parte derecha del lienzo sin el brillo y la izquierda con él; "
+"arrastra la línea para mover el corte"
 
 #: apps/wprs-app/qml/SceneSpriteCutter.qml
 msgid "Left to right, top to bottom"
@@ -15577,6 +15646,17 @@ msgid "Drag to change the radius"
 msgstr "Arrastra para cambiar el radio"
 
 #: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
+msgid "Drag onto another layer to make particles collide with that layer"
+msgstr "Arrastra sobre otra capa para que las partículas choquen con esa capa"
+
+#: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
+msgid ""
+"Drag along the top edge to set the opacity from which the picture is solid"
+msgstr ""
+"Arrastra a lo largo del borde superior para fijar la opacidad desde la que "
+"la imagen es sólida"
+
+#: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
 msgid "target"
 msgstr "objetivo"
 
@@ -16948,54 +17028,3 @@ msgstr "Cualquier horizontal"
 #: apps/wprs-app/qml/facade/WallhavenWords.qml
 msgid "Any portrait"
 msgstr "Cualquier vertical"
-
-#: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
-msgid "Drag onto another layer to make particles collide with that layer"
-msgstr "Arrastra sobre otra capa para que las partículas choquen con esa capa"
-
-#: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
-msgid "Drag along the top edge to set the opacity from which the picture is solid"
-msgstr "Arrastra a lo largo del borde superior para fijar la opacidad desde la que la imagen es sólida"
-
-#: apps/wprs-app/qml/SceneParallaxGrips.qml
-msgid "Parallax center"
-msgstr "Centro del paralaje"
-
-#: apps/wprs-app/qml/SceneParallaxGrips.qml
-msgid ""
-"Where the parallax rests: drag it away from the middle of the canvas to "
-"shift the whole picture"
-msgstr "Dónde reposa el paralaje: arrástralo lejos del centro del lienzo para desplazar toda la imagen"
-
-#: apps/wprs-app/qml/SceneParallaxGrips.qml
-msgid "Depth %1, %2"
-msgstr "Profundidad %1, %2"
-
-#: apps/wprs-app/qml/SceneParallaxGrips.qml
-msgid ""
-"Parallax depth of the layer: drag it away from the layer, a quarter of the "
-"canvas width is 1; hold Shift to set the depth across and the depth up and "
-"down apart"
-msgstr "Profundidad de paralaje de la capa: arrástralo lejos de la capa, un cuarto del ancho del lienzo vale 1; mantén Mayús para fijar por separado la profundidad a lo ancho y en alto"
-
-#: apps/wprs-app/qml/SceneSplitTool.qml
-msgid "Compare the glow"
-msgstr "Comparar el brillo"
-
-#: apps/wprs-app/qml/SceneSplitTool.qml
-msgid ""
-"Show the right part of the canvas without the glow and the left part with "
-"it; drag the line to move the split"
-msgstr "Muestra la parte derecha del lienzo sin el brillo y la izquierda con él; arrastra la línea para mover el corte"
-
-#: apps/wprs-app/qml/SceneGlowGrip.qml
-msgid "With the glow"
-msgstr "Con el brillo"
-
-#: apps/wprs-app/qml/SceneGlowGrip.qml
-msgid "Without the glow"
-msgstr "Sin el brillo"
-
-#: apps/wprs-app/qml/SceneGlowGrip.qml
-msgid "Drag to move the split between the glow and no glow"
-msgstr "Arrastra para mover el corte entre con brillo y sin brillo"

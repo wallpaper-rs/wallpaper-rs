@@ -205,6 +205,10 @@ msgid ""
 msgstr "Aquí no se pueden mostrar fondos web: el auxiliar web no arranca (%1)."
 
 #: apps/wprsd/src/words.rs
+msgid "The page reported an error and may not be drawing: %1"
+msgstr "La página informó de un error y puede que no se esté dibujando: %1"
+
+#: apps/wprsd/src/words.rs
 msgid ""
 "The web page stopped three times in a row and is off; the background color "
 "shows instead."

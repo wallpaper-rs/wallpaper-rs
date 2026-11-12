@@ -2716,6 +2716,10 @@ msgid "Show it as the daemon does with reduced motion"
 msgstr "Mostrarla como la muestra el demonio con menos movimiento"
 
 #: apps/wprs-ctl/src/folder.rs
+msgid "Show it without the glow of the canvas, to compare it with the glow"
+msgstr "Mostrarla sin el brillo del lienzo, para compararla con el brillo"
+
+#: apps/wprs-ctl/src/folder.rs
 msgid "Start from this preset of the package before --values"
 msgstr "Partir de este preajuste del paquete antes de aplicar --values"
 
@@ -3430,11 +3434,9 @@ msgstr ""
 msgid ""
 "Print the levels of the 64 bands of the sound a scene on a screen follows, "
 "as the editor meter reads them; nothing is recorded or kept, and it needs "
-"the audio input of the scene"
-msgstr ""
-"Muestra los niveles de las 64 bandas del sonido que sigue la escena de una "
-"pantalla, como los lee el medidor del editor; no se graba ni se guarda nada "
-"y hace falta la entrada de audio de la escena"
+"the audio input of the scene. listening says whether the daemon has the "
+"sound capture open for it, sound whether sound is arriving now"
+msgstr "Muestra los niveles de las 64 bandas del sonido que sigue la escena de una pantalla, como los lee el medidor del editor; no se graba ni se guarda nada y hace falta la entrada de audio de la escena. listening dice si el daemon tiene abierta la captura de sonido para ella y sound si está llegando sonido ahora"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid "The screen, such as a preview output named preview:1"
@@ -4362,6 +4364,10 @@ msgid ""
 msgstr ""
 "%1: %2 quiere %3 pero aquí no está permitido, así que esa parte de la escena "
 "queda apagada"
+
+#: apps/wprs-ctl/src/levels/notes.rs
+msgid "the page reported an error and may not be drawing: %1"
+msgstr "la página informó de un error y puede que no se esté dibujando: %1"
 
 #: apps/wprs-ctl/src/library.rs
 msgid "Add a folder and scan it; prints the source uid, then the job id"
@@ -8430,6 +8436,13 @@ msgstr "el marco va de 0 a %1 mm, no %2"
 
 #: apps/wprs-ctl/src/stacking.rs
 msgid ""
+"LaMa or ONNX Runtime is not installed, so the simple fill is used. To get "
+"the better fill run wprs-ctl models download lama-big-fp32 (see wprs-ctl "
+"models list); nothing is downloaded until you ask"
+msgstr "LaMa o ONNX Runtime no está instalado, así que se usa el relleno simple. Para tener el relleno mejor ejecuta wprs-ctl models download lama-big-fp32 (mira wprs-ctl models list); no se descarga nada hasta que lo pidas"
+
+#: apps/wprs-ctl/src/stacking.rs
+msgid ""
 "How the background behind near objects is filled; the setting parallax.fill "
 "by default"
 msgstr ""
@@ -9902,10 +9915,6 @@ msgstr "Sincronizar cada, como 12h; 0s para hacerlo solo cuando se pida"
 msgid "Disk space for the pictures, in MB (16 to 65536)"
 msgstr "Espacio en disco para las imágenes, en MB (16 a 65536)"
 
-#: apps/wprs-ctl/src/folder.rs
-msgid "Show it without the glow of the canvas, to compare it with the glow"
-msgstr "Mostrarla sin el brillo del lienzo, para compararla con el brillo"
-
 #: apps/wprs-ctl/src/wallhaven_filters.rs
 msgid "--%1 takes %2 separated by commas, or digits like 101"
 msgstr "--%1 recibe %2 separados por comas, o dígitos como 101"
@@ -9933,3 +9942,4 @@ msgstr "se mueve"
 #: apps/wprs-ctl/src/stacking.rs
 msgid "stays still"
 msgstr "queda quieta"
+
