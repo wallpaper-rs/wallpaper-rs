@@ -31,7 +31,7 @@ ColumnLayout {
             "size_over_life": App.tr("Size over life"),
             "color_over_life": App.tr("Color over life")
         })
-    readonly property string layer: tools.renderLayer
+    readonly property string chosen: tools.renderLayer
 
     visible: layers.length > 0
 
@@ -43,13 +43,13 @@ ColumnLayout {
     QQC2.ComboBox {
         Layout.fillWidth: true
         model: [App.tr("The system, for every layer")].concat(scope.layers.map(id => App.tr("Only the layer %1", id)))
-        currentIndex: Math.max(0, scope.layers.indexOf(scope.layer) + 1)
+        currentIndex: Math.max(0, scope.layers.indexOf(scope.chosen) + 1)
         onActivated: index => scope.tools.renderLayer = index > 0 ? scope.layers[index - 1] : ""
     }
 
     QQC2.Label {
         Layout.fillWidth: true
-        visible: scope.layer !== "" && !scope.info.own
+        visible: scope.chosen !== "" && !scope.info.own
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
         text: App.tr("This layer follows the render of the system. Your first change below gives it a render of its own, copied from the system's.")
@@ -57,18 +57,18 @@ ColumnLayout {
 
     QQC2.Label {
         Layout.fillWidth: true
-        visible: scope.layer !== "" && !!scope.info.own
+        visible: scope.chosen !== "" && !!scope.info.own
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
         text: (scope.info.differs ?? []).length ? App.tr("This layer has its own render. It differs from the system's in: %1", scope.info.differs.map(k => scope.names[k] ?? k).join(", ")) : App.tr("This layer has its own render, equal to the system's for now.")
     }
 
     QQC2.Button {
-        visible: scope.layer !== "" && !!scope.info.own
+        visible: scope.chosen !== "" && !!scope.info.own
         text: App.tr("Use the render of the system again")
         icon.name: "edit-undo"
         onClicked: scope.tools.edit("scope", {
-                "layer": scope.layer,
+                "layer": scope.chosen,
                 "own": false
             })
     }
