@@ -185,6 +185,12 @@ calls! {
         UploadAs upload_as(path: str, visibility: str);
         ListPackages list_packages() json;
         SetVisibility set_visibility(id: str, version: str, visibility: str);
+        ListAuthorKeys list_author_keys() json;
+        AddAuthorKey add_author_key(public_key: str);
+        RotateAuthorKey rotate_author_key(from: str, public_key: str, signature: str);
+        RemoveAuthorKey remove_author_key(fingerprint: str);
+        ListUploads list_uploads() json;
+        CancelUpload cancel_upload(id: str);
         Vote vote(id: str, vote: str) json;
         GetVotes get_votes(ids: strs) json;
         RemoveServer remove_server(wipe: bool);

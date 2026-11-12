@@ -135,6 +135,34 @@ impl Sync {
     }
 
     #[zbus(out_args("json"))]
+    async fn list_author_keys(&self) -> Result<String> {
+        self.d()?.run(|d| d.list_author_keys()).await
+    }
+
+    #[zbus(out_args("fingerprint"))]
+    async fn add_author_key(&self, public_key: String) -> Result<String> {
+        self.d()?.run(move |d| d.add_author_key(&public_key)).await
+    }
+
+    #[zbus(out_args("fingerprint"))]
+    async fn rotate_author_key(&self, from: String, public_key: String, signature: String) -> Result<String> {
+        self.d()?.run(move |d| d.rotate_author_key(&from, &public_key, &signature)).await
+    }
+
+    async fn remove_author_key(&self, fingerprint: String) -> Result<()> {
+        self.d()?.run(move |d| d.remove_author_key(&fingerprint)).await
+    }
+
+    #[zbus(out_args("json"))]
+    async fn list_uploads(&self) -> Result<String> {
+        self.d()?.run(|d| d.list_uploads()).await
+    }
+
+    async fn cancel_upload(&self, id: String) -> Result<()> {
+        self.d()?.run(move |d| d.cancel_upload(&id)).await
+    }
+
+    #[zbus(out_args("json"))]
     async fn vote(&self, id: String, vote: String) -> Result<String> {
         self.d()?.run(move |d| d.vote(&id, &vote)).await
     }

@@ -1028,6 +1028,18 @@ msgstr "Un nombre nuevo"
 msgid "Remove the expression"
 msgstr "Quitar la expresión"
 
+#: apps/wprs-ctl/src/copying.rs
+msgid "Id of the copy; the id of the package followed by .copy when omitted"
+msgstr "Id de la copia; el id del paquete seguido de .copy si se omite"
+
+#: apps/wprs-ctl/src/copying.rs
+msgid "Unpack even though its license allows no derived works: you made it or its author allows it"
+msgstr "Desempaquetar aunque su licencia no permita obras derivadas: lo hiciste tú o su autor lo permite"
+
+#: apps/wprs-ctl/src/copying.rs
+msgid "Only print what the license allows and the id of the copy"
+msgstr "Solo mostrar lo que permite la licencia y el id de la copia"
+
 #: apps/wprs-ctl/src/cropping.rs apps/wprs-ctl/src/depth.rs
 #: apps/wprs-ctl/src/edit.rs apps/wprs-ctl/src/stacking.rs
 #: apps/wprs-ctl/src/touching.rs
@@ -2424,6 +2436,42 @@ msgstr ""
 "lo que reproduce el reproductor multimedia (título, artista, álbum, portada "
 "y progreso, nunca se guarda, registra ni envía)"
 
+#: apps/wprs-ctl/src/keyed.rs
+msgid "List the keys registered for your online author id"
+msgstr "Lista las claves registradas para tu id de autor en línea"
+
+#: apps/wprs-ctl/src/keyed.rs
+msgid "Register a public key with which you sign your packages online"
+msgstr "Registra una clave pública con la que firmas tus paquetes en línea"
+
+#: apps/wprs-ctl/src/keyed.rs
+msgid "Public key file or text of the key"
+msgstr "Archivo o texto de la clave pública"
+
+#: apps/wprs-ctl/src/keyed.rs
+msgid "Hand your online author over from an old key to a new one, signing with the old key"
+msgstr "Traspasa tu autor en línea de una clave vieja a una nueva, firmando con la vieja"
+
+#: apps/wprs-ctl/src/keyed.rs apps/wprs-ctl/src/pack.rs
+msgid "Secret key file that signed the earlier versions"
+msgstr "Archivo de clave secreta que firmó las versiones anteriores"
+
+#: apps/wprs-ctl/src/keyed.rs apps/wprs-ctl/src/repo/authors.rs
+msgid "Public key file or text of the new key"
+msgstr "Archivo o texto de clave pública de la clave nueva"
+
+#: apps/wprs-ctl/src/keyed.rs apps/wprs-ctl/src/pack.rs
+msgid "Author id that the repository shows for the account"
+msgstr "Id de autor que muestra el repositorio para la cuenta"
+
+#: apps/wprs-ctl/src/keyed.rs
+msgid "Remove a registered key"
+msgstr "Quita una clave registrada"
+
+#: apps/wprs-ctl/src/keyed.rs
+msgid "Fingerprint of the key, as list prints it"
+msgstr "Huella de la clave, tal como la imprime list"
+
 #: apps/wprs-ctl/src/keying.rs
 msgid ""
 "Add or replace a keyframe of an animatable value, remove it with --remove or "
@@ -3629,8 +3677,12 @@ msgid "Stop the simulated playback"
 msgstr "Detener la reproducción simulada"
 
 #: apps/wprs-ctl/src/media.rs
-msgid "JSON file of setting values to try in the preview only, such as {\"speed\": 2}; nothing is saved"
-msgstr "Archivo JSON con valores de ajustes para probar solo en la vista previa, como {\"speed\": 2}; no se guarda nada"
+msgid ""
+"JSON file of setting values to try in the preview only, such as {\"speed\": "
+"2}; nothing is saved"
+msgstr ""
+"Archivo JSON con valores de ajustes para probar solo en la vista previa, "
+"como {\"speed\": 2}; no se guarda nada"
 
 #: apps/wprs-ctl/src/media.rs
 msgid ""
@@ -3978,16 +4030,8 @@ msgstr ""
 "nueva; imprime la firma"
 
 #: apps/wprs-ctl/src/pack.rs
-msgid "Secret key file that signed the earlier versions"
-msgstr "Archivo de clave secreta que firmó las versiones anteriores"
-
-#: apps/wprs-ctl/src/pack.rs
 msgid "Public key file or line of the new key"
 msgstr "Archivo o línea de clave pública de la clave nueva"
-
-#: apps/wprs-ctl/src/pack.rs
-msgid "Author id that the repository shows for the account"
-msgstr "Id de autor que muestra el repositorio para la cuenta"
 
 #: apps/wprs-ctl/src/pack.rs
 msgid ""
@@ -4016,8 +4060,8 @@ msgid "Check packages and, with --key, their author signature"
 msgstr "Comprobar paquetes y, con --key, la firma de su autor"
 
 #: apps/wprs-ctl/src/pack.rs
-msgid "Package file to validate"
-msgstr "Archivo de paquete que se valida"
+msgid "Package file or folder to validate"
+msgstr "Archivo o carpeta del paquete que se valida"
 
 #: apps/wprs-ctl/src/pack.rs
 msgid "Public key file or text of an accepted author"
@@ -5409,10 +5453,6 @@ msgid "Fingerprint of the key that signed the earlier versions"
 msgstr "Huella de la clave que firmó las versiones anteriores"
 
 #: apps/wprs-ctl/src/repo/authors.rs
-msgid "Public key file or text of the new key"
-msgstr "Archivo o texto de clave pública de la clave nueva"
-
-#: apps/wprs-ctl/src/repo/authors.rs
 msgid "Signature file or text that wprs-ctl pack rotate-key printed"
 msgstr "Archivo o texto de la firma que imprimió wprs-ctl pack rotate-key"
 
@@ -6059,6 +6099,18 @@ msgid ""
 "List the packages this account uploaded, with their state and visibility"
 msgstr ""
 "Listar los paquetes que subió esta cuenta, con su estado y su visibilidad"
+
+#: apps/wprs-ctl/src/server.rs
+msgid "List the upload sessions of this account, or cancel an unfinished one"
+msgstr "Lista las sesiones de subida de esta cuenta o cancela una sin terminar"
+
+#: apps/wprs-ctl/src/server.rs
+msgid "Cancel this unfinished upload"
+msgstr "Cancela esta subida sin terminar"
+
+#: apps/wprs-ctl/src/server.rs
+msgid "The keys with which you sign your packages online"
+msgstr "Las claves con las que firmas tus paquetes en línea"
 
 #: apps/wprs-ctl/src/server.rs
 msgid "Make a package, or one version, public or unlisted"

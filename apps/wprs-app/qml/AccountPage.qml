@@ -165,6 +165,17 @@ Kirigami.ScrollablePage {
             visible: !!page.account && items.length > 0
             account: page.account
         }
+
+        AccountSessions {
+            Layout.fillWidth: true
+            account: page.account
+        }
+
+        AccountKeys {
+            Layout.fillWidth: true
+            visible: !!page.account
+            account: page.account
+        }
     }
 
     AccountDialogs {

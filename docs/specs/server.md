@@ -166,7 +166,11 @@ With `--online-authors` the root sets `policy.authors = "online"`. Every account
 into `authors/<sha256>.json`, which the next entry pins (`docs/specs/repo.md`). A new key for
 packages already published needs a rotation signed by an earlier key of the account:
 `wprs-ctl pack rotate-key OLD.key NEW.pub --author u<id>` prints the signature, and
-`POST /api/v1/me/author-keys/rotate` (or the form of `/account`) stores it with the new key. Clients
+`POST /api/v1/me/author-keys/rotate` (or the form of `/account`) stores it with the new key. The
+desktop does the same without the web page: `wprs-ctl server author-key list|add|rotate|remove`, or
+*Author keys* in *Account* (`ListAuthorKeys`, `AddAuthorKey`, `RotateAuthorKey` and `RemoveAuthorKey`
+of `Sync1`, `dbus.md`), and `wprs-ctl server uploads [--cancel ID]` or *Uploads that did not finish*
+in *Account* list and cancel the upload sessions that `/api/v1/me/packages` returns in `uploads`. Clients
 trust, for each package, the key that signed the first version they installed and accept a later
 version only from that key or a key that a chain of rotations reaches; authors that the root lists
 keep priority over online ones with the same id. So whoever steals the online key can list new

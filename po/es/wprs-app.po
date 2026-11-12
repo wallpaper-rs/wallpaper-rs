@@ -268,6 +268,75 @@ msgstr ""
 "Ningún equipo tiene este archivo: si sale del servidor, se pierde para "
 "siempre."
 
+#: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/RepoKeys.qml
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Author keys"
+msgstr "Claves de autor"
+
+#: apps/wprs-app/qml/AccountKeys.qml
+msgid "The public keys with which you sign the packages you upload. Create a pair in the build dialog of the editor; only the public key goes here."
+msgstr "Las claves públicas con las que firmas los paquetes que subes. Crea un par en el diálogo de construir del editor; aquí solo va la clave pública."
+
+#: apps/wprs-app/qml/AccountKeys.qml
+msgid "Hand over…"
+msgstr "Traspasar…"
+
+#: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/EditOps.qml
+#: apps/wprs-app/qml/PackageInspector.qml apps/wprs-app/qml/PackageNetwork.qml
+#: apps/wprs-app/qml/PlaylistItems.qml apps/wprs-app/qml/SceneAssets.qml
+#: apps/wprs-app/qml/SceneBoneRow.qml apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
+#: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
+#: apps/wprs-app/qml/SceneModelSwing.qml apps/wprs-app/qml/ScenePairs.qml
+#: apps/wprs-app/qml/SceneProperties.qml apps/wprs-app/qml/SceneRigIk.qml
+#: apps/wprs-app/qml/SceneRigPhysics.qml apps/wprs-app/qml/SceneRigRow.qml
+#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/SceneScriptParam.qml
+#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSettingMenu.qml
+#: apps/wprs-app/qml/SceneShapes.qml apps/wprs-app/qml/SceneSwarmPoints.qml
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+#: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
+msgid "Remove"
+msgstr "Quitar"
+
+#: apps/wprs-app/qml/AccountKeys.qml
+msgid "Public key file or text"
+msgstr "Archivo o texto de la clave pública"
+
+#: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/ItemCopy.qml
+#: apps/wprs-app/qml/OutputControls.qml apps/wprs-app/qml/RepoCharter.qml
+#: apps/wprs-app/qml/RepoPublish.qml apps/wprs-app/qml/RepoRoot.qml
+#: apps/wprs-app/qml/SceneBuild.qml apps/wprs-app/qml/SceneEntry.qml
+#: apps/wprs-app/qml/SceneHandover.qml apps/wprs-app/qml/SceneMeta.qml
+#: apps/wprs-app/qml/SceneReview.qml apps/wprs-app/qml/SceneShelve.qml
+#: apps/wprs-app/qml/SceneShortcut.qml apps/wprs-app/qml/Settings.qml
+msgid "Choose…"
+msgstr "Elegir…"
+
+#: apps/wprs-app/qml/AccountKeys.qml
+msgid "Register the key"
+msgstr "Registrar la clave"
+
+#: apps/wprs-app/qml/AccountKeys.qml
+msgid "Hand over to a new key"
+msgstr "Traspasar a una clave nueva"
+
+#: apps/wprs-app/qml/AccountKeys.qml
+msgid "Sign the hand-over with the old key in Keys… of the build dialog, and paste the signature here."
+msgstr "Firma el traspaso con la clave vieja en Claves… del diálogo de construir y pega aquí la firma."
+
+#: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/SceneHandover.qml
+msgid "New public key:"
+msgstr "Clave pública nueva:"
+
+#: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/SceneHandover.qml
+msgid "Signature:"
+msgstr "Firma:"
+
+#: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/RepoKeyList.qml
+#: apps/wprs-app/qml/SceneHandover.qml apps/wprs-app/qml/SceneReview.qml
+msgid "Public keys"
+msgstr "Claves públicas"
+
 #: apps/wprs-app/qml/AccountPage.qml apps/wprs-app/qml/Navigation.qml
 msgid "Account"
 msgstr "Cuenta"
@@ -336,6 +405,19 @@ msgid ""
 msgstr ""
 "La sincronización no está cifrada: quien administra el servidor puede leer "
 "tu biblioteca, tus listas y tus ajustes."
+
+#: apps/wprs-app/qml/AccountSessions.qml
+msgid "Uploads that did not finish"
+msgstr "Subidas que no terminaron"
+
+#: apps/wprs-app/qml/AccountSessions.qml
+msgid "An upload that stopped half way holds one of the two open sessions the server allows; cancel it to free the place."
+msgstr "Una subida que quedó a medias ocupa una de las dos sesiones abiertas que permite el servidor; cancélala para liberar el sitio."
+
+#: apps/wprs-app/qml/AccountSessions.qml apps/wprs-app/qml/EditDepth.qml
+#: apps/wprs-app/qml/EditDepthCompare.qml apps/wprs-app/qml/StatusBar.qml
+msgid "Cancel"
+msgstr "Cancelar"
 
 #: apps/wprs-app/qml/AccountShared.qml
 msgid "No recovery passphrase: if every device is lost, so is the synced data."
@@ -1014,11 +1096,6 @@ msgstr ""
 "Esta imagen aún no tiene mapa de profundidad. El blanco está cerca y el "
 "negro, lejos. En cuanto se descarga el modelo, el mapa se calcula solo."
 
-#: apps/wprs-app/qml/EditDepth.qml apps/wprs-app/qml/EditDepthCompare.qml
-#: apps/wprs-app/qml/StatusBar.qml
-msgid "Cancel"
-msgstr "Cancelar"
-
 #: apps/wprs-app/qml/EditDepth.qml
 msgid "Run the model on"
 msgstr "Ejecutar el modelo en"
@@ -1607,30 +1684,6 @@ msgstr "Subir"
 msgid "Move down"
 msgstr "Bajar"
 
-#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/PackageInspector.qml
-#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackagePresets.qml
-#: apps/wprs-app/qml/PackageRequires.qml apps/wprs-app/qml/PlaylistItems.qml
-#: apps/wprs-app/qml/SceneAssets.qml apps/wprs-app/qml/SceneBoneRow.qml
-#: apps/wprs-app/qml/SceneEffectsList.qml
-#: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
-#: apps/wprs-app/qml/SceneModelSwing.qml apps/wprs-app/qml/ScenePairs.qml
-#: apps/wprs-app/qml/SceneProperties.qml apps/wprs-app/qml/SceneRigIk.qml
-#: apps/wprs-app/qml/SceneRigPhysics.qml apps/wprs-app/qml/SceneRigRow.qml
-#: apps/wprs-app/qml/SceneRigRules.qml apps/wprs-app/qml/SceneScriptParam.qml
-#: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSettingMenu.qml
-#: apps/wprs-app/qml/SceneShapes.qml apps/wprs-app/qml/SceneSwarmPoints.qml
-#: apps/wprs-app/qml/SceneTemplateTree.qml
-#: apps/wprs-app/qml/ScenePools.qml apps/wprs-app/qml/SceneProperties.qml
-#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneRigPhysics.qml
-#: apps/wprs-app/qml/SceneRigRow.qml apps/wprs-app/qml/SceneRigRules.qml
-#: apps/wprs-app/qml/SceneScriptsList.qml
-#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneShapes.qml
-#: apps/wprs-app/qml/SceneSwarmPoints.qml
-#: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
-msgid "Remove"
-msgstr "Quitar"
-
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/RgbBoard.qml
 msgid "Whole picture"
 msgstr "Toda la imagen"
@@ -2067,6 +2120,44 @@ msgstr ""
 "Hay instalada una versión más reciente de este paquete. ¿Instalar también la "
 "anterior?"
 
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid "Edit a copy"
+msgstr "Editar una copia"
+
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid "The copy is unpacked into a folder of its own with a new id, so the installed package never changes. Its license and credits stay, and it credits the original as the work it comes from."
+msgstr "La copia se desempaqueta en una carpeta propia con un id nuevo, así que el paquete instalado nunca cambia. Conserva su licencia y sus créditos, y cita al original como la obra de la que viene."
+
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid "The license %1 allows no derived works. Edit a copy only if you made this package or its author allows it."
+msgstr "La licencia %1 no permite obras derivadas. Edita una copia solo si hiciste este paquete o si su autor lo permite."
+
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid "The license %1 asks for: %2."
+msgstr "La licencia %1 pide: %2."
+
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid "I made this package or its author allows a copy"
+msgstr "Hice este paquete o su autor permite una copia"
+
+#: apps/wprs-app/qml/ItemCopy.qml apps/wprs-app/qml/ItemFacts.qml
+#: apps/wprs-app/qml/PackageSections.qml
+msgid "Package:"
+msgstr "Paquete:"
+
+#: apps/wprs-app/qml/ItemCopy.qml apps/wprs-app/qml/RepoCharter.qml
+#: apps/wprs-app/qml/SceneOffer.qml apps/wprs-app/qml/ScenesPage.qml
+msgid "Folder:"
+msgstr "Carpeta:"
+
+#: apps/wprs-app/qml/ItemCopy.qml
+msgid "Id of the copy:"
+msgstr "Id de la copia:"
+
+#: apps/wprs-app/qml/ItemCopyButton.qml
+msgid "Edit a copy…"
+msgstr "Editar una copia…"
+
 #: apps/wprs-app/qml/ItemDrawer.qml
 msgid "Show mature content"
 msgstr "Mostrar el contenido para adultos"
@@ -2140,10 +2231,6 @@ msgstr "Este paquete está hecho solo para %1"
 #: apps/wprs-app/qml/ItemFacts.qml
 msgid "This package needs a newer version of wallpaper-rs: it %1"
 msgstr "Este paquete necesita una versión más nueva de wallpaper-rs: %1"
-
-#: apps/wprs-app/qml/ItemFacts.qml apps/wprs-app/qml/PackageSections.qml
-msgid "Package:"
-msgstr "Paquete:"
 
 #: apps/wprs-app/qml/ItemFacts.qml
 msgid "Installed from:"
@@ -2460,14 +2547,6 @@ msgstr "Repositorios"
 #: apps/wprs-app/qml/SettingsPage.qml
 msgid "Settings"
 msgstr "Ajustes"
-
-#: apps/wprs-app/qml/OutputControls.qml apps/wprs-app/qml/RepoCharter.qml
-#: apps/wprs-app/qml/RepoPublish.qml apps/wprs-app/qml/RepoRoot.qml
-#: apps/wprs-app/qml/SceneBuild.qml apps/wprs-app/qml/SceneEntry.qml
-#: apps/wprs-app/qml/SceneMeta.qml apps/wprs-app/qml/SceneShortcut.qml
-#: apps/wprs-app/qml/Settings.qml
-msgid "Choose…"
-msgstr "Elegir…"
 
 #: apps/wprs-app/qml/OutputControls.qml apps/wprs-app/qml/OutputRow.qml
 #: apps/wprs-app/qml/facade/Labels.qml apps/wprs-app/qml/facade/SceneWords.qml
@@ -3581,6 +3660,7 @@ msgstr ""
 #: apps/wprs-app/qml/PresetDialog.qml apps/wprs-app/qml/ProfilesPage.qml
 #: apps/wprs-app/qml/ProviderDialog.qml apps/wprs-app/qml/RepoCharter.qml
 #: apps/wprs-app/qml/ScenePoolEdit.qml
+#: apps/wprs-app/qml/SceneKeys.qml
 msgid "Name:"
 msgstr "Nombre:"
 
@@ -3957,11 +4037,6 @@ msgstr "Repositorio estático nuevo"
 msgid "Rotate the root"
 msgstr "Rotar la raíz"
 
-#: apps/wprs-app/qml/RepoCharter.qml apps/wprs-app/qml/SceneOffer.qml
-#: apps/wprs-app/qml/ScenesPage.qml
-msgid "Folder:"
-msgstr "Carpeta:"
-
 #: apps/wprs-app/qml/RepoCharter.qml
 msgid "An empty folder"
 msgstr "Una carpeta vacía"
@@ -4037,14 +4112,6 @@ msgstr "Añadir una clave pública…"
 #: apps/wprs-app/qml/Settings.qml
 msgid "Clear"
 msgstr "Borrar"
-
-#: apps/wprs-app/qml/RepoKeyList.qml
-msgid "Public keys"
-msgstr "Claves públicas"
-
-#: apps/wprs-app/qml/RepoKeys.qml
-msgid "Author keys"
-msgstr "Claves de autor"
 
 #: apps/wprs-app/qml/RepoKeys.qml apps/wprs-app/qml/RepoStock.qml
 msgid "revoked"
@@ -4147,6 +4214,7 @@ msgid "Password of the key:"
 msgstr "Contraseña de la clave:"
 
 #: apps/wprs-app/qml/RepoPublish.qml apps/wprs-app/qml/RepoRoot.qml
+#: apps/wprs-app/qml/SceneKeys.qml
 msgid "Empty for a key without one"
 msgstr "Vacía para una clave sin contraseña"
 
@@ -4228,7 +4296,7 @@ msgstr "Firmar la raíz"
 msgid "Rotate the root…"
 msgstr "Rotar la raíz…"
 
-#: apps/wprs-app/qml/RepoStatic.qml
+#: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Published index %1 with %2 packages; it expires %3"
 msgstr "Índice %1 publicado con %2 paquetes; caduca el %3"
 
@@ -4256,11 +4324,11 @@ msgstr ""
 msgid "Added %1. Publish the repository next."
 msgstr "Añadido %1. Publica el repositorio a continuación."
 
-#: apps/wprs-app/qml/RepoStatic.qml
+#: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Changed. Publish the repository next."
 msgstr "Cambiado. Publica el repositorio a continuación."
 
-#: apps/wprs-app/qml/RepoStatic.qml
+#: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Open a static repository…"
 msgstr "Abrir un repositorio estático…"
 
@@ -4268,11 +4336,11 @@ msgstr "Abrir un repositorio estático…"
 msgid "A folder made with wprs-ctl repo init"
 msgstr "Una carpeta creada con wprs-ctl repo init"
 
-#: apps/wprs-app/qml/RepoStatic.qml
+#: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Add unlisted"
 msgstr "Añadir ocultos"
 
-#: apps/wprs-app/qml/RepoStatic.qml
+#: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Out of browsing and search; installing by id still works"
 msgstr ""
 "Fuera de la exploración y la búsqueda; instalar por id sigue funcionando"
@@ -4281,7 +4349,7 @@ msgstr ""
 msgid "Add packages…"
 msgstr "Añadir paquetes…"
 
-#: apps/wprs-app/qml/RepoStatic.qml
+#: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Publish…"
 msgstr "Publicar…"
 
@@ -4290,6 +4358,7 @@ msgid "Change the repository"
 msgstr "Cambiar el repositorio"
 
 #: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/ReposPage.qml
+#: apps/wprs-app/qml/SceneReview.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Packages (*.wpak)"
 msgstr "Paquetes (*.wpak)"
 
@@ -4330,7 +4399,7 @@ msgstr "Nota, opcional"
 msgid "Unfeature"
 msgstr "Quitar de destacados"
 
-#: apps/wprs-app/qml/RepoStock.qml
+#: apps/wprs-app/qml/RepoStock.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Feature"
 msgstr "Destacar"
 
@@ -4937,7 +5006,7 @@ msgstr "Compilar y aplicar"
 msgid "Save the scene and solve its problems before building it."
 msgstr "Guarda la escena y resuelve sus problemas antes de crear el paquete."
 
-#: apps/wprs-app/qml/SceneBuild.qml
+#: apps/wprs-app/qml/SceneBuild.qml apps/wprs-app/qml/SceneShelve.qml
 msgid "Package file:"
 msgstr "Archivo del paquete:"
 
@@ -4954,8 +5023,28 @@ msgid "None: the package is not signed"
 msgstr "Ninguna: el paquete no se firma"
 
 #: apps/wprs-app/qml/SceneBuild.qml
+msgid "Keys…"
+msgstr "Claves…"
+
+#: apps/wprs-app/qml/SceneBuild.qml
 msgid "Key password:"
 msgstr "Contraseña de la clave:"
+
+#: apps/wprs-app/qml/SceneBuild.qml
+msgid "Before building:"
+msgstr "Antes de construir:"
+
+#: apps/wprs-app/qml/SceneBuild.qml
+msgid "Review the package…"
+msgstr "Revisar el paquete…"
+
+#: apps/wprs-app/qml/SceneBuild.qml
+msgid "Publish:"
+msgstr "Publicar:"
+
+#: apps/wprs-app/qml/SceneBuild.qml
+msgid "Add to a repository…"
+msgstr "Añadir a un repositorio…"
 
 #: apps/wprs-app/qml/SceneBuild.qml
 msgid "Build the package"
@@ -5701,6 +5790,26 @@ msgstr ""
 "Pulsa la barra para añadir una parada, %1 como mucho, y arrastra una parada "
 "para moverla"
 
+#: apps/wprs-app/qml/SceneHandover.qml
+msgid "Hand an online author over to a new key"
+msgstr "Traspasar un autor en línea a una clave nueva"
+
+#: apps/wprs-app/qml/SceneHandover.qml
+msgid "Sign with the key that signed the earlier versions; the server accepts the new public key for that author."
+msgstr "Firma con la clave que firmó las versiones anteriores; el servidor acepta la clave pública nueva para ese autor."
+
+#: apps/wprs-app/qml/SceneHandover.qml
+msgid "Password of the old key:"
+msgstr "Contraseña de la clave vieja:"
+
+#: apps/wprs-app/qml/SceneHandover.qml
+msgid "Author id:"
+msgstr "Id del autor:"
+
+#: apps/wprs-app/qml/SceneHandover.qml
+msgid "Sign the hand-over"
+msgstr "Firmar el traspaso"
+
 #: apps/wprs-app/qml/SceneIkKnobs.qml
 msgid "Bends clockwise; click to bend the other way"
 msgstr "Se dobla en sentido horario; pulsa para doblarla al otro lado"
@@ -5796,6 +5905,58 @@ msgid ""
 msgstr ""
 "Arrastra las dos asas para curvar lo rápido que va el valor de una clave a "
 "la siguiente: la altura es la parte del camino, de 0 a 1."
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Replaced the key pair %1; its fingerprint is %2"
+msgstr "Se reemplazó el par de claves %1; su huella es %2"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Created the key pair %1; its fingerprint is %2"
+msgstr "Se creó el par de claves %1; su huella es %2"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Signed the hand-over from %1 to %2"
+msgstr "Se firmó el traspaso de %1 a %2"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Secret keys stay in %1, readable only by you. Nothing here ever shows one; keep a copy somewhere safe, because a lost key cannot be recovered."
+msgstr "Las claves secretas se guardan en %1, legibles solo por ti. Aquí nunca se muestra ninguna; guarda una copia en un lugar seguro, porque una clave perdida no se puede recuperar."
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "password"
+msgstr "contraseña"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Use to sign"
+msgstr "Usar para firmar"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "There are no keys yet."
+msgstr "Todavía no hay claves."
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "New key pair"
+msgstr "Par de claves nuevo"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "author"
+msgstr "autor"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Password:"
+msgstr "Contraseña:"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Create the key pair"
+msgstr "Crear el par de claves"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "Replace the key pair?"
+msgstr "¿Reemplazar el par de claves?"
+
+#: apps/wprs-app/qml/SceneKeys.qml
+msgid "A key pair named %1 already exists. Replacing it destroys its secret key for good: packages signed with it can no longer be followed by new versions you sign."
+msgstr "Ya existe un par de claves llamado %1. Reemplazarlo destruye su clave secreta para siempre: las versiones nuevas que firmes con otra clave no se aceptarán como actualización de los paquetes que firmó."
 
 #: apps/wprs-app/qml/SceneKtx2.qml
 msgid "Desktop graphics cards (BC7)"
@@ -7416,6 +7577,70 @@ msgstr ""
 msgid "These lines of scripts name %1 and are not rewritten: %2"
 msgstr "Estas líneas de scripts nombran %1 y no se reescriben: %2"
 
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "refused: %1"
+msgstr "rechazado: %1"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "plays without %1"
+msgstr "se reproduce sin %1"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "plays"
+msgstr "se reproduce"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Review the package"
+msgstr "Revisar el paquete"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Nothing to report: the package passes every check."
+msgstr "Nada que informar: el paquete pasa todas las comprobaciones."
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "%1 errors, %2 warnings, %3 notes"
+msgstr "%1 errores, %2 avisos, %3 notas"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Where it plays"
+msgstr "Dónde se reproduce"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Building adds to the features it needs: %1"
+msgstr "Al construir se añaden a las funciones que necesita: %1"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Signature"
+msgstr "Firma"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Not signed: build it with an author key to sign it."
+msgstr "Sin firmar: constrúyelo con una clave de autor para firmarlo."
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Signed; give a public key to check it."
+msgstr "Firmado; da una clave pública para comprobarlo."
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Signature valid, made by %1"
+msgstr "Firma válida, hecha por %1"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Signature not valid: %1"
+msgstr "Firma no válida: %1"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Package file; the folder when empty"
+msgstr "Archivo del paquete; la carpeta si está vacío"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Public key of the author"
+msgstr "Clave pública del autor"
+
+#: apps/wprs-app/qml/SceneReview.qml
+msgid "Check the signature"
+msgstr "Comprobar la firma"
+
 #: apps/wprs-app/qml/SceneRgb.qml apps/wprs-app/qml/SettingsPage.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "RGB lighting"
@@ -8000,6 +8225,42 @@ msgstr "Paquetes de recursos"
 #: apps/wprs-app/qml/SceneSharedPart.qml
 msgid "%1 · %2 · %3"
 msgstr "%1 · %2 · %3"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Added %1. Feature it or publish the repository next."
+msgstr "Se añadió %1. Destácalo o publica el repositorio a continuación."
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Add to a static repository"
+msgstr "Añadir a un repositorio estático"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Add the package you built to a static repository folder, optionally unlisted, feature it with a note and publish the repository with its online key. New repositories and their keys are made in Repositories."
+msgstr "Añade el paquete que construiste a la carpeta de un repositorio estático, si quieres oculto, destácalo con una nota y publica el repositorio con su clave en línea. Los repositorios nuevos y sus claves se crean en Repositorios."
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "No repository chosen"
+msgstr "Ningún repositorio elegido"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Build the package first"
+msgstr "Construye antes el paquete"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Add to the repository"
+msgstr "Añadir al repositorio"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Note when featured:"
+msgstr "Nota al destacarlo:"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Featured:"
+msgstr "Destacado:"
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Stop featuring"
+msgstr "Dejar de destacar"
 
 #: apps/wprs-app/qml/SceneShortcut.qml
 msgid "Web address"
@@ -9636,8 +9897,12 @@ msgid "Adds %1 to the uses of the script"
 msgstr "Agrega %1 a los usos del script"
 
 #: apps/wprs-app/qml/SceneTry.qml
-msgid "Try the settings of the package in the preview. Only the preview shows them: nothing is saved and no screen changes."
-msgstr "Prueba los ajustes del paquete en la vista previa. Solo la vista previa los muestra: no se guarda nada y ninguna pantalla cambia."
+msgid ""
+"Try the settings of the package in the preview. Only the preview shows them: "
+"nothing is saved and no screen changes."
+msgstr ""
+"Prueba los ajustes del paquete en la vista previa. Solo la vista previa los "
+"muestra: no se guarda nada y ninguna pantalla cambia."
 
 #: apps/wprs-app/qml/SceneTry.qml
 msgid "Package defaults"
@@ -9716,8 +9981,8 @@ msgid "Open a scene or package folder…"
 msgstr "Abrir una carpeta de escena o paquete…"
 
 #: apps/wprs-app/qml/ScenesPage.qml
-msgid "Edit a copy of a scene or web page from the library"
-msgstr "Editar una copia de una escena o página web de la biblioteca"
+msgid "Edit a copy of a package from the library"
+msgstr "Editar una copia de un paquete de la biblioteca"
 
 #: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "Allow these wallpapers?"

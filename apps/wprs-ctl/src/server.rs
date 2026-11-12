@@ -142,6 +142,15 @@ pub enum Server {
         #[arg(long, help = "Print the result as JSON")]
         json: bool,
     },
+    #[command(about = "List the upload sessions of this account, or cancel an unfinished one")]
+    Uploads {
+        #[arg(long, help = JSON)]
+        json: bool,
+        #[arg(long, value_name = "ID", help = "Cancel this unfinished upload")]
+        cancel: Option<String>,
+    },
+    #[command(subcommand, about = "The keys with which you sign your packages online")]
+    AuthorKey(crate::keyed::AuthorKey),
     #[command(about = "Make a package, or one version, public or unlisted")]
     Visibility {
         #[arg(help = "Package id")]

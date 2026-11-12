@@ -47,6 +47,12 @@ pub trait Sync1 {
     fn upload_as(&self, path: &str, visibility: &str) -> Result<u64>;
     fn list_packages(&self) -> Result<String>;
     fn set_visibility(&self, id: &str, version: &str, visibility: &str) -> Result<()>;
+    fn list_author_keys(&self) -> Result<String>;
+    fn add_author_key(&self, public_key: &str) -> Result<String>;
+    fn rotate_author_key(&self, from: &str, public_key: &str, signature: &str) -> Result<String>;
+    fn remove_author_key(&self, fingerprint: &str) -> Result<()>;
+    fn list_uploads(&self) -> Result<String>;
+    fn cancel_upload(&self, id: &str) -> Result<()>;
     fn vote(&self, id: &str, vote: &str) -> Result<String>;
     fn get_votes(&self, ids: &[&str]) -> Result<String>;
     fn remove_server(&self, wipe: bool) -> Result<()>;

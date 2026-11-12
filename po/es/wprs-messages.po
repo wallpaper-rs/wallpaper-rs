@@ -119,6 +119,9 @@ msgstr "%1 es demasiado grande"
 #: crates/wprs-editor/src/offer.rs crates/wprs-editor/src/package.rs
 #: crates/wprs-editor/src/packing/source.rs crates/wprs-editor/src/pages.rs
 #: crates/wprs-editor/src/presets.rs crates/wprs-editor/src/previews.rs
+#: crates/wprs-editor/src/author_keys.rs crates/wprs-editor/src/offer.rs
+#: crates/wprs-editor/src/package.rs crates/wprs-editor/src/packing/source.rs
+#: crates/wprs-editor/src/pages.rs crates/wprs-editor/src/previews.rs
 #: crates/wprs-editor/src/project.rs crates/wprs-editor/src/scripts.rs
 #: crates/wprs-editor/src/scripts/audit.rs
 #: crates/wprs-editor/src/scripts/edit.rs crates/wprs-editor/src/shaders.rs
@@ -412,6 +415,22 @@ msgstr "el canal es ambos, izquierdo o derecho"
 msgid "%1 is not x, y, inside or speed"
 msgstr "%1 no es x, y, inside ni speed"
 
+#: crates/wprs-editor/src/author_keys.rs
+msgid "a key name has 1 to 64 letters, digits, dots, dashes or underscores"
+msgstr "un nombre de clave tiene de 1 a 64 letras, dígitos, puntos, guiones o guiones bajos"
+
+#: crates/wprs-editor/src/author_keys.rs
+msgid "the password is empty; leave it out for a key without one"
+msgstr "la contraseña está vacía; no la pongas si la clave no lleva"
+
+#: crates/wprs-editor/src/author_keys.rs
+msgid "%1 or %2 already exists"
+msgstr "%1 o %2 ya existe"
+
+#: crates/wprs-editor/src/author_keys.rs
+msgid "name the author id that the repository shows"
+msgstr "indica el id de autor que muestra el repositorio"
+
 #: crates/wprs-editor/src/batch.rs
 msgid "undo and redo cannot be part of a step with other actions"
 msgstr "deshacer y rehacer no pueden ser parte de un paso con otras acciones"
@@ -606,6 +625,19 @@ msgstr "el clip no tiene ninguna clave ahí en %1 s"
 #: crates/wprs-editor/src/clips/shape.rs
 msgid "Bézier handles shape one channel of a key at a time"
 msgstr "Las asas Bézier curvan un canal de una clave cada vez"
+
+#: crates/wprs-editor/src/copying.rs crates/wprs-editor/src/offer.rs
+#: crates/wprs-editor/src/project.rs
+msgid "%1 is not an empty folder"
+msgstr "%1 no es una carpeta vacía"
+
+#: crates/wprs-editor/src/copying.rs
+msgid "%1: edit a copy only if you made it or its author allows it"
+msgstr "%1: edita una copia solo si lo hiciste tú o si su autor lo permite"
+
+#: crates/wprs-editor/src/copying.rs
+msgid "%1 is not a package id different from the original"
+msgstr "%1 no es un id de paquete distinto del original"
 
 #: crates/wprs-editor/src/covers.rs
 msgid "%1 is not a still picture of the scene"
@@ -1121,11 +1153,6 @@ msgstr "los ajustes predefinidos son %1"
 #: crates/wprs-editor/src/motion/presets.rs
 msgid "a layer has at most %1 swinging bones"
 msgstr "una capa tiene como mucho %1 huesos que se balancean"
-
-#: crates/wprs-editor/src/offer.rs crates/wprs-editor/src/package.rs
-#: crates/wprs-editor/src/project.rs
-msgid "%1 is not an empty folder"
-msgstr "%1 no es una carpeta vacía"
 
 #: crates/wprs-editor/src/offer.rs
 msgid "%1 is not a package id"

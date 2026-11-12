@@ -2025,6 +2025,21 @@ vieja.key nueva.pub --author u<id>` firma ese traspaso, que se guarda en *Cuenta
 clave en línea del servidor puede añadir autores y paquetes nuevos, pero no actualizar un paquete
 ya instalado. Los autores que lista la raíz tienen prioridad.
 
+En el editor, el diálogo de construir tiene *Claves…* (crea el par de claves de autor en la carpeta
+de claves de la aplicación, con permiso solo para ti y contraseña opcional, nunca muestra una clave
+secreta, pregunta antes de reemplazar un par y firma el traspaso de un autor en línea a otra clave) y
+*Revisar el paquete…* (cada hallazgo con su nivel, el archivo y un salto al campo, dónde se reproduce
+el paquete y si la firma de la carpeta o de un `.wpak` coincide con la clave pública del autor). Desde
+la terminal: `wprs-ctl pack check CARPETA`, `pack validate CARPETA|ARCHIVO --key autor.pub`,
+`repo keygen autor` y `pack rotate-key`.
+
+*Editar una copia…*, en la página de cada paquete de la biblioteca y en la lista de *Escenas*, abre
+una copia de cualquier tipo de paquete (escenas, páginas, imágenes y vídeos) en una carpeta nueva y
+con un id nuevo, así que el instalado nunca cambia, y conserva la licencia y los créditos. Si la
+licencia no permite obras derivadas (por ejemplo `CC-BY-ND-4.0`) no la abre, salvo que confirmes que
+el paquete es tuyo o que su autor lo permite. Desde la terminal: `wprs-ctl scene open CARPETA --from
+paquete.wpak [--id ID] [--mine] [--facts]`.
+
 `compose.yaml` baja `ghcr.io/wallpaper-rs/wprs-server` con la etiqueta de `WPRS_VERSION` (`latest` si no
 se fija). Cada versión publica esa imagen (`linux/amd64`, con las etiquetas `<versión>` y `latest`),
 firmada con cosign sin clave propia como los archivos de *Releases*. Lleva adjuntos los SBOM SPDX de
@@ -2092,6 +2107,9 @@ wprs-ctl server reset                            # sin ningún equipo con la cla
 wprs-ctl server upload fondo.wpak                # sube un paquete con el token del equipo
 wprs-ctl server upload fondo.wpak --unlisted     # … oculto: fuera del catálogo, instalable con su enlace
 wprs-ctl server packages                         # tus subidas, con su estado y visibilidad
+wprs-ctl server uploads                          # las sesiones de subida (en curso o terminadas); --cancel ID cancela una
+wprs-ctl server author-key list                  # las claves con las que firmas tus paquetes en línea
+wprs-ctl server author-key add autor.pub         # registra una clave; `rotate`, `remove` la cambian o la quitan
 wprs-ctl server visibility org.example.fondo public   # cambia la visibilidad de un paquete o de una versión
 wprs-ctl server repo 1a2b3c4d                    # añade un repositorio que otro equipo sincronizó, tras revisarlo
 wprs-ctl server secret wallhaven                 # sincroniza la clave de un proveedor, cifrada
@@ -2106,7 +2124,9 @@ web del servidor o con `--unlisted`): uno oculto se publica y se firma igual, pe
 búsqueda no lo muestran, y quien tenga su enlace o su id lo ve y lo instala. Oculto no es privado:
 sigue en los archivos firmados del repositorio, que cualquiera puede descargar y leer, con su título y
 su descripción; lo privado va en la sincronización o en un repositorio propio. *Cuenta* lista tus
-subidas y te deja cambiar la visibilidad de cada versión. En un repositorio estático, `wprs-ctl repo
+subidas y te deja cambiar la visibilidad de cada versión, ver y cancelar las sesiones de subida
+que quedaron a medias, y registrar, cambiar (con la firma de `pack rotate-key`) y quitar las claves de
+autor en línea. En un repositorio estático, `wprs-ctl repo
 add --unlisted`, `repo unlist` y `repo list-again` hacen lo mismo antes de `repo publish`, y la pestaña
 *Repositorio estático* de *Repositorios* abre la carpeta del repositorio y añade paquetes (también
 ocultos), oculta o vuelve a mostrar un paquete o una versión y destaca o deja de destacar, con la misma

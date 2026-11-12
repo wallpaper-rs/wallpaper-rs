@@ -2134,6 +2134,37 @@ statement}]}`: the versions this account uploaded, from `/api/v1/me/packages`.
 Makes every version of the package `id` of this account (`version` empty) or one version `public` or
 `unlisted`; `InvalidArgs` for another value or an id that is not a package id.
 
+### `ListAuthorKeys() → (s json)`
+
+`{items: [{fingerprint, public_key, created_at}]}`: the keys this account registered for its online
+author id, from `/api/v1/me/author-keys` (`server.md`).
+
+### `AddAuthorKey(s public_key) → (s fingerprint)`
+
+Registers a minisign public key (the text of a `.pub` file or its key line) for this account's online
+author id and returns its fingerprint; `InvalidArgs` for text that is no public key, and the
+server's refusal when the key is registered already or the repository binds its authors in the root.
+
+### `RotateAuthorKey(s from, s public_key, s signature) → (s fingerprint)`
+
+Hands the online author over from the registered key `from` (a fingerprint) to `public_key` with the
+`signature` that `wprs-ctl pack rotate-key` prints, and returns the fingerprint of the new key.
+`InvalidArgs` for a `from` that is no fingerprint or a text that is no public key.
+
+### `RemoveAuthorKey(s fingerprint)`
+
+Removes a registered author key; `InvalidArgs` for a text that is no fingerprint.
+
+### `ListUploads() → (s json)`
+
+`{uploads: [{id, state, errors, created_at}]}`: the upload sessions of this account, finished or not,
+from `/api/v1/me/packages`; `ListPackages` lists the versions they became.
+
+### `CancelUpload(s id)`
+
+Cancels an unfinished upload session (`DELETE /api/v1/uploads/{id}`); `InvalidArgs` for an id that
+cannot be one.
+
 ### `Vote(s id, s vote) → (s json)`
 
 Sends `up`, `down` or `none` for the package `id` to the linked server with this device's token

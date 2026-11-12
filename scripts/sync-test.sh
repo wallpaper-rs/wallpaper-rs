@@ -156,6 +156,7 @@ await b "$job"
 echo "link, approval and key share checks passed"
 source "$(dirname "$0")"/sync-library.sh
 source "$(dirname "$0")"/sync-unlisted.sh
+source "$(dirname "$0")"/sync-author.sh
 source "$(dirname "$0")"/sync-files.sh
 source "$(dirname "$0")"/sync-keys.sh
 source "$(dirname "$0")"/sync-phone.sh

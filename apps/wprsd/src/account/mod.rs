@@ -1,4 +1,5 @@
 mod apply;
+mod author;
 mod cycle;
 mod escrow;
 mod fetch;

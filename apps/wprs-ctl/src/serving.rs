@@ -78,6 +78,8 @@ pub async fn run(client: &Client, command: Server) -> Result<()> {
                 println!("{} {} {} {}", text("package"), text("version"), text("state"), text("visibility"));
             }
         }
+        Server::Uploads { json, cancel } => crate::keyed::uploads(client, json, cancel).await?,
+        Server::AuthorKey(command) => crate::keyed::run(client, command).await?,
         Server::Visibility { id, visibility, version } => {
             patient(sync.set_visibility(&id, version.as_deref().unwrap_or(""), &visibility)).await?
         }
