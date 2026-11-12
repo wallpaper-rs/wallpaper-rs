@@ -158,3 +158,10 @@ fn animated_previews_play_only_when_shown_allowed_and_on_mains() {
     assert!(drawer.contains("readonly property string animated: mature || flashing ? \"\" :"));
     assert!(drawer.contains("playing: visible && drawer.opened && !(App.state.on_battery ?? false)"));
 }
+
+#[test]
+fn the_installed_applications_fixture_follows_the_data_model() {
+    let found: wprs_core::model::ApplicationsReply =
+        wprs_client::parse(&crate::args::fixture("Daemon1", "ListApplications")).unwrap();
+    assert!(found.available && found.applications.len() == 2);
+}
