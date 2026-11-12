@@ -88,12 +88,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: scripts/ci-apt.sh shellcheck qt6-declarative-dev-tools gettext
 
@@ -134,12 +128,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -152,6 +140,8 @@ jobs:
           components: clippy
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          save-if: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Clippy
         run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
@@ -171,12 +161,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -191,7 +175,8 @@ jobs:
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
         with:
-          key: shard-${{ matrix.shard }}
+          shared-key: test-${{ matrix.shard }}
+          save-if: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Unit and render tests
         env:
@@ -213,12 +198,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -230,6 +209,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: test-1
+          save-if: false
 
       - name: Render tests with the OpenGL ES backend
         env:
@@ -252,12 +234,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -268,6 +244,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: dev
+          save-if: false
 
       - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
         with:
@@ -295,12 +274,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -313,6 +286,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: dev
+          save-if: ${{ github.ref == 'refs/heads/master' }}
 
       - name: User namespaces for the sandbox stand-in
         run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
@@ -336,12 +312,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -352,6 +322,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: dev
+          save-if: false
 
       - name: Daemon, helper and test binaries
         run: |
@@ -395,12 +368,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -414,6 +381,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: dev
+          save-if: false
 
       - name: Layer-shell surfaces on a headless Sway
         run: |
@@ -431,12 +401,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -450,6 +414,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          shared-key: dev
+          save-if: false
 
       - name: Desktop windows on Xvfb
         run: |
@@ -467,12 +434,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
-
       - name: Install system packages
         run: |
           scripts/ci-apt.sh \
@@ -485,6 +446,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          save-if: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Daemons, the phone client and wprs-server with end-to-end encrypted sync
         run: |
@@ -504,14 +467,20 @@ jobs:
         include:
           - name: daemon
             bins: wprsd
+            cache: daemon
+            save: true
             files: |
               target/release/wprsd
           - name: app
             bins: wprs-app
+            cache: app
+            save: true
             files: |
               target/release/wprs-app
           - name: tools
             bins: wprs-ctl wprs-web
+            cache: daemon
+            save: false
             files: |
               target/release/wprs-ctl
               target/release/wprs-web
@@ -522,7 +491,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+      - id: apt
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: ~/.cache/ci-apt
           key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
@@ -535,13 +505,21 @@ jobs:
             libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
             qt6-base-dev qt6-declarative-dev qt6-declarative-dev-tools ccache
 
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        if: github.ref == 'refs/heads/master' && steps.apt.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/ci-apt
+          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
+
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
         with:
-          key: ${{ matrix.name }}
+          shared-key: release-${{ matrix.cache }}
+          save-if: ${{ github.ref == 'refs/heads/master' && matrix.save }}
 
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+      - id: ccache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         if: matrix.name == 'app'
         with:
           path: ~/.cache/ccache
@@ -567,6 +545,12 @@ jobs:
           read -ra bins <<< "$BINARIES"
           scripts/build-release.sh "${bins[@]}"
           if command -v ccache > /dev/null && [ -n "${CCACHE_DIR:-}" ]; then ccache --show-stats; fi
+
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        if: matrix.name == 'app' && github.ref == 'refs/heads/master' && steps.ccache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/ccache
+          key: ccache-app-${{ hashFiles('Cargo.lock', 'apps/wprs-app/qml/**', 'apps/wprs-app/qt-shim/**', 'apps/wprs-app/src/**', 'po/**') }}
 
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
         if: always()
@@ -596,12 +580,6 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           persist-credentials: false
-
-      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/ci-apt
-          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: apt-${{ github.job }}-
 
       - name: Install system packages
         run: |
@@ -638,9 +616,67 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  android-native:
+    name: Android native library (${{ matrix.abi }})
+    needs: version
+    if: needs.version.outputs.android == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      matrix:
+        include:
+          - abi: arm64-v8a
+            target: aarch64-linux-android
+          - abi: x86_64
+            target: x86_64-linux-android
+    env:
+      ABI: ${{ matrix.abi }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+        with:
+          targets: ${{ matrix.target }}
+          components: clippy
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+        with:
+          key: ${{ matrix.abi }}
+          save-if: ${{ github.ref == 'refs/heads/master' }}
+
+      - name: Install cargo-ndk
+        run: cargo install --locked cargo-ndk --version 4.1.2
+
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6
+        with:
+          cache-provider: basic
+          cache-read-only: true
+          add-job-summary: on-failure
+
+      - name: Release library
+        run: |
+          export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME" ANDROID_NDK_ROOT="$ANDROID_NDK_LATEST_HOME"
+          android/gradlew -p android :app:cargo -Pabis="$ABI"
+          ls -l "android/app/build/rustJniLibs/$ABI"
+
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        with:
+          name: jni-${{ matrix.abi }}
+          path: android/app/build/rustJniLibs/${{ matrix.abi }}
+          if-no-files-found: error
+          compression-level: 1
+          retention-days: 1
+
+      - name: Clippy for Android
+        run: |
+          export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME" ANDROID_NDK_ROOT="$ANDROID_NDK_LATEST_HOME"
+          cargo ndk -t "$ABI" -P 31 clippy --locked -p wprs-android -- -D warnings
+
   android:
     name: Android APK
-    needs: version
+    needs: [version, android-native]
     if: needs.version.outputs.android == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
@@ -649,29 +685,23 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
-          targets: aarch64-linux-android, x86_64-linux-android
-          components: clippy
+          name: jni-arm64-v8a
+          path: android/app/build/rustJniLibs/arm64-v8a
 
-      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
-          key: android
-
-      - name: Install cargo-ndk
-        run: cargo install --locked cargo-ndk --version 4.1.2
+          name: jni-x86_64
+          path: android/app/build/rustJniLibs/x86_64
 
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6
         with:
           cache-provider: basic
+          cache-read-only: true
           add-job-summary: on-failure
 
-      - name: Clippy for Android
-        run: |
-          export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME" ANDROID_NDK_ROOT="$ANDROID_NDK_LATEST_HOME"
-          cargo ndk -t arm64-v8a -t x86_64 -P 31 clippy --locked -p wprs-android -- -D warnings
-
-      - name: Release APK, lint and unit tests
+      - name: Release APK
         env:
           VERSION_CODE: ${{ github.run_number }}
           VERSION_NAME: ${{ needs.version.outputs.semver }}
@@ -685,7 +715,7 @@ jobs:
           else
             echo "::warning::ANDROID_KEYSTORE is not set, so this APK is signed with a temporary debug key"
           fi
-          android/gradlew -p android assembleRelease lintRelease testDebugUnitTest -PversionCode="$VERSION_CODE" -PversionName="$VERSION_NAME"
+          android/gradlew -p android assembleRelease -x :app:cargo -PversionCode="$VERSION_CODE" -PversionName="$VERSION_NAME"
 
       - name: Native libraries, 16 KB page alignment and no build paths
         run: |
@@ -713,31 +743,59 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  android-lint:
+    name: Android lint and unit tests
+    needs: [version, android-native]
+    if: needs.version.outputs.android == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: jni-arm64-v8a
+          path: android/app/build/rustJniLibs/arm64-v8a
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: jni-x86_64
+          path: android/app/build/rustJniLibs/x86_64
+
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6
+        with:
+          cache-provider: basic
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+          add-job-summary: on-failure
+
+      - name: Lint and unit tests
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: ${{ needs.version.outputs.semver }}
+        run: |
+          export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME" ANDROID_NDK_ROOT="$ANDROID_NDK_LATEST_HOME"
+          android/gradlew -p android lintRelease testDebugUnitTest -x :app:cargo -PversionCode="$VERSION_CODE" -PversionName="$VERSION_NAME"
+
   android-emulator:
     name: Android emulator tests
     needs: version
     if: needs.version.outputs.android == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           persist-credentials: false
 
-      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
-        with:
-          targets: x86_64-linux-android
-
-      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
-        with:
-          key: android-emulator
-
-      - name: Install cargo-ndk
-        run: cargo install --locked cargo-ndk --version 4.1.2
-
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6
         with:
           cache-provider: basic
+          cache-read-only: true
           add-job-summary: on-failure
 
       - name: Enable KVM
@@ -746,11 +804,24 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: App and test APKs for x86_64
+      - name: Compile the Kotlin sources while the native library builds
         run: |
           printf 'ANDROID_NDK_HOME=%s\nANDROID_NDK_ROOT=%s\n' "$ANDROID_NDK_LATEST_HOME" "$ANDROID_NDK_LATEST_HOME" >> "$GITHUB_ENV"
           export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME" ANDROID_NDK_ROOT="$ANDROID_NDK_LATEST_HOME"
-          android/gradlew -p android assembleDebug assembleDebugAndroidTest -Pabis=x86_64
+          android/gradlew -p android compileDebugKotlin compileDebugAndroidTestKotlin -Pabis=x86_64 -x :app:cargo
+
+      - name: Wait for the native library
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/wait-artifact.sh jni-x86_64 'Android native library (x86_64)'
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: jni-x86_64
+          path: android/app/build/rustJniLibs/x86_64
+
+      - name: App and test APKs for x86_64
+        run: android/gradlew -p android assembleDebug assembleDebugAndroidTest -Pabis=x86_64 -x :app:cargo
 
       - uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
         with:
@@ -760,7 +831,7 @@ jobs:
           emulator-boot-timeout: 900
           script: |
             adb shell pm disable-user --user 0 com.google.android.gms
-            android/gradlew -p android connectedDebugAndroidTest -Pabis=x86_64
+            android/gradlew -p android connectedDebugAndroidTest -Pabis=x86_64 -x :app:cargo
 
       - name: Failing instrumentation tests
         if: failure()
@@ -879,6 +950,48 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  app-check:
+    name: Interface check
+    needs: [version, lint]
+    if: needs.version.outputs.rust == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    env:
+      ARCH: docker.io/library/archlinux:base-20261018.0.612668@sha256:52dfbd5afb23a220d5ee92dafcb4c788d96c026ed04179890c23adef4c897fa0
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - name: Virtual DRM devices
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: scripts/ci-drm.sh
+
+      - name: Plasma image
+        run: scripts/plasma-image.sh plasma-session
+
+      - name: Wait for the app binary
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/wait-artifact.sh release-bin-app 'Release binaries (app)'
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: release-bin-app
+          path: bins
+
+      - name: Every page of the app loads
+        run: |
+          docker run --rm --device /dev/dri -v "$PWD:/src" -w /src plasma-session bash -c '
+            set -e
+            chmod +x bins/wprs-app
+            bins/wprs-app --check
+          '
+
   plasma:
     name: Plasma end-to-end
     needs: [version, lint]
@@ -901,19 +1014,7 @@ jobs:
         run: scripts/ci-drm.sh
 
       - name: Plasma image
-        run: |
-          docker run --name prepare --device /dev/dri "$ARCH" bash -c '
-            set -e
-            pacman -Sy --noconfirm --needed archlinux-keyring >/dev/null
-            pacman -Syu --noconfirm --needed \
-              plasma-desktop plasma-workspace kwin kpipewire spectacle \
-              pipewire wireplumber dbus gst-plugins-base gst-plugins-good \
-              mesa vulkan-swrast vulkan-icd-loader \
-              imagemagick tar gzip libcap gdb jq qt6-declarative kirigami qqc2-desktop-style >/dev/null
-            pacman -Q plasma-desktop plasma-workspace kwin kpipewire mesa kirigami
-          '
-          docker commit prepare plasma-session >/dev/null
-          docker rm prepare >/dev/null
+        run: scripts/plasma-image.sh plasma-session
 
       - name: Wait for the tarball
         env:
@@ -929,8 +1030,6 @@ jobs:
         run: |
           docker run --rm --device /dev/dri -v "$PWD:/src" -w /src plasma-session bash -c '
             set -e
-            mkdir -p /tmp/app && tar -xzf dist/wallpaper-rs-*.tar.gz -C /tmp/app
-            /tmp/app/wallpaper-rs-*/bin/wprs-app --check
             scripts/plasma-test.sh dist/wallpaper-rs-*.tar.gz plasma-test-output
           '
 
@@ -992,7 +1091,7 @@ jobs:
   release:
     name: Release
     if: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-    needs: [version, workflows, lint, clippy, test, render-gl, depth, e2e, sway, x11, sync, build, package, android, android-emulator, rpm, plasma, web, server]
+    needs: [version, workflows, lint, clippy, test, render-gl, depth, e2e, sway, x11, sync, build, package, android-native, android, android-lint, android-emulator, rpm, plasma, app-check, web, server]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
