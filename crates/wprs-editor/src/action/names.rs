@@ -1,4 +1,3 @@
-
 pub const EDITOR: &str = "/scene/ext/editor";
 
 pub const ACTIONS: [&str; 70] = [
