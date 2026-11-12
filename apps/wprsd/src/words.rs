@@ -29,6 +29,21 @@ pub fn flashing_moves() -> String {
     tr("A package that flashes cannot keep moving when the desktop asks for reduced motion.")
 }
 
+pub fn nothing_before() -> String {
+    tr("There is no earlier wallpaper to bring back.")
+}
+
+pub fn no_settings(screen: &str) -> String {
+    match screen.is_empty() {
+        true => tr("No screen shows a wallpaper with settings: apply a scene or a video first."),
+        false => tr("%1 shows no wallpaper with settings.").replace("%1", screen),
+    }
+}
+
+pub fn which_screen() -> String {
+    tr("The screens show different wallpapers: name the screen whose settings you mean.")
+}
+
 pub fn volume() -> String {
     tr("Volume")
 }

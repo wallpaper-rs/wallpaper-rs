@@ -63,6 +63,16 @@ grep -q '^\[default.scenes."org.example.glow"\]' "$config" || fail "scene values
 if ctl prop set tint red -o TEST-11 2>/dev/null; then fail "an invalid color was accepted"; fi
 ctl prop reset -o TEST-11
 shown "$s11" 0 0 255
+ctl prop set tint '#ff0000' -o TEST-11 && shown "$s11" 255 0 0
+ctl prop reset && shown "$s11" 0 0 255
+ctl clear -o TEST-11
+expect "s['outputs']['TEST-11']['kind'], s['outputs']['TEST-11']['blank'], s['outputs']['TEST-11']['previous']" "('color', True, True)"
+shown "$s11" 0 0 0
+ctl restore -o TEST-11
+expect "s['outputs']['TEST-11']['kind'], s['outputs']['TEST-11']['blank'], s['outputs']['TEST-11']['item']" "('scene', False, '$glow')"
+shown "$s11" 0 0 255
+if ctl restore -o TEST-11 2>"$WORK/restore.err"; then fail "restore with nothing removed"; fi
+grep -q "no earlier wallpaper" "$WORK/restore.err" || fail "restore message: $(cat "$WORK/restore.err")"
 ctl prop preset load warm -o TEST-11
 shown "$s11" 255 0 0
 sleep 1

@@ -1,7 +1,6 @@
-use crate::apply::target_output;
 use crate::compositor::{Movie, Reel};
 use crate::daemon::Daemon;
-use crate::error::{Result, invalid, not_found};
+use crate::error::{Result, invalid};
 use crate::keyring::Keyring;
 use serde_json::{Value as Json, json};
 use std::collections::BTreeMap;
@@ -103,31 +102,6 @@ impl Daemon {
             wprs_format::Kind::Web => Ok(self.web_pack(path)?.props.clone()),
             _ => self.video_props(path),
         }
-    }
-
-    pub fn props_on(&self, output: &str) -> Result<(String, Arc<Props>)> {
-        let output = target_output(output)?;
-        let (shown, path) = {
-            let st = self.state();
-            let info = st.outputs.get(&output).filter(|_| !output.is_empty());
-            let shown =
-                info.and_then(|i| i.scene.as_ref().map(|s| s.props.clone()).or_else(|| i.video.clone()));
-            let path = if output.is_empty() {
-                st.config.default.image.clone()
-            } else {
-                st.config.resolve(&output).image
-            };
-            (shown, path)
-        };
-        let section = if output.is_empty() { "the default section" } else { &output };
-        let missing = || not_found(format!("{section} shows no package with settings"));
-        let package = |p: &PathBuf| wprs_library::Kind::detect(p) == Some(wprs_library::Kind::Package);
-        let props = match (shown, path) {
-            (Some(props), _) => props,
-            (None, Some(path)) if package(&path) => self.package_props(&path).map_err(|_| missing())?,
-            _ => return Err(missing()),
-        };
-        Ok((output, props))
     }
 
     pub fn scene_properties(&self, output: &str) -> Result<SceneProperties> {

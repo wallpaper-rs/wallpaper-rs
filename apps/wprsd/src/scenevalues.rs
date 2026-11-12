@@ -7,6 +7,13 @@ use std::path::Path;
 use std::sync::Arc;
 use wprs_scene::{Control, Values};
 
+fn same_value(checked: &Json, given: &Json) -> bool {
+    match (checked.as_f64(), given.as_f64()) {
+        (Some(a), Some(b)) => a == b,
+        _ => checked == given,
+    }
+}
+
 impl Daemon {
     pub fn set_scene_property(&self, output: &str, id: &str, value: &str) -> Result<()> {
         let (output, props) = self.props_on(output)?;
@@ -18,7 +25,7 @@ impl Daemon {
         let given: Json =
             serde_json::from_str(value).map_err(|e| invalid(format!("the value is not JSON: {e}")))?;
         let checked = prop.value(&given).map_err(|e| invalid(format!("{id} {e}")))?;
-        if checked != given {
+        if !same_value(&checked, &given) {
             tracing::warn!(property = id, "a property value was adjusted to its range");
         }
         if matches!(prop.control, Control::Shortcut {}) && !checked.is_null() {
@@ -52,7 +59,17 @@ impl Daemon {
 
     pub fn reset_scene_properties(&self, output: &str) -> Result<()> {
         let (output, props) = self.props_on(output)?;
-        self.store_values(&output, &props, Stored::clear)
+        if !output.is_empty() {
+            return self.store_values(&output, &props, Stored::clear);
+        }
+        self.update_config(|c| {
+            c.default.scenes.remove(&props.id);
+            c.outputs.values_mut().for_each(|o| drop(o.scenes.remove(&props.id)));
+            c.outputs.retain(|_, o| *o != wprs_core::OutputConfig::default());
+            Ok(())
+        })?;
+        self.refresh_package(&props.path);
+        Ok(())
     }
 
     pub fn share_scene_values(&self, output: &str, shared: bool) -> Result<()> {
@@ -155,5 +172,19 @@ impl Daemon {
         let shown: Vec<&String> = st.outputs.iter().filter(shows).map(|(n, _)| n).collect();
         shown.iter().for_each(|name| self.compositor.press(name, id));
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::same_value;
+    use serde_json::json;
+
+    #[test]
+    fn a_whole_number_checked_as_a_decimal_is_not_an_adjustment() {
+        assert!(same_value(&json!(80.0), &json!(80)));
+        assert!(same_value(&json!("a"), &json!("a")));
+        assert!(!same_value(&json!(96.0), &json!(120)));
+        assert!(!same_value(&json!(true), &json!(false)));
     }
 }
