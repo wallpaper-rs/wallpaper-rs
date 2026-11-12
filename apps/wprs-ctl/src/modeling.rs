@@ -4,8 +4,6 @@ use std::path::PathBuf;
 
 pub use crate::posing::{GroupCmd, ModelCmd};
 
-const EDIT: &str = "One edit as JSON, as the app sends it (see docs/specs/editor.md)";
-
 #[derive(Subcommand, Debug)]
 pub enum Modeling {
     #[command(about = "Add, place, remove or describe a 3D model layer")]
@@ -123,32 +121,8 @@ pub enum Modeling {
     Scene3d {
         #[arg(help = DIR)]
         dir: PathBuf,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        model: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        group: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        space: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        depth_test: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        material: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        paint: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        camera: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        view: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        tones: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        shadows: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        path: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        new_material: Option<String>,
-        #[arg(help = EDIT, long, value_name = "JSON")]
-        debug: Option<String>,
+        #[command(flatten)]
+        edits: crate::edits3d::Edits3d,
     },
     #[command(about = "Show what the models cost at each quality level and on each device tier")]
     Cost3d {

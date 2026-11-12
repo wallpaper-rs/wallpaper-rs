@@ -26,6 +26,7 @@ mod daemon;
 mod depth;
 pub mod edit;
 mod editing;
+mod edits3d;
 mod effected;
 mod effecting;
 mod facts;
