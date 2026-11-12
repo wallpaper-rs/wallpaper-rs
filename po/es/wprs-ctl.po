@@ -1408,6 +1408,11 @@ msgstr "Calidad de un archivo con pérdida, de 1 a 100"
 msgid "Size of the file; the size of the edited image when omitted"
 msgstr "Tamaño del archivo; el de la imagen editada si se omite"
 
+#: apps/wprs-ctl/src/edits3d.rs
+msgid "One edit as JSON, as the app sends it (see docs/specs/editor.md)"
+msgstr ""
+"Una edición como JSON, tal como la envía la app (ver docs/specs/editor.md)"
+
 #: apps/wprs-ctl/src/effected.rs
 msgid "%1 is not KEY=VALUE"
 msgstr "%1 no es CLAVE=VALOR"
@@ -2782,7 +2787,8 @@ msgstr "Id del recurso nuevo"
 
 #: apps/wprs-ctl/src/lamping.rs
 msgid "Second of the video the map is made from, the first frame by default"
-msgstr "Segundo del vídeo del que se hace el mapa; por defecto, el primer fotograma"
+msgstr ""
+"Segundo del vídeo del que se hace el mapa; por defecto, el primer fotograma"
 
 #: apps/wprs-ctl/src/lamping.rs
 msgid ""
@@ -3732,11 +3738,6 @@ msgstr ""
 "Archivo JSON de una pista inventada que se muestra en vez de un reproductor: "
 "title, artist, album, album_artist, subtitle, genres, playing, position, "
 "duration, rate y cover (una imagen de la carpeta)"
-
-#: apps/wprs-ctl/src/modeling.rs
-msgid "One edit as JSON, as the app sends it (see docs/specs/editor.md)"
-msgstr ""
-"Una edición como JSON, tal como la envía la app (ver docs/specs/editor.md)"
 
 #: apps/wprs-ctl/src/modeling.rs
 msgid "Add, place, remove or describe a 3D model layer"

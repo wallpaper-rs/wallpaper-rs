@@ -2372,36 +2372,6 @@ msgstr "el mapeo de tonos necesita hdr"
 msgid "the split goes from 0 to 1"
 msgstr "la división va de 0 a 1"
 
-#: crates/wprs-editor/src/stage3d/combed.rs
-msgid "only a fur material is combed"
-msgstr "solo se peina un material de pelo"
-
-#: crates/wprs-editor/src/stage3d/combed.rs
-msgid ""
-"a comb stroke has 2 to %1 points, a radius in pixels and a strength from 0 "
-"to 1"
-msgstr ""
-"un trazo de peinado tiene de 2 a %1 puntos, un radio en píxeles y una fuerza "
-"de 0 a 1"
-
-#: crates/wprs-editor/src/stage3d/combed.rs
-msgid "the stroke does not cross that material"
-msgstr "el trazo no pasa por ese material"
-
-#: crates/wprs-editor/src/stage3d/debug.rs
-msgid "the 3D view shows mask, matte or shadows"
-msgstr "la vista 3D muestra mask, matte o shadows"
-
-#: crates/wprs-editor/src/stage3d/debug.rs
-msgid "a debug view of one material names its layer and material"
-msgstr "una vista de depuración de un material nombra su capa y su material"
-
-#: crates/wprs-editor/src/stage3d/debug.rs
-#: crates/wprs-editor/src/stage3d/material.rs
-#: crates/wprs-editor/src/stage3d/painted.rs
-msgid "the model has no material named %1"
-msgstr "el modelo no tiene ningún material llamado %1"
-
 #: crates/wprs-editor/src/stage3d/carve.rs
 msgid "a sculpted shape has a name of 1 to 64 letters, digits, _ or -"
 msgstr "una forma esculpida tiene un nombre de 1 a 64 letras, cifras, _ o -"
@@ -2433,6 +2403,36 @@ msgstr "no se puede leer la escena"
 #: crates/wprs-editor/src/stage3d/carve.rs
 msgid "%1 is not shown at this time"
 msgstr "%1 no se muestra en este momento"
+
+#: crates/wprs-editor/src/stage3d/combed.rs
+msgid "only a fur material is combed"
+msgstr "solo se peina un material de pelo"
+
+#: crates/wprs-editor/src/stage3d/combed.rs
+msgid ""
+"a comb stroke has 2 to %1 points, a radius in pixels and a strength from 0 "
+"to 1"
+msgstr ""
+"un trazo de peinado tiene de 2 a %1 puntos, un radio en píxeles y una fuerza "
+"de 0 a 1"
+
+#: crates/wprs-editor/src/stage3d/combed.rs
+msgid "the stroke does not cross that material"
+msgstr "el trazo no pasa por ese material"
+
+#: crates/wprs-editor/src/stage3d/debug.rs
+msgid "the 3D view shows mask, matte or shadows"
+msgstr "la vista 3D muestra mask, matte o shadows"
+
+#: crates/wprs-editor/src/stage3d/debug.rs
+msgid "a debug view of one material names its layer and material"
+msgstr "una vista de depuración de un material nombra su capa y su material"
+
+#: crates/wprs-editor/src/stage3d/debug.rs
+#: crates/wprs-editor/src/stage3d/material.rs
+#: crates/wprs-editor/src/stage3d/painted.rs
+msgid "the model has no material named %1"
+msgstr "el modelo no tiene ningún material llamado %1"
 
 #: crates/wprs-editor/src/stage3d/edit.rs
 msgid "%1 of a model goes from %2 to %3"
@@ -2523,10 +2523,6 @@ msgstr "%1 no es un parámetro de %2"
 #: crates/wprs-editor/src/stage3d/material.rs
 msgid "only chroma materials take a key color"
 msgstr "solo los materiales de croma llevan un color clave"
-
-#: crates/wprs-editor/src/stage3d/newmat.rs
-msgid "there is already a shader named %1"
-msgstr "ya hay un shader llamado %1"
 
 #: crates/wprs-editor/src/stage3d/painted.rs
 msgid ""
@@ -2858,6 +2854,10 @@ msgstr "ya hay un parámetro %1"
 #: crates/wprs-editor/src/wgsl/form.rs
 msgid "there is no pass %1"
 msgstr "no hay ninguna pasada %1"
+
+#: crates/wprs-editor/src/wgsl/mod.rs
+msgid "there is already a shader named %1"
+msgstr "ya hay un shader llamado %1"
 
 #: crates/wprs-editor/src/wgsl/mod.rs
 msgid "there is no shader template %1"

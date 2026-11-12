@@ -713,6 +713,8 @@ msgstr "Preajuste:"
 #: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/PackageTrack.qml
 #: apps/wprs-app/qml/PackageWeb.qml apps/wprs-app/qml/SceneEffectMask.qml
 #: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/ScenePoolEdit.qml
+
+#: apps/wprs-app/qml/SceneMaterialDebug.qml apps/wprs-app/qml/SceneMedia.qml
 #: apps/wprs-app/qml/SceneRig.qml apps/wprs-app/qml/SceneSwarmKin.qml
 #: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneTones.qml
 #: apps/wprs-app/qml/facade/LabelWords.qml
@@ -1726,6 +1728,27 @@ msgstr "Subir"
 #: apps/wprs-app/qml/SceneSetting.qml
 msgid "Move down"
 msgstr "Bajar"
+
+
+#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/PackageInspector.qml
+#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackagePresets.qml
+#: apps/wprs-app/qml/PackageRequires.qml apps/wprs-app/qml/PlaylistItems.qml
+#: apps/wprs-app/qml/SceneAssets.qml apps/wprs-app/qml/SceneBoneRow.qml
+#: apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
+#: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
+#: apps/wprs-app/qml/SceneModelColliders.qml
+#: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneModelSwing.qml
+#: apps/wprs-app/qml/ScenePairs.qml apps/wprs-app/qml/SceneProperties.qml
+#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneRigPhysics.qml
+#: apps/wprs-app/qml/SceneRigRow.qml apps/wprs-app/qml/SceneRigRules.qml
+#: apps/wprs-app/qml/SceneScriptParam.qml apps/wprs-app/qml/SceneScriptRow.qml
+#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneShapes.qml
+#: apps/wprs-app/qml/SceneSwarmPoints.qml
+#: apps/wprs-app/qml/SceneTemplateTree.qml
+#: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
+msgid "Remove"
+msgstr "Quitar"
 
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/RgbBoard.qml
 msgid "Whole picture"
@@ -2983,8 +3006,8 @@ msgstr "Velocidad:"
 
 #: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/PackageFraming.qml
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/PackageWeb.qml
-#: apps/wprs-app/qml/PresetSettings.qml apps/wprs-app/qml/SceneInput.qml
-#: apps/wprs-app/qml/ScenePropertyRange.qml
+#: apps/wprs-app/qml/PresetSettings.qml apps/wprs-app/qml/SceneEffectParam.qml
+#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePropertyRange.qml
 #: apps/wprs-app/qml/SceneScriptParam.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Default"
@@ -7885,29 +7908,6 @@ msgstr "Clip nuevo del archivo…"
 msgid "Root motion: the clip moves the layer"
 msgstr "Movimiento de raíz: el clip mueve la capa"
 
-#: apps/wprs-app/qml/SceneModelRings.qml
-msgid "Turn %1"
-msgstr "Girar en %1"
-
-#: apps/wprs-app/qml/SceneModelRings.qml
-msgid "Drag along the ring to turn the model around this axis"
-msgstr ""
-"Arrastra a lo largo del anillo para girar el modelo alrededor de este eje"
-
-#: apps/wprs-app/qml/SceneModelRings.qml
-msgid ""
-"The rotation follows a binding; drag with Shift to replace it with a value"
-msgstr ""
-"El giro sigue un enlace; arrastra con Mayús para reemplazarlo por un valor"
-
-#: apps/wprs-app/qml/SceneModelRings.qml
-msgid ""
-"Drag up to push the model away along the line of sight, down to bring it "
-"closer"
-msgstr ""
-"Arrastra hacia arriba para alejar el modelo por la línea de visión, hacia "
-"abajo para acercarlo"
-
 #: apps/wprs-app/qml/SceneModelReach.qml apps/wprs-app/qml/SceneRefs.qml
 #: apps/wprs-app/qml/SceneRigIk.qml
 msgid "A point"
@@ -7943,6 +7943,29 @@ msgid ""
 msgstr ""
 "Un punto, una capa o el puntero se ven a través de la cámara; arrastra el "
 "punto sobre la vista."
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid "Turn %1"
+msgstr "Girar en %1"
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid "Drag along the ring to turn the model around this axis"
+msgstr ""
+"Arrastra a lo largo del anillo para girar el modelo alrededor de este eje"
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid ""
+"The rotation follows a binding; drag with Shift to replace it with a value"
+msgstr ""
+"El giro sigue un enlace; arrastra con Mayús para reemplazarlo por un valor"
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid ""
+"Drag up to push the model away along the line of sight, down to bring it "
+"closer"
+msgstr ""
+"Arrastra hacia arriba para alejar el modelo por la línea de visión, hacia "
+"abajo para acercarlo"
 
 #: apps/wprs-app/qml/SceneModelSculpt.qml
 msgid "Sculpt a blend shape"
