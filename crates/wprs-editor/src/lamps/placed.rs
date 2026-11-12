@@ -2,7 +2,7 @@ use crate::keys::value_at;
 use serde_json::Value;
 use std::path::Path;
 use std::sync::Arc;
-use wprs_scene::{Affine, Beam, Quality, Runtime, Scene, Values};
+use wprs_scene::{Affine, Beam, Quality, Runtime, Values};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Placed {
@@ -57,7 +57,7 @@ pub fn placed(dir: &Path, doc: &Value, t: f64) -> Vec<Placed> {
     if let Some(list) = scene.get_mut("layers") {
         shown(list);
     }
-    let Ok(scene) = Scene::from_json(&scene.to_string()) else { return Vec::new() };
+    let Some(scene) = crate::seats::parsed(&scene) else { return Vec::new() };
     let view = [0.0, 0.0, scene.canvas.size[0] as f32, scene.canvas.size[1] as f32];
     let mut rt = Runtime::new(Arc::new(scene), Values::new());
     rt.advance(t.max(0.0));

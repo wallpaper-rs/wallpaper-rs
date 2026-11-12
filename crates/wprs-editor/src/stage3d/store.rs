@@ -52,7 +52,7 @@ pub fn asset(dir: &Path, doc: &Value, asset: &str) -> Result<Read> {
 }
 
 pub fn scene(dir: &Path, doc: &Value) -> Option<wprs_scene::Scene> {
-    let mut scene = wprs_scene::Scene::from_json(&doc["scene"].to_string()).ok()?;
+    let mut scene = crate::seats::parsed(&doc["scene"])?;
     let posed = |l: &wprs_scene::Layer| matches!(&l.kind, wprs_scene::Kind::Model(m) if !m.rig.is_empty() || m.root_motion);
     let mut ids: Vec<(String, bool)> =
         scene.layers().filter_map(|l| Some((l.figure()?.to_owned(), posed(l)))).collect();

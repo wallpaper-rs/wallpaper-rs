@@ -86,3 +86,16 @@ fn spot_and_directional_lights_show_a_tilt_knob_on_their_aim_line() {
     assert!(low > y + 60.0 && low < 460.0, "a flatter beam puts the knob nearer the end: {low}");
     assert!(lamps::tilt_share(89.0) < lamps::tilt_share(0.0) && lamps::tilt_share(-89.0) < 0.91);
 }
+
+#[test]
+fn a_light_keeps_its_handles_when_another_layer_has_a_bad_color() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    light(&mut p, json!({ "add": { "light": "point", "at": [400, 300] } })).unwrap();
+    let list = p.doc["scene"]["layers"].as_array_mut().unwrap();
+    list.push(json!({"id": "odd", "type": "solid", "color": "#fff", "size": [10, 10]}));
+    let report = lamps::lights(&p.dir, &p.doc, 0.0);
+    let rows = report["lights"].as_array().unwrap();
+    assert_eq!(rows.len(), 1);
+    assert_eq!(rows[0]["at"], json!([400.0, 300.0]));
+}

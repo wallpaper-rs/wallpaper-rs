@@ -50,3 +50,16 @@ fn a_light_is_placed_in_3d_dragged_there_and_sent_back_to_the_plane() {
     let issues: Vec<String> = doc.validate(&Default::default()).iter().map(|i| i.to_string()).collect();
     assert!(!issues.iter().any(|i| i.contains("lamp")), "{issues:?}");
 }
+
+#[test]
+fn the_3d_stage_keeps_its_lights_when_another_layer_has_a_bad_color() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    edit(&mut p, json!({ "model": { "add": { "asset": "toy", "id": "doll" } } })).unwrap();
+    act(&mut p, json!({ "add_layer": { "kind": "light", "id": "lamp" } })).unwrap();
+    assert_eq!(lights(&p)[0]["id"], "lamp");
+    let list = p.doc["scene"]["layers"].as_array_mut().unwrap();
+    list.push(json!({"id": "odd", "type": "solid", "color": "#fff", "size": [10, 10]}));
+    let shown = lights(&p);
+    assert_eq!(shown[0]["id"], "lamp");
+}

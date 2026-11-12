@@ -5,7 +5,7 @@ use anyhow::{Result, ensure};
 use serde_json::{Value, json};
 use std::path::Path;
 use wprs_core::message::said;
-use wprs_scene::{Beam, IMAGES, Scene, VIDEOS, projectable};
+use wprs_scene::{Beam, IMAGES, VIDEOS, projectable};
 
 fn kind(doc: &Value, id: &str) -> Option<&'static str> {
     let path = doc.pointer(&format!("/scene/assets/{}/path", escape(id))).and_then(Value::as_str)?;
@@ -18,7 +18,7 @@ fn kind(doc: &Value, id: &str) -> Option<&'static str> {
 }
 
 fn layers(doc: &Value) -> Vec<String> {
-    let Ok(scene) = Scene::from_json(&doc["scene"].to_string()) else { return Vec::new() };
+    let Some(scene) = crate::seats::parsed(&doc["scene"]) else { return Vec::new() };
     let all = scene.layers().filter(|l| projectable(&scene, &l.id));
     all.map(|l| l.id.clone()).collect()
 }
