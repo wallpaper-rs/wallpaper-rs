@@ -631,13 +631,27 @@ msgstr "%1 no es current, previous ni none"
 msgid "%1 is animated, and a cover is a still picture"
 msgstr "%1 está animada, y una carátula es una imagen fija"
 
-#: crates/wprs-editor/src/credit.rs
+#: crates/wprs-editor/src/credit.rs crates/wprs-editor/src/credits.rs
 msgid "a package has at most 64 credits; credit folders instead of files"
 msgstr "un paquete tiene como mucho 64 créditos; acredita carpetas en vez de archivos"
 
 #: crates/wprs-editor/src/credit.rs
 msgid "a package is derived from at most 64 works"
 msgstr "un paquete deriva de 64 obras como mucho"
+
+#: crates/wprs-editor/src/credits.rs
+msgid ""
+"%1 files have no credit: %2 and %3 more; credit them, or their folder, if "
+"someone else made them"
+msgstr "%1 archivos no tienen crédito: %2 y %3 más; acredítalos, o su carpeta, si los hizo otra persona"
+
+#: crates/wprs-editor/src/credits.rs
+msgid "a credit needs files, a license and who it is attributed to"
+msgstr "un crédito necesita archivos, una licencia y a quién se atribuye"
+
+#: crates/wprs-editor/src/credits.rs crates/wprs-format/src/validate.rs
+msgid "%1 is not a file or folder of the package"
+msgstr "%1 no es un archivo ni una carpeta del paquete"
 
 #: crates/wprs-editor/src/cutouts.rs
 msgid "depth is turned off or changed, not both"
@@ -3307,10 +3321,6 @@ msgstr "%1 no sirve como %2 en los paquetes %3"
 #: crates/wprs-format/src/validate.rs
 msgid "%1 has %2 bytes, more than the %3 allowed"
 msgstr "%1 tiene %2 bytes, más de los %3 permitidos"
-
-#: crates/wprs-format/src/validate.rs
-msgid "%1 is not a file or folder of the package"
-msgstr "%1 no es un archivo ni una carpeta del paquete"
 
 #: crates/wprs-format/src/web.rs
 msgid "applies to web packages only"

@@ -160,22 +160,12 @@ impl Project {
         let mut done = self.history.record(&mut self.doc, label, ops, at, gesture)?;
         self.recorded = gesture.then_some(at);
         for _ in 0..2 {
-            let follow = sync(&self.doc, &before, dir);
-            if follow.is_empty() {
-                break;
+            match sync(&self.doc, &before, dir) {
+                follow if follow.is_empty() => break,
+                follow => done.extend(self.history.extend(&mut self.doc, follow)?),
             }
-            done.extend(self.history.extend(&mut self.doc, follow)?);
         }
         Ok(done)
-    }
-
-    pub fn settle(&mut self) -> Result<bool> {
-        let follow = sync(&self.doc, &Default::default(), Some(&self.dir));
-        if follow.is_empty() || self.dirty() || self.pending.is_some() {
-            return Ok(false);
-        }
-        self.record("sync", follow)?;
-        self.save().map(|_| true)
     }
 
     pub fn save(&mut self) -> Result<()> {

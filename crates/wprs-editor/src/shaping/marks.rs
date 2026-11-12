@@ -68,6 +68,10 @@ pub(crate) fn manifest(dir: &Path, doc: &Value, e: &M) -> Result<Vec<Op>> {
         M::Preset { base, values, clear, files } => {
             crate::presets::edit(dir, doc, base, values, clear, files)?
         }
+        M::Credit { paths, license, attribution, url } => {
+            crate::credits::credit(dir, doc, paths, license, attribution, url.as_deref())?
+        }
+        M::Uncredit { paths } => crate::credits::uncredit(doc, paths),
         M::AddFile { file, to } => return super::page::add_file(dir, doc, file, to.as_deref()),
         M::Media { file } => super::page::media(dir, doc, file)?,
     };

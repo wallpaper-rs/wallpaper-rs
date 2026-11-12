@@ -82,6 +82,16 @@ pub enum LayerEdit {
         #[serde(default)]
         alpha: Option<f64>,
     },
+    Credit {
+        paths: Vec<String>,
+        license: String,
+        attribution: String,
+        #[serde(default)]
+        url: Option<String>,
+    },
+    Uncredit {
+        paths: Vec<String>,
+    },
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]

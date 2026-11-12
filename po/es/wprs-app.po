@@ -2778,6 +2778,44 @@ msgstr "Inicio %1 s"
 msgid "End %1 s"
 msgstr "Fin %1 s"
 
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid ""
+"%1 files have no credit. Choose the ones someone else made and say who and "
+"under which license."
+msgstr "%1 archivos no tienen crédito. Elige los que hizo otra persona e indica quién y con qué licencia."
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "Every picture, sound, font and model of the package has a credit."
+msgstr "Todas las imágenes, sonidos, fuentes y modelos del paquete tienen crédito."
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "Show the files that already have a credit"
+msgstr "Mostrar los archivos que ya tienen crédito"
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "%1 (credited)"
+msgstr "%1 (con crédito)"
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "License of the chosen files"
+msgstr "Licencia de los archivos elegidos"
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "Who made them"
+msgstr "Quién los hizo"
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "Address of the work (https://…)"
+msgstr "Dirección de la obra (https://…)"
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "Credit the chosen files"
+msgstr "Acreditar los archivos elegidos"
+
+#: apps/wprs-app/qml/PackageCredits.qml
+msgid "Remove this credit"
+msgstr "Quitar este crédito"
+
 #: apps/wprs-app/qml/PackageFiles.qml
 msgid "entry page"
 msgstr "página de entrada"

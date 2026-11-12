@@ -11,6 +11,7 @@ Item {
     readonly property Component styles: stylesEditor
     readonly property Component emitters: emittersEditor
     readonly property Component rules: rulesEditor
+    readonly property Component authoring: packageFields
 
     visible: false
 
@@ -58,6 +59,14 @@ Item {
         id: rulesEditor
 
         SceneWakeRules {
+            host: hosts.input
+        }
+    }
+
+    Component {
+        id: packageFields
+
+        PackageFields {
             host: hosts.input
         }
     }

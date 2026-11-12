@@ -53,6 +53,7 @@ pub fn adjust(doc: &Value, field: &mut crate::Field) {
     match field.pointer.as_str() {
         "/manifest/inputs" => field.fixed = used(doc),
         "/manifest/default_locale" => field.required = true,
+        "/manifest/credits" => field.widget = "package:credits".into(),
         "/manifest/requires/features" => {
             field.options = wprs_format::features::CHOSEN.map(Value::from).to_vec()
         }
