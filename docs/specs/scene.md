@@ -831,8 +831,12 @@ viewer by its `transform.z` in pixels of that plane, so that models in front of 
 The models are drawn in slices between such planes, at most 4 different ones (more layers share the
 nearest), and the layers between their slices. Particle layers count as flat layers there: with
 `depth_test` the whole system stands on its plane, and its particles are not tested one by one
-against the depth of the models. A 3D group inside another 3D group draws its own
-picture, and the models of the outer one then draw alone.
+against the depth of the models. A plain group inside a 3D group (no
+effects, mask, other blend, opacity below 1, color, brightness, `clip`, tilt, `z` or `depth_test`)
+lets its layers join the slices one by one, and a plain 3D group inside another 3D group, directly or
+through plain groups, shares its depth: its models and its flat layers are drawn with those of the
+outer group, with the camera and the box of the outer group. A 3D group inside another that is not
+plain still draws its own picture, and the models of the outer one then draw alone.
 
 A model whose values do not move renders once and its picture is kept; a 3D group renders again only
 when a model, the camera, a light, the light around or the size changes, so that a still scene asks

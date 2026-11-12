@@ -1,11 +1,51 @@
 use super::{MAX_PLANES, Stage3d};
 use crate::eval::{Content, Draw, Frame};
+use crate::figure::Space;
 use crate::resolve::Context;
-use crate::{Affine, Blend, Color, Layer};
+use crate::{Affine, Blend, Color, Kind, Layer};
 
 fn plane(cx: &Context, layer: &Layer, eye: &crate::eye::Eye, height: f32) -> f32 {
     let z = layer.transform.z.as_ref().map_or(0.0, |z| z.get(cx));
     (eye.distance() - z * eye.unit(height)).max(eye.near)
+}
+
+fn loose(cx: &Context, d: &Draw) -> bool {
+    let tilted = d.layer.transform.tilt.is_some() || d.layer.transform.z.is_some();
+    matches!(d.content, Content::Group { clip: false })
+        && !d.isolate
+        && !d.hidden
+        && !tilted
+        && d.opacity >= 1.0
+        && d.blend == Blend::Normal
+        && !cx.mattes.contains(&d.layer.id)
+}
+
+fn holds(outer: &Layer, inner: &Layer) -> bool {
+    outer.children().iter().any(|c| std::ptr::eq(c, inner) || holds(c, inner))
+}
+
+fn deep(layer: &Layer) -> bool {
+    matches!(layer.kind, Kind::Group { space: Some(Space::Depth), .. })
+}
+
+pub(super) fn merged(cx: &Context, frame: &Frame, at: usize) -> bool {
+    let me = &frame.draws[at];
+    if !loose(cx, me) {
+        return false;
+    }
+    for j in (0..at).rev() {
+        let d = &frame.draws[j];
+        if d.end != j + 1 || !holds(d.layer, me.layer) {
+            continue;
+        }
+        if deep(d.layer) {
+            return true;
+        }
+        if !loose(cx, d) {
+            return false;
+        }
+    }
+    false
 }
 
 pub(super) fn gather<'a>(
@@ -26,6 +66,11 @@ pub(super) fn gather<'a>(
     let mut i = at + 1;
     while i < end {
         let d = &frame.draws[i];
+        if loose(cx, d) && !d.layer.depth_test {
+            blocks.push((i..i + 1, None));
+            i += 1;
+            continue;
+        }
         let deep = d.layer.depth_test && !matches!(d.content, Content::Model { .. });
         blocks.push((i..d.end, deep.then(|| plane(cx, d.layer, &eye, canvas[1]))));
         i = d.end;
@@ -64,7 +109,7 @@ pub(super) fn gather<'a>(
         let shift = frame.draws.len() as isize - range.start as isize;
         for k in range.clone() {
             let mut d = old[k - at - 1].clone();
-            d.end = (d.end as isize + shift) as usize;
+            d.end = ((d.end as isize + shift) as usize).min(range.end.saturating_add_signed(shift));
             moved[k - at - 1] = frame.draws.len();
             frame.draws.push(d);
         }

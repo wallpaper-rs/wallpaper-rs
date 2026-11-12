@@ -60,3 +60,23 @@ fn a_wider_field_of_view_shows_the_model_smaller() {
     let (narrow, broad) = (wide(40.0), wide(90.0));
     assert!(narrow > broad + 8, "{narrow} {broad}");
 }
+
+#[test]
+fn a_3d_group_inside_another_shares_its_depth() {
+    let Some(r) = renderer() else { return };
+    let models = BTreeMap::from([
+        ("red", cube(unlit("paint", [1.0, 0.0, 0.0, 1.0]))),
+        ("blue", cube(unlit("paint", [0.0, 0.0, 1.0, 1.0]))),
+    ]);
+    let card = json!({ "id": "card", "type": "solid", "color": "#00ff00", "size": [256, 256], "depth_test": true, "transform": { "z": -40 } });
+    let inner = json!({ "id": "inner", "type": "group", "space": "3d",
+        "layers": [model("near", "blue", [0.0, 0.0, 1.5]), card] });
+    let mut far = model("far", "red", [1.5, 0.0, -0.5]);
+    far["scale"] = json!(1.5);
+    let group = json!([{ "id": "world", "type": "group", "space": "3d",
+        "layers": [inner, far] }]);
+    let px = render(r, scene(json!({}), group, models), Quality::Q3);
+    assert!(near(rgb(&px, 42, 32), [0, 0, 255], 3), "{:?}", rgb(&px, 42, 32));
+    assert!(near(rgb(&px, 58, 32), [255, 0, 0], 3), "{:?}", rgb(&px, 58, 32));
+    assert!(near(rgb(&px, 2, 32), [0, 255, 0], 3), "{:?}", rgb(&px, 2, 32));
+}
