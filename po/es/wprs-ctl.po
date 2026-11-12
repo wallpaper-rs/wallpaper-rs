@@ -2460,8 +2460,8 @@ msgstr ""
 "y hace falta la entrada de audio de la escena"
 
 #: apps/wprs-ctl/src/inputs.rs
-msgid "The screen, such as a preview: output"
-msgstr "La pantalla, por ejemplo una salida preview:"
+msgid "The screen, such as a preview output named preview:1"
+msgstr "La pantalla, por ejemplo una salida de vista previa llamada preview:1"
 
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid "the pointer (only its latest position over the screen, never kept)"

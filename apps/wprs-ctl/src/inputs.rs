@@ -92,7 +92,7 @@ pub enum Inputs {
         about = "Print the levels of the 64 bands of the sound a scene on a screen follows, as the editor meter reads them; nothing is recorded or kept, and it needs the audio input of the scene"
     )]
     Bands {
-        #[arg(help = "The screen, such as a preview: output")]
+        #[arg(help = "The screen, such as a preview output named preview:1")]
         output: String,
     },
 }
