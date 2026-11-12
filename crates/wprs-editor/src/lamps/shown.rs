@@ -37,11 +37,8 @@ fn layer(dir: &Path, doc: &Value, id: &str, t: f64) -> Option<RgbaImage> {
     match l["type"].as_str()? {
         "image" => picture(dir, doc, l["image"].as_str()?),
         "video" => frame(dir, doc, first_video(l)?, t),
-        "text" => {
-            let words = l["text"].as_str()?;
-            let size = l["size"].as_f64().unwrap_or(48.0) as f32;
-            crate::swarms::glyphs::sized(dir, doc, l["font"].as_str().unwrap_or(""), words, size)
-        }
+        "text" => crate::lettering::picture(dir, doc, l, t)
+            .map(|i| image::DynamicImage::from(i).thumbnail(SIDE, SIDE).into_rgba8()),
         _ => None,
     }
 }

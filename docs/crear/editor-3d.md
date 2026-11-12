@@ -253,7 +253,7 @@ En la terminal: acción `lighting`.
 ### Generar un mapa de normales
 
 1. Con la capa elegida, pulsa **Generar normales…**.
-2. En el diálogo (**Generar normales a partir de la imagen**, **del fotograma** o **de las letras**) ajusta **Fuerza** y **Desenfoque**. Ves el relieve iluminado desde arriba a la izquierda, el propio mapa y una esfera iluminada antes de guardar.
+2. En el diálogo (**Generar normales a partir de la imagen**, **del fotograma** o **de las letras**) ajusta **Fuerza** y **Desenfoque**. Las letras de un texto salen en las mismas líneas que en el lienzo (con su ancho de ajuste y sus saltos de línea), y si el texto tiene fondo, el fondo sale como una placa más baja que las letras. Ves el relieve iluminado desde arriba a la izquierda, el propio mapa y una esfera iluminada antes de guardar.
 3. Pulsa **Generar**. El mapa queda como imagen de la escena.
 
 En la terminal: acción `normals`.

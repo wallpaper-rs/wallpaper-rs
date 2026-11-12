@@ -34,15 +34,8 @@ fn video(dir: &Path, doc: &Value, layer: &Value, time: Option<f64>) -> Result<So
     Ok(Source { id, path: None, picture })
 }
 
-fn text(dir: &Path, doc: &Value, layer: &Value) -> Result<Source> {
-    let words = match &layer["text"] {
-        Value::String(s) => s.clone(),
-        Value::Object(m) => m.get("value").and_then(Value::as_str).unwrap_or("00:00").to_string(),
-        _ => String::new(),
-    };
-    let size = layer["size"].as_f64().unwrap_or(48.0) as f32;
-    let font = layer["font"].as_str().unwrap_or("");
-    let picture = crate::swarms::glyphs::sized(dir, doc, font, &words, size)
+fn text(dir: &Path, doc: &Value, layer: &Value, time: Option<f64>) -> Result<Source> {
+    let picture = crate::lettering::picture(dir, doc, layer, time.unwrap_or(0.0))
         .ok_or_else(|| anyhow!(said("editor.normals_text", "the text layer has no letters to raise", &[])))?;
     let id = layer["id"].as_str().unwrap_or("text").to_string();
     Ok(Source { id, path: None, picture })
@@ -61,7 +54,7 @@ pub(super) fn source(dir: &Path, doc: &Value, m: &NormalsMake) -> Result<Source>
     match from {
         Some(l) if l["image"].is_string() => named(l["image"].as_str().unwrap_or_default()),
         Some(l) if l["type"] == "video" => video(dir, doc, l, m.time),
-        Some(l) if l["type"] == "text" => text(dir, doc, l),
+        Some(l) if l["type"] == "text" => text(dir, doc, l, m.time),
         _ => {
             Err(anyhow!(said("editor.normals_from", "name a picture or an image, video or text layer", &[])))
         }

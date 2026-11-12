@@ -1,5 +1,6 @@
 mod clock;
 mod list;
+mod plate;
 mod set;
 mod width;
 
@@ -13,6 +14,8 @@ use serde_json::{Value, json};
 use std::path::Path;
 use wprs_core::message::said;
 use wprs_type::Measured;
+
+pub(crate) use plate::picture;
 
 pub fn asks(q: &Value) -> bool {
     ["text_box", "font_list", "clock_sample", "clock_help"].iter().any(|k| q.get(k).is_some())
