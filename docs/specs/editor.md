@@ -970,7 +970,10 @@ a box with handles on two corners and a segment with handles on its ends, dashed
 particles inside, a layer as its outline with its field of distances over it (computed from the
 picture of an image layer and from the pixels of a text, a mesh texture or the children of a group,
 which a group shows approximately) and a mask as the canvas rectangle with the field of distances of its
-picture stretched over it (`colliders` of the query: `field` is a list of `[x, y, distance]`, negative
+picture stretched over it (a layer has a handle in the middle of its outline, `grip`, which retargets
+the collider to the topmost layer under the point where it is dropped, and a mask has one on the
+top edge, `grip`, which sets the opacity from which it is solid by its position along the edge; the
+border of the canvas has no field to change and no handle) (`colliders` of the query: `field` is a list of `[x, y, distance]`, negative
 inside, and `approximate` is true when nothing could be read). A force that keeps a distance
 draws a ring of that distance around its target, with a handle on the target and one on the ring;
 one that keeps particles between two points draws the line between them with a handle on each end;

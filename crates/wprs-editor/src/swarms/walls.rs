@@ -28,6 +28,7 @@ fn layer(dir: &Path, doc: &Value, id: &str, t: f64) -> Value {
         [((at[0] + x * c - y * s) * 100.0).round() / 100.0, ((at[1] + x * s + y * c) * 100.0).round() / 100.0]
     };
     out["outline"] = json!([place(0.0, 0.0), place(1.0, 0.0), place(1.0, 1.0), place(0.0, 1.0)]);
+    out["grip"] = json!(place(0.5, 0.5));
     let found = crate::actions::layer(doc, id).map(|(_, l)| l.clone()).unwrap_or_default();
     let asset = crate::keys::value_at(&found["image"], t);
     let path = asset.as_str().and_then(|a| doc["scene"]["assets"][a]["path"].as_str()).map(|p| dir.join(p));

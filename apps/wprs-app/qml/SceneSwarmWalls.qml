@@ -94,12 +94,12 @@ Item {
                     required property int index
                     readonly property var modelData: listed.rows[index]
 
-                    at: modelData.at
+                    at: modelData.drop && grabbed !== null ? reached : modelData.at
                     ratio: walls.r
                     square: true
                     tint: walls.tint(wall.modelData)
                     tip: modelData.tip ?? App.tr("Drag to move the collider")
-                    onMoved: (to, done) => modelData.act(to)
+                    onMoved: (to, done) => modelData.act(to, done)
                 }
             }
         }

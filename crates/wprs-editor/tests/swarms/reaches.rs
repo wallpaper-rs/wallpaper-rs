@@ -41,3 +41,21 @@ fn every_kind_of_layer_and_a_mask_show_what_a_collider_covers() {
     let lost = reach(&mut p, json!({ "mask": { "texture": "gone" } }));
     assert!(lost["field"] == json!([]) && lost["approximate"] == true, "{lost}");
 }
+
+#[test]
+fn a_layer_and_a_mask_collider_give_a_grip_to_drag_on_the_canvas() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    let wall = reach(&mut p, json!({ "layer": { "id": "logo" } }));
+    let (outline, grip) = (wall["outline"].as_array().unwrap(), wall["grip"].as_array().unwrap());
+    let at = |i: usize, c: usize| outline[i][c].as_f64().unwrap();
+    for c in 0..2 {
+        let middle = (at(0, c) + at(2, c)) / 2.0;
+        assert!((grip[c].as_f64().unwrap() - middle).abs() < 0.02, "the grip is the middle of the layer: {wall}");
+    }
+    let mask = reach(&mut p, json!({ "mask": { "texture": "pic", "threshold": 0.25 } }));
+    let (a, b) = (mask["corners"][0].clone(), mask["corners"][1].clone());
+    let expect = a[0].as_f64().unwrap() + (b[0].as_f64().unwrap() - a[0].as_f64().unwrap()) * 0.25;
+    assert!((mask["grip"][0].as_f64().unwrap() - expect).abs() < 0.02, "{mask}");
+    assert_eq!(mask["grip"][1], a[1]);
+}

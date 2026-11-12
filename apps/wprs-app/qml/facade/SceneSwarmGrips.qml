@@ -7,6 +7,28 @@ QtObject {
         return p.map(v => Math.round(v * 10) / 10);
     }
 
+    function inside(poly, p) {
+        let hit = false;
+        for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+            const a = poly[i], b = poly[j];
+            if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0])
+                hit = !hit;
+        }
+        return hit;
+    }
+
+    function under(page, p) {
+        const found = (page.view.gizmos ?? []).filter(g => inside(g.outline, p)).pop();
+        return found ? found.id : null;
+    }
+
+    function along(corners, p) {
+        const a = corners[0], b = corners[1];
+        const d = [b[0] - a[0], b[1] - a[1]];
+        const t = ((p[0] - a[0]) * d[0] + (p[1] - a[1]) * d[1]) / Math.max(1e-6, d[0] * d[0] + d[1] * d[1]);
+        return Math.round(Math.max(0, Math.min(1, t)) * 100) / 100;
+    }
+
     function walls(w, c) {
         const loc = p => round(w.swarm.local(p));
         const dist = (a, b) => Math.round(Math.hypot(a[0] - b[0], a[1] - b[1]) * 10) / 10;
@@ -43,6 +65,23 @@ QtObject {
                             "at": c[key],
                             "act": to => w.patch(c, v => v[key] = loc(to))
                         }));
+        case "layer":
+            return [{
+                    "at": c.grip,
+                    "drop": true,
+                    "tip": App.tr("Drag onto another layer to make particles collide with that layer"),
+                    "act": (to, done) => {
+                        const id = done ? under(w.swarm.page, to) : null;
+                        if (id && id !== c.value.bounds.layer.id)
+                            w.patch(c, v => v.id = id);
+                    }
+                }];
+        case "mask":
+            return [{
+                    "at": c.grip,
+                    "tip": App.tr("Drag along the top edge to set the opacity from which the picture is solid"),
+                    "act": to => w.patch(c, v => v.threshold = along(c.corners, to))
+                }];
         default:
             return [];
         }

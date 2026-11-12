@@ -274,7 +274,7 @@ Una **reasignación** convierte una entrada (por ejemplo, el azar o el sonido) e
 **Pasos**
 
 1. Abre la lista **Añadir un colisionador** (hasta 8) y elige: **Lienzo** (el borde del lienzo), **Plano**, **Círculo**, **Caja**, **Segmento**, **Capa** o **Máscara de imagen**.
-2. Arrastra las asas en el lienzo. Un plano tiene un asa en su punto y otra que gira el lado donde se quedan las partículas. El círculo tiene centro y radio; la caja, dos esquinas; el segmento, sus extremos.
+2. Arrastra las asas en el lienzo. Un plano tiene un asa en su punto y otra que gira el lado donde se quedan las partículas. El círculo tiene centro y radio; la caja, dos esquinas; el segmento, sus extremos. La capa tiene un asa en su centro: suéltala sobre otra capa del lienzo para que las partículas choquen con esa capa. La máscara tiene un asa en el borde superior: arrástrala a lo largo del borde para fijar la opacidad desde la que es sólida. El borde del lienzo no tiene nada que ajustar y no lleva asa.
 3. Elige qué pasa al chocar: **Rebote**, **Deslizar**, **Detener**, **Pegar** o **Eliminar**.
 4. Con **Rebote**, ajusta el rebote y la **Fricción**.
 5. En círculo y caja, marca **Mantener las partículas dentro** para que no salgan (el dibujo pasa a línea discontinua).

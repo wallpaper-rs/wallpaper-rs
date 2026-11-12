@@ -59,7 +59,8 @@ pub(super) fn points(solid: &[[f64; 2]]) -> Vec<Value> {
 pub(super) fn mask(dir: &Path, doc: &Value, v: &Value, f: &Frame, canvas: [f64; 2]) -> Value {
     let threshold = v["threshold"].as_f64().unwrap_or(0.5);
     let corners = [[0.0, 0.0], [canvas[0], 0.0], canvas, [0.0, canvas[1]]].map(|p| f.round(f.apply(p)));
-    let mut out = json!({ "texture": v["texture"], "threshold": threshold, "corners": corners, "field": [], "approximate": true });
+    let grip = f.round([0, 1].map(|i| corners[0][i] + (corners[1][i] - corners[0][i]) * threshold));
+    let mut out = json!({ "texture": v["texture"], "threshold": threshold, "corners": corners, "grip": grip, "field": [], "approximate": true });
     let path = v["texture"].as_str().and_then(|a| doc["scene"]["assets"][a]["path"].as_str());
     let Some(picture) = path.and_then(|p| crate::pictures::open(dir.join(p)).ok()) else { return out };
     let small = picture.thumbnail(62, 62).to_rgba8();

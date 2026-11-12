@@ -16125,3 +16125,11 @@ msgstr "Cualquier horizontal"
 #: apps/wprs-app/qml/facade/WallhavenWords.qml
 msgid "Any portrait"
 msgstr "Cualquier vertical"
+
+#: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
+msgid "Drag onto another layer to make particles collide with that layer"
+msgstr "Arrastra sobre otra capa para que las partículas choquen con esa capa"
+
+#: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
+msgid "Drag along the top edge to set the opacity from which the picture is solid"
+msgstr "Arrastra a lo largo del borde superior para fijar la opacidad desde la que la imagen es sólida"
