@@ -1,8 +1,11 @@
 use crate::draw::TARGET_FORMAT;
 use crate::{Layer, Renderer};
 use std::alloc::{GlobalAlloc, Layout, System};
+use std::backtrace::{Backtrace, BacktraceStatus};
 use std::cell::Cell;
 use wprs_core::Fit;
+
+mod traced;
 
 struct Counted;
 
@@ -11,7 +14,10 @@ thread_local! {
 }
 
 fn count() {
-    let _ = ALLOCATIONS.try_with(|n| n.set(n.get() + 1));
+    if traced::counted() {
+        let _ = ALLOCATIONS.try_with(|n| n.set(n.get() + 1));
+        traced::record();
+    }
 }
 
 unsafe impl GlobalAlloc for Counted {
@@ -44,8 +50,28 @@ pub(crate) fn allocations(work: impl FnOnce()) -> u64 {
     ALLOCATIONS.with(Cell::get) - before
 }
 
+const STEADY: &str = "allocations::steady_frames_allocate_nothing_beyond_the_gpu_calls_they_make";
+
+fn without_lock_traces(test: &str) {
+    let out = std::process::Command::new(std::env::current_exe().unwrap())
+        .args(["--exact", test, "--test-threads", "1", "--nocapture"])
+        .env("RUST_LIB_BACKTRACE", "0")
+        .output()
+        .unwrap();
+    let (stdout, stderr) = (String::from_utf8_lossy(&out.stdout), String::from_utf8_lossy(&out.stderr));
+    assert!(out.status.success() && stdout.contains("1 passed"), "{stdout}{stderr}");
+}
+
+#[inline(never)]
+fn deeper(n: u32, work: &mut dyn FnMut() -> u64) -> u64 {
+    std::hint::black_box(if n == 0 { work() } else { deeper(n - 1, work) })
+}
+
 #[test]
 fn steady_frames_allocate_nothing_beyond_the_gpu_calls_they_make() {
+    if Backtrace::capture().status() == BacktraceStatus::Captured {
+        return without_lock_traces(STEADY);
+    }
     let r = match Renderer::shared() {
         Ok(r) => r,
         Err(e) => return assert!(std::env::var_os("WPRS_REQUIRE_GPU").is_none(), "GPU required: {e}"),
@@ -97,12 +123,19 @@ fn steady_frames_allocate_nothing_beyond_the_gpu_calls_they_make() {
             [validation.pop(), memory.pop()].into_iter().all(|scope| pollster::block_on(scope).is_none())
         );
     };
-    let (mut ours, mut theirs) = (u64::MAX, u64::MAX);
+    let mut draw = || r.draw_layers(&mut target, &layers).unwrap();
+    if let Some(dir) = std::env::var_os("WPRS_ALLOC_TRACE") {
+        traced::trace(std::path::Path::new(&dir), bare, &mut draw, || r.finish().unwrap());
+    }
+    let (mut ours, mut theirs) = ([u64::MAX; 4], u64::MAX);
     for _ in 0..8 {
         theirs = theirs.min(allocations(bare));
-        r.finish().unwrap();
-        ours = ours.min(allocations(|| r.draw_layers(&mut target, &layers).unwrap()));
+        for (fewest, depth) in ours.iter_mut().zip([0, 4, 8, 16]) {
+            r.finish().unwrap();
+            *fewest = (*fewest).min(deeper(depth, &mut || allocations(&mut draw)));
+        }
         r.finish().unwrap();
     }
+    let ours = ours.into_iter().max().unwrap();
     assert!(ours <= theirs, "a steady frame made {ours} allocations, its GPU calls alone make {theirs}");
 }
