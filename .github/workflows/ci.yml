@@ -275,6 +275,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
 
+      - name: User namespaces for the sandbox stand-in
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: End-to-end test (D-Bus + PipeWire + daemon)
         run: |
           cargo build --locked -p wprsd -p wprs-ctl -p wprs-web
