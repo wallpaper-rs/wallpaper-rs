@@ -76,8 +76,22 @@ QtObject {
         shown.destroy();
     }
 
+    function properties() {
+        const listed = Qt.createComponent("SceneProperties.qml").createObject(page, {
+            "page": page
+        });
+        listed.add("folder");
+        expect(page.manifest.properties?.folder_1?.type === "folder", "a folder property was not added to the page");
+        expect(listed.properties.some(p => p.id === "folder_1"), "the property is not listed");
+        page.run("remove", {
+            "pointer": "/manifest/properties/folder_1"
+        });
+        listed.destroy();
+    }
+
     function exercise() {
         web();
+        properties();
         preview();
         playback();
         inputs();

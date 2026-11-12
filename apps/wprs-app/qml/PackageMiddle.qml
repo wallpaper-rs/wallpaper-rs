@@ -22,6 +22,10 @@ ColumnLayout {
         }
 
         QQC2.TabButton {
+            text: App.tr("Properties")
+        }
+
+        QQC2.TabButton {
             text: App.tr("Preview")
         }
     }
@@ -39,6 +43,10 @@ ColumnLayout {
                 width: parent.width
                 page: middle.page
             }
+        }
+
+        SceneProperties {
+            page: middle.page
         }
 
         PagePreview {

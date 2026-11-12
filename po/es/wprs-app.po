@@ -2781,6 +2781,11 @@ msgstr "Un archivo JSON de una pista inventada"
 
 #: apps/wprs-app/qml/PackageMiddle.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
+msgid "Properties"
+msgstr "Propiedades"
+
+#: apps/wprs-app/qml/PackageMiddle.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -9748,10 +9753,6 @@ msgstr "Script que se carga primero"
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Previews"
 msgstr "Vistas previas"
-
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Properties"
-msgstr "Propiedades"
 
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 msgid "Provider"

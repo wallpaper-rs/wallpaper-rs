@@ -844,6 +844,13 @@ and the errors it raises appear in the console under the problems. `wprs-ctl sce
 does the same on the desktop: for a web page it sends the manifest and the staged build, with
 `--quality`, `--restart` (reload) and `--console`.
 
+The *Properties* tab of a web page is the list of user properties of the scene editor, the same
+widget and the same actions (`add_property`, `set`, `remove`, the property inspector on the right):
+sliders, switches, colors, choices, texts, buttons, groups and, for a page, the `file` and `folder`
+properties whose choice the page reads through `window.wprs.files` and `window.wprs.random`; the
+user picks a folder per screen in the settings of the page. `wprs-ctl scene add-property DIR KIND` and the other property
+commands do it from a terminal, and so does `wprs-ctl scene act`.
+
 *Network* lists the https origins the page may reach, one row each with a remove button, and a field
 with *Add origin* (at most 8). It sends the `manifest` action `network` (`origins`, with `add` or
 `remove` to change the list instead of replacing it): origins are written in lower case without a

@@ -100,3 +100,24 @@ fn the_preview_of_a_page_carries_its_manifest_quality_rate_and_reload() {
     let plain = wprs_editor::pages::preview_document(&project.doc, &json!({}));
     assert!(plain.get("preview").is_none());
 }
+
+#[test]
+fn a_page_takes_properties_and_a_folder_property_like_a_scene() {
+    let root = tempfile::tempdir().unwrap();
+    let mut project = page(root.path());
+    act(&mut project, json!({"add_property": {"kind": "slider", "id": "speed"}})).unwrap();
+    act(&mut project, json!({"add_property": {"kind": "folder", "id": "photos"}})).unwrap();
+    let properties = &project.doc["manifest"]["properties"];
+    assert_eq!(properties["speed"]["type"], "slider");
+    assert_eq!(properties["photos"]["type"], "folder");
+    let rows = wprs_editor::listing::rows(&project.doc);
+    let ids: Vec<_> = rows.iter().map(|r| r["id"].as_str().unwrap().to_owned()).collect();
+    assert!(ids.contains(&"speed".to_owned()) && ids.contains(&"photos".to_owned()), "{ids:?}");
+    act(&mut project, json!({"set": {"pointer": "/manifest/properties/photos/mode", "value": "all"}}))
+        .unwrap();
+    assert_eq!(project.doc["manifest"]["properties"]["photos"]["mode"], "all");
+    let problems = wprs_editor::package::problems(&project.dir, &project.doc);
+    assert!(problems.iter().all(|p| p.warning), "{problems:?}");
+    act(&mut project, json!({"remove": {"pointer": "/manifest/properties/photos"}})).unwrap();
+    assert!(project.doc["manifest"]["properties"].get("photos").is_none());
+}
