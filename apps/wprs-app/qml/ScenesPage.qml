@@ -10,6 +10,10 @@ Kirigami.ScrollablePage {
 
     property var scenes: []
     property var projects: JSON.parse(helper.projects() || "[]")
+    readonly property var hints: ({
+            "image": App.tr("One still picture as the wallpaper: you choose it after creating the package. To animate or add effects, start from an empty scene and add the picture as a layer."),
+            "video": App.tr("One looping video as the wallpaper: you choose it after creating the package.")
+        })
     readonly property var starters: [["empty", "document-new"], ["particles", "weather-snow"], ["parallax", "view-list-details"], ["clock", "clock"], ["web", "text-html"], ["preset", "color-management"], ["image", "image-x-generic"], ["video", "video-x-generic"], ["assets", "package-x-generic"]]
 
     function exercise() {
@@ -80,6 +84,8 @@ Kirigami.ScrollablePage {
                     display: QQC2.AbstractButton.TextUnderIcon
                     implicitWidth: Kirigami.Units.gridUnit * 9
                     implicitHeight: Kirigami.Units.gridUnit * 5
+                    QQC2.ToolTip.visible: hovered && (page.hints[modelData[0]] ?? "") !== ""
+                    QQC2.ToolTip.text: page.hints[modelData[0]] ?? ""
                     onClicked: App.compose(folder.text, modelData[0], name.text)
                 }
             }

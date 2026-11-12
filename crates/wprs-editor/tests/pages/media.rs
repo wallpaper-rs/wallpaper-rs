@@ -147,3 +147,19 @@ fn the_preview_of_a_picture_or_video_package_is_a_scene_that_shows_the_file_as_t
     let manifest: wprs_format::Manifest = serde_json::from_value(m.clone()).unwrap();
     manifest.check_properties().unwrap();
 }
+
+#[test]
+fn adding_a_picture_to_an_empty_picture_package_makes_it_the_picture_to_show() {
+    let root = tempfile::tempdir().unwrap();
+    let mut still = package(root.path(), "image");
+    assert!(!errors(&still).is_empty());
+    let picture = root.path().join("snow.png");
+    image::RgbaImage::new(8, 8).save(&picture).unwrap();
+    manifest(&mut still, json!({"add_file": {"file": picture}})).unwrap();
+    assert_eq!(still.doc["manifest"]["entry"], "snow.png");
+    assert_eq!(errors(&still), Vec::<String>::new());
+    let other = root.path().join("more.png");
+    image::RgbaImage::new(8, 8).save(&other).unwrap();
+    manifest(&mut still, json!({"add_file": {"file": other}})).unwrap();
+    assert_eq!(still.doc["manifest"]["entry"], "snow.png");
+}

@@ -65,6 +65,14 @@ ColumnLayout {
         text: file.video ? App.tr("Choose a video (webm, mp4 or mkv): it is copied into the package.") : App.tr("Choose a picture (png, jpeg, webp, gif or ktx2): it is copied into the package.")
     }
 
+    QQC2.Label {
+        Layout.fillWidth: true
+        wrapMode: Text.Wrap
+        visible: !file.video
+        color: Kirigami.Theme.disabledTextColor
+        text: App.tr("This package shows one still picture. To animate it or add effects, make a scene and add the picture as a layer.")
+    }
+
     FileDialog {
         id: chooser
 

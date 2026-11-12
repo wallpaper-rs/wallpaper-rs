@@ -123,6 +123,14 @@ pub(super) fn add_file(dir: &Path, doc: &Value, file: &Path, to: Option<&str>) -
             &[]
         )
     );
+    let entry = doc["manifest"]["entry"].as_str().unwrap_or_default();
+    let fills = crate::reels::media(doc)
+        && to.is_none()
+        && !dir.join(entry).is_file()
+        && crate::layers::asset_kind(&file.to_string_lossy()) == crate::pages::kind(doc);
+    if fills {
+        return media(dir, doc, file);
+    }
     crate::pages::copy_in(dir, file, to)?;
     Ok(Vec::new())
 }
