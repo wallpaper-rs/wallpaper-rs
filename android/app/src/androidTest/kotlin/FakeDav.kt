@@ -31,7 +31,7 @@ class FakeDav(private val pictures: Int = 3) : AutoCloseable {
         val (method, path) = head.lines().first().split(' ').let { it[0] to it[1] }
         val (status, body) = when {
             method == "PROPFIND" -> "207 Multi-Status" to listing().toByteArray().also { listings.incrementAndGet() }
-            method == "GET" -> "200 OK" to picture(path.substringAfterLast('n').substringBefore('.').toIntOrNull() ?: 0).also { downloads.incrementAndGet() }
+            method == "GET" -> "200 OK" to picture(path.substringAfterLast("/n").substringBefore('.').toIntOrNull() ?: 0).also { downloads.incrementAndGet() }
             else -> "404 Not Found" to ByteArray(0)
         }
         client.getOutputStream().apply {

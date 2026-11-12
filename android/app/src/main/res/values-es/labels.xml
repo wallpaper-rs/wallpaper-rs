@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rate_stars">%1$d estrellas</string>
+    <string name="tag_remove">Quitar la etiqueta %1$s</string>
+    <string name="tag_add">Añadir etiquetas</string>
+    <string name="tag_name">Etiquetas, separadas por comas</string>
+    <string name="rename">Cambiar el nombre</string>
+    <string name="title_label">Título</string>
+    <string name="save">Guardar</string>
+</resources>

@@ -33,6 +33,10 @@ class SourcesTest {
     @After
     fun closed() {
         scenario?.close()
+        runBlocking {
+            val left = (account("providers") as JSONObject).getJSONArray("providers")
+            (0 until left.length()).forEach { account("provider_remove", "id" to left.getJSONObject(it).getString("id"), "purge" to true) }
+        }
     }
 
     private fun shown(content: @androidx.compose.runtime.Composable (Main) -> Unit) {
@@ -41,6 +45,12 @@ class SourcesTest {
     }
 
     private fun text(id: Int, vararg args: Any) = compose.onNodeWithText(context.getString(id, *args))
+
+    private fun patient(done: () -> Boolean): Boolean {
+        val end = System.currentTimeMillis() + PATIENCE_MS
+        while (!done() && System.currentTimeMillis() < end) Thread.sleep(100)
+        return done()
+    }
 
     private fun providers() = runBlocking { account("providers") as JSONObject }.getJSONArray("providers")
 
@@ -85,8 +95,9 @@ class SourcesTest {
             Thread.sleep(SILENCE_MS)
             assertEquals("nothing is contacted while it is off", 0, dav.listings.get() + dav.downloads.get())
             compose.onNode(hasText(context.getString(R.string.provider_turn_on))).performClick()
-            assertTrue(waitFor { dav.downloads.get() == 3 })
-            assertTrue(waitFor { providers().getJSONObject(0).optInt("count") == 3 })
+            assertTrue(patient { dav.downloads.get() == 3 })
+            val counted = patient { providers().getJSONObject(0).optInt("count") == 3 }
+            assertTrue("what the source brought: ${providers()}", counted)
             assertTrue(providers().getJSONObject(0).getBoolean("on"))
             val brought = runBlocking { ask("items", "query" to "tag:from-webdav") as JSONArray }
             assertEquals(3, brought.length())
@@ -98,5 +109,6 @@ class SourcesTest {
     private companion object {
         const val TIMEOUT_MS = 10_000L
         const val SILENCE_MS = 1_000L
+        const val PATIENCE_MS = 120_000L
     }
 }

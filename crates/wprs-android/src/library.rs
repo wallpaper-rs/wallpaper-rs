@@ -7,6 +7,7 @@ use serde_json::{Value, json};
 use std::sync::{Mutex, PoisonError};
 use wprs_library::{Library, PlaylistInfo, Rules};
 
+mod labels;
 mod lists;
 
 use lists::listed;
@@ -75,6 +76,7 @@ pub(crate) fn request(text: &str, on_battery: bool) -> String {
         .or_else(|| tried(text, crate::blanked::request))
         .or_else(|| tried(text, crate::converted::request))
         .or_else(|| tried(text, crate::kin::request))
+        .or_else(|| tried(text, labels::request))
         .unwrap_or_else(|| {
             serde_json::from_str(text)
                 .map_err(Error::from)

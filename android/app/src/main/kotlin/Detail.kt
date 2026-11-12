@@ -74,6 +74,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     val about = @Composable { modifier: Modifier ->
         Column(modifier.verticalScroll(rememberScrollState())) {
             item?.let { Text(facts(it), Modifier.padding(16.dp, 8.dp), style = MaterialTheme.typography.bodyMedium) }
+            item?.let { Labels(main, it) }
             item?.about?.takeIf { it.isNotEmpty() }?.let { Text(it, Modifier.padding(16.dp, 0.dp), style = MaterialTheme.typography.bodySmall, maxLines = 4) }
             item?.lacks?.takeIf { it.isNotEmpty() }?.let { lacks ->
                 val notes = lacks.mapNotNull { lack ->

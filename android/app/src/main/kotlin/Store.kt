@@ -45,6 +45,8 @@ class Item(json: JSONObject) {
     val height = json.optInt("height")
     val millis = json.optInt("duration_ms")
     val favorite = json.optBoolean("favorite")
+    val rating = json.optInt("rating")
+    val tags: List<String> = json.optJSONArray("tags").strings()
     private val details = json.optJSONObject("about")
     val about: String = details?.optString("description").orEmpty()
     val animated: String? = details?.takeUnless { it.isNull("animated") }?.optString("animated")?.takeIf { it.isNotEmpty() }

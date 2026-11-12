@@ -3,6 +3,7 @@ use serde_json::{Value, json};
 
 mod automatic;
 mod away;
+mod labelled;
 mod provided;
 mod repository;
 
@@ -59,4 +60,5 @@ pub(super) fn nothing_to_update_without_repositories() {
     automatic::updates_follow_the_setting();
     away::notes_follow_the_records_that_have_no_item_here();
     provided::picture_sources_download_only_when_turned_on();
+    labelled::ratings_tags_and_titles_are_set_from_the_phone();
 }
