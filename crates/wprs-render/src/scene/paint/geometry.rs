@@ -93,7 +93,7 @@ impl<'a> Painter<'a, '_, '_> {
         let rect = match &d.content {
             Content::Group { .. } => {
                 let mut j = i + 1;
-                let mut found: Option<Rect> = None;
+                let mut found = self.air_box(i);
                 while j < d.end {
                     if let Some(r) = self.extent(j).filter(|_| !self.frame.draws[j].hidden) {
                         found = Some(found.map_or(r, |f| f.union(r)));

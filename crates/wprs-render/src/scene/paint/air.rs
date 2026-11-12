@@ -40,6 +40,13 @@ impl Painter<'_, '_, '_> {
         self.airs() && (0..glow.count()).any(|k| glow.now.bulbs[k].air[0] > 0.0 && range.contains(&within(k)))
     }
 
+    pub(crate) fn air_box(&self, group: usize) -> Option<Rect> {
+        let glow = &self.pool.glow;
+        let inside = |k: &usize| self.frame.lamps.get(*k).is_some_and(|l| l.within == group);
+        let airy = (0..glow.count()).filter(|&k| glow.now.bulbs[k].air[0] > 0.0).filter(inside);
+        airy.map(|k| glow.marks[k].2).reduce(Rect::union).filter(|_| self.airs())
+    }
+
     pub(crate) fn air_meets(&self, range: Range<usize>, clip: Rect) -> bool {
         let glow = &self.pool.glow;
         let within = |k: usize| self.frame.lamps.get(k).map_or(usize::MAX, |l| l.within);
