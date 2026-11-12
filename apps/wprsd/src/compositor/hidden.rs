@@ -7,10 +7,23 @@ const SIDE: u32 = 320;
 const LIGHTS_FPS: u32 = 30;
 
 impl Output {
-    pub(super) fn would_light(&self, name: &str) -> bool {
+    fn colors(&self) -> bool {
         let scene = self.shown.scene.as_ref().is_some_and(|s| s.sends_rgb());
-        let page = self.shown.content.page().is_some_and(|p| p.pack.uses[3]);
-        !self.active && self.covered && self.awake && (scene || page) && crate::inputs::lights(name)
+        scene || self.shown.content.page().is_some_and(|p| p.pack.uses[3])
+    }
+
+    pub(super) fn would_light(&self, name: &str) -> bool {
+        !self.active && self.covered && self.awake && self.colors() && crate::inputs::lights(name)
+    }
+
+    pub(super) fn waits(&self, name: &str) -> Option<&'static str> {
+        let hidden = !self.active && self.covered;
+        match (self.colors(), self.awake, hidden) {
+            (false, _, true) => Some("colorless"),
+            (true, false, _) => Some("asleep"),
+            (true, true, true) if !crate::inputs::lights(name) => Some("ungranted"),
+            _ => None,
+        }
     }
 
     pub(super) fn lights_only(&self, name: &str) -> bool {
@@ -35,7 +48,10 @@ impl Output {
 
 impl State {
     pub(super) fn want_lights(&self) {
-        self.outputs.iter().for_each(|(name, o)| crate::rgb::want(name, o.would_light(name)));
+        for (name, o) in &self.outputs {
+            crate::rgb::want(name, o.would_light(name));
+            crate::rgb::note(name, o.waits(name));
+        }
     }
 }
 
@@ -74,8 +90,11 @@ mod tests {
         let mut output = Output::new((16, 9), shown, Sink::Stream(None), 60);
         (output.active, output.covered) = (false, true);
         assert!(!output.lights_only("TEST"), "an output without lights followed them");
+        assert_eq!(output.waits("TEST"), Some("colorless"), "a covered image did not say it sends no colors");
         output.awake = false;
         assert!(!output.would_light("TEST"), "a paused, locked or battery output asked for the lights");
+        (output.active, output.covered) = (true, false);
+        assert_eq!(output.waits("TEST"), None, "a shown output without colors waited for the lights");
         let now = Instant::now();
         assert!(!output.lit_only(now), "a frame for the lights counted as drawn");
         assert!(

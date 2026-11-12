@@ -11,6 +11,7 @@ impl State {
                 crate::rgb::cover(&output, false);
                 crate::rgb::rest(&output, false);
                 crate::rgb::want(&output, false);
+                crate::rgb::note(&output, None);
                 drop((self.outputs.remove(&output), self.windows.remove(&output)));
                 self.pictures.prune(&self.outputs);
                 self.follow(&output);

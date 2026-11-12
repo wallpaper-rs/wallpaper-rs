@@ -1,6 +1,6 @@
+use super::super::covered::{cover, rest, want};
 use super::tests::{SERIAL, follower, released, server};
 use super::*;
-use super::super::covered::{cover, rest, want};
 
 fn green() -> Strip {
     Strip::new(1, 1, vec![0, 255, 0]).unwrap()
@@ -51,7 +51,10 @@ fn lights_opened_for_a_covered_screen_go_once_the_shown_one_rests_or_stops_sendi
         }
         rest("TEST-OPENED-SHOWN", false);
         hidden("TEST-OPENED-HIDDEN", false);
-        assert!(released(&s, &heard), "lights nothing shows any more kept the devices (forgotten: {forgotten})");
+        assert!(
+            released(&s, &heard),
+            "lights nothing shows any more kept the devices (forgotten: {forgotten})"
+        );
     }
 }
 

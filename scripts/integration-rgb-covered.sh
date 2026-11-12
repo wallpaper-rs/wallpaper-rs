@@ -49,6 +49,12 @@ sent=$(($(painted) - before))
 if [ "$sent" -lt 20 ] || [ "$sent" -gt 140 ]; then fail "following lights got $sent colors in 2 s while covered"; fi
 [ "$(drawn)" = "$frames" ] || fail "the covered screen was drawn while its lights followed the scene"
 held follow False || fail "following lights said they paused"
+told() { ctl rgb status | grep "^TEST-RGB: the lights wait because $1" >/dev/null; }
+ctl pause
+wait_for 10 told "the wallpaper is paused" || fail "wprs-ctl rgb status did not say why the lights wait: $(ctl rgb status)"
+[ "$(ctl rgb status --json | js "r['waiting']")" = "{'TEST-RGB': 'paused'}" ] || fail "waiting: $(ctl rgb status --json)"
+ctl resume
+wait_for 10 sh -c "! '$BIN/wprs-ctl' rgb status | grep -q 'the lights wait'" || fail "the reason outlived the pause: $(ctl rgb status)"
 colors() { ctl rgb strip -o TEST-RGB --json | js "r['colors'][0]"; }
 still() { [ "$(for _ in 1 2 3 4 5; do colors; sleep 0.2; done | sort -u | wc -l)" = 1 ]; }
 ctl config rgb.server "127.0.0.1:1" >/dev/null

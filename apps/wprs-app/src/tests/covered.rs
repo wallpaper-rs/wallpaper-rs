@@ -24,6 +24,18 @@ fn the_rgb_choice_while_covered_applies_only_while_the_covered_wallpaper_pauses(
 }
 
 #[test]
+fn the_rgb_settings_say_why_covered_lights_wait() {
+    let (_, text) = qml_files().into_iter().find(|(n, _)| n == "SettingsRgb.qml").unwrap();
+    assert!(text.contains("model: Object.keys(lights.status.waiting ?? {})"), "the reasons are not listed");
+    for why in ["locked", "battery", "colorless", "ungranted"] {
+        assert!(
+            text.contains(&format!(r#"why === "{why}" ? App.tr("%1: the lights wait"#)),
+            "{why} is not told"
+        );
+    }
+}
+
+#[test]
 fn the_lights_board_places_devices_and_zones_by_their_own_keys() {
     let files = qml_files();
     let text = |name: &str| files.iter().find(|(n, _)| n == name).map(|(_, t)| t.clone()).unwrap();

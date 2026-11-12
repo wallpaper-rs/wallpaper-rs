@@ -13,8 +13,16 @@ impl Rgb {
     #[zbus(out_args("json"))]
     async fn get_status(&self) -> Result<String> {
         let d = self.0.upgrade().ok_or_else(|| failed("the daemon is stopping"))?;
-        let rgb = d.state().config.rgb.clone();
-        Ok(crate::rgb::status(&rgb).to_string())
+        let st = d.state();
+        let pause = &st.config.pause;
+        let asleep = match () {
+            _ if st.locked && pause.when_locked && !st.user_paused => "locked",
+            _ if st.on_battery && pause.on_battery && !st.user_paused => "battery",
+            _ => "paused",
+        };
+        let rgb = st.config.rgb.clone();
+        drop(st);
+        Ok(crate::rgb::status(&rgb, asleep).to_string())
     }
 
     async fn connect(&self) -> Result<()> {

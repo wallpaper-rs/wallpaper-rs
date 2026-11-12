@@ -11,7 +11,7 @@ use wprs_rgb::{Device, Strip};
 mod covered;
 mod worker;
 
-pub(crate) use covered::{cover, follows, paused, rest, want};
+pub(crate) use covered::{cover, follows, note, paused, rest, want};
 
 pub(crate) const EVERY: Duration = Duration::from_millis(33);
 const KEPT: usize = 16;
@@ -145,11 +145,13 @@ pub(crate) fn test(device: Option<u32>) -> Result<(), String> {
     asked(|tx| Ask::Test(device, tx))
 }
 
-pub(crate) fn status(rgb: &Rgb) -> Value {
+pub(crate) fn status(rgb: &Rgb, asleep: &'static str) -> Value {
+    let follows = rgb.enabled && rgb.when_covered == wprs_core::rgb::Covered::Follow;
+    let waiting = if follows { covered::waiting(asleep) } else { Default::default() };
     let Some(l) = LIGHTS.get() else {
         return json!({ "enabled": rgb.enabled, "server": rgb.server, "local": rgb.local(), "connected": false,
             "error": null, "devices": [], "source": null, "frames": 0, "testing": false, "strips": [],
-            "when_covered": rgb.when_covered, "held": false, "places": rgb.places });
+            "when_covered": rgb.when_covered, "held": false, "places": rgb.places, "waiting": waiting });
     };
     let s = lock(&l.status);
     let devices: Vec<Value> = s
@@ -173,5 +175,5 @@ pub(crate) fn status(rgb: &Rgb) -> Value {
     json!({ "enabled": s.rgb.enabled, "server": s.rgb.server, "local": s.rgb.local(), "connected": s.connected,
         "error": s.error, "devices": devices, "source": s.source, "frames": s.frames, "testing": s.testing,
         "strips": lock(&l.strips).keys().collect::<Vec<_>>(), "when_covered": s.rgb.when_covered, "held": s.held,
-        "places": s.rgb.places })
+        "places": s.rgb.places, "waiting": waiting })
 }

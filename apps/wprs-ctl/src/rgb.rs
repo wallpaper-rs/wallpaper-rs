@@ -67,6 +67,16 @@ pub enum Rgb {
     },
 }
 
+fn waiting(why: &str) -> &'static str {
+    match why {
+        "locked" => "the session is locked and the wallpaper pauses while locked",
+        "battery" => "the computer is on battery and the wallpaper pauses on battery",
+        "colorless" => "the covered output shows something that sends no colors",
+        "ungranted" => "the package shown there does not hold the rgb grant",
+        _ => "the wallpaper is paused",
+    }
+}
+
 fn status(s: &Value) -> String {
     let on = if s["enabled"] == true { "on" } else { "off" };
     let place = if s["local"] == true { "this computer" } else { "another computer on the network" };
@@ -78,6 +88,9 @@ fn status(s: &Value) -> String {
         (false, None) => "not connected".into(),
     });
     lines.push(covered(s));
+    for (output, why) in s["waiting"].as_object().into_iter().flatten() {
+        lines.push(format!("{output}: the lights wait because {}", waiting(why.as_str().unwrap_or(""))));
+    }
     if let Some(source) = s["source"].as_str() {
         lines.push(format!("colors from {source}, {} frames sent", s["frames"]));
     }

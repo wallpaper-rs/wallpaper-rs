@@ -115,6 +115,20 @@ ColumnLayout {
     }
 
     Repeater {
+        model: Object.keys(lights.status.waiting ?? {})
+
+        delegate: QQC2.Label {
+            required property string modelData
+            readonly property string why: String(lights.status.waiting[modelData])
+
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 30
+            wrapMode: Text.Wrap
+            color: Kirigami.Theme.disabledTextColor
+            text: why === "locked" ? App.tr("%1: the lights wait while the session is locked, because the wallpaper pauses then.", modelData) : why === "battery" ? App.tr("%1: the lights wait while the computer is on battery, because the wallpaper pauses then.", modelData) : why === "colorless" ? App.tr("%1: the lights wait, the covered screen shows something that sends no colors.", modelData) : why === "ungranted" ? App.tr("%1: the lights wait, the wallpaper there does not have permission to use the lights.", modelData) : App.tr("%1: the lights wait while the wallpaper is paused.", modelData)
+        }
+    }
+
+    Repeater {
         model: lights.status.devices ?? []
 
         delegate: RowLayout {

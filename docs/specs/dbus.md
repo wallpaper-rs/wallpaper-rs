@@ -1701,7 +1701,7 @@ Previews (`preview:*` outputs) keep their strip for the editor but never send it
 ### `GetStatus() → (s json)`
 
 `{enabled, server, local, connected, error, devices, source, frames, testing, strips, when_covered,
-held, places}`: `local` is
+held, places, waiting}`: `local` is
 `true` for addresses on this computer, `error` the last failure (`null` when fine), `devices` lists
 `{index, name, key, kind, leds, zones: [{name, leds, matrix: [w, h] | null}], own_mode, taken}` as the
 server names them, with `key` the name that `rgb.place.*` uses: the device name, or, when several
@@ -1711,7 +1711,12 @@ devices share a name, that name followed by its serial in parentheses (its order
 `source` the output whose colors were sent last, `frames` how many were sent and `strips` the
 outputs with a strip kept; `when_covered` is `rgb.when_covered` and `held` is `true` while the
 lights pause because the output they follow is covered and paused; `places` maps each placed device
-or `device#zone` to its `rgb.place.*` value.
+or `device#zone` to its `rgb.place.*` value; `waiting` (empty unless RGB lighting is on and
+`rgb.when_covered` is `follow`) maps each output whose lights wait to why: `paused` (the user paused
+the wallpaper), `locked` or `battery` (the wallpaper pauses while the session is locked or on battery),
+for an output whose package sends colors, `ungranted` for a covered one whose package lacks the `rgb`
+grant, and `colorless` for a covered and paused output that shows something without colors (an image,
+a video or a package without them).
 
 ### `Connect()`
 

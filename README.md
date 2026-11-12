@@ -1840,7 +1840,10 @@ pide las luces y ninguna pantalla a la vista y en marcha manda colores, al bloqu
 batería, cambiar a un fondo sin colores o quitar la pantalla, y la mantiene mientras una pantalla a la
 vista siga mandando colores aunque la última en pintar haya sido la tapada). Si el fondo tapado no se pausa, sigue dibujándose y las luces lo
 siguen como siempre, elijas lo que elijas. `wprs-ctl rgb covered` y `wprs-ctl rgb status` muestran
-la elección y si las luces están en pausa ahora. Cada dispositivo pasa a su modo directo solo cuando
+la elección y si las luces están en pausa ahora; con *Seguir el fondo*, `wprs-ctl rgb status` y la
+sección RGB de la app dicen además, pantalla por pantalla, por qué las luces esperan: el fondo está
+en pausa, la sesión bloqueada o el equipo con batería (y el fondo se pausa entonces), el paquete
+no tiene el permiso `rgb` o la pantalla tapada muestra algo sin colores. Cada dispositivo pasa a su modo directo solo cuando
 se le pintan colores y recupera su propio modo (y sus colores, si ese modo fija cada luz) en cuanto
 nada manda colores: al detenerse o cambiar el paquete, al quitar la pantalla, al apagar la
 iluminación, al cambiar de servidor, al terminar una prueba sin nada que pintar y al detenerse el
