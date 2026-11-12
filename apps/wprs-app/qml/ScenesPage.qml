@@ -25,8 +25,12 @@ Kirigami.ScrollablePage {
         App.compose(helper.folderFor("check"), "empty", "");
     }
 
+    function edit(path) {
+        copying.start(path);
+    }
+
     function copy(uid) {
-        App.query("GetItem", [uid], "Library1", reply => page && copying.start(reply.item.path));
+        App.query("GetItem", [uid], "Library1", reply => page && page.edit(reply.item.path));
     }
 
     title: App.tr("Scenes")
