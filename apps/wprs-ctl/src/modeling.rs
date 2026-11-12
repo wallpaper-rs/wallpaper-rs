@@ -122,7 +122,7 @@ pub enum Modeling {
         #[arg(help = DIR)]
         dir: PathBuf,
         #[command(flatten)]
-        edits: crate::edits3d::Edits3d,
+        edits: Box<crate::edits3d::Edits3d>,
     },
     #[command(about = "Show what the models cost at each quality level and on each device tier")]
     Cost3d {
