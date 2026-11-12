@@ -192,5 +192,6 @@ pub enum Author {
     Triggering(crate::triggering::Triggering),
     #[command(flatten)]
     Acting(crate::acting::Acting),
+    #[command(flatten)]
     Naming(crate::naming::Naming),
 }
