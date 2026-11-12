@@ -139,6 +139,7 @@ impl Daemon {
         let (props, scene) = (Arc::new(props), Arc::new(scene));
         let cap = serde_json::from_value(doc["preview"]["quality"].clone()).ok();
         let (battery, calm) = (doc["preview"]["battery"] == true, doc["preview"]["calm"] == true);
+        let probe = super::probe::probed(&doc);
         Ok(ScenePack {
             path: dir,
             props,
@@ -156,6 +157,7 @@ impl Daemon {
             cap,
             battery,
             calm,
+            probe,
         })
     }
 }

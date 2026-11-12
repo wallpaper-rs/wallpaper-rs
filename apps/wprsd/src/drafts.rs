@@ -9,6 +9,7 @@ mod again;
 pub(crate) mod media;
 mod pack;
 mod page;
+mod probe;
 
 pub(crate) use page::Drawn;
 

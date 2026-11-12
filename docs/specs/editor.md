@@ -859,6 +859,13 @@ takes Q3 to Q2 whatever the automatic choice would be, and at most 60 frames a s
 reduced motion (parallax and camera shake stand still, as the daemon does with the desktop
 setting). `wprs-ctl scene preview DIR [--battery] [--calm]` sets them.
 
+A preview document that carries `scene.ext.editor.probe` (`{pointer: [x, y], tilt: [x, y]}`, the
+pointer as fractions of the canvas from 0 to 1 and the tilt of a phone from −1 to 1, either
+part optional) feeds the scene a pointer that rests there and that tilt, so layers with
+parallax depth sit in the picture where the canvas outlines put them; out-of-range values are
+clamped, and the daemon reads it only for previews. The scene runtime takes the tilt as a
+device tilt, so `canvas.parallax.gyro` follows it.
+
 *Preview level*, a button of the canvas toolbar, opens the panel that sets what the preview
 shows. It has the same quality selector as the cost panels (Q0, Q1, Q2, Q3 and Restart), *On
 battery* and *Reduced motion*, and every change sends the preview again. Under them the panel

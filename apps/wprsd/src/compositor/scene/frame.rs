@@ -5,7 +5,7 @@ use super::{CALM, POLL, SETTLE, SceneState, after, assets};
 use std::collections::HashMap;
 use std::time::{Duration, Instant};
 use wprs_render::{GpuImage, RenderError, Renderer};
-use wprs_scene::Wake;
+use wprs_scene::{PointerState, Wake};
 
 impl SceneState {
     pub(in crate::compositor) fn render(
@@ -21,7 +21,19 @@ impl SceneState {
         self.runtime.set_battery(power.on_battery || self.spec.pack.battery);
         let dt = self.step(active, now);
         let p = self.pointer;
-        let pointer = self.runtime.pointer().follow(p.pos, p.buttons, dt as f32);
+        let pointer = match self.spec.pack.probe {
+            Some((pos, tilt)) => {
+                self.runtime.set_tilt(tilt);
+                PointerState {
+                    pos: Some(pos),
+                    smooth: pos,
+                    inside: true,
+                    presence: 1.0,
+                    ..Default::default()
+                }
+            }
+            None => self.runtime.pointer().follow(p.pos, p.buttons, dt as f32),
+        };
         self.runtime.set_pointer(pointer);
         self.runtime.set_wall(crate::zone::wall());
         let uses = self.uses;

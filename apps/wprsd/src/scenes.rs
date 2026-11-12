@@ -38,6 +38,7 @@ pub struct ScenePack {
     pub cap: Option<wprs_scene::Quality>,
     pub battery: bool,
     pub calm: bool,
+    pub probe: Option<([f32; 2], [f32; 2])>,
 }
 
 pub type Extra = (Vec<(String, Arc<Pixels>)>, Vec<(String, Reel)>);
@@ -72,6 +73,7 @@ impl ScenePack {
             cap: None,
             battery: false,
             calm: false,
+            probe: None,
         }
     }
 }
