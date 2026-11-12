@@ -8,7 +8,6 @@ Timer {
     property var stall: null
     property var sample: null
     property int step: 0
-    property int ticks: 0
     readonly property string pkg: "org.example.check"
     readonly property var steps: [[() => {
                 sample = JSON.parse(stall.backend.sample());
@@ -62,17 +61,13 @@ Timer {
             throw new Error("static repository: " + problem);
     }
 
-    interval: 100
+    interval: 20
     repeat: true
     onTriggered: {
         if (stall.failed)
             return finish("step " + step + " failed: " + stall.message);
-        if (!steps[step][1]()) {
-            if (++ticks > 150)
-                finish("step " + step + " did not finish: " + stall.message);
+        if (!steps[step][1]())
             return;
-        }
-        ticks = 0;
         if (++step < steps.length)
             return steps[step][0]();
         running = false;

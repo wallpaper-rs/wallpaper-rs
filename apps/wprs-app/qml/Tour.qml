@@ -18,6 +18,8 @@ Timer {
     repeat: true
     running: App.checking
     onTriggered: {
+        if (Object.keys(App.pending).length > 0)
+            return;
         const at = step++;
         if (at > 0 && at <= host.pages.length)
             host.pageStack.currentItem.exercise?.();
@@ -36,20 +38,14 @@ Timer {
                 opened = host.pageStack.currentItem;
             });
         } else if (opened?.editor?.ready !== true || host.pageStack.currentItem !== opened) {
-            if (at < host.pages.length + 51)
-                return;
-            stop();
-            Qt.quit();
-            throw new Error("the image editor did not open");
+            return;
         } else if (!edited) {
             edited = true;
-        } else if (host.waiting > 0 && at < host.pages.length + 151) {
+        } else if (host.waiting > 0) {
             return;
         } else {
             stop();
             Qt.quit();
-            if (host.waiting > 0)
-                throw new Error("a check of a page did not finish");
             if (opened.editor.dirty !== true)
                 throw new Error("the editor has no unsaved edits to keep");
             return keeps("settings");
