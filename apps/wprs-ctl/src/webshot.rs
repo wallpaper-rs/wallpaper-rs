@@ -1,5 +1,6 @@
 use crate::capturing::Capture;
 use crate::steps::edit;
+use crate::told::{fill, told, tr};
 use anyhow::{Context, Result, bail};
 use serde_json::json;
 use std::path::{Path, PathBuf};
@@ -16,13 +17,13 @@ async fn frame(client: &Client, output: &str, within: Duration) -> Result<image:
     while Instant::now() < end {
         let path = client.daemon.capture_page(output).await?;
         if !path.is_empty() {
-            let picture = image::open(&path).context("the captured frame cannot be read");
+            let picture = image::open(&path).context(tr(told("the captured frame cannot be read")));
             std::fs::remove_file(&path).ok();
             return Ok(picture?.to_rgba8());
         }
         tokio::time::sleep(POLL).await;
     }
-    bail!("the page drew no frame in {} s; is it loading or hidden?", within.as_secs())
+    bail!("{}", fill(told("the page drew no frame in %1 s; is it loading or hidden?"), &[&within.as_secs()]))
 }
 
 async fn pick(client: &Client, wanted: Option<&str>) -> Result<String> {
@@ -30,7 +31,12 @@ async fn pick(client: &Client, wanted: Option<&str>) -> Result<String> {
         return Ok(name.to_owned());
     }
     let state: wprs_core::model::State = wprs_client::parse(&client.daemon.get_state().await?)?;
-    state.outputs.keys().next().cloned().context("no screen to show the page on; name one with --output")
+    state
+        .outputs
+        .keys()
+        .next()
+        .cloned()
+        .context(tr(told("no screen to show the page on; name one with --output")))
 }
 
 fn web_base(shot: &Capture) -> Option<wprs_format::Package<std::io::BufReader<std::fs::File>>> {
@@ -60,7 +66,7 @@ pub fn run(dir: &Path, animated: bool, shot: &Capture) -> Result<()> {
         }
         _ => (dir.to_path_buf(), wprs_editor::pages::preview_document(&project.doc, &json!({})).to_string()),
     };
-    let path = std::fs::canonicalize(&shown)?.to_str().context("the path is not UTF-8")?.to_owned();
+    let path = std::fs::canonicalize(&shown)?.to_str().context(tr(told("the path is not UTF-8")))?.to_owned();
     let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build()?;
     let made = runtime.block_on(async {
         let client = Client::connect().await?;

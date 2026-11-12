@@ -8584,21 +8584,9 @@ msgid "%1 layer sets removed"
 msgstr "%1 conjuntos de capas eliminados"
 
 #: apps/wprs-ctl/src/stacking.rs
-msgid "%1  %2 layers, fill %3"
-msgstr "%1  %2 capas, relleno %3"
-
-#: apps/wprs-ctl/src/stacking.rs
 msgid "the fill off builds no layers: pictures stay still"
 msgstr ""
 "con el relleno desactivado no se crean capas: las imágenes quedan quietas"
-
-#: apps/wprs-ctl/src/stacking.rs
-msgid ""
-"LaMa or ONNX Runtime is not installed: using the simple fill (see wprs-ctl "
-"models list)"
-msgstr ""
-"LaMa u ONNX Runtime no está instalado: se usa el relleno simple (mira wprs-"
-"ctl models list)"
 
 #: apps/wprs-ctl/src/stacking.rs
 msgid "building the layers: %1 %"
@@ -8621,10 +8609,6 @@ msgstr "la imagen tiene %1 capas, de 0 a %2"
 #: apps/wprs-ctl/src/stacking.rs
 msgid "--at is a fraction from 0 to 1"
 msgstr "--at es una fracción de 0 a 1"
-
-#: apps/wprs-ctl/src/stacking.rs
-msgid "LaMa or ONNX Runtime is not installed: see wprs-ctl models list"
-msgstr "LaMa u ONNX Runtime no está instalado: mira wprs-ctl models list"
 
 #: apps/wprs-ctl/src/stacking.rs
 msgid "the layer set is damaged"
@@ -10000,3 +9984,53 @@ msgstr "se mueve"
 msgid "stays still"
 msgstr "queda quieta"
 
+
+#: apps/wprs-ctl/src/blanks.rs
+msgid ""
+"Plasma now shows the background color; plasma-back gives the screens "
+"back to Plasma's own wallpaper"
+msgstr ""
+"Plasma ahora muestra el color de fondo; plasma-back devuelve las "
+"pantallas al fondo propio de Plasma"
+
+#: apps/wprs-ctl/src/blanks.rs
+msgid "no screen was using the wallpaper-rs wallpaper type"
+msgstr "ninguna pantalla usaba el tipo de fondo de wallpaper-rs"
+
+#: apps/wprs-ctl/src/blanks.rs
+msgid ""
+"1 screen is back on Plasma's own wallpaper; restore or set a wallpaper"
+" to use wallpaper-rs again"
+msgstr ""
+"1 pantalla volvió al fondo propio de Plasma; restaura o elige un fondo"
+" para usar wallpaper-rs otra vez"
+
+#: apps/wprs-ctl/src/blanks.rs
+msgid ""
+"%1 screens are back on Plasma's own wallpaper; restore or set a "
+"wallpaper to use wallpaper-rs again"
+msgstr ""
+"%1 pantallas volvieron al fondo propio de Plasma; restaura o elige un "
+"fondo para usar wallpaper-rs otra vez"
+
+#: apps/wprs-ctl/src/presetting.rs
+msgid "read the values file"
+msgstr "leer el archivo de valores"
+
+#: apps/wprs-ctl/src/presetting.rs
+msgid "the values file is not a JSON object"
+msgstr "el archivo de valores no es un objeto JSON"
+
+#: apps/wprs-ctl/src/webshot.rs
+msgid "the captured frame cannot be read"
+msgstr "no se puede leer el fotograma capturado"
+
+#: apps/wprs-ctl/src/webshot.rs
+msgid "the page drew no frame in %1 s; is it loading or hidden?"
+msgstr ""
+"la página no dibujó ningún fotograma en %1 s; ¿está cargando o está "
+"oculta?"
+
+#: apps/wprs-ctl/src/webshot.rs
+msgid "no screen to show the page on; name one with --output"
+msgstr "no hay pantalla donde mostrar la página; indica una con --output"

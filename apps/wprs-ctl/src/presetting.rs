@@ -1,4 +1,5 @@
 use crate::steps::edit_all;
+use crate::told::{told, tr};
 use anyhow::{Context, Result, bail};
 use clap::Args;
 use serde_json::{Map, Value, json};
@@ -44,8 +45,10 @@ impl Starting {
         let mut actions = Vec::new();
         if let Some(id) = &self.base {
             let values: Map<String, Value> = match &self.values {
-                Some(file) => serde_json::from_slice(&std::fs::read(file).context("read the values file")?)
-                    .context("the values file is not a JSON object")?,
+                Some(file) => {
+                    serde_json::from_slice(&std::fs::read(file).context(tr(told("read the values file")))?)
+                        .context(tr(told("the values file is not a JSON object")))?
+                }
                 None => Map::new(),
             };
             let base = json!({ "id": id, "version": self.range });

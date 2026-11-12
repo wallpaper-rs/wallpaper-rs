@@ -328,15 +328,7 @@ msgstr "LaMa no está cargado"
 msgid "the fill mode is off: there are no layers to build"
 msgstr "el relleno está desactivado: no hay capas que crear"
 
-#: crates/wprs-depth/src/build.rs
-msgid "the set has %1 layers"
-msgstr "el conjunto tiene %1 capas"
-
 #
-
-#: crates/wprs-depth/src/build.rs
-msgid "the layer set does not match the depth map"
-msgstr "el conjunto de capas no coincide con el mapa de profundidad"
 
 #: crates/wprs-depth/src/build.rs
 msgid "the image has no depth map"
