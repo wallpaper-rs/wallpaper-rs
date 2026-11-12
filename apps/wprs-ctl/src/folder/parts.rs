@@ -77,6 +77,9 @@ pub(super) async fn apply(path: &str, output: &str, fit: &str, doc: &Value) -> R
     say(told("Showing it on the screen…"), &[]);
     client.library.apply(&uid, output, fit, "").await?;
     let shown = settle(&client, &uid, output).await?;
+    let state: wprs_core::model::State = serde_json::from_str(&client.daemon.get_state().await?)?;
+    let ours = |name: &String| output.is_empty() || name == output;
+    crate::levels::sandbox_lines(&state.outputs, ours).iter().for_each(|line| eprintln!("{line}"));
     println!("{}", applying::done(doc, &shown).local());
     if let Some(why) = applying::failed(&shown) {
         bail!(why.local());
