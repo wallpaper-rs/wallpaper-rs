@@ -24,7 +24,7 @@ object Ducking {
 }
 
 class Owners(private val graceMs: Long) {
-    private val owners = Owners(GRACE_MS)
+    private val wanting = mutableSetOf<Any>()
     private val leaving = mutableMapOf<Any, Long>()
 
     fun want(who: Any, on: Boolean, now: Long) {
