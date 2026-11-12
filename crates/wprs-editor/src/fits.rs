@@ -20,12 +20,22 @@ pub(crate) fn scene(doc: &Value, action: &Action, ops: &[Op]) -> Result<()> {
         Some(like) => Some(like.clone()),
         None => crate::keys::taken(doc, pointer),
     };
-    bail!(match like {
-        Some(like) => said(
+    match like.filter(|like| differs(like, value)) {
+        Some(like) => bail!(said(
             "editor.value_unfit",
             "%1 cannot take the value %2; give %3",
             &[pointer, value, &crate::blend::shape(&like)]
-        ),
-        None => said("editor.value_unread", "%1 cannot take the value %2", &[pointer, value]),
-    })
+        )),
+        None => Ok(()),
+    }
+}
+
+fn differs(like: &Value, value: &Value) -> bool {
+    match (like, value) {
+        (Value::Number(_), Value::Number(_)) | (Value::Bool(_), Value::Bool(_)) => false,
+        (Value::String(_), Value::String(_)) => false,
+        (Value::Array(a), Value::Array(b)) => a.len() != b.len(),
+        (_, Value::Object(_)) | (Value::Object(_), _) | (Value::Null, _) | (_, Value::Null) => false,
+        _ => true,
+    }
 }

@@ -641,10 +641,6 @@ msgstr "%1: se reproduce sin %2"
 msgid "%1 cannot take the value %2; give %3"
 msgstr "%1 no admite el valor %2; da %3"
 
-#: crates/wprs-editor/src/fits.rs
-msgid "%1 cannot take the value %2"
-msgstr "%1 no admite el valor %2"
-
 #: crates/wprs-editor/src/handles.rs
 msgid ""
 "a Bézier handle reaches from 0 s up to the neighbouring keyframe and by "
