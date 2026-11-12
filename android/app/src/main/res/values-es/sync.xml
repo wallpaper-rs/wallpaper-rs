@@ -52,4 +52,7 @@
     <string name="lan_found">Servidores en esta red</string>
     <string name="cert_trust">Confiar en él</string>
     <string name="recovery_revoked">Se revocó un dispositivo que puede conocer la frase de recuperación: pon una frase de recuperación nueva y distinta.</string>
+    <string name="checking_server">Comprobando el servidor…</string>
+    <string name="server_added">Servidor añadido</string>
+    <string name="server_blank">Escribe primero la dirección de tu servidor</string>
 </resources>

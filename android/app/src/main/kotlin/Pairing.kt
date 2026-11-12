@@ -102,22 +102,32 @@ fun Approve(main: Main, run: Run, close: () -> Unit) {
 }
 
 @Composable
-fun Server(run: Run) = Column(Modifier.padding(16.dp), Arrangement.spacedBy(12.dp)) {
+fun Server(main: Main, run: Run) = Column(Modifier.padding(16.dp), Arrangement.spacedBy(12.dp)) {
     var url by rememberSaveable { mutableStateOf("") }
     var print by rememberSaveable { mutableStateOf<String?>(null) }
+    var problem by rememberSaveable { mutableStateOf<String?>(null) }
+    val checking = stringResource(R.string.checking_server)
+    val added = stringResource(R.string.server_added)
+    val blank = stringResource(R.string.server_blank)
     val add = { pin: String? ->
-        run("") {
+        problem = null
+        if (url.isBlank()) problem = blank else run(checking) {
             try {
                 account("add", "url" to url.trim(), "fingerprint" to pin)
+                main.toast(added)
             } catch (e: Refused) {
-                if (e.id != OWN_CERTIFICATE) throw e
-                print = e.args.firstOrNull()
+                if (e.id == OWN_CERTIFICATE) print = e.args.firstOrNull() else problem = main.told(e).ifBlank { main.getString(R.string.failed_without_reason) }
+            } catch (e: Exception) {
+                problem = main.told(e).ifBlank { main.getString(R.string.failed_without_reason) }
             }
         }
     }
     Text(stringResource(R.string.sync_intro))
-    OutlinedTextField(url, { url = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.server)) }, singleLine = true)
-    Button({ add(null) }, enabled = url.isNotBlank()) { Text(stringResource(R.string.add_server)) }
+    OutlinedTextField(
+        url, { url = it; problem = null }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.server)) }, singleLine = true,
+        isError = problem != null, supportingText = { problem?.let { Text(it) } },
+    )
+    Button({ add(null) }) { Text(stringResource(R.string.add_server)) }
     Nearby { url = it }
     print?.let { found ->
         AlertDialog(

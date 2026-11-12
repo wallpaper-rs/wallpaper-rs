@@ -2,10 +2,10 @@ use crate::Error;
 use crate::said;
 use crate::state::{read, update};
 use serde_json::{Value, json};
-use wprs_sync::{Api, check_url, peek, valid_pin};
+use wprs_sync::{Api, peek, valid_pin};
 
 pub(crate) async fn add(url: &str, fingerprint: Option<&str>) -> Result<Value, Error> {
-    let url = check_url(url)?;
+    let url = crate::address::address(url)?;
     if read(|s| s.device.is_some()) {
         return Err(said(
             "android.phone_linked_server",
@@ -32,6 +32,14 @@ pub(crate) async fn add(url: &str, fingerprint: Option<&str>) -> Result<Value, E
                 "android.server_other_certificate",
                 "the server's certificate is not the one with the fingerprint given",
                 &[],
+            ));
+        }
+        Err(wprs_sync::Error::Network(_)) => {
+            let host = reqwest::Url::parse(&url).ok().and_then(|u| u.host_str().map(str::to_owned));
+            return Err(said(
+                "android.server_unreachable",
+                "cannot reach %1: check the address and the connection",
+                &[&host.unwrap_or(url)],
             ));
         }
         found => found?,

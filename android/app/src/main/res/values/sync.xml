@@ -52,4 +52,7 @@
     <string name="lan_found">Servers on this network</string>
     <string name="cert_trust">Trust it</string>
     <string name="recovery_revoked">A device that may know the recovery passphrase was revoked: set a new, different recovery passphrase.</string>
+    <string name="checking_server">Checking the server…</string>
+    <string name="server_added">Server added</string>
+    <string name="server_blank">Type the address of your server first</string>
 </resources>

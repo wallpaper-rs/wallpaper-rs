@@ -117,4 +117,8 @@
     <string name="error_android_convert_item">%1$s is not a video of the library</string>
     <string name="error_android_convert_failed">The converted video of %1$s cannot be read</string>
     <string name="error_android_layers_off">The fill is off: pictures keep the single image warp</string>
+    <string name="error_android_server_not_address">That is not a server address. Write it like https://my-server.example</string>
+    <string name="error_android_server_needs_https">The server address must start with https:// (http:// only works for this phone itself)</string>
+    <string name="error_android_server_address_parts">The server address can only have a host and a path: no user, password, ? or #</string>
+    <string name="error_android_server_unreachable">Could not reach %1$s. Check the address and that the phone has a connection</string>
 </resources>

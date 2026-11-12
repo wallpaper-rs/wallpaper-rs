@@ -69,7 +69,7 @@ fun Account(main: Main) {
     LazyColumn {
         item { Header(stringResource(R.string.devices)) }
         when {
-            state == "none" -> item { Server(run) }
+            state == "none" -> item { Server(main, run) }
             !status.isNull("link") -> item { Code(main, status.getJSONObject("link")) }
             state == "unlinked" -> item { Link(status, run) }
             else -> {
