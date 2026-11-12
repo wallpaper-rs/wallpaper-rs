@@ -25,10 +25,14 @@ impl Renderer {
         }
         self.scoped(|| {
             let size = wgpu::Extent3d { width, height, depth_or_array_layers: layers.len() as u32 };
+            let made = wgpu::Extent3d {
+                depth_or_array_layers: self.array_layers(size.depth_or_array_layers),
+                ..size
+            };
             let format = TextureFormat::Rgba8UnormSrgb;
             let texture = self.device.create_texture(&wgpu::TextureDescriptor {
                 label: Some("wprs-render layers"),
-                size,
+                size: made,
                 mip_level_count: 1,
                 sample_count: 1,
                 dimension: TextureDimension::D2,

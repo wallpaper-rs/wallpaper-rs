@@ -29,7 +29,7 @@ fn layered(t: &wgpu::Texture, layer: Option<u32>) -> wgpu::TextureView {
 fn depth_texture(r: &Renderer, side: u32, layers: u32, usage: U) -> wgpu::Texture {
     r.device.create_texture(&wgpu::TextureDescriptor {
         label: Some("wprs-render shadow map"),
-        size: wgpu::Extent3d { width: side, height: side, depth_or_array_layers: layers },
+        size: wgpu::Extent3d { width: side, height: side, depth_or_array_layers: r.array_layers(layers) },
         mip_level_count: 1,
         sample_count: 1,
         dimension: wgpu::TextureDimension::D2,
