@@ -34,4 +34,19 @@ for _ in 1 2 3 4; do ctl edit undo "$tools"; done
 [ "$(ctl edit depth layers "$tools" --fill simple --layers 4)" = "$plain" ] || fail "undo did not bring the first layers back"
 [ "$(sets)" = 2 ] || fail "$(sets) layer sets after the strokes, expected 2"
 ctl edit depth layers "$tools" --clear >/dev/null
+ctl config playback.software_parallax true
+ctl edit parallax "$tools" --source auto --steps 8
+read -r _ _ _ gone < <(ctl stream TEST-12 160 90)
+ctl set "$tools" -o TEST-12 --fit fill
+consume "$gone"
+built() { [ "$(sets)" -ge 1 ]; }
+wait_for 60 built || fail "the shown picture got no layers: $(ctl jobs)"
+ctl clear -o TEST-12
+ctl edit depth layers "$tools" --clear >/dev/null
+sleep 3
+[ "$(sets)" = 0 ] || fail "a cleared output built layers"
+[ -z "$(ctl jobs)" ] || fail "a cleared output started a job: $(ctl jobs)"
+leave && ctl release TEST-12
+ctl edit parallax "$tools" --off
+ctl config playback.software_parallax false
 echo "depth tool checks passed"
