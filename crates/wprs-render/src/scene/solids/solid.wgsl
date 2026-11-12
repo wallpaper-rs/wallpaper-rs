@@ -79,11 +79,22 @@ fn hashed(c: vec2<f32>) -> f32 {
     return fract(sin(dot(c, vec2<f32>(127.1, 311.7))) * 43758.5453);
 }
 
-fn map_uv(k: u32, in: Out) -> vec2<f32> {
+fn moved(k: u32, uv0: vec2<f32>, uv1: vec2<f32>) -> vec2<f32> {
     let a = uvs.rows[k * 2u];
     let b = uvs.rows[k * 2u + 1u];
-    let uv = vec3<f32>(select(in.uv, in.uv1, a.w > 0.5), 1.0);
+    let uv = vec3<f32>(select(uv0, uv1, a.w > 0.5), 1.0);
     return vec2<f32>(dot(a.xyz, uv), dot(b.xyz, uv));
+}
+
+fn map_uv(k: u32, in: Out) -> vec2<f32> {
+    return moved(k, in.uv, in.uv1);
+}
+
+@fragment
+fn fs_shadow_cut(c: Cut) {
+    if finish.color.a * textureSample(base_map, base_smp, moved(0u, c.uv, c.uv1)).a < finish.flags.x {
+        discard;
+    }
 }
 
 @fragment

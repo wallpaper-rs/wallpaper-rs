@@ -93,3 +93,24 @@ fn an_explicit_resolution_is_kept_within_the_cap_and_halved_at_the_lowest_qualit
     shot.frame(r, 0.0, Quality::Q0);
     assert_eq!(shot.view.shadow_sides(), vec![(256, 1)]);
 }
+
+#[test]
+fn a_cut_out_material_casts_a_shadow_only_where_it_is_drawn() {
+    let Some(r) = renderer() else { return };
+    r.force_tier(Some(Tier::T3));
+    let shaded = |alpha: f32| {
+        let (layers, mut models) = world(sun(true), false);
+        let cut =
+            ForgeMaterial { alpha: Some("MASK"), ..ForgeMaterial::new("block", [1.0, 1.0, 1.0, alpha]) };
+        models.insert(
+            "block",
+            Forge::default().material(cut).part("block", ForgeShape::Cube, [0.0; 3], 0.6, 0).glb(),
+        );
+        render(r, scene(json!({}), layers, models), Quality::Q3)
+    };
+    let (plain, models) = world(sun(false), false);
+    let lit = render(r, scene(json!({}), plain, models), Quality::Q3);
+    let (kept, gone) = (shaded(0.9), shaded(0.2));
+    assert!(dim(&kept, 32, 35) * 2 < dim(&lit, 32, 35), "{:?} {:?}", rgb(&kept, 32, 35), rgb(&lit, 32, 35));
+    assert!(dim(&gone, 32, 35) + 6 >= dim(&lit, 32, 35), "{:?} {:?}", rgb(&gone, 32, 35), rgb(&lit, 32, 35));
+}

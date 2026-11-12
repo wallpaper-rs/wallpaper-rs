@@ -11,6 +11,7 @@ pub(crate) struct Key {
     pub(crate) hdr: bool,
     pub(crate) skinned: bool,
     pub(crate) shadow: bool,
+    pub(crate) cut: bool,
     pub(crate) package: u64,
 }
 
@@ -22,7 +23,8 @@ impl Key {
             | u16::from(self.test) << 5
             | u16::from(self.hdr) << 6
             | u16::from(self.skinned) << 7
-            | u16::from(self.shadow) << 8;
+            | u16::from(self.shadow) << 8
+            | u16::from(self.shadow && self.cut) << 9;
         (bits, if self.shadow { 0 } else { self.package })
     }
 }
@@ -100,15 +102,22 @@ impl Solids {
             (false, true) => wgpu::CompareFunction::GreaterEqual,
             (false, false) => wgpu::CompareFunction::Always,
         };
-        let vs = match (key.shadow, key.skinned) {
-            (true, false) => "vs_shadow",
-            (true, true) => "vs_shadow_skinned",
-            (false, false) => "vs_solid",
-            (false, true) => "vs_skinned",
+        let vs = match (key.shadow, key.cut, key.skinned) {
+            (true, false, false) => "vs_shadow",
+            (true, false, true) => "vs_shadow_skinned",
+            (true, true, false) => "vs_shadow_cut",
+            (true, true, true) => "vs_shadow_cut_skinned",
+            (false, _, false) => "vs_solid",
+            (false, _, true) => "vs_skinned",
         };
         let vs = format!("{pre}{vs}");
-        let fs = (!key.shadow).then(|| format!("{pre}fs_solid"));
-        let targets = [Some(wgpu::ColorTargetState { blend: blend(key), ..format.into() })];
+        let fs = match (key.shadow, key.cut) {
+            (false, _) => Some(format!("{pre}fs_solid")),
+            (true, true) => Some(format!("{pre}fs_shadow_cut")),
+            (true, false) => None,
+        };
+        let colored = [Some(wgpu::ColorTargetState { blend: blend(key), ..format.into() })];
+        let targets: &[Option<wgpu::ColorTargetState>] = if key.shadow { &[] } else { &colored };
         let bias = match key.shadow {
             true => wgpu::DepthBiasState { constant: 2, slope_scale: 2.0, clamp: 0.0 },
             false => Default::default(),
@@ -126,7 +135,7 @@ impl Solids {
                 module: shader,
                 entry_point: Some(fs),
                 compilation_options: Default::default(),
-                targets: &targets,
+                targets,
             }),
             primitive: wgpu::PrimitiveState { cull_mode: cull, ..Default::default() },
             depth_stencil: Some(wgpu::DepthStencilState {

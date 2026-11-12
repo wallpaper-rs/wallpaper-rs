@@ -113,5 +113,9 @@ pub(super) fn finish(
         params: look.map_or([[0.0; 4]; 8], |l| l.slots),
     };
     let package = look.filter(|l| l.shade == Shade::Package).map_or(0, |l| l.package);
-    (uniform, Key { cull, blend, write, test, hdr, skinned, shadow: false, package }, shells)
+    (
+        uniform,
+        Key { cull, blend, write, test, hdr, skinned, shadow: false, cut: cutoff > 0.0, package },
+        shells,
+    )
 }

@@ -813,7 +813,9 @@ reads its map four times around its place and blends them (percentage closer fil
 normal by `shadow_bias`. Desktop computers (T3) draw shadows of the first 2 lights that cast them, T2 of
 the first one, and T0 and T1 of none. A map is drawn again only when its light, a caster, a pose or a
 swaying material changes, so a moving camera over still models reuses it. Primitives drawn with `blend`
-or `add` and materials with `cast_shadows: false` cast none.
+or `add` and materials with `cast_shadows: false` cast none; cut-out (`mask`) primitives cast a
+shadow only where they are drawn, since the map pass reads the alpha of their color map, a cost
+only they pay.
 
 Light layers light the models as they light flat layers: each light stands on the plane through the
 point the camera looks at, under the point of the box where it is drawn, moved toward the viewer by
