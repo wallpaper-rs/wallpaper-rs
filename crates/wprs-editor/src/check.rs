@@ -157,9 +157,11 @@ pub fn check_files(dir: &Path, doc: &Value) -> Vec<Problem> {
     }
     let scene = serde_json::from_value::<Scene>(doc["scene"].clone()).ok();
     let read = |path: &str| std::fs::read_to_string(dir.join(path)).ok();
-    if let Some((i, message)) = scene.and_then(|s| s.undeclared(read)) {
-        out.push(problem(format!("/scene/scripts/{i}"), said("editor.script", "%1", &[&message])));
+    let undeclared = scene.and_then(|s| s.undeclared(read));
+    if let Some((i, message)) = &undeclared {
+        out.push(problem(format!("/scene/scripts/{i}"), said("editor.script", "%1", &[message])));
     }
+    out.extend(crate::usage::problems(dir, doc, undeclared.map(|(i, _)| i)));
     let text = "%1 is not used by the scene but goes into the package";
     out.extend(
         unused(dir, doc)

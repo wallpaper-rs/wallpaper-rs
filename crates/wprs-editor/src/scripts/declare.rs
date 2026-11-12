@@ -1,43 +1,7 @@
 use serde_json::{Value, json};
-use wprs_scene::{ScriptApi, ScriptEvent, imported};
-
-const CALLS: [(&str, ScriptApi); 5] = [
-    (".bloom", ScriptApi::Bloom),
-    (".spawn(", ScriptApi::Layers),
-    (".order(", ScriptApi::Layers),
-    (".effect(", ScriptApi::Effects),
-    ("console.", ScriptApi::Console),
-];
+use wprs_scene::ScriptEvent;
 
 pub(super) const BLIND: [&str; 5] = ["clicks", "geometry", "animations", "shortcuts", "hierarchy"];
-
-const STAGE: [&str; 7] = ["camera", "camera3d", "parallax", "bloom", "background", "ambient", "sky"];
-
-fn staged(source: &str) -> bool {
-    let word = |c: char| c.is_alphanumeric() || c == '_' || c == '$';
-    let left = |before: &str| match before.chars().next_back() {
-        Some('.') => before.ends_with("wprs."),
-        Some(c) => !word(c),
-        None => true,
-    };
-    STAGE.iter().any(|key| {
-        let call = format!("scene.{key}");
-        let mut found = source.match_indices(&call);
-        found.any(|(i, _)| left(&source[..i]) && !source[i + call.len()..].starts_with(word))
-    })
-}
-
-fn unpacked(source: &str) -> bool {
-    let word = |c: char| c.is_alphanumeric() || c == '_' || c == '$';
-    source.match_indices('}').any(|(i, _)| {
-        let rest = source[i + 1..].trim_start();
-        let Some(rest) = rest.strip_prefix('=').map(str::trim_start) else { return false };
-        let rest = rest.strip_prefix("wprs.").unwrap_or(rest);
-        let named = rest.strip_prefix("scene").is_some_and(|after| !after.starts_with(word));
-        let open = source[..i].rfind('{').unwrap_or(i);
-        named && source[open + 1..i].split(|c: char| !word(c)).any(|w| STAGE.contains(&w))
-    })
-}
 
 pub(super) fn exported(source: &str) -> Vec<String> {
     let mut found = Vec::new();
@@ -66,11 +30,7 @@ pub fn declaration(source: &str) -> Value {
     }
     events.sort();
     events.dedup();
-    let mut uses = imported(source);
-    uses.extend(CALLS.iter().filter(|(call, _)| source.contains(call)).map(|(_, api)| *api));
-    uses.extend((staged(source) || unpacked(source)).then_some(ScriptApi::Camera));
-    uses.sort();
-    uses.dedup();
+    let uses = crate::usage::detect(source);
     let mut entry = json!({});
     if events.iter().any(|e| *e != ScriptEvent::Update) {
         entry["events"] = json!(events);

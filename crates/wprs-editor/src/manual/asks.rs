@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 34] = [
+pub const ASKS: [(&str, &str, &str); 35] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -40,5 +40,6 @@ pub const ASKS: [(&str, &str, &str); 34] = [
     ("effect_cost", "Cost of an effect", r#"{"effect": "NAME", "optional": false}"#),
     ("clocks", "Clock faces and their strips at a time", r#"{"time": 0, "strip": 0}"#),
     ("pools", "Mesh pools of the scene with the layers that draw them and the scripts that build them", "{}"),
+    ("uses", "What each script declares, what its source uses and what it lacks", "{}"),
     ("spread", "Spread of an emitter", "{}"),
 ];

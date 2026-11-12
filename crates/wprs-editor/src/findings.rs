@@ -12,10 +12,12 @@ pub struct Problem {
     pub message: String,
     pub warning: bool,
     pub said: Message,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fix: Option<Value>,
 }
 
 pub(crate) fn problem(pointer: impl Into<String>, said: Message) -> Problem {
-    Problem { pointer: pointer.into(), message: said.to_string(), warning: false, said }
+    Problem { pointer: pointer.into(), message: said.to_string(), warning: false, said, fix: None }
 }
 
 pub(crate) fn warning(pointer: impl Into<String>, said: Message) -> Problem {

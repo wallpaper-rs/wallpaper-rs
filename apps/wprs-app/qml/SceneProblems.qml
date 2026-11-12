@@ -68,6 +68,16 @@ ColumnLayout {
                 text: modelData.message
                 icon.name: modelData.warning ? "data-warning" : "data-error"
                 onClicked: panel.page.jump(modelData.pointer)
+
+                QQC2.ToolButton {
+                    readonly property string fixing: Object.keys(modelData.fix ?? {})[0] ?? ""
+
+                    anchors.right: parent.right
+                    visible: fixing !== ""
+                    icon.name: "dialog-ok-apply"
+                    text: App.tr("Fix")
+                    onClicked: panel.page.run(fixing, modelData.fix[fixing])
+                }
             }
         }
     }

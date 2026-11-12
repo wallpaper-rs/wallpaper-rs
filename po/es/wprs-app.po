@@ -7187,6 +7187,10 @@ msgid "No problems"
 msgstr "Sin problemas"
 
 #: apps/wprs-app/qml/SceneProblems.qml
+msgid "Fix"
+msgstr "Corregir"
+
+#: apps/wprs-app/qml/SceneProblems.qml
 msgid ""
 "A script wants %1 but it is not granted here, so that part of the scene is "
 "off while you try it."
@@ -9483,6 +9487,21 @@ msgid ""
 msgstr ""
 "Los clics y la entrada o salida del puntero activan líneas de tiempo, "
 "sonidos y scripts, con el permiso del puntero. El área se ve sobre el lienzo."
+#: apps/wprs-app/qml/SceneUses.qml
+msgid "What the scripts declare"
+msgstr "Lo que declaran los scripts"
+
+#: apps/wprs-app/qml/SceneUses.qml
+msgid "declares nothing"
+msgstr "no declara nada"
+
+#: apps/wprs-app/qml/SceneUses.qml
+msgid "lacks %1"
+msgstr "le falta %1"
+
+#: apps/wprs-app/qml/SceneUses.qml
+msgid "Adds %1 to the uses of the script"
+msgstr "Agrega %1 a los usos del script"
 
 #: apps/wprs-app/qml/SceneWakeRules.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml

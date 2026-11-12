@@ -184,6 +184,8 @@ pub enum Action {
     Script(ScriptEdit),
     Template(TemplateEdit),
     Pool(PoolEdit),
+    Uses(UsesEdit),
+    Uses(UsesEdit),
     Undo {},
     Redo {},
 }

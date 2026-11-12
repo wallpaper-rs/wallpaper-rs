@@ -14,6 +14,7 @@ mod placing;
 mod pools;
 mod reaching;
 mod timing;
+mod uses;
 
 fn state() {
     static STATE: OnceLock<TempDir> = OnceLock::new();

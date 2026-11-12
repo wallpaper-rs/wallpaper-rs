@@ -2206,6 +2206,13 @@ msgstr "añade o quita una línea de tiempo, no ambas cosas"
 #: crates/wprs-editor/src/touch.rs
 msgid "the opacity that takes the pointer goes from 0 to 1"
 msgstr "la opacidad que toma el puntero va de 0 a 1"
+#: crates/wprs-editor/src/usage.rs
+msgid "the scene has no script %1"
+msgstr "la escena no tiene el script %1"
+
+#: crates/wprs-editor/src/usage.rs
+msgid "%1 uses %2 but does not declare it; declare it in its uses"
+msgstr "%1 usa %2 pero no lo declara; decláralo en sus usos"
 
 #: crates/wprs-format/src/admin.rs
 msgid "no folder was given for the repository"
