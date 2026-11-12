@@ -9,7 +9,7 @@ ColumnLayout {
     id: preset
 
     required property var page
-    readonly property var document: page.view.id === undefined ? ({}) : JSON.parse(page.editor.value("/preset") || "{}")
+    readonly property var document: page.view.id === undefined ? ({}) : (JSON.parse(page.editor.value("/preset") || "null") ?? ({}))
     readonly property var base: document.base ?? ({})
     readonly property var values: document.values ?? ({})
     readonly property var files: document.files ?? ({})
