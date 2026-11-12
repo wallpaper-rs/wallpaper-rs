@@ -10,7 +10,7 @@ ColumnLayout {
     required property string mode
     readonly property var page: input.page
     readonly property bool flow: mode === "flow"
-    readonly property bool painting: page.brush?.pointer === input.field.pointer && (page.brush.direction === true) === flow
+    readonly property bool painting: page.brush?.pointer === input.field.pointer && (page.brush.action === "comb_flow") === flow
 
     function pick() {
         const args = {
@@ -18,10 +18,9 @@ ColumnLayout {
             "channel": null,
             "radius": Math.round(size.value * 1000) / 1000,
             "hardness": 0.5,
-            "value": erase.checked ? 0 : Math.round(level.value * 100) / 100
+            "value": erase.checked ? 0 : Math.round(level.value * 100) / 100,
+            "action": flow ? "comb_flow" : "paint_mask"
         };
-        if (flow)
-            args.direction = true;
         page.brush = args;
     }
 

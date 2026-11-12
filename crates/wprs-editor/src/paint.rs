@@ -34,8 +34,8 @@ pub(crate) fn paint(dir: &Path, doc: &Value, s: &Stroke) -> Result<Vec<Op>> {
     let id = named.map_or_else(|| unique(doc, s.pointer.rsplit('/').next().unwrap_or("mask")), String::from);
     let path = named.and_then(|id| doc.pointer(&format!("{}/path", asset(id)))?.as_str());
     let old = named.and_then(|id| crate::pictures::asset(dir, doc, id).ok()).map(|i| i.into_rgba8());
-    let mut picture =
-        old.unwrap_or_else(|| RgbaImage::from_pixel(SIDE, SIDE, Rgba(blank(dir, doc, s.pointer))));
+    let mut picture = old
+        .unwrap_or_else(|| RgbaImage::from_pixel(SIDE, SIDE, Rgba(blank(dir, doc, s.pointer, s.direction))));
     stroke(&mut picture, s);
     let layer = s.pointer.rsplit_once("/effects/").and_then(|(at, _)| doc.pointer(at));
     let image = layer.and_then(|l| l["image"].as_str()).filter(|i| doc.pointer(&asset(i)).is_some());
@@ -46,7 +46,7 @@ pub(crate) fn paint(dir: &Path, doc: &Value, s: &Stroke) -> Result<Vec<Op>> {
     Ok(ops)
 }
 
-fn blank(dir: &Path, doc: &Value, pointer: &str) -> [u8; 4] {
+fn blank(dir: &Path, doc: &Value, pointer: &str, still: bool) -> [u8; 4] {
     let painted = || {
         let (at, id) = pointer.rsplit_once("/params/")?;
         let name = doc.pointer(&format!("{at}/effect"))?.as_str()?;
@@ -59,7 +59,7 @@ fn blank(dir: &Path, doc: &Value, pointer: &str) -> [u8; 4] {
             _ => None,
         }
     };
-    painted().unwrap_or([0, 0, 0, 255])
+    painted().unwrap_or(if still { [128, 128, 128, 255] } else { [0, 0, 0, 255] })
 }
 
 pub(crate) fn stroke(picture: &mut RgbaImage, s: &Stroke) {

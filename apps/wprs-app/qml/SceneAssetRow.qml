@@ -21,7 +21,7 @@ QQC2.ItemDelegate {
 
     function ask() {
         const found = JSON.parse(owner.page.editor.rig("", JSON.stringify({
-                        "uses": {
+                        "asset_uses": {
                             "asset": modelData.id
                         }
                     })) || "null");

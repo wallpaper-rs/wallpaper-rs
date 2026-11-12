@@ -1,5 +1,9 @@
 use super::*;
 
+pub fn ok_lines(dir: &Path) -> String {
+    String::from_utf8(run(dir, &["scene", "validate", "snow"]).stdout).unwrap()
+}
+
 #[test]
 fn scene_upgrade_takes_what_pack_upgrade_takes() {
     let tmp = tempfile::tempdir().unwrap();

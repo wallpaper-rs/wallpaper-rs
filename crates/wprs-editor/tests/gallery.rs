@@ -175,11 +175,14 @@ fn an_asset_lists_every_place_that_uses_it() {
         .unwrap();
     let effects = json!([{"effect": "blur", "mask": {"texture": "mask"}}]);
     act(&mut p, json!({"set": {"pointer": "/scene/layers/0/effects", "value": effects}})).unwrap();
-    let found = query(&p, json!({"uses": {"asset": "mask"}}));
+    let found = query(&p, json!({"asset_uses": {"asset": "mask"}}));
     let rows = found["uses"].as_array().unwrap();
     assert_eq!(rows.len(), 1, "{found}");
     assert_eq!(rows[0]["pointer"], "/scene/layers/0/effects/0/mask/texture");
     assert_eq!(rows[0]["layer"], json!({"id": "film", "type": "video"}));
-    assert_eq!(query(&p, json!({"uses": {"asset": "clip"}}))["uses"][0]["pointer"], "/scene/layers/0/video");
-    assert!(query(&p, json!({"uses": {"asset": "nobody"}}))["uses"].as_array().unwrap().is_empty());
+    assert_eq!(
+        query(&p, json!({"asset_uses": {"asset": "clip"}}))["uses"][0]["pointer"],
+        "/scene/layers/0/video"
+    );
+    assert!(query(&p, json!({"asset_uses": {"asset": "nobody"}}))["uses"].as_array().unwrap().is_empty());
 }

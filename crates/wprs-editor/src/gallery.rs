@@ -2,7 +2,7 @@ use crate::ops::escape;
 use serde_json::{Value, json};
 use std::path::Path;
 
-const QUERIES: [&str; 3] = ["film", "sprites", "uses"];
+const QUERIES: [&str; 3] = ["film", "sprites", "asset_uses"];
 const SKIPPED: [&str; 4] = ["id", "path", "parent", "layer"];
 
 pub fn asks(q: &Value) -> bool {
@@ -65,5 +65,5 @@ pub fn query(dir: &Path, doc: &Value, q: &Value) -> Value {
     if let Some(s) = q.get("sprites") {
         return crate::cutter::sheet(dir, doc, s["asset"].as_str().unwrap_or_default());
     }
-    uses(doc, q["uses"]["asset"].as_str().unwrap_or_default())
+    uses(doc, q["asset_uses"]["asset"].as_str().unwrap_or_default())
 }

@@ -121,7 +121,7 @@ fn direction_strokes_encode_where_the_brush_went() {
     let (_root, mut project) = scene("flow");
     let pointer = "/scene/layers/0/effects/0/params/map";
     let stroke = |points: Value, value: f32| {
-        json!({ "paint_mask": { "pointer": pointer, "radius": 0.1, "direction": true, "value": value,
+        json!({ "comb_flow": { "pointer": pointer, "radius": 0.1, "value": value,
             "points": points } })
     };
     act(&mut project, stroke(json!([[0.2, 0.2], [0.4, 0.2]]), 1.0)).unwrap();

@@ -68,7 +68,9 @@ pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth:
         title: local(&p.label),
         sample: match (p.kind, drawn) {
             (ParamKind::Mask, _) => json!({ "channels": p.channels.unwrap_or(1) }),
-            (ParamKind::Texture, _) if p.tool.is_some() => json!({ "channels": 1, "tool": p.tool, "tools": tools }),
+            (ParamKind::Texture, _) if p.tool.is_some() => {
+                json!({ "channels": 1, "tool": p.tool, "tools": tools })
+            }
             (ParamKind::Texture | ParamKind::Lut, _) if !tools.is_empty() => json!({ "tools": tools }),
             (_, Some(effect)) => json!({ "effect": effect }),
             _ => Value::Null,

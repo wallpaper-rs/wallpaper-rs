@@ -5,7 +5,7 @@ ColumnLayout {
     id: tools
 
     required property var input
-    readonly property var kinds: input.field.sample?.tools ?? []
+    readonly property var kinds: (input.field.sample?.tools ?? []).filter(kind => !(input.field.sample?.tool && ["gray", "flow"].includes(kind)))
 
     Loader {
         Layout.fillWidth: true

@@ -93,7 +93,9 @@ fn a_scene_is_made_edited_and_built_from_the_command_line() {
     );
     ok(dir, &["scene", "set", "snow", "/scene/layers/2/opacity", "3"]);
     let problems = fails(dir, &["scene", "validate", "snow"]);
-    assert!(problems.trim_end().ends_with("1 problem") && ok_lines(dir).contains("/scene/layers/2/opacity"));
+    assert!(
+        problems.trim_end().ends_with("1 problem") && more::ok_lines(dir).contains("/scene/layers/2/opacity")
+    );
     assert!(fails(dir, &["scene", "build", "snow"]).contains("/scene/layers/2/opacity"));
     ok(dir, &["scene", "undo", "snow"]);
     let built: Value =
@@ -114,10 +116,6 @@ fn a_scene_is_made_edited_and_built_from_the_command_line() {
     let schema: Value = serde_json::from_str(&ok(dir, &["scene", "schema"])).unwrap();
     assert!(schema["$defs"]["Layer"].is_object());
     assert!(run(dir, &["scene", "preview", "snow", "-o", "DP-1"]).status.code() == Some(1));
-}
-
-pub fn ok_lines(dir: &Path) -> String {
-    String::from_utf8(run(dir, &["scene", "validate", "snow"]).stdout).unwrap()
 }
 
 pub fn fields(value: Value) -> Vec<String> {

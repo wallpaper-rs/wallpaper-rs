@@ -58,14 +58,14 @@ QtObject {
                 "mode": "flow"
             });
         brush.pick();
-        if (page.brush?.direction !== true || page.brush.pointer !== at || !brush.painting)
+        if (page.brush?.action !== "comb_flow" || page.brush.pointer !== at || !brush.painting)
             throw new Error("textures: the direction brush was not offered");
         const grey = make("SceneTextureBrush.qml", {
                 "input": input(""),
                 "mode": "gray"
             });
         grey.pick();
-        if (page.brush?.direction === true || !grey.painting || brush.painting)
+        if (page.brush?.action === "comb_flow" || !grey.painting || brush.painting)
             throw new Error("textures: the grey brush was not offered");
         page.brush = null;
         const depth = make("SceneDepthTool.qml", {

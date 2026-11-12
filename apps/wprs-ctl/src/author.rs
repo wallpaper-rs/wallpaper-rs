@@ -110,8 +110,6 @@ pub enum Author {
         hardness: f32,
         #[arg(long, default_value_t = 1.0, help = "Value painted, from 0 (erases) to 1")]
         value: f32,
-        #[arg(long, help = "Paint a flow map: the stroke writes the way it went, scaled by the value")]
-        direction: bool,
     },
     #[command(
         about = "Set the text of a title, description, change notes, label, option or the text a media value shows while nothing plays in one language; an empty language sets the plain text"
