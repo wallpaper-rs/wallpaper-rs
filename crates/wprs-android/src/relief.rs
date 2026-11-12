@@ -89,7 +89,6 @@ impl Raised {
     fn relief(&self, aspect: f32, uv: &UvRect, charging: bool) -> Relief<'_> {
         let p = &self.key.2.parallax;
         let steps = if charging { p.steps } else { p.steps.min(BATTERY_STEPS) };
-        tilt::saw(uv.scale[0]);
         let wanted = tilt::wanted_shift(p.strength, uv.scale[0]);
         let way = travel(wanted, &self.reach, (p.focus, p.overscan), (aspect, uv));
         let shift = shift(self.motion.at(), way.shift, aspect);
@@ -105,6 +104,7 @@ pub(crate) fn layer<'a>(
     raised: Option<(&'a Raised, bool)>,
 ) -> Layer<'a> {
     let uv = image.map(|image| placed(look.fit, look.crop, image.size(), size, look.pan));
+    uv.iter().for_each(|uv| tilt::saw(uv.scale[0]));
     let aspect = image.map_or(1.0, |i| i.size().0 as f32 / i.size().1.max(1) as f32);
     let relief = raised.zip(uv).filter(|(_, uv)| !uv.repeat);
     let relief = relief.map(|((raised, charging), uv)| raised.relief(aspect, &uv, charging));

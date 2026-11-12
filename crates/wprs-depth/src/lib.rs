@@ -1,3 +1,4 @@
+mod bands;
 mod brush;
 mod build;
 #[cfg(feature = "fetch")]
@@ -31,8 +32,9 @@ mod views;
 mod warp;
 mod windows;
 
+pub use bands::band;
 pub use brush::{lift, lift_map, marks, stamp};
-pub use build::{EDGE, MARGIN, MOST_EDGE, TIERS, band, edge_for, layers};
+pub use build::{EDGE, MARGIN, MOST_EDGE, TIERS, edge_for, layers};
 #[cfg(feature = "fetch")]
 pub use fetch::{AGENT, Cancelled, allowed, download};
 pub use field::{BEND, FIELD, field, field_size, sample, slope};

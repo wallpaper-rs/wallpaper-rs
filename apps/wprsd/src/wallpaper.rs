@@ -152,9 +152,8 @@ impl Daemon {
         let edit = self.edit_for(&file);
         let fit = edit.as_ref().and_then(|e| e.fit).filter(|_| fit != Fit::Span).unwrap_or(fit);
         let place = self.place(output, fit, edit.as_deref());
-        let edge = || {
-            wprs_render::needed_edge(&file, edit.as_deref(), &place, (fit, size), self.compositor.max_edge())
-        };
+        let max = self.compositor.max_edge();
+        let edge = || wprs_render::needed_edge(&file, edit.as_deref(), &place, (fit, size), max);
         let depth =
             edit.as_deref().filter(|e| e.needs_depth()).and_then(|e| self.depth_for(&file, e, edge()));
         let upload = (size, fit, file.clone(), modified, edit.clone(), place.clone());
