@@ -2727,14 +2727,6 @@ msgstr ""
 "Elige primero el vídeo: la parte que se reproduce se recorta en su línea de "
 "tiempo."
 
-#: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/SceneClockLanes.qml
-msgid "Start %1 s"
-msgstr "Inicio %1 s"
-
-#: apps/wprs-app/qml/PackageClip.qml apps/wprs-app/qml/SceneClockLanes.qml
-msgid "End %1 s"
-msgstr "Fin %1 s"
-
 #: apps/wprs-app/qml/PackageClip.qml
 msgid "Plays from %1 s to %2 s of %3 s"
 msgstr "Se reproduce del segundo %1 al %2 de %3 s"
@@ -2760,6 +2752,14 @@ msgstr "Valor por defecto"
 #: apps/wprs-app/qml/ScenePathRow.qml apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Loop"
 msgstr "Bucle"
+
+#: apps/wprs-app/qml/PackageClipBar.qml apps/wprs-app/qml/SceneClockLanes.qml
+msgid "Start %1 s"
+msgstr "Inicio %1 s"
+
+#: apps/wprs-app/qml/PackageClipBar.qml apps/wprs-app/qml/SceneClockLanes.qml
+msgid "End %1 s"
+msgstr "Fin %1 s"
 
 #: apps/wprs-app/qml/PackageFiles.qml
 msgid "entry page"

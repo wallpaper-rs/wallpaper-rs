@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wallpaper-rs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-11 00:00+0000\n"
+"POT-Creation-Date: 2026-11-12 00:00+0000\n"
 "PO-Revision-Date: 2026-11-06 00:00+0000\n"
 "Last-Translator: wallpaper-rs contributors\n"
 "Language-Team: wallpaper-rs contributors\n"
@@ -6550,19 +6550,19 @@ msgstr "Dónde la imagen pasa de LaMa al relleno simple, de 0 a 1"
 msgid "Where LaMa runs"
 msgstr "Dónde corre LaMa"
 
-#: apps/wprs-ctl/src/staging.rs
+#: apps/wprs-ctl/src/staged.rs
 msgid "%1 is not K=X,Y"
 msgstr "%1 no es K=X,Y"
 
-#: apps/wprs-ctl/src/staging.rs
+#: apps/wprs-ctl/src/staged.rs
 msgid "%1 is not a control point"
 msgstr "%1 no es un punto de control"
 
-#: apps/wprs-ctl/src/staging.rs
+#: apps/wprs-ctl/src/staged.rs
 msgid "%1 is not off, all or alpha"
 msgstr "%1 no es off, all ni alpha"
 
-#: apps/wprs-ctl/src/staging.rs
+#: apps/wprs-ctl/src/staged.rs
 msgid "%1 is not a blend mode"
 msgstr "%1 no es un modo de fusión"
 

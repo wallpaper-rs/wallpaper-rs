@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::path::PathBuf;
 
+mod declared;
+mod exports;
 mod glows;
 mod grips;
 mod ids;
@@ -18,25 +20,7 @@ mod stage2d;
 mod swarm;
 mod tend;
 mod timing;
-pub use ids::{Named, PasteEdit, RenameEdit, TranslateEdit};
-pub use lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapStroke, NormalsMake};
-pub use limbs::{AttachEdit, BodyEdit, BoneRuleEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit};
-pub use marks::{
-    CameraHold, CanvasEdit, ClockSet, Fit, Grip, LayerEdit, ManifestEdit, Needed, PropertyEdit, SCREENS,
-    Takes,
-};
-pub use motion::{AnimEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
-pub use names::{
-    ACTIONS, AssetEdit, ConditionEdit, EDITOR, ImportAssets, RgbEdit, RuleEdit, ScriptFile, UpgradeEdit,
-};
-pub use rigging::{
-    AutoWeights, BoneEdit, ClipEdit, ClipKey, DepthStroke, ExpressionEdit, MaskStroke, MeshCut, WeightStroke,
-};
-pub use shaping::{EffectsEdit, MaskHold, ScriptEdit, TemplateEdit};
-pub use solid::{CameraEdit, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit};
-pub use sow::SowEdit;
-pub use swarm::{ParticleEdit, Response, Strand, SwarmLight, TendEdit};
-pub use timing::{KeyframeEdit, TimelineEdit, TimelineEvent};
+pub use exports::*;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]

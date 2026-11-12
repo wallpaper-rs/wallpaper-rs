@@ -146,10 +146,6 @@ impl Project {
         self.commit(&action.name(), ops, gesture, at)
     }
 
-    pub fn effects(&self) -> crate::inspect::Own {
-        crate::shaping::own(&self.dir, &self.doc)
-    }
-
     pub fn record(&mut self, label: &str, ops: Vec<Op>) -> Result<Vec<Op>> {
         self.ready()?;
         self.commit(label, ops, false, now())

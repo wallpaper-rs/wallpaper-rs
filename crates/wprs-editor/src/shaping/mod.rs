@@ -27,6 +27,12 @@ pub(crate) fn own(dir: &Path, doc: &Value) -> crate::inspect::Own {
     scene.loaded
 }
 
+impl crate::project::Project {
+    pub fn effects(&self) -> crate::inspect::Own {
+        own(&self.dir, &self.doc)
+    }
+}
+
 pub(crate) fn refused(dir: &Path, doc: &Value, ops: Vec<Op>) -> Result<Vec<Op>> {
     checked(Some(dir), doc, ops)
 }
