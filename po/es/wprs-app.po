@@ -5434,6 +5434,16 @@ msgid "Ungroup"
 msgstr "Desagrupar"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
+msgid ""
+"%1 followed the removed layer and a value of its place is bound to something "
+"other than keyframes, so it could not be kept where it was: check where it "
+"sits now."
+msgstr ""
+"%1 seguía a la capa quitada y un valor de su lugar depende de algo que no "
+"son fotogramas clave, así que no se pudo dejar donde estaba: revisa dónde "
+"queda ahora."
+
+#: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Make a template"
 msgstr "Hacer plantilla"
 

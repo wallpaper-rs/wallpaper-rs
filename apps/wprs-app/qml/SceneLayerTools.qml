@@ -86,9 +86,20 @@ Flow {
             text: modelData[2]
             display: QQC2.AbstractButton.IconOnly
             enabled: tools.owner.current !== null && (modelData[0] !== "ungroup" || tools.owner.current.type === "group")
-            onClicked: tools.owner.page.run(modelData[0], {
-                    "id": tools.owner.current.id
-                })
+            onClicked: {
+                const page = tools.owner.page;
+                const id = tools.owner.current.id;
+                const lost = modelData[0] === "remove_layer" ? (JSON.parse(page.editor.rig("", JSON.stringify({
+                        "unkept": {
+                            "id": id
+                        }
+                    })) || "{}").layers ?? []) : [];
+                page.run(modelData[0], {
+                        "id": id
+                    });
+                if (lost.length > 0 && page.editor.error === "")
+                    page.notice = App.tr("%1 followed the removed layer and a value of its place is bound to something other than keyframes, so it could not be kept where it was: check where it sits now.", lost.join(", "));
+            }
         }
     }
 

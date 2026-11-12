@@ -1,4 +1,5 @@
 use super::refs::{Hold, Ref, refs};
+use crate::keys::value_at;
 use crate::ops::{Op, apply};
 use crate::seats::grips::{Moved, decompose, tidy};
 use crate::seats::seats;
@@ -7,17 +8,58 @@ use serde_json::{Value, json};
 use std::path::Path;
 use wprs_core::message::said;
 
-fn plain(v: Option<&Value>) -> bool {
-    v.is_none_or(|v| v.is_number() || v.as_array().is_some_and(|l| l.iter().all(Value::is_number)))
+const FIELDS: [&str; 4] = ["position", "rotation", "scale", "skew"];
+const SOURCES: [&str; 7] = ["prop", "map", "audio", "cursor", "clock", "date", "script"];
+
+fn plain(v: &Value) -> bool {
+    v.is_number() || v.as_array().is_some_and(|l| l.iter().all(Value::is_number))
 }
 
-fn kept(doc: &Value, staged: &Value, owner: &str, id: &str) -> Vec<Op> {
+fn keyed(v: &Value) -> bool {
+    v.get("keys").is_some_and(Value::is_array) && SOURCES.iter().all(|s| v.get(*s).is_none())
+}
+
+fn shifted(v: &Value, now: &Value, to: &Value, field: &str) -> Option<Value> {
+    let (now, to) = (numbers(now)?, numbers(to)?);
+    let by: Vec<f64> = match field {
+        "scale" => now.iter().zip(&to).map(|(n, t)| (n.abs() > 1e-9).then(|| t / n)).collect::<Option<_>>()?,
+        _ => now.iter().zip(&to).map(|(n, t)| t - n).collect(),
+    };
+    let mut out = v.clone();
+    for key in out.get_mut("keys")?.as_array_mut()? {
+        let value = numbers(&key[1])?;
+        let moved: Vec<f64> = match field {
+            "scale" => value.iter().zip(&by).map(|(a, f)| a * f).collect(),
+            _ => value.iter().zip(&by).map(|(a, d)| a + d).collect(),
+        };
+        key[1] = if key[1].is_array() { json!(moved) } else { json!(moved[0]) };
+        key[1] = round(&key[1]);
+    }
+    Some(out)
+}
+
+fn round(v: &Value) -> Value {
+    let cut = |x: f64| (x * 1e4).round() / 1e4;
+    match v {
+        Value::Array(l) => json!(l.iter().filter_map(Value::as_f64).map(cut).collect::<Vec<_>>()),
+        other => json!(other.as_f64().map(cut)),
+    }
+}
+
+fn numbers(v: &Value) -> Option<Vec<f64>> {
+    match v {
+        Value::Array(l) => l.iter().map(Value::as_f64).collect(),
+        other => other.as_f64().map(|n| vec![n]),
+    }
+}
+
+fn kept(doc: &Value, staged: &Value, owner: &str, id: &str) -> Option<Vec<Op>> {
     let dir = Path::new("");
-    let Some(before) = seats(dir, doc, 0.0).into_iter().find(|s| s.id == id) else { return Vec::new() };
-    let Some(after) = seats(dir, staged, 0.0).into_iter().find(|s| s.id == id) else { return Vec::new() };
+    let before = seats(dir, doc, 0.0).into_iter().find(|s| s.id == id)?;
+    let after = seats(dir, staged, 0.0).into_iter().find(|s| s.id == id)?;
     let t = &doc.pointer(owner).cloned().unwrap_or_default()["transform"];
-    if !["position", "rotation", "scale", "skew"].iter().all(|k| plain(t.get(*k))) {
-        return Vec::new();
+    if FIELDS.iter().any(|k| t.get(*k).is_some_and(|v| !plain(v) && !keyed(v))) {
+        return None;
     }
     let [a, b, c, d, e, f] = after.frame.inverse().then(before.world).0;
     let (rotation, skew, scale) = decompose([a, b, c, d]);
@@ -41,9 +83,13 @@ fn kept(doc: &Value, staged: &Value, owner: &str, id: &str) -> Vec<Op> {
         out.push(Op::Add { path: base.clone(), value: json!({}) });
     }
     for (k, v) in fields.into_iter().filter_map(|(k, v)| Some((k, v?))) {
-        out.push(Op::Add { path: format!("{base}/{k}"), value: v });
+        let value = match t.get(k).filter(|c| keyed(c)) {
+            Some(own) => shifted(own, &value_at(own, 0.0), &v, k)?,
+            None => v,
+        };
+        out.push(Op::Add { path: format!("{base}/{k}"), value });
     }
-    out
+    Some(out)
 }
 
 fn cleared(doc: &Value, r: &Ref) -> Vec<Op> {
@@ -59,6 +105,15 @@ fn cleared(doc: &Value, r: &Ref) -> Vec<Op> {
 }
 
 pub fn forget(doc: &Value, gone: &[String], inside: &str) -> Result<Vec<Op>> {
+    plan(doc, gone, inside).map(|(ops, _)| ops)
+}
+
+pub fn unkept(doc: &Value, id: &str) -> Vec<String> {
+    let Ok((path, value)) = crate::actions::layer(doc, id) else { return Vec::new() };
+    plan(doc, &crate::arrange::ids(value), &path).map(|(_, lost)| lost).unwrap_or_default()
+}
+
+fn plan(doc: &Value, gone: &[String], inside: &str) -> Result<(Vec<Op>, Vec<String>)> {
     let prefix = format!("{inside}/");
     let found: Vec<Ref> = refs(doc)
         .into_iter()
@@ -82,12 +137,15 @@ pub fn forget(doc: &Value, gone: &[String], inside: &str) -> Result<Vec<Op>> {
         ops.extend(more);
     }
     let followers = found.iter().filter(|r| r.hold == Hold::Parent);
-    let mut keep = Vec::new();
+    let (mut keep, mut lost) = (Vec::new(), Vec::new());
     for r in followers {
         let id = doc.pointer(&r.owner).and_then(|l| l["id"].as_str()).unwrap_or_default();
-        keep.extend(kept(doc, &staged, &r.owner, id));
+        match kept(doc, &staged, &r.owner, id) {
+            Some(more) => keep.extend(more),
+            None => lost.push(id.to_owned()),
+        }
     }
     apply(&mut staged, &keep)?;
     ops.extend(keep);
-    Ok(ops)
+    Ok((ops, lost))
 }

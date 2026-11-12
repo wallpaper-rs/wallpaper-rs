@@ -92,6 +92,9 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("script_uses").is_some() => {
             json!(crate::references::script_uses(dir, doc, q["script_uses"]["name"].as_str().unwrap_or(id)))
         }
+        _ if q.get("unkept").is_some() => {
+            json!({ "layers": crate::ids::unkept(doc, q["unkept"]["id"].as_str().unwrap_or(id)) })
+        }
         _ if q.get("particles").is_some() => {
             let p = &q["particles"];
             let (t, sound) = (p["time"].as_f64().unwrap_or(0.0), p["sound"].as_f64().unwrap_or(0.0) as f32);

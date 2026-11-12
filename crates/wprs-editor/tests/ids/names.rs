@@ -96,3 +96,36 @@ fn renaming_an_asset_rewrites_only_the_fields_that_refer_to_assets() {
     assert_eq!(at(&p, "/scene/layers/1/text"), json!(asset));
     assert_eq!(at(&p, "/scene/ext/note"), json!(asset));
 }
+
+#[test]
+fn removing_a_layer_keeps_keyframed_followers_in_place_and_names_the_bound_ones() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = scene(&root, "keyed");
+    family(&mut p);
+    let keys = json!({"keys": [[0, [50, 0]], [1, [80, 20]]]});
+    act(&mut p, json!({"set": {"pointer": "/scene/layers/1/transform/position", "value": keys}})).unwrap();
+    act(&mut p, json!({"set": {"pointer": "/scene/layers/1/transform/rotation", "value": {"keys": [[0, 0], [1, 90]]}}}))
+        .unwrap();
+    let before = pivot(&p, "kid");
+    let query = |p: &wprs_editor::Project| {
+        wprs_editor::rigs::query(&p.dir, &p.doc, "", &json!({"unkept": {"id": "base"}}))
+    };
+    assert_eq!(query(&p)["layers"], json!([]));
+    act(&mut p, json!({"remove_layer": {"id": "base"}})).unwrap();
+    let after = pivot(&p, "kid");
+    assert!((after[0] - before[0]).abs() < 0.05 && (after[1] - before[1]).abs() < 0.05, "{before:?} {after:?}");
+    let first = at(&p, "/scene/layers/0/transform/position/keys");
+    let (a, b) = (first[0][1].as_array().unwrap(), first[1][1].as_array().unwrap());
+    assert!(((b[0].as_f64().unwrap() - a[0].as_f64().unwrap()) - 30.0).abs() < 0.01, "{first}");
+    assert!(((b[1].as_f64().unwrap() - a[1].as_f64().unwrap()) - 20.0).abs() < 0.01, "{first}");
+    let turn = at(&p, "/scene/layers/0/transform/rotation/keys");
+    assert!(((turn[1][1].as_f64().unwrap() - turn[0][1].as_f64().unwrap()) - 90.0).abs() < 0.01, "{turn}");
+
+    let mut q = scene(&root, "bound");
+    family(&mut q);
+    let bound = json!({"script": "wobble"});
+    act(&mut q, json!({"set": {"pointer": "/scene/layers/1/transform/position", "value": bound}})).unwrap();
+    assert_eq!(query(&q)["layers"], json!(["kid"]));
+    act(&mut q, json!({"remove_layer": {"id": "base"}})).unwrap();
+    assert_eq!(at(&q, "/scene/layers/0/transform/position"), bound);
+}
