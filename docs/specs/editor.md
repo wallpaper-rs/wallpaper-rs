@@ -382,7 +382,7 @@ rate only lowers the ceiling of the scene: what the user or the battery sets sti
 
 | Annotation | Meaning |
 |------------|---------|
-| `x-markup` | a text with the markup of `package.md`, edited on several lines |
+| `x-markup` | a text with the markup of `package.md`, edited on several lines with a view under each one that renders what is typed as the app does everywhere else (paragraphs, lists, bold, italic and links; HTML, images and remote content are not part of the markup, and the links of the view are shown but never followed) |
 | `x-required` | required in `wallpaper-rs.wpak/2` (`content`, `photosensitive`, `origin`), so it has no way back to a default; a switch that is not set yet shows *No* and *Yes* |
 | `x-computed` | filled by the tools (`requires.features`), shown read-only with translated names but for the features the author chooses |
 | `x-ref` | `thumbnail` or `animated`: a file chooser that runs `thumbnail`; `language`: the languages of the texts and of the desktop, offered in a list by their names in the language of the desktop |

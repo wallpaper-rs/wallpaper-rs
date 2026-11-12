@@ -2427,6 +2427,14 @@ msgstr ""
 msgid "Allow this scene?"
 msgstr "¿Permitir esta escena?"
 
+#: apps/wprs-app/qml/MarkupField.qml
+msgid "How it looks"
+msgstr "Cómo se ve"
+
+#: apps/wprs-app/qml/MarkupView.qml
+msgid "Nothing to show yet"
+msgstr "Todavía no hay nada que mostrar"
+
 #: apps/wprs-app/qml/Navigation.qml apps/wprs-app/qml/ScenesPage.qml
 msgid "Scenes"
 msgstr "Escenas"

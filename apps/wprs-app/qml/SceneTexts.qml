@@ -14,10 +14,10 @@ ColumnLayout {
 
     function put(language, text) {
         host.page.run("translate", {
-            "pointer": field.pointer,
-            "language": language,
-            "text": text
-        });
+                "pointer": field.pointer,
+                "language": language,
+                "text": text
+            });
     }
 
     SceneRepeater {
@@ -52,15 +52,14 @@ ColumnLayout {
                 }
             }
 
-            Area {
+            MarkupField {
                 Layout.fillWidth: true
                 visible: texts.multiline
                 text: row.text
-                wrapMode: TextEdit.Wrap
-                Accessible.name: SceneWords.label(texts.field.key) + " " + ManifestWords.language(row.modelData.language)
-                onEditingFinished: {
-                    if (text !== row.text)
-                        texts.put(row.modelData.language, text);
+                label: SceneWords.label(texts.field.key) + " " + ManifestWords.language(row.modelData.language)
+                onCommitted: value => {
+                    if (value !== row.text)
+                        texts.put(row.modelData.language, value);
                 }
             }
 
@@ -97,10 +96,10 @@ ColumnLayout {
             enabled: /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8}){0,3}$/.test(tag.text)
             onClicked: {
                 texts.host.page.run("translate", {
-                    "pointer": texts.field.pointer,
-                    "language": tag.text,
-                    "add": true
-                });
+                        "pointer": texts.field.pointer,
+                        "language": tag.text,
+                        "add": true
+                    });
                 tag.clear();
             }
         }
