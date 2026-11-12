@@ -27,6 +27,7 @@ mod reliefshow;
 mod reliefwork;
 mod rows;
 mod scene;
+mod scenecode;
 mod scenefile;
 mod scenelive;
 mod scenemedia;

@@ -8,62 +8,81 @@ ColumnLayout {
     id: panel
 
     required property var page
+    readonly property string stamp: JSON.stringify(page.view.scripts ?? [])
+    property var listing: ({})
+    readonly property var scripts: listing.scripts ?? []
+
+    function reload() {
+        panel.listing = JSON.parse(page.editor.code("list", "{}") || "{}");
+    }
+
+    onStampChanged: reload()
+    Component.onCompleted: reload()
+
+    Timer {
+        interval: 1000
+        repeat: true
+        running: panel.visible && panel.scripts.length > 0
+        onTriggered: panel.page.editor.watch()
+    }
 
     QQC2.Label {
         Layout.fillWidth: true
-        visible: scripts.count > 0
+        visible: panel.scripts.length > 0
         text: App.tr("Scripts")
         font.bold: true
     }
 
-    ListView {
-        id: scripts
+    SceneRepeater {
+        id: list
 
-        Layout.fillWidth: true
-        Layout.preferredHeight: contentHeight
-        interactive: false
-        model: panel.page.view.scripts ?? []
+        rows: panel.scripts
 
-        delegate: QQC2.ItemDelegate {
-            id: script
+        delegate: SceneScriptRow {
+            required property int index
 
-            required property var modelData
+            Layout.fillWidth: true
+            page: panel.page
+            script: list.rows[index]
+            position: index
+            total: list.rows.length
+            onEdit: path => viewer.show(path)
+        }
+    }
 
-            width: ListView.view.width
-            text: [modelData.path, App.bytes(modelData.size)].join(" · ")
+    QQC2.ToolButton {
+        icon.name: "list-add"
+        text: App.tr("Attach a script of the folder…")
+        onClicked: {
+            panel.reload();
+            picker.popup();
+        }
 
-            QQC2.ToolButton {
-                anchors.right: openScript.left
-                icon.name: "document-preview"
-                text: App.tr("View source…")
-                display: QQC2.AbstractButton.IconOnly
-                QQC2.ToolTip.text: text
-                QQC2.ToolTip.visible: hovered
-                onClicked: viewer.show(script.modelData.path)
+        QQC2.Menu {
+            id: picker
+
+            QQC2.MenuItem {
+                text: App.tr("Every script of the folder is already attached")
+                enabled: false
+                visible: (panel.listing.free ?? []).length === 0
+                height: visible ? implicitHeight : 0
             }
 
-            QQC2.ToolButton {
-                id: openScript
+            SceneRepeater {
+                id: free
 
-                anchors.right: removeScript.left
-                icon.name: "document-open"
-                text: App.tr("Open in your editor…")
-                display: QQC2.AbstractButton.IconOnly
-                QQC2.ToolTip.text: text
-                QQC2.ToolTip.visible: hovered
-                onClicked: Qt.openUrlExternally("file://" + panel.page.editor.folder + "/" + script.modelData.path)
-            }
+                rows: panel.listing.free ?? []
 
-            QQC2.ToolButton {
-                id: removeScript
+                delegate: QQC2.MenuItem {
+                    required property int index
 
-                anchors.right: parent.right
-                icon.name: "edit-delete"
-                text: App.tr("Remove")
-                display: QQC2.AbstractButton.IconOnly
-                onClicked: panel.page.run("remove", {
-                    "pointer": script.modelData.pointer
-                })
+                    text: free.rows[index]
+                    onTriggered: panel.page.run("script", {
+                            "add": {
+                                "path": free.rows[index]
+                            }
+                        })
+                }
             }
         }
     }

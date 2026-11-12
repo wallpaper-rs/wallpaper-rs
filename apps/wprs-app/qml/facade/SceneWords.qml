@@ -190,7 +190,7 @@ QtObject {
 
     function binding(bound) {
         const found = Object.keys(SceneValues.sources).find(source => (bound ?? {})[source] !== undefined) ?? "keys";
-        const detail = found === "prop" ? bound.prop : ["audio", "cursor", "media"].includes(found) ? value(bound[found]) : "";
+        const detail = found === "prop" ? bound.prop : ["audio", "cursor", "media"].includes(found) ? value(bound[found]) : found === "script" ? [bound.script, bound.fn].filter(part => part).join(" · ") : "";
         return SceneValues.sources[found] + (detail ? " · " + detail : "");
     }
 }

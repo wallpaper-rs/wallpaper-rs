@@ -13,32 +13,32 @@ QQC2.ToolButton {
 
     function bound(source) {
         page.run("set", {
-            "pointer": field.pointer,
-            "value": source
-        });
+                "pointer": field.pointer,
+                "value": source
+            });
     }
 
     function follow(prop) {
         if (!listed)
             return bound({
-                "prop": prop.id
-            });
+                    "prop": prop.id
+                });
         const now = JSON.parse(page.editor.value(prop.pointer + "/default") || "null");
         const map = {};
         map[now === null ? "null" : String(now)] = field.shown ?? field.default;
         bound({
-            "prop": prop.id,
-            "map": map
-        });
+                "prop": prop.id,
+                "map": map
+            });
     }
 
     function key(remove) {
         page.run("keyframe", {
-            "pointer": field.pointer,
-            "time": page.editor.time,
-            "value": remove ? undefined : (field.shown ?? field.default),
-            "remove": remove
-        });
+                "pointer": field.pointer,
+                "time": page.editor.time,
+                "value": remove ? undefined : (field.shown ?? field.default),
+                "remove": remove
+            });
     }
 
     text: field.source === "keys" ? (here ? "◆" : "◈") : (field.source ? "⛓" : "◇")
@@ -74,9 +74,9 @@ QQC2.ToolButton {
             onTriggered: {
                 if (bind.field.value.placeholder === undefined)
                     bind.page.run("set", {
-                        "pointer": bind.field.pointer + "/placeholder",
-                        "value": ""
-                    });
+                            "pointer": bind.field.pointer + "/placeholder",
+                            "value": ""
+                        });
                 bind.page.editor.select(bind.field.pointer);
             }
         }
@@ -105,6 +105,12 @@ QQC2.ToolButton {
             }
         }
 
+        SceneBindScript {
+            page: bind.page
+            enabled: !bind.listed
+            onChosen: source => bind.bound(source)
+        }
+
         QQC2.Menu {
             title: App.tr("Follow the sound")
             enabled: !bind.listed
@@ -117,8 +123,8 @@ QQC2.ToolButton {
 
                     text: modelData[1]
                     onTriggered: bind.bound({
-                        "audio": modelData[0]
-                    })
+                            "audio": modelData[0]
+                        })
                 }
             }
         }
@@ -138,8 +144,8 @@ QQC2.ToolButton {
 
                     text: modelData[2] !== "" ? App.tr("%1 (now %2)", modelData[1], modelData[2]) : modelData[1]
                     onTriggered: bind.bound({
-                        "media": modelData[0]
-                    })
+                            "media": modelData[0]
+                        })
                 }
             }
         }
@@ -156,8 +162,8 @@ QQC2.ToolButton {
 
                     text: modelData[1]
                     onTriggered: bind.bound({
-                        "cursor": modelData[0]
-                    })
+                            "cursor": modelData[0]
+                        })
                 }
             }
         }

@@ -30,10 +30,10 @@ Flow {
                     text: SceneWords.kind(modelData) + (enabled ? "" : " (" + App.tr("import a file of this kind first") + ")")
                     icon.name: tools.owner.icon(modelData)
                     onTriggered: tools.owner.page.run("add_layer", {
-                        "kind": modelData,
-                        "name": SceneWords.kind(modelData),
-                        "into": tools.owner.current?.type === "group" ? tools.owner.current.id : undefined
-                    })
+                            "kind": modelData,
+                            "name": SceneWords.kind(modelData),
+                            "into": tools.owner.current?.type === "group" ? tools.owner.current.id : undefined
+                        })
                 }
             }
 
@@ -48,11 +48,11 @@ Flow {
 
                         text: modelData[1]
                         onTriggered: tools.owner.page.run("light", {
-                            "add": {
-                                "light": modelData[0],
-                                "into": tools.owner.current?.type === "group" ? tools.owner.current.id : undefined
-                            }
-                        })
+                                "add": {
+                                    "light": modelData[0],
+                                    "into": tools.owner.current?.type === "group" ? tools.owner.current.id : undefined
+                                }
+                            })
                     }
                 }
             }
@@ -87,8 +87,8 @@ Flow {
             display: QQC2.AbstractButton.IconOnly
             enabled: tools.owner.current !== null && (modelData[0] !== "ungroup" || tools.owner.current.type === "group")
             onClicked: tools.owner.page.run(modelData[0], {
-                "id": tools.owner.current.id
-            })
+                    "id": tools.owner.current.id
+                })
         }
     }
 
@@ -96,13 +96,17 @@ Flow {
         icon.name: "document-save-as-template"
         text: App.tr("Make a template")
         display: QQC2.AbstractButton.IconOnly
-        QQC2.ToolTip.text: App.tr("Copy the layer to the templates that scripts spawn")
+        QQC2.ToolTip.text: App.tr("Copy the selected layer and the ones picked with Ctrl to the templates that scripts spawn")
         QQC2.ToolTip.visible: hovered
         enabled: tools.owner.current !== null && ["group", "image", "text", "shape", "solid", "spectrum", "mesh"].includes(tools.owner.current.type)
-        onClicked: tools.owner.page.run("duplicate_layer", {
-                "id": tools.owner.current.id,
-                "template": true
-            })
+        onClicked: {
+            tools.owner.page.run("template", {
+                    "make": {
+                        "layers": [tools.owner.current.id].concat(tools.owner.page.picked.filter(id => id !== tools.owner.current.id))
+                    }
+                });
+            tools.owner.page.picked = [];
+        }
     }
 
     QQC2.ToolButton {
@@ -131,8 +135,8 @@ Flow {
         enabled: tools.owner.current !== null
         onClicked: {
             tools.owner.page.run("group", {
-                "ids": [tools.owner.current.id].concat(tools.owner.page.picked.filter(id => id !== tools.owner.current.id))
-            });
+                    "ids": [tools.owner.current.id].concat(tools.owner.page.picked.filter(id => id !== tools.owner.current.id))
+                });
             tools.owner.page.picked = [];
         }
     }

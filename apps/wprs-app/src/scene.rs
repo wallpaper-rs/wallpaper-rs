@@ -48,7 +48,9 @@ pub mod qobject {
         #[qinvokable]
         fn scripts(self: &SceneEditor, id: &QString) -> QString;
         #[qinvokable]
-        fn script_source(self: &SceneEditor, path: &QString) -> QString;
+        fn code(self: &SceneEditor, query: &QString, args: &QString) -> QString;
+        #[qinvokable]
+        fn watch(self: Pin<&mut SceneEditor>);
         #[qinvokable]
         fn rig(self: &SceneEditor, id: &QString, query: &QString) -> QString;
         #[qinvokable]
@@ -93,7 +95,7 @@ use cxx_qt_lib::QString;
 use qobject::SceneEditor;
 use serde_json::{Value, json};
 use std::pin::Pin;
-use wprs_editor::{Action, Problem, Project, inspect, outline, references};
+use wprs_editor::{Action, Problem, Project, outline};
 
 #[derive(Default)]
 pub struct SceneEditorRust {
@@ -115,6 +117,8 @@ pub struct SceneEditorRust {
     pub busy: bool,
     pub project: Option<Project>,
     pub imports: Vec<Action>,
+    pub report: Vec<String>,
+    pub watched: u64,
     pub files: Vec<Problem>,
     pub persisted: String,
     pub sending: bool,
@@ -133,6 +137,7 @@ impl SceneEditor {
             Err(e) => return self.fail(e),
         };
         self.as_mut().scoped();
+        let before = matches!(action, Action::ImportScript(_)).then(|| self.scripts_now());
         let done = {
             let mut this = self.as_mut().rust_mut();
             let Some(project) = this.project.as_mut() else { return };
@@ -141,6 +146,9 @@ impl SceneEditor {
         match done {
             Ok(_) => self.as_mut().changed(),
             Err(e) => return self.fail(e),
+        }
+        if let Some(before) = before {
+            self.as_mut().said(&before);
         }
         if gesture && let Some(project) = self.rust_mut().project.as_mut() {
             project.held();
@@ -157,30 +165,6 @@ impl SceneEditor {
     pub fn select(mut self: Pin<&mut Self>, pointer: &QString) {
         self.as_mut().set_selected(pointer.clone());
         self.show_fields();
-    }
-
-    pub fn inspect(&self, pointer: &QString) -> QString {
-        let fields = self.project.as_ref().map(|p| {
-            inspect::fields_from(Some(&p.dir), &p.doc, &pointer.to_string(), self.time, &p.effects())
-        });
-        QString::from(&serde_json::to_string(&fields.unwrap_or_default()).unwrap_or_default())
-    }
-
-    pub fn value(&self, pointer: &QString) -> QString {
-        let found = self.project.as_ref().and_then(|p| p.doc.pointer(&pointer.to_string()).cloned());
-        QString::from(&found.unwrap_or_default().to_string())
-    }
-
-    pub fn condition(&self, pointer: &QString, text: &QString) -> QString {
-        let doc = self.project.as_ref().map(|p| &p.doc);
-        let found =
-            doc.and_then(|d| wprs_editor::settings::condition(d, &pointer.to_string(), &text.to_string()));
-        QString::from(&found.unwrap_or_default())
-    }
-
-    pub fn scripts(&self, id: &QString) -> QString {
-        let found = self.project.as_ref().map(|p| references::scripts(&p.dir, &p.doc, &id.to_string()));
-        QString::from(&serde_json::to_string(&found.unwrap_or_default()).unwrap_or_default())
     }
 
     pub fn show_fields(mut self: Pin<&mut Self>) {
