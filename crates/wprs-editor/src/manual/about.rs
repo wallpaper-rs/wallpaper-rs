@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 63] = [
+pub const ABOUT: [(&str, &str); 65] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),
@@ -21,6 +21,8 @@ pub const ABOUT: [(&str, &str); 63] = [
     ("asset", "Change how an asset is stored: texture compression, cover, placeholder, cube faces"),
     ("rgb", "Turn the lighting of a layer on or off, or set its zone size"),
     ("translate", "Set, add or remove the text of a field in one language"),
+    ("rename", "Rename a layer, timeline, asset or particle system and what refers to it"),
+    ("paste", "Paste layers copied with the copy query, into a group or at a position"),
     ("thumbnail", "Set the thumbnail of the package, or its animated preview"),
     ("upgrade", "Move a first-version manifest to the current format"),
     ("add_property", "Add a user property to the manifest"),
