@@ -55,3 +55,30 @@ fn the_tilt_knob_writes_a_key_at_the_playhead_when_the_tilt_is_keyed() {
     light(&mut p, json!({ "set": { "layer": "s", "tilt": 30, "time": 1, "replace": true } })).unwrap();
     assert_eq!(layer(&p, "s")["transform"]["tilt"], json!([30.0, 0]));
 }
+
+#[test]
+fn the_radius_and_tube_end_handles_write_keys_at_the_playhead_when_keyed() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    light(&mut p, json!({ "add": { "light": "tube", "id": "t", "at": [400, 300] } })).unwrap();
+    let pointer = wprs_editor::actions::layer(&p.doc, "t").unwrap().0;
+    for (field, keys) in [
+        ("radius", json!([[0, 100], [2, 300]])),
+        ("transform/position", json!([[0, [400, 300]], [2, [600, 300]]])),
+    ] {
+        let set = json!({ "set": { "pointer": format!("{pointer}/{field}"), "value": { "keys": keys } } });
+        super::act(&mut p, set).unwrap();
+    }
+    light(&mut p, json!({ "set": { "layer": "t", "radius": 220, "time": 1 } })).unwrap();
+    let radius = layer(&p, "t")["radius"]["keys"].as_array().unwrap().clone();
+    assert!(radius.len() == 3 && radius.iter().any(|k| k[0] == 1.0 && k[1] == 220.0), "{radius:?}");
+    let end =
+        json!({ "set": { "layer": "t", "at": [500, 320], "aim": [560, 320], "length": 120, "time": 1 } });
+    light(&mut p, end).unwrap();
+    let t = layer(&p, "t");
+    let keys = t["transform"]["position"]["keys"].as_array().unwrap();
+    assert_eq!(keys.len(), 3, "{keys:?}");
+    assert_eq!(t["length"], json!(120.0));
+    let unkeyed = json!({ "set": { "layer": "t", "radius": 50 } });
+    assert!(light(&mut p, unkeyed).is_err(), "a keyed radius is not overwritten without replace");
+}

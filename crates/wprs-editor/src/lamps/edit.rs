@@ -46,20 +46,21 @@ pub(crate) fn change(dir: &Path, doc: &Value, s: &LightSet) -> Result<Vec<Op>> {
             .filter(|(f, k)| !k.contains(&beam) && doc.pointer(&format!("{path}/{f}")).is_some());
         ops.extend(found.map(|(field, _)| Op::Remove { path: format!("{path}/{field}") }));
     }
-    let mut put = |field: &str, v: Value| ops.extend(set(doc, &format!("{path}/{field}"), v));
+    let mut animated = Vec::new();
     if let Some(c) = &s.color {
         serde_json::from_value::<wprs_scene::Color>(c.clone()).map_err(|_| {
             anyhow!(said("editor.light_color", "a light color is #rrggbb or [r, g, b, a]", &[]))
         })?;
-        put("color", c.clone());
+        animated.push(("color", c.clone()));
     }
     let numbers =
         [("intensity", s.intensity, 0.0, 100.0), ("radius", s.radius, 1.0, 1e5), ("z", s.z, -1e5, 1e5)];
     for (name, v, lo, hi) in numbers {
         if let Some(v) = v {
-            put(name, json!(ranged(name, v, lo, hi)?));
+            animated.push((name, json!(ranged(name, v, lo, hi)?)));
         }
     }
+    let mut put = |field: &str, v: Value| ops.extend(set(doc, &format!("{path}/{field}"), v));
     if let Some([inner, outer]) = s.cone {
         only(beam, Beam::Spot, "cone")?;
         ranged("cone", inner, 0.0, 180.0)?;
@@ -93,15 +94,17 @@ pub(crate) fn change(dir: &Path, doc: &Value, s: &LightSet) -> Result<Vec<Op>> {
             moves.push(("rotation", json!((f64::from(angle) * 100.0).round() / 100.0)));
         }
     }
-    if moves.is_empty() {
-        return Ok(ops);
-    }
-    let base = format!("{path}/transform");
     let mut work = doc.clone();
-    for (field, v) in moves {
-        crate::shaping::keyed::write(&mut work, &format!("{base}/{field}"), v, s.time, s.replace)?;
+    for (field, v) in animated.iter().cloned().chain(moves.iter().map(|(f, v)| (*f, v.clone()))) {
+        let at =
+            if moves.iter().any(|(m, _)| *m == field) { format!("transform/{field}") } else { field.into() };
+        crate::shaping::keyed::write(&mut work, &format!("{path}/{at}"), v, s.time, s.replace)?;
     }
-    ops.extend(set(doc, &base, work.pointer(&base).cloned().unwrap_or_default()));
+    let fields = animated.iter().map(|(f, _)| *f).chain((!moves.is_empty()).then_some("transform"));
+    for field in fields {
+        let at = format!("{path}/{field}");
+        ops.extend(set(doc, &at, work.pointer(&at).cloned().unwrap_or_default()));
+    }
     Ok(ops)
 }
 

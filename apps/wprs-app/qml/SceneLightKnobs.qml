@@ -17,7 +17,9 @@ Item {
         square: true
         label: App.tr("Height %1", Math.round(knobs.light.z))
         tip: App.tr("Drag up or down to raise or lower the light")
-        onMoved: (to, done) => knobs.gizmo.put("z", Math.round((knobs.gizmo.at[1] - to[1]) / 0.5))
+        onMoved: (to, done) => knobs.gizmo.keyed({
+                "z": Math.round((knobs.gizmo.at[1] - to[1]) / 0.5)
+            })
     }
 
     SceneKnob {
@@ -25,7 +27,9 @@ Item {
         ratio: knobs.ratio
         tint: Kirigami.Theme.positiveTextColor
         tip: App.tr("Drag to change where the light ends")
-        onMoved: (to, done) => knobs.gizmo.put("radius", Math.max(1, Math.round(Math.hypot(to[0] - knobs.gizmo.at[0], to[1] - knobs.gizmo.at[1]))))
+        onMoved: (to, done) => knobs.gizmo.keyed({
+                "radius": Math.max(1, Math.round(Math.hypot(to[0] - knobs.gizmo.at[0], to[1] - knobs.gizmo.at[1])))
+            })
     }
 
     SceneKnob {

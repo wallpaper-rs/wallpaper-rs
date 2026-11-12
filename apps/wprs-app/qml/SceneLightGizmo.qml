@@ -11,15 +11,6 @@ Item {
     readonly property bool chosen: owner.selected === light.pointer
     readonly property var at: light.at
 
-    function local(p) {
-        const m = light.parent;
-        return [m[0] * p[0] + m[2] * p[1] + m[4], m[1] * p[0] + m[3] * p[1] + m[5]].map(v => Math.round(v * 100) / 100);
-    }
-
-    function put(field, value) {
-        owner.page.change(light.pointer + "/" + field, value, true);
-    }
-
     function keyed(args) {
         owner.page.run("light", {
             "set": Object.assign({
@@ -47,15 +38,18 @@ Item {
     function cone(to, inner) {
         const turn = Math.atan2(to[1] - at[1], to[0] - at[0]) * 180 / Math.PI - light.angle;
         const wide = Math.min(180, Math.round(Math.abs(((turn + 540) % 360) - 180) * 20) / 10);
-        put("cone", inner ? [Math.min(wide, light.cone[1]), light.cone[1]] : [light.cone[0], Math.max(wide, light.cone[0])]);
+        keyed({
+            "cone": inner ? [Math.min(wide, light.cone[1]), light.cone[1]] : [light.cone[0], Math.max(wide, light.cone[0])]
+        });
     }
 
     function end(to, other, plus) {
         const mid = [(to[0] + other[0]) / 2, (to[1] + other[1]) / 2];
-        const a = local(plus ? other : to), b = local(plus ? to : other);
-        put("transform/position", local(mid));
-        put("length", Math.max(1, Math.round(Math.hypot(to[0] - other[0], to[1] - other[1]))));
-        put("transform/rotation", Math.round(Math.atan2(b[1] - a[1], b[0] - a[0]) * 1800 / Math.PI) / 10);
+        keyed({
+            "at": mid.map(v => Math.round(v * 100) / 100),
+            "aim": (plus ? to : other).map(v => Math.round(v * 100) / 100),
+            "length": Math.max(1, Math.round(Math.hypot(to[0] - other[0], to[1] - other[1])))
+        });
     }
 
     Rectangle {
