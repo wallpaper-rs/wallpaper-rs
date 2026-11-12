@@ -44,9 +44,18 @@ pub enum Inherit {
     Opacity,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, PartialEq, Deserialize, JsonSchema)]
 #[serde(transparent)]
 pub struct Parallax(pub Value<Vec2>);
+
+impl Serialize for Parallax {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        match &self.0 {
+            Value::Fixed(Vec2([x, y])) if x == y => s.serialize_f32(*x),
+            v => v.serialize(s),
+        }
+    }
+}
 
 impl Default for Parallax {
     fn default() -> Self {
