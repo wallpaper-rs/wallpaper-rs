@@ -1207,7 +1207,7 @@ follows; empty ones are not sent and `GetSchema().providers` lists the allowed v
 
 | Option | Kind | Query parameter |
 | --- | --- | --- |
-| `query` | text | `q` (tags, `-tag`, `+tag`, `type:png`) |
+| `query` | text, or a pasted `https://wallhaven.cc/search?...` address | `q` (tags, `-tag`, `+tag`, `type:png`); a pasted address fills `query`, `similar`, `tag`, `categories`, `purity`, `sorting`, `order`, `top_range`, `atleast`, `resolutions`, `ratios`, `colors` and `page` from its parameters |
 | `categories` | flags (general, anime, people) | `categories`, 3 digits |
 | `purity` | flags (sfw, sketchy, nsfw) | `purity`, 3 digits; sketchy and nsfw need the API key |
 | `sorting` | enum: date_added, relevance, random, views, favorites, toplist, hot | `sorting` |

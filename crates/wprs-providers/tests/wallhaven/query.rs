@@ -99,3 +99,27 @@ async fn collections_are_listed_and_read_with_the_purity_filter_only() {
     assert_eq!(own.len(), 2);
     assert!(!own[1].public);
 }
+
+#[test]
+fn a_pasted_search_link_becomes_the_options() {
+    let link = "https://wallhaven.cc/search?q=sea+%40alice&categories=101&purity=100&sorting=random&order=asc&ratios=16x9%2Clandscape&colors=660000&atleast=1920x1080&page=2";
+    let get = |key: &str| if key == "query" { link.to_owned() } else { String::new() };
+    let search = Search::from_options(get);
+    assert_eq!(search.query.as_deref(), Some("sea @alice"));
+    assert_eq!(
+        (search.categories.as_str(), search.sorting.as_str(), search.order.as_str()),
+        ("101", "random", "asc")
+    );
+    assert_eq!(
+        (search.ratios, search.colors, search.page),
+        (vec!["16x9".into(), "landscape".into()], vec!["660000".into()], 2)
+    );
+    assert_eq!(search.atleast.as_deref(), Some("1920x1080"));
+    let like = |key: &str| {
+        if key == "query" { "https://wallhaven.cc/search?q=like%3A94x38z".to_owned() } else { String::new() }
+    };
+    assert_eq!(Search::from_options(like).similar.as_deref(), Some("94x38z"));
+    let plain =
+        |key: &str| if key == "query" { "https://example.org/search?q=x".to_owned() } else { String::new() };
+    assert_eq!(Search::from_options(plain).query.as_deref(), Some("https://example.org/search?q=x"));
+}

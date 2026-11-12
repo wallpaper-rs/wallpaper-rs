@@ -55,8 +55,9 @@ impl Search {
         let number = |key: &str, default: u32| get(key).trim().parse().unwrap_or(default).max(1);
         let base = Self::default();
         let text = |key: &str, default: String| some(key).unwrap_or(default);
-        Self {
-            query: some("query"),
+        let pasted = some("query").filter(|query| Self::is_search_link(query));
+        let mut search = Self {
+            query: some("query").filter(|query| !Self::is_search_link(query)),
             categories: text("categories", base.categories),
             purity: text("purity", base.purity),
             sorting: text("sorting", base.sorting),
@@ -74,7 +75,12 @@ impl Search {
             pages: number("pages", 1),
             max_items: number("max_items", 240) as usize,
             seed: some("seed"),
+        };
+        if let Some(link) = pasted {
+            search.apply_link(&link);
+            search.seed = some("seed");
         }
+        search
     }
 
     pub fn terms(&self) -> Option<String> {

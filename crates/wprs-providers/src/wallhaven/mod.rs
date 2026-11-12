@@ -10,6 +10,7 @@ const MAX_ITEMS: usize = 240;
 
 mod check;
 mod limit;
+mod link;
 mod search;
 
 pub use check::{
