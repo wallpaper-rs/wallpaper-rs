@@ -499,6 +499,13 @@ empaquetar (`paquete.md`).
 
 Para probar un script que reacciona a algo que no tienes a mano:
 
+- `wprs-ctl input grant org.example.mi_escena pointer` concede la entrada `pointer` a la escena que
+  se está mostrando (el id es el de su manifiesto), y `wprs-ctl input touch DP-1 0.8,0.2` pone un
+  puntero inventado en esa fracción de la pantalla (`--stop` lo quita). Con un `console.log` de
+  `input.cursor.scene` en `update`, la consola de la vista previa imprime
+  `log scripts/sigue.js: cursor [1536,216] true`: 0,8 y 0,2 de un lienzo de 1920 × 1080;
+- `wprs-ctl input status` dice qué entradas usa la escena de cada pantalla y cuáles tiene
+  concedidas;
 - `wprs-ctl scene preview mi-escena --media pista.json` inventa una pista del reproductor;
 - `wprs-ctl scene preview mi-escena --values ajustes.json` prueba valores de propiedades sin
   guardarlos;

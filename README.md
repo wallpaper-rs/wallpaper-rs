@@ -1766,7 +1766,7 @@ ninguno en Flathub) el fondo se rechaza con el motivo en lugar de quedarse en bl
 con el texto en español, y la biblioteca avisa antes de aplicarlo: la ficha de la página lo marca
 con el motivo, sus detalles lo muestran y `wprs-ctl lib show` da la línea `not shown here`. Meter WPE en el Flatpak exigiría compilar WPE WebKit 2.54 y sus dependencias
 en cada versión (horas y varios GiB de memoria), así que por ahora no está. `docs/specs/web.md` explica el
-motor, el aislamiento y la interfaz de la página, y `docs/guia-fondos-web.md` es la guía para quien
+motor, el aislamiento y la interfaz de la página, y `docs/crear/fondos-web.md` es la guía para quien
 los hace. El fundido hacia una página empieza cuando la página dibuja su primer fotograma (o falla),
 así que el fondo anterior no se funde en una pantalla vacía, y al salir de una página se funde desde
 su último fotograma. El límite de FPS frena todos los fotogramas de la página, no solo
