@@ -1,0 +1,11 @@
+{
+  "id": "niebla",
+  "name": { "es": "Niebla", "en": "Haze" },
+  "mask_mode": "strength",
+  "params": [
+    { "id": "color", "type": "color", "default": "#c8d4f0" },
+    { "id": "cantidad", "type": "float", "default": 0.4, "min": 0, "max": 1 }
+  ],
+  "passes": [{ "entry": "fs_niebla" }],
+  "cost": { "taps": 1, "passes": 1, "scale": 1 }
+}

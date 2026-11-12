@@ -1,0 +1,33 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.efectos-apilados",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {
+    "color_vivo": {
+      "default": true,
+      "label": {
+        "es": "Colores vivos"
+      },
+      "type": "bool"
+    }
+  },
+  "requires": {
+    "features": [
+      "effect_masks",
+      "mask_strength",
+      "scripts2"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Efectos apilados",
+  "version": "0.1.0"
+}

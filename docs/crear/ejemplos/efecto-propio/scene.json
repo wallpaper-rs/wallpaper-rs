@@ -1,0 +1,15 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#000000" },
+  "assets": { "cielo": { "path": "assets/cielo.png" } },
+  "effects": {
+    "duotono": { "descriptor": "effects/duotono.json", "wgsl": "effects/duotono.wgsl" },
+    "niebla": { "descriptor": "effects/niebla.json", "wgsl": "effects/niebla.wgsl" }
+  },
+  "layers": [
+    { "id": "fondo", "type": "image", "image": "cielo", "size": [1920, 1080],
+      "effects": [{ "effect": "duotono",
+        "params": { "sombra": "#12122e", "luz": "#ffcf8a", "cantidad": { "prop": "intensidad" } } },
+        { "effect": "niebla", "params": { "color": "#dfe6ff", "cantidad": 0.5 } }] }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#000000" },
+  "assets": {
+    "cielo": { "path": "assets/cielo.png" },
+    "mancha": { "path": "assets/mancha.png", "linear": true }
+  },
+  "layers": [
+    { "id": "fondo", "type": "image", "image": "cielo", "size": [1920, 1080],
+      "effects": [
+        { "effect": "color_adjust", "name": "color", "enabled": { "prop": "color_vivo" },
+          "params": { "saturation": 1.8, "contrast": 1.15 } },
+        { "effect": "waves", "params": { "amplitude": 10, "frequency": 5, "speed": 1.5 },
+          "mask": { "texture": "mancha", "channel": "r", "feather": 0 } },
+        { "effect": "blur", "params": { "radius": 6 },
+          "mask": { "shape": { "rect": { "size": [1920, 260] } }, "invert": true, "strength": 0.8 },
+          "optional": true }
+      ] },
+    { "id": "pantalla", "type": "adjustment",
+      "effects": [
+        { "effect": "bloom", "params": { "threshold": 0.7, "intensity": 0.8, "radius": 24 } },
+        { "effect": "vignette", "params": { "intensity": 0.45, "color": "#000010" } },
+        { "effect": "film_grain", "params": { "amount": 0.04, "fps": 12 } }
+      ] }
+  ]
+}
