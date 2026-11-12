@@ -4,6 +4,7 @@ use crate::findings::{manifest_problem, problem, warning};
 use crate::layers::find;
 use serde_json::Value;
 use std::collections::BTreeMap;
+use std::io::Read;
 use std::path::Path;
 use wprs_core::message::said;
 use wprs_format::{FileEntry, Limits, Property, SIGNATURE, validate};
@@ -143,6 +144,14 @@ pub fn check_files(dir: &Path, doc: &Value) -> Vec<Problem> {
         let text = "%1 signs an earlier version; a build without a key removes it";
         out.push(warning("/manifest", said("editor.signature", text, &[&SIGNATURE])));
     }
+    let head = |path: &str| {
+        let file = std::fs::File::open(dir.join(path)).ok()?;
+        let mut bytes = Vec::new();
+        file.take(1 << 16).read_to_end(&mut bytes).ok()?;
+        Some(bytes)
+    };
+    let phone = wprs_format::phone_note(&found, head);
+    out.extend(phone.map(|note| warning("/manifest", said("editor.phone_limits", "%1", &[&note]))));
     if !crate::pages::scened(doc) {
         return out;
     }

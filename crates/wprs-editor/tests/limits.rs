@@ -111,3 +111,24 @@ fn recovery_files_go_away_when_nothing_is_left_to_recover() {
     project.persist().unwrap();
     assert!(files() <= 32, "{} recovery files are kept", files());
 }
+
+#[test]
+fn the_limits_of_the_phone_show_in_the_problems_and_in_the_check_of_the_folder() {
+    let (root, _) = (tempfile::tempdir().unwrap(), state());
+    let dir = root.path().join("wide");
+    let project = Project::create(&dir, starter("empty", "org.example.wide", "Wide", "en").unwrap()).unwrap();
+    let phone = |project: &Project| {
+        let found = wprs_editor::check::check_files(&dir, &project.doc);
+        found.into_iter().find(|p| p.message.contains("phone")).map(|p| (p.pointer, p.warning))
+    };
+    assert_eq!(phone(&project), None);
+    image::RgbaImage::new(9000, 1).save(dir.join("assets/wide.png")).unwrap();
+    assert_eq!(phone(&project), Some(("/manifest".to_owned(), true)));
+    let (_, facts) = wprs_format::inspect(&dir).unwrap();
+    assert!(!facts.facets.contains(&"android".to_owned()));
+    assert!(facts.notes.iter().any(|n| n.contains("wide.png is 9000×1 pixels")), "{:?}", facts.notes);
+    fs::remove_file(dir.join("assets/wide.png")).unwrap();
+    image::RgbaImage::new(64, 64).save(dir.join("assets/fine.png")).unwrap();
+    assert_eq!(phone(&project), None);
+    assert!(wprs_format::inspect(&dir).unwrap().1.facets.contains(&"android".to_owned()));
+}

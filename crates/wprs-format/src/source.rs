@@ -112,13 +112,9 @@ pub(crate) fn facts_of(
             media::mark(&mut found, &path);
         }
     }
-    let total = files.iter().map(|f| f.size).sum();
-    let mut heads = Vec::new();
-    for file in files.iter().filter(|f| crate::closer::picture(&f.path)) {
-        let (head, _) = Folder(source).head(&file.path, usize::MAX, crate::closer::HEAD as usize)?;
-        heads.push((head, file.path.clone()));
-    }
-    if let Some(note) = crate::closer::oversized(total, heads) {
+    let sizes: Vec<(String, u64)> = files.iter().map(|f| (f.path.clone(), f.size)).collect();
+    let peek = |path: &str| Folder(source).head(path, usize::MAX, crate::closer::HEAD as usize).ok();
+    if let Some(note) = crate::closer::phone_note(&sizes, |path| peek(path).map(|r| r.0)) {
         found.facets.retain(|f| f != "android");
         found.notes.push(note);
     }

@@ -26,6 +26,17 @@ pub(crate) fn oversized(total: u64, heads: Vec<(Vec<u8>, String)>) -> Option<Str
     })
 }
 
+pub fn phone_note(
+    files: &[(String, u64)],
+    mut head: impl FnMut(&str) -> Option<Vec<u8>>,
+) -> Option<String> {
+    let total = files.iter().map(|(_, size)| size).sum();
+    let heads = files.iter().filter(|(path, _)| picture(path)).filter_map(|(path, _)| {
+        head(path).map(|bytes| (bytes, path.clone()))
+    });
+    oversized(total, heads.collect())
+}
+
 impl<R: Read + Seek> Package<R> {
     pub fn look_closer(&mut self) -> Result<()> {
         for path in self.videos.clone() {

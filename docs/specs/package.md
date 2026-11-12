@@ -400,7 +400,7 @@ package fully (no feature refused or left out) and that its `platforms` allows, 
 finds what plays whole on the phone. When they record facets (adding to a repository, indexing the
 library, the server and `pack check`), readers also check the limits of the phone: a package that
 takes more than 1 GiB once unpacked, or holds a png, jpeg, webp or gif picture of more than 8192
-pixels a side or 32 megapixels, loses the `android` facet and `pack check` says why. The phone opens
+pixels a side or 32 megapixels, loses the `android` facet and `pack check` says why. `pack check` of a folder does the same check on its files, and the editor lists it among the problems of the folder as a warning on `/manifest`, so that the author sees it before building. The phone opens
 packages with that 1 GiB limit, so it refuses larger ones. The app shows where a package works fully
 in its details and `wprs-ctl lib show` prints it as `works on`. Repositories copy `platforms` into the
 release.

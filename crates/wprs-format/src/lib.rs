@@ -63,7 +63,7 @@ pub use build::{build, build_staged, sha256, sha256_file};
 pub use catalog::{Added, add, hide, list, revoke, revoke_key, unrevoke};
 pub use charter::{Charter, key_text};
 pub use client::{Outcome, RepoInfo, Update, add_repo, remove_repo, repos, update_repo, verify};
-pub use closer::{PHONE_BYTES, PHONE_PIXELS, PHONE_SIDE};
+pub use closer::{PHONE_BYTES, PHONE_PIXELS, PHONE_SIDE, phone_note};
 pub use display::{Accent, Display, Flip, Follow, FrameRate, Span};
 pub use download::{animated, preview, previews, release};
 pub use entry::{Blob, DETAILS_FORMAT, Details, ENTRY_FORMAT, Entry, Pin};
