@@ -415,7 +415,7 @@ id). Nunca admite paquetes `imported`. `repo publish` firma y escribe el índice
 
 ```
 org.example.reloj 1.0.0 sha256=<huella sha256> author=mia
-index 1 published with 1 packages; it expires 2026-11-19 12:17:16 UTC
+index 1 published with 1 packages; it expires <fecha y hora UTC>
 ```
 
 El índice caduca. Antes de la fecha, vuelve a firmarlo sin cambiar nada:
