@@ -634,3 +634,105 @@ wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
 wprs-ctl scene act DIR manifest '{"inputs":{"inputs":["pointer"],"add":true}}'
 wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"depth_parallax"}}'
 wprs-ctl scene act DIR depth_map '{"asset":"picture","pointer":"/scene/layers/0/effects/0/params/depth"}'
+
+ask copy
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene ask DIR copy '{"ids":["backdrop"]}'
+
+ask film
+wprs-ctl scene act DIR add_layer '{"kind":"video","file":"video.webm","id":"clip"}'
+wprs-ctl scene ask DIR film '{"layer":"clip","strip":3}'
+
+ask sprites
+wprs-ctl scene act DIR import '{"file":"sheet.png","id":"sheet"}'
+wprs-ctl scene act DIR sprites '{"grid":{"asset":"sheet","columns":4,"rows":2}}'
+wprs-ctl scene ask DIR sprites '{"asset":"sheet"}'
+
+ask asset_uses
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene ask DIR asset_uses '{"asset":"picture"}'
+
+ask unkept
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene ask DIR unkept '{"id":"backdrop"}'
+
+ask script_uses
+wprs-ctl scene act DIR import_script '{"file":"","template":"empty"}'
+wprs-ctl scene ask DIR script_uses '{"name":"sparks"}'
+
+ask review
+wprs-ctl scene ask DIR review '{}'
+
+ask signature
+wprs-ctl scene ask DIR signature '{}'
+
+ask tried
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"glow"}'
+wprs-ctl scene ask DIR tried '{"values":{"glow":40}}'
+
+ask media
+wprs-ctl scene new DIR --from image
+wprs-ctl scene ask DIR media '{}'
+
+ask levels
+wprs-ctl scene act DIR add_property '{"kind":"slider","id":"glow"}'
+wprs-ctl scene ask DIR levels '{"property":"glow"}'
+
+ask base
+wprs-ctl scene new source
+wprs-ctl scene act source add_property '{"kind":"slider","id":"glow"}'
+wprs-ctl scene new DIR --from preset
+wprs-ctl scene ask DIR base '{"file":"source"}'
+
+ask bands
+wprs-ctl scene ask DIR bands '{"of":16}'
+
+ask touch
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
+wprs-ctl scene act DIR layer '{"touch":{"layer":"sky","takes":"alpha","alpha":0.5}}'
+wprs-ctl scene ask DIR touch '{}'
+
+ask shape_handles
+wprs-ctl scene act DIR add_layer '{"kind":"shape","id":"form"}'
+wprs-ctl scene ask DIR shape_handles '{"layer":"form","time":0}'
+
+ask text_box
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"title"}'
+wprs-ctl scene ask DIR text_box '{"layer":"title","time":0}'
+
+ask font_list
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"title"}'
+wprs-ctl scene ask DIR font_list '{"layer":"title"}'
+
+ask clock_sample
+wprs-ctl scene ask DIR clock_sample '{"pattern":"HH:mm","wall":0}'
+
+ask clock_help
+wprs-ctl scene ask DIR clock_help '{"lang":"en","wall":0}'
+
+ask mask_view
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"blur"}}'
+wprs-ctl scene act DIR effects '{"mask":{"layer":"image","index":0,"shape":{"ellipse":{"size":[600,400]}},"feather":40}}'
+wprs-ctl scene ask DIR mask_view '{"layer":"image","index":0,"time":0}'
+
+ask mask_picture
+wprs-ctl scene act DIR import '{"file":"picture.png"}'
+wprs-ctl scene ask DIR mask_picture '{"asset":"picture","channel":"luminance"}'
+
+ask effect_handles
+wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png"}'
+wprs-ctl scene act DIR effects '{"add":{"layer":"image","effect":"blur_radial"}}'
+wprs-ctl scene ask DIR effect_handles '{"layer":"image","index":0,"time":0}'
+
+ask capture_view
+wprs-ctl scene act DIR add_layer '{"kind":"adjustment","id":"setting"}'
+wprs-ctl scene act DIR layer '{"transform":{"layer":"setting","size":[400,300]}}'
+wprs-ctl scene ask DIR capture_view '{"layer":"setting","time":0}'
+
+ask level
+wprs-ctl scene ask DIR level '{"quality":"q2"}'
+
+ask history
+wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
+wprs-ctl scene ask DIR history '{}'

@@ -930,3 +930,168 @@ Simula un puntero y una inclinación de teléfono en la vista previa, para ver c
 wprs-ctl scene act mi-escena canvas '{"probe":{"pointer":[0.7,0.3],"tilt":[0.2,0]}}'
 wprs-ctl scene act mi-escena canvas '{"probe":{"off":true}}'
 ```
+
+## Preguntas
+
+### Antes de empezar
+
+Las preguntas se hacen con `wprs-ctl scene ask CARPETA NOMBRE 'JSON'` y contestan con JSON; no cambian nada. Las reglas de ids, rutas y coordenadas son las de [las acciones](#antes-de-empezar). Las que tratan de una capa aceptan también `--layer ID` cuando los argumentos no la nombran.
+
+### Capas, recursos y vídeo
+
+#### `copy`
+
+Contesta con las capas que se copian y todo lo que necesitan: los recursos, los sistemas de partículas y los efectos de paquete que usan. Es el texto que la acción [`paste`](#paste) pega, en la misma escena o en otra. En la app, **Copiar** del menú de capas.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `ids` | lista de textos | (obligatorio) Ids de las capas que se copian. |
+
+La respuesta tiene `from` (la carpeta de la escena de la que sale), `layers`, `assets`, `particles` y `effects`. Si un id no existe, trae `error`. Desde la terminal hay también `wprs-ctl scene copy CARPETA ID...`.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"solid","id":"fondo"}'
+wprs-ctl scene ask mi-escena copy '{"ids":["fondo"]}'
+```
+
+#### `unkept`
+
+Dice qué capas cambiarían de sitio si se quitara una capa o un grupo: las que la tienen de padre y cuya posición no se puede conservar sin ella. La app lo usa para avisar antes de quitar.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `id` | texto | Id de la capa o del grupo. Si falta, se usa `--layer`. |
+
+La respuesta es `{"layers": [...]}` con los ids de esas capas. La lista vacía quiere decir que quitarla no mueve nada.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"solid","id":"fondo"}'
+wprs-ctl scene ask mi-escena unkept '{"id":"fondo"}'
+```
+
+#### `asset_uses`
+
+Dice dónde usa la escena un recurso: cada ruta del documento que lo nombra y la capa a la que pertenece. Sirve para saber si se puede quitar un recurso sin romper nada.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `asset` | texto | (obligatorio) Id del recurso. |
+
+La respuesta tiene `asset` y `uses`, una lista de `{pointer, layer}` donde `layer` es `{id, type}` o `null` si el uso no es de una capa (por ejemplo, el de una propiedad).
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"image","file":"foto.png","id":"cielo"}'
+wprs-ctl scene ask mi-escena asset_uses '{"asset":"foto"}'
+```
+
+#### `film`
+
+Contesta con el vídeo de una capa de vídeo: su archivo, tamaño, largo, el recorte, la velocidad y si la velocidad tiene claves. Sirve para ver qué parte del vídeo se muestra. En la app, el recorte del vídeo de la capa.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto | (obligatorio) Id de la capa de vídeo. |
+| `strip` | entero | Cuántas miniaturas pedir, repartidas por el largo. Por defecto 0, ninguna. |
+
+La respuesta tiene `layer`, `pointer`, `asset`, `file`, `size`, `length` (en segundos), `start`, `end`, `rate`, `loop` y `keyed`. Con `strip`, trae también `strip`, una lista de `{at, file}` con la miniatura de cada instante. Si la capa no existe o no tiene vídeo, la respuesta es `null`.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"video","file":"video.webm","id":"clip"}'
+wprs-ctl scene ask mi-escena film '{"layer":"clip","strip":3}'
+```
+
+#### `sprites`
+
+Contesta con los cuadros en que está cortada una imagen: los rectángulos, el atlas, la velocidad y las duraciones. Se escriben con la acción [`sprites`](#sprites). En la app, el cortador de hojas de cuadros.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `asset` | texto | (obligatorio) Id de la imagen. |
+
+La respuesta tiene `asset`, `file`, `size`, `rects` (cada rectángulo `[x, y, ancho, alto]` en píxeles), `atlas`, `fps`, `frames`, `durations` y `most` (el máximo de cuadros). Si el recurso no es una imagen, es `null`.
+
+```sh
+wprs-ctl scene act mi-escena import '{"file":"hoja.png","id":"hoja"}'
+wprs-ctl scene act mi-escena sprites '{"grid":{"asset":"hoja","columns":4,"rows":2}}'
+wprs-ctl scene ask mi-escena sprites '{"asset":"hoja"}'
+```
+
+#### `touch`
+
+Contesta con las capas que reciben el puntero y cómo lo reciben: los huesos con zona de toque y las capas con `touch` distinto de `off`. Se escribe con la variante `touch` de [`layer`](#layer).
+
+No lleva argumentos: se pasa `{}`.
+
+La respuesta es `{"layers": [...]}`, y cada capa trae `id`, `pointer`, `takes` (`all` o `alpha`), `alpha` (el umbral) y `bones` (cuántas zonas de hueso tiene).
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"image","file":"foto.png","id":"cielo"}'
+wprs-ctl scene act mi-escena layer '{"touch":{"layer":"cielo","takes":"alpha","alpha":0.5}}'
+wprs-ctl scene ask mi-escena touch '{}'
+```
+
+### Formas, texto y zonas
+
+#### `shape_handles`
+
+Contesta con las asas que se ven sobre el lienzo para dar forma a una capa de forma, y con los extremos de su degradado. Las mueve la variante `shape` de [`layer`](#layer) (con `figure`). En la app, las asas de la forma.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto | (obligatorio) Id de la capa de forma. |
+| `time` | número | Segundo en que se mide dónde está la capa. Por defecto 0. |
+
+La respuesta tiene `kind` (el tipo de forma), `handles` (cada asa con `name`, `kind`, `u`, su lugar dentro de la forma, y `at`, su lugar en el lienzo) y `gradient` (`radial`, `stops`, `from` y `to`, o `null` sin degradado). Si la capa no es una forma, es `null`.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"shape","id":"forma"}'
+wprs-ctl scene ask mi-escena shape_handles '{"layer":"forma","time":0}'
+```
+
+#### `text_box`
+
+Contesta con la caja que ocupa el texto de una capa de texto: su tamaño, cuántas líneas tiene, el asa del ancho y las esquinas. En la app, el asa del ancho del texto.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto | (obligatorio) Id de la capa de texto. |
+| `time` | número | Segundo en que se mide. Por defecto 0. |
+
+La respuesta tiene `size`, `lines`, `widest` (la línea más ancha), `wrapped` (si el texto se parte por un ancho), `width`, `handle` y `corners`. Si la capa no es de texto, es `null`.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"text","id":"titulo"}'
+wprs-ctl scene ask mi-escena text_box '{"layer":"titulo","time":0}'
+```
+
+#### `font_list`
+
+Contesta con las tipografías que puede usar una capa de texto y con la cadena que ya eligió. En la app, el selector de tipografías.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto | (obligatorio) Id de la capa de texto. |
+
+La respuesta tiene `chain` (las tipografías elegidas, en orden), `package` (las que trae el paquete), `system` (las del sistema), `generic` (`sans-serif`, `serif` y `monospace`) y `most` (cuántas puede tener la cadena).
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"text","id":"titulo"}'
+wprs-ctl scene ask mi-escena font_list '{"layer":"titulo"}'
+```
+
+#### `capture_view`
+
+Contesta con la zona que captura una capa de ajuste, para dibujar sus asas sobre el lienzo. Sirve con la acción [`rgb`](#rgb), que envía esa zona a la iluminación RGB.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto | (obligatorio) Id de la capa de ajuste, que tiene que tener `size`. |
+| `time` | número | Segundo en que se mide. Por defecto 0. |
+
+La respuesta tiene `size`, `max` (el mayor tamaño que se admite), `over` (si el tamaño pasa de ese máximo), `redraw`, `zone` y `limit` (las cuatro esquinas de la zona y del límite), `drawn` y `handles` (cada asa con su `corner` y su lugar `at`). Si la capa no es de ajuste o no tiene `size`, es `null`.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"adjustment","id":"ajuste"}'
+wprs-ctl scene act mi-escena layer '{"transform":{"layer":"ajuste","size":[400,300]}}'
+wprs-ctl scene ask mi-escena capture_view '{"layer":"ajuste","time":0}'
+```

@@ -945,7 +945,7 @@ wprs-ctl scene act mi-escena redo '{}'
 
 ### Antes de empezar
 
-Las preguntas se hacen con `wprs-ctl scene ask CARPETA NOMBRE 'JSON'` y contestan con JSON; no cambian nada. Algunas piden un objeto con argumentos, otras un solo valor (como el id de un recurso entre comillas). Las reglas de ids, rutas y coordenadas son las de [las acciones](#antes-de-empezar). Preguntar por las capas que se copian no existe como pregunta: se hace con `wprs-ctl scene copy CARPETA ID...`.
+Las preguntas se hacen con `wprs-ctl scene ask CARPETA NOMBRE 'JSON'` y contestan con JSON; no cambian nada. Algunas piden un objeto con argumentos, otras un solo valor (como el id de un recurso entre comillas). Las reglas de ids, rutas y coordenadas son las de [las acciones](#antes-de-empezar). Las capas que se copian se piden con [`copy`](acciones-capas.md#copy); desde la terminal hay también `wprs-ctl scene copy CARPETA ID...`.
 
 ### Textos, créditos y avisos del paquete
 
@@ -1115,6 +1115,22 @@ wprs-ctl scene ask mi-escena pools '{}'
 
 ### Scripts y shaders
 
+#### `script_uses`
+
+Dice en qué líneas de los scripts de la escena aparece un id entre comillas (simples, dobles o de plantilla). Sirve para saber qué scripts siguen nombrando una capa, un sistema de partículas o una plantilla antes de renombrarla o quitarla: la acción `rename` no reescribe los scripts.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `name` | texto | (obligatorio) El id que se busca. |
+
+La respuesta es una lista de `{path, line}`: el script y el número de línea (desde 1). Es una lista vacía si ningún script lo nombra.
+
+```sh
+printf 'layers.show("cielo");\n' > uno.js
+wprs-ctl scene act mi-escena import_script '{"file":"uno.js"}'
+wprs-ctl scene ask mi-escena script_uses '{"name":"cielo"}'
+```
+
 #### `uses`
 
 Contesta, por cada script de la escena, qué partes del motor declara, cuáles detecta en su código y cuáles le faltan por declarar. Sirve para comprobar que el paquete pide los permisos que sus scripts necesitan. Lo que falta se arregla con la acción [`uses`](acciones-tiempo-y-paquete.md#uses).
@@ -1166,3 +1182,145 @@ wprs-ctl scene ask mi-escena shader_check '{"effect":"tinte","wgsl":"fn color_ti
 
 La última pregunta da `"ok": false`, `"line": 2` y `"column": 12`, con el aviso de que `colr` no existe.
 
+### Revisión y firma del paquete
+
+#### `review`
+
+Contesta con la revisión del paquete tal como la ve el editor antes de publicar: los problemas, lo que el paquete necesita, en qué plataformas se reproduce y si está firmado. Es la lista de problemas del editor, con las mismas comprobaciones que `scene validate`, más los avisos de plataforma.
+
+No lleva argumentos: se pasa `{}`.
+
+La respuesta tiene `findings` (cada uno con `level`: `error`, `warning` o `note`; `pointer`, `file` y `message`), `needs` y `build_adds` (lo que el paquete necesita y lo que la construcción le añade), `platforms` (por plataforma, `refused` con el motivo y `without` con lo que le falta), `facets` y `signature`.
+
+```sh
+wprs-ctl scene ask mi-escena review '{}'
+```
+
+#### `signature`
+
+Dice si una carpeta de paquete o un archivo `.wpak` está firmado, y si la firma vale para unas claves.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `keys` | lista de textos | Claves públicas de confianza. Sin ellas, la firma solo se cuenta, no se comprueba. |
+| `path` | texto | Carpeta o archivo `.wpak`. Por defecto, la carpeta de la escena. |
+
+La respuesta tiene `state`: `unsigned` (sin firma), `unchecked` (hay firma, pero no se dieron claves; trae `blocks`), `valid` (la firma vale; trae `signers`) o `invalid` (trae `error`).
+
+```sh
+wprs-ctl scene ask mi-escena signature '{}'
+```
+
+### Propiedades y ajustes
+
+#### `tried`
+
+Contesta con el formulario de las propiedades de usuario tal como se ve al probar un ajuste o unos valores sobre los de fábrica. Sirve para ver qué campos se muestran y con qué valores sin cambiar la escena. En la app, probar un ajuste en la vista previa.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `preset` | texto | Id de un ajuste del paquete. |
+| `values` | objeto | Valores que se prueban encima, por id de propiedad. |
+| `languages` | lista de textos | Idiomas de las etiquetas. |
+
+La respuesta tiene `fields` (cada campo con su `key`, `kind`, `label`, los límites, `value`, `visible`, `enabled`...), `presets` (los nombres de los ajustes) y `values` (los valores que resultan, ya ajustados a los límites de cada propiedad). Los campos secretos, atajos y botones no se listan.
+
+```sh
+wprs-ctl scene act mi-escena add_property '{"kind":"slider","id":"brillo"}'
+wprs-ctl scene ask mi-escena tried '{"values":{"brillo":40}}'
+```
+
+#### `levels`
+
+Dice qué valor toma una propiedad en cada nivel de calidad y en cuáles tiene un valor propio. El valor propio de un nivel va en el campo `quality` de la propiedad (`/manifest/properties/ID/quality/q1`) y se escribe con [`set`](acciones-capas.md#set).
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `property` | texto | (obligatorio) Id de la propiedad. |
+
+La respuesta tiene `property`, `default` y `levels`, una lista con un `{quality, value, own}` por nivel (`own` dice si el nivel fija el valor él mismo). Si la propiedad no existe, es `null`.
+
+```sh
+wprs-ctl scene act mi-escena add_property '{"kind":"slider","id":"brillo"}'
+wprs-ctl scene act mi-escena set '{"pointer":"/manifest/properties/brillo/quality/q1","value":20}'
+wprs-ctl scene ask mi-escena levels '{"property":"brillo"}'
+```
+
+#### `base`
+
+Para un paquete de ajustes: contesta con las propiedades del paquete al que se aplica y los valores que el ajuste les da. En la app, el formulario del paquete de ajustes.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `file` | texto | (obligatorio) Carpeta o archivo `.wpak` del paquete base. |
+
+La respuesta tiene `id`, `version`, `fields` (cada propiedad con su `key`, `title`, `range`, `default`, `value` del ajuste, `set`, `pointer` y `widget`) y `files`. Si el paquete base no se puede leer, es `null`.
+
+```sh
+wprs-ctl scene new origen
+wprs-ctl scene act origen add_property '{"kind":"slider","id":"brillo"}'
+wprs-ctl scene new mi-escena --from preset
+wprs-ctl scene ask mi-escena base '{"file":"origen"}'
+```
+
+#### `media`
+
+Para un paquete de imagen o de vídeo: contesta con su archivo, su tamaño y, si es un vídeo, su largo. En la app, la página del paquete de medios.
+
+No lleva argumentos: se pasa `{}`.
+
+La respuesta tiene `kind` (`image` o `video`), `entry` (el archivo que se espera), `present` (si existe), `bytes`, `file`, `size`, `length` y `aspect`. Con otro tipo de paquete es `null`.
+
+```sh
+wprs-ctl scene new mi-escena --from image
+wprs-ctl scene ask mi-escena media '{}'
+```
+
+### Relojes
+
+#### `clock_sample`
+
+Escribe un patrón de reloj con la hora de un instante y dice cuándo cambia el texto. Sirve para probar un patrón de una capa de texto con reloj.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `pattern` | texto | El patrón, por ejemplo `HH:mm`. Mira `clock_help`. |
+| `dates` | sí/no | `true` si el patrón es de fecha. Por defecto `false`. |
+| `lang` | texto | Idioma de los nombres de días y meses. Por defecto `en`. |
+| `wall` | número | Instante en segundos desde 1970. Por defecto, ahora. |
+
+La respuesta tiene `text` (el patrón ya escrito) y `next` (los segundos que faltan para que cambie).
+
+```sh
+wprs-ctl scene ask mi-escena clock_sample '{"pattern":"HH:mm","wall":0}'
+```
+
+#### `clock_help`
+
+Lista las piezas que se pueden usar en un patrón de reloj, con un ejemplo de cada una, y los números que da un reloj.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `lang` | texto | Idioma de los ejemplos. Por defecto `en`. |
+| `wall` | número | Instante de los ejemplos, en segundos desde 1970. Por defecto, ahora. |
+
+La respuesta tiene `tokens` (cada pieza con `token`, `dates` y `sample`), `numbers` (los valores `day`, `hour`, `minute`, `second`, `weekday` y `month` del instante) y `quote` (el carácter que cita texto literal).
+
+```sh
+wprs-ctl scene ask mi-escena clock_help '{"lang":"en","wall":0}'
+```
+
+### Historial de cambios
+
+#### `history`
+
+Contesta con los pasos que `undo` deshace y los que `redo` rehace. Es el historial que enseñan las pistas de **Deshacer** y **Rehacer** de la app, y el que lista `scene history`.
+
+No lleva argumentos: se pasa `{}`.
+
+La respuesta tiene `done` (los pasos hechos, del más antiguo al más nuevo), `undone` (los deshechos, el que rehace `redo` primero), `undo` y `redo` (el paso siguiente de cada uno, o `null`) y `dirty` (si hay cambios sin guardar). Cada paso trae `label` (el nombre de la acción) y `text` (el nombre que ve quien edita). El historial se guarda aparte al guardar la escena, así que otra llamada de `wprs-ctl` lo ve.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"solid","id":"fondo"}'
+wprs-ctl scene ask mi-escena history '{}'
+```

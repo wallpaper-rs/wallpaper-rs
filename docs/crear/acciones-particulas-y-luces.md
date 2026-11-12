@@ -1012,3 +1012,19 @@ La respuesta tiene `up`, `down`, `settles` (los segundos que tarda en asentarse 
 wprs-ctl scene ask mi-escena response '{"smooth":{"up":0.05,"down":0.4}}'
 wprs-ctl scene ask mi-escena response '{"smooth":0.3}'
 ```
+
+### Bandas de audio
+
+#### `bands`
+
+Contesta con la división del sonido en bandas: el rango de frecuencias de cada una y qué bandas son los graves, medios y agudos. Sirve para elegir qué bandas escucha una conexión de sonido. En la app, el selector de bandas.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `of` | entero | En cuántas bandas se divide: 16, 32 o 64. Por defecto 16. |
+
+La respuesta tiene `of`, `bands` (cada banda con `index`, `from` y `to` en hercios), `named` (el rango de `bass`, `mid` y `treble`), `levels` (los niveles con nombre) y `pointer` (las direcciones del puntero que se pueden leer). Con `pick` o `direction` en lugar de `of`, contesta con lo que lee esa elección. Si algo no vale, trae `error`.
+
+```sh
+wprs-ctl scene ask mi-escena bands '{"of":16}'
+```

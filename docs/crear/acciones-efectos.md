@@ -330,3 +330,79 @@ wprs-ctl scene act mi-escena add_layer '{"kind":"image","file":"foto.png"}'
 wprs-ctl scene act mi-escena paint_map '{"layer":"image","map":"emissive","points":[[0.5,0.5]],"radius":0.2,"hardness":1}'
 wprs-ctl scene ask mi-escena map '{"layer":"image","map":"emissive"}'
 ```
+
+### Calidad y asas de efectos
+
+#### `level`
+
+Dice qué hace un nivel de calidad con la escena: la escala de dibujo, la densidad, las partículas, qué efectos se quedan fuera y cuánto cuesta lo que queda. Sirve para ver cómo se vería el paquete en un equipo más modesto. En la app, la vista previa por nivel de calidad.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `quality` | texto | Nivel: `q0`, `q1`, `q2` o `q3`. Por defecto `q3`, el más alto. |
+| `battery` | sí/no | `true` aplica el recorte que se hace con batería. Por defecto `false`. |
+| `calm` | sí/no | Se devuelve tal cual en la respuesta, para la vista previa tranquila. |
+
+La respuesta tiene `asked` y `quality` (el nivel que se pidió y el que de verdad se usa), `render_scale`, `density`, `particles`, `bloom` (`on`, `hdr` y `glare`), `pointer` (con los emisores que siguen al puntero), `effects`, `left_out` (cuántos efectos quedan fuera) y `units` (el coste de los que quedan). Cada efecto trae `layer`, `effect`, `optional`, `kept`, `scale`, `units`, `full_units` y `levels`, el coste en cada nivel.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"image","file":"foto.png"}'
+wprs-ctl scene act mi-escena effects '{"add":{"layer":"image","effect":"blur","optional":true}}'
+wprs-ctl scene ask mi-escena level '{"quality":"q1"}'
+```
+
+#### `effect_handles`
+
+Contesta con las asas que un efecto de una capa enseña sobre el lienzo: los puntos, líneas y cuadriláteros que se arrastran con la variante `grip` de [`effects`](#effects).
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto | (obligatorio) Id de la capa. |
+| `index` | entero | Posición del efecto en la capa. Por defecto 0. |
+| `time` | número | Segundo en que se mide dónde está la capa. Por defecto 0. |
+
+La respuesta tiene `effect` (el id del efecto), `quad` (si el efecto se arrastra por cuatro esquinas) y `handles`, cada una con `param`, `kind`, `at` (su lugar en el lienzo), `value`, `range`, `anchor` y `partner`. Si el efecto no tiene asas, `handles` viene vacía.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"image","file":"foto.png"}'
+wprs-ctl scene act mi-escena effects '{"add":{"layer":"image","effect":"blur_radial"}}'
+wprs-ctl scene ask mi-escena effect_handles '{"layer":"image","index":0,"time":0}'
+```
+
+#### `mask_view`
+
+Contesta con la máscara de un efecto de una capa tal como se dibuja sobre el lienzo: de dónde sale, el área, el borde suave y las asas. Se escribe con las variantes `mask` y `mask_grip` de [`effects`](#effects).
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto | (obligatorio) Id de la capa. |
+| `index` | entero | Posición del efecto en la capa. |
+| `time` | número | Segundo en que se mide. Por defecto 0. |
+
+La respuesta tiene `source` (`shape`, `texture` o `layer`), `kind`, `invert`, `channel`, `strength`, `feather`, `box`, `size`, `area` y `area_u` (el contorno en el lienzo y dentro de la capa), `outer` e `inner` (los bordes del borde suave) y `holds`, las asas con su `grip` y su lugar `at`. Si el efecto no tiene máscara, es `null`.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"image","file":"foto.png"}'
+wprs-ctl scene act mi-escena effects '{"add":{"layer":"image","effect":"blur"}}'
+wprs-ctl scene act mi-escena effects '{"mask":{"layer":"image","index":0,"shape":{"ellipse":{"size":[600,400]}},"feather":40}}'
+wprs-ctl scene ask mi-escena mask_view '{"layer":"image","index":0,"time":0}'
+```
+
+#### `mask_picture`
+
+Prepara una imagen como máscara de un canal y contesta con el archivo que resulta. La app lo usa para ver la máscara de textura sobre la capa.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `asset` | texto | (obligatorio) Id de la imagen. |
+| `channel` | texto | Canal: `r`, `g`, `b`, `a` o `luminance`. Por defecto `luminance`. |
+| `invert` | sí/no | `true` invierte la máscara. Por defecto `false`. |
+| `strength` | número | Fuerza, de 0 a 1. Por defecto 1. |
+| `tint` | texto | Color de la máscara, `#rrggbb`. Por defecto blanco. |
+
+La respuesta es `{"path": ...}` con la imagen preparada, que se guarda en la caché. Si el recurso no es una imagen del paquete, es `null`.
+
+```sh
+wprs-ctl scene act mi-escena import '{"file":"foto.png"}'
+wprs-ctl scene ask mi-escena mask_picture '{"asset":"foto","channel":"luminance"}'
+```

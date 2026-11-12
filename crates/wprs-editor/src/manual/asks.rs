@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str); 52] = [
+pub const ASKS: [(&str, &str); 77] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map"),
     ("pose", "The rig of a layer posed by clip, time or bone angles"),
@@ -84,4 +84,59 @@ pub const ASKS: [(&str, &str); 52] = [
         "The peaks of a sound asset in the given number of buckets, computed once and kept in the cache",
     ),
     ("wander", "Where the made-up pointer of the preview is at a second"),
+    (
+        "copy",
+        "The layers to copy as a text the paste action takes back, with the assets, particle systems and effects they use",
+    ),
+    (
+        "film",
+        "The video of a layer: its file, size, length, trim, speed and optional thumbnails along its length",
+    ),
+    ("sprites", "The frames a picture asset is cut into: its rectangles, atlas, speed and durations"),
+    ("asset_uses", "Where the scene uses an asset: the pointers that name it and the layer that owns each"),
+    ("unkept", "The layers whose references would be lost if a layer or group were removed"),
+    ("script_uses", "The lines of the scripts that name an id in quotes"),
+    (
+        "review",
+        "The problems and notes of the package as the problem list of the editor shows them, with its signature state",
+    ),
+    (
+        "signature",
+        "Whether a package folder or file is signed, by whom and whether the signature holds, checked against the given keys",
+    ),
+    (
+        "tried",
+        "The form of the user properties with the values of a preset or some values tried on top of the defaults",
+    ),
+    ("media", "The picture or video of a media package: its file, size and length; null for other packages"),
+    ("levels", "What a property is at each quality level and which levels set it themselves"),
+    ("base", "The properties of the package a preset package is for, with the values the preset gives them"),
+    (
+        "bands",
+        "The audio bands, with their frequency ranges, at 16, 32 or 64 bands, or what a band pick or pointer direction reads",
+    ),
+    ("touch", "The layers and bones that take the pointer and how they take it"),
+    ("shape_handles", "The handles on the canvas of the shape of a layer at a time, and its gradient ends"),
+    ("text_box", "The size, lines and handles of a text layer at a time"),
+    ("font_list", "The fonts a text layer can use and the ones it has chosen"),
+    ("clock_sample", "A clock pattern shown at a wall-clock time and when it changes next"),
+    ("clock_help", "The tokens a clock pattern takes with a sample of each and the numbers a clock gives"),
+    ("mask_view", "The mask of an effect of a layer at a time: its source, area, feather and handles"),
+    (
+        "mask_picture",
+        "A picture asset prepared as a mask on one channel, optionally inverted or tinted, as a picture file",
+    ),
+    ("effect_handles", "The handles on the canvas of an effect of a layer at a time"),
+    (
+        "capture_view",
+        "The capture zone of an adjustment layer at a time: its size, limits and corner handles",
+    ),
+    (
+        "level",
+        "What a quality level does: scale, density, particles, the effects it keeps and the cost, optionally on battery",
+    ),
+    (
+        "history",
+        "The steps that undo would take back (oldest first) and redo would bring back (next first), and whether the scene has unsaved changes",
+    ),
 ];

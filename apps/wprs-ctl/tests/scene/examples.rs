@@ -63,7 +63,9 @@ fn tried(kind: &str, name: &str, tmp: &Path, ready: bool) -> Option<String> {
         std::fs::copy(tmp.join(file), work.join(file)).unwrap();
     }
     let setup: Vec<String> = before.iter().map(|l| scene(l)).collect();
-    let script = format!("wprs-ctl scene new mi-escena >/dev/null\n{}\n", setup.join("\n"));
+    let own = before.iter().any(|l| l.contains("scene new DIR"));
+    let first = if own { "" } else { "wprs-ctl scene new mi-escena >/dev/null\n" };
+    let script = format!("{first}{}\n", setup.join("\n"));
     let first = shell(&work, &script);
     if let Some(why) = failure(kind, name, before, &first, false) {
         return Some(why);

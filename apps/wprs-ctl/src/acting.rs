@@ -155,12 +155,7 @@ pub fn run(command: Acting) -> Result<()> {
                 usage(format!("there is no query {query:?}; wprs-ctl scene actions --queries lists them"))
             );
             let project = Project::open(&dir)?;
-            let found = wprs_editor::rigs::query(
-                &project.dir,
-                &project.holding(&layer),
-                &layer,
-                &manual::question(&query, args),
-            );
+            let found = project.ask(&layer, &manual::question(&query, args));
             println!("{}", serde_json::to_string_pretty(&found)?);
             Ok(())
         }
