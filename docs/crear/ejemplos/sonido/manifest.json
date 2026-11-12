@@ -1,0 +1,44 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.sonido",
+  "inputs": [
+    "audio"
+  ],
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {
+    "sonido_activo": {
+      "default": true,
+      "label": {
+        "es": "Sonido ambiente"
+      },
+      "type": "bool"
+    },
+    "ver_anillo": {
+      "default": true,
+      "label": {
+        "es": "Anillo del espectro"
+      },
+      "type": "bool"
+    }
+  },
+  "requires": {
+    "features": [
+      "audio_response",
+      "inputs.audio",
+      "shaping",
+      "sound"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Sonido",
+  "version": "0.1.0"
+}

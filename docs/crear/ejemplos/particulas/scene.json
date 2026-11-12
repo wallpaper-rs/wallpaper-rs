@@ -1,0 +1,29 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#070b16" },
+  "clock": { "seed": 7 },
+  "particles": {
+    "chispas": {
+      "capacity": 4000, "seed": 7, "prewarm": 2,
+      "emitters": [{ "shape": { "box": [[0, 1080], [1920, 1100]] }, "rate": { "prop": "densidad" } }],
+      "init": { "life": [2, 5], "speed": [200, 500], "angle": [250, 290], "size": [4, 12],
+                "color": ["#ffd27a", "#ff7a3d"] },
+      "forces": [{ "gravity": [0, -20] }, { "turbulence": { "strength": 30, "scale": 0.004 } },
+                 { "drag": 0.4 }],
+      "collide": [{ "bounds": "canvas", "bounce": 0.3 }],
+      "render": { "size_over_life": [[0, 0], [0.1, 1], [1, 0]], "color_over_life": [[0, "#ffffff"], [1, "#ffffff00"]] }
+    },
+    "nieve": {
+      "capacity": 3000,
+      "emitters": [{ "shape": { "line": [[0, -20], [1920, -20]] }, "rate": 120 }],
+      "init": { "life": [8, 12], "speed": [40, 90], "angle": [80, 100], "size": [3, 8], "color": ["#ffffff", "#cfe6ff"] },
+      "forces": [{ "wind": [12, 0] }, { "noise": 6 }],
+      "render": { "size_over_life": [[0, 1], [1, 1]] }
+    }
+  },
+  "layers": [
+    { "id": "nieve", "type": "particles", "system": "nieve" },
+    { "id": "chispas", "type": "particles", "system": "chispas", "blend": "add",
+      "instance": { "alpha": 0.9, "count": 1 } }
+  ]
+}

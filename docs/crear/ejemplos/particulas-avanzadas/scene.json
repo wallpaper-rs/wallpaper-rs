@@ -1,0 +1,41 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#05070f" },
+  "particles": {
+    "cohetes": {
+      "capacity": 200,
+      "emitters": [{ "shape": { "point": [960, 1040] }, "rate": 0, "bursts": [{ "count": 1, "every": 1.6 }] }],
+      "init": { "life": [1.1, 1.5], "speed": [700, 850], "angle": [255, 285], "size": [10, 12], "color": ["#ffe9a8", "#ffb347"] },
+      "forces": [{ "gravity": [0, 500] }],
+      "render": { "trail": { "length": 12, "width": 0.6 } },
+      "children": [{ "system": "estrellas", "on": "death", "inherit": ["color"] }]
+    },
+    "luciernagas": {
+      "capacity": 600, "space": "world", "prewarm": 3,
+      "points": [{ "at": [960, 540] }, { "follow": "cursor" }],
+      "emitters": [{ "shape": { "around": { "at": "p0", "count": 24, "radius": 420, "speed": 20 } }, "rate": 40,
+                     "periodic": { "on": [4, 6], "off": [1, 2] }, "max_per_step": 4 }],
+      "init": { "life": [3, 6], "speed": [10, 30, 2], "angle": [0, 360], "size": [6, 14],
+                "hsv": { "hue": [50, 120], "sat": [0.5, 0.9], "val": [0.9, 1] }, "alpha": [0.5, 1],
+                "remap": [{ "input": "life", "in": [3, 6], "output": "size", "out": [1, 0.3], "op": "mul" }] },
+      "forces": [{ "turbulence": { "strength": 40, "scale": 0.003 } },
+                 { "attractor": { "target": "p1", "strength": 4000, "radius": 500, "falloff": "linear" } },
+                 { "oscillate": { "what": "alpha", "freq": [0.5, 1.5], "scale": [0.2, 0.5] } },
+                 { "drag": 0.3, "window": [0, 0.2, 0.8, 1] }],
+      "render": { "size_over_life": [[0, 0], [0.2, 1], [1, 0]], "cutout": [0.1, 0.9, 1], "order": "newest" }
+    },
+    "estrellas": {
+      "capacity": 3000,
+      "emitters": [{ "shape": { "point": [0, 0] }, "rate": 0, "bursts": [{ "count": 60 }] }],
+      "init": { "life": [0.9, 1.6], "speed": [80, 320], "angle": [0, 360], "size": [5, 9], "color": ["#ffffff", "#9ad1ff"] },
+      "forces": [{ "gravity": [0, 160] }, { "drag": 0.8 }],
+      "render": { "size_over_life": [[0, 1], [1, 0]], "color_over_life": [[0, "#ffffff"], [1, "#ffffff00"]] }
+    }
+  },
+  "layers": [
+    { "id": "cohetes", "type": "particles", "system": "cohetes", "blend": "add" },
+    { "id": "estrellas", "type": "particles", "system": "estrellas", "blend": "add" },
+    { "id": "luciernagas", "type": "particles", "system": "luciernagas", "blend": "add",
+      "instance": { "alpha": 0.8, "count": 1, "brightness": 1.2 } }
+  ]
+}

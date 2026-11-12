@@ -1,0 +1,35 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.particulas",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {
+    "densidad": {
+      "default": 120,
+      "integer": true,
+      "label": {
+        "es": "Cantidad de chispas"
+      },
+      "max": 300,
+      "min": 0,
+      "step": 10,
+      "type": "slider"
+    }
+  },
+  "requires": {
+    "features": [
+      "particles2"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Partículas",
+  "version": "0.1.0"
+}

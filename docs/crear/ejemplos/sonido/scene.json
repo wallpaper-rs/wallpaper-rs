@@ -1,0 +1,20 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#0a0f1a" },
+  "audio": { "attack": 0.02, "release": 0.25, "gain": "auto" },
+  "assets": { "zumbido": { "path": "assets/zumbido.wav" } },
+  "layers": [
+    { "id": "ambiente", "type": "sound", "sound": "zumbido", "loop": true, "fade_in": 2, "fade_out": 2,
+      "play": { "prop": "sonido_activo" },
+      "volume": { "timeline": "marea", "keys": [[0, 0.3], [10, 0.8, "in_out_sine"], [20, 0.3, "in_out_sine"]] },
+      "pan": -0.2 },
+    { "id": "espectro", "type": "spectrum", "size": [1600, 360], "style": "bars", "bands": 32, "gap": 0.3,
+      "color": "#7dd3fc", "anchor": "bottom", "transform": { "position": [0, -80] } },
+    { "id": "anillo", "type": "spectrum", "size": [500, 500], "style": "circle", "bands": 64, "channel": "left",
+      "color": "#f472b6", "visible": { "prop": "ver_anillo" } },
+    { "id": "latido", "type": "shape", "shape": { "ellipse": { "size": [220, 220] } }, "fill": "#ffffff",
+      "opacity": { "audio": "level", "scale": 1.2, "offset": 0.2, "clamp": [0.2, 1], "smooth": 0.1 },
+      "transform": { "scale": { "audio": "bass", "scale": 0.5, "offset": 1, "smooth": { "up": 0.03, "down": 0.3 } } } }
+  ],
+  "timelines": [{ "id": "marea", "duration": 20, "loop": "repeat" }]
+}
