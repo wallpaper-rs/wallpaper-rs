@@ -29,10 +29,7 @@ ColumnLayout {
             live = null;
             return;
         }
-        App.query("GetParticleStats", [output], "Daemon1", reply => {
-            if (budget)
-                budget.live = reply;
-        }, () => {
+        App.query("GetParticleStats", [output], "Daemon1", reply => budget && (budget.live = reply), () => {
             if (!budget)
                 return;
             budget.live = null;
