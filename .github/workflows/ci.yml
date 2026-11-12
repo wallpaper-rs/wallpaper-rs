@@ -956,6 +956,43 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  flatpak-daemon:
+    name: Flatpak daemon (${{ matrix.arch }})
+    needs: [version, flatpak]
+    if: ${{ !cancelled() && needs.flatpak.result == 'success' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - name: Install Flatpak and a sound server
+        run: |
+          scripts/ci-apt.sh flatpak xdg-dbus-proxy pipewire pipewire-bin wireplumber dbus-x11 dbus-bin
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: flatpak-${{ matrix.arch }}
+          path: bundle
+
+      - name: Install the bundle
+        run: flatpak install --user -y --noninteractive --bundle bundle/*.flatpak
+
+      - name: The daemon answers inside the sandbox
+        timeout-minutes: 10
+        run: scripts/private-audio.sh packaging/flatpak/serve-check.sh
+
   app-check:
     name: Interface check
     needs: [version, lint]
