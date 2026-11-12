@@ -121,11 +121,19 @@ sí hace con ella es decidir si alguien puede **editar una copia** de tu paquete
 | `CC0-1.0` | Todo, sin condiciones: usar, cambiar y redistribuir. |
 | `CC-BY-4.0` | Usar, cambiar y redistribuir **con crédito** a su autor. |
 | `CC-BY-SA-4.0` | Lo mismo, y lo derivado se comparte con la misma licencia. |
-| `CC-BY-NC-4.0` | Con crédito y **sin uso comercial**. |
+| `CC-BY-NC-4.0`, `CC-BY-NC-SA-4.0` | Con crédito y **sin uso comercial** (la segunda, además, compartiendo igual). |
 | `CC-BY-ND-4.0`, `CC-BY-NC-ND-4.0` | Redistribuir sin cambios. **No permiten obras derivadas.** |
 | `MIT`, `Apache-2.0` | Para código (scripts, shaders): usar y cambiar con aviso de la licencia. |
 | `GPL-3.0-or-later`, `AGPL-3.0-or-later`, `LGPL-3.0-or-later` | Con copyleft: lo derivado se publica con la misma licencia. |
 | `LicenseRef-<nombre>` | Condiciones propias, que describes tú en el paquete. |
+
+**En el editor** la licencia se elige en una lista (*Título, licencia, origen y más…*) de diez, cada una con una línea que dice qué permite:
+`CC0-1.0`, `CC-BY-4.0`, `CC-BY-SA-4.0`, `CC-BY-NC-4.0`, `CC-BY-NC-SA-4.0`, `CC-BY-ND-4.0`,
+`CC-BY-NC-ND-4.0`, `MIT`, `Apache-2.0` y `GPL-3.0-or-later`. Puedes escribir cualquier otra
+expresión SPDX a mano (para una que no está en la lista, el editor solo dice que es una expresión
+propia). Si la dejas vacía, te recuerda que elijas la que dice qué pueden hacer otros con tu
+paquete. Desde la
+terminal: `wprs-ctl scene manifest mi-escena license CC-BY-4.0`.
 
 Lo que el programa hace con cada una: al abrir una copia para editarla, calcula si la licencia
 permite obras derivadas y qué condiciones lleva (crédito, compartir igual, sin uso comercial,
@@ -137,11 +145,14 @@ alternativas llevan `ND` (por ejemplo `CC-BY-ND-4.0`) o si está vacía. Editar 
 paquete así se rechaza y no se escribe nada, salvo que confirmes que el paquete es tuyo o que su
 autor lo permite:
 
-- en la app, *Editar una copia…* muestra siempre la licencia del original con una línea que dice qué
-  permite y qué condiciones trae. Si no permite obras derivadas, añade un aviso y una casilla: *Hice
-  este paquete o su autor permite una copia*; sin marcarla, no sigue. Al agregar la copia a un
-  repositorio estático (diálogo *Añadir a un repositorio estático*) el aviso vuelve a salir, con la
-  misma casilla, y `pack check` y el panel *Problemas* lo repiten como advertencia;
+- en la app, *Editar una copia…* muestra siempre la licencia del original, con una línea que dice qué
+  permite y qué condiciones trae, y un consejo para que pongas tu nombre en los autores. La casilla
+  *Hice este paquete o su autor permite una copia* **solo sale cuando la licencia no permite obras
+  derivadas**; con otra licencia el diálogo solo informa (y, si la licencia pide algo, como crédito o
+  compartir igual, lo enumera) y no hay casilla que marcar. Cuando sale, sin marcarla no sigue.
+  Al agregar la copia a un repositorio estático (diálogo *Añadir a un repositorio estático*) el aviso
+  vuelve a salir, con la misma casilla, y `scene validate`, `pack check` y el panel *Problemas* lo
+  repiten como advertencia;
 - en la terminal, `wprs-ctl scene open CARPETA --from paquete.wpak --mine`. Sin `--mine` falla con
   «<licencia> does not allow derived works».
 
@@ -281,11 +292,15 @@ más comunes:
 | `default_locale: es obligatorio con cadenas o textos traducidos` (error) | Hay textos por idioma y no dices cuál es el de respaldo. |
 | `/scene/assets: sobra.png is not used by the scene but goes into the package` (aviso) | Un archivo que ninguna parte de la escena usa. Se empaqueta igual y ocupa espacio: bórralo. |
 | `/manifest: manifest.json.minisig signs an earlier version; a build without a key removes it` (aviso) | Cambiaste algo después de firmar. Firma de nuevo (ver «Firmar»). |
+| `/scene/scripts/0/path: scripts/reloj.js:4: unexpected token in expression: ';'` (error) | Un script no compila. La línea es donde el motor se dio cuenta, a veces una después de la errata. Lo mismo para `scripts/falta.js is listed in scripts but is not in the folder`: pon el archivo o quita la entrada. |
 | `/scene/layers/3: data did not match any variant of untagged enum Value` (error) | Una capa tiene un valor que no es de ningún tipo permitido. El número es la posición de la capa: mira ahí su campo mal escrito. |
 | Un paquete de más de 1 GiB, o con una imagen de más de 8192 píxeles de lado o 32 megapíxeles | Pierde la etiqueta `android` y `pack check` dice por qué. |
 
-`pack check` no ejecuta los scripts ni abre las imágenes de la escena para ver si se ven bien:
-ver `scripts.md`, «Lo que `pack check` no ve».
+Los scripts no los ejecuta ninguno de los tres, pero `scene validate` y `pack check` los compilan: un
+error de sintaxis o un script que falta sale como problema, con el archivo y la línea, y hace
+fallar la orden (`scripts/reloj.js:4: unexpected token in expression: ';'`). Tampoco abren las
+imágenes de la escena para ver si se ven bien. Qué ven y qué no: `scripts.md`, «Qué ve `validate` y
+qué no».
 
 ## Empaquetar
 
@@ -320,7 +335,7 @@ pública. Al terminar dice cuál archivo es el secreto (`autor.key`, no se compa
 público (`autor.pub`, se entrega a quien deba comprobar tus firmas). Con `--no-password` la clave
 secreta queda sin cifrar; hazlo solo para claves de automatización. Sin terminal para preguntar, la
 contraseña se toma de la variable de entorno `WPRS_KEY_PASSWORD`; con terminal se pregunta y la
-variable, si existe, tiene prioridad. En la app, *Claves de autor* en el diálogo de construir hace
+variable, si existe, tiene prioridad. En la app, *Claves…* en el diálogo de construir hace
 lo mismo, dice lo mismo al crear el par y guarda el par en `$XDG_DATA_HOME/wallpaper-rs/keys` (modo
 0700).
 
@@ -350,9 +365,18 @@ Comprueba con `pack validate --key`: si la firma es de esa clave, imprime `signe
 
 **Firma después de cada cambio.** La firma cubre los bytes exactos de `manifest.json`. Si cambias el
 manifiesto (hasta la versión) o el programa lo reescribe, hay que firmar de nuevo antes de
-`pack build`; si no, el paquete lleva una firma que no corresponde y `pack validate --key` dice
-`signature rejected: trusted comment is not "wpak manifest <id> <versión>"`. Para no olvidarlo,
-usa `scene build --key` o encadena `pack sign` y `pack build`.
+`pack build`. Si lo olvidas, `pack build` no arma un paquete con una firma que no corresponde:
+
+```
+Error: invalid manifest.json.minisig: it signs another version of manifest.json; run pack sign again, or delete it to build unsigned
+```
+
+Vuelve a ejecutar `pack sign`, o borra `manifest.json.minisig` para construir sin firma. No hace
+falta la clave para darse cuenta: la firma lleva la huella del manifiesto que firmó. Si la firma es
+de una versión anterior del programa y no la lleva, `pack build mi-escena --key autor.pub` comprueba
+con tu clave pública que aún vale, y sin `--key` pide firmar de nuevo. Para no olvidarlo, usa
+`scene build --key autor.key` (firma al construir; sin `--key` quita la firma vieja y construye sin
+firmar) o encadena `pack sign` y `pack build`.
 
 ## Probar la instalación
 
@@ -367,8 +391,11 @@ wprs-ctl scene preview mi-escena
 - `lib import` instala el paquete en tu biblioteca: así lo verá quien lo instale. Imprime
   `job 1 import done: 0 failed, 1 imported`.
 - `scene apply` construye la carpeta, la importa y la muestra en una salida (`-o DP-1`) o en todas; al
-  final dice qué mostró, en qué pantalla y a qué calidad.
-- `scene preview` la muestra 60 segundos sin guardar nada.
+  final dice qué mostró, en qué pantalla y a qué calidad (`applied: Mi reloj 1.0.0 on DP-1, quality
+  Q3`). Si cambias la carpeta, vuelve a aplicarla: muestra lo nuevo aunque no subas la versión.
+- `scene preview` la muestra 60 segundos sin guardar nada (`--stop` la termina).
+- `wprs-ctl clear` quita el fondo que se ve y deja el color de fondo, y `wprs-ctl restore` trae el
+  anterior: sirve para dejar la pantalla como estaba.
 
 ## Publicar en un repositorio
 
@@ -403,7 +430,11 @@ signers = <huella de la clave raíz>
 threshold = 1
 complete = true
 anchor = ?fingerprint=<huella de la clave raíz>&repo_id=<id>
+address = file:///ruta/a/mi-repo/?fingerprint=<huella de la clave raíz>&repo_id=<id>
 ```
+
+`address` es la dirección completa de la carpeta, tal como se pega en *Añadir un repositorio* o en
+`remote add`; el cuadro del repositorio estático de la app la muestra con un botón *Copiar la dirección*.
 
 `--author ID=autor.pub` registra a un autor con su clave pública (repítelo para varios) y
 `--require-author-signature true` rechaza los paquetes que no firmó ningún autor de la raíz. Hay
@@ -455,8 +486,9 @@ wprs-ctl pkg search reloj
 wprs-ctl pkg install org.example.reloj
 ```
 
-(Con el demonio en marcha. `remote add` con solo una ruta de carpeta, sin esa forma, falla con
-«not a valid URL»).
+(Con el demonio en marcha, y con `--wait` en `pkg install` para que diga `Installed org.example.reloj
+1.0.0.`. `remote add` también acepta la carpeta con la misma consulta, `'mi-repo/?fingerprint=…&repo_id=…'`;
+una carpeta sin consulta falla con «needs a fingerprint or repo_id query parameter».)
 
 ### Actualizar un paquete publicado
 
@@ -545,8 +577,9 @@ con `wprs-ctl scene import mi-escena fondo.mp4`.
 1. `wprs-ctl scene validate` sin errores y `wprs-ctl pack check` en `ok`.
 2. Las entradas del manifiesto son las que la escena usa, ni una más.
 3. `content` y `photosensitive` dicen la verdad, y la licencia es la que quieres.
-4. La escena con scripts se vio en la vista previa y la consola no tiene errores.
-5. La vista previa se ve bien sin scripts (la captura del demonio no los ejecuta).
+4. La escena con scripts se vio en la vista previa (o con `scene render`) y la consola no tiene errores.
+5. La miniatura se ve bien sin scripts (la captura del demonio no los ejecuta), o es una imagen
+   hecha con `scene render`.
 6. `version` subió, y `pack sign` y `pack build` se hicieron después del último cambio.
 7. `pack validate --key autor.pub` imprime `ok … signer=`.
 8. No hay claves, contraseñas ni rutas personales dentro de la carpeta.

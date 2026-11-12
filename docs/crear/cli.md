@@ -8,8 +8,9 @@ Cada comando explica sus opciones con `--help` (`wprs-ctl scene render --help`),
 escritorio. Un comando que falla sale con un código distinto de 0 y escribe `Error: …`.
 
 **Con demonio y sin demonio.** Casi todo lo de esta página funciona sin el demonio. Solo lo necesitan
-`scene preview`, `scene apply`, `scene thumbnail --capture`, `lib import`, `remote add` y los comandos
-de `pkg` e `input`. La app lo inicia; con ella cerrada, lo inicia el servicio de usuario `wprsd`.
+`scene preview`, `scene apply`, `scene thumbnail --capture`, `lib import`, `remote add`, `clear`,
+`restore` y los comandos de `pkg` e `input`. La app lo inicia; con ella cerrada, lo inicia el
+servicio de usuario `wprsd`.
 
 **Las carpetas.** Una escena es una carpeta con `manifest.json`, `scene.json` y sus archivos. Casi
 todos los comandos `scene` empiezan con `wprs-ctl scene COMANDO CARPETA`.
@@ -51,6 +52,50 @@ Desempaqueta el `.wpak` en una carpeta nueva como una copia sin firma, con el id
 (imprime en JSON la licencia, el veredicto `allowed` o `refused` y el id de la copia, sin escribir
 nada), `--mine` (confirma que el paquete es tuyo o que su autor permite la copia, para licencias que no
 permiten obras derivadas) y `--json`. Ver «Editar una copia» en `paquete.md`.
+
+## Cambiar la escena con órdenes
+
+Estas son las órdenes que usa el tutorial de [LEEME.md](LEEME.md) para armar una escena sin el editor.
+Cambian la carpeta al momento y no necesitan el demonio.
+
+### `scene add-layer`: una capa nueva
+
+```
+wprs-ctl scene add-layer mi-escena image --file cielo.png --name Fondo
+```
+
+```
+fondo
+```
+
+Añade la capa y escribe su id, el nombre con el que las demás órdenes la nombran. El id sale del
+`--name` (o, si no lo das, del tipo de capa) en minúsculas. Capas, recursos, sistemas de partículas y
+líneas de tiempo comparten los ids: si el que saldría ya lo tiene cualquiera de ellos, se le añade
+`_2`, `_3`… y la orden imprime el que usó. Una imagen que importas con `--file` se llama como su
+archivo, así que `--file sunset.png --name Sunset` da la capa `sunset_2`: mira siempre lo que
+imprime la orden. Con `--id` eliges tú el id; si ya está en uso, la orden falla con `the id fondo is
+in use` y no cambia nada.
+
+Una capa de imagen sin tamaño se ve de su tamaño real y centrada, no del tamaño del lienzo. Para
+cubrirlo: `wprs-ctl scene layer mi-escena fondo transform --size 1920,1080`. Una capa de partículas
+nueva trae ya una nieve que cae sobre todo el lienzo (ver [particulas-y-sonido.md](particulas-y-sonido.md)).
+
+### `scene show`: leer cualquier valor
+
+```
+wprs-ctl scene show mi-escena /scene/layers/0
+wprs-ctl scene show mi-escena /manifest/title
+wprs-ctl scene show mi-escena
+```
+
+Imprime en JSON el valor que está en un JSON Pointer; sin puntero, los dos documentos juntos. El
+puntero **empieza siempre por `/scene`** (el contenido de `scene.json`: `/scene/layers`,
+`/scene/timelines`, `/scene/particles/nieve`) o por `/manifest` (el de `manifest.json`:
+`/manifest/title`, `/manifest/inputs`). `/layers` no existe y la orden dice `Error: nothing is at that
+pointer`; lo mismo pasa con una lista que aún no tiene nada, como `/scene/timelines` en una escena
+sin líneas de tiempo. Las capas se cuentan desde 0 desde abajo: la primera que añadiste es
+`/scene/layers/0`. `scene set mi-escena PUNTERO VALOR` escribe un valor en cualquiera de esos sitios,
+y `scene validate` dice qué está mal con el mismo tipo de puntero.
 
 ## Importar
 
@@ -111,7 +156,7 @@ salidas la muestra y cómo terminarla. Sin `-o`, en todas las salidas.
 
 | Opción | Qué hace |
 |--------|----------|
-| `--console` | Imprime lo que los scripts escriben con `console` y el error de la escena, con archivo y línea, a medida que salen, hasta que lo interrumpas. Sirve en cualquier salida, también en las de tus pantallas. Ver `scripts.md`. |
+| `--console` | Imprime lo que los scripts escriben con `console` y el error de la escena, con archivo y línea, a medida que salen, hasta que lo interrumpas. Sirve en cualquier salida, también en las de tus pantallas, pero la escena solo corre (y solo escribe) mientras algo mira esa salida. Ver `scripts.md`. |
 | `--stop` | Termina la vista previa y dice en qué salidas la terminó. Si la app tenía encendido *Mostrar en el escritorio*, lo apaga también. |
 | `--restart` | Empieza otra vez la escena, los scripts y las partículas. |
 | `--time S` | Mantiene fijo ese segundo (hasta 86400). Con un valor negativo, la escena se reproduce. |
@@ -133,20 +178,36 @@ applied: Mi reloj 1.0.2 on DP-1, quality Q3
 ```
 
 Construye el paquete, lo añade a tu biblioteca y lo muestra en la salida (o en todas). Va diciendo
-en la salida de error lo que hace (construir, añadir, mostrar) y, si el demonio tarda porque tiene
-otros trabajos, avisa cada 5 segundos. Al final imprime el título, la versión, la pantalla y el
-nivel de calidad con que la muestra; el texto sale en tu idioma. Si cambias la escena sin subir la
-versión, la pantalla muestra lo nuevo igual. `--span` la extiende sobre todas las pantallas.
+en la salida de error lo que hace (`Building the package…`, `Adding the package to the library…`,
+`Showing it on the screen…`) y, si el demonio tarda porque tiene otros trabajos, avisa cada 5
+segundos. Al final imprime el título, la versión, la pantalla y el nivel de calidad con que la
+muestra; el texto sale en tu idioma. Termina con error si la pantalla dice que no pudo mostrarla.
+Si cambias la escena sin subir la versión, la pantalla muestra lo nuevo igual. `--span` la extiende
+sobre todas las pantallas.
+
+Para quitar el fondo que acabas de aplicar:
+
+```
+wprs-ctl clear -o DP-1
+wprs-ctl restore -o DP-1
+```
+
+`clear` quita el fondo de la salida (de todas sin `-o`) y deja solo el color de fondo; no imprime
+nada. `restore` trae el que había, y dice `There is no earlier wallpaper to bring back.` si no hay
+ninguno (por ejemplo, si después de quitarlo pusiste otro). Aplicar otro fondo olvida el anterior; quitar dos veces
+conserva el primero. En la app están en *Ajustes*, en la fila de cada pantalla, como *Quitar el fondo* y
+*Recuperar el fondo*.
 
 ### `input`: entradas simuladas (con demonio)
 
 ```
-wprs-ctl input grant org.example.mi_escena pointer
+wprs-ctl input grant org.example.mi-escena pointer
 wprs-ctl input touch DP-1 0.8,0.2
 ```
 
 `input grant ESCENA ENTRADA` concede una entrada (`audio`, `pointer`, `clicks`, `media`…) a la
-escena que se muestra; `input touch SALIDA X,Y` pone un puntero inventado en esa fracción de la
+escena que se muestra (`ESCENA` es el `id` de su manifiesto, que `scene new mi-escena` deja como
+`org.example.mi-escena`; no imprime nada, y `input status` confirma el permiso); `input touch SALIDA X,Y` pone un puntero inventado en esa fracción de la
 pantalla (`--stop` lo quita) y `input status` dice qué usa y qué tiene concedido cada pantalla. Sirven
 para probar scripts y propiedades sin tocar el ratón.
 
@@ -181,7 +242,7 @@ Imprime los archivos que escribió.
 pared de `--time-of-day` (o la de este equipo) y escribe en la salida de error lo que imprimen con
 `console` (`script: log scripts/reloj.js: ...`) y sus errores, con archivo y línea
 (`script: error scripts/reloj.js: TypeError: ... (scripts/reloj.js line 4)`). Antes del primer cuadro
-da unos pasos a los scripts para que arranquen. No simula el sonido ni el reproductor. Los scripts
+da unos pasos a los scripts para que arranquen, así que las líneas de `console` salen repetidas (una por paso y por cuadro). No simula el sonido ni el reproductor. Los scripts
 nunca corren en el proceso de `wprs-ctl` (ni en el de la app): van a un proceso aparte con sandbox,
 el mismo que usa el demonio y con los mismos límites de tiempo y memoria. Si ese proceso no puede
 arrancar, dibuja sin scripts y lo dice en una línea en la salida de error.
@@ -223,6 +284,19 @@ Error: 1 problem
 Una línea por problema, con el JSON Pointer del campo, y después las advertencias con `warning:`. Sale con 1
 si hay algún error. `--json` imprime un objeto por problema.
 
+**También revisa los scripts, sin ejecutarlos.** Compila cada módulo de `scripts/` y avisa de un
+error de sintaxis o de un archivo que `scene.json` nombra y no está, con el archivo y la línea:
+
+```
+/scene/scripts/0/path: scripts/semaforo.js:4: unexpected token in expression: ';'
+/scene/scripts/1/path: scripts/falta.js is listed in scripts but is not in the folder
+Error: 2 problems
+```
+
+La línea que da el motor es donde se dio cuenta del error, que a veces es la siguiente a la que
+tiene la errata. Lo que solo falla al correr (una función que lanza un error, un valor del tipo
+equivocado) no se ve aquí: ver `scripts.md`, «Qué ve `validate` y qué no».
+
 ### `pack check`: qué necesita el paquete y dónde se reproduce
 
 ```
@@ -243,8 +317,18 @@ android = plays
 languages = en, es
 ```
 
-Sirve con una carpeta o con un `.wpak`. Se detiene en el primer error (`Error: …`). Qué significa cada
-línea y cada mensaje: `paquete.md`, «Revisar el paquete». `--json` imprime el resultado en JSON.
+Sirve con una carpeta o con un `.wpak`. Se detiene en el primer error de la escena o del manifiesto
+(`Error: …`). Los errores de los scripts (sintaxis, archivo que falta) no la detienen: salen como
+líneas `problem:` debajo de la primera línea, que entonces dice `problems scene …` en vez de
+`ok scene …`, y la orden termina con `Error: N problems` y el código 1:
+
+```
+problems scene org.example.reloj 1.0.0 (wallpaper-rs.wpak/2)
+problem: scripts/reloj.js:4: unexpected token in expression: ';'
+```
+
+Qué significa cada línea y cada mensaje: `paquete.md`, «Revisar el paquete». `--json` imprime el
+resultado en JSON, con los mismos problemas en `problems`.
 
 ### `pack validate`: la firma
 
@@ -273,7 +357,22 @@ wprs-ctl pack build mi-escena -o reloj.wpak
 
 Arma el paquete: calcula `requires.features`, lo escribe en el manifiesto y lo comprime. Imprime la
 huella SHA-256, el tamaño en bytes y el archivo (con `--json`, `{"path", "sha256", "size"}`). Sin `-o`,
-`<id>-<versión>.wpak` en la carpeta actual.
+`<id>-<versión>.wpak` en la carpeta actual. No compila los scripts: ejecuta antes `pack check` (o usa
+`scene build`, que sí los revisa).
+
+Si la carpeta trae una firma (`manifest.json.minisig`) hecha con otra versión del manifiesto, se
+niega a armar un paquete que llevaría una firma que no corresponde:
+
+```
+Error: invalid manifest.json.minisig: it signs another version of manifest.json; run pack sign again, or delete it to build unsigned
+```
+
+Vuelve a ejecutar `pack sign` (o borra la firma para construir sin ella). `pack build` no necesita la
+clave para darse cuenta, porque la firma lleva la huella del manifiesto que firmó. Las firmas
+hechas con una versión anterior del programa no la llevan; para ellas, `--key autor.pub` (el archivo
+de la clave pública o su texto) dice con qué clave comprobar que la firma aún vale, y sin esa
+opción `pack build` pide volver a firmar. Con una clave que no es la de la firma, o con un manifiesto
+cambiado, el mensaje es el mismo. `--key` no firma nada.
 
 ### `scene build`
 
@@ -281,8 +380,10 @@ huella SHA-256, el tamaño en bytes y el archivo (con `--json`, `{"path", "sha25
 wprs-ctl scene build mi-escena --key autor.key -o reloj.wpak
 ```
 
-Lo mismo, y con `--key` firma en el mismo paso. Rechaza una escena con errores. Sin `--key`, quita la
-firma vieja que haya en la carpeta.
+Lo mismo, y con `--key` (aquí la clave **secreta**, `autor.key`) firma en el mismo paso. Rechaza una
+escena con errores, también los de sintaxis de sus scripts. Sin `--key`, quita la firma vieja que haya
+en la carpeta y construye sin firmar: `scene build` nunca deja un paquete con una firma que no
+corresponde.
 
 ### `repo keygen`: una clave nueva
 
@@ -363,14 +464,24 @@ Para probarlo como lo haría otro equipo (con demonio):
 ```
 wprs-ctl remote add 'file:///ruta/a/mi-repo/?fingerprint=<huella>&repo_id=<id>' --wait
 wprs-ctl pkg search reloj
-wprs-ctl pkg install org.example.reloj
+wprs-ctl pkg install org.example.reloj --wait
 ```
 
 ```
 job 1 repo_add done: Mi repositorio (1 packages)
+job 2 install done: org.example.reloj 1.0.0
+Installed org.example.reloj 1.0.0.
 ```
 
+La dirección es la línea `address` de `repo status`; también vale la carpeta con la misma consulta
+(`wprs-ctl remote add 'mi-repo/?fingerprint=…&repo_id=…'`). Una carpeta sin esa consulta se rechaza
+con `needs a fingerprint or repo_id query parameter`. Sin `--wait`, `remote add` y `pkg install`
+solo imprimen el número del trabajo.
+
 ### Servidor propio
+
+El servidor, su arranque sin Docker, el enlace de cada equipo y lo que se sincroniza están en el
+README, «Servidor propio». Con un equipo ya enlazado:
 
 ```
 wprs-ctl server upload reloj.wpak --wait
@@ -422,7 +533,7 @@ con la acción `undo` (y volver a hacer con `redo`).
 
 | Comando | Para qué |
 |---------|----------|
-| `scene bench reloj.wpak --frames 300` | Dibuja un paquete fuera de pantalla e informa del coste de cada cuadro. |
+| `scene bench reloj.wpak --frames 300` | Dibuja un paquete fuera de pantalla e informa del coste de cada cuadro (sin ejecutar los scripts). |
 | `scene upgrade mi-escena --rating general --photosensitive false` | Lo mismo que `pack upgrade`. |
 | `scene recover mi-escena` | Restaura los cambios sin guardar que la app dejó para una carpeta (`--discard` los descarta). |
 | `pack new-assets`, `pack parts` | Hacen y listan paquetes de recursos con partes de una escena (`paquete.md`). |
