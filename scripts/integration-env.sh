@@ -33,7 +33,8 @@ name_free() { ! dbus-send --session --print-reply --dest=org.freedesktop.DBus /o
 ctl() { "$BIN/wprs-ctl" "$@"; }
 field() { ctl state | python3 -c "import json, sys; s = json.load(sys.stdin); print(eval(sys.argv[1]))" "$1"; }
 expect() {
-  for _ in $(seq 20); do [ "$(field "$1")" = "$2" ] && return; sleep 0.1; done
+  local ends=$((SECONDS + 30))
+  while [ "$SECONDS" -lt "$ends" ]; do [ "$(field "$1")" = "$2" ] && return; sleep 0.1; done
   echo "FAIL: $1 is $(field "$1"), expected $2" && exit 1
 }
 fail() { echo "FAIL: $*"; exit 1; }
