@@ -213,7 +213,10 @@ these are the differences:
   only after its first paint.
 - **Media.** `onMedia` gets the same as on the desktop from the media sessions of the phone, once
   the user allows `media` (and `media_network` for a page with network origins) and gives the app
-  notification access; the cover arrives as a PNG the page turns into a `blob:` address.
+  notification access; the cover arrives as a PNG the page turns into a `blob:` address. The app
+  starts reading the players again by itself when notification access comes back, and tries again
+  six times (1 s, then each wait doubled) when the system refuses to list them; taking access away
+  stops the reading at once and the settings screen follows both changes.
 - **Sandbox.** Layers 1 to 4 are the same, enforced by intercepting every request. Network loads
   are blocked in the WebView unless the package declares origins and the user allowed `network`,
   and only those origins pass; cookies, service workers, safe browsing and the WebView's metrics

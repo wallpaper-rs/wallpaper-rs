@@ -10,8 +10,11 @@ import android.media.session.PlaybackState
 import android.os.SystemClock
 import android.provider.Settings
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import java.util.Collections
+import java.util.WeakHashMap
 import org.json.JSONObject
 
 class Pictured {
@@ -22,6 +25,13 @@ class Pictured {
     fun forget() {
         sent = false
     }
+}
+
+object Retrying {
+    private const val FIRST_MS = 1_000L
+    private const val TRIES = 6
+
+    fun after(failures: Int): Long? = if (failures < TRIES) FIRST_MS shl failures else null
 }
 
 class Players(private val context: Context) : MediaSessionManager.OnActiveSessionsChangedListener {
@@ -38,11 +48,24 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
         override fun onSessionDestroyed() = pick(null)
     }
 
+    private var failures = 0
+    private val retry = Runnable { check() }
+
+    init {
+        synchronized(all) { all += this }
+    }
+
     fun follow(painter: Painter, wanted: Boolean) {
         if (wanted) listeners += painter else listeners -= painter
+        check()
+    }
+
+    private fun check() {
+        Render.cancel(retry)
         val on = listeners.isNotEmpty() && allowed(context)
         if (on == (manager != null)) return
         if (!on) {
+            failures = 0
             manager?.removeOnActiveSessionsChangedListener(this)
             manager = null
             pick(null)
@@ -52,8 +75,13 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
         runCatching {
             sessions.addOnActiveSessionsChangedListener(this, component, Render.handler)
             manager = sessions
+            failures = 0
             onActiveSessionsChanged(sessions.getActiveSessions(component))
-        }.onFailure { Native.media(null, null, 0, false) }
+        }.onFailure {
+            Native.media(null, null, 0, false)
+            tell(MediaShown())
+            Retrying.after(failures++)?.let { Render.later(it, retry) }
+        }
     }
 
     override fun onActiveSessionsChanged(controllers: List<MediaController>?) {
@@ -127,8 +155,16 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
     companion object {
         private const val SIDE = 256
         private val readers = mutableMapOf<Players, MediaShown>()
+        private val all = Collections.newSetFromMap(WeakHashMap<Players, Boolean>())
         var status by mutableStateOf(MediaShown())
             private set
+        var changes by mutableIntStateOf(0)
+            private set
+
+        fun recheck() = Render.post {
+            changes++
+            synchronized(all) { all.toList() }.forEach(Players::check)
+        }
 
         fun allowed(context: Context): Boolean {
             val enabled = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners").orEmpty()

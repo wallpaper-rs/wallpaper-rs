@@ -27,7 +27,7 @@ internal fun MediaGrants(form: JSONObject, grant: (String, Boolean) -> Unit) {
     val (uses, granted) = form.optJSONObject("uses") to form.optJSONObject("granted")
     if (uses?.optBoolean("media") != true) return
     val context = LocalContext.current
-    val access = Players.allowed(context)
+    val access = remember(Players.changes) { Players.allowed(context) }
     var asking by remember { mutableStateOf(false) }
     val on = granted?.optBoolean("media") == true
     Toggle(stringResource(R.string.show_media), on) { wanted ->
