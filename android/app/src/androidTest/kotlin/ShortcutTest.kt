@@ -92,6 +92,15 @@ class ShortcutTest : SceneBase() {
         assertEquals("Documents", Shortcuts.named("content://x.documents/tree/primary%3ADocuments"))
     }
 
+    @Test
+    fun theLastFailureIsKeptForTheNextTimeTheProcessStarts() {
+        assertTrue(!Shortcuts.open(context, JSONObject().put("app", "org.example.absent")))
+        val kept = context.getSharedPreferences("shortcuts", 0)
+        assertEquals("app" to "org.example.absent", kept.getString("reason", null) to kept.getString("shown", null))
+        Shortcuts.forget()
+        assertNull(kept.getString("reason", null))
+    }
+
     private companion object {
         const val APART_MS = 1_100L
         const val SHORTCUT_SCENE = """{ "schema": "wallpaper-rs.scene/1", "canvas": { "size": [64, 64] },

@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 
-enum class Ask { ASK, SHOW, SILENT }
+enum class Prompt { ASK, SHOW, SILENT }
 
 object Notice {
     const val ID = 4207
@@ -30,23 +30,23 @@ object Notice {
     private var receiver: BroadcastReceiver? = null
     private var last = ""
 
-    fun plan(enabled: Boolean, asked: Boolean, sdk: Int): Ask = when {
-        enabled -> Ask.SHOW
-        sdk < Build.VERSION_CODES.TIRAMISU || asked -> Ask.SILENT
-        else -> Ask.ASK
+    fun plan(enabled: Boolean, asked: Boolean, sdk: Int): Prompt = when {
+        enabled -> Prompt.SHOW
+        sdk < Build.VERSION_CODES.TIRAMISU || asked -> Prompt.SILENT
+        else -> Prompt.ASK
     }
 
     private fun manager(context: Context) = context.getSystemService(NotificationManager::class.java)
 
     private fun asked(context: Context) = context.getSharedPreferences(KEPT, Context.MODE_PRIVATE).getBoolean(ASKED, false)
 
-    fun mustAsk(context: Context) = plan(manager(context).areNotificationsEnabled(), asked(context), Build.VERSION.SDK_INT) == Ask.ASK
+    fun mustAsk(context: Context) = plan(manager(context).areNotificationsEnabled(), asked(context), Build.VERSION.SDK_INT) == Prompt.ASK
 
     fun asking(context: Context) = context.getSharedPreferences(KEPT, Context.MODE_PRIVATE).edit().putBoolean(ASKED, true).apply()
 
     fun update(context: Context, uid: String?, name: String, percent: Int, left: Int, stop: () -> Unit) {
         val notices = manager(context)
-        if (uid == null || plan(notices.areNotificationsEnabled(), true, Build.VERSION.SDK_INT) != Ask.SHOW) return clear(context)
+        if (uid == null || plan(notices.areNotificationsEnabled(), true, Build.VERSION.SDK_INT) != Prompt.SHOW) return clear(context)
         val key = "$uid $percent $left"
         if (key == last) return
         last = key

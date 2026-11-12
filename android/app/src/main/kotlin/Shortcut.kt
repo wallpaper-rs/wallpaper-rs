@@ -4,6 +4,7 @@ import android.app.WallpaperColors
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
 import android.provider.DocumentsContract
@@ -22,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,11 +36,25 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 object Shortcuts {
+    private const val KEPT = "shortcuts"
+    private var store: SharedPreferences? = null
     var missed by mutableStateOf<Pair<String, String>?>(null)
         private set
 
+    private fun remember(context: Context, value: Pair<String, String>?) {
+        store = context.applicationContext.getSharedPreferences(KEPT, Context.MODE_PRIVATE)
+        store?.edit()?.putString("reason", value?.first)?.putString("shown", value?.second)?.apply()
+    }
+
+    fun restore(context: Context) {
+        store = context.applicationContext.getSharedPreferences(KEPT, Context.MODE_PRIVATE)
+        val (reason, shown) = store?.getString("reason", null) to store?.getString("shown", null)
+        if (missed == null && reason != null && shown != null) missed = reason to shown
+    }
+
     fun forget() {
         missed = null
+        store?.edit()?.clear()?.apply()
     }
 
     private fun document(context: Context, target: JSONObject): Pair<String, Intent>? {
@@ -72,6 +88,7 @@ object Shortcuts {
         }
         val shown = chosen?.first?.let(Shortcuts::named) ?: uri.ifEmpty { app }
         missed = reason?.let { it to shown }
+        remember(context, missed)
         return reason == null
     }
 
@@ -155,6 +172,8 @@ internal fun Shortcut(field: JSONObject, modifier: Modifier, enabled: Boolean, s
 
 @Composable
 internal fun ShortcutMissed() {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) { Shortcuts.restore(context) }
     val (reason, shown) = Shortcuts.missed ?: return
     val text = when (reason) {
         "app" -> R.string.shortcut_missed_app

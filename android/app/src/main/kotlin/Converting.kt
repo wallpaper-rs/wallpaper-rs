@@ -69,7 +69,7 @@ object Converting {
         val context = app ?: return
         val now = running?.first ?: queue.firstOrNull()
         val left = progress.size - 1
-        Notice.update(context, now?.uid.takeIf { busy() }, now?.title.orEmpty(), ((progress[now?.uid] ?: 0f) * 100).toInt(), left) ::stopRunning
+        Notice.update(context, now?.uid.takeIf { busy() }, now?.title.orEmpty(), ((progress[now?.uid] ?: 0f) * 100).toInt(), left, ::stopRunning)
     }
 
     fun resume(context: Context) = Pending.all(context).forEach { conversion ->
