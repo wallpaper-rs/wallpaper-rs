@@ -791,8 +791,9 @@ repeated and smooth where the file had no map) and should be `linear` for
   close the strands grow (0.5), and the comb bends them towards that direction of the model, more at the
   tips. `maps.comb` names a `linear` picture over the first texture coordinates that combs each place
   on its own: its red, green and blue are the direction in the space of the model (0.5 is none, 0 and 1
-  are −1 and 1) and its alpha how much it replaces the comb of the material; the vertex stage reads one
-  texel per vertex of each shell, a cost only fur with a comb map pays. Strands thin out towards the
+  are −1 and 1) and its alpha how much it replaces the comb of the material; the vertex stage of the shells
+  reads one texel of it per vertex (of a 1-pixel picture without a comb map), at every quality level and
+  tier. Strands thin out towards the
   tips and shade darker at their roots; the shells are cut, not blended, so they need no sorting.
 - **`foliage`** sways the vertices with `canvas.wind`: the red of the vertex colors (`COLOR_0`) of the
   file says how much each vertex moves (black stays), or, without vertex colors, the height within the
