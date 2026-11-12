@@ -1,0 +1,211 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.propiedades",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "presets": [
+    {
+      "id": "calido",
+      "label": {
+        "en": "Warm",
+        "es": "Cálido"
+      },
+      "values": {
+        "color_disco": "#ff8a3d",
+        "estilo": "dia",
+        "opacidad": 90
+      }
+    },
+    {
+      "id": "frio",
+      "label": {
+        "en": "Cool",
+        "es": "Frío"
+      },
+      "values": {
+        "color_disco": "#7dd3fc",
+        "estilo": "noche",
+        "mensaje": "Buenas noches"
+      }
+    }
+  ],
+  "properties": {
+    "abrir": {
+      "label": {
+        "en": "Open on click",
+        "es": "Abrir al hacer clic"
+      },
+      "order": 7,
+      "type": "shortcut",
+      "visible_if": "estilo == 'noche' || ver_galeria"
+    },
+    "apariencia": {
+      "label": {
+        "en": "Look",
+        "es": "Apariencia"
+      },
+      "order": 1,
+      "type": "group"
+    },
+    "carpeta": {
+      "accept": [
+        "image"
+      ],
+      "enabled_if": "ver_galeria",
+      "every": 30,
+      "label": {
+        "en": "Photo folder",
+        "es": "Carpeta de fotos"
+      },
+      "max_files": 200,
+      "mode": "one",
+      "order": 4,
+      "pick": "sequence",
+      "recursive": 1,
+      "type": "folder"
+    },
+    "color_disco": {
+      "alpha": false,
+      "default": "#ffb347",
+      "group": "apariencia",
+      "label": {
+        "en": "Disc color",
+        "es": "Color del disco"
+      },
+      "order": 1,
+      "type": "color"
+    },
+    "destello": {
+      "label": {
+        "en": "Flash",
+        "es": "Destello"
+      },
+      "order": 8,
+      "type": "button"
+    },
+    "estilo": {
+      "default": "dia",
+      "label": {
+        "en": "Style",
+        "es": "Estilo"
+      },
+      "options": [
+        {
+          "icon": "weather-clear",
+          "label": {
+            "en": "Day",
+            "es": "Día"
+          },
+          "value": "dia"
+        },
+        {
+          "icon": "weather-clear-night",
+          "label": {
+            "en": "Night",
+            "es": "Noche"
+          },
+          "value": "noche"
+        }
+      ],
+      "order": 6,
+      "type": "combo"
+    },
+    "imagen": {
+      "accept": [
+        "image"
+      ],
+      "default_asset": "cielo",
+      "label": {
+        "en": "Background picture",
+        "es": "Imagen de fondo"
+      },
+      "order": 3,
+      "type": "file"
+    },
+    "mensaje": {
+      "default": "Hola",
+      "group": "apariencia",
+      "label": {
+        "en": "Message",
+        "es": "Mensaje"
+      },
+      "max_len": 60,
+      "order": 3,
+      "type": "text"
+    },
+    "nota": {
+      "label": "@nota",
+      "order": 0,
+      "type": "label"
+    },
+    "opacidad": {
+      "default": 100,
+      "editable": true,
+      "group": "apariencia",
+      "help": {
+        "en": "How solid the disc looks.",
+        "es": "Qué tan sólido se ve el disco."
+      },
+      "integer": true,
+      "label": {
+        "en": "Disc opacity",
+        "es": "Opacidad del disco"
+      },
+      "max": 100,
+      "min": 10,
+      "order": 2,
+      "quality": {
+        "q0": 50,
+        "q1": 70
+      },
+      "step": 5,
+      "type": "slider",
+      "unit": "%"
+    },
+    "separador": {
+      "label": {
+        "en": "Pictures",
+        "es": "Imágenes"
+      },
+      "order": 2,
+      "type": "divider"
+    },
+    "ver_galeria": {
+      "default": false,
+      "label": {
+        "en": "Show the gallery",
+        "es": "Enseñar la galería"
+      },
+      "order": 5,
+      "type": "bool"
+    }
+  },
+  "requires": {
+    "features": [
+      "folder",
+      "folder2",
+      "properties2",
+      "quality_settings",
+      "shortcut"
+    ]
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "strings": {
+    "en": {
+      "nota": "Change anything you like: the scene updates at once."
+    },
+    "es": {
+      "nota": "Cambia lo que quieras: la escena se actualiza al momento."
+    }
+  },
+  "title": "Propiedades de usuario",
+  "version": "0.1.0"
+}

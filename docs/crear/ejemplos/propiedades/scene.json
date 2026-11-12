@@ -1,0 +1,17 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#101520" },
+  "assets": { "cielo": { "path": "assets/cielo.png" } },
+  "layers": [
+    { "id": "foto", "type": "image", "image": { "prop": "imagen" }, "size": [1920, 1080] },
+    { "id": "galeria", "type": "image", "image": { "prop": "carpeta" }, "size": [640, 360],
+      "transform": { "position": [1500, 800] }, "visible": { "prop": "ver_galeria" } },
+    { "id": "disco", "type": "shape", "shape": { "ellipse": { "size": [300, 300] } },
+      "fill": { "prop": "color_disco" }, "opacity": { "prop": "opacidad", "scale": 0.01 },
+      "transform": { "position": [480, 540],
+        "scale": { "timeline": "destello", "keys": [[0, 1], [0.3, 1.5, "out_cubic"], [1, 1, "in_out_sine"]] } } },
+    { "id": "mensaje", "type": "text", "text": { "prop": "mensaje" }, "font": "sans-serif",
+      "size": 72, "color": "#ffffff", "anchor": "top", "transform": { "position": [0, 100] } }
+  ],
+  "timelines": [{ "id": "destello", "duration": 1, "loop": "once", "autoplay": false, "trigger": "prop:destello" }]
+}
