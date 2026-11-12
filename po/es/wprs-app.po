@@ -800,6 +800,29 @@ msgstr "Permitir"
 msgid "Not now"
 msgstr "Ahora no"
 
+#: apps/wprs-app/qml/CoverColors.qml
+msgid "Primary"
+msgstr "Principal"
+
+#: apps/wprs-app/qml/CoverColors.qml
+msgid "Secondary"
+msgstr "Secundario"
+
+#: apps/wprs-app/qml/CoverColors.qml
+msgid "Tertiary"
+msgstr "Terciario"
+
+#: apps/wprs-app/qml/CoverColors.qml apps/wprs-app/qml/facade/SceneLabels.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Text"
+msgstr "Texto"
+
+#: apps/wprs-app/qml/CoverColors.qml apps/wprs-app/qml/EditLight.qml
+#: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/OutputFilter.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Contrast"
+msgstr "Contraste"
+
 #: apps/wprs-app/qml/DepthDialog.qml
 msgid "Download the depth model?"
 msgstr "¿Descargar el modelo de profundidad?"
@@ -1424,12 +1447,6 @@ msgstr "Temperatura (K)"
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Tint"
 msgstr "Tinte"
-
-#: apps/wprs-app/qml/EditLight.qml apps/wprs-app/qml/EditOps.qml
-#: apps/wprs-app/qml/OutputFilter.qml apps/wprs-app/qml/SceneMedia.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Contrast"
-msgstr "Contraste"
 
 #: apps/wprs-app/qml/EditLight.qml apps/wprs-app/qml/EditOps.qml
 #: apps/wprs-app/qml/OutputFilter.qml apps/wprs-app/qml/SceneSwarmHues.qml
@@ -2374,6 +2391,18 @@ msgstr "Aquí aún no hay nada"
 msgid "Add folders in the settings, import files or drop them here."
 msgstr "Añade carpetas en los ajustes, importa archivos o suéltalos aquí."
 
+#: apps/wprs-app/qml/LightsStrip.qml apps/wprs-app/qml/SceneRgb.qml
+msgid "What the lights get, %1 × %2:"
+msgstr "Lo que reciben las luces, %1 × %2:"
+
+#: apps/wprs-app/qml/LightsStrip.qml
+msgid ""
+"The page has sent no colors to the lights yet; pages that call window.wprs."
+"rgb.setImage show them here."
+msgstr ""
+"La página todavía no mandó colores a las luces; las páginas que llaman a "
+"window.wprs.rgb.setImage los muestran aquí."
+
 #: apps/wprs-app/qml/Main.qml
 msgid "Allow this scene?"
 msgstr "¿Permitir esta escena?"
@@ -2971,6 +3000,14 @@ msgstr ""
 "que cambiaste en otro editor; lo que la página escribe con console.log y sus "
 "errores aparecen en la consola de la derecha."
 
+#: apps/wprs-app/qml/PackagePreview.qml apps/wprs-app/qml/PageLights.qml
+msgid "The page and its lights"
+msgstr "La página y sus luces"
+
+#: apps/wprs-app/qml/PackagePreview.qml
+msgid "Allow the page to send colors to the lights"
+msgstr "Permitir que la página mande colores a las luces"
+
 #: apps/wprs-app/qml/PackageSections.qml
 msgid "Entry page:"
 msgstr "Página de entrada:"
@@ -3035,6 +3072,10 @@ msgid "Cover"
 msgstr "Carátula"
 
 #: apps/wprs-app/qml/PackageTrack.qml apps/wprs-app/qml/SceneMedia.qml
+msgid "Cover colors"
+msgstr "Colores de la carátula"
+
+#: apps/wprs-app/qml/PackageTrack.qml apps/wprs-app/qml/SceneMedia.qml
 msgid "Triggers"
 msgstr "Disparadores"
 
@@ -3089,24 +3130,8 @@ msgid "JavaScript files"
 msgstr "Archivos JavaScript"
 
 #: apps/wprs-app/qml/PageLights.qml
-msgid "The page and its lights"
-msgstr "La página y sus luces"
-
-#: apps/wprs-app/qml/PageLights.qml
 msgid "Install the KPipeWire QML module to see the page here."
 msgstr "Instala el módulo QML de KPipeWire para ver aquí la página."
-
-#: apps/wprs-app/qml/PageLights.qml apps/wprs-app/qml/SceneRgb.qml
-msgid "What the lights get, %1 × %2:"
-msgstr "Lo que reciben las luces, %1 × %2:"
-
-#: apps/wprs-app/qml/PageLights.qml
-msgid ""
-"The page has sent no colors to the lights yet; pages that call window.wprs."
-"rgb.setImage show them here."
-msgstr ""
-"La página todavía no mandó colores a las luces; las páginas que llaman a "
-"window.wprs.rgb.setImage los muestran aquí."
 
 #: apps/wprs-app/qml/PageLights.qml
 msgid ""
@@ -5085,12 +5110,6 @@ msgid "Read it as data, such as a normal map or a mask, not as colors"
 msgstr ""
 "Leerla como datos, como un mapa de normales o una máscara, no como colores"
 
-#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePropertyRange.qml
-#: apps/wprs-app/qml/SceneScriptParam.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Default"
-msgstr "Valor por defecto"
-
 #: apps/wprs-app/qml/SceneInspector.qml
 msgid "Add effect"
 msgstr "Añadir un efecto"
@@ -5868,28 +5887,6 @@ msgstr ""
 #: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneTimelinePanel.qml
 msgid "Seconds"
 msgstr "Segundos"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Cover colors"
-msgstr "Colores de la carátula"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Primary"
-msgstr "Principal"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Secondary"
-msgstr "Secundario"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Tertiary"
-msgstr "Terciario"
-
-#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneScriptParams.qml
-#: apps/wprs-app/qml/facade/SceneLabels.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Text"
-msgstr "Texto"
 
 #: apps/wprs-app/qml/SceneMeshCut.qml
 msgid "Mesh from a picture"
@@ -8244,10 +8241,6 @@ msgstr ""
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Follow"
 msgstr "Seguir"
-
-#: apps/wprs-app/qml/SceneTemplateFollow.qml
-msgid "Stop following"
-msgstr "Dejar de seguir"
 
 #: apps/wprs-app/qml/SceneTemplateTree.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml

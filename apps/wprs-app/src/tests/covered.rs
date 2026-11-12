@@ -76,12 +76,14 @@ fn a_page_preview_shows_its_lights_and_gives_its_stream_back() {
         "the preview is not one fixed preview output"
     );
     assert!(!lights.contains("Date.now()"), "each try names a new preview output");
-    assert!(lights.contains(r#"App.query("GetStrip", [trial.output], "Rgb1""#));
+    let strip = text("LightsStrip.qml");
+    assert!(strip.contains(r#"App.query("GetStrip", [asked], "Rgb1""#));
     assert!(
         lights.contains(r#"App.act("ReleaseStream", [output], "Daemon1")"#)
             && lights.contains("onClosed: stop()")
     );
-    assert!(lights.contains("running: trial.opened"), "the strip was read while closed");
+    assert!(lights.contains("active: trial.opened") && strip.contains("running: lights.active"));
+    assert!(text("PackagePreview.qml").contains("LightsStrip {"), "the package preview shows no lights");
     assert!(text("ItemDrawer.qml").contains("lights.start(drawer.uid)"));
 }
 

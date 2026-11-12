@@ -1,3 +1,4 @@
+mod lights;
 mod palette;
 mod settings;
 mod web;

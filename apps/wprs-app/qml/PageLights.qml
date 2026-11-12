@@ -9,7 +9,6 @@ Kirigami.Dialog {
 
     property string uid
     property string output
-    property var strip: null
     property var stream: null
     property bool missing: false
     property string problem
@@ -18,7 +17,6 @@ Kirigami.Dialog {
         stop();
         trial.uid = uid;
         output = "preview:page-lights";
-        strip = null;
         problem = "";
         missing = false;
         open();
@@ -55,13 +53,6 @@ Kirigami.Dialog {
     standardButtons: Kirigami.Dialog.Close
     onClosed: stop()
 
-    Timer {
-        interval: 100
-        repeat: true
-        running: trial.opened && trial.output !== ""
-        onTriggered: App.query("GetStrip", [trial.output], "Rgb1", reply => trial && (trial.strip = reply), () => trial && (trial.strip = null))
-    }
-
     ColumnLayout {
         Rectangle {
             id: screen
@@ -78,26 +69,10 @@ Kirigami.Dialog {
             }
         }
 
-        QQC2.Label {
-            text: trial.strip ? App.tr("What the lights get, %1 × %2:", trial.strip[0], trial.strip[1]) : App.tr("The page has sent no colors to the lights yet; pages that call window.wprs.rgb.setImage show them here.")
-        }
-
-        Grid {
-            visible: trial.strip !== null
-            columns: Math.max(1, trial.strip?.[0] ?? 1)
-            spacing: 1
-
-            Repeater {
-                model: trial.strip ? trial.strip[0] * trial.strip[1] : 0
-
-                delegate: Rectangle {
-                    required property int index
-
-                    width: Kirigami.Units.gridUnit * 0.4
-                    height: width
-                    color: Qt.rgba(trial.strip[2][index * 3] / 255, trial.strip[2][index * 3 + 1] / 255, trial.strip[2][index * 3 + 2] / 255, 1)
-                }
-            }
+        LightsStrip {
+            Layout.fillWidth: true
+            output: trial.output
+            active: trial.opened
         }
 
         QQC2.Label {

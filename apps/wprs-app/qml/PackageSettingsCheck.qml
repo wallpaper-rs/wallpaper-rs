@@ -103,8 +103,22 @@ QtObject {
         player.destroy();
     }
 
+    function lights() {
+        const shown = Qt.createComponent("PackagePreview.qml").createObject(page, {
+            "page": page
+        });
+        page.change("/manifest/permissions/rgb", true);
+        expect(page.manifest.permissions?.rgb === true, "the page was not allowed to send colors to the lights");
+        page.run("remove", {
+            "pointer": "/manifest/permissions/rgb"
+        });
+        expect(page.manifest.permissions?.rgb === undefined, "the permission for the lights was not removed");
+        shown.destroy();
+    }
+
     function exercise() {
         web();
+        lights();
         media();
         properties();
         preview();

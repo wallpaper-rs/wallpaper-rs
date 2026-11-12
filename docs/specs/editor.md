@@ -920,6 +920,14 @@ and the errors it raises appear in the console under the problems. `wprs-ctl sce
 does the same on the desktop: for a web page it sends the manifest and the staged build, with
 `--quality`, `--restart` (reload) and `--console`.
 
+Under the preview of a web page, *The page and its lights* shows the colors the page sends with
+`window.wprs.rgb.setImage` as a grid, read ten times a second from `GetStrip` of the preview output while
+the tab is shown, and a switch that sets or removes `permissions.rgb` in the manifest (the same
+`set` and `remove` actions on `/manifest/permissions/rgb`). A preview lights the strip without the
+grant, with the lights off and without sending anything to the devices, so the author sees what a
+user would get before publishing; `wprs-ctl rgb strip -o OUTPUT` reads the same strip for the output of
+`wprs-ctl scene preview DIR -o OUTPUT`.
+
 The *Properties* tab of a web page is the list of user properties of the scene editor, the same
 widget and the same actions (`add_property`, `set`, `remove`, the property inspector on the right):
 sliders, switches, colors, choices, texts, buttons, groups and, for a page, the `file` and `folder`

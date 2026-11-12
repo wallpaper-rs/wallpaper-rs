@@ -119,4 +119,25 @@ ColumnLayout {
         color: Kirigami.Theme.disabledTextColor
         text: App.tr("Reload builds the page again from its files, so what you changed in another editor shows; what the page writes with console.log and its errors appear in the console on the right.")
     }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        Layout.topMargin: Kirigami.Units.smallSpacing
+        level: 4
+        text: App.tr("The page and its lights")
+    }
+
+    QQC2.Switch {
+        text: App.tr("Allow the page to send colors to the lights")
+        checked: preview.page.manifest.permissions?.rgb === true
+        onToggled: checked ? preview.page.change("/manifest/permissions/rgb", true) : preview.page.run("remove", {
+            "pointer": "/manifest/permissions/rgb"
+        })
+    }
+
+    LightsStrip {
+        Layout.fillWidth: true
+        output: preview.page.editor.output
+        active: preview.visible
+    }
 }
