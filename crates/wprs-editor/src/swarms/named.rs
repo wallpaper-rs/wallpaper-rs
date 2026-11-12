@@ -18,13 +18,13 @@ pub(super) fn rewrite(dir: &Path, doc: &Value, from: &str, to: &str) -> Result<V
         said("editor.id_use", "the id %1 is in use", &[&from])
     );
     let list = doc["scene"]["scripts"].as_array().into_iter().flatten().filter_map(|s| s["path"].as_str());
+    let mut ops = Vec::new();
     for path in list.filter(|p| wprs_format::check_path(p).is_ok()) {
         let Ok(text) = std::fs::read_to_string(dir.join(path)) else { continue };
         let next = swapped(&text, from, to);
         if next != text {
-            std::fs::write(dir.join(path), next)
-                .map_err(|e| said("editor.cannot_write", "cannot write %1: %2", &[&path, &e]))?;
+            ops.extend(crate::scripts::save(dir, doc, path, &next)?);
         }
     }
-    Ok(Vec::new())
+    Ok(ops)
 }

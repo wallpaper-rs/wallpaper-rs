@@ -28,6 +28,10 @@ fn scripts_that_name_a_renamed_system_are_listed_by_line_and_rewritten_on_reques
     );
     assert_eq!(std::fs::read_to_string(p.dir.join("scripts/b.js")).unwrap(), "const x = \"other\";\n");
     assert!(script_uses(&p.dir, &p.doc, "flakes").is_empty());
+    act(&mut p, json!({"undo": {}})).unwrap();
+    assert_eq!(std::fs::read_to_string(p.dir.join("scripts/a.js")).unwrap(), source);
+    act(&mut p, json!({"redo": {}})).unwrap();
+    assert!(std::fs::read_to_string(p.dir.join("scripts/a.js")).unwrap().contains("particles(\"snow\")"));
 }
 
 #[test]
