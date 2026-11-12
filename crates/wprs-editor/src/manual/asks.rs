@@ -69,4 +69,10 @@ pub const ASKS: [(&str, &str, &str); 39] = [
         "What a sound binding reacts to: the levels of the bands read from the preview folded to 16, 32 or 64, the marked bands and the value it gives",
         r#"{"source": {"audio": [0, 3], "of": 16}, "reading": {"listening": true, "raw": [[], []], "loudness": 0.5}, "of": 16}"#,
     ),
+    (
+        "response",
+        "The response of smooth to a step up and down: points of time and value and the seconds it takes to settle",
+        r#"{"smooth": {"up": 0.05, "down": 0.4}}"#,
+    ),
+    ("wander", "Where the made-up pointer of the preview is at a second", r#"{"time": 1.5}"#),
 ];

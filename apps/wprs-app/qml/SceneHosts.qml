@@ -16,6 +16,7 @@ Item {
     readonly property Component multiline: multilineEditor
     readonly property Component format: formatEditor
     readonly property Component trigger: triggerEditor
+    readonly property Component smooth: smoothEditor
 
     visible: false
 
@@ -71,6 +72,14 @@ Item {
         id: packageFields
 
         PackageFields {
+            host: hosts.input
+        }
+    }
+
+    Component {
+        id: smoothEditor
+
+        SceneSmooth {
             host: hosts.input
         }
     }

@@ -26,6 +26,7 @@ pub mod qobject {
         #[qproperty(bool, dirty)]
         #[qproperty(bool, live)]
         #[qproperty(bool, busy)]
+        #[qproperty(bool, sweeping)]
         type SceneEditor = super::SceneEditorRust;
 
         #[qinvokable]
@@ -91,6 +92,8 @@ pub mod qobject {
         #[qinvokable]
         fn hear(self: Pin<&mut SceneEditor>, on: bool);
         #[qinvokable]
+        fn sweep(self: Pin<&mut SceneEditor>, on: bool);
+        #[qinvokable]
         fn preview(self: Pin<&mut SceneEditor>, live: bool);
         #[qinvokable]
         fn render(self: Pin<&mut SceneEditor>, out: &QString, spec: &QString);
@@ -127,6 +130,7 @@ pub struct SceneEditorRust {
     pub placed: QString,
     pub look: QString,
     pub levels: QString,
+    pub sweeping: bool,
     pub node: u32,
     pub serial: f64,
     pub time: f64,

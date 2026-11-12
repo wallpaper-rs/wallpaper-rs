@@ -528,6 +528,16 @@ The menu of a bound field has *Try and shape the response*:
   daemon gives it, `of`: 16, 32 or 64) returns the folded `bands`, the `marked` range, the `value`,
   its `raw` value and the `levels` `bass`, `mid`, `treble`, `level` and `beat`; with `gain:
   "fixed"` in the scene it reads the levels measured from full scale.
+- *Try the pointer* (bindings that follow the pointer) starts a made-up pointer that wanders over
+  the preview, the same `SimulateTouch` as Test the pointer and clicks, until it is turned off,
+  which reports the pointer left; the made-up path is the query `wander` (`time`).
+- *Smooth the changes* gives the binding a `smooth` of 0.2 s and opens it. Every binding of a
+  number, a pair of numbers or a color has the `smooth` field as a control of its own: one slider
+  for the same time up and down, or two with *Different speed going up and down*, and a plot of the
+  response of the smoothing to a step up and then down, with the seconds it takes to settle
+  (three times the constant). The query `response` (`smooth`: a number or `{ "up", "down" }`, 0 to
+  60 s) returns the points of the plot.
+
 Next to the menus for scripts (*Follow a script* lists every script and function of the scene, with
 its settings) and the media player (above), these complete the entries of the binding menu.
 

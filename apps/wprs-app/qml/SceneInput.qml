@@ -123,6 +123,7 @@ ColumnLayout {
                 "styles": hosts.styles,
                 "emitters": hosts.emitters,
                 "rules": hosts.rules,
+                "smooth": hosts.smooth,
                 "list": editors.list,
                 "ref:mask": editors.mask,
                 "ref:model": editors.rig,

@@ -35,6 +35,7 @@ mod scenehear;
 mod scenelive;
 mod scenemedia;
 mod scenerender;
+mod scenesweep;
 mod scenework;
 mod secret;
 mod shelf;

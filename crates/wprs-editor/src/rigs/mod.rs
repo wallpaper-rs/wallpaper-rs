@@ -166,6 +166,8 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("strings").is_some() => crate::strings::query(dir, doc),
         _ if q.get("credits").is_some() => crate::credits::query(dir, doc),
         _ if q.get("meter").is_some() => crate::meter::query(doc, &q["meter"]),
+        _ if q.get("response").is_some() => crate::response::query(&q["response"]),
+        _ if q.get("wander").is_some() => crate::wander::query(&q["wander"]),
         _ if q.get("spread").is_some() => crate::spread::spread(doc, &q["spread"]),
         _ if q.get("curves").is_some() => crate::graph::curves(doc, &q["curves"]),
         _ if q.get("key_clip").is_some() => crate::graph::key_clip(doc, &q["key_clip"]),

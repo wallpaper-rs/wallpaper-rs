@@ -3,7 +3,7 @@ use super::rigrefs::{RIG, options};
 use super::{Field, Own, SOURCES, candidates};
 use crate::schema::{branches, choose, deref, sample};
 use crate::texts::rows;
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::path::Path;
 use wprs_scene::easings;
 
@@ -43,6 +43,12 @@ impl Walk<'_> {
         let optional = list.len() == 2 && list.iter().any(|b| b["type"] == "null");
         if optional {
             (schema, name) = deref(self.root, list.iter().find(|b| b["type"] != "null").unwrap_or(schema));
+        }
+        if name == "Smooth" {
+            f.widget = "smooth".into();
+            f.range = json!([0, 60]);
+            self.out.push(f);
+            return;
         }
         let probe = if current.is_null() { &f.default } else { &current };
         let scalar = probe.is_array() || probe.is_number() || probe.is_boolean();

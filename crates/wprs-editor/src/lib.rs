@@ -76,6 +76,7 @@ pub mod reels;
 pub mod references;
 mod rename;
 pub mod review;
+pub mod response;
 mod revisions;
 mod rgb;
 mod rig;
@@ -112,6 +113,7 @@ mod timelines;
 pub mod touch;
 pub mod tried;
 pub mod usage;
+pub mod wander;
 
 pub use actions::{ACTIONS, Action};
 pub use findings::{Problem, told, told_with};
