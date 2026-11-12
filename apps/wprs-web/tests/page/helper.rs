@@ -59,7 +59,7 @@ impl Page {
                 self.frames += 1;
                 self.link.send(&ToWeb::Freed { view, slot }, &[]).unwrap();
             }
-            FromWeb::Said(text) => {
+            FromWeb::Said(text) | FromWeb::Console { line: text, .. } => {
                 let Some(rest) = text.strip_prefix("log: probe ") else { return };
                 let (name, value) = rest.split_once(' ').unwrap();
                 self.said.entry(name.into()).or_default().push(serde_json::from_str(value).unwrap());
