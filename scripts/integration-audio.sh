@@ -76,7 +76,7 @@ wait_for 10 analysing || fail "no PipeWire stream for the audio analysis"
 [ "$(bands TEST-12 "(r['granted'], r['bands'])")" = "(True, 64)" ] ||
   fail "the levels were not offered with permission: $(ctl input bands TEST-12)"
 sleep 4
-[ "$(bands TEST-12 "r['listening'] is False or len(r['raw'][0]) == 64")" = True ] ||
+[ "$(bands TEST-12 "r['listening'] is True and (r['sound'] is False or len(r['raw'][0]) == 64)")" = True ] ||
   fail "the levels have the wrong shape: $(ctl input bands TEST-12)"
 ctl config pause.when_covered false && ctl covered TEST-12 true
 wait_for 10 reads "r['capturing']" False || fail "the sound of a covered screen was captured"
