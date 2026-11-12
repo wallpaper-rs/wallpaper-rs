@@ -13,8 +13,7 @@ QtObject {
             "page": page,
             "ratio": 1
         });
-        page.editor.select("/scene/canvas");
-        if (!grips.onCanvas || grips.offset === null)
+        if (grips.offset === null)
             throw new Error("parallax grips: the canvas shows no handle for the offset of its parallax");
         grips.shift([grips.size[0] * 0.75, grips.size[1] * 0.5]);
         const offset = read("/scene/canvas/parallax/offset");
