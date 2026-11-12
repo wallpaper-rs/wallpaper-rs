@@ -88,8 +88,8 @@ Una escena instalada no se cambia nunca. Se hace una copia en una carpeta tuya y
 
 Dónde está: dos sitios.
 
-- En la página **Escenas**, bajo **Editar una copia de un paquete de la biblioteca** (esa sección solo sale si la biblioteca tiene paquetes). Cada fila es un paquete.
-- En la ficha de cualquier paquete de la biblioteca, el botón **Editar una copia…**.
+- En la ficha de cualquier elemento de la biblioteca: elige el elemento, pulsa **Detalles** y baja hasta el final del panel; ahí está el botón **Editar una copia…**. Es el camino que siempre está.
+- En la página **Escenas**, bajo **Editar una copia de un paquete de la biblioteca**: una fila por paquete. Esa sección solo sale cuando la biblioteca tiene paquetes guardados como archivo `.wpak` (los de ejemplo, los instalados de un repositorio y los que importas como paquete; una imagen o un vídeo sueltos no cuentan), y si no la ves, usa la ficha.
 
 Pasos:
 
@@ -112,7 +112,9 @@ Dónde está: **Guardar** en la barra de arriba.
 Pasos:
 
 1. Pulsa **Guardar**. El botón está apagado mientras no haya cambios o el editor esté ocupado.
-2. Si algún archivo de la carpeta cambió desde que la abriste (por ejemplo, lo tocó otro programa), el editor se niega a pisarlo y lo dice en el aviso rojo.
+2. Si algún archivo de la carpeta cambió desde que la abriste (por ejemplo, lo tocó otro programa), el editor no lo pisa: sale el aviso **Otro programa cambió esta carpeta mientras editabas. Tus cambios no se han perdido: elige con qué quedarte.** con tres botones: **Quedarme con lo mío** (guarda tu versión encima), **Tomar lo del otro programa** (descarta lo tuyo y carga la carpeta como está) y **Guardar en otra carpeta…** (guarda lo tuyo aparte y deja la carpeta como la dejó el otro programa).
+
+El editor mira la carpeta cada dos segundos: si el cambio de fuera ocurre cuando no tienes nada sin guardar, recarga solo la escena y la lista de problemas, sin preguntar.
 
 Atajo: el de guardar de tu sistema (mira la [tabla de atajos](#todos-los-atajos-de-teclado)).
 
@@ -164,6 +166,7 @@ Qué dicen los avisos y errores:
 - Archivos de `assets` que ninguna parte de la escena usa, o una firma que dejó una compilación anterior.
 - Una sugerencia sobre destellos, si la escena parpadea mucho.
 - Un script que usa algo (sonido, puntero…) sin declararlo: **… usa … pero no lo declara; decláralo en sus usos**.
+- Un script que no compila (un error de sintaxis, con su archivo y su línea) o que `scene.json` nombra y no está en la carpeta. El editor compila los scripts sin ejecutarlos, como `wprs-ctl scene validate`.
 
 Pasos:
 
@@ -187,8 +190,8 @@ El lienzo muestra la escena dibujada por el demonio, tal como se vería de fondo
 
 Pasos para verla en tus pantallas de verdad:
 
-1. Pulsa **Ver en el escritorio**. Se enciende el interruptor y todas tus pantallas muestran la escena sin aplicarla.
-2. Vuelve a pulsarlo para apagarla. También se apaga al cerrar el editor.
+1. Pulsa **Ver en el escritorio**. Se enciende el interruptor y todas tus pantallas muestran la escena sin aplicarla; sobre el lienzo sale el aviso **Esta escena se muestra en el escritorio como vista previa y no está aplicada. Detén la vista previa cuando termines.**, con el botón **Detener la vista previa**.
+2. Vuelve a pulsarlo (o usa ese botón) para apagarla. También se apaga al cerrar el editor, y si la vista previa se termina desde fuera (`wprs-ctl scene preview DIR --stop`, otra escena en la pantalla), el editor lo dice y apaga el interruptor.
 
 Pasos para probar el ratón:
 
@@ -250,7 +253,7 @@ En la terminal: `wprs-ctl scene ask DIR effect_cost`, `cost3d` y `budget`; `wprs
 
 Dónde está: **Compilar y aplicar…** en la barra de arriba.
 
-El diálogo se llama **Compilar y aplicar**. Mientras haya cambios sin guardar o errores en la lista de problemas, los botones están apagados y el diálogo dice **Guarda la escena y resuelve sus problemas antes de crear el paquete.** Los avisos amarillos no lo impiden.
+El diálogo se llama **Compilar y aplicar**. Mientras el editor trabaja, haya cambios sin guardar o errores en la lista de problemas, los botones están apagados y el diálogo dice por qué: **Espera: el editor sigue trabajando.**, **Tienes cambios sin guardar. Guárdalos para crear el paquete o aplicarlo.** (con un botón **Guardar ahora**) o **La escena tiene N problemas que resolver antes; están en el panel de Problemas.** Los avisos amarillos no lo impiden.
 
 Pasos:
 
@@ -258,12 +261,12 @@ Pasos:
 2. Abre **Compilar y aplicar…**.
 3. Pulsa **Crear el paquete**. El archivo `.wpak` queda junto a la carpeta, con el id y la versión como nombre, o donde pongas en **Archivo del paquete:**. El aviso verde dice dónde quedó y su huella.
 4. Para firmarlo, elige la **Clave de autor:** (**Elegir…** abre un archivo; **Claves…** gestiona tus claves) y escribe la **Contraseña de la clave:** si la tiene.
-5. Para verlo en una pantalla, elige **Pantalla:** (**Todas las pantallas** o una) y pulsa **Aplicar a la pantalla**. Hace el paquete, lo mete en la biblioteca y lo muestra.
+5. Para verlo en una pantalla, elige **Pantalla:** (**Todas las pantallas** o una) y pulsa **Aplicar a la pantalla**. Hace el paquete, lo mete en la biblioteca y lo muestra, y el aviso verde dice qué mostró, en qué pantalla y a qué nivel de calidad (como `wprs-ctl scene apply`). Si cambias la escena y vuelves a aplicar, la pantalla muestra lo nuevo aunque no subas la versión. Para quitar el fondo después, **Quitar el fondo** en la fila de la pantalla, en la página **Ajustes**.
 6. **Revisar el paquete…** (en **Antes de construir:**) muestra todo lo que el paquete dirá al mundo antes de crearlo, y **Añadir a un repositorio…** (en **Publicar:**) lo prepara para publicarlo.
 
 Todo esto se explica en [paquete](paquete.md).
 
-En la terminal: `wprs-ctl scene build DIR [-o ARCHIVO] [--key CLAVE]` y `wprs-ctl scene apply DIR [-o SALIDA]`. La primera se niega si hay errores.
+En la terminal: `wprs-ctl scene build DIR [-o ARCHIVO] [--key CLAVE]` y `wprs-ctl scene apply DIR [-o SALIDA]`. La primera se niega si hay errores (también un script que no compila), y `scene apply` imprime lo mismo que el aviso verde. Para quitar el fondo: `wprs-ctl clear [-o SALIDA]` y `wprs-ctl restore`.
 
 ## El editor de imágenes
 
