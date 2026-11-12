@@ -109,6 +109,7 @@ pub mod qobject {
         fn finished(self: Pin<&mut SceneEditor>, message: QString);
         #[qsignal]
         fn rendered(self: Pin<&mut SceneEditor>, files: QString);
+        #[qsignal]
         fn waved(self: Pin<&mut SceneEditor>, asset: QString, wave: QString);
     }
 
