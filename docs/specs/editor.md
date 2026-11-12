@@ -155,6 +155,32 @@ time, so the window keeps answering. `prune` deletes the files of `assets/` that
 previews and its credits no longer name, and the meshes of `meshes/` that neither the scene nor the
 history names.
 
+## Acciones desde la línea de comandos
+
+Regla: toda acción del editor se alcanza con `wprs-ctl scene act`. Cada operación del editor es una
+variante del enum `Action` de `crates/wprs-editor` (o una consulta de `rigs::query`), y la línea de
+comandos no tiene un subcomando propio por herramienta. Solo existen subcomandos dedicados para lo que
+una persona o un script hace a mano: crear, importar, previsualizar, capturar, comprobar, empaquetar,
+firmar, publicar y los repositorios. Una función nueva del editor entra como `Action` con su prueba
+unitaria en `crates/wprs-editor`, y los guiones de integración la ejercitan con `scene act`.
+
+- `wprs-ctl scene act DIR ACCIÓN [JSON]` aplica una acción a la carpeta de escena, igual que la
+  aplicación: la misma validación, el mismo historial para deshacer y los mismos mensajes de error.
+  `JSON` es el objeto de argumentos de la variante; se puede pasar como argumento, con `--file RUTA` o
+  por la entrada estándar si vale `-`. Sin `JSON`, los argumentos son `{}`. Imprime los ids de lo que
+  se añadió, o con `--json` las operaciones que cambiaron el documento.
+- `wprs-ctl scene act DIR batch JSON` toma una lista JSON de objetos `{"acción": {argumentos}}` y las
+  aplica como un solo paso de deshacer (`Project::act_all`): si una falla, no queda ningún cambio en el
+  proyecto ni en el historial, y deshacer o rehacer no pueden formar parte de la lista.
+- `wprs-ctl scene actions` lista cada acción con una línea; `scene actions NOMBRE` imprime sus
+  argumentos (nombre, tipo, si son obligatorios u opcionales, valores de las enumeraciones y valores por
+  defecto) y una invocación de ejemplo; con `--json` imprime el esquema JSON de la acción. El esquema
+  sale de los tipos con `schemars`, y una prueba de `crates/wprs-editor` (`manual`) falla si una variante
+  de `Action` no figura en la lista, no tiene descripción o su ejemplo no se deserializa.
+- `wprs-ctl scene ask DIR CONSULTA [JSON] [--layer ID]` hace una consulta del editor (las mismas que la
+  aplicación pide con `rigs::query`) e imprime la respuesta como JSON; `scene actions --queries
+  [NOMBRE]` las lista y describe. `--inside PLANTILLA` vale para los tres comandos.
+
 ## History
 
 Each action that changes something is one step `{label, undo, redo}`. Only gestures merge: the
