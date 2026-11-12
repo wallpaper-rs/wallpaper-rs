@@ -35,10 +35,7 @@ ColumnLayout {
         basePath = "";
         if (!installedBase)
             return;
-        App.query("GetItem", [installedBase.uid], "Library1", reply => {
-                if (preset)
-                    preset.basePath = String(reply?.path ?? "");
-            }, () => {});
+        App.query("GetItem", [installedBase.uid], "Library1", reply => preset && (preset.basePath = String(reply?.path ?? "")), () => {});
     }
 
     function load() {
