@@ -61,6 +61,11 @@ pub enum SowEdit {
         #[serde(default)]
         color: Option<Vec<(f64, String)>>,
     },
+    Scope {
+        system: String,
+        layer: String,
+        own: bool,
+    },
     Render {
         system: String,
         #[serde(default)]

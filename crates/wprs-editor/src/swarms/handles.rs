@@ -64,8 +64,7 @@ pub fn heard(dir: &Path, doc: &Value, system: &str, layer: Option<&str>, (t, sou
     let Some(s) = doc.pointer(&format!("/scene/particles/{}", escape(system))) else { return Value::Null };
     let chosen = layer.and_then(|id| crate::actions::layer(doc, id).ok()).map(|(_, l)| l);
     let layer = layer.or_else(|| drawn_by(doc, system));
-    let drawn = layer.and_then(|id| crate::actions::layer(doc, id).ok()).map(|(_, l)| l);
-    let render = drawn.map(|l| &l["render"]).filter(|r| r.is_object()).unwrap_or(&s["render"]);
+    let render = chosen.map(|l| &l["render"]).filter(|r| r.is_object()).unwrap_or(&s["render"]);
     let f = frame(dir, doc, layer, t);
     let spots = tuned(points(s, &f, t), chosen.map_or(&Value::Null, |l| &l["instance"]["points"]), &f, t);
     let children = s["children"].as_array().into_iter().flatten().enumerate().map(|(k, c)| {
@@ -109,6 +108,8 @@ pub fn heard(dir: &Path, doc: &Value, system: &str, layer: Option<&str>, (t, sou
         "boids": super::steers::boids(s, &f),
         "operators": super::steers::operators(s),
         "strands": super::steers::strands(doc, s, render),
+        "render": render,
+        "scope": super::scopes::describe(doc, system, s, chosen),
         "fields": super::view::fields(s, &f, &emitters, (t, salt, sound)),
         "sound": sound,
         "seed": seed,

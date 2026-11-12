@@ -9,7 +9,7 @@ ColumnLayout {
 
     required property var tools
     readonly property var system: (tools.info, JSON.parse(tools.page.editor.value(SceneSwarmKnobs.pointer(tools.system, "")) || "null")) ?? ({})
-    readonly property var render: system.render ?? ({})
+    readonly property var render: tools.info?.render ?? system.render ?? ({})
     readonly property var orders: ["none", "newest", "oldest", "largest", "smallest", "lowest"]
     readonly property var tunables: ["alpha", "size", "count", "speed", "life", "time_scale", "brightness", "color", "points"]
     readonly property var locked: system.lock ?? []

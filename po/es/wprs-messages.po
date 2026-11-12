@@ -2109,7 +2109,7 @@ msgstr ""
 msgid "there is no particle system \"%1\""
 msgstr "no hay ningún sistema de partículas «%1»"
 
-#: crates/wprs-editor/src/swarms/mod.rs
+#: crates/wprs-editor/src/swarms/mod.rs crates/wprs-editor/src/swarms/scopes.rs
 msgid "the layer \"%1\" draws no particles of this system"
 msgstr "la capa «%1» no dibuja partículas de este sistema"
 

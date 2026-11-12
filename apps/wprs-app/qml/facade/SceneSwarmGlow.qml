@@ -2,10 +2,14 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    id: root
+
     property var info: null
     property bool shown: false
+    property string layer: ""
 
     function load(page, system, layer) {
+        root.layer = layer || "";
         info = system ? JSON.parse(page.editor.rig(system, JSON.stringify({
             "swarm_light": {
                 "system": system,
@@ -18,7 +22,9 @@ QtObject {
         page.run("particles", {
                 [what]: Object.assign({
                         "system": info?.system ?? ""
-                    }, args)
+                    }, layer ? {
+                        "layer": layer
+                    } : {}, args)
             }, gesture === true);
     }
 }

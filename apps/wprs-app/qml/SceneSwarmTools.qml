@@ -10,10 +10,13 @@ ColumnLayout {
     required property var page
     required property string system
     property var info: null
+    property string renderLayer: ""
+    readonly property var layered: ["cutout", "orient", "shader", "strand", "texture", "lit", "refract", "over", "render"]
 
     function load() {
         const q = {
             "particles": {
+                "layer": renderLayer || null,
                 "time": page.editor.time,
                 "sound": page.heard
             }
@@ -25,12 +28,18 @@ ColumnLayout {
         page.run("particles", {
                 [what]: Object.assign({
                         "system": system
-                    }, args)
+                    }, renderLayer && layered.includes(what) ? {
+                        "layer": renderLayer
+                    } : {}, args)
             }, gesture === true);
     }
 
     visible: info !== null
-    onSystemChanged: load()
+    onSystemChanged: {
+        renderLayer = "";
+        load();
+    }
+    onRenderLayerChanged: load()
     Component.onCompleted: load()
 
     Connections {
@@ -111,6 +120,11 @@ ColumnLayout {
     }
 
     SceneSwarmColliders {
+        Layout.fillWidth: true
+        tools: tools
+    }
+
+    SceneSwarmScope {
         Layout.fillWidth: true
         tools: tools
     }

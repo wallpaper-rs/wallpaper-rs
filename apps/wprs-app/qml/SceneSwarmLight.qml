@@ -12,7 +12,7 @@ GridLayout {
     readonly property var pictures: [App.tr("None")].concat(info?.pictures ?? [])
 
     function load() {
-        SceneSwarmGlow.load(tools.page, tools.system, null);
+        SceneSwarmGlow.load(tools.page, tools.system, tools.renderLayer);
     }
 
     columns: 2

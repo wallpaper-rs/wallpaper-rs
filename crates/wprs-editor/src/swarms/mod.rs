@@ -10,6 +10,7 @@ mod pulls;
 mod reach;
 mod salt;
 mod samples;
+mod scopes;
 mod shapes;
 mod sow;
 mod spots;

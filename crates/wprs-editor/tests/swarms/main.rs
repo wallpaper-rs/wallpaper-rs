@@ -14,6 +14,7 @@ mod looks;
 mod named;
 mod owns;
 mod reaches;
+mod scopes;
 mod sows;
 mod targets;
 mod tends;

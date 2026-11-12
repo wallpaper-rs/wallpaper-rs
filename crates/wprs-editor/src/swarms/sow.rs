@@ -157,6 +157,7 @@ pub(super) fn edit(doc: &Value, e: &S) -> Result<Vec<Op>> {
                 })
             })?
         }
+        S::Scope { system: s, layer, own } => super::scopes::switch(doc, &system(doc, s)?, layer, *own)?,
         S::Render { system: s, layer, stretch, frames, fps, mix, brightness, cycles, order } => {
             if let Some(o) = order.as_deref().filter(|o| *o != "none") {
                 parsed::<wprs_scene::Stack>(&json!(o), "order")?;

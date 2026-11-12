@@ -56,6 +56,24 @@ QtObject {
             });
         if (knob.modelData[1] !== 2 || find(emitter, item => item === knob) !== knob)
             throw new Error("kept: the lane did not follow a new start without rebuilding its handles");
+        const layer = (page.view.layers ?? []).find(l => l.type === "particles");
+        const scope = find(tools, item => item.names !== undefined && item.layers !== undefined);
+        const render = () => JSON.parse(page.editor.value(layer.pointer + "/render") || "null");
+        tools.renderLayer = layer.id;
+        tools.edit("render", {
+                "fps": 9
+            });
+        tools.load();
+        if (render()?.fps !== 9 || tools.info.scope.differs.indexOf("fps") < 0 || !scope.info.own)
+            throw new Error("scope: a change with a layer chosen did not start the render of that layer: " + JSON.stringify(tools.info.scope) + page.editor.error);
+        tools.edit("scope", {
+                "layer": layer.id,
+                "own": false
+            });
+        tools.load();
+        if (render() !== null || tools.info.scope.own)
+            throw new Error("scope: the layer did not go back to the render of the system: " + page.editor.error);
+        tools.renderLayer = "";
         tools.destroy();
     }
 }
