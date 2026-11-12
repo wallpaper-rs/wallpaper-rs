@@ -175,3 +175,12 @@ fn generate(places: &Places, path: &Path, sha: &str, depth: &Depth, device: Devi
     eprintln!("{}", fill(told("done in %1 s"), &[&format!("{:.1}", started.elapsed().as_secs_f32())]));
     Ok(made)
 }
+
+pub fn fallback() -> String {
+    fill(
+        told(
+            "LaMa or ONNX Runtime is not installed, so the simple fill is used. To get the better fill run wprs-ctl models download lama-big-fp32 (see wprs-ctl models list); nothing is downloaded until you ask",
+        ),
+        &[],
+    )
+}

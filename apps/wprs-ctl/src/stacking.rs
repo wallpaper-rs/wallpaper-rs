@@ -9,15 +9,6 @@ use wprs_core::edit::{Depth, Edit};
 use wprs_core::{Config, Fill};
 use wprs_depth::{Device, Layers, Places, Settings, band_mask, halves, load, settings};
 
-fn fallback() -> String {
-    fill(
-        told(
-            "LaMa or ONNX Runtime is not installed, so the simple fill is used. To get the better fill run wprs-ctl models download lama-big-fp32 (see wprs-ctl models list); nothing is downloaded until you ask",
-        ),
-        &[],
-    )
-}
-
 #[derive(clap::Args, Debug)]
 pub struct Make {
     #[arg(help = "Image file")]
@@ -127,7 +118,7 @@ pub fn make(args: Make) -> Result<()> {
     ensure!(wanted != Fill::Off, "{}", tr(told("the fill off builds no layers: pictures stay still")));
     let mut set = settings(&places, &edit, Some(wanted));
     if set.fill != wanted {
-        eprintln!("{}", fallback());
+        eprintln!("{}", crate::depth::fallback());
     }
     set.count = usize::from(args.layers.unwrap_or(config.layers));
     let device = args.device.parse().unwrap_or(Device::Auto);
@@ -190,7 +181,7 @@ pub fn compare(args: Compare) -> Result<()> {
     let mut sets = Vec::new();
     for fill in [Fill::Lama, Fill::Simple] {
         let (path, set) = ensure_set(&places, &edit, Some(fill), (&args.path, &sha), device)?;
-        ensure!(set.fill == fill, "{}", self::fallback());
+        ensure!(set.fill == fill, "{}", crate::depth::fallback());
         sets.push(load(&path)?.context(tr(told("the layer set is damaged")))?);
     }
     let count = sets[0].images.len().min(sets[1].images.len());
