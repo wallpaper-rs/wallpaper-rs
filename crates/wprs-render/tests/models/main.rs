@@ -16,6 +16,7 @@ mod posed;
 mod shaders;
 mod shadows;
 mod tones;
+mod uvs;
 
 pub const SIDE: u32 = 64;
 

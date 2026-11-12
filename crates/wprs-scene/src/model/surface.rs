@@ -1,3 +1,4 @@
+use super::uvs::{MapUv, map_uv};
 use crate::rigged::doc::{Gltf, Reference};
 
 pub const SLOTS: [&str; 5] = ["base", "orm", "normal", "occlusion", "emissive"];
@@ -23,6 +24,7 @@ pub struct Finish {
     pub double_sided: bool,
     pub unlit: bool,
     pub maps: [Option<u16>; 5],
+    pub uvs: [MapUv; 5],
 }
 
 impl Default for Finish {
@@ -39,6 +41,7 @@ impl Default for Finish {
             double_sided: false,
             unlit: false,
             maps: [None; 5],
+            uvs: [MapUv::default(); 5],
         }
     }
 }
@@ -51,7 +54,7 @@ pub(super) fn finishes(doc: &Gltf, textures: &[u16]) -> Result<Vec<Finish>, Stri
     let mut out = Vec::with_capacity(doc.materials.len());
     for (i, m) in doc.materials.iter().enumerate() {
         let name = m.name.clone().filter(|n| !n.is_empty()).unwrap_or_else(|| format!("material_{i}"));
-        let slot = |r: &Option<Reference>| -> Result<Option<u16>, String> {
+        let slot = |r: Option<&Reference>| -> Result<Option<u16>, String> {
             match r {
                 Some(r) => match textures.get(r.index) {
                     Some(i) => Ok(Some(*i)),
@@ -69,6 +72,19 @@ pub(super) fn finishes(doc: &Gltf, textures: &[u16]) -> Result<Vec<Finish>, Stri
             Some("BLEND") => Alpha::Blend,
             _ => Alpha::Opaque,
         };
+        let refs = [
+            pbr.and_then(|p| p.texture.as_ref()),
+            pbr.and_then(|p| p.orm.as_ref()),
+            m.normal.as_ref(),
+            m.occlusion.as_ref(),
+            m.glow.as_ref(),
+        ];
+        let mut uvs = [MapUv::default(); 5];
+        for (uv, r) in uvs.iter_mut().zip(refs) {
+            if let Some(r) = r {
+                *uv = map_uv(doc, r, &name)?;
+            }
+        }
         let finish = Finish {
             color: pbr.and_then(|p| p.color).unwrap_or([1.0; 4]),
             metallic: pbr.and_then(|p| p.metallic).unwrap_or(1.0),
@@ -79,13 +95,8 @@ pub(super) fn finishes(doc: &Gltf, textures: &[u16]) -> Result<Vec<Finish>, Stri
             alpha,
             double_sided: m.double,
             unlit: m.extensions.contains_key("KHR_materials_unlit"),
-            maps: [
-                slot(&pbr.and_then(|p| p.texture.as_ref().map(copy)))?,
-                slot(&pbr.and_then(|p| p.orm.as_ref().map(copy)))?,
-                slot(&m.normal.as_ref().map(copy))?,
-                slot(&m.occlusion.as_ref().map(copy))?,
-                slot(&m.glow.as_ref().map(copy))?,
-            ],
+            maps: [slot(refs[0])?, slot(refs[1])?, slot(refs[2])?, slot(refs[3])?, slot(refs[4])?],
+            uvs,
             name,
         };
         let numbers = [finish.metallic, finish.roughness, finish.normal_scale, finish.occlusion];
@@ -95,8 +106,4 @@ pub(super) fn finishes(doc: &Gltf, textures: &[u16]) -> Result<Vec<Finish>, Stri
         out.push(finish);
     }
     Ok(out)
-}
-
-fn copy(r: &Reference) -> Reference {
-    Reference { index: r.index, set: r.set, scale: r.scale, strength: r.strength }
 }

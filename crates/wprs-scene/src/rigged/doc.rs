@@ -15,6 +15,8 @@ pub(crate) struct Gltf {
     pub materials: Vec<Material>,
     pub textures: Vec<Texture>,
     pub images: Vec<Image>,
+    #[serde(rename = "samplers")]
+    pub samplings: Vec<super::maps::Sampling>,
     #[serde(rename = "extensionsRequired")]
     pub required: Vec<String>,
 }
@@ -172,12 +174,14 @@ pub(crate) struct Reference {
     pub set: usize,
     pub scale: Option<f32>,
     pub strength: Option<f32>,
+    pub extensions: super::maps::Moves,
 }
 
 #[derive(Deserialize, Default)]
 #[serde(default)]
 pub(crate) struct Texture {
     pub source: Option<usize>,
+    pub sampler: Option<usize>,
 }
 
 #[derive(Deserialize, Default)]

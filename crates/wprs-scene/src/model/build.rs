@@ -40,6 +40,7 @@ pub(super) fn append(model: &mut Model, p: &part::Part, material: Option<usize>)
         model.vertices.extend_from_slice(&p.normals[v]);
         model.vertices.extend_from_slice(&p.uvs[v * 2..v * 2 + 2]);
         model.vertices.extend_from_slice(&p.tangents[v]);
+        model.vertices.extend_from_slice(&p.second[v * 2..v * 2 + 2]);
     }
     match &p.paint {
         Some(paint) => model.paint.extend_from_slice(paint),

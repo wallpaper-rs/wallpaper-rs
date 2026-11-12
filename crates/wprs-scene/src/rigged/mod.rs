@@ -3,6 +3,7 @@ mod cut;
 mod delaunay;
 pub(crate) mod doc;
 pub(crate) mod geometry;
+pub(crate) mod maps;
 pub mod math;
 pub(crate) mod motion;
 pub(crate) mod read;

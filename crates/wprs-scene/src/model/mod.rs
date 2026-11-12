@@ -4,6 +4,7 @@ mod pictures;
 mod posed;
 mod surface;
 mod tiers;
+mod uvs;
 
 use crate::rigged::Rigged;
 use crate::rigged::math::Mat;
@@ -15,8 +16,9 @@ pub use forge::{Forge, ForgeMaterial, ForgeRig, ForgeShape};
 pub use pictures::picture_size;
 pub use surface::{Alpha, Finish, SLOTS};
 pub use tiers::{ModelCaps, Verdict, caps, fur_shells, shadow_side, verdict};
+pub use uvs::{MapUv, MapWrap, SAME_UV, Sampling};
 
-pub const MODEL_FLOATS: usize = 12;
+pub const MODEL_FLOATS: usize = 14;
 pub const SKIN_FLOATS: usize = 8;
 pub const MAX_TEXTURE: u32 = 4096;
 pub const PHONE_TEXTURE: u32 = 2048;
@@ -85,9 +87,6 @@ impl Model {
         let (text, bin) = chunks(bytes)?;
         let doc: crate::rigged::doc::Gltf =
             serde_json::from_slice(text).map_err(|e| format!("has invalid JSON: {e}"))?;
-        if doc.required.iter().any(|e| e == "KHR_texture_transform") {
-            return Err("requires KHR_texture_transform, which model layers draw without".into());
-        }
         let bin = Bin { doc: &doc, bin };
         let mut h = DefaultHasher::new();
         bytes.hash(&mut h);

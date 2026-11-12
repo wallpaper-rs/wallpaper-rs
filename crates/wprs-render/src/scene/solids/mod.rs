@@ -9,6 +9,7 @@ mod gpu;
 mod groups;
 mod layout;
 mod looks;
+mod maps;
 mod mix;
 mod package;
 mod paint;
@@ -35,7 +36,7 @@ pub(crate) struct Solids {
     pub(crate) packages: Mutex<HashMap<u64, Option<wgpu::ShaderModule>>>,
     pub(crate) module: OnceLock<wgpu::ShaderModule>,
     pub(crate) mixer: OnceLock<mix::Mixer>,
-    pub(crate) sampler: wgpu::Sampler,
+    pub(crate) samplers: Mutex<HashMap<wprs_scene::Sampling, wgpu::Sampler>>,
     pub(crate) wrap: wgpu::Sampler,
     pub(crate) compare: wgpu::Sampler,
     pub(crate) white: GpuImage,
@@ -84,7 +85,7 @@ impl crate::Renderer {
                 packages: Mutex::new(HashMap::new()),
                 module: OnceLock::new(),
                 mixer: OnceLock::new(),
-                sampler: sampler(&self.device, wgpu::AddressMode::Repeat),
+                samplers: Mutex::new(HashMap::new()),
                 wrap: sampler(&self.device, wgpu::AddressMode::ClampToEdge),
                 compare,
                 white: pixel([255; 4], Format::Rgba8UnormSrgb),

@@ -1,7 +1,7 @@
 use crate::Renderer;
 use std::sync::PoisonError;
 
-const OWN: [&str; 46] = [
+const OWN: [&str; 53] = [
     "Light",
     "Scene3",
     "Object",
@@ -29,7 +29,14 @@ const OWN: [&str; 46] = [
     "normal_map",
     "occlusion_map",
     "emissive_map",
-    "smp",
+    "base_smp",
+    "orm_smp",
+    "normal_smp",
+    "occlusion_smp",
+    "emissive_smp",
+    "uvs",
+    "Uvs",
+    "map_uv",
     "finish",
     "PI",
     "place",

@@ -84,25 +84,10 @@ impl Renderer {
             let linear = [false, true, true, true, false];
             let found: Vec<Option<Image>> = (0..5).map(|k| picture(m.maps[k], linear[k])).collect();
             let fallback = |k: usize| if k == 2 { &solids.flat.view } else { &solids.white.view };
-            let views: Vec<&wgpu::TextureView> =
-                (0..5).map(|k| found[k].as_ref().map_or(fallback(k), |i| &i.0.view)).collect();
-            let mut entries: Vec<wgpu::BindGroupEntry> = views
-                .iter()
-                .enumerate()
-                .map(|(k, v)| wgpu::BindGroupEntry {
-                    binding: k as u32,
-                    resource: wgpu::BindingResource::TextureView(v),
-                })
-                .collect();
-            entries.push(wgpu::BindGroupEntry {
-                binding: 5,
-                resource: wgpu::BindingResource::Sampler(&solids.sampler),
-            });
-            maps.push(self.device.create_bind_group(&wgpu::BindGroupDescriptor {
-                label: Some("wprs-render solid maps"),
-                layout: &solids.layouts[2],
-                entries: &entries,
-            }));
+            let views = std::array::from_fn(|k| found[k].as_ref().map_or(fallback(k), |i| &i.0.view));
+            let rows = super::maps::uv_rows(m);
+            let uvs = fill("wprs-render solid uvs", bytemuck::cast_slice(&rows), B::UNIFORM);
+            maps.push(self.maps_group(views, m, &uvs));
         }
         GpuModel { vertices, indices, paint, skin, morphs, maps }
     }

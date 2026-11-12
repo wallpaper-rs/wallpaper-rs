@@ -33,6 +33,7 @@ struct In {
     @location(2) uv: vec2<f32>,
     @location(3) tangent: vec4<f32>,
     @location(4) paint: f32,
+    @location(7) uv1: vec2<f32>,
 };
 struct Bound { @location(5) joints: vec4<f32>, @location(6) weights: vec4<f32> };
 struct Out {
@@ -43,7 +44,9 @@ struct Out {
     @location(3) tangent: vec4<f32>,
     @location(4) paint: f32,
     @location(5) @interpolate(flat) shell: f32,
+    @location(6) uv1: vec2<f32>,
 };
+struct Uvs { rows: array<vec4<f32>, 10> };
 struct Placed { p: vec3<f32>, n: vec3<f32>, t: vec3<f32> };
 
 @group(0) @binding(0) var<uniform> scene: Scene3;
@@ -62,7 +65,12 @@ struct Placed { p: vec3<f32>, n: vec3<f32>, t: vec3<f32> };
 @group(2) @binding(2) var normal_map: texture_2d<f32>;
 @group(2) @binding(3) var occlusion_map: texture_2d<f32>;
 @group(2) @binding(4) var emissive_map: texture_2d<f32>;
-@group(2) @binding(5) var smp: sampler;
+@group(2) @binding(5) var base_smp: sampler;
+@group(2) @binding(6) var orm_smp: sampler;
+@group(2) @binding(7) var normal_smp: sampler;
+@group(2) @binding(8) var occlusion_smp: sampler;
+@group(2) @binding(9) var emissive_smp: sampler;
+@group(2) @binding(10) var<uniform> uvs: Uvs;
 @group(3) @binding(0) var<uniform> finish: Finish;
 
 const PI: f32 = 3.14159265;
@@ -106,6 +114,7 @@ fn out(o: Placed, v: In, shell: u32) -> Out {
     r.normal = o.n;
     r.tangent = vec4<f32>(o.t, v.tangent.w * object.normal[3][3]);
     r.uv = v.uv;
+    r.uv1 = v.uv1;
     r.paint = v.paint;
     r.shell = f32(shell);
     return r;

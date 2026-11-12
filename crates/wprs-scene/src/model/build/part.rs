@@ -8,6 +8,7 @@ pub(crate) struct Part {
     pub at: Vec<[f32; 3]>,
     pub normals: Vec<[f32; 3]>,
     pub uvs: Vec<f32>,
+    pub second: Vec<f32>,
     pub tangents: Vec<[f32; 4]>,
     pub list: Vec<u32>,
     pub paint: Option<Vec<f32>>,
@@ -41,6 +42,7 @@ pub(crate) fn part(bin: &Bin, p: &Primitive, room: usize, world: &Mat) -> Result
     let count = positions.len() / 3;
     let read = |key: &str, width: usize| at(key).map(|a| bin.floats(a, width)).transpose();
     let uvs = read("TEXCOORD_0", 2)?.unwrap_or_else(|| vec![0.0; count * 2]);
+    let second = read("TEXCOORD_1", 2)?.filter(|v| v.len() == count * 2).unwrap_or_else(|| uvs.clone());
     let given = p.indices.map_or(Ok((0..count as u32).collect()), |a| bin.ints(a, 1))?;
     if given.iter().any(|i| *i as usize >= count) {
         return Err("has an index out of the range of its vertices".into());
@@ -72,5 +74,5 @@ pub(crate) fn part(bin: &Bin, p: &Primitive, room: usize, world: &Mat) -> Result
         }
         None => None,
     };
-    Ok(Part { at: placed, normals, uvs, tangents, list, paint })
+    Ok(Part { at: placed, normals, uvs, second, tangents, list, paint })
 }

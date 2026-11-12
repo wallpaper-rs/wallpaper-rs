@@ -83,18 +83,31 @@ fn a_tier_shows_the_poster_of_models_past_its_triangles_counting_fur_shells() {
 }
 
 #[test]
-fn texture_features_models_skip_are_refused_when_required_and_noted_otherwise() {
+fn texture_transforms_second_coordinates_and_samplers_are_read_into_the_finish() {
     let (mut doc, bin) = painted(16);
     assert!(ModelFile::parse(&pack(&doc, &bin)).unwrap().notes.is_empty());
-    doc["extensionsUsed"] = json!(["KHR_texture_transform"]);
-    doc["materials"][0]["pbrMetallicRoughness"]["baseColorTexture"]["texCoord"] = json!(1);
-    doc["samplers"] = json!([{ "wrapS": 33071 }]);
-    let noted = pack(&doc, &bin);
-    let notes = ModelFile::parse(&noted).unwrap().notes;
-    assert_eq!(notes.len(), 3, "{notes:?}");
-    assert!(Model::decode(&noted).is_ok());
+    let base = &mut doc["materials"][0]["pbrMetallicRoughness"]["baseColorTexture"];
+    base["texCoord"] = json!(1);
+    base["extensions"] = json!({ "KHR_texture_transform": { "offset": [0.5, 0.25], "scale": [2.0, 3.0] } });
     doc["extensionsRequired"] = json!(["KHR_texture_transform"]);
-    let required = pack(&doc, &bin);
-    assert!(ModelFile::parse(&required).is_ok(), "mesh layers keep reading it");
-    assert!(Model::decode(&required).unwrap_err().contains("KHR_texture_transform"));
+    doc["samplers"] = json!([{ "wrapS": 33071, "wrapT": 33648, "magFilter": 9728, "minFilter": 9729 }]);
+    doc["textures"][0]["sampler"] = json!(0);
+    let read = pack(&doc, &bin);
+    assert!(ModelFile::parse(&read).unwrap().notes.is_empty());
+    for model in [Model::decode(&read).unwrap(), Model::decode_posed(&read).unwrap()] {
+        let uv = model.materials[0].uvs[0];
+        assert_eq!((uv.set, uv.matrix), (1, [2.0, 0.0, 0.5, 0.0, 3.0, 0.25]));
+        assert_eq!(uv.apply([1.0, 1.0]), [2.5, 3.25]);
+        let s = uv.sampling;
+        assert_eq!(
+            (s.wrap, s.sharp, s.shrink_sharp, s.mips),
+            ([MapWrap::Clamp, MapWrap::Mirror], true, false, None)
+        );
+        assert_eq!(model.vertices.len(), model.vertex_count() * MODEL_FLOATS);
+    }
+    doc["materials"][0]["pbrMetallicRoughness"]["baseColorTexture"]["texCoord"] = json!(2);
+    assert_eq!(ModelFile::parse(&pack(&doc, &bin)).unwrap().notes.len(), 1);
+    doc["materials"][0]["pbrMetallicRoughness"]["baseColorTexture"]["extensions"]["KHR_texture_transform"]
+        ["rotation"] = json!(f64::NAN);
+    assert!(Model::decode(&pack(&doc, &bin)).is_ok(), "a null rotation reads as none");
 }

@@ -40,8 +40,11 @@ pub(super) fn layouts(device: &wgpu::Device) -> [wgpu::BindGroupLayout; 4] {
     let make = |label: &str, entries: &[wgpu::BindGroupLayoutEntry]| {
         device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor { label: Some(label), entries })
     };
-    let maps: Vec<_> =
-        (0..5).map(|k| entry(k, S::FRAGMENT, picture())).chain([entry(5, S::FRAGMENT, sampler)]).collect();
+    let maps: Vec<_> = (0..5)
+        .map(|k| entry(k, S::FRAGMENT, picture()))
+        .chain((5..10).map(|k| entry(k, S::FRAGMENT, sampler)))
+        .chain([entry(10, S::FRAGMENT, uniform(false))])
+        .collect();
     [
         make(
             "wprs-render solid scene",

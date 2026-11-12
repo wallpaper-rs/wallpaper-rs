@@ -64,7 +64,7 @@ impl Solids {
         (shader, pre): (&wgpu::ShaderModule, &str),
     ) -> wgpu::RenderPipeline {
         super::super::pipes::compiled(1);
-        let base = wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3, 2 => Float32x2, 3 => Float32x4];
+        let base = wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3, 2 => Float32x2, 3 => Float32x4, 7 => Float32x2];
         let paint = wgpu::vertex_attr_array![4 => Float32];
         let skin = wgpu::vertex_attr_array![5 => Float32x4, 6 => Float32x4];
         let step = wgpu::VertexStepMode::Vertex;

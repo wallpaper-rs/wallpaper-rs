@@ -136,9 +136,11 @@ files (`.glb`, at most 64 MiB each; FBX or OBJ convert to it with common 3D tool
 only the header and the JSON part of each file once (at most 4 MiB, and 16 MiB for all the models
 of a scene), refuse files that load anything from outside themselves or require an extension other
 than `KHR_materials_emissive_strength`, `KHR_materials_unlit`, `KHR_mesh_quantization` and
-`KHR_texture_transform` (only for mesh layers: a model layer refuses a file that requires it, and the
-editor warns about files that use it, read a second set of texture coordinates or clamp or mirror a
-texture, which models draw with the first set and repeated), skins of more than 256 bones, more than 64 blend shapes per primitive,
+`KHR_texture_transform` (model layers draw the offset, rotation, scale and `texCoord` of each map,
+read the first two sets of texture coordinates, `TEXCOORD_0` and `TEXCOORD_1`, and sample each
+texture with the wrap (repeat, clamp or mirror) and the filters (nearest or linear, with or
+without mipmaps) of its sampler; the editor warns about a map that reads a third set, drawn with the
+first), skins of more than 256 bones, more than 64 blend shapes per primitive,
 more than 65 536 nodes or 4096 meshes, materials, animations or skins, more than 262 144 list
 entries for all the models of a scene (buffer views have a cap of their own, 262 144 per file, and
 do not count there), pictures shown by textures whose distinct byte ranges together pass the size

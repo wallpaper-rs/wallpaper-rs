@@ -67,8 +67,6 @@ pub(super) struct Doc {
     #[serde(deserialize_with = "listed")]
     pub materials: Vec<super::notes::Surface>,
     #[serde(deserialize_with = "listed")]
-    pub samplers: Vec<super::notes::Sampler>,
-    #[serde(deserialize_with = "listed")]
     pub buffers: Vec<Linked>,
     #[serde(deserialize_with = "listed")]
     pub images: Vec<Linked>,
@@ -78,8 +76,6 @@ pub(super) struct Doc {
     pub views: Vec<View>,
     #[serde(rename = "extensionsRequired", deserialize_with = "listed")]
     pub required: Vec<String>,
-    #[serde(rename = "extensionsUsed", deserialize_with = "listed")]
-    pub used: Vec<String>,
 }
 
 #[derive(Deserialize, Default)]

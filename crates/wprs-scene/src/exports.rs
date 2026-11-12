@@ -79,9 +79,9 @@ pub use crate::media::{COVER_SIDE, Cover, MEDIA_TRIGGERS, Media, Reading};
 pub use crate::memory::MAX_MEMORY;
 pub use crate::model::{
     Alpha, Finish, Forge, ForgeMaterial, ForgeRig, ForgeShape, MAX_MODEL_TEXELS, MAX_MODEL_VERTICES,
-    MAX_POSED_MORPHS, MAX_TEXTURE, MODEL_FLOATS, Model, ModelCaps, ModelTexture, PHONE_TEXTURE, Primitive,
-    SKIN_FLOATS, SLOTS as MAP_SLOTS, Verdict, caps as model_caps, fur_shells, picture_size, shadow_side,
-    verdict as model_verdict,
+    MAX_POSED_MORPHS, MAX_TEXTURE, MODEL_FLOATS, MapUv, MapWrap, Model, ModelCaps, ModelTexture,
+    PHONE_TEXTURE, Primitive, SAME_UV, SKIN_FLOATS, SLOTS as MAP_SLOTS, Sampling, Verdict,
+    caps as model_caps, fur_shells, picture_size, shadow_side, verdict as model_verdict,
 };
 pub use crate::outside::{
     CHECK_WALL, Checker, UNCHECKED, check_out_of_process, checker, helper_runs, set_checker,

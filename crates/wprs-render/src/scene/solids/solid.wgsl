@@ -79,6 +79,13 @@ fn hashed(c: vec2<f32>) -> f32 {
     return fract(sin(dot(c, vec2<f32>(127.1, 311.7))) * 43758.5453);
 }
 
+fn map_uv(k: u32, in: Out) -> vec2<f32> {
+    let a = uvs.rows[k * 2u];
+    let b = uvs.rows[k * 2u + 1u];
+    let uv = vec3<f32>(select(in.uv, in.uv1, a.w > 0.5), 1.0);
+    return vec2<f32>(dot(a.xyz, uv), dot(b.xyz, uv));
+}
+
 @fragment
 fn fs_solid(in: Out, @builtin(front_facing) front: bool) -> @location(0) vec4<f32> {
     let along = dot(in.world - scene.eye.xyz, scene.forward.xyz);
@@ -87,12 +94,12 @@ fn fs_solid(in: Out, @builtin(front_facing) front: bool) -> @location(0) vec4<f3
     }
     let kind = finish.shade.x;
     var s: Surface;
-    s.albedo = finish.color * textureSample(base_map, smp, in.uv);
-    let orm = textureSample(orm_map, smp, in.uv);
-    s.occlusion = mix(1.0, textureSample(occlusion_map, smp, in.uv).r, finish.pbr.w);
+    s.albedo = finish.color * textureSample(base_map, base_smp, map_uv(0u, in));
+    let orm = textureSample(orm_map, orm_smp, map_uv(1u, in));
+    s.occlusion = mix(1.0, textureSample(occlusion_map, occlusion_smp, map_uv(3u, in)).r, finish.pbr.w);
     s.metallic = clamp(finish.pbr.x * orm.b, 0.0, 1.0);
     s.roughness = clamp(finish.pbr.y * orm.g, 0.04, 1.0);
-    s.emissive = finish.emissive.rgb * textureSample(emissive_map, smp, in.uv).rgb;
+    s.emissive = finish.emissive.rgb * textureSample(emissive_map, emissive_smp, map_uv(4u, in)).rgb;
     s.position = in.world;
     s.uv = in.uv;
     var n = normalize(in.normal);
@@ -102,7 +109,7 @@ fn fs_solid(in: Out, @builtin(front_facing) front: bool) -> @location(0) vec4<f3
     if finish.maps.x > 0.5 {
         let t = normalize(in.tangent.xyz - n * dot(n, in.tangent.xyz));
         let b = cross(n, t) * select(1.0, -1.0, in.tangent.w < 0.0);
-        let m = textureSample(normal_map, smp, in.uv).xyz * 2.0 - 1.0;
+        let m = textureSample(normal_map, normal_smp, map_uv(2u, in)).xyz * 2.0 - 1.0;
         n = normalize(t * m.x * finish.pbr.z + b * m.y * finish.pbr.z + n * m.z);
     }
     s.normal = n;
