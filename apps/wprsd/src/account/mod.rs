@@ -60,7 +60,7 @@ pub struct Account {
 }
 
 pub fn block_on<T>(work: impl Future<Output = T>) -> T {
-    tokio::runtime::Handle::current().block_on(work)
+    crate::outside::block_on(work)
 }
 
 pub fn sync_error(e: wprs_sync::Error) -> Error {

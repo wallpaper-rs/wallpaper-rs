@@ -9,7 +9,6 @@ use serde_json::Value;
 use std::fs;
 use std::sync::Arc;
 use std::time::Duration;
-use tokio::runtime::Handle;
 use wprs_core::model::{Credit, JobKind, SourceScan, SyncOutput, SyncReport};
 use wprs_library::{ScanReport, Source};
 use wprs_providers::Cache;
@@ -94,7 +93,6 @@ impl Daemon {
         if kind == "wallhaven" {
             options.insert("seed".into(), new_seed());
         }
-        let runtime = Handle::current();
         let secret = match &known.secret {
             None => None,
             Some(field) if self.orphaned(id) => match field.required {
@@ -102,7 +100,7 @@ impl Daemon {
                 true => return Err(needs_secret(id)),
                 false => None,
             },
-            Some(field) => match runtime.block_on(self.keyring()?.read(id, explicit))? {
+            Some(field) => match crate::outside::block_on(self.keyring()?.read(id, explicit))? {
                 Stored::Secret(secret) => Some(secret),
                 Stored::Locked => {
                     let refresh =
@@ -131,7 +129,7 @@ impl Daemon {
             ctl.progress(done, total);
             ctl.check().is_ok()
         };
-        let fetched = runtime.block_on(download(
+        let fetched = crate::outside::block_on(download(
             provider.as_ref(),
             &cache,
             &protected,

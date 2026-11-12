@@ -37,6 +37,7 @@ mod lights;
 mod look;
 mod media;
 mod orphans;
+mod outside;
 mod packages;
 mod pages;
 mod picks;
