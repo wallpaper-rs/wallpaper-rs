@@ -29,6 +29,7 @@ wait_for() {
   return 1
 }
 fail() { echo "FAIL: $*"; exit 1; }
+source "$(dirname "$0")"/integration-daemon.sh
 jq_() { python3 -c "import json, sys; r = json.load(sys.stdin); print(eval(sys.argv[1]))" "$1"; }
 
 port=$(python3 -c "import socket; s = socket.socket(); s.bind(('127.0.0.1', 0)); print(s.getsockname()[1])")
@@ -60,9 +61,10 @@ daemon() {
   mapfile -t more <"$dir/env"
   local env=(DBUS_SESSION_BUS_ADDRESS="unix:path=$dir/bus" XDG_RUNTIME_DIR="$dir/run" XDG_CONFIG_HOME="$dir/config"
     XDG_DATA_HOME="$dir/data" XDG_CACHE_HOME="$dir/cache")
+  DBUS_SESSION_BUS_ADDRESS="unix:path=$dir/bus" wait_for 10 name_free || fail "daemon $name: the bus name is still owned"
   env "${env[@]}" "${more[@]}" RUST_LOG=info,naga=warn,wgpu_core=warn,wgpu_hal=warn "$BIN/wprsd" >>"$WORK/wprsd-$name.log" 2>&1 &
   pids+=($!) && daemons[$name]=$!
-  wait_for 30 env "${env[@]}" "$BIN/wprs-ctl" state || fail "daemon $name did not start"
+  await_daemon "$!" "$WORK/wprsd-$name.log" env "${env[@]}" "$BIN/wprs-ctl" state
 }
 device() {
   local dir=$WORK/$1 name=$1
@@ -78,8 +80,7 @@ device() {
   daemon "$name"
 }
 restart() {
-  kill "${daemons[$1]}"
-  wait "${daemons[$1]}" 2>/dev/null || true
+  DBUS_SESSION_BUS_ADDRESS="unix:path=$WORK/$1/bus" stop_daemon "${daemons[$1]}" "$WORK/wprsd-$1.log"
   "${@:2}"
   daemon "$1"
 }

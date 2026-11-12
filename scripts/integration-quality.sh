@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare config daemon log
-kill "$daemon"
-wait "$daemon" 2>/dev/null || true
+declare config daemon
+stop_daemon "$daemon"
 bus_conf "$WORK/power.conf"
 { read -r power_bus; read -r power_pid; } < <(dbus-daemon --config-file="$WORK/power.conf" --fork --print-address=1 --print-pid=1)
 pids+=("$power_pid")
@@ -10,8 +9,7 @@ mkfifo "$WORK/power"
 DBUS_SYSTEM_BUS_ADDRESS=$power_bus "$BIN/examples/upower" <"$WORK/power" >"$WORK/upower.out" 2>&1 & pids+=($!)
 exec 8>"$WORK/power"
 wait_for 10 grep -q ready "$WORK/upower.out" || fail "the power service did not start: $(cat "$WORK/upower.out")"
-DBUS_SYSTEM_BUS_ADDRESS=$power_bus RUST_LOG=$log "$BIN/wprsd" >"$WORK/quality.log" 2>&1 & daemon=$!; pids+=("$daemon")
-wait_for 30 ctl state || fail "the daemon on battery did not start"
+DBUS_SYSTEM_BUS_ADDRESS=$power_bus start_daemon "$WORK/quality.log"
 expect "s['on_battery']" True
 ctl config pause.on_battery false
 read -r _ _ _ watched < <(ctl stream TEST-Q 160 90)

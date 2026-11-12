@@ -34,6 +34,7 @@ expect() {
   echo "FAIL: $1 is $(field "$1"), expected $2" && exit 1
 }
 fail() { echo "FAIL: $*"; exit 1; }
+source "$(dirname "$0")"/integration-daemon.sh
 
 shows() {
   import -silent -window root -crop "$1" +repage -depth 8 "$WORK/shot.ppm" && python3 - "$WORK/shot.ppm" "${@:2}" <<'EOF'
@@ -83,8 +84,8 @@ DISPLAY=:$(cat "$WORK/display")
 export DISPLAY
 
 log=${WPRS_IT_LOG:-debug},naga=warn,wgpu_core=warn,wgpu_hal=warn
-RUST_LOG=$log "$BIN/wprsd" --backend x11 >"$WORK/wprsd.log" 2>&1 & wprsd=$!; pids+=("$wprsd")
-wait_for 30 ctl state || fail "the daemon did not start"
+start_daemon "$WORK/wprsd.log" --backend x11
+wprsd=$daemon
 expect "sorted(s['outputs'])" "['screen']"
 expect "[s['outputs']['screen'][k] for k in ('width', 'height', 'refresh')]" "[1280, 720, 0]"
 grep -q "presentation backend chosen.*x11" "$WORK/wprsd.log" || fail "X11 not chosen"
@@ -191,8 +192,7 @@ echo "window manager checks passed"
 
 xdotool search --class '^wprsd$' windowunmap %@
 check "$full" "0.5,0.1,$green" "0.02,0.02,$blue" "0.98,0.98,$blue"
-kill "$wprsd"
-wait "$wprsd" || true
+stop_daemon "$wprsd" "$WORK/wprsd.log"
 check "$full" "0.5,0.1,$green" "0.02,0.02,$blue" "0.98,0.98,$blue"
 echo "root background checks passed"
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare blue log sway wireplumber
+declare blue daemon sway wireplumber
 declare -a driver
 mkdir -p "$WORK/clicks"
 cat >"$WORK/clicks/scene.json" <<'SCENE'
@@ -93,10 +93,9 @@ capturing True || fail "the capture stopped when PipeWire restarted"
 grep -q "the audio capture is connected to PipeWire again" "$WORK/wprsd.log" || fail "the capture was opened again instead of reconnecting"
 echo "audio capture switch and PipeWire restart checks passed"
 
-kill "$wprsd"
-wait "$wprsd" || true
-RUST_LOG=$log "$BIN/wprsd" --backend streams >"$WORK/streams.log" 2>&1 & wprsd=$!; pids+=("$wprsd")
-wait_for 30 ctl state || fail "the daemon did not start with streams"
+stop_daemon "$wprsd" "$WORK/wprsd.log"
+start_daemon "$WORK/streams.log" --backend streams
+wprsd=$daemon
 swaymsg -q "output HEADLESS-1 mode --custom 640x360@120Hz"
 ctl stream HEADLESS-1 1280 720 >/dev/null && ctl stream HEADLESS-2 1920 1080 >/dev/null
 ctl stream OTHER-1 1280 720 >/dev/null

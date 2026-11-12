@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare WORK BIN log wprsd magenta
+declare WORK BIN daemon wprsd magenta
 key=surfaces.layer_namespace
 announced() { grep -o "new layer surface: namespace [^ ]* layer [0-9]*" | sort -u || true; }
 saw() {
@@ -22,11 +22,9 @@ for bad in "a/b" "" "   "; do
   grep -q "layer-namespace" "$WORK/option.err" || fail "unclear refusal: $(cat "$WORK/option.err")"
 done
 mark=$(($(wc -l <"$WORK/sway.log") + 1))
-kill "$wprsd"
-wait "$wprsd" || true
-WPRS_LAYER_NAMESPACE="not valid" RUST_LOG=$log "$BIN/wprsd" --backend layer-shell >>"$WORK/wprsd.log" 2>&1 &
-wprsd=$!; pids+=("$wprsd")
-wait_for 30 ctl state || fail "the daemon did not start again"
+stop_daemon "$wprsd" "$WORK/wprsd.log"
+WPRS_LAYER_NAMESPACE="not valid" start_daemon "$WORK/wprsd.log" --backend layer-shell
+wprsd=$daemon
 expect "[s['layer_shell'][k] for k in ('namespace', 'from', 'restart')]" "['wprs-check', 'config', False]"
 expect "'environment' in (s['layer_shell']['ignored'] or '')" True
 expect "s['layer_shell']['ignored_from'], s['layer_shell']['ignored_empty']" "('environment', False)"

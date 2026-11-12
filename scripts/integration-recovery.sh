@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare anchor log output port
+declare anchor daemon output port
 restored() {
   read -r _ _ _ serial < <(ctl stream TEST-1 320 180) || return 1
   [ -z "${1:-}" ] || [ "$serial" = "$1" ] || return 1
@@ -27,10 +27,8 @@ new=$(announced)
 retry 30 restored "$new" || fail "TEST-1 is not shown under its new serial $new: $(ctl stream TEST-1 320 180)"
 echo "PipeWire restart recovery and StreamChanged passed (serial $old, then $new)"
 
-kill "$daemon"
-wait "$daemon" 2>/dev/null || true
-WPRS_DMABUF=emulate RUST_LOG=$log "$BIN/wprsd" >"$WORK/dmabuf.log" 2>&1 & daemon=$!; pids+=("$daemon")
-wait_for 30 ctl state || fail "the daemon with GPU stream buffers did not start"
+stop_daemon "$daemon"
+WPRS_DMABUF=emulate start_daemon "$WORK/dmabuf.log"
 read -r _ _ _ gpu < <(ctl stream TEST-1 320 180)
 ctl set "$ROOT/tests/fixtures/green-64x32.png" --fit fit
 green="buffers 4 center bgra \[0, 255, 0, 255\]"
@@ -48,10 +46,8 @@ frames=$(sed -n 's/^frames //p' "$WORK/gpu.out")
 echo "GPU stream buffer checks passed ($frames frames through 4 buffers)"
 ctl set "$ROOT/tests/fixtures/green-64x32.png" --fit fit && expect "${output}['kind']" image
 
-kill "$daemon"
-wait "$daemon" 2>/dev/null || true
-WPRS_DMABUF=emulate-flaky RUST_LOG=$log "$BIN/wprsd" >"$WORK/flaky.log" 2>&1 & daemon=$!; pids+=("$daemon")
-wait_for 30 ctl state || fail "the daemon with failing GPU stream buffers did not start"
+stop_daemon "$daemon"
+WPRS_DMABUF=emulate-flaky start_daemon "$WORK/flaky.log"
 read -r _ _ _ gpu < <(ctl stream TEST-1 320 180)
 ctl set "$ROOT/tests/fixtures/green-64x32.png" --fit fit && expect "${output}['kind']" image
 retry 10 sh -c "'$BIN/probe' $gpu 3 --dmabuf | grep -q 'type MemFd $green'" ||
@@ -62,8 +58,7 @@ wait "$held" || fail "no frame after a failed GPU allocation: $(cat "$WORK/flaky
 grep -q "type MemFd $green" "$WORK/flaky.out" || fail "the consumer got no shared memory: $(cat "$WORK/flaky.out")"
 echo "GPU allocation fallback passed"
 
-kill "$daemon"
-wait "$daemon" 2>/dev/null || true
+stop_daemon "$daemon"
 bus_conf "$WORK/system.conf"
 { read -r system; read -r system_pid; } < <(dbus-daemon --config-file="$WORK/system.conf" --fork --print-address=1 --print-pid=1)
 pids+=("$system_pid")
@@ -71,8 +66,7 @@ mkfifo "$WORK/zone"
 DBUS_SYSTEM_BUS_ADDRESS=$system "$BIN/examples/timedate" <"$WORK/zone" >"$WORK/timedate.out" 2>&1 & pids+=($!)
 exec 7>"$WORK/zone"
 wait_for 10 grep -q ready "$WORK/timedate.out" || fail "the time zone service did not start: $(cat "$WORK/timedate.out")"
-TZ=UTC DBUS_SYSTEM_BUS_ADDRESS=$system RUST_LOG=$log "$BIN/wprsd" >"$WORK/robust.log" 2>&1 & daemon=$!; pids+=("$daemon")
-wait_for 30 ctl state || fail "the daemon with a system bus did not start"
+TZ=UTC DBUS_SYSTEM_BUS_ADDRESS=$system start_daemon "$WORK/robust.log"
 echo Etc/UTC >&7
 clock=$WORK/clock && mkdir -p "$clock"
 png "$clock/a.png" ff0000 && png "$clock/b.png" 00ff00 && png "$clock/c.png" 0000ff

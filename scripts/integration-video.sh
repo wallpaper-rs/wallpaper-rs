@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare log
+declare daemon
 broken=$WORK/broken/config.toml
 mkdir -p "$(dirname "$broken")"
 printf '[playback\nvolume = 0.5\n[models]\nallow_download = false\n' >"$broken"
-RUST_LOG=$log "$BIN/wprsd" --config "$broken" >"$WORK/broken.log" 2>&1 & broken_pid=$!; pids+=("$broken_pid")
-wait_for 30 ctl state
+start_daemon "$WORK/broken.log" --config "$broken"
 expect "s['config_error'] is not None" True
 if ctl reload 2>/dev/null; then fail "reload accepted a broken configuration"; fi
 expect "s['config_error'] is not None" True
@@ -17,14 +16,11 @@ grep -q 'on_battery = false' "$broken" || fail "the new configuration was not sa
 grep -qx 'allow_download = false' "$broken" || fail "a broken configuration turned downloads back on"
 [ "$(stat -c %a "$broken")" = 600 ] || fail "config.toml is not private"
 [ "$(stat -c %a "$broken.broken")" = 600 ] || fail "config.toml.broken is not private"
-kill "$broken_pid"
-wait "$broken_pid" || true
+stop_daemon "$daemon" "$WORK/broken.log" 3
 echo "broken configuration checks passed"
 
-wait_for 10 name_free || fail "io.github.wallpaper_rs.Daemon is still owned on the private session bus"
-RUST_LOG=$log "$BIN/wprsd" >"$WORK/wprsd.log" 2>&1 & daemon=$!; pids+=("$daemon")
 for _ in $(seq 100); do dbus-send --session --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetId & done
-wait_for 30 ctl state || fail "the daemon did not start while clients came and went"
+start_daemon "$WORK/wprsd.log"
 timeout 30 "$BIN/wprsd" >"$WORK/second.log" 2>&1 || true
 grep -q "another wprsd" "$WORK/second.log" || { echo "FAIL: a second daemon took over"; exit 1; }
 dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus \

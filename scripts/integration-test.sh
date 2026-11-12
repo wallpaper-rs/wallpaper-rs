@@ -29,10 +29,8 @@ source "$(dirname "$0")"/integration-pages.sh
 source "$(dirname "$0")"/integration-gpu.sh
 source "$(dirname "$0")"/integration-quality.sh
 
-kill "$daemon"
-wait "$daemon" 2>/dev/null || true
-WPRS_RENDER_STOP=1 RUST_LOG=$log "$BIN/wprsd" >"$WORK/stopped.log" 2>&1 & daemon=$!; pids+=("$daemon")
-wait_for 30 ctl state || fail "the daemon did not start again"
+stop_daemon "$daemon" "$WORK/wprsd.log"
+WPRS_RENDER_STOP=1 start_daemon "$WORK/stopped.log"
 sleep 1
 kill -USR2 "$daemon"
 guarded() { ! ctl pause 2>"$WORK/guard.out" && grep -q "the renderer stopped after an error; restart wprsd" "$WORK/guard.out"; }

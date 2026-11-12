@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare log
+declare daemon
 gpu() { ctl gpu --json | python3 -c "import json, sys; g = json.load(sys.stdin); print(eval(sys.argv[1]))" "$1"; }
 used() { gpu "[a['name'] for a in g['adapters'] if a['used']][0]"; }
 [ "$(gpu "len([a for a in g['adapters'] if a['used']])")" = 1 ] || fail "not one card in use: $(ctl gpu --json)"
@@ -24,11 +24,9 @@ if [ -n "$bus" ]; then
   ctl gpu auto >/dev/null
 fi
 started() {
-  kill "$daemon"
-  wait "$daemon" 2>/dev/null || true
+  stop_daemon "$daemon"
   printf '[render]\ngpu = "%s"\n' "$1" >"$WORK/gpu.toml"
-  RUST_LOG=$log "$BIN/wprsd" --config "$WORK/gpu.toml" >"$WORK/gpu-$2.log" 2>&1 & daemon=$!; pids+=("$daemon")
-  wait_for 30 ctl state || fail "the daemon did not start with render.gpu = $1"
+  start_daemon "$WORK/gpu-$2.log" --config "$WORK/gpu.toml"
   read -r _ _ _ serial < <(ctl stream TEST-G 160 90)
   ctl set "$ROOT/tests/fixtures/green-64x32.png" -o TEST-G --fit fit
   retry 10 sh -c "'$BIN/probe' $serial 3 | grep -q 'center bgra \[0, 255, 0, 255\]'" ||

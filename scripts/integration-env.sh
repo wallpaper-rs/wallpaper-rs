@@ -30,8 +30,6 @@ wait_for() {
   return 1
 }
 
-name_free() { ! dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus \
-  org.freedesktop.DBus.NameHasOwner string:io.github.wallpaper_rs.Daemon | grep -q "boolean true"; }
 ctl() { "$BIN/wprs-ctl" "$@"; }
 field() { ctl state | python3 -c "import json, sys; s = json.load(sys.stdin); print(eval(sys.argv[1]))" "$1"; }
 expect() {
@@ -40,6 +38,7 @@ expect() {
   echo "FAIL: $1 is $(field "$1"), expected $2" && exit 1
 }
 fail() { echo "FAIL: $*"; exit 1; }
+source "$(dirname "${BASH_SOURCE[0]}")"/integration-daemon.sh
 
 bus_conf() {
   printf '<busconfig><type>session</type><listen>unix:dir=%s</listen><auth>EXTERNAL</auth><policy context="default">

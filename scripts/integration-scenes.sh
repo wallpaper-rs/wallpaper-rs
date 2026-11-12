@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare config log morning profile
+declare config daemon morning profile
 hold=$XDG_DATA_HOME/wallpaper-rs/profile-hold.json
 ctl stream TEST-8 160 90 >/dev/null
 ctl profile use Morning && expect "s['profile']" "$morning"
 ctl release TEST-8 && expect "list(s['outputs'])" "[]"
-kill "$daemon"
-wait "$daemon" 2>/dev/null || true
-RUST_LOG=$log "$BIN/wprsd" >"$WORK/restarted.log" 2>&1 & daemon=$!; pids+=("$daemon")
-wait_for 30 ctl state || fail "the daemon did not start again"
+stop_daemon "$daemon"
+start_daemon "$WORK/restarted.log"
 ctl stream TEST-8 160 90 >/dev/null
 sleep 4
 expect "s['profile']" "$morning"

@@ -35,6 +35,7 @@ expect() {
   echo "FAIL: $1 is $(field "$1"), expected $2" && exit 1
 }
 fail() { echo "FAIL: $*"; exit 1; }
+source "$(dirname "$0")"/integration-daemon.sh
 
 shows() {
   timeout 5 grim -o "$1" -t ppm "$WORK/shot.ppm" && python3 - "$WORK/shot.ppm" "${@:2}" <<'EOF'
@@ -74,8 +75,8 @@ WAYLAND_DISPLAY=$(basename "$(compgen -G "$XDG_RUNTIME_DIR/wayland-[0-9]")")
 export SWAYSOCK WAYLAND_DISPLAY
 
 log=${WPRS_IT_LOG:-debug},naga=warn,wgpu_core=warn,wgpu_hal=warn
-RUST_LOG=$log "$BIN/wprsd" --backend layer-shell >"$WORK/wprsd.log" 2>&1 & wprsd=$!; pids+=("$wprsd")
-wait_for 30 ctl state || fail "the daemon did not start"
+start_daemon "$WORK/wprsd.log" --backend layer-shell
+wprsd=$daemon
 expect "sorted(s['outputs'])" "['HEADLESS-1', 'HEADLESS-2']"
 expect "[s['outputs'][o]['height'] for o in ('HEADLESS-1', 'HEADLESS-2')]" "[360, 360]"
 grep -q "presentation backend chosen.*layer-shell" "$WORK/wprsd.log" || fail "layer-shell not chosen"
