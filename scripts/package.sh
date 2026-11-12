@@ -9,14 +9,12 @@ NAME=wallpaper-rs-$VERSION-$ARCH-linux
 STAGE=$(mktemp -d)
 trap 'rm -rf "$STAGE"' EXIT
 
-CARGO_HOME=${CARGO_HOME:-$HOME/.cargo}
-RUSTUP_HOME=${RUSTUP_HOME:-$HOME/.rustup}
-unset CARGO_ENCODED_RUSTFLAGS CARGO_BUILD_RUSTFLAGS
-export RUSTFLAGS="--remap-path-prefix=$CARGO_HOME=/cargo --remap-path-prefix=$RUSTUP_HOME=/rustup \
-  --remap-path-prefix=$HOME=/build --remap-path-prefix=$ROOT=/src"
-export CFLAGS="-ffile-prefix-map=$CARGO_HOME=/cargo -ffile-prefix-map=$HOME=/build -ffile-prefix-map=$ROOT=/src"
-export CXXFLAGS=$CFLAGS
-env -u SOURCE_DATE_EPOCH cargo build --release --locked --timings -p wprsd -p wprs-ctl -p wprs-app -p wprs-web --manifest-path "$ROOT/Cargo.toml"
+BIN=${WPRS_BIN_DIR:-$ROOT/target/release}
+if [ -z "${WPRS_BIN_DIR:-}" ]; then
+  "$ROOT/scripts/build-release.sh"
+else
+  chmod +x "$BIN"/*
+fi
 export SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git -C "$ROOT" log -1 --format=%ct 2>/dev/null || echo 0)}
 
 SRC=$STAGE/src
@@ -24,7 +22,7 @@ D=$STAGE/$NAME
 mkdir -p "$SRC" "$D/bin" "$D/packaging"
 git -C "$ROOT" archive HEAD integrations packaging scenes LICENSE README.md | tar -x -C "$SRC"
 for bin in wprsd wprs-ctl wprs-app wprs-web; do
-  install -m755 "$ROOT/target/release/$bin" "$D/bin/"
+  install -m755 "$BIN/$bin" "$D/bin/"
   objcopy --remove-section=.comment "$D/bin/$bin"
 done
 cp -r "$SRC/integrations/plasma-wallpaper" "$D/plasma-wallpaper"
@@ -34,7 +32,7 @@ sed -i "s/\"Version\": \"[^\"]*\"/\"Version\": \"$VERSION\"/" "$D"/*/metadata.js
 "$ROOT/scripts/translations.sh" build "$D"
 mkdir -p "$D/examples"
 for scene in "$SRC"/scenes/*/; do
-  "$ROOT/target/release/wprs-ctl" pack build "$scene" -o "$D/examples/$(basename "$scene").wpak" >/dev/null
+  "$BIN/wprs-ctl" pack build "$scene" -o "$D/examples/$(basename "$scene").wpak" >/dev/null
 done
 cp "$SRC/scenes/LICENSE" "$D/examples/"
 cp -r "$SRC/packaging/systemd" "$SRC/packaging/dbus" "$SRC/packaging/desktop" "$SRC/packaging/icons" "$D/packaging/"
