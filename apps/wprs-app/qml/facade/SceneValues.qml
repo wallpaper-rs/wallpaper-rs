@@ -125,6 +125,8 @@ QtObject {
             "spawn": App.tr("On birth"),
             "spot": App.tr("Spot"),
             "spring": App.tr("Spring"),
+            "capsule": App.tr("Capsule"),
+            "sphere": App.tr("Sphere"),
             "srgb": App.tr("sRGB"),
             "static": App.tr("Static"),
             "step": App.tr("Jump"),

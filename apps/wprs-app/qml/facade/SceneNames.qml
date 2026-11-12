@@ -21,6 +21,7 @@ QtObject {
             "phase": App.tr("Phase"),
             "phosphor": App.tr("Phosphor"),
             "physics": App.tr("Physics"),
+            "colliders": App.tr("Colliders"),
             "pick": App.tr("Pick the files"),
             "pitch": App.tr("Dot pitch"),
             "pivot": App.tr("Pivot"),

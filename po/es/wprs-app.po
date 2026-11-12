@@ -7550,6 +7550,7 @@ msgstr "Sin imagen"
 
 #: apps/wprs-app/qml/SceneModelColliders.qml
 #: apps/wprs-app/qml/SceneSwarmColliders.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Colliders"
 msgstr "Colisionadores"
 
@@ -14689,6 +14690,14 @@ msgstr "Al nacer"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Spring"
 msgstr "Muelle"
+
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Capsule"
+msgstr "Cápsula"
+
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Sphere"
+msgstr "Esfera"
 
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "sRGB"
