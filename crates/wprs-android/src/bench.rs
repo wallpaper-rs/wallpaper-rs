@@ -71,6 +71,7 @@ fn parse(args: &[String]) -> Result<Bench, String> {
             "--shot" => bench.shot = Some(value()?.into()),
             "--passes" => bench.passes = true,
             "--overlap" => bench.overlap = true,
+            "--pace" => bench.pace = serde_json::from_value(json!(value()?)).map_err(|e| e.to_string())?,
             "--stamps" => {
                 bench.stamps = match value()?.as_str() {
                     "all" => Stamping::All,
@@ -97,4 +98,18 @@ fn parse(args: &[String]) -> Result<Bench, String> {
 
 fn number<T: std::str::FromStr>(text: &str) -> Result<T, String> {
     text.parse().map_err(|_| format!("{text} is not a number"))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::parse;
+    use wprs_core::AutoPace;
+
+    #[test]
+    fn the_bench_takes_the_pace_of_the_automatic_level() {
+        let args = |text: &str| text.split(' ').map(String::from).collect::<Vec<_>>();
+        assert_eq!(parse(&args("--level auto")).unwrap().pace, AutoPace::Detail);
+        assert_eq!(parse(&args("--level auto --pace smooth")).unwrap().pace, AutoPace::Smooth);
+        assert!(parse(&args("--pace fast")).is_err());
+    }
 }

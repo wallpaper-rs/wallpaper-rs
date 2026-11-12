@@ -9,7 +9,8 @@ usage: WPRS_ADB_SERIAL=<serial> scripts/phone-bench.sh build
 Renders a scene package offscreen on a phone over adb, through the renderer of the live wallpaper,
 and prints its report as JSON with the battery temperature before and after the run.
 Options of run: --level q0|q1|q2|q3|auto|fitted, --frames N, --paced SECONDS, --fps N, --size WxH,
---passes, --overlap, --shot FILE.png. Environment: ADB (default adb), WPRS_ABI (arm64-v8a, the
+--passes, --overlap, --pace detail|smooth (how --level auto may halve the rate, detail by default),
+--shot FILE.png. Environment: ADB (default adb), WPRS_ABI (arm64-v8a, the
 default, or x86_64 for an emulator), WPRS_PHONE_DIR (default
 /data/local/tmp/wprs-bench), WPRS_COOL (wait until the battery is under this many degrees, default
 36), WPRS_AWAKE_TRIES (checks five minutes apart while the screen is on, default 6).
