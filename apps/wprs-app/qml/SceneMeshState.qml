@@ -8,6 +8,7 @@ QtObject {
     property string rigging
     property var sculpt: null
     property var weighing: null
+    property var carving: null
     property string view: "heat"
     property string bone
     property string clip
@@ -44,6 +45,7 @@ QtObject {
         rigging = settings === null ? "" : id;
         sculpt = kind === "depth" ? settings : null;
         weighing = kind === "weights" ? settings : null;
+        carving = kind === "shape" ? settings : null;
         mode = "";
     }
 

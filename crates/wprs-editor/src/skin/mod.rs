@@ -1,6 +1,7 @@
 mod bind;
 mod bones;
 mod brush;
+mod carve;
 mod glb;
 mod points;
 mod read;
@@ -15,6 +16,7 @@ use wprs_scene::mesh_math::{Mat, apply, mul};
 use wprs_scene::{Rigged, Trs};
 
 pub use brush::{Brush, Mode};
+pub use carve::{Carve, Chisel};
 pub(crate) use glb::Glb;
 
 pub(crate) struct Piece {

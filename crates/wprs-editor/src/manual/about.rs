@@ -53,6 +53,10 @@ pub const ABOUT: [(&str, &str); 72] = [
         "clip_event",
         "Add, move, rename or remove a named event of a clip, which fires when the clip passes it",
     ),
+    (
+        "shape_sculpt",
+        "Sculpt a blend shape of a mesh with a brush that pushes, pulls, smooths or erases, making the shape when it is new",
+    ),
     ("expression", "Add, change or remove a facial expression of a rig"),
     ("ik", "Add, change or remove an inverse kinematics chain"),
     ("physics", "Make bones follow physics: stiffness, damping and mode"),

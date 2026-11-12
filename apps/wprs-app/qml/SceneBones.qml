@@ -9,7 +9,7 @@ Item {
     readonly property var mesh: gizmo.page.mesh
     readonly property string layerId: gizmo.modelData.id
     readonly property bool posing: mesh.posing(layerId)
-    readonly property bool placing: mesh.rigging === layerId && mesh.sculpt === null && mesh.weighing === null && mesh.mode === ""
+    readonly property bool placing: mesh.rigging === layerId && mesh.sculpt === null && mesh.weighing === null && mesh.carving === null && mesh.mode === ""
     property var rig: ({
             "bones": []
         })
@@ -72,13 +72,18 @@ Item {
         property var points: []
 
         target: null
-        enabled: bones.mesh.rigging === bones.layerId && (bones.mesh.sculpt !== null || bones.mesh.weighing !== null)
+        enabled: bones.mesh.rigging === bones.layerId && (bones.mesh.sculpt !== null || bones.mesh.weighing !== null || bones.mesh.carving !== null)
         onActiveChanged: {
             if (!active && points.length > 0 && bones.mesh.sculpt !== null)
                 bones.gizmo.page.run("mesh_depth", Object.assign({
                     "layer": bones.layerId,
                     "points": points
                 }, bones.mesh.sculpt));
+            else if (!active && points.length > 0 && bones.mesh.carving !== null)
+                bones.gizmo.page.run("shape_sculpt", Object.assign({}, bones.mesh.carving, {
+                    "layer": bones.layerId,
+                    "points": points
+                }));
             else if (!active && points.length > 0 && bones.mesh.weighing !== null && bones.mesh.bone !== "")
                 bones.gizmo.page.run("weights", Object.assign({}, bones.mesh.weighing, {
                     "layer": bones.layerId,

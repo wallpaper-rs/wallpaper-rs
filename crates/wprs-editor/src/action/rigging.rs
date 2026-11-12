@@ -1,5 +1,5 @@
 use super::names::{half, tenth, whole};
-use crate::skin::Mode;
+use crate::skin::{Carve, Mode};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -167,4 +167,18 @@ pub struct MaskStroke {
     #[serde(default = "whole")]
     pub value: f32,
     pub points: Vec<[f32; 2]>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct ShapeStroke {
+    pub layer: String,
+    pub shape: String,
+    pub points: Vec<[f32; 2]>,
+    pub mode: Carve,
+    pub by: f32,
+    #[serde(default = "tenth")]
+    pub radius: f32,
+    #[serde(default = "half")]
+    pub falloff: f32,
 }

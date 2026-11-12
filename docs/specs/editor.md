@@ -772,8 +772,12 @@ the picked bone (from blue for none to red for all of it, blended between the ve
 that leads each triangle, with its colour, drawn as one picture of at most 384 pixels a side that
 is made again only after an edit; *Auto weights* runs `auto_weights`. The inspector also picks the clip the scene plays (`animations`)
 and `hit` bones and `depth` with its scale and back-face hiding, as `set` on those fields, which
-`wprs-ctl scene set` does as well. The blend shapes have sliders that only change the preview, and
-an expression is saved from them, shown to be changed and saved again, renamed or removed.
+`wprs-ctl scene set` does as well. *Pick them on the preview* under the bones that take the pointer
+makes a click on a bone of the preview add it to `hit` or take it out, and the bones in `hit` are
+drawn with a thick ring; while a layer has `depth` and its tools are shown, a knob on a line at the
+bottom of the preview drags the scale (0 to 10) with the value over it, and the preview follows the
+drag as one undoable step (the same change as the slider of the inspector, `parts` with `depth`). The blend shapes have sliders that only change the preview, and
+an expression is saved from them, shown to be changed and saved again, renamed or removed; each expression also has a slider of its own, 0 to 1, that mixes the expressions in the preview. *Sculpt a blend shape on the preview* picks an existing shape or names a new one and brushes the mesh (push away, pull in, smooth or erase, with its strength, size and soft edge) with `shape_sculpt`; the preview shows the shape at full weight while it is sculpted and one stroke is one undoable step.
 
 *Make a chain on the preview* takes a click on the bone a chain starts from and one on the bone it
 ends at, and adds it with `ik`. Each chain is listed with what it reaches for (the pointer, with a

@@ -1,5 +1,6 @@
-use crate::action::ExpressionEdit;
+use crate::action::{ExpressionEdit, ShapeStroke};
 use crate::ops::{Op, escape, set};
+use crate::skin::{Carve, Chisel, Skin};
 use anyhow::{Result, anyhow, ensure};
 use serde_json::{Map, Value};
 use std::path::Path;
@@ -66,4 +67,33 @@ pub(crate) fn expression(dir: &Path, doc: &Value, e: &ExpressionEdit) -> Result<
         }
     }
     Ok(ops)
+}
+
+pub(crate) fn sculpt(dir: &Path, doc: &Value, s: &ShapeStroke) -> Result<Vec<Op>> {
+    let ShapeStroke { layer, shape, points, mode, by, radius, falloff } = s;
+    let (_, found) = crate::actions::layer(doc, layer)?;
+    ensure!(found["type"] == "mesh", said("editor.not_mesh", "the layer is not a mesh", &[]));
+    ensure!(
+        (1..=64).contains(&shape.chars().count()) && !shape.contains(['/', '#']),
+        said("editor.shape_name", "a blend shape has a name of 1 to 64 characters without / or #", &[])
+    );
+    let (id, mut skin) = Skin::load(dir, doc, found)?;
+    let stroke = crate::sculpt::stroke(&skin, points, *radius)?;
+    let push = matches!(mode, Carve::Push | Carve::Pull);
+    let most = if push { crate::sculpt::MAX_RAISE } else { 1.0 };
+    ensure!(
+        by.is_finite() && (0.0..=most).contains(by) && falloff.is_finite() && (0.0..=1.0).contains(falloff),
+        said(
+            "editor.shape_by",
+            "a shape stroke has a strength from 0 to %1 and a falloff from 0 to 1",
+            &[&most]
+        )
+    );
+    let [w, h] = skin.size;
+    skin.carve(
+        shape,
+        &stroke,
+        &Chisel { mode: *mode, by: *by, radius: radius * w.max(h), falloff: *falloff },
+    )?;
+    skin.save(dir, doc, &id)
 }

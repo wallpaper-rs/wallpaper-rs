@@ -56,7 +56,7 @@ ColumnLayout {
             icon.name: "transform-move"
             checkable: true
             enabled: rig.editable
-            checked: rig.page.mesh.rigging === rig.layerId && rig.page.mesh.sculpt === null && rig.page.mesh.weighing === null && rig.page.mesh.mode === ""
+            checked: rig.page.mesh.rigging === rig.layerId && rig.page.mesh.sculpt === null && rig.page.mesh.weighing === null && rig.page.mesh.carving === null && rig.page.mesh.mode === ""
             onToggled: rig.page.mesh.tool(rig.layerId, "bones", checked ? {} : null)
         }
 
@@ -85,6 +85,16 @@ ColumnLayout {
         }
 
         SceneShapes {
+            Layout.fillWidth: true
+            host: rig
+        }
+
+        SceneExpressionMix {
+            Layout.fillWidth: true
+            host: rig
+        }
+
+        SceneShapeSculpt {
             Layout.fillWidth: true
             host: rig
         }
