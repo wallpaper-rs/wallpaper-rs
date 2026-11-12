@@ -1,4 +1,5 @@
 use crate::input::password;
+use crate::told::{fill, told};
 use crate::usage;
 use anyhow::Result;
 use clap::Args;
@@ -73,6 +74,17 @@ impl Policy {
 pub fn keygen(name: &str, no_password: bool) -> Result<String> {
     let password = (!no_password).then(|| password(true)).transpose()?;
     let made = wprs_editor::author_keys::create(Path::new("."), name, password, false)?;
+    let file =
+        |key: &str| made[key].as_str().and_then(|p| Path::new(p).file_name()?.to_str()).unwrap_or(name);
+    eprintln!(
+        "{}",
+        fill(
+            told(
+                "%1 is your SECRET key: never share it, and keep a copy somewhere safe. %2 is the public key: give it to whoever must check your signatures."
+            ),
+            &[&file("secret"), &file("public")]
+        )
+    );
     Ok(made["fingerprint"].as_str().unwrap_or_default().to_owned())
 }
 

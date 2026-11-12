@@ -1,3 +1,4 @@
+use crate::told::{fill, told, tr};
 use crate::usage;
 use anyhow::{Context, Result, bail, ensure};
 use percent_encoding::percent_decode_str;
@@ -56,17 +57,48 @@ pub fn secret(prompt: &str, stdin: bool) -> Result<String> {
     Ok(line)
 }
 
-pub fn password(twice: bool) -> Result<String> {
-    if !io::stdin().is_terminal() {
-        let hint = "no terminal to ask for the key password; set WPRS_KEY_PASSWORD";
-        return std::env::var("WPRS_KEY_PASSWORD").context(hint);
+pub const PASSWORD_VARIABLE: &str = "WPRS_KEY_PASSWORD";
+
+#[derive(Debug, PartialEq)]
+pub enum Password {
+    Given(String),
+    Ask,
+    Missing,
+}
+
+pub fn password_source(variable: Option<String>, terminal: bool) -> Password {
+    match variable.filter(|v| !v.is_empty()) {
+        Some(given) => Password::Given(given),
+        None if terminal => Password::Ask,
+        None => Password::Missing,
     }
-    let password = rpassword::prompt_password("Key password: ")?;
-    ensure!(
-        !twice || rpassword::prompt_password("Repeat the password: ")? == password,
-        "the passwords differ"
-    );
-    Ok(password)
+}
+
+pub fn password(twice: bool) -> Result<String> {
+    let source = password_source(std::env::var(PASSWORD_VARIABLE).ok(), io::stdin().is_terminal());
+    match source {
+        Password::Given(given) => Ok(given),
+        Password::Missing => {
+            bail!(
+                "{}",
+                fill(
+                    told(
+                        "the key has a password and there is no terminal to ask for it: set the environment variable %1 to the password"
+                    ),
+                    &[&PASSWORD_VARIABLE]
+                )
+            )
+        }
+        Password::Ask => {
+            let password = rpassword::prompt_password(tr(told("Key password: ")))?;
+            ensure!(
+                !twice || rpassword::prompt_password(tr(told("Repeat the password: ")))? == password,
+                "{}",
+                tr(told("the passwords differ"))
+            );
+            Ok(password)
+        }
+    }
 }
 
 pub async fn confirm(question: &str) -> Result<bool> {
@@ -95,4 +127,19 @@ pub async fn typed() -> Result<String> {
 
 pub fn now() -> Result<i64> {
     Ok(SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs().try_into()?)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{Password, password_source};
+
+    #[test]
+    fn the_password_comes_from_the_variable_then_the_terminal_and_is_otherwise_missing() {
+        let given = |v: &str| Some(v.to_owned());
+        assert_eq!(password_source(given("x"), false), Password::Given("x".into()));
+        assert_eq!(password_source(given("x"), true), Password::Given("x".into()));
+        assert_eq!(password_source(given(""), true), Password::Ask);
+        assert_eq!(password_source(None, true), Password::Ask);
+        assert_eq!(password_source(None, false), Password::Missing);
+    }
 }

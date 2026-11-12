@@ -11,11 +11,17 @@ const REASONS: [&str; 5] = ["malware", "license", "takedown", "broken", "other"]
 
 #[derive(Subcommand, Debug)]
 pub enum Repo {
-    #[command(about = "Create a key pair NAME.key and NAME.pub and print its fingerprint")]
+    #[command(
+        about = "Create a key pair: NAME.key is SECRET (never share it) and NAME.pub is public (share it); prints the fingerprint",
+        long_about = "Create a key pair: NAME.key is SECRET (never share it) and NAME.pub is public (share it); prints the fingerprint.\n\nThe secret key is protected by a password that is asked for on the terminal. Without a terminal, set the environment variable WPRS_KEY_PASSWORD to the password, or use --no-password for a key without one."
+    )]
     Keygen {
         #[arg(help = "Name of the key files")]
         name: String,
-        #[arg(long, help = "Leave the secret key unencrypted, for online keys used by automation")]
+        #[arg(
+            long,
+            help = "Leave the secret key unencrypted instead of asking for a password, for online keys used by automation"
+        )]
         no_password: bool,
     },
     #[command(about = "Create a repository in a folder; sign its root next")]

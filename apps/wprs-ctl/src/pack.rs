@@ -30,7 +30,10 @@ pub enum Pack {
     Sign {
         #[arg(help = "Package folder")]
         dir: PathBuf,
-        #[arg(long, help = "Secret key file of the author")]
+        #[arg(
+            long,
+            help = "Secret key file of the author, the NAME.key made by repo keygen; its password is asked on the terminal or read from WPRS_KEY_PASSWORD"
+        )]
         key: PathBuf,
     },
     #[command(
