@@ -1,4 +1,4 @@
-use super::{ask, edit, layer, project, undone};
+use super::{act, ask, edit, layer, project, undone};
 use image::{Rgba, RgbaImage};
 use serde_json::json;
 
@@ -78,4 +78,38 @@ fn a_material_map_is_chosen_from_the_pictures_imported_into_its_slot_and_removed
     let base = json!({ "material": { "layer": "doll", "name": "paint", "maps": { "base": null } } });
     edit(&mut p, base).unwrap();
     assert!(layer(&p, "doll")["materials"]["paint"].get("maps").is_none());
+}
+
+#[test]
+fn a_stroke_paints_a_map_of_a_material_over_the_picture_of_the_file() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    edit(&mut p, json!({ "model": { "add": { "asset": "toy", "id": "doll" } } })).unwrap();
+    let before = p.doc.clone();
+    let stroke = |slot: &str| {
+        json!({ "paint": { "layer": "doll", "name": "paint", "slot": slot, "color": [0.0, 0.0, 1.0],
+            "radius": 0.2, "hardness": 1.0, "points": [[0.5, 0.5]] } })
+    };
+    edit(&mut p, stroke("base")).unwrap();
+    let id = layer(&p, "doll")["materials"]["paint"]["maps"]["base"].as_str().unwrap().to_owned();
+    let asset = &p.doc["scene"]["assets"][&id];
+    assert_eq!(asset["linear"], json!(false));
+    let picture = image::open(p.dir.join(asset["path"].as_str().unwrap())).unwrap().into_rgba8();
+    assert_eq!(picture.dimensions(), (8, 8), "the stroke starts from the map of the file");
+    assert_eq!(picture.get_pixel(4, 4).0, [0, 0, 255, 255]);
+    assert_eq!(picture.get_pixel(0, 0).0, [200, 40, 40, 255]);
+    edit(&mut p, stroke("base")).unwrap();
+    assert_eq!(
+        layer(&p, "doll")["materials"]["paint"]["maps"]["base"],
+        json!(id),
+        "a second stroke keeps the map"
+    );
+    edit(&mut p, stroke("normal")).unwrap();
+    let normal = layer(&p, "doll")["materials"]["paint"]["maps"]["normal"].as_str().unwrap().to_owned();
+    assert_eq!(p.doc["scene"]["assets"][&normal]["linear"], json!(true));
+    assert!(edit(&mut p, stroke("shine")).is_err());
+    act(&mut p, json!({ "undo": {} })).unwrap();
+    act(&mut p, json!({ "undo": {} })).unwrap();
+    act(&mut p, json!({ "undo": {} })).unwrap();
+    assert_eq!(p.doc, before);
 }

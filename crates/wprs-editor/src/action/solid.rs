@@ -23,6 +23,7 @@ pub enum Edit3d {
         on: bool,
     },
     Material(MaterialEdit),
+    Paint(MaterialStroke),
     Camera(CameraEdit),
     View(ViewEdit),
     Tones(TonesEdit),
@@ -117,4 +118,17 @@ pub struct TonesEdit {
     pub hdr: Option<bool>,
     pub tonemap: Option<String>,
     pub split: Option<f64>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct MaterialStroke {
+    pub layer: String,
+    pub name: String,
+    pub slot: String,
+    pub color: [f32; 3],
+    pub radius: f32,
+    #[serde(default = "super::names::half")]
+    pub hardness: f32,
+    pub points: Vec<[f32; 2]>,
 }

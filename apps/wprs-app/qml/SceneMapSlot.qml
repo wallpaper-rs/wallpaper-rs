@@ -69,6 +69,12 @@ ColumnLayout {
             onTriggered: files.open()
         }
 
+        QQC2.MenuItem {
+            icon.name: "draw-brush"
+            text: App.tr("Paint this map…")
+            onTriggered: painter.open()
+        }
+
         QQC2.MenuSeparator {}
 
         Repeater {
@@ -85,6 +91,12 @@ ColumnLayout {
                 onTriggered: slot.choose(modelData.id)
             }
         }
+    }
+
+    SceneMapPaint {
+        id: painter
+
+        holder: slot
     }
 
     FileDialog {

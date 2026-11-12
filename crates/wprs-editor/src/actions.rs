@@ -19,7 +19,9 @@ pub use crate::action::{
     TendEdit, WeightStroke, WindEdit,
 };
 pub use crate::action::{AnimEdit, EffectsEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
-pub use crate::action::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, TonesEdit, ViewEdit};
+pub use crate::action::{
+    CameraEdit, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit,
+};
 pub use crate::action::{
     CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, ScriptEdit, Takes, TemplateEdit,
     TimelineEdit, TimelineEvent,
