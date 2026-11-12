@@ -45,6 +45,10 @@ fn init_validates_settings_and_signing() {
     assert!(signed.complete);
     assert_eq!(signed.signers, [root.fingerprint.as_str()]);
     assert_eq!(signed.query, format!("fingerprint={}&repo_id={}", root.fingerprint, signed.repo_id));
+    let anchor = wprs_format::Anchor::parse(&signed.address).unwrap();
+    assert!(signed.address.starts_with("file:///") && signed.address.ends_with(&signed.query));
+    assert_eq!(anchor.repo_id.as_deref(), Some(signed.repo_id.as_str()));
+    assert!(anchor.base.ends_with("/repo/") && anchor.fingerprint.is_some(), "{}", signed.address);
     let stored = settings(&dir).unwrap();
     assert_eq!(stored.root_keys, [public_key(&root.public).unwrap()]);
     assert_eq!(

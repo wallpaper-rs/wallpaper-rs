@@ -101,6 +101,7 @@ pub(super) fn root(status: &RootStatus, json: bool) -> Result<()> {
         ("threshold", status.threshold.to_string()),
         ("complete", status.complete.to_string()),
         ("anchor", format!("?{}", status.query)),
+        ("address", status.address.clone()),
     ]);
     either(status, json, text.trim_end().into())
 }

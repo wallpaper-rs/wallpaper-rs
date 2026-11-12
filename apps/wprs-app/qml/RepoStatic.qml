@@ -112,6 +112,11 @@ ColumnLayout {
         }
     }
 
+    RepoAddress {
+        Layout.fillWidth: true
+        text: stall.shown?.root?.address ?? ""
+    }
+
     RepoAdmin {
         id: admin
 

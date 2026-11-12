@@ -14,14 +14,33 @@ Kirigami.Page {
 
     function load() {
         App.query("List", [], "Repos1", reply => {
-            if (!page)
-                return;
-            page.repos = reply.repos;
-            page.error = "";
-        }, error => page && (page.error = error.message));
+                if (!page)
+                    return;
+                page.repos = reply.repos;
+                page.error = "";
+            }, error => page && (page.error = error.message));
     }
 
     function exercise() {
+        installer.watching = [7];
+        installer.announce([{
+                    "id": 7,
+                    "state": "done",
+                    "target": "0123abcd/org.example.dusk@1.1.0"
+                }]);
+        if (installer.message === "" || !installer.message.includes("org.example.dusk") || !installer.message.includes("1.1.0") || installer.watching.length !== 0)
+            throw new Error("an install that finished was not confirmed: " + installer.message);
+        installer.message = "";
+        const shown = Qt.createComponent("RepoAddress.qml").createObject(page, {
+                "text": "file:///repo/?fingerprint=ab&repo_id=cd"
+            });
+        shown.copy();
+        const board = Qt.createQmlObject("import QtQuick; TextEdit { visible: false }", page);
+        board.paste();
+        if (!shown.copied || board.text !== "file:///repo/?fingerprint=ab&repo_id=cd")
+            throw new Error("the repository address was not copied: " + board.text);
+        board.destroy();
+        shown.destroy();
         tabs.currentIndex = 3;
         tabs.currentIndex = 1;
     }
@@ -75,8 +94,23 @@ Kirigami.Page {
         }
     }
 
+    Kirigami.InlineMessage {
+        id: confirmation
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        z: 1
+        type: Kirigami.MessageType.Positive
+        text: installer.message
+        visible: text !== ""
+        showCloseButton: true
+        onVisibleChanged: if (!visible)
+            installer.message = ""
+    }
+
     StackLayout {
         anchors.fill: parent
+        anchors.topMargin: confirmation.visible ? confirmation.height + Kirigami.Units.smallSpacing : 0
         currentIndex: tabs.currentIndex
 
         RepoList {
@@ -96,7 +130,8 @@ Kirigami.Page {
             installer: installer
         }
 
-        RepoStatic {}
+        RepoStatic {
+        }
     }
 
     Installer {
