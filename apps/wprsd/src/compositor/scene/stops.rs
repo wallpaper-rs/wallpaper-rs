@@ -12,7 +12,17 @@ fn heavy() -> SceneSpec {
     let scene = Scene::from_json(&text.to_string()).unwrap();
     let pack = Arc::new(ScenePack::bare(scene, Default::default(), Vec::new()));
     let (values, extra, clips) = (pack.props.values(&[]), Vec::new(), Vec::new());
-    SceneSpec { values, pack, extra, clips, hold: None, moving: true, quality: None, span: None }
+    SceneSpec {
+        values,
+        pack,
+        extra,
+        clips,
+        hold: None,
+        moving: true,
+        quality: None,
+        span: None,
+        drafted: false,
+    }
 }
 
 #[test]
@@ -49,7 +59,17 @@ fn light() -> SceneSpec {
         Vec::new(),
     ));
     let (values, extra, clips) = (pack.props.values(&[]), Vec::new(), Vec::new());
-    SceneSpec { values, pack, extra, clips, hold: None, moving: true, quality: None, span: None }
+    SceneSpec {
+        values,
+        pack,
+        extra,
+        clips,
+        hold: None,
+        moving: true,
+        quality: None,
+        span: None,
+        drafted: false,
+    }
 }
 
 #[test]

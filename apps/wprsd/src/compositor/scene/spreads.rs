@@ -27,6 +27,7 @@ fn part(pack: &Arc<ScenePack>, span: [f32; 4]) -> SceneState {
         moving: false,
         quality: None,
         span: Some(span),
+        drafted: false,
     };
     SceneState::new(spec, Power::new(Tier::T3, false, 60))
 }

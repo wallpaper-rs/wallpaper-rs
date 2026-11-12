@@ -184,7 +184,7 @@ impl Daemon {
                 .and_then(serde_json::from_value)
                 .unwrap_or_default(),
             outputs: shown.map(output).collect(),
-            previews: crate::drafts::previews(&status),
+            previews: crate::drafts::previews(&status, |name| st.drafts.contains_key(name)),
             calibrating: crate::calibration::calibrating(&st),
             compute: self.compute,
             adapters: self.gpus.adapters(),

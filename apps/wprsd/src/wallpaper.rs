@@ -77,7 +77,20 @@ impl Daemon {
                 let moving = self.store.read(|lib| lib.moves(&pack.props.id)).unwrap_or(false);
                 let quality = self.state().config.own_quality(output);
                 let span = self.scene_span(output, resolved.fit, pack.scene.canvas.size);
-                (Content::Scene(SceneSpec { pack, values, extra, clips, hold, moving, quality, span }), None)
+                (
+                    Content::Scene(SceneSpec {
+                        pack,
+                        values,
+                        extra,
+                        clips,
+                        hold,
+                        moving,
+                        quality,
+                        span,
+                        drafted: draft.is_some(),
+                    }),
+                    None,
+                )
             }
             Some(Ok(Media::Web(pack))) => {
                 (Content::Web(self.page_on(output, pack, &mut shown_video, (page_quality, tried))), None)

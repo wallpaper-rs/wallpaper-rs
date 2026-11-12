@@ -53,6 +53,7 @@ pub struct PageSpec {
     pub folders: Vec<(String, PathBuf, bool)>,
     pub storage: Option<PathBuf>,
     pub quality: Option<wprs_core::QualityChoice>,
+    pub drafted: bool,
 }
 
 pub type PageKey = (PathBuf, wprs_core::QualityChoice);
@@ -143,7 +144,7 @@ impl Daemon {
         let privacy = self.privacy(&pack);
         let storage = (privacy.storage && pack.storage_kib > 0).then(|| self.page_storage(&pack.props.id));
         let storage = storage.filter(|dir| crate::store::private_dir(dir).is_ok());
-        PageSpec { pack, values, privacy, files, folders, storage, quality: None }
+        PageSpec { pack, values, privacy, files, folders, storage, quality: None, drafted: false }
     }
 
     pub fn page_on(
@@ -161,7 +162,7 @@ impl Daemon {
         ));
         *shown = Some(pack.props.clone());
         let quality = drafted.unwrap_or_else(|| self.state().config.own_quality(output));
-        PageSpec { quality, ..self.page_spec(pack, values) }
+        PageSpec { quality, drafted: drafted.is_some(), ..self.page_spec(pack, values) }
     }
 
     pub fn exposes(&self, item: &wprs_library::Item) -> Vec<String> {

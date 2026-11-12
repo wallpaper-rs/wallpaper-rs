@@ -19,6 +19,7 @@ fn snowfall(quality: Option<QualityChoice>) -> SceneSpec {
         extra: Vec::new(),
         clips: Vec::new(),
         hold: None,
+        drafted: false,
         moving: false,
         quality,
         span: None,

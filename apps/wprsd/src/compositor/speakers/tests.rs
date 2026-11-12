@@ -42,6 +42,7 @@ fn delayed() -> SceneState {
         extra: Vec::new(),
         clips: Vec::new(),
         hold: None,
+        drafted: false,
         moving: false,
         quality: None,
         span: None,

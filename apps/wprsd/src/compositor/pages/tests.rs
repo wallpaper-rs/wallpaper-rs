@@ -45,7 +45,16 @@ pub(in crate::compositor) fn page(language: bool, more: Json) -> PageSpec {
     };
     let privacy = Privacy { language, ..Privacy::default() };
     let (files, folders, values) = (Vec::new(), Vec::new(), Default::default());
-    PageSpec { pack: Arc::new(pack), values, privacy, files, folders, storage: None, quality: None }
+    PageSpec {
+        pack: Arc::new(pack),
+        values,
+        privacy,
+        files,
+        folders,
+        storage: None,
+        quality: None,
+        drafted: false,
+    }
 }
 
 #[test]

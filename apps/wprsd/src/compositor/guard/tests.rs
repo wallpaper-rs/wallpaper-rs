@@ -31,6 +31,7 @@ fn staged(layers: serde_json::Value, particles: serde_json::Value, poster: f32) 
         extra: Vec::new(),
         clips: Vec::new(),
         hold: None,
+        drafted: false,
         moving: false,
         quality: None,
         span: None,

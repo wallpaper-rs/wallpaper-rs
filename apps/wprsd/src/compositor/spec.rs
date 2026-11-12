@@ -45,6 +45,7 @@ pub struct SceneSpec {
     pub moving: bool,
     pub quality: Option<wprs_core::QualityChoice>,
     pub span: Option<[f32; 4]>,
+    pub drafted: bool,
 }
 
 #[derive(Debug, Clone)]

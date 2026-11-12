@@ -24,10 +24,11 @@ pub fn virtual_output(name: &str) -> bool {
 
 pub(crate) fn previews(
     status: &std::collections::BTreeMap<String, crate::compositor::OutputStatus>,
+    drafted: impl Fn(&str) -> bool,
 ) -> std::collections::BTreeMap<String, wprs_core::model::PreviewState> {
-    let shown = status
-        .iter()
-        .filter(|(name, s)| virtual_output(name) && (s.error.is_some() || !s.console.is_empty()));
+    let shown = status.iter().filter(|(name, s)| {
+        (virtual_output(name) || drafted(name)) && (s.error.is_some() || !s.console.is_empty())
+    });
     let state = |s: &crate::compositor::OutputStatus| wprs_core::model::PreviewState {
         error: s.error.clone(),
         console: s.console.clone(),
@@ -171,6 +172,21 @@ async fn expire(daemon: Weak<Daemon>) {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn a_preview_on_a_real_screen_reports_its_console_and_a_plain_screen_does_not() {
+        let said = crate::compositor::OutputStatus {
+            console: vec!["log main.js: hello".into()],
+            error: Some("main.js: boom (main.js line 3)".into()),
+            ..Default::default()
+        };
+        let status: std::collections::BTreeMap<_, _> =
+            [("DP-1".to_owned(), said.clone()), ("DP-2".to_owned(), said)].into();
+        let shown = super::previews(&status, |name| name == "DP-1");
+        assert_eq!(shown.keys().collect::<Vec<_>>(), ["DP-1"]);
+        assert_eq!(shown["DP-1"].console, ["log main.js: hello"]);
+        assert!(super::previews(&status, |_| false).is_empty());
+    }
+
     #[test]
     fn previews_left_in_the_settings_are_forgotten_and_screens_kept() {
         let mut config = wprs_core::Config::default();
