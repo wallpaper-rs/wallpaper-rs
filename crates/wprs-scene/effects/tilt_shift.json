@@ -10,7 +10,7 @@
     { "id": "softness", "type": "float", "default": 0.25, "min": 0, "max": 1 },
     { "id": "angle", "type": "float", "unit": "degrees", "default": 0, "min": -360, "max": 360 },
     { "id": "radius", "type": "float", "default": 12, "min": 0, "max": 64 },
-    { "id": "depth", "type": "texture", "default": "" }
+    { "id": "depth", "type": "texture", "tools": ["gray", "depth"], "default": "" }
   ],
   "passes": [
     { "entry": "fs_tilt_shift_h", "scale": 0.5, "inputs": ["previous", "asset:depth"] },

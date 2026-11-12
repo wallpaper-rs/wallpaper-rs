@@ -16,7 +16,7 @@
         { "value": 3, "label": { "en": "Distortion", "es": "Distorsión" } }
       ]
     },
-    { "id": "gradient", "type": "texture", "default": "" },
+    { "id": "gradient", "type": "texture", "tools": ["ramp"], "default": "" },
     { "id": "color", "type": "color", "default": "#ffffff" },
     { "id": "velocity_decay", "type": "float", "default": 0.98, "min": 0, "max": 1 },
     { "id": "dye_decay", "type": "float", "default": 0.97, "min": 0, "max": 1 },

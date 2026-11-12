@@ -60,8 +60,11 @@ pub fn source(dir: &Path, doc: &Value, id: &str) -> Value {
     let Some((descriptor, wgsl)) = files(doc, id) else { return Value::Null };
     let json = read(dir, &descriptor).unwrap_or_default();
     let parsed: Value = serde_json::from_str(&json).unwrap_or(Value::Null);
+    let found: Option<Descriptor> = serde_json::from_value(parsed.clone()).ok();
+    let tools = found.iter().flat_map(|d| d.params.iter().map(|p| (p.id.clone(), json!(p.tools(id)))));
+    let tools: serde_json::Map<String, Value> = tools.collect();
     json!({ "effect": id, "descriptor_path": descriptor, "wgsl_path": wgsl, "descriptor": json,
-        "wgsl": read(dir, &wgsl).unwrap_or_default(), "parsed": parsed,
+        "wgsl": read(dir, &wgsl).unwrap_or_default(), "parsed": parsed, "tools": tools,
         "stage": parsed["stage"].as_str().unwrap_or("layer"), "templates": super::starters::TEMPLATES,
         "kinds": super::form::KINDS, "fields": super::form::FIELDS })
 }

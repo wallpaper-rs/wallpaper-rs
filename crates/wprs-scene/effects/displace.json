@@ -5,7 +5,7 @@
   "description": "Offsets pixels using a map of normals or offsets.",
   "mask_mode": "strength",
   "params": [
-    { "id": "map", "type": "texture", "default": "" },
+    { "id": "map", "type": "texture", "tools": ["gray", "flow"], "default": "" },
     {
       "id": "mode",
       "type": "enum",

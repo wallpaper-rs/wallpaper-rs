@@ -1,4 +1,4 @@
-use crate::effects::{Descriptor, Fuse, Output, Pace, ParamDef, ParamKind, PassDef, SLOTS, Solve, Use};
+use crate::effects::{Descriptor, Fuse, Output, Pace, ParamDef, ParamKind, PassDef, SLOTS, Solve, Tool, Use};
 use crate::value::Param;
 use crate::{Class, MAX_PARAMS};
 use homography::homography;
@@ -104,6 +104,11 @@ impl Descriptor {
             fail(valid(&p.id) && self.param(&p.id) == Some(i), format!("{} is not a unique id", p.id));
             fail(p.accepts(&p.default), format!("the default of {} does not fit its type", p.id));
             fail(p.min.zip(p.max).is_none_or(|(lo, hi)| lo <= hi), format!("{} has min above max", p.id));
+            let pictured =
+                matches!(p.kind, ParamKind::Texture | ParamKind::Mask) && !p.tools.contains(&Tool::Table);
+            let tooled =
+                p.tools.is_empty() || pictured || (p.kind == ParamKind::Lut && p.tools == [Tool::Table]);
+            fail(tooled, format!("{} has tools its kind does not take", p.id));
         }
         let layered = self.stage == crate::effects::Stage::Layer;
         fail(

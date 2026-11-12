@@ -29,6 +29,13 @@ fn the_form_edits_parameters_passes_and_fields_and_renames_their_uses() {
     let pointer = wprs_editor::layers::find(&p.doc, "fill").unwrap();
     let uses = p.doc.pointer(&format!("{pointer}/effects/0/params")).unwrap();
     assert_eq!(uses, &json!({ "pull": 0.5 }), "the uses follow the rename");
+    let ramp = json!({ "effect": "bend", "id": "colors", "set": { "type": "texture", "tools": ["ramp"] } });
+    shader(&mut p, json!({ "param": ramp })).unwrap();
+    let source = ask(&p, json!({ "shader_source": { "effect": "bend" } }));
+    assert_eq!(source["tools"]["colors"], json!(["ramp"]), "{}", source["tools"]);
+    let wrong = json!({ "effect": "bend", "id": "pull", "set": { "tools": ["teapot"] } });
+    assert!(shader(&mut p, json!({ "param": wrong })).is_err());
+    shader(&mut p, json!({ "param": { "effect": "bend", "id": "colors", "remove": true } })).unwrap();
     let cost = json!({ "effect": "bend", "field": "cost", "value": { "taps": 2, "passes": 1, "scale": 1 } });
     shader(&mut p, json!({ "field": cost })).unwrap();
     assert_eq!(descriptor(&p, "bend")["cost"]["taps"], 2);

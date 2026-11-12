@@ -6,6 +6,7 @@ use std::sync::{OnceLock, RwLock};
 mod defs;
 mod handles;
 mod parts;
+mod tools;
 
 pub use defs::{Cost, Output, ParamDef, PassDef, State, Tune};
 pub use handles::{Grab, Hold};
@@ -13,6 +14,7 @@ pub use parts::{
     Entry, Fuse, MaskMode, Pace, ParamKind, PassBlend, RenderTarget, Solve, Stage, Texel, Tool, Unit, Use,
     Variant,
 };
+pub use tools::Tool;
 
 pub const FRAME_WGSL: &str = include_str!("frame.wgsl");
 pub const NOISE_WGSL: &str = include_str!("noise.wgsl");

@@ -6,6 +6,7 @@ mod drawn;
 mod effects;
 mod emitters;
 mod timelines;
+mod tools;
 
 const NEWER: &str =
     "tint blend_texture light_shafts blend_gradient caustics displace electric fire fluid glitter

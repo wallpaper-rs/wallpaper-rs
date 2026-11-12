@@ -5,7 +5,7 @@
   "description": "Shifts layers by a depth map as the pointer moves, for a 3D-ish parallax.",
   "mask_mode": "strength",
   "params": [
-    { "id": "depth", "type": "texture", "default": "" },
+    { "id": "depth", "type": "texture", "tools": ["gray", "depth"], "default": "" },
     { "id": "strength", "type": "float", "default": 24, "min": 0, "max": 256 },
     { "id": "focus", "type": "float", "default": 0.5, "min": 0, "max": 1 },
     { "id": "steps", "type": "float", "default": 16, "min": 8, "max": 24 },

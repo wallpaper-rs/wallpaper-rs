@@ -26,7 +26,7 @@ pub const FIELDS: [&str; 18] = [
     "options",
     "compose",
 ];
-const PARAM_KEYS: [&str; 13] = [
+const PARAM_KEYS: [&str; 14] = [
     "type",
     "default",
     "min",
@@ -40,6 +40,7 @@ const PARAM_KEYS: [&str; 13] = [
     "uses",
     "yields_to",
     "waits_for",
+    "tools",
 ];
 const PASS_KEYS: [&str; 10] =
     ["entry", "scale", "inputs", "output", "target", "copy", "blend", "vertex", "grid", "swap"];
