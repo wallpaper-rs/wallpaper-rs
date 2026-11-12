@@ -110,25 +110,30 @@ QtObject {
                 }));
     }
 
-    function raw(s) {
-        return JSON.parse(graph.page.editor.value(graph.shown[s].list) || "[]");
+    function clip(query) {
+        return JSON.parse(graph.page.editor.rig("", JSON.stringify({
+            "key_clip": query
+        })) || "{}");
     }
 
     function copy() {
-        SceneGraphSources.copied = picks().map(p => {
-            const s = graph.shown.findIndex(c => c.pointer === p.pointer);
-            return {
-                "pointer": p.pointer,
-                "keys": raw(s).filter(k => p.times.some(t => Math.abs(k[0] - t) < 1e-3))
-            };
+        const found = clip({
+            "copy": picks()
         });
+        if (found.text)
+            SceneGraphSources.share(found);
     }
 
     function paste() {
-        const lone = graph.copied.length === 1 && graph.shown.length > 0 && !graph.shown.some(c => c.pointer === graph.copied[0].pointer);
+        const copied = clip({
+            "read": SceneGraphSources.held()
+        }).picks ?? SceneGraphSources.copied;
+        if (!copied.length)
+            return;
+        const lone = copied.length === 1 && graph.shown.length > 0 && !graph.shown.some(c => c.pointer === copied[0].pointer);
         const target = lone ? (graph.chosen.length ? graph.shown[graph.chosen[0].s].pointer : graph.shown[0].pointer) : null;
         graph.page.run("edit_keys", {
-            "picks": graph.copied.map(c => ({
+            "picks": copied.map(c => ({
                         "pointer": target ?? c.pointer,
                         "keys": c.keys
                     })),

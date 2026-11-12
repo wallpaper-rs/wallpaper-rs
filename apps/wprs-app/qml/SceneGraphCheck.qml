@@ -114,6 +114,8 @@ QtObject {
             fail("linking the parts kept one handle per part");
         graph.chosen = both;
         graph.ops.copy();
+        if (!SceneGraphSources.board.text.startsWith("wprs-keys:") || SceneGraphSources.copied.length !== 1)
+            fail("copying keys did not write them as text for the clipboard: " + SceneGraphSources.board.text);
         graph.ops.paste();
         if (JSON.stringify(times(pointer)) !== "[0,3,5,6,8]")
             fail("pasting at the playhead missed: " + JSON.stringify(times(pointer)));

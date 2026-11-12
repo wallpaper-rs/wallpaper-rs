@@ -52,7 +52,7 @@ Flow {
 
     Shortcut {
         sequences: [StandardKey.Paste]
-        enabled: tracks.graph.visible && tracks.graph.copied.length > 0
+        enabled: tracks.graph.visible && tracks.graph.pasteable
         onActivated: tracks.graph.ops.paste()
     }
 

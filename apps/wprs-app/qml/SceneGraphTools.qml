@@ -63,7 +63,7 @@ Flow {
         icon.name: "edit-paste"
         text: App.tr("Paste at the playhead")
         display: QQC2.AbstractButton.IconOnly
-        enabled: tools.graph.copied.length > 0
+        enabled: tools.graph.pasteable
         onClicked: tools.graph.ops.paste()
     }
 

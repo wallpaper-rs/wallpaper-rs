@@ -13,7 +13,7 @@ Kirigami.Dialog {
     property var shown: []
     property var hidden: ({})
     property var chosen: []
-    readonly property var copied: SceneGraphSources.copied
+    readonly property bool pasteable: SceneGraphSources.pasteable
     property bool aligned: true
     property bool linked: true
     readonly property alias plot: plot

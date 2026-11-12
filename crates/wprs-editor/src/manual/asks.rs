@@ -57,4 +57,10 @@ pub const ASKS: [(&str, &str, &str); 39] = [
         "curves",
         "Keys of an animated value or of a clip channel, part by part, with their handles and the sampled curve",
         r#"{"pointer": "/scene/layers/0/opacity", "samples": 96}"#,
+    ),
+    (
+        "key_clip",
+        "Copied keys as a clipboard text, or the keys a clipboard text holds (none for any other text)",
+        r#"{"copy": [{"pointer": "/scene/layers/0/opacity", "times": [0]}]}"#,
+    ),
 ];

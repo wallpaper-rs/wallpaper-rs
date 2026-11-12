@@ -1,11 +1,13 @@
 mod bend;
 mod bounds;
+pub mod clip;
 mod curves;
 pub(crate) mod hands;
 pub(crate) mod parts;
 mod paste;
 mod values;
 
+pub use clip::key_clip;
 pub use curves::curves;
 
 use crate::action::{KeyPick, KeysEdit};

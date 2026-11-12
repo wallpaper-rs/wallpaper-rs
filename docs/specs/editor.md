@@ -209,7 +209,11 @@ separadas* cada pista tiene sus propias asas, en las unidades de esa parte (`edi
 volver a *Partes unidas* con una clave elegida que las tiene separadas le da a todas la forma de su
 primera parte (`link`). Con *Asas alineadas* el asa opuesta gira con la que se
 arrastra, conservando su largo; con *Asas rotas* cada una se mueve sola. *Enderezar*, copiar (Ctrl+C),
-pegar en el cabezal (Ctrl+V; las claves de otro valor se pegan en el valor elegido) y quitar
+pegar en el cabezal (Ctrl+V; las claves de otro valor se pegan en el valor elegido; las claves
+copiadas van también al portapapeles del sistema como el texto `wprs-keys:{"picks": [{"pointer",
+"keys"}]}`, así que se pegan en otra ventana o en otro proyecto, y un portapapeles con cualquier otro
+texto se pasa por alto y se pegan las últimas claves copiadas en la app; la consulta `key_clip` arma
+ese texto con `{"copy": PICKS}` y lo lee con `{"read": TEXTO}`, que da `picks` nulo si no es uno) y quitar
 (Supr) obran sobre la selección. La rueda acerca o aleja el tiempo alrededor del puntero, con Ctrl el valor
 y con Mayúsculas (o la rueda horizontal) desplaza el tiempo; arrastrar con el botón del medio mueve
 la vista en tiempo y valor. *Encuadrar lo elegido* (F) y *Encuadrar todo* (Inicio) salen de `bounds`

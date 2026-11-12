@@ -5,6 +5,24 @@ import io.github.wallpaper_rs.app
 QtObject {
     property var copied: []
     readonly property int most: 12
+    readonly property bool pasteable: copied.length > 0 || board.canPaste
+    readonly property TextEdit board: TextEdit {
+        visible: false
+        textFormat: TextEdit.PlainText
+    }
+
+    function share(found) {
+        copied = found.picks;
+        board.text = found.text;
+        board.selectAll();
+        board.copy();
+    }
+
+    function held() {
+        board.text = "";
+        board.paste();
+        return board.text;
+    }
 
     function tracks(list, chosen) {
         const own = chosen ? (list ?? []).find(t => t.pointer === chosen.pointer) : null;
