@@ -152,6 +152,7 @@ fn a_dedicated_scene_command_for_an_action_takes_the_same_arguments() {
             ("manifest", "uncredit"),
             ("manifest", "text"),
             ("manifest", "locale"),
+            ("layer", "figure"),
         ];
         for field in fields(json!({name: {"": null}})) {
             if by_act.contains(&(name, field.as_str())) {

@@ -3,8 +3,6 @@ use crate::keys::value_at;
 use serde_json::Value;
 use std::path::Path;
 
-static NULL: Value = Value::Null;
-
 pub(crate) fn pair(value: &Value, fallback: [f64; 2]) -> [f64; 2] {
     match value {
         Value::Number(n) => [n.as_f64().unwrap_or(0.0); 2],
@@ -24,23 +22,15 @@ pub(super) fn size(dir: &Path, doc: &Value, layer: &Value, canvas: [f64; 2], t: 
             .and_then(|f| crate::pictures::dimensions(f).ok())
             .map_or([512.0; 2], |(w, h)| [f64::from(w), f64::from(h)]),
         "video" => [640.0, 360.0],
-        "text" => {
-            let text = value_at(&layer["text"], t);
-            let chars = text.as_str().or(layer["text"]["clock"].as_str()).map_or(4, |s| s.chars().count());
-            let em = layer["size"].as_f64().unwrap_or(48.0);
-            [em * 0.6 * chars as f64, em * 1.2]
-        }
-        "shape" => {
-            let first = layer["shape"].as_object().and_then(|o| o.iter().next());
-            let (kind, shape) = first.map_or(("", &NULL), |(k, v)| (k.as_str(), v));
-            match kind {
-                "polygon" | "star" => [shape["size"].as_f64().unwrap_or(100.0) * 2.0; 2],
-                "line" => {
-                    pair(&shape["to"], [100.0, 0.0]).map(|v| v.abs() + shape["width"].as_f64().unwrap_or(1.0))
-                }
-                _ => pair(&shape["size"], [100.0; 2]),
-            }
-        }
+        "text" => crate::lettering::measure(dir, doc, layer, t).map_or_else(
+            || {
+                let em = layer["size"].as_f64().unwrap_or(48.0);
+                [em * 0.6, em * 1.2]
+            },
+            |m| m.size.map(f64::from),
+        ),
+        "shape" => crate::figures::first(layer)
+            .map_or([100.0; 2], |(kind, shape)| crate::figures::extent(kind, shape)),
         _ => canvas,
     }
 }

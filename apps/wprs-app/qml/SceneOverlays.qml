@@ -96,6 +96,20 @@ Item {
         ratio: overlays.ratio
     }
 
+    SceneShapeOverlay {
+        anchors.fill: parent
+        z: 6
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
+    SceneTextOverlay {
+        anchors.fill: parent
+        z: 6
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
     SceneStage3d {
         anchors.fill: parent
         z: 5

@@ -126,6 +126,8 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
             )
         }
         _ if crate::reach::asks(q) => crate::reach::query(dir, doc, q),
+        _ if crate::figures::asks(q) => crate::figures::query(dir, doc, q),
+        _ if crate::lettering::asks(q) => crate::lettering::query(dir, doc, q),
         _ if crate::onscreen::asks(q) => crate::onscreen::query(dir, doc, q),
         _ if crate::lamps::asks(q) => crate::lamps::query(dir, doc, id, q),
         _ if crate::stage3d::asks(q) => crate::stage3d::query(dir, doc, id, q),

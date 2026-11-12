@@ -8,9 +8,14 @@ ColumnLayout {
     id: bar
 
     required property var stops
-    readonly property int most: 8
+    property int most: 8
+    property int least: 1
 
     signal edited(var stops, bool gesture)
+    signal stopAdded(real at)
+    signal stopMoved(int index, real at, bool gesture)
+    signal stopColored(int index, string hex)
+    signal stopRemoved(int index)
 
     function sorted(list) {
         return list.slice().sort((a, b) => a[0] - b[0]);
@@ -22,6 +27,7 @@ ColumnLayout {
         stop[0] = Number(Math.min(1, Math.max(0, t)).toFixed(3));
         const next = sorted(list);
         edited(next, gesture);
+        stopMoved(index, stop[0], gesture);
         return next.indexOf(stop);
     }
 
@@ -40,16 +46,19 @@ ColumnLayout {
         const after = stops.findIndex(s => s[0] > t);
         const near = stops[after < 0 ? stops.length - 1 : after][1] ?? "#ffffff";
         edited(sorted(stops.concat([[Number(t.toFixed(3)), near]])), false);
+        stopAdded(Number(t.toFixed(3)));
     }
 
     function removed(index) {
         edited(stops.filter((_, k) => k !== index), false);
+        stopRemoved(index);
     }
 
     function recolored(index, hex) {
         const list = stops.map(s => s.slice());
         list[index][1] = hex;
         edited(list, false);
+        stopColored(index, hex);
     }
 
     SceneHold {
@@ -156,7 +165,7 @@ ColumnLayout {
                     icon.name: "list-remove"
                     text: App.tr("Remove the stop")
                     display: QQC2.AbstractButton.IconOnly
-                    enabled: bar.stops.length > 1
+                    enabled: bar.stops.length > bar.least
                     onClicked: bar.removed(index)
                 }
             }

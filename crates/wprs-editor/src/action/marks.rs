@@ -82,6 +82,7 @@ pub enum LayerEdit {
         #[serde(default)]
         alpha: Option<f64>,
     },
+    Figure(super::FigureEdit),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]

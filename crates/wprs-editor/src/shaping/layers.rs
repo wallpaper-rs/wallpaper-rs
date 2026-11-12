@@ -12,9 +12,9 @@ const SIZED: [&str; 5] = ["image", "video", "solid", "adjustment", "spectrum"];
 const TUNABLE: [&str; 9] =
     ["alpha", "size", "count", "speed", "life", "time_scale", "brightness", "color", "points"];
 
-pub(super) type Fields<'a> = [(&'a str, Option<Value>); 7];
+pub(crate) type Fields<'a> = [(&'a str, Option<Value>); 7];
 
-pub(super) fn transform(
+pub(crate) fn transform(
     doc: &Value,
     path: &str,
     fields: Fields,
@@ -126,6 +126,7 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &L) -> Result<Vec<Op>> {
             ops
         }
         L::Grip { .. } | L::Fit { .. } | L::Parent { .. } => super::grips::edit(dir, doc, e)?,
+        L::Figure(f) => crate::figures::edit(dir, doc, f)?,
         L::Blend { layer: id, blend } => {
             let (path, _) = layer(doc, id)?;
             set(doc, &format!("{path}/blend"), json!(blend))

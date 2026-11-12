@@ -9,6 +9,7 @@ ColumnLayout {
     required property var host
     readonly property var rows: Array.isArray(host.value) ? host.value : []
     readonly property bool stops: host.field.widget === "stops"
+    readonly property var owner: stops ? (host.page.view.layers ?? []).find(l => host.field.pointer === l.pointer + "/gradient/stops") ?? null : null
 
     function put(row, column, value) {
         const next = rows.map(pair => pair.slice());
@@ -18,6 +19,14 @@ ColumnLayout {
 
     function number(value) {
         return String(Number(Number(value).toFixed(4)));
+    }
+
+    SceneShapeStops {
+        Layout.fillWidth: true
+        visible: pairs.owner !== null
+        page: pairs.host.page
+        layerId: pairs.owner?.id ?? ""
+        stops: pairs.rows
     }
 
     SceneRepeater {
