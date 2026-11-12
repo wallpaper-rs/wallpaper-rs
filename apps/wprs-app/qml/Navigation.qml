@@ -1,11 +1,49 @@
 import QtQuick
+import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 Kirigami.GlobalDrawer {
+    id: drawer
+
     required property var host
 
+    function holds(item) {
+        for (let at = item; at; at = at.parent) {
+            if (at === drawer.contentItem)
+                return true;
+        }
+        return false;
+    }
+
+    function leave() {
+        if (modal)
+            close();
+        else if (collapsible)
+            collapsed = true;
+        host.pageStack.currentItem?.forceActiveFocus();
+    }
+
     collapsible: true
+    collapseButtonVisible: false
+    focus: modal
+    footer: QQC2.ToolButton {
+        visible: drawer.collapsible
+        icon.name: drawer.collapsed ? "sidebar-expand-left" : "sidebar-collapse-left"
+        text: drawer.collapsed ? "" : App.tr("Close sidebar")
+        onClicked: drawer.collapsed = !drawer.collapsed
+
+        QQC2.ToolTip.visible: drawer.collapsed && hovered
+        QQC2.ToolTip.text: App.tr("Open sidebar")
+        QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
+    }
+
+    Shortcut {
+        sequence: "Escape"
+        enabled: !!drawer.host.activeFocusItem && drawer.holds(drawer.host.activeFocusItem)
+        onActivated: drawer.leave()
+    }
+
     actions: [
         Kirigami.Action {
             text: App.tr("Library")

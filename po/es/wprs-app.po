@@ -2870,6 +2870,14 @@ msgstr "Cómo se ve"
 msgid "Nothing to show yet"
 msgstr "Todavía no hay nada que mostrar"
 
+#: apps/wprs-app/qml/Navigation.qml
+msgid "Close sidebar"
+msgstr "Cerrar el menú lateral"
+
+#: apps/wprs-app/qml/Navigation.qml
+msgid "Open sidebar"
+msgstr "Abrir el menú lateral"
+
 #: apps/wprs-app/qml/Navigation.qml apps/wprs-app/qml/ScenesPage.qml
 msgid "Scenes"
 msgstr "Escenas"
