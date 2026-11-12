@@ -9,6 +9,7 @@ use wprs_scene::{Forge, ForgeMaterial, ForgeShape};
 
 mod edits;
 mod flight;
+mod grabs;
 mod looks;
 mod motion;
 mod picking;

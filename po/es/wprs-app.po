@@ -1748,6 +1748,8 @@ msgid "Masks"
 msgstr "Máscaras"
 
 #: apps/wprs-app/qml/EditPage.qml apps/wprs-app/qml/SceneCanvasLook.qml
+
+#: apps/wprs-app/qml/SceneModelRings.qml apps/wprs-app/qml/SceneRigTouch.qml
 #: apps/wprs-app/qml/SceneSwarmDepth.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
@@ -5293,7 +5295,7 @@ msgstr "Cámara 3D"
 msgid "Field of view"
 msgstr "Campo de visión"
 
-#: apps/wprs-app/qml/SceneCamera3d.qml
+#: apps/wprs-app/qml/SceneCamera3d.qml apps/wprs-app/qml/SceneStageRig.qml
 msgid "Roll"
 msgstr "Giro"
 
@@ -7561,9 +7563,12 @@ msgstr "%1 luces con sombras"
 msgid "Drag to move the model along this direction"
 msgstr "Arrastra para mover el modelo en esta dirección"
 
-#: apps/wprs-app/qml/SceneModelGizmo.qml
-msgid "The position follows a binding; change it in the inspector"
-msgstr "La posición sigue un enlace; cámbiala en el inspector"
+#: apps/wprs-app/qml/SceneModelGizmo.qml apps/wprs-app/qml/SceneModelRings.qml
+msgid ""
+"The position follows a binding; drag with Shift to replace it with a value"
+msgstr ""
+"La posición sigue un enlace; arrastra con Mayús para reemplazarlo por un "
+"valor"
 
 #: apps/wprs-app/qml/SceneModelImport.qml
 msgid "3D model from a file"
@@ -7621,6 +7626,29 @@ msgstr "Clip nuevo del archivo…"
 #: apps/wprs-app/qml/SceneModelMotion.qml
 msgid "Root motion: the clip moves the layer"
 msgstr "Movimiento de raíz: el clip mueve la capa"
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid "Turn %1"
+msgstr "Girar en %1"
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid "Drag along the ring to turn the model around this axis"
+msgstr ""
+"Arrastra a lo largo del anillo para girar el modelo alrededor de este eje"
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid ""
+"The rotation follows a binding; drag with Shift to replace it with a value"
+msgstr ""
+"El giro sigue un enlace; arrastra con Mayús para reemplazarlo por un valor"
+
+#: apps/wprs-app/qml/SceneModelRings.qml
+msgid ""
+"Drag up to push the model away along the line of sight, down to bring it "
+"closer"
+msgstr ""
+"Arrastra hacia arriba para alejar el modelo por la línea de visión, hacia "
+"abajo para acercarlo"
 
 #: apps/wprs-app/qml/SceneModelSwing.qml
 msgid "Hair"
@@ -9369,29 +9397,44 @@ msgid "Drag over the fur to comb it; each stroke can be undone"
 msgstr "Arrastra sobre el pelo para peinarlo; cada trazo se puede deshacer"
 
 #: apps/wprs-app/qml/SceneStageCamera.qml
-msgid "Drag to move the scene camera"
-msgstr "Arrastra para mover la cámara de la escena"
+msgid ""
+"Drag to move the scene camera in the plane of the view, with Ctrl along the "
+"line of sight"
+msgstr ""
+"Arrastra para mover la cámara de la escena en el plano de la vista; con "
+"Ctrl, por la línea de visión"
 
 #: apps/wprs-app/qml/SceneStageCamera.qml
 msgid "Aim"
 msgstr "Mira"
 
 #: apps/wprs-app/qml/SceneStageCamera.qml
-msgid "Drag to move what the scene camera looks at"
-msgstr "Arrastra para mover lo que mira la cámara de la escena"
+msgid ""
+"Drag to move what the scene camera looks at in the plane of the view, with "
+"Ctrl along the line of sight"
+msgstr ""
+"Arrastra para mover lo que mira la cámara de la escena en el plano de la "
+"vista; con Ctrl, por la línea de visión"
 
 #: apps/wprs-app/qml/SceneStagePaths.qml
-msgid "Drag to move this key of the camera path"
-msgstr "Arrastra para mover esta clave del recorrido de cámara"
+msgid ""
+"Drag to move this key of the camera path in the plane of the view, with Ctrl "
+"along the line of sight"
+msgstr ""
+"Arrastra para mover esta clave del camino de cámara en el plano de la vista; "
+"con Ctrl, por la línea de visión"
 
 #: apps/wprs-app/qml/SceneStagePaths.qml
 msgid "Aim at %1 s"
 msgstr "Mira a los %1 s"
 
 #: apps/wprs-app/qml/SceneStagePaths.qml
-msgid "Drag to move the point this key of the camera path looks at"
+msgid ""
+"Drag to move the point this key of the camera path looks at, with Ctrl along "
+"the line of sight"
 msgstr ""
-"Arrastra para mover el punto al que mira esta clave del recorrido de cámara"
+"Arrastra para mover el punto que mira esta clave del camino de cámara; con "
+"Ctrl, por la línea de visión"
 
 #: apps/wprs-app/qml/SceneStagePaths.qml
 msgid "Camera now"
@@ -9400,6 +9443,33 @@ msgstr "Cámara ahora"
 #: apps/wprs-app/qml/SceneStagePaths.qml
 msgid "Where the paths put the camera at this time"
 msgstr "Dónde ponen los recorridos la cámara en este momento"
+
+#: apps/wprs-app/qml/SceneStageRig.qml
+msgid "Drag along the ring to roll the scene camera around its line of sight"
+msgstr ""
+"Arrastra a lo largo del anillo para inclinar la cámara de la escena "
+"alrededor de su línea de visión"
+
+#: apps/wprs-app/qml/SceneStageRig.qml apps/wprs-app/qml/facade/SceneTerms.qml
+msgid "Orbit"
+msgstr "Órbita"
+
+#: apps/wprs-app/qml/SceneStageRig.qml
+msgid "Drag to swing the scene camera around what it looks at"
+msgstr ""
+"Arrastra para hacer girar la cámara de la escena alrededor de lo que mira"
+
+#: apps/wprs-app/qml/SceneStageRig.qml
+msgid "Dolly"
+msgstr "Acercar"
+
+#: apps/wprs-app/qml/SceneStageRig.qml
+msgid ""
+"Drag up to bring the scene camera closer to what it looks at, down to back "
+"away"
+msgstr ""
+"Arrastra hacia arriba para acercar la cámara de la escena a lo que mira, "
+"hacia abajo para alejarla"
 
 #: apps/wprs-app/qml/SceneSwarm.qml
 msgid "Drag to move this control point for this layer only"
@@ -14094,10 +14164,6 @@ msgstr "Operación"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Options"
 msgstr "Opciones"
-
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-msgid "Orbit"
-msgstr "Órbita"
 
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Origin"

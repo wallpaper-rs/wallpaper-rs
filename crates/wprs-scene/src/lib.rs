@@ -43,6 +43,7 @@ mod form;
 mod fx;
 mod glow;
 mod gltf;
+pub mod grip;
 mod guard;
 mod helper;
 mod hitbox;

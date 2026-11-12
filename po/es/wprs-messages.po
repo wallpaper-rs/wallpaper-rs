@@ -2322,6 +2322,7 @@ msgid "a zoom is a factor above 0"
 msgstr "un zoom es un factor mayor que 0"
 
 #: crates/wprs-editor/src/stage3d/camera.rs
+#: crates/wprs-editor/src/stage3d/grab.rs
 msgid "%1 is not a model that is shown"
 msgstr "%1 no es un modelo que se muestre"
 
@@ -2390,6 +2391,32 @@ msgstr "solo las capas planas prueban la profundidad"
 msgid "only layers inside a 3D group test depth"
 msgstr "solo las capas dentro de un grupo 3D prueban la profundidad"
 
+#: crates/wprs-editor/src/stage3d/grab.rs
+msgid "%1 follows a binding: change the binding or replace it with the value"
+msgstr "%1 sigue un enlace: cambia el enlace o reemplázalo por el valor"
+
+#: crates/wprs-editor/src/stage3d/grab.rs
+msgid "this handle does not move a point"
+msgstr "esta manija no mueve un punto"
+
+#: crates/wprs-editor/src/stage3d/grab.rs
+msgid "the 3D view shows nothing to drag on"
+msgstr "la vista 3D no muestra nada sobre lo que arrastrar"
+
+#: crates/wprs-editor/src/stage3d/grab.rs
+msgid "a drag goes between two points on the view"
+msgstr "un arrastre va entre dos puntos de la vista"
+
+#: crates/wprs-editor/src/stage3d/grab/aimed.rs
+#: crates/wprs-editor/src/stage3d/paths.rs
+msgid "there is no camera path \"%1\""
+msgstr "no hay ningún recorrido de cámara «%1»"
+
+#: crates/wprs-editor/src/stage3d/grab/aimed.rs
+#: crates/wprs-editor/src/stage3d/paths.rs
+msgid "the path has no key at %1 s"
+msgstr "el recorrido no tiene ninguna clave a los %1 s"
+
 #: crates/wprs-editor/src/stage3d/maps.rs
 msgid ""
 "%1 is not a map of a material; use base, orm, normal, occlusion, emissive or "
@@ -2431,14 +2458,6 @@ msgstr ""
 #: crates/wprs-editor/src/stage3d/painted.rs
 msgid "a stroke of a map has 1 to %1 points and a color of numbers"
 msgstr "un trazo de un mapa tiene de 1 a %1 puntos y un color hecho de números"
-
-#: crates/wprs-editor/src/stage3d/paths.rs
-msgid "there is no camera path \"%1\""
-msgstr "no hay ningún recorrido de cámara «%1»"
-
-#: crates/wprs-editor/src/stage3d/paths.rs
-msgid "the path has no key at %1 s"
-msgstr "el recorrido no tiene ninguna clave a los %1 s"
 
 #: crates/wprs-editor/src/stage3d/paths.rs
 msgid "a camera path keeps at least 2 keys"

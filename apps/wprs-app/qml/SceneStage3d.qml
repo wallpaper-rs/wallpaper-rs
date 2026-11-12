@@ -24,6 +24,19 @@ Item {
             }, true);
     }
 
+    function grab(what, handle, from, to, replace) {
+        page.run("scene3d", {
+                "grab": {
+                    "what": what,
+                    "handle": handle,
+                    "from": from,
+                    "to": to,
+                    "time": page.editor.time,
+                    "replace": replace === true
+                }
+            }, true);
+    }
+
     function place(model, field, value) {
         const rounded = value.map(v => Math.round(v * 1000) / 1000);
         if (model.held[field] === "bound")

@@ -29,6 +29,7 @@ pub enum Edit3d {
     Tones(TonesEdit),
     Shadows(super::ShadowEdit),
     Path(super::PathEdit),
+    Grab(super::Grab),
     NewMaterial {
         name: String,
     },

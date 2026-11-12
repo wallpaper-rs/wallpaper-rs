@@ -22,6 +22,10 @@ impl Seen {
         let [x, y, _] = self.eye.project(p, self.size)?;
         Some(self.to.apply([x, y]))
     }
+
+    pub(super) fn back(&self, p: [f32; 2]) -> [f32; 2] {
+        self.to.inverse().apply(p)
+    }
 }
 
 fn corners([lo, hi]: [[f32; 3]; 2]) -> impl Iterator<Item = [f32; 3]> {
@@ -92,6 +96,7 @@ fn model(doc: &Value, seen: &Seen, p: &wprs_scene::Placed, stage: &str) -> Optio
     Some(json!({ "id": p.layer.id, "pointer": pointer, "stage": stage, "at": px(at), "arms": arms,
         "length": round(length), "depth": round(depth), "box": [round(lo[0]), round(lo[1]), round(hi[0]), round(hi[1])],
         "position": layer["position"], "rotation": layer["rotation"], "scale": layer["scale"], "now": super::turns::now(p),
+        "turns": super::rings::turns(seen, c, length * 0.9),
         "held": { "position": held("position"), "rotation": held("rotation"), "scale": held("scale") } }))
 }
 
@@ -154,10 +159,8 @@ pub fn stage(dir: &Path, doc: &Value, t: f64) -> Value {
         if !view.through && handles.is_null() {
             lines = frustum(&seen, &cam);
             let up: [f32; 3] = std::array::from_fn(|i| cam.at[i] + cam.basis().1[i] * cam.distance() * 0.25);
-            let (right, upward, _) = seen.eye.basis();
             handles = json!({ "eye": seen.at(cam.at).map(px), "center": seen.at(cam.center).map(px),
-                "up": seen.at(up).map(px), "unit": round(seen.eye.unit(s.size[1])),
-                "right": right.map(round), "upward": upward.map(round) });
+                "up": seen.at(up).map(px), "rig": super::rings::camera(&seen, &cam) });
         }
     }
     let groups: Vec<String> = crate::layers::walk(doc)

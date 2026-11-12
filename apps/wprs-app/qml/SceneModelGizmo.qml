@@ -19,14 +19,12 @@ Item {
         return model.held[field] !== "bound";
     }
 
-    function slide(k, to, done) {
-        const at = model.at, arm = model.arms[k];
-        const d = [arm[0] - at[0], arm[1] - at[1]];
-        const along = ((to[0] - at[0]) * d[0] + (to[1] - at[1]) * d[1]) / Math.max(d[0] * d[0] + d[1] * d[1], 1e-6);
-        const p = three("position");
-        p[k] += (along - 1) * model.length;
-        if (done)
-            stage.place(model, "position", p);
+    function grab(handle, from, to, held) {
+        stage.grab({
+            "model": {
+                "layer": model.id
+            }
+        }, handle, from, to, model.held[handle.startsWith("turn") ? "rotation" : "position"] === "bound" && (held & Qt.ShiftModifier));
     }
 
     Rectangle {
@@ -64,16 +62,20 @@ Item {
             ratio: gizmo.ratio
             label: ["X", "Y", "Z"][index]
             tint: gizmo.tints[index]
-            tip: gizmo.free("position") ? App.tr("Drag to move the model along this direction") : App.tr("The position follows a binding; change it in the inspector")
+            tip: gizmo.free("position") ? App.tr("Drag to move the model along this direction") : App.tr("The position follows a binding; drag with Shift to replace it with a value")
             opacity: gizmo.free("position") ? 1 : 0.4
             onMoved: (to, done) => {
-                if (gizmo.free("position"))
-                    gizmo.slide(index, to, done);
+                if (done)
+                    gizmo.grab(["x", "y", "z"][index], modelData, to, held);
             }
         }
     }
 
     SceneModelTurn {
+        gizmo: gizmo
+    }
+
+    SceneModelRings {
         gizmo: gizmo
     }
 }

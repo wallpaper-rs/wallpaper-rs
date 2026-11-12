@@ -20,7 +20,8 @@ pub use crate::action::{
 };
 pub use crate::action::{AnimEdit, EffectsEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use crate::action::{
-    CameraEdit, Edit3d, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit, ViewEdit,
+    CameraEdit, Edit3d, Grab, Grabbed, Handle, MaterialEdit, MaterialStroke, ModelEdit, ModelSet, TonesEdit,
+    ViewEdit,
 };
 pub use crate::action::{
     CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, ScriptEdit, Takes, TemplateEdit,

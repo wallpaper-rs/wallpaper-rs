@@ -17,19 +17,14 @@ Item {
                     })) || "null");
     }
 
-    function moveKey(path, key, field, to) {
-        const h = handles, from = field === "eye" ? key.at : key.aim, k = key["reach_" + field] ?? h.unit;
-        const d = [to[0] - from[0], to[1] - from[1]];
-        const args = {
-            "path": path,
-            "time": key.t
-        };
-        args[field] = key[field].map((v, i) => Math.round((v + (h.right[i] * d[0] - h.upward[i] * d[1]) * k) * 1000) / 1000);
-        stage.page.run("scene3d", {
-                "path": {
-                    "key": args
-                }
-            }, true);
+    function moveKey(path, key, aim, to, held) {
+        stage.grab({
+            "key": {
+                "path": path,
+                "key": key.t,
+                "aim": aim
+            }
+        }, held & Qt.ControlModifier ? "depth" : "plane", aim ? key.aim : key.at, to);
     }
 
     visible: handles !== null && (info?.paths ?? []).length > 0
@@ -80,10 +75,10 @@ Item {
                     ratio: paths.stage.ratio
                     label: App.tr("%1 at %2 s", one.modelData.id, modelData.t)
                     tint: Kirigami.Theme.positiveTextColor
-                    tip: App.tr("Drag to move this key of the camera path")
+                    tip: App.tr("Drag to move this key of the camera path in the plane of the view, with Ctrl along the line of sight")
                     onMoved: (to, done) => {
                         if (done)
-                            paths.moveKey(one.modelData.id, modelData, "eye", to);
+                            paths.moveKey(one.modelData.id, modelData, false, to, held);
                     }
                 }
             }
@@ -110,10 +105,10 @@ Item {
                     square: true
                     label: App.tr("Aim at %1 s", modelData.t)
                     tint: Kirigami.Theme.positiveTextColor
-                    tip: App.tr("Drag to move the point this key of the camera path looks at")
+                    tip: App.tr("Drag to move the point this key of the camera path looks at, with Ctrl along the line of sight")
                     onMoved: (to, done) => {
                         if (done)
-                            paths.moveKey(one.modelData.id, modelData, "center", to);
+                            paths.moveKey(one.modelData.id, modelData, true, to, held);
                     }
                 }
             }

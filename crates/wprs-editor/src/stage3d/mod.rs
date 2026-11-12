@@ -11,6 +11,7 @@ mod cost;
 mod debug;
 mod edit;
 mod gizmo;
+mod grab;
 mod info;
 mod maps;
 mod material;
@@ -19,6 +20,7 @@ mod painted;
 mod paths;
 mod picked;
 mod pose;
+mod rings;
 mod shadows;
 mod spend;
 mod sphere;
@@ -62,6 +64,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
         Edit3d::Tones(t) => camera::tones(doc, t),
         Edit3d::Shadows(s) => shadows::edit(doc, s),
         Edit3d::Path(p) => paths::edit(dir, doc, p),
+        Edit3d::Grab(g) => grab::grab(dir, doc, g),
         Edit3d::NewMaterial { name } => newmat::create(dir, doc, name),
         Edit3d::MaterialCode { name, text } => newmat::write(dir, doc, name, text),
         Edit3d::Key(k) => picked::key_from(dir, doc, k),

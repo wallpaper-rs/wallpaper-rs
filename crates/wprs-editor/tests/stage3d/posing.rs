@@ -80,22 +80,17 @@ fn camera_path_keys_and_their_aims_follow_the_cursor_at_their_own_depth() {
     let far = json!({ "path": "tour", "time": 2, "eye": [0, 0.5, -10], "center": [0, 0, -2] });
     super::edit(&mut p, json!({ "path": { "key": near } })).unwrap();
     super::edit(&mut p, json!({ "path": { "key": far } })).unwrap();
-    let handles = ask(&p, json!({ "stage3d": { "time": 0 } }))["handles"].clone();
     let keys = ask(&p, json!({ "paths3d": { "time": 0 } }))["paths"][0]["keys"].clone();
     let f = |v: &Value| v.as_f64().unwrap();
-    let (a, b) = (f(&keys[0]["reach_eye"]), f(&keys[1]["reach_eye"]));
-    assert!((b / a - 7.5).abs() < 0.2, "{a} {b}");
     for (k, field, shown) in [(0, "eye", "at"), (1, "eye", "at"), (1, "center", "aim")] {
         let key = &keys[k];
-        let reach = f(&key[format!("reach_{field}")]);
-        let moved: Vec<f64> =
-            (0..3).map(|i| f(&key[field][i]) + f(&handles["right"][i]) * 30.0 * reach).collect();
-        let mut args = json!({ "path": "tour", "time": key["t"] });
-        args[field] = json!(moved);
-        super::edit(&mut p, json!({ "path": { "key": args } })).unwrap();
+        let from = [f(&key[shown][0]), f(&key[shown][1])];
+        let what = json!({ "key": { "path": "tour", "key": key["t"], "aim": field == "center" } });
+        let grab = json!({ "what": what, "handle": "plane", "from": from, "to": [from[0] + 30.0, from[1]] });
+        super::edit(&mut p, json!({ "grab": grab })).unwrap();
         let after = ask(&p, json!({ "paths3d": { "time": 0 } }))["paths"][0]["keys"][k][shown].clone();
-        let dx = f(&after[0]) - f(&key[shown][0]);
-        assert!((dx - 30.0).abs() < 1.5, "key {k} {field} moved {dx} px for 30");
+        let dx = f(&after[0]) - from[0];
+        assert!((dx - 30.0).abs() < 0.5, "key {k} {field} moved {dx} px for 30");
     }
 }
 

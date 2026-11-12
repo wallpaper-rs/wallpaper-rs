@@ -76,7 +76,10 @@ pub const ABOUT: [(&str, &str); 78] = [
         "Make a grey depth map of a picture with the depth model and use it in an effect parameter",
     ),
     ("ambient", "Set the ambient light"),
-    ("scene3d", "Edit a 3D layer: models, materials, camera, view, tones, shadows and camera paths"),
+    (
+        "scene3d",
+        "Edit a 3D layer: models, materials, camera, view, tones, shadows, camera paths and drags of the 3D handles",
+    ),
     ("animate", "Edit the animation of a mesh or model layer: clips, presets and morphs"),
     (
         "effects",

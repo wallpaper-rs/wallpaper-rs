@@ -6,6 +6,7 @@ mod declared;
 mod exports;
 mod figures;
 mod glows;
+mod grab;
 mod grips;
 mod ids;
 mod lamps;
