@@ -1212,7 +1212,7 @@ manifest '{"preset": {"base": {"id": "org.example.dusk", "version": "1.2.3"}, "v
 
 ## Starting points, building and applying
 
-`wprs-ctl scene new DIR --from empty|particles|parallax|clock|web|preset [--id ID] [--title TITLE] [--locale
+`wprs-ctl scene new DIR --from empty|particles|parallax|clock|web|preset|assets [--id ID] [--title TITLE] [--locale
 LANGUAGE]` and the *Scenes* page of the app create a folder from a starting point, with the id
 `org.example.<folder name>` (accents dropped, so `Canción` becomes `cancion`) and the folder name as
 title unless given: an empty canvas, falling particles with a density property, layered hills that
@@ -1220,7 +1220,10 @@ follow the pointer, or a clock with a color property. The manifest is a valid
 `wallpaper-rs.wpak/2` one: `default_locale` is the language of the title, the first language of the
 desktop unless given (`es` for `es_ES.UTF-8`), or `en` when the labels of the properties, in English
 and Spanish, lack it; `content` `general`, `photosensitive` `false`, `origin` `original`, license
-`CC0-1.0`, and the inputs and features the scene uses.
+`CC0-1.0`, and the inputs and features the scene uses. The starting point `assets` makes an empty
+assets package (`kind` `assets`, entry `assets.json`, feature `assets`) that is edited like a scene: its
+layers, particle systems, scripts and effects are the parts it offers, built and shared as in "Shared
+parts"; the *Scenes* page lists it as *Assets package*.
 `wprs-ctl scene open DIR --from FILE.wpak` extracts a scene package into an empty folder, which is
 how the app edits a copy of a scene from the library. The copy drops `manifest.json.minisig`,
 which signed the manifest of the original author, and gets the id `<id>.copy`, so it never takes

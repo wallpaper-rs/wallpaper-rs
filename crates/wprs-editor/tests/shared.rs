@@ -156,3 +156,35 @@ fn bad_imports_and_offers_are_refused() {
     let gone = [Pick::parse("layer:gone").unwrap()];
     assert!(make(&from.dir, &from.doc, &gone, &root.path().join("gone"), &offer).is_err());
 }
+
+#[test]
+fn an_assets_starter_is_built_and_imported_with_the_credit_of_its_author() {
+    let root = tempfile::tempdir().unwrap();
+    state();
+    let mut doc = starter("assets", "org.example.kit", "Kit", "en").unwrap();
+    doc["manifest"]["authors"] = json!(["Kit Maker"]);
+    doc["manifest"]["license"] = json!("CC-BY-4.0");
+    let mut kit = Project::create(&root.path().join("kit"), doc).unwrap();
+    assert_eq!(kit.doc["manifest"]["kind"], "assets");
+    picture(&root.path().join("sky.png"), [10, 20, 30]);
+    let sky = Action::Import { file: root.path().join("sky.png"), id: None, linear: false, atlas: None };
+    kit.act(&sky).unwrap();
+    let layer = json!({"add_layer": {"kind": "image", "id": "backdrop"}});
+    kit.act(&serde_json::from_value(layer).unwrap()).unwrap();
+    kit.save().unwrap();
+    let wpak = root.path().join("kit.wpak");
+    package::build_saved(&kit.dir, &kit.doc, &wpak, None).unwrap();
+    let listed = stock::browse(&wpak, None).unwrap();
+    assert_eq!(listed["parts"][0]["key"], "layer:backdrop");
+    assert_eq!(listed["parts"][0]["files"][0]["attribution"], "Kit Maker");
+    let mut scene = target(root.path(), "scene");
+    let wanted = ImportAssets { package: wpak, parts: vec!["layer:backdrop".into()] };
+    scene.act(&Action::ImportAssets(wanted)).unwrap();
+    let credit = &scene.doc["manifest"]["credits"][0];
+    assert_eq!(credit["source"], json!({ "id": "org.example.kit", "version": "0.1.0" }));
+    assert_eq!(
+        (credit["license"].as_str(), credit["attribution"].as_str()),
+        (Some("CC-BY-4.0"), Some("Kit Maker"))
+    );
+    assert_eq!(scene.doc["manifest"]["origin"]["derived_from"][0]["author"], "Kit Maker");
+}

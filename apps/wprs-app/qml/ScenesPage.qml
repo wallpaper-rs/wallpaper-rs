@@ -10,7 +10,7 @@ Kirigami.ScrollablePage {
 
     property var scenes: []
     property var projects: JSON.parse(helper.projects() || "[]")
-    readonly property var starters: [["empty", "document-new"], ["particles", "weather-snow"], ["parallax", "view-list-details"], ["clock", "clock"], ["web", "text-html"], ["preset", "color-management"], ["image", "image-x-generic"], ["video", "video-x-generic"]]
+    readonly property var starters: [["empty", "document-new"], ["particles", "weather-snow"], ["parallax", "view-list-details"], ["clock", "clock"], ["web", "text-html"], ["preset", "color-management"], ["image", "image-x-generic"], ["video", "video-x-generic"], ["assets", "package-x-generic"]]
 
     function exercise() {
         App.compose(helper.folderFor("check"), "empty", "");

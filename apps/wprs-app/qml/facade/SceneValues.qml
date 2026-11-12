@@ -188,6 +188,7 @@ QtObject {
             "preset": App.tr("Preset"),
             "mesh": App.tr("Mesh"),
             "model": App.tr("3D model"),
-            "group3d": App.tr("3D group")
+            "group3d": App.tr("3D group"),
+            "assets": App.tr("Assets package")
         })
 }

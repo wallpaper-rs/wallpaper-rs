@@ -63,6 +63,7 @@ fn layers(starter: &str) -> Result<(Value, Value, Value)> {
                 &(STARTERS
                     .iter()
                     .chain(&crate::pages::PAGE_STARTERS)
+                    .chain(&crate::bundles::BUNDLE_STARTERS)
                     .copied()
                     .collect::<Vec<_>>()
                     .join(", "))
@@ -85,7 +86,9 @@ pub fn starter(name: &str, id: &str, title: &str, locale: &str) -> Result<Value>
     let base = json!({"schema": wprs_format::SCHEMA, "id": id, "version": "0.1.0", "title": title,
         "default_locale": locale, "license": "CC0-1.0", "origin": {"kind": "original"},
         "content": {"rating": "general"}, "photosensitive": false});
-    if let Some(mut doc) = crate::pages::manifest(name, base.clone()) {
+    let made =
+        crate::pages::manifest(name, base.clone()).or_else(|| crate::bundles::document(name, base.clone()));
+    if let Some(mut doc) = made {
         let ops = sync(&doc, &Default::default(), None);
         apply(&mut doc, &ops)?;
         return Ok(doc);

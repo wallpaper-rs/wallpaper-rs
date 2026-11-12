@@ -12989,6 +12989,10 @@ msgstr "Reloj de texto"
 msgid "3D group"
 msgstr "Grupo 3D"
 
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Assets package"
+msgstr "Paquete de recursos"
+
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Color fringes"
 msgstr "Bordes de color"

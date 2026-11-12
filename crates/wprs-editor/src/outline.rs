@@ -126,7 +126,7 @@ pub fn outline(project: &Project, time: f64, files: &[Problem]) -> Value {
         "kinds": KINDS, "screen_sizes": crate::action::SCREENS.map(|(name, size)| json!({"name": name, "size": size})), "starters": STARTERS, "easings": wprs_scene::easings(),
         "effects": wprs_scene::builtin().iter().map(|d| d.id.as_str()).chain(own(doc)).collect::<Vec<_>>(),
         "effect_names": names(project), "effect_catalog": catalog(project),
-        "kind": crate::pages::kind(doc), "page_starters": crate::pages::PAGE_STARTERS,
+        "kind": crate::pages::kind(doc), "page_starters": crate::pages::PAGE_STARTERS, "bundle_starters": crate::bundles::BUNDLE_STARTERS,
         "files": if crate::pages::scened(doc) { Vec::new() } else { crate::pages::files(&project.dir, doc) }})
 }
 
