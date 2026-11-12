@@ -4604,6 +4604,14 @@ msgstr "Ajustar"
 msgid "Test the pointer and clicks"
 msgstr "Probar el puntero y los clics"
 
+#: apps/wprs-app/qml/SceneCaptureZone.qml
+msgid "Captures %1 × %2 px; the most is %3 × %4"
+msgstr "Captura %1 × %2 px; el máximo es %3 × %4"
+
+#: apps/wprs-app/qml/SceneCaptureZone.qml
+msgid "Size the captured part; the layer keeps its scale"
+msgstr "Cambia el tamaño de la parte capturada; la capa conserva su escala"
+
 #: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneLightTools.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Length"

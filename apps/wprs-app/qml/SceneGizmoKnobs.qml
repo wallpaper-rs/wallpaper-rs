@@ -13,6 +13,7 @@ SceneSeat {
     readonly property var leftMid: middle(corners[3], corners[0])
     readonly property var mid: middle(corners[0], corners[2])
     readonly property real reach: Kirigami.Units.gridUnit / ratio
+    readonly property bool captures: model.kind === "adjustment" && Array.isArray(JSON.parse(page.editor.value(model.pointer + "/size") || "null"))
     property var grabbed: null
 
     function middle(a, b) {
@@ -51,6 +52,7 @@ SceneSeat {
             at: knobs.corners[index]
             ratio: knobs.ratio
             square: true
+            visible: Array.isArray(at) && !knobs.captures
             tip: App.tr("Scale from the pivot; Shift keeps the proportions")
             onMoved: to => knobs.grip({
                         "scale": {
@@ -71,6 +73,7 @@ SceneSeat {
             at: knobs.middle(knobs.corners[index], knobs.corners[(index + 1) % 4])
             ratio: knobs.ratio
             square: true
+            visible: Array.isArray(at) && !knobs.captures
             width: Kirigami.Units.gridUnit * 0.55
             tip: App.tr("Stretch one side; Ctrl skews the layer along this edge")
             onMoved: to => knobs.grip((held & Qt.ControlModifier) ? {

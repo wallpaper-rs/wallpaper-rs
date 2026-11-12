@@ -41,16 +41,29 @@ Item {
             });
     }
 
-    visible: gizmo !== null && mask !== null
+    readonly property bool masking: gizmo !== null && mask !== null
 
-    SceneMaskFrame {
-        overlay: overlay
-        shown: overlay.gizmo
+    SceneCaptureZone {
+        anchors.fill: parent
+        page: overlay.page
+        ratio: overlay.ratio
     }
 
-    SceneMaskFrame {
-        overlay: overlay
-        shown: overlay.source
-        outlined: true
+    Item {
+        id: masked
+
+        anchors.fill: parent
+        visible: overlay.masking
+
+        SceneMaskFrame {
+            overlay: overlay
+            shown: overlay.gizmo
+        }
+
+        SceneMaskFrame {
+            overlay: overlay
+            shown: overlay.source
+            outlined: true
+        }
     }
 }

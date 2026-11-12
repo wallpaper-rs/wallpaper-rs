@@ -1,9 +1,9 @@
 use super::layers::transform;
-use crate::action::LayerEdit as L;
+use crate::action::{Grip, LayerEdit as L};
 use crate::actions::layer;
 use crate::ops::{Op, apply, set};
 use crate::seats::grips::{Moved, decompose, fit, grip, tidy};
-use crate::seats::{parents, seats};
+use crate::seats::{canvas_of, parents, seats};
 use anyhow::{Result, anyhow, ensure};
 use serde_json::{Value, json};
 use std::path::Path;
@@ -78,6 +78,12 @@ fn reparent(
 
 pub(super) fn edit(dir: &Path, doc: &Value, e: &L) -> Result<Vec<Op>> {
     match e {
+        L::Grip { layer: id, grip: Grip::Size { corner }, to, at, .. } => {
+            let (path, _) = layer(doc, id)?;
+            let all = seats(dir, doc, at.unwrap_or(0.0));
+            let size = crate::onscreen::resize(found(&all, id)?, canvas_of(doc), *corner, *to)?;
+            super::refused(dir, doc, set(doc, &format!("{path}/size"), json!(size)))
+        }
         L::Grip { layer: id, grip: g, to, snap, at, replace } => {
             let (path, _) = layer(doc, id)?;
             let t = at.unwrap_or(0.0);

@@ -1084,6 +1084,10 @@ msgstr "%1 no es una carpeta vacía"
 msgid "%1 is not a package id"
 msgstr "%1 no es un id de paquete"
 
+#: crates/wprs-editor/src/onscreen/capture.rs
+msgid "the layer %1 captures no region"
+msgstr "la capa %1 no captura ninguna región"
+
 #: crates/wprs-editor/src/ops.rs
 msgid "\"%1\" is not a JSON Pointer"
 msgstr "«%1» no es un JSON Pointer"

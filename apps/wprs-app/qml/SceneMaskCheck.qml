@@ -46,7 +46,8 @@ QtObject {
                 "feather": 20
             });
         const until = Date.now() + 700;
-        while (Date.now() < until) {}
+        while (Date.now() < until) {
+        }
         overlay.put({
                 "feather": 30
             });
@@ -62,7 +63,7 @@ QtObject {
         panel.put({
                 "off": true
             });
-        if (read(use + "/mask") !== null || overlay.visible)
+        if (read(use + "/mask") !== null || overlay.masking)
             throw new Error("mask: the mask was not taken off");
         panel.destroy();
         overlay.destroy();

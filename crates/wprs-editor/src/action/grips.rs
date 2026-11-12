@@ -15,6 +15,9 @@ pub enum Grip {
     Skew {
         edge: [f64; 2],
     },
+    Size {
+        corner: [f64; 2],
+    },
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]

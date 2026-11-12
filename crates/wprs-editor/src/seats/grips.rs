@@ -121,6 +121,7 @@ pub fn grip(
                 ..Moved::default()
             }
         }
+        Grip::Size { .. } => Moved::default(),
         Grip::Skew { edge } => {
             ensure!(sized, bare);
             let p = arm(me, *edge);
