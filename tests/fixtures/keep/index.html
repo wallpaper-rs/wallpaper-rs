@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+<body style="margin:0">
+<script>
+document.body.style.background = localStorage.getItem("keep") === "yes" ? "#00ff00" : "#0000ff";
+localStorage.setItem("keep", "yes");
+</script>
+</body>
+</html>

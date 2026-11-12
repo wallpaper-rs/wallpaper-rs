@@ -56,6 +56,9 @@ else
   [ ! -e "$XDG_DATA_HOME/wallpaper-rs/web/org.example.tint/kept" ] || fail "the data of the page stayed"
   wait_for 10 fresh "$old" || fail "the page did not start again after its data was cleared: $(helper)"
   seen "$web" "0, 255, 0"
+  source "$(dirname "$0")"/integration-web-keep.sh
+  ctl lib apply "$tint" -o TEST-W 2>/dev/null
+  seen "$web" "0, 255, 0"
   old=$(helper)
   [ "$old" != None ] || fail "the state names no web helper for the page"
   ctl pack build "$ROOT/tests/fixtures/glow" -o "$pages/glow.wpak" >/dev/null && ctl lib import "$pages/glow.wpak" --wait >/dev/null
