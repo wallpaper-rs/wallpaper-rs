@@ -1,4 +1,5 @@
 import QtQuick
+import io.github.wallpaper_rs.app
 
 Item {
     id: overlays
@@ -27,7 +28,7 @@ Item {
             overlays.forceActiveFocus();
         }
 
-        target: overlays.page
+        target: SceneFocus
     }
 
     Keys.onPressed: event => {

@@ -114,7 +114,7 @@ ColumnLayout {
             onTapped: {
                 canvas.page.picking = "";
                 canvas.page.editor.select("/scene/canvas");
-                canvas.page.canvasWanted();
+                canvas.SceneFocus.canvasWanted();
             }
         }
 
