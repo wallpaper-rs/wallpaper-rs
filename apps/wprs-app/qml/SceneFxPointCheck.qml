@@ -43,9 +43,31 @@ QtObject {
         if (!gizmo)
             throw new Error("effect points: the layer has no handles");
         overlay.destroy();
+        generic(id);
         captured();
         while (page.view.history.done.length > steps)
             page.run("undo");
+    }
+
+    function generic(id) {
+        page.run("effects", {
+            "add": {
+                "layer": id,
+                "effect": "waves"
+            }
+        });
+        const use = "/scene/layers/0/effects/" + ((read("/scene/layers/0/effects") ?? []).length - 1);
+        page.editor.select(use);
+        const phase = page.fields.find(field => field.key === "phase");
+        for (const name of ["white", "black", "noise", "normal_flat"])
+            if (!phase || phase.widget !== "ref:image" || !phase.options.includes(name))
+                throw new Error("effect pictures: the picture of a texture does not offer " + name + ": " + JSON.stringify(phase?.options));
+        page.run("set", {
+            "pointer": use + "/params/phase",
+            "value": "noise"
+        });
+        if (read(use + "/params/phase") !== "noise")
+            throw new Error("effect pictures: a generic picture was not taken: " + page.editor.error);
     }
 
     function captured() {
