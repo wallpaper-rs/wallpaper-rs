@@ -182,7 +182,9 @@ msgstr "¿Dejar que un fondo siga el puntero?"
 msgid ""
 "Let “%1” follow the pointer? Only its latest position over the screen "
 "reaches the wallpaper, and it is never kept."
-msgstr "¿Dejar que «%1» siga el puntero? Al fondo solo llega su última posición sobre la pantalla, y nunca se guarda."
+msgstr ""
+"¿Dejar que «%1» siga el puntero? Al fondo solo llega su última posición "
+"sobre la pantalla, y nunca se guarda."
 
 #: apps/wprsd/src/words.rs
 msgid ""

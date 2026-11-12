@@ -746,7 +746,8 @@ and redo restore both with the rest of the step, and setting,
 adding, removing or moving anything under `/manifest/requires/features` is refused, except adding
 or removing `locale_files`, which the author chooses (a check box under the computed list). The same step sets `permissions.rgb` of a scene while some layer has `rgb` on and drops it when none does,
 whatever the edit (the `rgb` action, a `set`, adding, copying or removing a layer); a web page keeps the
-switch of its preview. A folder
+switch of its preview and the *Sends its colors to the RGB lighting* box among its inputs, and the
+inspector does not offer `permissions.rgb` for a scene, which keeps it in step itself. A folder
 edited by hand may lack them: a missing input is an error and a missing feature a warning, and
 `build` and `apply` first record the step `sync` that fills them and save. Problems also cover the
 rules of `features::check` and its warnings (a declared `audio`, `pointer`, `clicks`, `media` or

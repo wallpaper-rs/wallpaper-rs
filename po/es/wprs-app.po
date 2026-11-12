@@ -1061,7 +1061,10 @@ msgid ""
 "The sound is turned into levels on this computer while the wallpaper is "
 "shown; nothing is recorded, kept or sent, and the desktop may show a "
 "microphone indicator."
-msgstr "Mientras se muestra el fondo, el sonido se convierte en niveles en este equipo; no se graba, no se guarda ni se envía, y el escritorio puede mostrar un indicador de micrófono."
+msgstr ""
+"Mientras se muestra el fondo, el sonido se convierte en niveles en este "
+"equipo; no se graba, no se guarda ni se envía, y el escritorio puede mostrar "
+"un indicador de micrófono."
 
 #: apps/wprs-app/qml/Consent.qml apps/wprs-app/qml/SceneBind.qml
 
@@ -1073,7 +1076,9 @@ msgstr "Seguir el puntero"
 msgid ""
 "Only the latest pointer position over this screen reaches the wallpaper; "
 "positions are never kept and keys are never read."
-msgstr "Al fondo solo le llega la última posición del puntero sobre esta pantalla; las posiciones nunca se guardan y las teclas nunca se leen."
+msgstr ""
+"Al fondo solo le llega la última posición del puntero sobre esta pantalla; "
+"las posiciones nunca se guardan y las teclas nunca se leen."
 
 #: apps/wprs-app/qml/Consent.qml apps/wprs-app/qml/SceneControls.qml
 msgid "Take clicks and taps"
@@ -1083,7 +1088,9 @@ msgstr "Recibir clics y toques"
 msgid ""
 "Only real clicks and taps on the wallpaper of this screen reach it; they are "
 "never kept and keys are never read."
-msgstr "Solo le llegan al fondo los clics y toques reales sobre esta pantalla; nunca se guardan y nunca se leen las teclas."
+msgstr ""
+"Solo le llegan al fondo los clics y toques reales sobre esta pantalla; nunca "
+"se guardan y nunca se leen las teclas."
 
 #: apps/wprs-app/qml/Consent.qml apps/wprs-app/qml/SceneControls.qml
 msgid "Show what the media player plays"
@@ -1094,7 +1101,10 @@ msgid ""
 "While the wallpaper is shown, the title, artist, album, cover and progress "
 "of what a media player on this computer plays reach it; nothing of it is "
 "kept, logged or sent."
-msgstr "Mientras el fondo se ve, le llegan el título, el artista, el álbum, la carátula y el avance de lo que suena en un reproductor de este equipo; nada de eso se guarda, se registra ni se envía."
+msgstr ""
+"Mientras el fondo se ve, le llegan el título, el artista, el álbum, la "
+"carátula y el avance de lo que suena en un reproductor de este equipo; nada "
+"de eso se guarda, se registra ni se envía."
 
 #: apps/wprs-app/qml/Consent.qml apps/wprs-app/qml/SceneControls.qml
 msgid "Show what plays even though it can reach the network"
@@ -3731,6 +3741,16 @@ msgid ""
 msgstr ""
 "Una página no puede saber qué entradas usa, así que decláralas aquí; se "
 "pregunta al usuario antes de que la página reciba alguna."
+
+#: apps/wprs-app/qml/PackageInputs.qml
+msgid "Sends its colors to the RGB lighting"
+msgstr "Envía sus colores a la iluminación RGB"
+
+#: apps/wprs-app/qml/PackageInputs.qml
+msgid ""
+"The page calls window.wprs.rgb.setImage; the user is asked before any color "
+"reaches the keyboard, mouse or other lights."
+msgstr "La página llama a window.wprs.rgb.setImage; se le pregunta a quien la usa antes de que cualquier color llegue al teclado, al ratón o a otras luces."
 
 #: apps/wprs-app/qml/PackageInputs.qml
 msgid "Reaches the network (set by the origins above)"
@@ -6409,7 +6429,9 @@ msgstr "Dejar que los clics y toques de esta pantalla lleguen a su fondo"
 msgid ""
 "Clicks and taps cannot reach the wallpaper of this screen here, so this "
 "wallpaper does not react to them."
-msgstr "Aquí los clics y toques no llegan al fondo de esta pantalla, así que este fondo no reacciona a ellos."
+msgstr ""
+"Aquí los clics y toques no llegan al fondo de esta pantalla, así que este "
+"fondo no reacciona a ellos."
 
 #: apps/wprs-app/qml/SceneCoverPick.qml
 msgid "Cover of what plays"
@@ -12699,7 +12721,12 @@ msgid ""
 "clicks also have to be turned on for each screen in its wallpaper settings. "
 "The sound is turned into levels on this computer and never recorded, kept or "
 "sent; pointer positions and clicks are never kept."
-msgstr "Un fondo sigue el sonido que suena o el puntero, o recibe clics, solo después de que lo permitas para ese fondo y solo mientras se ve; los clics además hay que encenderlos en cada pantalla, en los ajustes de su fondo. El sonido se convierte en niveles en este equipo y nunca se graba, se guarda ni se envía; las posiciones del puntero y los clics nunca se guardan."
+msgstr ""
+"Un fondo sigue el sonido que suena o el puntero, o recibe clics, solo "
+"después de que lo permitas para ese fondo y solo mientras se ve; los clics "
+"además hay que encenderlos en cada pantalla, en los ajustes de su fondo. El "
+"sonido se convierte en niveles en este equipo y nunca se graba, se guarda ni "
+"se envía; las posiciones del puntero y los clics nunca se guardan."
 
 #: apps/wprs-app/qml/SettingsGrants.qml
 msgid "A wallpaper is following the sound now."

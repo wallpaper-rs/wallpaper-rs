@@ -66,7 +66,7 @@ origen y más…*).
 | `previews` | objeto | no | `{ thumbnail, animated }`. Ver «Vistas previas». Solo `/2` (en `/1` es `preview`). |
 | `requires` | objeto | no | `{ engine, features, packages, gpu }`: lo que el paquete necesita. `pack build` rellena `features` solo. `packages` lista hasta 16 `{ id, version }` de otros paquetes que se instalan con él. `gpu` es `any` o `compute`. Solo `/2`. |
 | `inputs` | lista | no, pero la escena puede exigirla | `audio`, `pointer`, `clicks`, `media` o `network`: lo que el paquete pide al usuario. Declararlo no lo concede: el usuario lo permite por paquete. Ver «Entradas». Solo `/2`. |
-| `permissions` | objeto | no | `{ network: { allow: [...] }, rgb }`: los orígenes de red de una página web y el permiso para enviar colores a la iluminación RGB. Solo `/2`. |
+| `permissions` | objeto | no | `{ network: { allow: [...] }, rgb }`: los orígenes de red de una página web y el permiso para enviar colores a la iluminación RGB. Solo `/2`. En una página web se marca con la casilla «Envía sus colores a la iluminación RGB» entre sus entradas; en una escena se pone y se quita sola según las capas con `rgb`. |
 | `web` | objeto | solo en `kind: web` | `{ preload, background, storage_kib }`. Ver `fondos-web.md`. |
 | `playback` | objeto | no | Cómo se reproduce por defecto: `speed`, `start`, `end`, `loop`, `max_fps`, `volume`, `muted`. Para vídeos, páginas y escenas. |
 | `display` | objeto | no | Cómo se coloca una imagen o un vídeo (`fit`, `background`, `span`, `flip`, `zoom`, `position`) y el color de acento que sugiere (`accent`). |

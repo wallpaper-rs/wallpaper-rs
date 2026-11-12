@@ -87,3 +87,15 @@ fn the_permission_follows_the_layers_that_send_colors_whatever_the_edit() {
     act(&mut p, json!({ "undo": {} })).unwrap();
     assert_eq!(p.doc["manifest"]["permissions"]["rgb"], json!(true));
 }
+
+#[test]
+fn the_inspector_does_not_offer_the_rgb_permission_of_a_scene_it_keeps_in_step_itself() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    act(&mut p, json!({ "rgb": { "layer": "glow", "on": true } })).unwrap();
+    let offered = |pointer: &str| {
+        wprs_editor::inspect::fields(&p.doc, pointer).iter().any(|f| f.pointer == "/manifest/permissions/rgb")
+    };
+    assert_eq!(p.doc["manifest"]["permissions"]["rgb"], json!(true));
+    assert!(!offered("/manifest/permissions") && !offered("/manifest"));
+}

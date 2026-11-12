@@ -11,6 +11,15 @@ ColumnLayout {
     readonly property var declared: page.manifest.inputs ?? []
     readonly property var choices: [["audio", App.tr("Hears the sound that plays"), App.tr("The page reads window.wprs.audio; it is asked for before it hears anything.")], ["pointer", App.tr("Follows the pointer"), App.tr("The page reads where the pointer is over its screen.")], ["clicks", App.tr("Reacts to clicks"), App.tr("The page reacts to presses of the pointer on the screen.")], ["media", App.tr("Follows the media player"), App.tr("The page reads the track, cover and position that window.wprs.onMedia reports.")]]
 
+    function lights(on) {
+        if (on)
+            page.change("/manifest/permissions/rgb", true);
+        else
+            page.run("remove", {
+                    "pointer": "/manifest/permissions/rgb"
+                });
+    }
+
     function set(input, on) {
         page.manifestEdit("inputs", {
                 "inputs": [input],
@@ -40,6 +49,17 @@ ColumnLayout {
             QQC2.ToolTip.text: modelData[2]
             QQC2.ToolTip.visible: hovered
         }
+    }
+
+    QQC2.CheckBox {
+        id: lights
+
+        Layout.fillWidth: true
+        text: App.tr("Sends its colors to the RGB lighting")
+        checked: inputs.page.manifest.permissions?.rgb === true
+        onToggled: inputs.lights(checked)
+        QQC2.ToolTip.text: App.tr("The page calls window.wprs.rgb.setImage; the user is asked before any color reaches the keyboard, mouse or other lights.")
+        QQC2.ToolTip.visible: hovered
     }
 
     QQC2.CheckBox {

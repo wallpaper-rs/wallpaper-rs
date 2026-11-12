@@ -26,6 +26,9 @@ pub fn hidden(doc: &Value) -> Vec<&'static str> {
 }
 
 pub fn applies(doc: &Value, pointer: &str) -> bool {
+    if pointer == "/manifest/permissions/rgb" && crate::pages::scened(doc) {
+        return false;
+    }
     let scene = doc["manifest"]["kind"] == "scene";
     let framing: &[&str] = match doc["manifest"]["kind"].as_str() {
         Some("scene") => &["fit", "zoom", "position", "background", "flip"],
