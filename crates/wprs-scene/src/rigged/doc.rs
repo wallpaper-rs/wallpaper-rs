@@ -1,5 +1,4 @@
 use serde::Deserialize;
-use serde::de::IgnoredAny;
 use std::collections::BTreeMap;
 
 #[derive(Deserialize, Default)]
@@ -83,7 +82,26 @@ pub(crate) struct Accessor {
     pub count: usize,
     #[serde(rename = "type")]
     pub kind: String,
-    pub sparse: Option<IgnoredAny>,
+    pub sparse: Option<Sparse>,
+}
+
+#[derive(Deserialize, Default)]
+#[serde(default)]
+pub(crate) struct Sparse {
+    pub count: usize,
+    pub indices: SparsePart,
+    pub values: SparsePart,
+}
+
+#[derive(Deserialize, Default)]
+#[serde(default)]
+pub(crate) struct SparsePart {
+    #[serde(rename = "bufferView")]
+    pub view: usize,
+    #[serde(rename = "byteOffset")]
+    pub offset: usize,
+    #[serde(rename = "componentType")]
+    pub component: u32,
 }
 
 #[derive(Deserialize, Default)]

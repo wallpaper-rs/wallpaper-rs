@@ -41,11 +41,7 @@ fn size(component: u32) -> Option<usize> {
 
 impl Bin<'_> {
     fn accessor(&self, i: usize) -> Result<&Accessor, String> {
-        let a = self.doc.accessors.get(i).ok_or_else(|| format!("names the missing accessor {i}"))?;
-        if a.sparse.is_some() {
-            return Err("uses sparse accessors, which are not read".into());
-        }
-        Ok(a)
+        self.doc.accessors.get(i).ok_or_else(|| format!("names the missing accessor {i}"))
     }
 
     pub fn count(&self, i: usize) -> Result<usize, String> {
@@ -69,7 +65,11 @@ impl Bin<'_> {
         if a.count.saturating_mul(n) > 1 << 24 {
             return Err(format!("accessor {i} holds too many values"));
         }
-        let Some(view) = a.view else { return Ok(vec![0.0; a.count * n]) };
+        let Some(view) = a.view else {
+            let mut out = vec![0.0; a.count * n];
+            self.scatter(i, (n, c), &mut out)?;
+            return Ok(out);
+        };
         let data = self.view(view)?;
         let stride = self.doc.views[view].stride.unwrap_or(n * c).max(n * c);
         let last = a.count.checked_sub(1).map_or(Some(0), |k| k.checked_mul(stride)?.checked_add(n * c));
@@ -84,10 +84,37 @@ impl Bin<'_> {
                 out.push(component(&data[at..at + c], a.component, a.normalized));
             }
         }
+        self.scatter(i, (n, c), &mut out)?;
         if out.iter().any(|v| !v.is_finite()) {
             return Err(format!("accessor {i} holds a value that is not a number"));
         }
         Ok(out)
+    }
+
+    fn scatter(&self, i: usize, (n, c): (usize, usize), out: &mut [f32]) -> Result<(), String> {
+        let a = &self.doc.accessors[i];
+        let Some(s) = &a.sparse else { return Ok(()) };
+        let wide = size(s.indices.component).filter(|_| [5121, 5123, 5125].contains(&s.indices.component));
+        let wide = wide.ok_or_else(|| format!("accessor {i} has sparse indices of an unknown type"))?;
+        let (keys, values) = (self.view(s.indices.view)?, self.view(s.values.view)?);
+        let fits = |data: &[u8], at: usize, len: usize| {
+            s.count.checked_mul(len).and_then(|l| l.checked_add(at)).is_some_and(|e| e <= data.len())
+        };
+        if !fits(keys, s.indices.offset, wide) || !fits(values, s.values.offset, n * c) {
+            return Err(format!("accessor {i} has sparse values past their buffer views"));
+        }
+        for k in 0..s.count {
+            let at = s.indices.offset + k * wide;
+            let slot = component(&keys[at..at + wide], s.indices.component, false) as usize;
+            let row = out
+                .get_mut(slot * n..slot * n + n)
+                .ok_or_else(|| format!("accessor {i} replaces an element it lacks"))?;
+            for (e, v) in row.iter_mut().enumerate() {
+                let at = s.values.offset + (k * n + e) * c;
+                *v = component(&values[at..at + c], a.component, a.normalized);
+            }
+        }
+        Ok(())
     }
 
     pub fn ints(&self, i: usize, wanted: usize) -> Result<Vec<u32>, String> {

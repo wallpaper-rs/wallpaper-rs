@@ -1,6 +1,6 @@
 use super::kit::{Gl, arm, fox, scene};
 use serde_json::json;
-use wprs_scene::{MAX_RIG_PALETTE, MAX_RIG_VERTICES, Rigged};
+use wprs_scene::{MAX_RIG_PALETTE, MAX_RIG_VERTICES, Rigged, VERTEX_FLOATS};
 
 fn refused(gl: &Gl) -> String {
     Rigged::decode(&gl.bytes()).unwrap_err()
@@ -65,8 +65,20 @@ fn values_that_are_not_numbers_and_unread_layouts_are_refused() {
     attribute(&mut gl, "POSITION", p);
     assert!(refused(&gl).contains("not a number"));
     let mut gl = arm();
-    gl.doc["accessors"][0]["sparse"] = json!({ "count": 1 });
-    assert!(refused(&gl).contains("sparse"));
+    let keys = gl.indices(&[2]);
+    let moved = gl.floats("VEC3", &[100.0, 0.0, 0.0]);
+    let view = |gl: &Gl, a: usize| gl.doc["accessors"][a]["bufferView"].clone();
+    let (keys, moved) = (view(&gl, keys), view(&gl, moved));
+    gl.doc["accessors"][0]["sparse"] = json!({ "count": 1, "indices": { "bufferView": keys, "componentType": 5125 },
+        "values": { "bufferView": moved } });
+    let rig = Rigged::decode(&gl.bytes()).unwrap();
+    assert_eq!(rig.vertices[2 * VERTEX_FLOATS..2 * VERTEX_FLOATS + 3], [100.0, 0.0, 0.0]);
+    assert_eq!(rig.vertices[3 * VERTEX_FLOATS], 12.0);
+    gl.doc["accessors"][0]["sparse"]["count"] = json!(4);
+    assert!(refused(&gl).contains("sparse values past"));
+    gl.doc["accessors"][0]["sparse"]["count"] = json!(1);
+    gl.doc["accessors"][0]["sparse"]["indices"]["componentType"] = json!(5126);
+    assert!(refused(&gl).contains("sparse indices of an unknown type"));
     let mut gl = arm();
     gl.doc["meshes"][1]["primitives"][0]["mode"] = json!(1);
     assert!(refused(&gl).contains("other than triangles"));

@@ -650,7 +650,7 @@ room.
 
 Files are refused that have a bone cycle or a node with two parents, a vertex whose weights do not
 add up to 1 or that follows a bone of no skin, an index out of its vertices, a value that is not a
-number, sparse accessors, primitives other than triangles (strips and fans are read as triangles),
+number, sparse values out of their buffer views or with indices that are not whole numbers or name no element (sparse accessors are read: their values replace those of the elements they name, over zeros when the accessor has no buffer view of its own), primitives other than triangles (strips and fans are read as triangles),
 animation keys out of order, a mesh that names a blend shape twice, more than 1 024 nodes, 65 536
 vertices, 1 048 576 triangle corners (three for each triangle, strips and fans included), 256 bones
 and parts, 64 drawn primitives, 524 288 blend shape vertices or 4 194 304 animation values, or 128 MiB
