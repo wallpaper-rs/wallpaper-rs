@@ -23,6 +23,12 @@ fn build(depth: &Depth) -> Layers {
     shifted(depth, 0.1)
 }
 
+fn large(depth: &Depth) -> Layers {
+    let (picture, map) = scene(400, 260);
+    let set = Settings { fill: Fill::Simple, count: 2, shift: 0.02, edge: 1920 };
+    layers(&picture, &map, (depth, &set), None, &mut |_| {}, &AtomicBool::new(false)).unwrap()
+}
+
 fn shifted(depth: &Depth, shift: f32) -> Layers {
     let (picture, map) = scene(96, 64);
     let set = Settings { fill: Fill::Simple, count: 2, shift, edge: 1920 };
@@ -83,15 +89,15 @@ fn a_stroke_of_the_edit_moves_where_the_layers_are_cut() {
 
 #[test]
 fn marks_add_to_the_band_or_keep_the_fill_out_of_it() {
-    let base = shifted(&Depth::default(), 0.02);
+    let base = large(&Depth::default());
     assert!(base.info.bands[0].pixels > 0 && base.info.bands[1].pixels == 0);
-    let behind = [[40.0 / 96.0, 31.0 / 64.0]];
+    let behind = [[166.0 / 400.0, 130.0 / 260.0]];
     let refill = Depth { fills: vec![dab(&behind, 0.04, 0.0, 1.0)], ..Depth::default() };
-    let more = shifted(&refill, 0.02);
+    let more = large(&refill);
     assert!(more.info.bands[0].pixels > base.info.bands[0].pixels + 20, "{:?}", more.info.bands);
-    assert_eq!(more.images[0].get_pixel(40, 31)[3], 255);
+    assert_eq!(more.images[0].get_pixel(166, 130)[3], 255);
     let elsewhere = Depth { fills: vec![dab(&[[0.1, 0.1]], 0.1, 0.0, 1.0)], ..Depth::default() };
-    assert_eq!(shifted(&elsewhere, 0.02).info.bands, base.info.bands);
+    assert_eq!(large(&elsewhere).info.bands, base.info.bands);
     let protect = Depth { fills: vec![dab(&[[0.5, 0.5]], 1.0, 0.0, -1.0)], ..Depth::default() };
     assert_eq!(build(&protect).info.bands[0].pixels, 0);
     let both = [dab(&[[0.5, 0.5]], 1.0, 0.0, -1.0), dab(&[[0.1, 0.1]], 0.1, 0.0, 1.0)];
