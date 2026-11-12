@@ -82,6 +82,9 @@ Item {
     height: Math.max(8, modelData.extent[1] * ratio)
     rotation: modelData.angle
     z: chosen ? 2 : 1
+    containmentMask: SceneGizmoShape {
+        gizmo: gizmo
+    }
 
     SceneOutline {
         parent: gizmo.parent

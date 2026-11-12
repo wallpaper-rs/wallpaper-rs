@@ -843,7 +843,7 @@ tools of the canvas build on the same place: `Seat::at` takes a point of the box
 fractions, to the canvas, and `Seat::fraction` brings it back; the overlay `SceneSeat.qml` does the
 same for a layer named by id and sends the grips. A tilted or lifted layer, or one under a tilted
 parent, also gets a dashed outline where the scene projects it (`Gizmo.corners`, through the same
-perspective as the scene); its handles stay on the flat box. The toolbar also offers
+perspective as the scene); its handles stay on the flat box. Taps, drags and the hover of a layer take only the points inside its outline (the same polygon the canvas draws, so a skewed layer is hit exactly as drawn), not the rectangle around it. The toolbar also offers
 guides for 16:9, 21:9, 32:9, 4:3, 16:10 and 9:16 screens. *Screens* previews the scene spread over
 several screens: two or three side by side, two stacked, or the user's own layout as the daemon
 reports it (`GetState().outputs[x].mm`). It frames the part of the canvas that each screen shows
