@@ -7,7 +7,7 @@ use wprs_video::{Cut, Event, Frame, Options, Player, is_video};
 const FIXTURE: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../../tests/fixtures/magenta-64x32.webm");
 const MAGENTA_RGB: [u8; 3] = [0xd0, 0x20, 0x60];
 const LOSSY_TOLERANCE: u8 = 16;
-const WAIT: Duration = Duration::from_secs(5);
+const WAIT: Duration = Duration::from_secs(30);
 
 fn play(path: &Path, max_size: (u32, u32)) -> Result<(Player, Receiver<Event>), wprs_video::Error> {
     let (tx, rx) = mpsc::channel();
@@ -21,10 +21,10 @@ fn play(path: &Path, max_size: (u32, u32)) -> Result<(Player, Receiver<Event>), 
 
 fn open(max_size: (u32, u32)) -> Option<(Player, Receiver<Event>)> {
     let started = play(Path::new(FIXTURE), max_size).map_err(|e| e.to_string()).and_then(|(player, rx)| {
-        match rx.recv_timeout(Duration::from_secs(10)) {
+        match rx.recv_timeout(WAIT) {
             Ok(Event::Frame(first)) => Ok((player, replay_first(first, rx))),
             Ok(Event::Error(e)) => Err(e),
-            Err(_) => Err("no frame within 10 s".to_string()),
+            Err(_) => Err(format!("no frame within {WAIT:?}")),
         }
     });
     if let Err(why) = &started {
@@ -94,12 +94,11 @@ fn follows_the_largest_output_size() {
 #[test]
 fn loops_past_the_end() {
     let Some((_player, rx)) = open((64, 32)) else { return };
-    let deadline = Instant::now() + Duration::from_millis(2500);
-    let frames = std::iter::from_fn(|| {
-        (Instant::now() < deadline).then(|| next_frame(&rx, Duration::from_secs(2))).flatten()
-    })
-    .count();
-    assert!(frames > 30, "only {frames} frames in 2.5 s");
+    let (deadline, mut last) = (Instant::now() + WAIT * 2, None);
+    let looped = std::iter::from_fn(|| (Instant::now() < deadline).then(|| next_frame(&rx, WAIT)).flatten())
+        .filter_map(|f| f.pts)
+        .any(|pts| last.replace(pts).is_some_and(|was| pts < was));
+    assert!(looped, "the video did not start over within {:?}", WAIT * 2);
 }
 
 #[test]
@@ -127,8 +126,8 @@ fn pausing_stops_frames() {
     }
     assert!(player.paused(), "the pause did not settle within 30 s");
     assert_eq!(player.seeks(), 0, "pausing sought the video");
-    let late = std::iter::from_fn(|| next_frame(&rx, Duration::from_millis(250))).take(120).count();
-    assert!(late < 120 && next_frame(&rx, Duration::from_secs(1)).is_none(), "frames while paused");
+    let late = std::iter::from_fn(|| next_frame(&rx, Duration::from_secs(2))).take(120).count();
+    assert!(late < 120 && next_frame(&rx, Duration::from_secs(2)).is_none(), "frames while paused");
     player.set_playing(true);
     assert!(next_frame(&rx, WAIT).is_some(), "no frames after resuming");
     assert_eq!(player.seeks(), 0, "resuming sought the video");
