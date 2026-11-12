@@ -94,9 +94,7 @@ pub enum Author {
         #[arg(long, value_parser = wprs_editor::molds::SCRIPT_TEMPLATES, help = crate::steps::TEMPLATE)]
         template: Option<String>,
     },
-    #[command(
-        about = "Paint a stroke into the picture of a mask parameter of an effect, on one channel or on all colors, kept as a new linear picture in masks/ so that undo returns to the previous one"
-    )]
+    #[command(about = crate::steps::PAINT)]
     PaintMask {
         #[arg(help = DIR)]
         dir: PathBuf,

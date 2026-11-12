@@ -8,15 +8,13 @@ use wprs_core::model::Input;
 use zbus::message::Header;
 
 mod give;
+mod ids;
 mod told;
 
-pub struct Inputs(pub Weak<Daemon>);
+pub(crate) use ids::scene_id;
+use ids::{parse, reopen};
 
-pub(crate) fn scene_id(scene: &str) -> Result<&str> {
-    let valid = |c: char| c.is_ascii_lowercase() || c.is_ascii_digit() || "._-".contains(c);
-    let fine = (1..=255).contains(&scene.len()) && scene.chars().all(valid);
-    fine.then_some(scene).ok_or_else(|| invalid(format!("{scene} is not a scene package id")))
-}
+pub struct Inputs(pub Weak<Daemon>);
 
 pub(crate) fn start(daemon: &Arc<Daemon>, connection: zbus::Connection) {
     let path = grants_path(daemon);
@@ -28,21 +26,6 @@ impl Inputs {
         let stopping = || failed("the daemon is stopping");
         Ok((self.0.upgrade().ok_or_else(stopping)?, hub().ok_or_else(stopping)?))
     }
-}
-
-fn parse(input: &str) -> Result<Input> {
-    Input::parse(input).ok_or_else(|| {
-        invalid(format!(
-            "{input} is not audio, pointer, clicks, network, rgb, media, media_network or audio_network"
-        ))
-    })
-}
-
-fn reopen(d: &Daemon, input: Input) -> anyhow::Result<()> {
-    if input == Input::Network {
-        d.configure_all();
-    }
-    Ok(())
 }
 
 #[zbus::interface(name = "io.github.wallpaper_rs.Inputs1")]

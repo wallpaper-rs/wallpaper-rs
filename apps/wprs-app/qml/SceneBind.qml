@@ -142,31 +142,12 @@ QQC2.ToolButton {
             onWatch: meter.open()
         }
 
-        QQC2.Menu {
-            title: App.tr("Follow the sound")
+        SceneBindSound {
             enabled: !bind.listed
-
-            Repeater {
-                model: [["bass", App.tr("Bass")], ["mid", App.tr("Mids")], ["treble", App.tr("Treble")], ["level", App.tr("Level")], ["beat", App.tr("Beat")]]
-
-                delegate: QQC2.MenuItem {
-                    required property var modelData
-
-                    text: modelData[1]
-                    onTriggered: bind.sourced({
-                            "pick": modelData[0]
-                        })
-                }
-            }
-
-            QQC2.MenuSeparator {}
-
-            QQC2.MenuItem {
-                text: App.tr("A band or a range of bands…")
-                onTriggered: {
-                    bands.base = bind.field.source === "audio" ? bind.field.value : ({});
-                    bands.open();
-                }
+            onPicked: request => bind.sourced(request)
+            onRanged: {
+                bands.base = bind.field.source === "audio" ? bind.field.value : ({});
+                bands.open();
             }
         }
 

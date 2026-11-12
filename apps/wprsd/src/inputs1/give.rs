@@ -14,7 +14,7 @@ impl super::Inputs {
         input: &str,
     ) -> Result<()> {
         let (d, hub) = self.parts()?;
-        let (input, scene) = (super::parse(input)?, super::scene_id(scene)?.to_owned());
+        let (input, scene) = (super::ids::parse(input)?, super::ids::scene_id(scene)?.to_owned());
         let (key, title) = lock(&hub.control).package(&scene, key)?;
         let trusted = caller(call.0, call.1).await.trusted();
         if matches!(input, Input::Network | Input::Rgb | Input::MediaNetwork | Input::AudioNetwork)
@@ -31,7 +31,7 @@ impl super::Inputs {
         }
         d.run(move |d| {
             hub.grant(&grants_path(d), &scene, &key, input)?;
-            super::reopen(d, input)
+            super::ids::reopen(d, input)
         })
         .await
     }
