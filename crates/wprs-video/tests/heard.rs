@@ -82,7 +82,8 @@ fn playing(rx: &Receiver<Event>, within: impl Fn(Duration) -> bool) {
 fn confirmed(rx: &Receiver<Event>, percent: f64) {
     let (start, mut recent) = (Instant::now(), Vec::<(Instant, Duration)>::new());
     let slow = |pair: &[(Instant, Duration)]| {
-        let (wall, pts) = ((pair[1].0 - pair[0].0).as_secs_f64(), pair[1].1.as_secs_f64() - pair[0].1.as_secs_f64());
+        let (wall, pts) =
+            ((pair[1].0 - pair[0].0).as_secs_f64(), pair[1].1.as_secs_f64() - pair[0].1.as_secs_f64());
         pts > 0.0 && (0.7..1.5).contains(&(wall / pts * percent / 100.0))
     };
     while start.elapsed() < Duration::from_secs(30) {
