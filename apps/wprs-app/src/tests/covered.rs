@@ -150,8 +150,9 @@ fn package_effects_list_offers_reimport_and_remove() {
     assert!(list.contains("model: panel.page.view.package_effects"));
     assert!(list.contains(r#"onClicked: panel.page.run("remove_effect""#));
     assert!(list.contains(r#"panel.page.run("import_effect""#));
-    let assets = file("SceneAssets.qml");
+    let assets = file("SceneAssetParts.qml");
     assert!(assets.contains("SceneEffectsList {"));
+    assert!(file("SceneAssets.qml").contains("SceneAssetParts {"));
 }
 
 #[test]

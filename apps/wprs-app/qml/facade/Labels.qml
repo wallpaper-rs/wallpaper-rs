@@ -71,7 +71,7 @@ QtObject {
         const parts = String(name).replace(/^effect\./, "").split(".");
         const effect = SceneWords.effect(parts[0]);
         const used = parts.length > 1 ? App.tr("sets %1 on the %2 effect", SceneWords.label(parts[1]), effect) : App.tr("uses the %1 effect", effect);
-        return FeatureWords.features[name] ?? used;
+        return LabelFeatureWords.features[name] ?? used;
     }
 
     function field(key) {

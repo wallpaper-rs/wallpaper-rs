@@ -10625,376 +10625,376 @@ msgstr "%1 MB"
 msgid "%1 KB"
 msgstr "%1 KB"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "reacts to the sound playing on the computer"
 msgstr "reacciona al sonido que se reproduce en el equipo"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "follows the pointer"
 msgstr "sigue al puntero"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "reacts to clicks"
 msgstr "reacciona a los clics"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shows what the media player plays"
 msgstr "muestra lo que reproduce el reproductor multimedia"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "connects to the network"
 msgstr "se conecta a la red"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "runs scene scripts"
 msgstr "ejecuta scripts de escena"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "plays sound"
 msgstr "reproduce sonido"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "has settings of the newer kinds"
 msgstr "tiene ajustes de los tipos nuevos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shows pictures from a folder the user chooses"
 msgstr "muestra las imágenes de una carpeta que elige el usuario"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "plays videos the user chooses"
 msgstr "reproduce vídeos que elige el usuario"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets how its video plays"
 msgstr "define cómo se reproduce su vídeo"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "is a web page"
 msgstr "es una página web"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets the values of another package"
 msgstr "fija los valores de otro paquete"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "holds resources for other packages"
 msgstr "guarda recursos para otros paquetes"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "needs other packages"
 msgstr "necesita otros paquetes"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "says what graphics card it needs"
 msgstr "dice qué tarjeta gráfica necesita"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "names the devices it is made for"
 msgstr "nombra los dispositivos para los que está hecho"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "keeps its texts in a file per language"
 msgstr "guarda sus textos en un archivo por idioma"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "names texts the engine translates"
 msgstr "nombra textos que traduce el motor"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "writes newer settings with their default values"
 msgstr "escribe ajustes nuevos con sus valores por defecto"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "says that it was imported or where it was downloaded from"
 msgstr "dice que se importó o de dónde se descargó"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "credits files to the package they come from"
 msgstr "atribuye archivos al paquete del que vienen"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets the color around its picture or spreads over every screen"
 msgstr ""
 "fija el color alrededor de su imagen o se extiende por todas las pantallas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "suggests an accent color for the desktop"
 msgstr "propone un color de acento para el escritorio"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shows its picture or video mirrored"
 msgstr "muestra su imagen o su vídeo en espejo"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "limits its frame rate, starts muted or plays once"
 msgstr "limita sus fotogramas, empieza en silencio o se reproduce una sola vez"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "opens what the user chooses when clicked"
 msgstr "abre lo que elige el usuario con un clic"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "reads the subfolders of a chosen folder or fewer of its files"
 msgstr "lee las subcarpetas de una carpeta elegida o menos de sus archivos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lets its page list a chosen folder"
 msgstr "deja que su página liste una carpeta elegida"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lets its scene scripts list a chosen folder"
 msgstr "deja que los scripts de su escena listen una carpeta elegida"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "changes its settings when the device saves power"
 msgstr "cambia sus ajustes cuando el dispositivo ahorra energía"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "uses compressed textures in the KTX2 format"
 msgstr "usa texturas comprimidas en formato KTX2"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "uses pictures in the AVIF format"
 msgstr "usa imágenes en formato AVIF"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "mixes layers with the newer blend modes"
 msgstr "mezcla capas con los modos de fusión nuevos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "tints or brightens its pictures, videos, particles or groups"
 msgstr "tiñe o aclara sus imágenes, vídeos, partículas o grupos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "moves layers with a layer outside their group"
 msgstr "mueve capas con una capa de fuera de su grupo"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "tilts layers in depth"
 msgstr "inclina capas en profundidad"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "weakens masks"
 msgstr "atenúa máscaras"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "masks its effects with layers or shapes"
 msgstr "enmascara sus efectos con capas o formas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "feeds layers into effects"
 msgstr "pasa capas a los efectos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "uses videos as masks, effect textures or light patterns"
 msgstr "usa vídeos como máscaras, texturas de efectos o proyecciones de luz"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets the speed, range or frame of its videos and moving pictures"
 msgstr ""
 "fija la velocidad, el tramo o el fotograma de sus vídeos e imágenes animadas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "plays the same video in several layers, each on its own clock"
 msgstr "reproduce el mismo vídeo en varias capas, cada una con su propio reloj"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets how its pictures are filtered, repeated or shrunk"
 msgstr "fija cómo se filtran, repiten o reducen sus imágenes"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "plays sprite sheets or animated pictures"
 msgstr "reproduce hojas de sprites o imágenes animadas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "wraps or boxes its texts"
 msgstr "ajusta sus textos en líneas o les pone una caja"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "outlines, shadows, blurs or spaces its texts"
 msgstr "pone contorno, sombra, desenfoque o espaciado a sus textos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "uses font collections, compressed fonts or fallback fonts"
 msgstr "usa colecciones de fuentes, fuentes comprimidas o fuentes de respaldo"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "plays MP3 or long sounds, lists of sounds or sounds started by events"
 msgstr ""
 "reproduce sonidos MP3 o largos, listas de sonidos o sonidos que arrancan con "
 "eventos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "moves, zooms, turns or shakes the whole scene"
 msgstr "mueve, acerca, gira o sacude toda la escena"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets how the scene follows the pointer or the tilt of the phone"
 msgstr "fija cómo sigue la escena al puntero o a la inclinación del teléfono"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid ""
 "binds the parallax of the scene or of a layer to a property, sound or time"
 msgstr ""
 "ata el paralaje de la escena o de una capa a una propiedad, al sonido o al "
 "tiempo"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "makes the bright parts of the scene glow"
 msgstr "hace brillar las partes claras de la escena"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "renders brighter than white and maps the tones"
 msgstr "dibuja más claro que el blanco y ajusta los tonos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "draws over the previous frame"
 msgstr "dibuja sobre el fotograma anterior"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lights its layers"
 msgstr "ilumina sus capas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lights the air"
 msgstr "ilumina el aire"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "projects pictures with its lights"
 msgstr "proyecta imágenes con sus luces"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shades its pictures with normal maps, gloss and glow"
 msgstr "sombrea sus imágenes con mapas de normales, brillo y luz propia"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets the light around and above the scene"
 msgstr "fija la luz alrededor y por encima de la escena"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "redraws a part of the scene elsewhere"
 msgstr "vuelve a dibujar una parte de la escena en otro sitio"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "starts things at named moments of its timelines"
 msgstr "arranca cosas en momentos con nombre de sus líneas de tiempo"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "counts the length of its timelines in frames"
 msgstr "cuenta la duración de sus líneas de tiempo en fotogramas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "blends the end of its looping timelines into their start"
 msgstr "enlaza el final de sus líneas de tiempo en bucle con su principio"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "starts its random patterns differently each time"
 msgstr "empieza sus patrones aleatorios de otra forma cada vez"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shapes keyframe curves with handles"
 msgstr "da forma a las curvas de los fotogramas clave con manejadores"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "animates each part of a position or a color on its own"
 msgstr "anima por separado cada parte de una posición o un color"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "adds animations to a base value"
 msgstr "suma animaciones a un valor base"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "follows the time of day, the weekday or the month"
 msgstr "sigue la hora del día, el día de la semana o el mes"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "writes dates"
 msgstr "escribe fechas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "reacts to ranges of sound frequencies"
 msgstr "reacciona a tramos de frecuencias del sonido"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shapes how values react with limits, an exponent or uneven smoothing"
 msgstr ""
 "da forma a la reacción de los valores con límites, un exponente o un "
 "suavizado desigual"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sets how fast it reacts to sound"
 msgstr "fija lo rápido que reacciona al sonido"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "runs effect shaders of its own"
 msgstr "ejecuta shaders de efectos propios"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "builds its effect shaders in several variants"
 msgstr "compila sus shaders de efectos en varias variantes"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "bends layers with its effect shaders"
 msgstr "deforma capas con sus shaders de efectos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "runs effect shaders that use newer fields or helpers"
 msgstr "ejecuta shaders de efectos con campos o funciones de ayuda más nuevos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "spreads its scene over every screen"
 msgstr "extiende su escena por todas las pantallas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "bends pictures with a skeleton"
 msgstr "deforma imágenes con un esqueleto"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "reaches for targets with chains of bones"
 msgstr "alcanza objetivos con cadenas de huesos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "swings bones with springs, ropes and wind"
 msgstr "balancea huesos con muelles, cuerdas y viento"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "hands bones over to other parents"
 msgstr "pasa huesos a otros padres"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "morphs shapes and expressions"
 msgstr "transforma formas y expresiones"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "pins layers to bones or points of its models"
 msgstr "sujeta capas a huesos o puntos de sus modelos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shows 3D models"
 msgstr "muestra modelos 3D"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "animates, poses or swings its 3D models"
 msgstr "anima, posa o balancea sus modelos 3D"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "flies the 3D camera along paths"
 msgstr "mueve la cámara 3D por recorridos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shades its models with fur, foliage, chroma or shaders of its own"
 msgstr "sombrea sus modelos con pelo, follaje, croma o shaders propios"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "moves a 3D camera"
 msgstr "mueve una cámara 3D"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "casts shadows"
 msgstr "proyecta sombras"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid ""
 "moves particles in world space, with control points, timing or richer "
 "settings"
@@ -11002,102 +11002,102 @@ msgstr ""
 "mueve partículas en el espacio del mundo, con puntos de control, tiempos o "
 "ajustes más completos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "spawns particles from other particles"
 msgstr "hace nacer partículas de otras partículas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "gives its particles depth"
 msgstr "da profundidad a sus partículas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lights or refracts its particles"
 msgstr "ilumina o refracta sus partículas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "emits particles from the shape of a layer"
 msgstr "emite partículas desde la forma de una capa"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "starts particles with noise, paths or remapped values"
 msgstr "hace nacer partículas con ruido, recorridos o valores reasignados"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "keeps particles at distances or remaps their values as they live"
 msgstr ""
 "mantiene las partículas a distancia o reasigna sus valores mientras viven"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "binds the ranges of births or the shapes of emitters"
 msgstr "enlaza los rangos de nacimiento o las formas de los emisores"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "makes particles hit boxes, lines, layers or the inside of circles"
 msgstr ""
 "hace chocar partículas con cajas, líneas, capas o el interior de círculos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "moves particles in flocks"
 msgstr "mueve partículas en bandadas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "draws particles as ropes or long trails"
 msgstr "dibuja partículas como cuerdas o estelas largas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "cuts out or turns its particles"
 msgstr "recorta o gira sus partículas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "draws particles with shaders of its own"
 msgstr "dibuja partículas con shaders propios"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "runs scripts that use the newer script interface"
 msgstr "ejecuta scripts que usan la interfaz de scripts más nueva"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lets its scripts add layers"
 msgstr "deja que sus scripts añadan capas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lets its scripts build shapes"
 msgstr "deja que sus scripts construyan formas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lets its scripts keep data"
 msgstr "deja que sus scripts guarden datos"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "plays and stops its sounds from scripts"
 msgstr "reproduce y para sus sonidos desde scripts"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "drives pictures, videos, clips and bones from scripts"
 msgstr "mueve imágenes, vídeos, clips y huesos desde scripts"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "moves the camera or the parallax from scripts"
 msgstr "mueve la cámara o el paralaje desde scripts"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "opens what the user chooses from a script"
 msgstr "abre lo que elige el usuario desde un script"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "lets its scripts read and change the parents of layers"
 msgstr "deja que sus scripts lean y cambien los padres de las capas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "reacts to the pointer on its layers"
 msgstr "reacciona al puntero sobre sus capas"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "shows the title, cover or progress of what the media player plays"
 msgstr ""
 "muestra el título, la carátula o el avance de lo que suena en el reproductor"
 
-#: apps/wprs-app/qml/facade/FeatureWords.qml
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sends its colors to RGB lighting"
 msgstr "envía sus colores a la iluminación RGB"
 

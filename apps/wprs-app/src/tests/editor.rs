@@ -134,8 +134,11 @@ fn the_scene_editor_has_words_for_every_field_value_and_effect() {
 
 #[test]
 fn every_feature_has_a_translated_explanation() {
-    let labels =
-        qml_files().into_iter().find(|(name, _)| name == "Labels.qml").map(|(_, text)| text).unwrap();
+    let labels: String = qml_files()
+        .into_iter()
+        .filter(|(name, _)| name == "Labels.qml" || name == "LabelFeatureWords.qml")
+        .map(|(_, text)| text)
+        .collect();
     for (name, why, _) in wprs_format::features::all() {
         assert!(
             labels.contains(&format!("\"{name}\": App.tr(\"{why}\")")),
