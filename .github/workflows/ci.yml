@@ -911,6 +911,7 @@ jobs:
     needs: [version, depth]
     if: needs.version.outputs.rust == 'true'
     strategy:
+      fail-fast: false
       matrix:
         include:
           - arch: x86_64
