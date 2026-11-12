@@ -58,6 +58,7 @@ enum Command {
     Again(String),
     Count(String, mpsc::Sender<Option<Counted>>),
     Wake,
+    Settle(mpsc::Sender<()>),
     Clear(std::path::PathBuf, mpsc::Sender<std::io::Result<()>>),
     Quit,
 }
@@ -169,6 +170,12 @@ impl Compositor {
 
     pub fn status(&self) -> BTreeMap<String, OutputStatus> {
         lock(&self.status).clone()
+    }
+
+    pub fn settled(&self) {
+        let (done, wait) = mpsc::channel();
+        self.send(Command::Settle(done));
+        drop(wait.recv_timeout(std::time::Duration::from_secs(2)));
     }
 
     pub fn stop(&self) {

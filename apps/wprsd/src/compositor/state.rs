@@ -33,6 +33,7 @@ pub(super) struct State {
     pub(super) locked: bool,
     pub(super) felt: Option<Instant>,
     pictures: Pictures,
+    settling: Vec<mpsc::Sender<()>>,
     scripts: super::scripts::Scripts,
 }
 
@@ -66,6 +67,7 @@ impl State {
             locked,
             felt: None,
             pictures: Pictures::default(),
+            settling: Vec::new(),
             scripts: Default::default(),
         }
     }
@@ -117,6 +119,7 @@ impl State {
             self.render_due();
             self.sync_sounds();
             self.publish_status();
+            self.settling.drain(..).for_each(|done| drop(done.send(())));
         }
     }
 }

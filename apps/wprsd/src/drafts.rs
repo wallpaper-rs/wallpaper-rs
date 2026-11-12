@@ -143,6 +143,7 @@ impl Daemon {
                 false => drop(self.configure_output(output)),
             }
         }
+        self.compositor.settled();
         Ok(())
     }
 }

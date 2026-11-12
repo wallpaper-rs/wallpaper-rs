@@ -17,4 +17,6 @@ printed() {
 printed "first version of the code" || fail "the script did not run in the preview: $(cat "$WORK/reload.out")"
 printf '%s\n' 'export function init() { console.log("second version of the code"); }' >"$reload/scripts/reload.js"
 printed "second version of the code" || fail "the preview kept the old code after the file changed: $(cat "$WORK/reload.out")"
+! grep -q "first version of the code" "$WORK/reload.out" ||
+  fail "the console began with lines of the scene shown before: $(cat "$WORK/reload.out")"
 ctl release preview:1

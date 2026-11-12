@@ -73,7 +73,7 @@ pub enum Folder {
         #[arg(
             long,
             conflicts_with = "stop",
-            help = "Print the console of its scripts and report its error as they change, until stopped"
+            help = "Print the console of its scripts and report its error as they change, until stopped. The scene runs only while something consumes frames on that output (a screen showing it or a stream of it), so without a consumer nothing is printed"
         )]
         console: bool,
         #[command(flatten)]

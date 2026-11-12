@@ -89,6 +89,7 @@ impl State {
                 done.send(scene.and_then(|s| s.counted(self.renderer))).ok();
             }
             Command::Wake => {}
+            Command::Settle(done) => self.settling.push(done),
             Command::Clear(dir, done) => self.clear_page(dir, done),
             Command::Quit => return false,
         }

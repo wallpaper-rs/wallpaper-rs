@@ -2052,10 +2052,14 @@ msgstr "Partir de este preajuste del paquete antes de aplicar --values"
 #: apps/wprs-ctl/src/folder.rs
 msgid ""
 "Print the console of its scripts and report its error as they change, until "
-"stopped"
+"stopped. The scene runs only while something consumes frames on that output "
+"(a screen showing it or a stream of it), so without a consumer nothing is "
+"printed"
 msgstr ""
 "Mostrar la consola de sus scripts e informar su error a medida que cambian, "
-"hasta que se detenga"
+"hasta que se detenga. La escena solo corre mientras algo consume cuadros en "
+"esa salida (una pantalla que la muestre o una transmisión de ella), así que "
+"sin consumidor no se muestra nada"
 
 #: apps/wprs-ctl/src/folder.rs
 msgid "Build the scene into the library and show it on an output"
