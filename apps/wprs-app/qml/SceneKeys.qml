@@ -43,7 +43,7 @@ Kirigami.Dialog {
         }
         if (operation === "create") {
             made = reply.secret;
-            message = reply.replaced ? App.tr("Replaced the key pair %1; its fingerprint is %2", reply.name, reply.fingerprint) : App.tr("Created the key pair %1; its fingerprint is %2", reply.name, reply.fingerprint);
+            message = (reply.replaced ? App.tr("Replaced the key pair %1; its fingerprint is %2.", reply.name, reply.fingerprint) : App.tr("Created the key pair %1; its fingerprint is %2.", reply.name, reply.fingerprint)) + " " + App.tr("%1.key is your SECRET key: never share it, and keep a copy somewhere safe. %1.pub is the public key: give it to whoever must check your signatures.", reply.name);
             refresh();
         } else {
             handover = reply.signature;
