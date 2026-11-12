@@ -227,7 +227,7 @@ wprs-ctl scene act mi-escena sprites '{"remove":{"asset":"hoja","index":0}}'
 
 ## Cómo abrir las herramientas de profundidad de una imagen
 
-Con la profundidad, una imagen se separa en capas que el paralaje mueve a distinto ritmo. Estas herramientas no están en el editor de escenas sino en el editor de imágenes.
+Con la profundidad, una imagen se separa en capas que el paralaje mueve a distinto ritmo. Las capas se cortan por regiones: las partes conectadas de la imagen entre un salto de profundidad y otro. Así una superficie continua, como un suelo, nunca se parte ni se estira. Estas herramientas no están en el editor de escenas sino en el editor de imágenes.
 
 **Dónde está:** en la biblioteca, abre una imagen y pulsa **Editar…**; en la columna de herramientas del editor de imágenes elige **Profundidad**.
 
@@ -280,7 +280,7 @@ wprs-ctl edit depth brush foto.png --clear
 
 **Dónde está:** **Cortes de capa**.
 
-La franja muestra el histograma de la profundidad, **Lejos** a la izquierda y **Cerca** a la derecha, coloreado por capa, con un asa por cada corte. Debajo dice **N capas, cortadas por la propia imagen** o **N capas, cortadas donde pusiste las asas**.
+La franja muestra el histograma de la profundidad, **Lejos** a la izquierda y **Cerca** a la derecha, coloreado por capa, con un asa por cada corte. Debajo dice **N capas, cortadas por la propia imagen** o **N capas, cortadas donde pusiste las asas**, seguido de **N regiones** cuando la imagen ya tiene capas. Los cortes agrupan las regiones en capas según su profundidad media.
 
 **Pasos:**
 
@@ -290,6 +290,8 @@ La franja muestra el histograma de la profundidad, **Lejos** a la izquierda y **
 4. **Mostrar las capas sobre la imagen** pinta el contorno de cada capa tintado.
 
 La ayuda de la ventana dice: **Arrastra un asa para mover un corte, haz doble clic para quitarlo y clic en la franja para añadir otro.**
+
+Si la imagen se queda quieta, una línea en rojo dice por qué (ver más abajo).
 
 **En la terminal:** `wprs-ctl edit depth cuts ARCHIVO 0.3,0.6` o `--auto`.
 
@@ -330,3 +332,17 @@ wprs-ctl edit depth fill-mask foto.png --clear
 3. **Comparar LaMa con el relleno simple** divide la imagen: a la izquierda el relleno de LaMa y a la derecha el **Relleno simple**. **Dónde termina LaMa** mueve la división (también se arrastra la línea). Solo está disponible si LaMa está instalado; si no, dice **LaMa no está instalado, así que no hay nada que comparar. Descárgalo en los ajustes.**
 
 **En la terminal:** `wprs-ctl edit depth layers ARCHIVO` construye las capas, `show ARCHIVO --layer N --out PNG [--band PNG]` guarda una y `compare ARCHIVO --out PNG` guarda la comparación. En los ajustes de la aplicación están **Comprobar LaMa**, **Quitar LaMa** y **Recalcular las capas**; en la terminal, `wprs-ctl models verify` y `models remove`.
+
+## Cómo se mueve la imagen y por qué a veces se queda quieta
+
+Cada capa se mueve con su propio campo de profundidad suave, y el movimiento total tiene un límite: nunca pasa de lo que las capas cubren, así que no se ve el borde del fondo ni se estira un trozo de imagen. Con una fuerza alta, el límite recorta el desplazamiento en vez de deformar la imagen. Las capas se construyen a la resolución de la pantalla (la app y `wprs-ctl` las construyen a 1920 como mucho, y el teléfono también).
+
+Mientras las capas no están listas, o si no pueden moverla sin estirarla, la imagen se queda quieta. El motivo se lee en la línea roja de **Cortes de capa**, en la herramienta **Paralaje** y en `wprs-ctl edit depth layers ARCHIVO` (en la salida de errores; `--list` muestra además las regiones, el desplazamiento seguro y si cada juego se mueve). Los motivos son: no hay mapa de profundidad, no hay modelo de profundidad, el relleno está apagado, la imagen tiene operaciones de color, las capas se están construyendo, no se pudieron construir, o su profundidad no permite moverla sin estirarla. El daemon dice lo mismo en `GetState`, en el campo `still` de cada salida.
+
+## Cómo descargar el modelo desde la herramienta de paralaje
+
+**Dónde está:** **Paralaje**, en **Detalles > Editar imagen**.
+
+Si enciendes el paralaje y falta el modelo de profundidad, la herramienta muestra enseguida **La imagen queda quieta: el modelo de profundidad no está instalado** con el tamaño de la descarga, y el botón **Descargar el modelo de profundidad…**. **Nada se descarga hasta que lo pidas**: el botón abre la ventana de consentimiento **¿Descargar el modelo de profundidad?**, y después se ve el avance con **Cancelar**. Si el modelo ya está pero la imagen no tiene mapa, el botón es **Generar el mapa**. El teléfono muestra el mismo aviso con un botón de descarga.
+
+**En la terminal:** `wprs-ctl edit parallax ARCHIVO` imprime el aviso con el tamaño y el comando `wprs-ctl models download depth-anything-v2-small`.
