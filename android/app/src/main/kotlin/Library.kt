@@ -1,5 +1,6 @@
 package io.github.wallpaper_rs
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -76,6 +77,11 @@ fun Library(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
         fetch("items", "query" to query, "languages" to languages)
     }
     chosen.follow(items)
+    BackHandler(text.isNotEmpty() || filter != 0) {
+        text = ""
+        searched = ""
+        filter = 0
+    }
     Column {
         if (chosen.isEmpty()) Header(stringResource(R.string.library)) else Selecting(main, chosen, items.orEmpty().map(Item::uid))
         OutlinedTextField(
@@ -87,12 +93,12 @@ fun Library(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
             filter = FILTERS.indexOfFirst { it.second == chosen }
         }
         if (kind == SCENES || kind == "kind:web") Row(Modifier.padding(horizontal = 8.dp), Arrangement.spacedBy(8.dp)) {
-            TextButton(main::examples) { Text(stringResource(R.string.examples)) }
+            if (kind == SCENES) TextButton(main::examples) { Text(stringResource(R.string.examples)) }
             TextButton(main::openPackage) { Text(stringResource(R.string.open_package)) }
         }
         Importing(main)
         if (query.isEmpty()) AwayNotes(main)
-        if (items?.isEmpty() == true) Text(stringResource(R.string.empty), Modifier.padding(16.dp))
+        if (items?.isEmpty() == true) Empty(main, hollow(kind, searched))
         LazyVerticalGrid(
             columns = GridCells.Adaptive(112.dp),
             contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 96.dp),
@@ -116,7 +122,8 @@ fun Thumb(item: Item, modifier: Modifier = Modifier, picked: Boolean = false) {
     val outline = if (picked) Modifier.border(3.dp, MaterialTheme.colorScheme.primary, shape) else Modifier
     Box(modifier.then(outline).clip(shape).background(MaterialTheme.colorScheme.surfaceVariant)) {
         val hidden = if (item.mature) Modifier.blur(24.dp) else Modifier
-        bitmap?.let { Image(it, item.title, Modifier.fillMaxSize().then(hidden), contentScale = ContentScale.Crop) }
+        val kind = stringResource(if (item.video) R.string.kind_video else if (item.scene) R.string.kind_scene else R.string.kind_photo)
+        bitmap?.let { Image(it, "$kind ${item.title}".trim(), Modifier.fillMaxSize().then(hidden), contentScale = ContentScale.Crop) }
         if (item.mature) Icon(Icons.Default.Lock, stringResource(R.string.mature), Modifier.align(Alignment.Center), Color.White)
         if (item.flashing) Icon(Icons.Default.Warning, stringResource(R.string.flashing), Modifier.align(Alignment.TopEnd).padding(4.dp), Color.White)
         val corner = Modifier.align(Alignment.BottomStart).padding(4.dp)

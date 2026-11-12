@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_images">There are no photos yet. Pick a photo or video from your phone.</string>
+    <string name="empty_videos">There are no videos yet. Pick a photo or video from your phone.</string>
+    <string name="empty_scenes">There are no animated scenes yet. Add the example scenes or open a scene package.</string>
+    <string name="empty_webs">There are no web pages yet. Open a web page package to add one.</string>
+    <string name="empty_favorites">You have no favorites yet. Tap the heart on a wallpaper to add it here.</string>
+    <string name="empty_search">Nothing matches your search.</string>
+    <string name="pick_media">Pick a photo or video</string>
+    <string name="kind_video">Video</string>
+    <string name="kind_scene">Scene</string>
+    <string name="kind_photo">Photo</string>
+</resources>
