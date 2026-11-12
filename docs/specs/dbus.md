@@ -1427,7 +1427,7 @@ package, and play it only then.
 
 ### `Install(s spec, b allow_stale, b allow_downgrade) → (t job)`
 
-Installs `[repo/]id[@version]`; without a version, the newest release when it is newer than the
+Installs `[repo/]id[@version]`, plus the packages it lists in `requires.packages` that are missing; when one of those cannot be installed the job still finishes, its output lists the ids in `missing` and the `JobFinished` message says the package is incomplete. Without a version, the newest release when it is newer than the
 installed one (this is how updates are installed), else the job finishes at once with the
 installed record. Checked before the job starts: `InvalidArgs` for a malformed spec, a package
 offered by several repositories without `repo`, a package installed from another repository or an

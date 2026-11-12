@@ -62,6 +62,9 @@ impl Backend {
                 if state == "failed" {
                     self.as_mut().set_last_error(q(&message));
                 }
+                if state == "done" && !message.is_empty() {
+                    self.as_mut().set_last_error(q(&message));
+                }
                 self.job_finished(job, q(&state), q(&name), q(&message));
             }
             Event::Thumb(uid, size, path) => self.thumbnail_ready(q(&uid), size, q(&path)),

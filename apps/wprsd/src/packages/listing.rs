@@ -42,6 +42,7 @@ impl Daemon {
             item,
             update,
             changes: String::new(),
+            missing: Vec::new(),
         }
     }
 }

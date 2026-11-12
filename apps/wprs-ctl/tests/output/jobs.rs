@@ -26,6 +26,12 @@ fn finished_jobs_are_summarized_by_kind() {
     for (kind, output, detail) in cases {
         assert_eq!(show::summary(&job(kind, output)), format!("job 4 {kind} done: {detail}"));
     }
+    let mut incomplete = installed();
+    incomplete["missing"] = json!(["org.example.base", "org.example.sky"]);
+    assert_eq!(
+        show::summary(&job("install", incomplete)),
+        "job 4 install done: org.example.dawn 1.0.0 (incomplete: could not install org.example.base, org.example.sky)"
+    );
     assert_eq!(show::summary(&job("a_new_kind", json!({"anything": 1}))), "job 4 unknown done");
     let jobs = reply(json!({"jobs": [job("install", json!(null))]}));
     assert_eq!(

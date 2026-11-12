@@ -128,6 +128,8 @@ model! {
         pub update: Option<String>,
         #[serde(default)]
         pub changes: String,
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        pub missing: Vec<String>,
     }
 
     pub struct InstalledReply { pub model: u32, pub serial: u64, pub packages: Vec<InstalledPackage> }

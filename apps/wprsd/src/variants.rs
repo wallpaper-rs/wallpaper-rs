@@ -58,7 +58,8 @@ impl Daemon {
         self: &std::sync::Arc<Self>,
         record: &wprs_format::Installed,
         (stale, downgrade): (bool, bool),
-    ) {
+    ) -> Vec<String> {
+        let mut missing = Vec::new();
         let needed = wprs_format::peek(&record.path).map(|m| m.dependencies().to_vec()).unwrap_or_default();
         for dependency in needed.iter().filter(|d| !self.present(d)) {
             let spec = matching(&self.store.data, &record.repo_id, dependency);
@@ -69,8 +70,10 @@ impl Daemon {
                     "cannot install a package that {} needs: {e}",
                     record.id
                 );
+                missing.push(dependency.id.clone());
             }
         }
+        missing
     }
 
     fn present(&self, dependency: &wprs_format::Dependency) -> bool {

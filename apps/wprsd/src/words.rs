@@ -132,3 +132,8 @@ pub fn gpu_missing(name: &str) -> String {
 pub fn gpu_unusable(name: &str) -> String {
     tr("The graphics card chosen by “%1” cannot be opened; the automatic choice is used.").replace("%1", name)
 }
+
+pub fn incomplete(missing: &str) -> String {
+    tr("The package is installed but incomplete: it could not install %1, which it needs.")
+        .replace("%1", missing)
+}

@@ -160,9 +160,15 @@ pub fn summary(job: &Job) -> String {
         JobKind::RepoAdd => {
             from_value(output).ok().map(|r: Repo| format!("{} ({} packages)", r.name, r.packages))
         }
-        JobKind::Install => {
-            from_value(output).ok().map(|p: InstalledPackage| format!("{} {}", p.id, p.version))
-        }
+        JobKind::Install => from_value(output).ok().map(|p: InstalledPackage| {
+            let needs = p.missing.join(", ");
+            let note = if needs.is_empty() {
+                String::new()
+            } else {
+                format!(" (incomplete: could not install {needs})")
+            };
+            format!("{} {}{note}", p.id, p.version)
+        }),
         JobKind::Upload => from_value(output).ok().map(|u: UploadOutput| {
             format!("{} {} {}", u.package.unwrap_or_default(), u.version.unwrap_or_default(), u.state)
         }),

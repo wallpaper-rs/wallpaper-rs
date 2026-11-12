@@ -223,3 +223,11 @@ msgid ""
 msgstr ""
 "La tarjeta gráfica elegida con «%1» no se puede abrir; se usa la elección "
 "automática."
+
+#: apps/wprsd/src/words.rs
+msgid ""
+"The package is installed but incomplete: it could not install %1, which it "
+"needs."
+msgstr ""
+"El paquete está instalado pero incompleto: no se pudo instalar %1, que "
+"necesita."

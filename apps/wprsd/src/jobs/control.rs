@@ -60,6 +60,10 @@ impl Daemon {
         };
         let (name, message) =
             error.as_ref().map_or_else(Default::default, |e| (e.name.clone(), e.message.clone()));
+        let missing = output.as_ref().and_then(|o| o.get("missing")).and_then(Value::as_array);
+        let missing: Vec<&str> = missing.into_iter().flatten().filter_map(Value::as_str).collect();
+        let message =
+            if missing.is_empty() { message } else { crate::words::incomplete(&missing.join(", ")) };
         let finish = |e: &mut Entry| {
             (e.job.state, e.job.finished_at, e.job.error, e.job.output) = (state, Some(now()), error, output)
         };
