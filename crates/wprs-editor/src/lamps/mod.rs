@@ -54,7 +54,9 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::Uses(e) => crate::usage::declare(dir, doc, e),
         Action::Film(e) => crate::films::act(dir, doc, e),
         Action::Sprites(e) => crate::cutter::act(dir, doc, e),
-        Action::Keys(e) => crate::graph::edit(doc, e).and_then(|ops| crate::shaping::refused(dir, doc, ops)),
+        Action::EditKeys(e) => {
+            crate::graph::edit(doc, e).and_then(|ops| crate::shaping::refused(dir, doc, ops))
+        }
         Action::Keyframe(e) => {
             crate::keys::keyframe(doc, e).and_then(|ops| crate::shaping::refused(dir, doc, ops))
         }

@@ -160,7 +160,7 @@ fn steps(doc: &Value, action: &Action) -> Result<Vec<Op>> {
             None => Vec::new(),
         },
         Action::Keyframe(k) => crate::shaping::checked(None, doc, keyframe(doc, k)?)?,
-        Action::Keys(k) => crate::shaping::checked(None, doc, crate::graph::edit(doc, k)?)?,
+        Action::EditKeys(k) => crate::shaping::checked(None, doc, crate::graph::edit(doc, k)?)?,
         Action::Translate(t) => {
             crate::texts::translate(doc, &t.pointer, &t.language, t.text.as_deref(), t.add)?
         }

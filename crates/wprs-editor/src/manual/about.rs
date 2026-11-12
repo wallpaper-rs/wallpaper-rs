@@ -46,7 +46,7 @@ pub const ABOUT: [(&str, &str); 72] = [
     ("clip", "Create, change or remove an animation clip of a rig"),
     ("key", "Set or remove a key of a bone in a clip"),
     (
-        "keys",
+        "edit_keys",
         "Edit keys picked in the curve editor: move, scale, lift or set a part of them, bend or straighten handles, remove, or paste copied keys",
     ),
     ("expression", "Add, change or remove a facial expression of a rig"),

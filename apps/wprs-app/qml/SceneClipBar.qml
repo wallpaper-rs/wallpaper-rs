@@ -132,6 +132,12 @@ QQC2.ToolBar {
                 }
             }
 
+            SceneGraphButton {
+                page: clipBar.line.page
+                now: clipBar.line.now
+                sources: SceneGraphSources.rows(clipBar.line.rows, clipBar.mesh, clipBar.line.chosen)
+            }
+
             QQC2.ToolButton {
                 icon.name: "edit-delete"
                 text: App.tr("Remove the key")

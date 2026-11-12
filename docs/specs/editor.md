@@ -113,7 +113,7 @@ undo and redo walk through, the undone ones marked.
 | `uses` | `path` (a script of the scene; every script when left out), `add` and `remove` (names of the `uses` of the script, such as `geometry`, `camera`, `hierarchy` or `shortcuts`); with neither, it declares what the source of the script uses and its `uses` lack. A script that gets `geometry` in a scene with no pool also gets a pool `shapes`. Importing a script (`import_script`) detects `geometry` (`scene.mesh`), `hierarchy` (`setParent`, `children`, `world`, `parent`), `shortcuts` (`openShortcut`) and `camera` along with the other parts; a saved script that uses more than it declares (apart from `audio`, `pointer`, `clicks` and `particles`) is a problem with a one-click fix (the `fix` of the problem is the action to send), shown in the Problems list as *Fix* and in the *What the scripts declare* list of the Assets panel as *Declare what it uses*; `{"uses": {}}` of `rig` lists, for each script, `declared`, `detected` and `missing` | `scene act DIR uses JSON`, `scene ask DIR uses` |
 | `film` | one of `trim` (`layer`, `start`, optional `end`; without `end` the video plays to its end; the part must lie inside the video, whose length is read from its header, and last 0.05 s or more), `rate` (`layer`, `rate` from 0 to 4) or `fit` (`layer`; sets `size` to the real size of the video); the layer is a video layer or an image layer that shows a video | `scene act DIR film JSON` |
 | `sprites` | one of `grid` (`asset`, `rows`, `columns`, optional `margin`, `spacing`, `count` and `order`: `rows`, `columns`, `rows_reversed` or `columns_reversed`; replaces `atlas` and `rects` with the rectangles of the grid), `rects` (every frame), `add`, `change` (`index`, `rect`), `remove`, `reorder` (`from`, `to`), `play` (`fps` from 0.1 to 120 and `frames`, from 1 to the number of frames) and `clear`; each `rect` is `[x, y, width, height]` inside the picture, with at most 256 frames | `scene act DIR sprites JSON` |
-| `keys` | `picks` (lista de `{pointer, times}`: un valor animado o un canal de un clip, `/scene/layers/N/clips/M/bones/B/rotation` y demás, con los segundos de sus claves elegidas), y una de estas ediciones como un solo paso: `shift` (segundos sumados), `scale` (mayor que 0) con `pivot` (estira los tiempos alrededor de ese segundo, junto con el largo de sus asas), `lift` y `value` (suman o fijan la parte `part` del valor: 0 para x o rojo, 1 para y o verde…; `lift` sin `part` suma a todas las partes, salvo el alfa de un color; `value` en listas y colores pide `part`), `remove` (quita las claves elegidas, dejando al menos una), `in_handle`/`out_handle` con `aligned` (una sola clave: el asa dada y, alineada, la otra con la misma pendiente y su propio largo, o un tercio del tramo si no tenía), `straighten` (como en `keyframe`), o pegar: `keys` dentro de cada pick (claves copiadas tal cual) con `at`, el segundo donde cae la primera de todas, reemplazando las claves de esos segundos y animando un valor que era fijo. Se rechazan claves que caen antes de 0 s o a menos de un milisegundo de otra, asas que pasan de su vecina y valores que la escena no lee, con mensajes que nombran el campo; las asas que una clave movida deja más largas que su tramo se acortan hasta la vecina | `scene act DIR keys JSON` |
+| `edit_keys` | `picks` (lista de `{pointer, times}`: un valor animado o un canal de un clip, `/scene/layers/N/clips/M/bones/B/rotation` y demás, con los segundos de sus claves elegidas), y una de estas ediciones como un solo paso: `shift` (segundos sumados), `scale` (mayor que 0) con `pivot` (estira los tiempos alrededor de ese segundo, junto con el largo de sus asas), `lift` y `value` (suman o fijan la parte `part` del valor: 0 para x o rojo, 1 para y o verde…; `lift` sin `part` suma a todas las partes, salvo el alfa de un color; `value` en listas y colores pide `part`), `remove` (quita las claves elegidas, dejando al menos una), `in_handle`/`out_handle` con `aligned` (una sola clave: el asa dada y, alineada, la otra con la misma pendiente y su propio largo, o un tercio del tramo si no tenía), `straighten` (como en `keyframe`), o pegar: `keys` dentro de cada pick (claves copiadas tal cual) con `at`, el segundo donde cae la primera de todas, reemplazando las claves de esos segundos y animando un valor que era fijo. Se rechazan claves que caen antes de 0 s o a menos de un milisegundo de otra, asas que pasan de su vecina y valores que la escena no lee, con mensajes que nombran el campo; las asas que una clave movida deja más largas que su tramo se acortan hasta la vecina | `scene act DIR edit_keys JSON` |
 | `undo`, `redo` | none | `undo`, `redo` |
 
 `film` and `sprites` have no command of their own: `scene act` runs them. The queries `film`
@@ -163,6 +163,29 @@ previas, las luces, los relojes y las estimaciones que el editor calcula a un se
 con lo que dibuja el motor; solo una lista que la escena no puede leer se mezcla aparte, parte por
 parte. Una lista de tres números se interpola como una terna (no como color): un color escrito como
 `[r, g, b]` se prefiere en hexadecimal o con cuatro partes.
+
+### Editor de curvas
+
+El botón *Editor de curvas* de la barra de la línea de tiempo (y el de la barra de clips de una malla
+o un modelo, para los canales `rotation`, `position`, `scale`, `angles`, `shift`, los pesos de las
+formas y el orden de las partes) abre un gráfico de las claves de los valores animados de la capa
+elegida, o de todos si no hay una clave elegida (doce a lo sumo). Cada valor se parte en pistas, una
+por parte: x, y y z de una posición, rojo, verde, azul y alfa de un color, o el número solo; cada
+pista se dibuja con su propia escala, se muestra u oculta con su casilla y sale de la consulta
+`curves` (`wprs-ctl scene ask DIR curves '{"pointer": P}'` o, para un canal de un clip,
+`{"layer", "clip", "row": ["bones", HUESO, CANAL]}`), que da las claves con sus partes, la posición de
+sus asas en cada pista (las que faltan, con su valor por defecto de un tercio del tramo) y la curva
+muestreada por el motor. Un clic elige una clave, Ctrl o Mayúsculas más clic la suma o la quita, y
+arrastrar sobre el fondo elige las claves de un rectángulo. Las claves elegidas se arrastran en tiempo
+y, si son de un solo valor, también en el valor de la pista que se arrastra; la manija a la derecha de
+la caja de la selección estira sus tiempos desde la primera, y *Estirar tiempos ×* hace lo mismo con
+un factor; cada uno es un paso de deshacer con la acción `edit_keys`. Las asas de las claves elegidas se
+arrastran en vivo, como un paso por arrastre, con el tiempo limitado a la clave vecina; en listas y
+colores la altura del asa es la parte del camino, la misma para todas las partes, así que el asa
+dibujada en una pista mueve la curva de todas. Con *Asas alineadas* el asa opuesta gira con la que se
+arrastra, conservando su largo; con *Asas rotas* cada una se mueve sola. *Enderezar*, copiar (Ctrl+C),
+pegar en el cabezal (Ctrl+V; las claves de otro valor se pegan en el valor elegido) y quitar
+(Supr) obran sobre la selección.
 
 The template picker of the layers bar shows the scene, or one script template alone on the canvas as
 a copy of it draws (the preview look `template`). While a template is shown, the layers panel lists

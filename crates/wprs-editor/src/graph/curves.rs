@@ -22,8 +22,24 @@ fn handle(keys: &[Value], i: usize, name: &str) -> Value {
     json!({ "dt": dt, "dv": dv, "set": given.is_some(), "room": span, "share": !scalar, "gains": gains, "at": points })
 }
 
+fn channel(doc: &Value, q: &Value) -> anyhow::Result<(String, f64)> {
+    let (layer, clip) = (q["layer"].as_str().unwrap_or_default(), q["clip"].as_str().unwrap_or_default());
+    let (path, l) = crate::actions::layer(doc, layer)?;
+    let (i, found) = crate::clips::found(l, clip)?;
+    let row = q["row"].as_array().map_or(&[][..], Vec::as_slice);
+    let names: Vec<String> = row.iter().filter_map(Value::as_str).map(crate::ops::escape).collect();
+    Ok((format!("{path}/clips/{i}/{}", names.join("/")), found["from"].as_f64().unwrap_or(0.0)))
+}
+
 pub fn curves(doc: &Value, q: &Value) -> Value {
-    let pointer = q["pointer"].as_str().unwrap_or_default();
+    let (pointer, offset) = match q["pointer"].as_str() {
+        Some(p) => (p.to_owned(), 0.0),
+        None => match channel(doc, q) {
+            Ok(found) => found,
+            Err(e) => return json!({ "error": e.to_string() }),
+        },
+    };
+    let pointer = pointer.as_str();
     let (list, keys) = match super::list(doc, pointer) {
         Ok(found) => found,
         Err(e) => return json!({ "error": e.to_string() }),
@@ -61,5 +77,5 @@ pub fn curves(doc: &Value, q: &Value) -> Value {
             json!({ "part": p, "name": name, "points": points })
         })
         .collect();
-    json!({ "pointer": pointer, "list": list, "range": [from, to], "keys": rows, "tracks": tracks })
+    json!({ "pointer": pointer, "list": list, "offset": offset, "range": [from, to], "keys": rows, "tracks": tracks })
 }

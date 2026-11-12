@@ -25,35 +25,42 @@ fn picked_keys_move_scale_and_lift_together_as_one_step() {
     let mut p = project(&root);
     keyed(&mut p, PLACE, &[(0.0, json!([0, 0])), (1.0, json!([10, 20])), (2.0, json!([30, 40]))]);
     keyed(&mut p, COLOR, &[(0.0, json!("#000000")), (2.0, json!("#ffffff"))]);
-    act(&mut p, json!({"keys": {"picks": [{"pointer": PLACE, "times": [1]}], "out_handle": [0.5, 0.2]}}))
-        .unwrap();
+    act(
+        &mut p,
+        json!({"edit_keys": {"picks": [{"pointer": PLACE, "times": [1]}], "out_handle": [0.5, 0.2]}}),
+    )
+    .unwrap();
     let before = steps(&p);
     let picks = json!([{"pointer": PLACE, "times": [1, 2]}, {"pointer": COLOR, "times": [2]}]);
-    act(&mut p, json!({"keys": {"picks": picks, "scale": 2, "pivot": 1, "shift": 0.5}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": picks, "scale": 2, "pivot": 1, "shift": 0.5}})).unwrap();
     assert_eq!(steps(&p), before + 1, "one step for the whole selection");
     let moved = keys(&p, PLACE);
     assert_eq!(moved.iter().map(|k| k[0].as_f64().unwrap()).collect::<Vec<_>>(), [0.0, 1.5, 3.5]);
     assert_eq!(moved[1][2]["out"], json!([1.0, 0.2]), "handles stretch with the times");
     assert_eq!(keys(&p, COLOR)[1][0], json!(3.5));
     let picks = json!([{"pointer": PLACE, "times": [1.5]}]);
-    act(&mut p, json!({"keys": {"picks": picks, "part": 1, "lift": 5}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": picks, "part": 1, "lift": 5}})).unwrap();
     assert_eq!(keys(&p, PLACE)[1][1], json!([10.0, 25.0]));
     let picks = json!([{"pointer": COLOR, "times": [3.5]}]);
-    act(&mut p, json!({"keys": {"picks": picks, "part": 0, "value": 0}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": picks, "part": 0, "value": 0}})).unwrap();
     assert_eq!(keys(&p, COLOR)[1][1], json!("#00ffff"));
     let picks = json!([{"pointer": PLACE, "times": [1.5]}]);
-    let met = refused(&mut p, json!({"keys": {"picks": picks, "shift": 2}}));
+    let met = refused(&mut p, json!({"edit_keys": {"picks": picks, "shift": 2}}));
     assert!(met.contains("would meet at 3.5 s"), "{met}");
-    let early = refused(&mut p, json!({"keys": {"picks": picks, "shift": -5}}));
+    let early = refused(&mut p, json!({"edit_keys": {"picks": picks, "shift": -5}}));
     assert!(early.contains("before 0 s"), "{early}");
-    let unpart = refused(&mut p, json!({"keys": {"picks": picks, "value": 3}}));
+    let unpart = refused(&mut p, json!({"edit_keys": {"picks": picks, "value": 3}}));
     assert!(unpart.contains("part names the part"), "{unpart}");
-    let missing = refused(&mut p, json!({"keys": {"picks": [{"pointer": PLACE, "times": [9]}], "shift": 1}}));
+    let missing =
+        refused(&mut p, json!({"edit_keys": {"picks": [{"pointer": PLACE, "times": [9]}], "shift": 1}}));
     assert!(missing.contains("no keyframe at 9 s"), "{missing}");
-    act(&mut p, json!({"keys": {"picks": [{"pointer": PLACE, "times": [0, 3.5]}], "remove": true}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": [{"pointer": PLACE, "times": [0, 3.5]}], "remove": true}}))
+        .unwrap();
     assert_eq!(keys(&p, PLACE).len(), 1);
-    let last =
-        refused(&mut p, json!({"keys": {"picks": [{"pointer": PLACE, "times": [1.5]}], "remove": true}}));
+    let last = refused(
+        &mut p,
+        json!({"edit_keys": {"picks": [{"pointer": PLACE, "times": [1.5]}], "remove": true}}),
+    );
     assert!(last.contains("keep at least one key"), "{last}");
 }
 
@@ -63,9 +70,12 @@ fn moving_a_key_shortens_handles_that_would_pass_their_neighbour() {
     let mut p = project(&root);
     let opacity = "/scene/layers/0/opacity";
     keyed(&mut p, opacity, &[(0.0, json!(0)), (2.0, json!(1)), (4.0, json!(0))]);
-    act(&mut p, json!({"keys": {"picks": [{"pointer": opacity, "times": [0]}], "out_handle": [1.5, 0.5]}}))
-        .unwrap();
-    act(&mut p, json!({"keys": {"picks": [{"pointer": opacity, "times": [2]}], "shift": -1}})).unwrap();
+    act(
+        &mut p,
+        json!({"edit_keys": {"picks": [{"pointer": opacity, "times": [0]}], "out_handle": [1.5, 0.5]}}),
+    )
+    .unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": [{"pointer": opacity, "times": [2]}], "shift": -1}})).unwrap();
     assert_eq!(keys(&p, opacity)[0][2]["out"], json!([1.0, 0.5]));
 }
 
@@ -76,22 +86,22 @@ fn aligned_handles_keep_one_slope_and_straighten_is_one_step() {
     let opacity = "/scene/layers/0/opacity";
     keyed(&mut p, opacity, &[(0.0, json!(0)), (1.0, json!(0.5)), (3.0, json!(1))]);
     let pick = json!([{"pointer": opacity, "times": [1]}]);
-    act(&mut p, json!({"keys": {"picks": pick, "in_handle": [0.5, 0.1]}})).unwrap();
-    act(&mut p, json!({"keys": {"picks": pick, "out_handle": [1, 0.4], "aligned": true}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": pick, "in_handle": [0.5, 0.1]}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": pick, "out_handle": [1, 0.4], "aligned": true}})).unwrap();
     let key = &keys(&p, opacity)[1];
     assert_eq!((key[2]["out"].clone(), key[2]["in"].clone()), (json!([1.0, 0.4]), json!([0.5, 0.2])));
-    let broken = json!({"keys": {"picks": pick, "in_handle": [0.25, -0.3]}});
+    let broken = json!({"edit_keys": {"picks": pick, "in_handle": [0.25, -0.3]}});
     act(&mut p, broken).unwrap();
     assert_eq!(keys(&p, opacity)[1][2]["out"], json!([1.0, 0.4]), "a broken handle leaves the other alone");
-    let past = refused(&mut p, json!({"keys": {"picks": pick, "out_handle": [2.5, 0]}}));
+    let past = refused(&mut p, json!({"edit_keys": {"picks": pick, "out_handle": [2.5, 0]}}));
     assert!(past.contains("neighbouring keyframe"), "{past}");
     let two = refused(
         &mut p,
-        json!({"keys": {"picks": [{"pointer": opacity, "times": [0, 1]}], "out_handle": [0.2, 0]}}),
+        json!({"edit_keys": {"picks": [{"pointer": opacity, "times": [0, 1]}], "out_handle": [0.2, 0]}}),
     );
     assert!(two.contains("one key at a time"), "{two}");
     let before = steps(&p);
-    act(&mut p, json!({"keys": {"picks": pick, "straighten": true}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": pick, "straighten": true}})).unwrap();
     assert_eq!(steps(&p), before + 1);
     assert_eq!(keys(&p, opacity)[1][2], json!({"in": [0.25, -0.3]}));
 }
@@ -105,18 +115,18 @@ fn copied_keys_paste_at_a_time_into_their_tracks_and_plain_values() {
     act(&mut p, json!({"set": {"pointer": "/scene/layers/0/transform/rotation", "value": 0}})).unwrap();
     let copied = json!([[0.0, 0.25, {"out": [0.5, 0.1]}], [1.0, 0.75]]);
     let pick = json!([{"pointer": opacity, "keys": copied}, {"pointer": "/scene/layers/0/transform/rotation", "keys": [[0.5, 90]]}]);
-    act(&mut p, json!({"keys": {"picks": pick, "at": 1}})).unwrap();
+    act(&mut p, json!({"edit_keys": {"picks": pick, "at": 1}})).unwrap();
     let pasted: Vec<f64> = keys(&p, opacity).iter().map(|k| k[0].as_f64().unwrap()).collect();
     assert_eq!(pasted, [0.0, 1.0, 2.0]);
     assert_eq!(keys(&p, opacity)[1][1], json!(0.25), "the key at 1 s is replaced");
     assert_eq!(at(&p, "/scene/layers/0/transform/rotation/keys"), json!([[1.5, 90]]));
     let bad = refused(
         &mut p,
-        json!({"keys": {"picks": [{"pointer": opacity, "keys": [[0, "#ff0000"]]}], "at": 4}}),
+        json!({"edit_keys": {"picks": [{"pointer": opacity, "keys": [[0, "#ff0000"]]}], "at": 4}}),
     );
     assert!(bad.contains("give a number"), "{bad}");
     let shapeless =
-        refused(&mut p, json!({"keys": {"picks": [{"pointer": opacity, "keys": [[0]]}], "at": 4}}));
+        refused(&mut p, json!({"edit_keys": {"picks": [{"pointer": opacity, "keys": [[0]]}], "at": 4}}));
     assert!(shapeless.contains("a pasted key is [time, value]"), "{shapeless}");
 }
 
@@ -125,7 +135,7 @@ fn the_curves_query_splits_keys_into_parts_with_handles_and_the_sampled_curve() 
     let root = tempfile::tempdir().unwrap();
     let mut p = project(&root);
     keyed(&mut p, PLACE, &[(0.0, json!([0, 0])), (2.0, json!([100, 50]))]);
-    act(&mut p, json!({"keys": {"picks": [{"pointer": PLACE, "times": [0]}], "out_handle": [1, 0.5]}}))
+    act(&mut p, json!({"edit_keys": {"picks": [{"pointer": PLACE, "times": [0]}], "out_handle": [1, 0.5]}}))
         .unwrap();
     let curves = wprs_editor::graph::curves(&p.doc, &json!({"pointer": PLACE, "samples": 5}));
     assert_eq!(curves["list"], json!(format!("{PLACE}/keys")));

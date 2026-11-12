@@ -44,7 +44,7 @@ pub const ACTIONS: [&str; 74] = [
     "auto_weights",
     "clip",
     "key",
-    "keys",
+    "edit_keys",
     "expression",
     "ik",
     "physics",

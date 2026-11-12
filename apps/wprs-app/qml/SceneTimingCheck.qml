@@ -96,6 +96,9 @@ QtObject {
         Qt.createComponent("SceneCurveCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("SceneGraphCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         Qt.createComponent("ScenePathLanesCheck.qml").createObject(page, {
             "page": page
         }).exercise();

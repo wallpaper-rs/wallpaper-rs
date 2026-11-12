@@ -62,6 +62,12 @@ QQC2.ToolBar {
             }
         }
 
+        SceneGraphButton {
+            page: bar.timeline.page
+            now: bar.timeline.page.clock
+            sources: SceneGraphSources.tracks(bar.timeline.tracks, bar.timeline.chosen)
+        }
+
         QQC2.ToolButton {
             icon.name: "chronometer"
             text: App.tr("Timelines")
