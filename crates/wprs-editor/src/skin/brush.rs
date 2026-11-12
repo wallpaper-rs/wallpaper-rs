@@ -24,18 +24,6 @@ pub struct Brush {
     pub falloff: f32,
 }
 
-fn reach(d: f32, falloff: f32) -> f32 {
-    let hard = 1.0 - falloff;
-    match d {
-        d if d >= 1.0 => 0.0,
-        d if d <= hard => 1.0,
-        d => {
-            let s = (d - hard) / falloff.max(1e-6);
-            1.0 - s * s * (3.0 - 2.0 * s)
-        }
-    }
-}
-
 pub fn fit(w: &mut Vec<(usize, f32)>, locked: &[usize]) {
     w.retain(|x| x.1 > LEAST);
     w.sort_by(|a, b| b.1.total_cmp(&a.1));
@@ -96,16 +84,13 @@ impl Skin {
         self.settle();
         self.auto = false;
         let r = b.radius.max(1e-3);
-        let near: Vec<f32> = self
-            .points
-            .iter()
-            .map(|p| stroke.iter().map(|s| (s[0] - p[0]).hypot(s[1] - p[1]) / r).fold(1.0, f32::min))
-            .collect();
+        let near: Vec<f32> =
+            self.points.iter().map(|p| crate::brush::nearest(stroke, [p[0], p[1]], r)).collect();
         let around = if b.mode == Mode::Smooth { self.neighbours() } else { Vec::new() };
         let before = self.weights.clone();
         let mut touched = 0;
         for (v, d) in near.iter().enumerate() {
-            let a = b.by * reach(*d, b.falloff);
+            let a = b.by * crate::brush::falloff(*d, b.falloff);
             if a <= 0.0 {
                 continue;
             }

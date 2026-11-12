@@ -57,7 +57,16 @@ pub(crate) fn rigged(dir: &Path, doc: &Value, layer: &Value) -> Result<(String, 
         true => wprs_scene::Model::skeleton(&bytes),
         false => Rigged::decode(&bytes),
     };
-    Ok((id.to_owned(), path.to_owned(), rig.map_err(|e| anyhow!("{path} {e}"))?))
+    let mut rig = rig.map_err(|e| anyhow!("{path} {e}"))?;
+    let carved =
+        doc.pointer(&format!("/scene/assets/{}/shapes", crate::ops::escape(id))).and_then(Value::as_object);
+    for name in carved.into_iter().flat_map(|c| c.keys()).filter(|_| solid) {
+        if rig.shape(name).is_none() {
+            rig.shapes.push(name.clone());
+            rig.defaults.push(0.0);
+        }
+    }
+    Ok((id.to_owned(), path.to_owned(), rig))
 }
 
 pub(crate) fn solid(layer: &Value) -> bool {

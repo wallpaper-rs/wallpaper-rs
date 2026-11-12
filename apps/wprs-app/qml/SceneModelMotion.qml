@@ -128,6 +128,11 @@ ColumnLayout {
         motion: motion
     }
 
+    SceneModelSculpt {
+        Layout.fillWidth: true
+        motion: motion
+    }
+
     SceneSliders {
         Layout.fillWidth: true
         visible: (motion.info?.shapes ?? []).length > 0

@@ -59,7 +59,7 @@ pub fn scene(dir: &Path, doc: &Value) -> Option<wprs_scene::Scene> {
     ids.sort_by(|a, b| a.0.cmp(&b.0).then(b.1.cmp(&a.1)));
     ids.dedup_by(|a, b| a.0 == b.0);
     for (id, posed) in ids {
-        if let Ok((model, head)) = path(dir, doc, &id).and_then(|p| file_as(&p, posed)) {
+        if let Ok((model, head)) = super::carved::read(dir, doc, &id, posed) {
             scene.solids.insert(id.clone(), model);
             scene.models.insert(id, head);
         }

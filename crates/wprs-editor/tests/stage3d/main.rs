@@ -7,6 +7,7 @@ use wprs_editor::actions::Action;
 use wprs_editor::starters::starter;
 use wprs_scene::{Forge, ForgeMaterial, ForgeShape};
 
+mod carving;
 mod edits;
 mod flight;
 mod grabs;

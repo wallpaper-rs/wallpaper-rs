@@ -79,7 +79,7 @@ pub const ABOUT: [(&str, &str); 78] = [
     ("ambient", "Set the ambient light"),
     (
         "scene3d",
-        "Edit a 3D layer: models, materials, camera, view, tones, shadows, camera paths and drags of the 3D handles",
+        "Edit a 3D layer: models, materials, sculpted shapes, camera, view, tones, shadows, camera paths and 3D handle drags",
     ),
     ("animate", "Edit the animation of a mesh or model layer: clips, presets and morphs"),
     (

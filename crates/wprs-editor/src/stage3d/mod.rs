@@ -6,6 +6,9 @@ use std::path::Path;
 
 mod bones;
 mod camera;
+mod carve;
+mod carved;
+mod carving;
 mod combed;
 mod cost;
 mod debug;
@@ -60,6 +63,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
         Edit3d::DepthTest { layer, on } => edit::depth_test(doc, layer, *on),
         Edit3d::Material(m) => material::material(dir, doc, m),
         Edit3d::Paint(s) => painted::paint(dir, doc, s),
+        Edit3d::Sculpt(s) => carve::sculpt(dir, doc, s),
         Edit3d::Camera(c) => camera::camera_edit(doc, c),
         Edit3d::View(v) => camera::view_edit(dir, doc, v),
         Edit3d::Tones(t) => camera::tones(doc, t),

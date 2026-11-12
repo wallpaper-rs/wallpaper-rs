@@ -10,6 +10,7 @@ mod batch;
 mod blend;
 mod bodies;
 mod bring;
+pub mod brush;
 mod bundles;
 mod cache;
 pub mod canvas;

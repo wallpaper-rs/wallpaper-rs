@@ -12,7 +12,7 @@ Item {
     readonly property var path: model.path ?? []
     readonly property bool shown: stage.selected === model.pointer
 
-    visible: list.length > 0 && shown
+    visible: shown
 
     SceneLightLines {
         anchors.fill: parent
@@ -50,6 +50,11 @@ Item {
     }
 
     SceneBoneReach3d {
+        anchors.fill: parent
+        bones: bones
+    }
+
+    SceneBoneCarve3d {
         anchors.fill: parent
         bones: bones
     }

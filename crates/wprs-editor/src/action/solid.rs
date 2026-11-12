@@ -24,6 +24,7 @@ pub enum Edit3d {
     },
     Material(MaterialEdit),
     Paint(MaterialStroke),
+    Sculpt(super::SculptStroke),
     Camera(CameraEdit),
     View(ViewEdit),
     Tones(TonesEdit),

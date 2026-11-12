@@ -18,3 +18,26 @@ pub struct ColliderEdit {
     #[serde(default)]
     pub remove: bool,
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum Carve {
+    Push,
+    Pull,
+    Smooth,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct SculptStroke {
+    pub layer: String,
+    pub shape: String,
+    pub mode: Carve,
+    pub points: Vec<[f32; 2]>,
+    pub radius: f32,
+    pub strength: f32,
+    #[serde(default)]
+    pub softness: Option<f32>,
+    #[serde(default)]
+    pub time: f64,
+}

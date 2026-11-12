@@ -46,7 +46,7 @@ QtObject {
         rigging = settings === null ? "" : id;
         sculpt = kind === "depth" ? settings : null;
         weighing = kind === "weights" ? settings : null;
-        carving = kind === "shape" ? settings : null;
+        carving = kind === "shape" || kind === "carve" ? settings : null;
         mode = "";
     }
 

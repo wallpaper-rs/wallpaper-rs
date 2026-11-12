@@ -207,6 +207,7 @@ msgid "%1 is not rgb, r, g or b"
 msgstr "%1 no es rgb, r, g ni b"
 
 #: crates/wprs-core/src/edit/touch.rs crates/wprs-editor/src/sculpt.rs
+#: crates/wprs-editor/src/stage3d/carve.rs
 msgid "a stroke has 1 to %1 points"
 msgstr "un trazo tiene de 1 a %1 puntos"
 
@@ -2397,6 +2398,38 @@ msgstr "una vista de depuración de un material nombra su capa y su material"
 #: crates/wprs-editor/src/stage3d/painted.rs
 msgid "the model has no material named %1"
 msgstr "el modelo no tiene ningún material llamado %1"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "a sculpted shape has a name of 1 to 64 letters, digits, _ or -"
+msgstr "una forma esculpida tiene un nombre de 1 a 64 letras, cifras, _ o -"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "the brush has a radius of 1 to 4096 pixels"
+msgstr "el pincel tiene un radio de 1 a 4096 píxeles"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "the strength goes above 0 and up to %1"
+msgstr "la fuerza va de más de 0 hasta %1"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "the softness goes from 0 to 1"
+msgstr "la suavidad va de 0 a 1"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "the file already has a blend shape named %1"
+msgstr "el archivo ya tiene una forma de mezcla llamada %1"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "a model has at most %1 sculpted shapes"
+msgstr "un modelo tiene como mucho %1 formas esculpidas"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "the scene cannot be read"
+msgstr "no se puede leer la escena"
+
+#: crates/wprs-editor/src/stage3d/carve.rs
+msgid "%1 is not shown at this time"
+msgstr "%1 no se muestra en este momento"
 
 #: crates/wprs-editor/src/stage3d/edit.rs
 msgid "%1 of a model goes from %2 to %3"

@@ -1220,6 +1220,11 @@ msgstr "Tamaño del pincel"
 #: apps/wprs-app/qml/SceneSwarmKeep.qml apps/wprs-app/qml/SceneSwarmPull.qml
 #: apps/wprs-app/qml/SceneTextureBrush.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
+
+#: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneModelSculpt.qml
+#: apps/wprs-app/qml/SceneNormals.qml apps/wprs-app/qml/SceneRigWeights.qml
+#: apps/wprs-app/qml/SceneRigWind.qml apps/wprs-app/qml/SceneSwarmKeep.qml
+#: apps/wprs-app/qml/SceneSwarmPull.qml apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Strength"
 msgstr "Fuerza"
 
@@ -7246,8 +7251,9 @@ msgstr "Gris"
 msgid "Paint the map %1"
 msgstr "Pintar el mapa %1"
 
-#: apps/wprs-app/qml/SceneMapPaint.qml apps/wprs-app/qml/SceneModelTurn.qml
-#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmStart.qml
+#: apps/wprs-app/qml/SceneMapPaint.qml apps/wprs-app/qml/SceneModelSculpt.qml
+#: apps/wprs-app/qml/SceneModelTurn.qml apps/wprs-app/qml/SceneSwarmKin.qml
+#: apps/wprs-app/qml/SceneSwarmStart.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Size"
 msgstr "Tamaño"
@@ -7763,6 +7769,42 @@ msgid ""
 msgstr ""
 "Un punto, una capa o el puntero se ven a través de la cámara; arrastra el "
 "punto sobre la vista."
+
+#: apps/wprs-app/qml/SceneModelSculpt.qml
+msgid "Sculpt a blend shape"
+msgstr "Esculpir una forma de mezcla"
+
+#: apps/wprs-app/qml/SceneModelSculpt.qml
+msgid "Name of the shape"
+msgstr "Nombre de la forma"
+
+#: apps/wprs-app/qml/SceneModelSculpt.qml
+msgid "Sculpt on the view"
+msgstr "Esculpir sobre la vista"
+
+#: apps/wprs-app/qml/SceneModelSculpt.qml
+msgid "Push"
+msgstr "Empujar"
+
+#: apps/wprs-app/qml/SceneModelSculpt.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Pull"
+msgstr "Hundir"
+
+#: apps/wprs-app/qml/SceneModelSculpt.qml apps/wprs-app/qml/SceneRigWeights.qml
+msgid "Smooth"
+msgstr "Suavizar"
+
+#: apps/wprs-app/qml/SceneModelSculpt.qml
+msgid ""
+"Each stroke moves the vertices under the brush along their normals, or evens "
+"them out, and saves the shape in a file beside the model; Undo takes the "
+"stroke back. The shape then has a weight slider like those of the file."
+msgstr ""
+"Cada trazo mueve los vértices bajo el pincel a lo largo de sus normales, o "
+"los empareja, y guarda la forma en un archivo junto al modelo; Deshacer "
+"quita el trazo. La forma tiene luego un deslizador de peso como las del "
+"archivo."
 
 #: apps/wprs-app/qml/SceneModelSwing.qml
 msgid "Hair"
@@ -8738,6 +8780,7 @@ msgstr "Restar"
 #: apps/wprs-app/qml/SceneRigWeights.qml apps/wprs-app/qml/SceneShapeSculpt.qml
 msgid "Smooth"
 msgstr "Suavizar"
+
 
 #: apps/wprs-app/qml/SceneRigWeights.qml
 msgid "Normalise"
@@ -13656,10 +13699,6 @@ msgstr "Probabilidad"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "User property"
 msgstr "Propiedad de usuario"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Pull"
-msgstr "Atracción"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Pointer force"
