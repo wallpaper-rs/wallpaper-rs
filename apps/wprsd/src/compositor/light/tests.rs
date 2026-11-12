@@ -122,6 +122,6 @@ fn hdr_ktx2_pictures_ask_for_hdr_and_keep_their_light_while_the_screen_has_it() 
     let players = HashMap::new();
     let layer = output.shown.layer(&players, 1.0, None, (16, 9)).lit(output.lit[0].image());
     assert_eq!(layer.image.map(wprs_render::GpuImage::id), Some(id));
-    output.show(shown(None), (16, 9), false);
+    output.show(shown(None), (16, 9), false, false);
     assert!(output.lit[0].image().is_none(), "the light outlived its picture");
 }

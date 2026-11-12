@@ -85,7 +85,7 @@ impl State {
         let shown = Shown { content, fit, background, image, uv, transition, relief, scene, tone };
         let transition = !transition.unwrap_or(self.settings.transition).is_zero();
         match self.outputs.get_mut(&name) {
-            Some(output) => output.show(shown, size, transition),
+            Some(output) => output.show(shown, size, transition, self.exporter.is_streaming(&name)),
             None => {
                 let sink =
                     self.windows.remove(&name).map_or(Sink::Stream(None), |w| Sink::Surface(Screen::new(w)));

@@ -68,7 +68,7 @@ fn a_failed_draw_is_tried_again_later_and_less_often() {
     assert_eq!(deadline(&output, true, power, now), Some(now + Duration::from_secs(1) / 60));
     output.failed = 7;
     let red = Shown { background: [255, 0, 0], ..color() };
-    output.show(red, (16, 9), false);
+    output.show(red, (16, 9), false, false);
     assert_eq!(
         deadline(&output, true, power, now),
         Some(now + Duration::from_secs(1) / 60),

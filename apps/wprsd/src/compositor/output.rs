@@ -94,9 +94,13 @@ impl Output {
         }
     }
 
-    pub(super) fn show(&mut self, shown: Shown, size: (u32, u32), transition: bool) {
+    pub(super) fn animates(&self, transition: bool, streaming: bool, resized: bool) -> bool {
+        transition && self.watched(streaming) && !resized && self.active && self.last_render.is_some()
+    }
+
+    pub(super) fn show(&mut self, shown: Shown, size: (u32, u32), transition: bool, streaming: bool) {
         let resized = std::mem::replace(&mut self.size, size) != size;
-        let animate = transition && !resized && self.active && self.last_render.is_some();
+        let animate = self.animates(transition, streaming, resized);
         let old = std::mem::replace(&mut self.shown, shown);
         self.fade = (animate && !old.content.same_source(&self.shown.content)).then_some((old, None));
         let kept = std::mem::take(&mut self.lit[0]);

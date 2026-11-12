@@ -1,9 +1,18 @@
 use crate::*;
 use anyhow::Context;
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::signal::unix::{SignalKind, signal};
 use wprs_core::{Config, dbus};
 use zbus::fdo::{DBusProxy, RequestNameFlags};
+
+fn hurry(grace: Duration) {
+    std::thread::spawn(move || {
+        std::thread::sleep(grace);
+        tracing::warn!("shutdown took longer than {grace:?}; exiting");
+        unsafe { libc::_exit(0) }
+    });
+}
 
 #[tokio::main]
 pub(crate) async fn run(args: Args) -> anyhow::Result<()> {
@@ -82,6 +91,8 @@ pub(crate) async fn run(args: Args) -> anyhow::Result<()> {
         _ = crate::restart::asked() => {}
     }
     tracing::info!("shutting down");
+    hurry(Duration::from_secs(2));
+    tokio::time::timeout(Duration::from_secs(1), connection.release_name(dbus::BUS_NAME)).await.ok();
     tokio::task::spawn_blocking(crate::rgb::stop).await.ok();
     wprs_scene::end_trials();
     inputs::stop(&connection).await;
