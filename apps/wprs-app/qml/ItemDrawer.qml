@@ -160,6 +160,7 @@ Kirigami.OverlayDrawer {
 
             QQC2.Button {
                 visible: drawer.pkg?.kind === "web"
+                enabled: !drawer.pkg?.unshown
                 text: App.tr("Try the page and its lights…")
                 icon.name: "color-management"
                 onClicked: lights.start(drawer.uid)

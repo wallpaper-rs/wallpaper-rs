@@ -97,7 +97,12 @@ impl ItemModel {
             6 => QVariant::from(&i32::from(item.rating)),
             7 => text(&grid::info(item)),
             8 => QVariant::from(&item.missing),
-            9 => text(item.error.as_deref().unwrap_or_default()),
+            9 => text(
+                item.error
+                    .as_deref()
+                    .or(item.package.as_ref().and_then(|p| p.unshown.as_deref()))
+                    .unwrap_or_default(),
+            ),
             10 => text(&item.revoked.map(grid::name).unwrap_or_default()),
             11 => QVariant::from(&row.selected),
             12 => text(&item.tags.join(", ")),

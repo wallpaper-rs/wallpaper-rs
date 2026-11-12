@@ -80,6 +80,7 @@ pub fn details(reply: ItemDetails) -> String {
         ("playlists", Some(list(reply.playlists.iter().map(|p| &p.name))).filter(|p| !p.is_empty())),
         ("thumb", reply.thumb.map(|t| t.display().to_string())),
         ("privacy", package.as_ref().and_then(|p| wprs_format::web_notice(&p.exposes)).map(|m| m.local())),
+        ("not shown here", package.as_ref().and_then(|p| p.unshown.clone())),
         (
             "works on",
             package

@@ -34,6 +34,13 @@ ColumnLayout {
 
     visible: pkg?.kind === "web"
 
+    Kirigami.InlineMessage {
+        Layout.fillWidth: true
+        visible: !!privacy.pkg?.unshown
+        type: Kirigami.MessageType.Warning
+        text: privacy.pkg?.unshown ?? ""
+    }
+
     Kirigami.Heading {
         level: 4
         text: App.tr("Privacy")

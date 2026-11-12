@@ -21,6 +21,8 @@ model! {
         #[serde(default)]
         pub exposes: Vec<String>,
         #[serde(default)]
+        pub unshown: Option<String>,
+        #[serde(default)]
         pub base: Option<String>,
     }
 

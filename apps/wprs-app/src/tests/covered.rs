@@ -36,6 +36,22 @@ fn the_rgb_settings_say_why_covered_lights_wait() {
 }
 
 #[test]
+fn the_library_warns_before_applying_a_web_page_this_build_cannot_show() {
+    let files = qml_files();
+    let text = |name: &str| files.iter().find(|(n, _)| n == name).map(|(_, t)| t.clone()).unwrap();
+    assert!(text("WebPrivacy.qml").contains("visible: !!privacy.pkg?.unshown"));
+    assert!(
+        text("ItemDrawer.qml").contains("enabled: !drawer.pkg?.unshown"),
+        "a page that cannot run was tried"
+    );
+    let rows = include_str!("../rows.rs");
+    assert!(
+        rows.contains("p.unshown.as_deref()"),
+        "library tiles do not mark web pages that cannot be shown"
+    );
+}
+
+#[test]
 fn the_lights_board_places_devices_and_zones_by_their_own_keys() {
     let files = qml_files();
     let text = |name: &str| files.iter().find(|(n, _)| n == name).map(|(_, t)| t.clone()).unwrap();
