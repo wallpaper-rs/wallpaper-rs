@@ -26,7 +26,9 @@ pub(super) fn framing(green: &str, bands: &str) {
     );
     assert_eq!(deep(json!({ "op": "parallax", "uid": green, "on": true })), Value::Null);
     assert_eq!(wanted(), [false, false], "a picture without depth layers stays still");
-    assert_eq!(deep(json!({ "op": "item", "uid": green }))["still"], json!("no_map"));
+    let item = deep(json!({ "op": "item", "uid": green }));
+    assert_eq!(item["still"], json!("no_model"), "the phone has no depth model in the tests");
+    assert!(item["model_size"].as_str().is_some_and(|s| s.ends_with("MB")), "{item}");
     layered(&image(green));
     assert_eq!(wanted(), [true, true]);
     let saved = depth::loaded(&image(green)).unwrap().parallax.unwrap();
