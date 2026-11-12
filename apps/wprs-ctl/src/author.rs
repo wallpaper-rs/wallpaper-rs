@@ -28,6 +28,8 @@ pub enum Author {
         dir: PathBuf,
         #[arg(long, value_name = "FILE", help = "Scene package to extract into the new folder")]
         from: Option<PathBuf>,
+        #[command(flatten)]
+        copying: crate::copying::Copying,
         #[arg(long, help = "Print the description as JSON")]
         json: bool,
     },

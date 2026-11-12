@@ -21,16 +21,19 @@ Kirigami.ScrollablePage {
 
     title: App.tr("Scenes")
     Component.onCompleted: {
-        for (const kind of ["scene", "web"])
-            App.query("Search", ["kind:" + kind, 0, 200], "Library1", reply => {
-                if (!page)
-                    return;
-                page.scenes = page.scenes.concat((reply?.items ?? []).filter(item => String(item.path ?? "").endsWith(".wpak")));
-            });
+        App.query("Search", ["kind:package", 0, 500], "Library1", reply => {
+            if (!page)
+                return;
+            page.scenes = (reply?.items ?? []).filter(item => String(item.path ?? "").endsWith(".wpak"));
+        });
     }
 
     SceneEditor {
         id: helper
+    }
+
+    ItemCopy {
+        id: copying
     }
 
     FolderDialog {
@@ -111,7 +114,7 @@ Kirigami.ScrollablePage {
 
         Kirigami.Heading {
             level: 3
-            text: App.tr("Edit a copy of a scene or web page from the library")
+            text: App.tr("Edit a copy of a package from the library")
             visible: page.scenes.length > 0
         }
 
@@ -127,7 +130,7 @@ Kirigami.ScrollablePage {
                 Layout.fillWidth: true
                 text: modelData.title
                 icon.name: "edit-copy"
-                onClicked: App.compose(helper.folderFor(modelData.title), "", modelData.path)
+                onClicked: copying.start(modelData.path)
             }
         }
     }

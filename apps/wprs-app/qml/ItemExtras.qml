@@ -102,6 +102,10 @@ ColumnLayout {
         onClicked: presets.open()
     }
 
+    ItemCopyButton {
+        drawer: extras.host
+    }
+
     PresetDialog {
         id: presets
 

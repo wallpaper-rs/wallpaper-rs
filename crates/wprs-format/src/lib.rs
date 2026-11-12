@@ -22,6 +22,7 @@ mod index;
 mod install;
 #[cfg(feature = "sign")]
 mod keys;
+mod license;
 mod locale;
 mod manifest;
 pub mod media;
@@ -77,6 +78,7 @@ pub use index::{
 pub use install::{Installed, current, install, installed, remove};
 #[cfg(feature = "sign")]
 pub use keys::{Keypair, Signer, keygen, sign_source};
+pub use license::{Derivatives, derivatives};
 pub use locale::{ENGINE, LOCALE, MAX_LOCALE_FILE, locale_file, valid_tag};
 pub use manifest::{
     Kind, Manifest, SCHEMA, SCHEMA_V1, Strings, manifest_schema, newer_names, newer_spelling,

@@ -1280,7 +1280,19 @@ how the app edits a copy of a scene from the library. The copy drops `manifest.j
 which signed the manifest of the original author, and gets the id `<id>.copy`, so it never takes
 the place of the original in the library. A copy of a version 2 package is derived: its origin
 credits the original (its authors, or its id without them, its title, license and home page) after
-the works the original came from, and its authors stay for whoever edits it to fill in.
+the works the original came from, and its authors stay for whoever edits it to fill in. Its
+license, credits and files stay as they were. Every package kind opens this way, pictures and videos
+included; `--id ID` gives the copy another id than `<id>.copy` (`<id>.copy2` for a copy of a copy),
+which must be a valid id other than the original. A license that allows no derived works (an SPDX
+expression whose every alternative holds `ND`, such as `CC-BY-ND-4.0`, or one that is empty) refuses
+the copy, and nothing is written, unless `--mine` says that the person made the package or has the
+permission of its author; `--facts` prints, without unpacking, the title, kind, license, authors,
+the verdict (`allowed` or `refused`), the conditions that go with an allowed license (attribution,
+share-alike, non-commercial, copyleft, custom terms) and the id of the copy. The app offers *Edit a
+copy…* on the page of each package of the library (any kind that has a `.wpak` file) and in the list
+of the *Scenes* page, which lists scenes, pages, pictures and videos: the dialog shows the same
+facts, lets the person pick the folder and the id, and asks to confirm that the package is theirs
+before it unpacks a refused license.
 
 `validate` lists the problems of the document and of the folder with the pointer of the field
 concerned, nested layers included, the same messages the app shows; unused files and a signature

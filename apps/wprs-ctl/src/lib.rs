@@ -18,6 +18,7 @@ mod clipkey;
 mod clipping;
 mod consent;
 mod console;
+mod copying;
 mod cropping;
 mod daemon;
 mod depth;

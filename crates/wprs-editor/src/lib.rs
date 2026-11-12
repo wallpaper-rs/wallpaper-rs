@@ -17,6 +17,7 @@ pub mod check;
 mod clips;
 pub mod clocks;
 mod contents;
+pub mod copying;
 pub mod covers;
 mod credit;
 mod credits;

@@ -1,12 +1,12 @@
 use crate::check::{check_files, review};
 use crate::project::Project;
 use anyhow::{Result, bail, ensure};
-use serde_json::{Value, json};
+use serde_json::Value;
 use std::fs;
 use std::io::ErrorKind;
 use std::path::{Path, PathBuf};
 use wprs_core::message::said;
-use wprs_format::{Ancestor, Limits, MANIFEST, Manifest, Origin, OriginKind, SIGNATURE, Signer, sign_source};
+use wprs_format::{Ancestor, Limits, Manifest, Origin, OriginKind, SIGNATURE, Signer, sign_source};
 
 pub fn problems(dir: &Path, doc: &Value) -> Vec<crate::Problem> {
     let mut all = review(doc, Some(dir));
@@ -29,7 +29,7 @@ pub fn output(dir: &Path, doc: &Value) -> Result<PathBuf> {
     Ok(dir.parent().unwrap_or(&dir).join(name(doc)))
 }
 
-fn unsign(dir: &Path) -> Result<()> {
+pub(crate) fn unsign(dir: &Path) -> Result<()> {
     match fs::remove_file(dir.join(SIGNATURE)) {
         Err(e) if e.kind() != ErrorKind::NotFound => Err(e.into()),
         _ => Ok(()),
@@ -55,25 +55,10 @@ pub fn build_saved(dir: &Path, doc: &Value, out: &Path, signer: Option<&Signer>)
 }
 
 pub fn extract(file: &Path, dir: &Path) -> Result<String> {
-    let empty = !dir.exists() || fs::read_dir(dir)?.next().is_none();
-    ensure!(empty, said("editor.not_empty_folder", "%1 is not an empty folder", &[&(dir.display())]));
-    let mut package = wprs_format::open(file, &Limits::default())?;
-    wprs_format::extract(&mut package, dir)?;
-    unsign(dir)?;
-    let path = dir.join(MANIFEST);
-    let mut manifest: Value = serde_json::from_slice(&fs::read(&path)?)?;
-    let id = manifest["id"].as_str().unwrap_or("org.example.scene");
-    let id = if id.ends_with(".copy") { id.to_owned() } else { format!("{id}.copy") };
-    if let Some(fields) = manifest.as_object_mut().filter(|_| package.manifest.v2()) {
-        fields.remove("authors");
-        fields.insert("origin".into(), serde_json::to_value(derived(&package.manifest))?);
-    }
-    manifest["id"] = json!(id);
-    fs::write(&path, serde_json::to_string_pretty(&manifest)? + "\n")?;
-    Ok(id)
+    crate::copying::extract(file, dir, None, false)
 }
 
-fn derived(original: &Manifest) -> Origin {
+pub(crate) fn derived(original: &Manifest) -> Origin {
     let cut = |text: String| text.chars().take(128).collect::<String>();
     let authors = Some(original.authors.join(", ")).filter(|a| !a.trim().is_empty());
     let ancestor = Ancestor {

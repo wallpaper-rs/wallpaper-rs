@@ -118,4 +118,15 @@ ctl pack validate "$lic" --key "$scene/author-keys/ana.pub" | grep -q "^ok scene
 ctl pack validate "$scene/licensed.wpak" --key "$scene/author-keys/ana.pub" | grep -q "signer=" || fail "the signature of the package was not accepted"
 if ctl pack validate "$scene/licensed.wpak" --key "$scene/author-keys/bo.pub" 2>/dev/null; then fail "another key vouched for the package"; fi
 ctl pack check "$lic" --json | grep -q '"warnings"' || fail "pack check of the folder gave no report"
-echo "package review and key checks passed"
+ctl scene open "$scene/copy" --from "$scene/licensed.wpak" --facts | grep -q '"new_id":"org.example.licensed.copy"' || fail "the facts of the copy were not printed"
+ctl scene open "$scene/copy" --from "$scene/licensed.wpak" --id org.example.mycopy >/dev/null || fail "a copy was not unpacked"
+[ "$(ctl scene show "$scene/copy" /manifest/id)" = '"org.example.mycopy"' ] || fail "the copy kept the id of the original"
+[ "$(ctl scene show "$scene/copy" /manifest/license)" = '"CC-BY-SA-4.0"' ] || fail "the copy lost the license of the original"
+[ "$(ctl scene show "$scene/copy" /manifest/origin/kind)" = '"derived"' ] || fail "the copy does not credit the original"
+if ctl scene open "$scene/same" --from "$scene/licensed.wpak" --id org.example.licensed 2>/dev/null; then fail "a copy took the id of the original"; fi
+ctl scene set "$lic" /manifest/license '"CC-BY-ND-4.0"' >/dev/null
+ctl scene build "$lic" -o "$scene/nd.wpak" >/dev/null || fail "the scene without derivatives was not built"
+if ctl scene open "$scene/nd-copy" --from "$scene/nd.wpak" 2>/dev/null; then fail "a copy of a package without derivatives was unpacked"; fi
+[ ! -e "$scene/nd-copy/manifest.json" ] || fail "a refused copy left files"
+ctl scene open "$scene/nd-copy" --from "$scene/nd.wpak" --mine >/dev/null || fail "the author could not edit a copy of their own package"
+echo "package review, key and copy checks passed"

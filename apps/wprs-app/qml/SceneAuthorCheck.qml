@@ -52,7 +52,23 @@ QtObject {
         dialog.destroy();
     }
 
+    function copying() {
+        const sample = JSON.parse(Qt.createQmlObject("import io.github.wallpaper_rs.app\nStall {}", page).sample());
+        const dialog = Qt.createComponent("ItemCopy.qml").createObject(page, {});
+        dialog.start(sample.wpak);
+        expect(dialog.facts.verdict === "allowed" && dialog.ready, "a package with a free license cannot be copied: " + JSON.stringify(dialog.facts));
+        expect(dialog.facts.new_id === "org.example.check.copy" && dialog.facts.kind === "image", "the copy does not say what it is");
+        const folder = dialog.helper.folderFor("copy check");
+        const made = JSON.parse(dialog.helper.copyInto(sample.wpak, folder, "org.example.check.mine", false));
+        expect(made.id === "org.example.check.mine", "the copy was not unpacked: " + JSON.stringify(made));
+        expect(JSON.parse(dialog.helper.copyInto(sample.wpak, folder, "", false)).error !== undefined, "a folder in use was overwritten");
+        expect(JSON.parse(dialog.helper.copyFacts("/missing/package.wpak")).error !== undefined, "a missing package has facts");
+        dialog.close();
+        dialog.destroy();
+    }
+
     function exercise() {
+        copying();
         review();
         keys();
         shelving();

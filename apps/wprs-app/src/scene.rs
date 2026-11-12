@@ -32,6 +32,16 @@ pub mod qobject {
         #[qinvokable]
         fn open(self: Pin<&mut SceneEditor>, folder: &QString, package: &QString);
         #[qinvokable]
+        fn copy_facts(self: &SceneEditor, package: &QString) -> QString;
+        #[qinvokable]
+        fn copy_into(
+            self: &SceneEditor,
+            package: &QString,
+            folder: &QString,
+            id: &QString,
+            mine: bool,
+        ) -> QString;
+        #[qinvokable]
         fn run(self: Pin<&mut SceneEditor>, action: &QString, args: &QString, gesture: bool);
         #[qinvokable]
         fn hold(self: Pin<&mut SceneEditor>, on: bool);

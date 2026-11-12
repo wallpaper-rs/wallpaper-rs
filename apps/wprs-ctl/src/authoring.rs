@@ -59,9 +59,13 @@ pub fn run(command: Author) -> Result<()> {
                 .map_err(|e| usage(wprs_editor::told(&e)))?;
             Project::create(&dir, doc)?;
         }
-        Author::Open { dir, from, json } => {
+        Author::Open { dir, from, copying, json } => {
             if let Some(file) = from {
-                package::extract(&file, &dir)?;
+                if copying.facts {
+                    println!("{}", wprs_editor::copying::facts(&file)?);
+                    return Ok(());
+                }
+                wprs_editor::copying::extract(&file, &dir, copying.id.as_deref(), copying.mine)?;
             }
             describe(&Project::open(&dir)?, json)?;
         }
