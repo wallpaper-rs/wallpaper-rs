@@ -8144,3 +8144,7 @@ msgstr "Sincronizar cada, como 12h; 0s para hacerlo solo cuando se pida"
 #: apps/wprs-ctl/src/wallhaven_filters.rs
 msgid "Disk space for the pictures, in MB (16 to 65536)"
 msgstr "Espacio en disco para las imágenes, en MB (16 a 65536)"
+
+#: apps/wprs-ctl/src/folder.rs
+msgid "Show it without the glow of the canvas, to compare it with the glow"
+msgstr "Mostrarla sin el brillo del lienzo, para compararla con el brillo"
