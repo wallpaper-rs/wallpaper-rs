@@ -2,7 +2,7 @@
   "id": "sway",
   "name": { "en": "Sway" },
   "category": "motion",
-  "description": "Sways the picture like something hanging, with stiffness and spread.",
+  "description": "Sways the picture like something hanging, with stiffness and spread, or makes foliage tremble.",
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [
@@ -14,7 +14,9 @@
     { "id": "angle", "type": "float", "default": 3, "min": 0, "max": 90 },
     { "id": "pivot", "type": "vec2", "default": [0.5, 0], "min": -1, "max": 2 },
     { "id": "double", "type": "bool", "default": false },
-    { "id": "phase", "type": "texture", "default": "" }
+    { "id": "phase", "type": "texture", "default": "" },
+    { "id": "foliage", "type": "bool", "default": false },
+    { "id": "ratio", "type": "float", "default": 1, "min": 0.1, "max": 10 }
   ],
   "passes": [{ "entry": "fs_sway", "inputs": ["previous", "asset:phase"] }],
   "fuse": "uv",

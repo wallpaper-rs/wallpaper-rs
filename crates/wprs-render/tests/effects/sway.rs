@@ -13,3 +13,25 @@ fn sway_bends_the_top_and_swing_turns_around_the_pivot() {
     out.check(&[((32, 0), input.at(32, 0))]);
     assert!(out.at(32, 31)[0].abs_diff(input.at(32, 31)[0]) > 20, "{:?}", out.at(32, 31));
 }
+
+#[test]
+fn foliage_trembles_every_row_along_both_directions() {
+    let input = Shot(squares());
+    let Some(mut run) = Fx::new("sway", json!({ "amplitude": 3, "foliage": true, "speed": 0.7 })).input(squares()).run()
+    else {
+        return;
+    };
+    let mut shots = Vec::new();
+    for _ in 0..3 {
+        run.runtime.advance(0.29);
+        shots.push(run.shot());
+    }
+    let row = |s: &Shot, y: u32| (0..W).filter(|&x| s.at(x, y) != input.at(x, y)).count();
+    assert!(shots.iter().any(|s| row(s, H - 2) > 4), "the bottom row stays still");
+    assert!(shots.windows(2).any(|w| w[0].diff(&w[1]) > 1.0));
+    let tall = json!({ "amplitude": 3, "foliage": true, "ratio": 0.1 });
+    let rows = RgbaImage::from_fn(W, H, |_, y| Rgba([(y * 255 / (H - 1)) as u8, 0, 0, 255]));
+    let Some(mut run) = Fx::new("sway", tall).input(rows.clone()).run() else { return };
+    run.runtime.advance(0.4);
+    assert!(run.shot().diff(&Shot(rows)) > 0.2);
+}

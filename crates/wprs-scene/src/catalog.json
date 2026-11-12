@@ -56,7 +56,9 @@
     ],
     "sway": [
       { "id": "double", "type": "bool", "default": false },
-      { "id": "phase", "type": "texture", "default": "" }
+      { "id": "phase", "type": "texture", "default": "" },
+      { "id": "foliage", "type": "bool", "default": false },
+      { "id": "ratio", "type": "float", "default": 1, "min": 0.1, "max": 10 }
     ],
     "twirl": [
       { "id": "aspect", "type": "float", "default": 1, "min": 0.1, "max": 10 },
