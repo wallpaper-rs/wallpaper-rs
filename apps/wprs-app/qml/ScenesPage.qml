@@ -19,7 +19,7 @@ Kirigami.ScrollablePage {
     function exercise() {
         if (page.scenes.length === 0)
             throw new Error("the scenes page offers no installed package to copy");
-        for (const part of [["page", "web"], ["clip", "video"], ["still", "image"]])
+        for (const part of [["page", "web"], ["clip", "video"], ["still", "image"], ["preset", "preset"]])
             if (App.backend.claim("compose." + part[0]))
                 App.compose(helper.folderFor(part[0]), part[1], "");
         App.compose(helper.folderFor("check"), "empty", "");

@@ -70,6 +70,7 @@ pub mod pkg;
 pub mod playlists;
 mod posing;
 pub mod presets;
+mod presetting;
 pub mod private;
 pub mod profiles;
 pub mod props;

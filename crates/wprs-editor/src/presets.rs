@@ -112,3 +112,26 @@ pub(crate) fn edit(
     }
     Ok(ops)
 }
+
+pub fn steps(dir: &Path, doc: &Value) -> Value {
+    if crate::pages::kind(doc) != "preset" {
+        return json!({"preset": false, "ready": false, "steps": []});
+    }
+    let given = |key: &str| doc["preset"][key].as_object().is_some_and(|m| !m.is_empty());
+    let title = !crate::meta::title(doc, &[]).trim().is_empty();
+    let text = |pointer: &str| doc.pointer(pointer).and_then(Value::as_str).is_some_and(|s| !s.is_empty());
+    let problems = crate::package::problems(dir, doc);
+    let errors = problems.iter().filter(|p| !p.warning).count();
+    let previewed = text("/manifest/previews/thumbnail") || text("/manifest/preview");
+    let steps = [
+        ("base", text("/preset/base/id")),
+        ("values", given("values") || given("files")),
+        ("title", title),
+        ("license", text("/manifest/license")),
+        ("preview", previewed),
+        ("check", errors == 0),
+    ];
+    let ready = steps.iter().all(|(_, done)| *done);
+    let rows: Vec<Value> = steps.iter().map(|(id, done)| json!({"id": id, "done": done})).collect();
+    json!({"preset": true, "ready": ready, "steps": rows, "errors": errors})
+}

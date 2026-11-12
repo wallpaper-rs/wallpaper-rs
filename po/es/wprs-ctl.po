@@ -813,11 +813,13 @@ msgstr "Una imagen, o con --animated un gif o webp"
 
 #: apps/wprs-ctl/src/capturing.rs
 msgid ""
-"Draw the scene on the graphics card and keep a frame, or with --animated a "
-"recording of it"
+"Draw the scene on the graphics card, or take a frame of the picture or video "
+"of the package, and keep it, or with --animated a recording of a scene or a "
+"video"
 msgstr ""
-"Dibuja la escena con la tarjeta gráfica y conserva un fotograma, o con --"
-"animated una grabación"
+"Dibuja la escena con la tarjeta gráfica, o toma un fotograma de la imagen o "
+"del video del paquete, y lo conserva, o con --animated una grabación de una "
+"escena o de un video"
 
 #: apps/wprs-ctl/src/capturing.rs
 msgid "Second of the scene to keep; its poster time without it"
@@ -835,6 +837,20 @@ msgstr "Segundos que se graban, de 0,1 a 15; 4 sin él"
 #: apps/wprs-ctl/src/capturing.rs
 msgid "Frames a second of the recording, 1 to 30; 10 without it"
 msgstr "Fotogramas por segundo de la grabación, de 1 a 30; 10 sin él"
+
+#: apps/wprs-ctl/src/capturing.rs
+msgid ""
+"File type of the recording: gif, or webp, which keeps every color; gif "
+"without it"
+msgstr ""
+"Tipo de archivo de la grabación: gif, o webp, que conserva todos los "
+"colores; gif sin él"
+
+#: apps/wprs-ctl/src/capturing.rs
+msgid ""
+"For a preset package: the installed package file of its base, drawn with the "
+"values of the preset"
+msgstr "Para un paquete preajuste: el archivo instalado de su paquete base, que se dibuja con los valores del preajuste"
 
 #: apps/wprs-ctl/src/caution.rs
 msgid ""
@@ -5920,6 +5936,28 @@ msgstr ""
 "Quien consiga una copia de los datos del servidor puede intentar adivinar la "
 "frase sin límite: usa varias palabras sin relación que no uses en ningún "
 "otro sitio y guárdalas en un lugar seguro."
+
+#: apps/wprs-ctl/src/presetting.rs
+msgid "With --from preset: the package the preset is for"
+msgstr "Con --from preset: el paquete para el que es el preajuste"
+
+#: apps/wprs-ctl/src/presetting.rs
+msgid ""
+"With --base: the versions of the base it suits, such as ^1.2; any version "
+"when omitted"
+msgstr "Con --base: las versiones del paquete base a las que sirve, como ^1.2; cualquiera sin él"
+
+#: apps/wprs-ctl/src/presetting.rs
+msgid "With --base: a JSON file with the values the preset sets, by setting id"
+msgstr "Con --base: un archivo JSON con los valores que fija el preajuste, por id de ajuste"
+
+#: apps/wprs-ctl/src/presetting.rs
+msgid "With --from preset: license of the preset, such as CC-BY-4.0"
+msgstr "Con --from preset: licencia del preajuste, como CC-BY-4.0"
+
+#: apps/wprs-ctl/src/presetting.rs
+msgid "With --from preset: a picture to keep as its thumbnail"
+msgstr "Con --from preset: una imagen que se guarda como su miniatura"
 
 #: apps/wprs-ctl/src/private.rs
 msgid "List the private files on the server and those waiting to upload"

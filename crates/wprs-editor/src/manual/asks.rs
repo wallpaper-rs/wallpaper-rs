@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str); 77] = [
+pub const ASKS: [(&str, &str); 78] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map"),
     ("pose", "The rig of a layer posed by clip, time or bone angles"),
@@ -59,6 +59,10 @@ pub const ASKS: [(&str, &str); 77] = [
     (
         "flashes",
         "What the last measure of the flashes found for the scene as it is now, kept between calls, or null; run measures first",
+    ),
+    (
+        "preset_steps",
+        "What a preset package still lacks before it is published: base package, values, title, license, preview and a clean check, each done or not",
     ),
     ("credits", "The files of the package that can be credited, the credits and the files with none"),
     (

@@ -14,6 +14,12 @@ QtObject {
             }).exercise();
             return;
         }
+        if (page.kind === "preset") {
+            Qt.createComponent("PresetPublishCheck.qml").createObject(page, {
+                "page": page
+            }).exercise();
+            return;
+        }
         if (page.kind !== "web" || !has("index.html", "entry") || !has("app.js"))
             throw new Error("the web starter has no page: " + JSON.stringify(page.view.files));
         page.manifestEdit("add_file", {

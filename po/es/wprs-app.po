@@ -1464,6 +1464,15 @@ msgstr "Ensanchar los bordes cercanos (px)"
 #: apps/wprs-app/qml/SceneMeta.qml apps/wprs-app/qml/SceneOffer.qml
 
 #: apps/wprs-app/qml/facade/Labels.qml
+
+#: apps/wprs-app/qml/EditDepth.qml apps/wprs-app/qml/PresetPublish.qml
+
+#: apps/wprs-app/qml/SceneImportSheet.qml apps/wprs-app/qml/SceneLayerFiles.qml
+
+#: apps/wprs-app/qml/SceneMapSlot.qml apps/wprs-app/qml/SceneMeta.qml
+
+#: apps/wprs-app/qml/SceneOffer.qml apps/wprs-app/qml/facade/Labels.qml
+
 msgid "Pictures"
 msgstr "Imágenes"
 
@@ -2624,6 +2633,11 @@ msgid "Try the page and its lights…"
 msgstr "Probar la página y sus luces…"
 
 #: apps/wprs-app/qml/ItemDrawer.qml apps/wprs-app/qml/SceneListEditor.qml
+
+#: apps/wprs-app/qml/ItemDrawer.qml apps/wprs-app/qml/PresetPublish.qml
+
+#: apps/wprs-app/qml/SceneEditors.qml
+
 msgid "Edit…"
 msgstr "Editar…"
 
@@ -3403,23 +3417,32 @@ msgid "Open this address in the browser?"
 msgstr "¿Abrir esta dirección en el navegador?"
 
 #: apps/wprs-app/qml/PackageCapture.qml
-msgid "Record a preview from the scene"
-msgstr "Grabar una vista previa de la escena"
+msgid "Record a preview as WebP"
+msgstr "Grabar una vista previa como WebP"
 
 #: apps/wprs-app/qml/PackageCapture.qml
-msgid "Capture the thumbnail from the scene"
-msgstr "Capturar la miniatura de la escena"
+msgid "Record a preview as GIF"
+msgstr "Grabar una vista previa como GIF"
+
+#: apps/wprs-app/qml/PackageCapture.qml apps/wprs-app/qml/PresetPublish.qml
+msgid "Capture the thumbnail"
+msgstr "Capturar la miniatura"
 
 #: apps/wprs-app/qml/PackageCapture.qml
-msgid "Record 4 seconds of the scene from the second the preview is on"
+msgid ""
+"Record 4 seconds from the second the preview is on, as a GIF or, with the "
+"WebP box ticked, as a WebP that keeps every color"
 msgstr ""
-"Graba 4 segundos de la escena desde el segundo en que está la vista previa"
+"Graba 4 segundos desde el segundo en que está la vista previa, como GIF o, "
+"con la casilla WebP marcada, como WebP, que conserva todos los colores"
 
 #: apps/wprs-app/qml/PackageCapture.qml
-msgid "Draw the scene at the second the preview is on and keep that frame"
-msgstr ""
-"Dibuja la escena en el segundo en que está la vista previa y conserva ese "
-"fotograma"
+msgid "Keep the picture of the package, made smaller, as the thumbnail"
+msgstr "Conserva como miniatura la imagen del paquete, reducida"
+
+#: apps/wprs-app/qml/PackageCapture.qml
+msgid "Draw the second the preview is on and keep that frame"
+msgstr "Dibuja el segundo en que está la vista previa y conserva ese fotograma"
 
 #: apps/wprs-app/qml/PackageClip.qml
 msgid "Choose the video first: the part that plays is cut on its timeline."
@@ -3750,7 +3773,9 @@ msgstr "Envía sus colores a la iluminación RGB"
 msgid ""
 "The page calls window.wprs.rgb.setImage; the user is asked before any color "
 "reaches the keyboard, mouse or other lights."
-msgstr "La página llama a window.wprs.rgb.setImage; se le pregunta a quien la usa antes de que cualquier color llegue al teclado, al ratón o a otras luces."
+msgstr ""
+"La página llama a window.wprs.rgb.setImage; se le pregunta a quien la usa "
+"antes de que cualquier color llegue al teclado, al ratón o a otras luces."
 
 #: apps/wprs-app/qml/PackageInputs.qml
 msgid "Reaches the network (set by the origins above)"
@@ -3999,13 +4024,8 @@ msgstr ""
 #: apps/wprs-app/qml/PackagePreset.qml
 msgid ""
 "Each setting of the base package has its own control; the ones in bold are "
-"set by this preset, and a picture or video is copied into the package. "
-"Title, license and the preview picture are in the package details."
-msgstr ""
-"Cada ajuste del paquete base tiene su propio control; los que están en "
-"negrita los fija este preajuste, y una imagen o un vídeo se copia dentro del "
-"paquete. El título, la licencia y la imagen de vista previa están en los "
-"datos del paquete."
+"set by this preset, and a picture or video is copied into the package."
+msgstr "Cada ajuste del paquete base tiene su propio control; los que están en negrita los fija este preajuste, y una imagen o un video se copia dentro del paquete."
 
 #: apps/wprs-app/qml/PackagePresets.qml
 msgid ""
@@ -4431,6 +4451,73 @@ msgstr "Nuevo preajuste para este elemento"
 #: apps/wprs-app/qml/PresetDialog.qml
 msgid "New preset"
 msgstr "Nuevo preajuste"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "The base package is chosen"
+msgstr "Se eligió el paquete base"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "The preset sets at least one value or file"
+msgstr "El preajuste fija al menos un valor o un archivo"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "It has a title"
+msgstr "Tiene un título"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "It has a license"
+msgstr "Tiene una licencia"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "It has a preview picture"
+msgstr "Tiene una imagen de vista previa"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "The review finds no problem"
+msgstr "La revisión no encuentra ningún problema"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "Publish as a preset"
+msgstr "Publicar como preajuste"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "Install the base package to draw the preset over it."
+msgstr "Instala el paquete base para dibujar el preajuste sobre él."
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid ""
+"Draw the base package with the values of this preset and keep that frame"
+msgstr "Dibuja el paquete base con los valores de este preajuste y conserva ese fotograma"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "Record a preview"
+msgstr "Grabar una vista previa"
+
+#: apps/wprs-app/qml/PresetPublish.qml apps/wprs-app/qml/SceneMeta.qml
+msgid "WebP"
+msgstr "WebP"
+
+#: apps/wprs-app/qml/PresetPublish.qml apps/wprs-app/qml/SceneMeta.qml
+msgid "Record as WebP instead of GIF"
+msgstr "Grabar como WebP en vez de GIF"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "Choose a picture…"
+msgstr "Elegir una imagen…"
+
+#: apps/wprs-app/qml/PresetPublish.qml apps/wprs-app/qml/RepoStatic.qml
+
+#: apps/wprs-app/qml/SceneShelve.qml
+msgid "Publish…"
+msgstr "Publicar…"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "Build the package, then add it to a repository and publish it"
+msgstr "Construye el paquete, añádelo a un repositorio y publícalo"
+
+#: apps/wprs-app/qml/PresetPublish.qml
+msgid "Finish the steps above first"
+msgstr "Termina primero los pasos de arriba"
 
 #: apps/wprs-app/qml/PresetSettings.qml
 msgid "No file"
@@ -5094,10 +5181,6 @@ msgstr ""
 #: apps/wprs-app/qml/RepoStatic.qml
 msgid "Add packages…"
 msgstr "Añadir paquetes…"
-
-#: apps/wprs-app/qml/RepoStatic.qml apps/wprs-app/qml/SceneShelve.qml
-msgid "Publish…"
-msgstr "Publicar…"
 
 #: apps/wprs-app/qml/RepoStatic.qml
 msgid "Change the repository"

@@ -17,6 +17,8 @@ pub enum Author {
         title: Option<String>,
         #[arg(long, help = "Language of the title, such as es or pt-BR; the desktop language when omitted")]
         locale: Option<String>,
+        #[command(flatten)]
+        preset: crate::presetting::Starting,
     },
     #[command(about = crate::steps::OPEN)]
     Open {

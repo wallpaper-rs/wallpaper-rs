@@ -114,10 +114,16 @@ ColumnLayout {
         catalog: preset.catalog
     }
 
+    PresetPublish {
+        Layout.fillWidth: true
+        page: preset.page
+        basePath: preset.basePath
+    }
+
     QQC2.Label {
         Layout.fillWidth: true
         wrapMode: Text.Wrap
         color: Kirigami.Theme.disabledTextColor
-        text: App.tr("Each setting of the base package has its own control; the ones in bold are set by this preset, and a picture or video is copied into the package. Title, license and the preview picture are in the package details.")
+        text: App.tr("Each setting of the base package has its own control; the ones in bold are set by this preset, and a picture or video is copied into the package.")
     }
 }

@@ -578,6 +578,10 @@ wprs-ctl scene act DIR import '{"file":"sound.ogg"}'
 wprs-ctl scene act DIR manifest '{"credit":{"paths":["assets/picture.png"],"license":"CC-BY-4.0","attribution":"Ana Perez"}}'
 wprs-ctl scene ask DIR credits '{}'
 
+ask preset_steps
+wprs-ctl scene new DIR --from preset
+wprs-ctl scene ask DIR preset_steps '{}'
+
 ask flashes
 wprs-ctl scene act DIR add_layer '{"kind":"solid"}'
 wprs-ctl scene ask DIR flashes '{"run":true,"from":0,"seconds":1,"fps":5}'

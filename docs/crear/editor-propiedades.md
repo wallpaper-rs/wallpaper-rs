@@ -427,11 +427,13 @@ Pasos:
 6. Los ajustes de imagen o vídeo tienen un botón **Imagen o vídeo…** con el que eliges un archivo, que se copia dentro del paquete. Una fila sin archivo dice **Ningún archivo**.
 7. Si el paquete base no está instalado, el editor dice «Instala el paquete base para elegir los ajustes que fija este preajuste.» Instálalo o rellena los valores desde la terminal.
 
+Publicar como preajuste: debajo de los ajustes, la sección **Publicar como preajuste** lista los pasos que faltan, cada uno con una marca verde o un aviso: el paquete base elegido, algún valor o archivo, el título, la licencia, la imagen de vista previa y una revisión sin problemas. **Editar…** abre los datos del paquete para el título y la licencia. Para la vista previa, **Capturar la miniatura** dibuja el paquete base instalado con los valores del preajuste y guarda ese cuadro; **Grabar una vista previa** graba unos segundos como gif, o como webp con la casilla **WebP**; **Elegir una imagen…** usa un archivo tuyo. Cuando todos los pasos están hechos, **Publicar…** abre el diálogo de construir, que empaqueta, firma, añade el paquete a un repositorio estático y lo publica. Solo se puede dibujar el preajuste de una escena; el de una página web, una imagen o un video usa una imagen que elijas.
+
 El título, la licencia, el origen y la imagen de vista previa son los de cualquier paquete (mira [paquete](paquete.md)). Un paquete de preajustes sin un paquete base válido tiene un problema en la lista hasta que elijas uno, y un paquete no puede ser su propia base. Compilar, firmar y publicar son las de cualquier paquete.
 
 Los valores que el paquete base no conoce se dejan fuera, con un aviso, cuando el preajuste se aplica.
 
-En la terminal: acción `manifest` con `preset` (campos `base`, `values`, `files` y `clear`) y la orden `wprs-ctl scene new DIR --from preset`. Una versión simple como `1.2.3` se convierte en el rango compatible `^1.2`. Mira [acciones](acciones.md).
+En la terminal: acción `manifest` con `preset` (campos `base`, `values`, `files` y `clear`), la orden `wprs-ctl scene new DIR --from preset` (con `--base`, `--range`, `--values`, `--license` y `--preview` para empezar con todo hecho), la acción `shot` con `base` para la vista previa y la pregunta `preset_steps` para ver qué falta. Una versión simple como `1.2.3` se convierte en el rango compatible `^1.2`. Mira [acciones](acciones.md).
 
 ```sh
 wprs-ctl scene new mi-preajuste --from preset

@@ -67,7 +67,8 @@ pub fn run(command: Author) -> Result<()> {
         Err(command) => *command,
     };
     match command {
-        Author::New { dir, from, id, title, locale } => {
+        Author::New { dir, from, id, title, locale, preset } => {
+            preset.allowed(&from)?;
             let name = fs::canonicalize(
                 dir.parent().filter(|p| !p.as_os_str().is_empty()).unwrap_or(Path::new(".")),
             )?
@@ -78,6 +79,7 @@ pub fn run(command: Author) -> Result<()> {
             let doc = starter(&from, &id, &title.unwrap_or(folder), &locale)
                 .map_err(|e| usage(wprs_editor::told(&e)))?;
             Project::create(&dir, doc)?;
+            preset.apply(&dir)?;
         }
         Author::Open { dir, from, copying, json } => {
             if let Some(file) = from {

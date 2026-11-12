@@ -265,6 +265,12 @@ wprs-ctl scene new mi-escena --from preset
 wprs-ctl scene act mi-escena manifest '{"preset":{"base":{"id":"org.example.base","version":"1.0.0"},"values":{"brillo":2}}}'
 ```
 
+Un preset también se puede empezar con todo lo suyo en un solo comando: `--base ID` y `--range VERSIONES` (cualquiera sin él), `--values ARCHIVO` (un JSON con los valores), `--license ID` y `--preview IMAGEN`. Para saber qué le falta antes de publicarlo, mira la pregunta [`preset_steps`](#preset_steps).
+
+```sh
+wprs-ctl scene new mi-escena --from preset --base org.example.base --range '^1.0' --license CC0-1.0
+```
+
 ##### variante `credit`
 
 Acredita archivos del paquete con su licencia y autor. Se juntan en un mismo crédito los que tienen la misma licencia, autor y dirección. Para ver qué falta por acreditar, mira la pregunta [`credits`](#credits).
@@ -385,15 +391,16 @@ wprs-ctl scene act mi-escena thumbnail '{"file":"mi-escena/assets/preview-animat
 
 #### `shot`
 
-Dibuja la escena para guardar una captura como miniatura, grabar un gif como vista animada, o medir cuánto parpadea. Solo para escenas. Tres variantes.
+Dibuja la escena para guardar una captura como miniatura, grabar un gif o webp como vista animada, o medir cuánto parpadea. `still` y `recording` también sirven para un paquete de imagen (solo `still`: el cuadro es la propia imagen, reducida) y de video (el cuadro y la grabación salen del video). Una página web no se puede dibujar aquí: se le pone una imagen con [`thumbnail`](#thumbnail). `flashes` es solo para escenas. Tres variantes.
 
 ##### variante `still`
 
-Guarda un cuadro como miniatura (de hasta 1024 píxeles).
+Guarda un cuadro como miniatura (de hasta 1024 píxeles). En un paquete preset dibuja la escena base con los valores del preset. En un video, `time` es el segundo del video; sin él se toma un cuadro cerca del comienzo.
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
 | `time` | número | Segundo de la escena. Sin él, el cuadro fijo de la escena (`poster`, ver `clock` en [`canvas`](acciones-capas.md#canvas)). |
+| `base` | texto | Solo en un preset: el archivo instalado del paquete base, que se dibuja con los valores del preset. |
 
 ```sh
 wprs-ctl scene act mi-escena add_layer '{"kind":"solid"}'
@@ -402,13 +409,15 @@ wprs-ctl scene act mi-escena shot '{"still":{"time":1}}'
 
 ##### variante `recording`
 
-Graba un gif de hasta 640 píxeles y 8 MiB (se reduce hasta que cabe) como vista animada.
+Graba un gif o un webp de hasta 640 píxeles y 8 MiB (se reduce hasta que cabe) como vista animada.
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
 | `from` | número | Segundo donde empieza. Por defecto 0. |
 | `seconds` | número | Duración, de 0.1 a 15. Por defecto 4. |
 | `fps` | entero | Cuadros por segundo, de 1 a 30. Por defecto 10. |
+| `base` | texto | Solo en un preset: el archivo del paquete base. |
+| `format` | `gif` o `webp` | Tipo de archivo. `webp` guarda cada color sin perderlo; `gif` es el valor por defecto. |
 
 ```sh
 wprs-ctl scene act mi-escena add_layer '{"kind":"solid"}'
@@ -979,6 +988,21 @@ wprs-ctl scene ask mi-escena credits '{}'
 ```
 
 La última línea da `"missing": ["assets/sonido.ogg"]`.
+
+#### `preset_steps`
+
+Contesta qué le falta a un paquete preset antes de publicarlo. Sirve para saber si ya se puede empaquetar, firmar y añadir a un repositorio. En un paquete que no es preset contesta `"preset": false`.
+
+No lleva argumentos: se pasa `{}`.
+
+La respuesta tiene: `preset` (si el paquete es un preset), `ready` (si todos los pasos están hechos), `errors` (cuántos errores tiene la revisión) y `steps`, con un `id` y un `done` por paso: `base` (el paquete base está elegido), `values` (el preset da algún valor o archivo), `title`, `license`, `preview` (tiene miniatura) y `check` (la revisión no tiene errores).
+
+```sh
+wprs-ctl scene new mi-escena --from preset
+wprs-ctl scene ask mi-escena preset_steps '{}'
+```
+
+La última línea da `"ready": false`: un preset recién creado ya tiene título y licencia, y le faltan `base`, `values`, `preview` y `check`.
 
 #### `flashes`
 
