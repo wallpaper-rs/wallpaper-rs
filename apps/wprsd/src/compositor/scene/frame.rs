@@ -61,7 +61,7 @@ impl SceneState {
             }
             self.view = Some(view);
         }
-        let listing = self.listing_wake(now);
+        let (listing, fps) = (self.listing_wake(now), self.fps(power, refresh));
         let view = self.view.as_mut().expect("created above");
         view.spread(self.spec.span);
         view.light(self.lit);
@@ -90,7 +90,7 @@ impl SceneState {
             let image = view.image().filter(|_| view.stats().damage > 0);
             guard.watch(renderer, image, now, &self.spec.pack.props.id)?;
         }
-        let (fps, timed) = (power.fps(&self.runtime, quality, refresh), view.gpu_time());
+        let timed = view.gpu_time();
         let interval = Duration::from_secs(1) / fps;
         self.sent = (std::mem::take(&mut self.sent.0), frame.view, [size.0, size.1], fps);
         let stopped = self.guard.as_ref().is_some_and(|g| g.speed() == 0.0);

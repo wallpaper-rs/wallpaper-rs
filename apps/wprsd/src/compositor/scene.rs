@@ -21,7 +21,7 @@ use std::time::{Duration, Instant};
 use wprs_core::Region;
 use wprs_render::SceneView;
 use wprs_scene::{
-    Course, Fired, Governor, LayerRead, PointerState, Press, Quality, Runtime, Spare, Touch, Uses, Values,
+    Course, Fired, LayerRead, Pilot, PointerState, Press, Quality, Runtime, Spare, Touch, Uses, Values,
     Voice, Why,
 };
 
@@ -76,7 +76,7 @@ pub(super) struct SceneState {
     guard: Option<Box<super::guard::Guard>>,
     pub(super) damage: Option<Region>,
     spare: Spare,
-    governor: Governor,
+    pilot: Pilot,
     why: Why,
     over: Option<(f32, f32)>,
     automatic: &'static str,
@@ -163,7 +163,7 @@ impl SceneState {
             guard: None,
             damage: None,
             spare: Spare::default(),
-            governor: Governor::default(),
+            pilot: Pilot::default(),
             why,
             over,
             automatic,

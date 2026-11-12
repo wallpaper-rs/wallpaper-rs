@@ -2,7 +2,10 @@ use super::SceneState;
 use crate::compositor::Level;
 use crate::compositor::power::Power;
 use std::time::Instant;
-use wprs_scene::Quality;
+use wprs_scene::{Quality, Why};
+
+#[cfg(test)]
+mod tests;
 
 pub(super) fn owned(spec: &super::SceneSpec, power: Power) -> Power {
     Power {
@@ -17,20 +20,31 @@ impl SceneState {
         owned(&self.spec, power)
     }
 
+    fn steer(&mut self, power: Power) -> ((Quality, Why), Quality) {
+        let cap = self.spec.pack.cap.unwrap_or(Quality::Q3);
+        let capped = |(quality, why): (Quality, Why)| (quality.min(cap), why);
+        let model = power.choose(power.auto(&self.runtime));
+        let ceiling = capped(power.choose(power.reach()));
+        self.pilot.start(power.floor(), model.0);
+        (self.pilot.level(ceiling, model.1), ceiling.0)
+    }
+
+    fn stalled(&self, power: Power) -> bool {
+        power.choice.is_auto() && self.pilot.stalled()
+    }
+
     pub(super) fn level(&mut self, power: Power) -> Quality {
         let power = self.own(power);
         self.restop(power);
-        self.governor.hold(power.floor());
-        let (quality, why) = self.governor.level(power.level(&self.runtime));
+        let ((quality, why), _) = self.steer(power);
         self.why = why;
-        let quality = quality.min(self.spec.pack.cap.unwrap_or(Quality::Q3));
         self.over = power.over(&self.runtime, quality);
-        self.automatic = power.automatic(&self.runtime, quality);
+        self.automatic = if self.stalled(power) { "still" } else { power.automatic(&self.runtime, quality) };
         quality
     }
 
     fn restop(&mut self, power: Power) {
-        let still = self.spec.hold.is_some() || power.still(&self.runtime);
+        let still = self.spec.hold.is_some() || power.still(&self.runtime) || self.stalled(power);
         if std::mem::replace(&mut self.still, still) == still {
             return;
         }
@@ -45,13 +59,20 @@ impl SceneState {
         if std::mem::replace(&mut self.samples, samples) == samples || self.still || self.lights {
             return;
         }
-        let (power, runtime) = (self.own(power), &self.runtime);
-        let budget =
-            |q| (1000.0 / power.fps(runtime, q, refresh).max(1) as f32 * power.gpu_share(), runtime.cost(q));
-        let ceiling = power.level(runtime).0;
-        if self.governor.feed(now, gpu_ms as f32, budget, ceiling, power.raises()) {
-            let level = self.governor.level((ceiling, self.why)).0;
-            tracing::debug!(?level, gpu_ms, "the GPU time of the frames changed the scene quality");
+        let power = self.own(power);
+        let (_, ceiling) = self.steer(power);
+        let full = power.fps(&self.runtime, self.quality, refresh);
+        let halves = power.pace.halves() && power.choice.fixed().is_none();
+        let periods = wprs_scene::periods(halves, [full, wprs_scene::halved(full)]);
+        let modes = (ceiling, power.raises(), power.choice.is_auto());
+        if self.pilot.feed(now, gpu_ms as f32, periods, modes) {
+            let (step, pace) = (self.pilot.step(), self.pilot.pace());
+            tracing::debug!(
+                ?step,
+                pace,
+                gpu_ms,
+                "the GPU time of the frames changed the scene quality or pace"
+            );
         }
     }
 

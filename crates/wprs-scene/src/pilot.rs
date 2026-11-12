@@ -1,14 +1,15 @@
 use crate::{Quality, Why};
-use serde::Serialize;
 use std::time::{Duration, Instant};
 
 mod pace;
+mod step;
 mod window;
 
 pub use pace::{HALVES, halved, periods};
+pub use step::{Step, lowers};
 pub use window::Window;
 
-const DROP: f32 = 0.85;
+pub(crate) const DROP: f32 = 0.85;
 const CLIMB: f32 = 0.5;
 const FIT: f32 = 0.75;
 const STALL: f32 = 2.0;
@@ -19,27 +20,6 @@ const BOUNCE: Duration = Duration::from_secs(30);
 const FLIPS: Duration = Duration::from_secs(120);
 const BREAK: Duration = Duration::from_secs(1);
 const TRIES: u8 = 4;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum Step {
-    #[default]
-    Model,
-    Steady,
-    Climbed,
-    Dropped,
-    Top,
-    Held,
-    Still,
-    Halved,
-    Doubled,
-}
-
-impl Step {
-    pub fn name(self) -> &'static str {
-        ["model", "steady", "climbed", "dropped", "top", "held", "still", "halved", "doubled"][self as usize]
-    }
-}
 
 #[derive(Debug, Clone, Default)]
 pub struct Pilot {
@@ -58,6 +38,7 @@ pub struct Pilot {
     paced: Option<Instant>,
     step: Step,
     frame: Option<f32>,
+    period: Option<f32>,
     stalled: bool,
 }
 
@@ -75,10 +56,12 @@ impl Pilot {
     }
 
     pub fn level(&self, (ceiling, why): (Quality, Why), model: Why) -> (Quality, Why) {
-        let here = self.level.clamp(self.floor(ceiling), ceiling);
+        let floor = self.floor(ceiling);
+        let here = self.level.clamp(floor, ceiling);
         match () {
             _ if here == ceiling => (ceiling, why),
-            _ if self.step == Step::Model => (here, model),
+            _ if self.step == Step::Model || (model == Why::User && here == floor) => (here, model),
+            _ if self.step == Step::Top && self.start.is_some_and(|s| s.1 == here) => (here, model),
             _ => (here, Why::Slow),
         }
     }
@@ -93,6 +76,10 @@ impl Pilot {
 
     pub fn frame_ms(&self) -> Option<f32> {
         self.frame
+    }
+
+    pub fn timing(&self) -> Option<(f32, f32)> {
+        self.frame.zip(self.period)
     }
 
     pub fn step(&self) -> Step {
@@ -123,7 +110,7 @@ impl Pilot {
             return self.moved(at);
         }
         let Some(mean) = self.window.mean() else { return false };
-        self.frame = Some(mean);
+        (self.frame, self.period) = (Some(mean), Some(periods[usize::from(self.halved)]));
         let (floor, period) = (self.floor(ceiling), periods[usize::from(self.halved)]);
         let here = self.level.clamp(floor, ceiling);
         self.level = here;

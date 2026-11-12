@@ -16,7 +16,7 @@ fn slowed(lights: bool) -> (Quality, &'static str) {
     ));
     let (values, extra, clips) = (pack.props.values(&[]), Vec::new(), Vec::new());
     let spec = SceneSpec { values, pack, extra, clips, hold: None, moving: true, quality: None, span: None };
-    let mains = Power::new(Tier::T3, false, 0);
+    let mains = Power { pace: wprs_core::AutoPace::Smooth, ..Power::new(Tier::T3, false, 0) };
     let mut state = SceneState::new(spec, mains);
     let start = Instant::now();
     for sample in 1..=200 {

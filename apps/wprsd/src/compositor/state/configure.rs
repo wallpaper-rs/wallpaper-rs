@@ -117,7 +117,7 @@ impl State {
 
     pub(super) fn apply_settings(&mut self, settings: Settings) {
         let old = std::mem::replace(&mut self.settings, settings);
-        self.power.max_fps = settings.max_fps;
+        (self.power.max_fps, self.power.pace) = (settings.max_fps, settings.pace);
         if std::mem::replace(&mut self.power.choice, settings.quality) != settings.quality {
             self.outputs.values_mut().filter(|o| o.shown.scene.is_some()).for_each(|o| o.dirty = true);
         }

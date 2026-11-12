@@ -196,4 +196,5 @@ pub struct Settings {
     pub scene_sound: bool,
     pub duck: f64,
     pub quality: wprs_core::QualityChoice,
+    pub pace: wprs_core::AutoPace,
 }

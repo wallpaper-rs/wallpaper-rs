@@ -259,36 +259,26 @@ reason, the render and screen sizes, the rate, its cap and the present mode. Wit
 frame costs one atomic read and nothing is measured.
 
 While a scene plays, the GPU time of its frames (measured as described below) moves the quality
-level: when their average (an exponential average over the measured frames, started again after
-more than a second without one) stays above the GPU budget for 2 seconds, the level goes one step
-down; when the average, times the factor by which the level above was dearer (the average just
-before the step down divided by the one 5 seconds after it, between 1 and 16, and at most one and a
-half times the ratio between the estimated costs of the two levels, so a burst of load that ends
-right after the step down does not count), stays under half of the budget of the level above for 15
-seconds, one step back up. When only that factor holds the level down, the level above is tried again
-after a minute. A level that has to come back down within 30 seconds of a raise doubles both waits,
-up to four times, and every raise that holds for 30 seconds halves them again. The level never goes
-above the one that the tier, the cost, the power source and the temperature allow, and never rises on battery,
-with power saving or while the GPU or CPU is warm (on phones, only while charging and cool). The
-budget of a level is half of its frame interval on mains power and a quarter on battery, with power
-saving and on phones. A lower level draws fewer pixels and effects but keeps the frame rate, which
-only the tier, the power source, the temperature and the user set, and comparing the cost measured
-at the level above keeps a scene from bouncing between two levels. The phone steers by measured
-time alone (`Pilot` in `crates/wprs-scene/src/pilot.rs`): its ceiling is `q3` (one step under the
-tier level with power saving, lower while warm or hot), and the level the cost model fits is only
-where it starts, before any frame is measured. It keeps the GPU times of the last 32 frames and,
+level. The desktop daemon and the phone steer by measured time alone, with the same controller
+(`Pilot` in `crates/wprs-scene/src/pilot.rs`): its ceiling is `q3` (one step under the tier level
+with power saving, lower while warm or hot, and never above the `cap` of the package), and the
+level the cost model fits is only where it starts, before any frame is measured. On the desktop
+the level never rises on battery, with power saving or while the GPU or CPU is warm, and the
+reason stays the one of the start (`battery`, `saver` or `heat`) while the level holds there; the
+phone also rises on battery. It keeps the GPU times of the last 32 frames and,
 from the 12th on, averages those between half and twice their median, so a few spikes do not
 count, against the frame interval of the rate it plays at (the user's cap or the display rate).
 When the average stays over 85 % of the interval for 2 seconds the level goes one step down; when
 it stays under half of the interval for 6 seconds (once the level above was measured: when the
-average times the ratio measured there fits three quarters of the interval), one step up, also on
-battery, unless power saving or heat hold it. Two changes are at least 5 seconds apart, the window
+average times the ratio measured there fits three quarters of the interval), one step up, unless the power source, power saving or heat hold it. Two changes are at least 5 seconds apart, the window
 starts again after each, and a step up that comes back down within 30 seconds doubles the wait for
 the next one, up to four times; one that holds for 30 seconds halves it again, so a level measured
 too dear is not tried again while the scene costs the same. Under `auto` a scene whose frames take
 more than twice the interval at the lowest level for 2 seconds stays at `poster_time` until the
-choice changes or the scene is loaded again: on the phone the cost model never stops a scene, only
-the model triangle limit and that measurement do. The phone settings show the measured average
+choice changes or the scene is loaded again, with the notice of a still scene (`quality_auto` is
+`still`): on the phone the cost model never stops a scene, only the model triangle limit and that
+measurement do; the desktop also keeps still a scene whose estimate at `q0` is over the budget of
+the tier. The phone settings show the measured average
 against the interval and the last decision (`model`, `steady`, `climbed`, `dropped`, `top`, `held`,
 `still`, `halved` or `doubled`), and `--quality auto` of `wprs-ctl scene bench` and `--level auto`
 of the phone bench report the same under `auto` (`frame_ms`, `period_ms`, `step`, `still`, `pace`,
@@ -305,8 +295,9 @@ waits, cool-downs and bounce guards apply to the pace (a pace that flips again w
 doubles the wait before it returns to whole, up to four times), a level the user fixes never
 changes its pace, and the user's cap bounds it (half pace halves the cap). On the phone the halved
 pace presents every second vsync of Choreographer, the skipped ones do no work, and the measured
-time stays the GPU time of each frame drawn. The desktop daemon keeps its own controller, so
-`playback.auto_pace` applies to phones and to the bench. Its frame rate otherwise never depends on the level (60 on battery unless the user sets another cap). It
+time stays the GPU time of each frame drawn; on the desktop the halved pace halves the rate the
+daemon schedules the frames of that output at. The frame rate otherwise never depends on the level
+(60 on battery unless the user sets another cap). It
 presents through three swapchain images (latency 2), so the GPU draws a frame while the next one is
 recorded.
 Two changes are at least 5 seconds apart. The quality only moves on devices that time their frames,

@@ -681,23 +681,16 @@ puede hacerlo) se repite en los arranques siguientes, hasta tres veces, y cuenta
 la escena se mueve, el tiempo que cada fotograma añade en la GPU, partículas incluidas, guía la
 calidad (lo que va desde que la GPU termina el fotograma anterior hasta que termina este, así que no
 cuentan ni la espera detrás de un fotograma que sigue en la GPU ni las pasadas que corren a la vez en
-las GPU de teselas; las medidas por pasada solo reparten ese tiempo entre los efectos): si durante 2 s pasa de la mitad del intervalo entre fotogramas (de una cuarta parte con
-batería), baja un nivel, y solo vuelve a subir si, con lo que costaba el nivel de arriba, durante
-15 s no llegaría a la mitad del intervalo de ese nivel, así que una escena no salta entre dos
-niveles cuando el de abajo además dibuja menos fotogramas por segundo. Cuánto más caro se toma el
-nivel de arriba nunca pasa de una vez y media lo que estima el modelo de costes, para que una carga breve
-justo antes de bajar no deje la escena abajo, y si solo eso la retiene, a los 60 s prueba otra vez
-el nivel de arriba; cada vez que tiene que volver a bajar en menos de 30 s, las esperas se duplican
-(hasta cuatro veces) y se acortan otra vez cuando una subida se mantiene. Nunca sube con batería ni
-por encima de lo que permiten la clase, la batería y la temperatura. Sin marcas de tiempo en la GPU
-mide uno de cada quince fotogramas esperando a la GPU. En el teléfono el nivel se guía solo por el
-tiempo medido: el modelo de costes solo da el nivel de los primeros fotogramas, y desde el
+las GPU de teselas; las medidas por pasada solo reparten ese tiempo entre los efectos). Sin marcas de tiempo en la GPU
+mide uno de cada quince fotogramas esperando a la GPU. En el ordenador y en el teléfono el nivel se guía solo por el
+tiempo medido, con el mismo piloto: el modelo de costes solo da el nivel de los primeros fotogramas, y desde el
 duodécimo cuenta la media de los últimos 32 (sin los que pasan del doble o no llegan a la mitad de
 su mediana, para que un pico suelto no cuente) frente al intervalo del ritmo con que se dibuja (el
 tope que elijas o el de la pantalla). Si durante 2 s pasa del 85 % del intervalo, baja un nivel; si
 durante 6 s no llega a la mitad (o, cuando ya midió el nivel de arriba, si la media por lo que ese
-nivel encarecía cabe en tres cuartas partes), sube uno, hasta Q3 (menos con ahorro de energía o
-calor) y también con batería. Entre dos cambios pasan al menos 5 s, y una subida que vuelve a bajar
+nivel encarecía cabe en tres cuartas partes), sube uno, hasta Q3 (menos con ahorro de energía,
+calor o el tope del paquete); en el teléfono también con batería, en el ordenador no sube con batería y
+conserva el motivo («con batería») mientras se queda en el nivel de partida. Entre dos cambios pasan al menos 5 s, y una subida que vuelve a bajar
 en menos de 30 s duplica la espera de la siguiente (hasta cuatro veces), así que no salta entre dos
 niveles. Con `auto`, una escena que en el nivel más bajo tarda más del doble del intervalo durante
 2 s queda quieta en su póster hasta que cambies la elección o se vuelva a cargar. *Ajustes* muestra
@@ -709,8 +702,8 @@ cuartas partes del doble se alcanza a mitad de ritmo (30 fotogramas por segundo 
 nivel a mitad de ritmo cabría también entero (menos de la mitad del intervalo entero durante 6 s) vuelve al ritmo
 entero antes de subir otro nivel, y una sobrecarga baja primero a mitad de ritmo y solo después un nivel. Con `smooth`
 el ritmo no cambia nunca, un nivel fijo tampoco, y el tope que elijas lo acota. *Ajustes* lo muestra en la decisión
-(«q2 a 30 fps»), `wprs-ctl config playback.auto_pace detail|smooth` y la app lo cambian (el ordenador conserva su propio
-control: vale para el teléfono y para `wprs-ctl scene bench --quality auto`, que imprime el ritmo). Presenta con tres imágenes para que la GPU dibuje un fotograma
+(«q2 a 30 fps»), `wprs-ctl config playback.auto_pace detail|smooth` y la app lo cambian; en el ordenador la mitad de
+ritmo dibuja esa pantalla a la mitad de fotogramas, y `wprs-ctl scene bench --quality auto` imprime el ritmo. Presenta con tres imágenes para que la GPU dibuje un fotograma
 mientras se prepara el siguiente. `wprs-ctl state` (`tier`,
 `tier_measured`, y `quality` y `quality_reason` en cada pantalla), la app y la bandeja muestran la
 clase medida, el nivel y por qué bajó.
@@ -720,8 +713,8 @@ fijo de `q0` a `q3`, o `min-q1` y `min-q2`, que dejan la elección automática p
 ese nivel (puede subir más). Lo que elijas se respeta siempre, también con batería, con el ahorro
 de energía, con calor y aunque la escena pese más de lo que aguanta la GPU: entonces la escena se
 ve con todos sus detalles y con menos fotogramas por segundo. Solo la elección automática detiene
-una escena: la que pesa más que el presupuesto del equipo aun en el nivel más bajo (en el teléfono,
-la que se midió demasiado lenta en ese nivel) o dibuja más triángulos de modelos de los que admite
+una escena: la que pesa más que el presupuesto del equipo aun en el nivel más bajo (solo en el ordenador)
+o la que se midió demasiado lenta en ese nivel o dibuja más triángulos de modelos de los que admite
 su clase se queda quieta en su póster con `auto`, se
 reproduce en el nivel fijo elegido y, con `min-q1` o `min-q2`, en ese mínimo (o más arriba si
 cabe). La app (junto a la elección de calidad en *Ajustes* y en cada pantalla con escena), la

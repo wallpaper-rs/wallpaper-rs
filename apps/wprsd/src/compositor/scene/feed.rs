@@ -77,6 +77,7 @@ impl SceneState {
     }
 
     pub(in crate::compositor) fn fps(&self, power: Power, refresh: u32) -> u32 {
-        power.fps(&self.runtime, self.quality, refresh)
+        let fps = power.fps(&self.runtime, self.quality, refresh);
+        if self.pilot.pace() > 1 { wprs_scene::halved(fps) } else { fps }
     }
 }

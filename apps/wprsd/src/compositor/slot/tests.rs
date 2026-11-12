@@ -19,6 +19,7 @@ fn heard() -> (Settings, bool) {
             scene_sound,
             duck: 1.0,
             quality: Default::default(),
+            pace: Default::default(),
         },
         false,
     )

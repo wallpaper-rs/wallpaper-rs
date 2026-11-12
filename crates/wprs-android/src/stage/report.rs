@@ -140,8 +140,9 @@ impl Stage {
         };
         let auto = cooled(budget.auto(&self.runtime));
         let ceiling = budget.choose(cooled(budget.reach()));
-        self.pilot.start(budget.floor(), budget.choose(auto).0);
-        let (quality, why) = self.pilot.level(ceiling, auto.1);
+        let model = budget.choose(auto);
+        self.pilot.start(budget.floor(), model.0);
+        let (quality, why) = self.pilot.level(ceiling, model.1);
         if let Some(slot) = self.reports {
             let costs = [Quality::Q0, Quality::Q1, Quality::Q2, Quality::Q3].map(|q| self.runtime.cost(q));
             let (crowded, stalled) = (budget.crowded(&self.runtime), self.pilot.stalled());

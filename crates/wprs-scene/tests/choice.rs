@@ -2,7 +2,7 @@ use serde_json::json;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use wprs_core::QualityChoice;
-use wprs_scene::{Budget, Governor, Heat, Quality, Runtime, SCHEMA, Scene, Tier, Why};
+use wprs_scene::{Budget, Heat, Pilot, Quality, Runtime, SCHEMA, Scene, Tier, Why};
 
 fn runtime(layers: usize) -> Runtime {
     let blur = |i: usize| json!({ "id": format!("b{i}"), "type": "adjustment", "effects": [{ "effect": "blur", "params": { "radius": 30 } }] });
@@ -120,20 +120,35 @@ fn a_chosen_level_over_the_budget_says_automatic_would_lower_it_when_it_fits_low
 
 #[test]
 fn slow_frames_never_take_the_level_below_the_floor() {
-    let (mut g, mut at) = (Governor::default(), Instant::now());
-    let slow = |g: &mut Governor, at: &mut Instant, ceiling| {
+    let (mut p, mut at) = (Pilot::default(), Instant::now());
+    let slow = |p: &mut Pilot, at: &mut Instant| {
         (0..3600).for_each(|_| {
             *at += Duration::from_micros(16_667);
-            g.feed(*at, 40.0, |_| (8.3, 1.0), ceiling, true);
+            p.feed(*at, 40.0, [16.7; 2], (Quality::Q3, true, false));
         });
     };
-    g.hold(Quality::Q2);
-    slow(&mut g, &mut at, Quality::Q3);
-    assert_eq!(g.level((Quality::Q3, Why::Full)), (Quality::Q2, Why::Slow));
-    g.hold(Quality::Q3);
-    slow(&mut g, &mut at, Quality::Q3);
-    assert_eq!(g.level((Quality::Q3, Why::User)), (Quality::Q3, Why::User), "a fixed level never moves");
-    g.hold(Quality::Q0);
-    slow(&mut g, &mut at, Quality::Q3);
-    assert_eq!(g.level((Quality::Q3, Why::Full)).0, Quality::Q0, "without a floor it goes to the bottom");
+    p.start(Quality::Q2, Quality::Q3);
+    slow(&mut p, &mut at);
+    assert_eq!(p.level((Quality::Q3, Why::Full), Why::Cost), (Quality::Q2, Why::Slow));
+    p.start(Quality::Q3, Quality::Q3);
+    slow(&mut p, &mut at);
+    assert_eq!(
+        p.level((Quality::Q3, Why::User), Why::User),
+        (Quality::Q3, Why::User),
+        "a fixed level never moves"
+    );
+    p.start(Quality::Q0, Quality::Q3);
+    slow(&mut p, &mut at);
+    assert_eq!(
+        p.level((Quality::Q3, Why::Full), Why::Cost).0,
+        Quality::Q0,
+        "without a floor it goes to the bottom"
+    );
+    p.start(Quality::Q1, Quality::Q1);
+    slow(&mut p, &mut at);
+    assert_eq!(
+        p.level((Quality::Q3, Why::Full), Why::User),
+        (Quality::Q1, Why::User),
+        "a floor that holds is the user's"
+    );
 }
