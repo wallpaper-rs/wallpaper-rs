@@ -595,7 +595,11 @@ nits). When `playback.hdr` lights the screen in HDR for such a video, the app wr
 values instead, with 203 nits at 1.0 and the knee toward the headroom of the screen, and a color
 filter keeps the highlights above white; when the decoder reports that its frames are already
 standard (it mapped them itself), the app shows them as they come and does not light the screen in
-HDR for them. Once a picture or nothing takes the place of the video, the screen leaves HDR. `wprs-ctl pack check` says so. Readers look for it only when they
+HDR for them. A video asset inside a scene with `canvas.hdr`, a tone map and `q3` takes the same
+extended values when the screen is lit in HDR, so the tone map of the scene bends its highlights;
+in other scenes it keeps the standard curve. The last frame held by a video that ended, or by a
+paused clip, is converted again when the headroom changes or the graphics card is opened anew.
+Once a picture or nothing takes the place of the video, the screen leaves HDR. `wprs-ctl pack check` says so. Readers look for it only when they
 record facets (adding to a repository, indexing the library, the server and `pack check`), never
 when they open a package to show it. The inputs of a web page come from its manifest as declared;
 for the other kinds every input, `media` included, comes from what the package uses, and an

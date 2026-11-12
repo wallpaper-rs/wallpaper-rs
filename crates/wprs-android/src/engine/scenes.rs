@@ -125,12 +125,14 @@ impl Engine {
             return Ok(None);
         };
         let tier = power::tier(gpu.renderer.software(), gpu.renderer.compute()).min(gpu.renderer.tier());
-        stage.light(crate::hdr::light(&gpu.renderer, surface, power.charging, stage.top())?.0);
+        let lit = crate::hdr::light(&gpu.renderer, surface, power.charging, stage.top())?.0;
+        stage.light(lit);
         stage.turn();
         stage.reports = (!self.preview).then_some(usize::from(self.lock));
         stage.measured = self.measured;
         let wanted = stage.videos();
-        let videos = self.clips.frames(&gpu.renderer, (gpu.epoch, 1.0), &wanted);
+        let headroom = if stage.top() { lit } else { 1.0 };
+        let videos = self.clips.frames(&gpu.renderer, (gpu.epoch, headroom), &wanted);
         let shot =
             stage.render(&gpu.renderer, (self.size, nanos, fps), (power, tier), &videos, self.dirty)?;
         let (hint, delay) = (shot.fps, shot.delay);
