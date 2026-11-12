@@ -19,6 +19,7 @@ pub struct Layout {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct TextLayer {
+    #[schemars(extend("x-multiline" = true))]
     pub text: Value<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[schemars(extend("x-ref" = "font"))]

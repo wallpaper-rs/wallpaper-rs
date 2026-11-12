@@ -12,6 +12,9 @@ Item {
     readonly property Component emitters: emittersEditor
     readonly property Component rules: rulesEditor
     readonly property Component authoring: packageFields
+    readonly property Component fonts: fontsEditor
+    readonly property Component multiline: multilineEditor
+    readonly property Component format: formatEditor
 
     visible: false
 
@@ -75,6 +78,30 @@ Item {
         id: emittersEditor
 
         SceneEmitterList {
+            host: hosts.input
+        }
+    }
+
+    Component {
+        id: multilineEditor
+
+        SceneMultiline {
+            host: hosts.input
+        }
+    }
+
+    Component {
+        id: fontsEditor
+
+        SceneFontPicker {
+            host: hosts.input
+        }
+    }
+
+    Component {
+        id: formatEditor
+
+        SceneFormat {
             host: hosts.input
         }
     }

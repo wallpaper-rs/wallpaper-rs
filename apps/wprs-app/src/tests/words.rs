@@ -143,7 +143,7 @@ fn every_value_and_label_the_scene_editor_shows_is_translated() {
         let free = f.widget.starts_with("ref:") && f.widget != "ref:effect";
         match (f.shown.as_str(), f.widget.as_str()) {
             (Some(raw), "json") => wanted.push((format!("{} shows the raw value {raw:?}", f.pointer), None)),
-            (_, "text" | "texts" | "markup" | "color" | "rgb" | "lines") => {}
+            (_, "text" | "multiline" | "format" | "texts" | "markup" | "color" | "rgb" | "lines") => {}
             (Some(text), _) if !free && !text.is_empty() => {
                 wanted.push((format!("{} {text}", f.pointer), words.value(text)))
             }

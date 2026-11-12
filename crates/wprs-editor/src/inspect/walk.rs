@@ -79,6 +79,8 @@ impl Walk<'_> {
             _ if meta["x-computed"] == true => "computed".into(),
             _ if meta["x-condition"] == true => "condition".into(),
             _ if meta["x-scalar"] == true => "scalar".into(),
+            _ if meta["x-format"] == true => "format".into(),
+            _ if meta["x-multiline"] == true => "multiline".into(),
             _ if meta["x-color"] == true => "color".into(),
             ("Color", _) => "color".into(),
             ("Vec2", _) => "vec2".into(),
