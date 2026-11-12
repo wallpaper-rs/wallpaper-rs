@@ -5573,7 +5573,9 @@ msgstr "Índice del emisor, 0 el primero"
 msgid ""
 "Particles started at once; replaces every burst of the emitter with this one "
 "(several go through scene act)"
-msgstr "Partículas que salen de una vez; sustituye todas las ráfagas del emisor por esta (varias se escriben con scene act)"
+msgstr ""
+"Partículas que salen de una vez; sustituye todas las ráfagas del emisor por "
+"esta (varias se escriben con scene act)"
 
 #: apps/wprs-ctl/src/seeding.rs
 msgid "Seconds between bursts"

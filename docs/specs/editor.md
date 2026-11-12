@@ -595,8 +595,11 @@ The preview also draws the colliders of the system, colored by their response (r
 die, green where they stick): the border of the canvas, a plane as a line with a handle on its
 point and one that turns the side particles stay on, a circle with handles on its center and radius,
 a box with handles on two corners and a segment with handles on its ends, dashed when they keep
-particles inside, and a layer as its outline with its field of distances over it (computed from the
-picture of an image layer; other layers show only their outline). A force that keeps a distance
+particles inside, a layer as its outline with its field of distances over it (computed from the
+picture of an image layer and from the pixels of a text, a mesh texture or the children of a group,
+which a group shows approximately) and a mask as the canvas rectangle with the field of distances of its
+picture stretched over it (`colliders` of the query: `field` is a list of `[x, y, distance]`, negative
+inside, and `approximate` is true when nothing could be read). A force that keeps a distance
 draws a ring of that distance around its target, with a handle on the target and one on the ring;
 one that keeps particles between two points draws the line between them with a handle on each end;
 an `attractor`, a `vortex`, an `orbit` and a `slow_near` (the `pulls` of the query: `index`, `kind`,
@@ -607,8 +610,8 @@ moves that point (the pointer has no handle). The steering section of the inspec
 these forces and lists them with the point they follow, their strength (the speed a `slow_near`
 keeps) and a slider for each reach. The inspector lists the
 colliders with a picker of the response (bounce, slide, stop, stick or kill) and the bounce and
-friction it uses, whether a circle or a box keeps particles inside, and a picker of the layers it may
-collide with; the kept distances with pickers of their targets among the control points and the
+friction it uses, whether a circle or a box keeps particles inside, a picker of the layers it may
+collide with and, for a picture mask, its picture and the opacity from which it is solid; the kept distances with pickers of their targets among the control points and the
 pointer and sliders for the distance and the strength; a toggle and sliders for the neighbour radius,
 the separation, the alignment, the cohesion and the most speed of a flock; the remap operators with
 the same editor as the remaps of the starting values and `age` as one more input; and the rope and

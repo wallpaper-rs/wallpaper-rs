@@ -58,9 +58,9 @@ Item {
                         ctx.arc(c.center[0] * r, c.center[1] * r, c.radius * r, 0, 2 * Math.PI);
                         ctx.stroke();
                     }
-                    if (c.kind === "layer") {
+                    if (c.kind === "layer" || c.kind === "mask") {
                         ctx.setLineDash([4, 4]);
-                        line(c.outline, true);
+                        line(c.outline ?? c.corners, true);
                         c.field.forEach(f => {
                                 ctx.globalAlpha = Math.max(0.1, 0.8 - Math.abs(f[2]) / 40);
                                 ctx.fillStyle = f[2] < 0 ? walls.tint(c) : Kirigami.Theme.disabledTextColor;

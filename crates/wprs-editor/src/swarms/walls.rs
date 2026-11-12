@@ -33,25 +33,20 @@ fn layer(dir: &Path, doc: &Value, id: &str, t: f64) -> Value {
     let path = asset.as_str().and_then(|a| doc["scene"]["assets"][a]["path"].as_str()).map(|p| dir.join(p));
     let Some(picture) = path.filter(|_| found["type"] == "image").and_then(|p| crate::pictures::open(p).ok())
     else {
+        let sampled = super::samples::samples(dir, doc, &json!({ "id": id }), t);
+        let solid: Vec<[f64; 2]> = sampled["samples"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(|p| Some([p[0].as_f64()?, p[1].as_f64()?]))
+            .collect();
+        out["field"] = json!(super::reach::points(&solid));
+        out["approximate"] = json!(solid.is_empty() || sampled["approximate"] == true);
         return out;
     };
     let small = picture.thumbnail(62, 62).to_rgba8();
-    let (sw, sh) = (small.width() + 2, small.height() + 2);
-    let mut rgba = vec![0u8; (sw * sh * 4) as usize];
-    for (x, y, p) in small.enumerate_pixels() {
-        rgba[(((y + 1) * sw + x + 1) * 4 + 3) as usize] = p.0[3];
-    }
-    let (cells, d) = wprs_scene::distance_field(sw, sh, &rgba, 0.5, [sw as f32, sh as f32]);
     let unit = w.max(h) / f64::from(small.width().max(small.height()));
-    let step = cells[0].max(cells[1]).div_ceil(24).max(1);
-    let field = (0..cells[1]).step_by(step).flat_map(|y| (0..cells[0]).step_by(step).map(move |x| (x, y)));
-    let field = field.map(|(x, y)| {
-        let (u, v) =
-            ((x as f64 - 0.5) / f64::from(small.width()), (y as f64 - 0.5) / f64::from(small.height()));
-        let [px, py] = place(u, v);
-        json!([px, py, (f64::from(d[y * cells[0] + x]) * unit * 10.0).round() / 10.0])
-    });
-    out["field"] = json!(field.collect::<Vec<_>>());
+    out["field"] = json!(super::reach::field(&small, 0.5, unit, &place));
     out["approximate"] = json!(false);
     out
 }
@@ -84,7 +79,7 @@ pub(super) fn colliders(dir: &Path, doc: &Value, s: &Value, f: &Frame, t: f64) -
             }
             "segment" => json!({ "from": p(&v["from"]), "to": p(&v["to"]) }),
             "layer" => layer(dir, doc, v["id"].as_str().unwrap_or_default(), t),
-            "mask" => json!({ "texture": v["texture"] }),
+            "mask" => super::reach::mask(dir, doc, v, f, canvas),
             _ => json!({ "corners": [[0.0, 0.0], [canvas[0], 0.0], canvas, [0.0, canvas[1]]] }),
         };
         out["index"] = json!(k);

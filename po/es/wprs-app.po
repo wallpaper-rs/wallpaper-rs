@@ -7394,6 +7394,14 @@ msgid "Layer"
 msgstr "Capa"
 
 #: apps/wprs-app/qml/SceneSwarmCollider.qml
+msgid "Picture"
+msgstr "Imagen"
+
+#: apps/wprs-app/qml/SceneSwarmCollider.qml
+msgid "Solid from opacity %1"
+msgstr "Sólido desde la opacidad %1"
+
+#: apps/wprs-app/qml/SceneSwarmCollider.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Friction"
 msgstr "Fricción"
@@ -7428,6 +7436,10 @@ msgstr "Caja"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Segment"
 msgstr "Segmento"
+
+#: apps/wprs-app/qml/SceneSwarmColliders.qml
+msgid "Picture mask"
+msgstr "Máscara de imagen"
 
 #: apps/wprs-app/qml/SceneSwarmColliders.qml
 msgid "Colliders"

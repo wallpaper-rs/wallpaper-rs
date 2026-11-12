@@ -9,8 +9,8 @@ ColumnLayout {
 
     required property var tools
     readonly property var list: tools.info?.colliders ?? []
-    readonly property var kinds: ["canvas", "plane", "circle", "box", "segment", "layer"]
-    readonly property var names: [App.tr("Canvas"), App.tr("Plane"), App.tr("Circle"), App.tr("Box"), App.tr("Segment"), App.tr("Layer")]
+    readonly property var kinds: ["canvas", "plane", "circle", "box", "segment", "layer", "mask"]
+    readonly property var names: [App.tr("Canvas"), App.tr("Plane"), App.tr("Circle"), App.tr("Box"), App.tr("Segment"), App.tr("Layer"), App.tr("Picture mask")]
 
     function fresh(kind) {
         const c = [960, 540];
@@ -43,6 +43,12 @@ ColumnLayout {
             "layer": {
                 "layer": {
                     "id": tools.info?.sources[0] ?? ""
+                }
+            },
+            "mask": {
+                "mask": {
+                    "texture": tools.info?.strands?.textures?.[0] ?? "",
+                    "threshold": 0.5
                 }
             }
         }[kind];

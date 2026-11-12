@@ -12,14 +12,15 @@ GridLayout {
     required property var kinds
     readonly property var responses: ["bounce", "slide", "stop", "stick", "kill"]
     readonly property var sources: tools.info?.sources ?? []
+    readonly property var pictures: tools.info?.strands?.textures ?? []
 
-    function patch(change) {
+    function patch(change, gesture) {
         const v = JSON.parse(JSON.stringify(wall.value));
         change(v);
         tools.edit("collider", {
                 "index": wall.index,
                 "collider": v
-            });
+            }, gesture);
     }
 
     function respond(response, more, gesture) {
@@ -61,6 +62,33 @@ GridLayout {
         model: row.sources
         currentIndex: row.sources.indexOf(row.wall.id)
         onActivated: index => row.patch(v => v.bounds.layer.id = row.sources[index])
+    }
+
+    QQC2.Label {
+        visible: row.wall.kind === "mask"
+        text: App.tr("Picture")
+    }
+
+    QQC2.ComboBox {
+        Layout.fillWidth: true
+        visible: row.wall.kind === "mask"
+        model: row.pictures
+        currentIndex: row.pictures.indexOf(row.wall.texture)
+        onActivated: index => row.patch(v => v.bounds.mask.texture = row.pictures[index])
+    }
+
+    QQC2.Label {
+        visible: row.wall.kind === "mask"
+        text: App.tr("Solid from opacity %1", Math.round((row.wall.threshold ?? 0.5) * 100) / 100)
+    }
+
+    SceneSlider {
+        Layout.fillWidth: true
+        visible: row.wall.kind === "mask"
+        from: 0
+        to: 1
+        value: row.wall.threshold ?? 0.5
+        onMoved: row.patch(v => v.bounds.mask.threshold = Math.round(value * 100) / 100, true)
     }
 
     QQC2.Label {

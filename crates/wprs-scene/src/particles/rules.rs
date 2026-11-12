@@ -1,8 +1,8 @@
+use super::MAX_BURSTS;
 use super::{
     EmitShape, MAX_COLLIDERS, MAX_COLLIDERS2, MAX_EMITTERS, MAX_EMITTERS2, MAX_FORCES, MAX_FORCES2,
     MAX_PREWARM, MAX_PREWARM2, MAX_RATE, System,
 };
-use super::MAX_BURSTS;
 use crate::MAX_PARTICLES;
 use crate::validate::{Check, Issue};
 use crate::value::Value;

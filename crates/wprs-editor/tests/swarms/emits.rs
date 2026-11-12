@@ -13,7 +13,8 @@ fn an_emitter_bursts_pauses_waits_follows_and_listens() {
         (&e["bursts"][0]["count"], &e["follow"], &e["audio_gate"]),
         (&json!(10), &json!("cursor"), &json!(true))
     );
-    edit(&mut p, "emit", json!({"emitter": 0, "clear": ["bursts"], "values": {"audio_gate": false}})).unwrap();
+    edit(&mut p, "emit", json!({"emitter": 0, "clear": ["bursts"], "values": {"audio_gate": false}}))
+        .unwrap();
     let e = &system(&p)["emitters"][0];
     assert!(e.get("bursts").is_none() && e.get("audio_gate").is_none() && e["delay"] == json!(1));
     assert!(edit(&mut p, "emit", json!({"emitter": 0, "values": {"wobble": 1}})).is_err());

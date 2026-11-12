@@ -88,10 +88,10 @@ pub use crate::package::shader_line;
 pub use crate::particles::{
     Area, Around, Bake, Between, Boids, Bow, Burst, CPU_BOIDS, CPU_PARTICLES, Carry, Census, Child, Cloud,
     Collider, ControlPoint, Cue, EVENT, EmitShape, Emitter, Falloff, Flock, Follow, Force, Frames, Handle,
-    Hsv, Inheritable, Init, Instance, KeepBetween, KeepDistance, Kept, MAX_BOIDS, MAX_CHILDREN,
+    Hsv, Inheritable, Init, Instance, KeepBetween, KeepDistance, Kept, MAX_BOIDS, MAX_BURSTS, MAX_CHILDREN,
     MAX_COLLIDERS, MAX_COLLIDERS2, MAX_CONTROL, MAX_CURVE, MAX_DEPTH as MAX_GENERATIONS, MAX_EMIT,
     MAX_EMITTERS, MAX_EMITTERS2, MAX_FIELD, MAX_FORCES, MAX_FORCES2, MAX_HATCH, MAX_LONG, MAX_PALETTE,
-    MAX_BURSTS, MAX_PARTS, MAX_POINTS, MAX_PREWARM, MAX_PREWARM2, MAX_REMAPS, MAX_ROPE, MAX_STOPS, MAX_TRAIL, Moment,
+    MAX_PARTS, MAX_POINTS, MAX_PREWARM, MAX_PREWARM2, MAX_REMAPS, MAX_ROPE, MAX_STOPS, MAX_TRAIL, Moment,
     OffsetNoise, Operator, Orient, Oscillate, PARTICLE_EVENTS, Palette, Part, Particle, Periodic,
     Perspective, Placement, Play, REMAP_INPUTS, ROPE_POINTS, Refract, Refresh, Remap, RemapOp, RemapOutput,
     Render, Ring, Rope, STEP, SUBSTEPS, Sim, SlowNear, Source, Spread, Stack, Strand, Stretch, Surface,

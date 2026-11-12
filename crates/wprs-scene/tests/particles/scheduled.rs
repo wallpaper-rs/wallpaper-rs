@@ -143,5 +143,8 @@ fn an_emitter_runs_several_independent_bursts() {
     assert!(near(seconds[1].0, 0.25) && near(seconds[2].0, 0.5) && near(seconds[3].0, 1.25), "{seconds:?}");
     let doc = json!({ "capacity": 10, "emitters": [{ "shape": "edge", "bursts": vec![json!({ "count": 1 }); 9] }] });
     let found = Scene::from_json(&scene(doc, true)).unwrap().validate(&Default::default());
-    assert!(found.iter().any(|i| matches!(i, Issue::Range { path, .. } if path.ends_with("/bursts"))), "{found:?}");
+    assert!(
+        found.iter().any(|i| matches!(i, Issue::Range { path, .. } if path.ends_with("/bursts"))),
+        "{found:?}"
+    );
 }

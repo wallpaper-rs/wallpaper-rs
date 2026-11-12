@@ -25,7 +25,10 @@ pub enum Seeding {
     Emitter {
         #[arg(help = "Index of the emitter, 0 first")]
         index: usize,
-        #[arg(long, help = "Particles started at once; replaces every burst of the emitter with this one (several go through scene act)")]
+        #[arg(
+            long,
+            help = "Particles started at once; replaces every burst of the emitter with this one (several go through scene act)"
+        )]
         burst: Option<u32>,
         #[arg(allow_negative_numbers = true, long, requires = "burst", help = "Seconds between bursts")]
         every: Option<f64>,
