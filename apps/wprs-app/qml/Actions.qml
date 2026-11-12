@@ -131,7 +131,7 @@ Item {
                 }
             });
         const on = make("01J9Z0X9Z6Q7X4F3K5E1V0R1SC", "scene");
-        const off = make("01J9Z0X9Z6Q7X4F3K5E1V0R1AB", "scene");
+        const off = make("01J9Z0X9Z6Q7X4F3K5E1V0R1ZZ", "scene");
         const image = make("01J9Z0X9Z6Q7X4F3K5E1V0R1AB", "image");
         const found = [on.screens.join(), off.screens.length, on.visible, image.visible];
         [on, off, image].forEach(item => item.destroy());
