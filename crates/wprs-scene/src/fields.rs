@@ -7,6 +7,7 @@ impl Check<'_> {
     pub(crate) fn fields(&mut self, p: &str, layer: &Layer) {
         self.uses(layer.blend.newer(), "blend_modes2");
         self.uses(layer.parallax.apart(), "parallax2");
+        self.uses(layer.parallax.bound(), "parallax_values");
         if let Some(b) = &layer.brightness {
             self.uses(true, "layer_color");
             self.number(&format!("{p}/brightness"), b, 0.0, 16.0);

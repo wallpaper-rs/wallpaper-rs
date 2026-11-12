@@ -44,39 +44,27 @@ pub enum Inherit {
     Opacity,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize, JsonSchema)]
-#[serde(from = "Depth", into = "Depth")]
-pub struct Parallax(pub [f32; 2]);
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(transparent)]
+pub struct Parallax(pub Value<Vec2>);
 
-#[derive(Serialize, Deserialize, JsonSchema)]
-#[serde(untagged)]
-enum Depth {
-    Both(f32),
-    Apart([f32; 2]),
-}
-
-impl From<Depth> for Parallax {
-    fn from(depth: Depth) -> Self {
-        Parallax(match depth {
-            Depth::Both(v) => [v; 2],
-            Depth::Apart(v) => v,
-        })
-    }
-}
-
-impl From<Parallax> for Depth {
-    fn from(Parallax([x, y]): Parallax) -> Self {
-        if x == y { Depth::Both(x) } else { Depth::Apart([x, y]) }
+impl Default for Parallax {
+    fn default() -> Self {
+        Parallax(Value::Fixed(Vec2([0.0; 2])))
     }
 }
 
 impl Parallax {
     pub fn is_zero(&self) -> bool {
-        self.0 == [0.0; 2]
+        matches!(&self.0, Value::Fixed(Vec2(v)) if *v == [0.0; 2])
     }
 
     pub fn apart(&self) -> bool {
-        self.0[0] != self.0[1]
+        matches!(&self.0, Value::Fixed(Vec2([x, y])) if x != y)
+    }
+
+    pub fn bound(&self) -> bool {
+        matches!(self.0, Value::Bound(_))
     }
 }
 

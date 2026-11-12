@@ -31,6 +31,8 @@ pub enum CanvasEdit {
         #[serde(default)]
         pointer: Option<f64>,
         #[serde(default)]
+        offset: Option<[f64; 2]>,
+        #[serde(default)]
         gyro: Option<bool>,
         #[serde(default)]
         off: bool,

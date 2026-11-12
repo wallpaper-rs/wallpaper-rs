@@ -11,9 +11,14 @@ impl Check<'_> {
         let c = &self.scene.canvas;
         if let Some(f) = &c.parallax {
             self.uses(true, "parallax2");
-            self.range("/canvas/parallax/amount", f.amount, 0.0, 4.0);
+            self.uses(f.bound() || f.offset != crate::Value::Fixed(crate::Vec2([0.0; 2])), "parallax_values");
+            self.number("/canvas/parallax/amount", &f.amount, 0.0, 4.0);
             self.range("/canvas/parallax/delay", f.delay, 0.0, 2.0);
-            self.range("/canvas/parallax/pointer", f.pointer, 0.0, 1.0);
+            self.number("/canvas/parallax/pointer", &f.pointer, 0.0, 1.0);
+            self.value("/canvas/parallax/offset", &f.offset);
+            if let crate::Value::Fixed(crate::Vec2(o)) = f.offset {
+                o.iter().for_each(|v| self.range("/canvas/parallax/offset", *v, -1.0, 1.0));
+            }
         }
         if let Some(cam) = &c.camera {
             self.uses(true, "camera");

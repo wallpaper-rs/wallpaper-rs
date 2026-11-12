@@ -45,13 +45,24 @@ pub(crate) fn parent_of<'a>(layer: &'a Layer, set: &'a LayerOverride) -> Option<
     }
 }
 
-pub(crate) fn glide(scene: &Scene, script: &crate::ScriptOutputs) -> crate::look::Glide {
-    let mut glide = scene.canvas.parallax.clone().unwrap_or_default();
-    if let Some(set) = script.stage.and_then(|s| s.parallax) {
-        glide.amount = set.amount.unwrap_or(glide.amount);
-        glide.delay = set.delay.unwrap_or(glide.delay);
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub(crate) struct Eased {
+    pub(crate) amount: f32,
+    pub(crate) pointer: f32,
+    pub(crate) offset: [f32; 2],
+    pub(crate) gyro: bool,
+}
+
+pub(crate) fn glide(cx: &Context) -> Eased {
+    let set = cx.script.stage.and_then(|s| s.parallax).unwrap_or_default();
+    let base = cx.scene.canvas.parallax.as_ref();
+    let get = |v: Option<&crate::Value<f32>>| v.map_or(1.0, |v| v.get(cx));
+    Eased {
+        amount: set.amount.unwrap_or_else(|| get(base.map(|g| &g.amount))),
+        pointer: set.pointer.unwrap_or_else(|| get(base.map(|g| &g.pointer))),
+        offset: set.offset.unwrap_or_else(|| base.map_or([0.0; 2], |g| g.offset.get(cx).0)),
+        gyro: base.is_some_and(|g| g.gyro),
     }
-    glide
 }
 
 fn follows(layer: &Layer, set: &LayerOverride, what: Inherit) -> bool {
@@ -120,7 +131,7 @@ impl Context<'_> {
             || matches!(layer.kind, Kind::Group { .. } | Kind::Adjustment { .. });
         let center = if free { [0.0; 2] } else { [canvas[0] / 2.0, canvas[1] / 2.0] };
         let position = set.position.unwrap_or_else(|| t.position.as_ref().map_or(center, |p| p.get(self).0));
-        let shift = self.shift(set.parallax.unwrap_or(layer.parallax.0));
+        let shift = self.shift(set.parallax.unwrap_or_else(|| layer.parallax.0.get(self).0));
         let seat = Affine::translate([0, 1].map(|i| base[i] + shift[i] * canvas[i]));
         let own = Affine::translate(position)
             .then(Affine::rotate(set.rotation.unwrap_or_else(|| t.rotation.get(self))))
@@ -133,13 +144,13 @@ impl Context<'_> {
         if depth == [0.0; 2] || self.still {
             return [0.0; 2];
         }
-        let glide = glide(self.scene, self.script);
+        let glide = glide(self);
         let tilt = if glide.gyro { self.tilt } else { [0.0; 2] };
         if glide.pointer > 0.0 && self.glide.moving() {
             self.note(Wake::Frame);
         }
         [0, 1].map(|i| {
-            let offset = (self.glide.smooth[i] - 0.5) * glide.pointer + tilt[i] * 0.5;
+            let offset = (self.glide.smooth[i] - 0.5) * glide.pointer + (glide.offset[i] + tilt[i]) * 0.5;
             offset * glide.amount * depth[i]
         })
     }

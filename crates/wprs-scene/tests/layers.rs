@@ -81,6 +81,32 @@ fn parallax_follows_its_amount_delay_pointer_share_and_the_tilt() {
 }
 
 #[test]
+fn parallax_adds_a_bound_offset_to_the_pointer_and_layers_may_bind_their_depth() {
+    let depth = json!({ "keys": [[0, [0.1, 0.1]], [1, [0.3, 0.3]]] });
+    let layers = json!([box_at("near", json!({ "parallax": depth, "transform": { "position": [50, 25] } }))]);
+    let canvas = json!({ "size": [100, 50], "parallax": { "delay": 0, "offset": [1, 0], "amount": { "keys": [[0, 1], [1, 2]] } } });
+    let mut rt = runtime(canvas, layers);
+    let centered = PointerState { pos: Some([0.5; 2]), smooth: [0.5; 2], inside: true, ..Default::default() };
+    rt.set_pointer(centered);
+    let at = |rt: &Runtime| rt.frame(VIEW, Quality::Q3).draws[0].world.apply([0.0; 2]);
+    let [x, y] = at(&rt);
+    assert!((x - 55.0).abs() < 1e-3 && (y - 25.0).abs() < 1e-3, "{x} {y}");
+    rt.advance(1.0);
+    let [x, _] = at(&rt);
+    assert!((x - 80.0).abs() < 1e-2, "twice the amount and three times the depth: {x}");
+    let script = ScriptOutputs {
+        stage: Some(StageSet {
+            parallax: Some(GlideSet { pointer: Some(0.0), offset: Some([-1.0, 0.0]), ..GlideSet::default() }),
+            ..StageSet::default()
+        }),
+        ..ScriptOutputs::default()
+    };
+    rt.set_script(script);
+    let [x, _] = at(&rt);
+    assert!((x - 20.0).abs() < 1e-2, "{x}");
+}
+
+#[test]
 fn tints_brightness_and_mask_strength_reach_the_draws() {
     let layers = json!([
         { "id": "img", "type": "image", "image": "a", "color": { "keys": [[0, "#ff0000"], [1, "#ff0000"]] },

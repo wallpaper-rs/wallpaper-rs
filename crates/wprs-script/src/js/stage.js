@@ -15,7 +15,7 @@ const fields = (shape) => (v) => {
 const shake = fields({ enabled: Boolean, amplitude: number("amplitude"), roughness: number("roughness"), speed: number("speed") });
 const shapes = {
     camera: fields({ center: vec("center"), zoom: number("zoom"), rotation: number("rotation"), shake }),
-    parallax: fields({ amount: number("amount"), delay: number("delay") }),
+    parallax: fields({ amount: number("amount"), delay: number("delay"), pointer: number("pointer"), offset: vec("offset") }),
     bloom: fields({ threshold: number("threshold"), strength: number("strength"), radius: number("radius"), tint: (v) => numbers(v, 4, "tint") }),
     camera3d: fields({ fov: number("fov"), eye: (v) => numbers(v, 3, "eye"), center: (v) => numbers(v, 3, "center"), up: (v) => numbers(v, 3, "up") }),
 };

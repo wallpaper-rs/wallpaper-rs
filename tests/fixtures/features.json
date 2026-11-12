@@ -50,6 +50,7 @@
  "sound2": {"scene": {"assets": {"rain": {"path": "rain.wav"}}, "layers": [{"id": "rain", "type": "sound", "sound": "rain", "stream": true}]}, "files": {"rain.wav": "base64:UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YRAAAACAgICAgICAgICAgICAgICA"}},
  "camera": {"scene": {"canvas": {"size": [64, 32], "camera": {"zoom": 1.2}}}},
  "parallax2": {"scene": {"canvas": {"size": [64, 32], "parallax": {"amount": 1.5, "pointer": 0}}}},
+ "parallax_values": {"scene": {"canvas": {"size": [64, 32], "parallax": {"offset": [0.5, 0]}}}},
  "bloom": {"scene": {"canvas": {"size": [64, 32], "bloom": {"threshold": 0.9}}}},
  "hdr": {"scene": {"canvas": {"size": [64, 32], "hdr": true}}},
  "keep_frame": {"scene": {"canvas": {"size": [64, 32], "clear": false}}},

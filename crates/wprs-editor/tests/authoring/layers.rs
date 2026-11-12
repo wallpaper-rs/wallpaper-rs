@@ -81,6 +81,12 @@ fn the_canvas_glows_and_moves_in_depth_from_its_defaults() {
         json!({"amount": 2.0, "delay": 0.15, "pointer": 1.0, "gyro": true})
     );
     assert!(refused(&mut p, json!({"canvas": {"parallax": {"delay": 9}}})).contains("delay"));
+    act(&mut p, json!({"canvas": {"parallax": {"offset": [0.5, -3]}}})).unwrap();
+    assert_eq!(at(&p, "/scene/canvas/parallax/offset"), json!([0.5, -1.0]));
+    let bound = json!({"set": {"pointer": "/scene/canvas/parallax/amount", "value": {"keys": [[0, 1], [2, 3]]}}});
+    act(&mut p, bound).unwrap();
+    act(&mut p, json!({"canvas": {"parallax": {"pointer": 0.5}}})).unwrap();
+    assert_eq!(at(&p, "/scene/canvas/parallax/amount"), json!({"keys": [[0, 1], [2, 3]]}));
     act(&mut p, json!({"canvas": {"parallax": {"off": true}}})).unwrap();
     assert_eq!(at(&p, "/scene/canvas/parallax"), serde_json::Value::Null);
 }

@@ -165,7 +165,7 @@ impl Runtime {
             opacity: set.opacity.unwrap_or_else(|| layer.opacity.get(&cx)),
             visible: set.visible.unwrap_or_else(|| layer.visible.get(&cx)),
             color: set.color.or(color).unwrap_or([1.0; 4]),
-            parallax: set.parallax.unwrap_or(layer.parallax.0),
+            parallax: set.parallax.unwrap_or_else(|| layer.parallax.0.get(&cx).0),
             size: set.size.or(size),
             text,
             world: cx.world(layer).0,

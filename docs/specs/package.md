@@ -314,6 +314,7 @@ the scene sound, runs `sound2`, `script_sounds`, `scripts2`, `script_layers` and
 | `sound2` | plays MP3, `sounds` lists, `mode`, `pause`, `stream` or `play_on` | runs | runs |
 | `camera` | sets `canvas.camera` | runs | runs |
 | `parallax2` | sets `canvas.parallax` or a parallax with two different parts | runs | runs |
+| `parallax_values` | binds `amount`, `pointer` or `offset` of `canvas.parallax`, sets an `offset`, or binds the `parallax` of a layer | runs | runs |
 | `bloom` | sets `canvas.bloom` | runs | runs |
 | `hdr` | sets `canvas.hdr` or `canvas.tonemap` | runs | runs |
 | `keep_frame` | sets `canvas.clear` to `false` | runs | runs |

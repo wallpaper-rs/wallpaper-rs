@@ -20,6 +20,7 @@ pub const SCENE: &[(&str, &str, [Support; 2])] = &[
     ("sound2", "plays MP3 or long sounds, lists of sounds or sounds started by events", [Yes, Yes]),
     ("camera", "moves, zooms, turns or shakes the whole scene", [Yes, Yes]),
     ("parallax2", "sets how the scene follows the pointer or the tilt of the phone", [Yes, Yes]),
+    ("parallax_values", "binds the parallax of the scene or of a layer to a property, sound or time", [Yes, Yes]),
     ("bloom", "makes the bright parts of the scene glow", [Yes, Yes]),
     ("hdr", "renders brighter than white and maps the tones", [Yes, Yes]),
     ("keep_frame", "draws over the previous frame", [Yes, Yes]),

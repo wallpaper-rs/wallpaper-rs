@@ -8,12 +8,26 @@ use serde::{Deserialize, Serialize};
 #[serde(default, deny_unknown_fields)]
 pub struct Glide {
     #[schemars(extend("x-range" = [0, 4]))]
-    pub amount: f32,
+    pub amount: Value<f32>,
     #[schemars(extend("x-unit" = "s", "x-range" = [0, 2]))]
     pub delay: f32,
     #[schemars(extend("x-range" = [0, 1]))]
-    pub pointer: f32,
+    pub pointer: Value<f32>,
+    #[serde(skip_serializing_if = "centered")]
+    #[schemars(extend("x-range" = [-1, 1]))]
+    pub offset: Value<Vec2>,
     pub gyro: bool,
+}
+
+fn centered(v: &Value<Vec2>) -> bool {
+    matches!(v, Value::Fixed(Vec2(v)) if *v == [0.0; 2])
+}
+
+impl Glide {
+    pub fn bound(&self) -> bool {
+        let fixed = |v: &Value<f32>| matches!(v, Value::Fixed(_));
+        !fixed(&self.amount) || !fixed(&self.pointer) || !matches!(self.offset, Value::Fixed(_))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -95,7 +109,8 @@ pub struct Playback {
 
 impl Default for Glide {
     fn default() -> Self {
-        Glide { amount: 1.0, delay: 0.15, pointer: 1.0, gyro: false }
+        let offset = Value::Fixed(Vec2([0.0; 2]));
+        Glide { amount: Value::Fixed(1.0), delay: 0.15, pointer: Value::Fixed(1.0), offset, gyro: false }
     }
 }
 

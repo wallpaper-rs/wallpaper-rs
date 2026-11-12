@@ -89,10 +89,11 @@ pub(crate) fn canvas(dir: &Path, doc: &Value, e: &C) -> Result<Vec<Op>> {
             put(doc, "/scene/canvas/bloom", Some(Value::Object(next)))
         }
         C::Parallax { off: true, .. } => put(doc, "/scene/canvas/parallax", None),
-        C::Parallax { amount, delay, pointer, gyro, .. } => {
+        C::Parallax { amount, delay, pointer, offset, gyro, .. } => {
             let mut next = merged::<wprs_scene::Glide>(doc, "/scene/canvas/parallax");
             let numbers = [("amount", amount), ("delay", delay), ("pointer", pointer)];
             numbers.iter().for_each(|(k, v)| v.iter().for_each(|v| drop(next.insert((*k).into(), json!(v)))));
+            offset.iter().for_each(|o| drop(next.insert("offset".into(), json!(o.map(|v| v.clamp(-1.0, 1.0))))));
             gyro.iter().for_each(|g| drop(next.insert("gyro".into(), json!(g))));
             put(doc, "/scene/canvas/parallax", Some(Value::Object(next)))
         }

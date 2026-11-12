@@ -23,6 +23,8 @@ pub struct CameraSet {
 pub struct GlideSet {
     pub amount: Option<f32>,
     pub delay: Option<f32>,
+    pub pointer: Option<f32>,
+    pub offset: Option<[f32; 2]>,
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
@@ -84,8 +86,12 @@ impl StageSet {
             rotation: within(c.rotation, -360.0, 360.0),
             shake: c.shake.map(shake),
         };
-        let glide =
-            |g: GlideSet| GlideSet { amount: within(g.amount, 0.0, 4.0), delay: within(g.delay, 0.0, 2.0) };
+        let glide = |g: GlideSet| GlideSet {
+            amount: within(g.amount, 0.0, 4.0),
+            delay: within(g.delay, 0.0, 2.0),
+            pointer: within(g.pointer, 0.0, 1.0),
+            offset: g.offset.filter(|o| o.iter().all(|v| v.is_finite())).map(|o| o.map(|v| v.clamp(-1.0, 1.0))),
+        };
         let bloom = |b: BloomSet| BloomSet {
             threshold: within(b.threshold, 0.0, 4.0),
             strength: within(b.strength, 0.0, 8.0),
