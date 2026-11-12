@@ -1517,6 +1517,7 @@ msgid "Nearest"
 msgstr "Lo más cercano"
 
 #: apps/wprs-app/qml/EditMasks.qml apps/wprs-app/qml/SceneMapBrush.qml
+#: apps/wprs-app/qml/SceneMask.qml
 msgid "Hardness"
 msgstr "Dureza"
 
@@ -4880,6 +4881,10 @@ msgid "Mask of the effect:"
 msgstr "Máscara del efecto:"
 
 #: apps/wprs-app/qml/SceneEffectMask.qml
+msgid "Mask of the layer:"
+msgstr "Máscara de la capa:"
+
+#: apps/wprs-app/qml/SceneEffectMask.qml
 msgid "A picture"
 msgstr "Una imagen"
 
@@ -4902,6 +4907,10 @@ msgstr "Capa:"
 #: apps/wprs-app/qml/SceneEffectMask.qml
 msgid "Shape:"
 msgstr "Forma:"
+
+#: apps/wprs-app/qml/SceneEffectMask.qml
+msgid "Looks like:"
+msgstr "Se ve así:"
 
 #: apps/wprs-app/qml/SceneEffectMask.qml
 msgid "Mask:"
@@ -5773,19 +5782,38 @@ msgstr "Gris"
 msgid "Paint"
 msgstr "Pintar"
 
-#: apps/wprs-app/qml/SceneMask.qml
-msgid "Paint on the layer in the preview; each stroke is one step to undo."
-msgstr ""
-"Pinta sobre la capa en la vista previa; cada trazo es un paso que se puede "
-"deshacer."
+#: apps/wprs-app/qml/SceneMask.qml apps/wprs-app/qml/SceneSwarmHues.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Value"
+msgstr "Valor"
 
-#: apps/wprs-app/qml/SceneMaskKnobs.qml
+#: apps/wprs-app/qml/SceneMask.qml
+msgid ""
+"Paint on the layer in the preview, where the channel is tinted; each stroke "
+"is one step to undo."
+msgstr ""
+"Pinta sobre la capa en la vista previa, donde el canal aparece teñido; cada "
+"trazo es un paso que se puede deshacer."
+
+#: apps/wprs-app/qml/SceneMaskOverlay.qml
 msgid "Drag to size the mask"
 msgstr "Arrastra para dar tamaño a la máscara"
 
-#: apps/wprs-app/qml/SceneMaskKnobs.qml
+#: apps/wprs-app/qml/SceneMaskOverlay.qml
 msgid "Soft edge %1 px: drag away from the shape to soften its edge"
 msgstr "Borde suave %1 px: arrastra lejos de la forma para suavizar su borde"
+
+#: apps/wprs-app/qml/SceneMaskOverlay.qml
+msgid "Drag to widen or narrow the ring"
+msgstr "Arrastra para ensanchar o estrechar el anillo"
+
+#: apps/wprs-app/qml/SceneMaskOverlay.qml
+msgid "Drag to round the corners"
+msgstr "Arrastra para redondear las esquinas"
+
+#: apps/wprs-app/qml/SceneMaskOverlay.qml
+msgid "Drag to sharpen or blunt the points"
+msgstr "Arrastra para afilar o despuntar las puntas"
 
 #: apps/wprs-app/qml/SceneMaterial3d.qml
 msgid "Physical"
@@ -7701,11 +7729,6 @@ msgstr "Distancia focal %1 px"
 #: apps/wprs-app/qml/SceneSwarmFocal.qml
 msgid "Drag to change how strongly depth shrinks particles"
 msgstr "Arrastra para cambiar cuánto encoge la profundidad a las partículas"
-
-#: apps/wprs-app/qml/SceneSwarmHues.qml
-#: apps/wprs-app/qml/facade/SceneLabels.qml
-msgid "Value"
-msgstr "Valor"
 
 #: apps/wprs-app/qml/SceneSwarmHues.qml
 msgid "Pick the hue among steps"

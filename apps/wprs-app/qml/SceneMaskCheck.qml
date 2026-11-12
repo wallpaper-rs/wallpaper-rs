@@ -33,7 +33,8 @@ QtObject {
             });
         if (panel.source !== "shape" || panel.kind !== "rect" || overlay.kind !== "rect")
             throw new Error("mask: the panel did not give the effect a shape: " + page.editor.error);
-        overlay.sized([60, -25]);
+        const owner = overlay.owner;
+        overlay.hold("size", overlay.at([0.5 + 60 / owner.size[0], 0.5 - 25 / owner.size[1]]));
         overlay.put({
                 "feather": 12
             });
@@ -57,7 +58,7 @@ QtObject {
         panel.put({
                 "shape": panel.shaped("star")
             });
-        overlay.sized([40, 10]);
+        overlay.hold("size", overlay.at([0.5 + 40 / owner.size[0], 0.5 + 10 / owner.size[1]]));
         if (read(use + "/mask/shape/star/size") !== 80)
             throw new Error("mask: the star was not sized from its handle");
         panel.put({

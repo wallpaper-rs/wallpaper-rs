@@ -2,6 +2,16 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use wprs_scene::MaskChannel;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum MaskHold {
+    Size,
+    Feather,
+    Width,
+    Radius,
+    Inner,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum EffectsEdit {
@@ -50,9 +60,19 @@ pub enum EffectsEdit {
         #[serde(default)]
         replace: bool,
     },
+    MaskGrip {
+        layer: String,
+        #[serde(default)]
+        index: Option<usize>,
+        hold: MaskHold,
+        to: [f64; 2],
+        #[serde(default)]
+        at: Option<f64>,
+    },
     Mask {
         layer: String,
-        index: usize,
+        #[serde(default)]
+        index: Option<usize>,
         #[serde(default)]
         texture: Option<String>,
         #[serde(default)]

@@ -27,7 +27,7 @@ pub use names::{
 pub use rigging::{
     AutoWeights, BoneEdit, ClipEdit, ClipKey, DepthStroke, ExpressionEdit, MaskStroke, MeshCut, WeightStroke,
 };
-pub use shaping::{EffectsEdit, ScriptEdit, TemplateEdit};
+pub use shaping::{EffectsEdit, MaskHold, ScriptEdit, TemplateEdit};
 pub use solid::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, TonesEdit, ViewEdit};
 pub use swarm::{ParticleEdit, Response, Strand, SwarmLight, TendEdit};
 pub use timing::{KeyframeEdit, TimelineEdit, TimelineEvent};

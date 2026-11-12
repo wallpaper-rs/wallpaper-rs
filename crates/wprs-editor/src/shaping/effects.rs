@@ -118,6 +118,9 @@ pub(crate) fn effects(dir: &Path, doc: &Value, e: &E) -> Result<Vec<Op>> {
             let t = at.unwrap_or(0.0);
             crate::onscreen::grip(dir, doc, (id, *index, param), *to, *both, (t, *replace))
         }
+        E::MaskGrip { layer: id, index, hold, to, at } => {
+            crate::onscreen::mask_grip(dir, doc, (id, *index), hold, *to, at.unwrap_or(0.0))
+        }
         E::Mask { .. } => super::masks::mask(dir, doc, e),
     }
 }

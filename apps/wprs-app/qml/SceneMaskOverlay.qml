@@ -1,47 +1,70 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
-Item {
+SceneSeat {
     id: overlay
 
-    required property var page
-    required property real ratio
-    readonly property var found: page.editor.selected.match(/^(.*\/layers\/\d+)\/effects\/(\d+)(\/mask(\/.*)?)?$/)
-    readonly property var gizmo: found ? (page.view.gizmos ?? []).find(g => g.pointer === found[1]) ?? null : null
-    readonly property var owner: found ? (page.view.layers ?? []).find(l => l.pointer === found[1]) ?? null : null
-    readonly property var mask: gizmo ? (page.view, JSON.parse(page.editor.value(found[1] + "/effects/" + found[2] + "/mask") || "null")) : null
-    readonly property string texture: typeof mask === "string" ? mask : mask?.texture ?? ""
-    readonly property string kind: mask?.shape ? Object.keys(mask.shape)[0] : ""
-    readonly property var spec: kind ? mask.shape[kind] : ({})
-    readonly property var box: kind === "line" ? [Math.abs((spec.to ?? [0, 0])[0]) + (spec.width ?? 0), Math.abs((spec.to ?? [0, 0])[1]) + (spec.width ?? 0)] : ["polygon", "star"].includes(kind) ? [spec.size ?? 0, spec.size ?? 0] : spec.size ?? [0, 0]
-    readonly property var source: typeof mask?.layer === "string" ? (page.view.gizmos ?? []).find(g => g.id === mask.layer) ?? null : null
+    readonly property var found: page.editor.selected.match(/^(.*\/layers\/\d+)(?:\/effects\/(\d+))?(\/mask(\/.*)?)?$/)
+    readonly property var owner: found ? (page.view.gizmos ?? []).find(g => g.pointer === found[1]) ?? null : null
+    readonly property int index: found && found[2] !== undefined ? Number(found[2]) : -1
+    readonly property var shown: owner ? (page.view, JSON.parse(page.editor.rig("", JSON.stringify({
+                        "mask_view": {
+                            "layer": owner.id,
+                            "index": index >= 0 ? index : null,
+                            "time": page.editor.time
+                        }
+                    })) || "null")) : null
+    readonly property bool masking: shown !== null
+    readonly property string kind: shown?.kind ?? ""
+    readonly property string texture: shown?.texture ?? ""
+    readonly property var picture: texture ? JSON.parse(page.editor.rig("", JSON.stringify({
+                    "mask_picture": {
+                        "asset": texture,
+                        "channel": shown.channel ?? null,
+                        "invert": shown.invert,
+                        "strength": shown.strength ?? 1,
+                        "tint": hex(Kirigami.Theme.highlightColor)
+                    }
+                })) || "null") : null
+
+    function hex(color) {
+        return "#" + [color.r, color.g, color.b].map(v => Math.round(v * 255).toString(16).padStart(2, "0")).join("");
+    }
 
     function put(fields) {
         page.run("effects", {
                 "mask": Object.assign({
                         "layer": owner.id,
-                        "index": Number(found[2])
+                        "index": index >= 0 ? index : null
                     }, fields)
             }, true);
     }
 
-    function sized(local) {
-        const at = [Math.abs(local[0]) * 2, Math.abs(local[1]) * 2].map(v => Math.max(1, Math.round(v)));
-        const next = Object.assign({}, spec);
-        if (kind === "line")
-            next.to = local.map(v => Math.round(v * 2));
-        else if (["polygon", "star"].includes(kind))
-            next.size = Math.max(at[0], at[1]);
-        else
-            next.size = at;
-        put({
-                "shape": {
-                    [kind]: next
+    function hold(grip, to) {
+        page.run("effects", {
+                "mask_grip": {
+                    "layer": owner.id,
+                    "index": index >= 0 ? index : null,
+                    "hold": grip,
+                    "to": to,
+                    "at": page.editor.time
                 }
-            });
+            }, true);
     }
 
-    readonly property bool masking: gizmo !== null && mask !== null
+    function tip(grip) {
+        return ({
+                "size": App.tr("Drag to size the mask"),
+                "feather": App.tr("Soft edge %1 px: drag away from the shape to soften its edge", shown?.feather ?? 0),
+                "width": App.tr("Drag to widen or narrow the ring"),
+                "radius": App.tr("Drag to round the corners"),
+                "inner": App.tr("Drag to sharpen or blunt the points")
+            })[grip];
+    }
+
+    layerId: owner?.id ?? ""
+    visible: owner !== null
 
     SceneCaptureZone {
         anchors.fill: parent
@@ -50,20 +73,67 @@ Item {
     }
 
     Item {
-        id: masked
-
         anchors.fill: parent
         visible: overlay.masking
 
-        SceneMaskFrame {
-            overlay: overlay
-            shown: overlay.gizmo
+        SceneArea {
+            loops: overlay.shown ? [overlay.shown.box] : []
+            ratio: overlay.ratio
+            ink: Kirigami.Theme.disabledTextColor
+            fill: 0
+            dashed: true
         }
 
-        SceneMaskFrame {
-            overlay: overlay
-            shown: overlay.source
-            outlined: true
+        SceneBoxPicture {
+            visible: overlay.picture !== null && overlay.shown?.unit !== undefined
+            unit: overlay.shown?.unit ?? [1, 0, 0, 1, 0, 0]
+            ratio: overlay.ratio
+            source: overlay.picture ? "file://" + overlay.picture.path : ""
+        }
+
+        SceneArea {
+            loops: overlay.shown?.from_box ? [overlay.shown.from_box] : []
+            ratio: overlay.ratio
+            ink: Kirigami.Theme.neutralTextColor
+            fill: 0.15
+        }
+
+        SceneArea {
+            loops: overlay.shown ? (overlay.shown.invert && overlay.kind !== "" ? [overlay.shown.box].concat(overlay.shown.area) : overlay.shown.area) : []
+            ratio: overlay.ratio
+            fill: 0.25
+        }
+
+        SceneArea {
+            loops: overlay.shown?.outer ?? []
+            ratio: overlay.ratio
+            fill: 0
+            dashed: true
+        }
+
+        SceneArea {
+            loops: overlay.shown?.inner ?? []
+            ratio: overlay.ratio
+            fill: 0
+            dashed: true
+        }
+
+        SceneRepeater {
+            id: holds
+
+            rows: overlay.shown?.holds ?? []
+
+            delegate: SceneKnob {
+                required property int index
+                readonly property var modelData: holds.rows[index]
+
+                at: modelData.at
+                ratio: overlay.ratio
+                square: modelData.grip === "size"
+                tint: modelData.grip === "feather" ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.highlightColor
+                tip: overlay.tip(modelData.grip)
+                onMoved: to => overlay.hold(modelData.grip, to)
+            }
         }
     }
 }

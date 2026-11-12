@@ -30,7 +30,7 @@ pub(crate) fn edit(layer: String, what: Effect) -> E {
         Effect::Move { index, to } => E::Move { layer, index, to },
         Effect::Mask { index, texture, from, shape, channel, invert, feather, strength, off } => E::Mask {
             layer,
-            index,
+            index: Some(index),
             texture,
             from,
             shape: shape.as_deref().map(value),

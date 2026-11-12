@@ -1088,6 +1088,18 @@ msgstr "%1 no es un id de paquete"
 msgid "the layer %1 captures no region"
 msgstr "la capa %1 no captura ninguna región"
 
+#: crates/wprs-editor/src/onscreen/mask.rs
+msgid "the layer %1 has no mask there"
+msgstr "la capa %1 no tiene máscara ahí"
+
+#: crates/wprs-editor/src/onscreen/maskgrip.rs
+msgid "the mask of the layer %1 is not a shape"
+msgstr "la máscara de la capa %1 no es una forma"
+
+#: crates/wprs-editor/src/onscreen/maskgrip.rs
+msgid "the %1 shape of a mask has no such handle"
+msgstr "la forma %1 de una máscara no tiene esa asa"
+
 #: crates/wprs-editor/src/ops.rs
 msgid "\"%1\" is not a JSON Pointer"
 msgstr "«%1» no es un JSON Pointer"

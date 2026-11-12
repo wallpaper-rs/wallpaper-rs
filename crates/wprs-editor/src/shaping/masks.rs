@@ -14,7 +14,13 @@ pub(super) fn mask(dir: &Path, doc: &Value, e: &E) -> Result<Vec<Op>> {
     else {
         return Ok(Vec::new());
     };
-    let (at, old) = slot(doc, id, *index)?;
+    let (at, old) = match index {
+        Some(i) => slot(doc, id, *i)?,
+        None => {
+            let (path, found) = crate::actions::layer(doc, id)?;
+            (path, found.clone())
+        }
+    };
     let at = format!("{at}/mask");
     if *off {
         return Ok(put(doc, &at, None));
