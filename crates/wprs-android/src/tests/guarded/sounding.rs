@@ -22,6 +22,7 @@ fn a_page_says_when_it_sounds_and_when_it_falls_silent() {
     assert_eq!(said(quiet), "false", "a player at volume 0 is silent");
     let context = "const c = new AudioContext(); c.suspend();";
     assert_eq!(said(context), "false,true,false");
-    let both = "const a = new HTMLMediaElement(); const c = new AudioContext(); a.play(); c.suspend(); a.pause();";
+    let both =
+        "const a = new HTMLMediaElement(); const c = new AudioContext(); a.play(); c.suspend(); a.pause();";
     assert_eq!(said(both), "false,true,false", "silent only when nothing sounds");
 }

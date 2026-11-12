@@ -142,14 +142,19 @@ impl Clips {
             let converted = acquired.and_then(|new| {
                 let held = (clip.yuv.is_some(), clip.headroom);
                 match clip.last.as_ref().filter(|_| crate::blend::redo(new, held, headroom)) {
-                    Some(image) => {
-                        convert(r, (clip.coding, &clip.path), image, &mut clip.chroma, &mut clip.yuv, headroom)
-                    }
+                    Some(image) => convert(
+                        r,
+                        (clip.coding, &clip.path),
+                        image,
+                        &mut clip.chroma,
+                        &mut clip.yuv,
+                        headroom,
+                    ),
                     None => Ok(false),
                 }
             });
-            clip.headroom = if converted.as_ref().is_ok_and(|fresh| *fresh) { headroom } else { clip.headroom };
             clip.fresh = converted.as_ref().is_ok_and(|fresh| *fresh);
+            clip.headroom = if clip.fresh { headroom } else { clip.headroom };
             if let Err(e) = converted {
                 failed(&e, &mut clip.warned);
             }
