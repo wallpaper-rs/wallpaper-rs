@@ -135,7 +135,11 @@ fn a_dedicated_scene_command_for_an_action_takes_the_same_arguments() {
             ids.push(sub.get_name());
             ids.extend(sub.get_arguments().map(|a| a.get_id().as_str()));
         }
+        let canvas_only = ["grip", "mask_grip"];
         for field in fields(json!({name: {"": null}})) {
+            if name == "effects" && canvas_only.contains(&field.as_str()) {
+                continue;
+            }
             let named = ids.contains(&field.as_str()) || ids.contains(&field.replace('_', "-").as_str());
             assert!(named, "scene {name} lacks {field}");
         }
