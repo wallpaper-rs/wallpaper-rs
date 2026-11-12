@@ -9487,6 +9487,7 @@ msgid ""
 msgstr ""
 "Los clics y la entrada o salida del puntero activan líneas de tiempo, "
 "sonidos y scripts, con el permiso del puntero. El área se ve sobre el lienzo."
+
 #: apps/wprs-app/qml/SceneUses.qml
 msgid "What the scripts declare"
 msgstr "Lo que declaran los scripts"
