@@ -10,5 +10,9 @@
   ],
   "passes": [{ "entry": "fs_blur_h" }, { "entry": "fs_blur_v", "inputs": ["previous", "input"] }],
   "cost": { "taps": 3, "passes": 2, "scale": 1 },
+  "lighter": {
+    "passes": [{ "entry": "fs_blur_lite", "scale": 0.5 }, { "entry": "fs_blur_lite_mix", "inputs": ["previous", "input"] }],
+    "cost": { "taps": 2, "passes": 2, "scale": 0.5 }
+  },
   "reach": "radius"
 }

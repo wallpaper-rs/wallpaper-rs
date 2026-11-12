@@ -112,7 +112,7 @@ fn only_the_automatic_choice_stops_a_scene_too_heavy_for_the_tier() {
 
 #[test]
 fn a_chosen_level_over_the_budget_says_automatic_would_lower_it_when_it_fits_lower() {
-    let pond = runtime(6);
+    let pond = runtime(4);
     let power = Budget { choice: QualityChoice::Fixed(3), ..Budget::new(Tier::T0, false, 60) };
     assert!(!power.heavy(&pond) && power.over(&pond, Quality::Q3).is_some());
     assert_eq!(power.automatic(&pond, Quality::Q3), "lower");

@@ -105,17 +105,19 @@ impl SceneView {
 
     pub fn left_out(&self) -> Vec<String> {
         let kind = |id: &str| if self.refused.contains_key(id) { "effect" } else { "layer" };
-        self.left()
-            .into_iter()
-            .map(|(id, why)| format!("the {} {id} was left out: {why}", kind(&id)))
-            .collect()
+        let lighter = self.pool.ledger.light.iter().map(|(id, why)| (id.clone(), why.clone()));
+        let lighter =
+            lighter.map(|(id, why)| format!("the effect {id} was drawn with its lighter variant: {why}"));
+        let left = self.left().into_iter().map(|(id, why)| format!("the {} {id} was left out: {why}", kind(&id)));
+        left.chain(lighter).collect()
     }
 
     pub fn left_key(&self) -> u64 {
         use std::hash::{DefaultHasher, Hash, Hasher};
         let mut h = DefaultHasher::new();
-        (&self.refused, &self.dropped).hash(&mut h);
-        if self.refused.is_empty() && self.dropped.is_empty() { 0 } else { h.finish() | 1 }
+        (&self.refused, &self.dropped, &self.pool.ledger.light).hash(&mut h);
+        let none = self.refused.is_empty() && self.dropped.is_empty() && self.pool.ledger.light.is_empty();
+        if none { 0 } else { h.finish() | 1 }
     }
 
     pub fn retry(&mut self) -> bool {

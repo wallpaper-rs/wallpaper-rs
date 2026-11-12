@@ -5,11 +5,13 @@ use std::sync::{OnceLock, RwLock};
 
 mod defs;
 mod handles;
+mod lighter;
 mod parts;
 mod tools;
 
 pub use defs::{Cost, Output, ParamDef, PassDef, State, Tune};
 pub use handles::{Grab, Hold};
+pub use lighter::{Form, Lighter, drawn_builtin};
 pub use parts::{
     Entry, Fuse, MaskMode, Pace, ParamKind, PassBlend, RenderTarget, Solve, Stage, Texel, Unit, Use, Variant,
 };
@@ -81,6 +83,12 @@ pub struct Descriptor {
     pub stage: Stage,
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub compose: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub lighter: Option<Lighter>,
+    #[serde(skip)]
+    pub lite: Option<std::sync::Arc<Descriptor>>,
+    #[serde(skip)]
+    pub light: bool,
     #[serde(skip)]
     pub wgsl: String,
     #[serde(skip)]

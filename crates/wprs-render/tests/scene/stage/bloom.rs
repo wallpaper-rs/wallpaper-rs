@@ -55,7 +55,11 @@ fn scripts_turn_bloom_on_in_scenes_that_declare_none_and_off_again() {
     assert!(shot.runtime.set_script(ask(Some(2.0))));
     let near = at(&shot.pixels(r), 56, 25);
     assert!(near[0] > 10 && near[0] == near[1], "{near:?}");
-    assert_eq!(at(&at_level(&mut shot, r, Quality::Q0), 56, 25)[0], 0, "the lowest level drops the glow");
+    let low = at(&at_level(&mut shot, r, Quality::Q0), 56, 25)[0];
+    assert!(
+        low > 0 && low.abs_diff(near[0]) < 64,
+        "the lowest level glows with the lighter bloom: {low} {near:?}"
+    );
     assert!(shot.runtime.set_script(ask(None)));
     assert_eq!(at(&shot.pixels(r), 56, 25), [0; 3]);
 }

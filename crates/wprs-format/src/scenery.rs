@@ -50,6 +50,7 @@ pub const SCENE: &[(&str, &str, [Support; 2])] = &[
     ("effect_options", "builds its effect shaders in several variants", [Yes, Yes]),
     ("vertex_effects", "bends layers with its effect shaders", [Yes, Yes]),
     ("custom_effects2", "runs effect shaders that use newer fields or helpers", [Yes, Yes]),
+    ("lighter_effects", "draws lighter variants of its effect shaders at low quality levels", [Yes, Yes]),
     ("mesh", "bends pictures with a skeleton", [Yes, Yes]),
     ("ik", "reaches for targets with chains of bones", [Yes, Yes]),
     ("bone_physics", "swings bones with springs, ropes and wind", [Yes, Yes]),

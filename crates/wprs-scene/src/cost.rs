@@ -47,7 +47,7 @@ impl Scene {
 
     fn flat_units(&self, l: &Layer, quality: Quality) -> f32 {
         let effects = l.effects.iter().filter_map(|e| {
-            let d = self.effect(&e.effect)?;
+            let d = self.effect(&e.effect)?.live(quality, e.optional)?;
             let scale = quality.effect_scale(d.class(), e.optional)? * d.scale_at(quality);
             let scale = if d.passes.len() > 1 { scale } else { 1.0 };
             Some(d.units() * scale * scale)

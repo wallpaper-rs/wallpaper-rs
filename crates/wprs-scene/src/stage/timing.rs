@@ -23,6 +23,7 @@ impl Check<'_> {
             self.uses(!d.options.is_empty(), "effect_options");
             self.uses(d.passes.iter().any(|p| p.vertex.is_some()), "vertex_effects");
             self.uses(d.newest(), "custom_effects2");
+            self.uses(d.lighter.is_some(), "lighter_effects");
         }
     }
 

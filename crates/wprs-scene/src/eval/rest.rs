@@ -13,7 +13,7 @@ pub(super) fn chain(
 }
 
 fn resting(d: &Descriptor, slots: &[[f32; 4]], [pointer, glide]: [&PointerState; 2], chain: usize) -> bool {
-    let builtin = |id: &str| crate::descriptor(id).is_some_and(|b| std::ptr::eq(b, d));
+    let builtin = |id: &str| crate::descriptor(id).is_some_and(|b| d.key == 0 && b.id == d.id);
     let at = |id: &str| d.param(id).map_or(0.0, |i| slots[i][0]);
     if chain != 1 {
         return false;

@@ -84,8 +84,38 @@ pub(crate) fn checked(id: &str, json: &str, wgsl: &str) -> Result<Descriptor, St
             d.uses.push(found);
         }
     }
+    lighter(&mut d, (&module, &info), key(&format!("{json}\0lighter"), wgsl))?;
     crate::guard::armed(module, &source)?;
     Ok(d)
+}
+
+fn lighter(
+    d: &mut Descriptor,
+    (module, info): (&naga::Module, &naga::valid::ModuleInfo),
+    key: u64,
+) -> Result<(), String> {
+    let full = d.units();
+    let Some(lite) = d.lite.as_mut().map(std::sync::Arc::make_mut) else { return Ok(()) };
+    let entries: Vec<&str> =
+        lite.passes.iter().flat_map(|p| [p.entry.as_str()].into_iter().chain(p.vertex.as_deref())).collect();
+    let entries: Vec<&str> = entries.into_iter().filter(|e| !e.is_empty()).collect();
+    if let Some(missing) = entries.iter().find(|e| !module.entry_points.iter().any(|p| p.name == **e)) {
+        return Err(format!("its shader has no entry point {missing} for its lighter variant"));
+    }
+    let (sampled, ops, size) = measure(lite, (module, info), &entries)?;
+    (lite.reads, lite.ops, lite.size, lite.key) = (sampled, ops, size, key);
+    for found in reads(module, &entries) {
+        if !lite.uses.contains(&found) {
+            lite.uses.push(found);
+        }
+    }
+    let light = lite.units();
+    if light >= full {
+        return Err(format!(
+            "its lighter variant costs {light:.2} units, not less than the {full:.2} of the effect"
+        ));
+    }
+    Ok(())
 }
 
 impl Descriptor {

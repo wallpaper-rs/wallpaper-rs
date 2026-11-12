@@ -75,9 +75,7 @@ fn emit<'a>(
         let ctl = controls.and_then(|list| list.iter().find(|c| c.at == i));
         let on = ctl.and_then(|c| c.enabled).unwrap_or_else(|| effect.enabled.get(cx));
         let Some(d) = cx.scene.shader(&effect.effect).filter(|_| on) else { continue };
-        let kept = quality.effect_scale(d.class(), effect.optional);
-        let frozen = kept.is_none() && d.frozen(quality);
-        let Some(scale) = kept.or(frozen.then_some(0.25)) else { continue };
+        let Some((d, scale, frozen)) = d.drawn(quality, effect.optional) else { continue };
         let found = |id: &str| {
             let set = ctl.and_then(|c| c.params.get(id).cloned()).map(Cow::Owned);
             set.or_else(|| {

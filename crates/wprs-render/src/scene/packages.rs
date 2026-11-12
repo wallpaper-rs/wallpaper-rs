@@ -47,7 +47,10 @@ impl Renderer {
                 continue;
             }
             match d.variants(e) {
-                Ok(variants) => self.want(d, &variants, formats, lease, &mut jobs),
+                Ok(variants) => {
+                    self.want(d, &variants, formats, lease, &mut jobs);
+                    d.lite.iter().for_each(|l| self.want(l, &variants, formats, lease, &mut jobs));
+                }
                 Err(problem) => drop(refused.insert(d.id.clone(), problem)),
             }
         }

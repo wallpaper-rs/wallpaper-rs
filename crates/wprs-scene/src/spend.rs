@@ -11,8 +11,23 @@ pub struct Spend {
     pub index: usize,
     pub effect: String,
     pub units: f32,
+    pub lighter: Option<f32>,
     pub bounds: Bounds,
     pub stateful: bool,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Over {
+    pub at: usize,
+    pub why: String,
+    pub lighter: bool,
+}
+
+impl Over {
+    pub fn note(&self, key: &str) -> String {
+        let how = if self.lighter { "was drawn with its lighter variant" } else { "was left out" };
+        format!("the effect {key} {how}: {}", self.why)
+    }
 }
 
 impl Spend {
@@ -21,7 +36,11 @@ impl Spend {
     }
 
     pub fn work(&self, view: [f32; 4], pixels: f32) -> f32 {
-        (self.units * covered(self.bounds, view) * pixels / 1e6).max(FLOOR)
+        Spend::done(self.units, self.bounds, view, pixels)
+    }
+
+    fn done(units: f32, bounds: Bounds, view: [f32; 4], pixels: f32) -> f32 {
+        (units * covered(bounds, view) * pixels / 1e6).max(FLOOR)
     }
 }
 
@@ -31,8 +50,9 @@ impl Scene {
             layer.effects.iter().enumerate().filter_map(move |(index, e)| {
                 let d = self.effect(&e.effect)?;
                 let (stateful, effect) = (d.state.is_some(), e.effect.clone());
-                let units = d.units() * if stateful { TICKS } else { 1.0 };
-                Some(Spend { layer: layer.id.clone(), index, effect, units, bounds, stateful })
+                let ticks = if stateful { TICKS } else { 1.0 };
+                let (units, lighter) = (d.units() * ticks, d.lighter_units().map(|u| u * ticks));
+                Some(Spend { layer: layer.id.clone(), index, effect, units, lighter, bounds, stateful })
             })
         });
         uses.collect()
@@ -41,9 +61,7 @@ impl Scene {
     pub fn left_over(&self, tier: Tier, view: [f32; 4], pixels: f32) -> Vec<String> {
         let spends = self.spends();
         let cut = over(&spends, |_| false, tier, view, pixels);
-        cut.into_iter()
-            .map(|(i, why)| format!("the effect {} was left out: {why}", spends[i].key()))
-            .collect()
+        cut.iter().map(|c| c.note(&spends[c.at].key())).collect()
     }
 
     pub fn without<'a>(&self, cut: impl IntoIterator<Item = &'a Spend>) -> Scene {
@@ -74,15 +92,20 @@ pub fn over(
     tier: Tier,
     view: [f32; 4],
     pixels: f32,
-) -> Vec<(usize, String)> {
+) -> Vec<Over> {
     let (limit, mut total, mut states, mut out) = (tier.ceiling(), 0.0, 0, Vec::new());
-    for (i, s) in spends.iter().enumerate().filter(|(i, _)| !skip(*i)) {
+    for (at, s) in spends.iter().enumerate().filter(|(i, _)| !skip(*i)) {
         let work = s.work(view, pixels);
+        let lighter =
+            s.lighter.map(|u| Spend::done(u, s.bounds, view, pixels)).filter(|w| total + w <= limit);
         if s.stateful && states >= MAX_STATEFUL {
-            out.push((i, format!("the scene has more than {MAX_STATEFUL} effects that keep a state")));
+            let why = format!("the scene has more than {MAX_STATEFUL} effects that keep a state");
+            out.push(Over { at, why, lighter: false });
         } else if total + work > limit {
             let why = format!("the effects of the scene would do more than {limit} units of work a frame");
-            out.push((i, format!("{why} on this GPU")));
+            out.push(Over { at, why: format!("{why} on this GPU"), lighter: lighter.is_some() });
+            (total, states) =
+                (total + lighter.unwrap_or(0.0), states + usize::from(s.stateful && lighter.is_some()));
         } else {
             (total, states) = (total + work, states + usize::from(s.stateful));
         }

@@ -126,7 +126,7 @@ pub fn runs_by<'a>(
 
 pub fn cut_at(scene: &crate::Scene, e: &EffectUse, quality: crate::Quality) -> bool {
     let shader = scene.shader(&e.effect);
-    shader.is_some_and(|d| quality.effect_scale(d.class(), e.optional).is_none() && !d.frozen(quality))
+    shader.is_some_and(|d| d.form(quality, e.optional) == crate::Form::Out)
 }
 
 pub fn fused_at<'a>(

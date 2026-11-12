@@ -78,7 +78,7 @@ fn many_adjustment_layers_of_effects_stop_at_the_scene_budget() {
     let (tier, spends) = (run.r.tier(), run.runtime.scene.spends());
     let cut = over(&spends, |_| false, tier, BIG, BIG[2] * BIG[3]);
     let kept = spends.len() - cut.len();
-    assert!(!cut.is_empty() && cut[0].0 == kept, "{kept}");
+    assert!(!cut.is_empty() && cut[0].at == kept, "{kept}");
     assert!(kept as f32 * spends[0].work(BIG, BIG[2] * BIG[3]) <= tier.ceiling());
     let left = run.view.left_out();
     assert!(left.len() == 250 - kept / 16 && left.iter().all(|l| l.contains("units of work a frame")));

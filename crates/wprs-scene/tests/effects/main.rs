@@ -7,6 +7,7 @@ mod checks;
 mod costs;
 mod fusion;
 mod inputs;
+mod lighter;
 mod locality;
 mod spread;
 

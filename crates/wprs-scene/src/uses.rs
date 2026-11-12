@@ -119,7 +119,7 @@ fn effects(scene: &Scene, quality: Quality, base: Uses, props: Option<&Values>) 
     let scripted = scene.scripts.iter().any(|s| s.wants(crate::ScriptApi::Effects));
     let shown = |e: &EffectUse| scripted || e.enabled.settled(props) != Some(false);
     let drawn = |e: &&EffectUse| {
-        scene.effect(&e.effect).filter(|d| shown(e) && quality.effect_scale(d.class(), e.optional).is_some())
+        scene.effect(&e.effect).filter(|_| shown(e)).and_then(|d| d.live(quality, e.optional))
     };
     let kept: Vec<_> =
         scene.drawable().flat_map(|l| &l.effects).filter_map(|e| Some((drawn(&e)?, e))).collect();

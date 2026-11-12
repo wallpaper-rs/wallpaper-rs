@@ -64,9 +64,10 @@ fn static_scenes_sleep_and_animated_ones_ask_for_frames() {
         json!([{ "id": "b", "type": "image", "image": "a", "effects": [{ "effect": "blur", "optional": true }] }]),
     );
     let blur = runtime(&blur);
+    let light = |q| blur.frame(VIEW, q).effects.iter().map(|e| e.descriptor.light).collect::<Vec<_>>();
     assert_eq!(
-        (blur.frame(VIEW, Quality::Q3).effects.len(), blur.frame(VIEW, Quality::Q0).effects.len()),
-        (1, 0)
+        (light(Quality::Q3), light(Quality::Q1), light(Quality::Q0)),
+        (vec![false], vec![true], vec![true])
     );
     assert_eq!(blur.frame(VIEW, Quality::Q2).effects[0].scale, 0.5);
 }

@@ -340,6 +340,7 @@ the scene sound, runs `sound2`, `script_sounds`, `scripts2`, `script_layers` and
 | `effect_options` | brings effects with `options` | runs | runs |
 | `vertex_effects` | brings effects with a `vertex` stage | runs | runs |
 | `custom_effects2` | brings effects with `compose`, `swap`, `min_fps` or `velocity`, or whose shader calls `cursor_last`, `grid_uv`, `grid_position` or `fs_copy` | runs | runs |
+| `lighter_effects` | brings effects with a `lighter` variant for low quality levels | runs | runs |
 | `mesh` | has `mesh` layers, with their parts, depth, clips and animation layers | runs | runs |
 | `ik` | sets `ik` chains on a mesh or model | runs | runs |
 | `bone_physics` | sets `physics` on a mesh or model, or `canvas.wind` | runs | runs |

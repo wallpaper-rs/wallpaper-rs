@@ -33,6 +33,7 @@ impl Descriptor {
                 swap,
             });
         }
+        d.lighten();
         Ok(d)
     }
 
@@ -172,6 +173,7 @@ impl Descriptor {
             "a homography needs four vec2 corners, three free slots and no fuse".into(),
         );
         found.extend(self.extended().into_iter().map(|p| format!("{id}: {p}")));
+        found.extend(self.lighter_problems());
         found
     }
 

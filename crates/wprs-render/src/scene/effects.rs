@@ -4,7 +4,7 @@ use super::item::{Fx, Rect};
 use super::paint::Painter;
 use super::pipes::Shader;
 use super::region::Region;
-use wprs_scene::{Affine, EffectDraw, MaskMode, Output, ParamKind, PassDef, descriptor};
+use wprs_scene::{Affine, EffectDraw, MaskMode, Output, ParamKind, PassDef, drawn_builtin};
 
 pub(crate) const EMPTY: [Src; 7] =
     [Src::Clear, Src::White, Src::Clear, Src::Clear, Src::Clear, Src::Clear, Src::Void];
@@ -69,7 +69,8 @@ impl Painter<'_, '_, '_> {
         rect: Rect,
         layer_uv: Affine,
     ) -> Src {
-        let Some(d) = descriptor(&e.descriptor.id) else { return current };
+        let Some(d) = drawn_builtin(e.descriptor) else { return current };
+        let d = if self.lightened(i, e) { d.lite.as_deref().unwrap_or(d) } else { d };
         let key = self.r.pipes().chain(&self.r.device, std::iter::once(d), Some(&mut *self.lease));
         let fed = self.fed(i, e, (rect, layer_uv), d.reads_mask_at_its_pixel().then_some(0.0));
         let (mut fx, mask) = self.base(e, layer_uv);

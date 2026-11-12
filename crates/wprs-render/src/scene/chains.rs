@@ -81,7 +81,7 @@ impl Pipes {
         let _ = self.get(device, Shader::Fx(base, "fs_mask_mix"), Mode::Replace, format);
         let glow = scene.canvas.bloom.as_ref().and_then(|_| descriptor("bloom"));
         let used = scene.drawable().flat_map(|l| l.effects.iter().filter_map(|e| descriptor(&e.effect)));
-        for d in used.chain(glow) {
+        for d in used.chain(glow).flat_map(|d| std::iter::once(d).chain(d.lite.as_deref())) {
             let key = self.chain(device, std::iter::once(d), Some(&mut lease));
             for pass in &d.passes {
                 let target = if pass.output == Output::Next { format } else { state };

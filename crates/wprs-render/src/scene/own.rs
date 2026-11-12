@@ -44,6 +44,7 @@ impl Painter<'_, '_, '_> {
         uv: Affine,
     ) -> Src {
         let d: &Descriptor = e.descriptor;
+        let d = if self.lightened(i, e) { d.lite.as_deref().unwrap_or(d) } else { d };
         let stops = stopped(d.key);
         if stops && !self.refused.contains_key(&d.id) {
             self.refused.insert(d.id.clone(), STOPPED.into());

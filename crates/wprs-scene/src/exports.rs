@@ -30,10 +30,10 @@ pub use crate::drafted::{DEBUG_VIEWS, Drafted};
 pub use crate::drawn::TRIANGLE_UNIT;
 pub use crate::easing::Ease;
 pub use crate::effects::{
-    BLEND_WGSL, Cost, Descriptor, Entry, FRAME_WGSL, FX_SLOTS, Fuse, GENERIC_PICTURES, Grab, Hold,
-    MASK_SLOTS, MaskMode, NOISE_WGSL, Output, PRELUDE, Pace, ParamDef, ParamKind, PassBlend, PassDef,
-    RELIEF_WGSL, RenderTarget, SLOTS, Solve, Stage, State, Texel, Tool, Tune, Unit, Use, Variant, builtin,
-    descriptor, register,
+    BLEND_WGSL, Cost, Descriptor, Entry, FRAME_WGSL, FX_SLOTS, Form, Fuse, GENERIC_PICTURES, Grab, Hold,
+    Lighter, MASK_SLOTS, MaskMode, NOISE_WGSL, Output, PRELUDE, Pace, ParamDef, ParamKind, PassBlend,
+    PassDef, RELIEF_WGSL, RenderTarget, SLOTS, Solve, Stage, State, Texel, Tool, Tune, Unit, Use, Variant,
+    builtin, descriptor, drawn_builtin, register,
 };
 pub use crate::eval::lamps::{Lamp, Picture, SHADOW_BIAS};
 pub use crate::eval::{
@@ -145,7 +145,7 @@ pub use crate::signal::{CLOCKS, Gain, HEARD, Hearing, Reduce, SPLITS, Smooth, ce
 pub use crate::sites::{Site, script_inputs, script_key, sites};
 pub use crate::sound::{MAX_SOUNDS, Order, Sound, VOLUME, Voice, volume_property};
 pub use crate::spare::Spare;
-pub use crate::spend::{MAX_STATEFUL, Spend, over};
+pub use crate::spend::{MAX_STATEFUL, Over, Spend, over};
 pub use crate::sprites::{STAGES_WGSL, material_shader, particle_shader};
 pub use crate::stage::{IMAGES, VIDEOS};
 pub use crate::strikes::{STOPPED, end_trials, forgive_strikes, keep_strikes, strike, struck, tried, trying};

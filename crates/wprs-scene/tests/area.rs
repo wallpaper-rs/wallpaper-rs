@@ -79,11 +79,11 @@ fn the_scene_budget_leaves_out_the_uses_past_the_limit_in_order() {
     assert!(small.is_empty(), "{}", small.len());
     let kept = 4000 - large.len();
     let work = spends[0].work(VIEW, 3840.0 * 2160.0);
-    assert!(kept > 0 && kept as f32 * work <= Tier::T0.ceiling() && large[0].0 == kept, "{kept}");
-    assert!(large.iter().all(|(_, why)| why.contains("units of work a frame")));
+    assert!(kept > 0 && kept as f32 * work <= Tier::T0.ceiling() && large[0].at == kept, "{kept}");
+    assert!(large.iter().all(|c| !c.lighter && c.why.contains("units of work a frame")));
     assert!(at(Tier::T3, 3840.0 * 2160.0).len() < large.len());
     assert!(s.left_over(Tier::T0, VIEW, 3840.0 * 2160.0)[0].starts_with("the effect tint on a"));
-    let trimmed = s.without(large.iter().map(|(i, _)| &spends[*i]));
+    let trimmed = s.without(large.iter().map(|c| &spends[c.at]));
     assert_eq!(trimmed.spends().len(), kept);
     assert_eq!(MAX_STATEFUL, 16);
 }
