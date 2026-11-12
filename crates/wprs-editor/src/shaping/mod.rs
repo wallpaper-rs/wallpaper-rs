@@ -3,6 +3,7 @@ mod effects;
 mod grips;
 mod keyed;
 pub(crate) mod layers;
+mod lens;
 pub(crate) mod marks;
 mod masks;
 pub(crate) mod needs;

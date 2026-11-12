@@ -35,4 +35,8 @@ impl Runtime {
         visit(&cx, &self.scene.layers, &mut out);
         out
     }
+
+    pub fn lens(&self, view: [f32; 4], quality: Quality) -> Affine {
+        Context { view, ..self.context() }.lens(quality)
+    }
 }

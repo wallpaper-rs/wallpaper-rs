@@ -10,6 +10,7 @@ mod capture;
 mod effect_points;
 mod grips;
 mod kin;
+mod lens;
 mod masks;
 mod placed;
 

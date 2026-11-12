@@ -575,6 +575,7 @@ msgstr "el archivo no tiene ninguna animación «%1»"
 
 #: crates/wprs-editor/src/clips.rs crates/wprs-editor/src/clips/keyed.rs
 #: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/shaping/layers.rs
+#: crates/wprs-editor/src/shaping/lens.rs
 #: crates/wprs-editor/src/stage3d/paths.rs
 msgid "the time must be 0 or more seconds"
 msgstr "el tiempo debe ser de 0 segundos o más"
@@ -1770,6 +1771,14 @@ msgstr "un tamaño es mayor que 0 píxeles"
 #: crates/wprs-editor/src/shaping/layers.rs
 msgid "a %1 layer takes no size"
 msgstr "una capa %1 no lleva tamaño"
+
+#: crates/wprs-editor/src/shaping/lens.rs
+msgid "the zoom of the camera is 0.1 to 10"
+msgstr "el zoom de la cámara va de 0,1 a 10"
+
+#: crates/wprs-editor/src/shaping/lens.rs
+msgid "the camera turns −360 to 360 degrees"
+msgstr "la cámara gira de −360 a 360 grados"
 
 #: crates/wprs-editor/src/shaping/marks.rs
 msgid "%1 is not a display setting: %2"

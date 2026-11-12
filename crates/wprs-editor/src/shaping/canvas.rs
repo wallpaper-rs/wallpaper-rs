@@ -35,6 +35,9 @@ fn merged<T: serde::Serialize + Default>(doc: &Value, at: &str) -> Map<String, V
 
 pub(crate) fn canvas(dir: &Path, doc: &Value, e: &C) -> Result<Vec<Op>> {
     let ops = match e {
+        C::Camera { .. } | C::CameraGrip { .. } | C::CameraView { .. } => {
+            return super::lens::edit(dir, doc, e);
+        }
         C::Size { size } => {
             let fits = size.iter().all(|v| (1..=wprs_scene::MAX_SIZE).contains(v));
             ensure!(fits, said("editor.canvas_size", "a side of the canvas is 1 to 16384 pixels", &[]));

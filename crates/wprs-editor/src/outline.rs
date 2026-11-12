@@ -118,7 +118,7 @@ pub fn outline(project: &Project, time: f64, files: &[Problem]) -> Value {
     let title = crate::meta::title(doc, &wprs_core::locale::languages());
     json!({"title": title, "id": m["id"], "version": m["version"], "license": m["license"], "canvas": doc["scene"]["canvas"],
         "v2": m["schema"] == wprs_format::SCHEMA, "rating": m["content"]["rating"], "photosensitive": m["photosensitive"],
-        "layers": layers, "outside": outside, "gizmos": shown, "problems": problems, "assets": assets, "scripts": scripts, "templates": crate::templates::tree(&project.dir, doc),
+        "layers": layers, "outside": outside, "gizmos": shown, "camera2d": crate::seats::lens::frame(&seen, time), "problems": problems, "assets": assets, "scripts": scripts, "templates": crate::templates::tree(&project.dir, doc),
         "package_effects": package_effects,
         "properties": crate::listing::rows(doc), "presets": crate::listing::presets(doc),
         "property_kinds": crate::props::PROPERTY_KINDS, "timelines": timelines, "tracks": tracks, "length": length, "systems": systems,

@@ -162,6 +162,9 @@ pub fn staged(look: &Value) -> Option<Value> {
 pub fn preview(scene: &mut Value, look: &Value) {
     crate::lamps::preview(scene);
     crate::stage3d::preview(scene);
+    if crate::seats::lens::whole(scene) {
+        drop(scene["canvas"].as_object_mut().map(|c| c.remove("camera")));
+    }
     if let Some(alone) = look["template"].as_str().and_then(|t| scene["templates"].get(t)).cloned() {
         scene["layers"] = json!([alone]);
         drop(scene.as_object_mut().map(|s| s.remove("scripts")));

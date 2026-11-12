@@ -4848,6 +4848,56 @@ msgstr ""
 "En la vista previa: arrastra con el botón derecho para girar la vista, con "
 "el botón central o Mayús para desplazarla, y gira la rueda para acercarte"
 
+#: apps/wprs-app/qml/SceneCameraFrame.qml
+msgid "Camera zoom %1×: drag a corner of the frame closer to zoom in"
+msgstr "Zoom de la cámara %1×: acerca una esquina del marco para ampliar"
+
+#: apps/wprs-app/qml/SceneCameraFrame.qml
+#: apps/wprs-app/qml/SceneStageCamera.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Camera"
+msgstr "Cámara"
+
+#: apps/wprs-app/qml/SceneCameraFrame.qml
+msgid "Center of the camera: drag to move what it shows"
+msgstr "Centro de la cámara: arrástralo para mover lo que muestra"
+
+#: apps/wprs-app/qml/SceneCameraFrame.qml
+msgid "Camera turned %1°: drag to turn the top of the view toward the pointer"
+msgstr "Cámara girada %1°: arrastra para girar la parte de arriba de la vista hacia el puntero"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "2D camera"
+msgstr "Cámara 2D"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "The canvas shows the whole scene with the frame of the camera"
+msgstr "El lienzo muestra la escena entera con el marco de la cámara"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "The canvas shows the scene through the camera"
+msgstr "El lienzo muestra la escena a través de la cámara"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "Add a 2D camera that zooms, turns and moves the view"
+msgstr "Añade una cámara 2D que amplía, gira y mueve la vista"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "Add a 2D camera"
+msgstr "Añadir una cámara 2D"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "View through the camera"
+msgstr "Ver a través de la cámara"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "View the whole canvas with the camera frame"
+msgstr "Ver el lienzo entero con el marco de la cámara"
+
+#: apps/wprs-app/qml/SceneCameraTool.qml
+msgid "Remove the camera"
+msgstr "Quitar la cámara"
+
 #: apps/wprs-app/qml/SceneCanvas.qml
 msgid "Guide:"
 msgstr "Guía:"
@@ -7676,11 +7726,6 @@ msgstr "Dos apiladas"
 #: apps/wprs-app/qml/SceneSpanPick.qml
 msgid "My screens"
 msgstr "Mis pantallas"
-
-#: apps/wprs-app/qml/SceneStageCamera.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Camera"
-msgstr "Cámara"
 
 #: apps/wprs-app/qml/SceneStageCamera.qml
 msgid "Drag to move the scene camera"

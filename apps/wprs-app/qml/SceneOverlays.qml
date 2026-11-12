@@ -103,6 +103,13 @@ Item {
         ratio: overlays.ratio
     }
 
+    SceneCameraFrame {
+        anchors.fill: parent
+        z: 7
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
     SceneSnapGuides {
         anchors.fill: parent
         z: 7

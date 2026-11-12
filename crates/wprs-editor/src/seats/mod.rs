@@ -7,6 +7,7 @@ use wprs_scene::{Affine, Lean, Quality, Runtime, Scene, Seated, Values};
 pub(crate) mod boxes;
 pub(crate) mod grips;
 mod kin;
+pub mod lens;
 mod snap;
 
 pub use kin::{chain, parents};
@@ -112,7 +113,10 @@ pub(crate) fn canvas_of(doc: &Value) -> [f64; 2] {
 }
 
 pub fn seats(dir: &Path, doc: &Value, t: f64) -> Vec<Seat> {
-    let Some(scene) = parsed(&doc["scene"]) else { return Vec::new() };
+    let Some(mut scene) = parsed(&doc["scene"]) else { return Vec::new() };
+    if lens::whole(&doc["scene"]) {
+        scene.canvas.camera = None;
+    }
     let canvas = canvas_of(doc);
     let rt = {
         let mut rt = Runtime::new(Arc::new(scene), Values::new());
