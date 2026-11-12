@@ -129,6 +129,7 @@ fn edit(command: Modeling) -> Result<(PathBuf, Edit3d)> {
             space,
             depth_test,
             material,
+            paint,
             camera,
             view,
             tones,
@@ -141,6 +142,7 @@ fn edit(command: Modeling) -> Result<(PathBuf, Edit3d)> {
             let more = [("material", material), ("camera", camera), ("view", view), ("tones", tones)];
             let late =
                 [("shadows", shadows), ("path", path), ("new_material", new_material), ("debug", debug)];
+            let late = late.into_iter().chain([("paint", paint)]);
             let given: Vec<(&str, String)> =
                 named.into_iter().chain(more).chain(late).filter_map(|(k, v)| Some((k, v?))).collect();
             anyhow::ensure!(given.len() == 1, "give exactly one of the 3D edits");

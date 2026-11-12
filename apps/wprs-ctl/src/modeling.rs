@@ -134,6 +134,8 @@ pub enum Modeling {
         #[arg(help = EDIT, long, value_name = "JSON")]
         material: Option<String>,
         #[arg(help = EDIT, long, value_name = "JSON")]
+        paint: Option<String>,
+        #[arg(help = EDIT, long, value_name = "JSON")]
         camera: Option<String>,
         #[arg(help = EDIT, long, value_name = "JSON")]
         view: Option<String>,
