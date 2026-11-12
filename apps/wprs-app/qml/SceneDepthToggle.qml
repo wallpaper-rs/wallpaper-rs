@@ -19,7 +19,6 @@ ColumnLayout {
     readonly property var reasons: ({
             "perspective": App.tr("its particle system has no perspective"),
             "refract": App.tr("its particles bend what lies behind them"),
-            "shader": App.tr("its particles use their own shader"),
             "trail": App.tr("its particles draw trails"),
             "rope": App.tr("its particles draw ropes"),
             "children": App.tr("a child system is drawn that way or has children of its own")

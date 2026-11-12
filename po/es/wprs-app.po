@@ -17176,9 +17176,6 @@ msgstr "su sistema de partículas no tiene perspectiva"
 msgid "its particles bend what lies behind them"
 msgstr "sus partículas doblan lo que hay detrás"
 
-#: apps/wprs-app/qml/SceneDepthToggle.qml
-msgid "its particles use their own shader"
-msgstr "sus partículas usan su propio shader"
 
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid "its particles draw trails"

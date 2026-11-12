@@ -47,3 +47,39 @@ fn lit_particles_in_a_3d_group_hide_one_by_one_behind_the_models_in_front_of_the
         assert!(shown[2].0, "{render}: the lowest quality keeps the plane: {shown:?}");
     }
 }
+
+const SAME: &str = "fn particle(p: Sprite) -> Sprite {\n    return p;\n}\n";
+
+fn owned(depth: f32) -> Scene {
+    let mut extra = sparks(depth, json!({ "shader": "same" }));
+    extra["effects"] = json!({ "same": { "descriptor": "effects/same.json", "wgsl": "effects/same.wgsl" } });
+    let layer = json!({ "id": "p", "type": "particles", "system": "s", "depth_test": true });
+    let doc = json!({ "schema": SCHEMA, "canvas": { "size": [SIDE, SIDE], "background": "#000000" },
+        "assets": { "red": { "path": "red.glb" } }, "layers": group(layer), "particles": extra["particles"],
+        "effects": extra["effects"] });
+    let mut scene = Scene::from_json(&doc.to_string()).unwrap();
+    let glb = cube(unlit("paint", [1.0, 0.0, 0.0, 1.0]));
+    let files = move |path: &str, _: usize| match path {
+        "red.glb" => Ok(glb.clone()),
+        "effects/same.json" => Ok(br#"{ "id": "same", "stage": "particle", "cost": {} }"#.to_vec()),
+        "effects/same.wgsl" => Ok(SAME.as_bytes().to_vec()),
+        _ => Err(format!("no {path}")),
+    };
+    scene.adopt(&BTreeMap::new(), files).unwrap();
+    scene
+}
+
+#[test]
+fn particles_with_a_shader_of_their_own_in_a_3d_group_hide_one_by_one() {
+    let Some(r) = renderer() else { return };
+    let mut shown = Vec::new();
+    for (depth, quality) in [(-50.0, Quality::Q3), (50.0, Quality::Q3), (-50.0, Quality::Q0)] {
+        let mut shot = shoot(r, owned(depth), &[]);
+        let px = (0..12).map(|_| shot.frame(r, 0.05, quality)).last().unwrap();
+        shown.push(rgb(&px, 32, 32));
+        assert!(shot.view.left_out().is_empty(), "{:?}", shot.view.left_out());
+    }
+    assert!(near(shown[0], [0, 255, 0], 8), "a nearer particle shows: {shown:?}");
+    assert!(near(shown[1], [255, 0, 0], 8), "a farther particle hides: {shown:?}");
+    assert!(near(shown[2], [255, 0, 0], 8), "the lowest quality keeps the plane: {shown:?}");
+}
