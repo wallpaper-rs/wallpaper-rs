@@ -62,4 +62,17 @@ ColumnLayout {
         visible: sections.web
         page: sections.page
     }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        visible: sections.web
+        level: 4
+        text: App.tr("Inputs")
+    }
+
+    PageInputs {
+        Layout.fillWidth: true
+        visible: sections.web
+        page: sections.page
+    }
 }

@@ -36,8 +36,22 @@ QtObject {
         expect(page.manifest.permissions === undefined && !(page.manifest.inputs ?? []).includes("network"), "the last origin left the network input behind");
     }
 
+    function inputs() {
+        page.manifestEdit("inputs", {
+            "inputs": ["audio", "pointer"],
+            "add": true
+        });
+        expect((page.manifest.inputs ?? []).includes("audio") && page.manifest.inputs.includes("pointer"), "declared inputs were not kept");
+        page.manifestEdit("inputs", {
+            "inputs": ["audio", "pointer"],
+            "remove": true
+        });
+        expect(!(page.manifest.inputs ?? []).includes("audio"), "a declared input was not removed");
+    }
+
     function exercise() {
         web();
+        inputs();
         network();
     }
 }

@@ -50,3 +50,15 @@ fn network_origins_keep_the_network_input_in_step() {
     act(&mut project, json!({"undo": {}})).unwrap();
     assert_eq!(project.doc["manifest"]["inputs"], json!(["network"]));
 }
+
+#[test]
+fn declared_inputs_are_checked_and_never_drop_the_network_one_alone() {
+    let root = tempfile::tempdir().unwrap();
+    let mut project = page(root.path());
+    manifest(&mut project, json!({"inputs": {"inputs": ["audio", "pointer", "clicks"]}})).unwrap();
+    assert_eq!(project.doc["manifest"]["inputs"], json!(["audio", "pointer", "clicks"]));
+    manifest(&mut project, json!({"inputs": {"inputs": ["pointer"], "remove": true}})).unwrap();
+    assert_eq!(project.doc["manifest"]["inputs"], json!(["audio", "clicks"]));
+    assert!(manifest(&mut project, json!({"inputs": {"inputs": ["lasers"], "add": true}})).is_err());
+    assert!(manifest(&mut project, json!({"inputs": {"inputs": ["network"], "add": true}})).is_err());
+}

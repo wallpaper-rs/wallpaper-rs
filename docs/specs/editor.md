@@ -842,6 +842,11 @@ and removed with the last, so the declared input and the origins never disagree;
 add or remove `network` by itself. Only a web page takes origins. The same action is
 `wprs-ctl scene manifest DIR network ORIGIN... [--add|--remove]`.
 
+*Inputs* has a check box for each input a page cannot show it uses, since nothing in its code tells
+the tools: `audio`, `pointer`, `clicks` and `media`; the `network` box is read-only and follows the
+origins. A box sends the `manifest` action `inputs` with `add` or `remove`, which refuses a name that
+is not an input. The same action is `wprs-ctl scene manifest DIR inputs NAME... [--add|--remove]`.
+
 ## Starting points, building and applying
 
 `wprs-ctl scene new DIR --from empty|particles|parallax|clock|web [--id ID] [--title TITLE] [--locale
