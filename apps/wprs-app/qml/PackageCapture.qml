@@ -46,8 +46,10 @@ QQC2.ToolButton {
             if (tries > 100)
                 return stop();
             App.query("CapturePage", [capture.host.page.editor.output], "Daemon1", reply => {
+                if (!capture)
+                    return;
                 const path = String(reply?.[0] ?? "");
-                if (capture && asking.running && path !== "") {
+                if (asking.running && path !== "") {
                     asking.stop();
                     capture.host.page.run("thumbnail", {
                         "file": path,
