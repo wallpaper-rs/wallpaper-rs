@@ -75,8 +75,10 @@ pub fn curves(doc: &Value, q: &Value) -> Value {
             json!({ "part": p, "name": name, "points": points })
         })
         .collect();
+    let picked: Vec<f64> = q["picked"].as_array().into_iter().flatten().filter_map(Value::as_f64).collect();
+    let bounds = super::bounds::bounds(&rows, &tracks, &picked);
     let unit = crate::schema::at(doc, pointer).and_then(|s| s["x-unit"].as_str().map(String::from));
     let kind = crate::kinded::kind(doc, &list);
     json!({ "pointer": pointer, "list": list, "offset": offset, "range": [from, to], "keys": rows, "tracks": tracks,
-        "kind": kind, "unit": unit.unwrap_or_default() })
+        "kind": kind, "unit": unit.unwrap_or_default(), "bounds": bounds })
 }

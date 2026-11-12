@@ -210,7 +210,13 @@ volver a *Partes unidas* con una clave elegida que las tiene separadas le da a t
 primera parte (`link`). Con *Asas alineadas* el asa opuesta gira con la que se
 arrastra, conservando su largo; con *Asas rotas* cada una se mueve sola. *Enderezar*, copiar (Ctrl+C),
 pegar en el cabezal (Ctrl+V; las claves de otro valor se pegan en el valor elegido) y quitar
-(Supr) obran sobre la selección.
+(Supr) obran sobre la selección. La rueda acerca o aleja el tiempo alrededor del puntero, con Ctrl el valor
+y con Mayúsculas (o la rueda horizontal) desplaza el tiempo; arrastrar con el botón del medio mueve
+la vista en tiempo y valor. *Encuadrar lo elegido* (F) y *Encuadrar todo* (Inicio) salen de `bounds`
+de la consulta `curves`: `all` da, parte por parte, de dónde a dónde llegan la curva, las claves y sus
+asas fijadas, y con `picked` (los segundos de las claves elegidas) `picked` da el tramo de tiempo y de
+valor de esas claves con sus asas. Cada pista conserva su propia escala; el acercamiento en valor es
+el mismo para todas.
 
 The template picker of the layers bar shows the scene, or one script template alone on the canvas as
 a copy of it draws (the preview look `template`). While a template is shown, the layers panel lists

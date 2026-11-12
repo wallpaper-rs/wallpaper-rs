@@ -16,6 +16,7 @@ Kirigami.Dialog {
     readonly property var copied: SceneGraphSources.copied
     property bool aligned: true
     property bool linked: true
+    readonly property alias plot: plot
     readonly property SceneGraphKeys ops: SceneGraphKeys {
         graph: graph
     }
@@ -50,7 +51,8 @@ Kirigami.Dialog {
                     "samples": 160
                 }, s)
             })) || "{}")).map((c, i) => Object.assign(c, {
-                    "label": sources[i].label
+                    "label": sources[i].label,
+                    "source": sources[i]
                 })).filter(c => c.list !== undefined);
         chosen = chosen.filter(c => shown[c.s]?.keys.some(k => Math.abs(k.t - c.t) < 1e-3));
     }
@@ -74,6 +76,7 @@ Kirigami.Dialog {
     onWatchChanged: visible && load()
     onSourcesChanged: {
         chosen = [];
+        plot.view.fitAll();
         if (visible)
             load();
     }
@@ -92,6 +95,12 @@ Kirigami.Dialog {
             Layout.fillWidth: true
             Layout.preferredHeight: Kirigami.Units.gridUnit * 18
             graph: graph
+        }
+
+        SceneGraphTracks {
+            Layout.fillWidth: true
+            graph: graph
+            plot: plot
         }
 
         QQC2.Label {

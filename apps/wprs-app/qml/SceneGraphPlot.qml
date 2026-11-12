@@ -14,7 +14,12 @@ Canvas {
     property real dy: 0
     property real stretch: 1
     property var band: null
-    readonly property var watched: [tracks, graph.chosen, graph.now, dx, dy, stretch, band, width, height]
+    readonly property SceneGraphView view: SceneGraphView {
+        plot: plot
+    }
+    readonly property var times: view.span ?? graph.span
+    readonly property var win: view.win
+    readonly property var watched: [tracks, graph.chosen, graph.now, dx, dy, stretch, band, width, height, times, win]
 
     function build(shown, hidden, chosen) {
         const out = [];
@@ -31,8 +36,8 @@ Canvas {
     }
 
     function fit(tr) {
-        const all = tr.points.map(pt => pt[1]).concat(tr.keys.map(k => k.parts?.[tr.p]).filter(v => v !== undefined));
-        tr.keys.filter(k => graph.picked(tr.s, k.t)).forEach(k => ["in", "out"].forEach(side => k[side]?.at?.[tr.p] && all.push(k[side].at[tr.p][1])));
+        const framed = graph.shown[tr.s]?.bounds?.all?.[tr.p];
+        const all = framed ?? tr.points.map(pt => pt[1]).concat(tr.keys.map(k => k.parts?.[tr.p]).filter(v => v !== undefined));
         const lo = all.length ? Math.min.apply(null, all) : 0, hi = all.length ? Math.max.apply(null, all) : 1;
         const margin = Math.max(1e-3, (hi - lo) * 0.08);
         tr.lo = lo - margin;
@@ -41,19 +46,20 @@ Canvas {
     }
 
     function tx(t) {
-        return pad + (t - graph.span[0]) / Math.max(1e-6, graph.span[1] - graph.span[0]) * (width - 2 * pad);
+        return pad + (t - times[0]) / Math.max(1e-6, times[1] - times[0]) * (width - 2 * pad);
     }
 
     function time(px) {
-        return graph.span[0] + (px - pad) / Math.max(1, width - 2 * pad) * (graph.span[1] - graph.span[0]);
+        return times[0] + (px - pad) / Math.max(1, width - 2 * pad) * (times[1] - times[0]);
     }
 
     function vy(tr, v) {
-        return pad + (1 - (v - tr.lo) / (tr.hi - tr.lo)) * (height - 2 * pad);
+        const n = ((v - tr.lo) / (tr.hi - tr.lo) - win[0]) / Math.max(1e-9, win[1] - win[0]);
+        return pad + (1 - n) * (height - 2 * pad);
     }
 
     function value(tr, py) {
-        return tr.lo + (1 - (py - pad) / Math.max(1, height - 2 * pad)) * (tr.hi - tr.lo);
+        return tr.lo + view.share(py) * (tr.hi - tr.lo);
     }
 
     function shifted(tr, k) {

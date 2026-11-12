@@ -157,3 +157,24 @@ fn the_curves_query_splits_keys_into_parts_with_handles_and_the_sampled_curve() 
             .is_string()
     );
 }
+
+#[test]
+fn the_curves_query_frames_all_keys_and_the_picked_ones() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    keyed(&mut p, PLACE, &[(0.0, json!([0, 0])), (2.0, json!([100, 50])), (4.0, json!([20, 10]))]);
+    act(
+        &mut p,
+        json!({"edit_keys": {"picks": [{"pointer": PLACE, "times": [2]}], "part": 1, "out_handle": [1, 80]}}),
+    )
+    .unwrap();
+    let curves = wprs_editor::graph::curves(&p.doc, &json!({"pointer": PLACE, "samples": 9, "picked": [2]}));
+    let bounds = &curves["bounds"];
+    assert_eq!(bounds["all"][0][0], json!(0.0));
+    assert!(bounds["all"][1][1].as_f64().unwrap() >= 130.0, "a set handle is framed: {bounds}");
+    let picked = &bounds["picked"];
+    assert_eq!(picked["range"], json!([1.333333, 3.0]), "{picked}");
+    assert_eq!(picked["parts"][1], json!([33.333333, 130.0]), "{picked}");
+    let none = wprs_editor::graph::curves(&p.doc, &json!({"pointer": PLACE}));
+    assert_eq!(none["bounds"]["picked"], json!(null));
+}

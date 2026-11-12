@@ -116,9 +116,19 @@ MouseArea {
         held = null;
     }
 
+    acceptedButtons: Qt.LeftButton | Qt.MiddleButton
     onPressed: event => {
         x0 = event.x;
         y0 = event.y;
+        if (event.button === Qt.MiddleButton) {
+            mode = "pan";
+            held = {
+                "mode": "pan",
+                "span": plot.times,
+                "win": plot.win
+            };
+            return;
+        }
         held = hit(event.x, event.y);
         held.adding = (event.modifiers & (Qt.ControlModifier | Qt.ShiftModifier)) !== 0;
         mode = held.mode;
@@ -145,6 +155,18 @@ MouseArea {
             plot.stretch = Math.max(0.05, (plot.time(event.x) - plot.box[0]) / Math.max(1e-6, plot.box[1] - plot.box[0]));
         else if (mode === "band")
             plot.band = [x0, y0, event.x, event.y];
+        else if (mode === "pan")
+            plot.view.pan(held.span, held.win, event.x - x0, event.y - y0);
+    }
+    onWheel: wheel => {
+        const step = wheel.angleDelta.y !== 0 ? wheel.angleDelta.y : wheel.angleDelta.x;
+        if (step === 0)
+            return;
+        const across = plot.width - 2 * plot.pad;
+        if ((wheel.modifiers & Qt.ShiftModifier) !== 0 || wheel.angleDelta.y === 0)
+            plot.view.pan(plot.times, plot.win, step > 0 ? across / 10 : -across / 10, 0);
+        else
+            plot.view.zoom(wheel.x, wheel.y, step > 0 ? 0.8 : 1.25, (wheel.modifiers & Qt.ControlModifier) !== 0);
     }
     onReleased: finish()
     onCanceled: finish()

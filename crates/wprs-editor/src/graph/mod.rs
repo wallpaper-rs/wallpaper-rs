@@ -1,4 +1,5 @@
 mod bend;
+mod bounds;
 mod curves;
 pub(crate) mod hands;
 pub(crate) mod parts;

@@ -95,6 +95,21 @@ QtObject {
         });
     }
 
+    function framed() {
+        return graph.shown.map((c, s) => ({
+                    "s": s,
+                    "times": graph.chosen.filter(o => o.s === s).map(o => o.t)
+                })).filter(f => f.times.length > 0).map(f => ({
+                    "s": f.s,
+                    "bounds": JSON.parse(graph.page.editor.rig("", JSON.stringify({
+                        "curves": Object.assign({
+                            "samples": 2,
+                            "picked": f.times
+                        }, graph.shown[f.s].source)
+                    })) || "{}").bounds
+                }));
+    }
+
     function raw(s) {
         return JSON.parse(graph.page.editor.value(graph.shown[s].list) || "[]");
     }

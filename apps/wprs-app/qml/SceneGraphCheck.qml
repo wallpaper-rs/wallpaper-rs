@@ -37,6 +37,17 @@ QtObject {
         plot.mouse.x0 = at[0];
         plot.dx = plot.tx(3) - plot.tx(2);
         plot.mouse.finish();
+        const wide = plot.times[1] - plot.times[0];
+        plot.view.zoom(200, 100, 0.5, false);
+        if (Math.abs(plot.times[1] - plot.times[0] - wide / 2) > 1e-6)
+            fail("zooming did not halve the time span: " + JSON.stringify(plot.times));
+        graph.load();
+        plot.view.fitPicked();
+        if (!(plot.times[0] < 3 && plot.times[1] > 3 && plot.times[1] - plot.times[0] < wide))
+            fail("fitting the picked key missed: " + JSON.stringify(plot.times) + JSON.stringify(graph.chosen));
+        plot.view.fitAll();
+        if (plot.view.span !== null || plot.win[1] !== 1)
+            fail("fitting all keys kept a zoom");
         plot.destroy();
     }
 
