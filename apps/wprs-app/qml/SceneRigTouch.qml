@@ -7,7 +7,7 @@ ColumnLayout {
     id: touch
 
     required property var owner
-    readonly property var depth: owner.depth
+    readonly property bool picking: owner.host.page.mesh.mode === "hit" && owner.host.page.mesh.rigging === owner.host.layerId
 
     QQC2.Label {
         text: App.tr("Bones that take the pointer")
@@ -26,6 +26,21 @@ ColumnLayout {
             text: modelData
             onRemoved: touch.owner.put("/hit", touch.owner.without(touch.owner.touched, index))
         }
+    }
+
+    QQC2.Button {
+        text: App.tr("Pick them on the preview")
+        icon.name: "input-mouse"
+        checkable: true
+        checked: touch.picking
+        onToggled: touch.owner.host.page.mesh.use(touch.owner.host.layerId, checked ? "hit" : "")
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: touch.picking
+        wrapMode: Text.Wrap
+        text: App.tr("Click a bone on the preview to make it take the pointer, or click it again to let it go; the bones that take it have a thick ring.")
     }
 
     RowLayout {
@@ -48,39 +63,5 @@ ColumnLayout {
         visible: touch.owner.touched.length > 0
         wrapMode: Text.Wrap
         text: App.tr("Scripts learn which of these bones the pointer touched, with the pointer permission.")
-    }
-
-    QQC2.Switch {
-        text: App.tr("Push vertices by their depth with perspective")
-        checked: touch.depth !== null
-        onToggled: touch.owner.put("/depth", checked ? {
-            "scale": 1
-        } : null)
-    }
-
-    RowLayout {
-        visible: touch.depth !== null
-
-        QQC2.Label {
-            text: App.tr("Depth")
-        }
-
-        SceneSlider {
-            Layout.fillWidth: true
-            from: 0
-            to: 10
-            value: touch.depth?.scale ?? 1
-            onMoved: touch.owner.put("/depth", Object.assign({}, touch.depth, {
-                "scale": Math.round(value * 100) / 100
-            }))
-        }
-
-        QQC2.Switch {
-            text: App.tr("Hide parts seen from behind")
-            checked: touch.depth?.cull === true
-            onToggled: touch.owner.put("/depth", Object.assign({}, touch.depth, {
-                "cull": checked
-            }))
-        }
     }
 }

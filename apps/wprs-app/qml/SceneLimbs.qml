@@ -60,6 +60,10 @@ Item {
         return list.length > 0 ? list[0].name : "";
     }
 
+    function hit() {
+        return JSON.parse(page.editor.value(mesh.pointer(layerId) + "/hit") || "[]") ?? [];
+    }
+
     function tapped(name) {
         if (mode === "chain" && mesh.root === "")
             mesh.root = name;
@@ -75,6 +79,11 @@ Item {
                 "layer": layerId,
                 "bones": [name],
                 "remove": shown.bodies.some(b => b.bone === name)
+            });
+        else if (mode === "hit")
+            page.run("set", {
+                "pointer": mesh.pointer(layerId) + "/hit",
+                "value": hit().includes(name) ? hit().filter(n => n !== name) : hit().concat([name])
             });
         else if (mode === "attach" && mesh.attaching !== "")
             pin(mesh.attaching, Qt.point(0, 0), name);

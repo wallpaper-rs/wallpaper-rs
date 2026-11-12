@@ -124,7 +124,8 @@ Item {
             height: width
             radius: width / 2
             color: bones.mesh.bone === modelData.name ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.highlightColor
-            border.color: Kirigami.Theme.backgroundColor
+            border.color: (bones.rig.hit ?? []).includes(modelData.name) ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.backgroundColor
+            border.width: (bones.rig.hit ?? []).includes(modelData.name) ? 3 : 1
             visible: modelData.at !== undefined
 
             QQC2.Label {
@@ -151,6 +152,12 @@ Item {
                 }
             }
         }
+    }
+
+    SceneDepthKnob {
+        anchors.fill: parent
+        host: bones
+        visible: !bones.posing && bones.mesh.rigging === bones.layerId && bones.rig.depth !== null && bones.rig.depth !== undefined
     }
 
     ScenePoints {
