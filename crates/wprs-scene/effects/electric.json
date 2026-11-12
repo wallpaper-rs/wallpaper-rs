@@ -2,7 +2,7 @@
   "id": "electric",
   "name": { "en": "Electric" },
   "category": "motion",
-  "description": "Draws animated electric arcs.",
+  "description": { "en": "Draws animated electric arcs.", "es": "Dibuja arcos eléctricos animados." },
   "min_fps": 30,
   "pace": { "steps": [30, 15] },
   "mask_mode": "strength",

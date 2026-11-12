@@ -2,7 +2,7 @@
   "id": "crt",
   "name": { "en": "CRT screen" },
   "category": "stylize",
-  "description": "Simulates an old CRT screen with scanlines and curvature.",
+  "description": { "en": "Simulates an old CRT screen with scanlines and curvature.", "es": "Imita una pantalla antigua de tubo, con líneas y curvatura." },
   "mask_mode": "strength",
   "params": [
     { "id": "curvature", "type": "float", "default": 0.1, "min": 0, "max": 1 },

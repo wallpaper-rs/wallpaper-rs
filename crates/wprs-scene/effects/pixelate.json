@@ -2,7 +2,7 @@
   "id": "pixelate",
   "name": { "en": "Pixelate" },
   "category": "distort",
-  "description": "Blocks the picture into large square or hexagonal pixels.",
+  "description": { "en": "Blocks the picture into large square or hexagonal pixels.", "es": "Convierte la imagen en grandes píxeles cuadrados o hexagonales." },
   "params": [
     { "id": "size", "type": "float", "default": 8, "min": 1, "max": 256 },
     { "id": "hex", "type": "bool", "default": false }

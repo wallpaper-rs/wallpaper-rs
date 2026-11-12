@@ -2,7 +2,7 @@
   "id": "bloom",
   "name": { "en": "Glow" },
   "category": "light",
-  "description": "Glows bright areas of the picture outward.",
+  "description": { "en": "Glows bright areas of the picture outward.", "es": "Hace que las zonas brillantes de la imagen irradien luz hacia fuera." },
   "params": [
     { "id": "threshold", "type": "float", "default": 0.8, "min": 0, "max": 4 },
     { "id": "intensity", "type": "float", "default": 1, "min": 0, "max": 8 },

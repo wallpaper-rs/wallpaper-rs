@@ -2,7 +2,7 @@
   "id": "sway",
   "name": { "en": "Sway" },
   "category": "motion",
-  "description": "Sways the picture like something hanging, with stiffness and spread, or makes foliage tremble.",
+  "description": { "en": "Sways the picture like something hanging, with stiffness and spread, or makes foliage tremble.", "es": "Hace oscilar la imagen como algo colgado, con rigidez y dispersión, o hace temblar el follaje." },
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

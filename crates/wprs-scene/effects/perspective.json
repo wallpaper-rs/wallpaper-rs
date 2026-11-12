@@ -2,7 +2,7 @@
   "id": "perspective",
   "name": { "en": "Perspective" },
   "category": "distort",
-  "description": "Warps the four corners of the picture into a new quad.",
+  "description": { "en": "Warps the four corners of the picture into a new quad.", "es": "Deforma las cuatro esquinas de la imagen hacia un cuadrilátero nuevo." },
   "mask_mode": "strength",
   "params": [
     { "id": "top_left", "type": "vec2", "default": [0.04, 0], "min": -2, "max": 3 },

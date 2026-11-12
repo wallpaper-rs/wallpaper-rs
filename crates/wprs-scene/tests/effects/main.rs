@@ -9,6 +9,7 @@ mod fusion;
 mod inputs;
 mod lighter;
 mod locality;
+mod spoken;
 mod spread;
 
 const VIEW: [f32; 4] = [0.0, 0.0, 64.0, 32.0];

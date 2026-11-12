@@ -2,7 +2,7 @@
   "id": "local_contrast",
   "name": { "en": "Local contrast" },
   "category": "blur",
-  "description": "Sharpens local contrast without affecting overall exposure.",
+  "description": { "en": "Sharpens local contrast without affecting overall exposure.", "es": "Aumenta el contraste local sin cambiar la exposición general." },
   "mask_mode": "strength",
   "params": [
     { "id": "radius", "type": "float", "default": 8, "min": 1, "max": 64 },

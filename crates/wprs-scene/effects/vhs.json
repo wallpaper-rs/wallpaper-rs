@@ -2,7 +2,7 @@
   "id": "vhs",
   "name": { "en": "VHS" },
   "category": "stylize",
-  "description": "Simulates a worn VHS tape with noise and color smear.",
+  "description": { "en": "Simulates a worn VHS tape with noise and color smear.", "es": "Imita una cinta de vídeo gastada, con ruido y manchas de color." },
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

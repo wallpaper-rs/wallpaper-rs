@@ -2,7 +2,7 @@
   "id": "glitter",
   "name": { "en": "Glitter" },
   "category": "stylize",
-  "description": "Scatters small sparkling points over the picture.",
+  "description": { "en": "Scatters small sparkling points over the picture.", "es": "Esparce pequeños puntos brillantes sobre la imagen." },
   "mask_mode": "strength",
   "params": [
     { "id": "density", "type": "float", "default": 0.3, "min": 0, "max": 1 },

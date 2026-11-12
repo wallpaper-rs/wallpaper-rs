@@ -2,7 +2,7 @@
   "id": "twirl",
   "name": { "en": "Twirl" },
   "category": "distort",
-  "description": "Twists the picture around a center point.",
+  "description": { "en": "Twists the picture around a center point.", "es": "Retuerce la imagen alrededor de un punto central." },
   "mask_mode": "strength",
   "params": [
     { "id": "angle", "type": "float", "unit": "degrees", "default": 60, "min": -1080, "max": 1080 },

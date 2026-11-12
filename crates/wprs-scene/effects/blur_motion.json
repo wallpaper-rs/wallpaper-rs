@@ -2,7 +2,7 @@
   "id": "blur_motion",
   "name": { "en": "Motion blur" },
   "category": "blur",
-  "description": "Blurs the picture in one direction, as if it moved fast.",
+  "description": { "en": "Blurs the picture in one direction, as if it moved fast.", "es": "Desenfoca la imagen en una dirección, como si se moviera rápido." },
   "mask_mode": "strength",
   "params": [
     { "id": "angle", "type": "float", "unit": "degrees", "default": 0, "min": -360, "max": 360 },

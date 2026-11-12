@@ -2,7 +2,7 @@
   "id": "waves",
   "name": { "en": "Waves" },
   "category": "motion",
-  "description": "Distorts the picture with one or two wave patterns.",
+  "description": { "en": "Distorts the picture with one or two wave patterns.", "es": "Deforma la imagen con uno o dos patrones de ondas." },
   "min_fps": 30,
   "uses": ["time"],
   "mask_mode": "strength",

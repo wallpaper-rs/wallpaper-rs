@@ -2,7 +2,7 @@
   "id": "blend_gradient",
   "name": { "en": "Gradient blend" },
   "category": "blend",
-  "description": "Blends in a texture using a gradient map to control where it shows.",
+  "description": { "en": "Blends in a texture using a gradient map to control where it shows.", "es": "Mezcla una textura usando un mapa de degradado que controla dónde se ve." },
   "mask_mode": "strength",
   "params": [
     { "id": "texture", "type": "texture", "default": "" },

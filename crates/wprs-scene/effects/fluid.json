@@ -2,7 +2,7 @@
   "id": "fluid",
   "name": { "en": "Fluid" },
   "category": "motion",
-  "description": "Simulates a fluid that reacts to the pointer.",
+  "description": { "en": "Simulates a fluid that reacts to the pointer.", "es": "Simula un fluido que reacciona al puntero." },
   "mask_mode": "strength",
   "params": [
     {

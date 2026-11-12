@@ -2,7 +2,7 @@
   "id": "edges",
   "name": { "en": "Edges" },
   "category": "stylize",
-  "description": "Outlines edges, with an optional sketch look.",
+  "description": { "en": "Outlines edges, with an optional sketch look.", "es": "Marca los bordes, con un aspecto de dibujo si quieres." },
   "mask_mode": "strength",
   "params": [
     { "id": "strength", "type": "float", "default": 1, "min": 0, "max": 1 },

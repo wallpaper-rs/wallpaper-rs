@@ -2,7 +2,7 @@
   "id": "color_lut",
   "name": { "en": "Color grading" },
   "category": "color",
-  "description": "Grades color using a LUT image.",
+  "description": { "en": "Grades color using a LUT image.", "es": "Da un tratamiento de color con una imagen de tabla de colores." },
   "mask_mode": "strength",
   "params": [
     { "id": "lut", "type": "lut", "tools": ["table"], "default": "" },

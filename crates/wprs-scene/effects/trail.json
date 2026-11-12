@@ -2,7 +2,7 @@
   "id": "trail",
   "name": { "en": "Motion trail" },
   "category": "motion",
-  "description": "Leaves a fading trail of past frames.",
+  "description": { "en": "Leaves a fading trail of past frames.", "es": "Deja una estela que se desvanece con los fotogramas anteriores." },
   "params": [{ "id": "persistence", "type": "float", "default": 0.8, "min": 0, "max": 0.99 }],
   "state": { "scale": 1, "settle": 0.25, "fade": "persistence" },
   "passes": [

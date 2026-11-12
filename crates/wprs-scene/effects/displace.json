@@ -2,7 +2,7 @@
   "id": "displace",
   "name": { "en": "Displace" },
   "category": "distort",
-  "description": "Offsets pixels using a map of normals or offsets.",
+  "description": { "en": "Offsets pixels using a map of normals or offsets.", "es": "Desplaza los píxeles con un mapa de normales o de desplazamientos." },
   "mask_mode": "strength",
   "params": [
     { "id": "map", "type": "texture", "tools": ["gray", "flow"], "default": "" },

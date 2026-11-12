@@ -2,7 +2,7 @@
   "id": "fire",
   "name": { "en": "Fire" },
   "category": "motion",
-  "description": "Draws animated fire using a color gradient.",
+  "description": { "en": "Draws animated fire using a color gradient.", "es": "Dibuja fuego animado con un degradado de color." },
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

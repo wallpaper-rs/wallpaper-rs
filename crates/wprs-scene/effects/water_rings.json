@@ -2,7 +2,7 @@
   "id": "water_rings",
   "name": { "en": "Water rings" },
   "category": "motion",
-  "description": "Draws expanding rings like drops on water.",
+  "description": { "en": "Draws expanding rings like drops on water.", "es": "Dibuja anillos que se expanden, como gotas en el agua." },
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

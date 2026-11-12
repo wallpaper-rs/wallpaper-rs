@@ -2,7 +2,7 @@
   "id": "shake",
   "name": { "en": "Shake" },
   "category": "motion",
-  "description": "Shakes the picture along a direction or a painted flow map, by noise or a periodic push.",
+  "description": { "en": "Shakes the picture along a direction or a painted flow map, by noise or a periodic push.", "es": "Sacude la imagen en una dirección o según un mapa de flujo pintado, con ruido o un empuje periódico." },
   "mask_mode": "strength",
   "params": [
     { "id": "strength", "type": "float", "default": 0, "min": 0, "max": 256, "uses": "time" },

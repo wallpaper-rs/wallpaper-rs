@@ -2,7 +2,7 @@
   "id": "chroma_key",
   "name": { "en": "Chroma key" },
   "category": "color",
-  "description": "Removes a chosen color, making it transparent.",
+  "description": { "en": "Removes a chosen color, making it transparent.", "es": "Quita un color elegido y lo vuelve transparente." },
   "mask_mode": "strength",
   "params": [
     { "id": "key", "type": "color", "default": "#00ff00" },

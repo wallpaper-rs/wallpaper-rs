@@ -2,7 +2,7 @@
   "id": "clouds",
   "name": { "en": "Clouds and fog" },
   "category": "motion",
-  "description": "Draws drifting procedural clouds or fog.",
+  "description": { "en": "Draws drifting procedural clouds or fog.", "es": "Dibuja nubes o niebla que van a la deriva." },
   "min_fps": 20,
   "uses": ["time"],
   "params": [

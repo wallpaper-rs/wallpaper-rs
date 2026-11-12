@@ -2,7 +2,7 @@
   "id": "reflection",
   "name": { "en": "Reflection" },
   "category": "light",
-  "description": "Adds a wavy reflection below the picture.",
+  "description": { "en": "Adds a wavy reflection below the picture.", "es": "Añade bajo la imagen un reflejo ondulado." },
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

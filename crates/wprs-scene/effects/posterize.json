@@ -2,7 +2,7 @@
   "id": "posterize",
   "name": { "en": "Posterize" },
   "category": "color",
-  "description": "Reduces the picture to a few color levels.",
+  "description": { "en": "Reduces the picture to a few color levels.", "es": "Reduce la imagen a unos pocos niveles de color." },
   "mask_mode": "strength",
   "params": [
     { "id": "levels", "type": "float", "default": 6, "min": 2, "max": 64 },

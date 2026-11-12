@@ -2,7 +2,7 @@
   "id": "vignette",
   "name": { "en": "Vignette" },
   "category": "light",
-  "description": "Darkens the corners of the picture.",
+  "description": { "en": "Darkens the corners of the picture.", "es": "Oscurece las esquinas de la imagen." },
   "mask_mode": "strength",
   "params": [
     { "id": "intensity", "type": "float", "default": 0.35, "min": 0, "max": 1 },

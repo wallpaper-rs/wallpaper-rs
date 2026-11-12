@@ -2,7 +2,7 @@
   "id": "blur",
   "name": { "en": "Blur" },
   "category": "blur",
-  "description": "Blurs the picture by a fixed radius.",
+  "description": { "en": "Blurs the picture by a fixed radius.", "es": "Desenfoca la imagen con un radio fijo." },
   "params": [
     { "id": "radius", "type": "float", "default": 8, "min": 0, "max": 128 },
     { "id": "blend", "type": "blend", "default": "normal" },

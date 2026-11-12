@@ -2,7 +2,7 @@
   "id": "tilt_shift",
   "name": { "en": "Tilt-shift" },
   "category": "blur",
-  "description": "Blurs out of a focus band, as in a tilt-shift photo.",
+  "description": { "en": "Blurs out of a focus band, as in a tilt-shift photo.", "es": "Desenfoca fuera de una banda de enfoque, como en una foto de miniatura." },
   "mask_mode": "strength",
   "params": [
     { "id": "focus", "type": "float", "default": 0.5, "min": 0, "max": 1 },

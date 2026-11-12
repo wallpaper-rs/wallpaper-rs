@@ -2,7 +2,7 @@
   "id": "pulse",
   "name": { "en": "Pulse" },
   "category": "color",
-  "description": "Pulses brightness, color, opacity or a tinted light over time.",
+  "description": { "en": "Pulses brightness, color, opacity or a tinted light over time.", "es": "Hace pulsar el brillo, el color, la opacidad o una luz teñida con el tiempo." },
   "mask_mode": "strength",
   "params": [
     {

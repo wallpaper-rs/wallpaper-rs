@@ -2,7 +2,7 @@
   "id": "lens_distort",
   "name": { "en": "Lens distortion" },
   "category": "distort",
-  "description": "Barrel or pincushion distorts the picture like a lens.",
+  "description": { "en": "Barrel or pincushion distorts the picture like a lens.", "es": "Deforma la imagen como una lente, en barril o en cojín." },
   "mask_mode": "strength",
   "params": [
     { "id": "k1", "type": "float", "default": 0.1, "min": -1, "max": 1 },

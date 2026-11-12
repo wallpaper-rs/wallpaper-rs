@@ -2,7 +2,7 @@
   "id": "tint",
   "name": { "en": "Tint" },
   "category": "color",
-  "description": "Tints or colorizes the picture with a chosen color.",
+  "description": { "en": "Tints or colorizes the picture with a chosen color.", "es": "Tiñe o colorea la imagen con el color que elijas." },
   "mask_mode": "strength",
   "params": [
     { "id": "color", "type": "color", "default": "#ff8800" },

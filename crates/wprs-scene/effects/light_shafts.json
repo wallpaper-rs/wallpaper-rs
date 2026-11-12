@@ -2,7 +2,7 @@
   "id": "light_shafts",
   "name": { "en": "Light shafts" },
   "category": "light",
-  "description": "Draws soft colored light shafts across the picture.",
+  "description": { "en": "Draws soft colored light shafts across the picture.", "es": "Dibuja haces suaves de luz de color que cruzan la imagen." },
   "mask_mode": "strength",
   "params": [
     {

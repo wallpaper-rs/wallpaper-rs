@@ -2,7 +2,7 @@
   "id": "flow",
   "name": { "en": "Flow" },
   "category": "motion",
-  "description": "Distorts the picture along a flow map over time.",
+  "description": { "en": "Distorts the picture along a flow map over time.", "es": "Deforma la imagen a lo largo de un mapa de flujo con el tiempo." },
   "min_fps": 30,
   "mask_mode": "strength",
   "params": [

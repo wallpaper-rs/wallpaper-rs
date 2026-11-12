@@ -2,7 +2,7 @@
   "id": "spin",
   "name": { "en": "Spin" },
   "category": "motion",
-  "description": "Spins the picture around a center point.",
+  "description": { "en": "Spins the picture around a center point.", "es": "Hace girar la imagen alrededor de un punto central." },
   "mask_mode": "strength",
   "params": [
     { "id": "center", "type": "position", "default": [0.5, 0.5] },

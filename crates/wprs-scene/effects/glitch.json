@@ -2,7 +2,7 @@
   "id": "glitch",
   "name": { "en": "Glitch" },
   "category": "motion",
-  "description": "Glitches the picture with shifted rows and color splits.",
+  "description": { "en": "Glitches the picture with shifted rows and color splits.", "es": "Estropea la imagen con filas desplazadas y colores separados." },
   "mask_mode": "strength",
   "params": [
     { "id": "bursts", "type": "float", "default": 0, "min": 0, "max": 10, "uses": "time" },

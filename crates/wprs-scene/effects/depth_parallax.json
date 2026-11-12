@@ -2,7 +2,7 @@
   "id": "depth_parallax",
   "name": { "en": "Depth parallax" },
   "category": "distort",
-  "description": "Shifts layers by a depth map as the pointer moves, for a 3D-ish parallax.",
+  "description": { "en": "Shifts layers by a depth map as the pointer moves, for a 3D-ish parallax.", "es": "Desplaza las capas según un mapa de profundidad cuando se mueve el puntero, para un efecto de relieve." },
   "mask_mode": "strength",
   "params": [
     { "id": "depth", "type": "texture", "tools": ["gray", "depth"], "default": "" },
