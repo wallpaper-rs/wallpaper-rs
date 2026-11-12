@@ -20,22 +20,14 @@ fn loose(cx: &Context, d: &Draw) -> bool {
         && !cx.mattes.contains(&d.layer.id)
 }
 
-fn drawn_as(r: &crate::Render) -> Option<&'static str> {
-    match () {
-        _ if r.rope.is_some() => Some("rope"),
-        _ => None,
-    }
-}
-
 pub fn particle_plane(scene: &crate::Scene, layer: &Layer) -> Option<&'static str> {
-    let Kind::Particles { system, render, .. } = &layer.kind else { return Some("kind") };
+    let Kind::Particles { system, .. } = &layer.kind else { return Some("kind") };
     let Some(s) = scene.particles.get(system) else { return Some("kind") };
     let mut kids = s.children.iter().filter_map(|c| scene.particles.get(&c.system));
     match () {
         _ if s.perspective.is_none() => Some("perspective"),
-        _ => drawn_as(render.as_deref().unwrap_or(&s.render)).or_else(|| {
-            kids.any(|k| drawn_as(&k.render).is_some() || !k.children.is_empty()).then_some("children")
-        }),
+        _ if kids.any(|k| !k.children.is_empty()) => Some("children"),
+        _ => None,
     }
 }
 

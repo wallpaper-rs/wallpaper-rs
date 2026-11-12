@@ -852,12 +852,11 @@ no plane: each particle stands at the depth of its own place, the plane of the l
 draws the depth of its opaque models once into a picture of its own size (one more pass of their
 triangles, without colors, only while such a layer is in the group, and kept while nothing moves),
 which the particles read; lit particles (`render.lit` or a layer with `lighting`) , particles with a shader of their own,
-refracting particles and trails (short and long, each point at the depth its particle had when it
-was marked) read it too. Refracting particles hide their bending where a nearer model
+refracting particles, trails (short and long, each point at the depth its particle had when it
+was marked) and ropes (each knot at the depth of its particle) read it too. Refracting particles hide their bending where a nearer model
 covers them, but the picture they bend is the finished picture of the group, which holds no depth:
 where a visible particle sits beside a nearer model its offsets can still pull in a few pixels of that
-model. Systems that have ropes, or children that do or have
-children of their own, stand on the plane of the layer as before, and so does every system at the lowest quality, which skips that pass. A plain group inside a 3D group (no
+model. Systems whose children have children of their own stand on the plane of the layer as before, and so does every system at the lowest quality, which skips that pass. A plain group inside a 3D group (no
 effects, mask, other blend, opacity below 1, color, brightness, `clip`, tilt, `z` or `depth_test`)
 lets its layers join the slices one by one, and a plain 3D group inside another 3D group, directly or
 through plain groups, shares its depth: its models and its flat layers are drawn with those of the

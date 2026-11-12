@@ -8,13 +8,14 @@ struct Knot {
     pos: [f32; 2],
     size: f32,
     life: f32,
+    near: f32,
     color: [f32; 4],
 }
 
 fn knot(p: &Particle, deep: [f32; 4]) -> Knot {
     let (pos, k) = seen(p, deep);
     let color = [p.color[0], p.color[1], p.color[2], p.color[3] * p.look[0]];
-    Knot { pos, size: p.look[1] * k, life: (p.age / p.life).min(1.0), color }
+    Knot { pos, size: p.look[1] * k, life: (p.age / p.life).min(1.0), near: k, color }
 }
 
 fn curve(k: [&Knot; 4], t: f32, smooth: bool) -> ([f32; 2], [f32; 2]) {
@@ -65,8 +66,8 @@ pub fn strung(particles: &[Particle], s: &Sim, order: &mut Vec<(u32, u32)>, out:
         let (a, b) = (&k[1], &k[2]);
         let c: [f32; 4] = std::array::from_fn(|i| mix(a.color[i], b.color[i]));
         let size = mix(a.size, b.size);
-        let life = mix(a.life, b.life);
+        let (life, near) = (mix(a.life, b.life), mix(a.near, b.near).max(1e-6));
         out[q as usize] =
-            [pos[0], pos[1], normal[0], normal[1], seg as f32 + t, size, life, 1.0, c[0], c[1], c[2], c[3]];
+            [pos[0], pos[1], normal[0], normal[1], seg as f32 + t, size, life, near, c[0], c[1], c[2], c[3]];
     }
 }

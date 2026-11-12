@@ -17175,9 +17175,6 @@ msgstr "su sistema de partículas no tiene perspectiva"
 
 
 
-#: apps/wprs-app/qml/SceneDepthToggle.qml
-msgid "its particles draw ropes"
-msgstr "sus partículas dibujan cuerdas"
 
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid "a child system is drawn that way or has children of its own"

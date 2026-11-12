@@ -139,12 +139,16 @@ fn streak(depth: f32, render: Value) -> Value {
 }
 
 pub fn covered(r: &Renderer, extra: Value, quality: Quality) -> usize {
+    shaded(r, extra, quality, |c| !near(c, [255, 0, 0], 8))
+}
+
+fn shaded(r: &Renderer, extra: Value, quality: Quality, pick: impl Fn([u8; 3]) -> bool) -> usize {
     let layer = json!({ "id": "p", "type": "particles", "system": "s", "depth_test": true });
     let mut shot = shoot(r, scene(extra, group(layer), red()), &[]);
     shot.view.set_particle_trails(r, wprs_scene::Tier::T3);
     let px = (0..4).map(|_| shot.frame(r, 0.05, quality)).last().unwrap();
     let pixels = (22..42).flat_map(|x| (29..36).map(move |y| (x, y)));
-    pixels.filter(|(x, y)| !near(rgb(&px, *x, *y), [255, 0, 0], 8)).count()
+    pixels.filter(|(x, y)| pick(rgb(&px, *x, *y))).count()
 }
 
 #[test]
@@ -160,4 +164,22 @@ fn trails_in_a_3d_group_hide_one_by_one_behind_the_models_in_front_of_them() {
         let low = covered(r, streak(-50.0, render.clone()), Quality::Q0);
         assert!(front > 20 && behind == 0 && low == 0, "{render}: {front} {behind} {low}");
     }
+}
+
+fn strung(depth: f32) -> Value {
+    let mut s = streak(depth, json!({ "rope": { "width": 12 } }));
+    s["particles"]["s"]["emitters"][0] =
+        json!({ "shape": { "point": [4, 32] }, "rate": 60, "max_per_step": 1 });
+    s["particles"]["s"]["init"]["speed"] = json!([200, 200]);
+    s["particles"]["s"]["init"]["size"] = json!([1, 1]);
+    s["particles"]["s"]["capacity"] = json!(64);
+    s
+}
+
+#[test]
+fn ropes_in_a_3d_group_hide_one_by_one_behind_the_models_in_front_of_them() {
+    let Some(r) = renderer() else { return };
+    let (front, behind) = (covered(r, strung(-50.0), Quality::Q3), covered(r, strung(50.0), Quality::Q3));
+    let low = covered(r, strung(-50.0), Quality::Q0);
+    assert!(front > 20 && behind == 0 && low == 0, "{front} {behind} {low}");
 }

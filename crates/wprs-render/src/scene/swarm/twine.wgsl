@@ -17,6 +17,7 @@ struct Knot {
     pos: vec2<f32>,
     size: f32,
     life: f32,
+    near: f32,
     color: vec4<f32>,
 };
 
@@ -37,7 +38,7 @@ fn knot(slot: u32) -> Knot {
         k = select(0.0, deep.x / f, f > 1.0);
         pos = deep.yz + (p.pos - deep.yz) * k;
     }
-    return Knot(pos, p.look.y * k, min(p.age / p.life, 1.0), vec4<f32>(p.color.rgb, p.color.a * p.look.x));
+    return Knot(pos, p.look.y * k, min(p.age / p.life, 1.0), k, vec4<f32>(p.color.rgb, p.color.a * p.look.x));
 }
 
 fn at(i: i32, n: u32) -> Knot {
@@ -115,7 +116,8 @@ fn twine(@builtin(local_invocation_index) t: u32) {
         let color = k1.color + (k2.color - k1.color) * tt;
         let size = k1.size + (k2.size - k1.size) * tt;
         let life = k1.life + (k2.life - k1.life) * tt;
-        let out = array<f32, 12>(pos.x, pos.y, normal.x, normal.y, f32(seg) + tt, size, life, 1.0, color.r, color.g, color.b, color.a);
+        let near = max(k1.near + (k2.near - k1.near) * tt, 1e-6);
+        let out = array<f32, 12>(pos.x, pos.y, normal.x, normal.y, f32(seg) + tt, size, life, near, color.r, color.g, color.b, color.a);
         for (var c = 0u; c < 12u; c++) {
             strands[o + c] = bitcast<u32>(out[c]);
         }
