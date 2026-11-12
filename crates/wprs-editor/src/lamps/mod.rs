@@ -15,11 +15,11 @@ mod placed;
 mod report;
 mod source;
 mod swarm;
+mod template;
 
 pub use air::{air, levels as air_levels};
 pub use cast::{cast, homography};
 pub use cost::cost;
-pub use edit::template;
 pub use lit::hemisphere;
 pub(crate) use lit::{color, picture};
 pub use maps::{heat, preview as normals_preview};
@@ -27,6 +27,7 @@ pub use placed::{Placed, placed};
 pub use report::{AIM, FEW, Z_KNOB, falloff, handles, lights, reach, tiers, tilt_share};
 pub(crate) use swarm::edit as glow;
 pub use swarm::{sides, swarm_light};
+pub use template::template;
 
 pub(crate) const QUERIES: [&str; 9] =
     ["lights", "falloff", "normals", "map", "hemisphere", "lighting", "air", "projection", "swarm_light"];
