@@ -2,6 +2,9 @@ use cxx_qt_build::{CxxQtBuilder, QmlFile, QmlModule};
 use std::path::PathBuf;
 use std::{env, fs};
 
+#[path = "qt-shim/setup.rs"]
+mod shim;
+
 fn files(dir: &str) -> Vec<PathBuf> {
     let mut files: Vec<_> = fs::read_dir(dir)
         .unwrap()
@@ -25,6 +28,7 @@ fn main() {
         .unwrap();
     println!("cargo::rerun-if-changed=../../po");
     println!("cargo::rerun-if-changed=qml");
+    shim::install();
     let pages = files("qml").into_iter().map(QmlFile::from);
     let singletons = files("qml/facade").into_iter().map(|p| QmlFile::from(p).singleton(true));
     CxxQtBuilder::new_qml_module(
