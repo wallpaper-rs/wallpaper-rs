@@ -130,7 +130,9 @@ fn tight(data: &[u8], (width, height): (u32, u32), stride: u32) -> Vec<u8> {
     let (row, stride) = (width as usize * 4, stride as usize);
     let mut out = Vec::with_capacity(row * height as usize);
     for line in data.chunks(stride).take(height as usize) {
-        out.extend(line[..row.min(line.len())].as_chunks::<4>().0.iter().flat_map(|p| [p[2], p[1], p[0], 255]));
+        out.extend(
+            line[..row.min(line.len())].as_chunks::<4>().0.iter().flat_map(|p| [p[2], p[1], p[0], 255]),
+        );
     }
     out
 }
