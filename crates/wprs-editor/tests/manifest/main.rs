@@ -145,6 +145,8 @@ fn the_inspector_shows_the_manifest_from_its_schema() {
         |doc: &Value| fields(doc, "/manifest/playback").into_iter().map(|f| f.key).collect::<Vec<_>>();
     doc["manifest"]["playback"] = json!({});
     assert_eq!(playback(&doc), ["max_fps", "muted", "volume"], "scenes only limit their rate and sound");
+    let rate = fields(&doc, "/manifest/playback").into_iter().find(|f| f.key == "max_fps").unwrap();
+    assert_eq!((rate.widget.as_str(), rate.range), ("framerate", json!([1, 240])));
     doc["manifest"]["kind"] = json!("video");
     assert_eq!(playback(&doc).len(), 7, "{:?}", playback(&doc));
 }

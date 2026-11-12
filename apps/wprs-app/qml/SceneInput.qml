@@ -70,8 +70,8 @@ ColumnLayout {
             QQC2.ToolTip.text: text
             QQC2.ToolTip.visible: hovered
             onClicked: input.page.run("remove", {
-                "pointer": input.field.pointer
-            })
+                    "pointer": input.field.pointer
+                })
         }
 
         SceneBind {
@@ -113,6 +113,7 @@ ColumnLayout {
                 "variant": choiceEditor,
                 "color": colorEditor,
                 "accent": accentEditor,
+                "framerate": rateEditor,
                 "rgb": colorEditor,
                 "condition": hosts.condition,
                 "vec2": editors.pair,
@@ -148,8 +149,8 @@ ColumnLayout {
             onActivated: index => {
                 if (options[index] === null)
                     input.page.run("remove", {
-                        "pointer": input.field.pointer
-                    });
+                            "pointer": input.field.pointer
+                        });
                 else
                     input.commit(variant ? input.field.sample[options[index]] : options[index]);
             }
@@ -160,6 +161,14 @@ ColumnLayout {
         id: accentEditor
 
         SceneAccent {
+            owner: input
+        }
+    }
+
+    Component {
+        id: rateEditor
+
+        SceneFrameRate {
             owner: input
         }
     }

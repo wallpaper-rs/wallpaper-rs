@@ -96,3 +96,22 @@ fn the_accent_follows_a_color_property_through_a_rename_and_keeps_it_from_being_
     act(&mut p, json!({"manifest": {"display": {"values": {"accent": "#336699"}}}})).unwrap();
     act(&mut p, json!({"remove_property": {"id": "glow"}})).unwrap();
 }
+
+#[test]
+fn a_scene_sets_its_frame_rate_sound_and_start_without_video_settings() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    for rate in [json!("display"), json!(45)] {
+        act(&mut p, json!({"manifest": {"playback": {"values": {"max_fps": rate.clone()}}}})).unwrap();
+        assert_eq!(at(&p, "/manifest/playback/max_fps"), rate);
+    }
+    act(&mut p, json!({"manifest": {"playback": {"values": {"volume": 0.4, "muted": true}}}})).unwrap();
+    assert_eq!(at(&p, "/manifest/playback"), json!({"max_fps": 45, "volume": 0.4, "muted": true}));
+    for refused in
+        [json!({"max_fps": 0}), json!({"max_fps": 500}), json!({"speed": 2}), json!({"loop": false})]
+    {
+        assert!(act(&mut p, json!({"manifest": {"playback": {"values": refused}}})).is_err());
+    }
+    act(&mut p, json!({"manifest": {"playback": {"clear": ["max_fps", "volume", "muted"]}}})).unwrap();
+    assert!(p.doc["manifest"].get("playback").is_none());
+}

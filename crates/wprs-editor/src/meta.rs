@@ -61,6 +61,10 @@ pub fn adjust(doc: &Value, field: &mut crate::Field) {
             field.widget = "accent".into();
             field.options = props.filter(|(_, p)| p["type"] == "color").map(|(id, _)| json!(id)).collect();
         }
+        "/manifest/playback/max_fps" => {
+            field.widget = "framerate".into();
+            field.range = json!([1, 240]);
+        }
         _ => crate::settings::adjust(doc, field),
     }
 }

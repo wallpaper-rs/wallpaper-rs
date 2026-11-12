@@ -369,6 +369,14 @@ display --accent C|prop:ID` do the same. The action refuses a property that is n
 rename of the property moves the accent along, and a property that the accent follows cannot be
 removed until the accent changes.
 
+The `playback` group of the manifest is shown for scenes too (their frame rate, volume and
+muting; the speed, the part and the loop belong to videos). `playback.max_fps` has a control of its
+own, a box with *Not set*, *Follow the screen* and the usual rates (10 to 240 frames a second) and
+*Another rate…* for a number from 1 to 240. It sends the `manifest` action `playback` with
+`values.max_fps` (`"display"` or a whole number), or `clear: ["max_fps"]` for none, so `wprs-ctl
+scene act` and `scene manifest DIR playback` do the same; a rate of 0 or over 240 is refused. The
+rate only lowers the ceiling of the scene: what the user or the battery sets still wins.
+
 | Annotation | Meaning |
 |------------|---------|
 | `x-markup` | a text with the markup of `package.md`, edited on several lines |

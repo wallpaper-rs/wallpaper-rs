@@ -2936,16 +2936,17 @@ msgid "Highest frame rate:"
 msgstr "Fotogramas máximos:"
 
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/SceneEditors.qml
-#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/SceneLighting.qml
-#: apps/wprs-app/qml/SceneMask.qml
+#: apps/wprs-app/qml/SceneFrameRate.qml apps/wprs-app/qml/SceneInput.qml
+#: apps/wprs-app/qml/SceneLighting.qml apps/wprs-app/qml/SceneMask.qml
 msgid "Not set"
 msgstr "Sin fijar"
 
-#: apps/wprs-app/qml/PackagePlayback.qml
+#: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/SceneFrameRate.qml
 msgid "Follow the screen"
 msgstr "Seguir la pantalla"
 
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/PackagePreview.qml
+#: apps/wprs-app/qml/SceneFrameRate.qml
 msgid "%1 frames a second"
 msgstr "%1 fotogramas por segundo"
 
@@ -5203,6 +5204,30 @@ msgstr "Vídeos"
 #: apps/wprs-app/qml/SceneField.qml apps/wprs-app/qml/SceneLayerRow.qml
 msgid "Hide"
 msgstr "Ocultar"
+
+#: apps/wprs-app/qml/SceneFrameRate.qml
+msgid "Highest frame rate"
+msgstr "Máximo de fotogramas por segundo"
+
+#: apps/wprs-app/qml/SceneFrameRate.qml
+msgid "Another rate…"
+msgstr "Otra velocidad…"
+
+#: apps/wprs-app/qml/SceneFrameRate.qml
+msgid "Frames a second"
+msgstr "Fotogramas por segundo"
+
+#: apps/wprs-app/qml/SceneFrameRate.qml
+msgid "frames a second"
+msgstr "fotogramas por segundo"
+
+#: apps/wprs-app/qml/SceneFrameRate.qml
+msgid ""
+"A ceiling: what the user or the battery sets is never exceeded, and the "
+"content never goes above its own rate."
+msgstr ""
+"Es un tope: nunca se supera lo que fija el usuario o la batería, y el "
+"contenido no pasa de su propio ritmo."
 
 #: apps/wprs-app/qml/SceneGizmoKnobs.qml
 msgid "Scale from the pivot; Shift keeps the proportions"
