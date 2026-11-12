@@ -102,7 +102,7 @@ fn update(uid: &str) -> Result<Value, Error> {
             drop(fs::remove_file(store::thumb_file(uid, extension)?));
         }
     }
-    crate::variant::needed(&repo, &path, 0);
+    let needs = crate::variant::needed(&repo, &path, 0);
     store::changed();
-    Ok(json!({ "item": uid }))
+    Ok(json!({ "item": uid, "failed": needs.failed }))
 }

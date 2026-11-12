@@ -32,7 +32,7 @@ fun Kin(main: Main, uid: String, open: (String) -> Unit) {
                 ?: stringResource(R.string.preset_of_missing, base.getString("id"))
             Text(about, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
             if (found != null) TextButton({ open(found.getString("uid")) }) { Text(stringResource(R.string.preset_show)) }
-            else if (!base.isNull("repo")) Button({ main.act { account("install_base", "uid" to uid) } }) {
+            else if (!base.isNull("repo")) Button({ main.act { main.complete(account("install_base", "uid" to uid)) } }) {
                 Text(stringResource(R.string.preset_install))
             }
         }

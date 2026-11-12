@@ -42,7 +42,8 @@ pub(super) fn presets_set_the_values_of_their_base() {
     let error = variant::apply(&preset).unwrap_err();
     assert_eq!(error.reply()["id"], json!("android.preset_needs"), "{error}");
     assert!(
-        variant::needed("nowhere", &library::with(|lib| Ok(lib.item(&preset)?.path)).unwrap(), 0).is_empty()
+        variant::needed("nowhere", &library::with(|lib| Ok(lib.item(&preset)?.path)).unwrap(), 0)
+            == variant::Needs { installed: vec![], failed: vec!["org.example.based".into()] }
     );
     let clip = fs::read(Path::new(FIXTURES).join("magenta-64x32.webm")).unwrap();
     let chained = |n: usize| {
@@ -61,8 +62,8 @@ pub(super) fn presets_set_the_values_of_their_base() {
     });
     let levels: Vec<String> = (1..=4).map(|n| format!("org.example.chain{n}")).collect();
     assert_eq!(asked, levels, "four levels, and an installed preset is not fetched again");
-    assert_eq!(got.len(), 4);
-    let chain = [got, vec![first]].concat();
+    assert_eq!((got.installed.len(), got.failed.len()), (4, 0));
+    let chain = [got.installed, vec![first]].concat();
     assert_eq!(ask(json!({ "op": "remove", "uids": chain })), Value::Null);
     let base = built(
         "based",
@@ -101,8 +102,16 @@ pub(super) fn presets_set_the_values_of_their_base() {
     let updated = variant::loaded(&path, Some(&preset)).unwrap();
     assert!(!Arc::ptr_eq(&first, &updated), "an updated preset is read again while it is shown");
     assert_eq!(reel::played(&updated).rate, 0.25);
-    fs::write(&kept, before).unwrap();
-    drop((first, again, updated, base_pack));
+    fs::write(&kept, &before).unwrap();
+    let held = variant::loaded(&path, Some(&preset)).unwrap();
+    assert_eq!(reel::played(&held).rate, 0.5);
+    let moved = kept.with_file_name("moved.wpak");
+    fs::copy(&newer, &moved).unwrap();
+    library::with(|lib| Ok(lib.relink_item(&preset, &moved, library::now())?)).unwrap();
+    let relinked = variant::loaded(&path, Some(&preset)).unwrap();
+    assert_eq!(reel::played(&relinked).rate, 0.25, "a preset updated in place does not keep the old values");
+    library::with(|lib| Ok(lib.relink_item(&preset, &kept, library::now())?)).unwrap();
+    drop((first, again, updated, base_pack, held, relinked));
     choice::commit(true, choice::Target::Home).unwrap();
     assert_eq!(shown(false), base, "a preset shows its base with its values");
     let played = reel::of(Some(&path));

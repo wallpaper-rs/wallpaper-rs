@@ -182,13 +182,18 @@ pub(crate) fn listed(found: Vec<wprs_format::Item>, hide: bool, languages: &[Str
 
 pub(crate) fn install(repo_id: &str, id: &str) -> Result<Value, Error> {
     let (uid, path) = fetched(&format!("{repo_id}/{id}"))?;
-    crate::variant::needed(repo_id, &path, 0);
+    let needs = crate::variant::needed(repo_id, &path, 0);
     store::changed();
-    Ok(json!({"item": uid}))
+    Ok(json!({"item": uid, "failed": needs.failed}))
 }
 
 pub(crate) fn fetched(spec: &str) -> Result<(String, PathBuf), Error> {
-    let done = wprs_format::install(&dir()?, &fetch()?, spec, now(), false, false)?;
+    let (data, fetch) = (dir()?, fetch()?);
+    let mut done = wprs_format::install(&data, &fetch, spec, now(), false, false)?;
+    if !done.path.is_file() {
+        wprs_format::remove(&data, &done.id, Some(&done.version))?;
+        done = wprs_format::install(&data, &fetch, spec, now(), false, false)?;
+    }
     let (uid, _) = store::store(&mut std::fs::File::open(&done.path)?, &format!("{}.wpak", done.id))?;
     drop(std::fs::remove_file(&done.path));
     let mut items = installed();

@@ -30,7 +30,7 @@ fun RepoUpdates(main: Main, run: Run) {
             trailingContent = {
                 TextButton({
                     run("") {
-                        account("update", "uid" to update.getString("uid"))
+                        main.complete(account("update", "uid" to update.getString("uid")))
                         checked++
                         main.changed()
                     }

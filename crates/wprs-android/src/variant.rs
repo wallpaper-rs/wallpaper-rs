@@ -26,7 +26,7 @@ fn wanted(dependency: &Dependency) -> Result<VersionReq, Error> {
     })
 }
 
-fn found(lib: &Library, dependency: &Dependency, any: bool) -> Result<Option<Item>, Error> {
+fn found_in(lib: &Library, dependency: &Dependency, any: bool) -> Result<Option<Item>, Error> {
     let wanted = wanted(dependency)?;
     let usable = |i: &Item| {
         i.package.as_ref().is_some_and(|p| any || (p.kind != "preset" && p.kind != "assets"))
@@ -36,7 +36,7 @@ fn found(lib: &Library, dependency: &Dependency, any: bool) -> Result<Option<Ite
 }
 
 pub(crate) fn present(lib: &Library, dependency: &Dependency) -> Result<Option<Item>, Error> {
-    found(lib, dependency, false)
+    found_in(lib, dependency, false)
 }
 
 pub(crate) fn based(item: &Item) -> Result<Option<Dependency>, Error> {
@@ -87,15 +87,16 @@ pub(crate) fn loaded(path: &Path, preset: Option<&str>) -> Result<Arc<Pack>, Err
     let base = pack::load(path)?;
     let Some(preset) = preset else { return Ok(base) };
     let key = (preset.to_owned(), path.to_path_buf());
+    let current = with(|lib| Ok(lib.item(preset)?.path))?;
     let mut tried = TRIED.lock().unwrap_or_else(PoisonError::into_inner);
     tried.retain(|(.., made)| made.strong_count() > 0);
     let on = |pack: &Arc<Pack>| pack.tried.as_ref().is_some_and(|(_, on)| Arc::ptr_eq(on, &base));
     let same = |stamp: &pack::Stamp| pack::stamp(&stamp.0).is_ok_and(|now| now == *stamp);
-    let found = tried.iter().filter(|(k, stamp, _)| *k == key && same(stamp));
+    let found = tried.iter().filter(|(k, stamp, _)| *k == key && stamp.0 == current && same(stamp));
     if let Some(pack) = found.filter_map(|(.., made)| made.upgrade()).find(on) {
         return Ok(pack);
     }
-    let stamp = pack::stamp(&with(|lib| Ok(lib.item(preset)?.path))?)?;
+    let stamp = pack::stamp(&current)?;
     let values = chosen(&stamp.0, &base.properties)?;
     let pack = Arc::new(Pack { tried: Some((values, Arc::clone(&base))), ..Pack::clone(&base) });
     tried.push((key, stamp, Arc::downgrade(&pack)));
@@ -104,29 +105,46 @@ pub(crate) fn loaded(path: &Path, preset: Option<&str>) -> Result<Arc<Pack>, Err
 
 pub(crate) type Fetch<'a> = dyn FnMut(&Dependency) -> Result<(String, PathBuf), Error> + 'a;
 
-pub(crate) fn needed(repo: &str, path: &Path, depth: u32) -> Vec<String> {
+#[derive(Debug, Default, PartialEq)]
+pub(crate) struct Needs {
+    pub(crate) installed: Vec<String>,
+    pub(crate) failed: Vec<String>,
+}
+
+impl Needs {
+    pub(crate) fn told(&self) -> serde_json::Value {
+        json!({ "installed": self.installed, "failed": self.failed })
+    }
+}
+
+pub(crate) fn needed(repo: &str, path: &Path, depth: u32) -> Needs {
     needing(path, depth, &mut |dependency| {
         matching(Some(repo), dependency).and_then(|spec| repos::fetched(&spec))
     })
 }
 
-pub(crate) fn needing(path: &Path, depth: u32, fetch: &mut Fetch) -> Vec<String> {
+pub(crate) fn needing(path: &Path, depth: u32, fetch: &mut Fetch) -> Needs {
+    let mut found = Needs::default();
     if depth >= DEPTH {
-        return Vec::new();
+        return found;
     }
     let needs = wprs_format::peek(path).map(|m| m.dependencies().to_vec()).unwrap_or_default();
-    let mut installed = Vec::new();
-    let missing = |d: &&Dependency| !with(|lib| found(lib, d, true)).is_ok_and(|found| found.is_some());
+    let missing = |d: &&Dependency| !with(|lib| found_in(lib, d, true)).is_ok_and(|found| found.is_some());
     for dependency in needs.iter().filter(missing) {
         match fetch(dependency) {
             Ok((uid, path)) => {
-                installed.extend(needing(&path, depth + 1, fetch));
-                installed.push(uid);
+                let deeper = needing(&path, depth + 1, fetch);
+                found.installed.extend(deeper.installed);
+                found.failed.extend(deeper.failed);
+                found.installed.push(uid);
             }
-            Err(e) => log::warn!("cannot install {} that a package needs: {e}", dependency.id),
+            Err(e) => {
+                log::warn!("cannot install {} that a package needs: {e}", dependency.id);
+                found.failed.push(dependency.id.clone());
+            }
         }
     }
-    installed
+    found
 }
 
 pub(crate) fn matching(repo: Option<&str>, dependency: &Dependency) -> Result<String, Error> {

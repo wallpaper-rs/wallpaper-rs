@@ -55,8 +55,8 @@ pub(crate) fn install_base(uid: &str) -> Result<Value, Error> {
     let Some(base) = base else { return Ok(json!({ "item": null, "installed": [] })) };
     let missing = || said("android.no_release", "no release of %1 matches %2", &[&base.id, &base.version]);
     let repo = source(uid, &base).ok_or_else(missing)?;
-    let installed = needed(&repo, &item.path, 0);
+    let needs = needed(&repo, &item.path, 0);
     store::changed();
     let found = with(|lib| present(lib, &base))?.ok_or_else(missing)?;
-    Ok(json!({ "item": found.uid, "installed": installed }))
+    Ok(json!({ "item": found.uid, "installed": needs.installed, "failed": needs.failed }))
 }

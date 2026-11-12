@@ -78,8 +78,10 @@ fn shown(lock: bool) -> Value {
         json!({ "key": key, "min": min, "max": max, "decimals": places, "value": value[key] })
     });
     let looks = LOOKS.iter().map(|look| json!(look));
-    let swatches: serde_json::Map<String, Value> =
-        LOOKS.iter().map(|look| (json!(look).as_str().unwrap_or_default().to_owned(), json!(swatch(look)))).collect();
+    let swatches: serde_json::Map<String, Value> = LOOKS
+        .iter()
+        .map(|look| (json!(look).as_str().unwrap_or_default().to_owned(), json!(swatch(look))))
+        .collect();
     json!({
         "filter": value, "own": own, "fields": fields.collect::<Vec<_>>(), "looks": looks.collect::<Vec<_>>(),
         "swatches": swatches,

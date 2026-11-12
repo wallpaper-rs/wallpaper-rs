@@ -39,7 +39,9 @@ pub(crate) fn openable(value: &Value) -> bool {
     let text = text.as_str().unwrap_or_default();
     match kind.as_str() {
         "uri" => text.starts_with("https://") && text.len() <= 2048 && !text.chars().any(char::is_control),
-        "file" | "folder" => text.starts_with("content://") && text.len() <= 2048 && !text.chars().any(char::is_control),
+        "file" | "folder" => {
+            text.starts_with("content://") && text.len() <= 2048 && !text.chars().any(char::is_control)
+        }
         "app" => {
             (1..=255).contains(&text.len())
                 && text.bytes().all(|b| b.is_ascii_alphanumeric() || b"._".contains(&b))

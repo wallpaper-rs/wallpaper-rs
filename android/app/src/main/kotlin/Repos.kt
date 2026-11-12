@@ -129,7 +129,7 @@ private fun Explore(main: Main, run: Run, close: () -> Unit) {
                                 if (item.optBoolean("installed")) Text(stringResource(R.string.repo_installed))
                                 else TextButton({
                                     run("") {
-                                        account("install", "repo_id" to item.getString("repo_id"), "id" to item.getString("id"))
+                                        main.complete(account("install", "repo_id" to item.getString("repo_id"), "id" to item.getString("id")))
                                         installed++
                                         main.changed()
                                     }

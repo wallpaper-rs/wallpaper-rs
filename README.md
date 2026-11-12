@@ -509,7 +509,10 @@ avisa. El color de acento del fondo (o, si no propone uno, el dominante de su vi
 color que Android da al sistema. Un paquete de más de 1 GiB descomprimido se rechaza. Al instalar un
 paquete de un repositorio también se instalan del mismo repositorio los paquetes que nombra en
 `requires.packages` y que faltan (la versión más nueva que cumpla el rango), y los que piden estos,
-hasta cuatro niveles; un preajuste o un paquete de recursos ya instalado cuenta como presente. Un paquete hecho solo para
+hasta cuatro niveles; un preajuste o un paquete de recursos ya instalado cuenta como presente. Si una
+dependencia no se pudo instalar, el teléfono lo dice con un aviso que nombra lo que faltó (también al
+actualizar o al instalar la base de un preajuste) y el escritorio igual: el trabajo de instalación termina
+con ese texto y el resultado trae `missing`. Un paquete hecho solo para
 el escritorio se rechaza con ese aviso, traducido. El nivel de calidad sale de la
 clase del teléfono (básica con poca memoria o sin sombreadores de cálculo, alta si el fabricante
 declara una clase de rendimiento de Android 13 o posterior, media en el resto, ajustada con la misma

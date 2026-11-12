@@ -4,7 +4,9 @@ use common::{image, manifest as v1, v2};
 use image::ImageFormat;
 use serde_json::json;
 use std::fs;
-use wprs_format::{Control, Display, Error, Kind, Manifest, Playback, Requires, VIDEO_PROPERTIES, features, inspect};
+use wprs_format::{
+    Control, Display, Error, Kind, Manifest, Playback, Requires, VIDEO_PROPERTIES, features, inspect,
+};
 
 fn with(mut manifest: Manifest, properties: serde_json::Value) -> Manifest {
     manifest.properties = serde_json::from_value(properties).unwrap();
