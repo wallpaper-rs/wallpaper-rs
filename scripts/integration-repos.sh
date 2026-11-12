@@ -79,7 +79,7 @@ bus Daemon1 CancelJob t "$stalled" >/dev/null
 [ ! -e "$preview" ] || fail "the preview was kept with its repository"
 [ ! -e "$moving" ] || fail "the animated preview was kept with its repository"
 ctl remote add "$site/repo?$anchor" --wait >/dev/null
-[ "$(ctl remote ls --json | jq_ "[(x['name'], x['packages']) for x in r['repos']]")" = "[('Example', 2)]" ] ||
+[ "$(ctl remote ls --json | jq_ "[(x['name'], x['url'].startswith('file://')) for x in r['repos']]")" = "[('Example', True)]" ] ||
   fail "a repository added from a folder: $(ctl remote ls --json)"
 ctl remote rm "$(ctl remote ls --json | jq_ "r['repos'][0]['repo_id']")"
 echo "repository checks passed"
