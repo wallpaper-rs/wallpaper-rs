@@ -298,6 +298,11 @@ La línea que da el motor es donde se dio cuenta del error, que a veces es la si
 tiene la errata. Lo que solo falla al correr (una función que lanza un error, un valor del tipo
 equivocado) no se ve aquí: ver `scripts.md`, «Qué ve `validate` y qué no».
 
+Entre las advertencias hay dos que nombran la capa: la que no se ve nunca porque otra de encima tapa todo el
+lienzo sin transparencia (`La capa «foto» nunca se ve: «cielo», que está encima, tapa todo el lienzo…`) y la figura
+que queda del todo fuera del lienzo. No impiden construir el paquete; el panel de problemas del editor las
+muestra igual.
+
 ### `pack check`: qué necesita el paquete y dónde se reproduce
 
 ```

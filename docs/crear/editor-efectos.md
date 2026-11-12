@@ -23,7 +23,9 @@ Todo lo que haces aquí es una acción del editor. En la terminal se aplica con 
 3. Se abre el cuadro **Añadir un efecto**. Escribe en el buscador para encontrar un efecto por su nombre o por su descripción, o recorre la lista, agrupada por categoría.
 4. Pulsa el efecto. Se añade al final de la lista de efectos de la capa y el cuadro se cierra. **Cancelar** cierra el cuadro sin añadir nada.
 
-Cada entrada de la lista muestra el nombre del efecto, su descripción y su costo, por ejemplo «(coste 2.2)». El costo es el trabajo que le pide a la tarjeta gráfica; mira [Cómo ver cuánto cuesta un efecto](#cómo-ver-cuánto-cuesta-un-efecto).
+El botón **Añadir** de la fila **Efectos** del inspector hace lo mismo: abre este cuadro y no crea nada hasta que eliges un efecto.
+
+Cada entrada de la lista muestra el nombre del efecto, su descripción (en español si el sistema está en español) y su costo, por ejemplo «(coste 2.2)». El costo es el trabajo que le pide a la tarjeta gráfica; mira [Cómo ver cuánto cuesta un efecto](#cómo-ver-cuánto-cuesta-un-efecto).
 
 Los efectos que escribes en el paquete aparecen en la misma lista, con su categoría y su descripción.
 
