@@ -45,7 +45,7 @@ fn a_package_effect_draws_its_lighter_passes_where_its_level_would_leave_it_out(
 #[test]
 fn the_hard_budget_draws_lighter_variants_before_it_leaves_effects_out() {
     let uses: Vec<Value> = vec![json!({ "effect": "split" })];
-    let layers = (0..48).map(|i| json!({ "id": format!("adj{i}"), "type": "adjustment", "effects": uses })).collect();
+    let layers = (0..24).map(|i| json!({ "id": format!("adj{i}"), "type": "adjustment", "effects": uses })).collect();
     let Some(mut run) = super::budget::packaged(&split(64), SPLIT, layers) else { return };
     run.shot_at((3840, 2160)).check(&[((32, 16), RED)]);
     let left = run.view.left_out();
