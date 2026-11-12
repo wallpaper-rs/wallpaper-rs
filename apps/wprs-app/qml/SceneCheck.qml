@@ -168,9 +168,12 @@ QtObject {
                 Qt.createComponent("SceneShapingCheck.qml").createObject(page, {
                     "page": page
                 }).exercise();
+                Qt.createComponent("SceneLightsCheck.qml").createObject(page, {
+                    "page": page
+                }).particles();
             }
             if (kind === "empty")
-                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml", "SceneTouchCheck.qml", "SceneBandCheck.qml", "SceneLevelCheck.qml"])
+                for (const check of ["SceneMeshCheck.qml", "SceneHandleCheck.qml", "SceneTimingCheck.qml", "SceneScriptCheck.qml", "SceneMediaCheck.qml", "SceneTouchCheck.qml", "SceneBandCheck.qml", "SceneLevelCheck.qml", "SceneLightsCheck.qml"])
                     Qt.createComponent(check).createObject(page, {
                         "page": page
                     }).exercise();

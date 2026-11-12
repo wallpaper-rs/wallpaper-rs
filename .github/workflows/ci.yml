@@ -202,6 +202,45 @@ jobs:
           mapfile -t packages < <(scripts/test-shards.sh "$SHARD")
           cargo test "${packages[@]}" --all-features --locked
 
+  render-gl:
+    name: Render tests on OpenGL ES
+    needs: version
+    if: needs.version.outputs.rust == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/ci-apt
+          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: apt-${{ github.job }}-
+
+      - name: Install system packages
+        run: |
+          scripts/ci-apt.sh \
+            pkg-config libclang-dev libpipewire-0.3-dev \
+            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+            gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+            libegl1 libgles2 libgl1-mesa-dri
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+
+      - name: Render tests with the OpenGL ES backend
+        env:
+          WGPU_BACKEND: gl
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          WPRS_REQUIRE_GPU: "1"
+        run: |
+          cargo test -p wprs-render --all-features --locked -- \
+            --skip a_directional_light_with_shadows_darkens_the_ground_behind_a_block \
+            --skip scenes_that_blend_in_srgb_draw_no_more_passes_than_linear_ones
+
   depth:
     name: Depth model test
     needs: version
@@ -953,7 +992,7 @@ jobs:
   release:
     name: Release
     if: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-    needs: [version, workflows, lint, clippy, test, depth, e2e, sway, x11, sync, build, package, android, android-emulator, rpm, plasma, web, server]
+    needs: [version, workflows, lint, clippy, test, render-gl, depth, e2e, sway, x11, sync, build, package, android, android-emulator, rpm, plasma, web, server]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
