@@ -185,43 +185,44 @@ unitaria en `crates/wprs-editor`, y los guiones de integración la ejercitan con
   aplicación pide con `rigs::query`) e imprime la respuesta como JSON; `scene actions --queries
   [NOMBRE]` las lista y describe. `--inside PLANTILLA` vale para los tres comandos.
 
-## Scripts and templates
+## Scripts y plantillas
 
-The scripts section of the assets panel lists each module of `scripts` in the order it runs: its
-size, how many values follow it, a warning when what the code uses differs from what the scene
-declares, a handle to drag it to another place, buttons to move it up or down, edit its code, open the file in the app of the system
-and remove it. The attach button offers the `.js` files of `scripts/` that the scene does not list
-yet. Unfolding a module shows the check of the code against its declaration and its settings.
+La sección de scripts del panel de recursos lista cada módulo de `scripts` en el orden en que se
+ejecuta: su tamaño, cuántos valores lo siguen, un aviso cuando lo que usa el código difiere de lo que
+declara la escena, y botones para subirlo o bajarlo, editar su código, abrir el archivo en la
+aplicación del sistema y quitarlo. El botón de adjuntar ofrece los archivos `.js` de `scripts/` que la
+escena aún no lista. Al desplegar un módulo se ve la comprobación del código contra su declaración y
+sus ajustes.
 
-- The check (`scripts::audit`) reads the code and reports what it uses and the entry does not
-  declare, and what the entry declares and the code does not use, for `events`, `uses` and `params`
-  (the settings read as `params.name`, `params["name"]`, `params: { name }` in the arguments of a function, or `const { name } = params`). Parts the code cannot show
-  (`clicks`, `geometry`, `animations`, `shortcuts`, `hierarchy`) are never reported as unused. The
-  *Declare what it uses* button runs `script` with `declare`.
-- The settings of a module are a table with a row for each: its id, its type, its default (a field
-  for numbers and texts, a check box, the color picker or two numbers) and, for numbers, the
-  minimum and maximum. Every edit is a `script` action with `param`; a value the module refuses
-  puts the row back as it was.
-- The code view edits the module: it saves with the button or Ctrl+S (`script` with `write`), shows
-  the check above the text, opens the file in the app of the system and lists the script API
-  (`scripts::reference`, the parts of the `wprs` module, the functions a module exports and the
-  functions a value follows). While the app is open it looks at the size and the modification time
-  of the modules once a second, only when the scene lists scripts: when a file changes outside the
-  app, the text of an unmodified code view is read again, the check is run again and the preview
-  starts the scene again with the new code, because the document it receives carries a stamp of the
-  modules (`scene.ext.editor.scripts`).
-- The binding menu of every value has *Follow a script*: for each module, *every frame* (the
-  `update` of the module) and each function it exports besides the events (`scripts::functions`);
-  a function of a module with settings is bound with `params` filled with their defaults.
-- The templates section lists each template of `templates` as a tree of its layers. Clicking a layer
-  selects it, so the inspector shows its fields, the preview button shows the template alone as a
-  copy draws it, and each template can be renamed or removed. *Make a template* of the layers bar
-  takes the selected layer and the ones picked with Ctrl.
+- La comprobación (`scripts::audit`) lee el código e informa de lo que usa y la entrada no declara, y
+  de lo que la entrada declara y el código no usa, para `events`, `uses` y `params` (los ajustes que
+  se leen como `params.nombre` o `params["nombre"]`). Las partes que el código no puede mostrar
+  (`clicks`, `geometry`, `animations`, `shortcuts`, `hierarchy`) nunca se informan como sin uso. El
+  botón *Declare what it uses* ejecuta `script` con `declare`.
+- Los ajustes de un módulo son una tabla con una fila por ajuste: su id, su tipo, su valor por defecto
+  (un campo para números y textos, una casilla, el selector de color o dos números) y, para los
+  números, el mínimo y el máximo. Cada cambio es una acción `script` con `param`; si el módulo rechaza
+  un valor, la fila vuelve a como estaba.
+- La vista de código edita el módulo: guarda con el botón o con Ctrl+S (`script` con `write`), muestra
+  la comprobación sobre el texto, abre el archivo en la aplicación del sistema y lista la API de
+  scripts (`scripts::reference`: las partes del módulo `wprs`, las funciones que exporta un módulo y
+  las funciones que sigue un valor). Con la aplicación abierta se mira una vez por segundo el tamaño y
+  la fecha de modificación de los módulos, solo cuando la escena lista scripts: si un archivo cambia
+  fuera de la aplicación, se vuelve a leer el texto de una vista de código sin modificar, se repite la
+  comprobación y la vista previa reinicia la escena con el código nuevo, porque el documento que
+  recibe lleva una marca de los módulos (`scene.ext.editor.scripts`).
+- El menú de enlace de cada valor tiene *Follow a script*: para cada módulo, *every frame* (el
+  `update` del módulo) y cada función que exporta además de los eventos (`scripts::functions`); una
+  función de un módulo con ajustes se enlaza con `params` rellenado con sus valores por defecto.
+- La sección de plantillas lista cada plantilla de `templates` como un árbol de sus capas. Pulsar una
+  capa la selecciona, de modo que el inspector muestra sus campos; el botón de vista previa muestra la
+  plantilla sola como la dibuja una copia, y cada plantilla se puede renombrar o quitar. *Make a
+  template* de la barra de capas toma la capa seleccionada y las marcadas con Ctrl.
 
-The queries `scripts::listing` (the modules with their functions, settings, the values that follow
-them and their check, and the files of `scripts/` that are free), `scripts::audit`,
-`scripts::reference`, `scripts::stamp`, `scripts::changes` and `templates::tree` live in
-`crates/wprs-editor`; the app reaches them with the `code` query of the scene editor.
+Las consultas `scripts::listing` (los módulos con sus funciones, ajustes, los valores que los siguen y
+su comprobación, y los archivos libres de `scripts/`), `scripts::audit`, `scripts::reference`,
+`scripts::stamp`, `scripts::changes` y `templates::tree` viven en `crates/wprs-editor`; la aplicación
+llega a ellas con la consulta `code` del editor de escenas.
 
 ## History
 

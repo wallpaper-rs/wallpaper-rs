@@ -132,7 +132,9 @@ pub(crate) fn run(command: Folder) -> Result<()> {
         }
         Folder::Preview { dir, output, time, stop, quality, restart, media, console, .. } => {
             let project = Project::open(&dir)?;
-            let document = crate::media::preview_document(&project.dir, &project.doc, quality, restart, media)?.to_string();
+            let document =
+                crate::media::preview_document(&project.dir, &project.doc, quality, restart, media)?
+                    .to_string();
             let (dir, document) = (fs::canonicalize(&dir)?, if stop { String::new() } else { document });
             let path = dir.to_str().context("the path is not UTF-8")?.to_owned();
             runtime()?.block_on(async {

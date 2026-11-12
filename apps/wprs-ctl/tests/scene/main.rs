@@ -124,8 +124,6 @@ pub fn fields(value: Value) -> Vec<String> {
     refused.split('`').skip(3).step_by(2).map(String::from).collect()
 }
 
-const GENERIC: [&str; 2] = ["grip", "mask_grip"];
-
 #[test]
 fn a_dedicated_scene_command_for_an_action_takes_the_same_arguments() {
     assert_eq!(fields(json!({"": {}})), ACTIONS);
@@ -138,9 +136,6 @@ fn a_dedicated_scene_command_for_an_action_takes_the_same_arguments() {
             ids.extend(sub.get_arguments().map(|a| a.get_id().as_str()));
         }
         for field in fields(json!({name: {"": null}})) {
-            if name == "effects" && GENERIC.contains(&field.as_str()) {
-                continue;
-            }
             let named = ids.contains(&field.as_str()) || ids.contains(&field.replace('_', "-").as_str());
             assert!(named, "scene {name} lacks {field}");
         }

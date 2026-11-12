@@ -419,7 +419,9 @@ msgstr "Quitar el brillo"
 msgid ""
 "Set the size of the canvas in pixels, such as 1920,1080 or 1080,2340 for a "
 "phone"
-msgstr "Fijar el tamaño del lienzo en píxeles, como 1920,1080 o 1080,2340 para un teléfono"
+msgstr ""
+"Fijar el tamaño del lienzo en píxeles, como 1920,1080 o 1080,2340 para un "
+"teléfono"
 
 #: apps/wprs-ctl/src/backdrop.rs
 msgid "Pixels from 1 to 16384 each"

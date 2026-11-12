@@ -25,7 +25,7 @@ fn templates_are_made_from_layers_renamed_removed_and_listed_as_a_tree() {
     assert_eq!(tree.len(), 2);
     assert_eq!(tree[1]["layers"].as_array().unwrap().len(), 3);
     assert_eq!(tree[1]["layers"][1]["pointer"], "/scene/templates/pair/layers/0");
-    assert_eq!(tree[1]["scripts"], json!(["scripts/s.js"]));
+    assert_eq!(tree[1]["scripts"], json!(["scripts/s.js:1"]));
     act(&mut p, json!({ "template": { "rename": { "name": "pair", "to": "couple" } } })).unwrap();
     assert!(
         p.doc["scene"]["templates"]["couple"].is_object()

@@ -34,17 +34,17 @@ printf '{"title": "Made-up song", "artist": "Nobody", "playing": true, "position
 read -r _ _ _ node < <(ctl stream preview:authored 320 180)
 ctl scene preview "$folder" -o preview:authored --media "$folder/track.json" || fail "the page folder was not previewed"
 seen "$node" "0, 0, 255"
-consoled() { field "'$1' in ' '.join(s['outputs']['preview:authored']['console'])" | grep -q True; }
-wait_for 20 consoled "page-console-line" || fail "console.log of the page did not reach the preview: $(field "s['outputs']['preview:authored']['console']")"
-wait_for 20 consoled "page-error-line" || fail "the error of the page did not reach the preview: $(field "s['outputs']['preview:authored']['console']")"
+consoled() { field "'$1' in ' '.join(s['previews']['preview:authored']['console'])" | grep -q True; }
+wait_for 20 consoled "page-console-line" || fail "console.log of the page did not reach the preview: $(field "s['previews']['preview:authored']['console']")"
+wait_for 20 consoled "page-error-line" || fail "the error of the page did not reach the preview: $(field "s['previews']['preview:authored']['console']")"
 wait_for 20 consoled '"title":"Made-up song","artist":"Nobody","position":12.0' ||
-  fail "the made-up track did not reach onMedia: $(field "s['outputs']['preview:authored']['console']")"
-consoled '"cover":true,"colors":true' || fail "the cover and its colors did not reach onMedia: $(field "s['outputs']['preview:authored']['console']")"
+  fail "the made-up track did not reach onMedia: $(field "s['previews']['preview:authored']['console']")"
+consoled '"cover":true,"colors":true' || fail "the cover and its colors did not reach onMedia: $(field "s['previews']['preview:authored']['console']")"
 printf '{"title": "Flood", "playing": true, "position": 1, "duration": 200}\n' >"$folder/flood.json"
 ctl scene preview "$folder" -o preview:authored --media "$folder/flood.json" || fail "the flooding track was not shown"
 wait_for 20 consoled "page-flood-line" || fail "the flood never reached the preview"
-wait_for 30 consoled "page-late-line" || fail "a late line was lost after a flood: $(field "s['outputs']['preview:authored']['console']")"
-[ "$(field "len(s['outputs']['preview:authored']['console'])")" -le 50 ] || fail "the preview kept more than 50 lines"
+wait_for 30 consoled "page-late-line" || fail "a late line was lost after a flood: $(field "s['previews']['preview:authored']['console']")"
+[ "$(field "len(s['previews']['preview:authored']['console'])")" -le 50 ] || fail "the preview kept more than 50 lines"
 ctl config rgb.server "127.0.0.1:$openrgb" >/dev/null
 ctl config rgb.enabled true
 sleep 1

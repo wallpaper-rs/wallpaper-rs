@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 65] = [
+pub const ABOUT: [(&str, &str); 67] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),
@@ -48,7 +48,7 @@ pub const ABOUT: [(&str, &str); 65] = [
     ("attach", "Attach a layer to a bone or to a point of another layer"),
     ("point", "Add, move, rename or remove a named point of a layer"),
     ("parts", "Order, hide or show the parts of a layered picture"),
-    ("particles", "Edit a particle system: shape, forces, colliders, strands, lighting and settings"),
+    ("particles", "Edit a particle system: shape, bursts, forces, colliders, strands, lighting and settings"),
     ("light", "Add, change, mute or remove the lights of the scene"),
     ("lighting", "Set the lighting model of the scene"),
     ("normals", "Make a normal map for a layer"),
@@ -56,7 +56,10 @@ pub const ABOUT: [(&str, &str); 65] = [
     ("ambient", "Set the ambient light"),
     ("scene3d", "Edit a 3D layer: models, materials, camera, view, tones, shadows and camera paths"),
     ("animate", "Edit the animation of a mesh or model layer: clips, presets and morphs"),
-    ("effects", "Add, set, remove, move or mask the effects of a layer"),
+    (
+        "effects",
+        "Add, set, remove, move or mask the effects of a layer, and drag their handles and masks on the canvas",
+    ),
     ("layer", "Edit the transform, blend or instancing of a layer"),
     (
         "manifest",
@@ -65,6 +68,8 @@ pub const ABOUT: [(&str, &str); 65] = [
     ("property", "Edit a user property of the manifest"),
     ("canvas", "Edit the canvas: bloom and parallax"),
     ("timeline", "Add, change or remove a timeline and its events"),
+    ("script", "Attach, remove, move or declare a script, write its code, or set its typed settings"),
+    ("template", "Make a template from layers, or rename or remove one"),
     ("undo", "Undo the last change"),
     ("redo", "Redo the last undone change"),
 ];

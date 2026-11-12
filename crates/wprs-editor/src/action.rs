@@ -13,6 +13,7 @@ mod names;
 mod rigging;
 mod shaping;
 mod solid;
+mod sow;
 mod swarm;
 mod tend;
 mod timing;
@@ -29,6 +30,7 @@ pub use rigging::{
 };
 pub use shaping::{EffectsEdit, MaskHold, ScriptEdit, TemplateEdit};
 pub use solid::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, TonesEdit, ViewEdit};
+pub use sow::SowEdit;
 pub use swarm::{ParticleEdit, Response, Strand, SwarmLight, TendEdit};
 pub use timing::{KeyframeEdit, TimelineEdit, TimelineEvent};
 

@@ -812,7 +812,8 @@ msgstr "Secundario"
 msgid "Tertiary"
 msgstr "Terciario"
 
-#: apps/wprs-app/qml/CoverColors.qml apps/wprs-app/qml/facade/SceneLabels.qml
+#: apps/wprs-app/qml/CoverColors.qml apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Text"
 msgstr "Texto"
@@ -2953,6 +2954,7 @@ msgstr "Volumen:"
 
 #: apps/wprs-app/qml/PackagePlayback.qml apps/wprs-app/qml/PackageWeb.qml
 #: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePropertyRange.qml
+#: apps/wprs-app/qml/SceneScriptParam.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Default"
 msgstr "Valor por defecto"
@@ -3252,7 +3254,8 @@ msgid "Automatic rules"
 msgstr "Reglas automáticas"
 
 #: apps/wprs-app/qml/ProfileCard.qml apps/wprs-app/qml/SceneAssets.qml
-#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneTemplateTree.qml
+#: apps/wprs-app/qml/SceneSettingMenu.qml
+#: apps/wprs-app/qml/SceneTemplateTree.qml
 #: apps/wprs-app/qml/SceneTimelineMenu.qml
 msgid "Rename…"
 msgstr "Cambiar el nombre…"
@@ -5315,6 +5318,42 @@ msgstr "Un mapa cúbico hecho con seis imágenes cuadradas"
 msgid "Face %1"
 msgstr "Cara %1"
 
+#: apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Add layer"
+msgstr "Añadir una capa"
+
+#: apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "import a file of this kind first"
+msgstr "importa antes un archivo de este tipo"
+
+#: apps/wprs-app/qml/SceneLayerAdd.qml apps/wprs-app/qml/SceneLightTools.qml
+#: apps/wprs-app/qml/SceneSwarmLight.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Light"
+msgstr "Luz"
+
+#: apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Point light"
+msgstr "Luz puntual"
+
+#: apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Spot light"
+msgstr "Foco"
+
+#: apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Tube light"
+msgstr "Tubo de luz"
+
+#: apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Directional light"
+msgstr "Luz direccional"
+
+#: apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Mesh from a picture…"
+msgstr "Malla desde una imagen…"
+
 #: apps/wprs-app/qml/SceneLayerClip.qml
 msgid "Copy the layers"
 msgstr "Copiar las capas"
@@ -5388,42 +5427,6 @@ msgstr "Bloquear"
 #: apps/wprs-app/qml/SceneLayerRow.qml apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "Solo"
 msgstr "Solo"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Add layer"
-msgstr "Añadir una capa"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "import a file of this kind first"
-msgstr "importa antes un archivo de este tipo"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml apps/wprs-app/qml/SceneLightTools.qml
-#: apps/wprs-app/qml/SceneSwarmLight.qml
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Light"
-msgstr "Luz"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Point light"
-msgstr "Luz puntual"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Spot light"
-msgstr "Foco"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Tube light"
-msgstr "Tubo de luz"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Directional light"
-msgstr "Luz direccional"
-
-#: apps/wprs-app/qml/SceneLayerTools.qml
-msgid "Mesh from a picture…"
-msgstr "Malla desde una imagen…"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Duplicate"
@@ -9006,24 +9009,31 @@ msgstr "Sin conectar."
 msgid ""
 "%1: the lights wait while the session is locked, because the wallpaper "
 "pauses then."
-msgstr "%1: las luces esperan mientras la sesión está bloqueada, porque el fondo se pausa entonces."
+msgstr ""
+"%1: las luces esperan mientras la sesión está bloqueada, porque el fondo se "
+"pausa entonces."
 
 #: apps/wprs-app/qml/SettingsRgb.qml
 msgid ""
 "%1: the lights wait while the computer is on battery, because the wallpaper "
 "pauses then."
-msgstr "%1: las luces esperan mientras el equipo funciona con batería, porque el fondo se pausa entonces."
+msgstr ""
+"%1: las luces esperan mientras el equipo funciona con batería, porque el "
+"fondo se pausa entonces."
 
 #: apps/wprs-app/qml/SettingsRgb.qml
 msgid ""
 "%1: the lights wait, the covered screen shows something that sends no colors."
-msgstr "%1: las luces esperan, la pantalla tapada muestra algo que no manda colores."
+msgstr ""
+"%1: las luces esperan, la pantalla tapada muestra algo que no manda colores."
 
 #: apps/wprs-app/qml/SettingsRgb.qml
 msgid ""
 "%1: the lights wait, the wallpaper there does not have permission to use the "
 "lights."
-msgstr "%1: las luces esperan, el fondo de esa pantalla no tiene permiso para usar las luces."
+msgstr ""
+"%1: las luces esperan, el fondo de esa pantalla no tiene permiso para usar "
+"las luces."
 
 #: apps/wprs-app/qml/SettingsRgb.qml
 msgid "%1: the lights wait while the wallpaper is paused."
