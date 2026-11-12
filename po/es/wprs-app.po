@@ -1995,8 +1995,8 @@ msgid ""
 "Uninstall every installed version of %1? You can install it again from "
 "Browse."
 msgstr ""
-"¿Desinstalar todas las versiones instaladas de %1? Podés instalarlo de "
-"nuevo desde Explorar."
+"¿Desinstalar todas las versiones instaladas de %1? Podés instalarlo de nuevo "
+"desde Explorar."
 
 #: apps/wprs-app/qml/Installed.qml
 msgid "Uninstall %1 %2? You can install it again from Browse."
@@ -2752,8 +2752,8 @@ msgid ""
 msgstr ""
 "Mostrar una pista inventada en la pantalla donde se aplicó por última vez, "
 "en lugar de lo que reproduce un reproductor de medios, para probar valores, "
-"disparadores y scripts; esto cambia lo que se muestra de verdad ahí, no "
-"solo una vista previa."
+"disparadores y scripts; esto cambia lo que se muestra de verdad ahí, no solo "
+"una vista previa."
 
 #: apps/wprs-app/qml/PackageMedia.qml
 msgid "Build and apply this package to a screen first."
@@ -5579,8 +5579,8 @@ msgid ""
 "FBX and OBJ files open in Blender and leave it as binary glTF (.glb); the "
 "guide in the documentation tells how."
 msgstr ""
-"Los archivos FBX y OBJ se abren en Blender y salen de él como glTF binario "
-"(.glb); la guía de la documentación explica cómo."
+"Los archivos FBX y OBJ se abren en Blender y salen de él como glTF binario (."
+"glb); la guía de la documentación explica cómo."
 
 #: apps/wprs-app/qml/SceneModelImport.qml
 msgid "Binary glTF models"
@@ -8240,6 +8240,33 @@ msgstr "Conectado; ahora manda los colores %1."
 #: apps/wprs-app/qml/SettingsRgb.qml
 msgid "Not connected."
 msgstr "Sin conectar."
+
+#: apps/wprs-app/qml/SettingsRgb.qml
+msgid ""
+"%1: the lights wait while the session is locked, because the wallpaper "
+"pauses then."
+msgstr "%1: las luces esperan mientras la sesión está bloqueada, porque el fondo se pausa entonces."
+
+#: apps/wprs-app/qml/SettingsRgb.qml
+msgid ""
+"%1: the lights wait while the computer is on battery, because the wallpaper "
+"pauses then."
+msgstr "%1: las luces esperan mientras el equipo funciona con batería, porque el fondo se pausa entonces."
+
+#: apps/wprs-app/qml/SettingsRgb.qml
+msgid ""
+"%1: the lights wait, the covered screen shows something that sends no colors."
+msgstr "%1: las luces esperan, la pantalla tapada muestra algo que no manda colores."
+
+#: apps/wprs-app/qml/SettingsRgb.qml
+msgid ""
+"%1: the lights wait, the wallpaper there does not have permission to use the "
+"lights."
+msgstr "%1: las luces esperan, el fondo de esa pantalla no tiene permiso para usar las luces."
+
+#: apps/wprs-app/qml/SettingsRgb.qml
+msgid "%1: the lights wait while the wallpaper is paused."
+msgstr "%1: las luces esperan mientras el fondo está en pausa."
 
 #: apps/wprs-app/qml/SettingsRgb.qml
 msgid "%1, with %2 lights"
