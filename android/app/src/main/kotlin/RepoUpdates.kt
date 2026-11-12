@@ -15,6 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.json.JSONArray
+import org.json.JSONObject
+
+fun updatesWanted(refresh: String?, automatic: String?) = refresh != "false" || automatic == "true"
+
+fun askNote(asks: List<String>) = asks.joinToString(", ").takeIf { it.isNotEmpty() }
+
+fun asked(update: JSONObject) = update.optJSONArray("asks")?.let { askNote(List(it.length(), it::getString)) }
 
 @Composable
 fun RepoUpdates(main: Main, run: Run) {
@@ -26,7 +33,10 @@ fun RepoUpdates(main: Main, run: Run) {
     listed.forEach { update ->
         ListItem(
             headlineContent = { Text(update.getString("title").ifEmpty { update.getString("id") }) },
-            supportingContent = { Text(stringResource(R.string.repo_update_from, update.getString("installed"), update.getString("available"))) },
+            supportingContent = {
+                Text(stringResource(R.string.repo_update_from, update.getString("installed"), update.getString("available")))
+                asked(update)?.let { Text(stringResource(R.string.repo_update_asks, it), style = MaterialTheme.typography.bodySmall) }
+            },
             trailingContent = {
                 TextButton({
                     run("") {

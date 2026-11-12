@@ -7,7 +7,7 @@ use std::net::{TcpListener, TcpStream};
 use std::path::{Path, PathBuf};
 use wprs_format::{Limits, Settings, Signer, build, init, keygen, sign_root};
 
-fn serve(root: PathBuf) -> u16 {
+pub(super) fn serve(root: PathBuf) -> u16 {
     let listener = TcpListener::bind("127.0.0.1:0").unwrap();
     let port = listener.local_addr().unwrap().port();
     std::thread::spawn(move || {
@@ -60,7 +60,7 @@ fn wpak(dir: &Path, id: &str, version: &str, kind: &str, needs: &[(&str, &str)])
     out
 }
 
-fn operate(repo: &Path, op: Value) -> Value {
+pub(super) fn operate(repo: &Path, op: Value) -> Value {
     let mut op = op;
     op["dir"] = json!(repo);
     let reply: Value = serde_json::from_str(&crate::stall::request(&op.to_string())).unwrap();
@@ -68,11 +68,11 @@ fn operate(repo: &Path, op: Value) -> Value {
     reply
 }
 
-fn account(request: Value) -> Value {
+pub(super) fn account(request: Value) -> Value {
     serde_json::from_str(&crate::account::request(&request.to_string())).unwrap()
 }
 
-fn uid_of(id: &str) -> Option<String> {
+pub(super) fn uid_of(id: &str) -> Option<String> {
     library::with(|lib| Ok(lib.packages_of(id)?.into_iter().next().map(|i| i.uid))).unwrap()
 }
 

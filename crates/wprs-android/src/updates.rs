@@ -4,6 +4,8 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use std::fs;
 
+mod held;
+
 const REFRESHED: &str = "refreshed";
 const DAY: i64 = 86_400;
 
@@ -19,7 +21,7 @@ pub(crate) fn request(request: Request) -> Result<Value, Error> {
     match request {
         Request::Updates => list(),
         Request::RefreshRepos { force } => refresh(force),
-        Request::Update { uid } => update(&uid),
+        Request::Update { uid } => update(&uid, false),
     }
 }
 
@@ -57,7 +59,7 @@ fn kept() -> Result<Vec<Kept>, Error> {
 fn list() -> Result<Value, Error> {
     let dir = repos::dir()?;
     let found = if dir.is_dir() { wprs_format::browse_with(&dir, "", true)? } else { Vec::new() };
-    Ok(json!(newer(&found, &kept()?)))
+    Ok(json!(held::mark(newer(&found, &kept()?))))
 }
 
 fn refresh(force: bool) -> Result<Value, Error> {
@@ -65,7 +67,7 @@ fn refresh(force: bool) -> Result<Value, Error> {
     let last = fs::read_to_string(dir.join(REFRESHED)).ok().and_then(|t| t.trim().parse::<i64>().ok());
     let known = if dir.is_dir() { wprs_format::repos(&dir, now)? } else { Vec::new() };
     if known.is_empty() || (!force && last.is_some_and(|at| (0..DAY).contains(&(now - at)))) {
-        return list();
+        return automatic();
     }
     let fetch = repos::fetch()?;
     for repo in known.iter().filter(|r| r.broken.is_none()) {
@@ -75,13 +77,33 @@ fn refresh(force: bool) -> Result<Value, Error> {
     }
     store::write(&dir.join(REFRESHED), now.to_string().as_bytes())?;
     store::changed();
+    automatic()
+}
+
+fn automatic() -> Result<Value, Error> {
+    if crate::settings::config().repos.auto_update {
+        let waiting = list()?;
+        let due = |u: &&Value| u["asks"].is_null();
+        for uid in waiting.as_array().into_iter().flatten().filter(due).filter_map(|u| u["uid"].as_str()) {
+            if let Err(e) = update(uid, true) {
+                log::warn!("cannot update a package: {e}");
+            }
+        }
+    }
     list()
 }
 
-fn update(uid: &str) -> Result<Value, Error> {
+fn update(uid: &str, quiet: bool) -> Result<Value, Error> {
     let Some((repo, id)) = repos::installed().remove(uid) else { return Ok(json!({ "item": null })) };
     let old = library::with(|lib| Ok(lib.item(uid)?))?;
     let (fresh, path) = repos::fetched(&format!("{repo}/{id}"))?;
+    if fresh != uid
+        && quiet
+        && let Some(asks) = held::keep_back(uid, &fresh, &old.path, &path)?
+    {
+        store::changed();
+        return Ok(json!({ "item": uid, "failed": [], "asks": asks }));
+    }
     if fresh != uid {
         let path = library::with(|lib| {
             lib.remove_items(&[&fresh])?;

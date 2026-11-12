@@ -1241,7 +1241,13 @@ activado (también cuando se cambia en el ordenador y llega por la sincronizaci�
 *Sincronizar ahora*, una restauración o un emparejamiento), el teléfono actualiza sus índices como el escritorio: la
 pestaña muestra un aviso con cuántos paquetes tienen versión nueva, *Actualizaciones* los lista con
 *Actualizar* (la versión nueva ocupa el lugar de la vieja, con sus listas y ajustes) y *Buscar
-actualizaciones* lo hace al momento.
+actualizaciones* lo hace al momento. Con *Actualizar los repositorios automáticamente*
+(`repos.auto_update`, desactivado de serie porque actualizar sin preguntar cambia lo que se ejecuta;
+en los ajustes del teléfono, bajo los fondos; en el ordenador, en los ajustes junto a los
+repositorios, y `wprs-ctl config repos.auto_update true`) los paquetes con versión nueva se
+actualizan solos tras esa comprobación, con las mismas reglas de red y batería y todas las
+comprobaciones de una instalación; una versión que pide un permiso nuevo no se instala sola:
+queda en la lista con una nota que dice qué pide ahora. Nunca hay notificación de actualizaciones.
 
 Para sincronizar por la red de casa sin un dominio ni un certificado público, un ordenador puede
 servir `wprs-server` con su propio certificado (`WPRS_TLS=self-signed`) y anunciarse en la red

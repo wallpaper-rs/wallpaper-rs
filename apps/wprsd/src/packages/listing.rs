@@ -40,8 +40,9 @@ impl Daemon {
             signer: record.signer.clone(),
             revoked,
             item,
-            update,
+            update: update.clone(),
             changes: String::new(),
+            asks: update.as_ref().map(|v| self.held_asks(&record.repo_id, &record.id, v)).unwrap_or_default(),
             missing: Vec::new(),
         }
     }

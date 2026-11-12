@@ -24,6 +24,7 @@ class RepoCheck(context: Context, params: WorkerParameters) : Worker(context, pa
 object Updates {
     const val WORK = "repos"
     const val SETTING = "repos.auto_refresh"
+    const val AUTO = "repos.auto_update"
     val count = mutableIntStateOf(0)
     private val main = Handler(Looper.getMainLooper())
 
@@ -35,8 +36,13 @@ object Updates {
 
     fun on() = runCatching { Native.setting(SETTING, null) }.getOrNull() != "false"
 
+    fun active() = updatesWanted(
+        runCatching { Native.setting(SETTING, null) }.getOrNull(),
+        runCatching { Native.setting(AUTO, null) }.getOrNull(),
+    )
+
     fun check(context: Context): ListenableWorker.Result {
-        if (!on()) return ListenableWorker.Result.success().also { schedule(context) }
+        if (!active()) return ListenableWorker.Result.success().also { schedule(context) }
         val found = runCatching { JSONArray(Native.account(JSONObject().put("op", "refresh_repos").put("force", false).toString())) }
         found(found.getOrNull()?.length() ?: return ListenableWorker.Result.retry())
         return ListenableWorker.Result.success()
@@ -51,7 +57,7 @@ object Updates {
 
     fun schedule(context: Context, repos: Int = counted()) {
         val work = WorkManager.getInstance(context)
-        if (repos == 0 || !on()) {
+        if (repos == 0 || !active()) {
             work.cancelUniqueWork(WORK)
             return
         }

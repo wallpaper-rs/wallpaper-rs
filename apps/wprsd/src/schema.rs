@@ -71,6 +71,7 @@ fn options() -> Vec<Field> {
         flag("library.show_mature"),
         range(option("library.thumb_cache_mb", FieldKind::Int), 64.0, 8192.0, Some(1.0)),
         flag("repos.auto_refresh"),
+        flag("repos.auto_update"),
         flag("repos.vote_counts"),
         range(option("layout.bezel_mm", FieldKind::Float), 0.0, 100.0, Some(0.5)),
         flag("models.allow_download"),

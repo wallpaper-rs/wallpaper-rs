@@ -62,6 +62,7 @@ private val TOGGLES = listOf(
     Triple(R.string.hide_mature, "library.hide_mature", "true" to "false"),
     Triple(R.string.vote_counts, "repos.vote_counts", "true" to "false"),
     Triple(R.string.auto_refresh, Updates.SETTING, "true" to "false"),
+    Triple(R.string.auto_update, Updates.AUTO, "true" to "false"),
     Triple(R.string.mobile_data, Sync.NETWORK, "any" to "unmetered"),
     Triple(R.string.show_mature, Unveil.KEY, "true" to "false"),
 )
@@ -92,7 +93,8 @@ fun Settings(main: Main) {
         change {
             Native.setting(key, value)
             Unveil.load()
-            if (key == Updates.SETTING) Updates.schedule(main)
+            if (key == Updates.SETTING || key == Updates.AUTO) Updates.schedule(main)
+            if (key == Updates.AUTO && value == "true") Native.account("{\"op\": \"refresh_repos\", \"force\": false}")
             if (key == Sync.NETWORK) Sync.network(main)
         }
     }

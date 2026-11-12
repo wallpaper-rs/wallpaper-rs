@@ -39,6 +39,16 @@ impl Daemon {
     }
 
     pub fn install(self: &Arc<Self>, spec: &str, allow_stale: bool, allow_downgrade: bool) -> Result<u64> {
+        self.install_as(spec, allow_stale, allow_downgrade, false)
+    }
+
+    pub fn install_as(
+        self: &Arc<Self>,
+        spec: &str,
+        allow_stale: bool,
+        allow_downgrade: bool,
+        quiet: bool,
+    ) -> Result<u64> {
         let (repo, id, version) = parse_spec(spec)?;
         let repo = repo.map(|r| self.repo_id(r)).transpose()?;
         let at = version.map_or(String::new(), |v| format!("@{v}"));
@@ -87,6 +97,9 @@ impl Daemon {
             let _turn = d.jobs.wait_turn(JobKind::Scan);
             let _packages = lock(&PACKAGES);
             let record = wprs_format::current(&d.store.data, &record.repo_id, &record.id, &record.version)?;
+            if quiet {
+                d.keep_back(&record)?;
+            }
             if lock(&d.remote.removing).contains(&record.repo_id) || !record.path.is_file() {
                 return Err(failed(format!(
                     "{} {} was uninstalled while it was installed",

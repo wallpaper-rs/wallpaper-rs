@@ -12,6 +12,7 @@ ColumnLayout {
     property string removingId
     property string removingVersion
     readonly property var updates: packages.filter((p, i) => p.update && packages.findIndex(q => q.id === p.id) === i)
+    readonly property var plain: updates.filter(p => !p.asks || p.asks.length === 0)
 
     function load() {
         App.query("ListInstalled", [], "Repos1", reply => installed && (installed.packages = reply.packages));
@@ -37,8 +38,8 @@ ColumnLayout {
     QQC2.Button {
         text: App.tr("Update all")
         icon.name: "system-software-update"
-        enabled: installed.updates.length > 0
-        onClicked: installed.updates.forEach(p => installed.installer.install(p.repo_id + "/" + p.id))
+        enabled: installed.plain.length > 0
+        onClicked: installed.plain.forEach(p => installed.installer.install(p.repo_id + "/" + p.id))
     }
 
     QQC2.ScrollView {
@@ -72,6 +73,16 @@ ColumnLayout {
                         text: row.modelData.changes ? App.tr("What's new: %1", App.plain(row.modelData.changes)) : ""
                         textFormat: Text.PlainText
                         wrapMode: Text.Wrap
+                        font: Kirigami.Theme.smallFont
+                    }
+
+                    QQC2.Label {
+                        Layout.fillWidth: true
+                        visible: !!row.modelData.update && !!row.modelData.asks && row.modelData.asks.length > 0
+                        text: App.tr("Not updated automatically: it now asks for %1", (row.modelData.asks ?? []).join(", "))
+                        textFormat: Text.PlainText
+                        wrapMode: Text.Wrap
+                        color: Kirigami.Theme.neutralTextColor
                         font: Kirigami.Theme.smallFont
                     }
                 }

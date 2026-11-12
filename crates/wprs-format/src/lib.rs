@@ -1,6 +1,7 @@
 mod about;
 mod admin;
 mod archive;
+mod asks;
 mod authors;
 mod broken;
 mod browse;
@@ -58,6 +59,7 @@ mod web;
 pub use admin::sign_root;
 pub use admin::{RootStatus, init, rotate_root, status};
 pub use archive::{extract, peek, thumbnail};
+pub use asks::asks;
 pub use authors::{AUTHORS_FORMAT, Authors, ONLINE, OnlineAuthor, Rotation, Trusted, rotation_text};
 pub use browse::{Item, browse, browse_with};
 pub use build::{build, build_staged, sha256, sha256_file};

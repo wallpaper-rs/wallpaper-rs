@@ -1,6 +1,7 @@
 use crate::updates::{Kept, newer};
 use serde_json::{Value, json};
 
+mod automatic;
 mod repository;
 
 fn offered(repo: &str, id: &str, versions: &[&str]) -> wprs_format::Item {
@@ -53,4 +54,5 @@ pub(super) fn nothing_to_update_without_repositories() {
     assert_eq!(account(json!({ "op": "update", "uid": "nowhere" })), json!({ "item": null }));
     assert!(account(json!({ "op": "refresh_repos" }))["error"].is_string(), "force is required");
     repository::dependencies_and_updates_follow_a_repository();
+    automatic::updates_follow_the_setting();
 }

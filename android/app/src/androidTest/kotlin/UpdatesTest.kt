@@ -83,6 +83,26 @@ class UpdatesTest {
     }
 
     @Test
+    fun automaticUpdatesKeepTheDailyCheckWhileTheCheckAloneIsOff() {
+        storage()
+        val work = WorkManager.getInstance(context)
+        val states = { work.getWorkInfosForUniqueWork(Updates.WORK).get().map { it.state } }
+        try {
+            Native.setting(Updates.SETTING, "false")
+            Native.setting(Updates.AUTO, "true")
+            Updates.schedule(context, repos = 1)
+            assertTrue("updating by itself needs the check", waitFor { states() == listOf(WorkInfo.State.ENQUEUED) })
+            Native.setting(Updates.AUTO, "false")
+            Updates.schedule(context, repos = 1)
+            assertTrue(waitFor { states().all { it == WorkInfo.State.CANCELLED } })
+        } finally {
+            Native.setting(Updates.SETTING, "true")
+            Native.setting(Updates.AUTO, "false")
+            work.cancelUniqueWork(Updates.WORK).result.get()
+        }
+    }
+
+    @Test
     fun syncingRestoringAndLinkingScheduleTheDailyCheckWhenThereAreRepositories() {
         storage()
         val work = WorkManager.getInstance(context)

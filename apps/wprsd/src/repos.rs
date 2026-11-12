@@ -184,6 +184,7 @@ impl Daemon {
             }
         }
         self.reload_installed();
+        self.update_installed();
         failure.map_or_else(|| Ok(serde_json::to_value(out).unwrap_or_default()), Err)
     }
 }

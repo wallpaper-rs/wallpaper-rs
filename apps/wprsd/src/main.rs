@@ -85,6 +85,7 @@ mod sync1;
 mod thumbs;
 mod tidy;
 mod timing;
+mod updating;
 mod variants;
 mod wallhaven;
 mod wallpaper;

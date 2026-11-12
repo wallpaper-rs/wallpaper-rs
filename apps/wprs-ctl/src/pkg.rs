@@ -91,7 +91,7 @@ pub async fn run(client: &Client, command: Pkg) -> Result<()> {
         }
         Pkg::Upgrade { allow_stale, wait } => {
             let installed: InstalledReply = parse(&repos.list_installed().await?)?;
-            let updates = installed.packages.iter().filter(|p| p.update.is_some());
+            let updates = installed.packages.iter().filter(|p| p.update.is_some() && p.asks.is_empty());
             let (mut asked, mut declined) = (HashMap::new(), None);
             for spec in updates.map(|p| format!("{}/{}", p.repo_id, p.id)).collect::<BTreeSet<_>>() {
                 match install(client, &spec, allow_stale, false, &wait, &mut asked).await {
@@ -183,10 +183,11 @@ pub fn installed(reply: InstalledReply) -> String {
             format!("\nWhat's new in {} {new}:\n{}\n", p.id, wprs_core::markup::plain(&p.changes))
         })
         .collect();
+    let held = crate::held::asked(&reply.packages);
     let rows = reply.packages.into_iter().map(|p| {
         let (item, size) = (p.item.as_deref().map_or("-".into(), short), bytes(p.size));
         let (update, revoked) = (p.update.unwrap_or("-".into()), p.revoked.map_or("-".into(), |r| text(&r)));
         vec![prefix(&p.repo_id), p.id, p.version, size, item, update, revoked]
     });
-    table(&["REPO", "ID", "VERSION", "SIZE", "ITEM", "UPDATE", "REVOKED"], rows) + &notes
+    table(&["REPO", "ID", "VERSION", "SIZE", "ITEM", "UPDATE", "REVOKED"], rows) + &notes + &held
 }

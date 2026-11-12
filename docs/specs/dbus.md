@@ -658,6 +658,7 @@ Changes one setting and saves the configuration. Keys and their current values a
 | `library.hide_mature` | leave packages rated `mature` out of `Search` (unless the query has its own `content:` filter; `SearchPage.query` stays the one given) and `Browse`; a change emits `library` and `repos` | `false` |
 | `library.show_mature` | show the previews of packages rated `mature` without blur; otherwise clients (app, tray, phone) blur them until the user confirms once per package with `Library1.Confirm`; a change emits `library` and `repos` | `false` |
 | `repos.auto_refresh` | refresh each repository 10 min after start and then every 24 h; the phone reads it for its daily check, which a synced change starts or stops | `true` |
+| `repos.auto_update` | after each refresh, update without asking the installed packages that have a newer version in their repository, with every check of `Install`; a version that asks for a permission the installed one lacks (an input, `rgb` or a network origin) is not installed: it stays in `ListInstalled` with `asks`. Off by default, because updating without asking changes what runs on the device. There is no notification for updates either way | `false` |
 | `repos.vote_counts` | fetch and show vote counts from the linked server in the catalog (`GetVotes`); voting itself stays possible | `true` |
 | `layout.bezel_mm` | `0` to `100`, frame width of every screen side for the `span` fit | `0.0` |
 | `layout.monitors.<screen>` | `x,y,w,h` in millimetres places the screen whose identity or output name is `<screen>` on the canvas of the `span` fit (see "Edits and spanning"), `none` or an empty value lets the daemon place it again; at most 64 screens, positions within ±100 m and sizes up to 10 m; not listed in `options` | none |
@@ -1414,7 +1415,12 @@ repository is fetched again from its stored address, or from the network mirrors
 root, anchored on its `repo_id`; when neither is left the refresh fails and the repository has to
 be added again with its URL or removed. With
 `repos.auto_refresh`, every repository is refreshed 10 minutes after the daemon starts and then
-every 24 hours; updates are never installed automatically.
+every 24 hours. Updates are installed only with `repos.auto_update` (off by default), once the
+refresh ends and also when the option is turned on; the desktop has no metered or battery rule for
+refreshes, so none applies to them. A version that asks for new permissions (see `ListInstalled`) is
+downloaded, checked, discarded and remembered until a newer version appears; its job ends `failed`
+with the permissions in the message. `Install` of that package by hand installs it. With the option
+off, updates show as a list with the `Update` action of each package.
 
 ### `Remove(s repo, b uninstall)`
 
@@ -1488,8 +1494,10 @@ remaining version, or is removed with its thumbnails when none remains.
 
 An `InstalledReply`; `item` is set on the version linked to the library item and `update` on
 the newest installed version when a newer one is available, with `changes` holding the change
-notes of that version in the user's language and with its markup. `RefreshOutput.updates` carries
-the same notes.
+notes of that version in the user's language and with its markup. `asks` lists the permissions that
+version asks for and the installed one does not, when automatic updates held it back; clients show
+them next to the update and leave the package out of their "update all" action.
+`RefreshOutput.updates` carries the same notes.
 
 ### Signal `PreviewReady(s spec, s path)`
 
@@ -2867,7 +2875,7 @@ struct BrowsePage { model: u32, serial: u64, query: String, total: u32, offset: 
 struct InstalledPackage {
     repo_id: String, id: String, version: String, sha256: String, size: u64,
     signer: Option<String>, revoked: Option<Reason>, item: Option<Uid>, update: Option<String>,
-    changes: String,
+    changes: String, asks: Vec<String>,
 }
 struct InstalledReply { model: u32, serial: u64, packages: Vec<InstalledPackage> }
 struct Update { repo_id: String, id: String, installed: String, available: String, changes: String }
@@ -2948,6 +2956,7 @@ thumb_cache_mb = 512
 
 [repos]
 auto_refresh = true
+auto_update = false
 
 [models]
 allow_download = true

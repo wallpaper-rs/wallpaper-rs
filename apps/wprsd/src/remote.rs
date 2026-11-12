@@ -40,6 +40,7 @@ pub struct Remote {
     pub previews: Mutex<Vec<(String, String)>>,
     pub preview_wake: Notify,
     pub orphans: crate::orphans::Orphans,
+    pub held: Mutex<crate::updating::Held>,
 }
 
 pub struct Claim<'a>(&'a Mutex<HashSet<String>>, String);

@@ -181,7 +181,13 @@ impl Service {
     }
 
     async fn set_option(&self, key: String, value: String) -> Result<()> {
-        self.d()?.render(move |d| d.set_option(&key, &value).inspect(|_| crate::duck::follow(d))).await
+        self.d()?
+            .render(move |d| {
+                d.set_option(&key, &value)
+                    .inspect(|_| crate::duck::follow(d))
+                    .inspect(|()| crate::updating::follow(d, &key, &value))
+            })
+            .await
     }
 
     async fn restart(&self, #[zbus(connection)] bus: &zbus::Connection) -> Result<()> {
