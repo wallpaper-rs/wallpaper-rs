@@ -62,7 +62,7 @@ fn root_motion_moves_the_layer_on_past_each_loop() {
     let (plain, _) = posed(r, walk, &[0.0, 1.5]);
     let (moved, shot) = posed(r, rooted, &[0.0, 1.5]);
     let travel = shot.runtime.puppet("rig").unwrap().posed().travel;
-    assert!((travel[0] - 1.5).abs() < 0.05, "{travel:?}");
+    assert!((travel[3] - 1.5).abs() < 0.05, "{travel:?}");
     assert!(lit(&plain[1], 37, 25) && !lit(&plain[1], 48, 25), "without root motion the loop starts over");
     assert!(lit(&moved[1], 48, 25), "with root motion the column walks on");
 }

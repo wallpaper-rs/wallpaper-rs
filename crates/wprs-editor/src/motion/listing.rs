@@ -1,35 +1,11 @@
 use crate::rigs::round;
 use serde_json::{Value, json};
 use std::path::Path;
-use wprs_scene::{Rigged, Track};
-
-const STEPS: usize = 32;
+use wprs_scene::Rigged;
 
 pub fn root_path(rig: &Rigged, clip: &Value, laps: f32) -> Vec<[f32; 3]> {
-    let motion = rig.motion(clip["animation"].as_str());
-    let Some(motion) = motion.filter(|_| clip["animation"].is_string() || clip.get("bones").is_none()) else {
-        return Vec::new();
-    };
-    let moves = |n: u16| motion.channels.iter().find(|c| c.node == n && c.path == Track::Translation);
-    let Some(ch) = rig.order.iter().find_map(|n| moves(*n)) else { return Vec::new() };
-    let from = clip["from"].as_f64().unwrap_or(0.0) as f32;
-    let to = clip["to"].as_f64().map_or(motion.length, |t| t as f32);
-    let len = (to - from).max(1e-3);
-    let mut out = [0.0f32; 4];
-    let mut at = |t: f32| {
-        ch.sample(from + t, &mut out);
-        [out[0], out[1], out[2]]
-    };
-    let (start, end) = (at(0.0), at(len));
-    (0..=STEPS)
-        .map(|k| {
-            let t = k as f32 / STEPS as f32 * len * laps;
-            let (lap, local) = ((t / len).floor(), t.rem_euclid(len));
-            let now = at(if k == STEPS && local < 1e-4 { len } else { local });
-            let lap = if k == STEPS && local < 1e-4 { lap - 1.0 } else { lap };
-            [0, 1, 2].map(|i| if i == 1 { 0.0 } else { now[i] - start[i] + lap * (end[i] - start[i]) })
-        })
-        .collect()
+    let Ok(clip) = serde_json::from_value::<wprs_scene::AnimClip>(clip.clone()) else { return Vec::new() };
+    wprs_scene::clip_course(rig, &clip, laps)
 }
 
 pub fn motion(dir: &Path, doc: &Value, id: &str) -> Value {

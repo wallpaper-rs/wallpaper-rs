@@ -40,7 +40,7 @@ fn model_clips_take_3d_keys_and_bone_pickers_list_model_bones() {
     assert!(bones.contains(&"tip"), "{known}");
     let m = ask(&p, json!({ "motion": { "layer": "doll" } }));
     assert_eq!(m["model"], true);
-    assert_eq!(m["files"].as_array().unwrap().len(), 2);
+    assert_eq!(m["files"].as_array().unwrap().len(), 3);
     assert_eq!(m["shapes"], json!(["bulge"]));
     assert!(m["bones"].as_array().unwrap().iter().any(|b| b["name"] == "tip" && b["parent"] == "root"));
 }
@@ -92,6 +92,13 @@ fn root_motion_presets_and_blend_shapes_of_a_model() {
     let m = ask(&p, json!({ "motion": { "layer": "doll" } }));
     let path = m["clips"][0]["path"].as_array().unwrap();
     assert!((path.last().unwrap()[0].as_f64().unwrap() - 2.0).abs() < 0.05, "two laps of the walk: {path:?}");
+    act(&mut p, json!({ "clip": { "layer": "doll", "id": "turn", "add": true } })).unwrap();
+    let at = wprs_editor::actions::layer(&p.doc, "doll").unwrap().0;
+    act(&mut p, json!({ "set": { "pointer": format!("{at}/clips/1/animation"), "value": "stroll" } }))
+        .unwrap();
+    let m = ask(&p, json!({ "motion": { "layer": "doll" } }));
+    let end = m["clips"][1]["path"].as_array().unwrap().last().unwrap().clone();
+    assert_eq!(end, json!([1.0, 1.0, 1.0]), "two turning laps climb and curve");
     let shown = ask(&p, json!({ "stage3d": { "time": 0.5 } }));
     let doll = &shown["models"][0];
     assert!(doll["bones"].as_array().is_some_and(|b| b.len() >= 2), "{doll}");

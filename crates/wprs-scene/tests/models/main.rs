@@ -12,6 +12,7 @@ mod limits;
 mod pictures;
 mod posing;
 mod reading;
+mod walking;
 
 pub fn cube() -> Vec<u8> {
     Forge::default()

@@ -914,9 +914,14 @@ heaviest for each primitive. A still skinned model draws its rest pose, as the f
 
 `physics` swings bones in the plane of x and y of the model, counting one unit of the model as 100
 pixels for `gravity`, `wind` and `translation`, and freezes at the lowest quality, where bones keep the
-pose of their animation. Chains of `ik` follow only `bone:` targets on models. With `root_motion`, the
-first playing clip that moves a bone of the file stops moving that bone along x and z and moves the layer
-instead, adding up each turn of a repeating clip, so that a walk walks on; up and down stays in the pose.
+pose of their animation. Chains of `ik` follow only `bone:` targets on models. With `root_motion`, the root
+bone (the first bone, from the top of the skeleton, that an animation of the file moves) keeps the pose it
+has when its clips start, and what the clips do to it moves the layer instead, along x, y and z and turning
+where the clips turn it, adding up each turn of a repeating clip so that a walk walks on and a turning walk
+walks a circle. Every playing animation layer moves the layer by its weight and fade, mixed as their poses
+are: a layer replaces the motion of those before it by its weight and an additive one adds its own, and a
+layer whose bone mask leaves the root out moves nothing. The work is a few samples and products of the
+root bone per playing layer and frame, the same at every quality and tier, with nothing allocated.
 A model that moves in its stage renders the stage again only on the frames where its pose changed.
 
 ## Values

@@ -60,12 +60,12 @@ pub(super) fn angles(r: &M3) -> [f32; 3] {
 }
 
 pub(super) fn now(p: &wprs_scene::Placed) -> serde_json::Value {
-    let m = of_mat4(&p.matrix);
+    let back = p.pose.map_or(wprs_scene::mesh_math::IDENTITY, |q| wprs_scene::mesh_math::invert(&q.travel));
+    let base = wprs_scene::mul4(&p.matrix, &wprs_scene::widen(&back));
+    let m = of_mat4(&base);
     let size = |c: usize| (0..3).map(|r| m[r][c] * m[r][c]).sum::<f32>().sqrt();
     let scale = [size(0), size(1), size(2)];
-    let travel = p.pose.map_or([0.0; 3], |q| q.travel);
-    let moved = apply(&m, travel);
-    let at: [f32; 3] = std::array::from_fn(|i| p.matrix[12 + i] - moved[i]);
+    let at: [f32; 3] = std::array::from_fn(|i| base[12 + i]);
     let r = |v: [f32; 3]| v.map(|x| (x * 1000.0).round() / 1000.0);
     serde_json::json!({ "position": r(at), "rotation": angles(&pure(&m)), "scale": r(scale) })
 }

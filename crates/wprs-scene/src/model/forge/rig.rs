@@ -73,11 +73,17 @@ impl ForgeRig {
         let turns = out.floats(&[0.0, 0.0, 0.0, 1.0, 0.0, 0.0, s45, c45, 0.0, 0.0, 0.0, 1.0], 4, "VEC4");
         let walk_t = out.floats(&[0.0, 1.0], 1, "SCALAR");
         let walk = out.floats(&[0.0, 0.0, 0.0, 1.0, 0.0, 0.0], 3, "VEC3");
+        let half = std::f32::consts::FRAC_1_SQRT_2;
+        let stroll = out.floats(&[0.0, 0.0, 0.0, 0.0, 0.5, 1.0], 3, "VEC3");
+        let heading = out.floats(&[0.0, 0.0, 0.0, 1.0, 0.0, half, 0.0, half], 4, "VEC4");
         let animations = json!([
             { "name": "bend", "samplers": [{ "input": times, "output": turns }],
               "channels": [{ "sampler": 0, "target": { "node": 1, "path": "rotation" } }] },
             { "name": "walk", "samplers": [{ "input": walk_t, "output": walk }],
-              "channels": [{ "sampler": 0, "target": { "node": 0, "path": "translation" } }] }
+              "channels": [{ "sampler": 0, "target": { "node": 0, "path": "translation" } }] },
+            { "name": "stroll", "samplers": [{ "input": walk_t, "output": stroll }, { "input": walk_t, "output": heading }],
+              "channels": [{ "sampler": 0, "target": { "node": 0, "path": "translation" } },
+                { "sampler": 1, "target": { "node": 0, "path": "rotation" } }] }
         ]);
         let nodes = json!([
             { "name": "root", "children": [1] },

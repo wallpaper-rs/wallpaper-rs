@@ -34,6 +34,19 @@ pub fn mul4(a: &Mat4, b: &Mat4) -> Mat4 {
     std::array::from_fn(|k| (0..4).map(|i| a[i * 4 + k % 4] * b[(k / 4) * 4 + i]).sum())
 }
 
+pub fn widen(m: &crate::Mat) -> Mat4 {
+    std::array::from_fn(|k| match (k % 4, k / 4) {
+        (3, c) => {
+            if c == 3 {
+                1.0
+            } else {
+                0.0
+            }
+        }
+        (r, c) => m[r * 4 + c],
+    })
+}
+
 pub fn apply4(m: &Mat4, [x, y, z]: [f32; 3], w: f32) -> [f32; 4] {
     std::array::from_fn(|r| m[r] * x + m[4 + r] * y + m[8 + r] * z + m[12 + r] * w)
 }

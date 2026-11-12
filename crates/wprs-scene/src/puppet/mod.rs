@@ -4,6 +4,7 @@ use crate::{Layer, Wake};
 use std::sync::Arc;
 
 mod arc;
+mod course;
 mod cues;
 mod drive;
 #[cfg(test)]
@@ -23,6 +24,7 @@ mod swing;
 mod touch;
 mod world;
 
+pub use course::{COURSE_STEPS, clip_course};
 pub use fig::MODEL_UNIT;
 pub(crate) use fig::{Fig, figure, mesh};
 pub(crate) use mount::Seat;
@@ -37,13 +39,20 @@ pub struct Drawn {
     pub clip: Option<u16>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Posed {
     pub generation: u64,
     pub palette: Vec<Mat>,
     pub morphs: Vec<[(u32, f32); MAX_ACTIVE_SHAPES]>,
     pub draws: Vec<Drawn>,
-    pub travel: [f32; 3],
+    pub travel: Mat,
+}
+
+impl Default for Posed {
+    fn default() -> Self {
+        let (palette, morphs, draws) = (Vec::new(), Vec::new(), Vec::new());
+        Posed { generation: 0, palette, morphs, draws, travel: crate::rigged::math::IDENTITY }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -61,6 +70,7 @@ pub(crate) struct Head {
     pub speed: f32,
     pub fresh: bool,
     pub laps: u32,
+    pub mixed: f32,
 }
 
 #[derive(Debug, Clone, PartialEq, Default)]
@@ -93,6 +103,7 @@ pub struct Puppet {
     pub(crate) chains: Vec<reach::Chain>,
     pub(crate) bodies: Vec<swing::Body>,
     pub(crate) lag: f32,
+    pub(crate) root: Option<u16>,
 }
 
 impl Puppet {
@@ -117,6 +128,7 @@ impl Puppet {
             chains,
             bodies,
             lag: 0.0,
+            root: root::bone(&rig),
             layer: layer.id.clone(),
             clips,
             heads,
@@ -151,7 +163,7 @@ impl Puppet {
     pub(crate) fn pose(&mut self, cx: &crate::resolve::Context, m: &Fig, (seat, sim): (&Seat, &Sim)) {
         self.blend(cx, m);
         if m.root {
-            self.root(m);
+            self.root(cx, m);
         }
         self.worlds(cx, m);
         if !self.chains.is_empty() {

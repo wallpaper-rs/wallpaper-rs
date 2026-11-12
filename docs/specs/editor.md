@@ -1100,7 +1100,9 @@ for its weight, and Animation layers: per layer the clip it plays, On, Adds, mov
 for weight, speed, fade in and fade out, and a bone mask picker (Only these bones); the same Animation
 layers part shows under the bones of a mesh. In the authoring view the selected model draws its bones
 (a line from each bone to its parent and a knob that picks the bone for the timeline and the pickers)
-and, with root motion, the path its first clip walks over two turns. The picked bone shows a ring: dragging
+and, with root motion, the path the layer will walk ahead from where it stands, mixing every playing
+animation layer by its weight (adding the additive ones), over two turns of its longest clip and in all three
+directions, turning where the clips turn. The picked bone shows a ring: dragging
 the ring turns the bone around the view axis, dragging inside it tips the bone like a trackball, and a
 square in its middle moves it in the plane of the view; each drag keys `angles` or `shift` of that bone
 in the chosen clip at the playhead (a model without clips gets `clip_1`). A swinging bone draws the fan

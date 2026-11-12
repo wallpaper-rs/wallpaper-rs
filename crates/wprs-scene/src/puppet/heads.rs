@@ -29,7 +29,22 @@ pub(super) fn head(rig: &Rigged, m: &Fig, layer: Option<usize>, clip: Option<usi
         false => rig.joints.iter().map(|j| bones.contains(&j.name)).collect(),
     };
     let (t, fade, ended, off, held, rate, weight, speed) = (0.0, 0.0, false, false, None, None, None, 1.0);
-    Some(Head { clip, layer, t, fade, ended, off, held, rate, weight, mask, speed, fresh: true, laps: 0 })
+    Some(Head {
+        clip,
+        layer,
+        t,
+        fade,
+        ended,
+        off,
+        held,
+        rate,
+        weight,
+        mask,
+        speed,
+        fresh: true,
+        laps: 0,
+        mixed: 0.0,
+    })
 }
 
 fn toward(fade: f32, on: bool, dt: f32, (up, down): (f32, f32)) -> f32 {

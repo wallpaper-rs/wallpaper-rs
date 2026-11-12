@@ -1,6 +1,6 @@
 use super::*;
 
-fn rigged(extra: Value, layers: Value) -> Scene {
+pub fn rigged(extra: Value, layers: Value) -> Scene {
     let mut doc = json!({ "schema": SCHEMA, "canvas": { "size": [200, 100] },
         "assets": { "toy": { "path": "toy.glb" } }, "layers": layers });
     extra.as_object().unwrap().iter().for_each(|(k, v)| doc[k] = v.clone());
@@ -23,7 +23,7 @@ fn an_animated_model_reads_its_skeleton_clips_and_blend_shapes() {
     let m = &s.solids["toy"];
     let rig = m.rig.as_ref().expect("a posed model keeps its skeleton");
     assert_eq!(rig.joints.iter().map(|j| j.name.as_str()).collect::<Vec<_>>(), ["root", "tip", "body"]);
-    assert_eq!((rig.palette.len(), rig.shapes.clone(), rig.motions.len()), (2, vec!["bulge".to_owned()], 2));
+    assert_eq!((rig.palette.len(), rig.shapes.clone(), rig.motions.len()), (2, vec!["bulge".to_owned()], 3));
     assert_eq!((m.skin.len() / SKIN_FLOATS, m.morphs.len() / 2), (m.vertex_count(), m.vertex_count()));
     assert!((m.bounds[1][1] - 2.0).abs() < 1e-4 && m.painted);
     let still = rigged(json!({}), json!([model("m", json!({}))]));

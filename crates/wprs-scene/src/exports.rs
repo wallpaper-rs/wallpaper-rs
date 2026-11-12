@@ -41,7 +41,7 @@ pub use crate::eval::{
     Placed, Shade, Stage3d, centripetal, cross_key, lamp3d, path_period, path_pose, play_paths, sequence,
 };
 pub use crate::extrude::Relief;
-pub use crate::eye::{Eye, IDENTITY4, Mat4, apply4, mul4, placement, unit3};
+pub use crate::eye::{Eye, IDENTITY4, Mat4, apply4, mul4, placement, unit3, widen};
 pub use crate::figure::{
     Attach, Coverage, Cull, Follows, MATERIALS, MAX_FIGURES, MAX_SHADOWS, Material, MeshDepth, MeshLayer,
     MeshPart, ModelLayer, Space,
@@ -109,7 +109,8 @@ pub use crate::props::{
     check_presets, cycle, effective, exposed, icon, legacy, rename, stale, tag, veiled,
 };
 pub use crate::puppet::{
-    CATCH_UP, Drawn, IK_ROUNDS, LONGEST_STEP, MODEL_UNIT, Posed, Puppet, QUIET, QUIET_TIME,
+    CATCH_UP, COURSE_STEPS, Drawn, IK_ROUNDS, LONGEST_STEP, MODEL_UNIT, Posed, Puppet, QUIET, QUIET_TIME,
+    clip_course,
 };
 pub use crate::quality::{Class, Quality, Why};
 pub use crate::released::{newer_manifest_keys, newer_scene_keys};

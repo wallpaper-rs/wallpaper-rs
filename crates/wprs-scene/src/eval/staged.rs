@@ -111,8 +111,8 @@ pub(crate) fn after<'a>(
                 let q = (frame.quality == crate::Quality::Q0).then_some(30);
                 cx.paced(if p.dirty { crate::Wake::Frame } else { p.wake }, q);
             }
-            if let Some(t) = pose.map(|p| p.travel).filter(|t| *t != [0.0; 3]) {
-                matrix = mul4(&matrix, &placement(t, [0.0; 3], [1.0; 3]));
+            if let Some(t) = pose.map(|p| p.travel).filter(|t| *t != crate::rigged::math::IDENTITY) {
+                matrix = mul4(&matrix, &crate::eye::widen(&t));
             }
             let start = frame.looks.len();
             looks::looks(cx, model, m, frame.quality, &mut frame.looks);
