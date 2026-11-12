@@ -1069,8 +1069,9 @@ msgid "Grow near edges (px)"
 msgstr "Ensanchar los bordes cercanos (px)"
 
 #: apps/wprs-app/qml/EditDepth.qml apps/wprs-app/qml/SceneImportSheet.qml
-#: apps/wprs-app/qml/SceneLayerFiles.qml apps/wprs-app/qml/SceneMeta.qml
-#: apps/wprs-app/qml/SceneOffer.qml apps/wprs-app/qml/facade/Labels.qml
+#: apps/wprs-app/qml/SceneLayerFiles.qml apps/wprs-app/qml/SceneMapSlot.qml
+#: apps/wprs-app/qml/SceneMeta.qml apps/wprs-app/qml/SceneOffer.qml
+#: apps/wprs-app/qml/facade/Labels.qml
 msgid "Pictures"
 msgstr "Imágenes"
 
@@ -4435,6 +4436,10 @@ msgstr "Solo estos huesos"
 msgid "Add a layer playing…"
 msgstr "Añadir una capa que reproduzca…"
 
+#: apps/wprs-app/qml/SceneAssetChoice.qml
+msgid "Which asset"
+msgstr "Qué recurso"
+
 #: apps/wprs-app/qml/SceneAssets.qml
 msgid "cube map, shown as a panorama"
 msgstr "mapa cúbico, visto como panorama"
@@ -6289,6 +6294,40 @@ msgstr "Pintar la luz propia sobre la vista previa"
 msgid "Gray"
 msgstr "Gris"
 
+#: apps/wprs-app/qml/SceneMapPaint.qml
+msgid "Paint the map %1"
+msgstr "Pintar el mapa %1"
+
+#: apps/wprs-app/qml/SceneMapPaint.qml apps/wprs-app/qml/SceneModelTurn.qml
+#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmStart.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Size"
+msgstr "Tamaño"
+
+#: apps/wprs-app/qml/SceneMapSlot.qml
+msgid "Choose or replace this map"
+msgstr "Elegir o reemplazar este mapa"
+
+#: apps/wprs-app/qml/SceneMapSlot.qml
+msgid "(none)"
+msgstr "(ninguno)"
+
+#: apps/wprs-app/qml/SceneMapSlot.qml
+msgid "Read as colors: import it as data"
+msgstr "Se lee como colores: impórtalo como datos"
+
+#: apps/wprs-app/qml/SceneMapSlot.qml
+msgid "The map of the file"
+msgstr "El mapa del archivo"
+
+#: apps/wprs-app/qml/SceneMapSlot.qml
+msgid "Picture from a file…"
+msgstr "Imagen desde un archivo…"
+
+#: apps/wprs-app/qml/SceneMapSlot.qml
+msgid "Paint this map…"
+msgstr "Pintar este mapa…"
+
 #: apps/wprs-app/qml/SceneMask.qml
 msgid "Paint"
 msgstr "Pintar"
@@ -6384,10 +6423,6 @@ msgstr "Metal"
 #: apps/wprs-app/qml/SceneMaterial3d.qml
 msgid "Relief"
 msgstr "Relieve"
-
-#: apps/wprs-app/qml/SceneMaterial3d.qml
-msgid "(none)"
-msgstr "(ninguno)"
 
 #: apps/wprs-app/qml/SceneMaterialShade.qml
 msgid "Shells"
@@ -6672,12 +6707,6 @@ msgstr ""
 #: apps/wprs-app/qml/SceneModelTurn.qml
 msgid "The rotation follows a binding; change it in the inspector"
 msgstr "El giro sigue un enlace; cámbialo en el inspector"
-
-#: apps/wprs-app/qml/SceneModelTurn.qml apps/wprs-app/qml/SceneSwarmKin.qml
-#: apps/wprs-app/qml/SceneSwarmStart.qml
-#: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Size"
-msgstr "Tamaño"
 
 #: apps/wprs-app/qml/SceneModelTurn.qml
 msgid "Drag away from the model to make it bigger"

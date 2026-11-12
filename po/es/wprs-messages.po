@@ -951,7 +951,7 @@ msgstr "el color de una luz es #rrggbb o [r, g, b, a]"
 msgid "the light %1 is not shown"
 msgstr "la luz %1 no se muestra"
 
-#: crates/wprs-editor/src/lamps/lit.rs
+#: crates/wprs-editor/src/lamps/lit.rs crates/wprs-editor/src/stage3d/maps.rs
 msgid "%1 is not a picture of the scene"
 msgstr "%1 no es una imagen de la escena"
 
@@ -1961,11 +1961,18 @@ msgstr "solo las capas planas prueban la profundidad"
 msgid "only layers inside a 3D group test depth"
 msgstr "solo las capas dentro de un grupo 3D prueban la profundidad"
 
+#: crates/wprs-editor/src/stage3d/maps.rs
+#: crates/wprs-editor/src/stage3d/painted.rs
+msgid ""
+"%1 is not a map of a material; use base, orm, normal, occlusion or emissive"
+msgstr "%1 no es un mapa de un material; usa base, orm, normal, occlusion o emissive"
+
 #: crates/wprs-editor/src/stage3d/material.rs
 msgid "a material color is #rrggbb or [r, g, b, a]"
 msgstr "un color de material es #rrggbb o [r, g, b, a]"
 
 #: crates/wprs-editor/src/stage3d/material.rs
+#: crates/wprs-editor/src/stage3d/painted.rs
 msgid "the model has no material named %1"
 msgstr "el modelo no tiene ningún material llamado %1"
 
@@ -1988,6 +1995,10 @@ msgstr "solo los materiales de croma llevan un color clave"
 #: crates/wprs-editor/src/stage3d/newmat.rs
 msgid "there is already a shader named %1"
 msgstr "ya hay un shader llamado %1"
+
+#: crates/wprs-editor/src/stage3d/painted.rs
+msgid "a stroke of a map has 1 to %1 points and a color of numbers"
+msgstr "un trazo de un mapa tiene de 1 a %1 puntos y un color hecho de números"
 
 #: crates/wprs-editor/src/stage3d/paths.rs
 msgid "there is no camera path \"%1\""
