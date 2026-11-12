@@ -54,6 +54,13 @@ impl Runtime {
         }
     }
 
+    pub fn set_device(&self, tier: crate::Tier, phone: bool) {
+        let unit = crate::triangle_unit(tier, phone);
+        if self.unit.replace(unit) != unit {
+            self.costs.set(Default::default());
+        }
+    }
+
     pub fn cost(&self, quality: Quality) -> f32 {
         let at = Arc::as_ptr(&self.scene) as usize;
         let (kept, mut costs) = self.costs.get();
@@ -61,8 +68,9 @@ impl Runtime {
         let cost = *costs[quality as usize].get_or_insert_with(|| {
             let magnify = self.magnify.get();
             let lent = self.glow[0].as_deref().filter(|_| self.scene.canvas.bloom.is_none());
-            let copies = self.scene.copies_cost(self.spawned().chain(lent), quality, magnify);
-            self.scene.priced(quality, false, magnify) + copies
+            let unit = self.unit.get();
+            let copies = self.scene.copies_cost(self.spawned().chain(lent), quality, (magnify, unit));
+            self.scene.priced(quality, false, (magnify, unit)) + copies
         });
         self.costs.set((at, costs));
         cost

@@ -28,6 +28,7 @@ impl Stage {
         let budget = Budget { choice, saver, ..Budget::new(tier, !power.charging, cap.max(1)) };
         self.runtime.set_battery(!power.charging);
         self.runtime.set_magnify(self.runtime.scene.magnify(size));
+        self.runtime.set_device(tier, true);
         self.heavy = budget.choice.is_auto() && (budget.crowded(&self.runtime) || self.pilot.stalled());
         let turned = std::mem::replace(&mut self.posed, self.heavy) != self.heavy;
         if turned && self.heavy {

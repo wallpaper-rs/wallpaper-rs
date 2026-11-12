@@ -2426,6 +2426,7 @@ wprs-ctl scene bench escena.wpak --quality auto --paced 30   # 30 s en tiempo re
 WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh build && WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh copy escena.wpak
 WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh run escena.wpak --level q3 --passes   # el mismo banco en el teléfono, en JSON
 WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh run escena.wpak --level auto --paced 30 --pace smooth   # el automático sin bajar el ritmo
+WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh costs   # lo que cuesta la etapa 3D en el teléfono: unidad, modelos y mapas de sombras
 ```
 
 En la página *Ajustes* de la app, el botón *Ajustes de la escena* (o *Ajustes del vídeo*) de cada

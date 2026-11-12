@@ -11,6 +11,7 @@ mod kit;
 mod limits;
 mod pictures;
 mod posing;
+mod priced;
 mod reading;
 mod swaying;
 mod walking;

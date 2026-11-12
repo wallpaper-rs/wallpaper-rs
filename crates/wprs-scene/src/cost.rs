@@ -50,12 +50,12 @@ impl Scene {
         (quality.density() * loose / shown.max(1e-6)).clamp(0.125, 1.0)
     }
 
-    fn units(&self, l: &Layer, quality: Quality, magnify: f32) -> f32 {
+    fn units(&self, l: &Layer, quality: Quality, (magnify, unit): (f32, f32)) -> f32 {
         let thin = self.thin(l, quality, magnify);
-        thin * thin * self.flat_units(l, quality)
+        thin * thin * self.flat_units(l, quality, unit)
     }
 
-    fn flat_units(&self, l: &Layer, quality: Quality) -> f32 {
+    fn flat_units(&self, l: &Layer, quality: Quality, unit: f32) -> f32 {
         let effects = l.effects.iter().filter_map(|e| {
             let d = self.effect(&e.effect)?.live(quality, e.optional)?;
             let scale = quality.effect_scale(d.class(), e.optional)? * d.scale_at(quality);
@@ -77,7 +77,7 @@ impl Scene {
         let solid = match &l.kind {
             Kind::Model(_) => {
                 let draws = 1 + self.shadow_draws();
-                (self.drawn_triangles(l, quality) * u64::from(draws)) as f32 / crate::TRIANGLE_UNIT + APART
+                (self.drawn_triangles(l, quality) * u64::from(draws)) as f32 / unit + APART
             }
             _ => 0.0,
         };
@@ -88,13 +88,13 @@ impl Scene {
         &self,
         copies: impl Iterator<Item = &'a Layer>,
         quality: Quality,
-        magnify: f32,
+        (magnify, unit): (f32, f32),
     ) -> f32 {
         let mut stack: Vec<&Layer> = copies.collect();
         let mut units = 0.0;
         while let Some(l) = stack.pop() {
             stack.extend(l.children());
-            units += if l.flat() { self.units(l, quality, magnify) } else { 0.0 };
+            units += if l.flat() { self.units(l, quality, (magnify, unit)) } else { 0.0 };
         }
         let scale = quality.render_scale_for(magnify);
         units * scale * scale
@@ -117,18 +117,24 @@ impl Scene {
     }
 
     pub fn cost_at(&self, quality: Quality, magnify: f32) -> f32 {
-        self.priced(quality, self.scripts.iter().any(|s| s.wants(crate::ScriptApi::Bloom)), magnify)
+        self.cost_on(quality, magnify, crate::TRIANGLE_UNIT)
     }
 
-    pub(crate) fn priced(&self, quality: Quality, scripted: bool, magnify: f32) -> f32 {
+    pub fn cost_on(&self, quality: Quality, magnify: f32, unit: f32) -> f32 {
+        let scripted = self.scripts.iter().any(|s| s.wants(crate::ScriptApi::Bloom));
+        self.priced(quality, scripted, (magnify, unit))
+    }
+
+    pub(crate) fn priced(&self, quality: Quality, scripted: bool, (magnify, unit): (f32, f32)) -> f32 {
         let areas = self.areas();
         let whole = self.canvas.camera.is_some();
         let area = |l: &Layer| areas.get(&std::ptr::from_ref(l)).copied().filter(|_| !whole).unwrap_or(1.0);
-        let layers = self.layers().filter(|l| l.flat()).map(|l| self.units(l, quality, magnify) * area(l));
+        let layers =
+            self.layers().filter(|l| l.flat()).map(|l| self.units(l, quality, (magnify, unit)) * area(l));
         let lit = (scripted && self.canvas.bloom.is_none())
             .then(|| crate::Canvas { bloom: Some(crate::Bloom::default()), ..self.canvas.clone() });
         let glows = crate::glow::glows(lit.as_ref().unwrap_or(&self.canvas));
-        let glow = glows[0].as_deref().map_or(0.0, |g| self.units(g, quality, magnify));
+        let glow = glows[0].as_deref().map_or(0.0, |g| self.units(g, quality, (magnify, unit)));
         let particles = self.layers().filter_map(|l| match &l.kind {
             Kind::Particles { system, .. } => self.particles.get(system),
             _ => None,

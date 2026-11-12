@@ -64,8 +64,11 @@ pub fn scene_bench(
     let tier = bench.tier.unwrap_or_else(|| r.tier());
     let magnify = runtime.scene.magnify(bench.size);
     runtime.set_magnify(magnify);
+    let phone = cfg!(target_os = "android");
+    runtime.set_device(tier, phone);
+    let unit = wprs_scene::triangle_unit(tier, phone);
     assets.sheets.iter().for_each(|(id, d)| runtime.set_sheet(id, d.clone()));
-    let fitted = Quality::fitting(|q| runtime.scene.cost_at(q, magnify), tier, tier.quality(false));
+    let fitted = Quality::fitting(|q| runtime.scene.cost_on(q, magnify, unit), tier, tier.quality(false));
     let quality = match bench.level {
         Level::Fixed(q) => q,
         Level::Fitted | Level::Auto => fitted,

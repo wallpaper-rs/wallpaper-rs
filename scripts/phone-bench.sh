@@ -5,12 +5,15 @@ usage() {
 usage: WPRS_ADB_SERIAL=<serial> scripts/phone-bench.sh build
        WPRS_ADB_SERIAL=<serial> scripts/phone-bench.sh copy FILE.wpak...
        WPRS_ADB_SERIAL=<serial> scripts/phone-bench.sh run NAME.wpak [bench options]
+       WPRS_ADB_SERIAL=<serial> scripts/phone-bench.sh costs
        WPRS_ADB_SERIAL=<serial> scripts/phone-bench.sh clean
 Renders a scene package offscreen on a phone over adb, through the renderer of the live wallpaper,
 and prints its report as JSON with the battery temperature before and after the run.
 Options of run: --level q0|q1|q2|q3|auto|fitted, --frames N, --paced SECONDS, --fps N, --size WxH,
 --passes, --overlap, --pace detail|smooth (how --level auto may halve the rate, detail by default),
---shot FILE.png. Environment: ADB (default adb), WPRS_ABI (arm64-v8a, the
+--shot FILE.png. costs builds the render tests for the phone and runs the measurement of what the
+3D stage costs there (the_3d_stage_costs_on_this_gpu): the time of a unit and of the models and
+shadow map passes for growing triangle counts. Environment: ADB (default adb), WPRS_ABI (arm64-v8a, the
 default, or x86_64 for an emulator), WPRS_PHONE_DIR (default
 /data/local/tmp/wprs-bench), WPRS_COOL (wait until the battery is under this many degrees, default
 36), WPRS_AWAKE_TRIES (checks five minutes apart while the screen is on, default 6).
@@ -42,6 +45,15 @@ send() {
     sleep 1
   done
 }
+ndk() {
+  local home=$HOME src=$PWD cargo_home rustup_home flags
+  cargo_home=${CARGO_HOME:-$home/.cargo} rustup_home=${RUSTUP_HOME:-$home/.rustup}
+  flags=$(printf -- '--remap-path-prefix=%s=/cargo\x1f--remap-path-prefix=%s=/rustup\x1f--remap-path-prefix=%s=/build\x1f--remap-path-prefix=%s=/src' \
+    "$cargo_home" "$rustup_home" "$home" "$src")
+  CARGO_ENCODED_RUSTFLAGS=$flags \
+    CFLAGS="-ffile-prefix-map=$cargo_home=/cargo -ffile-prefix-map=$rustup_home=/rustup -ffile-prefix-map=$home=/build -ffile-prefix-map=$src=/src" \
+    cargo ndk -t "$ABI" -P 31 "$@"
+}
 tenths() { shell dumpsys battery | sed -n 's/^ *temperature: *\([0-9]*\).*/\1/p' | head -1; }
 degrees() { local t; t=$(tenths); printf '%d.%d' "$((t / 10))" "$((t % 10))"; }
 thermal() { shell dumpsys thermalservice | sed -n 's/^ *Thermal Status: *\([0-9]*\).*/\1/p' | head -1; }
@@ -65,13 +77,17 @@ cool() {
 }
 case $1 in
   build)
-    home=$HOME src=$PWD
-    cargo_home=${CARGO_HOME:-$home/.cargo} rustup_home=${RUSTUP_HOME:-$home/.rustup}
-    flags=$(printf -- '--remap-path-prefix=%s=/cargo\x1f--remap-path-prefix=%s=/rustup\x1f--remap-path-prefix=%s=/build\x1f--remap-path-prefix=%s=/src' \
-      "$cargo_home" "$rustup_home" "$home" "$src")
-    CARGO_ENCODED_RUSTFLAGS=$flags \
-      CFLAGS="-ffile-prefix-map=$cargo_home=/cargo -ffile-prefix-map=$rustup_home=/rustup -ffile-prefix-map=$home=/build -ffile-prefix-map=$src=/src" \
-      cargo ndk -t "$ABI" -P 31 build -p wprs-android --release --locked --example bench
+    ndk build -p wprs-android --release --locked --example bench
+    ;;
+  costs)
+    exe=$(ndk test -p wprs-render --test models --release --locked --no-run --message-format=json |
+      sed -n 's/.*"executable":"\([^"]*\)".*/\1/p' | tail -1)
+    [ -n "$exe" ] || { echo "the render tests did not build" >&2; exit 1; }
+    shell mkdir -p "$DIR"
+    send "$exe" "$DIR/models"
+    shell chmod 755 "$DIR/models"
+    cool
+    shell "cd $DIR && WPRS_REQUIRE_GPU=1 ./models costed --ignored --nocapture --test-threads=1"
     ;;
   copy)
     shift

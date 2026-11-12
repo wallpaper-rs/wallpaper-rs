@@ -867,12 +867,17 @@ plain still draws its own picture, and the models of the outer one then draw alo
 A model whose values do not move renders once and its picture is kept; a 3D group renders again only
 when a model, the camera, a light, the light around or the size changes, so that a still scene asks
 for no frames. The work of a model counts the triangles it draws, fur shells included, toward the
-cost of the scene, one unit for every 200 000, and again for each shadow map they are drawn into
-(the first two lights with `shadows`, six maps for a point light). That ratio was measured on a discrete
-graphics card, where 60 000 triangles took 0.29 units (a full-screen pass of 1920×1080 at 0.016 ms)
-and a directional shadow map about as much as the triangles themselves; the test
-`the_3d_stage_costs_on_this_gpu` of `crates/wprs-render/tests/models` (run with `--ignored`) prints
-those numbers for any graphics card. Device tiers take at most 50 000 triangles (T0), 150 000
+cost of the scene, and again for each shadow map they are drawn into (the first two lights with
+`shadows`, six maps for a point light). How many triangles make a unit depends on the device: the
+tier of discrete GPUs on a computer (T3) counts one unit for every 200 000, the ratio measured on a
+discrete graphics card, where 60 000 triangles took 0.29 units (a full-screen pass of 1920×1080 at
+0.016 ms) and a directional shadow map about as much as the triangles themselves. Phones, whatever
+their tier, and the lower tiers that phones reach (T0, T1 and T2, also on computers) keep the more
+prudent one unit for every 60 000 until the same measurement exists for a phone. The editor, the
+validator and `pack check` warn with the prudent unit; the daemon, the phone and `wprs-ctl scene bench`
+choose the quality with the unit of their device. The test `the_3d_stage_costs_on_this_gpu` of
+`crates/wprs-render/tests/models` (run with `--ignored`) prints those numbers for any graphics card,
+and `scripts/phone-bench.sh costs` builds it for a phone and runs it there over adb. Device tiers take at most 50 000 triangles (T0), 150 000
 (T1), 500 000 (T2) and 2 000 000 (T3), skins of at most 256 bones and shadows of 0, 0, 1 and 2 lights;
 the editor and the validator tell which tiers a scene fits. A tier shows the poster of a scene whose
 models draw more triangles than it takes at the lowest quality, where fur keeps a quarter of its

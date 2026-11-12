@@ -1,6 +1,11 @@
 use crate::{Kind, Layer, Model, Quality, Scene, Value, fur_shells};
 
-pub const TRIANGLE_UNIT: f32 = 200_000.0;
+pub const TRIANGLE_UNIT: f32 = 60_000.0;
+pub const MEASURED_TRIANGLE_UNIT: f32 = 200_000.0;
+
+pub fn triangle_unit(tier: crate::Tier, phone: bool) -> f32 {
+    if phone || tier < crate::Tier::T3 { TRIANGLE_UNIT } else { MEASURED_TRIANGLE_UNIT }
+}
 
 fn layers(m: &crate::Material) -> u32 {
     match m.params.get("layers") {

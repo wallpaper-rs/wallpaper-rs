@@ -27,7 +27,7 @@ pub use crate::custom::{
 };
 pub use crate::document::{Color, Scene, SceneError};
 pub use crate::drafted::{DEBUG_VIEWS, Drafted};
-pub use crate::drawn::TRIANGLE_UNIT;
+pub use crate::drawn::{MEASURED_TRIANGLE_UNIT, TRIANGLE_UNIT, triangle_unit};
 pub use crate::easing::Ease;
 pub use crate::effects::{
     BLEND_WGSL, Cost, Descriptor, Entry, FRAME_WGSL, FX_SLOTS, Form, Fuse, GENERIC_PICTURES, Grab, Hold,

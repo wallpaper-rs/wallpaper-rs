@@ -54,17 +54,19 @@ fn spent(rows: &[(String, f64)], what: &str) -> f64 {
 #[ignore]
 fn the_3d_stage_costs_on_this_gpu() {
     let Some(r) = renderer() else { return };
+    let (level, phone) = (r.tier(), cfg!(target_os = "android"));
+    let priced = wprs_scene::triangle_unit(level, phone);
     r.force_tier(Some(Tier::T3));
     let unit = r.unit_ms(WIDE, 16).unwrap();
-    eprintln!("adapter {:?}: a unit is {unit:.4} ms", r.adapter());
+    eprintln!("adapter {:?}, level {level:?}, phone {phone}: a unit is {unit:.4} ms", r.adapter());
+    eprintln!("the cost model prices this device at one unit per {priced} triangles");
     for (count, segments) in [(4, 64), (16, 64), (16, 128), (16, 256)] {
         for shadows in [false, true] {
             let (triangles, rows) = passes(r, staged(count, segments, shadows));
             let (models, maps) = (spent(&rows, "3d models"), spent(&rows, "3d shadow maps"));
-            let per = models / unit / (triangles as f64 / f64::from(wprs_scene::TRIANGLE_UNIT));
+            let per = models / unit / (triangles as f64 / 60_000.0);
             eprintln!(
-                "{count} balls of {segments} segments, {triangles} triangles, shadows {shadows}: models {models:.4} ms, shadow maps {maps:.4} ms, {per:.3} units per {} triangles",
-                wprs_scene::TRIANGLE_UNIT
+                "{count} balls of {segments} segments, {triangles} triangles, shadows {shadows}: models {models:.4} ms, shadow maps {maps:.4} ms, {per:.3} units per 60000 triangles"
             );
         }
     }

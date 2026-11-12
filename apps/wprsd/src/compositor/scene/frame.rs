@@ -67,6 +67,7 @@ impl SceneState {
         view.light(self.lit);
         view.show_shift(self.spec.pack.shift);
         self.runtime.set_magnify(view.magnify(size));
+        self.runtime.set_device(renderer.tier(), false);
         let inner = view.inner(renderer, size, quality);
         let rect = view.view(inner);
         let presses = std::mem::take(&mut self.presses);
