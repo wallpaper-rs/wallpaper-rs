@@ -64,7 +64,7 @@ async fn asks(
     }
     let slow = after.outputs.iter().filter(|(name, o)| ours(name) && o.particles == "cpu");
     let slow = slow.map(|(name, _)| format!("{name}: {}", tr(SLOW)));
-    let sandbox = crate::levels::sandbox_lines(&after.outputs, &ours);
+    let sandbox = crate::levels::sandbox_lines(&after.outputs, ours);
     let asks = requests(&reply, &ours, only);
     Ok(asks.into_iter().chain(slow).chain(sandbox).collect())
 }
