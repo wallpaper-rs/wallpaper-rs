@@ -2018,6 +2018,10 @@ msgid "Start the particle systems and the scene again"
 msgstr "Volver a empezar los sistemas de partículas y la escena"
 
 #: apps/wprs-ctl/src/folder.rs
+msgid "Start from this preset of the package before --values"
+msgstr "Partir de este preajuste del paquete antes de aplicar --values"
+
+#: apps/wprs-ctl/src/folder.rs
 msgid ""
 "Show it as the daemon does on battery: a lower level and the battery pace"
 msgstr ""
@@ -3623,6 +3627,10 @@ msgstr ""
 #: apps/wprs-ctl/src/media.rs
 msgid "Stop the simulated playback"
 msgstr "Detener la reproducción simulada"
+
+#: apps/wprs-ctl/src/media.rs
+msgid "JSON file of setting values to try in the preview only, such as {\"speed\": 2}; nothing is saved"
+msgstr "Archivo JSON con valores de ajustes para probar solo en la vista previa, como {\"speed\": 2}; no se guarda nada"
 
 #: apps/wprs-ctl/src/media.rs
 msgid ""

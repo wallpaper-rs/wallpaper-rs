@@ -340,6 +340,17 @@ same `SimulateMedia` call `wprs-ctl media simulate` makes; until the package is 
 tab says so instead. `wprs-ctl scene preview DIR --media FILE.json` shows the track in the preview
 of a page from a terminal.
 
+The *Try* tab of the scene editor (and of a page package) shows the user properties of the manifest
+with the same widget as the settings of a shown package, followed by the presets of the package. Choosing
+a preset or changing a value sets `values` and `preset` in the look of the editor, and the preview
+document carries the merged map in `preview.values` (`PreviewScene` in `dbus.md`): the daemon shows the
+package with those values, over the defaults of its properties, instead of the values saved for the
+package, and never writes them anywhere. Secret texts and buttons are left out. *Back to the defaults*
+ends the trial. `wprs-ctl scene preview DIR --values FILE.json [--preset ID]` does the same from a
+terminal; the file is a JSON object of property ids and values and `--preset` names a preset of the
+manifest whose values the file then overrides. `rig` with `{"tried": {...}}` returns the form
+(`fields`, `presets`, `values`) that the tab draws.
+
 Test the pointer and clicks, a toggle of the canvas toolbar, turns the mouse over the preview into
 a made-up pointer on it instead of an editing tool: while it is on, moving or pressing over the
 preview calls `SimulateTouch` (`dbus.md`) with the position as fractions of the output and the

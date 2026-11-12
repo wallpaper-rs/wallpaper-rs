@@ -74,6 +74,20 @@ pub(crate) fn split(document: &str) -> (String, Option<Value>) {
     }
 }
 
+pub(crate) fn values(document: String) -> (String, Option<crate::sceneprops::Stored>) {
+    if !document.contains("\"values\"") {
+        return (document, None);
+    }
+    let Ok(mut doc) = serde_json::from_str::<Value>(&document) else { return (document, None) };
+    let Some(tried) = doc["preview"].as_object_mut().and_then(|p| p.remove("values")) else {
+        return (document, None);
+    };
+    let stored = tried
+        .as_object()
+        .map(|o| o.iter().filter_map(|(k, v)| Some((k.clone(), crate::sceneprops::stored(v)?))).collect());
+    (doc.to_string(), stored)
+}
+
 pub(crate) fn frame(dir: &Path, media: Value) -> Result<Frame> {
     let s: Simulated =
         serde_json::from_value(media).map_err(|e| invalid(format!("the simulated media player: {e}")))?;

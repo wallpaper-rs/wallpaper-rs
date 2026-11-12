@@ -146,6 +146,7 @@ impl SceneEditor {
             if let Some(staged) = wprs_editor::rigs::staged(&look) {
                 document["preview"] = staged;
             }
+            wprs_editor::tried::stage(&project.doc, &look, &mut document);
             document
         };
         let document = document.to_string();

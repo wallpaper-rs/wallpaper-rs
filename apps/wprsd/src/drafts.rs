@@ -35,6 +35,15 @@ pub(crate) fn previews(
     shown.map(|(name, s)| (name.clone(), state(s))).collect()
 }
 
+pub(crate) fn layers<'a>(
+    config: &'a wprs_core::Config,
+    tried: Option<&'a crate::sceneprops::Stored>,
+    output: &str,
+    package: &str,
+) -> Vec<&'a crate::sceneprops::Stored> {
+    tried.map_or_else(|| config.scene_values(output, package), |t| vec![t])
+}
+
 pub(crate) fn forget_previews(config: &mut wprs_core::Config) -> bool {
     let before = config.outputs.len();
     config.outputs.retain(|name, _| !virtual_output(name));
@@ -50,6 +59,7 @@ pub(crate) fn save_config(config: &wprs_core::Config, path: &Path) -> Result<(),
 pub(crate) struct Draft {
     pub(crate) pack: Drawn,
     pub(crate) hold: Option<f64>,
+    pub(crate) values: Option<crate::sceneprops::Stored>,
     document: String,
     trusted: bool,
     at: Instant,
@@ -73,6 +83,7 @@ impl Daemon {
         };
         ensure!(document.len() <= MAX_DOCUMENT, invalid("the scene is too large"));
         let (document, simulated) = media::split(document);
+        let (document, tried) = media::values(document);
         let document = document.as_str();
         let simulated = simulated.map(|m| media::frame(dir, m).map(Arc::new)).transpose()?;
         let hold =
@@ -107,12 +118,13 @@ impl Daemon {
                 match &pack {
                     Some(pack) => {
                         let old = st.drafts.get(output);
-                        let kept = old.is_some_and(|d| d.pack.same(pack) && d.hold == hold);
+                        let kept =
+                            old.is_some_and(|d| d.pack.same(pack) && d.hold == hold && d.values == tried);
                         if kept && old.is_some_and(|d| again::restarted(&d.document, document)) {
                             again.push(output.clone());
                         }
                         let (pack, document, at) = (pack.clone(), document.into(), Instant::now());
-                        let draft = Draft { pack, hold, document, trusted, at };
+                        let draft = Draft { pack, hold, values: tried.clone(), document, trusted, at };
                         started |= st.drafts.insert(output.clone(), draft).is_none();
                     }
                     None => drop(st.drafts.remove(output)),

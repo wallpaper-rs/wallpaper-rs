@@ -11,6 +11,8 @@ QtObject {
     property bool versusGlow: false
     readonly property string effective: battery && levels.indexOf(quality) > 2 ? "q2" : quality
     property var media: null
+    property var values: null
+    property string preset: ""
     readonly property var sample: ({
             "title": "Night Drive",
             "artist": "Example Artist",
@@ -35,12 +37,38 @@ QtObject {
             look.media = media;
         else
             delete look.media;
+        if (values !== null || preset !== "") {
+            look.values = values ?? {};
+            look.preset = preset;
+        } else {
+            delete look.values;
+            delete look.preset;
+        }
         page.editor.look = JSON.stringify(look);
         page.editor.seek(page.clock, page.editor.playing);
     }
 
     function again(page) {
         restart += 1;
+        preview(page);
+    }
+
+    function tryValue(page, key, value) {
+        const next = Object.assign({}, values ?? {});
+        next[key] = value;
+        values = next;
+        preview(page);
+    }
+
+    function tryPreset(page, id) {
+        values = {};
+        preset = id;
+        preview(page);
+    }
+
+    function untry(page) {
+        values = null;
+        preset = "";
         preview(page);
     }
 }

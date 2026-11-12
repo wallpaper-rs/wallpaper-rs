@@ -83,6 +83,7 @@ fn body(dir: &Path, doc: &Value, layer: &Value) -> Value {
 
 pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
     match () {
+        _ if q.get("tried").is_some() => crate::tried::query(doc, &q["tried"]),
         _ if q.get("weights").is_some() => heat(dir, doc, id, q["weights"].as_str()),
         _ if q.get("pose").is_some() => pose(dir, doc, id, &q["pose"]),
         _ if q.get("keys").is_some() => keys(dir, doc, id, q["keys"].as_str().unwrap_or_default()),

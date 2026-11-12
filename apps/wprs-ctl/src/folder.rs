@@ -1,4 +1,5 @@
 use crate::author::DIR;
+use crate::media::VALUES;
 use anyhow::{Context, Result, ensure};
 use clap::Subcommand;
 use std::fs;
@@ -65,6 +66,10 @@ pub enum Folder {
         calm: bool,
         #[arg(long, value_name = "FILE", help = crate::media::MEDIA)]
         media: Option<PathBuf>,
+        #[arg(long, value_name = "FILE", help = VALUES)]
+        values: Option<PathBuf>,
+        #[arg(long, value_name = "ID", help = "Start from this preset of the package before --values")]
+        preset: Option<String>,
         #[arg(
             long,
             conflicts_with = "stop",
@@ -135,7 +140,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             crate::spanning::preview(&dir, &span, (time >= 0.0).then_some(time))?
         }
         Folder::Preview {
-            dir, output, time, stop, quality, restart, battery, calm, media, console, ..
+            dir, output, time, stop, quality, restart, battery, calm, media, console, values, preset, ..
         } => {
             let project = Project::open(&dir)?;
             let document = crate::media::preview_document(
@@ -145,6 +150,7 @@ pub(crate) fn run(command: Folder) -> Result<()> {
                 restart,
                 media,
                 [battery, calm],
+                (values, preset),
             )?
             .to_string();
             let (dir, document) = (fs::canonicalize(&dir)?, if stop { String::new() } else { document });

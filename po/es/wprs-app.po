@@ -3141,6 +3141,10 @@ msgstr "Propiedades"
 msgid "Preview"
 msgstr "Vista previa"
 
+#: apps/wprs-app/qml/PackageMiddle.qml apps/wprs-app/qml/SceneSide.qml
+msgid "Try"
+msgstr "Probar"
+
 #: apps/wprs-app/qml/PackageNetwork.qml
 msgid ""
 "The page may reach these https origins once the user allows the network; "
@@ -9630,6 +9634,22 @@ msgstr "le falta %1"
 #: apps/wprs-app/qml/SceneUses.qml
 msgid "Adds %1 to the uses of the script"
 msgstr "Agrega %1 a los usos del script"
+
+#: apps/wprs-app/qml/SceneTry.qml
+msgid "Try the settings of the package in the preview. Only the preview shows them: nothing is saved and no screen changes."
+msgstr "Prueba los ajustes del paquete en la vista previa. Solo la vista previa los muestra: no se guarda nada y ninguna pantalla cambia."
+
+#: apps/wprs-app/qml/SceneTry.qml
+msgid "Package defaults"
+msgstr "Valores del paquete"
+
+#: apps/wprs-app/qml/SceneTry.qml
+msgid "Back to the defaults"
+msgstr "Volver a los valores por defecto"
+
+#: apps/wprs-app/qml/SceneTry.qml
+msgid "The package declares no properties to try."
+msgstr "El paquete no declara propiedades para probar."
 
 #: apps/wprs-app/qml/SceneWakeRules.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml

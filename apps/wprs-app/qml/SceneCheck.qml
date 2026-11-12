@@ -179,6 +179,9 @@ QtObject {
                 Qt.createComponent("SceneSettingsCheck.qml").createObject(page, {
                     "page": page
                 }).exercise();
+                Qt.createComponent("SceneTryCheck.qml").createObject(page, {
+                    "page": page
+                }).exercise();
             }
             page.jump("/scene/layers/0/opacity");
             page.editor.seek(0.5, false);

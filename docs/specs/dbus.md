@@ -445,7 +445,11 @@ manifest `kind` is `web`, `document` is `{"manifest": …, "preview": …}` and 
 the page: the daemon packs it into a temporary package with that manifest (without changing the
 folder) and shows it like a library page; `preview.quality` (`q0` to `q2`) runs it at that level,
 `preview.fps` caps its frames, a new `preview.restart` builds it again, and `preview.media` is a
-made-up track for `window.wprs.onMedia`. The lines the page writes to `console` and its errors are
+made-up track for `window.wprs.onMedia`. For a scene or a page, `preview.values` is a map of user
+property values (property id to JSON value) that the preview uses instead of the values saved for the
+package: properties it leaves out take their defaults, and an unknown or invalid value is treated as
+in the saved settings. Nothing of it is saved, and a call with another map shows the package again
+without building it again. The lines the page writes to `console` and its errors are
 in `GetState().previews[x].console` of a `preview:` output. A `time` of 0 or more
 holds the scene at that second (up to 86400, a day), as a still frame that only renders again when the call changes;
 a negative `time` plays it. The scene is checked for what it needs to render: the id, the user

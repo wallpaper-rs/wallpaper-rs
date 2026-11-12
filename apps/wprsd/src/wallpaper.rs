@@ -35,14 +35,15 @@ impl Daemon {
         let display = image.as_deref().map(crate::look::display).unwrap_or_default();
         let shown = image.as_deref().map(|_| crate::look::look(chosen, || crate::look::author(&display)));
         (resolved.fit, resolved.background) = shown.unwrap_or((resolved.fit, resolved.background));
-        let draft = self.state().drafts.get(output).map(|d| (d.pack.clone(), d.hold));
+        let draft = self.state().drafts.get(output).map(|d| (d.pack.clone(), d.hold, d.values.clone()));
         if draft.is_some() {
             transition = Some(Duration::ZERO);
         }
+        let tried = draft.as_ref().and_then(|d| d.2.clone());
         let (hold, page_quality) =
             (draft.as_ref().and_then(|d| d.1), draft.as_ref().and_then(|d| d.0.quality()));
         let media = match &draft {
-            Some((d, _)) => Some(Ok(d.media())),
+            Some((d, _, _)) => Some(Ok(d.media())),
             None => image.clone().map(|image| self.media(image)),
         };
         let (mut shown_scene, mut shown_video, mut turn, mut fit) = (None, None, None, resolved.fit);
@@ -66,7 +67,7 @@ impl Daemon {
             Some(Ok(Media::Scene(pack))) => {
                 let (values, stale) = {
                     let st = self.state();
-                    let stored = st.config.scene_values(output, &pack.props.id);
+                    let stored = crate::drafts::layers(&st.config, tried.as_ref(), output, &pack.props.id);
                     (pack.props.values(&stored), pack.props.stale(&stored))
                 };
                 stale.iter().for_each(|w| tracing::warn!(output, scene = pack.props.id, "{w}"));
@@ -79,7 +80,7 @@ impl Daemon {
                 (Content::Scene(SceneSpec { pack, values, extra, clips, hold, moving, quality, span }), None)
             }
             Some(Ok(Media::Web(pack))) => {
-                (Content::Web(self.page_on(output, pack, &mut shown_video, page_quality)), None)
+                (Content::Web(self.page_on(output, pack, &mut shown_video, (page_quality, tried))), None)
             }
             Some(Ok(Media::Picture(file))) => {
                 match self.picture(output, file, (size, resolved.fit), uploaded) {

@@ -32,6 +32,10 @@ ColumnLayout {
         QQC2.TabButton {
             text: App.tr("Player")
         }
+
+        QQC2.TabButton {
+            text: App.tr("Try")
+        }
     }
 
     StackLayout {
@@ -56,6 +60,10 @@ ColumnLayout {
         }
 
         SceneMedia {
+            page: panel.page
+        }
+
+        SceneTry {
             page: panel.page
         }
     }

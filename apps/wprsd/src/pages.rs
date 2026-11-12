@@ -151,9 +151,14 @@ impl Daemon {
         output: &str,
         pack: Arc<WebPack>,
         shown: &mut Option<Arc<Props>>,
-        drafted: Option<Option<wprs_core::QualityChoice>>,
+        (drafted, tried): (Option<Option<wprs_core::QualityChoice>>, Option<crate::sceneprops::Stored>),
     ) -> PageSpec {
-        let values = pack.props.values(&self.state().config.scene_values(output, &pack.props.id));
+        let values = pack.props.values(&crate::drafts::layers(
+            &self.state().config,
+            tried.as_ref(),
+            output,
+            &pack.props.id,
+        ));
         *shown = Some(pack.props.clone());
         let quality = drafted.unwrap_or_else(|| self.state().config.own_quality(output));
         PageSpec { quality, ..self.page_spec(pack, values) }

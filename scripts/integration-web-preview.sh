@@ -45,6 +45,18 @@ ctl scene preview "$folder" -o preview:authored --media "$folder/flood.json" || 
 wait_for 20 consoled "page-flood-line" || fail "the flood never reached the preview"
 wait_for 30 consoled "page-late-line" || fail "a late line was lost after a flood: $(field "s['previews']['preview:authored']['console']")"
 [ "$(field "len(s['previews']['preview:authored']['console'])")" -le 50 ] || fail "the preview kept more than 50 lines"
+cat >>"$folder/app.js" <<'PAGE'
+wprs.onProperties((p) => { if (p.speed !== undefined) console.log("tried-speed " + p.speed); });
+PAGE
+ctl scene set "$folder" /manifest/properties '{"speed": {"type": "slider", "min": 0, "max": 10, "default": 2}}' >/dev/null
+ctl scene set "$folder" /manifest/presets '[{"id": "calm", "values": {"speed": 3}}]' >/dev/null
+printf '{"speed": 7}\n' >"$folder/values.json"
+ctl scene preview "$folder" -o preview:authored --restart --values "$folder/values.json" || fail "the page was not previewed with values"
+wait_for 20 consoled "tried-speed 7" || fail "the tried value did not reach the page: $(field "s['previews']['preview:authored']['console']")"
+ctl scene preview "$folder" -o preview:authored --restart --preset calm || fail "the page was not previewed with a preset"
+wait_for 20 consoled "tried-speed 3" || fail "the preset did not reach the page: $(field "s['previews']['preview:authored']['console']")"
+printf '[1]\n' >"$folder/values.json"
+if ctl scene preview "$folder" -o preview:authored --values "$folder/values.json" 2>/dev/null; then fail "values that are no object were accepted"; fi
 ctl config rgb.server "127.0.0.1:$openrgb" >/dev/null
 ctl config rgb.enabled true
 sleep 1

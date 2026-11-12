@@ -99,6 +99,7 @@ mod tidy;
 mod timelines;
 pub mod touch;
 pub mod usage;
+pub mod tried;
 
 pub use actions::{ACTIONS, Action};
 pub use findings::{Problem, told, told_with};

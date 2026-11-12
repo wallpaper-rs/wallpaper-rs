@@ -39,6 +39,10 @@ ColumnLayout {
                 text: middle.titles[modelData]
             }
         }
+
+        QQC2.TabButton {
+            text: App.tr("Try")
+        }
     }
 
     StackLayout {
@@ -65,6 +69,10 @@ ColumnLayout {
         }
 
         PackagePreview {
+            page: middle.page
+        }
+
+        SceneTry {
             page: middle.page
         }
     }

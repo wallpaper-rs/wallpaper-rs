@@ -71,6 +71,9 @@ pub async fn run(client: &Client, command: Media) -> Result<()> {
     Ok(())
 }
 
+pub const VALUES: &str =
+    "JSON file of setting values to try in the preview only, such as {\"speed\": 2}; nothing is saved";
+
 pub const MEDIA: &str = "JSON file of a made-up track shown instead of a media player: title, artist, album, album_artist, subtitle, genres, playing, position, duration, rate and cover (a picture of the folder)";
 
 pub(crate) fn preview_document(
@@ -80,11 +83,13 @@ pub(crate) fn preview_document(
     restart: bool,
     media: Option<std::path::PathBuf>,
     [battery, calm]: [bool; 2],
+    tried: (Option<std::path::PathBuf>, Option<String>),
 ) -> Result<Value> {
     let nonce = restart.then(|| std::time::UNIX_EPOCH.elapsed().map_or(1, |d| d.as_millis() as u64));
     let media = media.map(|f| simulated(&f)).transpose()?;
-    let look =
-        json!({ "quality": quality, "restart": nonce, "media": media, "battery": battery, "calm": calm });
+    let values = tried.0.map(|f| read_values(&f)).transpose()?;
+    let look = json!({ "quality": quality, "restart": nonce, "media": media, "battery": battery, "calm": calm,
+        "values": values, "preset": tried.1 });
     if wprs_editor::pages::paged(doc) {
         return Ok(wprs_editor::pages::preview_document(doc, &look));
     }
@@ -94,5 +99,15 @@ pub(crate) fn preview_document(
     let mut document = json!({"manifest": doc["manifest"], "scene": wprs_editor::actions::visible(doc)});
     wprs_editor::scripts::stamped(&mut document["scene"], dir, doc);
     wprs_editor::rigs::staged(&look).into_iter().for_each(|s| document["preview"] = s);
+    wprs_editor::tried::stage(doc, &look, &mut document);
     Ok(document)
+}
+
+fn read_values(file: &std::path::Path) -> Result<Value> {
+    let text =
+        std::fs::read_to_string(file).map_err(|e| anyhow::anyhow!("cannot read {}: {e}", file.display()))?;
+    let values: Value =
+        serde_json::from_str(&text).map_err(|e| anyhow::anyhow!("{}: {e}", file.display()))?;
+    anyhow::ensure!(values.is_object(), "{} is not a JSON object of setting values", file.display());
+    Ok(values)
 }

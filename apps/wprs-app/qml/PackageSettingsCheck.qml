@@ -118,6 +118,9 @@ QtObject {
 
     function exercise() {
         web();
+        Qt.createComponent("SceneTryCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         lights();
         media();
         properties();

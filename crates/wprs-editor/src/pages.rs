@@ -23,6 +23,7 @@ pub fn paged(doc: &Value) -> bool {
 pub fn preview_document(doc: &Value, look: &Value) -> Value {
     let mut document = json!({"manifest": doc["manifest"]});
     crate::rigs::staged(look).into_iter().for_each(|s| document["preview"] = s);
+    crate::tried::stage(doc, look, &mut document);
     document
 }
 

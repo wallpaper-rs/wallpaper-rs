@@ -55,3 +55,18 @@ fn a_simulated_cover_is_a_picture_inside_the_scene_folder() {
     }
     assert!(frame(dir.path(), json!({"cover": ""})).unwrap().cover.is_none());
 }
+
+#[test]
+fn tried_values_leave_the_document_and_drop_the_empty_ones() {
+    let doc = json!({"scene": {}, "preview": {"quality": "q1", "values": {"speed": 2.5, "name": "x", "gone": null}}});
+    let (rest, tried) = super::values(doc.to_string());
+    assert_eq!(
+        serde_json::from_str::<serde_json::Value>(&rest).unwrap()["preview"],
+        json!({"quality": "q1"})
+    );
+    let tried = tried.unwrap();
+    assert_eq!(tried.len(), 2);
+    assert_eq!(tried["speed"].as_float(), Some(2.5));
+    let plain = r#"{"scene": {}}"#.to_owned();
+    assert_eq!(super::values(plain.clone()), (plain, None));
+}

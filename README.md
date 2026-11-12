@@ -1922,6 +1922,12 @@ clip a archivo, con un puntero simulado si hace falta, y se nombran los efectos 
 con *Probar el puntero y los clics*, que ahora dibuja un aro donde está el puntero y un destello en cada clic. Desde la terminal,
 `wprs-ctl scene preview CARPETA --battery --calm` y `wprs-ctl scene render CARPETA --out archivo` hacen lo mismo.
 
+La pestaña *Probar* (también en los paquetes de página) muestra las propiedades de usuario del
+manifiesto con el mismo control que los ajustes de un paquete mostrado y lista sus presets; elegir un
+preset o cambiar un valor solo cambia la vista previa, sin guardar nada ni tocar ninguna pantalla, y
+*Volver a los valores por defecto* termina la prueba. Desde la terminal,
+`wprs-ctl scene preview CARPETA --values valores.json [--preset ID]` hace lo mismo.
+
 La carátula es un recurso de imagen con `media: current` (la de lo que suena) o `media: previous`
 (la anterior), que vale donde vale una imagen; su archivo es lo que se ve mientras no suena nada o
 sin permiso. El selector de imagen del editor ofrece *Carátula de lo que suena* y *Carátula
