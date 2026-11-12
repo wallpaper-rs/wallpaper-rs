@@ -43,3 +43,16 @@ pub(super) fn skinned(scene: &Scene) -> usize {
     let models = scene.layers().filter(|l| posed(l)).filter_map(|l| scene.solids.get(l.figure()?));
     models.map(|m| m.vertex_count()).sum()
 }
+
+pub(super) fn colliders(scene: &Scene, q: Quality) -> (usize, usize) {
+    let budget = match q {
+        Quality::Q0 => 0,
+        Quality::Q1 => wprs_scene::LOW_BONE_COLLIDERS,
+        _ => wprs_scene::MAX_BONE_COLLIDERS,
+    };
+    let counts = scene.layers().filter_map(|l| match &l.kind {
+        Kind::Model(m) if !m.rig.physics.is_empty() => Some(m.rig.colliders.len()),
+        _ => None,
+    });
+    counts.fold((0, 0), |(kept, left), n| (kept + n.min(budget), left + n.saturating_sub(budget)))
+}

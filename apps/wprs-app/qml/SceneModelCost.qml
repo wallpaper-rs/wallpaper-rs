@@ -21,6 +21,8 @@ ColumnLayout {
             out.push(App.tr("fur casts the shadow of its skin only"));
         if ((row.skinned ?? 0) > 0)
             out.push(row.physics ? App.tr("%1 skinned vertices with swinging bones", row.skinned) : App.tr("%1 skinned vertices, bones keep their animation", row.skinned));
+        if ((row.colliders ?? 0) + (row.colliders_left_out ?? 0) > 0)
+            out.push(App.tr("%1 bone colliders, %2 left out", row.colliders, row.colliders_left_out));
         return out.length > 0 ? "; " + out.join(", ") : "";
     }
 

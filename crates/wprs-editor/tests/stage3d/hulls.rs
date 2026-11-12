@@ -42,6 +42,18 @@ fn colliders_of_a_model_are_added_tuned_shown_and_removed() {
         (12, &json!([-20.0, 30.0]))
     );
     assert_eq!(doll["reach"][0]["point"], json!([40.0, 30.0]));
+    for k in 0..3 {
+        collider(&mut p, json!({ "layer": "doll", "bone": "tip", "radius": 0.05 * f64::from(k + 1) }))
+            .unwrap();
+    }
+    let cost = ask(&p, json!({ "cost3d": { "quality": "q3" } }));
+    let counts: Vec<_> = (0..4)
+        .map(|q| (cost["levels"][q]["colliders"].clone(), cost["levels"][q]["colliders_left_out"].clone()))
+        .collect();
+    assert_eq!(
+        counts,
+        [(json!(0), json!(4)), (json!(2), json!(2)), (json!(4), json!(0)), (json!(4), json!(0))]
+    );
     collider(&mut p, json!({ "layer": "doll", "index": 0, "remove": true })).unwrap();
-    assert!(layer(&p, "doll").get("colliders").is_none());
+    assert_eq!(layer(&p, "doll")["colliders"].as_array().unwrap().len(), 3);
 }

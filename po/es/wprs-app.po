@@ -7598,6 +7598,10 @@ msgid "%1 skinned vertices, bones keep their animation"
 msgstr "%1 vértices con piel, los huesos mantienen su animación"
 
 #: apps/wprs-app/qml/SceneModelCost.qml
+msgid "%1 bone colliders, %2 left out"
+msgstr "%1 colisionadores de huesos, %2 fuera"
+
+#: apps/wprs-app/qml/SceneModelCost.qml
 msgid "3D models"
 msgstr "Modelos 3D"
 

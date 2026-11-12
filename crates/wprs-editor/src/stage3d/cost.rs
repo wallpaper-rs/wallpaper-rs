@@ -36,12 +36,14 @@ pub fn cost(dir: &Path, doc: &Value, quality: Quality) -> Value {
             let unit = |id: &&str| scene.layer(id).map_or(0.0, |l| scene.drawn_triangles(l, *q) as f32 / TRIANGLE_UNIT + 1.0);
             let units: f32 = shown.iter().map(|(id, _)| unit(id)).sum::<f32>() * k * k;
             let (shadows, fur) = (super::spend::shadow_texels(&scene, *q), super::spend::fur(&scene, *q));
+            let colliders = super::spend::colliders(&scene, *q);
             json!({ "quality": q, "triangles": triangles, "drawn": scene.model_triangles(*q), "pixels": round(canvas[0] * canvas[1] * k * k),
                 "units": round(units), "scene": round(scene.cost(*q)), "specular": *q > Quality::Q0,
                 "shadow_texels": shadows, "fur_shells": fur.0, "fur_triangles": fur.1,
                 "fur_shadow_triangles": if shadows > 0 && *q >= Quality::Q2 { fur.2 } else { 0 },
                 "left_out": left_out(*q, shadows, fur.2),
-                "skinned": super::spend::skinned(&scene), "physics": *q > Quality::Q0 })
+                "skinned": super::spend::skinned(&scene), "physics": *q > Quality::Q0,
+                "colliders": colliders.0, "colliders_left_out": colliders.1 })
         })
         .collect();
     let tiers: Vec<Value> = [Tier::T0, Tier::T1, Tier::T2, Tier::T3]
