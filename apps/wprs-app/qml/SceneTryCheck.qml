@@ -1,4 +1,5 @@
 import QtQuick
+import io.github.wallpaper_rs.app
 
 QtObject {
     required property var page
@@ -36,7 +37,7 @@ QtObject {
         expect(value(panel, "try_speed") === 9 && JSON.parse(page.editor.look).preset === "fast", "a preset was not tried");
         SceneLook.tryValue(page, "try_speed", 4);
         expect(value(panel, "try_speed") === 4 && JSON.parse(page.editor.look).values.try_speed === 4, "a value was not tried");
-        expect(page.manifest.properties.try_speed.default === 2, "trying a value changed the package");
+        expect(JSON.parse(page.editor.value("/manifest/properties/try_speed")).default === 2, "trying a value changed the package");
         SceneLook.untry(page);
         const look = JSON.parse(page.editor.look);
         expect(value(panel, "try_speed") === 2 && look.values === undefined && look.preset === undefined, "the defaults did not come back");

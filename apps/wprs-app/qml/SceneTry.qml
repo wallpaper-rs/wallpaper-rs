@@ -8,12 +8,12 @@ QQC2.ScrollView {
     id: tryout
 
     required property var page
-    readonly property var form: tryout.ask(tryout.page.manifest, SceneLook.values, SceneLook.preset)
+    readonly property var form: tryout.ask(tryout.page.view, SceneLook.values, SceneLook.preset)
     readonly property var fields: (form.fields ?? []).filter(field => field.visible)
     readonly property var presets: form.presets ?? []
     readonly property bool trying: SceneLook.values !== null || SceneLook.preset !== ""
 
-    function ask(manifest, values, preset) {
+    function ask(view, values, preset) {
         const language = Qt.locale().name.replace("_", "-");
         return JSON.parse(tryout.page.editor.rig("", JSON.stringify({
                 "tried": {
