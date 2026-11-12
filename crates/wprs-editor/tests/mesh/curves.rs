@@ -74,3 +74,17 @@ fn handles_are_refused_where_they_make_no_sense() {
     }
     assert_eq!(rotation(&p), json!([[0.0, 0.0], [2.0, 40.0]]));
 }
+
+#[test]
+fn the_curve_editor_moves_bends_and_reads_the_keys_of_a_clip_channel() {
+    let (_root, mut p) = keyed();
+    let channel = "/scene/layers/0/clips/0/bones/arm/rotation";
+    let pick = json!([{ "pointer": channel, "times": [2] }]);
+    act(&mut p, json!({ "keys": { "picks": pick, "in_handle": [1, -10] } })).unwrap();
+    act(&mut p, json!({ "keys": { "picks": pick, "shift": 1, "lift": 5 } })).unwrap();
+    assert_eq!(rotation(&p)[1], json!([3.0, 45.0, { "in": [1.0, -10.0] }]));
+    let curves = wprs_editor::graph::curves(&p.doc, &json!({ "pointer": channel, "samples": 4 }));
+    assert_eq!(curves["list"], json!(channel));
+    assert_eq!(curves["tracks"][0]["points"][3], json!([3.0, 45.0]));
+    assert!(serde_json::from_value::<wprs_scene::Scene>(p.doc["scene"].clone()).is_ok());
+}

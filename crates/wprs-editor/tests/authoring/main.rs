@@ -7,6 +7,7 @@ use wprs_editor::starters::starter;
 
 mod effects;
 mod events;
+mod graph;
 mod layers;
 mod marks;
 mod masking;

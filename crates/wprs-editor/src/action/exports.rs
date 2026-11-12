@@ -19,4 +19,4 @@ pub use super::solid::{
 };
 pub use super::sow::SowEdit;
 pub use super::swarm::{ParticleEdit, Response, Strand, SwarmLight, TendEdit};
-pub use super::timing::{KeyframeEdit, TimelineEdit, TimelineEvent};
+pub use super::timing::{KeyPick, KeyframeEdit, KeysEdit, TimelineEdit, TimelineEvent};

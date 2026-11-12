@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 71] = [
+pub const ABOUT: [(&str, &str); 72] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),
@@ -45,6 +45,10 @@ pub const ABOUT: [(&str, &str); 71] = [
     ("auto_weights", "Compute the weights of the bones on a mesh"),
     ("clip", "Create, change or remove an animation clip of a rig"),
     ("key", "Set or remove a key of a bone in a clip"),
+    (
+        "keys",
+        "Edit keys picked in the curve editor: move, scale, lift or set a part of them, bend or straighten handles, remove, or paste copied keys",
+    ),
     ("expression", "Add, change or remove a facial expression of a rig"),
     ("ik", "Add, change or remove an inverse kinematics chain"),
     ("physics", "Make bones follow physics: stiffness, damping and mode"),

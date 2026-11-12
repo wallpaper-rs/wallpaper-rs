@@ -163,6 +163,7 @@ pub enum Action {
     AutoWeights(AutoWeights),
     Clip(ClipEdit),
     Key(ClipKey),
+    Keys(KeysEdit),
     Expression(ExpressionEdit),
     Ik(IkEdit),
     Physics(BodyEdit),

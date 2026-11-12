@@ -1,4 +1,4 @@
-pub const ASKS: [(&str, &str, &str); 38] = [
+pub const ASKS: [(&str, &str, &str); 39] = [
     ("rig", "Bones, points, parts and clips of a layer; what is asked when no other query is named", "{}"),
     ("weights", "Weights of a bone over the mesh of a layer, as a heat map", r#""BONE""#),
     ("pose", "The rig of a layer posed by clip, time or bone angles", "{}"),
@@ -53,4 +53,8 @@ pub const ASKS: [(&str, &str, &str); 38] = [
         r#"{"run": true, "from": 0, "seconds": 8, "fps": 15}"#,
     ),
     ("credits", "The files of the package that can be credited, the credits and the files with none", "{}"),
+    (
+        "curves",
+        "Keys of an animated value or of a clip channel, part by part, with their handles and the sampled curve",
+        r#"{"pointer": "/scene/layers/0/opacity", "samples": 96}"#,
 ];

@@ -76,3 +76,29 @@ pub struct TimelineEvent {
     pub t: f64,
     pub name: String,
 }
+
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(default, deny_unknown_fields)]
+pub struct KeyPick {
+    pub pointer: String,
+    pub times: Vec<f64>,
+    pub keys: Vec<Value>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(default, deny_unknown_fields)]
+pub struct KeysEdit {
+    pub picks: Vec<KeyPick>,
+    pub shift: f64,
+    pub scale: Option<f64>,
+    pub pivot: f64,
+    pub part: Option<usize>,
+    pub lift: f64,
+    pub value: Option<f64>,
+    pub in_handle: Option<[f64; 2]>,
+    pub out_handle: Option<[f64; 2]>,
+    pub aligned: bool,
+    pub straighten: bool,
+    pub remove: bool,
+    pub at: Option<f64>,
+}

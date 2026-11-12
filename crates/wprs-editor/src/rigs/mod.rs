@@ -166,6 +166,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("strings").is_some() => crate::strings::query(dir, doc),
         _ if q.get("credits").is_some() => crate::credits::query(dir, doc),
         _ if q.get("spread").is_some() => crate::spread::spread(doc, &q["spread"]),
+        _ if q.get("curves").is_some() => crate::graph::curves(doc, &q["curves"]),
         _ => rig(dir, doc, id),
     }
 }

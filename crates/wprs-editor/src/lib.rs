@@ -34,6 +34,7 @@ mod fits;
 pub mod flashes;
 pub mod forms;
 pub mod gallery;
+pub mod graph;
 mod handles;
 pub mod history;
 pub mod ids;

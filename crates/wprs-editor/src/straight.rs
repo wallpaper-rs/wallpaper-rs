@@ -5,7 +5,7 @@ use anyhow::{Result, anyhow, ensure};
 use serde_json::{Value, json};
 use wprs_core::message::said;
 
-fn cut(key: &Value, side: &str) -> Value {
+pub(crate) fn cut(key: &Value, side: &str) -> Value {
     let plain = json!([key[0], key[1]]);
     match key.get(2) {
         Some(Value::Object(sides)) => {
