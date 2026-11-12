@@ -489,6 +489,24 @@ With an empty `path`, only the fit changes and the current wallpapers stay: the 
 per-output fits, with or without a path. An empty `path` and an empty `fit` return
 `InvalidArgs`.
 
+### `ClearWallpaper(s output)`
+
+Removes the wallpaper of `output`, or of every output when `output` is empty, and shows only the
+background color (`SetBackground`, black by default). A playlist assigned to the affected outputs
+stops. What was shown is kept in the configuration (`blank` of the section) until a new wallpaper is
+set; `GetState().outputs[x].blank` is true while an output shows no wallpaper and `previous` while
+`RestoreWallpaper` has something to bring back. Clearing again keeps the first wallpaper, not the
+empty one. What the screen shows then depends on how the daemon presents: with the Plasma plugin,
+layer-shell surfaces and X11 windows it is the background color drawn by the daemon (to give the
+screen back to the desktop's own wallpaper, choose another wallpaper type in the desktop settings or
+stop the daemon); with streams for another program it is a stream of that color.
+
+### `RestoreWallpaper(s output)`
+
+Brings back what `ClearWallpaper` removed from `output` (every output when empty). With nothing to
+bring back it returns `InvalidArgs` (`there is no earlier wallpaper to bring back`) and changes
+nothing.
+
 ### `SetBackground(s color, s output)`
 
 Sets the color shown around and behind the wallpaper of `output`, or of every output when

@@ -110,6 +110,10 @@ model! {
         #[serde(default)]
         pub left_out: Vec<String>,
         #[serde(default)]
+        pub blank: bool,
+        #[serde(default)]
+        pub previous: bool,
+        #[serde(default)]
         pub particles: String,
         #[serde(default)]
         pub quality: String,

@@ -1,4 +1,4 @@
-pub use crate::args::{Out, Page, Wait};
+pub use crate::args::{FIT, ITEM, JSON, OUTPUT, Out, Page, Wait};
 use crate::edit::Edits;
 use crate::inputs::Inputs;
 use crate::library::Lib;
@@ -10,11 +10,6 @@ use crate::{pack::Pack, pkg::Pkg, playlists::Playlist, props::Prop, providers::P
 use crate::{remote::Remote, repo::Repo, server::Server};
 use clap::{Parser, Subcommand};
 use wprs_core::Fit;
-
-pub const OUTPUT: &str = "Output name such as DP-1; every output when omitted";
-pub const FIT: &str = "Placement: fill, fit, stretch, center or tile";
-pub const JSON: &str = "Print the daemon reply as JSON";
-pub const ITEM: &str = "Item: a file path, a uid or the last 6 or more characters of one";
 
 #[derive(Parser, Debug)]
 #[command(name = "wprs-ctl", version = wprs_core::VERSION, about = "Control the wallpaper-rs daemon")]
@@ -34,6 +29,10 @@ pub enum Command {
         #[arg(short, long, help = FIT)]
         fit: Option<Fit>,
     },
+    #[command(about = "Remove the wallpaper and show only the background color; restore brings it back")]
+    Clear(Out),
+    #[command(about = "Bring back the wallpaper that clear removed")]
+    Restore(Out),
     #[command(about = "Change only the placement of the current wallpaper")]
     Fit {
         #[arg(help = FIT)]

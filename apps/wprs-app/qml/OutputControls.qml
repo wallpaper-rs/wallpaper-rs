@@ -8,6 +8,7 @@ ColumnLayout {
     id: controls
 
     required property var host
+    readonly property bool restorable: host.name === "" ? Object.values(host.daemon.state?.outputs ?? {}).some(o => o.previous === true) : host.info.previous === true
 
     Flow {
         Layout.fillWidth: true
@@ -17,6 +18,22 @@ ColumnLayout {
             text: host.daemon.tr("Choose…")
             icon.name: "document-open"
             onClicked: files.open()
+        }
+
+        QQC2.Button {
+            visible: host.info.blank !== true
+            text: host.daemon.tr("Remove wallpaper")
+            icon.name: "edit-clear"
+            QQC2.ToolTip.text: host.daemon.tr("Show only the background color. You can bring the wallpaper back.")
+            QQC2.ToolTip.visible: hovered
+            onClicked: host.daemon.act("ClearWallpaper", [host.name])
+        }
+
+        QQC2.Button {
+            visible: controls.restorable
+            text: host.daemon.tr("Bring back the wallpaper")
+            icon.name: "edit-undo"
+            onClicked: host.daemon.act("RestoreWallpaper", [host.name])
         }
 
         QQC2.ComboBox {

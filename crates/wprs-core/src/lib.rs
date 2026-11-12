@@ -1,3 +1,4 @@
+pub mod blank;
 pub mod config;
 pub mod damage;
 pub mod dbus;

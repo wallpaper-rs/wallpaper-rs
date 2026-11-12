@@ -106,9 +106,8 @@ impl Daemon {
         let output = |(name, info): (&String, &crate::streams::OutputInfo)| {
             let (r, s) = (st.config.resolve(name), status.get(name).cloned().unwrap_or_default());
             let ((width, height), [red, green, blue]) = (info.size, r.background);
-            let kind = s.shown();
-            let section = st.config.outputs.get(name).filter(|o| o.image.is_some() || o.playlist.is_some());
-            let preset = section.unwrap_or(&st.config.default).preset.clone();
+            let own = st.config.outputs.get(name).filter(|o| o.sets_content());
+            let preset = own.unwrap_or(&st.config.default).preset.clone();
             let item = r.image.as_ref().and_then(|image| st.items.get(image).cloned());
             let credit = r.image.as_deref().and_then(|image| self.credit(image));
             let mut state = OutputState {
@@ -118,7 +117,7 @@ impl Daemon {
                 fit: r.fit,
                 shown_fit: info.shown_fit(r.fit),
                 background: format!("#{red:02x}{green:02x}{blue:02x}"),
-                kind,
+                kind: s.shown(),
                 playing: s.playing,
                 active: st.active(info),
                 covered: info.covered(),
@@ -150,6 +149,8 @@ impl Daemon {
                 quality_timing: s.level.timing(),
                 decode: s.decode.into(),
                 left_out: s.left_out,
+                blank: st.config.is_blank(name),
+                previous: st.config.has_previous(name),
                 sandbox: s.sandbox.into(),
                 helper: s.helper,
                 accent: info.accent.clone(),

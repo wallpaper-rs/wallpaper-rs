@@ -20,6 +20,8 @@ pub struct OutputConfig {
     pub playlist: Option<String>,
     pub preset: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub blank: Option<crate::blank::Kept>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub clicks: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<Filter>,
@@ -29,6 +31,12 @@ pub struct OutputConfig {
     pub hdr: Option<crate::HdrChoice>,
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
     pub scenes: BTreeMap<String, BTreeMap<String, toml::Value>>,
+}
+
+impl OutputConfig {
+    pub fn sets_content(&self) -> bool {
+        self.image.is_some() || self.playlist.is_some() || self.blank.is_some()
+    }
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
@@ -91,9 +99,7 @@ impl Config {
     }
 
     pub fn resolve(&self, output: &str) -> Resolved {
-        let content = (self.outputs.get(output))
-            .filter(|o| o.image.is_some() || o.playlist.is_some())
-            .unwrap_or(&self.default);
+        let content = (self.outputs.get(output)).filter(|o| o.sets_content()).unwrap_or(&self.default);
         let (fit, background) = self.chosen(output);
         Resolved {
             image: content.image.clone().filter(|_| content.playlist.is_none()),
@@ -124,8 +130,8 @@ impl Config {
     }
 
     fn set_content(&mut self, output: &str, image: Option<PathBuf>, playlist: Option<String>) {
-        let o = self.section(output, |o| (o.image, o.playlist, o.preset) = (None, None, None));
-        (o.image, o.playlist, o.preset) = (image, playlist, None);
+        let o = self.section(output, |o| (o.image, o.playlist, o.preset, o.blank) = (None, None, None, None));
+        (o.image, o.playlist, o.preset, o.blank) = (image, playlist, None, None);
     }
 
     pub fn set_fit(&mut self, output: &str, fit: Fit) {

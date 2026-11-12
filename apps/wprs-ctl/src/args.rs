@@ -1,8 +1,12 @@
-use crate::cli::OUTPUT;
 use anyhow::Result;
 use clap::Args;
 use tokio::signal::unix::{SignalKind, signal};
 use wprs_client::Daemon1Proxy;
+
+pub const OUTPUT: &str = "Output name such as DP-1; every output when omitted";
+pub const FIT: &str = "Placement: fill, fit, stretch, center or tile";
+pub const JSON: &str = "Print the daemon reply as JSON";
+pub const ITEM: &str = "Item: a file path, a uid or the last 6 or more characters of one";
 
 #[derive(Args, Debug)]
 pub struct Out {

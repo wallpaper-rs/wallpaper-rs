@@ -6,10 +6,8 @@ use futures_util::TryFutureExt;
 use serde_json::{Value, json};
 use std::cell::Cell;
 use std::io::{self, IsTerminal};
-use std::pin::pin;
 use wprs_client::{Client, explain};
 use wprs_core::Fit;
-use zbus::export::ordered_stream::{OrderedStreamExt, join};
 
 pub async fn run(command: Command) -> Result<()> {
     let client = &Client::connect().await?;
@@ -19,6 +17,8 @@ pub async fn run(command: Command) -> Result<()> {
             daemon.set_wallpaper(&path_arg(&path)?, &output, fit.map_or("", Fit::as_str)).await?
         }
         Command::Fit { fit, output } => daemon.set_wallpaper("", &output, fit.as_str()).await?,
+        Command::Clear(out) => daemon.clear_wallpaper(&out.output).await?,
+        Command::Restore(out) => daemon.restore_wallpaper(&out.output).await?,
         Command::Background { color, output } => daemon.set_background(&color, &output).await?,
         Command::Filter(args) => crate::filtering::run(client, args).await?,
         Command::Config { key: Some(key), value: Some(value), .. } => {
@@ -66,7 +66,7 @@ pub async fn run(command: Command) -> Result<()> {
         }
         Command::Screen(placement) => placement.tell(daemon).await?,
         Command::Schema { json } => show::reply(daemon.get_schema().await?, json, show::schema)?,
-        Command::Watch { json } => watch(client, json).await?,
+        Command::Watch { json } => crate::watching::watch(client, json).await?,
         Command::Wait { serial, timeout, json } => {
             let serial = match serial {
                 Some(serial) => serial,
@@ -149,33 +149,6 @@ pub async fn finished<T>(
     };
     println!("{}", if wait.json { serde_json::to_string(&job)? } else { show::summary(&job) });
     Ok((value, Some(job)))
-}
-
-async fn watch(client: &Client, json: bool) -> Result<()> {
-    let daemon = &client.daemon;
-    let line =
-        |value: Value, text: String| if json { value.to_string() } else { show::clean(text.trim_end()) };
-    let changed = daemon.receive_changed().await?.filter_map(|s| {
-        let a = s.args().ok()?;
-        let value = json!({"signal": "Changed", "topic": a.topic, "ids": a.ids, "serial": a.serial});
-        Some(line(value, format!("{} {} {}", a.serial, a.topic, a.ids.join(" "))))
-    });
-    let progressed = daemon.receive_job_progress().await?.filter_map(|s| {
-        let a = s.args().ok()?;
-        let value = json!({"signal": "JobProgress", "job": a.job, "done": a.done, "total": a.total});
-        Some(line(value, format!("job {} {}/{}", a.job, a.done, a.total)))
-    });
-    let finished = daemon.receive_job_finished().await?.filter_map(|s| {
-        let a = s.args().ok()?;
-        let value = json!({"signal": "JobFinished", "job": a.job, "state": a.state, "error_name": a.error_name,
-            "message": a.message});
-        Some(line(value, format!("job {} {} {}", a.job, a.state, a.message)))
-    });
-    let mut events = pin!(join(join(changed, progressed), finished));
-    while let Some(line) = events.next().await {
-        println!("{line}");
-    }
-    Ok(())
 }
 
 fn options(state: &str, filter: Option<&str>, json: bool) -> Result<()> {

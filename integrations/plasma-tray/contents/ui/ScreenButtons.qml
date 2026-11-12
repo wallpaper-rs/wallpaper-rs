@@ -35,6 +35,28 @@ RowLayout {
     PlasmaComponents3.Button {
         Layout.fillWidth: true
         Layout.preferredWidth: 1
+        visible: host.info.blank !== true
+        icon.name: "edit-clear"
+        text: i18n("Remove")
+        PlasmaComponents3.ToolTip.text: i18n("Remove the wallpaper and show only the background color")
+        PlasmaComponents3.ToolTip.visible: hovered
+        onClicked: host.daemon.act("ClearWallpaper", [host.name])
+    }
+
+    PlasmaComponents3.Button {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 1
+        visible: host.info.blank === true && host.info.previous === true
+        icon.name: "edit-undo"
+        text: i18n("Bring back")
+        PlasmaComponents3.ToolTip.text: i18n("Bring back the wallpaper that was removed")
+        PlasmaComponents3.ToolTip.visible: hovered
+        onClicked: host.daemon.act("RestoreWallpaper", [host.name])
+    }
+
+    PlasmaComponents3.Button {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 1
         enabled: host.item !== ""
         checkable: true
         checked: host.details.favorite === true

@@ -618,6 +618,8 @@ wprs-ctl set ~/Vídeos/mar.mp4 -o DP-1 -f fit    # una pantalla, modo de ajuste
 wprs-ctl fit center                             # solo el modo de ajuste, mismo fondo
 wprs-ctl fit tile -o DP-1                       # el modo de ajuste de una pantalla
 wprs-ctl background '#203040'                   # color alrededor del fondo
+wprs-ctl clear                                  # quita el fondo: queda solo el color de fondo
+wprs-ctl clear -o DP-1 && wprs-ctl restore -o DP-1   # quitar el fondo de una pantalla y recuperarlo
 wprs-ctl filter warm --strength 0.6 -o DP-1      # filtro de color de una pantalla (none lo quita)
 wprs-ctl filter --list                          # los filtros que hay
 wprs-ctl pause | resume | toggle                # pausar los fondos animados
@@ -2296,6 +2298,7 @@ wprs-ctl prop set volume 60 -o DP-1          # volumen propio de una escena con 
 wprs-ctl prop press again -o DP-1            # pulsa un botón de la escena
 wprs-ctl prop share -o DP-1                  # los mismos valores en todas las pantallas (--own: solo esta)
 wprs-ctl prop preset load calma -o DP-1 && wprs-ctl prop reset -o DP-1
+wprs-ctl prop reset                          # sin -o: los valores de todas las pantallas que muestran la escena
 wprs-ctl prop preset save Noche -o DP-1      # guarda los valores actuales como preajuste propio
 wprs-ctl prop preset export Noche -f noche.json -o DP-1
 wprs-ctl prop preset import noche.json --save Noche -o HDMI-A-1

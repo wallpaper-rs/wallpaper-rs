@@ -38,6 +38,14 @@ impl Daemon {
         Err(zbus::fdo::Error::InvalidArgs(format!("invalid value {value:?} for {key}")))
     }
 
+    fn clear_wallpaper(&self, output: String) {
+        self.0.push(format!("ClearWallpaper [{output}]"));
+    }
+
+    fn restore_wallpaper(&self, output: String) {
+        self.0.push(format!("RestoreWallpaper [{output}]"));
+    }
+
     fn set_filter(&self, filter: String, output: String) {
         self.0.push(format!("SetFilter [{output}] {filter}"));
     }
