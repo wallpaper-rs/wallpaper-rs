@@ -29,3 +29,19 @@ fn scripts_that_name_a_renamed_system_are_listed_by_line_and_rewritten_on_reques
     assert_eq!(std::fs::read_to_string(p.dir.join("scripts/b.js")).unwrap(), "const x = \"other\";\n");
     assert!(script_uses(&p.dir, &p.doc, "flakes").is_empty());
 }
+
+#[test]
+fn a_scene_without_systems_gets_its_first_one_from_the_panel_actions() {
+    let root = tempfile::tempdir().unwrap();
+    super::state();
+    let doc = wprs_editor::starters::starter("empty", "org.example.bare", "Bare", "en").unwrap();
+    let mut p = wprs_editor::Project::create(&root.path().join("bare"), doc).unwrap();
+    act(&mut p, json!({"particles": {"create": {"system": "first"}}})).unwrap();
+    act(&mut p, json!({"particles": {"create": {"system": "second", "from": "first"}}})).unwrap();
+    act(&mut p, json!({"particles": {"create": {"system": "third", "parent": "second"}}})).unwrap();
+    let systems = p.doc["scene"]["particles"].as_object().unwrap();
+    assert_eq!(systems.keys().collect::<Vec<_>>(), ["first", "second", "third"]);
+    act(&mut p, json!({"particles": {"delete": {"system": "third"}}})).unwrap_err();
+    act(&mut p, json!({"particles": {"rename": {"system": "first", "to": "base"}}})).unwrap();
+    assert!(p.doc["scene"]["particles"].get("base").is_some());
+}
