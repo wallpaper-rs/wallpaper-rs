@@ -42,22 +42,34 @@ fn facing(at: vec2<f32>) -> vec3<f32> {
     return normalize(vec3<f32>(xy * item.lit_at.z, max(t.z, 0.0) + 1e-3));
 }
 
+fn toward(v: vec3<f32>, up: vec3<f32>) -> vec3<f32> {
+    if up.z > 0.9999 {
+        return v;
+    }
+    let a = normalize(vec3<f32>(-up.y, up.x, 0.0));
+    let s = sqrt(max(1.0 - up.z * up.z, 0.0));
+    return v * up.z + cross(a, v) * s + a * dot(a, v) * (1.0 - up.z);
+}
+
 fn shade(c: vec4<f32>, at: vec2<f32>, in: Out) -> vec4<f32> {
     if c.a <= 1e-5 {
         return c;
     }
     let albedo = c.rgb / c.a;
-    let n = facing(at);
+    let plane = item.lit_plane;
+    let tilted = plane.z > 0.0;
+    let n = select(facing(at), toward(facing(at), plane.xyz), tilted);
     let rough = item.lit.y * select(1.0, textureSampleLevel(rough_tex, samp, at * item.lit_scale.zw, 0.0).r, item.lit_maps.y > 0.5);
     let glow = item.lit.w * select(1.0, textureSampleLevel(glow_tex, samp, at * item.lit_more.xy, 0.0).r, item.lit_maps.z > 0.5);
     let p = in.position.xy + item.lit_at.xy;
+    let z = select(0.0, plane.w - dot(plane.xy, p) / max(plane.z, 1e-3), tilted);
     var light = mix(lights.ambient.rgb, lights.sky.rgb, 0.5 - 0.5 * n.y);
     var spec = vec3<f32>(0.0);
     let shine = mix(256.0, 4.0, rough);
     let gloss = (1.0 - rough) * (1.0 - rough);
     for (var i = 0u; i < u32(lights.head.x); i++) {
         let b = lights.bulbs[i];
-        let r = reach(b, p);
+        let r = reach_at(b, p, z);
         if r.w <= 0.0 {
             continue;
         }

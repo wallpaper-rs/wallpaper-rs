@@ -1,9 +1,34 @@
 use super::super::item::{Item, Rect, scale_of};
 use super::super::paint::{Painter, Target};
 use super::super::{Op, Src};
-use wprs_scene::{Affine, Content, Quality};
+use wprs_scene::{Affine, Content, Lean, Quality};
 
 const MIRROR: f32 = 24.0;
+const STEP: f32 = 64.0;
+
+fn plane(lean: Lean, origin: [f32; 2], (canvas, distance): ([f32; 2], f32), screen: Affine) -> [f32; 4] {
+    let center = canvas.map(|v| v / 2.0);
+    let k = scale_of(screen);
+    let at = |q: [f32; 2]| {
+        let (s, w) = (lean.apply(q), lean.depth(q).max(1e-3));
+        let flat = [0, 1].map(|i| center[i] + (s[i] - center[i]) * w);
+        let px = screen.apply(flat);
+        [px[0], px[1], k * distance * (1.0 - w)]
+    };
+    let [o, x, y] = [origin, [origin[0] + STEP, origin[1]], [origin[0], origin[1] + STEP]].map(at);
+    let (u, v) = ([0, 1, 2].map(|i| x[i] - o[i]), [0, 1, 2].map(|i| y[i] - o[i]));
+    let c = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+    let long = c.iter().map(|v| v * v).sum::<f32>().sqrt();
+    if long < 1e-9 {
+        return [0.0; 4];
+    }
+    let sign = if c[2] < 0.0 { -1.0 } else { 1.0 };
+    let n = c.map(|v| v * sign / long);
+    if n[2] < 1e-3 {
+        return [0.0; 4];
+    }
+    [n[0], n[1], n[2], o[2] + (n[0] * o[0] + n[1] * o[1]) / n[2]]
+}
 
 impl Painter<'_, '_, '_> {
     pub(crate) fn lit(&self, i: usize) -> bool {
@@ -64,6 +89,9 @@ impl Painter<'_, '_, '_> {
         let (x, y) = (a.hypot(b).max(1e-6), c.hypot(d).max(1e-6));
         item.lit_basis = [a / x, b / x, c / y, d / y];
         item.lit_at = [target.rect.x, target.rect.y, 1.0, MIRROR * scale_of(self.screen)];
+        let d = &self.frame.draws[i];
+        let view = (self.frame.canvas, self.frame.distance);
+        item.lit_plane = d.lean.map_or([0.0; 4], |l| plane(l, d.world.apply([0.0; 2]), view, self.screen));
         let found = [l.normal, l.roughness_map, l.emissive_map].map(|id| self.map_of(id));
         let mut maps = [Src::White; 8];
         maps[4..].copy_from_slice(&self.gobos());

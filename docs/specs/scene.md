@@ -581,7 +581,7 @@ fade, its cone and the cosine between the normal of the pixel and the direction 
 highlight that is sharp on smooth surfaces and spread out on rough ones; the ambient light comes on
 top, the color of `canvas.ambient` on surfaces facing down and of `canvas.sky` (the ambient one when
 unset) on surfaces facing up, and black when neither is set. A layer without a normal map faces the
-viewer, and so takes the mix of both halfway. `lighting` takes:
+viewer, and so takes the mix of both halfway. A layer turned with `tilt` or lifted with `z` is lit in its own plane: its normal, and the normal map laid over it, turn with the plane, and each pixel takes the distance to the light from where the plane holds it in depth (as if seen straight on, without the narrowing of the perspective), so a wall turned away from a lamp darkens and its near edge takes more light than its far one; a mesh layer is lit like a picture of its posed parts, in the plane of its box. `lighting` takes:
 
 | Field | Meaning |
 |-------|---------|

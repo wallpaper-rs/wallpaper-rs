@@ -128,6 +128,7 @@ pub struct Frame<'a> {
     pub background: Color,
     pub camera: Affine,
     pub canvas: [f32; 2],
+    pub distance: f32,
     pub keep: bool,
     pub quality: Quality,
     pub wake: Wake,

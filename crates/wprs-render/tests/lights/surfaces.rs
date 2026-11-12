@@ -67,3 +67,16 @@ fn strength_mixes_the_lit_and_plain_layer() {
     let v = at(&img, 80, 45)[0];
     assert!(v > 190, "{v}");
 }
+
+#[test]
+fn a_tilted_layer_is_lit_in_its_own_plane() {
+    let turned = |angle: f32| {
+        let mut w = wall(json!({}));
+        w["transform"]["tilt"] = json!([0, angle]);
+        once(json!([w, left(30.0)]), json!({}), UP)
+    };
+    let (Some(toward), Some(away), Some(flat)) = (turned(50.0), turned(-50.0), turned(0.0)) else { return };
+    let (a, b, c) = (at(&toward, 80, 45)[0], at(&away, 80, 45)[0], at(&flat, 80, 45)[0]);
+    assert!(a.abs_diff(b) > 20, "turning the wall either way lights it alike: {a} {b} {c}");
+    assert!(a.max(b) > c && a.min(b) < c, "{a} {b} {c}");
+}

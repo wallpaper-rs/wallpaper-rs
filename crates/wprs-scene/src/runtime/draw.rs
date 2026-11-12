@@ -103,6 +103,7 @@ impl Runtime {
             background,
             camera,
             canvas,
+            distance: cx.distance(),
             keep,
             quality,
             wake,

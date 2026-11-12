@@ -15,6 +15,10 @@ struct Lights {
 };
 
 fn reach(b: Bulb, p: vec2<f32>) -> vec4<f32> {
+    return reach_at(b, p, 0.0);
+}
+
+fn reach_at(b: Bulb, p: vec2<f32>, z: f32) -> vec4<f32> {
     let kind = b.color.w;
     if kind > 2.5 {
         return vec4<f32>(-b.dir.xyz, 1.0);
@@ -25,7 +29,7 @@ fn reach(b: Bulb, p: vec2<f32>) -> vec4<f32> {
         let t = clamp(dot(p - (src - b.more.yz), ab) / max(dot(ab, ab), 1e-6), 0.0, 1.0);
         src = src - b.more.yz + ab * t;
     }
-    let v = vec3<f32>(src - p, b.at.z);
+    let v = vec3<f32>(src - p, b.at.z - z);
     let d = length(v);
     if d >= b.at.w {
         return vec4<f32>(0.0);
