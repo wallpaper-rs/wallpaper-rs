@@ -8,6 +8,9 @@ mod pictures;
 mod players;
 #[cfg(test)]
 mod restart;
+mod scaled;
+#[cfg(test)]
+mod shrunk;
 mod simulated;
 #[cfg(test)]
 mod tests;

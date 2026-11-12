@@ -973,7 +973,7 @@ cover cannot be read. Covers are read once per track (the last eight fetched fro
 kept in memory by address while `media.remote_covers` stays on, so they are not fetched again), also when a new track keeps the address of
 the one before (a cover with the same bytes stays the same cover), from `file://` addresses of at
 most 16 MiB or, only with `media.remote_covers` on (`dbus.md`), from `http` and `https` addresses
-of at most 4 MiB within 5 seconds, and pictures of more than 4096 pixels a side are refused; they
+of at most 4 MiB within 5 seconds, pictures of more than 4096 pixels a side are refused, and JPEG covers are decoded already scaled down by the decoder (at most 1/8 of each side, never below 256 pixels on the long side) instead of at full size; they
 are reduced in memory to at most 256 pixels on the longer side in
 sRGB, keeping their shape, and never written to disk. A layer that shows a cover keeps its `size`,
 so a square `size` suits most covers. The colors are worked out once per cover: the three

@@ -27,6 +27,7 @@ tracing-subscriber.workspace = true
 tokio.workspace = true
 zbus.workspace = true
 image.workspace = true
+jpeg-decoder.workspace = true
 serde = { workspace = true }
 clap.workspace = true
 wprs-library.workspace = true

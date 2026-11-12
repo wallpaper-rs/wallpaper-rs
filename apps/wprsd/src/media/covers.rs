@@ -55,7 +55,10 @@ pub(crate) fn decode(bytes: &[u8]) -> Option<Arc<Cover>> {
     (limits.max_image_width, limits.max_image_height) = (Some(MAX_SIDE), Some(MAX_SIDE));
     limits.max_alloc = Some(MAX_ALLOC);
     reader.limits(limits);
-    let image = reduced(reader.decode().ok()?);
+    let image = match super::scaled::jpeg(bytes, MAX_SIDE, MAX_ALLOC) {
+        Some(small) => reduced(small),
+        None => reduced(reader.decode().ok()?),
+    };
     let colors = colors(&image).unwrap_or(FALLBACK);
     let serial = SERIAL.fetch_add(1, Ordering::Relaxed);
     Some(Arc::new(Cover { serial, pixels: Pixels::new(image), colors, digest }))

@@ -7210,6 +7210,7 @@ dependencies = [
  "futures-util",
  "image",
  "jiff",
+ "jpeg-decoder",
  "libc",
  "reqwest",
  "roxmltree 0.21.1",
