@@ -64,7 +64,7 @@ impl Swarms {
                 for (store, cloud) in flight.stores.iter().zip(&flight.clouds) {
                     r.queue.write_buffer(&store.particles, 0, bytemuck::cast_slice(&cloud.particles));
                     if let Some(trail) = store.trail.as_ref().filter(|_| !cloud.trail.is_empty()) {
-                        r.queue.write_buffer(trail, 16, bytemuck::cast_slice(&cloud.trail));
+                        r.queue.write_buffer(trail, 20, bytemuck::cast_slice(&cloud.trail));
                     }
                 }
                 super::sort::stack(r, self.canvas[1], &mut flight.stores, &flight.clouds);

@@ -21,18 +21,18 @@ pub(super) fn slots(kind: usize) -> Vec<(u64, Vec<VertexAttribute>)> {
             wgpu::vertex_attr_array![0 => Float32x4, 1 => Float32x4, 2 => Float32x4, 3 => Float32x4, 4 => Float32x4, 5 => Float32x4].to_vec(),
         )],
         TRAIL => vec![
-            (16, wgpu::vertex_attr_array![0 => Float32x2, 1 => Float16x2, 2 => Unorm8x4].to_vec()),
-            (16, wgpu::vertex_attr_array![3 => Float32x2, 4 => Float16x2, 5 => Unorm8x4].to_vec()),
+            (20, wgpu::vertex_attr_array![0 => Float32x2, 1 => Float16x2, 2 => Unorm8x4, 6 => Float32].to_vec()),
+            (20, wgpu::vertex_attr_array![3 => Float32x2, 4 => Float16x2, 5 => Unorm8x4, 7 => Float32].to_vec()),
         ],
         ROPE => vec![
             (48, wgpu::vertex_attr_array![0 => Float32x4, 1 => Float32x4, 2 => Float32x4].to_vec()),
             (48, wgpu::vertex_attr_array![3 => Float32x4, 4 => Float32x4, 5 => Float32x4].to_vec()),
         ],
         _ => vec![
-            (16, wgpu::vertex_attr_array![0 => Float32x2, 1 => Float16x2].to_vec()),
-            (16, wgpu::vertex_attr_array![3 => Float32x2, 4 => Float16x2, 5 => Unorm8x4].to_vec()),
-            (16, wgpu::vertex_attr_array![6 => Float32x2, 7 => Float16x2, 8 => Unorm8x4].to_vec()),
-            (16, wgpu::vertex_attr_array![9 => Float32x2, 10 => Float16x2].to_vec()),
+            (20, wgpu::vertex_attr_array![0 => Float32x2, 1 => Float16x2].to_vec()),
+            (20, wgpu::vertex_attr_array![3 => Float32x2, 4 => Float16x2, 5 => Unorm8x4, 11 => Float32].to_vec()),
+            (20, wgpu::vertex_attr_array![6 => Float32x2, 7 => Float16x2, 8 => Unorm8x4, 12 => Float32].to_vec()),
+            (20, wgpu::vertex_attr_array![9 => Float32x2, 10 => Float16x2].to_vec()),
         ],
     }
 }

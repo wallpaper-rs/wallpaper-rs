@@ -14,13 +14,13 @@ fn record(base: u32, i: u32, p: Particle, slot: u32, prev: vec2<f32>) {
 
 fn mark(i: u32, p: Particle, before: f32) {
     let k = sim.trail.y;
-    let o = sim.trail.x + i * k * 4u;
+    let o = sim.trail.x + i * k * 5u;
     let stride = max(sim.trail.z, 1u);
     let span = f32(stride) / 60.0;
     if stride == 1u || u32(p.age / span) != u32(before / span) {
         for (var j = k - 1u; j > 0u; j--) {
-            for (var c = 0u; c < 4u; c++) {
-                state.data[o + j * 4u + c] = state.data[o + j * 4u - 4u + c];
+            for (var c = 0u; c < 5u; c++) {
+                state.data[o + j * 5u + c] = state.data[o + j * 5u - 5u + c];
             }
         }
     }
@@ -36,9 +36,10 @@ fn mark(i: u32, p: Particle, before: f32) {
     state.data[o + 1u] = bitcast<u32>(pos.y);
     state.data[o + 2u] = pack2x16float(vec2<f32>(p.size * p.look.y * near, min(p.age / p.life, 1.0)));
     state.data[o + 3u] = pack4x8unorm(vec4<f32>(p.color.rgb, p.color.a * p.look.x));
+    state.data[o + 4u] = bitcast<u32>(near);
     if p.age >= p.life {
         for (var j = 0u; j < k; j++) {
-            state.data[o + j * 4u + 2u] = 0u;
+            state.data[o + j * 5u + 2u] = 0u;
         }
     }
 }

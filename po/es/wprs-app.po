@@ -17174,9 +17174,6 @@ msgstr "su sistema de partículas no tiene perspectiva"
 
 
 
-#: apps/wprs-app/qml/SceneDepthToggle.qml
-msgid "its particles draw trails"
-msgstr "sus partículas dibujan estelas"
 
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid "its particles draw ropes"

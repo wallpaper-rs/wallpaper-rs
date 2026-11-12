@@ -129,10 +129,13 @@ fn particles_in_a_3d_group_say_whether_they_hide_one_by_one() {
     );
     act(
         &mut p,
-        json!({ "set": { "pointer": format!("{at}/render/trail"), "value": { "length": 4, "width": 2 } } }),
+        json!({ "set": { "pointer": format!("{at}/render/trail"), "value": { "length": 4, "width": 1 } } }),
     )
     .unwrap();
-    assert_eq!((way(&p)["way"].clone(), way(&p)["reason"].clone()), (json!("plane"), json!("trail")));
+    assert_eq!(way(&p)["way"], "one_by_one", "trails hide one by one");
+    act(&mut p, json!({ "set": { "pointer": format!("{at}/render/rope"), "value": { "width": 4 } } }))
+        .unwrap();
+    assert_eq!((way(&p)["way"].clone(), way(&p)["reason"].clone()), (json!("plane"), json!("rope")));
     assert_eq!(way(&p)["lowest"], "plane");
     assert_eq!(super::ask(&p, json!({ "depth3d": { "layer": "nothing" } })), json!(null));
 }

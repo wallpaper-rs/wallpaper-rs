@@ -33,7 +33,7 @@ pub struct Cloud {
     pub(super) died: Vec<Event>,
     pub(super) mirror: Vec<Event>,
     pub(super) hatched: u32,
-    pub trail: Vec<[u32; 4]>,
+    pub trail: Vec<[u32; 5]>,
     pub rope: Vec<super::Strand>,
     school: super::school::School,
     order: Vec<(u32, u32)>,
@@ -80,7 +80,7 @@ impl Cloud {
         let mirror = host.map_or(&[][..], |h| h.mirror.as_slice());
         let (k, stride) = (s.trail[1] as usize, s.trail[2].max(1));
         if self.trail.len() != n * k {
-            self.trail = vec![[0; 4]; n * k];
+            self.trail = vec![[0; 5]; n * k];
         }
         self.school.steer(&self.particles, s);
         let span = stride as f32 / 60.0;

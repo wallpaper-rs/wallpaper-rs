@@ -2,7 +2,7 @@ use super::{B, SceneView, buffer};
 use crate::{RenderError, Renderer};
 use wprs_scene::{ROPE_POINTS, Strand};
 
-pub type Strands = (Vec<Strand>, Vec<[u32; 4]>);
+pub type Strands = (Vec<Strand>, Vec<[u32; 5]>);
 
 impl Renderer {
     pub fn strands(&self, view: &SceneView) -> Result<Vec<Strands>, RenderError> {
@@ -11,7 +11,7 @@ impl Renderer {
         for (herd, flight) in swarms.herds.iter().zip(&swarms.flights) {
             let Some(flight) = flight else { continue };
             for (p, store) in flight.stores.iter().enumerate() {
-                let marks = u64::from(herd.bake.allocs[p]) * u64::from(herd.bake.trails[p]) * 16;
+                let marks = u64::from(herd.bake.allocs[p]) * u64::from(herd.bake.trails[p]) * 20;
                 if !flight.clouds.is_empty() {
                     let cloud = &flight.clouds[p];
                     out.push((cloud.rope.clone(), cloud.trail.clone()));

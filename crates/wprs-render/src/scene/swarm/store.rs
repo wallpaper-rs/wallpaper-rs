@@ -79,7 +79,7 @@ impl Swarms {
             });
             let k = u64::from(bake.trails[p]);
             let trail = (!self.gpu && k > 0)
-                .then(|| buffer(r, u64::from(*alloc) * k * 16 + 48, B::VERTEX | B::COPY_DST));
+                .then(|| buffer(r, u64::from(*alloc) * k * 20 + 60, B::VERTEX | B::COPY_DST));
             let mut orders: Vec<(Stack, f32)> = Vec::new();
             for (o, size) in self.kits.iter().filter(|k| k.system == bake.systems[p]).filter_map(|k| k.order)
             {

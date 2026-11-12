@@ -46,8 +46,8 @@ fn layout(r: &Room) -> ([u32; 4], [u32; 4], u32) {
     let events = if r.makes & 3 != 0 { 2 * PARTICLE_EVENTS * EVENT as u32 } else { 0 };
     let mirror = if r.makes & 4 != 0 { r.alloc * EVENT as u32 } else { 0 };
     let marks = r.alloc + events + mirror;
-    let pad = if r.trail > 0 { 8 } else { 0 };
-    let chain = marks + r.alloc * r.trail * 4 + pad;
+    let pad = if r.trail > 0 { 10 } else { 0 };
+    let chain = marks + r.alloc * r.trail * 5 + pad;
     let grid = chain + r.rope;
     let more = if r.cells > 0 { 3 * r.cells + 3 * r.alloc } else { 0 };
     let links = [r.alloc, r.alloc + PARTICLE_EVENTS * EVENT as u32, r.alloc + events, marks];

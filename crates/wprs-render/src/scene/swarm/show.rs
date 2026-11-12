@@ -56,17 +56,17 @@ impl Swarms {
                 pass.set_bind_group(2, group, &[]);
             }
             let trail = match (&store.trail, &store.gpu) {
-                (Some(t), _) => Some((t, 16)),
+                (Some(t), _) => Some((t, 20)),
                 (None, Some((state, ..))) if k > 0 => Some((state, (4 + u64::from(herd.bake.marks[p])) * 4)),
                 _ => None,
             };
             let cords = self.cords.get(&mode);
             if let Some((buffer, at)) = trail.filter(|_| look >= 2.0) {
-                let size = alloc * k * 16 - 16;
+                let size = alloc * k * 20 - 20;
                 match cords.filter(|_| kit.long).and_then(|[_, long]| self.chosen(how, LONG, long)) {
                     Some(long) => {
                         pass.set_pipeline(long);
-                        [at - 16, at, at + 16, at + 32].iter().enumerate().for_each(|(i, from)| {
+                        [at - 20, at, at + 20, at + 40].iter().enumerate().for_each(|(i, from)| {
                             pass.set_vertex_buffer(i as u32, buffer.slice(*from..*from + size))
                         });
                         let pieces = self.looks.get(first + p).map_or(0, |l| l.strand[0] as u32) + 2;
@@ -76,7 +76,7 @@ impl Swarms {
                         if let Some(ribbon) = self.chosen(how, TRAIL, ribbon) {
                             pass.set_pipeline(ribbon);
                             pass.set_vertex_buffer(0, buffer.slice(at..at + size));
-                            pass.set_vertex_buffer(1, buffer.slice(at + 16..at + 16 + size));
+                            pass.set_vertex_buffer(1, buffer.slice(at + 20..at + 20 + size));
                             pass.draw(0..4, 0..(alloc * k - 1) as u32);
                         }
                     }

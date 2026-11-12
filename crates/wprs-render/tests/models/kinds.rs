@@ -84,18 +84,18 @@ fn particles_with_a_shader_of_their_own_in_a_3d_group_hide_one_by_one() {
     assert!(near(shown[2], [255, 0, 0], 8), "the lowest quality keeps the plane: {shown:?}");
 }
 
-fn bent(r: &Renderer, depth: Option<f32>) -> Vec<u8> {
+fn bent(r: &Renderer, depth: Option<f32>, tested: bool) -> Vec<u8> {
     let stripes =
         RgbaImage::from_fn(16, 16, |x, _| Rgba(if x % 4 < 2 { [0, 255, 0, 255] } else { [0, 0, 255, 255] }));
     let bump = RgbaImage::from_pixel(4, 4, Rgba([255, 128, 255, 255]));
     let images = [("stripes", Pixels::new(stripes)), ("bump", Pixels::new(bump))];
     let back = json!({ "id": "back", "type": "image", "image": "stripes", "size": [SIDE, SIDE],
         "transform": { "position": [32, 32] }, "depth_test": true });
-    let mut layers = group(json!({ "id": "p", "type": "particles", "system": "s", "depth_test": true,
+    let mut layers = group(json!({ "id": "p", "type": "particles", "system": "s", "depth_test": tested,
         "visible": depth.is_some() }));
     layers[0]["layers"].as_array_mut().unwrap().insert(0, back);
     let mut extra = sparks(depth.unwrap_or(0.0), json!({ "refract": { "normal": "bump", "amount": 1 } }));
-    extra["particles"]["s"]["init"]["size"] = json!([80, 80]);
+    extra["particles"]["s"]["init"]["size"] = json!([140, 140]);
     extra["assets"] =
         json!({ "stripes": { "path": "stripes.png" }, "bump": { "path": "bump.png", "linear": true } });
     let mut shot = shoot(r, scene(extra, layers, red()), &images);
@@ -105,11 +105,12 @@ fn bent(r: &Renderer, depth: Option<f32>) -> Vec<u8> {
 #[test]
 fn refracting_particles_in_a_3d_group_bend_only_what_they_are_in_front_of() {
     let Some(r) = renderer() else { return };
-    let plain = bent(r, None);
+    let plain = bent(r, None, true);
     let reds: Vec<u32> = (0..SIDE).filter(|x| near(rgb(&plain, *x, 32), [255, 0, 0], 8)).collect();
     let (Some(&left), Some(&right)) = (reds.first(), reds.last()) else { panic!("the cube shows") };
     assert!(right > left + 6 && right < SIDE - 6, "{left} {right}");
-    let (front, behind) = (bent(r, Some(-50.0)), bent(r, Some(50.0)));
+    let (front, behind) = (bent(r, Some(-50.0), true), bent(r, Some(50.0), true));
+    let flat = bent(r, Some(50.0), false);
     let inside = right - 2;
     assert!(
         !near(rgb(&front, inside, 32), [255, 0, 0], 40),
@@ -121,15 +122,42 @@ fn refracting_particles_in_a_3d_group_bend_only_what_they_are_in_front_of() {
         "a farther one leaves it: {:?}",
         rgb(&behind, inside, 32)
     );
-    let moved = |px: &[u8]| (right + 2..SIDE - 2).any(|x| rgb(px, x, 32) != rgb(&plain, x, 32));
-    let row = |px: &[u8]| {
-        (0..SIDE).map(|x| rgb(px, x, 32)[2] / 128 + 2 * (rgb(px, x, 32)[0] / 128)).collect::<Vec<_>>()
-    };
-    assert!(
-        moved(&front) && moved(&behind),
-        "both bend the stripes beside the cube: {left} {right}\n{:?}\n{:?}\n{:?}",
-        row(&plain),
-        row(&front),
-        row(&behind)
-    );
+    let moved = (right + 2..SIDE - 2).any(|x| rgb(&front, x, 32) != rgb(&plain, x, 32));
+    assert!(moved, "a nearer particle bends the stripes beside the cube");
+    let beside = (right + 2..SIDE).chain(0..left.saturating_sub(1));
+    let same = beside.into_iter().all(|x| rgb(&behind, x, 32) == rgb(&flat, x, 32));
+    assert!(same, "beside the cube a farther particle bends as it does on its plane");
+}
+
+fn streak(depth: f32, render: Value) -> Value {
+    let mut s = sparks(depth, render);
+    s["particles"]["s"]["emitters"][0]["shape"] = json!({ "point": [4, 32] });
+    s["particles"]["s"]["init"]["speed"] = json!([300, 300]);
+    s["particles"]["s"]["init"]["angle"] = json!([0, 0]);
+    s["particles"]["s"]["init"]["size"] = json!([16, 16]);
+    s
+}
+
+pub fn covered(r: &Renderer, extra: Value, quality: Quality) -> usize {
+    let layer = json!({ "id": "p", "type": "particles", "system": "s", "depth_test": true });
+    let mut shot = shoot(r, scene(extra, group(layer), red()), &[]);
+    shot.view.set_particle_trails(r, wprs_scene::Tier::T3);
+    let px = (0..4).map(|_| shot.frame(r, 0.05, quality)).last().unwrap();
+    let pixels = (22..42).flat_map(|x| (29..36).map(move |y| (x, y)));
+    pixels.filter(|(x, y)| !near(rgb(&px, *x, *y), [255, 0, 0], 8)).count()
+}
+
+#[test]
+fn trails_in_a_3d_group_hide_one_by_one_behind_the_models_in_front_of_them() {
+    let Some(r) = renderer() else { return };
+    for render in [
+        json!({ "trail": { "length": 16, "width": 1 } }),
+        json!({ "trail": { "length": 16, "width": 1, "segments": 4 } }),
+        json!({ "trail": { "length": 32, "width": 1 } }),
+    ] {
+        let front = covered(r, streak(-50.0, render.clone()), Quality::Q3);
+        let behind = covered(r, streak(50.0, render.clone()), Quality::Q3);
+        let low = covered(r, streak(-50.0, render.clone()), Quality::Q0);
+        assert!(front > 20 && behind == 0 && low == 0, "{render}: {front} {behind} {low}");
+    }
 }

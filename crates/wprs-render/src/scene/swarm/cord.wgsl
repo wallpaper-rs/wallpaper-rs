@@ -4,6 +4,7 @@ struct Cord {
     @location(1) uv: vec2<f32>,
     @location(2) @interpolate(flat) textured: f32,
     @location(3) bend: vec3<f32>,
+    @location(4) scale: f32,
 };
 
 fn toned(life: f32, c: vec4<f32>) -> vec4<f32> {
@@ -31,7 +32,7 @@ fn vs_rope(
 ) -> Cord {
     var out: Cord;
     out.position = vec4<f32>(2.0, 2.0, 2.0, 1.0);
-    if ai.w < 0.5 || bi.w < 0.5 {
+    if ai.w <= 0.0 || bi.w <= 0.0 {
         return out;
     }
     let far = (v & 1u) == 1u;
@@ -44,6 +45,7 @@ fn vs_rope(
     out.uv = vec2<f32>(i.x * look.cord.y + look.cord.z, side + 0.5);
     out.textured = look.cord.w;
     out.bend = across(p.zw, width);
+    out.scale = i.w;
     return out;
 }
 
@@ -68,6 +70,8 @@ fn vs_long(
     @location(8) cb: vec4<f32>,
     @location(9) q: vec2<f32>,
     @location(10) sq: vec2<f32>,
+    @location(11) ka: f32,
+    @location(12) kb: f32,
 ) -> Cord {
     var out: Cord;
     out.position = vec4<f32>(2.0, 2.0, 2.0, 1.0);
@@ -93,10 +97,14 @@ fn vs_long(
     out.uv = vec2<f32>((f32(j) + t) / max(look.extra.y - 1.0, 1.0) * look.strand.y + look.strand.z, side + 0.5);
     out.textured = look.strand.w;
     out.bend = across(vec2<f32>(-c[1].y, c[1].x) / l, width);
+    out.scale = mix(ka, kb, t);
     return out;
 }
 
 fn corded(in: Cord) -> vec4<f32> {
+    if hidden(in.position.xy, in.scale) {
+        discard;
+    }
     var s = textureSample(sprite, samp, vec2<f32>(fract(in.uv.x), in.uv.y));
     if look.tint.y > 0.5 {
         s = vec4<f32>(encode(s.rgb), s.a);

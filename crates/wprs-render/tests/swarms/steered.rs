@@ -93,7 +93,7 @@ fn ropes_and_long_trails_share_their_geometry_on_both_paths() {
     }
     let k = cpu_trail.len() / cpu.len();
     assert_eq!((k, cpu_trail.len()), (7, gpu_trail.len()));
-    let pos = |m: &[u32; 4]| [f32::from_bits(m[0]), f32::from_bits(m[1])];
+    let pos = |m: &[u32; 5]| [f32::from_bits(m[0]), f32::from_bits(m[1])];
     for (i, p) in cpu.iter().enumerate().filter(|(_, p)| p.age < p.life) {
         let j = gpu.iter().position(|g| g.id == p.id && g.age < g.life).unwrap();
         for (a, b) in cpu_trail[i * k..i * k + k].iter().zip(&gpu_trail[j * k..j * k + k]) {

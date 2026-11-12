@@ -1147,7 +1147,7 @@ glow). The inspector of a group turns it 3D, and the inspector of a flat layer i
 toggles Hide behind nearer models (`depth_test`); on a particles layer a note under it says, from the
 `depth3d` query, whether each particle hides on its own (and that the lowest quality hides the whole
 layer as one plane) or why the whole layer hides as one plane: its system has no perspective, its
-particles draw trails or ropes, or a child system does or has children; for refracting particles it adds that their bending hides
+particles draw ropes, or a child system does or has children; for refracting particles it adds that their bending hides
 too but can still pull in a few pixels of a nearer model next to it (`caveat: refract_edges`).
 
 Selecting the canvas also shows the 3D camera: sliders for the field of view and the roll that change

@@ -96,7 +96,7 @@ fn long_trails_keep_spaced_points_within_the_caps() {
     assert_eq!(sim.trail[1..], [9, 5, 1]);
     let first = cloud.particles.iter().position(|p| p.age > 1.0 && p.age < p.life).unwrap();
     let marks = &cloud.trail[first * 9..first * 9 + 9];
-    let x = |m: &[u32; 4]| f32::from_bits(m[0]);
+    let x = |m: &[u32; 5]| f32::from_bits(m[0]);
     let gaps: Vec<f32> = marks.windows(2).map(|w| x(&w[0]) - x(&w[1])).collect();
     assert!(gaps[1..gaps.len() - 1].iter().all(|g| (g - 5.0).abs() < 1e-2), "{gaps:?}");
 }
