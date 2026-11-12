@@ -537,6 +537,24 @@ screens without their own values share. They apply at once without reloading the
 text is stored in the Secret Service instead, once for every output (`KeyringUnavailable` without
 one), and `""` forgets it; it never reaches the configuration, the logs, exported settings or sync.
 
+### `ListApplications() → (s json)`
+
+An `ApplicationsReply`: `available` (`false` in the Flatpak, where applications are not opened) and
+`applications`, the applications a `shortcut` setting can open, each `{id, name, icon}`: the
+desktop entries of `applications/` in the data folders of the desktop (`[A-Za-z0-9._-]` ids, the
+first of an id wins) that are of type application and are neither hidden, nor `NoDisplay`, nor run
+in a terminal, ordered by name. `icon` is the `Icon` of the entry, a theme name or a path, and may
+be empty. The app offers them as a picker and `wprs-ctl prop apps` lists them.
+
+### `CheckShortcut(s value_json)`
+
+Checks the target of a `shortcut` setting without storing it, with the rules of `SetSceneProperty`:
+`null` (nothing), `{"uri": "https://…"}` (an address with a host, at most 2048 characters, without
+spaces or control characters), `{"file": "/…"}` or `{"folder": "/…"}` (absolute, existing) or
+`{"app": "<id>"}` (installed and launchable, outside the Flatpak). Anything else returns
+`InvalidArgs` with the reason, which the app shows as the target is typed. `wprs-ctl prop
+check-shortcut VALUE` does the same.
+
 ### `ApplyScenePreset(s output, s preset)`
 
 Stores every value of a preset as `SetSceneProperty` would: a preset of the package by its id or its

@@ -1,6 +1,19 @@
 use serde_json::Value;
 
 model! {
+    pub struct Application {
+        pub id: String,
+        pub name: String,
+        pub icon: String,
+    }
+
+    pub struct ApplicationsReply {
+        pub model: u32,
+        pub serial: u64,
+        pub available: bool,
+        pub applications: Vec<Application>,
+    }
+
     pub struct SceneField {
         pub key: String,
         pub kind: String,

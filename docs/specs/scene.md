@@ -1884,7 +1884,10 @@ file or a folder (chosen through the file chooser and opened through the same po
 it as an open file) or an application by its desktop id (`[A-Za-z0-9._-]`, at most 255 characters),
 never a command. On the phone a file or a folder is the one the user picked with the system document picker, kept as a `content://` address with read permission that survives restarts (`{"file": "content://…"}` or `{"folder": "content://…"}`), and it is opened through the same view intent as the other targets. Only the user sets it (`SetSceneProperty`, `wprs-ctl prop set open
 '{"uri": "https://example.org"}'`, or the app's control under *Scene settings*), never the author, a
-preset or sync, and `SetSceneProperty` refuses a file or folder that does not exist. It stays in
+preset or sync, and `SetSceneProperty` refuses a file or folder that does not exist, an application that is not installed
+and an address that is not one (`CheckShortcut` asks the same without storing it, and `ListApplications`
+lists the installed applications the app offers as a picker; `wprs-ctl prop apps` and `prop
+check-shortcut` do the same). It stays in
 `config.toml` on this computer. An application is looked up as `applications/<id>.desktop` in the
 data folders of the desktop: one that is hidden or runs in a terminal is refused, a `DBusActivatable`
 one is activated through `org.freedesktop.Application`, and any other is started from its `Exec`

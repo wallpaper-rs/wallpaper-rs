@@ -40,7 +40,8 @@ msgstr "%1: campo desconocido"
 #: crates/wprs-core/src/edit/perform.rs crates/wprs-core/src/edit/set.rs
 #: crates/wprs-core/src/edit/tool.rs crates/wprs-editor/src/check.rs
 #: crates/wprs-editor/src/findings.rs crates/wprs-editor/src/history.rs
-#: crates/wprs-format/src/facts.rs crates/wprs-format/src/features.rs
+#: crates/wprs-editor/src/presets.rs crates/wprs-format/src/facts.rs
+#: crates/wprs-format/src/features.rs
 msgid "%1"
 msgstr "%1"
 
@@ -503,6 +504,7 @@ msgid "%1 %2"
 msgstr "%1 %2"
 
 #: crates/wprs-editor/src/check.rs crates/wprs-editor/src/pages.rs
+#: crates/wprs-editor/src/presets.rs
 msgid "%1 is not in the folder"
 msgstr "%1 no está en la carpeta"
 
@@ -1185,6 +1187,22 @@ msgstr ""
 "una capa %1 no puede mostrar %2; las capas image, video, sound, mesh y model "
 "toman un archivo de su tipo"
 
+#: crates/wprs-editor/src/presets.rs crates/wprs-editor/src/project.rs
+msgid "%1 is not valid JSON: %2"
+msgstr "%1 no es un JSON válido: %2"
+
+#: crates/wprs-editor/src/presets.rs
+msgid "only a preset package holds the values of another package"
+msgstr "solo un paquete de preajuste guarda los valores de otro paquete"
+
+#: crates/wprs-editor/src/presets.rs crates/wprs-editor/src/shaping/needs.rs
+msgid "a package cannot require itself"
+msgstr "un paquete no puede requerirse a sí mismo"
+
+#: crates/wprs-editor/src/presets.rs
+msgid "%1 is not a picture or a video"
+msgstr "%1 no es una imagen ni un vídeo"
+
 #: crates/wprs-editor/src/previews.rs
 msgid "the picture does not fit in 1 MiB even as a jpeg of 512 pixels"
 msgstr "la imagen no cabe en 1 MiB ni como jpeg de 512 píxeles"
@@ -1208,10 +1226,6 @@ msgstr "una vista previa animada necesita %1; actualiza antes el manifiesto"
 #: crates/wprs-editor/src/project.rs
 msgid "the entry %1 is not a scene file"
 msgstr "la entrada %1 no es un archivo de escena"
-
-#: crates/wprs-editor/src/project.rs
-msgid "%1 is not valid JSON: %2"
-msgstr "%1 no es un JSON válido: %2"
 
 #: crates/wprs-editor/src/project.rs
 msgid "the files of %1 changed outside the editor; open the folder again"
@@ -1749,10 +1763,6 @@ msgstr "una hoja de sprites tiene de 1 a 256 filas y de 1 a 256 columnas"
 #: crates/wprs-editor/src/shaping/needs.rs
 msgid "%1 is not a version or a version range such as ^1.2"
 msgstr "%1 no es una versión ni un rango de versiones como ^1.2"
-
-#: crates/wprs-editor/src/shaping/needs.rs
-msgid "a package cannot require itself"
-msgstr "un paquete no puede requerirse a sí mismo"
 
 #: crates/wprs-editor/src/shaping/needs.rs
 msgid "a package requires at most %1 other packages"

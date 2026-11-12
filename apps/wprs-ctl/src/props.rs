@@ -7,7 +7,7 @@ use clap::Subcommand;
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 use wprs_client::Client;
-use wprs_core::model::SceneProperties;
+use wprs_core::model::{ApplicationsReply, SceneProperties};
 
 #[derive(Subcommand, Debug)]
 pub enum Prop {
@@ -37,6 +37,17 @@ pub enum Prop {
         value: Option<String>,
         #[arg(short, long, default_value = "", help = OUTPUT)]
         output: String,
+    },
+    #[command(about = "List the installed applications a shortcut setting can open, by their id")]
+    Apps {
+        #[arg(long, help = JSON)]
+        json: bool,
+    },
+    #[command(about = "Check the target of a shortcut setting without storing it: \
+        {\"uri\": \"https://…\"}, {\"file\": \"/…\"}, {\"folder\": \"/…\"} or {\"app\": \"<id>\"}")]
+    CheckShortcut {
+        #[arg(help = "Target as JSON, or null for none")]
+        value: String,
     },
     #[command(about = "Forget the values set for the package, back to its defaults")]
     Reset {
@@ -105,12 +116,23 @@ pub async fn run(client: &Client, command: Prop) -> Result<()> {
             };
             daemon.set_scene_property(&output, &id, &text).await?
         }
+        Prop::Apps { json } => show::reply(daemon.list_applications().await?, json, applications)?,
+        Prop::CheckShortcut { value: text } => daemon.check_shortcut(&value(&text)).await?,
         Prop::Reset { output } => daemon.reset_scene_properties(&output).await?,
         Prop::Press { id, output } => daemon.press_scene_button(&output, &id).await?,
         Prop::Share { output, own } => daemon.share_scene_values(&output, !own).await?,
         Prop::Preset(command) => propsets::run(client, command).await?,
     }
     Ok(())
+}
+
+fn applications(reply: ApplicationsReply) -> String {
+    let note = match reply.available {
+        true => String::new(),
+        false => "applications open only outside the Flatpak\n".to_owned(),
+    };
+    let rows = reply.applications.iter().map(|a| vec![a.id.clone(), a.name.clone()]);
+    note + &table(&["ID", "NAME"], rows)
 }
 
 fn list(reply: SceneProperties) -> String {

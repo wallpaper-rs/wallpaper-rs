@@ -6,7 +6,7 @@ use crate::items::reply;
 use crate::streams::HELD;
 use args::{absolute, local_path};
 use std::sync::Weak;
-use wprs_core::model::{JobReply, JobsReply, MODEL};
+use wprs_core::model::{ApplicationsReply, JobReply, JobsReply, MODEL};
 use zbus::fdo;
 use zbus::message::Header;
 use zbus::object_server::SignalEmitter as Emit;
@@ -120,6 +120,20 @@ impl Service {
             Some(key) => d.store_secret(&key, &value_json).await,
             None => d.run(move |d| d.set_scene_property(&output, &id, &value_json)).await,
         }
+    }
+
+    #[zbus(out_args("json"))]
+    async fn list_applications(&self) -> Result<String> {
+        let found = tokio::task::spawn_blocking(crate::shortcuts::apps::listed).await.unwrap_or_default();
+        let (available, serial) = (crate::flatpak::app_id().is_none(), self.d()?.changes.serial());
+        reply(ApplicationsReply { model: MODEL, serial, available, applications: found })
+    }
+
+    async fn check_shortcut(&self, value_json: String) -> Result<()> {
+        let given: serde_json::Value = serde_json::from_str(&value_json)
+            .map_err(|e| crate::error::invalid(format!("the value is not JSON: {e}")))?;
+        let checked = tokio::task::spawn_blocking(move || crate::shortcuts::apps::check(&given)).await;
+        checked.unwrap_or_else(|e| Err(e.to_string())).map_err(crate::error::invalid)
     }
 
     #[zbus(out_args("preset"))]

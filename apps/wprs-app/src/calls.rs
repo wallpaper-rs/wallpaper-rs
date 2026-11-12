@@ -46,6 +46,8 @@ calls! {
         ShowCalibration show_calibration(on: bool);
         GetSceneProperties get_scene_properties(output: str) json;
         SetSceneProperty set_scene_property(output: str, id: str, value_json: str);
+        ListApplications list_applications() json;
+        CheckShortcut check_shortcut(value_json: str);
         ApplyScenePreset apply_scene_preset(output: str, preset: str);
         ResetSceneProperties reset_scene_properties(output: str);
         SaveScenePreset save_scene_preset(output: str, name: str);

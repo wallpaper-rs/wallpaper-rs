@@ -6,6 +6,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::Notify;
 use wprs_scene::Control;
 
+pub(crate) mod apps;
 mod launch;
 mod portal;
 #[cfg(test)]

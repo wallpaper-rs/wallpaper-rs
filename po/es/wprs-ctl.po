@@ -4510,6 +4510,27 @@ msgid "New value as JSON or plain text; asked for when left out"
 msgstr "Valor nuevo como JSON o texto simple; se pregunta si se omite"
 
 #: apps/wprs-ctl/src/props.rs
+msgid ""
+"List the installed applications a shortcut setting can open, by their id"
+msgstr ""
+"Lista las aplicaciones instaladas que un ajuste de atajo puede abrir, por su "
+"id"
+
+#: apps/wprs-ctl/src/props.rs
+msgid ""
+"Check the target of a shortcut setting without storing it: {\"uri\": "
+"\"https://…\"}, {\"file\": \"/…\"}, {\"folder\": \"/…\"} or {\"app\": "
+"\"<id>\"}"
+msgstr ""
+"Comprueba el destino de un ajuste de atajo sin guardarlo: {\"uri\": "
+"\"https://…\"}, {\"file\": \"/…\"}, {\"folder\": \"/…\"} o {\"app\": "
+"\"<id>\"}"
+
+#: apps/wprs-ctl/src/props.rs
+msgid "Target as JSON, or null for none"
+msgstr "Destino como JSON, o null para ninguno"
+
+#: apps/wprs-ctl/src/props.rs
 msgid "Forget the values set for the package, back to its defaults"
 msgstr ""
 "Olvidar los valores fijados para el paquete, volviendo a los de por defecto"
@@ -6636,10 +6657,12 @@ msgstr "Dibujar la capa como lo hace el sistema en todos los valores"
 #: apps/wprs-ctl/src/steps.rs
 msgid ""
 "Create a package folder from a starting point: the scenes empty, particles, "
-"parallax or clock, or web for a web page"
+"parallax or clock, web for a web page or preset for the values of another "
+"package"
 msgstr ""
 "Crear una carpeta de paquete desde un punto de partida: las escenas empty, "
-"particles, parallax o clock, o web para una página web"
+"particles, parallax o clock, web para una página web o preset para los "
+"valores de otro paquete"
 
 #: apps/wprs-ctl/src/steps.rs
 msgid ""

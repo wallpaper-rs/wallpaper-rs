@@ -1598,9 +1598,10 @@ msgid "Move down"
 msgstr "Bajar"
 
 #: apps/wprs-app/qml/EditOps.qml apps/wprs-app/qml/PackageInspector.qml
-#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackageRequires.qml
-#: apps/wprs-app/qml/PlaylistItems.qml apps/wprs-app/qml/SceneAssets.qml
-#: apps/wprs-app/qml/SceneBoneRow.qml apps/wprs-app/qml/SceneEffectsList.qml
+#: apps/wprs-app/qml/PackageNetwork.qml apps/wprs-app/qml/PackagePreset.qml
+#: apps/wprs-app/qml/PackageRequires.qml apps/wprs-app/qml/PlaylistItems.qml
+#: apps/wprs-app/qml/SceneAssets.qml apps/wprs-app/qml/SceneBoneRow.qml
+#: apps/wprs-app/qml/SceneEffectsList.qml
 #: apps/wprs-app/qml/SceneEmitterList.qml apps/wprs-app/qml/SceneInput.qml
 #: apps/wprs-app/qml/SceneInspector.qml apps/wprs-app/qml/SceneLayerTools.qml
 #: apps/wprs-app/qml/SceneModelSwing.qml apps/wprs-app/qml/ScenePairs.qml
@@ -2973,6 +2974,74 @@ msgstr ""
 "Lo que el usuario fija para la pantalla siempre prevalece sobre estos "
 "valores por defecto."
 
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid ""
+"Choose the package this preset is for: it must be installed, or type its id "
+"and a version range."
+msgstr ""
+"Elige el paquete para el que es este preajuste: debe estar instalado, o "
+"escribe su id y un rango de versiones."
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid "Preset for %1, version %2"
+msgstr "Preajuste para %1, versión %2"
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid "Base package"
+msgstr "Paquete base"
+
+#: apps/wprs-app/qml/PackagePreset.qml apps/wprs-app/qml/PackageRequires.qml
+msgid "Compatible with %1"
+msgstr "Compatible con %1"
+
+#: apps/wprs-app/qml/PackagePreset.qml apps/wprs-app/qml/PackageRequires.qml
+msgid "^1.2"
+msgstr "^1.2"
+
+#: apps/wprs-app/qml/PackagePreset.qml apps/wprs-app/qml/PackageRequires.qml
+msgid "Version range"
+msgstr "Rango de versiones"
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid "Use as base"
+msgstr "Usar como base"
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid "Setting id"
+msgstr "Id del ajuste"
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid "Value, such as #3d5aff or 0.4"
+msgstr "Valor, como #3d5aff o 0.4"
+
+#: apps/wprs-app/qml/PackagePreset.qml apps/wprs-app/qml/SceneSwarmHues.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Value"
+msgstr "Valor"
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid "Set value"
+msgstr "Fijar el valor"
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid "Picture or video…"
+msgstr "Imagen o vídeo…"
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid ""
+"Values are the settings of the base package this preset sets; a picture or "
+"video is copied into the package. Title, license and the preview picture are "
+"in the package details."
+msgstr ""
+"Los valores son los ajustes del paquete base que fija este preajuste; una "
+"imagen o un vídeo se copia dentro del paquete. El título, la licencia y la "
+"imagen de vista previa están en los detalles del paquete."
+
+#: apps/wprs-app/qml/PackagePreset.qml
+msgid ""
+"Pictures and videos (*.png *.jpg *.jpeg *.webp *.gif *.webm *.mp4 *.mkv)"
+msgstr "Imágenes y vídeos (*.png *.jpg *.jpeg *.webp *.gif *.webm *.mp4 *.mkv)"
+
 #: apps/wprs-app/qml/PackagePreview.qml
 msgid "Reload"
 msgstr "Recargar"
@@ -3033,18 +3102,6 @@ msgid "Package"
 msgstr "Paquete"
 
 #: apps/wprs-app/qml/PackageRequires.qml
-msgid "Compatible with %1"
-msgstr "Compatible con %1"
-
-#: apps/wprs-app/qml/PackageRequires.qml
-msgid "^1.2"
-msgstr "^1.2"
-
-#: apps/wprs-app/qml/PackageRequires.qml
-msgid "Version range"
-msgstr "Rango de versiones"
-
-#: apps/wprs-app/qml/PackageRequires.qml
 msgid "Add package"
 msgstr "Añadir paquete"
 
@@ -3081,6 +3138,13 @@ msgstr "Entradas"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Playback"
 msgstr "Reproducción"
+
+#: apps/wprs-app/qml/PackageSections.qml
+#: apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Preset"
+msgstr "Preajuste"
 
 #: apps/wprs-app/qml/PackageSections.qml
 msgid "Required packages"
@@ -7265,6 +7329,18 @@ msgid "Use"
 msgstr "Usar"
 
 #: apps/wprs-app/qml/SceneShortcut.qml
+msgid "Choose an installed application…"
+msgstr "Elegir una aplicación instalada…"
+
+#: apps/wprs-app/qml/SceneShortcut.qml
+msgid "Installed applications"
+msgstr "Aplicaciones instaladas"
+
+#: apps/wprs-app/qml/SceneShortcut.qml
+msgid "Applications open only outside the Flatpak."
+msgstr "Las aplicaciones solo se abren fuera de Flatpak."
+
+#: apps/wprs-app/qml/SceneShortcut.qml
 msgid ""
 "Only you choose what it opens: the wallpaper never sees it and asks for it "
 "only when you click it on a screen that takes clicks. Web addresses open "
@@ -9409,11 +9485,6 @@ msgstr "Android"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Web page"
 msgstr "Página web"
-
-#: apps/wprs-app/qml/facade/LabelWords.qml
-#: apps/wprs-app/qml/facade/ManifestWords.qml
-msgid "Preset"
-msgstr "Preajuste"
 
 #: apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Resources"

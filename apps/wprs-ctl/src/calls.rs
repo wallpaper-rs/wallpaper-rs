@@ -30,6 +30,8 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Daemon1", "PreviewScene", "scene preview", &["--output", "DIR", "=document of DIR", "--time"]),
     ("Daemon1", "GetSceneProperties", "prop ls", &["--output"]),
     ("Daemon1", "SetSceneProperty", "prop set", &["--output", "ID", "VALUE"]),
+    ("Daemon1", "ListApplications", "prop apps", &[]),
+    ("Daemon1", "CheckShortcut", "prop check-shortcut", &["VALUE"]),
     ("Daemon1", "ApplyScenePreset", "prop preset load", &["--output", "PRESET"]),
     ("Daemon1", "ResetSceneProperties", "prop reset", &["--output"]),
     ("Daemon1", "SaveScenePreset", "prop preset save", &["--output", "NAME"]),

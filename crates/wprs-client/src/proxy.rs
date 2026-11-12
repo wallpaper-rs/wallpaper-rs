@@ -35,6 +35,8 @@ pub trait Daemon1 {
     fn preview_scene(&self, output: &str, dir: &str, document: &str, time: f64) -> Result<()>;
     fn get_scene_properties(&self, output: &str) -> Result<String>;
     fn set_scene_property(&self, output: &str, id: &str, value_json: &str) -> Result<()>;
+    fn list_applications(&self) -> Result<String>;
+    fn check_shortcut(&self, value_json: &str) -> Result<()>;
     fn apply_scene_preset(&self, output: &str, preset: &str) -> Result<()>;
     fn reset_scene_properties(&self, output: &str) -> Result<()>;
     fn save_scene_preset(&self, output: &str, name: &str) -> Result<String>;

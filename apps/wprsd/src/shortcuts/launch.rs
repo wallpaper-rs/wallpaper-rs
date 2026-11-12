@@ -53,19 +53,34 @@ pub(crate) fn words(exec: &str) -> Vec<String> {
     out
 }
 
-pub(super) async fn app(connection: &zbus::Connection, id: &str) -> anyhow::Result<()> {
-    anyhow::ensure!(crate::flatpak::app_id().is_none(), "applications open only outside the Flatpak");
+pub(super) fn installed(id: &str) -> anyhow::Result<String> {
     let name = format!("applications/{id}.desktop");
     let path = dirs().into_iter().map(|d| d.join(&name)).find(|p| p.is_file());
     let text =
         std::fs::read_to_string(path.ok_or_else(|| anyhow::anyhow!("no application {id} is installed"))?)?;
-    let found = entry(&text);
+    launchable(id, &entry(&text))?;
+    Ok(text)
+}
+
+pub(super) fn launchable(id: &str, found: &HashMap<&str, &str>) -> anyhow::Result<()> {
     let yes = |key: &str| found.get(key) == Some(&"true");
     anyhow::ensure!(
         found.get("Type") == Some(&"Application") && !yes("Hidden"),
         "{id} is not an application"
     );
     anyhow::ensure!(!yes("Terminal"), "{id} runs in a terminal");
+    Ok(())
+}
+
+pub(super) fn folders() -> Vec<PathBuf> {
+    dirs().into_iter().map(|d| d.join("applications")).collect()
+}
+
+pub(super) async fn app(connection: &zbus::Connection, id: &str) -> anyhow::Result<()> {
+    anyhow::ensure!(crate::flatpak::app_id().is_none(), "applications open only outside the Flatpak");
+    let text = installed(id)?;
+    let found = entry(&text);
+    let yes = |key: &str| found.get(key) == Some(&"true");
     if yes("DBusActivatable") {
         let object = format!("/{}", id.replace('.', "/").replace('-', "_"));
         let options: HashMap<&str, Value<'_>> = HashMap::new();
