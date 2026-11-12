@@ -38,6 +38,10 @@ async fn pages((iface, member, mut key): Source, offset: u32, count: u32) -> Res
     }
 }
 
+pub(crate) fn is_gone(source: &Source, error: &Error) -> bool {
+    source.0 == "Playlists1" && error.name == wprs_core::dbus::error::NOT_FOUND
+}
+
 impl ItemModel {
     pub fn fetch(mut self: Pin<&mut Self>, offset: u32) {
         let Some(source) = self.source.clone() else { return };
@@ -51,8 +55,12 @@ impl ItemModel {
                 if model.generation != generation {
                     return;
                 }
+                let gone = page.as_ref().err().zip(model.source.as_ref()).is_some_and(|(e, s)| is_gone(s, e));
                 match page {
                     Ok(page) => model.as_mut().page(offset, page),
+                    Err(_) if gone => model
+                        .as_mut()
+                        .page(offset, Page { query: String::new(), total: 0, items: Vec::new() }),
                     Err(e) => {
                         model.as_mut().set_loading(false);
                         model.as_mut().set_error(QString::from(&e.message));

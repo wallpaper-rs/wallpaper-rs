@@ -3,6 +3,7 @@ mod covered;
 mod depth;
 mod editor;
 mod fake;
+mod gone;
 mod grid;
 mod labels;
 mod landing;
