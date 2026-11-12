@@ -22,15 +22,17 @@ fn judged(r: &Renderer, effect: String, size: (u32, u32)) -> f64 {
 }
 
 fn calibrated(r: &Renderer, size: (u32, u32)) -> Duration {
-    let cheap = judged(r, entry("return tap(in.uv) * 0.5;"), size).max(0.5);
-    let heavy = judged(r, busy(BUSY), size);
+    let mut cheap: Vec<f64> = (0..3).map(|_| judged(r, entry("return tap(in.uv) * 0.5;"), size)).collect();
+    cheap.sort_by(f64::total_cmp);
+    let heavy = (0..3).map(|_| judged(r, busy(BUSY), size)).fold(f64::INFINITY, f64::min);
     set_gpu_budget(None);
     retry_effects();
+    let cheap = cheap[1].max(0.5);
     assert!(
         heavy > cheap * 4.0,
         "the busy effect is not much slower than the cheap one: {heavy} ms, {cheap} ms"
     );
-    Duration::from_secs_f64((cheap * heavy).sqrt() / 1000.0)
+    Duration::from_secs_f64(heavy / 4.0 / 1000.0)
 }
 
 #[test]
@@ -86,4 +88,4 @@ fn slow_effects_are_left_out_for_the_run_without_a_strike_and_never_queue_up() {
     r.finish().unwrap();
 }
 
-const BUSY: usize = 8;
+const BUSY: usize = 16;
