@@ -121,6 +121,7 @@ fn a_video_with_sound_takes_a_new_speed_and_part() {
     player.set_cut(Cut { speed: 200, start: 300, end: 1500 });
     let range = Duration::from_millis(300) - FRAME..Duration::from_millis(1500) + FRAME;
     playing(&rx, |pts| range.contains(&pts));
+    confirmed(&rx, 200.0);
     let seen = frames(&rx, Duration::from_millis(500), Duration::from_secs(2));
     std::fs::remove_file(path).unwrap();
     assert!(seen.len() > 10, "only {} frames after the change", seen.len());
