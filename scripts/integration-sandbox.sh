@@ -9,6 +9,8 @@ MAP_UID=$(id -u)
 MAP_GID=$(id -g)
 export BIN WORK MAP_UID MAP_GID
 cat >"$WORK/sandbox-inner.sh" <<'INNER'
+mkdir -p "$WORK/sandbox-bin"
+mount --bind "$BIN" "$WORK/sandbox-bin"
 mount -t tmpfs tmpfs /run
 mkdir -p /run/host/monitor
 printf "Etc/UTC\n" >/run/host/monitor/timezone
@@ -17,7 +19,7 @@ printf "Etc/UTC\n" >/run/host/monitor/timezone
     printf "Etc/GMT-5\n" >/run/host/monitor/timezone.new
     mv /run/host/monitor/timezone.new /run/host/monitor/timezone
   done ) &
-exec unshare --user --map-user="$MAP_UID" --map-group="$MAP_GID" env RUST_LOG="$log" FLATPAK_ID=io.github.wallpaper_rs.WallpaperRs "$BIN/wprsd"
+exec unshare --user --map-user="$MAP_UID" --map-group="$MAP_GID" env RUST_LOG="$log" FLATPAK_ID=io.github.wallpaper_rs.WallpaperRs "$WORK/sandbox-bin/wprsd"
 INNER
 unshare --user --map-root-user --mount bash "$WORK/sandbox-inner.sh" >"$WORK/sandboxed.log" 2>&1 &
 sandboxed=$!; pids+=("$sandboxed")
