@@ -107,9 +107,7 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &E) -> Result<Vec<Op>> {
                 wprs_format::check_path(path).is_ok(),
                 said("editor.script_path", "%1 is not a path of the package", &[&path])
             );
-            fs::write(dir.join(path), code)
-                .map_err(|e| said("editor.cannot_write", "cannot write %1: %2", &[&path, &e]))?;
-            Ok(Vec::new())
+            super::save(dir, doc, path, code)
         }
         E::Param { path, id, kind, default, min, max, to, remove } => {
             let given = Param {

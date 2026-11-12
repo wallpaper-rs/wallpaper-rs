@@ -63,3 +63,10 @@ pub fn stamp(dir: &Path, doc: &Value) -> u64 {
     }
     hasher.finish()
 }
+
+pub fn stamped(scene: &mut Value, dir: &Path, doc: &Value) {
+    let listed = doc.pointer("/scene/scripts").and_then(Value::as_array).is_some_and(|l| !l.is_empty());
+    if listed {
+        scene["ext"]["editor"]["scripts"] = json!(stamp(dir, doc));
+    }
+}

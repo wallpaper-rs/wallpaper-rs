@@ -74,6 +74,7 @@ pub async fn run(client: &Client, command: Media) -> Result<()> {
 pub const MEDIA: &str = "JSON file of a made-up track shown instead of a media player: title, artist, album, album_artist, subtitle, genres, playing, position, duration, rate and cover (a picture of the folder)";
 
 pub(crate) fn preview_document(
+    dir: &std::path::Path,
     doc: &Value,
     quality: Option<String>,
     restart: bool,
@@ -86,6 +87,7 @@ pub(crate) fn preview_document(
         return Ok(wprs_editor::pages::preview_document(doc, &look));
     }
     let mut document = json!({"manifest": doc["manifest"], "scene": wprs_editor::actions::visible(doc)});
+    wprs_editor::scripts::stamped(&mut document["scene"], dir, doc);
     wprs_editor::rigs::staged(&look).into_iter().for_each(|s| document["preview"] = s);
     Ok(document)
 }

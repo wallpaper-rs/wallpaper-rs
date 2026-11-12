@@ -139,7 +139,7 @@ impl SceneEditor {
             let mut scene = visible(&project.doc);
             wprs_editor::swarms::pin_seed(&mut scene);
             wprs_editor::rigs::preview(&mut scene, &look);
-            scene["ext"]["editor"]["scripts"] = json!(wprs_editor::scripts::stamp(&project.dir, &project.doc));
+            wprs_editor::scripts::stamped(&mut scene, &project.dir, &project.doc);
             let mut document = json!({"manifest": project.doc["manifest"], "scene": scene});
             if let Some(staged) = wprs_editor::rigs::staged(&look) {
                 document["preview"] = staged;

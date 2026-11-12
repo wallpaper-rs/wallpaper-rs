@@ -72,11 +72,11 @@ fn make(doc: &Value, ids: &[String], name: Option<&str>) -> Result<Vec<Op>> {
     })
 }
 
-pub(crate) fn edit(doc: &Value, e: &E) -> Result<Vec<Op>> {
+pub(crate) fn edit(dir: &Path, doc: &Value, e: &E) -> Result<Vec<Op>> {
     let exists = |name: &str| doc.pointer(&path(name)).is_some();
     match e {
         E::Make { layers, name } => make(doc, layers, name.as_deref()),
-        E::Rename { name, to } => {
+        E::Rename { name, to, rewrite } => {
             ensure!(exists(name), said("editor.no_template", "the scene has no template %1", &[&name]));
             let to = clean(to);
             ensure!(!to.is_empty(), said("editor.template_name", "a template needs a name", &[]));
@@ -84,7 +84,14 @@ pub(crate) fn edit(doc: &Value, e: &E) -> Result<Vec<Op>> {
                 to == *name || !exists(&to),
                 said("editor.template_taken", "the template %1 exists", &[&to])
             );
-            Ok(if to == *name { Vec::new() } else { vec![Op::Move { from: path(name), path: path(&to) }] })
+            if to == *name {
+                return Ok(Vec::new());
+            }
+            let mut ops = vec![Op::Move { from: path(name), path: path(&to) }];
+            if *rewrite {
+                ops.extend(rewritten(dir, doc, name, &to)?);
+            }
+            Ok(ops)
         }
         E::Remove { name } => {
             ensure!(exists(name), said("editor.no_template", "the scene has no template %1", &[&name]));
@@ -107,7 +114,52 @@ pub fn tree(dir: &Path, doc: &Value) -> Vec<Value> {
         let mut layers = Vec::new();
         rows(layer, &pointer, 0, &mut layers);
         let scripts = crate::references::scripts(dir, doc, name);
-        json!({"name": name, "pointer": pointer, "layers": layers, "scripts": scripts})
+        json!({"name": name, "pointer": pointer, "layers": layers, "scripts": scripts, "mentions": mentions(dir, doc, name)})
     })
     .collect()
+}
+
+const QUOTES: [char; 3] = ['"', '\'', '`'];
+
+fn literals(name: &str) -> Vec<String> {
+    QUOTES.iter().map(|q| format!("{q}{name}{q}")).collect()
+}
+
+fn texts(dir: &Path, doc: &Value) -> Vec<(String, String)> {
+    let list = doc.pointer("/scene/scripts").and_then(Value::as_array).into_iter().flatten();
+    let paths = list.filter_map(|s| s["path"].as_str()).filter(|p| wprs_format::check_path(p).is_ok());
+    paths.filter_map(|p| Some((p.to_owned(), std::fs::read_to_string(dir.join(p)).ok()?))).collect()
+}
+
+fn rewritten(dir: &Path, doc: &Value, name: &str, to: &str) -> Result<Vec<Op>> {
+    let mut ops = Vec::new();
+    for (path, text) in texts(dir, doc) {
+        let mut next = text.clone();
+        for (from, quote) in literals(name).iter().zip(QUOTES) {
+            next = next.replace(from, &format!("{quote}{to}{quote}"));
+        }
+        if next != text {
+            ops.extend(crate::scripts::save(dir, doc, &path, &next)?);
+        }
+    }
+    Ok(ops)
+}
+
+pub fn mentions(dir: &Path, doc: &Value, name: &str) -> Vec<Value> {
+    let word = |c: char| c.is_alphanumeric() || c == '_' || c == '$';
+    let exact = literals(name);
+    let mut out = Vec::new();
+    for (path, text) in texts(dir, doc) {
+        for (i, line) in text.lines().enumerate() {
+            let named = line.match_indices(name).any(|(at, _)| {
+                !line[..at].chars().next_back().is_some_and(word)
+                    && !line[at + name.len()..].starts_with(word)
+            });
+            if named {
+                let literal = exact.iter().any(|l| line.contains(l.as_str()));
+                out.push(json!({"path": path, "line": i + 1, "exact": literal}));
+            }
+        }
+    }
+    out
 }

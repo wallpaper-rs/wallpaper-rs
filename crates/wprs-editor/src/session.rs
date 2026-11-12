@@ -34,6 +34,7 @@ fn sweep(dir: &Path, keep: &Path) {
         if i < excess || *modified < old {
             fs::remove_file(path).ok();
             fs::remove_dir_all(path.with_extension("meshes")).ok();
+            fs::remove_dir_all(path.with_extension("code")).ok();
         }
     }
 }
@@ -44,6 +45,10 @@ fn state(dir: &Path) -> Result<PathBuf> {
     let base =
         dirs::state_dir().ok_or_else(|| said("editor.no_state_folder", "there is no state folder", &[]))?;
     Ok(base.join("wallpaper-rs").join("editor").join(format!("{}.json", &name[..32])))
+}
+
+pub(crate) fn codes(dir: &Path) -> Result<PathBuf> {
+    Ok(state(dir)?.with_extension("code"))
 }
 
 pub(crate) fn stash(dir: &Path) -> Result<PathBuf> {
@@ -75,6 +80,9 @@ impl Project {
     pub fn forget(&self) -> Result<()> {
         if let Ok(stash) = stash(&self.dir) {
             fs::remove_dir_all(stash).ok();
+        }
+        if let Ok(kept) = codes(&self.dir) {
+            fs::remove_dir_all(kept).ok();
         }
         match fs::remove_file(state(&self.dir)?) {
             Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(e.into()),

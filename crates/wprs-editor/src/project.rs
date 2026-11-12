@@ -127,7 +127,8 @@ impl Project {
                     _ => self.history.redo(&mut self.doc)?,
                 };
                 self.bring_back();
-                return Ok(moved.map(|(_, o)| o).unwrap_or_default());
+                let moved = Ok(moved.map(|(_, o)| o).unwrap_or_default());
+                return moved.inspect(|o| crate::scripts::restore(&self.dir, &self.doc, o));
             }
             action => {
                 let scope = self.scope.as_deref().filter(|_| !crate::outside::whole(action));

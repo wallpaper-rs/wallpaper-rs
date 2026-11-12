@@ -1,4 +1,5 @@
 mod declared;
+mod reverts;
 mod tables;
 mod trees;
 

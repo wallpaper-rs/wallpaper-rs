@@ -26,7 +26,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::EffectRule(r) => crate::shaders::rule(dir, doc, r),
         Action::ImportScript(s) => crate::scripts::import(dir, doc, &s.file, s.template.as_deref()),
         Action::Script(e) => crate::scripts::edit(dir, doc, e),
-        Action::Template(e) => crate::templates::edit(doc, e),
+        Action::Template(e) => crate::templates::edit(dir, doc, e),
         Action::ImportAssets(wanted) => crate::bring::import(dir, doc, wanted),
         Action::Asset(wanted) => crate::packing::act(dir, doc, wanted),
         Action::Rgb(e) => crate::rgb::act(doc, e),

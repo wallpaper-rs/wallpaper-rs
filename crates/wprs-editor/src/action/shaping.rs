@@ -111,6 +111,8 @@ pub enum TemplateEdit {
     Rename {
         name: String,
         to: String,
+        #[serde(default)]
+        rewrite: bool,
     },
     Remove {
         name: String,

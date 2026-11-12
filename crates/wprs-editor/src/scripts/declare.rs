@@ -101,7 +101,10 @@ pub fn used_params(source: &str) -> Vec<String> {
         let name = match rest.chars().next() {
             Some('.') => rest[1..].split(|c: char| !word(c)).next().unwrap_or_default().to_owned(),
             Some('[') => rest[1..].split(']').next().unwrap_or_default().trim_matches(['"', '\'']).to_owned(),
-            _ => continue,
+            _ => {
+                found.extend(destructured(&source[..at], rest));
+                continue;
+            }
         };
         found.push(name);
     }
@@ -114,4 +117,24 @@ pub fn used_params(source: &str) -> Vec<String> {
 pub fn valid_param(id: &str) -> bool {
     (1..=32).contains(&id.len())
         && id.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '_')
+}
+
+fn braced(inner: &str) -> Vec<String> {
+    let parts = inner.split(',').map(|p| p.trim().trim_start_matches("..."));
+    let names = parts.filter_map(|p| p.split(|c: char| c == ':' || c == '=' || c.is_whitespace()).next());
+    names.map(String::from).collect()
+}
+
+fn destructured(before: &str, rest: &str) -> Vec<String> {
+    let word = |c: char| c.is_alphanumeric() || c == '_' || c == '$';
+    if let Some(inner) =
+        rest.trim_start().strip_prefix(':').map(str::trim_start).and_then(|r| r.strip_prefix('{'))
+    {
+        return braced(inner.split('}').next().unwrap_or_default());
+    }
+    let head = before.trim_end_matches(|c: char| word(c) || c == '.').trim_end();
+    let Some(close) = head.strip_suffix('=').map(str::trim_end).and_then(|h| h.strip_suffix('}')) else {
+        return Vec::new();
+    };
+    close.rfind('{').map(|open| braced(&close[open + 1..])).unwrap_or_default()
 }
