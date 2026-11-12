@@ -56,6 +56,7 @@ pub(crate) fn paint(dir: &Path, doc: &Value, s: &MaterialStroke) -> Result<Vec<O
             hardness: s.hardness,
             value: *value,
             points: &s.points,
+            direction: false,
         };
         stroke(&mut picture, &one);
     }

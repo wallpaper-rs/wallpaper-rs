@@ -140,7 +140,19 @@ pub(crate) fn run(command: Folder) -> Result<()> {
             crate::spanning::preview(&dir, &span, (time >= 0.0).then_some(time))?
         }
         Folder::Preview {
-            dir, output, time, stop, quality, restart, battery, calm, media, console, values, preset, ..
+            dir,
+            output,
+            time,
+            stop,
+            quality,
+            restart,
+            battery,
+            calm,
+            media,
+            console,
+            values,
+            preset,
+            ..
         } => {
             let project = Project::open(&dir)?;
             let document = crate::media::preview_document(
