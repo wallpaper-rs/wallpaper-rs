@@ -12,6 +12,7 @@ pub fn tables() -> Tables {
         "SceneTerms.qml",
         "SceneNames.qml",
         "SceneLabels.qml",
+        "SceneScreens.qml",
     ];
     for (file, text) in
         qml_files().into_iter().filter(|(n, _)| n.ends_with("Words.qml") || more.contains(&n.as_str()))
@@ -21,11 +22,16 @@ pub fn tables() -> Tables {
                 continue;
             };
             let rows = body.split("})").next().unwrap().lines().filter_map(|line| {
-                let (key, text) = line.trim().split_once("\": App.tr(\"")?;
-                Some((
-                    key.trim_start_matches('"').into(),
-                    text.trim_end_matches(',').strip_suffix("\")")?.into(),
-                ))
+                let (key, call) = line.trim().split_once("\": App.")?;
+                let call = call.trim_end_matches(',').strip_suffix(')')?;
+                let text = match call.strip_prefix("trc(\"") {
+                    Some(rest) => {
+                        let (context, text) = rest.split_once("\", \"")?;
+                        format!("{context}{}{}", wprs_core::locale::CONTEXT_MARK, text.strip_suffix('"')?)
+                    }
+                    None => call.strip_prefix("tr(\"")?.strip_suffix('"')?.to_owned(),
+                };
+                Some((key.trim_start_matches('"').into(), text))
             });
             let name = if name == "early" { "words" } else { name };
             out.entry(format!("{}.{name}", &file[..1])).or_default().extend(rows);

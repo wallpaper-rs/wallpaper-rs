@@ -118,7 +118,7 @@ Kirigami.Dialog {
             QQC2.ComboBox {
                 id: kind
 
-                model: form.kinds
+                model: form.kinds.map(k => SceneEffects.type(k))
             }
 
             QQC2.Button {
@@ -128,7 +128,7 @@ Kirigami.Dialog {
                 onClicked: {
                     form.param(fresh.text, {
                             "set": {
-                                "type": kind.currentText
+                                "type": form.kinds[kind.currentIndex]
                             }
                         });
                     fresh.text = "";

@@ -80,6 +80,11 @@ QtObject {
         return backend.tr(text).replace(/%([1-9])/g, (mark, n) => n < args.length ? String(args[n]) : mark);
     }
 
+    function trc(context, text) {
+        const args = Array.prototype.slice.call(arguments, 1);
+        return tr.apply(null, [context + "\u0004" + text].concat(args.slice(1)));
+    }
+
     function field(key) {
         return Labels.field(key);
     }

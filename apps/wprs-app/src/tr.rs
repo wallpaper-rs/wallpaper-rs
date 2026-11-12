@@ -6,7 +6,9 @@ static CATALOG: LazyLock<HashMap<String, String>> =
     LazyLock::new(|| catalog(&wprs_core::locale::languages()));
 
 pub fn tr(text: &str) -> String {
-    CATALOG.get(text).cloned().unwrap_or_else(|| text.to_owned())
+    CATALOG.get(text).cloned().unwrap_or_else(|| {
+        text.rsplit_once(wprs_core::locale::CONTEXT_MARK).map_or(text, |(_, plain)| plain).to_owned()
+    })
 }
 
 pub fn catalog(languages: &[String]) -> HashMap<String, String> {

@@ -119,7 +119,7 @@ La tabla lista los efectos que trae el programa, en el orden y con los nombres d
 | Fallo digital | `glitch` | Filas desplazadas y colores separados. |
 | Desplazamiento continuo | `scroll` | Desplaza la imagen y la repite en los bordes. |
 | Sacudida | `shake` | Sacude la imagen en una dirección o por un mapa de flujo pintado. |
-| Velocidad de giro | `spin` | Gira la imagen alrededor de un centro. |
+| Giro | `spin` | Gira la imagen alrededor de un centro. |
 | Vaivén | `sway` | Balancea la imagen como algo colgado, o hace temblar el follaje. |
 | Estela de movimiento | `trail` | Deja una estela que se apaga. |
 | Anillos en el agua | `water_rings` | Anillos que se expanden, como gotas. |

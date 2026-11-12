@@ -22,16 +22,19 @@ pub fn catalog(catalogs: &[(&str, &str)], languages: &[String]) -> HashMap<Strin
     found.map(|(_, po)| parse(po)).unwrap_or_default()
 }
 
+pub const CONTEXT_MARK: char = '\u{4}';
+
 pub fn parse(po: &str) -> HashMap<String, String> {
     let mut map = HashMap::new();
     for entry in po.split("\n\n") {
         if entry.lines().any(|l| l.starts_with("#,") && l.contains("fuzzy")) {
             continue;
         }
-        let (mut parts, mut at) = ([String::new(), String::new()], None);
+        let (mut parts, mut at) = ([String::new(), String::new(), String::new()], None);
         for line in entry.lines().map(str::trim) {
             let quoted;
             (at, quoted) = match line.split_once(' ') {
+                Some(("msgctxt", rest)) => (Some(2), rest),
                 Some(("msgid", rest)) => (Some(0), rest),
                 Some(("msgstr", rest)) => (Some(1), rest),
                 _ if line.starts_with('"') => (at, line),
@@ -41,9 +44,9 @@ pub fn parse(po: &str) -> HashMap<String, String> {
                 parts[i].push_str(&unescape(text));
             }
         }
-        let [id, text] = parts;
+        let [id, text, context] = parts;
         if !id.is_empty() && !text.is_empty() {
-            map.insert(id, text);
+            map.insert(if context.is_empty() { id } else { format!("{context}{CONTEXT_MARK}{id}") }, text);
         }
     }
     map

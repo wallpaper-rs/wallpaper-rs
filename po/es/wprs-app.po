@@ -1435,6 +1435,7 @@ msgstr "Luz suave"
 #: apps/wprs-app/qml/EditEffects.qml apps/wprs-app/qml/SceneMapPaint.qml
 #: apps/wprs-app/qml/SceneMaterial3d.qml
 #: apps/wprs-app/qml/SceneScriptParams.qml apps/wprs-app/qml/SceneSwarmKin.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Color"
 msgstr "Color"
@@ -5852,6 +5853,7 @@ msgid "%1 %"
 msgstr "%1 %"
 
 #: apps/wprs-app/qml/SceneEffectFields.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Mask"
 msgstr "Máscara"
@@ -9155,16 +9157,19 @@ msgid "On by default"
 msgstr "Activado por defecto"
 
 #: apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Number"
 msgstr "Número"
 
 #: apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Switch"
 msgstr "Interruptor"
 
 #: apps/wprs-app/qml/SceneScriptParams.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Pair of numbers"
 msgstr "Par de números"
@@ -10708,6 +10713,7 @@ msgstr "Estela"
 
 #: apps/wprs-app/qml/SceneSwarmScope.qml
 #: apps/wprs-app/qml/SceneSwarmStrands.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Texture"
 msgstr "Textura"
@@ -10919,7 +10925,6 @@ msgid "Life in seconds"
 msgstr "Vida en segundos"
 
 #: apps/wprs-app/qml/SceneSwarmStart.qml
-#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Spin"
 msgstr "Velocidad de giro"
@@ -11109,6 +11114,7 @@ msgid "Along a gradient"
 msgstr "A lo largo de un degradado"
 
 #: apps/wprs-app/qml/SceneSwarmTools.qml
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Emitters"
 msgstr "Emisores"
@@ -11634,7 +11640,7 @@ msgid "Rename tag"
 msgstr "Cambiar el nombre de la etiqueta"
 
 #: apps/wprs-app/qml/SelectionDialogs.qml
-#: apps/wprs-app/qml/facade/SceneNames.qml
+msgctxt "rating"
 msgid "Rate"
 msgstr "Valorar"
 
@@ -12399,7 +12405,9 @@ msgstr "ejecuta shaders de efectos con campos o funciones de ayuda más nuevos"
 
 #: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "draws lighter variants of its effect shaders at low quality levels"
-msgstr "dibuja variantes más livianas de sus shaders de efectos en los niveles de calidad bajos"
+msgstr ""
+"dibuja variantes más livianas de sus shaders de efectos en los niveles de "
+"calidad bajos"
 
 #: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "spreads its scene over every screen"
@@ -13578,6 +13586,11 @@ msgid "Shine"
 msgstr "Destello"
 
 #: apps/wprs-app/qml/facade/SceneEffects.qml
+msgctxt "effect"
+msgid "Spin"
+msgstr "Giro"
+
+#: apps/wprs-app/qml/facade/SceneEffects.qml
 msgid "Tilt-shift"
 msgstr "Efecto miniatura"
 
@@ -13610,6 +13623,29 @@ msgstr "Ondulaciones del agua"
 #: apps/wprs-app/qml/facade/SceneEffects.qml
 msgid "Waves"
 msgstr "Ondas"
+
+#: apps/wprs-app/qml/facade/SceneEffects.qml
+msgid "Whole number"
+msgstr "Número entero"
+
+#: apps/wprs-app/qml/facade/SceneEffects.qml
+msgid "Point on the canvas"
+msgstr "Punto sobre el lienzo"
+
+#: apps/wprs-app/qml/facade/SceneEffects.qml
+#: apps/wprs-app/qml/facade/SceneTerms.qml
+msgid "Color table"
+msgstr "Tabla de color"
+
+#: apps/wprs-app/qml/facade/SceneEffects.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Choice"
+msgstr "Selección"
+
+#: apps/wprs-app/qml/facade/SceneEffects.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Blend mode"
+msgstr "Modo de fusión"
 
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Taper"
@@ -13718,6 +13754,10 @@ msgstr "Luz en el aire"
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Vortex"
 msgstr "Vórtice"
+
+#: apps/wprs-app/qml/facade/SceneLabels.qml
+msgid "Wake rules"
+msgstr "Reglas de despertar"
 
 #: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Walls"
@@ -13976,6 +14016,10 @@ msgid "Range"
 msgstr "Alcance"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Rate"
+msgstr "Ritmo"
+
+#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Ratio"
 msgstr "Relación"
 
@@ -14216,6 +14260,46 @@ msgstr "Balanceo"
 #: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Particle system"
 msgstr "Sistema de partículas"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "HD"
+msgstr "HD"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "Full HD"
+msgstr "Full HD"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "QHD"
+msgstr "QHD"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "4K UHD"
+msgstr "4K UHD"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "5K"
+msgstr "5K"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "Ultrawide 21:9"
+msgstr "Panorámica 21:9"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "Super ultrawide 32:9"
+msgstr "Superpanorámica 32:9"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "16:10"
+msgstr "16:10"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "4:3"
+msgstr "4:3"
+
+#: apps/wprs-app/qml/facade/SceneScreens.qml
+msgid "Phone 9:19.5"
+msgstr "Teléfono 9:19.5"
 
 #: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
 msgid "Drag to move the plane"
@@ -14501,10 +14585,6 @@ msgstr "Escala logarítmica"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Brightness only"
 msgstr "Solo el brillo"
-
-#: apps/wprs-app/qml/facade/SceneTerms.qml
-msgid "Color table"
-msgstr "Tabla de color"
 
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Map"
@@ -15203,10 +15283,6 @@ msgid "Bend"
 msgstr "Doblez"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Blend mode"
-msgstr "Modo de fusión"
-
-#: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Blend in"
 msgstr "Entrada gradual"
 
@@ -15318,10 +15394,6 @@ msgstr "Primer color"
 #: apps/wprs-app/qml/facade/WallhavenWords.qml
 msgid "Colors"
 msgstr "Colores"
-
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Choice"
-msgstr "Selección"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Count"

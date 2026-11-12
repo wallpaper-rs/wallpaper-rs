@@ -10,6 +10,7 @@ use std::path::Path;
 use wprs_core::message::said;
 use wprs_scene::{Descriptor, MAX_PARAMS, MAX_PASSES, MAX_WGSL, MAX_WGSL_TOTAL};
 
+pub use form::KINDS as PARAM_KINDS;
 pub use starters::{TEMPLATES, starter};
 pub(crate) use trial::files;
 pub use trial::{check, located, source};

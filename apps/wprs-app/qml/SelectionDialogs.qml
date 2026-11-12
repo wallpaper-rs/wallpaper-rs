@@ -135,7 +135,7 @@ Item {
     Kirigami.Dialog {
         id: rater
 
-        title: App.tr("Rate")
+        title: App.trc("rating", "Rate")
         standardButtons: Kirigami.Dialog.Close
 
         Stars {

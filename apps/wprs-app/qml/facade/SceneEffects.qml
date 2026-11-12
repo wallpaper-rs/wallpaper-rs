@@ -42,7 +42,7 @@ QtObject {
             "scroll": App.tr("Scroll"),
             "shake": App.tr("Shake"),
             "shine": App.tr("Shine"),
-            "spin": App.tr("Spin"),
+            "spin": App.trc("effect", "Spin"),
             "sway": App.tr("Sway"),
             "tilt_shift": App.tr("Tilt-shift"),
             "tint": App.tr("Tint"),
@@ -55,4 +55,23 @@ QtObject {
             "water_ripple": App.tr("Water ripples"),
             "waves": App.tr("Waves")
         })
+    readonly property var types: ({
+            "float": App.tr("Number"),
+            "int": App.tr("Whole number"),
+            "bool": App.tr("Switch"),
+            "vec2": App.tr("Pair of numbers"),
+            "position": App.tr("Point on the canvas"),
+            "color": App.tr("Color"),
+            "texture": App.tr("Texture"),
+            "lut": App.tr("Color table"),
+            "mask": App.tr("Mask"),
+            "enum": App.tr("Choice"),
+            "blend": App.tr("Blend mode"),
+            "emitters": App.tr("Emitters")
+        })
+
+    function type(kind) {
+        return types[kind] ?? SceneWords.label(kind);
+    }
+
 }

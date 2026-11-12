@@ -58,7 +58,7 @@ for pkg in integrations/*/; do
 done
 
 mapfile -t sources < <(find apps/wprs-app/qml -name '*.qml' | LC_ALL=C sort)
-xgettext --c++ --from-code=UTF-8 -k -ktr:1 --add-location=file --force-po --package-name=wallpaper-rs \
+xgettext --c++ --from-code=UTF-8 -k -ktr:1 -ktrc:1c,2 --add-location=file --force-po --package-name=wallpaper-rs \
   -o "$TMP/wprs-app.pot" "${sources[@]}"
 catalog wprs-app ""
 xgettext --c++ --from-code=UTF-8 -k -ktr:1 --add-location=file --force-po --package-name=wallpaper-rs \

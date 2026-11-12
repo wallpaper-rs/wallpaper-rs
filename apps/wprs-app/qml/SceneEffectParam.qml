@@ -48,7 +48,7 @@ RowLayout {
     }
 
     QQC2.ComboBox {
-        model: row.form.kinds
+        model: row.form.kinds.map(k => SceneEffects.type(k))
         currentIndex: Math.max(0, row.form.kinds.indexOf(row.param.type))
         onActivated: index => row.form.param(row.param.id, {
                     "set": {

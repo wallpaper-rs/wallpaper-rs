@@ -4,6 +4,7 @@ mod depth;
 mod editor;
 mod fake;
 mod grid;
+mod labels;
 mod landing;
 mod pages;
 mod picture;

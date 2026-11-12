@@ -32,7 +32,7 @@ QQC2.ToolButton {
                 delegate: QQC2.MenuItem {
                     required property var modelData
 
-                    text: modelData.name + " (" + modelData.size[0] + " × " + modelData.size[1] + ")"
+                    text: SceneScreens.label(modelData.name) + " (" + modelData.size[0] + " × " + modelData.size[1] + ")"
                     checkable: true
                     checked: clock.size[0] === modelData.size[0] && clock.size[1] === modelData.size[1]
                     onTriggered: clock.canvas({

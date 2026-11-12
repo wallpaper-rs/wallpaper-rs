@@ -50,6 +50,7 @@ QtObject {
             "volume": App.tr("Volume"),
             "volumetric": App.tr("Light in the air"),
             "vortex": App.tr("Vortex"),
+            "wake": App.tr("Wake rules"),
             "walls": App.tr("Walls"),
             "warp": App.tr("Warp"),
             "wave": App.tr("Wave"),
