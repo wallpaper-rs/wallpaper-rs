@@ -61,14 +61,14 @@ expect "rerun of an older commit keeps what it read" "$got" ""
 
 got=$(
   {
-    cache 1 "$old" $m 2026-11-01T10:00:00Z 2026-11-05T10:05:00Z 600
+    cache 1 "$old" $m 2026-11-10T10:00:00Z 2026-11-11T10:05:00Z 600
     cache 2 "$new" $m 2026-11-10T10:00:00Z 2026-11-12T10:05:00Z 600
-    cache 3 depth-anything-v2-small-46c4e8ee-onnxruntime-1.31.0 $m 2026-11-01T10:00:00Z 2026-11-05T10:05:00Z 100
-    cache 4 apt-build-dddddddddddddddddddddddddddddddd $m 2026-11-01T10:00:00Z 2026-11-11T10:05:00Z 100
+    cache 3 depth-anything-v2-small-46c4e8ee-onnxruntime-1.31.0 $m 2026-11-01T10:00:00Z 2026-11-07T10:05:00Z 100
+    cache 4 apt-build-dddddddddddddddddddddddddddddddd $m 2026-11-01T10:00:00Z 2026-11-05T10:05:00Z 100
     cache 5 setup-java-Linux-x64-gradle-eeeeeeeeeeeeeeee $m 2026-10-01T10:00:00Z 2026-11-01T10:05:00Z 100
   } | run 2026-11-12T10:00:00Z 2026-11-12T10:30:00Z
 )
-expect "older generation idle 7 days deleted, only generation of a family idle 10 days kept" "$got" "1 "
+expect "older generation idle 1 day, only generation idle 7 and 10 days: deleted; only generation idle 5 days: kept" "$got" "1 4 5 "
 
 got=$(
   {
