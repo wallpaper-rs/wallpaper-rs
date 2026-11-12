@@ -575,7 +575,7 @@ Añade una luz en el centro del lienzo con los valores de su tipo: punto (radio 
 | `light` | texto | `point` (punto, por defecto), `spot` (foco), `tube` (tubo) o `directional` (direccional). |
 | `id` | texto | Id de la capa de luz. Sin valor, usa el nombre del tipo. |
 | `into` | texto | Id de un grupo donde entra. |
-| `at` | lista de números | Lugar `[x, y]` de la luz, en píxeles del lienzo (del grupo, con `into`). Sin valor, el centro. |
+| `at` | lista de números | Lugar `[x, y]` de la luz dentro de su grupo, en píxeles, y se guarda como la `position` de su transformación. En la lista principal coincide con los píxeles del lienzo; dentro de un grupo que está movido, la luz queda en el lugar del lienzo que resulta de sumarle el del grupo. Sin valor, el centro del lienzo. Para dejar una luz en un punto del lienzo, usa `at` de la variante `set`. |
 
 ```sh
 wprs-ctl scene act mi-escena light '{"add":{"light":"spot","id":"foco","at":[960,300]}}'

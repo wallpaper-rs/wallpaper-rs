@@ -353,7 +353,7 @@ wprs-ctl scene act mi-escena manifest '{"media":{"file":"foto.png"}}'
 
 #### `translate`
 
-Escribe, añade o quita el texto de un campo en un idioma. Sirve para los textos de la ficha (`/manifest/title`, `/manifest/description`, `/manifest/changes`), las etiquetas, ayudas y opciones de las propiedades de usuario, y los textos de reserva de los medios. No sirve para el texto de una capa `text` (ese se cambia con [`set`](acciones-capas.md#set)). Al escribir en un idioma distinto del del paquete, un texto simple se convierte en un texto con varios idiomas. En la app, el campo de idiomas junto a cada texto.
+Escribe, añade o quita el texto de un campo en un idioma. Sirve para los textos de la ficha (`/manifest/title`, `/manifest/description`, `/manifest/changes`), las etiquetas, ayudas y opciones de las propiedades de usuario, y los textos de reserva de los medios. No sirve para el texto de una capa `text`, que no tiene idiomas: la acción lo dice y ese texto se cambia con [`set`](acciones-capas.md#set). Al escribir en un idioma distinto del del paquete, un texto simple se convierte en un texto con varios idiomas. En la app, el campo de idiomas junto a cada texto.
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
@@ -581,11 +581,11 @@ Copia un módulo `.js` a `scripts/` y lo declara, o crea uno nuevo a partir de u
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
-| `file` | texto (obligatorio) | Sin plantilla: el archivo `.js` que se copia (ruta desde donde ejecutas el comando). Con plantilla: el nombre del módulo nuevo, que debe terminar en `.js`; con `""` se llama como la plantilla (`empty.js`, `timer.js`...). Si el archivo ya existe, la acción falla. |
+| `file` | texto | Sin plantilla (obligatorio): el archivo `.js` que se copia (ruta desde donde ejecutas el comando). Con plantilla: el nombre del módulo nuevo, que debe terminar en `.js`; si falta, se llama como la plantilla (`empty.js`, `timer.js`...). Si el archivo ya existe, la acción falla. |
 | `template` | texto | Plantilla de arranque: `empty` (vacío, con `init` y `update`), `media` (maneja el estado del reproductor de medios), `touch` (responde cuando el puntero está sobre la salida) o `timer` (cuenta segundos). |
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena import_script '{"file":"reloj.js","template":"timer"}'
 wprs-ctl scene act mi-escena import_script '{"file":"musica.js","template":"media"}'
 wprs-ctl scene act mi-escena import_script '{"file":"tocar.js","template":"touch"}'
@@ -611,7 +611,7 @@ Declara un módulo `.js` que ya está en la carpeta del paquete y la escena aún
 | `path` | texto (obligatorio) | Ruta del módulo. |
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena script '{"remove":{"path":"scripts/empty.js"}}'
 wprs-ctl scene act mi-escena script '{"add":{"path":"scripts/empty.js"}}'
 ```
@@ -625,7 +625,7 @@ Quita el módulo de la lista (el archivo se queda en la carpeta). Se rechaza, di
 | `path` | texto (obligatorio) | Ruta del módulo. |
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena script '{"remove":{"path":"scripts/empty.js"}}'
 ```
 
@@ -639,7 +639,7 @@ Cambia el lugar del módulo en la lista, que es el orden en que se ejecutan.
 | `to` | entero (obligatorio) | Posición nueva (0 es el primero). |
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena import_script '{"file":"reloj.js","template":"timer"}'
 wprs-ctl scene act mi-escena script '{"move":{"path":"scripts/reloj.js","to":0}}'
 ```
@@ -654,7 +654,7 @@ Pone en `events` y `uses` lo que el código del módulo usa de verdad. Conserva 
 | `params` | sí/no | `true` añade también, como números, los ajustes que el código lee como `params.nombre` y el módulo no declara. Por defecto `false`. |
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena script '{"write":{"path":"scripts/empty.js","text":"export function update() { const x = params.fuerza; }\n"}}'
 wprs-ctl scene act mi-escena script '{"declare":{"path":"scripts/empty.js","params":true}}'
 ```
@@ -669,7 +669,7 @@ Guarda el código de un módulo que la escena ya lista. No cambia su declaració
 | `text` | texto (obligatorio) | El código completo. |
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena script '{"write":{"path":"scripts/empty.js","text":"export function update() {}\n"}}'
 ```
 
@@ -688,7 +688,7 @@ Crea, cambia, renombra o quita un ajuste (`params`) del módulo, que el usuario 
 | `remove` | sí/no | `true` quita el ajuste. Por defecto `false`. |
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena script '{"param":{"path":"scripts/empty.js","id":"velocidad","type":"number","default":2,"min":0,"max":10}}'
 wprs-ctl scene act mi-escena script '{"param":{"path":"scripts/empty.js","id":"velocidad","to":"ritmo"}}'
 wprs-ctl scene act mi-escena script '{"param":{"path":"scripts/empty.js","id":"ritmo","remove":true}}'
@@ -707,7 +707,7 @@ Declara qué partes del motor usa un script, o toma de su código las que faltan
 Sin `add` ni `remove`, declara las partes que el código usa y la declaración no tiene.
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena uses '{"path":"scripts/empty.js","add":["timers","math"]}'
 wprs-ctl scene act mi-escena uses '{"path":"scripts/empty.js","remove":["math"]}'
 wprs-ctl scene act mi-escena script '{"write":{"path":"scripts/empty.js","text":"export function update() { scene.bloom; }\n"}}'
@@ -982,7 +982,7 @@ La última línea da `"missing": ["assets/sonido.ogg"]`.
 
 #### `flashes`
 
-Contesta con el último resultado de medir cuánto parpadea la escena, o con una medición nueva si pides `run`. Sirve para decidir si el paquete debe marcarse como sensible a los destellos. El resultado solo vive mientras la escena no cambie y en el mismo proceso: cada llamada de `wprs-ctl` es un proceso, así que desde la terminal hay que pedir `run`.
+Contesta con el último resultado de medir cuánto parpadea la escena, o con una medición nueva si pides `run`. Sirve para decidir si el paquete debe marcarse como sensible a los destellos. El resultado se guarda junto al estado de la escena mientras la escena no cambie, y lo ve cualquier otra llamada de `wprs-ctl`: no hace falta pedir `run` otra vez después de `shot` con `flashes`.
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
@@ -999,7 +999,7 @@ wprs-ctl scene ask mi-escena flashes '{"run":true,"from":0,"seconds":1,"fps":5}'
 wprs-ctl scene ask mi-escena flashes '{}'
 ```
 
-La última línea da `null`: en otro proceso no hay medición guardada.
+La última línea da la medición que hizo la anterior; si la escena cambia después, da `null`.
 
 ### Claves, curvas y disparadores
 
@@ -1140,7 +1140,7 @@ No lleva argumentos: se pasa `{}`.
 La respuesta tiene `scripts`, y cada script trae `path`, `pointer`, `declared`, `detected` y `missing`.
 
 ```sh
-wprs-ctl scene act mi-escena import_script '{"file":"","template":"empty"}'
+wprs-ctl scene act mi-escena import_script '{"template":"empty"}'
 wprs-ctl scene act mi-escena script '{"write":{"path":"scripts/empty.js","text":"export function update() { scene.bloom; }\n"}}'
 wprs-ctl scene ask mi-escena uses '{}'
 ```

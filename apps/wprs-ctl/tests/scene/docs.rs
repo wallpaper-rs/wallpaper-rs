@@ -3,12 +3,13 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use wprs_editor::{ACTIONS, manual};
 
-const FIXTURES: [(&str, &str); 6] = [
+const FIXTURES: [(&str, &str); 7] = [
     ("foto.png", "scenes/pulse/assets/cover.png"),
     ("hoja.png", "tests/fixtures/bands-640x180.png"),
     ("sonido.ogg", "scenes/pond/assets/water.ogg"),
     ("modelo.glb", "tests/fixtures/rig.glb"),
     ("figura.glb", "tests/fixtures/toy.glb"),
+    ("piezas.glb", "tests/fixtures/parts.glb"),
     ("video.webm", "tests/fixtures/magenta-64x32.webm"),
 ];
 

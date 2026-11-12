@@ -37,6 +37,8 @@ Estas cuatro acciones editan cualquier parte del documento por su ruta. No compr
 
 Escribe un valor en una ruta. Si en el camino faltan objetos, los crea. Si la ruta ya existe, reemplaza el valor.
 
+Se rechaza un valor de otra clase que el que había (un texto donde iba un número, por ejemplo). Un valor de la clase correcta que rompe una regla, como una opacidad de 7 o un recurso que no existe, se acepta, igual que en el editor mientras se está a medias de un cambio. La respuesta de la acción lo dice: `wprs-ctl` imprime en la salida de errores una línea `problem: RUTA: MENSAJE` (o `warning:`) por cada problema que ese cambio añade, los mismos que enseña la lista de problemas del editor, y con `--json` los trae en `problems`. Sin líneas, el cambio no añadió ninguno.
+
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
 | `pointer` | texto (obligatorio) | Ruta del valor, por ejemplo `/scene/canvas/background`. |
@@ -48,7 +50,7 @@ wprs-ctl scene act mi-escena set '{"pointer":"/scene/canvas/background","value":
 
 #### `add`
 
-Inserta un valor en una lista o en un objeto. En una lista, el último nivel de la ruta es la posición (0 es el primero) o `-` para ponerlo al final. En un objeto, es el nombre del campo nuevo (si ya existía, lo reemplaza).
+Inserta un valor en una lista o en un objeto. En una lista, el último nivel de la ruta es la posición (0 es el primero) o `-` para ponerlo al final. En un objeto, es el nombre del campo nuevo (si ya existía, lo reemplaza). Acepta y avisa de los problemas como [`set`](#set).
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
@@ -171,7 +173,7 @@ Cambia una capa de lugar: a otra posición de su lista, o a otro grupo.
 | `to` | entero (obligatorio) | Posición final en la lista de destino (0 es abajo del todo). Si es mayor que el largo, queda arriba del todo. |
 | `into` | texto | Id de un grupo de destino. Sin él, la capa pasa a la lista principal. |
 
-Para meter una capa en un grupo, el grupo tiene que estar más abajo en la lista que la capa; si está más arriba, la acción falla con un error de ruta. Primero baja el grupo con otro `move_layer`.
+El grupo puede estar arriba o abajo de la capa en la lista. Un grupo no se puede meter dentro de sí mismo ni de lo que contiene: la acción se rechaza.
 
 ```sh
 wprs-ctl scene act mi-escena add_layer '{"kind":"group","id":"adorno"}'
@@ -225,7 +227,7 @@ wprs-ctl scene act mi-escena hide '{"id":"fondo","hidden":false}'
 
 #### `lock`
 
-Bloquea una capa para que no se cambie en el lienzo de la app, o la desbloquea. Es una marca del editor (queda en `/scene/ext/editor/locked`): los comandos de la terminal siguen pudiendo cambiarla. En la app es **Bloquear**.
+Marca una capa como bloqueada, o quita la marca. La marca es del editor (queda en `/scene/ext/editor/locked`) y solo la respetan las asas y los arrastres del lienzo de la app: una capa bloqueada no se mueve ni se estira con el ratón. No protege nada más: las acciones (`set`, `layer`, `move_layer`, `remove_layer`...), los campos del inspector y los comandos de la terminal siguen cambiando una capa bloqueada. En la app es **Bloquear**.
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|

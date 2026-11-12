@@ -39,7 +39,7 @@ wprs-ctl scene act mi-escena redo
 wprs-ctl scene validate mi-escena
 ```
 
-`scene history` lista los pasos que recorren `undo` y `redo`. `scene validate` comprueba la escena y sale con código 1 si algo está mal. Algunas acciones (como `set`) aceptan valores que la comprobación después rechaza; por eso conviene validar al terminar.
+`scene history` lista los pasos que recorren `undo` y `redo`. `scene validate` comprueba la escena y sale con código 1 si algo está mal. Algunas acciones (como `set` y `add`) aceptan valores que rompen una regla de la escena, y entonces imprimen en la salida de errores una línea `problem: RUTA: MENSAJE` por cada problema que ese cambio añade (con `--json`, los traen en `problems`). Conviene validar al terminar. `scene ask mi-escena history` da lo mismo que `scene history`, como JSON.
 
 ## Cómo leer los errores
 
@@ -61,7 +61,7 @@ wprs-ctl scene actions --json
 ```
 
 - Sin nombre, lista todas las acciones con una línea cada una.
-- Con un nombre, muestra sus argumentos (si son obligatorios u opcionales y su tipo) y una línea de ejemplo. El ejemplo es solo un esqueleto: algunas acciones necesitan además argumentos que dependen de la escena.
+- Con un nombre, muestra sus argumentos (si son obligatorios u opcionales y su tipo) y un ejemplo que funciona. Si el ejemplo necesita algo en la escena, las líneas anteriores a la última lo preparan; se ejecutan en orden sobre una escena recién creada, con los archivos de ejemplo (`picture.png`, `sheet.png`, `sound.ogg`, `model.glb`, `figure.glb`, `pieces.glb`, `video.webm`) en la carpeta desde donde se ejecuta. Una prueba del programa ejecuta todos los ejemplos que imprime.
 - Con `--json`, imprime la lista, o el esquema JSON de los argumentos, en JSON.
 - Con `--queries`, hace lo mismo con las preguntas: `wprs-ctl scene actions --queries` y `wprs-ctl scene actions --queries wind`.
 
@@ -81,7 +81,7 @@ wprs-ctl scene ask mi-escena sounds '{}'
 
 ## Los ejemplos de estas páginas
 
-Cada ejemplo está en un bloque que se ejecuta sobre una escena recién creada con `wprs-ctl scene new mi-escena`. Las líneas de un bloque van en orden: las primeras preparan lo que necesita la última. Los archivos de ejemplo que se nombran (`foto.png`, `hoja.png`, `sonido.ogg`, `modelo.glb`, `figura.glb`, `video.webm`) están en la carpeta desde donde se ejecuta; use los suyos con otro nombre.
+Cada ejemplo está en un bloque que se ejecuta sobre una escena recién creada con `wprs-ctl scene new mi-escena`. Las líneas de un bloque van en orden: las primeras preparan lo que necesita la última. Los archivos de ejemplo que se nombran (`foto.png`, `hoja.png`, `sonido.ogg`, `modelo.glb`, `figura.glb`, `piezas.glb`, `video.webm`) están en la carpeta desde donde se ejecuta; use los suyos con otro nombre.
 
 Los nombres de las coordenadas, las unidades y los ids se explican al principio de cada página, en «Antes de empezar».
 

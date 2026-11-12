@@ -853,12 +853,20 @@ Ordena, oculta o muestra las piezas de una malla y activa o ajusta su profundida
 
 Hay que dar al menos algo que cambiar. Las piezas deben existir (las lista `rig`).
 
-`clip` y `unclip` piden una malla con más de una pieza, como la de un archivo `.glb` con varias; una malla hecha desde una imagen solo tiene `body`, y esas dos opciones no tienen ejemplo aquí.
+`clip` y `unclip` piden una malla con más de una pieza, como la de un archivo `.glb` con varias; una malla hecha desde una imagen solo tiene `body`. El archivo de ejemplo `piezas.glb` tiene dos, `chest` y `legs`.
 
 ```sh
 wprs-ctl scene act mi-escena import '{"file":"foto.png"}'
 wprs-ctl scene act mi-escena mesh_from_picture '{"image":"foto","id":"malla"}'
 wprs-ctl scene act mi-escena parts '{"layer":"malla","order":{"body":3}}'
+```
+
+Hacer que una pieza solo se vea sobre otra, y quitar esa restricción:
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"mesh","file":"piezas.glb","id":"cuerpo"}'
+wprs-ctl scene act mi-escena parts '{"layer":"cuerpo","clip":{"chest":"legs"}}'
+wprs-ctl scene act mi-escena parts '{"layer":"cuerpo","unclip":["chest"]}'
 ```
 
 Ocultar y mostrar:

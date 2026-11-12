@@ -313,9 +313,8 @@ wprs-ctl scene act DIR bone '{"layer":"mesh","name":"root","at":[0.5,0.9]}'
 wprs-ctl scene act DIR point '{"layer":"mesh","name":"ring","at":[0.5,0.2],"parent":"root"}'
 
 act parts
-wprs-ctl scene act DIR import '{"file":"picture.png"}'
-wprs-ctl scene act DIR mesh_from_picture '{"image":"picture","id":"mesh"}'
-wprs-ctl scene act DIR parts '{"layer":"mesh","order":{"body":3}}'
+wprs-ctl scene act DIR add_layer '{"kind":"mesh","file":"pieces.glb","id":"body"}'
+wprs-ctl scene act DIR parts '{"layer":"body","clip":{"chest":"legs"}}'
 
 act animate
 wprs-ctl scene act DIR import '{"file":"picture.png"}'
