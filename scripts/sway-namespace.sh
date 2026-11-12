@@ -28,9 +28,10 @@ wprsd=$daemon
 expect "[s['layer_shell'][k] for k in ('namespace', 'from', 'restart')]" "['wprs-check', 'config', False]"
 expect "'environment' in (s['layer_shell']['ignored'] or '')" True
 expect "s['layer_shell']['ignored_from'], s['layer_shell']['ignored_empty']" "('environment', False)"
-check HEADLESS-1 "0.5,0.5,$magenta"
 saw "$mark" wprs-check
 [ -n "$(tail -n "+$mark" "$WORK/sway.log" | announced)" ] || fail "the compositor did not log the new surfaces"
+swaymsg -q reload
+check HEADLESS-1 "0.5,0.5,$magenta"
 echo "the compositor read the namespace before and after the restart"
 ctl config "$key" "" >/dev/null
 expect "s['layer_shell']['restart'], s['options']['$key']" "(True, 'auto')"

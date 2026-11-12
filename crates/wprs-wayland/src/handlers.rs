@@ -28,12 +28,10 @@ impl OutputHandler for State {
     }
 
     fn update_output(&mut self, _: &Connection, _: &Queue, output: WlOutput) {
-        self.rest_again(&output);
         self.changed(|s| s.output == output, |_| {})
     }
 
     fn output_destroyed(&mut self, _: &Connection, _: &Queue, output: WlOutput) {
-        self.forget_idle(&output);
         self.remove(|s| s.output == output)
     }
 }
@@ -51,12 +49,13 @@ impl LayerShellHandler for State {
         configure: LayerSurfaceConfigure,
         _: u32,
     ) {
+        tracing::debug!(size = ?configure.new_size, "the background surface was configured");
         let output = self.screens.iter().find(|s| s.parts.layer == *layer).map(|s| s.output.clone());
         let fallback = output.and_then(|o| self.outputs.info(&o)?.logical_size);
         let fallback = fallback.map(|(w, h)| (w.max(0) as u32, h.max(0) as u32));
         let sized = |(w, h): &(u32, u32)| *w > 0 && *h > 0;
         let Some(logical) = Some(configure.new_size).filter(sized).or(fallback.filter(sized)) else { return };
-        self.changed(|s| s.parts.layer == *layer, |s| s.logical = Some(logical))
+        self.changed(|s| s.parts.layer == *layer, |s| (s.logical, s.awaiting) = (Some(logical), None))
     }
 }
 

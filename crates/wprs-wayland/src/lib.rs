@@ -122,6 +122,7 @@ impl Session {
                     break e;
                 }
                 state.reopen();
+                state.remap_due();
                 if wake.flag.swap(false, std::sync::atomic::Ordering::Acquire) {
                     state.reconcile();
                 }

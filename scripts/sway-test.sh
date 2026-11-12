@@ -64,6 +64,7 @@ xwayland disable
 output HEADLESS-1 mode --custom 640x360@60Hz pos 0 0
 output HEADLESS-2 mode --custom 640x360@60Hz scale 1.5 pos 640 0
 output HEADLESS-3 mode --custom 480x270@120Hz
+output * bg #804020 solid_color
 for_window [app_id="foot"] fullscreen enable
 EOF
 driver=()
@@ -81,7 +82,7 @@ expect "sorted(s['outputs'])" "['HEADLESS-1', 'HEADLESS-2']"
 expect "[s['outputs'][o]['height'] for o in ('HEADLESS-1', 'HEADLESS-2')]" "[360, 360]"
 grep -q "presentation backend chosen.*layer-shell" "$WORK/wprsd.log" || fail "layer-shell not chosen"
 
-green='#00ff00' blue='#2040c0' magenta='#d02060' desktop='#3f3f3f'
+green='#00ff00' blue='#2040c0' magenta='#d02060' desktop='#804020'
 source "$(dirname "$0")"/sway-first.sh
 ctl background "$blue"
 ctl set "$ROOT/tests/fixtures/green-64x32.png" --fit fit
@@ -118,12 +119,14 @@ wait_for 10 grep -q "closing a stream named after a screen" "$WORK/wprsd.log" ||
 expect "[s['outputs']['HEADLESS-3'][k] for k in ('width', 'height', 'clients')]" "[480, 270, 1]"
 expect "[s['outputs'][o]['refresh'] for o in ('HEADLESS-1', 'HEADLESS-3')]" "[60, 120]"
 grep -q "presented without a refresh rate" "$WORK/wprsd.log" || fail "no presentation feedback"
+swaymsg -q reload
 check HEADLESS-3 "0.5,0.5,$green" "0.02,0.02,$blue"
 swaymsg -q output HEADLESS-3 unplug
 expect "sorted(s['outputs'])" "['HEADLESS-1', 'HEADLESS-2']"
 surfaces() { grep "surface ready" "$WORK/wprsd.log" | grep -c "$1"; }
 before=$(surfaces HEADLESS-2)
 swaymsg -q output HEADLESS-2 disable && swaymsg -q output HEADLESS-2 enable
+swaymsg -q reload
 check HEADLESS-2 "0.5,0.5,$green" "0.02,0.02,$blue"
 sleep 1
 if grep "output removed" "$WORK/wprsd.log" | grep HEADLESS-2 >/dev/null; then fail "a short output flap removed the output"; fi

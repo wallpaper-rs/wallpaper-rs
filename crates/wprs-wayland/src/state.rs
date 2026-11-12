@@ -52,6 +52,9 @@ pub(crate) struct Screen {
     pub(crate) toplevel: bool,
     pub(crate) rate: Rate,
     pub(crate) overlaps: Overlaps,
+    pub(crate) mapped: bool,
+    pub(crate) cold: bool,
+    pub(crate) awaiting: Option<Instant>,
 }
 
 pub(crate) struct State {
@@ -76,7 +79,6 @@ pub(crate) struct State {
     pub(crate) reopen: Vec<WlOutput>,
     pub(crate) sink: Sink,
     pub(crate) wanted: Wanted,
-    pub(crate) idle: Vec<(WlOutput, String)>,
     conn: Connection,
     qh: QueueHandle<State>,
     namespace: String,
@@ -113,7 +115,6 @@ impl State {
             reopen: Vec::new(),
             sink,
             wanted,
-            idle: Vec::new(),
             conn,
             qh: qh.clone(),
             namespace,
@@ -125,11 +126,7 @@ impl State {
     pub(crate) fn add(&mut self, output: WlOutput) {
         let Some(info) = self.outputs.info(&output) else { return };
         let name = name_of(&info);
-        if !(self.wanted)(&name) {
-            self.rest(output);
-            return;
-        }
-        self.idle.retain(|(o, _)| *o != output);
+        let mapped = (self.wanted)(&name);
         let (qh, surface) = (&self.qh, self.compositor.create_surface(&self.qh));
         let layer = self.layers.create_layer_surface(
             qh,
@@ -177,6 +174,9 @@ impl State {
             toplevel: false,
             rate,
             overlaps,
+            mapped,
+            cold: false,
+            awaiting: None,
         };
         self.screens.push(screen);
         for cover in [Cover::Toplevel, Cover::Overlap] {

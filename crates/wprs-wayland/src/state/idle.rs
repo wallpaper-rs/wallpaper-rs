@@ -1,8 +1,12 @@
 use super::{State, turned};
 use crate::scale::UNIT;
+use std::time::{Duration, Instant};
+
+const REMAP_WAIT: Duration = Duration::from_millis(300);
 use crate::{Event, Placed};
 use smithay_client_toolkit::output::OutputInfo;
 use smithay_client_toolkit::reexports::client::protocol::wl_output::WlOutput;
+use smithay_client_toolkit::shell::WaylandSurface;
 
 pub(crate) fn name_of(info: &OutputInfo) -> String {
     info.name.clone().unwrap_or_else(|| format!("wayland-{}", info.id))
@@ -32,26 +36,9 @@ fn placed(info: &OutputInfo) -> Placed {
 }
 
 impl State {
-    pub(crate) fn rest(&mut self, output: WlOutput) {
-        let Some(info) = self.outputs.info(&output) else { return };
-        let name = name_of(&info);
-        if !self.idle.iter().any(|(o, _)| *o == output) {
-            self.idle.push((output, name.clone()));
-        }
-        (self.sink)(Event::Idle(name, placed(&info)));
-    }
-
-    pub(crate) fn rest_again(&mut self, output: &WlOutput) {
-        if self.idle.iter().any(|(o, _)| o == output) {
-            self.rest(output.clone());
-        }
-    }
-
-    pub(crate) fn forget_idle(&mut self, output: &WlOutput) {
-        if let Some(at) = self.idle.iter().position(|(o, _)| o == output) {
-            let (_, name) = self.idle.remove(at);
-            (self.sink)(Event::Gone(name));
-        }
+    pub(crate) fn rest(&mut self, output: &WlOutput) {
+        let Some(info) = self.outputs.info(output) else { return };
+        (self.sink)(Event::Idle(name_of(&info), placed(&info)));
     }
 
     pub(crate) fn reconcile(&mut self) {
@@ -59,17 +46,49 @@ impl State {
         for output in outputs {
             let Some(info) = self.outputs.info(&output) else { continue };
             let want = (self.wanted)(&name_of(&info));
-            let has = self.screens.iter().any(|s| s.output == output);
-            tracing::debug!(output = name_of(&info), want, has, "checking the background surface");
-            match (want, has) {
-                (true, false) => self.add(output),
-                (false, true) => {
-                    self.screens.retain(|s| s.output != output);
-                    self.rest(output);
-                }
+            let Some(at) = self.screens.iter().position(|s| s.output == output) else {
+                self.add(output);
+                continue;
+            };
+            let screen = &mut self.screens[at];
+            match (want, screen.mapped) {
                 (true, true) => self.changed(|s| s.output == output, |_| {}),
+                (true, false) => {
+                    screen.mapped = true;
+                    if std::mem::take(&mut screen.cold) {
+                        screen.awaiting = Some(Instant::now() + REMAP_WAIT);
+                        screen.parts.layer.commit();
+                    } else {
+                        self.changed(|s| s.output == output, |_| {});
+                    }
+                }
+                (false, true) => {
+                    screen.mapped = false;
+                    screen.cold = true;
+                    let surface = screen.parts.layer.wl_surface();
+                    surface.attach(None, 0, 0);
+                    surface.commit();
+                    self.rest(&output);
+                }
                 (false, false) => {}
             }
+        }
+    }
+
+    pub(crate) fn remap_at(&self) -> Option<Instant> {
+        self.screens.iter().filter_map(|s| s.awaiting).min()
+    }
+
+    pub(crate) fn remap_due(&mut self) {
+        let now = Instant::now();
+        let due: Vec<WlOutput> = self
+            .screens
+            .iter()
+            .filter(|s| s.awaiting.is_some_and(|at| at <= now))
+            .map(|s| s.output.clone())
+            .collect();
+        for output in due {
+            self.changed(|s| s.output == output, |s| s.awaiting = None);
         }
     }
 }

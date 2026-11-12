@@ -210,6 +210,17 @@ riverctl spawn wprsd             # river (~/.config/river/init)
 spawn-at-startup "wprsd"         # niri (~/.config/niri/config.kdl)
 ```
 
+Si tu configuración de Sway tiene una línea `output … bg …` (o usas otro programa de fondo en la
+capa de fondo), conviene saber cómo las ordena el compositor: en la misma capa se ve encima la
+superficie más antigua, no la más nueva. `wprsd` mantiene viva su superficie (al quitar el fondo la
+deja sin imagen en vez de destruirla), así que conserva su sitio al quitar y recuperar el fondo y
+cuando recargas Sway (`swaymsg reload` vuelve a lanzar `swaybg`, que pasa a ser el más nuevo). Lo que
+el protocolo no permite es subir una superficie ya creada: si `swaybg` se creó antes que la de
+`wprsd` (al arrancar `wprsd` después de él, o cuando una pantalla se conecta o se vuelve a activar y
+`swaybg` llega primero), el fondo de Sway queda encima del de `wprsd`. En ese caso ejecuta `swaymsg
+reload` una vez, o quita la línea `output … bg …`; sin ella, al quitar el fondo se ve el color liso
+propio de Sway.
+
 En COSMIC, añádelo a las aplicaciones de inicio y elige un color sólido como fondo propio del
 escritorio. Si `install.sh` dejó activo el servicio de usuario, pásale el entorno gráfico desde la
 misma configuración en vez de lanzar el binario: `systemctl --user import-environment

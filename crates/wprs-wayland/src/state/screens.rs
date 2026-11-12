@@ -43,7 +43,8 @@ impl State {
 
     pub(crate) fn retry_at(&self) -> Option<Instant> {
         let names = self.reopen.iter().filter_map(|o| self.outputs.info(o)?.name);
-        names.filter_map(|n| allowed_at(self.reopened.get(&n)?, REOPENED, REOPEN_WINDOW)).min()
+        let reopen = names.filter_map(|n| allowed_at(self.reopened.get(&n)?, REOPENED, REOPEN_WINDOW)).min();
+        [reopen, self.remap_at()].into_iter().flatten().min()
     }
 
     pub(crate) fn remove(&mut self, gone: impl Fn(&Screen) -> bool) {
@@ -59,7 +60,11 @@ impl State {
     pub(crate) fn changed(&mut self, matches: impl Fn(&Screen) -> bool, change: impl FnOnce(&mut Screen)) {
         let Some(screen) = self.screens.iter_mut().find(|s| matches(s)) else { return };
         change(screen);
-        let Some(logical) = screen.logical else { return };
+        let (Some(logical), None) = (screen.logical, screen.awaiting) else { return };
+        if !screen.mapped {
+            let output = screen.output.clone();
+            return self.rest(&output);
+        }
         let info = self.outputs.info(&screen.output);
         let mode = info.as_ref().and_then(|i| i.modes.iter().find(|m| m.current));
         let window = Window {
