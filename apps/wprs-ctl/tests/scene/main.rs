@@ -1,6 +1,7 @@
 mod acting;
 mod authoring;
 mod cues;
+mod docs;
 mod language;
 mod marks;
 mod more;
