@@ -9,6 +9,8 @@ use wprs_core::Fill;
 use wprs_core::edit::Edit;
 use wprs_depth::{Device, Inpainter, Settings, threads};
 
+pub(crate) const PHONE_EDGE: u32 = wprs_depth::EDGE;
+
 pub(crate) fn fill(chosen: Fill, saver: bool) -> Option<Fill> {
     match chosen {
         Fill::Off => None,
@@ -20,7 +22,24 @@ pub(crate) fn fill(chosen: Fill, saver: bool) -> Option<Fill> {
 fn settings_of(edit: &Edit) -> Option<Settings> {
     let config = settings::config().parallax;
     let fill = places().ok()?.fill(fill(config.fill, Power::now().saver)?);
-    Some(Settings { fill, count: usize::from(config.layers), shift: edit.moving()?.strength })
+    let shift = crate::tilt::wanted_shift(edit.moving()?.strength, crate::tilt::visible());
+    let edge = wprs_depth::edge_for(PHONE_EDGE);
+    Some(Settings { fill, count: usize::from(config.layers), shift, edge })
+}
+
+pub(crate) fn still(image: &Path, edit: &Edit) -> Option<wprs_core::travel::Still> {
+    let places = places().ok()?;
+    let fallback = || Settings { fill: wprs_core::Fill::Off, count: 5, shift: 0.0, edge: PHONE_EDGE };
+    let set = settings_of(edit).unwrap_or_else(fallback);
+    let found = path(image, edit);
+    let built = found.as_deref().and_then(|p| wprs_depth::load(p).ok().flatten());
+    match (places.still((image, &edit.source.sha256), edit, &set), built) {
+        (Some(wprs_core::travel::Still::Building), Some(set)) if set.info.reach.moves(set.info.size[0]) => {
+            None
+        }
+        (Some(wprs_core::travel::Still::Building), Some(_)) => Some(wprs_core::travel::Still::Flat),
+        (still, _) => still,
+    }
 }
 
 pub(crate) fn shown() -> Value {
@@ -45,7 +64,7 @@ pub(crate) fn build(
     device: Device,
 ) -> Result<PathBuf, Error> {
     let places = places()?;
-    let off = || said("android.layers_off", "the fill is off: pictures keep the single image warp", &[]);
+    let off = || said("android.layers_off", "the fill is off: pictures stay still", &[]);
     let set = settings_of(edit).ok_or_else(off)?;
     let threads = (threads() / 2).max(1);
     let mut loaded =

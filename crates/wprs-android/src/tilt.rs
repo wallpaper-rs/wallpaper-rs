@@ -10,11 +10,11 @@ const FRESH: Duration = Duration::from_millis(500);
 const SILENCE: Duration = Duration::from_secs(2);
 const SUBPIXEL: f32 = 0.25;
 const LATE: f32 = 0.1;
-pub(crate) const PHONE: f32 = 3.0;
-const MARGIN: f32 = 0.2;
+pub(crate) const PHONE: f32 = wprs_core::travel::PHONE_GAIN;
 
 static SENSED: Mutex<Option<Sensed>> = Mutex::new(None);
 static REACH: AtomicU32 = AtomicU32::new(0);
+static VISIBLE: AtomicU32 = AtomicU32::new(0);
 
 pub(crate) enum Reading {
     Gravity([f32; 3]),
@@ -101,7 +101,7 @@ fn aimed(sensed: Option<&Sensed>, offset: f32, now: Instant) -> [f32; 2] {
 pub(crate) fn wanted(preview: bool, lock: bool) -> bool {
     choice::shown_on(preview, lock).is_some_and(|shown| match shown.scene {
         true => crate::pack::load(&shown.path).is_ok_and(|pack| pack.scene.tilts()),
-        false => !shown.video && depth::raised(&shown.path).is_some(),
+        false => !shown.video && depth::raised(&shown.path).is_some_and(|r| r.deck.is_some()),
     })
 }
 
@@ -117,16 +117,16 @@ pub(crate) fn pixels(parallax: &Parallax, size: (u32, u32)) -> f32 {
     parallax.strength * PHONE * size.0 as f32
 }
 
-pub(crate) fn shift(at: [f32; 2], strength: f32, aspect: f32, visible: f32) -> [f32; 2] {
-    let reach = at[0].hypot(at[1]).max(1.0);
-    let s = strength * PHONE * visible.clamp(0.0, 2.0);
-    [s * at[0] / reach, s * at[1] * aspect / reach]
+pub(crate) fn wanted_shift(strength: f32, visible: f32) -> f32 {
+    strength * wprs_core::travel::gain(true, visible)
 }
 
-pub(crate) fn overscan(parallax: &Parallax, aspect: f32, visible: f32) -> f32 {
-    let lean = parallax.focus.max(1.0 - parallax.focus);
-    let margin = (parallax.strength * PHONE * visible.clamp(0.0, 2.0) * aspect.max(1.0) * lean).min(MARGIN);
-    parallax.overscan.max(1.0 / (1.0 - 2.0 * margin))
+pub(crate) fn saw(visible: f32) {
+    VISIBLE.store(visible.to_bits(), Relaxed);
+}
+
+pub(crate) fn visible() -> f32 {
+    Some(f32::from_bits(VISIBLE.load(Relaxed))).filter(|v| *v > 0.0).unwrap_or(1.0)
 }
 
 impl Motion {

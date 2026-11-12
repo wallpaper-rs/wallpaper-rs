@@ -5,6 +5,7 @@ use super::{Content, Reel};
 use std::time::Instant;
 use wprs_core::edit::Parallax;
 use wprs_core::settings::fps::lower;
+use wprs_core::travel::Reach;
 use wprs_core::{Ages, Region};
 use wprs_render::GpuImage;
 use wprs_scene::Tier;
@@ -14,7 +15,7 @@ mod shown;
 pub use shown::Tone;
 pub(super) use shown::{Shown, Sink};
 
-pub(super) type Raised = (GpuImage, Parallax);
+pub(super) type Raised = (GpuImage, Parallax, Reach);
 
 type Composed = (u64, (u32, u32), Option<([u32; 2], u32)>);
 

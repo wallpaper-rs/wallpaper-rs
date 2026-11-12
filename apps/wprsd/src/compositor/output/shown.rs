@@ -5,6 +5,7 @@ use super::super::{Content, Reel, Spec};
 use super::Raised;
 use std::collections::HashMap;
 use std::time::Duration;
+use wprs_core::travel::{shift, travel};
 use wprs_core::{Fit, UvRect};
 use wprs_render::{GpuImage, Layer, Relief, Target};
 
@@ -62,11 +63,13 @@ impl Shown {
             _ => self.uv,
         };
         let aspect = image.map_or(1.0, |i| i.size().0 as f32 / i.size().1.max(1) as f32);
-        let relief = self.relief.as_ref().zip(moved).map(|((depth, p), ([x, y], steps))| {
-            let reach = x.hypot(y).max(1.0);
-            let shift = [p.strength * x / reach, p.strength * y * aspect / reach];
-            Relief { depth, shift, focus: p.focus, steps: p.steps.min(steps), overscan: p.overscan }
-        });
+        let relief =
+            self.relief.as_ref().zip(moved).zip(image).map(|(((depth, p, reach), (at, steps)), i)| {
+                let window = framed.unwrap_or_else(|| UvRect::compute(fit, i.size(), size));
+                let way = travel(p.strength, reach, (p.focus, p.overscan), (aspect, &window));
+                let shift = shift(at, way.shift, aspect);
+                Relief { depth, shift, focus: p.focus, steps: p.steps.min(steps), overscan: way.zoom }
+            });
         let (flip, grade) = (self.tone.flip, self.tone.grade);
         Layer { image, fit, background: self.background, opacity, uv: framed, relief, flip, grade }
     }

@@ -58,17 +58,15 @@ fn listening_again_after_a_hide_starts_over_from_where_the_phone_is() {
 }
 
 #[test]
-fn the_phone_shifts_a_share_of_what_it_shows_and_zooms_to_hide_the_edges() {
+fn the_phone_shifts_a_share_of_what_it_shows_and_builds_for_it() {
     let parallax = Parallax::default();
-    assert_eq!(shift([0.5, -0.5], 0.02, 0.5, 1.0), [0.03, -0.015]);
-    assert_eq!(shift([0.5, 0.0], 0.02, 1.0, 0.5), [0.015, 0.0]);
+    assert_eq!(wanted_shift(0.02, 1.0), 0.06);
+    assert_eq!(wanted_shift(0.02, 0.5), 0.03);
     assert_eq!(pixels(&parallax, (1080, 2400)), 0.02 * 3.0 * 1080.0);
-    let reach = shift([1.0, 0.0], parallax.strength, 1.0, 0.45)[0] / 0.45 * 1080.0;
+    let reach = wanted_shift(parallax.strength, 0.45) / 0.45 * 1080.0;
     assert!((pixels(&parallax, (1080, 2400)) - reach).abs() < 1e-3, "{reach}");
-    let zoom = overscan(&parallax, 0.75, 1.0);
-    assert!((zoom - 1.0 / (1.0 - 2.0 * 0.042)).abs() < 1e-4, "{zoom}");
-    assert_eq!(overscan(&Parallax { strength: 0.0, ..parallax.clone() }, 1.0, 1.0), 1.04);
-    assert!(overscan(&Parallax { strength: 0.03, focus: 0.0, ..parallax }, 4.0, 2.0) <= 1.0 / 0.6 + 1e-4);
+    saw(0.4);
+    assert_eq!(visible(), 0.4);
 }
 
 #[test]

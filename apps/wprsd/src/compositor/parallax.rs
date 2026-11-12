@@ -21,7 +21,7 @@ impl State {
         let moving = self.outputs.get(name).is_some_and(|o| self.moves(o));
         let source = self.outputs.get_mut(name).and_then(|o| {
             o.moving = moving;
-            o.shown.relief.as_ref().map(|(_, p)| p.source)
+            o.shown.relief.as_ref().map(|(_, p, _)| p.source)
         });
         crate::inputs::relief(name, moving && source == Some(Source::Pointer));
     }

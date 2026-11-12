@@ -95,12 +95,13 @@ impl State {
         let live: Vec<Live> = (self.outputs.iter())
             .filter(|(name, o)| o.active && o.watched(self.exporter.is_streaming(name)) && self.moves(o))
             .filter_map(|(name, o)| {
-                let (Content::Image(picture), Some((_, p))) = (&o.shown.content, &o.shown.relief) else {
+                let (Content::Image(picture), Some((_, p, reach))) = (&o.shown.content, &o.shown.relief)
+                else {
                     return None;
                 };
                 let (key, pixels) =
                     ((picture.file.clone(), p.source, p.smoothing_ms), o.size.0.max(o.size.1));
-                Some((name.clone(), key, o.offset, p.strength * pixels as f32))
+                Some((name.clone(), key, o.offset, p.strength.min(reach.shift) * pixels as f32))
             })
             .collect();
         for (name, at) in self.motion.step(&live, crate::inputs::pointer_over, Instant::now()) {

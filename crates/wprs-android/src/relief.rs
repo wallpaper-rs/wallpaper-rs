@@ -4,19 +4,19 @@ use crate::gpu::Gpu;
 use crate::power::Power;
 use crate::store;
 use crate::tilt::{self, Motion};
-use image::Luma;
 use std::path::Path;
 use std::time::Instant;
-use wprs_core::edit::{Edit, Geometry};
+use wprs_core::edit::Geometry;
+use wprs_core::travel::{Reach, shift, travel};
 use wprs_core::{Fit, UvRect};
-use wprs_render::{DepthMap, GpuImage, Layer, Relief};
+use wprs_render::{GpuImage, Layer, Relief};
 
 const BATTERY_STEPS: u32 = 8;
 
 pub(crate) struct Raised {
     key: (u64, String, Raise, Option<Geometry>),
     depth: GpuImage,
-    flat: bool,
+    reach: Reach,
     motion: Motion,
 }
 
@@ -58,20 +58,14 @@ pub(crate) fn raise(
     let motion =
         old.take().filter(|raised| key.as_ref().is_some_and(|k| k.1 == raised.key.1)).map(|r| r.motion);
     *old = key.and_then(|key| {
-        let map = depth::maps::map(&key.2);
-        let flat = map.is_none();
-        let map = map.unwrap_or_else(|| DepthMap::from_pixel(1, 1, Luma([u16::MAX])));
-        let turned = key.3.clone().map(|geometry| Edit { geometry, ..Edit::default() });
-        let deck = key.2.deck.as_ref().filter(|_| key.3.is_none() && !flat);
-        let layers = deck.and_then(|path| wprs_depth::load(path).ok().flatten());
-        let stack = layers.and_then(|l| gpu.renderer.upload_layers(&l.images, &l.info.depths).ok());
-        let depth = match stack {
-            Some(stack) => stack,
-            None => {
-                gpu.renderer.upload_depth(&map, turned.as_ref()).inspect_err(|e| log::warn!("{e}")).ok()?
-            }
+        let layers = key.2.deck.as_ref().and_then(|path| wprs_depth::load(path).ok().flatten())?;
+        let layers = match &key.3 {
+            Some(geometry) if !geometry.is_identity() => wprs_depth::turned(&layers, geometry),
+            _ => layers,
         };
-        Some(Raised { key, depth, flat, motion: motion.unwrap_or_default() })
+        let uploaded = gpu.renderer.upload_layers(&layers.images, &layers.fields, &layers.info.depths);
+        let depth = uploaded.inspect_err(|e| log::warn!("{e}")).ok()?;
+        Some(Raised { key, depth, reach: layers.info.reach, motion: motion.unwrap_or_default() })
     });
     true
 }
@@ -92,22 +86,15 @@ impl Raised {
         self.motion.step(goal, parallax.smoothing_ms, clock, tilt::pixels(parallax, size))
     }
 
-    fn relief(&self, aspect: f32, visible: f32, charging: bool) -> (Relief<'_>, f32) {
+    fn relief(&self, aspect: f32, uv: &UvRect, charging: bool) -> Relief<'_> {
         let p = &self.key.2.parallax;
-        let steps = match () {
-            _ if self.flat => 1,
-            _ if charging => p.steps,
-            _ => p.steps.min(BATTERY_STEPS),
-        };
-        let shift = tilt::shift(self.motion.at(), p.strength, aspect, visible);
-        let relief = Relief { depth: &self.depth, shift, focus: p.focus, steps, overscan: 1.0 };
-        (relief, tilt::overscan(p, aspect, visible))
+        let steps = if charging { p.steps } else { p.steps.min(BATTERY_STEPS) };
+        tilt::saw(uv.scale[0]);
+        let wanted = tilt::wanted_shift(p.strength, uv.scale[0]);
+        let way = travel(wanted, &self.reach, (p.focus, p.overscan), (aspect, uv));
+        let shift = shift(self.motion.at(), way.shift, aspect);
+        Relief { depth: &self.depth, shift, focus: p.focus, steps, overscan: way.zoom }
     }
-}
-
-fn zoomed(uv: UvRect, zoom: f32) -> UvRect {
-    let offset = [0, 1].map(|i| uv.offset[i] + uv.scale[i] * (1.0 - 1.0 / zoom) / 2.0);
-    UvRect { offset, scale: uv.scale.map(|s| s / zoom), repeat: false }
 }
 
 pub(crate) fn layer<'a>(
@@ -120,17 +107,7 @@ pub(crate) fn layer<'a>(
     let uv = image.map(|image| placed(look.fit, look.crop, image.size(), size, look.pan));
     let aspect = image.map_or(1.0, |i| i.size().0 as f32 / i.size().1.max(1) as f32);
     let relief = raised.zip(uv).filter(|(_, uv)| !uv.repeat);
-    let relief = relief.map(|((raised, charging), uv)| raised.relief(aspect, uv.scale[0], charging));
-    let uv = uv.map(|uv| relief.as_ref().map_or(uv, |(_, zoom)| zoomed(uv, *zoom)));
+    let relief = relief.map(|((raised, charging), uv)| raised.relief(aspect, &uv, charging));
     let (fit, background) = (look.fit, look.background);
-    Layer {
-        image,
-        fit,
-        background,
-        opacity,
-        uv,
-        relief: relief.map(|(relief, _)| relief),
-        flip: look.flip,
-        grade: look.grade,
-    }
+    Layer { image, fit, background, opacity, uv, relief, flip: look.flip, grade: look.grade }
 }
