@@ -46,3 +46,18 @@ fn bone_colliders_keep_a_swinging_tip_out_and_fewer_count_at_low_quality() {
     assert!(open > 0.5 && kept < open - 0.15, "the ball stops the tip: {open} {kept}");
     assert!((low - open).abs() < 0.05, "at Q1 only the first two colliders count: {low} {open}");
 }
+
+#[test]
+fn a_model_chain_reaches_for_a_point_of_its_box_through_the_camera() {
+    let square = json!({ "canvas": { "size": [100, 100] } });
+    let ik = json!({ "ik": [{ "chain": ["root", "tip"], "target": [60, 50] }] });
+    let mut rt = runtime(rigged(square, json!([model("m", ik)])));
+    rt.frame([0.0, 0.0, 100.0, 100.0], Quality::Q3);
+    rt.advance(0.1);
+    rt.frame([0.0, 0.0, 100.0, 100.0], Quality::Q3);
+    let rig = rt.scene.solids["toy"].rig.clone().unwrap();
+    let w = tip(&rt);
+    let end = mesh_math::apply(&w, rig.tip(1));
+    let want = 5.0 * 0.2 * (30.0f32).to_radians().tan();
+    assert!((end[0] - want).abs() < 0.05 && end[1].abs() < 0.05, "the end lands under the point: {end:?}");
+}

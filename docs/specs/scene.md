@@ -917,7 +917,9 @@ it is read, and costs nothing more while it plays. A still skinned model draws i
 
 `physics` swings bones in the plane of x and y of the model, counting one unit of the model as 100
 pixels for `gravity`, `wind` and `translation`, and freezes at the lowest quality, where bones keep the
-pose of their animation. Chains of `ik` follow only `bone:` targets on models. With `root_motion`, the root
+pose of their animation. Chains of `ik` on models take every target meshes take: `bone:` of the model, and a point `[x, y]` in
+pixels of the box of the layer, `layer:` and `cursor`, which are seen through the camera and met on the
+plane through the root of the chain that faces it, then reached in the plane of x and y of the model. With `root_motion`, the root
 bone (the first bone, from the top of the skeleton, that an animation of the file moves) keeps the pose it
 has when its clips start, and what the clips do to it moves the layer instead, along x, y and z and turning
 where the clips turn it, adding up each turn of a repeating clip so that a walk walks on and a turning walk

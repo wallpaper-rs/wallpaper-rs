@@ -79,8 +79,11 @@ impl Runtime {
                     continue;
                 }
                 cx.wake.set(Wake::Idle);
-                let placed =
-                    m.unit == 1.0 && (!p.chains.is_empty() || self.script.rigs.contains_key(&p.layer));
+                let reaches = !p.chains.is_empty();
+                let placed = match m.unit == 1.0 {
+                    true => reaches || self.script.rigs.contains_key(&p.layer),
+                    false => reaches,
+                };
                 let seat = Seat::new(&cx, layer, &m, pointer.filter(|_| placed), placed);
                 p.pose(&cx, &m, (&seat, &sim));
                 (p.wake, p.dirty) = (p.wake.min(cx.wake.get()), false);

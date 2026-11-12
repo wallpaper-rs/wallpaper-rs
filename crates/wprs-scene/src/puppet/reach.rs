@@ -64,17 +64,21 @@ fn clamp(c: &Chain, i: usize, now: f32, delta: f32, sign: f32) -> f32 {
 
 impl Puppet {
     pub(crate) fn reach(&mut self, cx: &Context, m: &Fig, seat: &Seat) {
+        let found = if m.unit == 1.0 { None } else { cx.find(&self.layer) };
+        let sight = found.and_then(|l| super::aim::sight(cx, l, seat, &self.next.travel));
         for k in 0..self.chains.len() {
             let ik = &m.rig.ik[self.chains[k].entry];
             let weight = ik.weight.get(cx).clamp(0.0, 1.0);
+            let root = super::solid::head(&self.worlds[self.chains[k].nodes[0] as usize]);
+            let onto = |p: [f32; 2]| sight.as_ref().map_or(p, |s| s.onto(p, root));
             let target = match &self.chains[k].goal {
                 Goal::Point => match &ik.target {
-                    Reach::Point(v) => Some(seat.boxed_at(v.get(cx).0)),
+                    Reach::Point(v) => Some(onto(seat.boxed_at(v.get(cx).0))),
                     Reach::Named(_) => None,
                 },
-                Goal::Cursor => seat.cursor,
+                Goal::Cursor => seat.cursor.map(onto),
                 Goal::Bone(b) => Some(pivot(&self.worlds[*b as usize])),
-                Goal::Layer(id) => seat.layer(cx, id),
+                Goal::Layer(id) => seat.layer(cx, id).map(onto),
             };
             let Some(target) = target.filter(|_| weight > 0.0) else { continue };
             self.solve(k, target, ik.bend);

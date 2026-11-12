@@ -3,6 +3,7 @@ use crate::rigged::{MAX_ACTIVE_SHAPES, Rigged};
 use crate::{Layer, Wake};
 use std::sync::Arc;
 
+mod aim;
 mod arc;
 mod collide;
 mod course;
