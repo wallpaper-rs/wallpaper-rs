@@ -51,12 +51,26 @@ object Converting {
     }
 
     @Volatile
+    var asking: (() -> Unit)? = null
+
+    @Volatile
     var finished: ((String) -> Unit)? = null
 
     private fun library(op: String, uid: String): String? =
         JSONTokener(Native.library(JSONObject().put("op", op).put("uid", uid).toString())).nextValue() as? String
 
     fun busy() = progress.isNotEmpty()
+
+    private fun stopRunning() {
+        (running?.first ?: queue.firstOrNull())?.let { stop(it.uid) }
+    }
+
+    private fun shown() {
+        val context = app ?: return
+        val now = running?.first ?: queue.firstOrNull()
+        val left = progress.size - 1
+        Notice.update(context, now?.uid.takeIf { busy() }, now?.title.orEmpty(), ((progress[now?.uid] ?: 0f) * 100).toInt(), left) ::stopRunning
+    }
 
     fun resume(context: Context) = Pending.all(context).forEach { conversion ->
         val current = runCatching { JSONObject(Native.library(JSONObject().put("op", "item").put("uid", conversion.uid).toString())).optString("path") }.getOrDefault("")
@@ -72,16 +86,19 @@ object Converting {
     private fun queued(context: Context, conversion: Conversion) = main.post {
         if (conversion.uid in progress) return@post
         app = context.applicationContext
+        if (Notice.mustAsk(context)) asking?.invoke()
         names[conversion.uid] = conversion.title
         progress[conversion.uid] = 0f
         queue += conversion
         next()
+        shown()
     }
 
     fun stop(uid: String) = main.post {
         if (queue.removeAll { it.uid == uid }) {
             progress.remove(uid)
             app?.let { Pending.remove(it, uid) }
+            shown()
         }
         val (conversion, transformer) = running?.takeIf { it.first.uid == uid } ?: return@post
         transformer.cancel()
@@ -134,6 +151,7 @@ object Converting {
             val (conversion, transformer) = running ?: return
             val holder = ProgressHolder()
             if (transformer.getProgress(holder) == Transformer.PROGRESS_STATE_AVAILABLE) progress[conversion.uid] = holder.progress / 100f
+            shown()
             main.postDelayed(this, POLL_MS)
         }
     }
@@ -149,6 +167,7 @@ object Converting {
                 progress.remove(conversion.uid)
                 finished?.invoke(conversion.uid)
                 next()
+                shown()
             }
         }
     }

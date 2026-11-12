@@ -109,9 +109,8 @@ pub(crate) fn hears(pack: &Pack) -> bool {
 fn form(pack: &Pack, languages: &[String], uid: &str) -> Result<Value, Error> {
     let values = values(pack);
     let sounds = pack.scene.sounds().next().is_some();
-    let length =
-        || with(|lib| Ok(lib.item(uid)?.meta.duration_ms)).ok().flatten().map(|ms| ms as f64 / 1000.0);
-    let video = pack.video.as_ref().map(|m| m.video_properties(&crate::reel::labels(), length()));
+    let (length, probe) = crate::reel::clip(uid, pack.video.is_some());
+    let video = pack.video.as_ref().map(|m| m.video_properties(&crate::reel::labels(), length));
     let props = video.unwrap_or_else(|| pack.properties.clone());
     let languages: Vec<String> = languages.iter().cloned().chain(pack.locale.clone()).collect();
     let (mut fields, presets) = wprs_scene::form(&props, &pack.presets, &values, &languages);
@@ -132,7 +131,7 @@ fn form(pack: &Pack, languages: &[String], uid: &str) -> Result<Value, Error> {
         "granted": { "audio": audio, "touch": touch, "taps": taps, "media": allows(&pack.id, Input::Media),
             "media_network": allows(&pack.id, Input::MediaNetwork),
             "audio_network": allows(&pack.id, Input::AudioNetwork) },
-        "access": crate::playing::access(), "video": pack.video.is_some(),
+        "access": crate::playing::access(), "video": pack.video.is_some(), "length": length, "probe": probe,
     }))
 }
 

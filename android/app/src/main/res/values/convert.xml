@@ -9,4 +9,13 @@
     <string name="converted_name">%1$s for this phone</string>
     <string name="convert_note">This phone has no hardware decoder for this video at its size and speed, so it plays it with the processor and spends more battery. Converting makes an H.264 copy that the phone decodes in hardware.</string>
     <string name="convert_saver">Battery saver is on, so new videos were not converted. Their pages can convert them.</string>
+    <string name="convert_channel">Video conversion</string>
+    <string name="convert_notice_title">Show conversion progress?</string>
+    <string name="convert_notice_why">Converting a video can take a while. Allow notifications to see its progress and stop it while the app is closed. If you decline, videos convert exactly the same, without the notification.</string>
+    <string name="convert_notice_allow">Allow</string>
+    <string name="convert_notice_no">Not now</string>
+    <plurals name="convert_left">
+        <item quantity="one">%d more waiting</item>
+        <item quantity="other">%d more waiting</item>
+    </plurals>
 </resources>

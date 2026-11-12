@@ -77,7 +77,7 @@ impl Manifest {
     pub fn video_properties(&self, labels: &[String; 8], length: Option<f64>) -> BTreeMap<String, Property> {
         let (play, show) =
             (self.playback.clone().unwrap_or_default(), self.display.clone().unwrap_or_default());
-        let length = length.filter(|l| l.is_finite() && *l >= 1.0).map_or(MAX_START, |l| l.min(MAX_START));
+        let length = length.filter(|l| l.is_finite() && *l >= 1.0).unwrap_or(MAX_START);
         let [x, y] = show.position.unwrap_or_default();
         let slider = |min: f64, max: f64, default: f64, places: u8, unit: &str| Slider {
             decimals: Some(places),

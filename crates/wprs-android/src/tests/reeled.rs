@@ -33,6 +33,12 @@ pub(super) fn video_settings_play_on_the_phone() {
         (json!(true), vec!["speed", "start", "end", "volume", "zoom", "x", "y"])
     );
     assert_eq!(form["presets"][0]["value"], json!("calm"), "{form}");
+    assert!(form["length"].is_null() && form["probe"].as_str().is_some_and(|p| p.ends_with(".webm")), "{form}");
+    assert_eq!(form["fields"][2]["max"], json!(3600.0));
+    store::poster(&uid, &[0xff00_00ff_u32 as i32; 8], 4, (64, 32), (90_000, false)).unwrap();
+    let measured = ask(json!({ "op": "scene", "uid": uid, "languages": [] }));
+    assert_eq!((measured["length"].clone(), measured["probe"].clone()), (json!(90.0), Value::Null));
+    assert_eq!((measured["fields"][1]["max"].clone(), measured["fields"][2]["max"].clone()), (json!(89.5), json!(90.0)));
     let shown = reel::of(Some(&path));
     let authored = reel::Reel {
         rate: 0.75,

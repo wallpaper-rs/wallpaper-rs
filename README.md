@@ -384,7 +384,7 @@ Si el teléfono solo puede decodificar un vídeo con el procesador (no tiene un 
 hardware para su formato, su tamaño o su velocidad) pero sí decodifica por hardware H.264 a ese
 tamaño o a 1080p o 720p, la app lo convierte al añadirlo a una copia H.264 con el codificador del
 propio Android (Media3 Transformer, sin codificadores añadidos al APK), mostrando el avance con un
-botón *Detener* que deja el vídeo como estaba. *Convertir los vídeos que el teléfono no reproduce
+botón *Detener* que deja el vídeo como estaba; mientras convierte, una notificación silenciosa y continua, en su propio canal, muestra el avance, cuántos esperan y un botón *Detener*, y desaparece al terminar o detener. La primera conversión pide el permiso de notificaciones con una línea que explica para qué; si lo rechazas, convierte igual sin notificación y no vuelve a preguntar. *Convertir los vídeos que el teléfono no reproduce
 con fluidez* en *Ajustes* elige entre *Convertirlos* (la copia toma el lugar del original, que se
 borra, y conserva sus listas y su elección), *Convertir y conservar el original* (la copia se
 añade como otro vídeo) y *Nunca*. Con el ahorro de energía no convierte nada al añadir y lo avisa;

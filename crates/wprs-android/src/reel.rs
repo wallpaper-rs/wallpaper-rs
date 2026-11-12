@@ -18,6 +18,13 @@ pub(crate) const LABELS: [&str; 8] = [
     "0 plays to the end",
 ];
 
+pub(crate) fn clip(uid: &str, video: bool) -> (Option<f64>, Option<String>) {
+    let item = crate::library::with(|lib| Ok(lib.item(uid)?)).ok();
+    let length = item.as_ref().and_then(|i| i.meta.duration_ms).filter(|ms| *ms > 0).map(|ms| f64::from(ms) / 1000.0);
+    let probe = item.filter(|_| video && length.is_none()).and_then(|i| pack::entry(&i.path).ok());
+    (length, probe.map(|path| path.to_string_lossy().into_owned()))
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Reel {
     pub(crate) rate: f64,

@@ -47,6 +47,8 @@ class Main : ComponentActivity() {
     private val folder = registerForActivityResult(OpenDocumentTree()) { uri -> uri?.let(::importFolder) }
     private val packages = registerForActivityResult(OpenDocument()) { uri -> uri?.let { store(listOf(it)) } }
     val placing = mutableStateOf(false)
+    val noticing = mutableStateOf(false)
+    private val noticed = { runOnUiThread { Notice.asking(this).also { noticing.value = true } } }
     private val saverSkipped = AtomicBoolean()
     private val conversions = { _: String -> runOnUiThread { revision.intValue++ } }
     val preview = registerForActivityResult(StartActivityForResult()) { placed(it.resultCode == Activity.RESULT_OK) }
@@ -58,6 +60,7 @@ class Main : ComponentActivity() {
         Unveil.load()
         Heard.applied = synced
         Converting.finished = conversions
+        Converting.asking = noticed
         if (savedInstanceState == null) {
             Sync.soon(this, 0)
             thread(isDaemon = true) {
@@ -65,7 +68,10 @@ class Main : ComponentActivity() {
                 Updates.found(Updates.count())
             }
         }
-        setContent { App(this) }
+        setContent {
+            App(this)
+            NoticeAsk(this)
+        }
     }
 
     override fun onStart() {
@@ -88,6 +94,7 @@ class Main : ComponentActivity() {
         scope.cancel()
         if (Heard.applied === synced) Heard.applied = null
         if (Converting.finished === conversions) Converting.finished = null
+        if (Converting.asking === noticed) Converting.asking = null
         forget()
         if (playing.isInitialized()) videos.close()
         if (paging.isInitialized()) pages.close()
