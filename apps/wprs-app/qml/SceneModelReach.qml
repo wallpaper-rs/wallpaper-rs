@@ -10,7 +10,7 @@ ColumnLayout {
     required property var motion
     readonly property var chains: motion.info?.ik ?? []
     readonly property var parents: (motion.info?.bones ?? []).reduce((all, b) => Object.assign(all, Object.fromEntries([[b.name, b.parent]])), {})
-    readonly property string parent: parents[motion.bone] ?? ""
+    readonly property string above: parents[motion.bone] ?? ""
     readonly property var layers: (motion.page.view.layers ?? []).map(l => l.id).filter(id => id !== motion.layerId)
     readonly property var choices: [null, "cursor"].concat(motion.bones.map(b => "bone:" + b), layers.map(id => "layer:" + id))
 
@@ -37,10 +37,10 @@ ColumnLayout {
 
     QQC2.Button {
         icon.name: "list-add"
-        text: reach.parent !== "" ? App.tr("New chain from %1 to %2", reach.parent, reach.motion.bone) : App.tr("Pick a bone that has a parent")
-        enabled: reach.parent !== "" && reach.chains.length < 16
+        text: reach.above !== "" ? App.tr("New chain from %1 to %2", reach.above, reach.motion.bone) : App.tr("Pick a bone that has a parent")
+        enabled: reach.above !== "" && reach.chains.length < 16
         onClicked: reach.run({
-                "root": reach.parent,
+                "root": reach.above,
                 "tip": reach.motion.bone
             })
     }
