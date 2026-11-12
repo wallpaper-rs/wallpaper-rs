@@ -190,6 +190,7 @@ pub enum Action {
     Pool(PoolEdit),
     Uses(UsesEdit),
     Film(crate::films::FilmEdit),
+    Sprites(crate::cutter::SpriteEdit),
     Undo {},
     Redo {},
 }

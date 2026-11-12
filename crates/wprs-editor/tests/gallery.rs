@@ -118,3 +118,50 @@ fn a_video_is_offered_wherever_a_texture_is_picked() {
         texture.options
     );
 }
+
+#[test]
+fn a_sprite_grid_cuts_in_the_chosen_order_and_free_frames_are_edited_one_by_one() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    picture(&p.dir, "walk.png", [40, 20]);
+    act(&mut p, json!({"set": {"pointer": "/scene/assets/walk", "value": {"path": "assets/walk.png", "atlas": [2, 4]}}}))
+        .unwrap();
+    let grid = json!({"sprites": {"grid": {"asset": "walk", "rows": 2, "columns": 4, "count": 6}}});
+    act(&mut p, grid).unwrap();
+    let asset = &p.doc["scene"]["assets"]["walk"];
+    assert!(asset.get("atlas").is_none());
+    assert_eq!(asset["rects"].as_array().unwrap().len(), 6);
+    assert_eq!(asset["rects"][1], json!([10, 0, 10, 10]));
+    assert_eq!(asset["rects"][4], json!([0, 10, 10, 10]));
+    let down = json!({"sprites": {"grid": {"asset": "walk", "rows": 2, "columns": 4, "order": "columns"}}});
+    act(&mut p, down).unwrap();
+    assert_eq!(p.doc["scene"]["assets"]["walk"]["rects"][1], json!([0, 10, 10, 10]));
+    act(&mut p, json!({"sprites": {"change": {"asset": "walk", "index": 0, "rect": [1, 2, 3, 4]}}})).unwrap();
+    act(&mut p, json!({"sprites": {"add": {"asset": "walk", "rect": [30, 10, 10, 10]}}})).unwrap();
+    act(&mut p, json!({"sprites": {"reorder": {"asset": "walk", "from": 8, "to": 0}}})).unwrap();
+    act(&mut p, json!({"sprites": {"remove": {"asset": "walk", "index": 1}}})).unwrap();
+    let rects = &p.doc["scene"]["assets"]["walk"]["rects"];
+    assert_eq!(
+        (rects[0].clone(), rects[1].clone(), rects.as_array().unwrap().len()),
+        (json!([30, 10, 10, 10]), json!([0, 10, 10, 10]), 8)
+    );
+    act(&mut p, json!({"sprites": {"play": {"asset": "walk", "fps": 12.0, "frames": 5}}})).unwrap();
+    let sheet = query(&p, json!({"sprites": {"asset": "walk"}}));
+    assert_eq!(
+        (sheet["size"].clone(), sheet["fps"].clone(), sheet["frames"].clone()),
+        (json!([40, 20]), json!(12.0), json!(5))
+    );
+    for bad in [
+        json!({"sprites": {"change": {"asset": "walk", "index": 0, "rect": [35, 0, 10, 10]}}}),
+        json!({"sprites": {"add": {"asset": "walk", "rect": [0, 0, 0, 5]}}}),
+        json!({"sprites": {"remove": {"asset": "walk", "index": 99}}}),
+        json!({"sprites": {"play": {"asset": "walk", "fps": 500.0}}}),
+        json!({"sprites": {"play": {"asset": "walk", "frames": 99}}}),
+        json!({"sprites": {"grid": {"asset": "walk", "rows": 30, "columns": 30}}}),
+        json!({"sprites": {"clear": {"asset": "missing"}}}),
+    ] {
+        assert!(act(&mut p, bad.clone()).is_err(), "{bad}");
+    }
+    act(&mut p, json!({"sprites": {"clear": {"asset": "walk"}}})).unwrap();
+    assert!(p.doc["scene"]["assets"]["walk"].get("rects").is_none());
+}

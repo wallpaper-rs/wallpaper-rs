@@ -112,11 +112,13 @@ undo and redo walk through, the undone ones marked.
 | `add_layer` with kind `shapes` | a `video` layer that draws a pool: `source` names the pool, the first one when it is left out; refused until a pool exists. The source of any `video` layer offers the pools besides the video assets, so the inspector picks either; the Add layer menu lists *Shapes from a pool* once there is a pool | `scene act DIR add_layer JSON` |
 | `uses` | `path` (a script of the scene; every script when left out), `add` and `remove` (names of the `uses` of the script, such as `geometry`, `camera`, `hierarchy` or `shortcuts`); with neither, it declares what the source of the script uses and its `uses` lack. A script that gets `geometry` in a scene with no pool also gets a pool `shapes`. Importing a script (`import_script`) detects `geometry` (`scene.mesh`), `hierarchy` (`setParent`, `children`, `world`, `parent`), `shortcuts` (`openShortcut`) and `camera` along with the other parts; a saved script that uses more than it declares (apart from `audio`, `pointer`, `clicks` and `particles`) is a problem with a one-click fix (the `fix` of the problem is the action to send), shown in the Problems list as *Fix* and in the *What the scripts declare* list of the Assets panel as *Declare what it uses*; `{"uses": {}}` of `rig` lists, for each script, `declared`, `detected` and `missing` | `scene act DIR uses JSON`, `scene ask DIR uses` |
 | `film` | one of `trim` (`layer`, `start`, optional `end`; without `end` the video plays to its end; the part must lie inside the video, whose length is read from its header, and last 0.05 s or more), `rate` (`layer`, `rate` from 0 to 4) or `fit` (`layer`; sets `size` to the real size of the video); the layer is a video layer or an image layer that shows a video | `scene act DIR film JSON` |
+| `sprites` | one of `grid` (`asset`, `rows`, `columns`, optional `margin`, `spacing`, `count` and `order`: `rows`, `columns`, `rows_reversed` or `columns_reversed`; replaces `atlas` and `rects` with the rectangles of the grid), `rects` (every frame), `add`, `change` (`index`, `rect`), `remove`, `reorder` (`from`, `to`), `play` (`fps` from 0.1 to 120 and `frames`, from 1 to the number of frames) and `clear`; each `rect` is `[x, y, width, height]` inside the picture, with at most 256 frames | `scene act DIR sprites JSON` |
 | `undo`, `redo` | none | `undo`, `redo` |
 
-`film` has no command of its own: `scene act` runs it. The query `film`
-(`{"film": {"layer", "strip"}}`: real size, length, trim and speed of the video of a layer) goes
-through `rig`, like the other queries of the canvas.
+`film` and `sprites` have no command of their own: `scene act` runs them. The queries `film`
+(`{"film": {"layer", "strip"}}`: real size, length, trim and speed of the video of a layer) and
+`sprites` (`{"sprites": {"asset"}}`: size of the picture, frames, `fps` and `frames`) go through `rig`,
+like the other queries of the canvas.
 
 A video layer has on the canvas the box of the real size of its video (that of `size` when the
 layer sets it), not one of 640 × 360. In the inspector of a video layer, or of an image layer that
@@ -127,6 +129,11 @@ these layers too), the loop, *Use the size of the video* and *Play the whole vid
 texture is picked (the `texture` of a mask, an effect, a mesh or a spot light) the list also holds
 the video assets; the lists of normal, environment and particle-pool maps still ask for pictures.
 
+The sprite cutter (the *Cut sprites* button of each picture) shows the picture with its numbered
+frames: a grid is cut by rows, columns, margin, spacing, number of frames and order; dragging over
+the picture draws a frame, dragging a frame moves it and dragging its corner resizes it; a strip of
+the resulting frames plays them at the chosen frames a second, and lets them be reordered, removed
+and limited to the first ones (`frames`).
 
 A new layer gets an id made from its `name`, or else from its kind (`text`, `text_2`…; accents
 are dropped, other characters become `_`, and a name with no Latin letter or digit falls back to

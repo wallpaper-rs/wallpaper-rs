@@ -35,11 +35,24 @@ ColumnLayout {
                 onClicked: panel.page.editor.select(modelData.pointer)
 
                 QQC2.ToolButton {
-                    anchors.right: packed.left
+                    anchors.right: cutting.left
                     icon.name: "edit-rename"
                     text: App.tr("Rename…")
                     display: QQC2.AbstractButton.IconOnly
                     onClicked: renaming.ask("asset", row.modelData.id)
+                }
+
+                QQC2.ToolButton {
+                    id: cutting
+
+                    anchors.right: packed.left
+                    visible: row.modelData.kind === "image" && !row.modelData.path.toLowerCase().endsWith(".ktx2")
+                    icon.name: "view-grid"
+                    text: App.tr("Cut sprites…")
+                    display: QQC2.AbstractButton.IconOnly
+                    QQC2.ToolTip.text: text
+                    QQC2.ToolTip.visible: hovered
+                    onClicked: cutter.show(row.modelData.id)
                 }
 
                 QQC2.ToolButton {
@@ -159,6 +172,12 @@ ColumnLayout {
 
     SceneKtx2 {
         id: packing
+
+        page: panel.page
+    }
+
+    SceneSpriteCutter {
+        id: cutter
 
         page: panel.page
     }
