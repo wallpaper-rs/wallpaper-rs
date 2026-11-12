@@ -180,10 +180,8 @@ impl SceneEditor {
             let Some(project) = this.project.as_mut() else { return };
             if gesture { project.drag(&action) } else { project.act(&action) }
         };
-        match done {
-            Ok(_) => self.as_mut().changed(),
-            Err(e) => return self.fail(e),
-        }
+        let Ok(_) = done.map_err(|e| self.as_mut().fail(e)) else { return };
+        self.as_mut().changed();
         if let Some(before) = before {
             self.as_mut().said(&before);
         }
