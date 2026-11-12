@@ -74,7 +74,7 @@ pub(crate) fn edit(what: Backdrop) -> C {
             C::Clock(wprs_editor::actions::ClockSet { poster, seed, fresh })
         }
         Backdrop::Parallax { amount, delay, pointer, gyro, off } => {
-            C::Parallax { amount, delay, pointer, gyro, off }
+            C::Parallax { amount, delay, pointer, offset: None, gyro, off }
         }
     }
 }
