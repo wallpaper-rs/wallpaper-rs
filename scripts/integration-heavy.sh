@@ -27,6 +27,9 @@ ctl quality | grep "^TEST-Q: this scene is too heavy for this device" >/dev/null
 ctl quality q0 | grep "^TEST-Q: this scene costs .* frames may drop and battery use rise; automatic quality would keep it still" >/dev/null ||
   fail "wprs-ctl quality q0 did not warn: $(ctl quality)"
 expect "$level, $costs" "('q0', 'user', 'stop', True)"
+script -qefc "$BIN/wprs-ctl state" /dev/null | grep "^TEST-Q: this scene costs .* would keep it still" >/dev/null ||
+  fail "wprs-ctl state on a terminal did not warn of the cost"
+ctl state 2>&1 | grep "this scene costs" >/dev/null && fail "wprs-ctl state warned into a pipe"
 wait_for 10 moves || fail "a fixed level left the heavy scene still"
 ctl quality min-q1 -o TEST-Q | grep "^TEST-Q: this scene costs" >/dev/null || fail "wprs-ctl quality min-q1: $(ctl quality)"
 expect "$level, $costs" "('q1', 'user', 'stop', True)"
