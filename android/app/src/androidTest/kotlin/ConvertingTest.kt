@@ -125,8 +125,8 @@ class ConvertingTest {
         Pending.add(context, Conversion(uid, "/gone/clip.webm", "clip", false, 64 to 32))
         Pending.add(context, Conversion("missing", item(uid).getString("path"), "clip", false, 64 to 32))
         Converting.resume(context)
-        assertTrue(Pending.all(context).isEmpty())
-        assertTrue(item(uid).getString("path").endsWith(".webm"))
+        assertEquals(emptyList<String>(), Pending.all(context).map { it.uid + " " + it.path })
+        assertEquals(before, item(uid).getString("path"))
         assertFalse(uid in Converting.progress)
     }
 
