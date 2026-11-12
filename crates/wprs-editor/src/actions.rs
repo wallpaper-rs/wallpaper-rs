@@ -10,7 +10,7 @@ use wprs_format::features;
 
 pub use crate::action::{
     ACTIONS, Action, AssetEdit, ConditionEdit, EDITOR, ImportAssets, PresetAdd, RgbEdit, RuleEdit,
-    ScriptFile, ShotEdit, UpgradeEdit,
+    ScriptFile, ShotEdit, ShotFormat, UpgradeEdit,
 };
 pub use crate::action::{
     AmbientEdit, AttachEdit, AutoWeights, BodyEdit, BoneEdit, BoneRuleEdit, ClipEdit, ClipKey, DepthSet,

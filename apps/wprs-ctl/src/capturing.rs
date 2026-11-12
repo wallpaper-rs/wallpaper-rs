@@ -8,7 +8,7 @@ pub struct Capture {
     pub file: Option<std::path::PathBuf>,
     #[arg(
         long,
-        help = "Draw the scene on the graphics card and keep a frame, or with --animated a recording of it"
+        help = "Draw the scene on the graphics card, or take a frame of the picture or video of the package, and keep it, or with --animated a recording of a scene or a video"
     )]
     pub capture: bool,
     #[arg(long, requires = "capture", conflicts_with = "animated", value_parser = crate::spanning::second, help = "Second of the scene to keep; its poster time without it")]
@@ -19,4 +19,13 @@ pub struct Capture {
     pub seconds: Option<f64>,
     #[arg(long, requires = "animated", help = "Frames a second of the recording, 1 to 30; 10 without it")]
     pub fps: Option<u32>,
+    #[arg(long, requires = "animated", value_parser = ["gif", "webp"], help = "File type of the recording: gif, or webp, which keeps every color; gif without it")]
+    pub format: Option<String>,
+    #[arg(
+        long,
+        requires = "capture",
+        value_name = "FILE",
+        help = "For a preset package: the installed package file of its base, drawn with the values of the preset"
+    )]
+    pub base: Option<std::path::PathBuf>,
 }

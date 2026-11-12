@@ -8,6 +8,10 @@ fn lit(layers: &Value) -> bool {
     layers.as_array().into_iter().flatten().any(|l| l["rgb"] == true || lit(&l["layers"]))
 }
 
+pub(crate) fn kept(doc: &Value, pointer: &str) -> bool {
+    pointer == "/manifest/permissions/rgb" && crate::pages::scened(doc)
+}
+
 fn permitted(doc: &Value) -> bool {
     doc["manifest"]["permissions"]["rgb"] == true
 }

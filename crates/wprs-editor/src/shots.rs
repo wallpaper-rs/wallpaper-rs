@@ -1,3 +1,4 @@
+use crate::action::ShotFormat;
 use anyhow::{Result, anyhow, ensure};
 use image::codecs::gif::{GifEncoder, Repeat};
 use image::{Delay, Frame, RgbaImage};
@@ -28,38 +29,80 @@ pub fn poster_time(doc: &Value) -> f64 {
     doc["scene"]["clock"]["poster_time"].as_f64().unwrap_or(0.0)
 }
 
-pub fn frames(
-    dir: &Path,
-    doc: &Value,
-    (edge, times): (u32, &[f64]),
-    each: impl FnMut(RgbaImage),
-) -> Result<()> {
+pub fn frames(dir: &Path, doc: &Value, spec: (u32, &[f64]), each: impl FnMut(RgbaImage)) -> Result<()> {
     scened(doc)?;
     let scene = Scene::from_json(&crate::actions::visible(doc).to_string())?;
+    let properties: BTreeMap<String, wprs_format::Property> =
+        serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
+    let language = doc["manifest"]["default_locale"].as_str().unwrap_or("en");
     let read = |path: &str| match inside(path) {
         true => std::fs::read(dir.join(path)).map_err(|e| format!("{path}: {e}")),
         false => Err(format!("{path} is outside the scene folder")),
     };
-    let assets = SceneAssets::read(&scene, read).map_err(|e| anyhow!(e))?;
-    let assets = assets.with_scripts(&scene, crate::reach::reader(dir)).map_err(|e| anyhow!(e))?;
-    let properties: BTreeMap<String, wprs_format::Property> =
-        serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
-    let props = wprs_scene::effective(&properties, &[]);
-    let language = doc["manifest"]["default_locale"].as_str().unwrap_or("en");
+    let wanted = Wanted { properties: &properties, values: &wprs_scene::Values::new(), language };
+    draw(&scene, wanted, (&read, &crate::reach::reader(dir)), spec, each)
+}
+
+pub struct Wanted<'a> {
+    pub properties: &'a BTreeMap<String, wprs_format::Property>,
+    pub values: &'a wprs_scene::Values,
+    pub language: &'a str,
+}
+
+type Read<'a> = &'a dyn Fn(&str) -> std::result::Result<Vec<u8>, String>;
+
+pub fn draw(
+    scene: &Scene,
+    wanted: Wanted,
+    (read, scripts): (Read, Read),
+    (edge, times): (u32, &[f64]),
+    each: impl FnMut(RgbaImage),
+) -> Result<()> {
+    let assets = SceneAssets::read(scene, read).map_err(|e| anyhow!(e))?;
+    let assets = assets.with_scripts(scene, scripts).map_err(|e| anyhow!(e))?;
+    let props = wprs_scene::effective(wanted.properties, &[wanted.values]);
     let renderer = Renderer::shared().map_err(|e| {
         said("editor.no_graphics", "there is no graphics device to draw the scene: %1", &[&e])
     })?;
-    renderer.stills(&scene, &assets, &props, (wprs_render::local_wall(), language), (edge, times), each)?;
+    renderer.stills(
+        scene,
+        &assets,
+        &props,
+        (wprs_render::local_wall(), wanted.language),
+        (edge, times),
+        each,
+    )?;
     Ok(())
 }
 
-pub fn still(dir: &Path, doc: &Value, edge: u32, time: f64) -> Result<RgbaImage> {
+pub fn still(
+    dir: &Path,
+    doc: &Value,
+    edge: u32,
+    (time, base): (Option<f64>, Option<&Path>),
+) -> Result<RgbaImage> {
+    crate::shotmedia::unsupported(doc)?;
+    match crate::pages::kind(doc) {
+        "image" => return crate::shotmedia::picture(dir, doc, edge),
+        "video" => return crate::shotmedia::video(dir, doc, edge, time),
+        "preset" => {
+            let mut found = None;
+            crate::shotmedia::preset(doc, base, (edge, time.map(|t| vec![t]).as_deref()), |i| {
+                found = Some(i)
+            })?;
+            return found.ok_or_else(|| anyhow!(said("editor.shot_none", "the scene drew no picture", &[])));
+        }
+        _ => {}
+    }
     let mut found = None;
-    frames(dir, doc, (edge, &[time]), |image| found = Some(image))?;
+    frames(dir, doc, (edge, &[time.unwrap_or_else(|| poster_time(doc))]), |image| found = Some(image))?;
     found.ok_or_else(|| anyhow!(said("editor.shot_none", "the scene drew no picture", &[])))
 }
 
-fn encode(images: &[RgbaImage], fps: u32) -> Result<Vec<u8>> {
+fn encode(images: &[RgbaImage], fps: u32, format: ShotFormat) -> Result<Vec<u8>> {
+    if format == ShotFormat::Webp {
+        return crate::webp::animated(images, fps);
+    }
     let mut out = Vec::new();
     let mut encoder = GifEncoder::new_with_speed(&mut out, 20);
     encoder.set_repeat(Repeat::Infinite)?;
@@ -75,8 +118,13 @@ pub fn animation(
     dir: &Path,
     doc: &Value,
     (from, seconds, fps): (f64, f64, u32),
-    edge: u32,
+    (edge, format, base): (u32, ShotFormat, Option<&Path>),
 ) -> Result<Vec<u8>> {
+    crate::shotmedia::unsupported(doc)?;
+    ensure!(
+        crate::pages::kind(doc) != "image",
+        said("editor.shot_still", "a picture does not move: keep a frame instead", &[])
+    );
     ensure!(
         seconds > 0.0 && seconds <= MOST_SECONDS && (1..=30).contains(&fps),
         said("editor.shot_span", "record from 0.1 to 15 s at 1 to 30 frames a second", &[])
@@ -86,8 +134,16 @@ pub fn animation(
     let mut edge = edge.clamp(16, MOST_EDGE);
     loop {
         let mut images = Vec::new();
-        frames(dir, doc, (edge, &times), |image| images.push(image))?;
-        let gif = encode(&images, fps)?;
+        match crate::pages::kind(doc) {
+            "video" => {
+                for time in &times {
+                    images.push(crate::shotmedia::video(dir, doc, edge, Some(*time))?);
+                }
+            }
+            "preset" => crate::shotmedia::preset(doc, base, (edge, Some(&times)), |i| images.push(i))?,
+            _ => frames(dir, doc, (edge, &times), |image| images.push(image))?,
+        }
+        let gif = encode(&images, fps, format)?;
         if gif.len() <= MOST_BYTES || edge <= 160 {
             ensure!(
                 gif.len() <= MOST_BYTES,

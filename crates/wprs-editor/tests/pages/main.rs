@@ -3,6 +3,7 @@ mod media;
 mod needs;
 mod palette;
 mod settings;
+mod shots;
 mod web;
 
 use serde_json::{Value, json};

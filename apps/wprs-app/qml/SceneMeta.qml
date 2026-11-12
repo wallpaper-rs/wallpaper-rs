@@ -96,8 +96,19 @@ Loader {
                 elide: Text.ElideMiddle
             }
 
+            QQC2.CheckBox {
+                id: asWebp
+
+                visible: meta.animated && recorder.visible
+                text: App.tr("WebP")
+                Accessible.name: App.tr("Record as WebP instead of GIF")
+            }
+
             PackageCapture {
+                id: recorder
+
                 host: meta.host
+                webp: asWebp.checked
             }
 
             QQC2.Button {

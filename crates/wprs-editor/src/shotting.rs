@@ -16,16 +16,15 @@ pub fn file(dir: &Path, doc: &Value, e: &ShotEdit) -> Result<Option<(String, boo
             crate::flashes::measure(dir, doc, span)?;
             return Ok(None);
         }
-        ShotEdit::Still { time } => {
-            let image =
-                crate::shots::still(dir, doc, STILL, time.unwrap_or_else(|| crate::shots::poster_time(doc)))?;
+        ShotEdit::Still { time, base } => {
+            let image = crate::shots::still(dir, doc, STILL, (*time, base.as_deref()))?;
             fs::create_dir_all(dir.join("assets"))?;
             image.save_with_format(&part, image::ImageFormat::Png)?;
             false
         }
-        ShotEdit::Recording { from, seconds, fps } => {
+        ShotEdit::Recording { from, seconds, fps, format, base } => {
             let span = (from.unwrap_or(0.0), seconds.unwrap_or(4.0), fps.unwrap_or(10));
-            let gif = crate::shots::animation(dir, doc, span, MOTION)?;
+            let gif = crate::shots::animation(dir, doc, span, (MOTION, *format, base.as_deref()))?;
             fs::create_dir_all(dir.join("assets"))?;
             fs::write(&part, gif)?;
             true

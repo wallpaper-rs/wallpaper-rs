@@ -7,7 +7,9 @@ pub use super::lamps::{AmbientEdit, LightEdit, LightSet, LightingEdit, Map, MapS
 pub use super::limbs::{
     AttachEdit, BodyEdit, BoneRuleEdit, DepthSet, IkEdit, PartsEdit, PointEdit, Spot, WindEdit,
 };
-pub use super::marks::{CameraHold, CanvasEdit, ClockSet, Fit, Grip, LayerEdit, SCREENS, ShotEdit, Takes};
+pub use super::marks::{
+    CameraHold, CanvasEdit, ClockSet, Fit, Grip, LayerEdit, SCREENS, ShotEdit, ShotFormat, Takes,
+};
 pub use super::motion::{AnimEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use super::names::{
     ACTIONS, AssetEdit, ConditionEdit, EDITOR, ImportAssets, RgbEdit, RuleEdit, ScriptFile, UpgradeEdit,

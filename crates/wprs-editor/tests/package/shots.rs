@@ -20,6 +20,9 @@ fn a_frame_and_a_recording_of_the_scene_become_the_previews() {
     let animated = p.doc["manifest"]["previews"]["animated"].as_str().unwrap().to_owned();
     assert!(animated.ends_with(".gif") && p.dir.join(&animated).is_file(), "{animated}");
     assert!(!p.dir.join("assets/.shot.part").exists());
+    act(&mut p, json!({ "shot": { "recording": { "seconds": 1.0, "fps": 5, "format": "webp" } } })).unwrap();
+    let animated = p.doc["manifest"]["previews"]["animated"].as_str().unwrap().to_owned();
+    assert!(animated.ends_with(".webp") && p.dir.join(&animated).is_file(), "{animated}");
     act(&mut p, json!({ "shot": { "flashes": { "seconds": 1.0, "fps": 6 } } })).unwrap();
     let found = ask(&p, json!({ "flashes": {} }));
     assert_eq!(found["flashing"], json!(false), "{found}");

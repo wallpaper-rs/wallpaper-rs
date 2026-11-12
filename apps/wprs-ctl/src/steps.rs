@@ -6,7 +6,7 @@ use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
 use wprs_editor::actions::{
-    Action, MaskStroke, ParticleEdit, ScriptFile, ShotEdit, SowEdit, TemplateEdit, UpgradeEdit,
+    Action, MaskStroke, ParticleEdit, ScriptFile, ShotEdit, ShotFormat, SowEdit, TemplateEdit, UpgradeEdit,
 };
 use wprs_editor::{Op, Project, references};
 
@@ -170,11 +170,15 @@ pub(crate) fn action(command: Author) -> Result<(PathBuf, Action), Box<Author>> 
             (dir, Action::Thumbnail { file: fs::canonicalize(&file).unwrap_or(file), animated })
         }
         Author::Thumbnail { dir, animated: false, shot, .. } => {
-            (dir, Action::Shot(ShotEdit::Still { time: shot.time }))
+            (dir, Action::Shot(ShotEdit::Still { time: shot.time, base: shot.base }))
         }
         Author::Thumbnail { dir, shot, .. } => {
             let (from, seconds, fps) = (shot.from, shot.seconds, shot.fps);
-            (dir, Action::Shot(ShotEdit::Recording { from, seconds, fps }))
+            let format = shot.format.as_deref().map_or(ShotFormat::Gif, |f| match f {
+                "webp" => ShotFormat::Webp,
+                _ => ShotFormat::Gif,
+            });
+            (dir, Action::Shot(ShotEdit::Recording { from, seconds, fps, format, base: shot.base }))
         }
         Author::Upgrade { dir, rating, reasons, photosensitive, derived_from } => {
             let rating = rating.and_then(|r| serde_json::from_value(json!(r)).ok());

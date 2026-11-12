@@ -106,6 +106,7 @@ pub mod shaders;
 mod shapes;
 mod shaping;
 pub mod shelf;
+pub mod shotmedia;
 pub mod shots;
 pub mod shotting;
 pub mod skin;
@@ -128,6 +129,7 @@ pub mod touch;
 pub mod tried;
 pub mod usage;
 pub mod wander;
+pub mod webp;
 pub mod wgsl;
 
 pub use actions::{ACTIONS, Action};

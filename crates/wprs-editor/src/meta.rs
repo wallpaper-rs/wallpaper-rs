@@ -26,9 +26,6 @@ pub fn hidden(doc: &Value) -> Vec<&'static str> {
 }
 
 pub fn applies(doc: &Value, pointer: &str) -> bool {
-    if pointer == "/manifest/permissions/rgb" && crate::pages::scened(doc) {
-        return false;
-    }
     let scene = doc["manifest"]["kind"] == "scene";
     let framing: &[&str] = match doc["manifest"]["kind"].as_str() {
         Some("scene") => &["fit", "zoom", "position", "background", "flip"],
@@ -39,7 +36,7 @@ pub fn applies(doc: &Value, pointer: &str) -> bool {
     let key = |prefix: &str| pointer.strip_prefix(prefix).and_then(|k| k.split('/').next());
     let shown = key("/manifest/display/").is_none_or(|k| !framing.contains(&k))
         && key("/manifest/playback/").is_none_or(|k| !playing.contains(&k));
-    shown || doc.pointer(pointer).is_some()
+    !crate::rgb::kept(doc, pointer) && (shown || doc.pointer(pointer).is_some())
 }
 
 pub fn adjust(doc: &Value, field: &mut crate::Field) {

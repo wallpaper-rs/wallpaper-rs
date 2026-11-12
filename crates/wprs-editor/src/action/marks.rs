@@ -3,7 +3,7 @@ use serde_json::{Map, Value};
 use wprs_scene::Blend;
 
 pub use super::grips::{ClockSet, Fit, Grip, SCREENS};
-pub use super::stage2d::{CameraHold, CanvasEdit, ShotEdit};
+pub use super::stage2d::{CameraHold, CanvasEdit, ShotEdit, ShotFormat};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]

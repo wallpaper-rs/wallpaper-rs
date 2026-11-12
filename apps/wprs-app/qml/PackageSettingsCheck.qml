@@ -124,8 +124,23 @@ QtObject {
         panel.destroy();
     }
 
+    function captures() {
+        const button = Qt.createComponent("PackageCapture.qml").createObject(page, {
+            "host": {
+                "page": page,
+                "field": {
+                    "widget": "ref:animated"
+                }
+            },
+            "webp": true
+        });
+        expect(!button.visible, "a web page offered to be drawn for its preview");
+        button.destroy();
+    }
+
     function exercise() {
         web();
+        captures();
         Qt.createComponent("SceneTryCheck.qml").createObject(page, {
             "page": page
         }).exercise();

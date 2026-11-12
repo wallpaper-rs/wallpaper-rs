@@ -80,12 +80,22 @@ pub enum CameraHold {
     Turn,
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ShotFormat {
+    #[default]
+    Gif,
+    Webp,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum ShotEdit {
     Still {
         #[serde(default)]
         time: Option<f64>,
+        #[serde(default)]
+        base: Option<std::path::PathBuf>,
     },
     Recording {
         #[serde(default)]
@@ -94,6 +104,10 @@ pub enum ShotEdit {
         seconds: Option<f64>,
         #[serde(default)]
         fps: Option<u32>,
+        #[serde(default)]
+        format: ShotFormat,
+        #[serde(default)]
+        base: Option<std::path::PathBuf>,
     },
     Flashes {
         #[serde(default)]
