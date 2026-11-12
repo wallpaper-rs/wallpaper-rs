@@ -1377,7 +1377,12 @@ and down, or one for both while *Same depth across and up and down* is on, and a
 the `layer` action. While the canvas has parallax, *Try the parallax* in the toolbar puts a simulated
 pointer on the canvas (the outline field `probe`), and, with *Follow the tilt of a phone*, a square
 whose place from the middle of the canvas is the tilt; dragging them sends `probe` and the outlines and
-handles of every layer shift by its depth, and the grips keep working on the shifted layers. The
+handles of every layer shift by its depth, and the grips keep working on the shifted layers. While
+it is on, the chosen layer gets a handle at its middle displaced by its depth (a quarter of the
+canvas width is 1, from -10 to 10; the same depth across and up and down moves along the diagonal
+and Shift sets them apart, a depth that follows a binding or keys has none), and choosing the canvas
+gives its parallax a handle for `offset` (from -1 to 1 of half the canvas on each side); both send
+`depth` of `layer` and `parallax` of `canvas` as drags. The
 preview stream itself still follows the real pointer. The toolbar also offers
 guides for 16:9, 21:9, 32:9, 4:3, 16:10 and 9:16 screens. *Screens* previews the scene spread over
 several screens: two or three side by side, two stacked, or the user's own layout as the daemon

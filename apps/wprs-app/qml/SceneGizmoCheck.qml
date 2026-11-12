@@ -101,6 +101,9 @@ QtObject {
         if (page.view.probe === null || !(gizmo.modelData.pivot[0] > still + 1))
             throw new Error("gizmo: the simulated pointer did not shift the layer by its depth: " + page.editor.error);
         gizmo.destroy();
+        Qt.createComponent("SceneParallaxGripCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         page.editor.seek(0, false);
         while (page.view.history.done.length > steps)
             page.run("undo");

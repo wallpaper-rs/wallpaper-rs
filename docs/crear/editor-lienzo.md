@@ -263,9 +263,11 @@ Pasos:
 1. Activa el botón. Aparece un círculo **Puntero** en el centro del lienzo.
 2. Arrástralo: cada capa se mueve según su profundidad de paralaje, como si el puntero estuviera ahí.
 3. Si el paralaje sigue la inclinación del teléfono, aparece además un cuadrado **Inclinación** y una línea discontinua desde el centro. Arrástralo lejos del centro para inclinar el teléfono simulado hacia ese lado.
-4. Desactiva el botón para volver a la vista normal.
+4. Con una capa elegida y el botón activo, aparece un círculo verde **Profundidad** con una línea discontinua desde el centro de la capa. Arrástralo para fijar la profundidad de paralaje de la capa: cada cuarto del ancho del lienzo vale 1, de -10 a 10. Si la profundidad es la misma a lo ancho y en alto, el círculo se mueve en diagonal y escribe el mismo valor en las dos; mantén Mayús para fijarlas por separado. Una profundidad que sigue un enlace o fotogramas clave no lleva asa.
+5. Aunque el botón esté apagado, si eliges **Lienzo** aparece un círculo **Centro del paralaje** con una línea desde el centro del lienzo: arrástralo para fijar dónde reposa el paralaje (**Desplazamiento**), de -1 a 1 en cada dirección.
+6. Desactiva el botón para volver a la vista normal.
 
-En la terminal: `canvas` con `probe` (`pointer`, `tilt` o `off`).
+En la terminal: `canvas` con `probe` (`pointer`, `tilt` o `off`) y con `parallax` y su `offset`, y `layer` con `depth`.
 
 ## Cómo probar el puntero y los clics
 

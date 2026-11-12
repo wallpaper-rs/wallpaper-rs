@@ -16133,3 +16133,24 @@ msgstr "Arrastra sobre otra capa para que las partículas choquen con esa capa"
 #: apps/wprs-app/qml/facade/SceneSwarmGrips.qml
 msgid "Drag along the top edge to set the opacity from which the picture is solid"
 msgstr "Arrastra a lo largo del borde superior para fijar la opacidad desde la que la imagen es sólida"
+
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid "Parallax center"
+msgstr "Centro del paralaje"
+
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid ""
+"Where the parallax rests: drag it away from the middle of the canvas to "
+"shift the whole picture"
+msgstr "Dónde reposa el paralaje: arrástralo lejos del centro del lienzo para desplazar toda la imagen"
+
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid "Depth %1, %2"
+msgstr "Profundidad %1, %2"
+
+#: apps/wprs-app/qml/SceneParallaxGrips.qml
+msgid ""
+"Parallax depth of the layer: drag it away from the layer, a quarter of the "
+"canvas width is 1; hold Shift to set the depth across and the depth up and "
+"down apart"
+msgstr "Profundidad de paralaje de la capa: arrástralo lejos de la capa, un cuarto del ancho del lienzo vale 1; mantén Mayús para fijar por separado la profundidad a lo ancho y en alto"

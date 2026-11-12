@@ -124,6 +124,13 @@ Item {
         ratio: overlays.ratio
     }
 
+    SceneParallaxGrips {
+        anchors.fill: parent
+        z: 8
+        page: overlays.page
+        ratio: overlays.ratio
+    }
+
     SceneProbe {
         anchors.fill: parent
         z: 8
