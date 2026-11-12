@@ -9,6 +9,7 @@ QtObject {
             "aberration": App.tr("Color fringes"),
             "accept": App.tr("Accepted files"),
             "additive": App.tr("Add on top"),
+            "aim3d": App.tr("Aim among the models"),
             "align": App.tr("Alignment"),
             "alignment": App.tr("Alignment"),
             "alpha": App.tr("Transparency"),

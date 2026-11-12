@@ -13548,6 +13548,15 @@ msgid "Polygon"
 msgstr "Polígono"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
+
+msgid "Shape pools"
+msgstr "Reservas de formas"
+
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Place among the models"
+msgstr "Lugar entre los modelos"
+
+#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Still frame at"
 msgstr "Fotograma fijo en"
 
@@ -14713,6 +14722,10 @@ msgstr "Archivos admitidos"
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Add on top"
 msgstr "Sumar encima"
+
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Aim among the models"
+msgstr "Mira entre los modelos"
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
 msgid "Transparency"

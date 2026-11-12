@@ -37,6 +37,7 @@ QtObject {
             "polygon": App.tr("Polygon"),
             "pools": App.tr("Shape pools"),
             "position": App.tr("Position"),
+            "position3d": App.tr("Place among the models"),
             "poster_time": App.tr("Still frame at"),
             "prewarm": App.tr("Warm-up"),
             "probability": App.tr("Probability"),
