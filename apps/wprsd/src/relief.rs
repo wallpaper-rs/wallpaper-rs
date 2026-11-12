@@ -12,7 +12,7 @@ const MAX_EDGE: u32 = 1024;
 pub(crate) type Cached = (Option<SystemTime>, edit::Depth, Weak<DepthMap>);
 
 impl Daemon {
-    pub(crate) fn depth_for(&self, file: &Path, edit: &Edit) -> Option<Depth> {
+    pub(crate) fn depth_for(&self, file: &Path, edit: &Edit, edge: u32) -> Option<Depth> {
         let settings = edit.depth.clone().unwrap_or_default();
         let sha = match edit.source.sha256.as_str() {
             "" => Source::read(file, [0; 2]).ok()?.sha256,
@@ -38,7 +38,7 @@ impl Daemon {
                 map
             }
         };
-        let deck = self.deck_for(file, &sha, edit, &places);
+        let deck = self.deck_for(file, &sha, edit, (&places, edge));
         Some(Depth { file: found, modified, map, deck })
     }
 }

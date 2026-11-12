@@ -92,14 +92,18 @@ pub fn sha256(path: &Path) -> std::io::Result<String> {
 }
 
 pub fn decode(path: &Path) -> Result<RgbImage> {
+    decode_edge(path, PICTURE_EDGE)
+}
+
+pub fn decode_edge(path: &Path, edge: u32) -> Result<RgbImage> {
     let decoded = wprs_render::decode_unoriented(ImageReader::open(path)?, wprs_render::picture_limits());
     let refused = || format!("{} is not a picture", path.display());
     let Ok((mut image, orientation)) = decoded else {
-        let image = wprs_render::decode_image(path, PICTURE_EDGE).with_context(refused)?;
+        let image = wprs_render::decode_image(path, edge).with_context(refused)?;
         return Ok(image::DynamicImage::ImageRgba8(image).into_rgb8());
     };
-    if image.width().max(image.height()) > PICTURE_EDGE {
-        image = image.thumbnail(PICTURE_EDGE, PICTURE_EDGE);
+    if image.width().max(image.height()) > edge {
+        image = image.thumbnail(edge, edge);
     }
     image.apply_orientation(orientation);
     Ok(image.into_rgb8())

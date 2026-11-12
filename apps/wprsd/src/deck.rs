@@ -60,7 +60,13 @@ fn build(
 }
 
 impl Daemon {
-    pub(crate) fn deck_for(&self, file: &Path, sha: &str, edit: &Edit, places: &Places) -> Option<Deck> {
+    pub(crate) fn deck_for(
+        &self,
+        file: &Path,
+        sha: &str,
+        edit: &Edit,
+        (places, edge): (&Places, u32),
+    ) -> Option<Deck> {
         let moving = edit.moving()?;
         let config = self.state().config.parallax.clone();
         if edit.operates() || config.fill == Fill::Off {
@@ -70,7 +76,8 @@ impl Daemon {
         let set = Settings {
             fill: places.fill(config.fill),
             count: usize::from(config.layers),
-            shift: moving.strength,
+            shift: moving.strength * wprs_core::travel::gain(false, 1.0),
+            edge: wprs_depth::edge_for(edge),
         };
         let path = places.layer_set(file, sha, &depth, &set)?;
         let known = self.state().decks.sets.get(&path).and_then(Weak::upgrade);
@@ -114,7 +121,7 @@ impl Daemon {
     }
 
     fn build_deck(&self, file: &Path, sha: &str, (depth, set): (Depth, Settings), path: PathBuf) {
-        if self.state().decks.failed.contains(&path) {
+        if self.state().decks.failed.contains(&path) || wprs_depth::has_failed(&path) {
             return;
         }
         let (file, sha) = (file.to_owned(), sha.to_owned());

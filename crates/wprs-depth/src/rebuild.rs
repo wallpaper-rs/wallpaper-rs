@@ -7,9 +7,14 @@ use wprs_core::edit::{Depth, Edit, Parallax};
 use wprs_core::{Config, Fill};
 
 pub fn settings(places: &Places, edit: &Edit, fill: Option<Fill>) -> Settings {
+    sized(places, edit, fill, crate::EDGE)
+}
+
+pub fn sized(places: &Places, edit: &Edit, fill: Option<Fill>, edge: u32) -> Settings {
     let config = Config::default_path().and_then(|p| Config::load(&p)).unwrap_or_default().parallax;
     let shift = edit.parallax.as_ref().map_or(Parallax::default().strength, |p| p.strength);
-    Settings { fill: places.fill(fill.unwrap_or(config.fill)), count: usize::from(config.layers), shift }
+    let (fill, count) = (places.fill(fill.unwrap_or(config.fill)), usize::from(config.layers));
+    Settings { fill, count, shift, edge: crate::edge_for(edge) }
 }
 
 impl Places {

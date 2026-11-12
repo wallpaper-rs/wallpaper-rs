@@ -5,7 +5,6 @@ use image::{GrayImage, Luma, Rgb, RgbImage};
 use std::sync::atomic::{AtomicBool, Ordering::Relaxed};
 
 pub const CROP: u32 = 512;
-pub const MOST_RUNS: usize = 8;
 pub const FEATHER: usize = 2;
 pub const LEAST: usize = 24;
 
@@ -35,14 +34,14 @@ fn tiles((w, h): Size, side: usize, band: &[bool]) -> Vec<(usize, usize, usize, 
 }
 
 pub fn plan(size: Size, band: &[bool]) -> Vec<(usize, usize, usize, usize)> {
-    let mut side = CROP as usize;
-    loop {
-        let found = tiles(size, side, band);
-        if found.len() <= MOST_RUNS || side >= size.0.max(size.1) {
-            return found;
-        }
-        side *= 2;
-    }
+    tiles(size, CROP as usize, band)
+}
+
+fn sized<P: image::Pixel + 'static>(
+    image: &image::ImageBuffer<P, Vec<P::Subpixel>>,
+    (w, h): (u32, u32),
+) -> image::ImageBuffer<P, Vec<P::Subpixel>> {
+    if image.dimensions() == (w, h) { image.clone() } else { resize(image, w, h, FilterType::Triangle) }
 }
 
 pub fn lama(image: &mut RgbImage, band: &[bool], inpaint: &mut Inpaint<'_>, stop: &AtomicBool) -> Result<()> {
@@ -55,11 +54,11 @@ pub fn lama(image: &mut RgbImage, band: &[bool], inpaint: &mut Inpaint<'_>, stop
         let mask = GrayImage::from_fn(w as u32, h as u32, |i, j| {
             Luma([if band[(y + j as usize) * size.0 + x + i as usize] { 255 } else { 0 }])
         });
-        let input = resize(&crop, CROP, CROP, FilterType::Triangle);
-        let hole = resize(&mask, CROP, CROP, FilterType::Triangle);
+        let input = sized(&crop, (CROP, CROP));
+        let hole = sized(&mask, (CROP, CROP));
         let hole =
             GrayImage::from_fn(CROP, CROP, |i, j| Luma([if hole.get_pixel(i, j)[0] > 0 { 255 } else { 0 }]));
-        let out = resize(&inpaint(&input, &hole)?, w as u32, h as u32, FilterType::Triangle);
+        let out = sized(&inpaint(&input, &hole)?, (w as u32, h as u32));
         for j in 0..h {
             for i in 0..w {
                 let t = weight[(y + j) * size.0 + x + i];
