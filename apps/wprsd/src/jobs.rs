@@ -50,7 +50,7 @@ fn active(job: &Job) -> bool {
 fn joins(job: &Job, kind: JobKind, target: &str) -> bool {
     let fresh = match kind {
         JobKind::Import => false,
-        JobKind::Scan => job.state == JobState::Queued,
+        JobKind::Scan | JobKind::AccountSync => job.state == JobState::Queued,
         _ => active(job),
     };
     fresh && job.kind == kind && job.target == target

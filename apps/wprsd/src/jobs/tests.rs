@@ -31,6 +31,10 @@ fn a_change_during_a_running_scan_gets_a_scan_of_its_own() {
     queued.state = JobState::Queued;
     assert!(!joins(&running, JobKind::Scan, "") && joins(&queued, JobKind::Scan, ""));
     assert!(!joins(&queued, JobKind::Scan, "other") && !joins(&queued, JobKind::Import, ""));
+    let (syncing, mut waiting) = (entry(4, JobKind::AccountSync).job, entry(5, JobKind::AccountSync).job);
+    waiting.state = JobState::Queued;
+    assert!(!joins(&syncing, JobKind::AccountSync, ""), "a sync asked after an edit joined one that read before it");
+    assert!(joins(&waiting, JobKind::AccountSync, ""));
     let install = entry(3, JobKind::Install).job;
     assert!(joins(&install, JobKind::Install, "") && !joins(&install, JobKind::Analyze, ""));
 }
