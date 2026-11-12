@@ -56,7 +56,7 @@ QQC2.ToolButton {
                         "animated": false
                     });
                 }
-            }, () => capture && asking.stop());
+            }, () => asking && asking.stop());
         }
     }
 }
