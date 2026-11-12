@@ -1488,7 +1488,10 @@ it stays a slider within 0 to 100. Scenes start muted like videos and follow `pl
 plays on the lock screen (see "Scene sound" in `dbus.md`). On the phone the sound plays only while the
 wallpaper is shown on the home screen (not on the lock screen or in a preview), pauses with the scene
 when battery saver, a low battery or heat stop it, follows `playback.duck` and releases its audio output
-5 s after every layer has stopped; a scene that has sound layers gets its `volume` setting there too.
+5 s after every layer has stopped; a scene that has sound layers gets its `volume` setting there too. The
+settings of the app set `playback.volume` with a slider in steps of 5 % under the sound switch; the
+output asks for the power-saving mode of AAudio and the timing of the sound subtracts the frames it
+still holds.
 
 ## Particles
 

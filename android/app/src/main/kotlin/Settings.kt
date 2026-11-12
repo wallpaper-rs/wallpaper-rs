@@ -65,7 +65,7 @@ private val TOGGLES = listOf(
     Triple(R.string.mobile_data, Sync.NETWORK, "any" to "unmetered"),
     Triple(R.string.show_mature, Unveil.KEY, "true" to "false"),
 )
-private val KEYS = CHOICES.map { it.second } + TOGGLES.map { it.second }
+private val KEYS = CHOICES.map { it.second } + TOGGLES.map { it.second } + VOLUME
 private val NOTICES = listOf("onnxruntime", "onnxruntime-third-party-notices", "depth-anything-v2", "lama")
 
 @Composable
@@ -108,6 +108,7 @@ fun Settings(main: Main) {
         items(TOGGLES) { (label, key, states) ->
             val (on, off) = states
             Toggle(stringResource(label), values[key] == on) { set(key, if (it) on else off) }
+            if (key == "playback.muted") Loudness(values[VOLUME], values[key] == on) { set(VOLUME, it) }
         }
         item {
             val model by loaded(JSONObject(), changes, Depth.working.value) { depth("model") as JSONObject }

@@ -92,6 +92,7 @@
     <string name="gl" translatable="false">OpenGL ES</string>
     <string name="fade">Fade between wallpapers</string>
     <string name="video_sound">Play the sound of videos and scenes</string>
+    <string name="sound_volume">Volume of videos, scenes and pages: %1$d %%</string>
     <string name="parallax">Move with the phone</string>
     <string name="make_map">Make a depth map</string>
     <string name="remake_map">Make the depth map again</string>

@@ -87,6 +87,7 @@
     <string name="automatic">Automático</string>
     <string name="fade">Fundido entre fondos</string>
     <string name="video_sound">Reproducir el sonido de los vídeos y las escenas</string>
+    <string name="sound_volume">Volumen de vídeos, escenas y páginas: %1$d %%</string>
     <string name="parallax">Moverse con el teléfono</string>
     <string name="make_map">Calcular un mapa de profundidad</string>
     <string name="remake_map">Volver a calcular el mapa de profundidad</string>
