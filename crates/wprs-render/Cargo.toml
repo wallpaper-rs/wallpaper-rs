@@ -12,6 +12,7 @@ avif = ["image/avif"]
 [dependencies]
 wprs-core.workspace = true
 wprs-scene.workspace = true
+wprs-script.workspace = true
 wprs-ktx2.workspace = true
 wprs-type.workspace = true
 wgpu = { workspace = true, features = ["naga-ir"] }

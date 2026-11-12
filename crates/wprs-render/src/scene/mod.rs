@@ -40,6 +40,7 @@ mod region;
 mod rehearse;
 mod render;
 mod sampling;
+mod scripted;
 mod sized;
 pub(crate) mod skins;
 pub(crate) mod solids;
@@ -68,7 +69,7 @@ pub(crate) use pipes::Pipes;
 use pipes::{Mode, Shader};
 use pool::Tex;
 pub use profile::{profiled_passes, reset_profiled_passes};
-pub use rehearse::{Opened, Reel, Rehearsal, Trace, Versus, split};
+pub use rehearse::{Opened, Reel, Rehearsal, Trace, Versus, local_wall, split};
 pub(crate) use sampling::layout;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -149,6 +150,7 @@ pub struct SceneAssets {
     pub fonts: HashMap<String, Arc<Vec<u8>>>,
     pub luts: HashMap<String, Arc<Lut>>,
     pub sheets: HashMap<String, Vec<f32>>,
+    pub scripts: Vec<(String, String)>,
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]

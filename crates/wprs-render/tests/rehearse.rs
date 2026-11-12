@@ -1,5 +1,6 @@
 use image::{Rgba, RgbaImage};
-use wprs_render::{Rehearsal, Trace, split};
+use serde_json::json;
+use wprs_render::{Rehearsal, Renderer, SceneAssets, Trace, split};
 use wprs_scene::Quality;
 
 #[test]
@@ -50,6 +51,8 @@ fn frames_are_written_as_a_picture_a_sequence_or_an_animated_picture() {
         render_size: (4, 4),
         fps: 10,
         left_out: Vec::new(),
+        console: Vec::new(),
+        stopped: Vec::new(),
     };
     let one = reel(1).write(&dir.path().join("a.png")).unwrap();
     assert_eq!(one, [dir.path().join("a.png")]);
@@ -59,4 +62,61 @@ fn frames_are_written_as_a_picture_a_sequence_or_an_animated_picture() {
     let gif = reel(3).write(&dir.path().join("c.gif")).unwrap();
     assert_eq!(&std::fs::read(&gif[0]).unwrap()[..3], b"GIF");
     assert!(reel(1).write(&dir.path().join("d.txt")).is_err());
+}
+
+fn gpu() -> Option<&'static Renderer> {
+    match Renderer::shared() {
+        Ok(r) => Some(r),
+        Err(e) if std::env::var_os("WPRS_REQUIRE_GPU").is_none() => {
+            eprintln!("skipping GPU test: {e}");
+            None
+        }
+        Err(e) => panic!("GPU required but unavailable: {e}"),
+    }
+}
+
+fn clocked(source: &str) -> (wprs_scene::Scene, SceneAssets) {
+    let doc = json!({ "schema": wprs_scene::SCHEMA, "canvas": { "size": [32, 18], "background": "#000000" },
+        "scripts": [{ "path": "scripts/hour.js", "events": ["update"], "uses": ["layers", "console"] }],
+        "layers": [{ "id": "lamp", "type": "solid", "color": "#ffffff", "visible": false }] });
+    let scene = wprs_scene::Scene::load(&doc.to_string(), &Default::default()).unwrap();
+    let assets =
+        SceneAssets { scripts: vec![("scripts/hour.js".into(), source.into())], ..Default::default() };
+    (scene, assets)
+}
+
+const HOUR: &str = "import { scene, time } from 'wprs';
+export function update() {
+  scene.layer('lamp').visible = time.format('HH') === '15';
+  console.log('hour ' + time.format('HH'));
+}";
+
+#[test]
+fn a_render_runs_the_scripts_at_the_clock_it_was_given() {
+    let Some(r) = gpu() else { return };
+    let (scene, assets) = clocked(HOUR);
+    let at = |hours: f64| Rehearsal {
+        wall: 1_700_000_000.0 - 1_700_000_000.0 % 86_400.0 + hours * 3600.0,
+        edge: 32,
+        ..Rehearsal::default()
+    };
+    let day = r.rehearse(&scene, &assets, &Default::default(), &at(15.5)).unwrap();
+    let night = r.rehearse(&scene, &assets, &Default::default(), &at(3.5)).unwrap();
+    assert!(day.console.len() > 0, "{:?} {:?}", day.console, day.stopped);
+    assert_eq!(day.frames[0].get_pixel(16, 9).0[0], 255, "{:?}", day.console);
+    assert_eq!(night.frames[0].get_pixel(16, 9).0[0], 0);
+    assert!(day.console.iter().any(|l| l == "log scripts/hour.js: hour 15"), "{:?}", day.console);
+    assert!(night.console.iter().any(|l| l == "log scripts/hour.js: hour 03"), "{:?}", night.console);
+}
+
+#[test]
+fn a_script_that_fails_in_a_render_says_where() {
+    let Some(r) = gpu() else { return };
+    let bad = "import { scene } from 'wprs';\n\nexport function update() {\n  scene.layer('lamp').opacity = 'high';\n}";
+    let (scene, assets) = clocked(bad);
+    let reel = r
+        .rehearse(&scene, &assets, &Default::default(), &Rehearsal { edge: 32, ..Rehearsal::default() })
+        .unwrap();
+    let said = reel.console.iter().find(|l| l.starts_with("error scripts/hour.js")).expect("no error line");
+    assert!(said.ends_with("(scripts/hour.js line 4)"), "{said}");
 }

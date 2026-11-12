@@ -57,12 +57,14 @@ fn poster(dir: &Path, edge: u32, time: Option<f64>) -> Result<RgbaImage> {
         false => Err(format!("{path} is outside the scene folder")),
     };
     let assets = SceneAssets::read(&scene, read).map_err(|e| anyhow!(e))?;
+    let assets =
+        assets.with_scripts(&scene, wprs_editor::reach::reader(&project.dir)).map_err(|e| anyhow!(e))?;
     let properties: BTreeMap<String, wprs_format::Property> =
         serde_json::from_value(project.doc["manifest"]["properties"].clone()).unwrap_or_default();
     let props = wprs_scene::effective(&properties, &[]);
     let renderer = Renderer::new()?;
     let time = time.unwrap_or(f64::from(scene.clock.poster_time));
-    Ok(renderer.still(&scene, &assets, &props, (0.0, "en"), (edge, time))?)
+    Ok(renderer.still(&scene, &assets, &props, (wprs_render::local_wall(), "en"), (edge, time))?)
 }
 
 pub fn compose(canvas: &RgbaImage, monitors: &[Monitor], edge: u32) -> RgbaImage {

@@ -15,7 +15,7 @@ fn pair(value: &Value) -> Option<[f32; 2]> {
     Some([at(0)?, at(1)?])
 }
 
-pub fn wanted(spec: &Value) -> (Rehearsal, Option<Versus>) {
+pub fn wanted(spec: &Value, doc: &Value) -> (Rehearsal, Option<Versus>) {
     let number =
         |key: &str, default: f64, low: f64, high: f64| spec[key].as_f64().unwrap_or(default).clamp(low, high);
     let pointer = pair(&spec["pointer"]["from"]).map(|from| Trace {
@@ -29,6 +29,8 @@ pub fn wanted(spec: &Value) -> (Rehearsal, Option<Versus>) {
         calm: spec["calm"] == true,
         edge: number("size", 1280.0, 16.0, 4096.0) as u32,
         time: number("time", 0.0, 0.0, 86_400.0),
+        wall: spec["wall"].as_f64().unwrap_or_else(wprs_render::local_wall),
+        lang: doc["manifest"]["default_locale"].as_str().unwrap_or("en").to_owned(),
         frames: number("frames", 1.0, 1.0, 600.0) as usize,
         fps: number("fps", 30.0, 1.0, 240.0) as u32,
         pointer,
@@ -42,11 +44,12 @@ pub fn wanted(spec: &Value) -> (Rehearsal, Option<Versus>) {
 }
 
 pub fn shoot(dir: &Path, doc: &Value, out: &Path, spec: &Value) -> anyhow::Result<String> {
-    let (rehearsal, versus) = wanted(spec);
+    let (rehearsal, versus) = wanted(spec, doc);
     let open = |bloom: bool| -> anyhow::Result<wprs_render::Opened> {
         let (scene, props) = wprs_editor::reach::open(doc, bloom)?;
-        let assets =
-            SceneAssets::read(&scene, wprs_editor::reach::reader(dir)).map_err(anyhow::Error::msg)?;
+        let assets = SceneAssets::read(&scene, wprs_editor::reach::reader(dir))
+            .and_then(|a| a.with_scripts(&scene, wprs_editor::reach::reader(dir)))
+            .map_err(anyhow::Error::msg)?;
         Ok((scene, assets, props))
     };
     let reel = Renderer::shared()?.rehearse_versus(open, &rehearsal, versus.as_ref())?;

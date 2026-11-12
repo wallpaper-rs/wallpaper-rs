@@ -41,6 +41,7 @@ pub fn frames(
         false => Err(format!("{path} is outside the scene folder")),
     };
     let assets = SceneAssets::read(&scene, read).map_err(|e| anyhow!(e))?;
+    let assets = assets.with_scripts(&scene, crate::reach::reader(dir)).map_err(|e| anyhow!(e))?;
     let properties: BTreeMap<String, wprs_format::Property> =
         serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
     let props = wprs_scene::effective(&properties, &[]);
@@ -48,7 +49,7 @@ pub fn frames(
     let renderer = Renderer::shared().map_err(|e| {
         said("editor.no_graphics", "there is no graphics device to draw the scene: %1", &[&e])
     })?;
-    renderer.stills(&scene, &assets, &props, (0.0, language), (edge, times), each)?;
+    renderer.stills(&scene, &assets, &props, (wprs_render::local_wall(), language), (edge, times), each)?;
     Ok(())
 }
 

@@ -7039,6 +7039,7 @@ dependencies = [
  "wprs-core",
  "wprs-ktx2",
  "wprs-scene",
+ "wprs-script",
  "wprs-type",
 ]
 

@@ -1,3 +1,4 @@
+use super::scripted::Scripted;
 use super::{Pixels, SceneAssets};
 use crate::{Layer, RenderError, Renderer};
 use image::RgbaImage;
@@ -43,6 +44,19 @@ impl SceneAssets {
             }
         }
         Ok(assets)
+    }
+
+    pub fn with_scripts(
+        mut self,
+        scene: &Scene,
+        mut read: impl FnMut(&str) -> Result<Vec<u8>, String>,
+    ) -> Result<SceneAssets, String> {
+        for script in &scene.scripts {
+            let text =
+                String::from_utf8(read(&script.path)?).map_err(|_| format!("{} is not text", script.path))?;
+            self.scripts.push((script.path.clone(), text));
+        }
+        Ok(self)
     }
 
     pub fn reloadable<R: FnMut(&str) -> Result<Vec<u8>, String>>(
@@ -113,9 +127,14 @@ impl Renderer {
         assets.sheets.iter().for_each(|(id, d)| runtime.set_sheet(id, d.clone()));
         runtime.set_wall(wall);
         runtime.set_language(lang);
+        let mut scripts = Scripted::start(scene, assets, &runtime, lang);
         let (mut target, mut pixels) = (self.create_target(size.0, size.1)?, Vec::new());
-        for time in times {
+        for (i, time) in times.iter().enumerate() {
             runtime.seek(time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));
+            if let Some(scripts) = scripts.as_mut() {
+                let at = (view.view(size), [size.0, size.1], 60, 3);
+                (0..if i == 0 { 4 } else { 1 }).for_each(|_| scripts.step(&mut runtime, at));
+            }
             let frame = runtime.frame(view.view(size), Quality::Q3);
             let image = self.render_scene(&mut view, &runtime, &frame, size, Quality::Q3, &[])?;
             each(self.read_into(&mut target, &mut pixels, image, size)?);

@@ -1,10 +1,19 @@
 use super::SceneAssets;
+use super::scripted::Scripted;
 use crate::{RenderError, Renderer};
 use image::codecs::gif::{GifEncoder, Repeat};
 use image::{Delay, Frame, RgbaImage};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use wprs_scene::{PointerState, Quality, Runtime, Scene, Values};
+
+pub fn local_wall() -> f64 {
+    let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
+    let seconds = libc::time_t::try_from(now.as_secs()).unwrap_or_default();
+    let mut local = unsafe { std::mem::zeroed::<libc::tm>() };
+    let found = !unsafe { libc::localtime_r(&seconds, &mut local) }.is_null();
+    now.as_secs_f64() + if found { local.tm_gmtoff as f64 } else { 0.0 }
+}
 
 const PRESS_FROM: f32 = 0.4;
 const PRESS_TO: f32 = 0.7;
@@ -23,6 +32,8 @@ pub struct Rehearsal {
     pub calm: bool,
     pub edge: u32,
     pub time: f64,
+    pub wall: f64,
+    pub lang: String,
     pub frames: usize,
     pub fps: u32,
     pub pointer: Option<Trace>,
@@ -36,6 +47,8 @@ impl Default for Rehearsal {
             calm: false,
             edge: 1280,
             time: 0.0,
+            wall: local_wall(),
+            lang: "en".into(),
             frames: 1,
             fps: 30,
             pointer: None,
@@ -50,6 +63,8 @@ pub struct Reel {
     pub render_size: (u32, u32),
     pub fps: u32,
     pub left_out: Vec<String>,
+    pub console: Vec<String>,
+    pub stopped: Vec<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -109,9 +124,13 @@ impl Renderer {
         runtime.set_battery(wanted.battery);
         runtime.set_reduced_motion(wanted.calm);
         runtime.set_quality(quality);
+        runtime.set_wall(wanted.wall);
+        runtime.set_language(&wanted.lang);
         runtime.seek(wanted.time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));
+        let mut scripts = Scripted::start(scene, assets, &runtime, &wanted.lang);
         let mut view = self.scene_view(scene, assets, runtime.props())?;
         runtime.set_magnify(view.magnify(size));
+        let shown = |view: [f32; 4]| (view, [size.0, size.1], wanted.rate(), quality as u8);
         let (step, mut pointer) = (1.0 / f64::from(wanted.rate()), PointerState::default());
         let (mut frames, mut inner) = (Vec::new(), size);
         for i in 0..wanted.frames.max(1) {
@@ -122,11 +141,27 @@ impl Renderer {
             pointer = pointer.follow(pos, buttons, step as f32);
             runtime.set_pointer(pointer);
             inner = view.inner(self, size, quality);
+            if let Some(scripts) = scripts.as_mut() {
+                let at = shown(view.view(inner));
+                if i == 0 {
+                    scripts.warm(&mut runtime, at);
+                }
+                scripts.step(&mut runtime, at);
+            }
             let frame = runtime.frame(view.view(inner), quality);
             let image = self.render_scene(&mut view, &runtime, &frame, inner, quality, &[])?;
             frames.push(self.read_scene(image, size)?);
         }
-        Ok(Reel { frames, quality, render_size: inner, fps: wanted.rate(), left_out: view.left_out() })
+        let (console, stopped) = scripts.map(|s| (s.console.clone(), s.stopped.clone())).unwrap_or_default();
+        Ok(Reel {
+            frames,
+            quality,
+            render_size: inner,
+            fps: wanted.rate(),
+            left_out: view.left_out(),
+            console,
+            stopped,
+        })
     }
 }
 

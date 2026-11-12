@@ -108,6 +108,7 @@ mod touching;
 mod triggering;
 mod undoing;
 mod userprops;
+mod wallclock;
 pub mod wallhaven;
 mod wallhaven_filters;
 mod watching;

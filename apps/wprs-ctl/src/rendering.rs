@@ -20,6 +20,8 @@ pub enum Rendering {
         out: PathBuf,
         #[arg(long, default_value_t = 0.0, value_parser = crate::spanning::second, help = "Second of the scene clock of the first frame")]
         time: f64,
+        #[arg(long, value_name = "TIME", value_parser = crate::wallclock::parse, help = "Wall clock the scene and its scripts see, as HH:MM[:SS] today or YYYY-MM-DD HH:MM[:SS]; the clock of this computer when omitted, so pass it to get the same picture every time")]
+        time_of_day: Option<f64>,
         #[arg(long, default_value = "q3", value_parser = ["q0", "q1", "q2", "q3"], help = "Highest quality level")]
         quality: String,
         #[arg(long, help = "Render as on battery: a lower level and at most 60 frames a second")]
@@ -70,6 +72,7 @@ pub fn run(command: Rendering) -> Result<()> {
         dir,
         out,
         time,
+        time_of_day,
         quality,
         battery,
         calm,
@@ -90,6 +93,8 @@ pub fn run(command: Rendering) -> Result<()> {
         calm,
         edge: size,
         time,
+        wall: time_of_day.unwrap_or_else(wprs_render::local_wall),
+        lang: project.doc["manifest"]["default_locale"].as_str().unwrap_or("en").to_owned(),
         frames: frames as usize,
         fps,
         pointer: pointer.map(|(from, to)| Trace { from, to, click }),
@@ -97,6 +102,7 @@ pub fn run(command: Rendering) -> Result<()> {
     let open = |bloom: bool| -> Result<wprs_render::Opened> {
         let (scene, props) = wprs_editor::reach::open(&project.doc, bloom)?;
         let assets = SceneAssets::read(&scene, wprs_editor::reach::reader(&project.dir))
+            .and_then(|a| a.with_scripts(&scene, wprs_editor::reach::reader(&project.dir)))
             .map_err(anyhow::Error::msg)?;
         Ok((scene, assets, props))
     };
@@ -109,5 +115,7 @@ pub fn run(command: Rendering) -> Result<()> {
     let written = reel.write(&out).with_context(|| format!("cannot write {}", out.display()))?;
     written.iter().for_each(|p: &PathBuf| println!("{}", p.display()));
     reel.left_out.iter().for_each(|l| eprintln!("{l}"));
+    reel.console.iter().for_each(|l| eprintln!("script: {l}"));
+    reel.stopped.iter().for_each(|l| eprintln!("script stopped: {l}"));
     Ok(())
 }
