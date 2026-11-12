@@ -1,5 +1,6 @@
 package io.github.wallpaper_rs
 
+import android.media.MediaCodecInfo.CodecProfileLevel
 import android.media.MediaCodecList
 import android.media.MediaExtractor
 import android.media.MediaFormat
@@ -40,7 +41,14 @@ class ConvertingTest {
         setDataSource(fixture(name).path)
         val mime = getTrackFormat(0).getString(MediaFormat.KEY_MIME).orEmpty()
         release()
-        MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos.any { !it.isEncoder && it.supportedTypes.any { type -> type.equals(mime, true) } }
+        val tenBit = setOf(
+            CodecProfileLevel.VP9Profile2, CodecProfileLevel.VP9Profile2HDR, CodecProfileLevel.VP9Profile3, CodecProfileLevel.VP9Profile3HDR,
+            CodecProfileLevel.HEVCProfileMain10, CodecProfileLevel.HEVCProfileMain10HDR10, CodecProfileLevel.AV1ProfileMain10, CodecProfileLevel.AV1ProfileMain10HDR10,
+        )
+        MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos.any { info ->
+            !info.isEncoder && info.supportedTypes.any { it.equals(mime, true) } &&
+                info.getCapabilitiesForType(mime).profileLevels.any { it.profile in tenBit }
+        }
     }
 
     private fun item(uid: String) = JSONObject(Native.library(JSONObject().put("op", "item").put("uid", uid).toString()))
@@ -84,7 +92,7 @@ class ConvertingTest {
     fun highDynamicRangeVideosBecomeEightBitAvcInStandardRange() {
         storage()
         for (name in listOf("pq-64x32.mkv", "hlg-64x32.mkv")) {
-            assumeTrue("$name has no decoder here", decodes(name))
+            assumeTrue("$name has no ten-bit decoder here", decodes(name))
             val uid = stored(name)
             Converting.offer(context, Conversion(uid, item(uid).getString("path"), "hdr", false, 64 to 32))
             assertTrue("$name converts", waitFor { item(uid).getString("path").endsWith(".mp4") })
@@ -122,6 +130,7 @@ class ConvertingTest {
     fun aPendingConversionOfAVideoThatChangedOrWentIsDropped() {
         storage()
         val uid = stored("magenta-64x32.webm")
+        val before = item(uid).getString("path")
         Pending.add(context, Conversion(uid, "/gone/clip.webm", "clip", false, 64 to 32))
         Pending.add(context, Conversion("missing", item(uid).getString("path"), "clip", false, 64 to 32))
         Converting.resume(context)
