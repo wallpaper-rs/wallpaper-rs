@@ -51,8 +51,11 @@ fun costNote(report: JSONObject): String? {
     val over = report.optJSONArray("over")?.let {
         stringResource(R.string.level_over, "%.1f".format(it.optDouble(0)), "%.0f".format(it.optDouble(1)))
     }
-    val words = costWords(report.optString("auto"), over != null) ?: return null
-    return listOfNotNull(over, stringResource(words), kept).joinToString(" ")
+    val slow = report.optJSONArray("slow")?.let {
+        stringResource(R.string.level_slow, "%.1f".format(it.optDouble(0)), "%.1f".format(it.optDouble(1)))
+    }
+    val words = costWords(report.optString("auto"), over != null || slow != null) ?: return null
+    return listOfNotNull(slow ?: over, stringResource(words), kept).joinToString(" ")
 }
 
 @Composable

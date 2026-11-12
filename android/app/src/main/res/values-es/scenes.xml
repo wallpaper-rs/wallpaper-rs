@@ -55,6 +55,7 @@
     <string name="tier_timed">La clase se midió con marcas de tiempo de la GPU, sin contar la espera del procesador.</string>
     <string name="level_chosen">Nivel elegido por ti: se mantiene aunque el teléfono no se esté cargando o esté caliente.</string>
     <string name="level_over">Esta escena cuesta %1$s unidades por fotograma en este nivel, más de las %2$s que se calcula que aguanta este teléfono: puede perder fotogramas y gastar más batería.</string>
+    <string name="level_slow">Sus fotogramas tardan %1$s ms en el procesador gráfico, más que los %2$s ms que tiene cada fotograma: se pierden fotogramas y se gasta más batería.</string>
     <string name="auto_would_stop">La calidad automática la dejaría quieta en su póster.</string>
     <string name="auto_would_lower">La calidad automática la bajaría.</string>
     <string name="level_stopped">Esta escena es demasiado pesada para este teléfono, así que la calidad automática la deja quieta en su póster. Un nivel fijo la reproduce igual, con menos fotogramas por segundo y más gasto de batería.</string>

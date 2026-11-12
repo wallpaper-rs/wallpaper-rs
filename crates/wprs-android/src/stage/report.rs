@@ -41,13 +41,13 @@ pub(crate) fn mark(slot: usize, which: usize, value: u8) {
 
 pub(crate) fn wallpaper() -> serde_json::Value {
     let shown = shown().unwrap_or(NOTHING);
-    let (auto, over) = shown.cost.map_or(("", None), |kept| judged(kept, crate::power::choice()));
+    let (auto, over, slow) = shown.cost.map_or(("", None, None), |kept| judged(kept, crate::power::choice()));
     let [tier, quality, reason] = level(shown.level).unwrap_or_default();
     let left: Vec<_> = shown.left.1.iter().map(|(id, why)| json!({ "id": id, "reason": why })).collect();
     let (frame, period, step) =
         shown.cost.map_or((None, None, ""), |c| (c.frame, Some(c.period), c.step.name()));
     let (pace, fps) = shown.cost.map_or((None, None), |c| (Some(c.pace), Some(c.fps)));
-    json!({ "tier": tier, "quality": quality, "reason": reason, "left_out": left, "over": over, "auto": auto,
+    json!({ "tier": tier, "quality": quality, "reason": reason, "left_out": left, "over": over, "slow": slow, "auto": auto,
         "frame_ms": frame, "period_ms": period, "step": step, "pace": pace, "pace_fps": fps })
 }
 
@@ -115,18 +115,22 @@ fn shown() -> Option<Shown> {
     })
 }
 
-fn judged(kept: Cost, choice: QualityChoice) -> (&'static str, Option<[f32; 2]>) {
+type Judged = (&'static str, Option<[f32; 2]>, Option<[f32; 2]>);
+
+fn judged(kept: Cost, choice: QualityChoice) -> Judged {
     let budget = Budget { choice, ..kept.budget };
-    let quality = if budget == kept.budget { kept.quality } else { budget.choose((kept.auto, Why::User)).0 };
+    let same = budget == kept.budget;
+    let quality = if same { kept.quality } else { budget.choose((kept.auto, Why::User)).0 };
     let (cost, most) = (kept.costs[quality as usize], budget.tier.budget());
     let over = (!budget.choice.is_auto() && cost > most).then_some([cost, most]);
-    let automatic = match () {
-        _ if (kept.crowded || kept.stalled) && budget.choice.is_auto() => "still",
-        _ if kept.crowded => "stop",
-        _ if over.is_some() => "lower",
-        _ => "",
-    };
-    (automatic, over)
+    let timing = kept.frame.filter(|_| same).map(|frame| (frame, kept.period));
+    let lowered = !budget.choice.is_auto() && wprs_scene::lowers(over.is_some(), timing);
+    match () {
+        _ if (kept.crowded || kept.stalled) && budget.choice.is_auto() => ("still", None, None),
+        _ if kept.crowded => ("stop", over, None),
+        _ if lowered => ("lower", over.filter(|_| timing.is_none()), timing.map(|(f, p)| [f, p])),
+        _ => ("", None, None),
+    }
 }
 
 impl Stage {

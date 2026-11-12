@@ -8,6 +8,11 @@ fn warned() -> (String, Option<[f32; 2]>) {
     (shown["auto"].as_str().unwrap().to_owned(), over)
 }
 
+fn slow() -> Option<[f64; 2]> {
+    let shown = report::wallpaper();
+    shown["slow"].as_array().map(|o| [0, 1].map(|i| o[i].as_f64().unwrap()))
+}
+
 fn tier() -> String {
     report::wallpaper()["tier"].as_str().unwrap().to_owned()
 }
@@ -72,11 +77,22 @@ pub(super) fn only_automatic_stops_heavy_scenes() {
     for choice in ["q0", "q1", "min-q1"] {
         assert_eq!(settings::setting("playback.quality", Some(choice)).unwrap(), choice);
         assert_eq!(warned().0, "lower", "{choice} kept warning of the old choice before a frame");
-        assert!(warned().1.is_some(), "{choice} hid its cost before a frame");
+        assert!(warned().1.is_some() || slow().is_some(), "{choice} hid its cost before a frame");
         assert!(shoot(&mut stage, n + 1) > 0, "{choice} kept the scene still");
-        let [cost, budget] = warned().1.expect(choice);
-        assert!(cost > budget && budget == wprs_scene::Tier::T0.budget(), "{choice} {cost} {budget}");
+        let estimated = warned().1.is_some_and(|[c, b]| c > b && b == wprs_scene::Tier::T0.budget());
+        assert!(estimated || slow().is_some_and(|[f, p]| f > p), "{choice} {:?} {:?}", warned(), slow());
         assert_eq!(warned().0, "lower", "{choice}");
+    }
+    assert_eq!(settings::setting("playback.quality", Some("q0")).unwrap(), "q0");
+    shoot(&mut stage, n + 1);
+    for (ms, told) in [(1.0, ""), (100.0, "lower")] {
+        let at = std::time::Instant::now();
+        for k in 0..64u64 {
+            let when = at + std::time::Duration::from_millis(k * 40);
+            stage.pilot().feed(when, ms, [41.7; 2], (wprs_scene::Quality::Q0, true, false));
+        }
+        shoot(&mut stage, n + 1);
+        assert_eq!((warned(), slow().is_some()), ((told.into(), None), ms > 50.0), "measured {ms} ms");
     }
     assert_eq!(settings::setting("playback.quality", Some("auto")).unwrap(), "auto");
     assert_eq!(warned(), ("".into(), None), "auto kept the old cost warning");
@@ -88,7 +104,8 @@ pub(super) fn only_automatic_stops_heavy_scenes() {
     assert!(preview.render(r, at, (power, wprs_scene::Tier::T3), &[], false).unwrap().fps > 0);
     assert_eq!(report::wallpaper(), before, "a preview wrote the wallpaper's level or left-out effects");
     assert_eq!(before["tier"], "T0");
-    assert_eq!(warned().1.map(|[_, b]| b), Some(wprs_scene::Tier::T0.budget()), "a preview wrote the report");
+    let home = warned().1.map_or(slow().is_some(), |[_, b]| b == wprs_scene::Tier::T0.budget());
+    assert!(home, "a preview wrote the report: {:?}", warned());
     assert_eq!(settings::setting("playback.quality", Some("auto")).unwrap(), "auto");
     assert!(shoot(&mut stage, n + 2) > 0, "another choice did not measure the scene again");
     stall(&mut stage);
@@ -114,7 +131,7 @@ pub(super) fn only_automatic_stops_heavy_scenes() {
     assert_eq!(tier(), "T0", "the home scene was forgotten");
     assert_eq!(warned().0, "still", "the home scene's warning went with the lock screen's");
     report::forget(report::HOME);
-    let nothing = json!({ "tier": "", "quality": "", "reason": "", "left_out": [], "over": null, "auto": "",
+    let nothing = json!({ "tier": "", "quality": "", "reason": "", "left_out": [], "over": null, "slow": null, "auto": "",
         "frame_ms": null, "period_ms": null, "step": "", "pace": null, "pace_fps": null });
     assert_eq!(report::wallpaper(), nothing, "an image kept a scene's warning");
     assert_eq!(ask(json!({ "op": "remove", "uids": [uid] })), Value::Null);

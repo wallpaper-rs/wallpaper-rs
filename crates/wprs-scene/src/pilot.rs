@@ -164,6 +164,7 @@ impl Pilot {
 
     fn moved(&mut self, at: Instant) -> bool {
         (self.window, self.changed, self.over, self.under) = (Window::default(), Some(at), None, None);
+        (self.frame, self.period) = (None, None);
         true
     }
 
