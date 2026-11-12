@@ -70,7 +70,7 @@ pub(crate) fn pack(mut pictures: Vec<RgbaImage>, edge: u32) -> Option<Atlas> {
 
 pub(crate) fn placed(rig: &Rigged, rects: &[[f32; 4]]) -> Vec<f32> {
     let mut out = rig.vertices.clone();
-    for v in out.chunks_exact_mut(VERTEX_FLOATS) {
+    for v in out.as_chunks_mut::<VERTEX_FLOATS>().0 {
         let piece = v[VERTEX_FLOATS - 1] as usize;
         let sheet = rig.sheets.get(piece).copied().unwrap_or(0) as usize;
         let Some([x, y, w, h]) = rects.get(sheet).copied() else { continue };
