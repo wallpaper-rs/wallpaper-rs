@@ -279,10 +279,16 @@ simulate OUTPUT FILE.json` shows one on any screen (`dbus.md`, `SimulateMedia`).
 The preview then shows that track instead of what a media player plays, without asking for the
 `media` grant and without reading the players; it reaches only the preview.
 
-A web package has no preview to simulate media in, so its Player tab instead shows a made-up
-track from a JSON file of the same shape (Simulate from a file…) on the screen it was last built
-and applied to (Stop ends it), the same `SimulateMedia` call `wprs-ctl media simulate` makes;
-until the package is applied once, the tab says so instead.
+A web package has the same simulated player in its Player tab (switch, title, artist, album, a
+cover picked among the pictures of the folder, next track, playing, position and length), which
+feeds `window.wprs.onMedia` of the page in its Preview tab: the track goes in `preview.media` of
+the `PreviewScene` document (`dbus.md`), so the page gets it, with the cover as a blob and the colors
+of the cover, without the `media` grant and also when the page loads after the track started; it
+reaches only the preview. Under it, *On a screen* still shows a made-up track from a JSON file
+(Simulate from a file…) on the screen the package was last built and applied to (Stop ends it), the
+same `SimulateMedia` call `wprs-ctl media simulate` makes; until the package is applied once, the
+tab says so instead. `wprs-ctl scene preview DIR --media FILE.json` shows the track in the preview
+of a page from a terminal.
 
 Test the pointer and clicks, a toggle of the canvas toolbar, turns the mouse over the preview into
 a made-up pointer on it instead of an editing tool: while it is on, moving or pressing over the

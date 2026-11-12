@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
+import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
@@ -9,6 +10,17 @@ ColumnLayout {
 
     required property var page
     readonly property bool placed: panel.page.editor.placed !== ""
+
+    PageMedia {
+        Layout.fillWidth: true
+        page: panel.page
+    }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        level: 4
+        text: App.tr("On a screen")
+    }
 
     QQC2.Label {
         Layout.fillWidth: true

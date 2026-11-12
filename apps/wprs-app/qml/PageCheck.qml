@@ -1,4 +1,5 @@
 import QtQuick
+import io.github.wallpaper_rs.app
 
 QtObject {
     required property var page
@@ -89,8 +90,21 @@ QtObject {
         listed.destroy();
     }
 
+    function media() {
+        const player = Qt.createComponent("PageMedia.qml").createObject(page, {
+            "page": page
+        });
+        player.change("title", "Made-up song");
+        expect(SceneLook.media?.title === "Made-up song" && JSON.parse(page.editor.look).media?.title === "Made-up song", "the made-up track was not kept for the preview");
+        SceneLook.media = null;
+        SceneLook.preview(page);
+        expect(JSON.parse(page.editor.look).media === undefined, "the made-up track was not released");
+        player.destroy();
+    }
+
     function exercise() {
         web();
+        media();
         properties();
         preview();
         playback();

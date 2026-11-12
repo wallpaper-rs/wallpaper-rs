@@ -16,6 +16,8 @@ echo "web page authoring checks passed"
 read -r _ _ _ pagepreview < <(ctl stream preview:pages 320 180)
 printf 'console.log("page-preview-ready");\n' >>"$made/clock/app.js"
 ctl scene preview "$made/clock" -o preview:pages --quality q1 --restart || fail "a web page was not previewed"
+printf '{"title": "Made-up song", "artist": "Nobody", "playing": true, "position": 12, "duration": 200}\n' >"$made/track.json"
+ctl scene preview "$made/clock" -o preview:pages --media "$made/track.json" || fail "a web page was not previewed with a made-up track"
 ctl scene preview "$made/clock" -o preview:pages --stop || fail "the preview of a web page did not stop"
 ctl release preview:pages
 echo "web page preview checks passed"

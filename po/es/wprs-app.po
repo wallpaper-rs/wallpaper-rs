@@ -608,10 +608,11 @@ msgstr "Preajuste:"
 
 #: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/EditDepthCheck.qml
 #: apps/wprs-app/qml/EditDepthCompare.qml apps/wprs-app/qml/OutputFilter.qml
-#: apps/wprs-app/qml/PageWeb.qml apps/wprs-app/qml/SceneEffectMask.qml
-#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneRig.qml
-#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmLight.qml
-#: apps/wprs-app/qml/SceneTones.qml apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/PageWeb.qml
+#: apps/wprs-app/qml/SceneEffectMask.qml apps/wprs-app/qml/SceneMedia.qml
+#: apps/wprs-app/qml/SceneRig.qml apps/wprs-app/qml/SceneSwarmKin.qml
+#: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneTones.qml
+#: apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "None"
@@ -2748,6 +2749,10 @@ msgid "Up"
 msgstr "Subir un nivel"
 
 #: apps/wprs-app/qml/PackageMedia.qml
+msgid "On a screen"
+msgstr "En una pantalla"
+
+#: apps/wprs-app/qml/PackageMedia.qml
 msgid ""
 "Show a made-up track on the screen where this was last applied, instead of "
 "what a media player plays, to try values, triggers and scripts; this changes "
@@ -2910,6 +2915,62 @@ msgstr ""
 "Aquí window.wprs.rgb.setImage devuelve true y sus colores solo se muestran, "
 "nunca se mandan. En el escritorio devuelve false y no manda nada hasta que "
 "enciendas la iluminación RGB y lo permitas para este paquete."
+
+#: apps/wprs-app/qml/PageMedia.qml
+msgid ""
+"Try the page in the preview with a made-up track for window.wprs.onMedia "
+"instead of what a player plays. Only the preview shows it, without asking "
+"for permission."
+msgstr "Prueba la página en la vista previa con una pista inventada para window.wprs.onMedia en vez de lo que suena en un reproductor. Solo la muestra la vista previa, sin pedir permiso."
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+msgid "Simulated player"
+msgstr "Reproductor simulado"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+#: apps/wprs-app/qml/facade/ManifestWords.qml
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
+msgid "Title"
+msgstr "Título"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Artist"
+msgstr "Artista"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+#: apps/wprs-app/qml/facade/Labels.qml
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Album"
+msgstr "Álbum"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+msgid "Cover"
+msgstr "Carátula"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+msgid "Triggers"
+msgstr "Disparadores"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+msgid "Next track"
+msgstr "Pista siguiente"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+#: apps/wprs-app/qml/facade/SceneMediaWords.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Playing"
+msgstr "Reproduciendo"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+msgid "Position: %1"
+msgstr "Posición: %1"
+
+#: apps/wprs-app/qml/PageMedia.qml apps/wprs-app/qml/SceneMedia.qml
+msgid "Duration: %1"
+msgstr "Duración: %1"
 
 #: apps/wprs-app/qml/PageNetwork.qml
 msgid ""
@@ -5605,59 +5666,12 @@ msgstr ""
 "reproductor. Solo la muestra la vista previa, sin pedir permiso."
 
 #: apps/wprs-app/qml/SceneMedia.qml
-msgid "Simulated player"
-msgstr "Reproductor simulado"
-
-#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/facade/ManifestWords.qml
-#: apps/wprs-app/qml/facade/SceneMediaWords.qml
-msgid "Title"
-msgstr "Título"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-#: apps/wprs-app/qml/facade/SceneMediaWords.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Artist"
-msgstr "Artista"
-
-#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/facade/Labels.qml
-#: apps/wprs-app/qml/facade/SceneMediaWords.qml
-#: apps/wprs-app/qml/facade/SceneValues.qml
-msgid "Album"
-msgstr "Álbum"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Cover"
-msgstr "Carátula"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Triggers"
-msgstr "Disparadores"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Next track"
-msgstr "Pista siguiente"
-
-#: apps/wprs-app/qml/SceneMedia.qml
 msgid ""
 "Starts what waits for a new track and, when the scene has pictures, for a "
 "new cover; Playing starts what waits for play or pause."
 msgstr ""
 "Inicia lo que espera una pista nueva y, si la escena tiene imágenes, una "
 "carátula nueva; Reproduciendo inicia lo que espera reproducir o pausar."
-
-#: apps/wprs-app/qml/SceneMedia.qml
-#: apps/wprs-app/qml/facade/SceneMediaWords.qml
-#: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Playing"
-msgstr "Reproduciendo"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Position: %1"
-msgstr "Posición: %1"
-
-#: apps/wprs-app/qml/SceneMedia.qml
-msgid "Duration: %1"
-msgstr "Duración: %1"
 
 #: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneTimelinePanel.qml
 msgid "Seconds"

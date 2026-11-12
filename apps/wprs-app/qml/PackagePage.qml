@@ -145,8 +145,14 @@ Kirigami.Page {
                     page: page
                 }
 
-                PackageMedia {
-                    page: page
+                QQC2.ScrollView {
+                    contentWidth: availableWidth
+                    clip: true
+
+                    PackageMedia {
+                        width: parent.width
+                        page: page
+                    }
                 }
             }
         }
