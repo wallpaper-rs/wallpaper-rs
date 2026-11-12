@@ -81,8 +81,11 @@ always opaque.
   that runs before the page counts) against the same limit. While it runs, a `localStorage` write
   past the limit, with `setItem` or as a property, in the page or its frames, throws
   `QuotaExceededError`; a write to IndexedDB or Cache Storage has the origin measured again two
-  seconds later, and so does hiding the page (which also counts what its workers wrote), so a page
-  that grows past the limit while it runs starts again at once on the passing origin. A
+  seconds later, and so does hiding the page; a page that starts a worker has the origin measured
+  every ten seconds as well, since a worker's writes cannot be observed. A `localStorage` write in
+  one frame marks the totals of the other frames of its origin as stale (through the `storage`
+  event), so each frame measures again before its next write and the frames together stay under the
+  limit. A page that grows past the limit while it runs starts again at once on the passing origin. A
   page over the limit runs on a passing origin that keeps nothing, and its page in the app says so
   until *Clear data*, which also starts a new origin.
 - Changing a property sends only the changed values to the running page; changing what the page may

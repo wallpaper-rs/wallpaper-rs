@@ -22,6 +22,11 @@ class Storage {
 globalThis.window = globalThis;
 globalThis.setTimeout = (run) => run();
 globalThis.IDBObjectStore = class { put(v) { return `put ${v}`; } };
+globalThis.listeners = [];
+globalThis.addEventListener = (name, run) => listeners.push([name, run]);
+globalThis.intervals = [];
+globalThis.setInterval = (run) => intervals.push(run);
+globalThis.Worker = class { constructor(url) { this.url = url; } };
 globalThis.localStorage = new Storage();
 localStorage.setItem("old", "ab");
 globalThis.posted = [];
@@ -41,7 +46,12 @@ const PROBE: &str = r#"[
   tried(() => { delete localStorage.c; localStorage.e = "ee"; }),
   String(localStorage.getItem("e")),
   new IDBObjectStore().put(1),
-  posted.join(),
+  posted.filter((m, i) => i === 0 || m.includes("wrote")).join(),
+  tried(() => { localStorage.clear(); localStorage.setItem("p", "x".repeat(10)); }),
+  tried(() => { localStorage.m.set("other", "z".repeat(60)); localStorage.setItem("q", "w"); }),
+  tried(() => { listeners.forEach(([name, run]) => name === "storage" && run()); localStorage.setItem("r", "w"); }),
+  [intervals.length, new Worker("w.js").url, intervals.length, new Worker("v.js") instanceof Worker, intervals.length].join(),
+  (intervals[0](), posted[posted.length - 1]),
 ].join(" ")"#;
 
 #[test]
@@ -52,7 +62,8 @@ fn writes_past_the_cap_are_refused() {
     let seen =
         context.with(|ctx| ctx.eval::<String, _>(format!("{FAKE}\n{capped}\n{capped}\n{PROBE}")).unwrap());
     let refused = r#"{"kept":10} ok QuotaExceededError null ok ok ok ok QuotaExceededError ok ee put 1"#;
-    assert_eq!(seen, format!(r#"{refused} {{"kept":10}},{{"wrote":true}}"#));
+    let frames = "ok ok QuotaExceededError 0,w.js,1,true,1";
+    assert_eq!(seen, format!(r#"{refused} {{"kept":10}},{{"wrote":true}} {frames} {{"wrote":true}}"#));
 }
 
 fn installed() -> (String, PathBuf) {

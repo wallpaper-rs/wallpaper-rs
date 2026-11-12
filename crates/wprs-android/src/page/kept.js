@@ -26,6 +26,24 @@
   watch(window.IDBObjectStore, ["put", "add"]);
   watch(window.IDBCursor, ["update"]);
   watch(window.Cache, ["put", "add", "addAll"]);
+  const EVERY = 10000;
+  let polling = false;
+  const poll = () => {
+    if (polling || typeof setInterval !== "function") return;
+    polling = true;
+    setInterval(() => post({ wrote: true }), EVERY);
+  };
+  for (const name of ["Worker", "SharedWorker"]) {
+    const Real = window[name];
+    if (typeof Real !== "function") continue;
+    const Wrapped = new Proxy(Real, {
+      construct: (target, args, derived) => {
+        poll();
+        return Reflect.construct(target, args, derived === Wrapped ? target : derived);
+      },
+    });
+    window[name] = Wrapped;
+  }
   let store = null;
   try {
     store = window.localStorage;
@@ -38,7 +56,20 @@
     return total;
   };
   let total = measure();
+  let stale = false;
+  let reporting = false;
   post({ kept: total });
+  const report = () => {
+    if (reporting) return;
+    reporting = true;
+    later(() => {
+      reporting = false;
+      post({ kept: total });
+    }, 2000);
+  };
+  window.addEventListener("storage", () => {
+    stale = true;
+  });
   const proto = Storage.prototype;
   const set = proto.setItem;
   const remove = proto.removeItem;
@@ -46,20 +77,28 @@
   proto.setItem = function (key, value) {
     if (this !== store) return set.call(this, key, value);
     const grown = weight(key, value) - weight(key, store.getItem(String(key)));
-    if (total + grown > allowed) total = measure();
+    if (stale || total + grown > allowed) {
+      total = measure();
+      stale = false;
+    }
     if (grown > 0 && total + grown > allowed) {
       throw new DOMException("the page keeps more data than it declared", "QuotaExceededError");
     }
     set.call(this, key, value);
     total += grown;
+    report();
   };
   proto.removeItem = function (key) {
-    if (this === store) total -= weight(key, store.getItem(String(key)));
-    return remove.call(this, key);
+    if (this !== store) return remove.call(this, key);
+    total -= weight(key, store.getItem(String(key)));
+    remove.call(this, key);
+    report();
   };
   proto.clear = function () {
-    if (this === store) total = 0;
-    return clear.call(this);
+    if (this !== store) return clear.call(this);
+    total = 0;
+    clear.call(this);
+    report();
   };
   const own = new Set(Object.getOwnPropertyNames(proto));
   const named = (key) => typeof key === "string" && !own.has(key);
