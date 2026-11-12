@@ -67,3 +67,21 @@ fn the_shadow_of_foliage_sways_with_its_surface() {
         assert!((body - shadow).abs() < 0.6 + body.abs() * 0.5, "the shadow follows the surface: {seen:?}");
     }
 }
+
+#[test]
+fn fur_casts_a_shadow_as_long_as_its_strands_above_the_lowest_qualities() {
+    let Some(r) = renderer() else { return };
+    r.force_tier(Some(Tier::T3));
+    let ball = || {
+        let skin = unlit("block", [0.0, 1.0, 0.0, 1.0]);
+        Forge::default().material(skin).part("ball", ForgeShape::Sphere(12), [0.0; 3], 0.6, 0).glb()
+    };
+    let fur = json!({ "shader": "fur", "params": { "layers": 12, "length": 60, "density": 0.9 } });
+    let cast =
+        |material: Value, q: Quality| shaded(&render(r, backdrop(ball(), material, [0.0; 2]), q)).len();
+    let (bare, long, low) =
+        (cast(json!({}), Quality::Q3), cast(fur.clone(), Quality::Q3), cast(fur.clone(), Quality::Q1));
+    let bare_low = cast(json!({}), Quality::Q1);
+    assert!(bare > 20 && long > bare * 2, "the strands darken the backdrop beyond the skin: {bare} {long}");
+    assert!(low.abs_diff(bare_low) <= 6, "below Q2 fur casts its skin only: {low} {bare_low}");
+}

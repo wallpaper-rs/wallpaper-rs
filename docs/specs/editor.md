@@ -1126,7 +1126,8 @@ paths put the camera at the current time. The scene timeline shows a lane per pa
 drag to another time (`key` with `from`, `camera-path … key PATH T --from T` in the terminal) and seek
 the preview with a click; the panel of the timelines takes the presses that no lane takes, because the
 Breeze style turns a drag that nothing accepts into a move of the whole window, which kept the keys of a
-lane from being dragged. The cost lines add the shadow maps, the fur shells and
+lane from being dragged. The cost lines add the shadow maps, the fur shells, the fur triangles each
+shadow map draws (`fur_shadow_triangles`; `left_out` says when fur casts its skin only) and
 the skinned vertices of each quality level and the shadowed lights of each tier. `wprs-ctl scene
 animate`, `clip`, `key`, `material`, `shadows`, `camera-path`, `new-material`, `debug3d` and `cost3d`
 do the same from the terminal.

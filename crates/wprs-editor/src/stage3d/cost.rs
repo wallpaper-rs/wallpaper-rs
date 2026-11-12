@@ -5,6 +5,11 @@ use wprs_scene::{Kind, Model, Quality, TRIANGLE_UNIT, Tier, model_caps, model_ve
 
 const LEVELS: [Quality; 4] = [Quality::Q0, Quality::Q1, Quality::Q2, Quality::Q3];
 
+fn left_out(q: Quality, shadows: u64, fur: u64) -> Vec<&'static str> {
+    let short = shadows > 0 && fur > 0 && q < Quality::Q2;
+    short.then_some("fur casts the shadow of its skin only, without its length").into_iter().collect()
+}
+
 pub fn cost(dir: &Path, doc: &Value, quality: Quality) -> Value {
     let Some(scene) = super::store::scene(dir, doc) else { return Value::Null };
     let shown: Vec<(&str, &Model)> = scene
@@ -34,6 +39,8 @@ pub fn cost(dir: &Path, doc: &Value, quality: Quality) -> Value {
             json!({ "quality": q, "triangles": triangles, "drawn": scene.model_triangles(*q), "pixels": round(canvas[0] * canvas[1] * k * k),
                 "units": round(units), "scene": round(scene.cost(*q)), "specular": *q > Quality::Q0,
                 "shadow_texels": shadows, "fur_shells": fur.0, "fur_triangles": fur.1,
+                "fur_shadow_triangles": if shadows > 0 && *q >= Quality::Q2 { fur.2 } else { 0 },
+                "left_out": left_out(*q, shadows, fur.2),
                 "skinned": super::spend::skinned(&scene), "physics": *q > Quality::Q0 })
         })
         .collect();

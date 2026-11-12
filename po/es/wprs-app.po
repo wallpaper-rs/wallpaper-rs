@@ -7365,7 +7365,9 @@ msgstr "Dónde caen las sombras"
 #: apps/wprs-app/qml/SceneMaterialDebug.qml
 msgid ""
 "Only this material shows it, only in this preview; the wallpaper never does"
-msgstr "Solo este material la muestra, y solo en esta vista previa; el fondo de pantalla nunca la muestra"
+msgstr ""
+"Solo este material la muestra, y solo en esta vista previa; el fondo de "
+"pantalla nunca la muestra"
 
 #: apps/wprs-app/qml/SceneMaterialShade.qml
 msgid "Shells"
@@ -7468,6 +7470,14 @@ msgstr "mapas de sombra de %1 megapíxeles"
 #: apps/wprs-app/qml/SceneModelCost.qml
 msgid "%1 fur shells over %2 triangles"
 msgstr "%1 capas de pelo sobre %2 triángulos"
+
+#: apps/wprs-app/qml/SceneModelCost.qml
+msgid "%1 more fur triangles in each shadow map"
+msgstr "%1 triángulos más de pelo en cada mapa de sombras"
+
+#: apps/wprs-app/qml/SceneModelCost.qml
+msgid "fur casts the shadow of its skin only"
+msgstr "el pelo proyecta solo la sombra de su piel"
 
 #: apps/wprs-app/qml/SceneModelCost.qml
 msgid "%1 skinned vertices with swinging bones"

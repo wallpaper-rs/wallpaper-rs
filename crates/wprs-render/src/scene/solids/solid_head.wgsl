@@ -50,6 +50,7 @@ struct Cut {
     @builtin(position) position: vec4<f32>,
     @location(0) uv: vec2<f32>,
     @location(1) uv1: vec2<f32>,
+    @location(2) @interpolate(flat) shell: f32,
 };
 struct Uvs { rows: array<vec4<f32>, 10> };
 struct Placed { p: vec3<f32>, n: vec3<f32>, t: vec3<f32> };
@@ -167,14 +168,20 @@ fn vs_shadow_skinned(v: In, b: Bound, @builtin(vertex_index) index: u32) -> @bui
     return scene.clip * vec4<f32>(place(q[0], q[1], q[2], v.paint, 0u).p, 1.0);
 }
 
-@vertex
-fn vs_shadow_cut(v: In) -> Cut {
-    let p = place(v.pos, v.normal, v.tangent.xyz, v.paint, 0u).p;
-    return Cut(scene.clip * vec4<f32>(p, 1.0), v.uv, v.uv1);
+fn cast_shell(shell: u32) -> u32 {
+    return select(0u, u32(ceil(max(finish.shade.y, 1.0) * 0.6)), shell > 0u);
 }
 
 @vertex
-fn vs_shadow_cut_skinned(v: In, b: Bound, @builtin(vertex_index) index: u32) -> Cut {
+fn vs_shadow_cut(v: In, @builtin(instance_index) shell: u32) -> Cut {
+    let s = cast_shell(shell);
+    let p = place(v.pos, v.normal, v.tangent.xyz, v.paint, s).p;
+    return Cut(scene.clip * vec4<f32>(p, 1.0), v.uv, v.uv1, f32(s));
+}
+
+@vertex
+fn vs_shadow_cut_skinned(v: In, b: Bound, @builtin(vertex_index) index: u32, @builtin(instance_index) shell: u32) -> Cut {
     let q = posed(v, b, index);
-    return Cut(scene.clip * vec4<f32>(place(q[0], q[1], q[2], v.paint, 0u).p, 1.0), v.uv, v.uv1);
+    let s = cast_shell(shell);
+    return Cut(scene.clip * vec4<f32>(place(q[0], q[1], q[2], v.paint, s).p, 1.0), v.uv, v.uv1, f32(s));
 }

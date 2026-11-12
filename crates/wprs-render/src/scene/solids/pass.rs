@@ -43,7 +43,7 @@ impl Renderer {
             pass.set_bind_group(1, objects, &offsets);
             pass.set_bind_group(2, &gpu.maps[c.maps.min(gpu.maps.len() - 1)], &[]);
             pass.set_bind_group(3, &groups[1], &[c.finish * FINISH_SLOT as u32]);
-            let shells = if k.shadow { 1 } else { c.shells.max(1) };
+            let shells = if k.shadow { c.cast_shells } else { c.shells.max(1) };
             pass.draw_indexed(c.first..c.first + c.count, 0, 0..shells);
         }
     }

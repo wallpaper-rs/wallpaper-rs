@@ -17,8 +17,8 @@ fn triangles(model: &Model, material: usize) -> u64 {
     mine.map(|p| u64::from(p.count / 3)).sum()
 }
 
-pub(super) fn fur(scene: &Scene, q: Quality) -> (u64, u64) {
-    let (mut shells, mut drawn) = (0, 0);
+pub(super) fn fur(scene: &Scene, q: Quality) -> (u64, u64, u64) {
+    let (mut shells, mut drawn, mut skin) = (0, 0, 0);
     for l in scene.layers() {
         let Kind::Model(m) = &l.kind else { continue };
         let Some(model) = scene.solids.get(&m.model) else { continue };
@@ -28,11 +28,13 @@ pub(super) fn fur(scene: &Scene, q: Quality) -> (u64, u64) {
                 _ => wprs_scene::FUR_LAYERS as u32,
             };
             let n = u64::from(fur_shells(layers, q));
+            let base = model.material(name).map_or(0, |i| triangles(model, i));
             shells += n;
-            drawn += n * model.material(name).map_or(0, |i| triangles(model, i));
+            drawn += n * base;
+            skin += base;
         }
     }
-    (shells, drawn)
+    (shells, drawn, skin)
 }
 
 pub(super) fn skinned(scene: &Scene) -> usize {

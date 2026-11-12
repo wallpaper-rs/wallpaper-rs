@@ -815,7 +815,9 @@ the first one, and T0 and T1 of none. A map is drawn again only when its light, 
 swaying material changes, so a moving camera over still models reuses it. Primitives drawn with `blend`
 or `add` and materials with `cast_shadows: false` cast none; cut-out (`mask`) primitives cast a
 shadow only where they are drawn, since the map pass reads the alpha of their color map, a cost
-only they pay.
+only they pay. Fur casts the shadow of its length at Q2 and Q3: each shadow map draws its skin and
+one more shell at six tenths of the length, cut to its `density` (as many triangles again as the
+skin for each face of the map, only when the map is drawn again); at Q0 and Q1 it casts its skin only.
 
 Light layers light the models as they light flat layers: each light stands on the plane through the
 point the camera looks at, under the point of the box where it is drawn, moved toward the viewer by

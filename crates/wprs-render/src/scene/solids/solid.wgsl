@@ -108,6 +108,9 @@ fn map_uv(k: u32, in: Out) -> vec2<f32> {
 
 @fragment
 fn fs_shadow_cut(c: Cut) {
+    if c.shell > 0.5 && hashed(floor(c.uv * (40.0 + finish.shade.w * 360.0))) >= finish.shade.w {
+        discard;
+    }
     if finish.color.a * textureSample(base_map, base_smp, moved(0u, c.uv, c.uv1)).a < finish.flags.x {
         discard;
     }

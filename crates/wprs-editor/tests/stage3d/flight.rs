@@ -151,4 +151,13 @@ fn material_shaders_take_their_params_and_package_ones_report_their_lines() {
     let levels = cost["levels"].as_array().unwrap();
     assert!(levels[3]["fur_shells"].as_u64().unwrap() > levels[0]["fur_shells"].as_u64().unwrap());
     assert_eq!(cost["tiers"][2]["shadows"], 1);
+    assert_eq!(levels[3]["fur_shadow_triangles"], 0, "no light casts shadows yet");
+    act(&mut p, json!({ "add_layer": { "kind": "light", "id": "sun" } })).unwrap();
+    edit(&mut p, json!({ "shadows": { "layer": "sun", "on": true } })).unwrap();
+    let cost = ask(&p, json!({ "cost3d": { "quality": "q3" } }));
+    let levels = cost["levels"].as_array().unwrap();
+    assert_eq!(levels[3]["fur_shadow_triangles"], 12, "the shell a shadow map draws for the fur");
+    assert!(levels[3]["left_out"].as_array().unwrap().is_empty());
+    assert_eq!(levels[1]["fur_shadow_triangles"], 0);
+    assert_eq!(levels[1]["left_out"].as_array().unwrap().len(), 1);
 }

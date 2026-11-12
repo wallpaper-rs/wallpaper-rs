@@ -168,6 +168,7 @@ impl Renderer {
                         write: true,
                         test: true,
                         cull: 0,
+                        cut: c.key.cut || c.cast_shells > 1,
                         ..c.key
                     };
                     (*c, k)

@@ -15,6 +15,10 @@ ColumnLayout {
             out.push(App.tr("shadow maps of %1 megapixels", (row.shadow_texels / 1e6).toFixed(1)));
         if ((row.fur_shells ?? 0) > 0)
             out.push(App.tr("%1 fur shells over %2 triangles", row.fur_shells, row.fur_triangles));
+        if ((row.fur_shadow_triangles ?? 0) > 0)
+            out.push(App.tr("%1 more fur triangles in each shadow map", row.fur_shadow_triangles));
+        if ((row.left_out ?? []).includes("fur casts the shadow of its skin only, without its length"))
+            out.push(App.tr("fur casts the shadow of its skin only"));
         if ((row.skinned ?? 0) > 0)
             out.push(row.physics ? App.tr("%1 skinned vertices with swinging bones", row.skinned) : App.tr("%1 skinned vertices, bones keep their animation", row.skinned));
         return out.length > 0 ? "; " + out.join(", ") : "";

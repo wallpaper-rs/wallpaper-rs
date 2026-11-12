@@ -14,6 +14,7 @@ pub(crate) struct Call {
     pub(super) bones: u32,
     pub(super) draw: u32,
     pub(super) shells: u32,
+    pub(super) cast_shells: u32,
     pub(super) cast: bool,
     pub(super) faded: bool,
     pub(super) key: Key,
@@ -62,6 +63,7 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d, debug: &wprs_
     put(&mut draws, 0, &DrawSlots::default());
     let (mut slot, mut posed, mut drawn) = (0u32, 0u32, 1u32);
     let primed = frame.quality != wprs_scene::Quality::Q0;
+    let tall = frame.quality >= wprs_scene::Quality::Q2;
     for (o, p) in frame.placed[stage.models.clone()].iter().enumerate() {
         let first = calls.len();
         let (object, flipped) = super::looks::object(p);
@@ -120,6 +122,7 @@ pub(super) fn plan(s: &mut Staged, frame: &Frame, stage: &Stage3d, debug: &wprs_
                     bones: bone,
                     draw,
                     shells,
+                    cast_shells: if tall && shells > 1 { 2 } else { 1 },
                     cast,
                     faded,
                     key,
