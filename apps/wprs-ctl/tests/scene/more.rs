@@ -88,7 +88,12 @@ fn renaming_a_particle_system_warns_about_the_scripts_that_name_it() {
     ok(dir, &["scene", "set", "snow", "/scene/scripts", r#"[{"path": "scripts/flakes.js"}]"#]);
     let renamed = run(dir, &["scene", "particles", "snow", "flakes", "rename", "embers"]);
     let warned = String::from_utf8(renamed.stderr).unwrap();
-    assert!(renamed.status.success() && warned.contains("scripts/flakes.js:1 names \"flakes\""), "{warned}");
+    assert!(
+        renamed.status.success()
+            && warned.contains("scripts/flakes.js:1 names \"flakes\"")
+            && warned.contains("\"scripts\":{\"from\":\"flakes\",\"to\":\"embers\"}"),
+        "{warned}"
+    );
     assert_eq!(show(dir, "/scene/layers/1/system"), json!("embers"));
 }
 
