@@ -68,6 +68,9 @@ fun Account(main: Main) {
     val state = status.optString("state")
     LazyColumn {
         item { Header(stringResource(R.string.devices)) }
+        task?.takeIf { status.isNull("link") && status.isNull("pairing") }?.let { waiting ->
+            item { Waiting(main, waiting) }
+        }
         when {
             state == "none" -> item { Server(main, run) }
             !status.isNull("link") -> item { Code(main, status.getJSONObject("link")) }
@@ -80,9 +83,6 @@ fun Account(main: Main) {
             }
         }
         item { Stall(main) }
-        task?.takeIf { status.isNull("link") && status.isNull("pairing") }?.let { waiting ->
-            item { Waiting(main, waiting) }
-        }
     }
     Pairing(main, status, run)
     if (approving) Approve(main, run) { approving = false }
