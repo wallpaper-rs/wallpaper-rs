@@ -108,7 +108,8 @@ impl SceneView {
         let lighter = self.pool.ledger.light.iter().map(|(id, why)| (id.clone(), why.clone()));
         let lighter =
             lighter.map(|(id, why)| format!("the effect {id} was drawn with its lighter variant: {why}"));
-        let left = self.left().into_iter().map(|(id, why)| format!("the {} {id} was left out: {why}", kind(&id)));
+        let left =
+            self.left().into_iter().map(|(id, why)| format!("the {} {id} was left out: {why}", kind(&id)));
         left.chain(lighter).collect()
     }
 
