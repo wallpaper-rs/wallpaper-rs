@@ -111,12 +111,6 @@ pub(crate) struct Needs {
     pub(crate) failed: Vec<String>,
 }
 
-impl Needs {
-    pub(crate) fn told(&self) -> serde_json::Value {
-        json!({ "installed": self.installed, "failed": self.failed })
-    }
-}
-
 pub(crate) fn needed(repo: &str, path: &Path, depth: u32) -> Needs {
     needing(path, depth, &mut |dependency| {
         matching(Some(repo), dependency).and_then(|spec| repos::fetched(&spec))
