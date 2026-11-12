@@ -30,7 +30,13 @@ fn depth(view_dimension: wgpu::TextureViewDimension) -> wgpu::BindingType {
 }
 
 pub(crate) fn seen(device: &wgpu::Device) -> wgpu::BindGroupLayout {
-    let entries = [entry(7, S::FRAGMENT, depth(wgpu::TextureViewDimension::D2))];
+    let sample_type = wgpu::TextureSampleType::Float { filterable: false };
+    let read = wgpu::BindingType::Texture {
+        sample_type,
+        view_dimension: wgpu::TextureViewDimension::D2,
+        multisampled: false,
+    };
+    let entries = [entry(7, S::FRAGMENT, read)];
     device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
         label: Some("wprs-render seen"),
         entries: &entries,

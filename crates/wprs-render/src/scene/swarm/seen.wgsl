@@ -1,4 +1,4 @@
-@group(2) @binding(7) var seen_depth: texture_depth_2d;
+@group(2) @binding(7) var seen_depth: texture_2d<f32>;
 
 @fragment
 fn fs_seen(in: Corner) -> @location(0) vec4<f32> {
@@ -9,7 +9,7 @@ fn fs_seen(in: Corner) -> @location(0) vec4<f32> {
         let n = look.window.x;
         let f = look.window.y;
         let d = clamp(look.window.z / max(in.scale, 1e-6), n, f);
-        if textureLoad(seen_depth, at, 0) > n * (f - d) / ((f - n) * d) {
+        if textureLoad(seen_depth, at, 0).x > n * (f - d) / ((f - n) * d) {
             discard;
         }
     }
