@@ -3,7 +3,7 @@ import QtQuick
 QtObject {
     required property Item gizmo
 
-    function contains(point) {
+    function contains(point: point): bool {
         const corners = gizmo.modelData.outline ?? [];
         if (corners.length < 3)
             return point.x >= 0 && point.y >= 0 && point.x <= gizmo.width && point.y <= gizmo.height;
