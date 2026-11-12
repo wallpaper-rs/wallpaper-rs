@@ -11,7 +11,7 @@ pub(super) fn scenes() {
     let examples = drawn_examples();
     let added = ask(json!({ "op": "examples", "dir": examples }));
     let uids: Vec<String> = serde_json::from_value(added.clone()).unwrap_or_else(|_| panic!("{added}"));
-    assert_eq!(uids.len(), 5);
+    assert_eq!(uids.len(), 6);
     let listed = ask(json!({ "op": "items", "query": "kind:scene" }));
     let titles: BTreeSet<_> =
         listed.as_array().unwrap().iter().map(|i| i["title"].as_str().unwrap()).collect();

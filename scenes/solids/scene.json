@@ -7,12 +7,10 @@
   "assets": { "crate": { "path": "assets/crate.glb" } },
   "layers": [
     { "id": "backdrop", "type": "solid", "color": "#10162b" },
-    { "id": "stage", "type": "group", "space": "3d", "layers": [
-      { "id": "floor", "type": "model", "model": "crate", "position": [0, -1.2, 0], "scale": [5, 0.1, 5],
-        "materials": { "paint": { "color": "#3a4468", "params": { "roughness": 0.8 } } } },
-      { "id": "box", "type": "model", "model": "crate", "position": [0, 0, 0],
-        "rotation": { "timeline": "turn", "keys": [[0, [0, 0, 0]], [12, [0, 360, 0]]] } }
-    ] },
+    { "id": "floor", "type": "model", "model": "crate", "position": [0, -1.2, 0], "scale": [5, 0.1, 5],
+      "materials": { "paint": { "color": "#3a4468", "params": { "roughness": 0.8 } } } },
+    { "id": "box", "type": "model", "model": "crate", "position": [0, 0, 0],
+      "rotation": { "timeline": "turn", "keys": [[0, [0, 0, 0]], [12, [0, 360, 0]]] } },
     { "id": "sun", "type": "light", "light": "directional", "color": "#fff1d6", "intensity": 1.4,
       "shadows": true, "shadow_resolution": 1024, "shadow_bias": 0.2,
       "position3d": [4, 6, 3], "aim3d": [0, 0, 0] }
