@@ -632,6 +632,23 @@ wprs-ctl scene ask mi-escena material_check '{"name":"brillo"}'
 {"name":"brillo","ok":true,"material":true,"error":null,"line":null,"column":null,"source":"..."}
 ```
 
+#### `depth3d`
+
+Dice cómo se oculta tras los modelos más cercanos una capa de un grupo 3D. Es la nota bajo **Ocultarse tras los modelos más cercanos**.
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `layer` | texto (obligatorio) | Id de la capa. |
+
+La respuesta es `null` si no hay esa capa. Si la hay: `layer`, `inside` (si está dentro de un grupo 3D), `depth_test` (si la prueba de profundidad está encendida), `particles` (si es una capa de partículas), `way` y `reason`. `way` es `one_by_one` cuando cada partícula se prueba por su cuenta contra los modelos, y `plane` cuando toda la capa se prueba como un plano. `reason` dice por qué unas partículas van en su plano: `perspective` (el sistema no tiene perspectiva), `lighting` (la capa recibe luz), `lit`, `refract`, `shader`, `trail` o `rope` (cómo se dibujan) o `children` (un sistema hijo se dibuja así o tiene hijos); es `null` en las demás capas. `lowest` recuerda que en la calidad más baja toda capa va en su plano.
+
+```sh
+wprs-ctl scene act mi-escena scene3d '{"group":{"id":"mundo"}}'
+wprs-ctl scene act mi-escena add_layer '{"kind":"solid","id":"fondo","into":"mundo"}'
+wprs-ctl scene act mi-escena scene3d '{"depth_test":{"layer":"fondo","on":true}}'
+wprs-ctl scene ask mi-escena depth3d '{"layer":"fondo"}'
+```
+
 #### `surface3d`
 
 Dice qué parte del modelo hay bajo un punto de la vista de edición. Sirve para saber qué material se toca antes de pintarlo, peinarlo o tomar su color.

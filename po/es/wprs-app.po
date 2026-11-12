@@ -17165,3 +17165,47 @@ msgstr "Cualquier horizontal"
 #: apps/wprs-app/qml/facade/WallhavenWords.qml
 msgid "Any portrait"
 msgstr "Cualquier vertical"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "its particle system has no perspective"
+msgstr "su sistema de partículas no tiene perspectiva"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "the layer takes light"
+msgstr "la capa recibe luz"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "its particles are lit"
+msgstr "sus partículas están iluminadas"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "its particles bend what lies behind them"
+msgstr "sus partículas doblan lo que hay detrás"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "its particles use their own shader"
+msgstr "sus partículas usan su propio shader"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "its particles draw trails"
+msgstr "sus partículas dibujan estelas"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "its particles draw ropes"
+msgstr "sus partículas dibujan cuerdas"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "a child system is drawn that way or has children of its own"
+msgstr "un sistema hijo se dibuja así o tiene sus propios hijos"
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid ""
+"Each particle hides on its own behind nearer models; at the lowest quality "
+"the whole layer hides as one plane."
+msgstr ""
+"Cada partícula se oculta por su cuenta tras los modelos más cercanos; en la "
+"calidad más baja toda la capa se oculta como un solo plano."
+
+#: apps/wprs-app/qml/SceneDepthToggle.qml
+msgid "The whole layer hides as one plane, because %1."
+msgstr "Toda la capa se oculta como un solo plano, porque %1."

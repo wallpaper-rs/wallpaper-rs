@@ -47,8 +47,9 @@ Pasos:
 1. Elige un grupo. El inspector ofrece **Grupo 3D: modelos, luces y capas planas comparten profundidad**; actívalo para que el grupo sea 3D.
 2. Mete dentro los modelos, las luces y las capas planas que quieras.
 3. En una capa plana de ese grupo, marca **Ocultarse tras los modelos más cercanos** para que un modelo que pasa por delante la tape.
+4. En una capa de partículas, una nota bajo la casilla dice si cada partícula se oculta por su cuenta o si toda la capa se oculta como un plano, y por qué (por ejemplo, porque el sistema no tiene perspectiva o porque sus partículas están iluminadas). En la calidad más baja toda la capa va siempre como un plano.
 
-En la terminal: `scene3d` con `group`, `space` y `depth_test`.
+En la terminal: `scene3d` con `group`, `space` y `depth_test`; consulta `depth3d`.
 
 ## Cómo mover, girar y escalar un modelo con las asas
 

@@ -18,6 +18,7 @@ pub use staged::paths::spline::centripetal;
 pub use staged::paths::{at_time as path_pose, period as path_period, play as play_paths, sequence};
 pub use staged::{
     CHROMA_KEY, FUR_LAYERS, FUR_LENGTH, Flight, Look, MAX_PLANES, Placed, Shade, Stage3d, cross_key,
+    particle_plane,
 };
 
 pub(crate) fn walk<'a>(

@@ -11,6 +11,7 @@ mod key;
 mod looks;
 pub mod paths;
 
+pub use group::particle_plane;
 pub use key::{cross_key, seal};
 pub(crate) use looks::eye;
 pub use looks::{CHROMA_KEY, FUR_LAYERS, FUR_LENGTH};

@@ -12,6 +12,7 @@ mod carving;
 mod combed;
 mod cost;
 mod debug;
+mod depths;
 mod edit;
 mod gizmo;
 mod grab;
@@ -42,7 +43,7 @@ pub use info::info;
 pub use store::file;
 pub use view::{View, preview};
 
-pub(crate) const QUERIES: [&str; 10] = [
+pub(crate) const QUERIES: [&str; 11] = [
     "model_info",
     "stage3d",
     "materials3d",
@@ -53,6 +54,7 @@ pub(crate) const QUERIES: [&str; 10] = [
     "bone3d",
     "bound3d",
     "surface3d",
+    "depth3d",
 ];
 
 pub(crate) fn act(dir: &Path, doc: &Value, e: &Edit3d) -> Result<Vec<Op>> {
@@ -107,6 +109,7 @@ pub fn query(dir: &Path, doc: &Value, id: &str, q: &Value) -> Value {
         _ if q.get("material_check").is_some() => {
             newmat::check(dir, doc, q["material_check"]["name"].as_str().unwrap_or_default())
         }
+        _ if q.get("depth3d").is_some() => depths::depth(doc, &q["depth3d"]),
         _ if q.get("materials3d").is_some() => {
             material::listing(dir, doc, q["materials3d"]["layer"].as_str().unwrap_or(id))
         }

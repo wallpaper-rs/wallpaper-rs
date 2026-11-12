@@ -96,3 +96,31 @@ fn a_glb_file_becomes_a_model_layer_in_one_step() {
     assert_eq!(layer(&p, "crate")["model"], "crate_file");
     undone(&mut p, &before);
 }
+
+#[test]
+fn particles_in_a_3d_group_say_whether_they_hide_one_by_one() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    let layers = p.doc["scene"]["layers"].as_array().unwrap().clone();
+    let found = layers.iter().find(|l| l["type"] == "particles").unwrap();
+    let (id, system) =
+        (found["id"].as_str().unwrap().to_owned(), found["system"].as_str().unwrap().to_owned());
+    edit(&mut p, json!({ "model": { "add": { "asset": "toy", "id": "doll" } } })).unwrap();
+    edit(&mut p, json!({ "group": { "id": "world", "layers": ["doll", id] } })).unwrap();
+    edit(&mut p, json!({ "depth_test": { "layer": id, "on": true } })).unwrap();
+    let way = |p: &wprs_editor::Project| super::ask(p, json!({ "depth3d": { "layer": id } }));
+    let first = way(&p);
+    assert_eq!(
+        (&first["inside"], &first["depth_test"], &first["particles"]),
+        (&json!(true), &json!(true), &json!(true))
+    );
+    assert_eq!((&first["way"], &first["reason"]), (&json!("plane"), &json!("perspective")), "{first}");
+    let at = format!("/scene/particles/{system}");
+    act(&mut p, json!({ "set": { "pointer": format!("{at}/perspective"), "value": { "focal": 100 } } }))
+        .unwrap();
+    assert_eq!(way(&p)["way"], "one_by_one", "{}", way(&p));
+    act(&mut p, json!({ "set": { "pointer": format!("{at}/render/lit"), "value": true } })).unwrap();
+    assert_eq!((way(&p)["way"].clone(), way(&p)["reason"].clone()), (json!("plane"), json!("lit")));
+    assert_eq!(way(&p)["lowest"], "plane");
+    assert_eq!(super::ask(&p, json!({ "depth3d": { "layer": "nothing" } })), json!(null));
+}

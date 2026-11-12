@@ -25,6 +25,10 @@ pub const ASKS: [(&str, &str); 78] = [
     ("bone3d", "A bone of a 3D model"),
     ("bound3d", "Bounds of a 3D model"),
     ("surface3d", "The model surface under a point of the 3D view: layer, material, texture place and color"),
+    (
+        "depth3d",
+        "How a layer inside a 3D group is hidden behind nearer models: one particle at a time or as a plane, and why",
+    ),
     ("motion", "Clips and motion of a mesh or model layer"),
     (
         "script_calls",

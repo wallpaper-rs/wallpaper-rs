@@ -15,7 +15,41 @@ ColumnLayout {
         return up !== String(node?.pointer ?? "") && JSON.parse(page.editor.value(up + "/space") || "null") === "3d";
     }
 
+    property var way: null
+    readonly property var reasons: ({
+            "perspective": App.tr("its particle system has no perspective"),
+            "lighting": App.tr("the layer takes light"),
+            "lit": App.tr("its particles are lit"),
+            "refract": App.tr("its particles bend what lies behind them"),
+            "shader": App.tr("its particles use their own shader"),
+            "trail": App.tr("its particles draw trails"),
+            "rope": App.tr("its particles draw ropes"),
+            "children": App.tr("a child system is drawn that way or has children of its own")
+        })
+
+    function load() {
+        if (node?.type !== "particles") {
+            way = null;
+            return;
+        }
+        way = JSON.parse(page.editor.rig("", JSON.stringify({
+            "depth3d": {
+                "layer": node.id
+            }
+        })) || "null");
+    }
+
     visible: node !== null && (group || (inside && !["model", "light", "sound"].includes(node.type)))
+    onNodeChanged: load()
+    Component.onCompleted: load()
+
+    Connections {
+        function onViewChanged() {
+            toggle.load();
+        }
+
+        target: toggle.page.editor
+    }
 
     QQC2.CheckBox {
         visible: toggle.group
@@ -39,5 +73,13 @@ ColumnLayout {
                 "on": checked
             }
         })
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: !toggle.group && toggle.way !== null && toggle.way.particles && toggle.way.depth_test
+        wrapMode: Text.WordWrap
+        opacity: 0.8
+        text: toggle.way?.way === "one_by_one" ? App.tr("Each particle hides on its own behind nearer models; at the lowest quality the whole layer hides as one plane.") : App.tr("The whole layer hides as one plane, because %1.").arg(toggle.reasons[toggle.way?.reason] ?? "")
     }
 }

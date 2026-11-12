@@ -1144,7 +1144,11 @@ above of the scene (as in the light tools), the shader picker (physical, unlit o
 lit, both sides, casts and takes shadows, tint and glow colors, sliders for metal, roughness, relief and
 occlusion, and the thumbnails of the maps of the file (color, metal and roughness, normals, occlusion,
 glow). The inspector of a group turns it 3D, and the inspector of a flat layer inside a 3D group
-toggles Hide behind nearer models (`depth_test`).
+toggles Hide behind nearer models (`depth_test`); on a particles layer a note under it says, from the
+`depth3d` query, whether each particle hides on its own (and that the lowest quality hides the whole
+layer as one plane) or why the whole layer hides as one plane: its system has no perspective, the
+layer takes light, its particles are lit, refract, use their own shader, draw trails or ropes, or a
+child system does or has children.
 
 Selecting the canvas also shows the 3D camera: sliders for the field of view and the roll that change
 the preview while they move, where it looks from and toward, Set the camera from the view, Look

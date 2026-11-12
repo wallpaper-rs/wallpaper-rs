@@ -124,4 +124,4 @@ Preguntas: [particles](acciones-particulas-y-luces.md#particles), [budget](accio
 
 Acciones: [scene3d](acciones-3d.md#scene3d)
 
-Preguntas: [model_info](acciones-3d.md#model_info), [stage3d](acciones-3d.md#stage3d), [materials3d](acciones-3d.md#materials3d), [cost3d](acciones-3d.md#cost3d), [shadows3d](acciones-3d.md#shadows3d), [paths3d](acciones-3d.md#paths3d), [material_check](acciones-3d.md#material_check), [bone3d](acciones-3d.md#bone3d), [bound3d](acciones-3d.md#bound3d), [surface3d](acciones-3d.md#surface3d)
+Preguntas: [model_info](acciones-3d.md#model_info), [stage3d](acciones-3d.md#stage3d), [materials3d](acciones-3d.md#materials3d), [cost3d](acciones-3d.md#cost3d), [shadows3d](acciones-3d.md#shadows3d), [paths3d](acciones-3d.md#paths3d), [material_check](acciones-3d.md#material_check), [bone3d](acciones-3d.md#bone3d), [bound3d](acciones-3d.md#bound3d), [surface3d](acciones-3d.md#surface3d), [depth3d](acciones-3d.md#depth3d)

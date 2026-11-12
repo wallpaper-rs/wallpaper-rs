@@ -20,18 +20,32 @@ fn loose(cx: &Context, d: &Draw) -> bool {
         && !cx.mattes.contains(&d.layer.id)
 }
 
+fn drawn_as(r: &crate::Render) -> Option<&'static str> {
+    match () {
+        _ if r.shader.is_some() => Some("shader"),
+        _ if r.lit => Some("lit"),
+        _ if r.refract.is_some() => Some("refract"),
+        _ if r.trail.is_some() => Some("trail"),
+        _ if r.rope.is_some() => Some("rope"),
+        _ => None,
+    }
+}
+
+pub fn particle_plane(scene: &crate::Scene, layer: &Layer) -> Option<&'static str> {
+    let Kind::Particles { system, render, .. } = &layer.kind else { return Some("kind") };
+    let Some(s) = scene.particles.get(system) else { return Some("kind") };
+    let mut kids = s.children.iter().filter_map(|c| scene.particles.get(&c.system));
+    match () {
+        _ if s.perspective.is_none() => Some("perspective"),
+        _ if layer.lighting.is_some() => Some("lighting"),
+        _ => drawn_as(render.as_deref().unwrap_or(&s.render)).or_else(|| {
+            kids.any(|k| drawn_as(&k.render).is_some() || !k.children.is_empty()).then_some("children")
+        }),
+    }
+}
+
 fn apart(cx: &Context, layer: &Layer) -> bool {
-    let Kind::Particles { system, render, .. } = &layer.kind else { return false };
-    let Some(s) = cx.scene.particles.get(system) else { return false };
-    let plain = |r: &crate::Render| {
-        r.shader.is_none() && !r.lit && r.refract.is_none() && r.trail.is_none() && r.rope.is_none()
-    };
-    let mut kids = s.children.iter().filter_map(|c| cx.scene.particles.get(&c.system));
-    let kids = kids.all(|k| plain(&k.render) && k.children.is_empty());
-    s.perspective.is_some()
-        && layer.lighting.is_none()
-        && plain(render.as_deref().unwrap_or(&s.render))
-        && kids
+    particle_plane(cx.scene, layer).is_none()
 }
 
 fn holds(outer: &Layer, inner: &Layer) -> bool {
