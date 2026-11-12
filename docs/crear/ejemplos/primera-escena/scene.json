@@ -1,0 +1,15 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "fit": "fill", "background": "#000000" },
+  "clock": { "max_fps": "display" },
+  "assets": { "cielo": { "path": "assets/cielo.png" } },
+  "layers": [
+    { "id": "fondo", "type": "image", "image": "cielo", "size": [1920, 1080],
+      "effects": [{ "effect": "waves", "params": { "amplitude": 6, "frequency": 3 } }] },
+    { "id": "sol", "type": "shape", "shape": { "ellipse": { "size": [220, 220] } },
+      "fill": { "prop": "color_sol" },
+      "transform": { "position": { "timeline": "vuelta",
+        "keys": [[0, [260, 820], "in_out_sine"], [12, [1660, 260]]] } } }
+  ],
+  "timelines": [{ "id": "vuelta", "duration": 12, "loop": "pingpong" }]
+}

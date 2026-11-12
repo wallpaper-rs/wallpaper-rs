@@ -1,0 +1,25 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.primera-escena",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {
+    "color_sol": {
+      "default": "#ffd23f",
+      "label": "Color del sol",
+      "order": 1,
+      "type": "color"
+    }
+  },
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Mi primera escena",
+  "version": "0.1.0"
+}
