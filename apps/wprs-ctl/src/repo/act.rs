@@ -71,7 +71,11 @@ pub async fn run(command: Repo) -> Result<()> {
         Repo::Verify { url, json } => {
             let url =
                 if Path::new(&url).is_dir() { std::path::absolute(&url)?.display().to_string() } else { url };
-            let info = verify(&HttpFetch::new(Arc::default())?, &url, now()?)?;
+            let at = now()?;
+            let info = tokio::task::spawn_blocking(move || -> Result<_> {
+                Ok(verify(&HttpFetch::new(Arc::default())?, &url, at)?)
+            })
+            .await??;
             info.warnings.iter().for_each(|warning| eprintln!("warning: {warning}"));
             let text = lines([
                 ("repo_id", info.repo_id.clone()),
