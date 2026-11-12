@@ -1,7 +1,7 @@
 use anyhow::{Result, anyhow, bail, ensure};
 use image::RgbaImage;
 use image::imageops::FilterType;
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use wprs_core::message::said;
 
@@ -31,7 +31,7 @@ pub fn unsupported(doc: &Value) -> Result<()> {
     if crate::pages::kind(doc) == "web" {
         bail!(said(
             "editor.shot_web",
-            "a web page is drawn by the web engine of the daemon, not here; choose a picture for it",
+            "a web page is drawn by the web engine of the daemon, not here: use wprs-ctl scene thumbnail with --capture, or the capture button of the app",
             &[]
         ));
     }
@@ -68,10 +68,17 @@ pub fn preset(
         ))
     })?;
     let mut package = wprs_format::open(base, &wprs_format::Limits::default())?;
-    ensure!(
-        package.manifest.kind == wprs_format::Kind::Scene,
-        said("editor.shot_base_scene", "only a preset of a scene can be drawn here", &[])
-    );
+    match package.manifest.kind {
+        wprs_format::Kind::Scene => {}
+        wprs_format::Kind::Image | wprs_format::Kind::Video => {
+            return media_base(doc, &mut package, (edge, times), each);
+        }
+        _ => bail!(said(
+            "editor.shot_base_scene",
+            "only a preset of a scene, a picture or a video can be drawn here; a web page is drawn with wprs-ctl scene thumbnail --capture",
+            &[]
+        )),
+    }
     let scene = package.scene()?;
     let properties = package.manifest.properties.clone();
     let values: wprs_scene::Values = doc["preset"]["values"]
@@ -88,4 +95,56 @@ pub fn preset(
     let language = doc["manifest"]["default_locale"].as_str().unwrap_or("en");
     let wanted = crate::shots::Wanted { properties: &properties, values: &values, language };
     crate::shots::draw(&scene, wanted, (&read, &read), (edge, &times), each)
+}
+
+fn number(doc: &Value, key: &str) -> Option<f64> {
+    doc["preset"]["values"][key].as_f64()
+}
+
+pub(crate) fn framed(image: RgbaImage, zoom: f64, (x, y): (f64, f64)) -> RgbaImage {
+    if zoom <= 1.0 {
+        return image;
+    }
+    let (w, h) = (f64::from(image.width()), f64::from(image.height()));
+    let (cw, ch) = ((w / zoom).max(1.0), (h / zoom).max(1.0));
+    let center = |size: f64, window: f64, at: f64| {
+        (size / 2.0 + at.clamp(-1.0, 1.0) * (zoom - 1.0) * size / (2.0 * zoom) - window / 2.0)
+            .clamp(0.0, size - window)
+    };
+    let (left, top) = (center(w, cw, x), center(h, ch, y));
+    image::imageops::crop_imm(&image, left as u32, top as u32, cw as u32, ch as u32).to_image()
+}
+
+fn media_base<R: std::io::Read + std::io::Seek>(
+    doc: &Value,
+    package: &mut wprs_format::Package<R>,
+    (edge, times): (u32, Option<&[f64]>),
+    mut each: impl FnMut(RgbaImage),
+) -> Result<()> {
+    let dir = std::env::temp_dir().join(format!("wprs-base-{}-{}", std::process::id(), package.manifest.id));
+    std::fs::remove_dir_all(&dir).ok();
+    let drawn = (|| {
+        wprs_format::extract(package, &dir)?;
+        let entry = json!(package.manifest.entry);
+        let base = json!({"manifest": {"entry": entry}});
+        let zoom = number(doc, "zoom").unwrap_or(1.0);
+        let at = (number(doc, "x").unwrap_or(0.0), number(doc, "y").unwrap_or(0.0));
+        if package.manifest.kind != wprs_format::Kind::Video {
+            let one = times.is_none_or(|t| t.len() == 1);
+            ensure!(one, said("editor.shot_still", "a picture does not move: keep a frame instead", &[]));
+            each(fitted(framed(picture(&dir, &base, u32::MAX)?, zoom, at), edge));
+            return Ok(());
+        }
+        let start = number(doc, "start").unwrap_or(0.0);
+        let moments: Vec<Option<f64>> = match times {
+            Some(list) => list.iter().map(|t| Some(start + t)).collect(),
+            None => vec![number(doc, "start")],
+        };
+        for moment in moments {
+            each(fitted(framed(video(&dir, &base, u32::MAX, moment)?, zoom, at), edge));
+        }
+        Ok(())
+    })();
+    std::fs::remove_dir_all(&dir).ok();
+    drawn
 }

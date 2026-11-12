@@ -75,3 +75,40 @@ fn a_preset_is_drawn_over_its_base_with_its_values() {
     act(&mut p, json!({"shot": {"recording": {"seconds": 0.4, "fps": 5, "base": file}}})).unwrap();
     assert!(p.doc["manifest"]["previews"]["animated"].is_string());
 }
+
+#[test]
+fn a_preset_of_a_picture_or_a_video_is_drawn_with_its_own_zoom_and_start() {
+    state();
+    let root = tempfile::tempdir().unwrap();
+    let fixture = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/quadrants-64x32.webm");
+    let mut picture = Project::create(
+        &root.path().join("still"),
+        starter("image", "org.example.still", "Still", "en").unwrap(),
+    )
+    .unwrap();
+    let file = root.path().join("sky.png");
+    image::RgbaImage::new(64, 32).save(&file).unwrap();
+    act(&mut picture, json!({"manifest": {"media": {"file": file}}})).unwrap();
+    let mut video = Project::create(
+        &root.path().join("clip"),
+        starter("video", "org.example.clip", "Clip", "en").unwrap(),
+    )
+    .unwrap();
+    act(&mut video, json!({"manifest": {"media": {"file": fixture}}})).unwrap();
+    for (project, name) in [(&mut picture, "still.wpak"), (&mut video, "clip.wpak")] {
+        project.save().unwrap();
+        package::build(project, &root.path().join(name), None).unwrap();
+    }
+    let mut p = preset(root.path());
+    let size = |p: &Project| {
+        let name = p.doc["manifest"]["previews"]["thumbnail"].as_str().unwrap();
+        image::image_dimensions(p.dir.join(name)).unwrap()
+    };
+    let (still, clip) = (root.path().join("still.wpak"), root.path().join("clip.wpak"));
+    act(&mut p, json!({"shot": {"still": {"base": still}}})).unwrap();
+    assert_eq!(size(&p), (64, 32));
+    act(&mut p, json!({"manifest": {"preset": {"values": {"zoom": 2.0, "start": 0.1}}}})).unwrap();
+    act(&mut p, json!({"shot": {"still": {"base": clip}}})).unwrap();
+    assert_eq!(size(&p), (32, 16));
+    assert!(act(&mut p, json!({"shot": {"recording": {"seconds": 1.0, "base": still}}})).is_err());
+}
