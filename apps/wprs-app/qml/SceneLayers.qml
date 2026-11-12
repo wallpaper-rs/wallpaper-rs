@@ -80,7 +80,8 @@ ColumnLayout {
                 "adjustment": "color-management",
                 "light": "help-hint",
                 "model": "draw-cuboid",
-                "group3d": "folder-3d"
+                "group3d": "folder-3d",
+                "shapes": "draw-polyline"
             })[type] ?? "layer-visible-on";
     }
 

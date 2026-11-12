@@ -6,6 +6,7 @@ pub use super::limbs::{
 };
 pub use super::marks::{CameraHold, CanvasEdit, ClockSet, Fit, Grip, LayerEdit, SCREENS, Takes};
 pub use super::motion::{AnimEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
+pub use super::pools::PoolEdit;
 pub use super::names::{
     ACTIONS, AssetEdit, ConditionEdit, EDITOR, ImportAssets, RgbEdit, RuleEdit, ScriptFile, UpgradeEdit,
 };

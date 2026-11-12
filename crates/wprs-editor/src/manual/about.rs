@@ -1,4 +1,4 @@
-pub const ABOUT: [(&str, &str); 67] = [
+pub const ABOUT: [(&str, &str); 68] = [
     ("set", "Set the value at a JSON Pointer, creating the objects on the way"),
     ("add", "Insert a value into a list or an object at a JSON Pointer"),
     ("remove", "Remove the value at a JSON Pointer"),
@@ -70,6 +70,7 @@ pub const ABOUT: [(&str, &str); 67] = [
     ("timeline", "Add, change or remove a timeline and its events"),
     ("script", "Attach, remove, move or declare a script, write its code, or set its typed settings"),
     ("template", "Make a template from layers, or rename or remove one"),
+    ("pool", "Add, change or remove a mesh pool: the shapes that scripts build and shapes layers draw"),
     ("undo", "Undo the last change"),
     ("redo", "Redo the last undone change"),
 ];

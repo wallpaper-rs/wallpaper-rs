@@ -4,7 +4,7 @@ use serde_json::{Value, json};
 use std::path::Path;
 use wprs_core::message::said;
 
-pub const KINDS: [&str; 14] = [
+pub const KINDS: [&str; 15] = [
     "image",
     "video",
     "text",
@@ -19,6 +19,7 @@ pub const KINDS: [&str; 14] = [
     "light",
     "model",
     "group3d",
+    "shapes",
 ];
 pub const LAYERS: &str = "/scene/layers";
 
@@ -119,6 +120,13 @@ pub fn template(
         "sound" => json!({"id": id, "type": "sound", "sound": asset("sound")?}),
         "mesh" => json!({"id": id, "type": "mesh", "mesh": asset("model")?}),
         "model" => json!({"id": id, "type": "model", "model": asset("model")?}),
+        "shapes" => {
+            let pools = doc.pointer("/scene/pools").and_then(Value::as_object);
+            let first = pools.and_then(|p| p.keys().next().cloned());
+            let pool = source.map(String::from).or(first);
+            let pool = pool.ok_or_else(|| anyhow!(said("editor.add_pool", "add a pool first", &[])))?;
+            json!({"id": id, "type": "video", "video": pool})
+        }
         "group3d" => json!({"id": id, "type": "group", "space": "3d", "layers": []}),
         "text" => {
             json!({"id": id, "type": "text", "text": name.unwrap_or("Text"), "size": 96, "color": "#ffffff"})

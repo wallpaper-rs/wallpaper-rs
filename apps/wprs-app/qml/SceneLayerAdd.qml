@@ -25,8 +25,8 @@ QQC2.ToolButton {
 
                 visible: modelData !== "light"
                 height: visible ? implicitHeight : 0
-                enabled: !["image", "video", "sound", "mesh", "model"].includes(modelData) || (tools.owner.page.view.assets ?? []).some(asset => asset.kind === (modelData === "mesh" ? "model" : modelData))
-                text: SceneWords.kind(modelData) + (enabled ? "" : " (" + App.tr("import a file of this kind first") + ")")
+                enabled: modelData === "shapes" ? (tools.owner.page.view.pools ?? []).length > 0 : !["image", "video", "sound", "mesh", "model"].includes(modelData) || (tools.owner.page.view.assets ?? []).some(asset => asset.kind === (modelData === "mesh" ? "model" : modelData))
+                text: SceneWords.kind(modelData) + (enabled ? "" : " (" + (modelData === "shapes" ? App.tr("add a pool first") : App.tr("import a file of this kind first")) + ")")
                 icon.name: tools.owner.icon(modelData)
                 onTriggered: choice.offer(modelData)
             }

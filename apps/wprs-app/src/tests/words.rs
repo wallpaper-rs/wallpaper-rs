@@ -43,10 +43,14 @@ fn document(name: &str) -> Value {
         let ops = set(&doc, &format!("/scene/assets/{id}"), json!({"path": format!("assets/{path}")}));
         apply(&mut doc, &ops).unwrap();
     }
+    let pool = json!({"type": "mesh", "max": 4, "max_vertices": 64});
+    let ops = set(&doc, "/scene/pools/bars", pool);
+    apply(&mut doc, &ops).unwrap();
     for kind in KINDS {
-        let source = [("image", "pic"), ("video", "clip"), ("sound", "tone"), ("mesh", "rig")]
-            .into_iter()
-            .find(|(k, _)| *k == kind);
+        let source =
+            [("image", "pic"), ("video", "clip"), ("sound", "tone"), ("mesh", "rig"), ("shapes", "bars")]
+                .into_iter()
+                .find(|(k, _)| *k == kind);
         let source = source.map(|(_, s)| s.to_owned());
         let layer = Action::AddLayer {
             kind: kind.into(),

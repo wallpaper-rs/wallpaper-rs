@@ -38,6 +38,7 @@ pub(crate) fn whole(action: &Action) -> bool {
                 | Action::Manifest(_)
                 | Action::Canvas(_)
                 | Action::Timeline(_)
+                | Action::Pool(_)
                 | Action::Ambient(_)
                 | Action::Wind(_)
                 | Action::Particles(_)

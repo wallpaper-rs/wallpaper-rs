@@ -12,6 +12,7 @@ mod limbs;
 mod marks;
 mod motion;
 mod names;
+mod pools;
 mod rigging;
 mod shaping;
 mod solid;
@@ -182,6 +183,7 @@ pub enum Action {
     Timeline(TimelineEdit),
     Script(ScriptEdit),
     Template(TemplateEdit),
+    Pool(PoolEdit),
     Undo {},
     Redo {},
 }

@@ -244,11 +244,8 @@ msgid "there is no layer \"%1\""
 msgstr "no hay ninguna capa «%1»"
 
 #: crates/wprs-editor/src/actions.rs
-msgid ""
-"requires.features is computed from what the package uses, except locale_files"
-msgstr ""
-"requires.features se calcula a partir de lo que usa el paquete, salvo "
-"locale_files"
+msgid "requires.features is computed from what the package uses, except locale_files"
+msgstr "requires.features se calcula a partir de lo que usa el paquete, salvo locale_files"
 
 #: crates/wprs-editor/src/actions.rs crates/wprs-editor/src/bring.rs
 #: crates/wprs-editor/src/ids/rename.rs crates/wprs-editor/src/props.rs
@@ -298,8 +295,7 @@ msgstr "no se puede leer la imagen: %1"
 
 #: crates/wprs-editor/src/assets.rs
 msgid "only pictures, videos, sounds, fonts and .cube tables can be imported"
-msgstr ""
-"solo se pueden importar imágenes, vídeos, sonidos, fuentes y tablas .cube"
+msgstr "solo se pueden importar imágenes, vídeos, sonidos, fuentes y tablas .cube"
 
 #: crates/wprs-editor/src/assets.rs
 msgid "the file is larger than 1 GiB"
@@ -551,8 +547,7 @@ msgstr "no hay ningún clip «%1»"
 
 #: crates/wprs-editor/src/clips.rs
 msgid "only a clip being added starts playing in a new animation layer"
-msgstr ""
-"solo un clip que se añade empieza a sonar en una capa de animación nueva"
+msgstr "solo un clip que se añade empieza a sonar en una capa de animación nueva"
 
 #: crates/wprs-editor/src/clips.rs crates/wprs-editor/src/motion/mod.rs
 #: crates/wprs-editor/src/skin/mod.rs
@@ -638,8 +633,7 @@ msgstr "%1 está animada, y una carátula es una imagen fija"
 
 #: crates/wprs-editor/src/credit.rs
 msgid "a package has at most 64 credits; credit folders instead of files"
-msgstr ""
-"un paquete tiene como mucho 64 créditos; acredita carpetas en vez de archivos"
+msgstr "un paquete tiene como mucho 64 créditos; acredita carpetas en vez de archivos"
 
 #: crates/wprs-editor/src/credit.rs
 msgid "a package is derived from at most 64 works"
@@ -682,12 +676,8 @@ msgid "%1 cannot take the value %2; give %3"
 msgstr "%1 no admite el valor %2; da %3"
 
 #: crates/wprs-editor/src/handles.rs
-msgid ""
-"a Bézier handle reaches from 0 s up to the neighbouring keyframe and by "
-"-1000000 to 1000000 in value"
-msgstr ""
-"un tirador Bézier llega de 0 s hasta el fotograma clave vecino y de -1000000 "
-"a 1000000 en valor"
+msgid "a Bézier handle reaches from 0 s up to the neighbouring keyframe and by -1000000 to 1000000 in value"
+msgstr "un tirador Bézier llega de 0 s hasta el fotograma clave vecino y de -1000000 a 1000000 en valor"
 
 #: crates/wprs-editor/src/handles.rs
 msgid "a keyframe eases or has Bézier handles, not both"
@@ -698,17 +688,12 @@ msgid "give a base or make the value absolute, not both"
 msgstr "da una base o haz absoluto el valor, no ambos"
 
 #: crates/wprs-editor/src/handles.rs
-msgid ""
-"a handle of the keyframe of %1 at %2 s reaches past the neighbouring "
-"keyframe; it reaches up to %3 s"
-msgstr ""
-"un tirador del fotograma clave de %1 en %2 s pasa del fotograma clave "
-"vecino; llega hasta %3 s"
+msgid "a handle of the keyframe of %1 at %2 s reaches past the neighbouring keyframe; it reaches up to %3 s"
+msgstr "un tirador del fotograma clave de %1 en %2 s pasa del fotograma clave vecino; llega hasta %3 s"
 
 #: crates/wprs-editor/src/handles.rs
 msgid "Bézier handles shape keyframes of numbers, lists of numbers and colors"
-msgstr ""
-"las asas Bézier dan forma a claves de números, listas de números y colores"
+msgstr "las asas Bézier dan forma a claves de números, listas de números y colores"
 
 #: crates/wprs-editor/src/handles.rs
 msgid "only a value with keyframes adds them to a base"
@@ -719,11 +704,8 @@ msgid "each number of the base of %1 is from -1000000 to 1000000"
 msgstr "cada número de la base de %1 va de -1000000 a 1000000"
 
 #: crates/wprs-editor/src/handles.rs
-msgid ""
-"the base of %1 is a number, a list of numbers or a color like its keyframes"
-msgstr ""
-"la base de %1 es un número, una lista de números o un color, como sus "
-"fotogramas clave"
+msgid "the base of %1 is a number, a list of numbers or a color like its keyframes"
+msgstr "la base de %1 es un número, una lista de números o un color, como sus fotogramas clave"
 
 #: crates/wprs-editor/src/history.rs
 msgid "Change a value"
@@ -883,12 +865,8 @@ msgid "%1 already has a keyframe at %2 s"
 msgstr "%1 ya tiene un fotograma clave en %2 s"
 
 #: crates/wprs-editor/src/keys.rs
-msgid ""
-"the base of %1 does not add to its last keyframe; remove it with absolute to "
-"keep the keyframe value"
-msgstr ""
-"la base de %1 no se suma a su último fotograma clave; quítalo con absolute "
-"para quedarte con el valor del fotograma clave"
+msgid "the base of %1 does not add to its last keyframe; remove it with absolute to keep the keyframe value"
+msgstr "la base de %1 no se suma a su último fotograma clave; quítalo con absolute para quedarte con el valor del fotograma clave"
 
 #: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/straight.rs
 msgid "%1 has no keyframes"
@@ -927,12 +905,8 @@ msgid "%1 is not a picture or video of the scene"
 msgstr "%1 no es una imagen ni un vídeo de la escena"
 
 #: crates/wprs-editor/src/lamps/cast.rs
-msgid ""
-"the layer %1 cannot be projected: it is missing, takes light or reads a lit "
-"layer"
-msgstr ""
-"la capa %1 no se puede proyectar: no existe, recibe luz o lee una capa "
-"iluminada"
+msgid "the layer %1 cannot be projected: it is missing, takes light or reads a lit layer"
+msgstr "la capa %1 no se puede proyectar: no existe, recibe luz o lee una capa iluminada"
 
 #: crates/wprs-editor/src/lamps/cast.rs
 msgid "give a picture, a video or a layer to project"
@@ -968,9 +942,7 @@ msgstr "una capa de partículas solo toma fuerza y brillo"
 
 #: crates/wprs-editor/src/lamps/lit.rs
 msgid "lighting is for image, video, text, mesh, model and particles layers"
-msgstr ""
-"la iluminación es para capas de imagen, vídeo, texto, malla, modelo y "
-"partículas"
+msgstr "la iluminación es para capas de imagen, vídeo, texto, malla, modelo y partículas"
 
 #: crates/wprs-editor/src/lamps/lit.rs
 msgid "%1 goes from 0 to %2"
@@ -1025,14 +997,16 @@ msgid "import %1 %2 first"
 msgstr "importa antes %1 %2"
 
 #: crates/wprs-editor/src/layers.rs
+msgid "add a pool first"
+msgstr "agrega una reserva primero"
+
+#: crates/wprs-editor/src/layers.rs
 msgid "%1 is not a layer type; use one of %2"
 msgstr "%1 no es un tipo de capa; usa uno de %2"
 
 #: crates/wprs-editor/src/limbs.rs
 msgid "a chain goes from a bone down to one that hangs below it, 2 to %1 bones"
-msgstr ""
-"una cadena va de un hueso a otro que cuelga por debajo de él, de 2 a %1 "
-"huesos"
+msgstr "una cadena va de un hueso a otro que cuelga por debajo de él, de 2 a %1 huesos"
 
 #: crates/wprs-editor/src/limbs.rs
 msgid "a chain reaches for cursor, bone:<name>, layer:<id> or a point [x, y]"
@@ -1211,8 +1185,7 @@ msgstr "la calidad va de 1 a 100, no %1"
 
 #: crates/wprs-editor/src/packing/source.rs
 msgid "a cube map comes from one panorama or six faces, never an animation"
-msgstr ""
-"un mapa cúbico sale de un panorama o de seis caras, nunca de una animación"
+msgstr "un mapa cúbico sale de un panorama o de seis caras, nunca de una animación"
 
 #: crates/wprs-editor/src/packing/source.rs
 msgid "the picture cannot become KTX2: %1"
@@ -1227,12 +1200,8 @@ msgid "masks are painted on a parameter of an effect"
 msgstr "las máscaras se pintan en un parámetro de un efecto"
 
 #: crates/wprs-editor/src/placing.rs
-msgid ""
-"a %1 layer cannot show %2; image, video, sound, mesh and model layers take a "
-"file of their kind"
-msgstr ""
-"una capa %1 no puede mostrar %2; las capas image, video, sound, mesh y model "
-"toman un archivo de su tipo"
+msgid "a %1 layer cannot show %2; image, video, sound, mesh and model layers take a file of their kind"
+msgstr "una capa %1 no puede mostrar %2; las capas image, video, sound, mesh y model toman un archivo de su tipo"
 
 #: crates/wprs-editor/src/presets.rs crates/wprs-editor/src/project.rs
 msgid "%1 is not valid JSON: %2"
@@ -1250,6 +1219,30 @@ msgstr "un paquete no puede requerirse a sí mismo"
 msgid "%1 is not a picture or a video"
 msgstr "%1 no es una imagen ni un vídeo"
 
+#: crates/wprs-editor/src/pools.rs
+msgid "a pool id has 1 to 32 small letters, digits or _"
+msgstr "el id de una reserva tiene de 1 a 32 minúsculas, cifras o _"
+
+#: crates/wprs-editor/src/pools.rs
+msgid "add or remove a pool, not both"
+msgstr "agrega o quita una reserva, no ambas cosas"
+
+#: crates/wprs-editor/src/pools.rs
+msgid "there is no pool \"%1\""
+msgstr "no hay ninguna reserva «%1»"
+
+#: crates/wprs-editor/src/pools.rs
+msgid "the pool \"%1\" is drawn by %2; remove those layers first"
+msgstr "la reserva «%1» la dibuja %2; quita antes esas capas"
+
+#: crates/wprs-editor/src/pools.rs
+msgid "there is already a pool \"%1\""
+msgstr "ya hay una reserva «%1»"
+
+#: crates/wprs-editor/src/pools.rs
+msgid "a scene has at most %1 pools"
+msgstr "una escena tiene como mucho %1 reservas"
+
 #: crates/wprs-editor/src/previews.rs
 msgid "the picture does not fit in 1 MiB even as a jpeg of 512 pixels"
 msgstr "la imagen no cabe en 1 MiB ni como jpeg de 512 píxeles"
@@ -1259,12 +1252,8 @@ msgid "choose a png, jpeg, webp or gif picture"
 msgstr "elige una imagen png, jpeg, webp o gif"
 
 #: crates/wprs-editor/src/previews.rs
-msgid ""
-"an animated preview is a gif or webp of at most 640 pixels a side, 15 s and "
-"8 MiB"
-msgstr ""
-"una vista previa animada es un gif o webp de como mucho 640 píxeles de lado, "
-"15 s y 8 MiB"
+msgid "an animated preview is a gif or webp of at most 640 pixels a side, 15 s and 8 MiB"
+msgstr "una vista previa animada es un gif o webp de como mucho 640 píxeles de lado, 15 s y 8 MiB"
 
 #: crates/wprs-editor/src/previews.rs
 msgid "an animated preview needs %1; upgrade the manifest first"
@@ -1276,14 +1265,11 @@ msgstr "la entrada %1 no es un archivo de escena"
 
 #: crates/wprs-editor/src/project.rs
 msgid "the files of %1 changed outside the editor; open the folder again"
-msgstr ""
-"los archivos de %1 cambiaron fuera del editor; vuelve a abrir la carpeta"
+msgstr "los archivos de %1 cambiaron fuera del editor; vuelve a abrir la carpeta"
 
 #: crates/wprs-editor/src/props.rs
 msgid "a property id is a letter followed by at most 63 letters, digits or _"
-msgstr ""
-"el id de una propiedad es una letra seguida de como mucho 63 letras, cifras "
-"o _"
+msgstr "el id de una propiedad es una letra seguida de como mucho 63 letras, cifras o _"
 
 #: crates/wprs-editor/src/props.rs
 msgid "a group cannot go into another group"
@@ -1466,23 +1452,16 @@ msgid "a script has at most %1 settings"
 msgstr "un script tiene como mucho %1 ajustes"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"A layer by id: position, scale, rotation, opacity, visible, color and text "
-"can be read and written; on(event, handler) handles the pointer"
-msgstr ""
-"Una capa por su id: se leen y escriben su posición, escala, giro, opacidad, "
-"visibilidad, color y texto; on(evento, manejador) atiende al puntero"
+msgid "A layer by id: position, scale, rotation, opacity, visible, color and text can be read and written; on(event, handler) handles the pointer"
+msgstr "Una capa por su id: se leen y escriben su posición, escala, giro, opacidad, visibilidad, color y texto; on(evento, manejador) atiende al puntero"
 
 #: crates/wprs-editor/src/scripts/reference.rs
 msgid "The ids of the top-level layers in drawing order"
 msgstr "Los ids de las capas de primer nivel en orden de dibujo"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"Draws a copy of a template of the scene and gives its handle (declare layers)"
-msgstr ""
-"Dibuja una copia de una plantilla de la escena y devuelve su manejador "
-"(declara layers)"
+msgid "Draws a copy of a template of the scene and gives its handle (declare layers)"
+msgstr "Dibuja una copia de una plantilla de la escena y devuelve su manejador (declara layers)"
 
 #: crates/wprs-editor/src/scripts/reference.rs
 msgid "Removes a copy made with spawn"
@@ -1493,91 +1472,52 @@ msgid "Moves a layer to a place in the drawing order"
 msgstr "Mueve una capa a un lugar del orden de dibujo"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"An effect of the layer by its name or position: enabled, set(param, value), "
-"get and reset (declare effects)"
-msgstr ""
-"Un efecto de la capa por su nombre o posición: enabled, set(param, valor), "
-"get y reset (declara effects)"
+msgid "An effect of the layer by its name or position: enabled, set(param, value), get and reset (declare effects)"
+msgstr "Un efecto de la capa por su nombre o posición: enabled, set(param, valor), get y reset (declara effects)"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"time, dt, daytime (0 to 1), fps, quality, locale, language, canvas, screen, "
-"device and mode"
-msgstr ""
-"time, dt, daytime (de 0 a 1), fps, quality, locale, language, canvas, "
-"screen, device y mode"
+msgid "time, dt, daytime (0 to 1), fps, quality, locale, language, canvas, screen, device and mode"
+msgstr "time, dt, daytime (de 0 a 1), fps, quality, locale, language, canvas, screen, device y mode"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"The value of a user setting; color(id), label(id), pressed(id) and all() "
-"read the rest"
-msgstr ""
-"El valor de un ajuste de quien usa el fondo; color(id), label(id), "
-"pressed(id) y all() leen el resto"
+msgid "The value of a user setting; color(id), label(id), pressed(id) and all() read the rest"
+msgstr "El valor de un ajuste de quien usa el fondo; color(id), label(id), pressed(id) y all() leen el resto"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"The sound levels, from 0 to 1; bands(16, 32 or 64) and buffers(n) give the "
-"spectrum"
-msgstr ""
-"Los niveles de sonido, de 0 a 1; bands(16, 32 o 64) y buffers(n) dan el "
-"espectro"
+msgid "The sound levels, from 0 to 1; bands(16, 32 or 64) and buffers(n) give the spectrum"
+msgstr "Los niveles de sonido, de 0 a 1; bands(16, 32 o 64) y buffers(n) dan el espectro"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"x and y as fractions of the screen, inside, buttons and left (the last two "
-"need clicks)"
-msgstr ""
-"x e y como fracciones de la pantalla, inside, buttons y left (los dos "
-"últimos necesitan clics)"
+msgid "x and y as fractions of the screen, inside, buttons and left (the last two need clicks)"
+msgstr "x e y como fracciones de la pantalla, inside, buttons y left (los dos últimos necesitan clics)"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"What the media player plays: state, title, artist, album, position, "
-"duration, colors and has_cover"
-msgstr ""
-"Lo que reproduce el reproductor multimedia: state, title, artist, album, "
-"position, duration, colors y has_cover"
+msgid "What the media player plays: state, title, artist, album, position, duration, colors and has_cover"
+msgstr "Lo que reproduce el reproductor multimedia: state, title, artist, album, position, duration, colors y has_cover"
 
 #: crates/wprs-editor/src/scripts/reference.rs
-msgid ""
-"play, pause, reverse, stop, seek(t), speed, time, duration and on(name, "
-"handler)"
-msgstr ""
-"play, pause, reverse, stop, seek(t), speed, time, duration y on(nombre, "
-"manejador)"
+msgid "play, pause, reverse, stop, seek(t), speed, time, duration and on(name, handler)"
+msgstr "play, pause, reverse, stop, seek(t), speed, time, duration y on(nombre, manejador)"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
-msgid ""
-"Timers on the scene clock; they return a function that cancels them (declare "
-"timers)"
-msgstr ""
-"Temporizadores en el reloj de la escena; devuelven una función que los "
-"cancela (declara timers)"
+msgid "Timers on the scene clock; they return a function that cancels them (declare timers)"
+msgstr "Temporizadores en el reloj de la escena; devuelven una función que los cancela (declara timers)"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "Writes to the console of the preview; at most 20 lines a second"
-msgstr ""
-"Escribe en la consola de la vista previa; como mucho 20 líneas por segundo"
+msgstr "Escribe en la consola de la vista previa; como mucho 20 líneas por segundo"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "What the scripts keep between runs; delete, clear and keys too"
-msgstr ""
-"Lo que los scripts guardan entre ejecuciones; también delete, clear y keys"
+msgstr "Lo que los scripts guardan entre ejecuciones; también delete, clear y keys"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "An object the modules of the scene share; values are copied when set"
-msgstr ""
-"Un objeto que comparten los módulos de la escena; los valores se copian al "
-"asignarlos"
+msgstr "Un objeto que comparten los módulos de la escena; los valores se copian al asignarlos"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
-msgid ""
-"play, pause, stop, emit(n), point, from and wall for the particles of a layer"
-msgstr ""
-"play, pause, stop, emit(n), point, from y wall para las partículas de una "
-"capa"
+msgid "play, pause, stop, emit(n), point, from and wall for the particles of a layer"
+msgstr "play, pause, stop, emit(n), point, from y wall para las partículas de una capa"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "play, pause, stop, playing and volume of a sound layer"
@@ -1593,23 +1533,15 @@ msgstr "Vec2 y ayudas como smoothstep, que se importan de wprs/math"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "Called when the module starts, stops and when the canvas changes size"
-msgstr ""
-"Se llama cuando el módulo arranca, se detiene y cuando el lienzo cambia de "
-"tamaño"
+msgstr "Se llama cuando el módulo arranca, se detiene y cuando el lienzo cambia de tamaño"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
-msgid ""
-"Called every frame; what it returns is the value of a value bound to the "
-"module without fn"
-msgstr ""
-"Se llama en cada fotograma; lo que devuelve es el valor de un valor enlazado "
-"al módulo sin fn"
+msgid "Called every frame; what it returns is the value of a value bound to the module without fn"
+msgstr "Se llama en cada fotograma; lo que devuelve es el valor de un valor enlazado al módulo sin fn"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "Called with the user settings, and with the language, fps and quality"
-msgstr ""
-"Se llama con los ajustes de quien usa el fondo, y con el idioma, los fps y "
-"la calidad"
+msgstr "Se llama con los ajustes de quien usa el fondo, y con el idioma, los fps y la calidad"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "Called for each event of a timeline or clip"
@@ -1620,17 +1552,12 @@ msgid "Called as the media player changes (declare media)"
 msgstr "Se llama cuando cambia el reproductor multimedia (declara media)"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
-msgid ""
-"The click, down, up, enter, leave and move of a solid layer or a hit bone"
-msgstr ""
-"El click, down, up, enter, leave y move de una capa sólida o de un hueso "
-"tocable"
+msgid "The click, down, up, enter, leave and move of a solid layer or a hit bone"
+msgstr "El click, down, up, enter, leave y move de una capa sólida o de un hueso tocable"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "A function a value follows by name: ctx has path, layer, key and params"
-msgstr ""
-"Una función que un valor sigue por su nombre: ctx tiene path, layer, key y "
-"params"
+msgstr "Una función que un valor sigue por su nombre: ctx tiene path, layer, key y params"
 
 #: crates/wprs-editor/src/scripts/reference/more.rs
 msgid "The same with a first call and a call every frame"
@@ -1657,11 +1584,8 @@ msgid "a file needs a folder"
 msgstr "un archivo necesita una carpeta"
 
 #: crates/wprs-editor/src/session.rs
-msgid ""
-"unsaved changes of an earlier session wait; recover or discard them first"
-msgstr ""
-"hay cambios sin guardar de una sesión anterior; recupéralos o descártalos "
-"antes"
+msgid "unsaved changes of an earlier session wait; recover or discard them first"
+msgstr "hay cambios sin guardar de una sesión anterior; recupéralos o descártalos antes"
 
 #: crates/wprs-editor/src/shaders.rs
 msgid "%1 is larger than %2 KiB"
@@ -1760,12 +1684,8 @@ msgid "the simulated tilt goes from -1 to 1 on each side"
 msgstr "la inclinación simulada va de -1 a 1 en cada lado"
 
 #: crates/wprs-editor/src/shaping/grips.rs
-msgid ""
-"%1 cannot follow %2: it is itself, not drawn, follows %1 already or the "
-"chain would pass 8 layers"
-msgstr ""
-"%1 no puede seguir a %2: es la misma capa, no se dibuja, ya sigue a %1 o la "
-"cadena pasaría de 8 capas"
+msgid "%1 cannot follow %2: it is itself, not drawn, follows %1 already or the chain would pass 8 layers"
+msgstr "%1 no puede seguir a %2: es la misma capa, no se dibuja, ya sigue a %1 o la cadena pasaría de 8 capas"
 
 #: crates/wprs-editor/src/shaping/keyed.rs
 msgid "a part of %1 follows another source; write over it with replace"
@@ -1853,8 +1773,7 @@ msgstr "%1 no es una entrada; usa una de %2"
 
 #: crates/wprs-editor/src/shaping/page.rs
 msgid "a page declares network exactly when it lists the origins it reaches"
-msgstr ""
-"una página declara network justo cuando lista los orígenes a los que llega"
+msgstr "una página declara network justo cuando lista los orígenes a los que llega"
 
 #: crates/wprs-editor/src/shaping/page.rs
 msgid "files are added this way only to web, picture and video packages"
@@ -1870,8 +1789,7 @@ msgstr "%1 no es un archivo para un paquete de tipo %2"
 
 #: crates/wprs-editor/src/shelf.rs
 msgid "name a part as layer:ID, particles:ID, script:PATH or effect:ID, not %1"
-msgstr ""
-"nombra una parte como layer:ID, particles:ID, script:RUTA o effect:ID, no %1"
+msgstr "nombra una parte como layer:ID, particles:ID, script:RUTA o effect:ID, no %1"
 
 #: crates/wprs-editor/src/shelf.rs
 msgid "choose at least one part"
@@ -1946,11 +1864,8 @@ msgid "%1 of a model goes from %2 to %3"
 msgstr "%1 de un modelo va de %2 a %3"
 
 #: crates/wprs-editor/src/stage3d/edit.rs
-msgid ""
-"the %1 of the model is keyed or bound: add a keyframe or change the binding"
-msgstr ""
-"el campo %1 del modelo tiene claves o un enlace: añade una clave o cambia el "
-"enlace"
+msgid "the %1 of the model is keyed or bound: add a keyframe or change the binding"
+msgstr "el campo %1 del modelo tiene claves o un enlace: añade una clave o cambia el enlace"
 
 #: crates/wprs-editor/src/stage3d/edit.rs
 msgid "a model cannot be scaled to nothing"
@@ -1966,10 +1881,8 @@ msgstr "solo las capas dentro de un grupo 3D prueban la profundidad"
 
 #: crates/wprs-editor/src/stage3d/maps.rs
 #: crates/wprs-editor/src/stage3d/painted.rs
-msgid ""
-"%1 is not a map of a material; use base, orm, normal, occlusion or emissive"
-msgstr ""
-"%1 no es un mapa de un material; usa base, orm, normal, occlusion o emissive"
+msgid "%1 is not a map of a material; use base, orm, normal, occlusion or emissive"
+msgstr "%1 no es un mapa de un material; usa base, orm, normal, occlusion o emissive"
 
 #: crates/wprs-editor/src/stage3d/material.rs
 msgid "a material color is #rrggbb or [r, g, b, a]"
@@ -2118,9 +2031,7 @@ msgstr "%1 no es un paquete de recursos"
 
 #: crates/wprs-editor/src/straight.rs
 msgid "straighten the curve after a keyframe on its own, without other changes"
-msgstr ""
-"endereza la curva después de un fotograma clave por sí sola, sin otros "
-"cambios"
+msgstr "endereza la curva después de un fotograma clave por sí sola, sin otros cambios"
 
 #: crates/wprs-editor/src/swarms/emits.rs
 #: crates/wprs-editor/src/swarms/fields.rs crates/wprs-editor/src/swarms/sow.rs
@@ -2154,8 +2065,7 @@ msgstr "el sistema no tiene la reasignación %1"
 
 #: crates/wprs-editor/src/swarms/looks.rs
 msgid "give a remap to add or set, or the index of one to remove"
-msgstr ""
-"da una reasignación para añadir o cambiar, o el índice de una para quitar"
+msgstr "da una reasignación para añadir o cambiar, o el índice de una para quitar"
 
 #: crates/wprs-editor/src/swarms/mod.rs
 msgid "there is no particle system \"%1\""
@@ -2198,11 +2108,8 @@ msgid "only the last control point can go"
 msgstr "solo se puede quitar el último punto de control"
 
 #: crates/wprs-editor/src/swarms/spots.rs
-msgid ""
-"a control point lies within a million pixels and turns up to 360 degrees"
-msgstr ""
-"un punto de control queda a menos de un millón de píxeles y gira hasta 360 "
-"grados"
+msgid "a control point lies within a million pixels and turns up to 360 degrees"
+msgstr "un punto de control queda a menos de un millón de píxeles y gira hasta 360 grados"
 
 #: crates/wprs-editor/src/swarms/tend.rs
 msgid "give what to add or set, or the index of one to remove"
@@ -2233,10 +2140,8 @@ msgid "the scene has no template %1"
 msgstr "la escena no tiene la plantilla %1"
 
 #: crates/wprs-editor/src/texts.rs
-msgid ""
-"name a language such as en or pt-BR and a text of the manifest or the scene"
-msgstr ""
-"indica un idioma como en o pt-BR y un texto del manifiesto o de la escena"
+msgid "name a language such as en or pt-BR and a text of the manifest or the scene"
+msgstr "indica un idioma como en o pt-BR y un texto del manifiesto o de la escena"
 
 #: crates/wprs-editor/src/texts.rs
 msgid "write the text in the default language first"
@@ -2244,8 +2149,7 @@ msgstr "escribe antes el texto en el idioma predeterminado"
 
 #: crates/wprs-editor/src/texts.rs
 msgid "texts in several languages need %1; upgrade the manifest first"
-msgstr ""
-"los textos en varios idiomas necesitan %1; actualiza antes el manifiesto"
+msgstr "los textos en varios idiomas necesitan %1; actualiza antes el manifiesto"
 
 #: crates/wprs-editor/src/texts.rs
 msgid "the title needs a text"
@@ -2398,8 +2302,7 @@ msgstr "se esperaban como mucho 64 autores de 1 a 128 caracteres cada uno"
 
 #: crates/wprs-format/src/check.rs
 msgid "expected an SPDX license expression of at most 256 characters"
-msgstr ""
-"se esperaba una expresión de licencia SPDX de 256 caracteres como mucho"
+msgstr "se esperaba una expresión de licencia SPDX de 256 caracteres como mucho"
 
 #: crates/wprs-format/src/check.rs
 msgid "expected at most 32 tags of 1 to 32 characters"
@@ -2411,13 +2314,11 @@ msgstr "se esperaba una letra seguida de letras, cifras o _"
 
 #: crates/wprs-format/src/check.rs
 msgid "localized texts and the newer fields need wallpaper-rs.wpak/2"
-msgstr ""
-"los textos traducidos y los campos nuevos necesitan wallpaper-rs.wpak/2"
+msgstr "los textos traducidos y los campos nuevos necesitan wallpaper-rs.wpak/2"
 
 #: crates/wprs-format/src/check.rs
 msgid "web, preset and assets packages need wallpaper-rs.wpak/2"
-msgstr ""
-"los paquetes web, de ajustes y de recursos necesitan wallpaper-rs.wpak/2"
+msgstr "los paquetes web, de ajustes y de recursos necesitan wallpaper-rs.wpak/2"
 
 #: crates/wprs-format/src/check.rs
 msgid "expected 1 to 128 characters"
@@ -2429,8 +2330,7 @@ msgstr "demasiadas propiedades o ajustes predefinidos"
 
 #: crates/wprs-format/src/check.rs crates/wprs-format/src/manifest/read.rs
 msgid "the newer kinds and fields of properties need wallpaper-rs.wpak/2"
-msgstr ""
-"los tipos y campos nuevos de las propiedades necesitan wallpaper-rs.wpak/2"
+msgstr "los tipos y campos nuevos de las propiedades necesitan wallpaper-rs.wpak/2"
 
 #: crates/wprs-format/src/check/texts.rs
 msgid "texts of at most 8000 characters without control characters"
@@ -2450,8 +2350,7 @@ msgstr "@%1 no está en los textos del idioma predeterminado"
 
 #: crates/wprs-format/src/check/texts.rs
 msgid "needs a text in the default language and languages like en or pt-BR"
-msgstr ""
-"necesita un texto en el idioma predeterminado e idiomas como en o pt-BR"
+msgstr "necesita un texto en el idioma predeterminado e idiomas como en o pt-BR"
 
 #: crates/wprs-format/src/check/texts.rs
 msgid "has no text"
@@ -2527,9 +2426,7 @@ msgstr "no fija la raíz actual"
 
 #: crates/wprs-format/src/entry.rs
 msgid "must be listed exactly when the root lets authors register online"
-msgstr ""
-"debe figurar exactamente cuando la raíz deja que los autores se registren en "
-"línea"
+msgstr "debe figurar exactamente cuando la raíz deja que los autores se registren en línea"
 
 #: crates/wprs-format/src/entry.rs
 msgid "expected 2^shard_bits shards named by SHA-256"
@@ -2569,8 +2466,7 @@ msgstr "se esperaba un wpak-repo-featured/1.0 de este repositorio"
 
 #: crates/wprs-format/src/featured.rs
 msgid "expected at most 64 package ids, each once, with short notes"
-msgstr ""
-"se esperaban como mucho 64 ids de paquete, cada uno una vez, con notas cortas"
+msgstr "se esperaban como mucho 64 ids de paquete, cada uno una vez, con notas cortas"
 
 #: crates/wprs-format/src/featured.rs
 msgid "has 1 to 200 characters on one line without < or >"
@@ -2670,8 +2566,7 @@ msgstr "atribuye archivos al paquete del que vienen"
 
 #: crates/wprs-format/src/features.rs
 msgid "sets the color around its picture or spreads over every screen"
-msgstr ""
-"fija el color alrededor de su imagen o se extiende por todas las pantallas"
+msgstr "fija el color alrededor de su imagen o se extiende por todas las pantallas"
 
 #: crates/wprs-format/src/features.rs
 msgid "suggests an accent color for the desktop"
@@ -3075,8 +2970,7 @@ msgstr "usa vídeos como máscaras, texturas de efectos o proyecciones de luz"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "sets the speed, range or frame of its videos and moving pictures"
-msgstr ""
-"fija la velocidad, el tramo o el fotograma de sus vídeos e imágenes animadas"
+msgstr "fija la velocidad, el tramo o el fotograma de sus vídeos e imágenes animadas"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "plays the same video in several layers, each on its own clock"
@@ -3104,9 +2998,7 @@ msgstr "usa colecciones de fuentes, fuentes comprimidas o fuentes de respaldo"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "plays MP3 or long sounds, lists of sounds or sounds started by events"
-msgstr ""
-"reproduce sonidos MP3 o largos, listas de sonidos o sonidos que arrancan con "
-"eventos"
+msgstr "reproduce sonidos MP3 o largos, listas de sonidos o sonidos que arrancan con eventos"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "moves, zooms, turns or shakes the whole scene"
@@ -3194,9 +3086,7 @@ msgstr "reacciona a tramos de frecuencias del sonido"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "shapes how values react with limits, an exponent or uneven smoothing"
-msgstr ""
-"da forma a la reacción de los valores con límites, un exponente o un "
-"suavizado desigual"
+msgstr "da forma a la reacción de los valores con límites, un exponente o un suavizado desigual"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "sets how fast it reacts to sound"
@@ -3288,8 +3178,7 @@ msgstr "hace nacer partículas con ruido, recorridos o valores reasignados"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "keeps particles at distances or remaps their values as they live"
-msgstr ""
-"mantiene las partículas a distancia o reasigna sus valores mientras viven"
+msgstr "mantiene las partículas a distancia o reasigna sus valores mientras viven"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "binds the ranges of births or the shapes of emitters"
@@ -3297,8 +3186,7 @@ msgstr "enlaza los rangos de nacimiento o las formas de los emisores"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "makes particles hit boxes, lines, layers or the inside of circles"
-msgstr ""
-"hace chocar partículas con cajas, líneas, capas o el interior de círculos"
+msgstr "hace chocar partículas con cajas, líneas, capas o el interior de círculos"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "moves particles in flocks"
@@ -3358,8 +3246,7 @@ msgstr "reacciona al puntero sobre sus capas"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "shows the title, cover or progress of what the media player plays"
-msgstr ""
-"muestra el título, la carátula o el avance de lo que suena en el reproductor"
+msgstr "muestra el título, la carátula o el avance de lo que suena en el reproductor"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "sends its colors to RGB lighting"
@@ -3379,9 +3266,7 @@ msgstr "se esperaban de 1 a 16 bloques minisign"
 
 #: crates/wprs-format/src/source.rs
 msgid "misses %1; run pack sign again, which fills the list before signing"
-msgstr ""
-"le falta %1; vuelve a ejecutar pack sign, que rellena la lista antes de "
-"firmar"
+msgstr "le falta %1; vuelve a ejecutar pack sign, que rellena la lista antes de firmar"
 
 #: crates/wprs-format/src/store.rs
 msgid "expected 64 lowercase hex digits"
@@ -3441,8 +3326,7 @@ msgstr "incluye la base del ajuste"
 
 #: crates/wprs-format/src/web.rs
 msgid "assets packages are copied into scenes and need none"
-msgstr ""
-"los paquetes de recursos se copian en las escenas y no necesitan ninguno"
+msgstr "los paquetes de recursos se copian en las escenas y no necesitan ninguno"
 
 #: crates/wprs-format/src/web.rs
 msgid "preset and assets packages have none"
@@ -3501,8 +3385,7 @@ msgid "the network, to reach the sites it names"
 msgstr "la red, para llegar a los sitios que nombra"
 
 #: crates/wprs-format/src/web.rs
-msgid ""
-"This web wallpaper uses %1. You can restrict each of them in its settings."
+msgid "This web wallpaper uses %1. You can restrict each of them in its settings."
 msgstr "Este fondo web usa %1. Puedes restringir cada cosa en sus ajustes."
 
 #: crates/wprs-format/src/web.rs
@@ -3604,8 +3487,7 @@ msgstr "%1 nombra «%2», una propiedad que no guarda ningún valor"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "%1 needs exactly one source: prop, keys, audio, cursor, clock or script"
-msgstr ""
-"%1 necesita exactamente una fuente: prop, keys, audio, cursor, clock o script"
+msgstr "%1 necesita exactamente una fuente: prop, keys, audio, cursor, clock o script"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "%1 does not fit the type of this field"
@@ -3628,20 +3510,12 @@ msgid "invalid color \"%1\", expected #rrggbb or #rrggbbaa"
 msgstr "color no válido «%1»; se esperaba #rrggbb o #rrggbbaa"
 
 #: crates/wprs-scene/src/issue.rs
-msgid ""
-"%1 is a sound layer: only id, type, sound, sounds, mode, pause, stream, "
-"play_on, loop, play, volume, pan, fade_in and fade_out apply"
-msgstr ""
-"%1 es una capa de sonido: solo se aplican id, type, sound, sounds, mode, "
-"pause, stream, play_on, loop, play, volume, pan, fade_in y fade_out"
+msgid "%1 is a sound layer: only id, type, sound, sounds, mode, pause, stream, play_on, loop, play, volume, pan, fade_in and fade_out apply"
+msgstr "%1 es una capa de sonido: solo se aplican id, type, sound, sounds, mode, pause, stream, play_on, loop, play, volume, pan, fade_in y fade_out"
 
 #: crates/wprs-scene/src/issue.rs
-msgid ""
-"%1 is a light layer: only id, type, transform, anchor, visible, parent, "
-"inherit, attach and the fields of the light apply"
-msgstr ""
-"%1 es una capa de luz: solo se aplican id, type, transform, anchor, visible, "
-"parent, inherit, attach y los campos de la luz"
+msgid "%1 is a light layer: only id, type, transform, anchor, visible, parent, inherit, attach and the fields of the light apply"
+msgstr "%1 es una capa de luz: solo se aplican id, type, transform, anchor, visible, parent, inherit, attach y los campos de la luz"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "the scene has %1 light layers, at most 12 are allowed"
@@ -3668,11 +3542,8 @@ msgid "the scene has %1 sound layers, at most 8 are allowed"
 msgstr "la escena tiene %1 capas de sonido; se permiten como mucho 8"
 
 #: crates/wprs-scene/src/issue.rs
-msgid ""
-"/properties/volume of a scene with sound must be a slider within 0..=100"
-msgstr ""
-"/properties/volume de una escena con sonido debe ser un deslizador entre 0.."
-"=100"
+msgid "/properties/volume of a scene with sound must be a slider within 0..=100"
+msgstr "/properties/volume de una escena con sonido debe ser un deslizador entre 0..=100"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "%1 nests particle systems more than two levels deep"
@@ -3684,13 +3555,11 @@ msgstr "%1 nombra «%2», que su modelo no tiene"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "the scene has %1 mesh and model layers, at most 16 are allowed"
-msgstr ""
-"la escena tiene %1 capas de malla y de modelo; se permiten como mucho 16"
+msgstr "la escena tiene %1 capas de malla y de modelo; se permiten como mucho 16"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "the scene has %1 lights that cast shadows, at most 2 are allowed"
-msgstr ""
-"la escena tiene %1 luces que proyectan sombras; se permiten como mucho 2"
+msgstr "la escena tiene %1 luces que proyectan sombras; se permiten como mucho 2"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "%1 applies inside a group with space 3d only"
@@ -3713,20 +3582,12 @@ msgid "%1 must list bones that each hang from the one before"
 msgstr "%1 debe listar huesos que cuelguen cada uno del anterior"
 
 #: crates/wprs-scene/src/issue.rs
-msgid ""
-"%1 names a system that starts particles from a layer, which a child born "
-"from its parent cannot do"
-msgstr ""
-"%1 nombra un sistema que hace nacer partículas desde una capa, algo que no "
-"puede hacer un hijo que nace de su padre"
+msgid "%1 names a system that starts particles from a layer, which a child born from its parent cannot do"
+msgstr "%1 nombra un sistema que hace nacer partículas desde una capa, algo que no puede hacer un hijo que nace de su padre"
 
 #: crates/wprs-scene/src/issue.rs
-msgid ""
-"%1 applies to video layers that name a video file, pick videos through a map "
-"or take a file property that may hold a video"
-msgstr ""
-"%1 solo se aplica a capas de vídeo que nombran un archivo de vídeo, eligen "
-"vídeos con un mapa o toman una propiedad de archivo que puede tener un vídeo"
+msgid "%1 applies to video layers that name a video file, pick videos through a map or take a file property that may hold a video"
+msgstr "%1 solo se aplica a capas de vídeo que nombran un archivo de vídeo, eligen vídeos con un mapa o toman una propiedad de archivo que puede tener un vídeo"
 
 #: crates/wprs-scene/src/issue.rs
 msgid "invalid scene: %1"

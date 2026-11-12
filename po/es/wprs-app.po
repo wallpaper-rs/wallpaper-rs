@@ -616,6 +616,9 @@ msgstr "Preajuste:"
 #: apps/wprs-app/qml/PackageFraming.qml apps/wprs-app/qml/PackageTrack.qml
 #: apps/wprs-app/qml/PackageWeb.qml apps/wprs-app/qml/SceneEffectMask.qml
 #: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneRig.qml
+#: apps/wprs-app/qml/PackageTrack.qml apps/wprs-app/qml/PackageWeb.qml
+#: apps/wprs-app/qml/SceneEffectMask.qml apps/wprs-app/qml/SceneMedia.qml
+#: apps/wprs-app/qml/ScenePoolEdit.qml apps/wprs-app/qml/SceneRig.qml
 #: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmLight.qml
 #: apps/wprs-app/qml/SceneTones.qml apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
@@ -1618,6 +1621,12 @@ msgstr "Bajar"
 #: apps/wprs-app/qml/SceneScriptRow.qml apps/wprs-app/qml/SceneSettingMenu.qml
 #: apps/wprs-app/qml/SceneShapes.qml apps/wprs-app/qml/SceneSwarmPoints.qml
 #: apps/wprs-app/qml/SceneTemplateTree.qml
+#: apps/wprs-app/qml/ScenePools.qml apps/wprs-app/qml/SceneProperties.qml
+#: apps/wprs-app/qml/SceneRigIk.qml apps/wprs-app/qml/SceneRigPhysics.qml
+#: apps/wprs-app/qml/SceneRigRow.qml apps/wprs-app/qml/SceneRigRules.qml
+#: apps/wprs-app/qml/SceneScriptsList.qml
+#: apps/wprs-app/qml/SceneSettingMenu.qml apps/wprs-app/qml/SceneShapes.qml
+#: apps/wprs-app/qml/SceneSwarmPoints.qml
 #: apps/wprs-app/qml/SceneTimelineEvents.qml apps/wprs-app/qml/SettingsPage.qml
 msgid "Remove"
 msgstr "Quitar"
@@ -3420,6 +3429,7 @@ msgstr ""
 #: apps/wprs-app/qml/PlaylistEditor.qml apps/wprs-app/qml/PlaylistsPage.qml
 #: apps/wprs-app/qml/PresetDialog.qml apps/wprs-app/qml/ProfilesPage.qml
 #: apps/wprs-app/qml/ProviderDialog.qml apps/wprs-app/qml/RepoCharter.qml
+#: apps/wprs-app/qml/ScenePoolEdit.qml
 msgid "Name:"
 msgstr "Nombre:"
 
@@ -5317,7 +5327,7 @@ msgstr "Una capa"
 msgid "A shape"
 msgstr "Una forma"
 
-#: apps/wprs-app/qml/SceneEffectMask.qml
+#: apps/wprs-app/qml/SceneEffectMask.qml apps/wprs-app/qml/ScenePoolEdit.qml
 msgid "Picture:"
 msgstr "Imagen:"
 
@@ -5889,6 +5899,10 @@ msgstr "Bloquear"
 #: apps/wprs-app/qml/SceneLayerRow.qml apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "Solo"
 msgstr "Solo"
+
+#: apps/wprs-app/qml/SceneLayerTools.qml
+msgid "add a pool first"
+msgstr "agrega una reserva primero"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Duplicate"
@@ -6925,6 +6939,58 @@ msgstr "Quitar el punto"
 #: apps/wprs-app/qml/ScenePointList.qml
 msgid "Add a point"
 msgstr "Añadir un punto"
+
+#: apps/wprs-app/qml/ScenePoolEdit.qml
+msgid "Pool %1"
+msgstr "Reserva %1"
+
+#: apps/wprs-app/qml/ScenePoolEdit.qml
+msgid "New pool"
+msgstr "Reserva nueva"
+
+#: apps/wprs-app/qml/ScenePoolEdit.qml
+msgid "Shapes at once:"
+msgstr "Formas a la vez:"
+
+#: apps/wprs-app/qml/ScenePoolEdit.qml
+msgid "Vertices of each shape:"
+msgstr "Vértices de cada forma:"
+
+#: apps/wprs-app/qml/ScenePoolEdit.qml
+msgid "Size:"
+msgstr "Tamaño:"
+
+#: apps/wprs-app/qml/ScenePoolEdit.qml
+msgid "Own size in pixels"
+msgstr "Tamaño propio en píxeles"
+
+#: apps/wprs-app/qml/ScenePoolEdit.qml
+msgid "Width and height:"
+msgstr "Ancho y alto:"
+
+#: apps/wprs-app/qml/ScenePools.qml apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Shape pools"
+msgstr "Reservas de formas"
+
+#: apps/wprs-app/qml/ScenePools.qml
+msgid "%1 shapes of %2 vertices"
+msgstr "%1 formas de %2 vértices"
+
+#: apps/wprs-app/qml/ScenePools.qml
+msgid "drawn by %1"
+msgstr "la dibuja %1"
+
+#: apps/wprs-app/qml/ScenePools.qml
+msgid "Add a shapes layer"
+msgstr "Agregar una capa de formas"
+
+#: apps/wprs-app/qml/ScenePools.qml
+msgid "Change the pool…"
+msgstr "Cambiar la reserva…"
+
+#: apps/wprs-app/qml/ScenePools.qml
+msgid "Add a pool…"
+msgstr "Agregar una reserva…"
 
 #: apps/wprs-app/qml/ScenePoseKnob.qml
 msgid "Move the bone"
@@ -11821,10 +11887,6 @@ msgid "Polygon"
 msgstr "Polígono"
 
 #: apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Shape pools"
-msgstr "Reservas de formas"
-
-#: apps/wprs-app/qml/facade/SceneNames.qml
 msgid "Still frame at"
 msgstr "Fotograma fijo en"
 
@@ -12988,6 +13050,10 @@ msgstr "Reloj de texto"
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "3D group"
 msgstr "Grupo 3D"
+
+#: apps/wprs-app/qml/facade/SceneValues.qml
+msgid "Shapes from a pool"
+msgstr "Formas de una reserva"
 
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "Assets package"

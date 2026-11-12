@@ -89,6 +89,11 @@ ColumnLayout {
         page: panel.page
     }
 
+    ScenePoolsPanel {
+        Layout.fillWidth: true
+        page: panel.page
+    }
+
     Flow {
         Layout.fillWidth: true
 

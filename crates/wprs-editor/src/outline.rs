@@ -119,6 +119,7 @@ pub fn outline(project: &Project, time: f64, files: &[Problem]) -> Value {
     json!({"title": title, "id": m["id"], "version": m["version"], "license": m["license"], "canvas": doc["scene"]["canvas"],
         "v2": m["schema"] == wprs_format::SCHEMA, "rating": m["content"]["rating"], "photosensitive": m["photosensitive"],
         "layers": layers, "outside": outside, "gizmos": shown, "camera2d": crate::seats::lens::frame(&seen, time), "probe": seen.pointer("/scene/ext/editor/probe"), "problems": problems, "assets": assets, "scripts": scripts, "templates": crate::templates::tree(&project.dir, doc),
+        "pools": crate::pools::list(doc)["pools"],
         "package_effects": package_effects,
         "properties": crate::listing::rows(doc), "presets": crate::listing::presets(doc),
         "property_kinds": crate::props::PROPERTY_KINDS, "timelines": timelines, "tracks": tracks, "length": length, "systems": systems,

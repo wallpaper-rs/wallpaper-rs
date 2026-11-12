@@ -77,6 +77,10 @@ pub(crate) fn candidates(doc: &Value, reference: &str, pointer: &str) -> Vec<Val
                 doc["scene"]["effects"].as_object().into_iter().flat_map(|o| o.keys().map(|k| json!(k)));
             builtin().iter().map(|d| json!(d.id)).chain(own).collect()
         }
+        "video" if pointer.starts_with("/scene/") => {
+            let pools = keys("/scene/pools").unwrap_or_default();
+            assets_of(doc, "video").into_iter().map(|a| json!(a)).chain(pools).collect()
+        }
         kind => assets_of(doc, kind).into_iter().map(|a| json!(a)).collect(),
     }
 }
