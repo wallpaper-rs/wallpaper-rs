@@ -13,7 +13,7 @@ mod asking;
 mod position;
 mod shown;
 
-pub use asking::asking;
+pub use asking::{asking, asking_for};
 use position::at_fraction;
 use shown::status;
 
@@ -92,7 +92,7 @@ pub enum Inputs {
         trigger: String,
     },
     #[command(
-        about = "Print the levels of the 64 bands of the sound a scene on a screen follows, as the editor meter reads them; nothing is recorded or kept, and it needs the audio input of the scene"
+        about = "Print the levels of the 64 bands of the sound a scene on a screen follows, as the editor meter reads them; nothing is recorded or kept, and it needs the audio input of the scene. listening says whether the daemon has the sound capture open for it, sound whether sound is arriving now"
     )]
     Bands {
         #[arg(help = "The screen, such as a preview output named preview:1")]

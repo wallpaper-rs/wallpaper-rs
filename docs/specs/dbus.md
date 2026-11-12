@@ -1726,12 +1726,14 @@ scene editor calls it on its preview with *Fire it in the preview*.
 ### `Bands(s output) → (s json)`
 
 The levels of the sound that the scene shown on `output` follows, for the meter of the editor
-(`editor.md`). The reply is `{"granted", "listening", "bands": 64}` and, while `listening` is
-`true`, `raw` and `loud` (the levels of the 64 bands of the left and the right channel, from 0 to
+(`editor.md`). The reply is `{"granted", "listening", "sound", "bands": 64}`. `listening` is `true`
+while the daemon has the sound capture open and the scene holds the audio grant (it stays `true`
+in silence); `sound` is `true` only while levels of sound are arriving now. While `sound` is `true`
+the reply also carries `raw` and `loud` (the levels of the 64 bands of the left and the right channel, from 0 to
 1, relative to the loudest band of the last seconds and measured from full scale), `loudness`,
 `beat` and `silent`, exactly what the analysis hands the scene before the attack and release of
 the scene smooth it. `granted` is `false` while the scene on `output` lacks the audio grant, and
-then no level is given. Asking is what turns the meter on: the daemon keeps the last reading of an
+then no level is given and `listening` is `false`. Asking is what turns the meter on: the daemon keeps the last reading of an
 output only for 3 s after the latest call, drops it when nobody asks and refuses a reading older
 than 1 s, so nothing is stored beyond the latest frame of levels, no sound is kept or copied and
 no capture starts for it: the levels exist only while the scene follows the sound on its own
@@ -2762,8 +2764,13 @@ removing, renaming or retyping something increases it. Times are Unix seconds; `
 spanning"), or `null` before `SetOutputInfo`. `calibrating` tells whether `ShowCalibration` shows
 its pattern.
 `parallax` tells whether the image moves in depth; while it does not and its edit asks for it, `still`
-says why (`no_model`, `no_map`, `fill_off`, `edited`, `building`, `failed` or `flat`, see "Depth
-layers"), else `null`. `frames` counts the frames rendered for the
+says why (`no_model`, `no_map`, `fill_off`, `edited`, `building`, `building_simple`, `failed` or
+`flat`, see "Depth layers"), else `null`; `building_simple` is a build that uses the simple fill
+because LaMa is not installed. A picture whose layers are built but that the computer draws with its
+processor reports `software` until `playback.software_parallax` is set. `page_errors` lists the
+errors a web page wrote since it started (its console lines that are not plain logging, the latest
+50 at most); the library marks the item of that page as broken with the latest one, and `wprs-ctl
+state` prints them. `frames` counts the frames rendered for the
 output since it appeared; `page_frames` counts the frames the web page of the output drew (`0` for
 other wallpapers), which the frame rate cap limits. `refresh` is the refresh rate of its screen in Hz (`0` while unknown)
 and `fps` the most frames per second it renders now (see "Frame rate"). `buffers` is `"dmabuf"`

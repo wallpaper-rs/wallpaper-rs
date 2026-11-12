@@ -84,3 +84,11 @@ fn the_fixed_gain_of_the_scene_reads_the_loud_bands() {
     let seen = ask(&doc, json!({ "meter": { "source": { "audio": 2 }, "reading": heard } }));
     assert!((seen["value"].as_f64().unwrap() - 0.3).abs() < 1e-6, "{seen}");
 }
+
+#[test]
+fn an_open_capture_without_sound_draws_no_levels() {
+    let doc = json!({ "scene": {} });
+    let quiet = json!({ "granted": true, "listening": true, "sound": false });
+    let out = ask(&doc, json!({ "meter": { "source": { "audio": "bass" }, "reading": quiet } }));
+    assert_eq!((out["granted"].clone(), out["listening"].clone(), out["bands"].clone()), (json!(true), json!(false), Value::Null));
+}

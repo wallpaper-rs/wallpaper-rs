@@ -49,19 +49,22 @@ pub(crate) fn metered(output: &str, frame: &AudioFrame) {
 }
 
 pub(crate) fn bands(output: &str) -> Value {
-    reading(output, super::allows(output, Input::Audio))
+    let capturing = super::hub().is_some_and(|hub| lock(&hub.control).capturing);
+    reading(output, super::allows(output, Input::Audio), capturing)
 }
 
-fn reading(output: &str, granted: bool) -> Value {
+fn reading(output: &str, granted: bool, capturing: bool) -> Value {
     let mut meter = lock(&METER);
     meter.watched.insert(output.to_owned(), Instant::now());
     let found = meter.readings.get(output).filter(|r| r.at.elapsed() < FRESH);
+    let listening = granted && capturing;
     let Some(r) = found.filter(|_| granted) else {
-        return json!({ "granted": granted, "listening": false, "bands": BANDS });
+        return json!({ "granted": granted, "listening": listening, "sound": false, "bands": BANDS });
     };
     json!({
         "granted": true,
-        "listening": true,
+        "listening": listening,
+        "sound": !r.silent,
         "bands": BANDS,
         "raw": [round(&r.raw[0]), round(&r.raw[1])],
         "loud": [round(&r.loud[0]), round(&r.loud[1])],
@@ -77,13 +80,21 @@ mod tests {
 
     #[test]
     fn nothing_is_kept_for_an_output_nobody_watches() {
-        let frame = AudioFrame { loudness: 0.5, ..AudioFrame::default() };
+        let frame = AudioFrame { loudness: 0.5, silent: false, ..AudioFrame::default() };
         metered("preview:quiet", &frame);
         assert!(!lock(&METER).readings.contains_key("preview:quiet"));
-        assert_eq!(reading("preview:quiet", true)["listening"], false);
+        assert_eq!(reading("preview:quiet", true, true)["sound"], false);
         metered("preview:quiet", &frame);
-        let seen = reading("preview:quiet", true);
-        assert_eq!((seen["listening"].clone(), seen["loudness"].clone()), (json!(true), json!(0.5)));
-        assert_eq!(reading("preview:quiet", false)["raw"], Value::Null);
+        let seen = reading("preview:quiet", true, true);
+        assert_eq!((seen["sound"].clone(), seen["loudness"].clone()), (json!(true), json!(0.5)));
+        assert_eq!(reading("preview:quiet", false, true)["raw"], Value::Null);
+        let idle = reading("preview:quiet", true, false);
+        assert_eq!((idle["listening"].clone(), idle["sound"].clone()), (json!(false), json!(true)));
+    }
+
+    #[test]
+    fn an_open_capture_with_nothing_arriving_is_listening_without_sound() {
+        let quiet = reading("preview:none", true, true);
+        assert_eq!((quiet["listening"].clone(), quiet["sound"].clone()), (json!(true), json!(false)));
     }
 }

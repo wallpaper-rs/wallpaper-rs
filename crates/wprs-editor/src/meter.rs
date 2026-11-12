@@ -50,7 +50,7 @@ pub fn query(doc: &Value, q: &Value) -> Value {
         Err(e) => return json!({ "error": e.to_string() }),
     };
     let reading = &q["reading"];
-    let listening = reading["listening"] == true;
+    let listening = reading["listening"] == true && reading["sound"] != false;
     let mut out = json!({
         "granted": reading["granted"] != false,
         "listening": listening,
