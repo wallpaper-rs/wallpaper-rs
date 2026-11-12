@@ -1,6 +1,6 @@
 pub const EDITOR: &str = "/scene/ext/editor";
 
-pub const ACTIONS: [&str; 71] = [
+pub const ACTIONS: [&str; 72] = [
     "set",
     "add",
     "remove",
@@ -70,6 +70,7 @@ pub const ACTIONS: [&str; 71] = [
     "template",
     "pool",
     "uses",
+    "film",
     "undo",
     "redo",
 ];

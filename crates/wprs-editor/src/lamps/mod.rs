@@ -52,6 +52,7 @@ pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec
         Action::Timeline(e) => crate::timelines::edit(dir, doc, e),
         Action::Pool(e) => crate::pools::edit(dir, doc, e),
         Action::Uses(e) => crate::usage::declare(dir, doc, e),
+        Action::Film(e) => crate::films::act(dir, doc, e),
         Action::Keyframe(e) => {
             crate::keys::keyframe(doc, e).and_then(|ops| crate::shaping::refused(dir, doc, ops))
         }

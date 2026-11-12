@@ -189,6 +189,7 @@ pub enum Action {
     Template(TemplateEdit),
     Pool(PoolEdit),
     Uses(UsesEdit),
+    Film(crate::films::FilmEdit),
     Undo {},
     Redo {},
 }

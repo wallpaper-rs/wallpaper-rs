@@ -37,6 +37,9 @@ pub(crate) fn param(doc: &Value, p: &ParamDef, value: &Value, base: &str, depth:
         _ => p.values.iter().map(|e| json!(e.value)).collect(),
     };
     let mut options = reference.map(|r| candidates(doc, r, base)).unwrap_or(listed);
+    if matches!(p.kind, ParamKind::Texture | ParamKind::Mask) {
+        options = crate::films::pictures(doc);
+    }
     if reference == Some("image") {
         let generic: Vec<Value> = wprs_scene::GENERIC_PICTURES.iter().map(|g| json!(g)).collect();
         let free: Vec<Value> = generic.into_iter().filter(|g| !options.contains(g)).collect();

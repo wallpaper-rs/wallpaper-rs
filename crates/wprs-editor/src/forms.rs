@@ -18,6 +18,7 @@ pub fn extend(dir: Option<&Path>, doc: &Value, pointer: &str, out: &mut Vec<Fiel
         out.retain(|f| f.pointer != own && !f.pointer.starts_with(&format!("{own}/")));
         out.extend(levels(doc, id));
     }
+    crate::films::narrow(doc, out);
     let value = doc.pointer(pointer).unwrap_or(&Value::Null);
     if let (Some(id), None) = (value.get("prop").and_then(Value::as_str), value.get("keys")) {
         variants(doc, pointer, id, out);

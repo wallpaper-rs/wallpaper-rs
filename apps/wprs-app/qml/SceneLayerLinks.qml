@@ -18,4 +18,10 @@ ColumnLayout {
         page: links.page
         node: links.node
     }
+
+    SceneFilmTrim {
+        Layout.fillWidth: true
+        page: links.page
+        node: links.node
+    }
 }

@@ -111,7 +111,22 @@ undo and redo walk through, the undone ones marked.
 | `pool` | `id` (1 to 32 small letters, digits or `_`), `add` (a new mesh pool of 16 shapes of 1024 vertices unless `max` and `max_vertices` are given; at most 16 pools), `remove` (refused while a layer draws the pool, and it names them), `max` (1 to 256 shapes), `max_vertices` (3 to 65536), `texture` (an image asset), `size` (`[width, height]`, 1 to 4096) and `clear` (`texture`, `size`); refused when it leaves a problem in the scene. The *Shape pools* list of the Assets panel shows each pool with its size and the layers that draw it, adds a shapes layer on it, changes it in a dialog (name, shapes at once, vertices, picture from the image assets and own size) and removes it; `{"pools": {}}` of `rig` lists the pools with their limits, the layers that draw them (`layers`) and the scripts that declare `geometry` (`scripts`) | `scene act DIR pool JSON`, `scene ask DIR pools` |
 | `add_layer` with kind `shapes` | a `video` layer that draws a pool: `source` names the pool, the first one when it is left out; refused until a pool exists. The source of any `video` layer offers the pools besides the video assets, so the inspector picks either; the Add layer menu lists *Shapes from a pool* once there is a pool | `scene act DIR add_layer JSON` |
 | `uses` | `path` (a script of the scene; every script when left out), `add` and `remove` (names of the `uses` of the script, such as `geometry`, `camera`, `hierarchy` or `shortcuts`); with neither, it declares what the source of the script uses and its `uses` lack. A script that gets `geometry` in a scene with no pool also gets a pool `shapes`. Importing a script (`import_script`) detects `geometry` (`scene.mesh`), `hierarchy` (`setParent`, `children`, `world`, `parent`), `shortcuts` (`openShortcut`) and `camera` along with the other parts; a saved script that uses more than it declares (apart from `audio`, `pointer`, `clicks` and `particles`) is a problem with a one-click fix (the `fix` of the problem is the action to send), shown in the Problems list as *Fix* and in the *What the scripts declare* list of the Assets panel as *Declare what it uses*; `{"uses": {}}` of `rig` lists, for each script, `declared`, `detected` and `missing` | `scene act DIR uses JSON`, `scene ask DIR uses` |
+| `film` | one of `trim` (`layer`, `start`, optional `end`; without `end` the video plays to its end; the part must lie inside the video, whose length is read from its header, and last 0.05 s or more), `rate` (`layer`, `rate` from 0 to 4) or `fit` (`layer`; sets `size` to the real size of the video); the layer is a video layer or an image layer that shows a video | `scene act DIR film JSON` |
 | `undo`, `redo` | none | `undo`, `redo` |
+
+`film` has no command of its own: `scene act` runs it. The query `film`
+(`{"film": {"layer", "strip"}}`: real size, length, trim and speed of the video of a layer) goes
+through `rig`, like the other queries of the canvas.
+
+A video layer has on the canvas the box of the real size of its video (that of `size` when the
+layer sets it), not one of 640 × 360. In the inspector of a video layer, or of an image layer that
+shows a video, a panel draws a strip of frames along the real length of the file, with two grips
+that trim `start` and `end` to the hundredth of a second, a ruler in seconds, the speed (0 to 4
+times, which is what the format takes; the range of `playback.rate` in the inspector ends at 4 for
+these layers too), the loop, *Use the size of the video* and *Play the whole video*. Wherever a
+texture is picked (the `texture` of a mask, an effect, a mesh or a spot light) the list also holds
+the video assets; the lists of normal, environment and particle-pool maps still ask for pictures.
+
 
 A new layer gets an id made from its `name`, or else from its kind (`text`, `text_2`…; accents
 are dropped, other characters become `_`, and a name with no Latin letter or digit falls back to

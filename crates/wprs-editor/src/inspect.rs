@@ -81,6 +81,7 @@ pub(crate) fn candidates(doc: &Value, reference: &str, pointer: &str) -> Vec<Val
             let pools = keys("/scene/pools").unwrap_or_default();
             assets_of(doc, "video").into_iter().map(|a| json!(a)).chain(pools).collect()
         }
+        "image" if crate::films::takes(pointer) => crate::films::pictures(doc),
         kind => assets_of(doc, kind).into_iter().map(|a| json!(a)).collect(),
     }
 }

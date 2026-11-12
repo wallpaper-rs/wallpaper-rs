@@ -20,8 +20,10 @@ pub(super) fn size(dir: &Path, doc: &Value, layer: &Value, canvas: [f64; 2], t: 
     match layer["type"].as_str().unwrap_or_default() {
         "image" => file(&value_at(&layer["image"], t))
             .and_then(|f| crate::pictures::dimensions(f).ok())
-            .map_or([512.0; 2], |(w, h)| [f64::from(w), f64::from(h)]),
-        "video" => [640.0, 360.0],
+            .map(|(w, h)| [f64::from(w), f64::from(h)])
+            .or_else(|| crate::films::natural(dir, doc, layer))
+            .unwrap_or([512.0; 2]),
+        "video" => crate::films::natural(dir, doc, layer).unwrap_or([640.0, 360.0]),
         "text" => crate::lettering::measure(dir, doc, layer, t).map_or_else(
             || {
                 let em = layer["size"].as_f64().unwrap_or(48.0);
