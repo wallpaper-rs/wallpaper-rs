@@ -7,7 +7,7 @@ use wprs_core::message::said;
 pub const MAX_INFLUENCES: usize = 4;
 const LEAST: f32 = 1e-4;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum Mode {
     Add,

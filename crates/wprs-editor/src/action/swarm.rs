@@ -5,7 +5,7 @@ use wprs_scene::{Inheritable, Orient, Refresh};
 pub use super::glows::SwarmLight;
 pub use super::tend::{Response, Strand, TendEdit};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum ParticleEdit {
     Shape {

@@ -66,7 +66,7 @@ pub const ACTIONS: [&str; 63] = [
     "redo",
 ];
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct ImportAssets {
     pub package: std::path::PathBuf,
@@ -74,7 +74,7 @@ pub struct ImportAssets {
     pub parts: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct ScriptFile {
     pub file: std::path::PathBuf,
@@ -82,7 +82,7 @@ pub struct ScriptFile {
     pub template: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct AssetEdit {
     pub asset: String,
@@ -104,7 +104,7 @@ pub struct AssetEdit {
     pub faces: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct RgbEdit {
     pub layer: String,
@@ -116,7 +116,7 @@ pub struct RgbEdit {
     pub whole: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct UpgradeEdit {
     #[serde(default)]
@@ -129,7 +129,7 @@ pub struct UpgradeEdit {
     pub derived_from: Vec<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct ConditionEdit {
     pub id: String,
@@ -160,7 +160,7 @@ pub(super) fn tenth() -> f32 {
     0.1
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct RuleEdit {
     pub effect: String,

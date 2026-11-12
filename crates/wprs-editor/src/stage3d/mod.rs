@@ -30,7 +30,7 @@ pub use newmat::TEMPLATE;
 pub use store::file;
 pub use view::{View, preview};
 
-const QUERIES: [&str; 9] = [
+pub(crate) const QUERIES: [&str; 9] = [
     "model_info",
     "stage3d",
     "materials3d",

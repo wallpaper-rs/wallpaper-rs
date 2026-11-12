@@ -3,7 +3,7 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use wprs_scene::{Bend, Body, Follows};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct IkEdit {
     pub layer: String,
@@ -27,7 +27,7 @@ pub struct IkEdit {
     pub remove: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct BodyEdit {
     pub layer: String,
@@ -58,7 +58,7 @@ pub struct BodyEdit {
     pub remove: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct BoneRuleEdit {
     pub layer: String,
@@ -74,7 +74,7 @@ pub struct BoneRuleEdit {
     pub remove: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct WindEdit {
     #[serde(default)]
@@ -87,14 +87,14 @@ pub struct WindEdit {
     pub off: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(untagged)]
 pub enum Spot {
     At([f32; 2]),
     Name(String),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct AttachEdit {
     pub layer: String,
@@ -114,7 +114,7 @@ pub struct AttachEdit {
     pub detach: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct PointEdit {
     pub layer: String,
@@ -129,7 +129,7 @@ pub struct PointEdit {
     pub remove: bool,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct PartsEdit {
     pub layer: String,
@@ -147,7 +147,7 @@ pub struct PartsEdit {
     pub depth: Option<DepthSet>,
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct DepthSet {
     #[serde(default)]

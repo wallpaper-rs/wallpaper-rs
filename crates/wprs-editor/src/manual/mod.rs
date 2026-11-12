@@ -1,0 +1,68 @@
+mod about;
+mod asks;
+mod sample;
+mod shape;
+
+pub use about::ABOUT;
+pub use asks::ASKS;
+use serde_json::{Value, json};
+use std::sync::OnceLock;
+
+pub(crate) const DEPTH: usize = 6;
+
+fn root() -> &'static Value {
+    static ROOT: OnceLock<Value> = OnceLock::new();
+    ROOT.get_or_init(|| serde_json::to_value(schemars::schema_for!(crate::Action)).unwrap_or_default())
+}
+
+fn variants() -> impl Iterator<Item = &'static Value> {
+    ["oneOf", "anyOf"].into_iter().filter_map(|k| root()[k].as_array()).flatten()
+}
+
+pub fn names() -> Vec<String> {
+    let keys = |v: &Value| v["properties"].as_object().map(|o| o.keys().cloned().collect::<Vec<_>>());
+    variants().filter_map(keys).flatten().collect()
+}
+
+pub fn about(name: &str) -> Option<&'static str> {
+    ABOUT.iter().find(|(n, _)| *n == name).map(|(_, a)| *a)
+}
+
+pub fn schema(name: &str) -> Option<Value> {
+    let args = variants().find_map(|v| v["properties"].get(name))?;
+    Some(json!({ "$defs": root()["$defs"], "title": name, "allOf": [args] }))
+}
+
+pub fn describe(name: &str) -> Option<String> {
+    let schema = schema(name)?;
+    let defs = &schema["$defs"];
+    let mut out = vec![format!("{name}: {}", about(name).unwrap_or_default())];
+    let args = shape::resolved(&schema["allOf"][0], defs);
+    let before = out.len();
+    shape::lines(&args, defs, 1, DEPTH, &mut out);
+    if out.len() == before {
+        out.push("  no arguments".into());
+    }
+    Some(out.join("\n"))
+}
+
+pub fn example(name: &str) -> Option<Value> {
+    let schema = schema(name)?;
+    Some(sample::of(&schema["allOf"][0], &schema["$defs"], DEPTH))
+}
+
+pub fn invocation(name: &str) -> Option<String> {
+    let args = example(name)?;
+    Some(format!("wprs-ctl scene act DIR {name} '{args}'"))
+}
+
+pub fn ask_about(name: &str) -> Option<(&'static str, &'static str)> {
+    ASKS.iter().find(|(n, ..)| *n == name).map(|(_, a, e)| (*a, *e))
+}
+
+pub fn question(name: &str, args: Value) -> Value {
+    json!({ name: args })
+}
+
+#[cfg(test)]
+mod tests;

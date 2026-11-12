@@ -27,7 +27,7 @@ pub use report::{AIM, FEW, Z_KNOB, falloff, handles, lights, reach, tiers, tilt_
 pub(crate) use swarm::edit as glow;
 pub use swarm::{sides, swarm_light};
 
-const QUERIES: [&str; 9] =
+pub(crate) const QUERIES: [&str; 9] =
     ["lights", "falloff", "normals", "map", "hemisphere", "lighting", "air", "projection", "swarm_light"];
 
 pub(crate) fn act(dir: &Path, doc: &Value, action: &Action) -> Option<Result<Vec<Op>>> {
