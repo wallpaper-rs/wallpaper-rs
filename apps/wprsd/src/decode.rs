@@ -111,8 +111,14 @@ fn poster(
     scene: &wprs_scene::Scene,
     manifest: &wprs_format::Manifest,
 ) -> Result<DynamicImage, String> {
-    let assets =
-        wprs_render::SceneAssets::read(scene, |path| package.read_file(path).map_err(|e| e.to_string()))?;
+    let read = |package: &mut Package<BufReader<File>>, path: &str| {
+        package.read_file(path).map_err(|e| e.to_string())
+    };
+    let assets = wprs_render::SceneAssets::read(scene, |path| read(package, path))?;
+    let assets = match assets.clone().with_scripts(scene, |path| read(package, path)) {
+        Ok(scripted) => scripted,
+        Err(_) => assets,
+    };
     let props = wprs_scene::effective(&manifest.properties, &[]);
     wprs_render::Renderer::shared().map_err(|_| "no graphics device".to_owned()).and_then(|gpu| {
         let lang = manifest.locale_in(&wprs_core::locale::languages());

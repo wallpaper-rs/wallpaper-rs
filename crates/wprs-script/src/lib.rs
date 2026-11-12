@@ -9,30 +9,33 @@ mod local;
 mod modules;
 mod molds;
 #[cfg(not(target_os = "android"))]
+mod remote;
+#[cfg(not(target_os = "android"))]
 mod sandbox;
 mod setup;
 mod syntax;
 mod wire;
 
+use clock::{Clock, cpu};
 pub use frame::{Encoder, Frame, Mode};
 pub use heard::hears_media;
 #[cfg(not(target_os = "android"))]
 pub use host::{Host, serve};
 pub use limits::Limits;
 pub use local::Local;
+use modules::Modules;
+#[cfg(not(target_os = "android"))]
+pub use remote::{HOST_ARG, Remote, serve_if_asked};
+use rquickjs::{Array, CatchResultExt, Context, Function, Module, Object, Persistent, Runtime};
 #[cfg(not(target_os = "android"))]
 pub use sandbox::enter as sandbox;
-pub use setup::{Setup, Source};
-pub use syntax::{Fault, syntax};
-pub use wprs_scene::{Touch, TouchKind};
-
-use clock::{Clock, cpu};
-use modules::Modules;
-use rquickjs::{Array, CatchResultExt, Context, Function, Module, Object, Persistent, Runtime};
 use serde::{Deserialize, Serialize};
+pub use setup::{Setup, Source};
 use std::rc::Rc;
 use std::time::Duration;
+pub use syntax::{Fault, syntax};
 use wprs_scene::ScriptOutputs;
+pub use wprs_scene::{Touch, TouchKind};
 
 const MAX_FAILURES: u32 = 3;
 const MAX_OUTPUT: usize = 256 << 10;

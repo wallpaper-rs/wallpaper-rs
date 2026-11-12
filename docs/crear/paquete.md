@@ -214,7 +214,7 @@ gráfica del equipo y piden que el demonio esté en marcha. `--time` es el segun
 guarda (sin él, el segundo de su fotograma fijo, `clock.poster_time`).
 
 **`scene render` ejecuta los scripts, la captura del demonio no.** `scene render` corre los scripts de
-la carpeta con la hora de este equipo (o la de `--time-of-day`) y deja ver el resultado; en cambio
+la carpeta (en el proceso aparte con sandbox) con la hora de este equipo (o la de `--time-of-day`) y deja ver el resultado; en cambio
 `scene thumbnail --capture` dibuja la escena como la deja `scene.json`: un texto que un script
 rellena sale con su valor inicial. Pon en `scene.json` valores de partida que se vean bien, o usa
 una imagen hecha con `scene render`.

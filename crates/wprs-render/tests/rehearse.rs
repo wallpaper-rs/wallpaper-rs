@@ -92,31 +92,35 @@ export function update() {
 }";
 
 #[test]
-fn a_render_runs_the_scripts_at_the_clock_it_was_given() {
+fn without_a_sandboxed_host_the_scripts_do_not_run_and_the_render_says_so() {
     let Some(r) = gpu() else { return };
     let (scene, assets) = clocked(HOUR);
-    let at = |hours: f64| Rehearsal {
-        wall: 1_700_000_000.0 - 1_700_000_000.0 % 86_400.0 + hours * 3600.0,
+    let wanted = Rehearsal {
         edge: 32,
+        wall: 15.5 * 3600.0,
+        script_host: Some(("/nonexistent/script-host".into(), Vec::new())),
         ..Rehearsal::default()
     };
-    let day = r.rehearse(&scene, &assets, &Default::default(), &at(15.5)).unwrap();
-    let night = r.rehearse(&scene, &assets, &Default::default(), &at(3.5)).unwrap();
-    assert!(!day.console.is_empty(), "{:?} {:?}", day.console, day.stopped);
-    assert_eq!(day.frames[0].get_pixel(16, 9).0[0], 255, "{:?}", day.console);
-    assert_eq!(night.frames[0].get_pixel(16, 9).0[0], 0);
-    assert!(day.console.iter().any(|l| l == "log scripts/hour.js: hour 15"), "{:?}", day.console);
-    assert!(night.console.iter().any(|l| l == "log scripts/hour.js: hour 03"), "{:?}", night.console);
+    let reel = r.rehearse(&scene, &assets, &Default::default(), &wanted).unwrap();
+    assert_eq!(reel.frames[0].get_pixel(16, 9).0[0], 0, "a script ran without its host");
+    assert!(reel.console.is_empty());
+    assert!(reel.stopped.iter().any(|l| l.contains("sandboxed script host")), "{:?}", reel.stopped);
 }
 
 #[test]
-fn a_script_that_fails_in_a_render_says_where() {
-    let Some(r) = gpu() else { return };
-    let bad = "import { scene } from 'wprs';\n\nexport function update() {\n  scene.layer('lamp').opacity = 'high';\n}";
-    let (scene, assets) = clocked(bad);
-    let reel = r
-        .rehearse(&scene, &assets, &Default::default(), &Rehearsal { edge: 32, ..Rehearsal::default() })
-        .unwrap();
-    let said = reel.console.iter().find(|l| l.starts_with("error scripts/hour.js")).expect("no error line");
-    assert!(said.ends_with("(scripts/hour.js line 4)"), "{said}");
+fn no_code_of_a_scene_script_runs_in_the_rendering_process() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("..");
+    let banned = ["Script::load", "Local::new", ".update(&frame)", "Script::update"];
+    for dir in ["wprs-render/src", "wprs-editor/src", "../apps/wprs-ctl/src", "../apps/wprs-app/src"] {
+        let mut stack = vec![root.join(dir)];
+        while let Some(path) = stack.pop() {
+            if path.is_dir() {
+                stack.extend(std::fs::read_dir(&path).unwrap().map(|e| e.unwrap().path()));
+            } else if path.extension().is_some_and(|e| e == "rs") && !path.ends_with("tests.rs") {
+                let text = std::fs::read_to_string(&path).unwrap();
+                let hit = banned.iter().find(|b| text.contains(**b));
+                assert!(hit.is_none(), "{} runs script code itself: {hit:?}", path.display());
+            }
+        }
+    }
 }

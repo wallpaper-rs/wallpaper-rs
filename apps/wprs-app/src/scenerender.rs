@@ -30,6 +30,7 @@ pub fn wanted(spec: &Value, doc: &Value) -> (Rehearsal, Option<Versus>) {
         edge: number("size", 1280.0, 16.0, 4096.0) as u32,
         time: number("time", 0.0, 0.0, 86_400.0),
         wall: spec["wall"].as_f64().unwrap_or_else(wprs_render::local_wall),
+        script_host: None,
         lang: doc["manifest"]["default_locale"].as_str().unwrap_or("en").to_owned(),
         frames: number("frames", 1.0, 1.0, 600.0) as usize,
         fps: number("fps", 30.0, 1.0, 240.0) as u32,

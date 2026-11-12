@@ -94,6 +94,7 @@ pub fn run(command: Rendering) -> Result<()> {
         edge: size,
         time,
         wall: time_of_day.unwrap_or_else(wprs_render::local_wall),
+        script_host: None,
         lang: project.doc["manifest"]["default_locale"].as_str().unwrap_or("en").to_owned(),
         frames: frames as usize,
         fps,

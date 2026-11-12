@@ -34,6 +34,7 @@ pub struct Rehearsal {
     pub time: f64,
     pub wall: f64,
     pub lang: String,
+    pub script_host: Option<super::scripted::ScriptHost>,
     pub frames: usize,
     pub fps: u32,
     pub pointer: Option<Trace>,
@@ -49,6 +50,7 @@ impl Default for Rehearsal {
             time: 0.0,
             wall: local_wall(),
             lang: "en".into(),
+            script_host: None,
             frames: 1,
             fps: 30,
             pointer: None,
@@ -127,7 +129,8 @@ impl Renderer {
         runtime.set_wall(wanted.wall);
         runtime.set_language(&wanted.lang);
         runtime.seek(wanted.time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));
-        let mut scripts = Scripted::start(scene, assets, &runtime, &wanted.lang);
+        let mut scripts =
+            Scripted::start(scene, assets, &runtime, (&wanted.lang, wanted.script_host.as_ref()));
         let mut view = self.scene_view(scene, assets, runtime.props())?;
         runtime.set_magnify(view.magnify(size));
         let shown = |view: [f32; 4]| (view, [size.0, size.1], wanted.rate(), quality as u8);

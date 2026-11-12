@@ -181,7 +181,10 @@ Imprime los archivos que escribió.
 pared de `--time-of-day` (o la de este equipo) y escribe en la salida de error lo que imprimen con
 `console` (`script: log scripts/reloj.js: ...`) y sus errores, con archivo y línea
 (`script: error scripts/reloj.js: TypeError: ... (scripts/reloj.js line 4)`). Antes del primer cuadro
-da unos pasos a los scripts para que arranquen. No simula el sonido ni el reproductor.
+da unos pasos a los scripts para que arranquen. No simula el sonido ni el reproductor. Los scripts
+nunca corren en el proceso de `wprs-ctl` (ni en el de la app): van a un proceso aparte con sandbox,
+el mismo que usa el demonio y con los mismos límites de tiempo y memoria. Si ese proceso no puede
+arrancar, dibuja sin scripts y lo dice en una línea en la salida de error.
 
 ### `scene thumbnail`: la imagen del paquete
 

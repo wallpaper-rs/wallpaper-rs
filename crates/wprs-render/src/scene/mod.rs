@@ -57,7 +57,6 @@ mod under;
 mod uploads;
 mod view;
 mod warm;
-
 use crate::Renderer;
 use crate::texture::GpuImage;
 pub use builders::{finish_builds, stop_builds};
@@ -71,6 +70,7 @@ use pool::Tex;
 pub use profile::{profiled_passes, reset_profiled_passes};
 pub use rehearse::{Opened, Reel, Rehearsal, Trace, Versus, local_wall, split};
 pub(crate) use sampling::layout;
+pub use scripted::{ScriptHost, serve_script_host};
 use std::collections::HashMap;
 use std::sync::Arc;
 pub use stops::{retry_effects, stop_effects};

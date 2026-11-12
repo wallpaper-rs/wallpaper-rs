@@ -66,6 +66,7 @@ const MAIN: &str = "qrc:/qt/qml/io/github/wallpaper_rs/app/qml/Main.qml";
 const STYLE: &str = "org.kde.desktop";
 
 fn main() -> ExitCode {
+    wprs_render::serve_script_host();
     wprs_scene::serve_check();
     wprs_scene::check_out_of_process(true);
     wprs_core::stopped_effects().inspect(|p| wprs_scene::keep_strikes(p));

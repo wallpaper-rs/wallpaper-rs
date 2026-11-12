@@ -127,7 +127,7 @@ impl Renderer {
         assets.sheets.iter().for_each(|(id, d)| runtime.set_sheet(id, d.clone()));
         runtime.set_wall(wall);
         runtime.set_language(lang);
-        let mut scripts = Scripted::start(scene, assets, &runtime, lang);
+        let mut scripts = Scripted::start(scene, assets, &runtime, (lang, None));
         let (mut target, mut pixels) = (self.create_target(size.0, size.1)?, Vec::new());
         for (i, time) in times.iter().enumerate() {
             runtime.seek(time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));

@@ -147,6 +147,7 @@ fn quiet_on_closed_pipe() {
 }
 
 pub fn main() -> ExitCode {
+    wprs_render::serve_script_host();
     quiet_on_closed_pipe();
     wprs_scene::serve_check();
     wprs_scene::check_out_of_process(true);
