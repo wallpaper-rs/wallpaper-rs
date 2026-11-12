@@ -1,5 +1,7 @@
 use crate::Map;
+use crate::regions::regions;
 use image::{GrayImage, Luma, Rgba, RgbaImage};
+use wprs_core::edit::Depth;
 
 const HUES: [[u8; 3]; 6] =
     [[66, 135, 245], [52, 199, 89], [250, 204, 21], [249, 115, 22], [239, 68, 68], [168, 85, 247]];
@@ -19,9 +21,12 @@ pub fn histogram(map: &Map, bins: usize) -> Vec<f32> {
     counts.iter().map(|c| *c as f32 / top).collect()
 }
 
-pub fn outlines(map: &Map, cuts: &[f32]) -> RgbaImage {
+pub fn outlines(map: &Map, depth: &Depth, cuts: &[f32]) -> RgbaImage {
     let (w, h) = map.dimensions();
-    let layer = |x: u32, y: u32| cuts.partition_point(|c| *c <= f32::from(map.get_pixel(x, y)[0]) / 65535.0);
+    let levels: Vec<f32> = map.as_raw().iter().map(|v| f32::from(*v) / 65535.0).collect();
+    let found = regions(&levels, (w as usize, h as usize), depth);
+    let per: Vec<f32> = found.label.iter().map(|l| found.means[*l as usize]).collect();
+    let layer = |x: u32, y: u32| cuts.partition_point(|c| *c <= per[(y * w + x) as usize]);
     RgbaImage::from_fn(w, h, |x, y| {
         let mine = layer(x, y);
         let edge = (x + 1 < w && layer(x + 1, y) != mine) || (y + 1 < h && layer(x, y + 1) != mine);

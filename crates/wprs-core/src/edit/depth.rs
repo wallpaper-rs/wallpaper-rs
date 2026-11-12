@@ -1,4 +1,5 @@
 use super::parse::{invalid, usage};
+use super::regions::Join;
 use super::touch::{self, Touch};
 use super::{Edit, Error};
 use crate::message::{Message, said};
@@ -24,12 +25,16 @@ pub struct Depth {
     pub strokes: Vec<Touch>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub fills: Vec<Touch>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub joins: Vec<Join>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub splits: Vec<Touch>,
 }
 
 impl Default for Depth {
     fn default() -> Self {
         let model = MODEL.into();
-        let (cuts, strokes, fills) = (None, Vec::new(), Vec::new());
+        let (cuts, strokes, fills, joins, splits) = (None, Vec::new(), Vec::new(), Vec::new(), Vec::new());
         Self {
             model,
             input: 518,
@@ -41,6 +46,8 @@ impl Default for Depth {
             cuts,
             strokes,
             fills,
+            joins,
+            splits,
         }
     }
 }
@@ -88,6 +95,7 @@ pub(super) fn check(depth: Option<&Depth>, parallax: Option<&Parallax>) -> Resul
         d.cuts.as_deref().map_or(Ok(()), touch::cuts)?;
         touch::check("depth.strokes", &d.strokes)?;
         touch::check("depth.fills", &d.fills)?;
+        super::regions::check(&d.joins, &d.splits)?;
     }
     let Some(p) = parallax else { return Ok(()) };
     bounded("parallax.strength", p.strength, 0.0, MAX_STRENGTH)?;

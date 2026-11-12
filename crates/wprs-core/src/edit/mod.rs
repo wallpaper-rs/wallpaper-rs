@@ -9,6 +9,7 @@ mod history;
 mod masks;
 mod parse;
 mod perform;
+mod regions;
 mod set;
 mod tool;
 mod touch;
@@ -22,6 +23,7 @@ pub use geometry::{Matrix, mul};
 pub use history::History;
 pub use masks::{Mask, Stroke};
 pub use parse::numbers;
+pub use regions::{Join, MOST_JOINS, MOST_SPLITS};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 pub use touch::{

@@ -142,7 +142,7 @@ ColumnLayout {
 
     QQC2.Label {
         Layout.fillWidth: true
-        text: cuts.manual !== undefined ? App.tr("%1 layers, cut where you set the handles", cuts.list.length + 1) : App.tr("%1 layers, cut by the picture itself", cuts.list.length + 1)
+        text: (cuts.manual !== undefined ? App.tr("%1 layers, cut where you set the handles", cuts.list.length + 1) : App.tr("%1 layers, cut by the picture itself", cuts.list.length + 1)) + ((cuts.survey.regions ?? 0) > 0 ? " · " + App.tr("%1 regions", cuts.survey.regions) : "")
         wrapMode: Text.Wrap
     }
 
@@ -181,8 +181,16 @@ ColumnLayout {
 
     QQC2.Label {
         Layout.fillWidth: true
-        text: App.tr("Drag a handle to move a cut, double-click it to remove it, click the strip to add one.")
+        text: App.tr("Cuts group the regions of the picture into layers by their depth. Drag a handle to move a cut, double-click it to remove it, click the strip to add one.")
         wrapMode: Text.Wrap
         font: Kirigami.Theme.smallFont
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: (cuts.survey.still ?? "") !== ""
+        text: cuts.survey.still ?? ""
+        color: Kirigami.Theme.negativeTextColor
+        wrapMode: Text.Wrap
     }
 }

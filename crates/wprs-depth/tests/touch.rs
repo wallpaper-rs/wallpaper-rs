@@ -25,7 +25,7 @@ fn build(depth: &Depth) -> Layers {
 
 fn shifted(depth: &Depth, shift: f32) -> Layers {
     let (picture, map) = scene(96, 64);
-    let set = Settings { fill: Fill::Simple, count: 2, shift };
+    let set = Settings { fill: Fill::Simple, count: 2, shift, edge: 1920 };
     layers(&picture, &map, (depth, &set), None, &mut |_| {}, &AtomicBool::new(false)).unwrap()
 }
 
@@ -115,7 +115,7 @@ fn the_band_of_a_layer_is_what_the_set_filled() {
 #[test]
 fn the_views_show_outlines_a_histogram_and_two_halves() {
     let (_, map) = scene(96, 64);
-    let shown = outlines(&map, &[0.5]);
+    let shown = outlines(&map, &Depth::default(), &[0.5]);
     assert_eq!(shown.get_pixel(10, 10)[3], 40);
     assert_eq!(shown.get_pixel(31, 30)[3], 255);
     assert_ne!(shown.get_pixel(10, 10).0[..3], shown.get_pixel(40, 30).0[..3]);
