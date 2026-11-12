@@ -1,4 +1,24 @@
 use super::doc::{Accessor, Gltf};
+use serde::Deserialize;
+
+#[derive(Deserialize, Default)]
+#[serde(default)]
+pub(crate) struct Sparse {
+    pub count: usize,
+    pub indices: SparsePart,
+    pub values: SparsePart,
+}
+
+#[derive(Deserialize, Default)]
+#[serde(default)]
+pub(crate) struct SparsePart {
+    #[serde(rename = "bufferView")]
+    pub view: usize,
+    #[serde(rename = "byteOffset")]
+    pub offset: usize,
+    #[serde(rename = "componentType")]
+    pub component: u32,
+}
 
 pub(crate) struct Bin<'a> {
     pub doc: &'a Gltf,
