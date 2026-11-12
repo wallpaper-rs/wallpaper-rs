@@ -17,6 +17,7 @@ mod finish;
 mod lamps3d;
 mod light;
 mod paths;
+mod pictured;
 mod posed;
 mod shaders;
 mod shadows;

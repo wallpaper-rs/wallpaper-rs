@@ -30,7 +30,7 @@ pub enum Shade {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Look {
+pub struct Look<'a> {
     pub material: u16,
     pub color: Option<[f32; 4]>,
     pub emissive: Option<[f32; 3]>,
@@ -46,6 +46,7 @@ pub struct Look {
     pub extra: [f32; 8],
     pub slots: [[f32; 4]; 8],
     pub package: u64,
+    pub images: [Option<&'a str>; crate::MAX_MATERIAL_IMAGES],
     pub cast: Option<bool>,
     pub receive: Option<bool>,
 }

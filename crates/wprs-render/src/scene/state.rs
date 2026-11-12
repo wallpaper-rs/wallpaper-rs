@@ -92,7 +92,7 @@ fn emitters(list: &[wprs_scene::EffectEmitter]) -> Option<RgbaImage> {
     RgbaImage::from_raw((texels.len() / 4) as u32, 1, texels).filter(|_| !list.is_empty())
 }
 
-fn generic(name: &str) -> RgbaImage {
+pub(crate) fn generic(name: &str) -> RgbaImage {
     let mix = |v: u32| {
         let v = v.wrapping_mul(0x9e37_79b1);
         let v = (v ^ (v >> 15)).wrapping_mul(0x85eb_ca77);

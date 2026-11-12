@@ -149,6 +149,7 @@ pub use crate::spend::{MAX_STATEFUL, Spend, over};
 pub use crate::sprites::{STAGES_WGSL, material_shader, particle_shader};
 pub use crate::stage::{IMAGES, VIDEOS};
 pub use crate::strikes::{STOPPED, end_trials, forgive_strikes, keep_strikes, strike, struck, tried, trying};
+pub use crate::surfaces::{MAX_MATERIAL_IMAGES, MAX_MATERIAL_PARAMS, material_images};
 pub use crate::tier::{Gpu, Tier};
 pub use crate::timeline::{
     Event, Handles, Key, Loop, MOST_PARTS, Side, Timeline, local, sample, sample_json, sample_json_as,

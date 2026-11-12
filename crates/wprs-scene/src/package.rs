@@ -52,6 +52,7 @@ pub(crate) fn checked(id: &str, json: &str, wgsl: &str) -> Result<Descriptor, St
         }
         entries.push(name);
     }
+    crate::surfaces::check(&d)?;
     if let Some(o) =
         d.options.iter().find(|o| !module.overrides.iter().any(|(_, v)| v.name.as_deref() == Some(&o.id)))
     {

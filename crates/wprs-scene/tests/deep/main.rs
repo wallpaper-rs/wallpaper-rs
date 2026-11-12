@@ -3,6 +3,7 @@ use std::collections::BTreeMap;
 use wprs_scene::*;
 
 mod parse;
+mod pictured;
 mod schema;
 
 const DEEP: &str = include_str!("../deep.json");

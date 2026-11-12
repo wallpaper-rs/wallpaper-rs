@@ -114,6 +114,7 @@ mod spread;
 mod sprites;
 mod stage;
 mod strikes;
+mod surfaces;
 mod tally;
 mod tier;
 mod timeline;

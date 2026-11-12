@@ -13,13 +13,14 @@ const PARTICLE: &str = concat!(
     include_str!("stages.wgsl")
 );
 
-const MATERIAL: &str = concat!(
+pub(crate) const MATERIAL: &str = concat!(
     "const TAU: f32 = 6.2831853;\n",
     "const LUMA: vec3<f32> = vec3<f32>(0.2126, 0.7152, 0.0722);\n",
     include_str!("oklab.wgsl"),
     include_str!("noise.wgsl"),
     include_str!("dither.wgsl"),
-    include_str!("stages.wgsl")
+    include_str!("stages.wgsl"),
+    include_str!("images.wgsl")
 );
 
 pub fn particle_shader(d: &Descriptor, sprite: &str) -> Result<naga::Module, String> {

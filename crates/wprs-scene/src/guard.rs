@@ -19,7 +19,8 @@ pub fn straightened(source: String) -> String {
 }
 
 pub(crate) fn source(d: &Descriptor) -> String {
-    format!("{CONTRACT}{}", &effect_source(&[d])[PRELUDE.len()..])
+    let pictured = if d.stage == crate::Stage::Material { include_str!("pictured.wgsl") } else { "" };
+    format!("{CONTRACT}{}{pictured}", &effect_source(&[d])[PRELUDE.len()..])
 }
 
 pub(crate) fn armed(mut module: Module, source: &str) -> Result<Module, String> {

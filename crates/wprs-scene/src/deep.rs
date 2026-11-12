@@ -133,6 +133,16 @@ impl<'a> Check<'a> {
                 (Some((lo, hi)), Value::Fixed(Param::Number(n))) => self.range(&path, *n, lo, hi),
                 _ => {}
             }
+            let pictured = |d: &crate::Descriptor| {
+                d.params.iter().any(|p| &p.id == id && p.kind == crate::ParamKind::Texture)
+            };
+            if !built && self.scene.effect(shader).is_some_and(pictured) {
+                match value {
+                    Value::Fixed(Param::Text(t)) if crate::GENERIC_PICTURES.contains(&t.as_str()) => {}
+                    Value::Fixed(Param::Text(t)) => self.picture(&path, t),
+                    _ => self.issues.push(Issue::Type(path.clone())),
+                }
+            }
         }
     }
 }

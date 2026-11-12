@@ -138,7 +138,7 @@ pub struct Frame<'a> {
     pub sky: Option<Color>,
     pub stages: Vec<super::Stage3d<'a>>,
     pub placed: Vec<super::Placed<'a>>,
-    pub looks: Vec<super::Look>,
+    pub looks: Vec<super::Look<'a>>,
 }
 
 type Inputs<'a> = (Vec<(&'a str, String)>, Vec<(&'a str, Vec<crate::EffectEmitter>)>);

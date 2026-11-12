@@ -39,13 +39,21 @@ fn color(cx: &Context, v: Option<&Value<Param>>) -> Option<[f32; 3]> {
     }
 }
 
-pub(super) fn looks(cx: &Context, model: &Model, m: &ModelLayer, quality: Quality, out: &mut Vec<Look>) {
+pub(super) fn looks<'a>(
+    cx: &Context<'a>,
+    model: &Model,
+    m: &'a ModelLayer,
+    quality: Quality,
+    out: &mut Vec<Look<'a>>,
+) {
+    let scene: &'a crate::Scene = cx.scene;
     for (name, mat) in &m.materials {
         let Some(index) = model.material(name) else { continue };
         let param = |id: &str| number(cx, mat.params.get(id));
         let [r, g, b, _] = mat.emissive.as_ref().map_or([0.0; 4], |e| e.get(cx).0);
         let shader = mat.shader.as_deref().unwrap_or("pbr");
         let (mut extra, mut slots, mut package) = ([0.0; 8], [[0.0; 4]; 8], 0);
+        let mut images = [None; crate::MAX_MATERIAL_IMAGES];
         let shade = match shader {
             "pbr" => Shade::Pbr,
             "unlit" => Shade::Unlit,
@@ -69,8 +77,9 @@ pub(super) fn looks(cx: &Context, model: &Model, m: &ModelLayer, quality: Qualit
                 extra = [key[0], key[1], key[2], t, s, 0.0, 0.0, 0.0];
                 Shade::Chroma
             }
-            id => match cx.scene.effect(id).filter(|d| d.stage == crate::effects::Stage::Material) {
+            id => match scene.effect(id).filter(|d| d.stage == crate::effects::Stage::Material) {
                 Some(d) => {
+                    images = pictures(d, mat);
                     let found = |k: &str| mat.params.get(k).map(|v| Cow::Owned(v.get(cx)));
                     let all = d.pack(|k| d.setting(quality, k, found(k)));
                     slots.iter_mut().zip(all).for_each(|(s, a)| *s = a);
@@ -96,8 +105,29 @@ pub(super) fn looks(cx: &Context, model: &Model, m: &ModelLayer, quality: Qualit
             extra,
             slots,
             package,
+            images,
             cast: mat.cast_shadows,
             receive: mat.receive_shadows,
         });
     }
+}
+
+fn pictures<'a>(
+    d: &'a crate::Descriptor,
+    mat: &'a crate::Material,
+) -> [Option<&'a str>; crate::MAX_MATERIAL_IMAGES] {
+    let mut out = [None; crate::MAX_MATERIAL_IMAGES];
+    let named = |p: &'a Param| match p {
+        Param::Text(t) => Some(t.as_str()),
+        _ => None,
+    };
+    for (slot, id) in out.iter_mut().zip(crate::material_images(d)) {
+        let given = match mat.params.get(id) {
+            Some(Value::Fixed(p)) => named(p),
+            _ => None,
+        };
+        let default = d.params.iter().find(|p| p.id == id).and_then(|p| named(&p.default));
+        *slot = given.or(default);
+    }
+    out
 }

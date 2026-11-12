@@ -56,7 +56,10 @@ impl Renderer {
             });
             let comb =
                 picked[5].and_then(|i| images.get(i)).map_or(&self.solids().no_comb.view, |i| &i.0.view);
-            made.maps[m] = self.maps_group((views, comb), f, &base.uvs[m]);
+            let white = &self.solids().white.view;
+            made.maps[m] = self.maps_group((views, comb, [white; 4]), f, &base.uvs[m]);
+            made.views[m] = views.map(Clone::clone);
+            made.combs[m] = comb.clone();
         }
         models.insert(key, made);
     }

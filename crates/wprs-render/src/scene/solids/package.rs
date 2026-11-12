@@ -1,4 +1,5 @@
 use crate::Renderer;
+use std::collections::BTreeMap;
 use std::sync::PoisonError;
 
 const OWN: [&str; 61] = [
@@ -92,24 +93,37 @@ pub(crate) fn solid_source() -> String {
 }
 
 impl Renderer {
-    pub(super) fn packages(&self, scene: &wprs_scene::Scene, keys: impl Iterator<Item = u64>) {
+    pub(super) fn packages(
+        &self,
+        scene: &wprs_scene::Scene,
+        keys: impl Iterator<Item = u64>,
+        refused: &mut BTreeMap<String, String>,
+    ) {
         let solids = self.solids();
         for key in keys {
-            if solids.packages.lock().unwrap_or_else(PoisonError::into_inner).contains_key(&key) {
+            let packages = solids.packages.lock().unwrap_or_else(PoisonError::into_inner);
+            if let Some(Err((id, why))) = packages.get(&key) {
+                refused.entry(id.clone()).or_insert_with(|| why.clone());
+            }
+            if packages.contains_key(&key) {
                 continue;
             }
+            drop(packages);
             let found =
                 scene.loaded.values().find(|d| d.key == key && d.stage == wprs_scene::Stage::Material);
+            let id = found.map_or_else(|| format!("{key:016x}"), |d| d.id.clone());
             let made = found.ok_or_else(|| "it is not a material shader".to_owned()).and_then(|d| {
                 let module = wprs_scene::material_shader(d, &solid_source())?;
                 let source = wgpu::ShaderSource::Naga(std::borrow::Cow::Owned(module));
                 let label = Some("wprs-scene material shader");
                 Ok(self.device.create_shader_module(wgpu::ShaderModuleDescriptor { label, source }))
             });
-            if let Err(why) = &made {
-                tracing::warn!("a material shader was left out: {why}");
+            let made = made.map_err(|why| (id, format!("{FALLBACK}{why}")));
+            if let Err((id, why)) = &made {
+                tracing::warn!("the material shader {id} was left out: {why}");
+                refused.entry(id.clone()).or_insert_with(|| why.clone());
             }
-            solids.packages.lock().unwrap_or_else(PoisonError::into_inner).insert(key, made.ok());
+            solids.packages.lock().unwrap_or_else(PoisonError::into_inner).insert(key, made);
         }
     }
 }

@@ -5,6 +5,8 @@ use wprs_scene::{Finish, MapWrap, Sampling};
 
 pub(crate) const UV_ROWS: usize = 10;
 
+pub(super) type Dressing<'v> = ([&'v wgpu::TextureView; 5], &'v wgpu::TextureView, [&'v wgpu::TextureView; 4]);
+
 pub(super) fn uv_rows(f: &Finish) -> [[f32; 4]; UV_ROWS] {
     let mut rows = [[0.0; 4]; UV_ROWS];
     for (k, uv) in f.uvs.iter().enumerate() {
@@ -51,11 +53,12 @@ impl Renderer {
 
     pub(super) fn maps_group(
         &self,
-        (views, comb): ([&wgpu::TextureView; 5], &wgpu::TextureView),
+        (views, comb, images): Dressing<'_>,
         f: &Finish,
         uvs: &wgpu::Buffer,
     ) -> wgpu::BindGroup {
         let samplers = f.uvs.map(|u| self.map_sampler(u.sampling));
+        let shared = self.map_sampler(Sampling::default());
         let mut entries: Vec<wgpu::BindGroupEntry> = views
             .iter()
             .enumerate()
@@ -69,6 +72,10 @@ impl Renderer {
         );
         entries.push(wgpu::BindGroupEntry { binding: 10, resource: uvs.as_entire_binding() });
         entries.push(wgpu::BindGroupEntry { binding: 11, resource: R::TextureView(comb) });
+        entries.extend(
+            images.iter().zip(12..).map(|(v, binding)| wgpu::BindGroupEntry { binding, resource: R::TextureView(v) }),
+        );
+        entries.push(wgpu::BindGroupEntry { binding: 16, resource: R::Sampler(&shared) });
         self.device.create_bind_group(&wgpu::BindGroupDescriptor {
             label: Some("wprs-render solid maps"),
             layout: &self.solids().layouts[2],

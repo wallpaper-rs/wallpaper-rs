@@ -54,7 +54,10 @@ impl Solids {
         }
         let module = match key.code().1 {
             0 => (self.module(device), ""),
-            k => (self.packages.lock().unwrap_or_else(PoisonError::into_inner).get(&k)?.clone()?, "wprs_"),
+            k => (
+                self.packages.lock().unwrap_or_else(PoisonError::into_inner).get(&k)?.as_ref().ok()?.clone(),
+                "wprs_",
+            ),
         };
         let made = self.build(device, key, (&module.0, module.1));
         pipes.insert(key.code(), made.clone());

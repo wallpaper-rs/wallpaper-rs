@@ -1057,7 +1057,8 @@ daemon and needs no client:
   `GetState().outputs[x].error`.
 - A scene that plays without one of its package effects, because the graphics driver refused it or
   the GPU stopped while drawing it, keeps `playing`, leaves `error` empty and lists every effect
-  left out, with the reason, in `GetState().outputs[x].left_out`.
+  left out, with the reason, in `GetState().outputs[x].left_out`; a package material shader that
+  cannot be built is listed there too, and its models are shaded with `pbr`.
 - `GetState().outputs[x]` reports the `item` shown and `playlist` (`uid`, `name`, `position` in
   the cycle, `count` of playable items, `next_at`). Every shown item is recorded in `History`.
 

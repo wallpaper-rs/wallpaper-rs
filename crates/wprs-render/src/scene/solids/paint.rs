@@ -61,7 +61,8 @@ impl Renderer {
                 self.dress(&mut view.models, p, &view.images);
             }
             let looks = &frame.looks;
-            self.packages(scene, looks.iter().map(|l| l.package).filter(|k| *k != 0));
+            let keys = looks.iter().map(|l| l.package).filter(|k| *k != 0);
+            self.packages(scene, keys, &mut view.refused);
             let env = frame.placed[stage.models.clone()].iter().find_map(|p| p.env);
             let source = env.and_then(|e| view.images.get(e)).map(|i| &i.0);
             if let (Some(e), Some(source)) = (env, source)
@@ -72,6 +73,7 @@ impl Renderer {
             }
             let map = env.and_then(|e| view.envs.get(e)).map(|(_, m)| m);
             let staged = view.solids.get_mut(stage.layer).expect("made above");
+            self.pictured(staged, (&view.models, &view.images), frame, stage);
             let env_view = map.unwrap_or(&self.solids().white);
             let flags = (map.is_some(), &view.debug3d);
             let done = self.scoped(|| {

@@ -15,6 +15,7 @@ mod mix;
 mod package;
 mod paint;
 mod pass;
+mod pictures;
 mod pipes;
 mod seen;
 mod shadows;
@@ -32,11 +33,13 @@ pub(crate) const BONES_SLOT: u64 = 12288;
 pub(crate) const SOURCE: [&str; 3] =
     [include_str!("solid_head.wgsl"), include_str!("solid.wgsl"), include_str!("solid_light.wgsl")];
 
+pub(crate) type Built = Result<wgpu::ShaderModule, (String, String)>;
+
 pub(crate) struct Solids {
     pub(crate) layouts: [wgpu::BindGroupLayout; 4],
     pub(crate) seen: wgpu::BindGroupLayout,
     pub(crate) pipes: Mutex<HashMap<(u16, u64), wgpu::RenderPipeline>>,
-    pub(crate) packages: Mutex<HashMap<u64, Option<wgpu::ShaderModule>>>,
+    pub(crate) packages: Mutex<HashMap<u64, Built>>,
     pub(crate) module: OnceLock<wgpu::ShaderModule>,
     pub(crate) mixer: OnceLock<mix::Mixer>,
     pub(crate) samplers: Mutex<HashMap<wprs_scene::Sampling, wgpu::Sampler>>,
@@ -45,6 +48,8 @@ pub(crate) struct Solids {
     pub(crate) white: GpuImage,
     pub(crate) flat: GpuImage,
     pub(crate) no_comb: GpuImage,
+    pub(crate) black: GpuImage,
+    pub(crate) noise: GpuImage,
     pub(crate) no_shadow: wgpu::TextureView,
     pub(crate) no_cube: wgpu::TextureView,
     pub(crate) no_morph: wgpu::TextureView,
@@ -97,6 +102,8 @@ impl crate::Renderer {
                 white: pixel([255; 4], Format::Rgba8UnormSrgb),
                 flat: pixel([128, 128, 255, 255], Format::Rgba8Unorm),
                 no_comb: pixel([128, 128, 128, 0], Format::Rgba8Unorm),
+                black: pixel([0, 0, 0, 255], Format::Rgba8UnormSrgb),
+                noise: pictures::noise(self),
                 no_shadow: shadows::blank(self, 1),
                 no_cube: shadows::blank(self, 6),
                 no_morph: gpu::blank_morphs(self),

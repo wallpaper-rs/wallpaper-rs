@@ -17,6 +17,7 @@ pub(crate) struct GpuModel {
     pub(crate) maps: Vec<wgpu::BindGroup>,
     pub(crate) views: Vec<[wgpu::TextureView; 5]>,
     pub(crate) uvs: Vec<wgpu::Buffer>,
+    pub(crate) combs: Vec<wgpu::TextureView>,
     pub(crate) dressed: u64,
 }
 
@@ -94,10 +95,12 @@ impl Renderer {
                 std::array::from_fn(|k| found[k].as_ref().map_or(fallback(k), |i| &i.0.view));
             let rows = super::maps::uv_rows(m);
             let uvs = fill("wprs-render solid uvs", bytemuck::cast_slice(&rows), B::UNIFORM);
-            maps.push(self.maps_group((views, &solids.no_comb.view), m, &uvs));
+            let white = &solids.white.view;
+            maps.push(self.maps_group((views, &solids.no_comb.view, [white; 4]), m, &uvs));
             kept.push(views.map(Clone::clone));
             uv_buffers.push(uvs);
         }
-        GpuModel { vertices, indices, paint, skin, morphs, maps, views: kept, uvs: uv_buffers, dressed: 0 }
+        let combs = vec![solids.no_comb.view.clone(); maps.len()];
+        GpuModel { vertices, indices, paint, skin, morphs, maps, views: kept, uvs: uv_buffers, combs, dressed: 0 }
     }
 }

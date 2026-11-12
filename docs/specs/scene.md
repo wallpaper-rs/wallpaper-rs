@@ -1205,7 +1205,19 @@ WGSL defines `fn material(s: Surface) -> Surface`, or `particle` for a particle 
 particle; such descriptors have no passes, and the scene may only use them where their stage fits.
 `Surface` has `position`, `normal`, `uv`, `albedo`, `emissive`, `roughness`, `metallic` and
 `occlusion`; `Sprite` has `position`, `velocity`, `corner`, `uv`, `color`, `size`, `rotation`, `age`
-and `life`. Package descriptors may also use:
+and `life`. A material shader has at most 8 parameters (`param(0u)` to `param(7u)`), none of them a
+`lut`, `mask` or `emitters`, and samples up to 4 images: its `texture` parameters, in the order the
+descriptor lists them, are read with `image0(uv)` to `image3(uv)` (a repeating, filtered read of
+the picture, each counted as a texture read of the stage function in its cost). A material of the
+scene names each image by the id of a picture asset of the package or `white`, `black`, `noise` or
+`normal_flat`, as a literal (not bound to a property); one it does not name reads the `default`
+of the descriptor. Readers also build a material shader the way the 3D renderer does, with only
+`frame`, `param`, the images and the helpers of the material prelude, and refuse it with
+`it does not build as a material shader: wgsl:<line>:<column>: <reason>` when it uses what only
+layer effects have (`input_tex`, `sample`, `tap`, `mask_at` and the like). A material shader the
+graphics card still cannot build is left out like an effect: its models are shaded with `pbr`
+and `left_out` names it (`the effect <id> was left out: its models are shaded with pbr instead,
+since <reason>`). Package descriptors may also use:
 
 | Field | Meaning |
 |-------|---------|

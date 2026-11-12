@@ -53,6 +53,8 @@ pub(super) fn layouts(device: &wgpu::Device) -> [wgpu::BindGroupLayout; 4] {
         .map(|k| entry(k, S::FRAGMENT, picture()))
         .chain((5..10).map(|k| entry(k, S::FRAGMENT, sampler)))
         .chain([entry(10, S::FRAGMENT, uniform(false)), entry(11, S::VERTEX, picture())])
+        .chain((12..16).map(|k| entry(k, S::FRAGMENT, picture())))
+        .chain([entry(16, S::FRAGMENT, sampler)])
         .collect();
     [
         make(
