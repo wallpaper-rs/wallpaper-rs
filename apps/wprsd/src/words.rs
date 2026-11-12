@@ -19,6 +19,12 @@ pub fn too_old() -> String {
     )
 }
 
+pub fn signed_out() -> String {
+    tr(
+        "The server no longer accepts this computer: it was removed from the account or the account was deleted. Remove the server here and link this computer again to keep syncing.",
+    )
+}
+
 pub fn same_passphrase() -> String {
     tr(
         "This is the recovery passphrase from before a device was revoked, and that device may know it: choose a new, different passphrase.",

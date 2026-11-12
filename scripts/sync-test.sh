@@ -161,6 +161,7 @@ source "$(dirname "$0")"/sync-author.sh
 source "$(dirname "$0")"/sync-files.sh
 source "$(dirname "$0")"/sync-keys.sh
 source "$(dirname "$0")"/sync-phone.sh
+source "$(dirname "$0")"/sync-devices.sh
 
 python3 - "$WORK/server/db/wprs.sqlite" <<'CHECK' || fail "the server holds readable sync data"
 import sqlite3, sys

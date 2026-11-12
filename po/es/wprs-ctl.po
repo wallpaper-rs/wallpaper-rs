@@ -6045,6 +6045,53 @@ msgstr ""
 "Aprobar sin preguntar; solo para un código que se ve en tu propia pantalla"
 
 #: apps/wprs-ctl/src/server.rs
+msgid "Remove a device from the account: it can no longer sync"
+msgstr "Quita un equipo de la cuenta: ya no puede sincronizar"
+
+#: apps/wprs-ctl/src/server.rs
+msgid ""
+"Remove a device from the account: it can no longer sync. Asks for the "
+"password of the account, read from standard input when it is not a terminal; "
+"an account that signs in through single sign-on removes devices on the "
+"account page of the server."
+msgstr ""
+"Quita un equipo de la cuenta: ya no puede sincronizar. Pide la contraseña de "
+"la cuenta, que se lee de la entrada estándar cuando no es un terminal; una "
+"cuenta con inicio de sesión único quita los equipos en la página de la "
+"cuenta del servidor."
+
+#: apps/wprs-ctl/src/server.rs
+msgid ""
+"The device to remove, as `server status` lists it: its name, its label or "
+"its id"
+msgstr ""
+"El equipo que se quita, como lo lista `server status`: su nombre, su "
+"etiqueta o su id"
+
+#: apps/wprs-ctl/src/server.rs
+msgid "Remove it without asking"
+msgstr "Quitarlo sin preguntar"
+
+#: apps/wprs-ctl/src/server.rs
+msgid ""
+"Choose where this computer keeps its access to the server: the system "
+"keyring or a file"
+msgstr ""
+"Elige dónde guarda este equipo su acceso al servidor: el llavero del sistema "
+"o un archivo"
+
+#: apps/wprs-ctl/src/server.rs
+msgid ""
+"Choose where this computer keeps its access to the server: the system "
+"keyring or a private file in the data folder, for computers with no keyring. "
+"Whoever can read your files can then use the access. Only before linking."
+msgstr "Elige dónde guarda este equipo su acceso al servidor: el llavero del sistema o un archivo privado en la carpeta de datos, para equipos sin llavero. Quien pueda leer tus archivos podrá usar el acceso. Solo antes de enlazar."
+
+#: apps/wprs-ctl/src/server.rs
+msgid "Where to keep it"
+msgstr "Dónde guardarlo"
+
+#: apps/wprs-ctl/src/server.rs
 msgid ""
 "Show the server, this device, the sync state and the devices of the account"
 msgstr ""
@@ -6259,6 +6306,18 @@ msgstr ""
 #: apps/wprs-ctl/src/server.rs
 msgid "Also delete the local copies of the synced records"
 msgstr "Borrar también las copias locales de los registros sincronizados"
+
+#: apps/wprs-ctl/src/serving.rs
+msgid ""
+"The access of this computer will be kept in a private file in the data "
+"folder of wallpaper-rs: whoever can read your files can use it, and on an "
+"encrypted account read the synced data. Use it only on a computer with no "
+"keyring."
+msgstr ""
+"El acceso de este equipo se guardará en un archivo privado de la carpeta de "
+"datos de wallpaper-rs: quien pueda leer tus archivos puede usarlo y, en una "
+"cuenta cifrada, leer los datos sincronizados. Úsalo solo en un equipo sin "
+"llavero."
 
 #: apps/wprs-ctl/src/shading.rs
 msgid ""

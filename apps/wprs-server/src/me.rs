@@ -29,6 +29,7 @@ const TOKENS: &str = "SELECT id, name, scopes, device_id, created_at, used_at, e
                       WHERE user_id = ?1";
 const DEVICES: &str = "SELECT id, 'Device ' || number AS name, platform, enc_key, sig_key, created_at, \
                        seen_at FROM devices WHERE user_id = ?1 ORDER BY number";
+pub const DEVICE_ROW: &str = "DELETE FROM devices WHERE id = ?1 AND user_id = ?2";
 const KEYS: &str = "SELECT fingerprint, public_key, created_at FROM author_keys WHERE user_id = ?1";
 const UPLOADS: &str = "SELECT id, state, errors, created_at FROM uploads WHERE user_id = ?1 \
                        AND state != 'done' ORDER BY created_at DESC LIMIT 50";
@@ -142,22 +143,30 @@ async fn remove(State(app): St, auth: Auth, Path((what, id)): Path<(String, Stri
         "tokens" => auth
             .browser()
             .map(|()| "DELETE FROM tokens WHERE id = ?1 AND user_id = ?2 AND device_id IS NULL")?,
-        "devices" if auth.device.as_deref() == Some(id.as_str()) => {
-            "DELETE FROM devices WHERE id = ?1 AND user_id = ?2"
-        }
-        "devices" => auth.browser().map(|()| "DELETE FROM devices WHERE id = ?1 AND user_id = ?2")?,
+        "devices" if auth.device.as_deref() == Some(id.as_str()) => DEVICE_ROW,
+        "devices" => auth.browser().map(|()| DEVICE_ROW)?,
         "author-keys" => auth
             .scope("upload")
             .map(|()| "DELETE FROM author_keys WHERE fingerprint = ?1 AND user_id = ?2")?,
         _ => return Err(Problem::missing("collection")),
     };
-    let (user, gone, key) = (auth.user, vec![id.clone()], (what == "author-keys").then(|| id.clone()));
+    erase(&app, auth.user, what, id, sql).await
+}
+
+pub async fn erase(
+    app: &std::sync::Arc<crate::App>,
+    user: i64,
+    what: String,
+    id: String,
+    sql: &'static str,
+) -> Res<StatusCode> {
+    let (gone, key) = (vec![id.clone()], (what == "author-keys").then(|| id.clone()));
     let epoch = app.db.run(move |c| {
         changed(c.execute(sql, params![id, user])?, "item")?;
         Ok(if what == "devices" { revoked(c, user)? } else { None })
     });
     let epoch = epoch.await?;
-    crate::authors::publish(&app, user, None, key).await?;
+    crate::authors::publish(app, user, None, key).await?;
     if let Some(epoch) = epoch {
         app.hub.kick(&gone);
         app.hub.send(user, Note { event: "epoch", device: None, value: epoch });

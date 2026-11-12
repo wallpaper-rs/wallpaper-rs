@@ -33,6 +33,8 @@ pub trait Sync1 {
     fn get_status(&self) -> Result<String>;
     fn sync_now(&self) -> Result<u64>;
     fn set_paused(&self, paused: bool) -> Result<()>;
+    fn revoke_device(&self, device: &str, password: &str) -> Result<u64>;
+    fn set_file_secrets(&self, allow: bool) -> Result<()>;
     fn join(&self, device: &str) -> Result<u64>;
     fn share_key(&self, device: &str) -> Result<u64>;
     fn confirm_share(&self, device: &str, code: &str) -> Result<u64>;

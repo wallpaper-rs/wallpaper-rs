@@ -12,6 +12,9 @@ use wprs_client::{Client, explain};
 
 const PLAINTEXT: &str =
     "Plain-text sync lets the operator of the server read your library, playlists and settings.";
+const FILE: &str = "The access of this computer will be kept in a private file in the data folder of \
+                    wallpaper-rs: whoever can read your files can use it, and on an encrypted account \
+                    read the synced data. Use it only on a computer with no keyring.";
 const RESET: &str = "This deletes every synced record on the server and uploads this computer's library, \
                      playlists and settings under a new key. Every other device has to join again.";
 
@@ -36,7 +39,14 @@ pub async fn run(client: &Client, command: Server) -> Result<()> {
                 shown(vec![("code", code), ("url", url)]);
                 ((), id)
             });
-            job(client, start, &wait).await?
+            job(client, start, &wait).await.inspect_err(crate::account::keyring_hint)?
+        }
+        Server::Revoke { device, yes, wait } => crate::account::revoke(client, &device, yes, &wait).await?,
+        Server::Access { store } => {
+            if store == "file" {
+                eprintln!("{FILE}");
+            }
+            sync.set_file_secrets(store == "file").await.map_err(explain)?
         }
         Server::Approve { code, yes, wait } => approve(client, &code, yes, &wait).await?,
         Server::Status { json } => show::reply(sync.get_status().await?, json, status)?,

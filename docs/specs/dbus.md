@@ -82,6 +82,7 @@ Every error carries a readable English message. An error raised without a descri
 | `io.github.wallpaper_rs.Error.NotFound` | Unknown uid, name, output assignment, provider, repository, package or job |
 | `io.github.wallpaper_rs.Error.Exists` | Name, folder, provider id or repository already present |
 | `io.github.wallpaper_rs.Error.NeedsSecret` | A provider needs a secret that is missing or was rejected |
+| `io.github.wallpaper_rs.Error.SignedOut` | The server refused the token of this computer (`unauthorized`): the device was revoked or the account deleted |
 | `io.github.wallpaper_rs.Error.KeyringUnavailable` | The keyring item cannot be written or deleted, the keyring stayed locked for 20 s or its unlock prompt was dismissed, the Secret Service did not answer in time, or no Secret Service is available to store a secret |
 | `io.github.wallpaper_rs.Error.Stale` | A repository's signed index expired; retry with `allow_stale = true` after asking the user |
 | `io.github.wallpaper_rs.Error.Conflict` | A playlist edit by index found other entries than expected: `the playlist changed; reload it` |
@@ -1989,9 +1990,31 @@ account has none (encrypted unless `plaintext`, then the key is stored first), a
 repository with `Repos1.Add` and syncs. On an account that already syncs, the device
 needs the sync key from another device: state `needs_key`, see `Join`. When the account syncs
 without encryption and `plaintext` is false, the job fails, asks the server to revoke the new
-device and forgets its token. `NotFound` without a
+device and forgets its token; any other failure after the code was approved does the same, so a
+failed link leaves no device on the account. Before asking for a code the method checks that the
+token can be kept: with no Secret Service (and `SetFileSecrets` off) it returns `KeyringUnavailable`
+at once. When a `link` job fails, `GetStatus` keeps why in `link_problem` (`keyring`, `refused`,
+`expired`, `encryption` or `other`) and `link_error` until the next `Link`. `NotFound` without a
 server, `Exists` when this computer is linked or linking, `InvalidArgs` for a name over 64
 characters or with control characters.
+
+### `SetFileSecrets(b allow)`
+
+Chooses where this computer keeps the token and the sync key of the server: the Secret Service
+(`allow = false`, the default) or, for a computer that has none, a private file `server-secrets.json`
+(mode 0600) in the data folder. Clients show a notice before they call it with `true`: whoever can read
+the user's files can use the access and read what an encrypted account syncs. Only while this computer
+is not linked (`Failed` otherwise); `RemoveServer` deletes the file and sets it back to the keyring.
+`GetStatus` reports it as `file_secrets`.
+
+### `RevokeDevice(s device, s password) → (t job)`
+
+Removes a device of the account (`device` is its id, server name or label, as in `Join`) with an
+`account` job that deletes it on the server and refreshes `devices`; the next sync of another device
+replaces the sync key. It sends the password of the account with the request, like `ApproveDevice`
+(`POST /api/v1/me/devices/{id}/revoke`): a stolen device token alone cannot remove the other devices,
+and an account that signs in through single sign-on removes devices on the account page of the server.
+`Failed` for this computer (use `RemoveServer`), `NotFound` for an unknown device.
 
 ### `PreviewCode(s user_code) → (t job)`
 
@@ -2025,7 +2048,10 @@ that wait for `ConfirmRepo`, `secrets` the providers whose secret is synced, `re
 server holds an escrow of the current key (`current`), of an older one (`stale`) or none (`off`),
 and `files_bytes` of `files_quota_bytes` the private files on the server. `stale` means that a
 device that may know the recovery passphrase was revoked: clients ask for a new, different
-passphrase, and `SetEscrow` refuses the old one.
+passphrase, and `SetEscrow` refuses the old one. The state is `signed_out` when the server answers
+`unauthorized` to the token of this computer (the device was revoked or the account deleted): automatic
+sync and the event stream stop, `last_error` says why and clients show a notice on every page; the
+way out is `RemoveServer` and a new link.
 
 ### `SyncNow() → (t job)`
 
@@ -2981,7 +3007,7 @@ struct InputsReply {
     declined: BTreeMap<String, Vec<Input>>, asking: BTreeMap<String, Vec<Input>>,
     quiet: BTreeMap<String, Vec<Input>>, clicks: Vec<String>, clicking: Vec<String>, media: MediaStatus,
 }
-enum AccountState { Unlinked, Linking, NeedsKey, Ready, Paused, Error }
+enum AccountState { Unlinked, Linking, NeedsKey, Ready, Paused, Error, SignedOut }
 struct AccountDevice {
     id: String, name: String, label: Option<String>, platform: String, created_at: Time,
     seen_at: Option<Time>, current: bool,
@@ -2996,7 +3022,8 @@ struct Account {
     records: u32, used_bytes: u64, quota_bytes: u64, devices: Vec<AccountDevice>,
     pairing: Option<Pairing>, quarantined: u32, unapplied: u32, offers: Vec<RepoOffer>,
     secrets: Vec<String>, recovery: Recovery, files_bytes: u64, files_quota_bytes: u64,
-    job: Option<u64>, pin: Option<String>,
+    job: Option<u64>, pin: Option<String>, link_problem: Option<String>, link_error: Option<String>,
+    file_secrets: bool,
 }
 struct AccountReply { model: u32, serial: u64, account: Option<Account> }
 struct PrivateFile { id: String, name: String, size: u64, item: Option<Uid>, shared: bool, stored: bool }

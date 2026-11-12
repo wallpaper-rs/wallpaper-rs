@@ -2,7 +2,7 @@ use super::{Time, Uid};
 
 model! {
     #[derive(Copy, Eq, Hash)]
-    pub enum AccountState { Unlinked, Linking, NeedsKey, Ready, Paused, Error, #[serde(other)] Unknown }
+    pub enum AccountState { Unlinked, Linking, NeedsKey, Ready, Paused, Error, SignedOut, #[serde(other)] Unknown }
 
     pub struct AccountDevice {
         pub id: String,
@@ -58,6 +58,12 @@ model! {
         pub files_quota_bytes: u64,
         pub job: Option<u64>,
         pub pin: Option<String>,
+        #[serde(default)]
+        pub link_problem: Option<String>,
+        #[serde(default)]
+        pub link_error: Option<String>,
+        #[serde(default)]
+        pub file_secrets: bool,
     }
 
     pub struct AccountReply { pub model: u32, pub serial: u64, pub account: Option<Account> }

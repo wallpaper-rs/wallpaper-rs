@@ -1,4 +1,4 @@
-use super::block_on;
+use super::{block_on, vaultfile};
 use crate::daemon::Daemon;
 use crate::error::{Error, Result, failed};
 use crate::keyring::{Keyring, Stored};
@@ -11,7 +11,7 @@ use zeroize::Zeroizing;
 const ID: &str = "server";
 
 fn broken() -> Error {
-    failed("the server secrets in the keyring are broken; remove the server and link again")
+    failed("the stored access for this server is broken; remove the server and link again")
 }
 
 impl Daemon {
@@ -20,6 +20,13 @@ impl Daemon {
     }
 
     pub async fn read_secrets(&self, prompt: bool) -> Result<Secrets> {
+        if self.saved().file_secrets {
+            let text = vaultfile::read(&self.secrets_file())?;
+            let text = text.ok_or_else(|| {
+                failed("the stored access for this server is missing; link this computer again")
+            })?;
+            return serde_json::from_str(&text).map_err(|_| broken());
+        }
         match self.server_keyring()?.read(ID, prompt).await? {
             Stored::Secret(text) => serde_json::from_str(&text).map_err(|_| broken()),
             Stored::Locked => {
@@ -37,11 +44,32 @@ impl Daemon {
 
     pub fn store_secrets(&self, secrets: &Secrets) -> Result<()> {
         let text = Zeroizing::new(serde_json::to_string(secrets).map_err(|e| failed(e.to_string()))?);
+        if self.saved().file_secrets {
+            return vaultfile::write(&self.secrets_file(), &text);
+        }
         block_on(self.server_keyring()?.store(ID, &text))
     }
 
     pub fn forget_secrets(&self) -> Result<()> {
+        if self.saved().file_secrets {
+            return vaultfile::remove(&self.secrets_file());
+        }
         block_on(self.server_keyring()?.delete(ID))
+    }
+
+    pub fn keyring_ready(&self) -> Result<()> {
+        if self.saved().file_secrets {
+            return Ok(());
+        }
+        let keyring = self.server_keyring()?;
+        let reached = block_on(tokio::time::timeout(Duration::from_secs(10), keyring.reachable(ID)));
+        match reached {
+            Ok(true) => Ok(()),
+            _ => Err(Error::Named(
+                KEYRING_UNAVAILABLE,
+                "no keyring answers to store the access of this computer".into(),
+            )),
+        }
     }
 
     pub async fn events(&self) -> Result<reqwest::Response> {

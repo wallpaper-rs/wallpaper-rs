@@ -51,7 +51,7 @@ impl Daemon {
         let (mine, peer) = (secrets.device_key()?, self.peer(&api, device)?);
         public(&peer)?;
         Ok(self.start_job(JobKind::Link, &format!("join {}", peer.id), move |d, ctl| {
-            let received = d.receive_key(&api, &mine, &peer, ctl);
+            let received = d.receive_key(&api, &mine, &peer, ctl).inspect_err(|e| d.track_access(e));
             d.update(|s| s.pairing = None)?;
             received
         }))

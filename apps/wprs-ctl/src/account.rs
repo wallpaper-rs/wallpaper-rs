@@ -15,6 +15,34 @@ pub const NAMES: &str = "Item names on the server are keyed hashes: a device tha
 const OWN: &str = "Approve only a code that your own new device shows on its screen: \
                    someone who sends you a code is trying to get into your account.";
 
+const NO_KEYRING: &str = "No keyring is available to keep the access of this computer. Start or unlock the \
+                          system keyring and link again, or keep the access in a private file with `wprs-ctl \
+                          server access file` (whoever can read your files could then use it).";
+
+pub fn keyring_hint(error: &anyhow::Error) {
+    if wprs_client::error_name(error) == Some(wprs_core::dbus::error::KEYRING_UNAVAILABLE) {
+        eprintln!("{NO_KEYRING}");
+    }
+}
+
+fn state_note(state: String) -> String {
+    match state.as_str() {
+        "signed_out" => "signed out: the server no longer accepts this computer (it was removed from the \
+                         account or the account was deleted); run `wprs-ctl server remove` and link again"
+            .into(),
+        _ => state,
+    }
+}
+
+pub async fn revoke(client: &Client, device: &str, yes: bool, wait: &Wait) -> Result<()> {
+    eprintln!("The device can no longer sync with this account, and the sync key is replaced.");
+    if !yes && !confirm(&format!("Remove {device} from the account?")).await? {
+        bail!("nothing was removed");
+    }
+    let password = zeroize::Zeroizing::new(secret("Password of the account: ", false)?);
+    job(client, client.sync.revoke_device(device, &password).map_ok(|id| ((), id)), wait).await
+}
+
 pub fn status(reply: AccountReply) -> String {
     let Some(a) = reply.account else { return "no server is added\n".into() };
     let encryption = match a.encrypted {
@@ -33,7 +61,7 @@ pub fn status(reply: AccountReply) -> String {
         ("name", a.name),
         ("account", a.handle.unwrap_or("-".into())),
         ("device", device),
-        ("state", text(&a.state)),
+        ("state", state_note(text(&a.state))),
         ("encryption", encryption),
         ("certificate", a.pin.map_or_else(|| "-".into(), |pin| format!("pinned, fingerprint {pin}"))),
         ("synced", when(a.last_sync)),
@@ -41,6 +69,8 @@ pub fn status(reply: AccountReply) -> String {
         ("storage", storage),
         ("warning", a.warning.unwrap_or("-".into())),
         ("error", a.last_error.unwrap_or("-".into())),
+        ("access kept in", if a.file_secrets { "a private file" } else { "the system keyring" }.into()),
+        ("link problem", a.link_error.unwrap_or("-".into())),
         ("quarantined", a.quarantined.to_string()),
         ("not applied", a.unapplied.to_string()),
         ("comparison", comparison),

@@ -11,6 +11,12 @@ Kirigami.ScrollablePage {
     property string error
     property string code
     property string address
+    property string failure
+    property string failureDetail
+    property string lastName
+    property bool lastPlain
+    readonly property alias filer: filer
+    readonly property alias dialogs: dialogs
     readonly property string phase: account?.state ?? ""
     readonly property bool keyed: ["ready", "paused", "error"].includes(phase)
 
@@ -24,76 +30,48 @@ Kirigami.ScrollablePage {
     }
 
     function link(name, plaintext) {
+        lastName = name;
+        lastPlain = plaintext;
         App.query("Link", [name, plaintext], "Sync1", reply => {
             if (!page)
                 return;
+            page.failure = "";
             page.code = reply[0];
             page.address = reply[1];
+        }, error => {
+            if (!page)
+                return;
+            page.failure = error.name.endsWith("KeyringUnavailable") ? "keyring" : "other";
+            page.failureDetail = error.message;
         });
     }
 
     function exercise() {
         dialogs.linker.open();
+        page.failure = "keyring";
+        if (!problem.visible)
+            throw new Error("a link that failed for lack of a keyring shows no notice on the account page");
+        filer.open();
+        filer.close();
+        page.failure = "";
+        const kept = page.account;
+        page.account = Object.assign({}, kept, {
+            "state": "signed_out"
+        });
+        if (!problem.signedOut)
+            throw new Error("a computer the server no longer accepts shows no notice on the account page");
+        page.account = kept;
+        revoker.device = {
+            "id": "0",
+            "name": "Device 2"
+        };
+        revoker.open();
+        revoker.close();
     }
 
     title: App.tr("Account")
     Component.onCompleted: load()
-    actions: [
-        Kirigami.Action {
-            text: App.tr("Add server…")
-            icon.name: "list-add"
-            visible: !page.account
-            onTriggered: dialogs.adder.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Link this computer…")
-            icon.name: "link"
-            visible: page.phase === "unlinked"
-            onTriggered: dialogs.linker.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Sync now")
-            icon.name: "view-refresh"
-            visible: page.keyed
-            onTriggered: App.act("SyncNow", [], "Sync1")
-        },
-        Kirigami.Action {
-            text: page.account?.paused ? App.tr("Resume sync") : App.tr("Pause sync")
-            icon.name: page.account?.paused ? "media-playback-start" : "media-playback-pause"
-            visible: page.keyed
-            onTriggered: App.act("SetPaused", [!page.account.paused], "Sync1")
-        },
-        Kirigami.Action {
-            text: App.tr("Approve a device…")
-            icon.name: "dialog-ok-apply"
-            visible: !!page.account?.device
-            onTriggered: codes.approver.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Restore with the recovery passphrase…")
-            icon.name: "document-decrypt"
-            visible: page.phase === "needs_key" && page.account?.encrypted === true
-            onTriggered: dialogs.restorer.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Replace the sync key")
-            icon.name: "view-refresh"
-            visible: page.keyed && page.account?.encrypted === true
-            onTriggered: App.act("Rotate", [], "Sync1")
-        },
-        Kirigami.Action {
-            text: App.tr("Reset synced data…")
-            icon.name: "edit-clear-all"
-            visible: !!page.account?.device
-            onTriggered: dialogs.resetter.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Remove server…")
-            icon.name: "edit-delete"
-            visible: !!page.account
-            onTriggered: dialogs.remover.open()
-        }
-    ]
+    actions: tools.list
 
     Connections {
         target: App.backend
@@ -127,6 +105,13 @@ Kirigami.ScrollablePage {
             text: App.tr("Sync is not encrypted: the operator of the server can read your library, playlists and settings.")
         }
 
+        AccountProblem {
+            id: problem
+
+            Layout.fillWidth: true
+            page: page
+        }
+
         AccountSummary {
             Layout.fillWidth: true
             visible: !!page.account
@@ -145,6 +130,10 @@ Kirigami.ScrollablePage {
                 joining: page.phase === "needs_key"
                 pairing: page.account?.pairing ?? null
                 onShare: codes.share(modelData)
+                onRevoke: {
+                    revoker.device = modelData;
+                    revoker.open();
+                }
             }
         }
 
@@ -182,6 +171,24 @@ Kirigami.ScrollablePage {
         id: dialogs
 
         page: page
+    }
+
+    AccountActions {
+        id: tools
+
+        page: page
+        dialogs: dialogs
+        codes: codes
+    }
+
+    AccountFiler {
+        id: filer
+
+        page: page
+    }
+
+    AccountRevoke {
+        id: revoker
     }
 
     AccountCodes {

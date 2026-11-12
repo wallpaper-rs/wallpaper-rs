@@ -112,8 +112,8 @@ tmp/ logs/ backups/
   device, `p` personal) or the session cookie of the web site. The server stores SHA-256 of
   tokens and sessions only; revocation is immediate.
 - Scopes: `catalog:read`, `upload`, `sync`, `mod`, `admin`. Device tokens get `upload sync`: only
-  account sessions manage devices (a device may still sign itself out, and approve another one
-  with the account password); the migration to this version took the old `devices` scope away from
+  account sessions manage devices (a device may still sign itself out, and approve or remove another
+  one with the account password: `POST /api/v1/me/devices/{id}/revoke {password}`); the migration to this version took the old `devices` scope away from
   every token issued before. Personal tokens
   are created on the web site; `mod` and `admin` need the role and expire within 90 days. Web
   sessions have every scope of the role.

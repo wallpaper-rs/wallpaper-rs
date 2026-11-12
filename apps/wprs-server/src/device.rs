@@ -19,6 +19,7 @@ pub fn routes() -> Router {
         .route("/api/v1/auth/device/start", post(start))
         .route("/api/v1/auth/device/token", post(token))
         .route("/api/v1/auth/device/approve", post(crate::approval::approve))
+        .route("/api/v1/me/devices/{id}/revoke", post(crate::approval::revoke))
         .route("/api/v1/auth/device/preview", post(crate::approval::preview))
 }
 

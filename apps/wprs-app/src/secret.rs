@@ -69,7 +69,11 @@ impl Backend {
                     let (code, password) = passphrase.split_once('\n').unwrap_or((&passphrase, ""));
                     keyring(c.sync.approve_device(code, password)).await
                 }
-                (Daemon::Fixtures, "SetEscrow" | "Restore" | "ApproveDevice") => {
+                (Daemon::Bus(c), "RevokeDevice") => {
+                    let (device, password) = passphrase.split_once('\n').unwrap_or((&passphrase, ""));
+                    keyring(c.sync.revoke_device(device, password)).await
+                }
+                (Daemon::Fixtures, "SetEscrow" | "Restore" | "ApproveDevice" | "RevokeDevice") => {
                     Ok(fixture("Sync1", &member))
                 }
                 _ => Err(invalid(format!("{member} takes no passphrase"))),

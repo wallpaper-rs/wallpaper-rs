@@ -12,6 +12,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Add server…"
+msgstr "Añadir un servidor…"
+
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Link this computer…"
+msgstr "Enlazar este equipo…"
+
+#: apps/wprs-app/qml/AccountActions.qml apps/wprs-app/qml/ProviderCard.qml
+msgid "Sync now"
+msgstr "Sincronizar ahora"
+
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Resume sync"
+msgstr "Reanudar la sincronización"
+
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Pause sync"
+msgstr "Pausar la sincronización"
+
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Approve a device…"
+msgstr "Aprobar un equipo…"
+
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Restore with the recovery passphrase…"
+msgstr "Recuperar con la frase de recuperación…"
+
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Replace the sync key"
+msgstr "Cambiar la clave de sincronización"
+
+#: apps/wprs-app/qml/AccountActions.qml
+msgid "Reset synced data…"
+msgstr "Restablecer los datos sincronizados…"
+
+#: apps/wprs-app/qml/AccountActions.qml apps/wprs-app/qml/AccountProblem.qml
+msgid "Remove server…"
+msgstr "Quitar el servidor…"
+
 #: apps/wprs-app/qml/AccountCodes.qml
 msgid "Approve a device"
 msgstr "Aprobar un equipo"
@@ -32,7 +72,7 @@ msgstr ""
 "Aprueba solo un código que muestre la pantalla de tu propio equipo nuevo. "
 "Quien te envía un código intenta entrar en tu cuenta."
 
-#: apps/wprs-app/qml/AccountCodes.qml
+#: apps/wprs-app/qml/AccountCodes.qml apps/wprs-app/qml/AccountRevoke.qml
 msgid "Password of the account"
 msgstr "Contraseña de la cuenta"
 
@@ -85,6 +125,14 @@ msgid "seen %1"
 msgstr "visto %1"
 
 #: apps/wprs-app/qml/AccountDevice.qml
+msgid "never connected"
+msgstr "nunca se ha conectado"
+
+#: apps/wprs-app/qml/AccountDevice.qml
+msgid "linked %1"
+msgstr "enlazado el %1"
+
+#: apps/wprs-app/qml/AccountDevice.qml
 msgid "This computer shows %1. Type the code that device shows:"
 msgstr "Este equipo muestra %1. Escribe el código que muestra ese equipo:"
 
@@ -99,6 +147,10 @@ msgstr "Recibir la clave de este"
 #: apps/wprs-app/qml/AccountDevice.qml
 msgid "Share the key…"
 msgstr "Compartir la clave…"
+
+#: apps/wprs-app/qml/AccountDevice.qml
+msgid "Remove device…"
+msgstr "Quitar equipo…"
 
 #: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Add server"
@@ -197,6 +249,30 @@ msgstr ""
 "Úsalo solo cuando ninguno de tus equipos tenga ya la clave: escribe la frase "
 "de recuperación que pusiste en uno de ellos."
 
+#: apps/wprs-app/qml/AccountFiler.qml
+msgid "Keep the access in a private file"
+msgstr "Guardar el acceso en un archivo privado"
+
+#: apps/wprs-app/qml/AccountFiler.qml
+msgid "Keep it in a private file"
+msgstr "Guardarlo en un archivo privado"
+
+#: apps/wprs-app/qml/AccountFiler.qml
+msgid ""
+"Without a keyring, this computer would keep the token that identifies it to "
+"your server, and the sync key, in a private file in its data folder. Only "
+"you can read that file on this computer, but anyone who gets a copy of your "
+"files, or who uses this account on this computer, could use your account and "
+"read what you sync. Choose this only on a computer where you cannot use a "
+"keyring."
+msgstr ""
+"Sin llavero, este equipo guardaría la ficha que lo identifica ante tu "
+"servidor, y la clave de sincronización, en un archivo privado de su carpeta "
+"de datos. Solo tú puedes leer ese archivo en este equipo, pero quien consiga "
+"una copia de tus archivos, o use tu cuenta en este equipo, podría usar tu "
+"cuenta y leer lo que sincronizas. Elige esto solo en un equipo en el que no "
+"puedas usar un llavero."
+
 #: apps/wprs-app/qml/AccountFiles.qml
 msgid "waiting to upload"
 msgstr "esperando para subir"
@@ -240,6 +316,7 @@ msgid "Stop sharing"
 msgstr "Dejar de compartir"
 
 #: apps/wprs-app/qml/AccountFiles.qml apps/wprs-app/qml/DepthDialog.qml
+#: apps/wprs-app/qml/SyncedFiles.qml
 msgid "Download"
 msgstr "Descargar"
 
@@ -350,49 +427,21 @@ msgstr "Firma:"
 msgid "Public keys"
 msgstr "Claves públicas"
 
+#: apps/wprs-app/qml/AccountNotice.qml
+msgid ""
+"This computer can no longer sync: the server no longer accepts it, because "
+"it was removed from the account or the account was deleted."
+msgstr ""
+"Este equipo ya no puede sincronizar: el servidor ya no lo acepta, porque se "
+"quitó de la cuenta o se borró la cuenta."
+
+#: apps/wprs-app/qml/AccountNotice.qml
+msgid "Open Account"
+msgstr "Abrir Cuenta"
+
 #: apps/wprs-app/qml/AccountPage.qml apps/wprs-app/qml/Navigation.qml
 msgid "Account"
 msgstr "Cuenta"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Add server…"
-msgstr "Añadir un servidor…"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Link this computer…"
-msgstr "Enlazar este equipo…"
-
-#: apps/wprs-app/qml/AccountPage.qml apps/wprs-app/qml/ProviderCard.qml
-msgid "Sync now"
-msgstr "Sincronizar ahora"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Resume sync"
-msgstr "Reanudar la sincronización"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Pause sync"
-msgstr "Pausar la sincronización"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Approve a device…"
-msgstr "Aprobar un equipo…"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Restore with the recovery passphrase…"
-msgstr "Recuperar con la frase de recuperación…"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Replace the sync key"
-msgstr "Cambiar la clave de sincronización"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Reset synced data…"
-msgstr "Restablecer los datos sincronizados…"
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Remove server…"
-msgstr "Quitar el servidor…"
 
 #: apps/wprs-app/qml/AccountPage.qml
 msgid "No server yet"
@@ -418,6 +467,111 @@ msgid ""
 msgstr ""
 "La sincronización no está cifrada: quien administra el servidor puede leer "
 "tu biblioteca, tus listas y tus ajustes."
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid ""
+"This computer could not keep its access to the server because no system "
+"keyring is available. Start or unlock your keyring and link again. If this "
+"computer has none, you can keep the access in a private file instead: anyone "
+"who can read your files could then use it."
+msgstr ""
+"Este equipo no pudo guardar su acceso al servidor porque no hay ningún "
+"llavero del sistema disponible. Inicia o desbloquea tu llavero y vuelve a "
+"enlazar. Si este equipo no tiene ninguno, puedes guardar el acceso en un "
+"archivo privado: quien pueda leer tus archivos podría usarlo."
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid ""
+"The link was refused on the server. Link again when you are ready to approve "
+"it on your own computer."
+msgstr ""
+"El servidor rechazó el enlace. Vuelve a enlazar cuando estés listo para "
+"aprobarlo desde tu propio equipo."
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid "The code was not approved in time. Link again to get a new code."
+msgstr ""
+"El código no se aprobó a tiempo. Vuelve a enlazar para obtener un código "
+"nuevo."
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid ""
+"This account syncs without end-to-end encryption, so this computer was not "
+"linked. Link again and tick the box to sync without encryption only if you "
+"accept that the operator of the server can read your synced data."
+msgstr ""
+"Esta cuenta sincroniza sin cifrado de extremo a extremo, así que este equipo "
+"no se enlazó. Vuelve a enlazar y marca la casilla de sincronizar sin cifrado "
+"solo si aceptas que quien administra el servidor pueda leer tus datos "
+"sincronizados."
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid ""
+"This computer could not be linked. Check that the server can be reached and "
+"link again."
+msgstr ""
+"No se pudo enlazar este equipo. Comprueba que el servidor responde y vuelve "
+"a enlazar."
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid "Link again…"
+msgstr "Volver a enlazar…"
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid "Keep the access in a private file…"
+msgstr "Guardar el acceso en un archivo privado…"
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid "Details: %1"
+msgstr "Detalles: %1"
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid ""
+"This computer keeps its access to the server in a private file, not in the "
+"system keyring: whoever can read your files can use it. To use the keyring "
+"again, remove the server and add it again."
+msgstr ""
+"Este equipo guarda su acceso al servidor en un archivo privado y no en el "
+"llavero del sistema: quien pueda leer tus archivos puede usarlo. Para volver "
+"a usar el llavero, quita el servidor y añádelo de nuevo."
+
+#: apps/wprs-app/qml/AccountProblem.qml
+msgid ""
+"The server no longer accepts this computer: it was removed from the account "
+"or the account was deleted. Remove the server here and link this computer "
+"again to keep syncing."
+msgstr ""
+"El servidor ya no acepta este equipo: se quitó de la cuenta o se borró la "
+"cuenta. Quita aquí el servidor y vuelve a enlazar este equipo para seguir "
+"sincronizando."
+
+#: apps/wprs-app/qml/AccountRevoke.qml
+msgid "Remove %1 from the account"
+msgstr "Quitar %1 de la cuenta"
+
+#: apps/wprs-app/qml/AccountRevoke.qml
+msgid "Remove device"
+msgstr "Quitar equipo"
+
+#: apps/wprs-app/qml/AccountRevoke.qml
+msgid ""
+"This device can no longer sync with your account, and the sync key is "
+"replaced so that it cannot read what you sync from now on. Do it for a "
+"computer you lost or no longer use."
+msgstr ""
+"Este equipo ya no podrá sincronizar con tu cuenta, y se cambia la clave de "
+"sincronización para que no pueda leer lo que sincronices desde ahora. Hazlo "
+"con un equipo que perdiste o que ya no usas."
+
+#: apps/wprs-app/qml/AccountRevoke.qml
+msgid ""
+"Removing a device asks for the password of the account. An account that "
+"signs in through single sign-on removes devices on the account page of the "
+"server."
+msgstr ""
+"Quitar un equipo pide la contraseña de la cuenta. Una cuenta que inicia "
+"sesión con inicio de sesión único quita los equipos en la página de la "
+"cuenta del servidor."
 
 #: apps/wprs-app/qml/AccountSessions.qml
 msgid "Uploads that did not finish"
@@ -566,6 +720,42 @@ msgid "%1 of %2"
 msgstr "%1 de %2"
 
 #: apps/wprs-app/qml/AccountSummary.qml
+msgid "Syncs:"
+msgstr "Se sincroniza:"
+
+#: apps/wprs-app/qml/AccountSummary.qml
+msgid ""
+"Titles, tags, ratings, favorites and image edits of your library, playlists, "
+"profiles, presets and settings."
+msgstr ""
+"Títulos, etiquetas, valoraciones, favoritos y ediciones de imagen de tu "
+"biblioteca, las listas, los perfiles, los preajustes y los ajustes."
+
+#: apps/wprs-app/qml/AccountSummary.qml
+msgid "Stays on each computer:"
+msgstr "Queda en cada equipo:"
+
+#: apps/wprs-app/qml/AccountSummary.qml
+msgid ""
+"Which wallpaper is set on each screen and how it is placed, and the settings "
+"that depend on the computer."
+msgstr ""
+"Qué fondo está puesto en cada pantalla y cómo se coloca, y los ajustes que "
+"dependen del equipo."
+
+#: apps/wprs-app/qml/AccountSummary.qml
+msgid "Wallpaper files:"
+msgstr "Archivos de fondos:"
+
+#: apps/wprs-app/qml/AccountSummary.qml
+msgid ""
+"Only the ones you send with “Send files to my other computers”; your other "
+"computers download them from the Library or from here."
+msgstr ""
+"Solo los que envías con «Enviar los archivos a mis otros equipos»; tus otros "
+"equipos los descargan desde la Biblioteca o desde aquí."
+
+#: apps/wprs-app/qml/AccountSummary.qml
 msgid "Skipped records:"
 msgstr "Registros omitidos:"
 
@@ -658,8 +848,24 @@ msgid "Allow these wallpapers…"
 msgstr "Permitir estos fondos…"
 
 #: apps/wprs-app/qml/Actions.qml
-msgid "Sync the files to my devices"
-msgstr "Sincronizar los archivos con mis equipos"
+msgid "Send files to my other computers"
+msgstr "Enviar los archivos a mis otros equipos"
+
+#: apps/wprs-app/qml/Actions.qml
+msgid ""
+"Sending the files, encrypted, to your server. Your other computers can then "
+"download them from the Library or from Account."
+msgstr ""
+"Enviando los archivos, cifrados, a tu servidor. Tus otros equipos podrán "
+"descargarlos después desde la Biblioteca o desde Cuenta."
+
+#: apps/wprs-app/qml/Actions.qml
+msgid ""
+"The files were not sent. Link this computer to your server with end-to-end "
+"encryption in Account first."
+msgstr ""
+"No se enviaron los archivos. Primero enlaza este equipo con tu servidor, con "
+"cifrado de extremo a extremo, en Cuenta."
 
 #: apps/wprs-app/qml/Actions.qml apps/wprs-app/qml/ItemDrawer.qml
 #: apps/wprs-app/qml/ProviderCard.qml apps/wprs-app/qml/RepoList.qml
@@ -12117,6 +12323,14 @@ msgstr ""
 "El motor los traduce para cada usuario. Elige uno con Usar un texto por "
 "clave en un título o una etiqueta."
 
+#: apps/wprs-app/qml/SyncedFiles.qml
+msgid ""
+"%1 (%2) was sent to your server from another computer and is not in this "
+"library yet."
+msgstr ""
+"%1 (%2) se envió a tu servidor desde otro equipo y aún no está en esta "
+"biblioteca."
+
 #: apps/wprs-app/qml/TextsKeys.qml
 msgid "Use a text by key"
 msgstr "Usar un texto por clave"
@@ -12921,6 +13135,10 @@ msgstr "Esperando la aprobación"
 #: apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Needs the sync key from another device"
 msgstr "Necesita la clave de sincronización de otro equipo"
+
+#: apps/wprs-app/qml/facade/LabelWords.qml
+msgid "Signed out by the server"
+msgstr "Rechazado por el servidor"
 
 #: apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Ready"

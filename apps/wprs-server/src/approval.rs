@@ -4,7 +4,8 @@ use crate::error::{Input, Problem, Res, require};
 use crate::net::Client;
 use crate::{Reply, St};
 use axum::Json;
-use axum::extract::State;
+use axum::extract::{Path, State};
+use axum::http::StatusCode;
 use rusqlite::{Connection, params};
 use serde::Deserialize;
 use serde_json::{Value, json};
@@ -67,4 +68,22 @@ pub async fn approve(State(app): St, auth: Auth, client: Client, Input(a): Input
         .run(move |c| changed(c.execute(sql, params![code, state, auth.user, now()])?, "pending code"))
         .await?;
     Ok(Json(json!({"approved": a.approve})))
+}
+
+#[derive(Deserialize)]
+pub struct Revoke {
+    password: String,
+}
+
+pub async fn revoke(
+    State(app): St,
+    auth: Auth,
+    client: Client,
+    Path(id): Path<String>,
+    Input(r): Input<Revoke>,
+) -> Res<StatusCode> {
+    auth.device()?;
+    let checked = crate::account::authenticate(&app, &client, &auth.handle.clone(), r.password).await?;
+    require(checked == auth.user, "the password belongs to another account")?;
+    crate::me::erase(&app, auth.user, "devices".into(), id, crate::me::DEVICE_ROW).await
 }

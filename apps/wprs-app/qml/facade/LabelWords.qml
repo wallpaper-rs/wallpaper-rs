@@ -60,6 +60,7 @@ QtObject {
             "unlinked": App.tr("Not linked"),
             "linking": App.tr("Waiting for approval"),
             "needs_key": App.tr("Needs the sync key from another device"),
+            "signed_out": App.tr("Signed out by the server"),
             "ready": App.tr("Ready"),
             "paused": App.tr("Paused"),
             "queued": App.tr("Queued"),

@@ -55,6 +55,10 @@ pub struct Saved {
     pub label: String,
     pub encrypted: Option<bool>,
     pub plaintext: bool,
+    pub file_secrets: bool,
+    pub link_problem: Option<String>,
+    pub link_error: Option<String>,
+    pub signed_out: bool,
     pub epoch: i64,
     pub ready: bool,
     pub stale: bool,
@@ -110,7 +114,11 @@ pub fn save(path: &Path, saved: &Saved) -> Result<()> {
 
 impl Saved {
     pub fn active(&self) -> bool {
-        !self.url.is_empty() && self.device.is_some() && (self.ready || self.stale) && !self.paused
+        !self.url.is_empty()
+            && self.device.is_some()
+            && (self.ready || self.stale)
+            && !self.paused
+            && !self.signed_out
     }
 
     pub fn user(&self) -> i64 {

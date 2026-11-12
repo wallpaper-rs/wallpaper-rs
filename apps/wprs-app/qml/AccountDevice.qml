@@ -13,11 +13,12 @@ RowLayout {
     readonly property string code: row.pairing && !row.pairing.sharing && row.pairing.device === row.device.id ? (row.pairing.code ?? "") : ""
 
     signal share
+    signal revoke
 
     QQC2.Label {
         Layout.fillWidth: true
         elide: Text.ElideRight
-        text: [row.device.label ?? row.device.name, row.device.label ? row.device.name : "", row.device.current ? App.tr("this computer") : App.tr("seen %1", App.time(row.device.seen_at) || "–")].filter(t => t).join(" · ")
+        text: [row.device.label ?? row.device.name, row.device.label ? row.device.name : "", row.device.current ? App.tr("this computer") : (row.device.seen_at ? App.tr("seen %1", App.time(row.device.seen_at)) : App.tr("never connected")), App.tr("linked %1", App.time(row.device.created_at) || "–")].filter(t => t).join(" · ")
     }
 
     QQC2.Label {
@@ -52,5 +53,12 @@ RowLayout {
         text: App.tr("Share the key…")
         icon.name: "document-send"
         onClicked: row.share()
+    }
+
+    QQC2.Button {
+        visible: !row.device.current
+        text: App.tr("Remove device…")
+        icon.name: "edit-delete"
+        onClicked: row.revoke()
     }
 }

@@ -74,10 +74,8 @@ Kirigami.ApplicationWindow {
         loadInputs();
     }
     footer: StatusBar {}
-    header: Kirigami.InlineMessage {
-        type: Kirigami.MessageType.Error
-        text: App.backend.banner
-        visible: text !== ""
+    header: AccountBanners {
+        host: root
     }
     globalDrawer: Navigation {
         host: root

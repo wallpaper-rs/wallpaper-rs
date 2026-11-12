@@ -44,6 +44,16 @@ impl Sync {
         self.d()?.run(move |d| d.approve_with(&user_code, password)).await
     }
 
+    #[zbus(out_args("job"))]
+    async fn revoke_device(&self, device: String, password: String) -> Result<u64> {
+        let password = Zeroizing::new(password);
+        self.d()?.run(move |d| d.revoke_device(&device, password).inspect_err(|e| d.track_access(e))).await
+    }
+
+    async fn set_file_secrets(&self, allow: bool) -> Result<()> {
+        self.d()?.run(move |d| d.use_file_secrets(allow)).await
+    }
+
     #[zbus(out_args("json"))]
     async fn get_status(&self) -> Result<String> {
         self.d()?.run(|d| d.account_status()).await
@@ -60,12 +70,12 @@ impl Sync {
 
     #[zbus(out_args("job"))]
     async fn join(&self, device: String) -> Result<u64> {
-        self.d()?.run(move |d| d.join(&device)).await
+        self.d()?.run(move |d| d.join(&device).inspect_err(|e| d.track_access(e))).await
     }
 
     #[zbus(out_args("job"))]
     async fn share_key(&self, device: String) -> Result<u64> {
-        self.d()?.run(move |d| d.share_key(&device)).await
+        self.d()?.run(move |d| d.share_key(&device).inspect_err(|e| d.track_access(e))).await
     }
 
     #[zbus(out_args("job"))]

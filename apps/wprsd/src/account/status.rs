@@ -20,6 +20,7 @@ impl Saved {
         match () {
             _ if linking => AccountState::Linking,
             _ if self.device.is_none() => AccountState::Unlinked,
+            _ if self.signed_out => AccountState::SignedOut,
             _ if !self.ready => AccountState::NeedsKey,
             _ if self.paused => AccountState::Paused,
             _ if self.last_error.is_some() => AccountState::Error,
@@ -72,6 +73,9 @@ impl Saved {
             files_bytes: self.files_bytes,
             files_quota_bytes: self.files_quota,
             job,
+            link_problem: self.link_problem.clone(),
+            link_error: self.link_error.clone(),
+            file_secrets: self.file_secrets,
         })
     }
 }

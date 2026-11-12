@@ -41,6 +41,30 @@ pub enum Server {
         #[command(flatten)]
         wait: Wait,
     },
+    #[command(
+        about = "Remove a device from the account: it can no longer sync",
+        long_about = "Remove a device from the account: it can no longer sync. Asks for the password of \
+                      the account, read from standard input when it is not a terminal; an account that \
+                      signs in through single sign-on removes devices on the account page of the server."
+    )]
+    Revoke {
+        #[arg(help = "The device to remove, as `server status` lists it: its name, its label or its id")]
+        device: String,
+        #[arg(long, help = "Remove it without asking")]
+        yes: bool,
+        #[command(flatten)]
+        wait: Wait,
+    },
+    #[command(
+        about = "Choose where this computer keeps its access to the server: the system keyring or a file",
+        long_about = "Choose where this computer keeps its access to the server: the system keyring or a \
+                      private file in the data folder, for computers with no keyring. Whoever can read your \
+                      files can then use the access. Only before linking."
+    )]
+    Access {
+        #[arg(value_parser = ["keyring", "file"], help = "Where to keep it")]
+        store: String,
+    },
     #[command(about = "Show the server, this device, the sync state and the devices of the account")]
     Status {
         #[arg(long, help = JSON)]

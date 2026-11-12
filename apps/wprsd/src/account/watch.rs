@@ -7,6 +7,7 @@ use std::sync::{Arc, Weak};
 use std::time::Duration;
 use tokio::sync::watch;
 use tokio::time::sleep;
+use wprs_core::dbus::error::SIGNED_OUT;
 use wprs_core::model::JobKind;
 use wprs_sync::Parser;
 
@@ -108,6 +109,9 @@ async fn listen(daemon: Weak<Daemon>) {
             }
             Some(Err(e)) => {
                 tracing::debug!("the server event stream is unavailable: {e}");
+                if e.parts().0 == SIGNED_OUT {
+                    d.update(|s| (s.signed_out, s.last_error) = (true, Some(e.to_string()))).ok();
+                }
                 tokio::select! {
                     () = sleep(Duration::from_secs(backoff)) => {}
                     () = restart => {}

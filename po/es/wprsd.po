@@ -26,6 +26,16 @@ msgstr ""
 
 #: apps/wprsd/src/words.rs
 msgid ""
+"The server no longer accepts this computer: it was removed from the account "
+"or the account was deleted. Remove the server here and link this computer "
+"again to keep syncing."
+msgstr ""
+"El servidor ya no acepta este equipo: se quitó de la cuenta o se borró la "
+"cuenta. Quita aquí el servidor y vuelve a enlazar este equipo para seguir "
+"sincronizando."
+
+#: apps/wprsd/src/words.rs
+msgid ""
 "This is the recovery passphrase from before a device was revoked, and that "
 "device may know it: choose a new, different passphrase."
 msgstr ""

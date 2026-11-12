@@ -1,10 +1,11 @@
 use super::secrets::Secrets;
 use super::{block_on, sync_error};
 use crate::daemon::Daemon;
-use crate::error::{Result, failed};
+use crate::error::{Error, Result, failed};
 use crate::jobs::now;
 use serde_json::{Value, json};
 use std::sync::Arc;
+use wprs_core::dbus::error::SIGNED_OUT;
 use wprs_core::model::JobKind;
 use wprs_sync::Api;
 
@@ -28,12 +29,21 @@ impl Daemon {
             let result = d.cycle(prompt);
             d.retry_later(result.as_ref().map_or(None, |v| v["unsent"].as_u64()));
             let error = result.as_ref().err().map(ToString::to_string);
+            let out = result.as_ref().err().is_some_and(|e| e.parts().0 == SIGNED_OUT);
             d.update(|s| {
                 s.last_sync = if error.is_none() { Some(now()) } else { s.last_sync };
                 s.last_error = error;
+                s.signed_out = out;
             })?;
             result
         })
+    }
+
+    pub fn track_access(&self, e: &Error) {
+        if e.parts().0 == SIGNED_OUT {
+            let note = e.to_string();
+            self.update(|s| (s.signed_out, s.last_error) = (true, Some(note))).ok();
+        }
     }
 
     fn current_key(&self, api: &Api, secrets: &mut Secrets) -> Result<Value> {

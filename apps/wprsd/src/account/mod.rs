@@ -2,6 +2,7 @@ mod apply;
 mod author;
 mod away;
 mod cycle;
+mod devices;
 mod escrow;
 mod fetch;
 mod files;
@@ -9,6 +10,8 @@ mod gone;
 mod keys;
 mod legacy;
 mod link;
+#[cfg(test)]
+mod linktests;
 mod local;
 mod mail;
 mod manage;
@@ -27,6 +30,7 @@ mod status;
 mod tests;
 mod transfer;
 mod upload;
+mod vaultfile;
 mod votes;
 mod watch;
 
@@ -46,6 +50,7 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, AtomicU32};
 use std::sync::{Mutex, MutexGuard, OnceLock};
 use tokio::sync::Notify;
+use wprs_core::dbus::error::SIGNED_OUT;
 use wprs_core::model::JobKind;
 use wprs_sync::{Api, devices};
 
@@ -67,9 +72,10 @@ pub fn block_on<T>(work: impl Future<Output = T>) -> T {
 }
 
 pub fn sync_error(e: wprs_sync::Error) -> Error {
-    match e.code() == wprs_sync::TOO_OLD {
-        true => failed(crate::words::too_old()),
-        false => e.into(),
+    match e.code() {
+        wprs_sync::TOO_OLD => failed(crate::words::too_old()),
+        "unauthorized" => Error::Named(SIGNED_OUT, crate::words::signed_out()),
+        _ => e.into(),
     }
 }
 

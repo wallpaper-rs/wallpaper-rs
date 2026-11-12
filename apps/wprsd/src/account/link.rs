@@ -2,22 +2,62 @@ use super::secrets::{Secrets, encode};
 use super::server::{exists, pause, same_origin};
 use super::{block_on, hostname, sync_error};
 use crate::daemon::Daemon;
-use crate::error::{Result, failed, invalid};
+use crate::error::{Error, Result, failed, invalid};
 use crate::jobs::Ctl;
 use reqwest::Method;
 use serde_json::{Value, json};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
-use wprs_core::dbus::error::EXISTS;
+use wprs_core::dbus::error::{EXISTS, KEYRING_UNAVAILABLE};
 use wprs_core::model::JobKind;
 use wprs_sync::{AGENT, Api, DeviceKey, Poll, SyncKey, poll};
 
+pub const REFUSED: &str = "the link was refused";
+pub const EXPIRED: &str = "the code expired before it was approved; link again";
+pub const NEEDS_PLAIN: &str =
+    "the account syncs without end-to-end encryption; link with plain text only if you accept that";
+
+pub fn problem_of(error: &Error) -> Option<(&'static str, String)> {
+    if matches!(error, Error::Cancelled) {
+        return None;
+    }
+    let (name, message) = error.parts();
+    let code = match message.as_str() {
+        _ if name == KEYRING_UNAVAILABLE => "keyring",
+        REFUSED => "refused",
+        EXPIRED => "expired",
+        NEEDS_PLAIN => "encryption",
+        _ => "other",
+    };
+    Some((code, message))
+}
+
 impl Daemon {
+    fn note_link(&self, done: &Result<Value>) {
+        let (problem, error) = match done.as_ref().err().and_then(problem_of) {
+            Some((code, message)) => (Some(code.to_owned()), Some(message)),
+            None => (None, None),
+        };
+        if let Err(e) = self.update(|s| (s.link_problem, s.link_error) = (problem, error)) {
+            tracing::warn!("the reason a link failed could not be kept: {e}");
+        }
+    }
+
+    fn undo_link(&self, api: &Api, device: &str, token: &str) {
+        let gone = format!("/api/v1/me/devices/{device}");
+        let _ = block_on(api.clone().with_token(token).call(Method::DELETE, &gone, None));
+        if let Err(e) = self.forget_secrets() {
+            tracing::warn!("the access of an unfinished link could not be deleted: {e}");
+        }
+    }
+
     pub fn link_device(self: &Arc<Self>, name: &str, plaintext: bool) -> Result<(String, String, u64)> {
         let url = self.server_url()?;
         if self.saved().device.is_some() || !self.jobs.find(JobKind::Link, "link").is_empty() {
             return Err(exists("this computer is already linked or linking"));
         }
+        self.keyring_ready()?;
+        self.update(|s| (s.link_problem, s.link_error) = (None, None))?;
         let label = Some(name.trim()).filter(|n| !n.is_empty()).map_or_else(hostname, String::from);
         if label.chars().count() > 64 || label.chars().any(char::is_control) {
             return Err(invalid("a device name has 1 to 64 printable characters"));
@@ -31,8 +71,11 @@ impl Daemon {
             (text("device_code"), start["interval"].as_u64(), start["expires_in"].as_u64());
         let (interval, expires) = (interval.unwrap_or(5).clamp(1, 60), expires.unwrap_or(600).min(1800));
         let job = self.start_job(JobKind::Link, "link", move |d, ctl| {
-            let token = d.enroll(&api, &code, interval, expires, ctl)?;
-            d.finish_link(api, token, key, label, plaintext)
+            let done = d
+                .enroll(&api, &code, interval, expires, ctl)
+                .and_then(|token| d.finish_link(api, token, key, label, plaintext));
+            d.note_link(&done);
+            done
         });
         let shown = Some(text("verification_uri")).filter(|uri| same_origin(uri, &url));
         Ok((text("user_code"), shown.unwrap_or_else(|| format!("{url}/link")), job))
@@ -46,14 +89,31 @@ impl Daemon {
             match poll(&mut interval, answer) {
                 Poll::Done(token) => return Ok(token),
                 Poll::Wait(_) => {}
-                Poll::Stop(e) if e.code() == "access_denied" => return Err(failed("the link was refused")),
+                Poll::Stop(e) if e.code() == "access_denied" => return Err(failed(REFUSED)),
                 Poll::Stop(e) => return Err(sync_error(e)),
             }
         }
-        Err(failed("the code expired before it was approved; link again"))
+        Err(failed(EXPIRED))
     }
 
     fn finish_link(
+        self: &Arc<Self>,
+        api: Api,
+        token: Value,
+        key: DeviceKey,
+        label: String,
+        plaintext: bool,
+    ) -> Result<Value> {
+        let text = |field: &str| token[field].as_str().unwrap_or_default().to_owned();
+        let (device, secret) = (text("device_id"), text("token"));
+        let done = self.complete_link(api.clone(), token, key, label, plaintext);
+        if done.is_err() && self.saved().device.is_none() {
+            self.undo_link(&api, &device, &secret);
+        }
+        done
+    }
+
+    fn complete_link(
         self: &Arc<Self>,
         api: Api,
         token: Value,
@@ -72,12 +132,7 @@ impl Daemon {
             state => Some(state.map_err(sync_error)?),
         };
         if existing.as_ref().is_some_and(|state| state["encrypted"] != true) && !plaintext {
-            let gone = format!("/api/v1/me/devices/{}", text("device_id"));
-            let _ = block_on(api.call(Method::DELETE, &gone, None));
-            self.forget_secrets()?;
-            return Err(failed(
-                "the account syncs without end-to-end encryption; link with plain text only if you accept that",
-            ));
+            return Err(failed(NEEDS_PLAIN));
         }
         let owner = (self.server_url()?, me["id"].as_i64().unwrap_or_default());
         self.update(|s| {

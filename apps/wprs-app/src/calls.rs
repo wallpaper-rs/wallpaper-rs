@@ -148,6 +148,8 @@ calls! {
         GetStatus get_status() json;
         SyncNow sync_now();
         SetPaused set_paused(paused: bool);
+        RevokeDevice revoke_device(device: str, password: str);
+        SetFileSecrets set_file_secrets(allow: bool);
         Join join(device: str);
         ShareKey share_key(device: str);
         ConfirmShare confirm_share(device: str, code: str);

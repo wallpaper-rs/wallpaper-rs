@@ -25,6 +25,7 @@ pub mod error {
     pub const EXISTS: &str = "io.github.wallpaper_rs.Error.Exists";
     pub const NEEDS_SECRET: &str = "io.github.wallpaper_rs.Error.NeedsSecret";
     pub const KEYRING_UNAVAILABLE: &str = "io.github.wallpaper_rs.Error.KeyringUnavailable";
+    pub const SIGNED_OUT: &str = "io.github.wallpaper_rs.Error.SignedOut";
     pub const STALE: &str = "io.github.wallpaper_rs.Error.Stale";
     pub const CONFLICT: &str = "io.github.wallpaper_rs.Error.Conflict";
     pub const NEWER: &str = "io.github.wallpaper_rs.Error.Newer";
