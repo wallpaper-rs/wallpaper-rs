@@ -54,6 +54,9 @@ pub fn sign_source(dir: impl AsRef<Path>, signer: &Signer) -> Result<String> {
     crate::fill(dir)?;
     let json = fs::read(dir.join(MANIFEST))?;
     let manifest = Manifest::from_json(&json)?;
-    fs::write(dir.join(SIGNATURE), signer.sign(&json, &manifest_comment(&manifest.id, &manifest.version))?)?;
+    fs::write(
+        dir.join(SIGNATURE),
+        signer.sign(&json, &manifest_comment(&manifest.id, &manifest.version, &json))?,
+    )?;
     Ok(signer.fingerprint.clone())
 }

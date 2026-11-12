@@ -29,7 +29,7 @@ one block verifies with stock minisign tools.
   fingerprints, never blocks.
 - Trusted comments bind role, version and repository: `wpak-repo root <N> <repo_id>`,
   `wpak-repo entry <N> <repo_id>`, `wpak-repo details <N> <repo_id>`,
-  `wpak manifest <id> <version>` for package authors and `wpak-author-rotate <author> <from> <to>`
+  `wpak manifest <id> <version> sha256:<hash of manifest.json>` for package authors and `wpak-author-rotate <author> <from> <to>`
   for the rotations of online authors (signed text and trusted comment alike).
 
 ## Layout
@@ -188,8 +188,11 @@ A revoked key invalidates every signature it made even while a root still lists 
 ## Package signatures
 
 An author signs the exact bytes of `manifest.json`; the signature is stored in the package as
-`manifest.json.minisig` with the trusted comment `wpak manifest <id> <version>`. It can be
-checked by hand with `minisign -Vm manifest.json -p author.pub`.
+`manifest.json.minisig` with the trusted comment `wpak manifest <id> <version> sha256:<hash of manifest.json>`. It can be
+checked by hand with `minisign -Vm manifest.json -p author.pub`. `wprs-ctl pack build` reads that comment
+without any key and refuses a folder whose signature belongs to another version of `manifest.json`:
+a built package never carries a signature that cannot verify (sign again, or delete the file to build
+unsigned).
 
 ## Online authors
 

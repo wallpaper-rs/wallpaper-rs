@@ -2902,6 +2902,14 @@ msgstr "se esperaba un wpak-repo-authors/1.0 de este repositorio"
 msgid "expected unique ids"
 msgstr "se esperaban identificadores únicos"
 
+#: crates/wprs-format/src/build.rs
+msgid ""
+"it signs another version of manifest.json; run pack sign again, or delete it "
+"to build unsigned"
+msgstr ""
+"firma otra versión de manifest.json; vuelve a firmar con pack sign o "
+"bórrala para construir sin firma"
+
 #: crates/wprs-format/src/catalog.rs
 msgid "package size"
 msgstr "tamaño del paquete"

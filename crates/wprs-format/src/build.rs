@@ -1,10 +1,14 @@
 use crate::validate::extension;
-use crate::{Error, FileEntry, Kind, Limits, MANIFEST, Manifest, Result, validate};
+use crate::{
+    Error, FileEntry, Kind, Limits, MANIFEST, Manifest, Result, SIGNATURE, manifest_comment, signs_comment,
+    validate,
+};
 use sha2::{Digest, Sha256};
 use std::fmt::Write as _;
 use std::fs::{self, File};
 use std::io::{self, BufWriter, Read, Write};
 use std::path::Path;
+use wprs_core::message::said;
 use zip::write::SimpleFileOptions;
 use zip::{CompressionMethod, DateTime, ZipWriter};
 
@@ -14,8 +18,30 @@ const STORED: &[&str] = &[
 ];
 
 pub fn build(source: impl AsRef<Path>, out: impl AsRef<Path>, limits: &Limits) -> Result<String> {
-    crate::fill(source.as_ref())?;
-    pack(source.as_ref(), None, out.as_ref(), limits)
+    let source = source.as_ref();
+    crate::fill(source)?;
+    current(source)?;
+    pack(source, None, out.as_ref(), limits)
+}
+
+fn current(source: &Path) -> Result<()> {
+    let signed = match fs::read_to_string(source.join(SIGNATURE)) {
+        Err(e) if e.kind() == io::ErrorKind::NotFound => return Ok(()),
+        read => read?,
+    };
+    let json = fs::read(source.join(MANIFEST))?;
+    let manifest = Manifest::from_json(&json)?;
+    let comment = manifest_comment(&manifest.id, &manifest.version, &json);
+    crate::ensure(signs_comment(&signed, &comment), || {
+        crate::refuse(
+            SIGNATURE,
+            said(
+                "format.stale_signature",
+                "it signs another version of manifest.json; run pack sign again, or delete it to build unsigned",
+                &[],
+            ),
+        )
+    })
 }
 
 pub fn build_staged(

@@ -55,3 +55,7 @@ required-features = ["sign"]
 [[test]]
 name = "charter"
 required-features = ["sign"]
+
+[[test]]
+name = "signed"
+required-features = ["sign"]

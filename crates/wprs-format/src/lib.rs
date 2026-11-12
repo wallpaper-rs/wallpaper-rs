@@ -100,7 +100,9 @@ pub use refusal::Refusal;
 pub use release::{Needs, Preview, Rated, Release, Wanted};
 pub use repo::{Author, Key, Policy, ROOT_FORMAT, Role, Roles, Root, Time, comment};
 pub use settings::{Settings, settings};
-pub use sign::{fingerprint, manifest_comment, public_key, threshold, verify_blocks, verify_package};
+pub use sign::{
+    fingerprint, manifest_comment, public_key, signs_comment, threshold, verify_blocks, verify_package,
+};
 pub use source::{Folder, fill, inspect, locale_names, with_strings};
 pub use stall::{Shelved, Stocked, stock};
 pub use upgrade::{Renames, rename_json, upgrade, upgrade_json};
