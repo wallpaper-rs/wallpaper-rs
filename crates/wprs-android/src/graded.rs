@@ -1,7 +1,7 @@
 use crate::{Error, choice, said, settings};
 use serde::Deserialize;
 use serde_json::{Value, json};
-use wprs_core::filter::{Filter, LOOKS, RANGES};
+use wprs_core::filter::{Filter, LOOKS, Look, RANGES};
 
 #[derive(Deserialize)]
 #[serde(tag = "op", rename_all = "snake_case")]
@@ -39,6 +39,31 @@ fn read(value: Value) -> Result<Filter, Error> {
     Ok(filter.sanitized())
 }
 
+const SAMPLE: [[u8; 3]; 8] = [
+    [120, 170, 230],
+    [70, 140, 60],
+    [225, 175, 145],
+    [245, 245, 245],
+    [128, 128, 128],
+    [35, 40, 55],
+    [200, 60, 50],
+    [60, 90, 190],
+];
+const GAMMA: f32 = 2.2;
+
+fn swatch(look: &Look) -> Vec<u32> {
+    let grade = Filter { look: *look, ..Filter::default() }.grade();
+    SAMPLE
+        .iter()
+        .map(|rgb| {
+            let linear = rgb.map(|c| (f32::from(c) / 255.0).powf(GAMMA));
+            let shown = grade.as_ref().map_or(linear, |g| g.apply(linear));
+            let [r, g, b] = shown.map(|c| (c.clamp(0.0, 1.0).powf(1.0 / GAMMA) * 255.0).round() as u32);
+            0xff00_0000 | (r << 16) | (g << 8) | b
+        })
+        .collect()
+}
+
 fn shown(lock: bool) -> Value {
     let config = settings::config();
     let own = if lock {
@@ -53,5 +78,10 @@ fn shown(lock: bool) -> Value {
         json!({ "key": key, "min": min, "max": max, "decimals": places, "value": value[key] })
     });
     let looks = LOOKS.iter().map(|look| json!(look));
-    json!({ "filter": value, "own": own, "fields": fields.collect::<Vec<_>>(), "looks": looks.collect::<Vec<_>>() })
+    let swatches: serde_json::Map<String, Value> =
+        LOOKS.iter().map(|look| (json!(look).as_str().unwrap_or_default().to_owned(), json!(swatch(look)))).collect();
+    json!({
+        "filter": value, "own": own, "fields": fields.collect::<Vec<_>>(), "looks": looks.collect::<Vec<_>>(),
+        "swatches": swatches,
+    })
 }

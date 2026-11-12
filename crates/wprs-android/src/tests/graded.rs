@@ -8,6 +8,12 @@ pub(super) fn each_screen_has_its_own_filter() {
     let home = ask(json!({ "op": "filter", "lock": false }));
     assert_eq!((&home["own"], &home["filter"]["look"]), (&json!(false), &json!("none")), "{home}");
     assert_eq!(home["looks"].as_array().map(Vec::len), Some(16));
+    let swatch = |look: &str| home["swatches"][look].as_array().unwrap().clone();
+    assert_eq!(home["swatches"].as_object().map(|m| m.len()), Some(16));
+    assert_eq!(swatch("none")[4], json!(0xff80_8080_u32), "the plain look leaves the grey as it is");
+    assert_ne!(swatch("warm"), swatch("none"));
+    assert_ne!(swatch("mono"), swatch("warm"));
+    assert!(swatch("noir").iter().all(|c| c.as_u64().is_some_and(|c| c >> 24 == 0xff)));
     assert_eq!(
         home["fields"][5],
         json!({ "key": "hue", "min": -180.0, "max": 180.0, "decimals": 0, "value": 0.0 })
