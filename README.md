@@ -706,7 +706,9 @@ el ritmo no cambia nunca, un nivel fijo tampoco, y el tope que elijas lo acota. 
 ritmo dibuja esa pantalla a la mitad de fotogramas, y `wprs-ctl scene bench --quality auto` imprime el ritmo. Presenta con tres imágenes para que la GPU dibuje un fotograma
 mientras se prepara el siguiente. `wprs-ctl state` (`tier`,
 `tier_measured`, y `quality` y `quality_reason` en cada pantalla), la app y la bandeja muestran la
-clase medida, el nivel y por qué bajó.
+clase medida, el nivel y por qué bajó, y también el tiempo de GPU medido por fotograma frente al
+intervalo, el ritmo y la última decisión del piloto (`quality_frame_ms`, `quality_period_ms`,
+`quality_pace` y `quality_step`; columna `MEASURED` de `wprs-ctl quality`).
 
 El nivel también se puede elegir a mano con `playback.quality`: `auto` (lo de siempre), un nivel
 fijo de `q0` a `q3`, o `min-q1` y `min-q2`, que dejan la elección automática pero nunca por debajo de
@@ -721,7 +723,9 @@ cabe). La app (junto a la elección de calidad en *Ajustes* y en cada pantalla c
 bandeja, el teléfono (bajo su ajuste de calidad, del fondo de inicio o de bloqueo que dibujó
 último, nunca de una vista previa, y sin aviso en cuanto ese fondo pasa a ser una imagen, un video o
 una página), `wprs-ctl quality` y `wprs-ctl state` avisan de
-lo que cuesta frente al presupuesto del equipo, que puede perder fotogramas y gastar más batería, y
+lo que cuesta frente al presupuesto del equipo (en cuanto se miden sus fotogramas, de cuánto tardan
+en la GPU frente al intervalo y a cuántos fotogramas por segundo, y no avisan si caben), que puede
+perder fotogramas y gastar más batería, y
 si la elección automática la bajaría o la dejaría quieta (`quality_auto` en el estado: `still` si
 está quieta en su póster, `stop` si la reproduce un nivel fijo o un mínimo y `auto` la dejaría
 quieta, `lower` si solo la bajaría); si solo
@@ -2301,6 +2305,7 @@ wprs-ctl scene bench escena.wpak --size 1440x3040 --quality q3 --passes --shot q
 wprs-ctl scene bench escena.wpak --quality auto --paced 30   # 30 s en tiempo real con el nivel automático del teléfono
 WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh build && WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh copy escena.wpak
 WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh run escena.wpak --level q3 --passes   # el mismo banco en el teléfono, en JSON
+WPRS_ADB_SERIAL=<serie> scripts/phone-bench.sh run escena.wpak --level auto --paced 30 --pace smooth   # el automático sin bajar el ritmo
 ```
 
 En la página *Ajustes* de la app, el botón *Ajustes de la escena* (o *Ajustes del vídeo*) de cada

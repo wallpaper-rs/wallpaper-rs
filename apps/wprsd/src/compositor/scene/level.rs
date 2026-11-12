@@ -39,7 +39,13 @@ impl SceneState {
         let ((quality, why), _) = self.steer(power);
         self.why = why;
         self.over = power.over(&self.runtime, quality);
-        self.automatic = if self.stalled(power) { "still" } else { power.automatic(&self.runtime, quality) };
+        let lowered = wprs_scene::lowers(self.over.is_some(), self.pilot.timing());
+        self.automatic = match power.automatic(&self.runtime, quality) {
+            _ if self.stalled(power) => "still",
+            "" | "lower" if !power.choice.is_auto() && lowered => "lower",
+            "lower" => "",
+            automatic => automatic,
+        };
         quality
     }
 
@@ -78,7 +84,9 @@ impl SceneState {
 
     pub(in super::super) fn quality(&self) -> Level {
         let (cost, budget) = self.over.unwrap_or_default();
-        let quality = ["q0", "q1", "q2", "q3"][self.quality as usize];
-        Level { quality, reason: self.why.name(), cost, budget, automatic: self.automatic }
+        let (quality, reason) = (["q0", "q1", "q2", "q3"][self.quality as usize], self.why.name());
+        let ((frame_ms, period_ms), automatic) = (self.pilot.timing().unzip(), self.automatic);
+        let (step, pace) = (self.pilot.step().name(), self.pilot.pace());
+        Level { quality, reason, cost, budget, automatic, frame_ms, period_ms, step, pace }
     }
 }

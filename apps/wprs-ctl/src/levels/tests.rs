@@ -1,4 +1,5 @@
-use super::{hdr, note, off, sandbox_note};
+use super::hdr;
+use super::notes::{measured, note, off, sandbox_note};
 use serde_json::json;
 use wprs_core::model::{OutputState, SceneInputs};
 
@@ -25,6 +26,31 @@ fn a_chosen_level_on_a_scene_heavy_only_in_model_triangles_still_warns() {
     assert!(over.starts_with("this scene costs 6.0 units a frame at q0, more than the 4"), "{over}");
     assert!(over.ends_with("automatic quality would keep it still at its poster"), "{over}");
     assert_eq!(note(&shown("user", 0.0, "")), None);
+}
+
+#[test]
+fn a_level_measured_too_slow_tells_its_frame_time_and_rate_instead_of_the_estimate() {
+    let mut o = shown("user", 6.0, "lower");
+    o.quality_timing = serde_json::from_value(json!({ "quality_frame_ms": 25.0, "quality_period_ms": 16.7,
+        "quality_step": "steady", "quality_pace": 1 }))
+    .unwrap();
+    let slow = note(&o).unwrap();
+    assert!(
+        slow.starts_with("its frames take 25.0 ms on the graphics card at q0, more than the 16.7 ms"),
+        "{slow}"
+    );
+    assert!(slow.contains("at 60 frames a second") && slow.ends_with("would lower it"), "{slow}");
+    assert_eq!(measured(&o), "25.0 of 16.7 ms, steady");
+    o.quality_timing.quality_pace = 2;
+    assert_eq!(measured(&o), "25.0 of 16.7 ms, half pace, steady");
+    o.quality_timing.quality_frame_ms = None;
+    assert!(
+        note(&o).unwrap().starts_with("this scene costs 6.0 units"),
+        "no measure falls back to the estimate"
+    );
+    assert_eq!(measured(&o), "not yet, half pace, steady");
+    assert_eq!(note(&shown("user", 6.0, "")), None, "an estimate that measured frames disprove still warned");
+    assert_eq!(measured(&shown("user", 0.0, "")), "");
 }
 
 #[test]

@@ -2679,7 +2679,18 @@ battery use rise. `quality_auto` says what the automatic choice does or would do
 automatic choice is in charge), `"stop"` (a fixed level or a floor plays a scene that `auto` would
 keep still, also when only its model triangles exceed the class and its cost fits, in which case
 clients warn that it draws more model triangles than the device holds, whatever the reason of the
-level), `"lower"` (with the user's choice over budget, `auto` would only lower the level) or `""`.
+level), `"lower"` (`auto` would only lower the level: with the user's choice, the frames measured at that
+level take more than 85 % of their interval, or, before 12 frames are measured, the level costs
+more than the class holds) or `""`, also when the estimate is over budget but the measured frames
+fit. `quality_frame_ms` is the average GPU time of the last frames at that level (`null` until 12
+are measured, and again for a moment after each change), `quality_period_ms` the interval it is
+judged against (that of the pace in use), `quality_step` the last decision of the automatic choice
+(`model`, `steady`, `climbed`, `dropped`, `top`, `held`, `still`, `halved` or `doubled`, see
+"Cost and frame rate" in `scene.md`; `""` for other content) and `quality_pace` its pace divisor
+(`1`, or `2` while it plays at half the rate, `0` for other content); `wprs-ctl quality` shows them
+in its `MEASURED` column and the app and the tray under the level of each screen. With a measure,
+clients say how long the frames take against the interval, and the rate it allows, instead of the
+estimate.
 Clients tell a still scene from a playing one by this value, never by `quality_reason`, which keeps
 the automatic reason (or `"slow"`) when a floor does not raise the level. `tier` is
 the class of the graphics card, `"t0"` to `"t3"`, and `tier_measured` whether a short measured
@@ -2728,7 +2739,8 @@ struct OutputState {
     edited: bool, screen: Option<Screen>, mm: Option<[f64; 4]>, parallax: bool, frames: u64, page_frames: u64, refresh: u32, fps: u32,
     buffers: String, sound: String, shown_fit: Fit, flashes: String, left_out: Vec<String>,
     particles: String, quality: String, quality_reason: String, quality_choice: Option<String>,
-    quality_cost: f64, quality_budget: f64, quality_auto: String, sandbox: String,
+    quality_cost: f64, quality_budget: f64, quality_auto: String, quality_frame_ms: Option<f64>,
+    quality_period_ms: Option<f64>, quality_step: String, quality_pace: u32, sandbox: String,
     accent: Option<String>, filter: Option<Filter>, hdr: HdrState, away: Option<String>,
 }
 struct PreviewState { error: Option<String>, console: Vec<String> }

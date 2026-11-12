@@ -1,9 +1,10 @@
 use crate::show::{clean, table};
 use anyhow::Result;
 use clap::Args;
+pub use notes::{measured, note, notes};
 use serde_json::json;
 use wprs_client::Client;
-use wprs_core::model::{Input, InputsReply, OutputState, State};
+use wprs_core::model::{OutputState, State};
 use wprs_core::{HdrChoice, QualityChoice};
 
 const SETTLE: std::time::Duration = std::time::Duration::from_millis(300);
@@ -41,82 +42,6 @@ fn hdr(o: &OutputState) -> String {
     format!("{} {} ({}{peak}{way})", h.choice, if h.active { "on" } else { "off" }, h.reason)
 }
 
-pub fn note(o: &OutputState) -> Option<String> {
-    let over = o.quality_budget > 0.0 && o.quality_cost > o.quality_budget;
-    let note = match o.quality_auto.as_str() {
-        "still" => STOPPED.to_owned(),
-        "stop" if !over => TRIANGLES.to_owned(),
-        auto if over => format!(
-            "this scene costs {:.1} units a frame at {}, more than the {:.0} this device is estimated to hold: frames may drop and battery use rise; automatic quality would {}",
-            o.quality_cost,
-            o.quality,
-            o.quality_budget,
-            if auto == "stop" { "keep it still at its poster" } else { "lower it" }
-        ),
-        _ => return None,
-    };
-    let left = o.left_out.len();
-    Some(match left {
-        0 => note,
-        _ => format!(
-            "{note}; {left} {} out at every level to protect the graphics card",
-            WORDS[usize::from(left > 1)]
-        ),
-    })
-}
-
-pub fn sandbox_note(o: &OutputState) -> Option<&'static str> {
-    (o.sandbox == "reduced").then_some("its web engine runs without part of its sandbox on this computer")
-}
-const STOPPED: &str = "this scene is too heavy for this device and automatic quality keeps it still at its poster; a fixed level such as wprs-ctl quality q0 plays it anyway, with fewer frames per second and more battery use";
-const TRIANGLES: &str = "this scene draws more model triangles than this device holds: frames may drop and battery use rise; automatic quality would keep it still at its poster";
-const WORDS: [&str; 2] = ["effect stays", "effects stay"];
-
-fn off(used: &wprs_core::model::SceneInputs) -> Vec<&'static str> {
-    let simple = [
-        (used.audio, Input::Audio),
-        (used.pointer, Input::Pointer),
-        (used.clicks, Input::Clicks),
-        (used.network, Input::Network),
-        (used.rgb, Input::Rgb),
-        (used.media, Input::Media),
-    ];
-    let combo = [
-        (used.media && used.network, Input::MediaNetwork),
-        (used.audio && used.network, Input::AudioNetwork),
-    ];
-    simple
-        .into_iter()
-        .chain(combo)
-        .filter(|(on, i)| *on && !used.granted.contains(i))
-        .map(|(_, i)| i.as_str())
-        .collect()
-}
-
-pub fn notes(state: &str, inputs: &str) {
-    let Ok(state) = serde_json::from_str::<State>(state) else {
-        return;
-    };
-    state.outputs.iter().for_each(|(name, o)| {
-        note(o).into_iter().for_each(|n| eprintln!("{name}: {n}"));
-        let more = sandbox_note(o).map(String::from).into_iter().chain(o.error.clone());
-        more.chain(o.away.as_deref().map(crate::away::note)).for_each(|n| eprintln!("{name}: {n}"));
-    });
-    let Ok(inputs) = serde_json::from_str::<InputsReply>(inputs) else {
-        return;
-    };
-    inputs.shown.iter().for_each(|(name, used)| {
-        let off = off(used);
-        if !off.is_empty() {
-            eprintln!(
-                "{name}: {} wants {} but it is not granted here, so that part of the scene is off",
-                used.scene,
-                off.join(", ")
-            );
-        }
-    });
-}
-
 fn general(state: &State) -> String {
     state.options.get(QualityChoice::KEY).and_then(|v| v.as_str()).unwrap_or("auto").to_owned()
 }
@@ -142,8 +67,11 @@ pub async fn run(client: &Client, args: QualityArgs) -> Result<()> {
     let shown = state.outputs.iter().filter(|(name, _)| output.is_empty() || name.as_str() == output);
     if args.json {
         let rows = shown.map(|(name, o)| {
+            let t = &o.quality_timing;
             json!({ "output": name, "choice": o.quality_choice, "quality": o.quality, "reason": o.quality_reason,
-                "cost": o.quality_cost, "budget": o.quality_budget, "note": note(o), "hdr": o.hdr })
+                "cost": o.quality_cost, "budget": o.quality_budget, "frame_ms": t.quality_frame_ms,
+                "period_ms": t.quality_period_ms, "step": t.quality_step, "pace": t.quality_pace,
+                "note": note(o), "hdr": o.hdr })
         });
         let own = &state.qualities;
         println!(
@@ -156,9 +84,9 @@ pub async fn run(client: &Client, args: QualityArgs) -> Result<()> {
     let rows: Vec<_> = shown.collect();
     let cells = rows.iter().map(|(name, o)| {
         let chosen = o.quality_choice.clone().unwrap_or_else(|| general(&state));
-        vec![name.to_string(), chosen, o.quality.clone(), o.quality_reason.clone(), hdr(o)]
+        vec![name.to_string(), chosen, o.quality.clone(), o.quality_reason.clone(), measured(o), hdr(o)]
     });
-    print!("{}", table(&["OUTPUT", "CHOICE", "LEVEL", "WHY", "HDR"], cells));
+    print!("{}", table(&["OUTPUT", "CHOICE", "LEVEL", "WHY", "MEASURED", "HDR"], cells));
     println!("{} = {}", QualityChoice::KEY, clean(&general(&state)));
     if !output.is_empty() && !state.outputs.contains_key(output) {
         let own = state.qualities.get(output).map_or("none", String::as_str);
@@ -196,5 +124,6 @@ pub async fn notice(client: &Client, key: &str) -> Result<()> {
     Ok(())
 }
 
+mod notes;
 #[cfg(test)]
 mod tests;

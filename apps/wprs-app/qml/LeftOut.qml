@@ -26,10 +26,30 @@ QtObject {
             "slow": daemon.tr("lowered because its frames took too long on the graphics card"),
             "user": daemon.tr("chosen by you")
         };
-        const quality = daemon.tr("Quality %1 of 3", info.quality.slice(1));
+        const quality = info.quality_pace > 1 ? daemon.tr("Quality %1 of 3 at %2 frames a second", info.quality.slice(1), info.fps) : daemon.tr("Quality %1 of 3", info.quality.slice(1));
         const tier = String(state?.tier ?? "").slice(1);
         const card = !tier ? "" : state.tier_measured ? daemon.tr("graphics card class %1 of 3, measured", tier) : daemon.tr("graphics card class %1 of 3, from its model", tier);
-        return [reasons[info.quality_reason] ? quality + ": " + reasons[info.quality_reason] : quality, card].filter(t => t).join(" · ");
+        return [[reasons[info.quality_reason] ? quality + ": " + reasons[info.quality_reason] : quality, card].filter(t => t).join(" · "), timing(info)].filter(t => t).join("\n");
+    }
+
+    function timing(info) {
+        const steps = {
+            "model": daemon.tr("The level comes from the estimate until frames are measured."),
+            "steady": daemon.tr("The level holds: frames fit, without enough room for the next level."),
+            "climbed": daemon.tr("The level went up: frames had time to spare."),
+            "dropped": daemon.tr("The level went down: frames took longer than the target."),
+            "top": daemon.tr("This is the highest level allowed now."),
+            "held": daemon.tr("The next level was measured and does not fit."),
+            "still": daemon.tr("Even the lowest level is far too slow, so the scene stays still at its poster."),
+            "halved": daemon.tr("The frame rate was halved: frames took longer than the target and the level stays."),
+            "doubled": daemon.tr("The frame rate went back up: frames had time to spare.")
+        };
+        const step = steps[info.quality_step ?? ""];
+        if (!step)
+            return "";
+        if (info.quality_frame_ms === null || info.quality_frame_ms === undefined)
+            return daemon.tr("GPU time not measured yet. %1", step);
+        return daemon.tr("Measured GPU time: %1 ms a frame, for a target of %2 ms. %3", Number(info.quality_frame_ms).toFixed(1), Number(info.quality_period_ms).toFixed(1), step);
     }
 
     function note(info) {
@@ -38,8 +58,13 @@ QtObject {
         const left = (info.left_out ?? []).length;
         const kept = left ? daemon.tr("Effects left out to protect the graphics card stay out at every level: %1", left) : "";
         const cost = daemon.tr("This scene costs %1 units a frame at this level, more than the %2 this device is estimated to hold: frames may drop and battery use rise.", Number(info.quality_cost).toFixed(1), Number(info.quality_budget).toFixed(0));
+        const period = Number(info.quality_period_ms);
+        const slow = daemon.tr("Its frames take %1 ms on the graphics card, more than the %2 ms a frame has at %3 frames a second: frames drop and battery use rises.", Number(info.quality_frame_ms).toFixed(1), period.toFixed(1), period > 0 ? Math.round(1000 / period) : 0);
+        const timed = info.quality_frame_ms !== null && info.quality_frame_ms !== undefined;
         const would = auto === "stop" ? daemon.tr("Automatic quality would keep it still at its poster.") : daemon.tr("Automatic quality would lower it.");
-        if (over)
+        if (auto === "lower")
+            return [timed ? slow : cost, would, kept].filter(t => t).join(" ");
+        if (auto === "stop" && over)
             return [cost, would, kept].filter(t => t).join(" ");
         if (auto === "stop")
             return [daemon.tr("This scene draws more model triangles than this device holds: frames may drop and battery use rise. Automatic quality would keep it still at its poster."), kept].filter(t => t).join(" ");

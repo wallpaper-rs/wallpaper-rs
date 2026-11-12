@@ -147,6 +147,7 @@ impl Daemon {
                 quality_cost: f64::from((s.level.cost * 10.0).round() / 10.0),
                 quality_budget: f64::from(s.level.budget),
                 quality_auto: s.level.automatic.into(),
+                quality_timing: s.level.timing(),
                 decode: s.decode.into(),
                 left_out: s.left_out,
                 sandbox: s.sandbox.into(),

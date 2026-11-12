@@ -123,6 +123,8 @@ model! {
         pub quality_budget: f64,
         #[serde(default)]
         pub quality_auto: String,
+        #[serde(flatten)]
+        pub quality_timing: QualityTiming,
         #[serde(default)]
         pub decode: String,
         #[serde(default)]
@@ -172,4 +174,16 @@ model! {
         pub count: u32,
         pub next_at: Option<Time>,
     }
+}
+
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct QualityTiming {
+    #[serde(default)]
+    pub quality_frame_ms: Option<f64>,
+    #[serde(default)]
+    pub quality_period_ms: Option<f64>,
+    #[serde(default)]
+    pub quality_step: String,
+    #[serde(default)]
+    pub quality_pace: u32,
 }

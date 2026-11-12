@@ -26,6 +26,22 @@ pub struct Level {
     pub cost: f32,
     pub budget: f32,
     pub automatic: &'static str,
+    pub frame_ms: Option<f32>,
+    pub period_ms: Option<f32>,
+    pub step: &'static str,
+    pub pace: u32,
+}
+
+impl Level {
+    pub fn timing(&self) -> wprs_core::model::QualityTiming {
+        let tenths = |ms: Option<f32>| ms.map(|ms| f64::from((ms * 10.0).round() / 10.0));
+        wprs_core::model::QualityTiming {
+            quality_frame_ms: tenths(self.frame_ms),
+            quality_period_ms: tenths(self.period_ms),
+            quality_step: self.step.into(),
+            quality_pace: self.pace,
+        }
+    }
 }
 
 impl OutputStatus {

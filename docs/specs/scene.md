@@ -19,7 +19,8 @@ the particle steps apart, so the CPU never waits for the GPU there). The same be
 `scripts/phone-bench.sh build` cross-compiles the `bench` example of `crates/wprs-android` for arm64
 (or x86_64 for an emulator with `WPRS_ABI=x86_64`) with the NDK and the same path remaps as the Gradle build of the app, so both share one cache, `copy FILE.wpak...` copies it and the packages to
 `/data/local/tmp/wprs-bench` (nothing else on the phone is touched and no app is installed), and
-`run NAME.wpak --level q3 --passes` or `--level auto --paced 30` loads the package the way the
+`run NAME.wpak --level q3 --passes` or `--level auto --paced 30` (with `--pace smooth`, the
+automatic level never halves the rate; `detail`, the default, as `playback.auto_pace`) loads the package the way the
 live wallpaper does (phone limits, properties, tier from its GPU, 1440x3040 unless `--size` says
 otherwise) and prints the report as JSON with the battery temperature and thermal status before
 and after. The serial of the phone comes from `WPRS_ADB_SERIAL`; each run waits while the screen is
@@ -278,7 +279,7 @@ more than twice the interval at the lowest level for 2 seconds stays at `poster_
 choice changes or the scene is loaded again, with the notice of a still scene (`quality_auto` is
 `still`): on the phone the cost model never stops a scene, only the model triangle limit and that
 measurement do; the desktop also keeps still a scene whose estimate at `q0` is over the budget of
-the tier. The phone settings show the measured average
+the tier. The phone settings, the app, the tray and `wprs-ctl quality` (from `GetState`, see `dbus.md`) show the measured average
 against the interval and the last decision (`model`, `steady`, `climbed`, `dropped`, `top`, `held`,
 `still`, `halved` or `doubled`), and `--quality auto` of `wprs-ctl scene bench` and `--level auto`
 of the phone bench report the same under `auto` (`frame_ms`, `period_ms`, `step`, `still`, `pace`,
@@ -312,12 +313,15 @@ always holds, also on battery, with power saving, while the device is warm and w
 more than the tier holds: only the frame rate still follows the tier, the power source and the
 temperature, so a heavy scene shows fewer frames a second instead of fewer details. Above a floor,
 the automatic choice and the GPU time of the frames move the level as usual. The reason is then
-`user`, and when the chosen level costs more than the budget of the tier the app (next to the
-quality choice in the settings and on each screen that shows the scene), the tray, the phone (under
-its quality setting) and `wprs-ctl quality` and `wprs-ctl state` warn: the cost against the budget,
-that frames may drop and battery use rise, and whether the automatic choice would lower the level
-or keep the scene still. Only the automatic choice stops a scene: a scene over budget even at the
-lowest level (on the phone, one measured far too slow there), or with more model triangles than the
+`user`, and when the frames measured at the chosen level take more than 85 % of their interval
+(before 12 frames are measured: when the level costs more than the budget of the tier) the app
+(next to the quality choice in the settings and on each screen that shows the scene), the tray, the
+phone (under its quality setting) and `wprs-ctl quality` and `wprs-ctl state` warn: the measured
+time against the interval and the rate it allows (or the cost against the budget), that frames may
+drop and battery use rise, and whether the automatic choice would lower the level or keep the scene
+still. Frames measured to fit silence the estimate. Only the automatic choice stops a scene: a scene
+over budget even at the lowest level (on the desktop), one measured far too slow there, or with more
+model triangles than the
 tier draws, stays at `poster_time` under `auto`
 and plays at the chosen level under `q0` to `q3`, and at the floor (or higher, when it fits) under
 `min-q1` and `min-q2`; clients say so too, and for a scene heavy only in model triangles, whose

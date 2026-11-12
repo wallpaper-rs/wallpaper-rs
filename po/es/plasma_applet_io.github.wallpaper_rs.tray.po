@@ -329,6 +329,11 @@ msgstr "elegida por ti"
 
 #: integrations/plasma-tray/contents/ui/LeftOut.qml
 #, kde-format
+msgid "Quality %1 of 3 at %2 frames a second"
+msgstr "Calidad %1 de 3 a %2 fotogramas por segundo"
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
 msgid "Quality %1 of 3"
 msgstr "Calidad %1 de 3"
 
@@ -341,6 +346,72 @@ msgstr "tarjeta gráfica de clase %1 de 3, medida"
 #, kde-format
 msgid "graphics card class %1 of 3, from its model"
 msgstr "tarjeta gráfica de clase %1 de 3, según su modelo"
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "The level comes from the estimate until frames are measured."
+msgstr "El nivel sale de la estimación hasta que se miden fotogramas."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "The level holds: frames fit, without enough room for the next level."
+msgstr ""
+"El nivel se mantiene: los fotogramas caben, sin margen para el nivel "
+"siguiente."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "The level went up: frames had time to spare."
+msgstr "El nivel subió: a los fotogramas les sobraba tiempo."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "The level went down: frames took longer than the target."
+msgstr "El nivel bajó: los fotogramas tardaban más que el objetivo."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "This is the highest level allowed now."
+msgstr "Es el nivel más alto permitido ahora."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "The next level was measured and does not fit."
+msgstr "El nivel siguiente se midió y no cabe."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid ""
+"Even the lowest level is far too slow, so the scene stays still at its "
+"poster."
+msgstr ""
+"Ni el nivel más bajo alcanza, así que la escena queda quieta en su póster."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid ""
+"The frame rate was halved: frames took longer than the target and the level "
+"stays."
+msgstr ""
+"Los fotogramas por segundo bajaron a la mitad: tardaban más que el objetivo "
+"y el nivel se mantiene."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "The frame rate went back up: frames had time to spare."
+msgstr ""
+"Los fotogramas por segundo volvieron al ritmo completo: les sobraba tiempo."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "GPU time not measured yet. %1"
+msgstr "Tiempo de GPU sin medir todavía. %1"
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid "Measured GPU time: %1 ms a frame, for a target of %2 ms. %3"
+msgstr ""
+"Tiempo de GPU medido: %1 ms por fotograma, con un objetivo de %2 ms. %3"
 
 #: integrations/plasma-tray/contents/ui/LeftOut.qml
 #, kde-format
@@ -359,6 +430,16 @@ msgstr ""
 "Esta escena cuesta %1 unidades por fotograma en este nivel, más de las %2 "
 "que se calcula que aguanta este equipo: puede perder fotogramas y gastar más "
 "batería."
+
+#: integrations/plasma-tray/contents/ui/LeftOut.qml
+#, kde-format
+msgid ""
+"Its frames take %1 ms on the graphics card, more than the %2 ms a frame has "
+"at %3 frames a second: frames drop and battery use rises."
+msgstr ""
+"Sus fotogramas tardan %1 ms en la tarjeta gráfica, más que los %2 ms que "
+"tiene cada fotograma a %3 fotogramas por segundo: se pierden fotogramas y se "
+"gasta más batería."
 
 #: integrations/plasma-tray/contents/ui/LeftOut.qml
 #, kde-format

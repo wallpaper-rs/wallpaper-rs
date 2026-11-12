@@ -83,8 +83,20 @@ fn a_heavy_scene_first_halves_its_pace_and_never_under_a_fixed_level() {
     assert_eq!((fed.state.pilot.pace(), fed.state.fps(smooth, 60)), (1, 60), "smooth kept half the pace");
     let fixed = Some(QualityChoice::Fixed(3));
     let mut fed = Fed::new(snowfall(fixed), mains);
+    assert_eq!(fed.state.quality().automatic, "", "frames not measured yet were told as too slow");
     assert_eq!(fed.feed(30, 90.0, mains), ("q3", "user"), "slow frames moved a fixed level");
     assert_eq!((fed.state.pilot.pace(), fed.state.fps(mains, 60)), (1, 60), "a fixed level lost its pace");
+    assert_eq!(fed.state.quality().automatic, "lower", "measured slow frames at a fixed level were not told");
+}
+
+#[test]
+fn a_fixed_level_over_the_estimate_warns_only_until_its_frames_are_measured_to_fit() {
+    let software = Power::new(Tier::T0, false, 0);
+    let mut fed = Fed::new(snowfall(Some(QualityChoice::Fixed(3))), software);
+    assert!(fed.state.over.is_some_and(|(cost, budget)| cost > budget), "{:?}", fed.state.over);
+    assert_eq!(fed.state.quality().automatic, "lower");
+    assert_eq!(fed.feed(2, 1.0, software), ("q3", "user"));
+    assert_eq!(fed.state.quality().automatic, "", "frames measured to fit still warned from the estimate");
 }
 
 #[test]
