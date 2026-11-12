@@ -1,3 +1,4 @@
+mod settings;
 mod web;
 
 use serde_json::{Value, json};

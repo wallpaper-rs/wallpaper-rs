@@ -33,10 +33,10 @@ Kirigami.Page {
         }, gesture);
     }
 
-    function manifestEdit(what, args) {
+    function manifestEdit(what, args, gesture) {
         const edit = {};
         edit[what] = args;
-        run("manifest", edit);
+        run("manifest", edit, gesture);
     }
 
     function jump(pointer) {

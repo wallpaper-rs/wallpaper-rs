@@ -9,6 +9,7 @@ ColumnLayout {
 
     required property var page
     readonly property var pages: (page.view.files ?? []).filter(file => file.kind === "page").map(file => file.path)
+    readonly property bool web: page.kind === "web"
 
     spacing: Kirigami.Units.largeSpacing
 
@@ -22,7 +23,7 @@ ColumnLayout {
 
         QQC2.ComboBox {
             Kirigami.FormData.label: App.tr("Entry page:")
-            visible: sections.page.kind === "web"
+            visible: sections.web
             model: sections.pages
             currentIndex: sections.pages.indexOf(sections.page.manifest.entry ?? "")
             onActivated: index => sections.page.change("/manifest/entry", sections.pages[index])
@@ -34,5 +35,18 @@ ColumnLayout {
             icon.name: "documentinfo"
             onClicked: sections.page.editor.select("/manifest")
         }
+    }
+
+    Kirigami.Heading {
+        Layout.fillWidth: true
+        visible: sections.web
+        level: 4
+        text: App.tr("Page")
+    }
+
+    PageWeb {
+        Layout.fillWidth: true
+        visible: sections.web
+        page: sections.page
     }
 }

@@ -608,10 +608,10 @@ msgstr "Preajuste:"
 
 #: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/EditDepthCheck.qml
 #: apps/wprs-app/qml/EditDepthCompare.qml apps/wprs-app/qml/OutputFilter.qml
-#: apps/wprs-app/qml/SceneEffectMask.qml apps/wprs-app/qml/SceneMedia.qml
-#: apps/wprs-app/qml/SceneRig.qml apps/wprs-app/qml/SceneSwarmKin.qml
-#: apps/wprs-app/qml/SceneSwarmLight.qml apps/wprs-app/qml/SceneTones.qml
-#: apps/wprs-app/qml/facade/LabelWords.qml
+#: apps/wprs-app/qml/PageWeb.qml apps/wprs-app/qml/SceneEffectMask.qml
+#: apps/wprs-app/qml/SceneMedia.qml apps/wprs-app/qml/SceneRig.qml
+#: apps/wprs-app/qml/SceneSwarmKin.qml apps/wprs-app/qml/SceneSwarmLight.qml
+#: apps/wprs-app/qml/SceneTones.qml apps/wprs-app/qml/facade/LabelWords.qml
 #: apps/wprs-app/qml/facade/ManifestWords.qml
 #: apps/wprs-app/qml/facade/SceneValues.qml
 msgid "None"
@@ -2703,7 +2703,8 @@ msgstr "firma"
 msgid "%1 B"
 msgstr "%1 B"
 
-#: apps/wprs-app/qml/PackageFiles.qml apps/wprs-app/qml/SceneModelInfo.qml
+#: apps/wprs-app/qml/PackageFiles.qml apps/wprs-app/qml/PageWeb.qml
+#: apps/wprs-app/qml/SceneModelInfo.qml
 msgid "%1 KiB"
 msgstr "%1 KiB"
 
@@ -2800,6 +2801,10 @@ msgstr "Página de entrada:"
 msgid "Title, license, origin and more…"
 msgstr "Título, licencia, origen y más…"
 
+#: apps/wprs-app/qml/PackageSections.qml
+msgid "Page"
+msgstr "Página"
+
 #: apps/wprs-app/qml/PageLights.qml
 msgid "The page and its lights"
 msgstr "La página y sus luces"
@@ -2829,6 +2834,42 @@ msgstr ""
 "Aquí window.wprs.rgb.setImage devuelve true y sus colores solo se muestran, "
 "nunca se mandan. En el escritorio devuelve false y no manda nada hasta que "
 "enciendas la iluminación RGB y lo permitas para este paquete."
+
+#: apps/wprs-app/qml/PageWeb.qml
+msgid "Script before the page:"
+msgstr "Script antes de la página:"
+
+#: apps/wprs-app/qml/PageWeb.qml
+msgid "Add a script…"
+msgstr "Añadir un script…"
+
+#: apps/wprs-app/qml/PageWeb.qml
+msgid "Color while it loads:"
+msgstr "Color mientras carga:"
+
+#: apps/wprs-app/qml/PageWeb.qml apps/wprs-app/qml/SceneInput.qml
+#: apps/wprs-app/qml/ScenePropertyRange.qml
+#: apps/wprs-app/qml/facade/SceneWords.qml
+msgid "Default"
+msgstr "Valor por defecto"
+
+#: apps/wprs-app/qml/PageWeb.qml
+msgid "Kept data:"
+msgstr "Datos que guarda:"
+
+#: apps/wprs-app/qml/PageWeb.qml
+msgid "Nothing is kept"
+msgstr "No guarda nada"
+
+#: apps/wprs-app/qml/PageWeb.qml
+msgid ""
+"The page keeps its local storage, IndexedDB and cache up to this size, from "
+"0 to 5120 KiB; 0 keeps nothing."
+msgstr "La página guarda su almacenamiento local, IndexedDB y caché hasta este tamaño, de 0 a 5120 KiB; 0 no guarda nada."
+
+#: apps/wprs-app/qml/PageWeb.qml
+msgid "JavaScript files"
+msgstr "Archivos JavaScript"
 
 #: apps/wprs-app/qml/PlaylistEditor.qml apps/wprs-app/qml/PlaylistsPage.qml
 #: apps/wprs-app/qml/PresetDialog.qml apps/wprs-app/qml/ProfilesPage.qml
@@ -4658,11 +4699,6 @@ msgstr "Datos:"
 msgid "Read it as data, such as a normal map or a mask, not as colors"
 msgstr ""
 "Leerla como datos, como un mapa de normales o una máscara, no como colores"
-
-#: apps/wprs-app/qml/SceneInput.qml apps/wprs-app/qml/ScenePropertyRange.qml
-#: apps/wprs-app/qml/facade/SceneWords.qml
-msgid "Default"
-msgstr "Valor por defecto"
 
 #: apps/wprs-app/qml/SceneInspector.qml
 msgid "Add effect"

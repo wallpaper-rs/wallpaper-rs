@@ -825,6 +825,15 @@ The app opens such folders on a page of their own, *Package*: the file list (siz
 files…*, *Open the folder*, and per file *Use as the entry page* or *Use as the thumbnail*), the
 settings of the kind in the middle, and the inspector and the problems on the right.
 
+For a web page the settings in the middle start with *Page*: a list of the scripts of the folder to
+run before the page, with *Add a script…* to copy a `.js` or `.mjs` file in and choose it at once
+(`web.preload`, the `web` action with `preload`), a color picker for the color shown while the page
+loads (`web.background`, `#rrggbb`) and a slider from 0 to 5120 KiB for the data the page keeps
+(`web.storage_kib`, 0 keeps nothing). Each control sends the `manifest` action `web` with `values`
+and `clear`, so `wprs-ctl scene act DIR manifest '{"web": {"values": {"storage_kib": 256}}}'` does the
+same and so does `wprs-ctl scene manifest DIR web`; a color that is not `#rrggbb`, a size over
+5120 KiB or a preload that is not in the folder is refused like any other invalid manifest.
+
 ## Starting points, building and applying
 
 `wprs-ctl scene new DIR --from empty|particles|parallax|clock|web [--id ID] [--title TITLE] [--locale

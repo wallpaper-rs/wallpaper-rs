@@ -20,6 +20,9 @@ QtObject {
         if (!(page.view.problems ?? []).some(problem => problem.pointer === "/manifest/entry"))
             throw new Error("a missing entry page is no problem");
         page.run("undo");
+        Qt.createComponent("PageCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         page.editor.save();
         if (page.editor.dirty || page.editor.error !== "")
             throw new Error("the page was not saved: " + page.editor.error);
