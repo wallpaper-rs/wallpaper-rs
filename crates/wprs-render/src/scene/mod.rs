@@ -12,7 +12,6 @@ mod encode;
 mod fed;
 mod field;
 mod flight;
-mod fonts;
 mod fused;
 mod gather;
 mod held;
@@ -51,13 +50,11 @@ mod stops;
 mod straight;
 mod strip;
 mod swarm;
-mod text;
 mod timed;
 mod under;
 mod uploads;
 mod view;
 mod warm;
-mod woff2;
 
 use crate::Renderer;
 use crate::texture::GpuImage;
@@ -65,7 +62,6 @@ pub use builders::{finish_builds, stop_builds};
 pub use clock::{Stamping, set_gpu_budget};
 pub use flight::drawn_effects;
 pub(crate) use flight::hanging;
-pub use fonts::{MAX_FONT, font};
 pub use packages::{MAX_SCENE_BUILD, set_build_timeout};
 pub(crate) use pipes::Pipes;
 use pipes::{Mode, Shader};
@@ -81,6 +77,7 @@ pub use uploads::Pixels;
 pub(crate) use uploads::Uploads;
 pub use view::SceneView;
 use wprs_scene::Lut;
+pub use wprs_type::{MAX_FONT, font};
 
 const TEXT_FRAMES: u64 = 120;
 

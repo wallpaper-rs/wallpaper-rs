@@ -1,10 +1,10 @@
 use super::SceneView;
 use super::item::scale_of;
-use super::text::raster;
 use crate::Renderer;
 use crate::texture::{GpuImage, create_image};
 use std::hash::{DefaultHasher, Hash, Hasher};
 use wprs_scene::{Affine, Content, Frame};
+use wprs_type::raster;
 
 pub(crate) struct Raster {
     pub(crate) image: GpuImage,

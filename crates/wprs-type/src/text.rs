@@ -95,14 +95,34 @@ impl Typesetter<'_> {
     }
 }
 
-pub(crate) fn raster(
-    fonts: &[FontArc],
+pub(crate) struct Plan<'f> {
+    set: Typesetter<'f>,
+    lines: Vec<Line>,
+    block: f32,
+    advance: f32,
+    ascent: f32,
+    margin: [f32; 3],
+    pub(crate) width: u32,
+    pub(crate) height: u32,
+}
+
+impl Plan<'_> {
+    pub(crate) fn lines(&self) -> usize {
+        self.lines.len()
+    }
+
+    pub(crate) fn widest(&self) -> f32 {
+        self.lines.iter().map(|l| l.width).fold(0.0, f32::max)
+    }
+}
+
+pub(crate) fn plan<'f>(
+    fonts: &'f [FontArc],
     text: &str,
     px: f32,
-    align: Align,
     k: f32,
     layout: &Layout,
-) -> Option<RgbaImage> {
+) -> Option<Plan<'f>> {
     let scale = PxScale::from(px.clamp(1.0, 1024.0));
     let first = fonts.first()?.as_scaled(scale);
     let set = Typesetter { fonts, scale, spacing: layout.spacing * k };
@@ -127,14 +147,29 @@ pub(crate) fn raster(
     let margin = (layout.padding + layout.reach) * k + 1.0;
     let width = ((block + 2.0 * (bx + margin)).ceil() as u32).min(MAX_EDGE);
     let height = ((advance * lines.len().max(1) as f32 + 2.0 * (by + margin)).ceil() as u32).min(MAX_EDGE);
-    let mut image = RgbaImage::from_pixel(width, height, Rgba([255, 255, 255, 0]));
-    for (row, line) in lines.iter().enumerate() {
+    let ascent = first.ascent();
+    Some(Plan { set, lines, block, advance, ascent, margin: [margin, bx, by], width, height })
+}
+
+pub fn raster(
+    fonts: &[FontArc],
+    text: &str,
+    px: f32,
+    align: Align,
+    k: f32,
+    layout: &Layout,
+) -> Option<RgbaImage> {
+    let plan = plan(fonts, text, px, k, layout)?;
+    let scale = plan.set.scale;
+    let [margin, bx, by] = plan.margin;
+    let mut image = RgbaImage::from_pixel(plan.width, plan.height, Rgba([255, 255, 255, 0]));
+    for (row, line) in plan.lines.iter().enumerate() {
         let shift = match align {
             Align::Left => 0.0,
-            Align::Center => (block - line.width) / 2.0,
-            Align::Right => block - line.width,
+            Align::Center => (plan.block - line.width) / 2.0,
+            Align::Right => plan.block - line.width,
         };
-        let baseline = margin + by + first.ascent() + row as f32 * advance;
+        let baseline = margin + by + plan.ascent + row as f32 * plan.advance;
         for g in &line.glyphs {
             let glyph = g.id.with_scale_and_position(scale, point(margin + bx + shift + g.x, baseline));
             let Some(outline) = fonts[g.font].outline_glyph(glyph) else { continue };

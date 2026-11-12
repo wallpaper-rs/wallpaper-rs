@@ -1,0 +1,16 @@
+[package]
+name = "wprs-type"
+description = "Typesetting and fonts shared by the renderer and the editor of wallpaper-rs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+wprs-scene.workspace = true
+ab_glyph.workspace = true
+fontdb.workspace = true
+woff2-patched.workspace = true
+brotli-decompressor.workspace = true
+image.workspace = true
+tracing.workspace = true

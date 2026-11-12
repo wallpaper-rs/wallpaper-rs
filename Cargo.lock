@@ -6920,6 +6920,7 @@ dependencies = [
  "wprs-ktx2",
  "wprs-render",
  "wprs-scene",
+ "wprs-type",
  "wprs-video",
 ]
 
@@ -7021,7 +7022,6 @@ dependencies = [
  "ab_glyph",
  "ash",
  "brotli",
- "brotli-decompressor",
  "bytemuck",
  "fontdb",
  "half",
@@ -7035,10 +7035,10 @@ dependencies = [
  "thiserror 2.0.21",
  "tracing",
  "wgpu",
- "woff2-patched",
  "wprs-core",
  "wprs-ktx2",
  "wprs-scene",
+ "wprs-type",
 ]
 
 [[package]]
@@ -7149,6 +7149,19 @@ dependencies = [
  "wprs-core",
  "wprs-library",
  "zeroize",
+]
+
+[[package]]
+name = "wprs-type"
+version = "0.3.0"
+dependencies = [
+ "ab_glyph",
+ "brotli-decompressor",
+ "fontdb",
+ "image",
+ "tracing",
+ "woff2-patched",
+ "wprs-scene",
 ]
 
 [[package]]

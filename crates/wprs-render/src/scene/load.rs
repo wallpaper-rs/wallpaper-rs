@@ -145,7 +145,7 @@ impl Renderer {
                 images,
                 samplings,
                 sources,
-                fonts: super::fonts::Fonts::new(scene, &assets.fonts),
+                fonts: wprs_type::Fonts::new(scene, &assets.fonts),
                 texts: HashMap::new(),
                 pool,
                 caches: HashMap::new(),

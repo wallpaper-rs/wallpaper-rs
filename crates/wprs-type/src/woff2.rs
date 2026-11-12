@@ -1,4 +1,4 @@
-use super::fonts::MAX_FONT;
+use crate::fonts::MAX_FONT;
 use std::io::Read;
 
 fn byte(b: &mut &[u8]) -> Option<u8> {

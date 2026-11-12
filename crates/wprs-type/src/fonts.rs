@@ -5,7 +5,7 @@ use wprs_scene::Scene;
 
 pub const MAX_FONT: usize = 32 << 20;
 
-pub(crate) struct Fonts {
+pub struct Fonts {
     packaged: HashMap<String, FontArc>,
     system: HashMap<String, Option<FontArc>>,
 }
@@ -52,7 +52,7 @@ fn system(name: &str) -> Option<FontArc> {
 pub fn font(data: &[u8], face: u32) -> Option<FontArc> {
     let packed = data.starts_with(b"wOF2");
     let declared = data.get(16..20).map_or(0, |b| u32::from_be_bytes([b[0], b[1], b[2], b[3]]) as usize);
-    if data.len() > MAX_FONT || (packed && (declared > MAX_FONT || !super::woff2::fits(data))) {
+    if data.len() > MAX_FONT || (packed && (declared > MAX_FONT || !crate::woff2::fits(data))) {
         return None;
     }
     let data = match packed {
@@ -65,16 +65,35 @@ pub fn font(data: &[u8], face: u32) -> Option<FontArc> {
 }
 
 impl Fonts {
-    pub(crate) fn new(scene: &Scene, files: &HashMap<String, Arc<Vec<u8>>>) -> Fonts {
-        let load = |(id, data): (&String, &Arc<Vec<u8>>)| {
-            let face = scene.assets.get(id).and_then(|a| a.face).unwrap_or(0);
+    pub fn new(scene: &Scene, files: &HashMap<String, Arc<Vec<u8>>>) -> Fonts {
+        let faces = files.iter().map(|(id, data)| {
+            (id.as_str(), scene.assets.get(id).and_then(|a| a.face).unwrap_or(0), data.as_slice())
+        });
+        Fonts::from_faces(faces)
+    }
+
+    pub fn from_faces<'a>(faces: impl IntoIterator<Item = (&'a str, u32, &'a [u8])>) -> Fonts {
+        let load = |(id, face, data): (&str, u32, &[u8])| {
             let found = font(data, face);
             if found.is_none() {
                 tracing::warn!(font = id, "the font cannot be read and the text uses another one");
             }
-            Some((id.clone(), found?))
+            Some((id.to_owned(), found?))
         };
-        Fonts { packaged: files.iter().filter_map(load).collect(), system: HashMap::new() }
+        Fonts { packaged: faces.into_iter().filter_map(load).collect(), system: HashMap::new() }
+    }
+
+    pub fn add(&mut self, key: &str, data: &[u8], face: u32) -> bool {
+        let found = font(data, face);
+        let ok = found.is_some();
+        if let Some(f) = found {
+            self.packaged.insert(key.to_owned(), f);
+        }
+        ok
+    }
+
+    pub fn has(&self, key: &str) -> bool {
+        self.packaged.contains_key(key)
     }
 
     fn one(&mut self, name: &str) -> Option<FontArc> {
@@ -84,10 +103,22 @@ impl Fonts {
         self.system.entry(name.to_owned()).or_insert_with(|| system(name)).clone()
     }
 
-    pub(crate) fn chain(&mut self, font: Option<&str>, fallback: &[String]) -> Vec<FontArc> {
+    pub fn chain(&mut self, font: Option<&str>, fallback: &[String]) -> Vec<FontArc> {
         let names = std::iter::once(font.unwrap_or_default()).chain(fallback.iter().map(String::as_str));
         let mut found: Vec<FontArc> = names.filter_map(|n| self.one(n)).collect();
         found.extend(self.one(""));
         found
     }
+}
+
+pub fn families() -> Vec<String> {
+    let mut names: Vec<String> =
+        database().faces().filter_map(|f| f.families.first().map(|(n, _)| n.clone())).collect();
+    names.sort_unstable_by_key(|n| n.to_lowercase());
+    names.dedup();
+    names
+}
+
+pub fn installed(name: &str) -> bool {
+    database().faces().any(|f| f.families.iter().any(|(n, _)| n == name))
 }
