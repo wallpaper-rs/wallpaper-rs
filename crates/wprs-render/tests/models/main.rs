@@ -23,6 +23,7 @@ mod pictured;
 mod posed;
 mod shaders;
 mod shadows;
+mod strokes;
 mod tones;
 mod uvs;
 
