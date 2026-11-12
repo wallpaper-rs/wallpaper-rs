@@ -219,10 +219,7 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: "1"
           WPRS_REQUIRE_GPU: "1"
         run: |
-          cargo test -p wprs-render --all-features --locked -- \
-            --skip a_directional_light_with_shadows_darkens_the_ground_behind_a_block \
-            --skip scenes_that_blend_in_srgb_draw_no_more_passes_than_linear_ones \
-            --skip a_shader_that_breaks_the_device_is_blamed_and_nothing_panics
+          cargo test -p wprs-render --all-features --locked
 
   depth:
     name: Depth model test
