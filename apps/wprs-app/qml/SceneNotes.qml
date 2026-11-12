@@ -8,6 +8,8 @@ ColumnLayout {
     id: notes
 
     required property var page
+    readonly property bool drafted: Object.values(App.state.outputs ?? {}).some(output => output.drafted === true)
+    property bool seen: false
 
     property bool outside: false
 
@@ -20,12 +22,40 @@ ColumnLayout {
         onTriggered: notes.page.editor.followFolder()
     }
 
+    onDraftedChanged: {
+        if (drafted) {
+            seen = true;
+        } else if (seen && page.editor.live) {
+            seen = false;
+            page.editor.preview(false);
+            page.notice = App.tr("The preview on the desktop was ended from outside, so it is off here too.");
+        }
+    }
+
     Connections {
         target: notes.page.editor
 
         function onErrorChanged() {
             notes.outside = notes.page.editor.error !== "" && notes.page.editor.diverged();
         }
+
+        function onLiveChanged() {
+            if (!notes.page.editor.live)
+                notes.seen = false;
+        }
+    }
+
+    Kirigami.InlineMessage {
+        Layout.fillWidth: true
+        type: Kirigami.MessageType.Information
+        text: App.tr("This scene is shown on the desktop as a preview and is not applied. Stop the preview when you are done.")
+        visible: notes.page.editor.live
+        actions: [
+            Kirigami.Action {
+                text: App.tr("Stop the preview")
+                onTriggered: notes.page.editor.preview(false)
+            }
+        ]
     }
 
     Kirigami.InlineMessage {

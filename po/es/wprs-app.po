@@ -8508,6 +8508,25 @@ msgid "Save elsewhere…"
 msgstr "Guardar en otra carpeta…"
 
 #: apps/wprs-app/qml/SceneNotes.qml
+msgid ""
+"The preview on the desktop was ended from outside, so it is off here too."
+msgstr ""
+"La vista previa en el escritorio se terminó desde fuera, así que aquí "
+"también está apagada."
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid ""
+"This scene is shown on the desktop as a preview and is not applied. Stop the "
+"preview when you are done."
+msgstr ""
+"Esta escena se muestra en el escritorio como vista previa y no está "
+"aplicada. Detén la vista previa cuando termines."
+
+#: apps/wprs-app/qml/SceneNotes.qml
+msgid "Stop the preview"
+msgstr "Detener la vista previa"
+
+#: apps/wprs-app/qml/SceneNotes.qml
 msgid "This folder has unsaved changes from an earlier session."
 msgstr "Esta carpeta tiene cambios sin guardar de una sesión anterior."
 

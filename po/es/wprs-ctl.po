@@ -2115,6 +2115,40 @@ msgstr "Solo los efectos de esta categoría"
 msgid "Print one JSON object per effect"
 msgstr "Imprimir un objeto JSON por efecto"
 
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "Adding the package to the library…"
+msgstr "Añadiendo el paquete a la biblioteca…"
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid ""
+"Still adding it to the library (%1 s); the daemon may be busy with other "
+"jobs."
+msgstr ""
+"Sigue añadiéndose a la biblioteca (%1 s); el demonio puede estar ocupado con "
+"otros trabajos."
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "Showing it on the screen…"
+msgstr "Mostrándolo en la pantalla…"
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "No preview was running on any screen."
+msgstr "No había ninguna vista previa en ninguna pantalla."
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "Ended the preview on %1."
+msgstr "Se terminó la vista previa en %1."
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "Previewing %1 on %2 for 60 seconds. End it with scene preview --stop."
+msgstr ""
+"Mostrando %1 en %2 durante 60 segundos como vista previa. Termínala con "
+"scene preview --stop."
+
+#: apps/wprs-ctl/src/folder/parts.rs
+msgid "Building the package…"
+msgstr "Construyendo el paquete…"
+
 #: apps/wprs-ctl/src/forcing.rs apps/wprs-ctl/src/pulling.rs
 msgid ""
 "Replace the force at this place instead of adding one, keeping its window of "
@@ -5291,6 +5325,16 @@ msgstr ""
 #: apps/wprs-ctl/src/rendering.rs
 msgid "Second of the scene clock of the first frame"
 msgstr "Segundo del reloj de la escena del primer cuadro"
+
+#: apps/wprs-ctl/src/rendering.rs
+msgid ""
+"Wall clock the scene and its scripts see, as HH:MM[:SS] today or YYYY-MM-DD "
+"HH:MM[:SS]; the clock of this computer when omitted, so pass it to get the "
+"same picture every time"
+msgstr ""
+"La hora de pared que ven la escena y sus scripts, como HH:MM[:SS] de hoy o "
+"AAAA-MM-DD HH:MM[:SS]; la hora de este equipo si se omite, así que indícala "
+"para obtener siempre la misma imagen"
 
 #: apps/wprs-ctl/src/rendering.rs
 msgid "Highest quality level"

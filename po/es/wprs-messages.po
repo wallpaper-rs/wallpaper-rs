@@ -260,6 +260,22 @@ msgstr ""
 msgid "the id %1 is in use"
 msgstr "el id %1 ya está en uso"
 
+#: crates/wprs-editor/src/applying.rs
+msgid "applied: %1 %2; no screen shows it yet"
+msgstr "aplicado: %1 %2; ninguna pantalla lo muestra todavía"
+
+#: crates/wprs-editor/src/applying.rs
+msgid "applied: %1 %2 on %3, quality %4"
+msgstr "aplicado: %1 %2 en %3, calidad %4"
+
+#: crates/wprs-editor/src/applying.rs
+msgid "applied: %1 %2 on %3"
+msgstr "aplicado: %1 %2 en %3"
+
+#: crates/wprs-editor/src/applying.rs
+msgid "the screen %1 could not show it: %2"
+msgstr "la pantalla %1 no pudo mostrarlo: %2"
+
 #: crates/wprs-editor/src/arrange.rs
 msgid "a group cannot be moved into itself or into what it holds"
 msgstr "un grupo no se puede mover dentro de sí mismo ni de lo que contiene"

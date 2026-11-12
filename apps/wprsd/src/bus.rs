@@ -148,6 +148,7 @@ impl Daemon {
                 quality_auto: s.level.automatic.into(),
                 quality_timing: s.level.timing(),
                 decode: s.decode.into(),
+                drafted: st.drafts.contains_key(name),
                 left_out: s.left_out,
                 blank: st.config.is_blank(name),
                 previous: st.config.has_previous(name),

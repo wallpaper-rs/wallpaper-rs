@@ -132,6 +132,8 @@ model! {
         #[serde(default)]
         pub decode: String,
         #[serde(default)]
+        pub drafted: bool,
+        #[serde(default)]
         pub sandbox: String,
         #[serde(default)]
         pub helper: Option<u32>,
