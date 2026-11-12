@@ -9,7 +9,8 @@ ctl config rgb.server "lights.example.org:6742"
 [ "$(ctl rgb status --json | js "r['local']")" = False ] || fail "a remote server counted as this computer"
 ctl config rgb.server "127.0.0.1:$openrgb"
 ctl config rgb.enabled true
-ctl rgb devices | grep "Example keyboard" >/dev/null || fail "no devices: $(ctl rgb status)"
+devices_listed() { ctl rgb devices | grep "Example keyboard" >/dev/null; }
+wait_for 30 devices_listed || fail "no devices: $(ctl rgb status)"
 [ "$(ctl rgb devices --json | js "[d['leds'] for d in r]")" = "[4, 1]" ] || fail "devices: $(ctl rgb devices --json)"
 ctl rgb devices | grep "own mode Rainbow" >/dev/null || fail "the own mode was not shown: $(ctl rgb devices)"
 ctl rgb test 1
