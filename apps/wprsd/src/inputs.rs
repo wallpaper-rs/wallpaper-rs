@@ -2,6 +2,7 @@ mod control;
 mod hub;
 mod keys;
 mod kwin;
+mod meter;
 mod parallax;
 pub(crate) mod store;
 #[cfg(test)]
@@ -20,6 +21,7 @@ use wprs_wayland::Window;
 
 pub(crate) use control::reported;
 pub(crate) use keys::{Keys, draft_key};
+pub(crate) use meter::{bands, metered};
 pub(crate) use parallax::{pointer_over, relief};
 pub(crate) use store::{declined_path, grants_path, load, load_bound, save};
 

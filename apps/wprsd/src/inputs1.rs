@@ -133,6 +133,19 @@ impl Inputs {
         Ok(())
     }
 
+    #[zbus(out_args("json"))]
+    async fn bands(
+        &self,
+        output: String,
+        #[zbus(header)] header: Header<'_>,
+        #[zbus(connection)] bus: &zbus::Connection,
+    ) -> Result<String> {
+        if !caller(bus, &header).await.trusted() {
+            return Err(denied("only the app, the tray and wprs-ctl read the levels of the sound"));
+        }
+        Ok(crate::inputs::bands(&output).to_string())
+    }
+
     async fn set_clicks(
         &self,
         output: String,

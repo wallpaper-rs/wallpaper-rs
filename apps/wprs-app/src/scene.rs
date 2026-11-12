@@ -17,6 +17,7 @@ pub mod qobject {
         #[qproperty(QString, output)]
         #[qproperty(QString, placed)]
         #[qproperty(QString, look)]
+        #[qproperty(QString, levels)]
         #[qproperty(u32, node)]
         #[qproperty(f64, serial)]
         #[qproperty(f64, time)]
@@ -88,6 +89,8 @@ pub mod qobject {
         #[qinvokable]
         fn touch(self: Pin<&mut SceneEditor>, x: f64, y: f64, buttons: u32);
         #[qinvokable]
+        fn hear(self: Pin<&mut SceneEditor>, on: bool);
+        #[qinvokable]
         fn preview(self: Pin<&mut SceneEditor>, live: bool);
         #[qinvokable]
         fn render(self: Pin<&mut SceneEditor>, out: &QString, spec: &QString);
@@ -123,6 +126,7 @@ pub struct SceneEditorRust {
     pub output: QString,
     pub placed: QString,
     pub look: QString,
+    pub levels: QString,
     pub node: u32,
     pub serial: f64,
     pub time: f64,

@@ -88,6 +88,13 @@ pub enum Inputs {
         #[arg(help = "The trigger, as a timeline or a sound layer names it")]
         trigger: String,
     },
+    #[command(
+        about = "Print the levels of the 64 bands of the sound a scene on a screen follows, as the editor meter reads them; nothing is recorded or kept, and it needs the audio input of the scene"
+    )]
+    Bands {
+        #[arg(help = "The screen, such as a preview: output")]
+        output: String,
+    },
 }
 
 #[derive(ValueEnum, Clone, Copy, Debug)]
@@ -137,6 +144,7 @@ pub async fn run(client: &Client, command: Inputs) -> Result<()> {
         Inputs::Clicks { state, output } => {
             inputs.set_clicks(output.as_deref().unwrap_or_default(), matches!(state, Switch::On)).await?
         }
+        Inputs::Bands { output } => println!("{}", inputs.bands(&output).await?),
         Inputs::Touch { output, at: None, .. } => inputs.simulate_touch(&output, -1.0, -1.0, 0).await?,
         Inputs::Touch { output, at: Some(at), buttons, .. } => {
             let (x, y) = at_fraction(&at)?;

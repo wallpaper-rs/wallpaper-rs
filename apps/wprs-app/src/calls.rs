@@ -153,6 +153,7 @@ calls! {
         SimulateMedia simulate_media(output: str, track: str, cover: u8s);
         SimulateTouch simulate_touch(output: str, x: f64, y: f64, buttons: u32);
         SimulateTrigger simulate_trigger(output: str, trigger: str);
+        Bands bands(output: str) json;
     }
     Rgb1 rgb {
         GetStatus get_status() json;

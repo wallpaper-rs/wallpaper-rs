@@ -510,6 +510,26 @@ month. The field of the format shows what it reads now, from the same formatter 
 (query `clock_sample`: `pattern`, `dates`, optional `wall`, the local time in seconds, and `lang`),
 and a help with every piece and its sample (query `clock_help`: `tokens` and `numbers`) whose pieces
 add themselves to the format when clicked.
+### Hearing, shaping and trying a binding
+
+The menu of a bound field has *Try and shape the response*:
+
+- *Watch the levels of the sound* (bindings that follow the sound) opens a meter: the bands of the
+  sound the preview hears, as bars, drawn over a strip in which the bands the binding reads
+  (`audio` as a band, a range or `bass`, `mid`, `treble`, with `of`, `reduce` and `channel`) are
+  outlined, and a bar with the value the binding gives, before and after `bounds`, `exponent`,
+  `scale`, `offset`, `clamp` and `invert` (not `smooth`). The meter is the component
+  `SceneBandMeter.qml` (`page`, `source`, `of`), so the band picker places it over its own strip. It
+  reads the levels with the `Bands` call of the daemon (`dbus.md`) about ten times a second, only
+  while the window is open: closing it stops the calls and the daemon forgets the reading. The
+  levels are the ones the scene itself would hear, so the scene must declare and hold the sound
+  grant; without it the meter says so instead of drawing, and it says to play something when
+  nothing arrives. Nothing is recorded, kept or sent. The query `meter` (`source`, `reading` as the
+  daemon gives it, `of`: 16, 32 or 64) returns the folded `bands`, the `marked` range, the `value`,
+  its `raw` value and the `levels` `bass`, `mid`, `treble`, `level` and `beat`; with `gain:
+  "fixed"` in the scene it reads the levels measured from full scale.
+Next to the menus for scripts (*Follow a script* lists every script and function of the scene, with
+its settings) and the media player (above), these complete the entries of the binding menu.
 
 ## Package details
 

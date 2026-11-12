@@ -64,4 +64,9 @@ pub const ASKS: [(&str, &str, &str); 39] = [
         r#"{"copy": [{"pointer": "/scene/layers/0/opacity", "times": [0]}]}"#,
     ),
     ("fires", "The timelines and sound layers a trigger starts", r#""event:boom""#),
+    (
+        "meter",
+        "What a sound binding reacts to: the levels of the bands read from the preview folded to 16, 32 or 64, the marked bands and the value it gives",
+        r#"{"source": {"audio": [0, 3], "of": 16}, "reading": {"listening": true, "raw": [[], []], "loudness": 0.5}, "of": 16}"#,
+    ),
 ];

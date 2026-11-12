@@ -15,6 +15,7 @@ pub trait Inputs1 {
     fn simulate_media(&self, output: &str, track: &str, cover: &[u8]) -> Result<()>;
     fn simulate_touch(&self, output: &str, x: f64, y: f64, buttons: u32) -> Result<()>;
     fn simulate_trigger(&self, output: &str, trigger: &str) -> Result<()>;
+    fn bands(&self, output: &str) -> Result<String>;
 }
 
 #[proxy(

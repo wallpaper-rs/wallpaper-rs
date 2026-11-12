@@ -64,6 +64,13 @@ QQC2.ToolButton {
         onChosen: source => bind.bound(source)
     }
 
+    SceneBindMeter {
+        id: meter
+
+        page: bind.page
+        source: bind.field.value ?? ({})
+    }
+
     QQC2.Menu {
         id: menu
 
@@ -127,6 +134,12 @@ QQC2.ToolButton {
             page: bind.page
             enabled: !bind.listed
             onChosen: source => bind.bound(source)
+        }
+
+        SceneBindTry {
+            page: bind.page
+            field: bind.field
+            onWatch: meter.open()
         }
 
         QQC2.Menu {

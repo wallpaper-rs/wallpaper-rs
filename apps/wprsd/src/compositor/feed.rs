@@ -77,6 +77,9 @@ impl State {
         for (live, hears) in live.into_iter().zip(hearing) {
             if live.uses.audio && live.waiting {
                 let audio = if hears { heard.clone() } else { AudioFrame::default() };
+                if hears {
+                    inputs::metered(&live.name, &audio);
+                }
                 self.feed(SceneInput::Audio(live.name.clone(), Box::new(audio)));
             }
             if live.uses.media {

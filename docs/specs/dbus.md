@@ -1700,6 +1700,21 @@ of the scene changes and nothing is stored. A trigger of no bytes or over 256 re
 only the app, the tray and `wprs-ctl` (identified as for `Grant`) may call it, other callers get
 `AccessDenied`. `wprs-ctl input trigger OUTPUT TRIGGER` calls it, and the timeline panel of the
 scene editor calls it on its preview with *Fire it in the preview*.
+### `Bands(s output) → (s json)`
+
+The levels of the sound that the scene shown on `output` follows, for the meter of the editor
+(`editor.md`). The reply is `{"granted", "listening", "bands": 64}` and, while `listening` is
+`true`, `raw` and `loud` (the levels of the 64 bands of the left and the right channel, from 0 to
+1, relative to the loudest band of the last seconds and measured from full scale), `loudness`,
+`beat` and `silent`, exactly what the analysis hands the scene before the attack and release of
+the scene smooth it. `granted` is `false` while the scene on `output` lacks the audio grant, and
+then no level is given. Asking is what turns the meter on: the daemon keeps the last reading of an
+output only for 3 s after the latest call, drops it when nobody asks and refuses a reading older
+than 1 s, so nothing is stored beyond the latest frame of levels, no sound is kept or copied and
+no capture starts for it: the levels exist only while the scene follows the sound on its own
+account (`uses.audio`, the grant, the screen shown and watched). Only the app, the tray and
+`wprs-ctl` (identified as for `Grant`) may call it; other callers get `AccessDenied`. `wprs-ctl
+input bands OUTPUT` calls it and prints the reply.
 
 ### `Touch(s output, d x, d y, u buttons)`
 

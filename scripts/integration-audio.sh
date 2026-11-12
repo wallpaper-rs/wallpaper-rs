@@ -44,6 +44,7 @@ analysing() {
 }
 silent() { ! analysing; }
 reads() { [ "$(inputs "$1")" = "$2" ]; }
+bands() { ctl input bands "$1" | python3 -c "import json, sys; r = json.load(sys.stdin); print($2)"; }
 read -r _ _ _ s12 < <(ctl stream TEST-12 160 90)
 watch12() { "$BIN/probe" "$s12" 120 --hold >/dev/null 2>&1 & watcher=$!; pids+=("$watcher"); }
 watch12
@@ -53,6 +54,8 @@ wait_for 10 reads "r['shown']['TEST-12']['audio'], r['shown']['TEST-12']['scene'
 sleep 1
 [ "$(inputs "r['capturing']")" = False ] || fail "audio was captured without permission"
 if analysing; then fail "an audio stream exists without permission"; fi
+[ "$(bands TEST-12 "(r['granted'], r['listening'], 'raw' in r)")" = "(False, False, False)" ] ||
+  fail "the levels were read without permission: $(ctl input bands TEST-12)"
 denied "nothing can ask the user\\|is asked in a notification" Inputs1.Grant string:"$sea" string:audio
 denied "only the app, the tray and wprs-ctl give wallpapers the network or lights" Inputs1.Grant string:"$sea" string:audio_network
 [ "$(inputs "r['grants']")" = "{}" ] || fail "another program granted an input: $(ctl input status --json)"
@@ -70,6 +73,11 @@ dbus-send --session --print-reply --dest=io.github.wallpaper_rs.Daemon /io/githu
 grep -q '"sha256:' "$XDG_DATA_HOME/wallpaper-rs/inputs.json" || fail "a grant is not tied to the package"
 wait_for 10 reads "r['capturing']" True || fail "no audio capture with the permission: $(ctl input status --json)"
 wait_for 10 analysing || fail "no PipeWire stream for the audio analysis"
+[ "$(bands TEST-12 "(r['granted'], r['bands'])")" = "(True, 64)" ] ||
+  fail "the levels were not offered with permission: $(ctl input bands TEST-12)"
+sleep 4
+[ "$(bands TEST-12 "r['listening'] is False or len(r['raw'][0]) == 64")" = True ] ||
+  fail "the levels have the wrong shape: $(ctl input bands TEST-12)"
 ctl config pause.when_covered false && ctl covered TEST-12 true
 wait_for 10 reads "r['capturing']" False || fail "the sound of a covered screen was captured"
 ctl covered TEST-12 false && ctl config pause.when_covered true
@@ -118,5 +126,7 @@ ctl release TEST-12 && expect "list(s['outputs'])" "[]"
 ctl input revoke "$sea" audio
 [ "$(inputs "r['grants'], r['capturing'], r['tracking']")" = "({}, False, False)" ] || fail "inputs after revoking"
 grep -q "$sea" "$XDG_DATA_HOME/wallpaper-rs/inputs.json" && fail "a revoked grant was kept"
+[ "$(bands TEST-12 "(r['granted'], r['listening'])")" = "(False, False)" ] ||
+  fail "the levels outlived the grant: $(ctl input bands TEST-12)"
 bus Library1 Remove asb 3 "$sea_uid" "$spin_uid" "$twin_uid" false >/dev/null
 echo "audio and script scene checks passed"

@@ -123,7 +123,7 @@ impl<T> Binding<T> {
         self.tracks().iter().any(|(_, t)| t.is_some())
     }
 
-    pub(crate) fn modify(&self, x: f32) -> f32 {
+    pub fn modify(&self, x: f32) -> f32 {
         let x = self.bounds.map_or(x, |[a, b]| ((x - a) / (b - a).max(f32::EPSILON)).clamp(0.0, 1.0));
         let x = self.exponent.map_or(x, |e| x.abs().powf(e).copysign(x));
         let x = if self.invert { 1.0 - x } else { x };
