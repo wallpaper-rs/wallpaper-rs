@@ -1,10 +1,13 @@
 use crate::{Error, Library, Result};
 use rusqlite::types::Type;
-use rusqlite::{Connection, OpenFlags, OptionalExtension, Params, Row};
+use rusqlite::{Connection, OpenFlags, OptionalExtension, Params, Row, TransactionBehavior};
 use serde::de::DeserializeOwned;
 use std::fs::{self, DirBuilder, OpenOptions, Permissions};
 use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt, PermissionsExt};
 use std::path::Path;
+use std::time::Duration;
+
+const BUSY: Duration = Duration::from_secs(60);
 
 const MIGRATIONS: [&str; 6] = [
     include_str!("schema.sql"),
@@ -45,6 +48,7 @@ impl Library {
     pub fn open_read_only(path: impl AsRef<Path>) -> Result<Self> {
         let flags = OpenFlags::SQLITE_OPEN_READ_ONLY | OpenFlags::SQLITE_OPEN_NO_MUTEX;
         let db = Connection::open_with_flags(path, flags)?;
+        db.busy_timeout(BUSY)?;
         match version(&db)? {
             SCHEMA_VERSION => Ok(Self { db }),
             newer if newer > SCHEMA_VERSION => Err(Error::Newer(newer, SCHEMA_VERSION)),
@@ -57,6 +61,8 @@ impl Library {
     }
 
     fn setup(mut db: Connection) -> Result<Self> {
+        db.busy_timeout(BUSY)?;
+        db.set_transaction_behavior(TransactionBehavior::Immediate);
         db.execute_batch(
             "PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL; PRAGMA foreign_keys = ON;",
         )?;
@@ -145,4 +151,28 @@ pub(crate) fn json<T: DeserializeOwned>(row: &Row<'_>, index: usize) -> rusqlite
     let text: String = row.get(index)?;
     serde_json::from_str(&text)
         .map_err(|e| rusqlite::Error::FromSqlConversionFailure(index, Type::Text, e.into()))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_second_writer_waits_for_the_first_instead_of_failing() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("library.db");
+        let (mut first, mut second) = (Library::open(&path).unwrap(), Library::open(&path).unwrap());
+        let tx = first.db.transaction().unwrap();
+        tx.execute("INSERT INTO confirmations VALUES ('a', 'x')", []).unwrap();
+        let other = std::thread::spawn(move || {
+            let tx = second.db.transaction().unwrap();
+            let seen: i64 = tx.query_row("SELECT count(*) FROM confirmations", [], |r| r.get(0)).unwrap();
+            tx.execute("INSERT INTO confirmations VALUES ('b', ?1)", [seen.to_string()]).unwrap();
+            tx.commit().unwrap();
+            seen
+        });
+        std::thread::sleep(Duration::from_millis(200));
+        tx.commit().unwrap();
+        assert_eq!(other.join().unwrap(), 1, "the second writer read before the first one committed");
+    }
 }
