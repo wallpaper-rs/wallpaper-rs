@@ -14,6 +14,7 @@ mod layers;
 mod lifecycle;
 mod media;
 mod modules;
+mod molds;
 mod shortcuts;
 mod stage;
 

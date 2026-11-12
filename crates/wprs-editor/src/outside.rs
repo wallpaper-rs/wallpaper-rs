@@ -29,6 +29,8 @@ pub(crate) fn whole(action: &Action) -> bool {
                 | Action::Import { .. }
                 | Action::ImportEffect { .. }
                 | Action::ImportScript(_)
+                | Action::Script(_)
+                | Action::Template(_)
                 | Action::ImportAssets(_)
                 | Action::Asset(_)
                 | Action::Thumbnail { .. }

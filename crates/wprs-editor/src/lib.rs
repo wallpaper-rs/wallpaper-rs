@@ -77,6 +77,7 @@ pub mod stock;
 mod straight;
 pub mod strips;
 pub mod swarms;
+pub mod templates;
 pub mod texts;
 mod tidy;
 mod timelines;

@@ -67,3 +67,25 @@ fn touch_and_timer_scripts_are_made_from_templates_from_the_command_line() {
     assert!(listed.iter().any(|s| s["path"] == "scripts/touch.js" && s["pointer"] == "/scene/scripts/0"));
     assert!(listed.iter().any(|s| s["path"] == "scripts/timer.js" && s["size"].as_u64().unwrap() > 0));
 }
+
+#[test]
+fn every_template_is_accepted_and_importing_a_module_again_says_what_changed() {
+    let tmp = tempfile::tempdir().unwrap();
+    let dir = tmp.path();
+    ok(dir, &["scene", "new", "snow", "--from", "empty"]);
+    for name in wprs_editor::molds::SCRIPT_TEMPLATES {
+        ok(dir, &["scene", "import-script", "snow", "--template", name]);
+    }
+    let scripts = show(dir, "/scene/scripts");
+    assert_eq!(scripts[5]["params"]["count"]["default"], 8);
+    std::fs::write(dir.join("bars.js"), "export function update() {}").unwrap();
+    ok(dir, &["scene", "import-script", "snow", "bars.js"]);
+    let params = r#"{"speed": {"type": "number", "default": 1}}"#;
+    ok(dir, &["scene", "set", "snow", "/scene/scripts/10/params", params]);
+    std::fs::write(dir.join("bars.js"), "export function click() {}").unwrap();
+    let again = super::run(dir, &["scene", "import-script", "snow", "bars.js"]);
+    let said = String::from_utf8_lossy(&again.stderr).into_owned();
+    assert!(said.contains("scripts/bars.js now handles click"), "{said}");
+    assert!(said.contains("scripts/bars.js kept its 1 settings"), "{said}");
+    assert_eq!(show(dir, "/scene/scripts/10/params/speed/default"), 1);
+}

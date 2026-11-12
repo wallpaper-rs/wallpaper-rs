@@ -64,6 +64,8 @@ pub const ACTIONS: [&str; 65] = [
     "property",
     "canvas",
     "timeline",
+    "script",
+    "template",
     "undo",
     "redo",
 ];

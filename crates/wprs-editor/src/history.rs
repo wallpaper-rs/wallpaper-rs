@@ -168,6 +168,8 @@ pub fn step(name: &str) -> Message {
         "import_effect" => said("editor.step.import_effect", "Import an effect", &[]),
         "remove_effect" => said("editor.step.remove_effect", "Remove an effect", &[]),
         "import_script" => said("editor.step.import_script", "Import a script", &[]),
+        "script" => said("editor.step.script", "Edit a script", &[]),
+        "template" => said("editor.step.template", "Edit a template", &[]),
         "translate" => said("editor.step.translate", "Translate a text", &[]),
         "rename" => said("editor.step.rename", "Rename an id", &[]),
         "paste" => said("editor.step.paste", "Paste layers", &[]),

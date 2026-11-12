@@ -3,13 +3,15 @@ use anyhow::{Result, ensure};
 use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
-use wprs_editor::actions::{Action, MaskStroke, ParticleEdit, ScriptFile, SowEdit, UpgradeEdit};
+use wprs_editor::actions::{
+    Action, MaskStroke, ParticleEdit, ScriptFile, SowEdit, TemplateEdit, UpgradeEdit,
+};
 use wprs_editor::{Op, Project, references};
 
 pub(crate) const NEW: &str = "Create a package folder from a starting point: the scenes empty, particles, parallax or clock, or web for a web page";
 pub(crate) const OPEN: &str = "Describe a scene folder, or first extract a .wpak scene package into it as an unsigned copy with the id <id>.copy";
 pub(crate) const SCRIPT: &str = "Copy a JavaScript module into the scripts, or make it from a template, and declare the events and parts it uses";
-pub(crate) const TEMPLATE: &str = "Make the module from a template instead of copying FILE: empty, media (handles every media player event and exports nowPlaying, accentColor, shown and progress for values to follow), touch (its update returns 1 while the pointer is over the output and exports position and pressed) or timer (counts seconds with setInterval and exports seconds)";
+pub(crate) const TEMPLATE: &str = "Make the module from a template instead of copying FILE: empty, media (handles every media player event and exports nowPlaying, accentColor, shown and progress for values to follow), touch (its update returns 1 while the pointer is over the output and exports position and pressed), timer (counts seconds with setInterval and exports seconds), audio (exports level, bass and beat), spawn (draws copies of a template of the scene, with settings), wave (exports a swinging value, with settings), daytime (exports daylight and hour), setting (exports the value of a user setting) or launches (counts how many times the scene started)";
 
 pub(crate) fn value(text: &str) -> Value {
     serde_json::from_str(text).unwrap_or_else(|_| Value::String(text.into()))
@@ -29,6 +31,7 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
         .flat_map(|action| match action {
             Action::RenameProperty { id, .. }
             | Action::RemoveProperty { id }
+            | Action::Template(TemplateEdit::Rename { name: id, .. } | TemplateEdit::Remove { name: id })
             | Action::Particles(ParticleEdit::Sow(SowEdit::Rename { system: id, .. })) => {
                 references::scripts(&project.dir, &project.doc, id)
                     .into_iter()
@@ -42,6 +45,7 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
             _ => Vec::new(),
         })
         .collect();
+    let scripts = project.doc.pointer("/scene/scripts").cloned().unwrap_or_default();
     let ops = if single { project.act(&action)? } else { project.act_all(&actions)? };
     ensure!(!(undoing && ops.is_empty()), "there is nothing to {}", action.name());
     project.save()?;
@@ -53,6 +57,10 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
             "to rewrite the exact names: scene act DIR particles '{}'",
             json!({ "scripts": { "from": system, "to": to } })
         );
+    }
+    if matches!(action, Action::ImportScript(_)) {
+        let now = project.doc.pointer("/scene/scripts").cloned().unwrap_or_default();
+        wprs_editor::scripts::changes(&scripts, &now).iter().for_each(|m| eprintln!("{}", m.local()));
     }
     if json {
         println!("{}", serde_json::to_string_pretty(&json!({ "ops": ops }))?);

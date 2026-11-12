@@ -13,7 +13,6 @@ mod names;
 mod rigging;
 mod shaping;
 mod solid;
-mod sow;
 mod swarm;
 mod tend;
 mod timing;
@@ -28,9 +27,8 @@ pub use names::{
 pub use rigging::{
     AutoWeights, BoneEdit, ClipEdit, ClipKey, DepthStroke, ExpressionEdit, MaskStroke, MeshCut, WeightStroke,
 };
-pub use shaping::EffectsEdit;
+pub use shaping::{EffectsEdit, ScriptEdit, TemplateEdit};
 pub use solid::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, TonesEdit, ViewEdit};
-pub use sow::SowEdit;
 pub use swarm::{ParticleEdit, Response, Strand, SwarmLight, TendEdit};
 pub use timing::{KeyframeEdit, TimelineEdit, TimelineEvent};
 
@@ -192,6 +190,8 @@ pub enum Action {
     Property(PropertyEdit),
     Canvas(CanvasEdit),
     Timeline(TimelineEdit),
+    Script(ScriptEdit),
+    Template(TemplateEdit),
     Undo {},
     Redo {},
 }

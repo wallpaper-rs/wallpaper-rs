@@ -21,7 +21,8 @@ pub use crate::action::{
 pub use crate::action::{AnimEdit, EffectsEdit, PathEdit, PathKey, PlayEdit, ShadowEdit};
 pub use crate::action::{CameraEdit, Edit3d, MaterialEdit, ModelEdit, ModelSet, TonesEdit, ViewEdit};
 pub use crate::action::{
-    CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, TimelineEdit, TimelineEvent,
+    CanvasEdit, KeyframeEdit, LayerEdit, ManifestEdit, PropertyEdit, ScriptEdit, TemplateEdit, TimelineEdit,
+    TimelineEvent,
 };
 pub use crate::action::{ClockSet, Fit, Grip, Named, PasteEdit, RenameEdit, SCREENS, TranslateEdit};
 

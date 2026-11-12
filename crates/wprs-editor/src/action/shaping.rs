@@ -59,3 +59,60 @@ pub enum EffectsEdit {
         off: bool,
     },
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
+pub enum ScriptEdit {
+    Add {
+        path: String,
+    },
+    Remove {
+        path: String,
+    },
+    Move {
+        path: String,
+        to: usize,
+    },
+    Declare {
+        path: String,
+        #[serde(default)]
+        params: bool,
+    },
+    Write {
+        path: String,
+        text: String,
+    },
+    Param {
+        path: String,
+        id: String,
+        #[serde(default, rename = "type")]
+        kind: Option<String>,
+        #[serde(default)]
+        default: Option<Value>,
+        #[serde(default)]
+        min: Option<f64>,
+        #[serde(default)]
+        max: Option<f64>,
+        #[serde(default)]
+        to: Option<String>,
+        #[serde(default)]
+        remove: bool,
+    },
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
+pub enum TemplateEdit {
+    Make {
+        layers: Vec<String>,
+        #[serde(default)]
+        name: Option<String>,
+    },
+    Rename {
+        name: String,
+        to: String,
+    },
+    Remove {
+        name: String,
+    },
+}
