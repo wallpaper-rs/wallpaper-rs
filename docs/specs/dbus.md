@@ -2105,6 +2105,12 @@ Starts an `account_sync` job. `Failed` until this computer is linked and holds a
 with a translated message when the account was synced by a newer sync format (`server.md`): this
 version then neither sends nor applies anything until it is updated.
 
+When the key of the account changed (another device rotated it after a device was removed), a sync
+first waits up to 30 s for the device that rotated it to hand the new key over, and fails with
+`the sync key of the account changed: waiting for the new key, or join again` only if it does not
+arrive; a scheduled sync of a device already waiting for the key (`stale`) checks once without waiting, so those syncs
+never block. `WPRS_HANDOVER_DELAY_MS` delays that hand-over in tests.
+
 A sync sends every change in rounds; a change whose write conflicts three rounds in a row, or a
 cycle that fails while local changes wait, is tried again after 30 s, then 1, 2, 4 and 8 minutes
 and every 15 minutes, without contacting the server while nothing changed locally. The output

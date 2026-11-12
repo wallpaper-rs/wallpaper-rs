@@ -39,11 +39,21 @@ name=$(value e "['device']")
 a server sync --wait >/dev/null
 [ "$(listed "$name")" = 1 ] || fail "the new device is not listed: $(a server status)"
 if printf 'correct-horse-battery\n' | a server revoke Device-0 --yes 2>/dev/null; then fail "an unknown device was revoked"; fi
-for n in a b; do restart "$n" bash -c "echo WPRS_HANDOVER_DELAY_MS=6000 >>'$WORK/$n/env'"; done
+a_name=$(value a "['device']")
+read -r job held joined < <(compare e a "$a_name" "$name")
+a server share "$name" --code "$joined" --wait >/dev/null
+e server join "$a_name" --code "$held" --wait >/dev/null
+await e "$job"
+[ "$(value e "['state']")" = ready ] || fail "the new device did not take the key: $(e server status)"
+restart a bash -c "echo WPRS_HANDOVER_DELAY_MS=6000 >>'$WORK/a/env'"
+epoch=$(sql "SELECT epoch FROM sync_heads")
+a server rotate >/dev/null
+bumped() { [ "$(sql "SELECT epoch FROM sync_heads")" -gt "$epoch" ]; }
+wait_for 30 bumped || fail "the key was not replaced"
+e server sync --wait >/dev/null || fail "a computer that syncs before the new key reached it did not wait for it: $(e server status)"
+[ "$(value e "['state']")" = ready ] || fail "the new key did not reach the device: $(e server status)"
 printf 'correct-horse-battery\n' | a server revoke "$name" --yes --wait >/dev/null
-a server sync --wait >/dev/null || fail "a computer that syncs before the new key reached it failed: $(a server status)"
-b server sync --wait >/dev/null || fail "a computer that syncs before the new key reached it failed: $(b server status)"
-for n in a b; do [ "$(value "$n" "['state']")" = ready ] || fail "$n did not get the new key: $("$n" server status)"; done
+a server sync --wait >/dev/null || fail "the device that replaced the key could not sync: $(a server status)"
 [ "$(listed "$name")" = 0 ] || fail "the device stayed: $(a server status)"
 [ "$(devices)" = "$before" ] || fail "the device stayed on the server"
 if e server join "Device 1" 2>/dev/null; then fail "a revoked device joined"; fi

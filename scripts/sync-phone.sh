@@ -132,6 +132,7 @@ ask 'account {"op": "pause", "paused": true}' >/dev/null
 if grep -r -q -s -a -e 'wprs_d_' -e correct-horse-battery "$WORK/phone/sync.json" "$WORK/phone.log"; then
   fail "a phone token or the account password reached a file or a log"
 fi
+b server pause
 ask 'account {"op": "remove"}' >/dev/null
 [ "$(phone "['state']")" = none ] || fail "the removed phone: $(phone "")"
 [ "$(api "$URL/api/v1/me/devices" | jq_ "[d['platform'] for d in r['items']].count('android')")" = 0 ] ||

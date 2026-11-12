@@ -5,11 +5,15 @@ use crate::error::{Error, Result, failed};
 use crate::jobs::now;
 use serde_json::{Value, json};
 use std::sync::Arc;
+use std::time::{Duration, Instant};
 use wprs_core::dbus::error::SIGNED_OUT;
 use wprs_core::model::JobKind;
 use wprs_sync::Api;
 
 mod turn;
+
+const KEY_WAIT: Duration = Duration::from_secs(30);
+const KEY_POLL: Duration = Duration::from_millis(500);
 
 impl Daemon {
     pub fn sync_now(self: &Arc<Self>) -> Result<u64> {
@@ -46,7 +50,7 @@ impl Daemon {
         }
     }
 
-    fn current_key(&self, api: &Api, secrets: &mut Secrets) -> Result<Value> {
+    fn current_key(&self, api: &Api, secrets: &mut Secrets, patient: bool) -> Result<Value> {
         let get = || block_on(api.get("/api/v1/sync/state")).map_err(sync_error);
         let (mut state, encrypted) = (get()?, self.saved().encrypted.unwrap_or(true));
         if state["encrypted"].as_bool() != Some(encrypted) {
@@ -61,8 +65,16 @@ impl Daemon {
         }
         let (server, id) = (state["epoch"].as_i64().unwrap_or_default(), state["key_id"].as_str());
         let (mut epoch, mut adopted) = (secrets.epoch.unwrap_or(self.saved().epoch), None);
+        let deadline = Instant::now() + if patient { KEY_WAIT } else { Duration::ZERO };
         while encrypted && server > epoch {
-            let Some(found) = self.adopt(api, secrets, epoch + 1, id.filter(|_| epoch + 1 == server))? else {
+            let next = id.filter(|_| epoch + 1 == server);
+            let mut found = self.adopt(api, secrets, epoch + 1, next)?;
+            while found.is_none() && Instant::now() < deadline {
+                std::thread::sleep(KEY_POLL);
+                found = self.adopt(api, secrets, epoch + 1, next)?;
+            }
+            let Some(found) = found else {
+                tracing::info!(server, epoch, patient, "no new sync key arrived from a pinned device");
                 break;
             };
             (epoch, adopted) = (epoch + 1, Some(found));

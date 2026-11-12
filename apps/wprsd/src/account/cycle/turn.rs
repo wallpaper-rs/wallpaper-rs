@@ -11,7 +11,7 @@ impl Daemon {
     pub fn cycle(self: &Arc<Self>, prompt: bool) -> Result<Value> {
         self.linked()?;
         let (api, mut secrets) = self.account_api(prompt)?;
-        let state = self.current_key(&api, &mut secrets)?;
+        let state = self.current_key(&api, &mut secrets, prompt || !self.saved().stale)?;
         if state["format"].as_i64() > Some(wprs_sync::FORMAT) {
             return Err(failed(crate::words::too_old()));
         }
