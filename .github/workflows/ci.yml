@@ -16,6 +16,7 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: "1"
+  CARGO_PROFILE_DEV_DEBUG: "0"
 
 jobs:
   version:
@@ -24,6 +25,8 @@ jobs:
     outputs:
       semver: ${{ steps.gitversion.outputs.semVer }}
       informational: ${{ steps.gitversion.outputs.informationalVersion }}
+      rust: ${{ steps.changes.outputs.rust }}
+      android: ${{ steps.changes.outputs.android }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -50,6 +53,13 @@ jobs:
       - id: gitversion
         uses: gittools/actions/gitversion/execute@7417b1089e2c7de93510f1901d656ddf60bb024f
 
+      - id: changes
+        name: Jobs that a change can affect
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          ALWAYS: ${{ github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch' }}
+        run: scripts/changes.sh "$BASE" "$ALWAYS" | tee -a "$GITHUB_OUTPUT"
+
       - name: GitVersion versioned HEAD
         env:
           SHA: ${{ steps.gitversion.outputs.sha }}
@@ -68,9 +78,94 @@ jobs:
           shellcheck --version | grep '^version'
           "$(scripts/tools.sh actionlint "$RUNNER_TEMP/tools")" -color
 
-  check:
-    name: Lint and test
+  lint:
+    name: Static checks
+    needs: version
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/ci-apt
+          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: apt-${{ github.job }}-
+
+      - name: Install system packages
+        run: scripts/ci-apt.sh shellcheck qt6-declarative-dev-tools gettext
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+        with:
+          components: rustfmt
+
+      - name: Format
+        run: cargo fmt --all --check
+
+      - name: File lengths
+        run: scripts/file-lengths.sh
+
+      - name: Every workspace package is in a test shard
+        run: scripts/test-shards.sh check
+
+      - name: Shell scripts
+        run: shellcheck packaging/*.sh packaging/flatpak/*.sh scripts/*.sh
+
+      - name: QML syntax
+        run: |
+          for f in integrations/*/metadata.json; do python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$f"; done
+          for f in integrations/*/contents/ui/*.qml apps/wprs-app/qml/*.qml apps/wprs-app/qml/*/*.qml; do
+            /usr/lib/qt6/bin/qmlformat "$f" > /dev/null
+          done
+
+      - name: Translations
+        run: scripts/translations.sh check
+
+  clippy:
+    name: Clippy
+    needs: version
+    if: needs.version.outputs.rust == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/ci-apt
+          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: apt-${{ github.job }}-
+
+      - name: Install system packages
+        run: |
+          scripts/ci-apt.sh \
+            pkg-config libclang-dev libpipewire-0.3-dev \
+            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+            qt6-base-dev qt6-declarative-dev qt6-declarative-dev-tools gettext
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+
+  test:
+    name: Unit and render tests (shard ${{ matrix.shard }})
+    needs: version
+    if: needs.version.outputs.rust == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -90,25 +185,50 @@ jobs:
             gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-pipewire gstreamer1.0-tools \
             mesa-vulkan-drivers libvulkan1 \
             pipewire pipewire-bin wireplumber dbus-x11 gnome-keyring \
-            shellcheck qt6-base-dev qt6-declarative-dev qt6-declarative-dev-tools gettext
+            qt6-base-dev qt6-declarative-dev qt6-declarative-dev-tools gettext
 
       - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
-        with:
-          components: rustfmt, clippy
 
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
-
-      - name: Format
-        run: cargo fmt --all --check
-
-      - name: Clippy
-        run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+        with:
+          key: shard-${{ matrix.shard }}
 
       - name: Unit and render tests
         env:
           WPRS_REQUIRE_GPU: "1"
           WPRS_REQUIRE_VIDEO: "1"
-        run: cargo test --workspace --all-features --locked
+          SHARD: ${{ matrix.shard }}
+        run: |
+          mapfile -t packages < <(scripts/test-shards.sh "$SHARD")
+          cargo test "${packages[@]}" --all-features --locked
+
+  depth:
+    name: Depth model test
+    needs: version
+    if: needs.version.outputs.rust == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/ci-apt
+          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: apt-${{ github.job }}-
+
+      - name: Install system packages
+        run: |
+          scripts/ci-apt.sh \
+            pkg-config libclang-dev libpipewire-0.3-dev \
+            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+            mesa-vulkan-drivers libvulkan1
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
 
       - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
         with:
@@ -125,18 +245,35 @@ jobs:
           WPRS_DEPTH_MODEL=$HOME/.local/share/wallpaper-rs/models/depth-anything-v2-small/depth_anything_v2_vits_dynamic.onnx \
             cargo test --locked -p wprs-depth --all-features --test model -- --nocapture
 
-      - name: Shell scripts
-        run: shellcheck packaging/*.sh packaging/flatpak/*.sh scripts/*.sh
+  e2e:
+    name: End-to-end test (D-Bus + PipeWire + daemon)
+    needs: version
+    if: needs.version.outputs.rust == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
 
-      - name: QML syntax
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/ci-apt
+          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: apt-${{ github.job }}-
+
+      - name: Install system packages
         run: |
-          for f in integrations/*/metadata.json; do python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$f"; done
-          for f in integrations/*/contents/ui/*.qml apps/wprs-app/qml/*.qml apps/wprs-app/qml/*/*.qml; do
-            /usr/lib/qt6/bin/qmlformat "$f" > /dev/null
-          done
+          scripts/ci-apt.sh \
+            pkg-config libclang-dev libpipewire-0.3-dev \
+            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+            gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-pipewire gstreamer1.0-tools \
+            mesa-vulkan-drivers libvulkan1 \
+            pipewire pipewire-bin wireplumber dbus-x11 gnome-keyring
 
-      - name: Translations
-        run: scripts/translations.sh check
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
 
       - name: End-to-end test (D-Bus + PipeWire + daemon)
         run: |
@@ -146,23 +283,10 @@ jobs:
           cp target/debug/examples/probe target/debug/probe
           scripts/integration-test.sh target/debug
 
-      - name: Web helper test binaries
-        run: |
-          page=$(cargo test --locked -p wprs-web --test page --no-run --message-format=json |
-            jq -r 'select(.executable != null and .target.name == "page") | .executable')
-          mkdir -p web-bin && cp "$page" web-bin/web-page
-          cp target/debug/wprsd target/debug/wprs-ctl target/debug/wprs-web target/debug/probe web-bin/
-
-      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
-        with:
-          name: web-bin
-          path: web-bin
-          if-no-files-found: error
-          retention-days: 1
-
   web:
     name: Web wallpapers
-    needs: check
+    needs: version
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -170,10 +294,31 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
         with:
-          name: web-bin
-          path: target/debug
+          path: ~/.cache/ci-apt
+          key: apt-${{ github.job }}-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: apt-${{ github.job }}-
+
+      - name: Install system packages
+        run: |
+          scripts/ci-apt.sh \
+            pkg-config libclang-dev libpipewire-0.3-dev \
+            libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+            gstreamer1.0-plugins-base gstreamer1.0-plugins-good
+
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec
+
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0
+
+      - name: Daemon, helper and test binaries
+        run: |
+          cargo build --locked -p wprsd -p wprs-ctl -p wprs-web
+          cargo build --locked -p wprs-pipewire --example probe
+          page=$(cargo test --locked -p wprs-web --test page --no-run --message-format=json |
+            jq -r 'select(.executable != null and .target.name == "page") | .executable')
+          cp "$page" target/debug/web-page
+          cp target/debug/examples/probe target/debug/probe
 
       - name: Virtual DRM devices
         env:
@@ -185,7 +330,6 @@ jobs:
 
       - name: Helper and daemon with WPE WebKit, and video sound through PipeWire 1.2 or newer
         run: |
-          chmod +x target/debug/*
           docker run --rm --device /dev/dri --security-opt seccomp=unconfined --security-opt apparmor=unconfined --security-opt systempaths=unconfined \
             -v "$PWD:$PWD" -w "$PWD" \
             docker.io/library/archlinux:base-20261018.0.612668@sha256:52dfbd5afb23a220d5ee92dafcb4c788d96c026ed04179890c23adef4c897fa0 bash -c '
@@ -200,6 +344,8 @@ jobs:
 
   sway:
     name: Sway end-to-end
+    needs: version
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -234,6 +380,8 @@ jobs:
 
   x11:
     name: X11 end-to-end
+    needs: version
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -268,6 +416,8 @@ jobs:
 
   sync:
     name: Server sync end-to-end
+    needs: version
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -304,6 +454,7 @@ jobs:
   package:
     name: Package
     needs: version
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     env:
       WPRS_VERSION: ${{ needs.version.outputs.informational }}
@@ -332,6 +483,14 @@ jobs:
       - name: Build tarball
         run: scripts/package.sh dist
 
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        if: always()
+        with:
+          name: build-timings
+          path: target/cargo-timings/cargo-timing.html
+          if-no-files-found: ignore
+          retention-days: 3
+
       - name: Packages carry no build machine data
         run: |
           tar -xzf "dist/wallpaper-rs-${WPRS_VERSION%%+*}-x86_64-linux.tar.gz" -C "$RUNNER_TEMP"
@@ -356,6 +515,7 @@ jobs:
   android:
     name: Android APK
     needs: version
+    if: needs.version.outputs.android == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -435,6 +595,8 @@ jobs:
 
   android-emulator:
     name: Android emulator tests
+    needs: version
+    if: needs.version.outputs.android == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -497,6 +659,7 @@ jobs:
   rpm:
     name: Fedora package
     needs: [version, package]
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     env:
       WPRS_VERSION: ${{ needs.version.outputs.informational }}
@@ -538,6 +701,7 @@ jobs:
   flatpak:
     name: Flatpak bundle (${{ matrix.arch }})
     needs: version
+    if: needs.version.outputs.rust == 'true'
     strategy:
       matrix:
         include:
@@ -576,14 +740,15 @@ jobs:
 
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
         with:
-          name: wallpaper-rs-flatpak-${{ matrix.arch }}
+          name: flatpak-${{ matrix.arch }}
           path: ${{ matrix.bundle }}
           if-no-files-found: error
           retention-days: 7
 
   plasma:
     name: Plasma end-to-end
-    needs: package
+    needs: [version, package]
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -629,6 +794,7 @@ jobs:
   server:
     name: Server container
     needs: version
+    if: needs.version.outputs.rust == 'true'
     runs-on: ubuntu-24.04
     env:
       WPRS_VERSION: ${{ needs.version.outputs.informational }}
@@ -640,8 +806,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build and start with compose
-        run: docker compose up -d --build --wait --wait-timeout 180
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ${{ runner.temp }}/wprs-image
+          key: server-image-${{ github.sha }}
+
+      - name: Build the image
+        env:
+          WPRS_IMAGE_CACHE: ${{ runner.temp }}/wprs-image
+          WPRS_IMAGE_LOAD: "1"
+        run: scripts/server-image.sh wprs-server local
+
+      - name: Start with compose
+        run: docker compose up -d --no-build --wait --wait-timeout 180
 
       - name: Health, setup, repository, backup and restore
         run: scripts/server-smoke.sh
@@ -656,8 +833,8 @@ jobs:
 
   release:
     name: Release
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: [version, workflows, check, sway, x11, sync, package, android, android-emulator, rpm, flatpak, plasma, web, server]
+    if: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    needs: [version, workflows, lint, clippy, test, depth, e2e, sway, x11, sync, package, android, android-emulator, rpm, plasma, web, server]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -687,7 +864,7 @@ jobs:
 
   image:
     name: Server image
-    needs: [version, release]
+    needs: [version, release, server]
     if: needs.release.outputs.tag != '' && github.repository_owner == 'wallpaper-rs'
     runs-on: ubuntu-24.04
     permissions:
@@ -701,8 +878,14 @@ jobs:
         with:
           persist-credentials: false
 
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ${{ runner.temp }}/wprs-image
+          key: server-image-${{ github.sha }}
+
       - name: Push the image with its SBOM and sign it
         env:
+          WPRS_IMAGE_CACHE: ${{ runner.temp }}/wprs-image
           ACTOR: ${{ github.actor }}
           TOKEN: ${{ github.token }}
           VERSION: ${{ needs.version.outputs.semver }}
@@ -710,3 +893,35 @@ jobs:
           docker login ghcr.io --username "$ACTOR" --password-stdin <<< "$TOKEN"
           scripts/server-image.sh "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/wprs-server" "$VERSION" latest
           docker logout ghcr.io
+
+  flatpak-release:
+    name: Attach the Flatpak bundles
+    needs: [version, release, flatpak]
+    if: ${{ !cancelled() && needs.release.outputs.tag != '' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Both bundles were built
+        env:
+          FLATPAK: ${{ needs.flatpak.result }}
+        run: test "$FLATPAK" = success
+
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: flatpak-*
+          path: bundles
+          merge-multiple: true
+
+      - name: Attach the bundles and sign the new checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.version.outputs.semver }}
+          SIGN: ${{ github.repository_owner == 'wallpaper-rs' }}
+        run: scripts/release-flatpak.sh bundles
