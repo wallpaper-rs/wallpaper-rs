@@ -127,7 +127,7 @@ fn the_ring_grows_with_the_bass() {
     let audio = AudioFrame { bass: 1.0, level: 1.0, beat: true, ..AudioFrame::default() };
     let loud = play.go(&Inputs { audio, ..quiet() }, 60);
     assert!(loud.layers["pulso"].scale.unwrap()[0] > 1.7);
-    assert!(loud.layers["destello"].opacity.unwrap() > 0.2);
+    assert!(loud.layers["destello"].opacity.unwrap() > 0.09);
 }
 
 #[test]

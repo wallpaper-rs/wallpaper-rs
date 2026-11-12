@@ -574,7 +574,7 @@ export function update() {
 ### 3. Una reacción al sonido
 
 *Carpeta `reaccion-al-sonido`.* Un anillo crece con los graves (sube rápido y baja despacio) y la pantalla
-destella en cada golpe de ritmo. Declara `uses: ["audio"]` y `"inputs": ["audio"]`.
+se aclara un poco en cada golpe de ritmo. Declara `uses: ["audio"]` y `"inputs": ["audio"]`.
 
 **`scripts/pulso.js`**
 
@@ -593,7 +593,7 @@ export function update() {
     pulso.scale = tamano;
     pulso.opacity = 0.4 + audio.level * 0.6;
 
-    brillo = audio.beat ? 0.25 : Math.max(0, brillo - engine.dt);
+    brillo = audio.beat ? 0.1 : Math.max(0, brillo - engine.dt);
     destello.opacity = brillo;
 }
 ```

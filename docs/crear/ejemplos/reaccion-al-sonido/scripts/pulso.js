@@ -12,6 +12,6 @@ export function update() {
     pulso.scale = tamano;
     pulso.opacity = 0.4 + audio.level * 0.6;
 
-    brillo = audio.beat ? 0.25 : Math.max(0, brillo - engine.dt);
+    brillo = audio.beat ? 0.1 : Math.max(0, brillo - engine.dt);
     destello.opacity = brillo;
 }
