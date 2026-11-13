@@ -4,8 +4,8 @@ Un fondo web es una página que wallpaper-rs muestra detrás de las ventanas. To
 dentro del paquete: no hay servidor, la red está cortada salvo que la declares y el usuario la
 permita, y la página no puede abrir ventanas, diálogos ni descargas. Esta guía explica cómo hacerla;
 `docs/specs/package.md` («Web pages») describe el manifiesto y `docs/specs/web.md` el motor y el
-aislamiento. `docs/crear/ejemplos/reloj-web` es un fondo web completo y mínimo, y `scenes/lights`
-uno más grande, con luces RGB.
+aislamiento. `docs/crear/ejemplos/reloj-web` es un fondo web completo y mínimo; en el árbol del código fuente
+`scenes/lights` es uno más grande, con luces RGB (no viene con el programa instalado).
 
 ## Lo mínimo
 
@@ -14,7 +14,8 @@ mi-fondo/
   manifest.json
   index.html
   app.js
-  preview.png
+  assets/
+    preview.png
 ```
 
 ```json
@@ -30,7 +31,7 @@ mi-fondo/
   "photosensitive": false,
   "kind": "web",
   "entry": "index.html",
-  "previews": { "thumbnail": "preview.png" },
+  "previews": { "thumbnail": "assets/preview.png" },
   "inputs": [],
   "web": { "background": "#000000" },
   "properties": {
@@ -40,10 +41,15 @@ mi-fondo/
 ```
 
 `wprs-ctl scene new mi-fondo --from web` (o *Página web* en la página *Escenas* de la app) crea
-esta carpeta con una página de ejemplo (`index.html`, `app.js` y un manifiesto) que puedes editar en
-la app o con cualquier editor de texto. Después:
+esta carpeta con una página de ejemplo (`index.html`, `app.js` y un manifiesto sin `previews`) que
+puedes editar en la app o con cualquier editor de texto. La miniatura no la crea: `pack check` pasa
+sin ella, pero añádela con una imagen tuya, que `scene thumbnail` copia a `assets/preview.png`, la
+reduce si hace falta y escribe en `previews.thumbnail`. El límite es png, jpg o webp de hasta 1024
+píxeles de lado y 1 MiB; con una imagen de 1920 píxeles escrita a mano en el manifiesto, `pack check`
+falla con «previews.thumbnail no válido». Después:
 
 ```
+wprs-ctl scene thumbnail mi-fondo captura.png
 wprs-ctl pack check mi-fondo
 wprs-ctl pack build mi-fondo -o reloj.wpak
 wprs-ctl lib import reloj.wpak --wait
