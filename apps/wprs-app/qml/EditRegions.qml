@@ -17,7 +17,7 @@ ColumnLayout {
     readonly property var picks: page.regionPicks
     readonly property int edits: (survey.joins ?? 0) + (survey.splits ?? 0) + (survey.shifts ?? 0)
     property real step: 0.1
-    readonly property alias straightTool: straight
+    readonly property alias straightTool: straightPanel
 
     function zone(order) {
         return zones.find(z => z.order === order);
@@ -119,7 +119,7 @@ ColumnLayout {
     }
 
     EditRegionStraight {
-        id: straight
+        id: straightPanel
 
         Layout.fillWidth: true
         page: tool.page

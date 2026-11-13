@@ -4,7 +4,7 @@ import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
-    id: straight
+    id: panel
 
     required property var page
     required property var zones
@@ -42,26 +42,26 @@ ColumnLayout {
 
     QQC2.Switch {
         text: App.tr("Straight split of the picked region")
-        enabled: straight.picks.length === 1
-        checked: straight.straight && straight.picks.length === 1
-        onToggled: straight.straight = checked
+        enabled: panel.picks.length === 1
+        checked: panel.straight && panel.picks.length === 1
+        onToggled: panel.straight = checked
     }
 
     EditSlider {
-        visible: straight.straight && straight.picks.length === 1
+        visible: panel.straight && panel.picks.length === 1
         text: App.tr("Where to cut")
         from: 0.1
         to: 0.9
         stepSize: 0.05
-        value: straight.cut
-        onMoved: value => straight.cut = value
+        value: panel.cut
+        onMoved: value => panel.cut = value
     }
 
     QQC2.Button {
         Layout.fillWidth: true
-        visible: straight.straight && straight.picks.length === 1
+        visible: panel.straight && panel.picks.length === 1
         icon.name: "edit-cut"
         text: App.tr("Cut along the line")
-        onClicked: straight.cutStraight()
+        onClicked: panel.cutStraight()
     }
 }
