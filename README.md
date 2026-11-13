@@ -960,6 +960,30 @@ wprs-ctl input status                           # permisos y si se captura el so
 wprs-ctl input clicks on -o DP-1                # dejar que los clics de esa pantalla lleguen a su fondo
 ```
 
+### Recorrer fondos con el teclado
+
+`wprs-ctl next --preview` y `wprs-ctl prev --preview` muestran cuál sería el fondo siguiente o el
+anterior sin cambiar nada: empiezan a recorrer la lista que muestra esa pantalla (o la biblioteca,
+con `--from library` o si la pantalla no tiene lista) y cada llamada avanza o retrocede uno.
+`wprs-ctl browse apply` deja puesto el que estás mirando (con `--transition fade` o `none` solo
+para ese cambio), `wprs-ctl browse cancel` deja todo como estaba y `wprs-ctl browse show` dice cuál
+es. Si no tocas nada durante 30 segundos se deja de recorrer solo.
+
+Con `wprs-ctl config shortcuts.enabled true` el programa pide al escritorio dos atajos globales
+(propone `LOGO+ALT+N` y `LOGO+ALT+P`, que se cambian con `shortcuts.next` y `shortcuts.previous`):
+en Plasma, GNOME y Hyprland el escritorio los registra y puede mostrarte su propio diálogo para
+elegir otras teclas. En Sway y los demás compositores wlroots, y en X11, no hay portal de atajos:
+ata las órdenes a teclas en tu compositor, por ejemplo en Sway
+
+```sh
+bindsym $mod+Alt+n exec wprs-ctl next --preview
+bindsym $mod+Alt+p exec wprs-ctl prev --preview
+bindsym $mod+Alt+Return exec wprs-ctl browse apply
+bindsym $mod+Alt+Escape exec wprs-ctl browse cancel
+```
+
+y en X11 lo mismo con el gestor de atajos de tu entorno (o `xbindkeys`).
+
 El proveedor Wallhaven usa la API oficial v1 y admite todas las opciones de su búsqueda: palabras
 (`query`), categorías y pureza, orden (`date_added`, `relevance`, `random`, `views`, `favorites`,
 `toplist`, `hot`), sentido, rango del `toplist` (`1d` a `1y`), resolución mínima y resoluciones

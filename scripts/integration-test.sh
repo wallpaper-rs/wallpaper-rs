@@ -7,6 +7,7 @@ source "$(dirname "$0")"/integration-video.sh
 source "$(dirname "$0")"/integration-streams.sh
 source "$(dirname "$0")"/integration-library.sh
 source "$(dirname "$0")"/integration-playlists.sh
+source "$(dirname "$0")"/integration-browse.sh
 source "$(dirname "$0")"/integration-repos.sh
 source "$(dirname "$0")"/integration-scenes.sh
 source "$(dirname "$0")"/integration-crossing.sh
