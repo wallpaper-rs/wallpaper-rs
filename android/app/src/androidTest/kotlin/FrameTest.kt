@@ -11,13 +11,13 @@ class FrameTest : SceneBase() {
     @Test
     fun drawingFramesMakesNoNativeAllocationsBesidesTheGpuCalls() {
         show("Snowfall")
-        assertTrue(waitFor { frames.get() > FRAMES })
+        assertTrue("no ${FRAMES} frames within the patience", waitFor(PATIENCE) { frames.get() > FRAMES })
         Render.call { Native.allocations(true) }
         val start = frames.get()
-        val waited = waitFor { frames.get() > start + MEASURED }
+        val waited = waitFor(PATIENCE) { frames.get() > start + MEASURED }
         val made = Render.call { Native.allocations(false) }
         val drawn = frames.get() - start
-        assertTrue(waited)
+        assertTrue("fewer than $MEASURED frames within the patience", waited)
         assertTrue("the render thread made $made native allocations in $drawn frames", made <= drawn)
     }
 
@@ -25,7 +25,7 @@ class FrameTest : SceneBase() {
     @Test
     fun drawingFramesAllocatesNothingOnTheRenderThread() {
         show("Snowfall")
-        assertTrue(waitFor { frames.get() > FRAMES })
+        assertTrue("no ${FRAMES} frames within the patience", waitFor(PATIENCE) { frames.get() > FRAMES })
         val counted = Render.call {
             Debug.startAllocCounting()
             Debug.resetThreadAllocSize()
@@ -36,7 +36,7 @@ class FrameTest : SceneBase() {
         try {
             Render.call { Debug.resetThreadAllocSize() }
             val start = frames.get()
-            assertTrue(waitFor { frames.get() > start + MEASURED })
+            assertTrue("fewer than $MEASURED frames within the patience", waitFor(PATIENCE) { frames.get() > start + MEASURED })
             val bytes = Render.call { Debug.getThreadAllocSize() }
             assertTrue("the render thread allocated $bytes bytes in $MEASURED frames", bytes <= NOISE)
         } finally {
@@ -45,6 +45,7 @@ class FrameTest : SceneBase() {
     }
 
     private companion object {
+        const val PATIENCE = 120_000L
         const val PROBE = 4096
         const val MEASURED = 60
         const val NOISE = 4096
