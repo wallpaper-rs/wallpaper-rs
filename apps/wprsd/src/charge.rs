@@ -20,7 +20,7 @@ pub(crate) fn level(present: bool, percentage: f64) -> Option<u8> {
 
 pub(crate) async fn follow(daemon: Arc<Daemon>) {
     let follow = async {
-        let display = DisplayProxy::new(&zbus::Connection::system().await?).await?;
+        let display = DisplayProxy::new(&wprs_client::bus::system().await?).await?;
         let (mut levels, mut presence) =
             (display.receive_percentage_changed().await, display.receive_is_present_changed().await);
         loop {

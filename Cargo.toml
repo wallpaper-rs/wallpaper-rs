@@ -100,7 +100,7 @@ toml = "1"
 toml_edit = "=0.25.17"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "signal", "time"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "sync", "signal", "time"] }
 zbus = { version = "6", default-features = false, features = ["tokio", "service", "proxy"] }
 wgpu = "30"
 ash = "0.38"

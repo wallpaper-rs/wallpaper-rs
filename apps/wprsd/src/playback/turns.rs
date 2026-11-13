@@ -19,7 +19,7 @@ trait Login {
 
 async fn resumes(daemon: Arc<Daemon>) {
     let follow = async {
-        let login = LoginProxy::new(&zbus::Connection::system().await?).await?;
+        let login = LoginProxy::new(&wprs_client::bus::system().await?).await?;
         let mut sleeps = login.receive_prepare_for_sleep().await?;
         while let Some(signal) = sleeps.next().await {
             if signal.args().is_ok_and(|a| !a.start) {

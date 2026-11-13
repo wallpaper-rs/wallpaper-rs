@@ -13,7 +13,7 @@ impl Timedate {
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> zbus::Result<()> {
     let path = "/org/freedesktop/timedate1";
-    let builder = zbus::connection::Builder::system().name("org.freedesktop.timedate1");
+    let builder = wprs_client::bus::system_builder()?.name("org.freedesktop.timedate1");
     let bus = builder.serve_at(path, Timedate("Etc/UTC".into())).build().await?;
     let (tx, mut zones) = tokio::sync::mpsc::unbounded_channel();
     std::thread::spawn(move || {

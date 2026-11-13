@@ -113,7 +113,7 @@ async fn apply(bus: &zbus::Connection, line: &Value) -> zbus::Result<()> {
 async fn main() -> zbus::Result<()> {
     let name = std::env::args().nth(1).unwrap_or_else(|| "example".into());
     let player = Player { status: "Stopped".into(), rate: 1.0, ..Player::default() };
-    let builder = zbus::connection::Builder::session().name(format!("org.mpris.MediaPlayer2.{name}"));
+    let builder = wprs_client::bus::session_builder()?.name(format!("org.mpris.MediaPlayer2.{name}"));
     let bus = builder.serve_at(PATH, Root).serve_at(PATH, player).build().await?;
     let (tx, mut lines) = tokio::sync::mpsc::unbounded_channel();
     std::thread::spawn(move || {

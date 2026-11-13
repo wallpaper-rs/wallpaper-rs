@@ -1,3 +1,4 @@
+pub mod bus;
 mod proxies;
 mod proxy;
 mod reply;
@@ -52,7 +53,7 @@ pub fn private_only(env: &dyn Fn(&str) -> Option<String>) -> anyhow::Result<()> 
 impl Client {
     pub async fn connect() -> anyhow::Result<Client> {
         private_only(&|name| std::env::var(name).ok())?;
-        Client::new(zbus::Connection::session().await.context("cannot connect to the session bus")?).await
+        Client::new(bus::session().await.context("cannot connect to the session bus")?).await
     }
 
     pub async fn new(bus: zbus::Connection) -> anyhow::Result<Client> {

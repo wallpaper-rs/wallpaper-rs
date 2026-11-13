@@ -28,7 +28,7 @@ pub fn start(uris: Vec<String>, page: Option<&str>) -> Option<ExitCode> {
         return None;
     }
     bus::block_on(async move {
-        let conn = match Connection::session().await {
+        let conn = match wprs_client::bus::session().await {
             Ok(conn) => conn,
             Err(e) => {
                 set_link(Err(format!("cannot connect to the session bus: {e}")));

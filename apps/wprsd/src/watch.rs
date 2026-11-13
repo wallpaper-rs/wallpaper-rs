@@ -94,7 +94,7 @@ pub async fn motion(connection: zbus::Connection, daemon: Arc<Daemon>) {
 pub async fn battery(daemon: Arc<Daemon>, known: tokio::sync::oneshot::Sender<()>) {
     tokio::spawn(crate::charge::follow(daemon.clone()));
     let follow = async {
-        let upower = UPowerProxy::new(&zbus::Connection::system().await?).await?;
+        let upower = UPowerProxy::new(&wprs_client::bus::system().await?).await?;
         let mut changes = upower.receive_on_battery_changed().await;
         upower.on_battery().await.map(|v| daemon.set_on_battery(v)).ok();
         drop(known);
@@ -119,7 +119,7 @@ pub async fn battery(daemon: Arc<Daemon>, known: tokio::sync::oneshot::Sender<()
 
 pub async fn saver(daemon: Arc<Daemon>) {
     let follow = async {
-        let system = zbus::Connection::system().await?;
+        let system = wprs_client::bus::system().await?;
         let newer = ProfilesProxy::new(&system).await?;
         if let Ok(profile) = newer.active_profile().await {
             daemon.set_saver(profile == SAVER);

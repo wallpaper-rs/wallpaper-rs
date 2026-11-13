@@ -6822,7 +6822,9 @@ name = "wprs-client"
 version = "0.3.0"
 dependencies = [
  "anyhow",
+ "async-trait",
  "futures-util",
+ "rustix",
  "serde",
  "serde_json",
  "tempfile",
@@ -7244,6 +7246,7 @@ dependencies = [
  "tracing-subscriber",
  "wiremock",
  "wprs-audio",
+ "wprs-client",
  "wprs-core",
  "wprs-depth",
  "wprs-format",

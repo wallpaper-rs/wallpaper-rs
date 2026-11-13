@@ -13,7 +13,7 @@ impl Power {
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> zbus::Result<()> {
     let path = "/org/freedesktop/UPower";
-    let builder = zbus::connection::Builder::system().name("org.freedesktop.UPower");
+    let builder = wprs_client::bus::system_builder()?.name("org.freedesktop.UPower");
     let bus = builder.serve_at(path, Power(true)).build().await?;
     let (tx, mut lines) = tokio::sync::mpsc::unbounded_channel();
     std::thread::spawn(move || {

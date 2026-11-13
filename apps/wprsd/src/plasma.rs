@@ -19,7 +19,7 @@ pub(crate) fn switch_script(from: &str, to: &str) -> String {
 
 fn evaluate(script: &str) -> anyhow::Result<u32> {
     crate::outside::block_on(async {
-        let connection = zbus::Connection::session().await?;
+        let connection = wprs_client::bus::session().await?;
         let reply = connection
             .call_method(
                 Some("org.kde.plasmashell"),

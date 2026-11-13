@@ -17,7 +17,7 @@ fn hurry(grace: Duration) {
 #[tokio::main]
 pub(crate) async fn run(args: Args) -> anyhow::Result<()> {
     let config_path = args.config.map_or_else(Config::default_path, Ok)?;
-    let connection = zbus::Connection::session().await.context("cannot connect to the session bus")?;
+    let connection = wprs_client::bus::session().await.context("cannot connect to the session bus")?;
     let bus = DBusProxy::new(&connection).await?;
     let taken = || anyhow::anyhow!("another wprsd already owns {} on the session bus", dbus::BUS_NAME);
     if bus.name_has_owner(dbus::BUS_NAME.try_into()?).await? {

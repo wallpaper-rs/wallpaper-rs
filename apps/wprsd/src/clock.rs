@@ -44,7 +44,7 @@ fn follow_jumps(daemon: Weak<Daemon>) -> std::io::Result<()> {
 }
 
 async fn follow_zone(daemon: Arc<Daemon>) -> zbus::Result<()> {
-    let system = zbus::Connection::system().await?;
+    let system = wprs_client::bus::system().await?;
     let proxy = PropertiesProxy::builder(&system).destination(TIMEDATE).path("/org/freedesktop/timedate1");
     let props = proxy.cache_properties(CacheProperties::No).build().await?;
     let mut changes = props.receive_properties_changed().await?;

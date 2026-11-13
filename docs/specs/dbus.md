@@ -18,6 +18,13 @@ Flatpak exports the same activation file, starts the daemon with `flatpak run` a
 replacement. A second daemon checks the name before initializing the GPU and PipeWire and exits
 at once with an error saying that another wprsd owns it.
 
+Every connection of the workspace to the session or the system bus (daemon, `wprs-ctl`, the app)
+goes through `wprs_client::bus`, which sends each authentication command only after the bus
+answered the one before. Inside the Flatpak both buses are reached through `xdg-dbus-proxy`, and
+its releases before 0.1.6 drop a client that sends its authentication commands in one write; with
+this handshake the daemon and the clients connect through any proxy version.
+`scripts/integration-proxy.sh` checks it when `WPRS_BUS_PROXY` names a proxy binary.
+
 A panic in any thread of the daemon, a lost GPU device, a GPU that stops responding or a Wayland
 protocol error from the compositor makes the daemon exit with status 70 at once, without running the
 exit handlers of the libraries it uses (a GPU driver that stopped answering cannot hang it there),
