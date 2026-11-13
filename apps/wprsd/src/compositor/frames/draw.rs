@@ -33,14 +33,31 @@ pub(super) fn draw(
         return Ok(output.lit_only(now));
     }
     let unchanged = output.unchanged(moved, exporter.starved(name));
-    let progress = output.progress(now, output.shown.transition.map_or(transition, |d| d.as_secs_f32()));
+    let duration = output.shown.transition.map_or(transition, |d| d.as_secs_f32());
+    let progress = output.progress(now, output.passing.as_ref().map_or(duration, |p| p.duration()));
     let opacity = if output.fade.is_some() { smoothstep(progress) } else { 1.0 };
     let shown = output.shown.layer(players, opacity, moved, output.size).lit(output.lit[0].image());
     let from = output.fade.as_ref().map(|(from, _)| from.layer(players, 1.0, moved, output.size));
     let from = from.map(|layer| layer.lit(output.lit[1].image()));
     let layers = [from.unwrap_or(shown), shown];
-    let layers = &layers[usize::from(from.is_none())..];
     let damage = output.damage();
+    let mut layers = &layers[usize::from(from.is_none())..];
+    let crossed = output
+        .passing
+        .as_mut()
+        .zip(from)
+        .map(|(p, from)| p.frame(renderer, (from, shown), progress, output.size));
+    let (one, failed) = match crossed {
+        Some(Ok(layer)) => (Some([layer]), false),
+        Some(Err(why)) => {
+            tracing::warn!("the transition of the scene stopped and the plain fade plays: {why}");
+            (None, true)
+        }
+        None => (None, false),
+    };
+    if let Some(one) = &one {
+        layers = one;
+    }
     let written = match &mut output.sink {
         _ if unchanged => Ok(Ok(())),
         Sink::Stream(target) => match exporter.lease(name) {
@@ -78,6 +95,9 @@ pub(super) fn draw(
     output.shown.scene.iter_mut().for_each(|s| s.damage = Some(Default::default()));
     (output.last_render, output.failed) = (Some(now), 0);
     output.fade = output.fade.take().filter(|_| progress < 1.0);
+    if failed || output.fade.is_none() {
+        output.passing = None;
+    }
     output.dirty = output.fading();
     output.stale = output.missing_frame || output.fade.is_some();
     match (output.animated(), &mut output.sink) {

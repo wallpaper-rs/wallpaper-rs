@@ -40,6 +40,7 @@ pub(super) struct Output {
     pub(super) hdr: super::light::Hdr,
     pub(super) bright_video: bool,
     pub(super) lit: [wprs_render::Lit; 2],
+    pub(super) passing: Option<super::crossing::Passing>,
 }
 
 impl Output {
@@ -68,6 +69,7 @@ impl Output {
             hdr: Default::default(),
             bright_video: false,
             lit: Default::default(),
+            passing: None,
         }
     }
 
@@ -104,6 +106,7 @@ impl Output {
         let animate = self.animates(transition, streaming, resized);
         let old = std::mem::replace(&mut self.shown, shown);
         self.fade = (animate && !old.content.same_source(&self.shown.content)).then_some((old, None));
+        self.passing = None;
         let kept = std::mem::take(&mut self.lit[0]);
         self.lit[1] = if self.fade.is_some() { kept } else { Default::default() };
         if let Sink::Stream(target) = &mut self.sink

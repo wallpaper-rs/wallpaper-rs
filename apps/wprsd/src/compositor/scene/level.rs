@@ -80,6 +80,10 @@ impl SceneState {
         }
     }
 
+    pub(in super::super) fn drawn_at(&self) -> Quality {
+        self.quality
+    }
+
     pub(in super::super) fn quality(&self) -> Level {
         let (cost, budget) = self.over.unwrap_or_default();
         let (quality, reason) = (["q0", "q1", "q2", "q3"][self.quality as usize], self.why.name());
