@@ -4,11 +4,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,8 +29,8 @@ fun Kin(main: Main, uid: String, open: (String) -> Unit) {
             val about = found?.let { stringResource(R.string.preset_of, it.getString("title")) }
                 ?: stringResource(R.string.preset_of_missing, base.getString("id"))
             Text(about, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
-            if (found != null) TextButton({ open(found.getString("uid")) }) { Text(stringResource(R.string.preset_show)) }
-            else if (!base.isNull("repo")) Button({ main.act { main.complete(account("install_base", "uid" to uid)) } }) {
+            if (found != null) WordAction({ open(found.getString("uid")) }) { Text(stringResource(R.string.preset_show)) }
+            else if (!base.isNull("repo")) Action({ main.act { main.complete(account("install_base", "uid" to uid)) } }) {
                 Text(stringResource(R.string.preset_install))
             }
         }

@@ -6,7 +6,6 @@ import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,7 +34,7 @@ fun Removal(main: Main) = Column {
     var changes by remember { mutableIntStateOf(0) }
     val state by loaded(JSONObject(), changes) { ask("wallpaper") as JSONObject }
     Header(stringResource(R.string.wallpaper))
-    TextButton(
+    WordAction(
         {
             main.act {
                 ask("remove_wallpaper")
@@ -47,7 +46,7 @@ fun Removal(main: Main) = Column {
         Modifier.padding(horizontal = 8.dp),
         enabled = !state.optBoolean("blank"),
     ) { Text(stringResource(R.string.remove_wallpaper)) }
-    TextButton(
+    WordAction(
         {
             main.act {
                 ask("restore_wallpaper")

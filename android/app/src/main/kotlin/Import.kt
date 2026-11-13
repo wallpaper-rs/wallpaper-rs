@@ -6,8 +6,6 @@ import android.provider.DocumentsContract.Document
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -27,7 +25,7 @@ import kotlin.concurrent.thread
 @Composable
 fun Adding(main: Main, sources: () -> Unit, modifier: Modifier) = Box(modifier) {
     var open by remember { mutableStateOf(false) }
-    ExtendedFloatingActionButton(onClick = { open = true }, icon = { Icon(Icons.Default.Add, stringResource(R.string.choose)) }, text = { Text(stringResource(R.string.choose)) })
+    ExtendedFloatingActionButton(onClick = { open = true }, icon = { Glyph(Ph.Plus, stringResource(R.string.choose)) }, text = { Text(stringResource(R.string.choose)) })
     DropdownMenu(open, { open = false }) {
         listOf(R.string.photos to main::choose, R.string.files to main::chooseFiles, R.string.folder to main::chooseFolder, R.string.from_internet to sources).forEach { (label, pick) ->
             DropdownMenuItem({ Text(stringResource(label)) }, {

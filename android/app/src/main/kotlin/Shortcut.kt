@@ -21,7 +21,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -137,15 +136,15 @@ internal fun Shortcut(field: JSONObject, modifier: Modifier, enabled: Boolean, s
             Text(field.getString("label"), style = MaterialTheme.typography.titleSmall)
             Text(shown ?: stringResource(R.string.shortcut_none), style = MaterialTheme.typography.bodySmall)
         }
-        TextButton({ picking = true }, enabled = enabled) { Text(stringResource(R.string.shortcut_app)) }
-        TextButton({ typing = chosen?.optString("uri").orEmpty() }, enabled = enabled) { Text(stringResource(R.string.shortcut_web)) }
-        TextButton({ file.launch(arrayOf("*/*")) }, enabled = enabled) { Text(stringResource(R.string.shortcut_file)) }
-        TextButton({ folder.launch(null) }, enabled = enabled) { Text(stringResource(R.string.shortcut_folder)) }
-        if (chosen != null) TextButton({ set(null) }, enabled = enabled) { Text(stringResource(R.string.remove)) }
+        WordAction({ picking = true }, enabled = enabled) { Text(stringResource(R.string.shortcut_app)) }
+        WordAction({ typing = chosen?.optString("uri").orEmpty() }, enabled = enabled) { Text(stringResource(R.string.shortcut_web)) }
+        WordAction({ file.launch(arrayOf("*/*")) }, enabled = enabled) { Text(stringResource(R.string.shortcut_file)) }
+        WordAction({ folder.launch(null) }, enabled = enabled) { Text(stringResource(R.string.shortcut_folder)) }
+        if (chosen != null) WordAction({ set(null) }, enabled = enabled) { Text(stringResource(R.string.remove)) }
     }
     if (picking) AlertDialog(
         onDismissRequest = { picking = false },
-        confirmButton = { TextButton({ picking = false }) { Text(stringResource(R.string.cancel)) } },
+        confirmButton = { WordAction({ picking = false }) { Text(stringResource(R.string.cancel)) } },
         title = { Text(stringResource(R.string.shortcut_app)) },
         text = {
             LazyColumn {
@@ -162,8 +161,8 @@ internal fun Shortcut(field: JSONObject, modifier: Modifier, enabled: Boolean, s
         val web = Shortcuts.web(text)
         AlertDialog(
             onDismissRequest = { typing = null },
-            confirmButton = { TextButton({ typing = null; web?.let { set(JSONObject().put("uri", it)) } }, enabled = web != null) { Text(stringResource(R.string.shortcut_keep)) } },
-            dismissButton = { TextButton({ typing = null }) { Text(stringResource(R.string.cancel)) } },
+            confirmButton = { WordAction({ typing = null; web?.let { set(JSONObject().put("uri", it)) } }, enabled = web != null) { Text(stringResource(R.string.shortcut_keep)) } },
+            dismissButton = { WordAction({ typing = null }) { Text(stringResource(R.string.cancel)) } },
             title = { Text(stringResource(R.string.shortcut_web)) },
             text = { OutlinedTextField(text, { typing = it }, singleLine = true, isError = web == null, supportingText = { Text(stringResource(R.string.shortcut_https)) }) },
         )
@@ -183,6 +182,6 @@ internal fun ShortcutMissed() {
     }
     ListItem(
         headlineContent = { Text(stringResource(text, shown)) },
-        trailingContent = { TextButton(Shortcuts::forget) { Text(stringResource(R.string.close)) } },
+        trailingContent = { WordAction(Shortcuts::forget) { Text(stringResource(R.string.close)) } },
     )
 }

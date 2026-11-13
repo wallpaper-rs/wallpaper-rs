@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,11 +28,11 @@ internal fun SoundNetworkGrants(form: JSONObject, grant: (String, Boolean) -> Un
         title = { Text(stringResource(R.string.audio_network_title)) },
         text = { Text(stringResource(R.string.audio_network_why)) },
         confirmButton = {
-            TextButton({
+            WordAction({
                 confirming = false
                 grant("audio_network", true)
             }) { Text(stringResource(R.string.media_network_allow)) }
         },
-        dismissButton = { TextButton({ confirming = false }) { Text(stringResource(android.R.string.cancel)) } },
+        dismissButton = { WordAction({ confirming = false }) { Text(stringResource(android.R.string.cancel)) } },
     )
 }

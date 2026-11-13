@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,14 +45,14 @@ fun Pairing(main: Main, status: JSONObject, run: Run) {
             }
         },
         confirmButton = {
-            TextButton({
+            WordAction({
                 run(waiting) {
                     account("confirm", "code" to digits)
                     main.toast(done)
                 }
             }, enabled = digits.length == 6) { Text(stringResource(R.string.confirm)) }
         },
-        dismissButton = { TextButton({ main.act(false) { account("cancel") } }) { Text(stringResource(R.string.cancel)) } },
+        dismissButton = { WordAction({ main.act(false) { account("cancel") } }) { Text(stringResource(R.string.cancel)) } },
     )
 }
 
@@ -87,9 +85,9 @@ fun Approve(main: Main, run: Run, close: () -> Unit) {
             }
         },
         confirmButton = {
-            if (found == null) TextButton({ main.act(false) { found = account("preview", "code" to code) as? JSONObject } }, enabled = code.isNotBlank()) {
+            if (found == null) WordAction({ main.act(false) { found = account("preview", "code" to code) as? JSONObject } }, enabled = code.isNotBlank()) {
                 Text(stringResource(R.string.look_up))
-            } else TextButton({
+            } else WordAction({
                 close()
                 run("") {
                     account("approve", "code" to code, "approve" to true, "password" to password)
@@ -97,7 +95,7 @@ fun Approve(main: Main, run: Run, close: () -> Unit) {
                 }
             }, enabled = password.isNotEmpty()) { Text(stringResource(R.string.approve)) }
         },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
     )
 }
 
@@ -127,18 +125,18 @@ fun Server(main: Main, run: Run) = Column(Modifier.padding(16.dp), Arrangement.s
         url, { url = it; problem = null }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.server)) }, singleLine = true,
         isError = problem != null, supportingText = { problem?.let { Text(it) } },
     )
-    Button({ add(null) }) { Text(stringResource(R.string.add_server)) }
+    Action({ add(null) }) { Text(stringResource(R.string.add_server)) }
     Nearby { url = it }
     print?.let { found ->
         AlertDialog(
             onDismissRequest = { print = null },
             confirmButton = {
-                TextButton({
+                WordAction({
                     print = null
                     add(found)
                 }) { Text(stringResource(R.string.cert_trust)) }
             },
-            dismissButton = { TextButton({ print = null }) { Text(stringResource(R.string.cancel)) } },
+            dismissButton = { WordAction({ print = null }) { Text(stringResource(R.string.cancel)) } },
             title = { Text(stringResource(R.string.cert_title)) },
             text = { Text(stringResource(R.string.cert_question, found.chunked(4).joinToString(" "))) },
         )
@@ -158,13 +156,13 @@ fun Link(status: JSONObject, run: Run) = Column(Modifier.padding(16.dp), Arrange
         label = { Text(stringResource(R.string.phone_label)) }, placeholder = { Text(phone) },
     )
     Toggle(stringResource(R.string.plain_text), plain) { plain = it }
-    Button({
+    Action({
         run("") {
             account("link", "label" to name.ifBlank { phone }, "plaintext" to plain)
             account("wait")
         }
     }) { Text(stringResource(R.string.link)) }
-    TextButton({ run("") { account("remove") } }) { Text(stringResource(R.string.remove_server)) }
+    WordAction({ run("") { account("remove") } }) { Text(stringResource(R.string.remove_server)) }
 }
 
 @Composable

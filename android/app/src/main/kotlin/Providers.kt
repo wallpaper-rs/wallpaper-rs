@@ -11,9 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +46,7 @@ fun Providers(main: Main, shown: JSONObject, run: Run, library: (String) -> Unit
     }
     Text(stringResource(R.string.provider_add_title), Modifier.padding(16.dp, 8.dp), style = MaterialTheme.typography.titleSmall)
     FlowRow(Modifier.padding(horizontal = 16.dp), Arrangement.spacedBy(8.dp)) {
-        kinds.forEach { kind -> OutlinedButton({ adding = kind }) { Text(stringResource(kindTitle(kind.getString("kind")))) } }
+        kinds.forEach { kind -> QuietAction({ adding = kind }) { Text(stringResource(kindTitle(kind.getString("kind")))) } }
     }
     adding?.let { ProviderForm(main, it, null, run) { adding = null } }
 }
@@ -78,13 +76,13 @@ private fun Provider(main: Main, provider: JSONObject, kind: JSONObject, run: Ru
         if (provider.optBoolean("plain")) Note(stringResource(R.string.provider_plain), MaterialTheme.colorScheme.error)
         Note(stringResource(kindSent(name), sentTo(kind, provider.optJSONArray("hosts").strings())), Color.Unspecified)
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            if (on) TextButton({ run(downloading) { main.report(account("provider_sync", "id" to id, "force" to true)) } }) { Text(stringResource(R.string.provider_sync)) }
-            if (count > 0) TextButton({ library("tag:from-$id") }) { Text(stringResource(R.string.provider_see, count)) }
+            if (on) WordAction({ run(downloading) { main.report(account("provider_sync", "id" to id, "force" to true)) } }) { Text(stringResource(R.string.provider_sync)) }
+            if (count > 0) WordAction({ library("tag:from-$id") }) { Text(stringResource(R.string.provider_see, count)) }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            TextButton({ editing = true }) { Text(stringResource(R.string.provider_options)) }
-            if (provider.optJSONArray("credits").objects().isNotEmpty()) TextButton({ crediting = true }) { Text(stringResource(R.string.provider_credits)) }
-            TextButton({ removing = true }) { Text(stringResource(R.string.remove)) }
+            WordAction({ editing = true }) { Text(stringResource(R.string.provider_options)) }
+            if (provider.optJSONArray("credits").objects().isNotEmpty()) WordAction({ crediting = true }) { Text(stringResource(R.string.provider_credits)) }
+            WordAction({ removing = true }) { Text(stringResource(R.string.remove)) }
         }
     }
     if (editing) ProviderForm(main, kind, provider, run) { editing = false }
@@ -95,7 +93,7 @@ private fun Provider(main: Main, provider: JSONObject, kind: JSONObject, run: Ru
 @Composable
 private fun Credits(credits: List<JSONObject>, close: () -> Unit) = AlertDialog(
     onDismissRequest = close,
-    confirmButton = { TextButton(close) { Text(stringResource(R.string.close)) } },
+    confirmButton = { WordAction(close) { Text(stringResource(R.string.close)) } },
     title = { Text(stringResource(R.string.provider_credits)) },
     text = {
         Column(Modifier.verticalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) {
@@ -109,8 +107,8 @@ private fun Removing(id: String, run: Run, close: () -> Unit) {
     var purge by remember { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = close,
-        confirmButton = { TextButton({ close(); run("") { account("provider_remove", "id" to id, "purge" to purge) } }) { Text(stringResource(R.string.remove)) } },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        confirmButton = { WordAction({ close(); run("") { account("provider_remove", "id" to id, "purge" to purge) } }) { Text(stringResource(R.string.remove)) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
         text = {
             Column {
                 Text(stringResource(R.string.provider_remove_question))

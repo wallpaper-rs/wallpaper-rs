@@ -7,16 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,14 +51,14 @@ fun Playlists(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) 
                     Text(summary(list))
                     list.away.forEach { AwayLine(it) }
                 },
-                trailingContent = { if (list.current) Icon(Icons.Default.Check, stringResource(R.string.in_use)) },
+                trailingContent = { if (list.current) Glyph(Ph.Check, stringResource(R.string.in_use)) },
                 modifier = Modifier.clickable { open(list.uid) },
             )
         }
     }
     ExtendedFloatingActionButton(
         onClick = { naming = "" },
-        icon = { Icon(Icons.Default.Add, stringResource(R.string.new_playlist)) },
+        icon = { Glyph(Ph.Plus, stringResource(R.string.new_playlist)) },
         text = { Text(stringResource(R.string.new_playlist)) },
         modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).semantics { role = Role.Button },
     )
@@ -70,7 +66,7 @@ fun Playlists(main: Main, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) 
         AlertDialog(
             onDismissRequest = { naming = null },
             confirmButton = {
-                TextButton({
+                WordAction({
                     naming = null
                     main.act { ask("create", "name" to name) }
                 }, enabled = name.isNotBlank()) { Text(stringResource(R.string.create)) }

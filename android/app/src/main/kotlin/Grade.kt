@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -92,6 +91,6 @@ fun Grade(main: Main) = Column {
         val labelled = JSONObject(field.toString()).put("label", stringResource(SLIDERS[key] ?: R.string.filter))
         Slide(labelled, Modifier.fillMaxWidth().padding(16.dp, 4.dp), true) { change(key, it) }
     }
-    TextButton({ send(JSONObject()) }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.show_as_it_is)) }
+    WordAction({ send(JSONObject()) }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.show_as_it_is)) }
     Note(stringResource(R.string.filter_note))
 }

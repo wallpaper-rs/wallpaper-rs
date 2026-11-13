@@ -10,7 +10,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -54,8 +53,8 @@ fun ProviderForm(main: Main, kind: JSONObject, current: JSONObject?, run: Run, c
     AlertDialog(
         onDismissRequest = close,
         title = { Text(stringResource(kindTitle(name))) },
-        confirmButton = { TextButton(::save) { Text(stringResource(if (current == null) R.string.provider_add else R.string.provider_save)) } },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        confirmButton = { WordAction(::save) { Text(stringResource(if (current == null) R.string.provider_add else R.string.provider_save)) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(kindAbout(name)))

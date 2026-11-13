@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +37,7 @@ fun RepoUpdates(main: Main, run: Run) {
                 asked(update)?.let { Text(stringResource(R.string.repo_update_asks, it), style = MaterialTheme.typography.bodySmall) }
             },
             trailingContent = {
-                TextButton({
+                WordAction({
                     run("") {
                         main.complete(account("update", "uid" to update.getString("uid")))
                         checked++
@@ -48,7 +47,7 @@ fun RepoUpdates(main: Main, run: Run) {
             },
         )
     }
-    TextButton({ run("") { account("refresh_repos", "force" to true).also { checked++ } } }, Modifier.padding(horizontal = 8.dp)) {
+    WordAction({ run("") { account("refresh_repos", "force" to true).also { checked++ } } }, Modifier.padding(horizontal = 8.dp)) {
         Text(stringResource(R.string.repo_check))
     }
 }

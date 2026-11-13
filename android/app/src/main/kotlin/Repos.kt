@@ -20,7 +20,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -59,8 +58,8 @@ fun Repos(main: Main, status: JSONObject, run: Run) {
             supportingContent = { Text(offer.getString("url").substringBefore('?')) },
             trailingContent = {
                 Row {
-                    TextButton({ act { account("offer", "repo" to offer.getString("id"), "add" to true) } }) { Text(stringResource(R.string.repo_add)) }
-                    TextButton({ act { account("offer", "repo" to offer.getString("id"), "add" to false) } }) { Text(stringResource(R.string.repo_decline)) }
+                    WordAction({ act { account("offer", "repo" to offer.getString("id"), "add" to true) } }) { Text(stringResource(R.string.repo_add)) }
+                    WordAction({ act { account("offer", "repo" to offer.getString("id"), "add" to false) } }) { Text(stringResource(R.string.repo_decline)) }
                 }
             },
         )
@@ -70,12 +69,12 @@ fun Repos(main: Main, status: JSONObject, run: Run) {
             headlineContent = { Text(repo.getString("name")) },
             supportingContent = { Text(stringResource(R.string.repo_packages, repo.optInt("packages"))) },
             trailingContent = {
-                TextButton({ act { account("remove_repo", "repo_id" to repo.getString("repo_id")) } }) { Text(stringResource(R.string.remove)) }
+                WordAction({ act { account("remove_repo", "repo_id" to repo.getString("repo_id")) } }) { Text(stringResource(R.string.remove)) }
             },
         )
     }
     RepoAdd(main, run) { changed++; exploring = true }
-    if (shown.optJSONArray("repos").objects().isNotEmpty()) TextButton({ exploring = true }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.repo_browse)) }
+    if (shown.optJSONArray("repos").objects().isNotEmpty()) WordAction({ exploring = true }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.repo_browse)) }
     if (shown.optJSONArray("repos").objects().isNotEmpty()) RepoUpdates(main, run)
     if (exploring) Explore(main, run) { exploring = false }
 }
@@ -90,7 +89,7 @@ private fun Explore(main: Main, run: Run, close: () -> Unit) {
     val items = found.objects().sortedByDescending { it.optBoolean("featured") }
     AlertDialog(
         onDismissRequest = close,
-        confirmButton = { TextButton(close) { Text(stringResource(R.string.close)) } },
+        confirmButton = { WordAction(close) { Text(stringResource(R.string.close)) } },
         title = { Text(stringResource(R.string.repo_browse)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -121,7 +120,7 @@ private fun Explore(main: Main, run: Run, close: () -> Unit) {
                             },
                             trailingContent = {
                                 if (item.optBoolean("installed")) Text(stringResource(R.string.repo_installed))
-                                else TextButton({
+                                else WordAction({
                                     run("") {
                                         main.complete(account("install", "repo_id" to item.getString("repo_id"), "id" to item.getString("id")))
                                         installed++

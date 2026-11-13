@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +31,7 @@ fun Revoke(main: Main, run: Run, id: String, name: String, close: () -> Unit) {
             }
         },
         confirmButton = {
-            TextButton({
+            WordAction({
                 close()
                 run("") {
                     account("revoke", "device" to id, "password" to password)
@@ -40,6 +39,6 @@ fun Revoke(main: Main, run: Run, id: String, name: String, close: () -> Unit) {
                 }
             }, enabled = password.isNotEmpty()) { Text(stringResource(R.string.revoke)) }
         },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
     )
 }

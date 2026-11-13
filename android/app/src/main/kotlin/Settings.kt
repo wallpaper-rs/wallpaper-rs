@@ -8,7 +8,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -72,10 +71,10 @@ private val TOGGLES = listOf(
     Triple(R.string.show_mature, Unveil.KEY, "true" to "false"),
 )
 private val KEYS = CHOICES.map { it.second } + TOGGLES.map { it.second } + VOLUME
-private val NOTICES = listOf("onnxruntime", "onnxruntime-third-party-notices", "depth-anything-v2", "lama")
+private val NOTICES = listOf("onnxruntime", "onnxruntime-third-party-notices", "depth-anything-v2", "lama", "onest", "red-hat-display", "phosphor")
 
 @Composable
-fun Settings(main: Main) {
+fun Settings(main: Main, account: () -> Unit = {}) {
     var changes by remember { mutableIntStateOf(0) }
     var notice by remember { mutableStateOf<String?>(null) }
     val values by loaded(emptyMap<String, String>(), changes) { KEYS.associateWith { Native.setting(it, null) } }
@@ -105,6 +104,7 @@ fun Settings(main: Main) {
     }
     LazyColumn {
         item { Header(stringResource(R.string.settings)) }
+        item { Setting(stringResource(R.string.account), onClick = account) }
         items(CHOICES) { (label, key, options) ->
             val texts = options.map { (value, text) -> value to stringResource(text, value.toIntOrNull() ?: 0) }
             Choices(stringResource(label), texts, values[key].orEmpty()) { set(key, it) }
@@ -122,7 +122,7 @@ fun Settings(main: Main) {
             if (model.optBoolean("installed")) ListItem(
                 headlineContent = { Text(stringResource(R.string.depth_model, model.getString("size"))) },
                 trailingContent = {
-                    TextButton({ change { depth("forget") } }, enabled = Depth.working.value == null) {
+                    WordAction({ change { depth("forget") } }, enabled = Depth.working.value == null) {
                         Text(stringResource(R.string.delete_model))
                     }
                 },
@@ -163,7 +163,7 @@ fun Settings(main: Main) {
                 },
             ).forEach { Text(it, Modifier.padding(16.dp, 4.dp), style = MaterialTheme.typography.bodyMedium) }
             if ((report.optJSONArray("left_out")?.length() ?: 0) > 0) {
-                TextButton({ change { Native.retry() } }, Modifier.padding(8.dp, 0.dp)) {
+                WordAction({ change { Native.retry() } }, Modifier.padding(8.dp, 0.dp)) {
                     Text(stringResource(R.string.retry_effects))
                 }
             }
@@ -181,7 +181,7 @@ private fun Notice(name: String, close: () -> Unit) {
     val lines by loaded(emptyList<String>(), name) { assets.open("$name.txt").bufferedReader().use { it.readLines() } }
     AlertDialog(
         onDismissRequest = close,
-        confirmButton = { TextButton(close) { Text(stringResource(R.string.close)) } },
+        confirmButton = { WordAction(close) { Text(stringResource(R.string.close)) } },
         title = { Text(name) },
         text = { LazyColumn { items(lines) { Text(it, style = MaterialTheme.typography.bodySmall) } } },
     )

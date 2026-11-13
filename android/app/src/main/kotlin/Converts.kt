@@ -4,11 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,7 +31,7 @@ fun Conversions(only: String? = null) {
     Converting.progress.toList().filter { only == null || it.first == only }.forEach { (uid, done) ->
         Row(Modifier.fillMaxWidth().padding(16.dp, 4.dp), Arrangement.spacedBy(8.dp), Alignment.CenterVertically) {
             Text(stringResource(R.string.converting, Converting.names[uid].orEmpty(), (done * 100).toInt()), Modifier.weight(1f))
-            TextButton({ Converting.stop(uid) }) { Text(stringResource(R.string.convert_stop)) }
+            WordAction({ Converting.stop(uid) }) { Text(stringResource(R.string.convert_stop)) }
         }
         LinearProgressIndicator({ done }, Modifier.fillMaxWidth().padding(16.dp, 0.dp))
     }
@@ -49,7 +46,7 @@ fun ConvertVideo(main: Main, item: Item) {
     val start = { keep: Boolean -> main.act(false) { withContext(Dispatchers.IO) { main.convert(item.uid, item.title, asked = true, keep = keep) } }.let { } }
     Note(stringResource(R.string.convert_note))
     Row(Modifier.padding(16.dp, 4.dp), Arrangement.spacedBy(8.dp)) {
-        Button({ start(false) }) { Text(stringResource(R.string.convert_now)) }
-        OutlinedButton({ start(true) }) { Text(stringResource(R.string.convert_keep)) }
+        Action({ start(false) }) { Text(stringResource(R.string.convert_now)) }
+        QuietAction({ start(true) }) { Text(stringResource(R.string.convert_keep)) }
     }
 }

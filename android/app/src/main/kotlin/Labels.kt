@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,7 +14,6 @@ import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +37,7 @@ fun Labels(main: Main, item: Item) = Column(Modifier.padding(horizontal = 16.dp)
             val lit = star <= item.rating
             IconButton({ main.act { ask("rate", "uids" to uids, "rating" to if (item.rating == star) 0 else star) } }) {
                 val tint = if (lit) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
-                Icon(Icons.Default.Star, stringResource(R.string.rate_stars, star), tint = tint)
+                Glyph(Ph.Star, stringResource(R.string.rate_stars, star), lit = lit, tint = tint)
             }
         }
     }
@@ -49,13 +45,13 @@ fun Labels(main: Main, item: Item) = Column(Modifier.padding(horizontal = 16.dp)
         item.tags.forEach { tag ->
             InputChip(
                 false, { main.act { ask("retag", "uids" to uids, "add" to emptyList<String>(), "remove" to listOf(tag)) } }, { Text(tag) },
-                trailingIcon = { Icon(Icons.Default.Clear, stringResource(R.string.tag_remove, tag)) },
+                trailingIcon = { Glyph(Ph.X, stringResource(R.string.tag_remove, tag)) },
             )
         }
     }
     Row {
-        TextButton({ tagging = true }) { Text(stringResource(R.string.tag_add)) }
-        TextButton({ renaming = true }) { Text(stringResource(R.string.rename)) }
+        WordAction({ tagging = true }) { Text(stringResource(R.string.tag_add)) }
+        WordAction({ renaming = true }) { Text(stringResource(R.string.rename)) }
     }
     if (tagging) Asking(R.string.tag_add, R.string.tag_name, "", { tagging = false }) { text ->
         main.act { ask("retag", "uids" to uids, "add" to text.split(',').map(String::trim).filter(String::isNotEmpty), "remove" to emptyList<String>()) }
@@ -72,7 +68,7 @@ private fun Asking(title: Int, label: Int, start: String, close: () -> Unit, don
         onDismissRequest = close,
         title = { Text(stringResource(title)) },
         text = { OutlinedTextField(text, { text = it }, Modifier.fillMaxWidth(), singleLine = true, label = { Text(stringResource(label)) }) },
-        confirmButton = { TextButton({ close(); done(text) }, enabled = text.isNotBlank()) { Text(stringResource(R.string.save)) } },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        confirmButton = { WordAction({ close(); done(text) }, enabled = text.isNotBlank()) { Text(stringResource(R.string.save)) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
     )
 }

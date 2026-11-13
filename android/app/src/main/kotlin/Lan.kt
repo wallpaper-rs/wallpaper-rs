@@ -7,7 +7,6 @@ import android.os.Build
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateMapOf
@@ -78,7 +77,7 @@ fun Nearby(pick: (String) -> Unit) {
     if (found.isNotEmpty()) Text(stringResource(R.string.lan_found), style = MaterialTheme.typography.titleSmall)
     found.forEach { (name, url) ->
         ListItem(headlineContent = { Text(name) }, supportingContent = { Text(url) }, trailingContent = {
-            TextButton({ pick(url) }) { Text(stringResource(R.string.repo_add)) }
+            WordAction({ pick(url) }) { Text(stringResource(R.string.repo_add)) }
         })
     }
 }

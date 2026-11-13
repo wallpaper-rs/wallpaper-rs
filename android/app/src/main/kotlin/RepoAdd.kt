@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -36,7 +35,7 @@ fun RepoAdd(main: Main, run: Run, added: () -> Unit) = Column(Modifier.padding(1
         supportingText = { Text(problem ?: stringResource(R.string.repo_fingerprint_help)) },
     )
     if (host.isNotEmpty()) Text(stringResource(R.string.repo_sent, host), style = MaterialTheme.typography.bodySmall)
-    Button({
+    Action({
         problem = null
         run(checking) {
             try {

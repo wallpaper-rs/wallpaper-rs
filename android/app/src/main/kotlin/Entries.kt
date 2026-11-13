@@ -10,17 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -59,7 +52,7 @@ fun Entries(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) 
     if (!chosen.isEmpty()) Selecting(main, chosen, items.map(Item::uid), uid)
     else Row(verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) { Header(list?.name.orEmpty(), close) }
-        IconButton({ naming = true }, enabled = list != null) { Icon(Icons.Default.Edit, stringResource(R.string.rename_playlist)) }
+        IconButton({ naming = true }, enabled = list != null) { Glyph(Ph.PencilSimple, stringResource(R.string.rename_playlist)) }
     }
     list?.away.orEmpty().forEach { AwayLine(it, Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) }
     LazyColumn(contentPadding = PaddingValues(bottom = 16.dp)) {
@@ -84,8 +77,8 @@ fun Entries(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) 
                         main.setWallpaper()
                     }
                 }
-                Button({ use() }, enabled = items.isNotEmpty()) { Text(stringResource(R.string.apply)) }
-                OutlinedButton({
+                Action({ use() }, enabled = items.isNotEmpty()) { Text(stringResource(R.string.apply)) }
+                QuietAction({
                     main.act {
                         ask("delete", "playlist" to uid)
                         close()
@@ -106,16 +99,16 @@ fun Entries(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) 
                 headlineContent = { Text(item.title) },
                 leadingContent = { Thumb(item, Modifier.size(56.dp), item.uid in chosen) },
                 trailingContent = {
-                    if (chosen.isNotEmpty()) return@ListItem Icon(
-                        Icons.Default.CheckCircle,
+                    if (chosen.isNotEmpty()) return@ListItem Glyph(
+                        Ph.CheckCircle,
                         null,
                         tint = if (item.uid in chosen) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         if (manual) IconButton({ take(main, uid, item.uid) }) {
-                            Icon(Icons.Default.Close, stringResource(R.string.take_out))
+                            Glyph(Ph.X, stringResource(R.string.take_out))
                         }
-                        if (manual) Icon(Icons.Default.Menu, stringResource(R.string.drag_to_move), Modifier.padding(12.dp).pointerInput(item.uid, index) {
+                        if (manual) Glyph(Ph.GlobeSimple, stringResource(R.string.drag_to_move), Modifier.padding(12.dp).pointerInput(item.uid, index) {
                             detectVerticalDragGestures(
                                 onDragStart = { dragged = item.uid },
                                 onDragEnd = drop,

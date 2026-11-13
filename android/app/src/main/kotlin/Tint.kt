@@ -17,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,8 +68,8 @@ private fun Mixer(label: String, start: List<Int>, alpha: Boolean, close: () -> 
     val channels = listOf(R.string.red, R.string.green, R.string.blue, R.string.opacity).take(if (alpha) 4 else 3)
     AlertDialog(
         onDismissRequest = close,
-        confirmButton = { TextButton({ keep(Hex.format(rgba, alpha)) }) { Text(stringResource(R.string.choose_color)) } },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        confirmButton = { WordAction({ keep(Hex.format(rgba, alpha)) }) { Text(stringResource(R.string.choose_color)) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
         title = { Text(label) },
         text = {
             Column {

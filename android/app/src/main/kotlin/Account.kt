@@ -8,13 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -38,7 +35,7 @@ import org.json.JSONObject
 typealias Run = (String, suspend () -> Unit) -> Unit
 
 @Composable
-fun Account(main: Main) {
+fun Account(main: Main, close: (() -> Unit)? = null) {
     var changes by remember { mutableIntStateOf(0) }
     var task by remember { mutableStateOf<String?>(null) }
     var approving by remember { mutableStateOf(false) }
@@ -67,7 +64,7 @@ fun Account(main: Main) {
     }
     val state = status.optString("state")
     LazyColumn {
-        item { Header(stringResource(R.string.devices)) }
+        item { Header(stringResource(R.string.devices), close) }
         task?.takeIf { status.isNull("link") && status.isNull("pairing") }?.let { waiting ->
             item { Waiting(main, waiting) }
         }
@@ -98,7 +95,7 @@ fun JSONObject.server() = text("name")?.ifEmpty { null } ?: getString("url")
 fun Waiting(main: Main, text: String) = Column(Modifier.padding(16.dp), Arrangement.spacedBy(8.dp)) {
     if (text.isNotEmpty()) Text(text)
     LinearProgressIndicator(Modifier.fillMaxWidth())
-    TextButton({ main.act(false) { account("cancel") } }) { Text(stringResource(R.string.cancel)) }
+    WordAction({ main.act(false) { account("cancel") } }) { Text(stringResource(R.string.cancel)) }
 }
 
 @Composable
@@ -123,8 +120,8 @@ private fun Summary(main: Main, status: JSONObject, run: Run, approve: () -> Uni
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 val conflict = main.getString(R.string.conflict, "%1")
-                Button({ run("") { account("sync", "conflict" to conflict) } }) { Text(stringResource(R.string.sync_now)) }
-                OutlinedButton(approve) { Text(stringResource(R.string.approve_device)) }
+                Action({ run("") { account("sync", "conflict" to conflict) } }) { Text(stringResource(R.string.sync_now)) }
+                QuietAction(approve) { Text(stringResource(R.string.approve_device)) }
             }
             Toggle(stringResource(R.string.pause_sync), status.optBoolean("paused")) {
                 run("") { account("pause", "paused" to it) }
@@ -134,16 +131,16 @@ private fun Summary(main: Main, status: JSONObject, run: Run, approve: () -> Uni
             }
             Note(stringResource(R.string.listen_shown_note))
         }
-        TextButton({ removing = true }) { Text(stringResource(R.string.remove_server)) }
+        WordAction({ removing = true }) { Text(stringResource(R.string.remove_server)) }
         if (removing) AlertDialog(
             onDismissRequest = { removing = false },
             confirmButton = {
-                TextButton({
+                WordAction({
                     removing = false
                     run("") { account("remove") }
                 }) { Text(stringResource(R.string.remove)) }
             },
-            dismissButton = { TextButton({ removing = false }) { Text(stringResource(R.string.cancel)) } },
+            dismissButton = { WordAction({ removing = false }) { Text(stringResource(R.string.cancel)) } },
             text = { Text(stringResource(R.string.remove_server_question)) },
         )
     }
@@ -158,10 +155,10 @@ private fun Device(main: Main, device: JSONObject, join: Boolean, run: Run) {
         supportingContent = { Text(device.getString("name") + " · " + device.optString("platform")) },
         trailingContent = {
             Row {
-                TextButton({ run(waiting) { account(if (join) "join" else "share", "device" to device.getString("id")) } }) {
+                WordAction({ run(waiting) { account(if (join) "join" else "share", "device" to device.getString("id")) } }) {
                     Text(stringResource(if (join) R.string.get_key else R.string.share_key))
                 }
-                TextButton({ revoking = true }) { Text(stringResource(R.string.revoke)) }
+                WordAction({ revoking = true }) { Text(stringResource(R.string.revoke)) }
             }
         },
     )

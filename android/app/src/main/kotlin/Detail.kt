@@ -12,18 +12,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -125,16 +116,15 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
         }
         item?.exposes?.let { Exposes(it) }
         Row(Modifier.padding(16.dp), Arrangement.spacedBy(8.dp), Alignment.CenterVertically) {
-            Button(main::setWallpaper, Modifier.weight(1f), enabled = ready && asks == null) { Text(stringResource(R.string.apply)) }
+            Action(main::setWallpaper, Modifier.weight(1f), enabled = ready && asks == null) { Text(stringResource(R.string.apply)) }
             val favorite = item?.favorite == true
             IconButton({ main.act { ask("favorite", "uids" to listOf(uid), "favorite" to !favorite) } }) {
-                val icon = if (favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder
-                Icon(icon, stringResource(R.string.favorite))
+                Glyph(Ph.Heart, stringResource(R.string.favorite), lit = favorite)
             }
             IconButton({ adding = true }) {
-                Icon(Icons.AutoMirrored.Filled.List, stringResource(R.string.add_to_playlist))
+                Glyph(Ph.Playlist, stringResource(R.string.add_to_playlist))
             }
-            IconButton({ removing = true }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+            IconButton({ removing = true }) { Glyph(Ph.Trash, stringResource(R.string.remove)) }
         }
     }
     if (adding) AddTo({ adding = false }) { playlist -> main.act { ask("add", "playlist" to playlist, "items" to listOf(uid)) } }
@@ -149,9 +139,9 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
 @Composable
 private fun Caution(asks: String, confirm: () -> Unit) = Column(Modifier.fillMaxSize(), Arrangement.Center, Alignment.CenterHorizontally) {
     val flashing = asks == "photosensitive"
-    Icon(if (flashing) Icons.Default.Warning else Icons.Default.Lock, null, Modifier.padding(8.dp), MaterialTheme.colorScheme.error)
+    Glyph(if (flashing) Ph.Warning else Ph.Lock, null, Modifier.padding(8.dp), MaterialTheme.colorScheme.error)
     Text(stringResource(if (flashing) R.string.flashing_warning else R.string.mature_warning), Modifier.padding(16.dp), style = MaterialTheme.typography.bodyLarge)
-    OutlinedButton(confirm) { Text(stringResource(R.string.show_anyway)) }
+    QuietAction(confirm) { Text(stringResource(R.string.show_anyway)) }
 }
 
 @Composable

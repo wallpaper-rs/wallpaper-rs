@@ -16,17 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -36,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
@@ -47,8 +38,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.IconButton
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.foundation.layout.fillMaxWidth
 
 private val FILTERS = listOf(
@@ -94,15 +83,15 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
         if (chosen.isEmpty()) Header(stringResource(R.string.library)) else Selecting(main, chosen, items.orEmpty().map(Item::uid))
         OutlinedTextField(
             text, { text = it }, Modifier.fillMaxWidth().padding(horizontal = 16.dp), singleLine = true,
-            placeholder = { Text(stringResource(R.string.search)) }, leadingIcon = { Icon(Icons.Default.Search, null) },
-            trailingIcon = { if (text.isNotEmpty()) IconButton({ text = "" }) { Icon(Icons.Default.Clear, stringResource(R.string.clear_search)) } },
+            placeholder = { Text(stringResource(R.string.search)) }, leadingIcon = { Glyph(Ph.MagnifyingGlass, null) },
+            trailingIcon = { if (text.isNotEmpty()) IconButton({ text = "" }) { Glyph(Ph.X, stringResource(R.string.clear_search)) } },
         )
         Choices(null, FILTERS.map { (label, query) -> query to stringResource(label) }, kind) { chosen ->
             filter = FILTERS.indexOfFirst { it.second == chosen }
         }
         if (kind == SCENES || kind == "kind:web") Row(Modifier.padding(horizontal = 8.dp), Arrangement.spacedBy(8.dp)) {
-            if (kind == SCENES) TextButton(main::examples) { Text(stringResource(R.string.examples)) }
-            TextButton(main::openPackage) { Text(stringResource(R.string.open_package)) }
+            if (kind == SCENES) WordAction(main::examples) { Text(stringResource(R.string.examples)) }
+            WordAction(main::openPackage) { Text(stringResource(R.string.open_package)) }
         }
         Importing(main)
         if (query.isEmpty()) AwayNotes(main)
@@ -132,13 +121,13 @@ fun Thumb(item: Item, modifier: Modifier = Modifier, picked: Boolean = false) {
         val hidden = if (item.mature) Modifier.blur(24.dp) else Modifier
         val kind = stringResource(if (item.video) R.string.kind_video else if (item.scene) R.string.kind_scene else R.string.kind_photo)
         bitmap?.let { Image(it, "$kind ${item.title}".trim(), Modifier.fillMaxSize().then(hidden), contentScale = ContentScale.Crop) }
-        if (item.mature) Icon(Icons.Default.Lock, stringResource(R.string.mature), Modifier.align(Alignment.Center), Color.White)
-        if (item.flashing) Icon(Icons.Default.Warning, stringResource(R.string.flashing), Modifier.align(Alignment.TopEnd).padding(4.dp), Color.White)
-        if (item.failing != null) Icon(Icons.Default.Warning, stringResource(R.string.page_error), Modifier.align(Alignment.BottomEnd).padding(4.dp), MaterialTheme.colorScheme.error)
+        if (item.mature) Glyph(Ph.Lock, stringResource(R.string.mature), Modifier.align(Alignment.Center), tones.frost)
+        if (item.flashing) Glyph(Ph.Warning, stringResource(R.string.flashing), Modifier.align(Alignment.TopEnd).padding(4.dp), tones.frost)
+        if (item.failing != null) Glyph(Ph.Warning, stringResource(R.string.page_error), Modifier.align(Alignment.BottomEnd).padding(4.dp), MaterialTheme.colorScheme.error)
         val corner = Modifier.align(Alignment.BottomStart).padding(4.dp)
-        if (item.video) Icon(Icons.Default.PlayArrow, null, corner, Color.White)
-        if (item.scene) Icon(if (item.web) Icons.Default.Menu else Icons.Default.Star, null, corner, Color.White)
-        if (picked) Icon(Icons.Default.CheckCircle, null, Modifier.align(Alignment.TopStart).padding(4.dp), MaterialTheme.colorScheme.primary)
+        if (item.video) Glyph(Ph.Play, null, corner, tones.frost)
+        if (item.scene) Glyph(if (item.web) Ph.GlobeSimple else Ph.Sparkle, null, corner, tones.frost)
+        if (picked) Glyph(Ph.CheckCircle, null, Modifier.align(Alignment.TopStart).padding(4.dp), MaterialTheme.colorScheme.primary)
     }
 }
 

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -58,7 +57,7 @@ fun WebPrivacy(main: Main, uid: String, web: JSONObject?) {
     if (web.optBoolean("network")) Toggle(stringResource(R.string.web_reach), web.optBoolean("online")) { on ->
         main.act(false) { ask("grant", "uid" to uid, "input" to "network", "on" to on) }
     }
-    if (web.optBoolean("storage")) TextButton({
+    if (web.optBoolean("storage")) WordAction({
         main.act(false) {
             ask("clear_data", "uid" to uid)
             main.toast(cleared)

@@ -11,7 +11,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -67,7 +66,7 @@ fun Relief(main: Main, uid: String, state: JSONObject) {
     }
     if (moving && state.optString("still") == "no_model") {
         Note(stringResource(R.string.still_no_model, state.optString("model_size")), MaterialTheme.colorScheme.error)
-        TextButton(make, Modifier.padding(horizontal = 8.dp), enabled = busy == null) { Text(stringResource(R.string.get_depth_model)) }
+        WordAction(make, Modifier.padding(horizontal = 8.dp), enabled = busy == null) { Text(stringResource(R.string.get_depth_model)) }
     }
     if (moving) {
         Level(stringResource(R.string.strength), state.optDouble("strength", 0.02).toFloat(), MIN_STRENGTH..MAX_STRENGTH) { tune("strength" to it) }
@@ -84,7 +83,7 @@ fun Relief(main: Main, uid: String, state: JSONObject) {
         Note(stringResource(if (state.optBoolean("layers")) R.string.layers_ready else R.string.layers_none))
         UNMOVED[state.optString("still")]?.let { Note(stringResource(it), MaterialTheme.colorScheme.error) }
         if (state.optJSONObject("fill")?.optString("used")?.isNotEmpty() == true) {
-            TextButton({ Depth.layers(uid) }, Modifier.padding(horizontal = 8.dp), enabled = busy == null) {
+            WordAction({ Depth.layers(uid) }, Modifier.padding(horizontal = 8.dp), enabled = busy == null) {
                 Text(stringResource(R.string.make_layers))
             }
         }
@@ -96,27 +95,27 @@ fun Relief(main: Main, uid: String, state: JSONObject) {
     ) { Depth.device.value = it }
     Row(Modifier.padding(horizontal = 8.dp), Arrangement.spacedBy(8.dp), Alignment.CenterVertically) {
         val again = if (state.optBoolean("map")) R.string.remake_map else R.string.make_map
-        TextButton(make, enabled = busy == null) { Text(stringResource(again)) }
-        TextButton({ open.launch(arrayOf(PNG)) }, enabled = busy == null) { Text(stringResource(R.string.import_map)) }
+        WordAction(make, enabled = busy == null) { Text(stringResource(again)) }
+        WordAction({ open.launch(arrayOf(PNG)) }, enabled = busy == null) { Text(stringResource(R.string.import_map)) }
     }
     if (state.optBoolean("map") && busy == null) Levels(main, uid, state)
     if (busy == uid) Row(Modifier.padding(horizontal = 16.dp), Arrangement.spacedBy(8.dp), Alignment.CenterVertically) {
         val share = Depth.progress.floatValue
         val bar = Modifier.weight(1f)
         if (share < 0f) LinearProgressIndicator(bar) else LinearProgressIndicator({ share }, bar)
-        TextButton(Depth::cancel) { Text(stringResource(R.string.cancel)) }
+        WordAction(Depth::cancel) { Text(stringResource(R.string.cancel)) }
     }
     Depth.failure.value?.takeIf { it.first == uid && busy == null }?.let { (_, error) -> Note(LocalContext.current.told(error).ifBlank { error.javaClass.simpleName }, MaterialTheme.colorScheme.error) }
     consent?.let { model ->
         AlertDialog(
             onDismissRequest = { consent = null },
             confirmButton = {
-                TextButton({
+                WordAction({
                     consent = null
                     Depth.make(uid)
                 }) { Text(stringResource(R.string.download)) }
             },
-            dismissButton = { TextButton({ consent = null }) { Text(stringResource(R.string.cancel)) } },
+            dismissButton = { WordAction({ consent = null }) { Text(stringResource(R.string.cancel)) } },
             title = { Text(stringResource(R.string.download_model)) },
             text = {
                 val terms = listOf("title", "size", "hosts", "license", "license_url").map(model::getString)

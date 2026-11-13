@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,10 +86,10 @@ fun Scene(main: Main, uid: String, modifier: Modifier = Modifier) {
             Saved(name, { naming = preset to name }, { exporting = preset; writing.launch("$name.json") }) { main.act { ask("forget", "preset" to preset) } }
         }
         Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp)) {
-            TextButton({ naming = "" to "" }) { Text(stringResource(R.string.save_preset)) }
-            TextButton({ exporting = ""; writing.launch(FILE) }) { Text(stringResource(R.string.export_settings)) }
-            TextButton({ reading.launch(arrayOf(JSON, "text/plain")) }) { Text(stringResource(R.string.import_settings)) }
-            TextButton({ keeping.launch(arrayOf(JSON, "text/plain")) }) { Text(stringResource(R.string.import_preset)) }
+            WordAction({ naming = "" to "" }) { Text(stringResource(R.string.save_preset)) }
+            WordAction({ exporting = ""; writing.launch(FILE) }) { Text(stringResource(R.string.export_settings)) }
+            WordAction({ reading.launch(arrayOf(JSON, "text/plain")) }) { Text(stringResource(R.string.import_settings)) }
+            WordAction({ keeping.launch(arrayOf(JSON, "text/plain")) }) { Text(stringResource(R.string.import_preset)) }
         }
         if (form.optBoolean("video")) Reeler(main, uid, form, set)
         val fields = form.optJSONArray("fields") ?: JSONArray()
@@ -104,7 +103,7 @@ fun Scene(main: Main, uid: String, modifier: Modifier = Modifier) {
                 main.act { ask("secret", "uid" to uid, "key" to key, "text" to text) }
             }
         }
-        if (all.isNotEmpty()) TextButton({ main.act { ask("reset", "uid" to uid) } }, Modifier.padding(horizontal = 8.dp)) {
+        if (all.isNotEmpty()) WordAction({ main.act { ask("reset", "uid" to uid) } }, Modifier.padding(horizontal = 8.dp)) {
             Text(stringResource(R.string.reset))
         }
     }

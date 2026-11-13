@@ -3,8 +3,6 @@ package io.github.wallpaper_rs
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,12 +32,12 @@ fun hollow(kind: String, searched: String): Hollow = when {
 @Composable
 fun Empty(main: Main, why: Hollow, sources: () -> Unit) = Column(Modifier.padding(16.dp), Arrangement.spacedBy(12.dp)) {
     Text(stringResource(why.text))
-    if (why == Hollow.LIBRARY) Button(main::examples) { Text(stringResource(R.string.examples)) }
+    if (why == Hollow.LIBRARY) Action(main::examples) { Text(stringResource(R.string.examples)) }
     if (why == Hollow.LIBRARY || why == Hollow.IMAGES || why == Hollow.VIDEOS) {
         val pick = stringResource(R.string.pick_media)
-        if (why == Hollow.LIBRARY) OutlinedButton(main::choose) { Text(pick) } else Button(main::choose) { Text(pick) }
+        if (why == Hollow.LIBRARY) QuietAction(main::choose) { Text(pick) } else Action(main::choose) { Text(pick) }
     }
     if (why != Hollow.FAVORITES && why != Hollow.SEARCH) {
-        if (why == Hollow.LIBRARY) Button(sources) { Text(stringResource(R.string.get_wallpapers)) } else OutlinedButton(sources) { Text(stringResource(R.string.get_wallpapers)) }
+        if (why == Hollow.LIBRARY) Action(sources) { Text(stringResource(R.string.get_wallpapers)) } else QuietAction(sources) { Text(stringResource(R.string.get_wallpapers)) }
     }
 }

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -82,7 +81,7 @@ private fun Main.commit(target: String) = Render.post {
 fun Placing(main: Main) = AlertDialog(
     onDismissRequest = { main.placing.value = false },
     confirmButton = {},
-    dismissButton = { TextButton({ main.placing.value = false }) { Text(stringResource(R.string.cancel)) } },
+    dismissButton = { WordAction({ main.placing.value = false }) { Text(stringResource(R.string.cancel)) } },
     title = { Text(stringResource(R.string.place_where)) },
     text = {
         Column {

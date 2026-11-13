@@ -14,7 +14,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
@@ -91,8 +90,8 @@ fun NoticeAsk(main: Main) {
     if (!main.noticing.value) return
     AlertDialog(
         onDismissRequest = { main.noticing.value = false },
-        confirmButton = { TextButton({ main.noticing.value = false; request.launch(POST_NOTIFICATIONS) }) { Text(stringResource(R.string.convert_notice_allow)) } },
-        dismissButton = { TextButton({ main.noticing.value = false }) { Text(stringResource(R.string.convert_notice_no)) } },
+        confirmButton = { WordAction({ main.noticing.value = false; request.launch(POST_NOTIFICATIONS) }) { Text(stringResource(R.string.convert_notice_allow)) } },
+        dismissButton = { WordAction({ main.noticing.value = false }) { Text(stringResource(R.string.convert_notice_no)) } },
         title = { Text(stringResource(R.string.convert_notice_title)) },
         text = { Text(stringResource(R.string.convert_notice_why)) },
     )

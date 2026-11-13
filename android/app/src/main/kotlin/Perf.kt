@@ -6,7 +6,6 @@ import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,7 +49,7 @@ fun PerfControls() {
         recording = it
     }
     Note(stringResource(R.string.perf_hint))
-    TextButton({
+    WordAction({
         scope.launch {
             val text = withContext(Dispatchers.IO) { Perf.report() }
             context.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(ClipData.newPlainText("wallpaper-rs", text))

@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 @Composable
-fun Sources(main: Main, library: (String) -> Unit) {
+fun Sources(main: Main, close: (() -> Unit)? = null, library: (String) -> Unit) {
     var changes by remember { mutableIntStateOf(0) }
     var task by remember { mutableStateOf<String?>(null) }
     val status by loaded(JSONObject(), changes, main.revision.intValue) { Sync.status() }
@@ -35,7 +35,7 @@ fun Sources(main: Main, library: (String) -> Unit) {
         }
     }
     LazyColumn {
-        item(key = "header") { Header(stringResource(R.string.sources)) }
+        item(key = "header") { Header(stringResource(R.string.sources), close) }
         item(key = "intro") { Note(stringResource(R.string.sources_intro)) }
         task?.let { waiting -> item(key = "waiting") { Waiting(main, waiting) } }
         item(key = "providers") { Column { Providers(main, providers, run, library) } }

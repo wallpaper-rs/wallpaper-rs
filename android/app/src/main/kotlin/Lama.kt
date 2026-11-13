@@ -4,7 +4,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,14 +26,14 @@ fun LamaNote(main: Main, fill: String?, changes: Int) {
         ListItem(
             headlineContent = { Text(stringResource(R.string.lama_model, lama.optString("size"))) },
             trailingContent = {
-                TextButton({ main.act { withContext(Dispatchers.IO) { depth("forget_lama") } } }, enabled = !busy) {
+                WordAction({ main.act { withContext(Dispatchers.IO) { depth("forget_lama") } } }, enabled = !busy) {
                     Text(stringResource(R.string.delete_model))
                 }
             },
         )
     } else if (lama.has("files")) {
         Note(stringResource(R.string.lama_missing), MaterialTheme.colorScheme.error)
-        TextButton({ if (lama.optBoolean("allowed")) consent = lama else main.toast(off) }, enabled = !busy) {
+        WordAction({ if (lama.optBoolean("allowed")) consent = lama else main.toast(off) }, enabled = !busy) {
             Text(stringResource(R.string.download_lama))
         }
     }
@@ -42,12 +41,12 @@ fun LamaNote(main: Main, fill: String?, changes: Int) {
         AlertDialog(
             onDismissRequest = { consent = null },
             confirmButton = {
-                TextButton({
+                WordAction({
                     consent = null
                     Depth.fetchLama()
                 }) { Text(stringResource(R.string.download)) }
             },
-            dismissButton = { TextButton({ consent = null }) { Text(stringResource(R.string.cancel)) } },
+            dismissButton = { WordAction({ consent = null }) { Text(stringResource(R.string.cancel)) } },
             title = { Text(stringResource(R.string.download_lama)) },
             text = {
                 val terms = listOf("title", "size", "hosts", "license", "license_url").map(model::getString)

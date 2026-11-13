@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +32,7 @@ fun Framing(main: Main, uid: String, state: JSONObject) {
     Choices(stringResource(R.string.fit), fitChoices(), fit) { chosen -> main.fit(listOf(uid), chosen) }
     Row(Modifier.padding(start = 16.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(stringResource(R.string.frame_hint), Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-        TextButton({ main.act { withContext(Dispatchers.IO) { depth("unframe", "uid" to uid) } } }, enabled = !state.isNull("crop")) {
+        WordAction({ main.act { withContext(Dispatchers.IO) { depth("unframe", "uid" to uid) } } }, enabled = !state.isNull("crop")) {
             Text(stringResource(R.string.reset_frame))
         }
     }

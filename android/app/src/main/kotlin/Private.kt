@@ -10,7 +10,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,8 +27,8 @@ fun Phrase(title: String, close: () -> Unit, done: (String) -> Unit) {
     var phrase by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = close,
-        confirmButton = { TextButton({ done(phrase) }, enabled = phrase.isNotBlank()) { Text(title) } },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        confirmButton = { WordAction({ done(phrase) }, enabled = phrase.isNotBlank()) { Text(title) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
         title = { Text(stringResource(R.string.recovery_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -51,17 +50,17 @@ fun Recovery(status: JSONObject, run: Run) = Column(Modifier.padding(horizontal 
     if (!status.optBoolean("encrypted")) return@Column
     Text(stringResource(R.string.recovery_title), style = MaterialTheme.typography.titleSmall)
     if (status.optString("state") == "needs_key") {
-        TextButton({ asking = "restore" }) { Text(stringResource(R.string.restore)) }
+        WordAction({ asking = "restore" }) { Text(stringResource(R.string.restore)) }
     } else {
         val shown = if (status.optString("recovery") == "off") R.string.recovery_off else R.string.recovery_current
         Text(stringResource(shown), style = MaterialTheme.typography.bodyMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton({ asking = "escrow" }) { Text(stringResource(R.string.recovery_set)) }
-            if (status.optString("recovery") != "off") TextButton({ run("") { account("escrow", "passphrase" to "") } }) {
+            WordAction({ asking = "escrow" }) { Text(stringResource(R.string.recovery_set)) }
+            if (status.optString("recovery") != "off") WordAction({ run("") { account("escrow", "passphrase" to "") } }) {
                 Text(stringResource(R.string.recovery_remove))
             }
         }
-        if (status.optString("state") == "ready") TextButton({ run(rotating) { account("rotate") } }) {
+        if (status.optString("state") == "ready") WordAction({ run(rotating) { account("rotate") } }) {
             Text(stringResource(R.string.rotate_key))
         }
     }
@@ -96,7 +95,7 @@ fun PrivateFiles(main: Main, status: JSONObject, run: Run) {
             headlineContent = { Text(name) },
             supportingContent = { Text(listOfNotNull(size(file.optLong("size")), note).joinToString(" · ")) },
             trailingContent = {
-                if (file.isNull("item")) TextButton({ run(fetching) { account("fetch", "id" to file.getString("id")) } }) {
+                if (file.isNull("item")) WordAction({ run(fetching) { account("fetch", "id" to file.getString("id")) } }) {
                     Text(stringResource(R.string.private_fetch))
                 }
             },

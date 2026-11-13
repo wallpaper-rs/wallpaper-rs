@@ -7,7 +7,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -69,7 +68,7 @@ internal fun Entry(label: String, value: String, modifier: Modifier, enabled: Bo
             keyboardOptions = KeyboardOptions(keyboardType = if (hidden) KeyboardType.Password else KeyboardType.Text, imeAction = if (lines) ImeAction.Default else ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { keep(typed) }),
         )
-        if (lines) TextButton({ keep(typed) }, Modifier.align(Alignment.End), enabled = enabled && typed != value) { Text(stringResource(R.string.save_text)) }
+        if (lines) WordAction({ keep(typed) }, Modifier.align(Alignment.End), enabled = enabled && typed != value) { Text(stringResource(R.string.save_text)) }
     }
 }
 

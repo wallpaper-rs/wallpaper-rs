@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +37,7 @@ fun Levels(main: Main, uid: String, state: JSONObject) {
             main.act { withContext(Dispatchers.IO) { depth("levels", "uid" to uid, key to level(key, it)) } }
         }
     }
-    TextButton({ main.act { withContext(Dispatchers.IO) { depth("unmap", "uid" to uid) } } }, Modifier.padding(horizontal = 8.dp)) {
+    WordAction({ main.act { withContext(Dispatchers.IO) { depth("unmap", "uid" to uid) } } }, Modifier.padding(horizontal = 8.dp)) {
         Text(stringResource(R.string.depth_remove))
     }
 }

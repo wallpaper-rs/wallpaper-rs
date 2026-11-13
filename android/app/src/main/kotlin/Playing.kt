@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +44,7 @@ internal fun MediaGrants(form: JSONObject, grant: (String, Boolean) -> Unit) {
         else stringResource(R.string.media_status, shown.players, word(shown.track), word(shown.playing), word(shown.cover))
         Text(line, Modifier.padding(16.dp, 4.dp), style = MaterialTheme.typography.bodySmall)
     }
-    if (on && !access) TextButton({ asking = true }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.media_access_open)) }
+    if (on && !access) WordAction({ asking = true }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.media_access_open)) }
     var confirming by remember { mutableStateOf(false) }
     if (on && uses.optBoolean("network")) {
         Toggle(stringResource(R.string.show_media_network), granted.optBoolean("media_network")) { wanted ->
@@ -58,23 +57,23 @@ internal fun MediaGrants(form: JSONObject, grant: (String, Boolean) -> Unit) {
         title = { Text(stringResource(R.string.show_media_network)) },
         text = { Text(stringResource(R.string.media_network_why)) },
         confirmButton = {
-            TextButton({
+            WordAction({
                 confirming = false
                 grant("media_network", true)
             }) { Text(stringResource(R.string.media_network_allow)) }
         },
-        dismissButton = { TextButton({ confirming = false }) { Text(stringResource(android.R.string.cancel)) } },
+        dismissButton = { WordAction({ confirming = false }) { Text(stringResource(android.R.string.cancel)) } },
     )
     if (asking) AlertDialog(
         onDismissRequest = { asking = false },
         title = { Text(stringResource(R.string.media_access_title)) },
         text = { Text(stringResource(R.string.media_access_why)) },
         confirmButton = {
-            TextButton({
+            WordAction({
                 asking = false
                 context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }) { Text(stringResource(R.string.media_access_open)) }
         },
-        dismissButton = { TextButton({ asking = false }) { Text(stringResource(android.R.string.cancel)) } },
+        dismissButton = { WordAction({ asking = false }) { Text(stringResource(android.R.string.cancel)) } },
     )
 }

@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.FilterChip
@@ -21,7 +18,6 @@ import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -77,11 +73,11 @@ fun Schedule(rules: JSONObject, save: (String, Any) -> Unit) = Column(Modifier.p
     Row(Modifier.horizontalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) {
         times.forEach { time ->
             InputChip(true, { save("at", JSONArray(times - time)) }, { Text(time) },
-                trailingIcon = { Icon(Icons.Default.Close, stringResource(R.string.remove_hour)) })
+                trailingIcon = { Glyph(Ph.X, stringResource(R.string.remove_hour)) })
         }
         AssistChip({
             TimePickerDialog(context, { _, hour, minute -> save("at", JSONArray(timed(times, hour, minute))) }, 8, 0, true).show()
-        }, { Text(stringResource(R.string.add_hour)) }, leadingIcon = { Icon(Icons.Default.Add, null) })
+        }, { Text(stringResource(R.string.add_hour)) }, leadingIcon = { Glyph(Ph.Plus, null) })
     }
     if (times.isNotEmpty()) Text(stringResource(R.string.hours_hint), style = MaterialTheme.typography.bodySmall)
 }
@@ -115,8 +111,8 @@ fun Smart(list: Playlist, save: (JSONObject) -> Unit) {
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (matches >= 0) Text(stringResource(R.string.matches, matches), Modifier.padding(vertical = 12.dp), style = MaterialTheme.typography.bodySmall)
-            if (text != saved.orEmpty()) TextButton({ save(list.edited("query", text.ifBlank { null })) }) { Text(stringResource(R.string.save_search)) }
-            if (saved != null) TextButton({ save(list.edited("query", null)) }) { Text(stringResource(R.string.make_manual)) }
+            if (text != saved.orEmpty()) WordAction({ save(list.edited("query", text.ifBlank { null })) }) { Text(stringResource(R.string.save_search)) }
+            if (saved != null) WordAction({ save(list.edited("query", null)) }) { Text(stringResource(R.string.make_manual)) }
         }
     }
 }
@@ -126,8 +122,8 @@ fun Named(title: String, name: String, close: () -> Unit, done: (String) -> Unit
     var typed by remember(name) { mutableStateOf(name) }
     AlertDialog(
         onDismissRequest = close,
-        confirmButton = { TextButton({ done(typed.trim()) }, enabled = typed.isNotBlank()) { Text(stringResource(R.string.save_name)) } },
-        dismissButton = { TextButton(close) { Text(stringResource(R.string.cancel)) } },
+        confirmButton = { WordAction({ done(typed.trim()) }, enabled = typed.isNotBlank()) { Text(stringResource(R.string.save_name)) } },
+        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
         title = { Text(title) },
         text = { OutlinedTextField(typed, { typed = it }, label = { Text(stringResource(R.string.name)) }, singleLine = true) },
     )

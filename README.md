@@ -314,7 +314,8 @@ la anterior, también si cambias de uno a otro, y conserva el fondo elegido. Áb
 (Android pedirá permitir la instalación desde esa app) o instálalo desde un ordenador con
 `adb install -r wallpaper-rs-android-arm64-v8a.apk`.
 
-Para ponerlo de fondo, abre la app **wallpaper-rs**. La pestaña *Biblioteca* muestra las fotos y
+Para ponerlo de fondo, abre la app **wallpaper-rs**. La barra de abajo tiene tres pestañas, *Biblioteca*,
+*Listas* y *Ajustes*, y detrás de cada página se ve, quieta y velada, la imagen del fondo en uso. La pestaña *Biblioteca* muestra las fotos y
 los vídeos añadidos con *Añadir*, que ofrece tres caminos: *Fotos y vídeos* abre el selector de fotos
 de Android, *Elegir archivos* abre el selector de documentos para escoger varias imágenes y vídeos de
 cualquier carpeta, de la tarjeta o de una nube instalada, e *Importar una carpeta* añade las imágenes
@@ -1216,7 +1217,7 @@ obligatorio que falta, consejos) salen en el idioma del escritorio con el catál
 `po/<idioma>/wprs-ctl.po`; los nombres de las órdenes, de las opciones y de sus valores quedan en
 inglés para que los scripts sigan funcionando igual en cualquier idioma.
 
-La pestaña *Dispositivos* enlaza el teléfono con tu [servidor propio](#servidor-propio) con el
+La fila *Cuenta* de *Ajustes* abre la página que enlaza el teléfono con tu [servidor propio](#servidor-propio) con el
 mismo cliente en Rust que el escritorio, para compartir la biblioteca, las listas y los ajustes con
 tus ordenadores. Se escribe la dirección del servidor, *Enlazar este teléfono* muestra un código que
 se aprueba en un ordenador ya enlazado (`wprs-ctl server approve` o la página *Cuenta* de la app, con
@@ -1266,7 +1267,7 @@ revocado un equipo), los *Archivos privados* (los fondos propios que otro equipo
 *Descargar* para añadirlos a la biblioteca del teléfono, y en la página de una imagen o un vídeo
 del teléfono *Guardar cifrado en el servidor*, que lo sube por partes cifradas igual que
 `wprs-ctl server files share`, y al desactivarlo se borra del servidor), las claves de proveedores
-que se sincronizan (el teléfono las guarda selladas por el almacén de claves y las muestra). La pestaña
+que se sincronizan (el teléfono las guarda selladas por el almacén de claves y las muestra). La página
 *Fuentes* reúne de dónde vienen los fondos, con o sin servidor propio, y es lo que ofrece el botón
 *Conseguir fondos de internet* de la biblioteca vacía y la opción *Desde internet* de *Añadir*. Arriba están las
 *Imágenes de internet*, los proveedores en el teléfono (imagen del día de Bing, imagen astronómica de la NASA,
