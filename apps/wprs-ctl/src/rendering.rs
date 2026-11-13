@@ -114,7 +114,7 @@ pub fn run(command: Rendering) -> Result<()> {
         pointer: pointer.map(|(from, to)| Trace { from, to, click }),
     };
     let open = |bloom: bool| -> Result<wprs_render::Opened> {
-        let (scene, props) = wprs_editor::reach::open(&project.doc, bloom)?;
+        let (scene, props) = wprs_editor::reach::open(&project.doc, &project.dir, bloom)?;
         let mut assets = SceneAssets::read(&scene, wprs_editor::reach::reader(&project.dir))
             .and_then(|a| a.with_scripts(&scene, wprs_editor::reach::reader(&project.dir)))
             .map_err(anyhow::Error::msg)?;

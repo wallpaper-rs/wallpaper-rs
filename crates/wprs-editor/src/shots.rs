@@ -31,7 +31,7 @@ pub fn poster_time(doc: &Value) -> f64 {
 
 pub fn frames(dir: &Path, doc: &Value, spec: (u32, &[f64]), each: impl FnMut(RgbaImage)) -> Result<()> {
     scened(doc)?;
-    let scene = Scene::from_json(&crate::reach::shown(doc, true).to_string())?;
+    let scene = crate::reach::parse(doc, dir, true)?;
     let properties: BTreeMap<String, wprs_format::Property> =
         serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
     let language = doc["manifest"]["default_locale"].as_str().unwrap_or("en");

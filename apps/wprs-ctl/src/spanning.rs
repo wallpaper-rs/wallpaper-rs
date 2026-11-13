@@ -51,7 +51,7 @@ fn inside(path: &str) -> bool {
 
 fn poster(dir: &Path, edge: u32, time: Option<f64>) -> Result<RgbaImage> {
     let project = Project::open(dir)?;
-    let scene = wprs_scene::Scene::from_json(&wprs_editor::reach::shown(&project.doc, true).to_string())?;
+    let scene = wprs_editor::reach::parse(&project.doc, &project.dir, true)?;
     let read = |path: &str| match inside(path) {
         true => std::fs::read(project.dir.join(path)).map_err(|e| format!("{path}: {e}")),
         false => Err(fill(told("%1 is outside the scene folder"), &[&path])),

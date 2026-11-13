@@ -64,8 +64,16 @@ pub fn shown(doc: &Value, bloom: bool) -> Value {
     scene
 }
 
-pub fn open(doc: &Value, bloom: bool) -> anyhow::Result<(wprs_scene::Scene, wprs_scene::Values)> {
-    let scene = wprs_scene::Scene::from_json(&shown(doc, bloom).to_string())?;
+pub fn parse(doc: &Value, dir: &Path, bloom: bool) -> anyhow::Result<wprs_scene::Scene> {
+    let mut scene = wprs_scene::Scene::from_json(&shown(doc, bloom).to_string())?;
+    let properties: std::collections::BTreeMap<String, wprs_format::Property> =
+        serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
+    scene.adopt(&properties, wprs_format::Folder(dir)).map_err(|e| anyhow::anyhow!(e))?;
+    Ok(scene)
+}
+
+pub fn open(doc: &Value, dir: &Path, bloom: bool) -> anyhow::Result<(wprs_scene::Scene, wprs_scene::Values)> {
+    let scene = parse(doc, dir, bloom)?;
     let properties: std::collections::BTreeMap<String, wprs_format::Property> =
         serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
     Ok((scene, wprs_scene::effective(&properties, &[])))

@@ -57,7 +57,7 @@ pub fn shoot(dir: &Path, doc: &Value, out: &Path, spec: &Value) -> anyhow::Resul
     };
     rehearsal.media = played.as_ref().map(|p| p.state.clone());
     let open = |bloom: bool| -> anyhow::Result<wprs_render::Opened> {
-        let (scene, props) = wprs_editor::reach::open(doc, bloom)?;
+        let (scene, props) = wprs_editor::reach::open(doc, dir, bloom)?;
         let mut assets = SceneAssets::read(&scene, wprs_editor::reach::reader(dir))
             .and_then(|a| a.with_scripts(&scene, wprs_editor::reach::reader(dir)))
             .map_err(anyhow::Error::msg)?;

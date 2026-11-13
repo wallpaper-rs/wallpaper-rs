@@ -41,3 +41,15 @@ fn bad_shots_are_refused() {
         assert!(act(&mut p, bad.clone()).is_err(), "{bad}");
     }
 }
+
+#[test]
+fn the_shipped_3d_example_draws_its_objects_from_its_folder() {
+    if !drawing() {
+        return;
+    }
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scenes/solids");
+    let project = wprs_editor::Project::open(&dir).unwrap();
+    let image = wprs_editor::shots::still(&project.dir, &project.doc, 160, (Some(2.0), None)).unwrap();
+    let colours: std::collections::HashSet<_> = image.pixels().map(|p| p.0).collect();
+    assert!(colours.len() > 20, "{} colours", colours.len());
+}
