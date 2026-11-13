@@ -162,6 +162,11 @@ ColumnLayout {
         tools: tools
     }
 
+    SceneSwarmOverLife {
+        Layout.fillWidth: true
+        tools: tools
+    }
+
     SceneSwarmLight {
         Layout.fillWidth: true
         tools: tools

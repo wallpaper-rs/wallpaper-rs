@@ -17596,3 +17596,15 @@ msgstr "Quitar este emisor"
 #: apps/wprs-app/qml/SceneSwarmTools.qml
 msgid "Add an emitter"
 msgstr "Añadir un emisor"
+
+#: apps/wprs-app/qml/SceneSwarmOverLife.qml
+msgid "Along the life of a particle"
+msgstr "A lo largo de la vida de una partícula"
+
+#: apps/wprs-app/qml/SceneSwarmOverLife.qml
+msgid "Shape the size"
+msgstr "Dar forma al tamaño"
+
+#: apps/wprs-app/qml/SceneSwarmOverLife.qml
+msgid "Fade the color"
+msgstr "Degradar el color"

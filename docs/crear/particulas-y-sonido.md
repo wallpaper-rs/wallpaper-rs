@@ -209,7 +209,7 @@ Hasta 8 colisionadores, cada uno `{ "bounds", "bounce", "friction", "kill", "sti
 | `frames` | `time` (a `fps`, 12 por defecto), `life` o `random`. |
 | `mix` | Mezcla un fotograma con el siguiente. |
 | `cycles` | Cuántas veces se repiten los fotogramas en la vida (1 a 64, con `frames: life`). |
-| `size_over_life` | Lista de `[t, valor]` (hasta 64): multiplica el tamaño. |
+| `size_over_life` | Lista de `[t, valor]` (hasta 64): multiplica el tamaño. | En el panel de partículas, «A lo largo de la vida de una partícula» da una curva para arrastrar los puntos y, para el color, una barra de degradado.
 | `color_over_life` | Lo mismo, con colores. |
 | `brightness` | 0 a 16, puede seguir un valor. |
 | `stretch` | Segundos de movimiento a lo largo de los que se estira la partícula; o `{ "time", "min", "max" }` en píxeles. |
