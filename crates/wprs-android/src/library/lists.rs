@@ -1,8 +1,8 @@
 use super::known;
-use crate::{Error, settings, store};
+use crate::{Error, said, settings, store};
 use serde_json::{Value, json};
 use std::collections::HashSet;
-use wprs_library::{Item, Library};
+use wprs_library::{Item, Library, Rules};
 
 pub(crate) fn remove(lib: &mut Library, uids: &[String], now: i64) -> Result<Value, Error> {
     let refs = known(lib, uids);
@@ -44,6 +44,23 @@ pub(super) fn add(lib: &mut Library, playlist: &str, items: &[String]) -> Result
     let mut seen = HashSet::new();
     let fresh: Vec<&str> = known(lib, items).into_iter().filter(|i| seen.insert(*i) && !listed(i)).collect();
     Ok(json!(lib.add_to_playlist(playlist, &fresh)?))
+}
+
+pub(super) fn rotate(lib: &mut Library, name: &str, items: &[String], every: &str) -> Result<Value, Error> {
+    let rules: Rules = serde_json::from_value(json!({ "interval": every }))?;
+    if rules.interval.is_zero() {
+        return Err(said("android.rotation_interval", "give a time longer than zero", &[]));
+    }
+    let names: Vec<String> = lib.playlists()?.into_iter().map(|p| p.name).collect();
+    let (mut chosen, mut number) = (name.to_owned(), 1);
+    while names.contains(&chosen) {
+        number += 1;
+        chosen = format!("{name} {number}");
+    }
+    let uid = lib.create_playlist(&chosen, None, &rules)?;
+    lib.add_to_playlist(&uid, &known(lib, items))?;
+    crate::choice::pick(Some(crate::choice::Choice::Playlist(uid.clone())));
+    Ok(json!(uid))
 }
 
 pub(super) fn listed(items: Vec<Item>) -> Result<Value, Error> {

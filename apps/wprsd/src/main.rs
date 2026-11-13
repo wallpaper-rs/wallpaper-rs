@@ -70,6 +70,7 @@ mod restart;
 mod reveals;
 mod rgb;
 mod rgb1;
+mod rotating;
 mod rotation;
 mod scan;
 mod scenepresets;

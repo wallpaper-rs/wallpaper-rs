@@ -76,6 +76,8 @@ calls! {
         SetQuery set_query(playlist: str, query: str);
         Delete delete(playlist: str);
         AddItems add_items(playlist: str, uids: strs);
+        AddFolder add_folder(playlist: str, path: str, follow: bool);
+        Rotate rotate(name: str, uids: strs, folder: str, follow: bool, every: str, output: str);
         RemoveItems remove_items(playlist: str, uids: strs);
         RemoveEntries remove_entries(playlist: str, indexes: u32s, expected: strs);
         MoveItem move_item(playlist: str, from: u32, to: u32, expected: str);

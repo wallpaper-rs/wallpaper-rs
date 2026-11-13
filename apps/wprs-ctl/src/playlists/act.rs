@@ -1,5 +1,5 @@
 use super::{Playlist, history, playlists, rules};
-use crate::input::{resolve, strs};
+use crate::input::{path_arg, resolve, strs};
 use crate::show;
 use crate::told::{fill, told};
 use crate::usage;
@@ -19,8 +19,25 @@ pub async fn run(client: &Client, command: Playlist) -> Result<()> {
         Playlist::Rename { playlist, name } => pl.rename(&playlist, &name).await?,
         Playlist::Query { playlist, query } => pl.set_query(&playlist, &query).await?,
         Playlist::Rm { playlist } => pl.delete(&playlist).await?,
-        Playlist::Add { playlist, items } => {
-            pl.add_items(&playlist, &strs(&resolve(client, &items).await?)).await?
+        Playlist::Add { playlist, items, folder, follow } => {
+            if !items.is_empty() {
+                pl.add_items(&playlist, &strs(&resolve(client, &items).await?)).await?
+            }
+            if let Some(folder) = folder {
+                let count = pl.add_folder(&playlist, &path_arg(&folder)?, follow).await?;
+                eprintln!("{}", fill(told("The folder has %1 pictures and videos"), &[&count]));
+            }
+        }
+        Playlist::Rotate { items, folder, follow, every, name, out } => {
+            let uids = resolve(client, &items).await?;
+            let folder = folder.map(|f| path_arg(&f)).transpose()?.unwrap_or_default();
+            let name = name.unwrap_or_default();
+            let at = crate::inputs::asking(client, &out.output, async {
+                let uid = pl.rotate(&name, &strs(&uids), &folder, follow, &every, &out.output).await?;
+                println!("{uid}");
+                Ok(())
+            });
+            at.await?
         }
         Playlist::Remove { playlist, items } => {
             pl.remove_items(&playlist, &strs(&resolve(client, &items).await?)).await?

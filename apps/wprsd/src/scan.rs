@@ -30,6 +30,11 @@ fn scanned(source: Option<String>, r: ScanReport) -> SourceScan {
 
 impl Daemon {
     pub fn add_source(self: &Arc<Self>, path: &str, recursive: bool) -> Result<(String, u64)> {
+        let uid = self.register_source(path, recursive)?;
+        Ok((uid.clone(), self.scan_job(&uid)))
+    }
+
+    pub(crate) fn register_source(self: &Arc<Self>, path: &str, recursive: bool) -> Result<String> {
         let given = local(path)?;
         let dir = fs::canonicalize(&given).ok().filter(|dir| dir.is_dir());
         let dir = dir.ok_or_else(|| invalid(format!("{path} is not an existing directory")))?;
@@ -53,7 +58,7 @@ impl Daemon {
         })?;
         self.library_changed(Vec::new());
         self.watch_sources();
-        Ok((uid.clone(), self.scan_job(&uid)))
+        Ok(uid)
     }
 
     pub fn provider_of(&self, path: &Path) -> Option<String> {

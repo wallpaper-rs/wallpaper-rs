@@ -89,12 +89,13 @@ fn library_and_preset_commands_parse() {
         ("lib thumb R1AB2C", r#"Lib(Thumb { item: "R1AB2C", size: "512" })"#.into()),
         (
             "lib apply R1AB2C -o DP-1 -f center -p dark",
-            r#"Lib(Apply(Applying { item: "R1AB2C", output: "DP-1", fit: Some(Center), span: false, preset: "dark" }))"#
+            r#"Lib(Apply(Applying { item: "R1AB2C", output: "DP-1", fit: Some(Center), span: false, preset: "dark", sound: None, volume: None }))"#
                 .into(),
         ),
+
         (
             "lib apply R1AB2C --span",
-            r#"Lib(Apply(Applying { item: "R1AB2C", output: "", fit: None, span: true, preset: "" }))"#.into(),
+            r#"Lib(Apply(Applying { item: "R1AB2C", output: "", fit: None, span: true, preset: "", sound: None, volume: None }))"#.into(),
         ),
         ("preset ls", "Preset(Ls { item: None, json: false })".into()),
         ("preset ls R1AB2C --json", r#"Preset(Ls { item: Some("R1AB2C"), json: true })"#.into()),
@@ -124,7 +125,7 @@ fn playlist_and_profile_commands_parse() {
         ("playlist rm Sea", r#"Playlist(Rm { playlist: "Sea" })"#),
         (
             "playlist add Mine R1AB2C X9Y8Z7",
-            r#"Playlist(Add { playlist: "Mine", items: ["R1AB2C", "X9Y8Z7"] })"#,
+            r#"Playlist(Add { playlist: "Mine", items: ["R1AB2C", "X9Y8Z7"], folder: None, follow: false })"#,
         ),
         ("playlist remove Mine R1AB2C", r#"Playlist(Remove { playlist: "Mine", items: ["R1AB2C"] })"#),
         ("playlist remove-at Mine 0 3", r#"Playlist(RemoveAt { playlist: "Mine", indexes: [0, 3] })"#),

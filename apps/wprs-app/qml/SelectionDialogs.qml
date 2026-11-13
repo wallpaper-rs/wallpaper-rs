@@ -16,6 +16,8 @@ Item {
     readonly property alias renamer: renamer
     readonly property alias rater: rater
     readonly property alias allower: allower
+    readonly property alias folder: more.folder
+    readonly property alias rotator: more.rotator
 
     Kirigami.PromptDialog {
         id: allower
@@ -86,20 +88,27 @@ Item {
         }
     }
 
+    RotateDialogs {
+        id: more
+
+        owner: dialogs.owner
+    }
+
     Kirigami.Dialog {
         id: playlist
 
         title: App.tr("Add to playlist")
         standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-        onOpened: App.query("List", [], "Playlists1", reply => dialogs && (dialogs.owner.playlists = reply.playlists.filter(p => p.query === null)))
-        onAccepted: App.act("AddItems", [chooser.currentValue, dialogs.owner.uids], "Playlists1")
+        onOpened: {
+            more.loadLists();
+            standardButton(Kirigami.Dialog.Ok).enabled = Qt.binding(() => chooser.ready);
+        }
+        onAccepted: chooser.resolve(uid => App.act("AddItems", [uid, dialogs.owner.uids], "Playlists1"))
 
-        QQC2.ComboBox {
+        PlaylistChoice {
             id: chooser
 
-            model: dialogs.owner.playlists
-            textRole: "name"
-            valueRole: "uid"
+            playlists: dialogs.owner.playlists
         }
     }
 

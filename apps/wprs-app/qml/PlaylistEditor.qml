@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
@@ -61,6 +62,22 @@ ColumnLayout {
             }
         }
 
+        RowLayout {
+            Kirigami.FormData.label: App.tr("Folder:")
+
+            QQC2.Button {
+                text: App.tr("Add a folder…")
+                icon.name: "folder-add"
+                onClicked: folders.open()
+            }
+
+            QQC2.Switch {
+                id: keep
+
+                text: App.tr("Keep following it: new files join the playlist")
+            }
+        }
+
         Settings {
             daemon: App
             model: App.schema.rules ?? []
@@ -98,6 +115,12 @@ ColumnLayout {
                 onClicked: App.act("Stop", [modelData], "Playlists1")
             }
         }
+    }
+
+    FolderDialog {
+        id: folders
+
+        onAccepted: App.act("AddFolder", [editor.uid, App.path(selectedFolder), keep.checked], "Playlists1", reply => applicationWindow().showPassiveNotification(App.tr("The folder has %1 pictures and videos", reply[0])))
     }
 
     PlaylistItems {

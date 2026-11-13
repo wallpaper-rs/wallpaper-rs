@@ -81,6 +81,24 @@ ctl playlist stop -o TEST-8
 expect "s['outputs']['TEST-8']['playlist'], $shown" "(None, '$kept')"
 ctl playlist rm Warm
 [ "$(ctl playlist ls --json | js "[p['name'] for p in r['playlists']]")" = "['Colors']" ] || fail "playlists: $(ctl playlist ls)"
+fresh=$WORK/fresh
+mkdir -p "$fresh"
+png "$fresh/d-teal.png" 008080
+png "$fresh/e-gold.png" ffd700
+ctl playlist new Folded >/dev/null && ctl playlist add Folded --folder "$fresh"
+[ "$(ctl playlist show Folded --json | js "r['total'], r['playlist']['query']")" = "(2, None)" ] ||
+  fail "folder added to a list: $(ctl playlist show Folded --json)"
+ctl playlist new Followed >/dev/null && ctl playlist add Followed --folder "$fresh" --follow
+png "$fresh/f-pink.png" ffc0cb
+ctl lib rescan --wait >/dev/null
+[ "$(ctl playlist show Followed --json | js "r['total']")" = 3 ] || fail "followed folder: $(ctl playlist show Followed --json)"
+if ctl playlist add Colors --folder "$fresh" --follow 2>/dev/null; then fail "a folder was followed by a playlist that holds a list"; fi
+rotation=$(ctl playlist rotate --folder "$fresh" --every 10m -o TEST-8 --name Spin)
+[ "$(ctl playlist rule Spin interval)" = 10m ] || fail "rotate interval: $(ctl playlist rule Spin)"
+expect "s['outputs']['TEST-8']['playlist']['name']" "'Spin'"
+if ctl playlist rotate --every 0s "$red" 2>/dev/null; then fail "a rotation without time was accepted"; fi
+ctl playlist stop -o TEST-8
+ctl playlist rm Folded && ctl playlist rm Followed && ctl playlist rm "$rotation"
 echo "playlist checks passed"
 
 ctl lib apply "$red" -o TEST-8 -f center

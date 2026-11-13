@@ -62,6 +62,18 @@ impl ItemModel {
         self.summary();
     }
 
+    pub fn range(mut self: Pin<&mut Self>, row: i32, extend: bool) {
+        let rows = self.as_mut().rust_mut().grid.range(usize::try_from(row).unwrap_or(usize::MAX), extend);
+        self.as_mut().changed(rows);
+        self.summary();
+    }
+
+    pub fn everything(mut self: Pin<&mut Self>, on: bool) {
+        let rows = self.as_mut().rust_mut().grid.all(on);
+        self.as_mut().changed(rows);
+        self.summary();
+    }
+
     pub fn summary(mut self: Pin<&mut Self>) {
         let all = |f: fn(&ItemSummary) -> bool| self.grid.selected().all(f);
         let flags = (all(|i| i.removable), all(|i| i.imported), all(|i| i.favorite));

@@ -45,6 +45,19 @@ Item {
             }
         },
         Kirigami.Action {
+            text: App.tr("Rotate every…")
+            icon.name: "media-playlist-repeat"
+            onTriggered: {
+                tools.take();
+                dialogs.rotator.open();
+            }
+        },
+        Kirigami.Action {
+            text: App.tr("Add a folder to a playlist…")
+            icon.name: "folder-add"
+            onTriggered: dialogs.folder.open()
+        },
+        Kirigami.Action {
             text: App.tr("Tags…")
             icon.name: "tag"
             enabled: tools.items.selected > 0
@@ -93,6 +106,16 @@ Item {
             }
         }
     ]
+
+    function addToPlaylist() {
+        take();
+        dialogs.playlist.open();
+    }
+
+    function rotate() {
+        take();
+        dialogs.rotator.open();
+    }
 
     function take() {
         uids = JSON.parse(items.selection());

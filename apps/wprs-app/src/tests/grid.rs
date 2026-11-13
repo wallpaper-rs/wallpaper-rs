@@ -122,3 +122,30 @@ fn a_new_search_over_many_rows_keeps_its_rows_and_selection() {
     grid.reset(vec![summary("U0450")], false);
     assert_eq!(grid.selected().count(), 0);
 }
+
+#[test]
+fn shift_selects_the_rows_between_the_last_choice_and_the_one_reached() {
+    let mut grid = Grid { size: 256, ..Grid::default() };
+    grid.apply(&Edit::Insert(0, ["A", "B", "C", "D", "E", "F"].iter().map(|uid| summary(uid)).collect()));
+    let picked = |grid: &Grid| grid.selected().map(|i| i.uid.clone()).collect::<Vec<_>>();
+    grid.toggle(1, true);
+    assert_eq!(grid.range(3, false), vec![2, 3]);
+    assert_eq!(picked(&grid), ["B", "C", "D"]);
+    assert_eq!(grid.range(0, false), vec![0, 2, 3]);
+    assert_eq!(picked(&grid), ["A", "B"]);
+    grid.toggle(4, false);
+    assert_eq!(grid.range(5, true), vec![5]);
+    assert_eq!(picked(&grid), ["A", "B", "E", "F"]);
+    assert_eq!(grid.range(99, false), Vec::<usize>::new());
+    assert_eq!(picked(&grid), ["A", "B", "E", "F"]);
+}
+
+#[test]
+fn everything_selects_and_clears_every_row() {
+    let mut grid = Grid { size: 256, ..Grid::default() };
+    grid.apply(&Edit::Insert(0, ["A", "B", "C"].iter().map(|uid| summary(uid)).collect()));
+    grid.toggle(1, true);
+    assert_eq!(grid.all(true), vec![0, 2]);
+    assert_eq!(grid.all(false), vec![0, 1, 2]);
+    assert_eq!(grid.all(false), Vec::<usize>::new());
+}

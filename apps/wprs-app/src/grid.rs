@@ -21,6 +21,7 @@ pub struct Grid {
     pub rows: Vec<Row>,
     pub total: u32,
     pub size: u32,
+    pub anchor: usize,
 }
 
 pub fn compose(text: &str, kind: &str, favorite: bool, tag: &str) -> String {
@@ -61,7 +62,34 @@ impl Grid {
         changed
     }
 
+    pub fn range(&mut self, row: usize, extend: bool) -> Vec<usize> {
+        if row >= self.rows.len() {
+            return Vec::new();
+        }
+        let anchor = self.anchor.min(self.rows.len().saturating_sub(1));
+        let span = anchor.min(row)..=anchor.max(row);
+        let mut changed = Vec::new();
+        for (i, r) in self.rows.iter_mut().enumerate() {
+            let selected = span.contains(&i) || (extend && r.selected);
+            if selected != r.selected {
+                r.selected = selected;
+                changed.push(i);
+            }
+        }
+        changed
+    }
+
+    pub fn all(&mut self, on: bool) -> Vec<usize> {
+        let mut changed = Vec::new();
+        for (i, r) in self.rows.iter_mut().enumerate().filter(|(_, r)| r.selected != on) {
+            r.selected = on;
+            changed.push(i);
+        }
+        changed
+    }
+
     pub fn toggle(&mut self, row: usize, only: bool) -> Vec<usize> {
+        self.anchor = row;
         let mut changed = Vec::new();
         for (i, r) in self.rows.iter_mut().enumerate() {
             let selected = match i == row {

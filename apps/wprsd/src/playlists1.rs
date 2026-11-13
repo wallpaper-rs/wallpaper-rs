@@ -77,6 +77,28 @@ impl Playlists {
         library(&self.0)?.run(move |d| d.set_playlist_rule(&playlist, &key, &value)).await
     }
 
+    #[zbus(out_args("count"))]
+    async fn add_folder(&self, playlist: String, path: String, follow: bool) -> Result<u32> {
+        library(&self.0)?.run(move |d| d.add_folder(&playlist, &path, follow)).await
+    }
+
+    #[zbus(out_args("uid"))]
+    async fn rotate(
+        &self,
+        name: String,
+        uids: Vec<String>,
+        folder: String,
+        follow: bool,
+        every: String,
+        output: String,
+    ) -> Result<String> {
+        let rotate = move |d: &Arc<Daemon>| {
+            limited(&uids, MAX_UIDS)?;
+            d.rotate_playlist(&name, &uids, (&folder, follow), &every, &output)
+        };
+        library(&self.0)?.render(rotate).await
+    }
+
     async fn start(&self, playlist: String, output: String) -> Result<()> {
         library(&self.0)?.render(move |d| d.start(&playlist, &output)).await
     }

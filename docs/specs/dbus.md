@@ -701,6 +701,8 @@ Changes one setting and saves the configuration. Keys and their current values a
 |-----|--------|---------|
 | `playback.volume` | `0.0` to `1.0`, for videos and scenes with sound | `0.5` |
 | `playback.muted` | `true`, `false`, for videos and scenes with sound | `true` |
+| `playback.volume.<output>` | the volume of the wallpaper of one output (`default` for every output without its own), `0.0` to `1.0`, or `none` to follow again; it lowers what the global `playback.volume` lets through (the two multiply), and it plays on videos, including the videos of a package; kept as `volume` in `[outputs."<output>"]`, not listed in `options`, read back from `OutputState.sound_volume` | `none` |
+| `playback.muted.<output>` | `true` silences the wallpaper of one output (`default` for every output without its own), `false` plays it, `none` follows again; the global `playback.muted` stays the master: a muted global setting silences every output whatever this says; kept as `muted` in `[outputs."<output>"]`, read back from `OutputState.sound_muted` | `none` |
 | `playback.max_fps` | `1` to `240`, or `display` (also `0`) for the refresh rate of each output, up to 60 on battery (see "Frame rate") | `display` |
 | `playback.software_parallax` | move depth parallax images even when the GPU is emulated on the CPU (such as llvmpipe), with 8 steps at 15 frames per second at most | `false` |
 | `parallax.fill` | how the layers of a depth parallax picture are filled behind near objects (see "Depth layers"): `lama` (the LaMa model, when it and ONNX Runtime are installed, else `simple`), `simple` (push-pull extension of the nearest background) or `off` (no layers: the picture stays still); not synced, because each device has its own default | `lama` (`simple` on the phone) |
@@ -947,6 +949,7 @@ results (newest first by default). `uid:` keeps up to 500 items named by their u
 commas, which lets a client ask again for the items a `library` change names. `limit` is
 `0..=500`; `0` returns only `total`.
 
+`folder:<absolute path>` keeps the items whose file lies inside that folder or one of its subfolders (quote paths with spaces), whether or not the folder is a source; a playlist whose query is `folder:<path> -kind:package` follows the folder as it changes.
 
 The query is normalized first and `SearchPage.query` echoes it: `in:<name>` becomes `in:<uid>`
 (`in:` takes a manual playlist; a smart or unknown playlist returns `InvalidArgs`), and a bare
@@ -1163,6 +1166,26 @@ Stops the playlist on its outputs (the picture shown stays), then deletes it wit
 
 Appends items to a manual playlist; an item may appear more than once. `InvalidArgs` for a smart
 playlist.
+
+### `AddFolder(s playlist, s path, b follow) → (u count)`
+
+Adds every picture and video inside the folder `path` (an absolute local path) and its
+subfolders to a playlist. A folder the library does not cover yet becomes a recursive source
+(or a flat one when it contains another source) and is scanned before the call returns, so a
+large folder takes a while. With `follow` false the items are appended to a manual playlist
+(`InvalidArgs` for a smart one). With `follow` true the playlist becomes the smart playlist
+`folder:"<path>" -kind:package`, so files that appear in the folder join it by themselves;
+`InvalidArgs` when the playlist already holds a list or another search (follow a folder with a
+new playlist). Returns how many items the folder has. A path with a quote in its name is refused.
+
+### `Rotate(s name, as uids, s folder, b follow, s every, s output) → (s uid)`
+
+The shortest path to "change the wallpaper every N minutes": makes a manual playlist from the
+items `uids` and the folder `folder` (either may be empty, not both; `follow` needs a folder and
+no items), sets its `interval` rule to `every` (such as `10m`; longer than zero, at least 10 s)
+and starts it on `output` (empty for every output). The playlist is named `name`, the folder's
+name when `name` is empty, and gets a number when the name exists. When any step fails the new
+playlist is deleted again. Returns the uid of the playlist.
 
 ### `RemoveItems(s playlist, as uids)`
 
@@ -2920,6 +2943,7 @@ struct OutputState {
     edited: bool, screen: Option<Screen>, mm: Option<[f64; 4]>, parallax: bool, frames: u64, page_frames: u64, refresh: u32, fps: u32,
     buffers: String, sound: String, shown_fit: Fit, flashes: String, left_out: Vec<String>,
     particles: String, quality: String, quality_reason: String, quality_choice: Option<String>,
+    sound_muted: Option<bool>, sound_volume: Option<f64>,
     quality_cost: f64, quality_budget: f64, quality_auto: String, quality_frame_ms: Option<f64>,
     quality_period_ms: Option<f64>, quality_step: String, quality_pace: u32, sandbox: String,
     accent: Option<String>, filter: Option<Filter>, hdr: HdrState, away: Option<String>,

@@ -44,6 +44,10 @@ pub mod qobject {
         #[qinvokable]
         fn toggle(self: Pin<&mut ItemModel>, row: i32, only: bool);
         #[qinvokable]
+        fn range(self: Pin<&mut ItemModel>, row: i32, extend: bool);
+        #[qinvokable]
+        fn everything(self: Pin<&mut ItemModel>, on: bool);
+        #[qinvokable]
         fn selection(self: &ItemModel) -> QString;
         #[qinvokable]
         fn uid(self: &ItemModel, row: i32) -> QString;

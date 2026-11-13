@@ -49,6 +49,18 @@ Kirigami.Page {
         App.backend.press(Qt.Key_Space, 0);
         if (library.selected !== 1 || !grid.currentItem?.current)
             throw new Error("the Space key does not choose the focused item of the library");
+        if (grid.count > 1) {
+            App.backend.press(Qt.Key_Right, Qt.ShiftModifier);
+            if (library.selected !== 2)
+                throw new Error("Shift with an arrow key does not choose the items between");
+            App.backend.press(Qt.Key_A, Qt.ControlModifier);
+            if (library.selected !== grid.count)
+                throw new Error("Ctrl+A does not choose every item of the library");
+            App.backend.press(Qt.Key_Escape, 0);
+            if (library.selected !== 0)
+                throw new Error("Escape does not clear the choice of the library");
+            App.backend.press(Qt.Key_Space, 0);
+        }
         App.backend.press(Qt.Key_Return, 0);
         if (!tools.applying)
             throw new Error("the Enter key does not offer to apply the focused item");
@@ -65,6 +77,13 @@ Kirigami.Page {
     actions: tools.actions
 
     footer: Column {
+        SelectionBar {
+            width: parent.width
+            items: library
+            tools: tools
+            visible: grid.count > 0
+        }
+
         SyncedFiles {
             width: parent.width
         }
@@ -93,9 +112,23 @@ Kirigami.Page {
             }
 
             function choose(modifiers) {
-                if (currentIndex >= 0)
+                if (currentIndex < 0)
+                    return;
+                if (modifiers & Qt.ShiftModifier)
+                    library.range(currentIndex, !!(modifiers & Qt.ControlModifier));
+                else
                     pick(!(modifiers & Qt.ControlModifier) && !currentItem.selected);
             }
+
+            function pickWith(row, modifiers) {
+                currentIndex = row;
+                if (modifiers & Qt.ShiftModifier)
+                    library.range(row, !!(modifiers & Qt.ControlModifier));
+                else
+                    library.toggle(row, !(modifiers & Qt.ControlModifier));
+            }
+
+            property bool extending
 
             cellWidth: page.cell
             cellHeight: page.cell
@@ -113,10 +146,25 @@ Kirigami.Page {
             delegate: Tile {
                 width: page.cell
                 height: page.cell
-                onPicked: only => library.toggle(index, only)
+                onPicked: modifiers => grid.pickWith(index, modifiers)
                 onOpened: tools.inspect(uid)
             }
             Keys.onSpacePressed: event => choose(event.modifiers)
+            Keys.onEscapePressed: library.everything(false)
+            Keys.onPressed: event => {
+                const moves = [Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down, Qt.Key_Home, Qt.Key_End, Qt.Key_PageUp, Qt.Key_PageDown];
+                if (event.key === Qt.Key_A && (event.modifiers & Qt.ControlModifier)) {
+                    library.everything(true);
+                    event.accepted = true;
+                } else {
+                    extending = !!(event.modifiers & Qt.ShiftModifier) && moves.includes(event.key);
+                }
+            }
+            onCurrentIndexChanged: {
+                if (extending && currentIndex >= 0)
+                    library.range(currentIndex, false);
+                extending = false;
+            }
             Keys.onReturnPressed: page.applyCurrent()
             Keys.onEnterPressed: page.applyCurrent()
             onActiveFocusChanged: {
@@ -139,14 +187,8 @@ Kirigami.Page {
         }
     }
 
-    DropArea {
+    LibraryDrop {
         anchors.fill: parent
-        keys: ["text/uri-list"]
-        onDropped: drop => {
-            const paths = drop.urls.map(url => App.path(url)).filter(p => p);
-            if (paths.length > 0)
-                App.act("Import", [paths, false], "Library1");
-        }
     }
 
     Actions {

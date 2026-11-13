@@ -74,3 +74,37 @@ pub trait Rgb1 {
     fn test(&self, device: i32) -> Result<()>;
     fn get_strip(&self, output: &str) -> Result<(u32, u32, Vec<u8>)>;
 }
+
+#[proxy(
+    interface = "io.github.wallpaper_rs.Playlists1",
+    default_service = "io.github.wallpaper_rs.Daemon",
+    default_path = "/io/github/wallpaper_rs/Daemon"
+)]
+pub trait Playlists1 {
+    fn list(&self) -> Result<String>;
+    fn get(&self, playlist: &str, offset: u32, limit: u32) -> Result<String>;
+    fn create(&self, name: &str, query: &str) -> Result<String>;
+    fn rename(&self, playlist: &str, name: &str) -> Result<()>;
+    fn set_query(&self, playlist: &str, query: &str) -> Result<()>;
+    fn delete(&self, playlist: &str) -> Result<()>;
+    fn add_items(&self, playlist: &str, uids: &[&str]) -> Result<()>;
+    fn remove_items(&self, playlist: &str, uids: &[&str]) -> Result<()>;
+    fn remove_entries(&self, playlist: &str, indexes: &[u32], expected: &[&str]) -> Result<()>;
+    fn move_item(&self, playlist: &str, from: u32, to: u32, expected: &str) -> Result<()>;
+    fn set_rule(&self, playlist: &str, key: &str, value: &str) -> Result<()>;
+    fn add_folder(&self, playlist: &str, path: &str, follow: bool) -> Result<u32>;
+    fn rotate(
+        &self,
+        name: &str,
+        uids: &[&str],
+        folder: &str,
+        follow: bool,
+        every: &str,
+        output: &str,
+    ) -> Result<String>;
+    fn start(&self, playlist: &str, output: &str) -> Result<()>;
+    fn stop(&self, output: &str) -> Result<()>;
+    fn next(&self, output: &str) -> Result<()>;
+    fn previous(&self, output: &str) -> Result<()>;
+    fn history(&self, output: &str, limit: u32) -> Result<String>;
+}

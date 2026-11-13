@@ -66,11 +66,22 @@ fun Selecting(main: Main, chosen: SnapshotStateList<String>, all: List<String>, 
         IconButton({ done { ask("favorite", "uids" to uids, "favorite" to false) } }) {
             Icon(Icons.Default.FavoriteBorder, stringResource(R.string.unfavorite))
         }
+        if (playlist == null) TextButton({ dialog = "rotate" }) { Text(stringResource(R.string.rotate_every)) }
         TextButton({ dialog = "fit" }) { Text(stringResource(R.string.fit)) }
         if (playlist == null) IconButton({ dialog = "remove" }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
     }
     val close = { dialog = "" }
+    val rotation = stringResource(R.string.rotation_name)
     when (dialog) {
+        "rotate" -> Choose(
+            stringResource(R.string.rotate_every), close, INTERVALS.filter { it.first != "0s" }.map { (value, label) -> value to stringResource(label) }, "",
+        ) { every ->
+            main.act(false) {
+                ask("rotate", "name" to rotation, "items" to uids, "every" to every)
+                chosen.clear()
+                main.setWallpaper()
+            }
+        }
         "add" -> AddTo(close) { list -> done { ask("add", "playlist" to list, "items" to uids) } }
         "remove" -> Removing(uids.size, close) { done { ask("remove", "uids" to uids) } }
         "fit" -> Fits(close) { fit -> main.fit(uids, fit, chosen::clear) }

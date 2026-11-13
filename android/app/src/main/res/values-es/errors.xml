@@ -77,6 +77,7 @@
     <string name="error_android_repo_other">La dirección sincronizada nombra otro repositorio; no se añadió</string>
     <string name="error_android_rotate_plain">La sincronización no está cifrada: una clave nueva no protegería nada</string>
     <string name="error_android_rotated_elsewhere">Otro dispositivo cambió la clave antes</string>
+    <string name="error_android_rotation_interval">indica un tiempo mayor que cero</string>
     <string name="error_android_scene_package">%1$s no es un paquete de escena</string>
     <string name="error_android_scene_scripts_take">Los scripts de la escena ocupan más de 1 MiB</string>
     <string name="error_android_secret_text_most">%1$s no es un texto secreto de 1024 caracteres como mucho</string>

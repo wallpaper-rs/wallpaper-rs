@@ -27,7 +27,7 @@ QQC2.ItemDelegate {
 
     readonly property bool current: GridView.isCurrentItem && GridView.view.activeFocus
 
-    signal picked(bool only)
+    signal picked(int modifiers)
     signal opened
 
     highlighted: selected
@@ -106,7 +106,21 @@ QQC2.ItemDelegate {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
-        onClicked: mouse => tile.picked(!(mouse.modifiers & (Qt.ControlModifier | Qt.ShiftModifier)))
+        onClicked: mouse => tile.picked(mouse.modifiers)
         onDoubleClicked: tile.opened()
+    }
+
+    QQC2.CheckBox {
+        id: mark
+
+        anchors.left: parent.left
+        anchors.top: parent.top
+        visible: tile.hovered || tile.selected || mark.activeFocus
+        focusPolicy: Qt.NoFocus
+        checked: tile.selected
+        onToggled: tile.picked(Qt.ControlModifier)
+        QQC2.ToolTip.text: App.tr("Choose this picture; choose several to add them to a playlist or rotate them")
+        QQC2.ToolTip.visible: hovered
+        QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
     }
 }

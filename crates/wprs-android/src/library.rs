@@ -47,6 +47,7 @@ enum Request {
     Save { playlist: PlaylistInfo },
     Delete { playlist: String },
     Add { playlist: String, items: Vec<String> },
+    Rotate { name: String, items: Vec<String>, every: String },
     Take { playlist: String, items: Vec<String> },
     Move { playlist: String, from: usize, to: usize },
     Pick { choice: Option<Choice> },
@@ -154,6 +155,7 @@ fn answer(lib: &mut Library, request: Request, on_battery: bool) -> Result<Value
             Value::Null
         }
         Request::Add { playlist, items } => lists::add(lib, &playlist, &items)?,
+        Request::Rotate { name, items, every } => lists::rotate(lib, &name, &items, &every)?,
         Request::Take { playlist, items } => {
             json!(lib.remove_from_playlist_many(&playlist, &known(lib, &items))?)
         }

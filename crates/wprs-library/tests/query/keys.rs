@@ -127,7 +127,7 @@ fn unknown_keys_and_bad_values_are_clear_errors() {
 fn query_keys_describe_every_key() {
     let Fixture { library, .. } = fixture();
     let keys = query_keys();
-    assert_eq!(keys.len(), 18);
+    assert_eq!(keys.len(), 19);
     let has = |key: &str, hint: &str| keys.iter().any(|(k, h)| *k == key && h == hint);
     assert!(has("content", "general, mature or unrated"));
     assert!(has("in", "a manual playlist uid or name"));
@@ -154,4 +154,15 @@ fn uids_pick_items_whatever_else_the_query_asks() {
     let many = vec!["X"; 501].join(",");
     assert!(matches!(library.count(&format!("uid:{many}"), NOW), Err(Error::Query(_))));
     assert!(matches!(library.count("uid:", NOW), Err(Error::Query(_))));
+}
+
+#[test]
+fn folder_keeps_the_items_inside_a_whole_folder_and_nothing_beside_it() {
+    let Fixture { library, _dir, .. } = fixture();
+    let root = _dir.path().join("pictures");
+    let inside = format!("folder:\"{}\"", root.display());
+    assert_eq!(titles(&library, &inside), ["café", "night", "ocean waves", "square"]);
+    assert_eq!(titles(&library, &format!("folder:\"{}/\" kind:video", root.display())), ["night"]);
+    assert!(titles(&library, &format!("folder:\"{}\"", root.join("pic").display())).is_empty());
+    assert!(matches!(library.search("folder:", NOW, 0, 10), Err(Error::Query(_))));
 }

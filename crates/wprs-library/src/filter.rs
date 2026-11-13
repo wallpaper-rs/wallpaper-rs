@@ -25,7 +25,7 @@ const ORIENTATIONS: [(&str, &str); 3] = [
 ];
 const FACETED: &str = "' ' || i.facets || ' ' LIKE '% ' || ? || ' %'";
 const MAX_UIDS: usize = 500;
-fn keys() -> [(&'static str, Message); 18] {
+fn keys() -> [(&'static str, Message); 19] {
     [
         ("tag", said("library.key_tag", "a tag name", &[])),
         ("kind", said("library.key_kind", "image, video, package, scene or assets", &[])),
@@ -40,6 +40,7 @@ fn keys() -> [(&'static str, Message); 18] {
         ("audio", said("library.key_audio", "yes or no", &[])),
         ("source", said("library.key_source", "a source id", &[])),
         ("in", said("library.key_in", "a manual playlist uid or name", &[])),
+        ("folder", said("library.key_folder", "an absolute folder path: the items inside it and its subfolders", &[])),
         ("added", said("library.key_added", "an age like <7d", &[])),
         ("used", said("library.key_used", "never or an age like <7d", &[])),
         ("missing", said("library.key_missing", "nothing, yes or no", &[])),
@@ -98,7 +99,7 @@ fn parse(key: &str, value: &str, now: i64) -> Option<(String, Vec<Value>)> {
     let int = |n: i64| vec![Value::Integer(n)];
     let text = |text: &str| vec![Value::Text(text.into())];
     let (sql, params) = match key {
-        "tag" | "in" | "source" | "audio" | "facet" | "uid" if value.is_empty() => return None,
+        "tag" | "in" | "source" | "audio" | "facet" | "uid" | "folder" if value.is_empty() => return None,
         "uid" => {
             let uids: Vec<Value> =
                 value.split(',').filter(|u| !u.is_empty()).map(|u| Value::Text(u.into())).collect();
@@ -113,6 +114,13 @@ fn parse(key: &str, value: &str, now: i64) -> Option<(String, Vec<Value>)> {
         }
         "tag" => (TAGGED.into(), text(value)),
         "in" => (LISTED.into(), [text(value), text(value)].concat()),
+        "folder" => {
+            let prefix = format!("{}/", value.trim_end_matches('/'));
+            (
+                "substr(i.path, 1, ?) = ?".into(),
+                vec![Value::Integer(prefix.chars().count() as i64), Value::Text(prefix)],
+            )
+        }
         "source" => ("i.source_id = (SELECT id FROM sources WHERE uid = ?)".into(), text(value)),
         "kind" if ["scene", "web", "assets"].contains(&lower.as_str()) => {
             ("i.pkg_type = ?".into(), text(&lower))

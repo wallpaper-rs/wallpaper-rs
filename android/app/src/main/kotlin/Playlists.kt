@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 val INTERVALS = listOf(
+    "10m" to R.string.every_10m,
     "15m" to R.string.every_15m,
     "30m" to R.string.every_30m,
     "1h" to R.string.every_1h,

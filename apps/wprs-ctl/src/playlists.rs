@@ -11,6 +11,8 @@ pub use shown::playlists;
 pub use shown::rules;
 
 const PL: &str = "Playlist uid or name";
+const FOLDER: &str = "Add every picture and video inside this folder and its subfolders";
+const FOLLOW: &str = "With --folder, keep following the folder: files that appear in it join the playlist";
 
 #[derive(Subcommand, Debug)]
 pub enum Playlist {
@@ -54,12 +56,40 @@ pub enum Playlist {
         #[arg(value_name = "PL", help = PL)]
         playlist: String,
     },
-    #[command(about = "Append items to a manual playlist")]
+    #[command(about = "Append items, or every picture and video of a folder, to a playlist")]
     Add {
         #[arg(value_name = "PL", help = PL)]
         playlist: String,
-        #[arg(required = true, value_name = "ITEM", help = ITEM)]
+        #[arg(required_unless_present = "folder", value_name = "ITEM", help = ITEM)]
         items: Vec<String>,
+        #[arg(long, value_name = "DIR", help = FOLDER)]
+        folder: Option<String>,
+        #[arg(long, requires = "folder", help = FOLLOW)]
+        follow: bool,
+    },
+    #[command(
+        about = "Rotate items or a folder every so often: make the playlist, set the time and start it",
+        long_about = "Rotate items or a folder every so often. It makes a playlist from the items (or from \
+            the folder with --folder), sets the time between pictures with --every and starts it on the \
+            output, all in one step; print the uid of the new playlist."
+    )]
+    Rotate {
+        #[arg(value_name = "ITEM", help = ITEM)]
+        items: Vec<String>,
+        #[arg(long, value_name = "DIR", help = FOLDER)]
+        folder: Option<String>,
+        #[arg(long, requires = "folder", help = FOLLOW)]
+        follow: bool,
+        #[arg(
+            long,
+            value_name = "TIME",
+            help = "Time between pictures, such as 10m, 1h or 90s (at least 10s)"
+        )]
+        every: String,
+        #[arg(long, help = "Name of the new playlist; the folder name when left out")]
+        name: Option<String>,
+        #[command(flatten)]
+        out: Out,
     },
     #[command(about = "Remove every occurrence of items from a manual playlist")]
     Remove {
