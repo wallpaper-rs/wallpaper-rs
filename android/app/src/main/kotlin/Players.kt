@@ -67,6 +67,8 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
         check()
     }
 
+    fun seen(): String = "allowed=${allowed(context)} following=${listeners.size} reading=${manager != null} failures=$failures players=$count track=${controller?.metadata != null}"
+
     fun close() {
         listeners.clear()
         observe(false)

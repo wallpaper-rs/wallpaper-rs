@@ -50,7 +50,8 @@ class MediaSceneTest : SceneBase() {
         session.isActive = true
         allow(true)
         Render.call { players.follow(painter, true) }
-        assertTrue("a paused player, summary ${Players.status} readers ${Players.readersSeen()}", waitFor(70_000) { Players.status.let { it.track && it.cover && !it.playing } })
+        val paused = waitFor(70_000) { Players.status.let { it.track && it.cover && !it.playing } }
+        assertTrue("a paused player, summary ${Players.status} readers ${Players.readersSeen()} reader ${players.seen()}", paused)
         Render.call { painter.refresh() }
         assertTrue("a paused track left the scene dark: ${lamp.get()}", waitFor { red() < 32 })
         session.setPlaybackState(state(PlaybackState.STATE_PLAYING))
