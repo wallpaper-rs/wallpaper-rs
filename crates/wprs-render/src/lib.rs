@@ -81,7 +81,7 @@ pub use readback::TargetLimits;
 pub use save::{FORMATS, save};
 pub use scene::{
     MAX_FONT, MAX_SCENE_BUILD, Opened, Pixels, RGB_MOST, Reel, Rehearsal, SceneAssets, SceneStats, SceneView,
-    ScriptHost, Stamping, Trace, Versus, drawn_effects, finish_builds, font, lit, local_wall,
+    ScriptHost, Stamping, Trace, Versus, drawn_effects, finish_builds, font, lit, local_wall, on_today,
     profiled_passes, reset_profiled_passes, retry_effects, serve_script_host, set_build_timeout,
     set_gpu_budget, split, stop_builds, stop_effects,
 };

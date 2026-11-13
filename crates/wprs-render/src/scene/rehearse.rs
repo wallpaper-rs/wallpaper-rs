@@ -1,19 +1,14 @@
 mod reel;
+mod wall;
+
+pub use wall::{local_wall, on_today};
 
 use super::SceneAssets;
 use super::scripted::Scripted;
 use crate::{RenderError, Renderer};
 use image::RgbaImage;
 use std::sync::Arc;
-use wprs_scene::{PointerState, Quality, Runtime, Scene, Values};
-
-pub fn local_wall() -> f64 {
-    let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
-    let seconds = libc::time_t::try_from(now.as_secs()).unwrap_or_default();
-    let mut local = unsafe { std::mem::zeroed::<libc::tm>() };
-    let found = !unsafe { libc::localtime_r(&seconds, &mut local) }.is_null();
-    now.as_secs_f64() + if found { local.tm_gmtoff as f64 } else { 0.0 }
-}
+use wprs_scene::{MediaState, PointerState, Quality, Runtime, Scene, Values};
 
 const PRESS_FROM: f32 = 0.4;
 const PRESS_TO: f32 = 0.7;
@@ -35,6 +30,7 @@ pub struct Rehearsal {
     pub wall: f64,
     pub lang: String,
     pub script_host: Option<super::scripted::ScriptHost>,
+    pub media: Option<MediaState>,
     pub frames: usize,
     pub fps: u32,
     pub pointer: Option<Trace>,
@@ -51,6 +47,7 @@ impl Default for Rehearsal {
             wall: local_wall(),
             lang: "en".into(),
             script_host: None,
+            media: None,
             frames: 1,
             fps: 30,
             pointer: None,
@@ -129,6 +126,9 @@ impl Renderer {
         runtime.set_wall(wanted.wall);
         runtime.set_language(&wanted.lang);
         runtime.seek(wanted.time.clamp(0.0, f64::from(wprs_scene::MAX_POSTER_TIME)));
+        if let Some(media) = &wanted.media {
+            let _ = runtime.set_media(media.clone());
+        }
         let mut scripts =
             Scripted::start(scene, assets, &runtime, (&wanted.lang, wanted.script_host.as_ref()));
         let mut view = self.scene_view(scene, assets, runtime.props())?;
@@ -139,6 +139,9 @@ impl Renderer {
         for i in 0..wanted.frames.max(1) {
             if i > 0 {
                 runtime.advance(step);
+                if let Some(media) = &wanted.media {
+                    let _ = runtime.set_media(media.at(i as f64 * step));
+                }
             }
             let (pos, buttons) = wanted.pointer_at(i);
             pointer = pointer.follow(pos, buttons, step as f32);

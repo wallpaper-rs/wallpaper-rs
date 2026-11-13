@@ -5,6 +5,7 @@ mod mesh;
 mod outputs;
 mod rigs;
 mod stage;
+mod track;
 
 pub use media::MediaState;
 pub use mesh::{MAX_MESH_BYTES, MESH_FLOATS, Mesh};
@@ -15,6 +16,7 @@ pub use outputs::{
 };
 pub use rigs::{BoneSet, MAX_DRIVEN_BONES, MAX_DRIVEN_RIGS, MAX_DRIVEN_SHAPES, MAX_IMPULSES, RigControl};
 pub use stage::{BloomSet, Camera3dSet, CameraSet, GlideSet, ShakeSet, StageSet};
+pub use track::MadeTrack;
 
 pub const BANDS: usize = 64;
 pub(crate) const SETTLE: f32 = 0.15;

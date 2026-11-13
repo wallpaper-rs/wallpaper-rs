@@ -68,7 +68,7 @@ pub(crate) use pipes::Pipes;
 use pipes::{Mode, Shader};
 use pool::Tex;
 pub use profile::{profiled_passes, reset_profiled_passes};
-pub use rehearse::{Opened, Reel, Rehearsal, Trace, Versus, local_wall, split};
+pub use rehearse::{Opened, Reel, Rehearsal, Trace, Versus, local_wall, on_today, split};
 pub(crate) use sampling::layout;
 pub use scripted::{ScriptHost, serve_script_host};
 use std::collections::HashMap;

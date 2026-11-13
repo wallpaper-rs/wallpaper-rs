@@ -16,6 +16,7 @@ pub fn serve_script_host() {
 #[derive(Default)]
 pub(crate) struct Scripted {
     remote: Option<Remote>,
+    hears: bool,
     fired: Vec<Fired>,
     ended: Vec<String>,
     courses: Vec<Course>,
@@ -37,7 +38,8 @@ impl Scripted {
             return None;
         }
         let setup = Setup::new(scene, &assets.scripts, runtime.seed, (locale, &json!({})));
-        Some(Scripted { remote: Some(Remote::start(&setup, host.cloned())), ..Scripted::default() })
+        let hears = wprs_script::hears_media(scene);
+        Some(Scripted { remote: Some(Remote::start(&setup, host.cloned())), hears, ..Scripted::default() })
     }
 
     pub(crate) fn warm(&mut self, runtime: &mut Runtime, shown: ([f32; 4], [u32; 2], u32, u8)) {
@@ -76,6 +78,7 @@ impl Scripted {
             sounds: &self.sounds,
             videos: &self.filmed,
             ended: &self.ended,
+            media: self.hears.then(|| rt.media()),
             ..Frame::at(rt.time())
         };
         let answer = remote.step(&frame);
