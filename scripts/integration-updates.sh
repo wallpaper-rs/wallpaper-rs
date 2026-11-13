@@ -40,5 +40,6 @@ newest 1.2.1 || fail "an update with a new permission was installed by the bulk 
 ctl pkg install "$dusk" --wait >/dev/null
 newest 1.3.0 || fail "the update asked for by hand was not installed: $(versions)"
 ctl config repos.auto_update false
+ctl clear >/dev/null
 ctl pkg uninstall "$dusk"
 echo "update checks passed"
