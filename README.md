@@ -2205,7 +2205,7 @@ wprs-ctl server join "Device 1" --wait           # equipo nuevo de una cuenta ci
 wprs-ctl server share "Device 2"                 # en el equipo con la clave: muestra sus cifras y pide las del otro
 wprs-ctl server status                           # el estado, los equipos de la cuenta y por qué falló el último enlace
 wprs-ctl server revoke "Device 3"                # quita un equipo de la cuenta (también en Cuenta > Quitar equipo…)
-wprs-ctl server access file                      # sin llavero: guarda el acceso en un archivo privado, tras el aviso
+wprs-ctl provider store file                     # sin llavero: guarda todos los secretos en un archivo privado, tras el aviso
 wprs-ctl server rotate                           # clave nueva; los demás equipos la reciben solos
 wprs-ctl server reset                            # sin ningún equipo con la clave: rehace los datos desde este
 wprs-ctl server upload fondo.wpak                # sube un paquete con el token del equipo
@@ -2216,7 +2216,6 @@ wprs-ctl server author-key list                  # las claves con las que firmas
 wprs-ctl server author-key add autor.pub         # registra una clave; `rotate`, `remove` la cambian o la quitan
 wprs-ctl server visibility org.example.fondo public   # cambia la visibilidad de un paquete o de una versión
 wprs-ctl server repo 1a2b3c4d                    # añade un repositorio que otro equipo sincronizó, tras revisarlo
-wprs-ctl server secret wallhaven                 # sincroniza la clave de un proveedor, cifrada
 wprs-ctl server files share ./fondos             # sube tus propios fondos, cifrados; en otro equipo:
 wprs-ctl server files ls                         # … los lista y `server files fetch <id>` descarga uno
 wprs-ctl server away                             # lo que otros equipos sincronizaron y solo existe en ellos
@@ -2229,7 +2228,7 @@ wprs-ctl server restore                          # equipo nuevo sin ningún otro
 
 ```sh
 wprs-ctl server add http://127.0.0.1:8080              # la dirección del servidor
-wprs-ctl server access file                            # solo sin llavero del sistema, ver abajo
+wprs-ctl provider store file                           # solo sin llavero del sistema, ver abajo
 wprs-ctl server link --name Escritorio --wait          # imprime code = ABCD-EFGH y url = …/link, y espera
 curl -sS -b galleta -H 'content-type: application/json' \
   -d '{"user_code": "ABCD-EFGH", "approve": true}' \
@@ -2240,8 +2239,8 @@ wprs-ctl server status                                 # state = ready, la cuent
 `server add` acepta `https://`, y `http://` solo para este mismo equipo: un servidor que está en otro
 equipo necesita HTTPS (más abajo, con su propio certificado o con un proxy). Enlazar necesita un
 llavero del sistema donde guardar el acceso (GNOME Keyring, KWallet…): sin él, `server link` falla al
-momento y lo dice, sin dejar un equipo fantasma en la cuenta, y `server access file` (antes de
-enlazar) lo guarda en un archivo privado tras un aviso. Los equipos siguientes se aprueban desde uno
+momento y lo dice, sin dejar un equipo fantasma en la cuenta, y `provider store file` lo guarda en un
+archivo privado tras un aviso (se puede volver al llavero con `provider store keyring`). Los equipos siguientes se aprueban desde uno
 ya enlazado con `server approve CÓDIGO`, que pide la contraseña de la cuenta.
 
 La sincronización mueve registros (títulos, etiquetas, valoraciones, favoritos y ediciones de la
@@ -2320,7 +2319,8 @@ software y el permiso para descargar modelos, que se quedan en cada equipo), cif
 extremo; sin cifrar solo con `--plaintext`, que avisa antes. El token y la clave de sincronización
 viven en el llavero del sistema, y enlazar necesita uno (GNOME Keyring, KWallet…): sin llavero, *Cuenta* lo
 dice con palabras claras y ofrece, con un aviso, guardarlos en un archivo privado de la carpeta de datos
-(`wprs-ctl server access file`); quien pueda leer tus archivos podría usarlos. Un intento de enlace que
+(`wprs-ctl provider store file`, el mismo archivo y la misma elección para los secretos de los
+proveedores); quien pueda leer tus archivos podría usarlos, y un aviso visible se queda mientras esté así. Un intento de enlace que
 falla no deja equipos fantasma en la cuenta. *Cuenta* lista los equipos y quita cualquiera (*Quitar
 equipo…*, o `wprs-ctl server revoke`); un equipo quitado, o de una cuenta borrada, muestra en toda la
 app un aviso de que el servidor ya no lo acepta; el servidor ve los equipos como `Device 1`, `Device 2`… y el
@@ -3353,7 +3353,13 @@ misma pausa.
   User-Agent genérico (`wallpaper-rs/<versión>`), sin cookies ni cabecera Referer, y las claves de API
   y contraseñas solo se envían al servidor configurado. Se guardan en el llavero del sistema
   (Secret Service) y en ningún otro sitio: ni en la configuración, ni en los registros, ni en la
-  línea de órdenes. `http://` sin cifrar a otro equipo solo se permite con `allow_plain_http`.
+  línea de órdenes, ni se sincronizan entre equipos (los proveedores y sus claves son de cada
+  equipo). Un equipo sin llavero puede guardar todos los secretos (proveedores, scripts de escena y
+  acceso al servidor) en un archivo privado (0600) que eliges tú sabiéndolo
+  (`wprs-ctl provider store file`, o el aviso de la página de proveedores): un aviso visible se
+  queda mientras esté así, y se puede volver al llavero sin quitar nada
+  (`wprs-ctl provider store keyring`). La dirección de tu propio servidor puede usar `http://`
+  sin cifrar, siempre permitido, con un aviso permanente de que la contraseña viaja sin cifrar.
 - Los fondos web no tienen red salvo que la declaren y la permitas; lo que ven de ti (zona horaria,
   idioma, tarjeta gráfica y sus datos guardados) se avisa en la app, la bandeja, `wprs-ctl` y el
   teléfono, y puedes ocultarlo por fondo. En el teléfono el WebView va con sus métricas y la

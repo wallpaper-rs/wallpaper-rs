@@ -45,16 +45,16 @@ pub fn parse_url(text: &str, query: bool) -> Result<Url> {
     Ok(url)
 }
 
-fn server(text: &str, plain: bool) -> Result<()> {
-    let url = parse_url(text, false)?;
-    match url.scheme() {
-        "https" => Ok(()),
-        "http" if plain || local(&url) => Ok(()),
-        "http" => {
-            Err(invalid("refusing to send credentials over plain http; set allow_plain_http to allow it"))
-        }
-        _ => Err(invalid("use an https:// URL")),
+fn server(text: &str) -> Result<()> {
+    match parse_url(text, false)?.scheme() {
+        "https" | "http" => Ok(()),
+        _ => Err(invalid("use an http:// or https:// URL")),
     }
+}
+
+pub fn plain_http(options: &Options) -> bool {
+    let url = ["url", "server"].iter().find_map(|key| Url::parse(options.get(*key)?).ok());
+    url.is_some_and(|url| url.scheme() == "http" && !local(&url))
 }
 
 pub fn hosts(kind: &ProviderKind, options: &Options) -> Vec<String> {
@@ -72,7 +72,11 @@ pub fn entry(value: &toml::Value) -> std::result::Result<Entry, String> {
         toml::Value::Integer(number) => Ok((key.clone(), number.to_string())),
         _ => Err(format!("invalid value for {key}")),
     };
-    let given = table.iter().filter(|(key, _)| *key != "kind").map(text).collect::<Result<Options, _>>()?;
+    let given = table
+        .iter()
+        .filter(|(key, _)| !["kind", "allow_plain_http"].contains(&key.as_str()))
+        .map(text)
+        .collect::<Result<Options, _>>()?;
     let known = kind_of(kind).map_err(|e| e.to_string())?;
     let options = effective(&known, &given).map_err(|e| e.to_string())?;
     Ok((known, given, options))
@@ -98,7 +102,7 @@ fn number<T: FromStr + Default>(options: &Options, key: &str) -> T {
 
 pub fn build(kind: &str, o: &Options, secret: Option<&str>) -> wprs_providers::Result<Box<dyn Provider>> {
     let text = |key: &str| o.get(key).cloned().unwrap_or_default();
-    let (plain, key) = (text("allow_plain_http") == "true", secret.unwrap_or_default());
+    let (plain, key) = (true, secret.unwrap_or_default());
     Ok(match kind {
         "bing" => Box::new(Bing {
             count: number(o, "count"),

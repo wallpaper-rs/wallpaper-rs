@@ -65,7 +65,6 @@ QtObject {
             "server": App.tr("Server"),
             "folder": App.tr("Folder"),
             "album": App.tr("Album"),
-            "allow_plain_http": App.tr("Allow unencrypted HTTP"),
             "api_key": App.tr("API key"),
             "password": App.tr("Password")
         })

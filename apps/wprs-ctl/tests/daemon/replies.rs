@@ -26,11 +26,10 @@ async fn daemon_errors_map_to_messages_and_exit_codes() {
 #[tokio::test(flavor = "multi_thread")]
 async fn provider_secrets_come_from_stdin_and_never_from_arguments() {
     let bus = Bus::start().await;
-    let add =
-        ["provider", "add", "photos", "immich", "server=https://photos.example.org", "--allow-plain-http"];
+    let add = ["provider", "add", "photos", "immich", "server=https://photos.example.org"];
     let (code, out, err) = bus.fed(&[&add[..], &["--secret-stdin"]].concat(), "s3cret\nignored\n");
     assert_eq!((code, out.as_str()), (0, format!("{}\n", UIDS[0]).as_str()), "{err}");
-    let options = r#"{"allow_plain_http": "true", "server": "https://photos.example.org"}"#;
+    let options = r#"{"server": "https://photos.example.org"}"#;
     assert!(bus.log.has(&format!("Add photos immich {options} [s3cret]")));
     let (code, _, err) = bus.fed(&add, "");
     assert!(code == 2 && err.contains("immich needs its api_key; use --no-secret"), "{err}");
@@ -38,7 +37,21 @@ async fn provider_secrets_come_from_stdin_and_never_from_arguments() {
     assert!(bus.log.has(&format!("Add photos immich {options} []")));
     let (code, _, err) = bus.fed(&[&add[..], &["api_key=s3cret"]].concat(), "s3cret\n");
     assert!(code == 2 && err.contains("api_key is a secret"), "{err}");
-    assert!(!bus.log.has("Add photos immich {\"allow_plain_http\": \"true\", \"api_key\""));
+    assert!(!bus.log.has("Add photos immich {\"api_key\""));
+}
+
+#[tokio::test(flavor = "multi_thread")]
+async fn the_secret_store_is_chosen_and_the_notices_stay_in_the_list() {
+    let bus = Bus::start().await;
+    let (code, _, err) = bus.ctl(&["provider", "store", "file"]);
+    assert_eq!(code, 0, "{err}");
+    assert!(bus.log.has("SetSecretStore file") && err.contains("private file"), "{err}");
+    let (code, out, _) = bus.ctl(&["provider", "ls"]);
+    assert_eq!(code, 0);
+    assert!(out.contains("private file in the data folder") && out.contains("nas uses plain http"), "{out}");
+    let (code, out, _) = bus.ctl(&["provider", "store"]);
+    assert!(code == 0 && out.starts_with("file\n"), "{out}");
+    assert_eq!(bus.ctl(&["provider", "store", "vault"]).0, 2);
 }
 
 #[tokio::test(flavor = "multi_thread")]

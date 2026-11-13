@@ -38,7 +38,7 @@ impl Daemon {
 }
 
 pub fn start(daemon: &Arc<Daemon>, bus: zbus::Connection) {
-    daemon.account.keyring.set(Keyring::server(bus)).ok();
+    daemon.account.keyring.set(Keyring::server(bus, daemon.secret_home())).ok();
     *daemon.saved() = saved::load(&daemon.sync_path());
     if daemon.saved().active() {
         daemon.account.wake.notify_one();

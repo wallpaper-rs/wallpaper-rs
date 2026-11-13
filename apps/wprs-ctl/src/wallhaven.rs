@@ -58,7 +58,7 @@ pub async fn run(client: &Client, command: Wallhaven) -> Result<()> {
             let pairs = filters.pairs()?;
             let options: HashMap<&str, &str> =
                 pairs.iter().map(|(key, value)| (*key, value.as_str())).collect();
-            add(client, &id, "wallhaven", options, false, (no_secret, secret_stdin)).await?
+            add(client, &id, "wallhaven", options, (no_secret, secret_stdin)).await?
         }
         Wallhaven::Set { id, filters } => {
             let pairs = filters.pairs()?;

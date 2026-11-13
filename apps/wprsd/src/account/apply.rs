@@ -49,7 +49,6 @@ impl Daemon {
                 ("settings", "profile") => self.apply_profile(local, &key, view, links, kept),
                 ("settings", _) => view.map_or(Ok(()), |view| self.apply_settings(&key, &view, kept)),
                 ("repos", _) => self.apply_repo(local, &key, view),
-                ("secrets", _) => self.apply_secret(view),
                 _ => Ok(()),
             };
             match result {

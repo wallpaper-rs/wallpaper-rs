@@ -112,6 +112,7 @@ calls! {
         Reseed reseed(id: str);
         SetSecret set_secret(id: str, secret: str);
         ForgetSecret forget_secret(id: str);
+        SetSecretStore set_secret_store(store: str);
     }
     Repos1 repos {
         List list() json;
@@ -154,14 +155,12 @@ calls! {
         SyncNow sync_now();
         SetPaused set_paused(paused: bool);
         RevokeDevice revoke_device(device: str, password: str);
-        SetFileSecrets set_file_secrets(allow: bool);
         Join join(device: str);
         ShareKey share_key(device: str);
         ConfirmShare confirm_share(device: str, code: str);
         Rotate rotate();
         Reset reset();
         ConfirmRepo confirm_repo(repo: str, add: bool);
-        ShareSecret share_secret(provider: str, share: bool);
         SetEscrow set_escrow(passphrase: str);
         Restore restore(passphrase: str);
         ShareFiles share_files(targets: strs, share: bool);

@@ -22,15 +22,19 @@ mod presets;
 mod rotate;
 mod saved;
 mod secrets;
+
+impl Account {
+    pub fn server_ring(&self) -> Option<&Keyring> {
+        self.keyring.get()
+    }
+}
 mod server;
 mod share;
-mod shared;
 mod status;
 #[cfg(test)]
 mod tests;
 mod transfer;
 mod upload;
-mod vaultfile;
 mod votes;
 mod watch;
 

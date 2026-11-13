@@ -61,6 +61,13 @@ Kirigami.Card {
     ]
 
     contentItem: Kirigami.FormLayout {
+        Kirigami.InlineMessage {
+            Layout.fillWidth: true
+            visible: card.provider.plain_http === true
+            type: Kirigami.MessageType.Warning
+            text: App.tr("This address uses plain http: the password or key, and the pictures, travel over the network without encryption.")
+        }
+
         QQC2.Label {
             Kirigami.FormData.label: App.tr("State:")
             text: Labels.value(card.provider.state)

@@ -23,8 +23,7 @@ pub fn effective(kind: &ProviderKind, given: &Options) -> Result<Options> {
         };
         options.insert(field.key.clone(), value);
     }
-    let plain = options.get("allow_plain_http").is_some_and(|v| v == "true");
-    ["url", "server"].iter().filter_map(|key| options.get(*key)).try_for_each(|url| server(url, plain))?;
+    ["url", "server"].iter().filter_map(|key| options.get(*key)).try_for_each(|url| server(url))?;
     if kind.kind == "wallhaven" {
         let search = wprs_providers::wallhaven::Search::from_options(|key| {
             options.get(key).cloned().unwrap_or_default()

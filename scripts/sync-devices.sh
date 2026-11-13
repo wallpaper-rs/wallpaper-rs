@@ -19,16 +19,26 @@ if e server link --name Plain >"$WORK/nokeyring.out" 2>"$WORK/nokeyring.err"; th
 grep -q "No keyring" "$WORK/nokeyring.err" || fail "no word about the missing keyring: $(cat "$WORK/nokeyring.err")"
 [ "$(devices)" = "$before" ] || fail "a link without a keyring left a device on the account"
 [ "$(value e "['file_secrets']")" = False ] || fail "the file was chosen without being asked"
-e server access file 2>/dev/null
+e provider store file 2>/dev/null
 [ "$(value e "['file_secrets']")" = True ] || fail "the file choice was not kept: $(e server status)"
-file=$WORK/e/data/wallpaper-rs/server-secrets.json
-mkdir "$file"
+file=$WORK/e/data/wallpaper-rs/secrets.json
+[ "$(stat -c %a "$file")" = 600 ] || fail "the file of the secrets is not private"
+e provider ls | grep -q "private file" || fail "the file choice shows no notice: $(e provider ls)"
+e provider add nas webdav url=http://nas.example.org/dav user=reader refresh=0s --no-secret >/dev/null
+printf 'throwaway-pass\n' | e provider secret nas --secret-stdin
+[ "$(e provider ls --json | jq_ "[p['has_secret'] for p in r['providers']]")" = "[True]" ] ||
+  fail "a provider secret was not kept in the file: $(e provider ls)"
+e provider ls | grep -q "nas uses plain http" || fail "plain http shows no notice: $(e provider ls)"
+grep -q throwaway-pass "$file" || fail "the secret is not in the private file"
+if e provider ls --json | grep -q throwaway-pass; then fail "a secret appeared in a reply"; fi
+e provider rm nas
+printf garbage >"$file"
 link=$(e server link --name Plain)
 approve "$link"
 wait_for 60 failed e "$(tail -n 1 <<<"$link")" || fail "the link that cannot keep its token did not fail: $(e job "$(tail -n 1 <<<"$link")")"
 [ "$(devices)" = "$before" ] || fail "a failed link left a device on the account"
 [ "$(value e "['link_problem']")" = other ] || fail "the failure was not kept: $(e server status)"
-rmdir "$file"
+printf "{}" >"$file"
 link=$(e server link --name Plain)
 approve "$link"
 await e "$(tail -n 1 <<<"$link")"
@@ -61,5 +71,8 @@ wait_for 30 signed || fail "the revoked device shows nothing: $(e server status)
 e server status | grep -q "signed out" || fail "ctl does not say it: $(e server status)"
 e server remove
 [ "$(value e "")" = None ] || fail "the revoked device kept the server"
-[ ! -e "$file" ] || fail "the file of the access stayed after removing the server"
+[ -e "$file" ] || fail "removing the server forgot where the secrets are kept"
+[ "$(e provider store | head -n 1)" = file ] || fail "the file choice was lost: $(e provider store)"
+if e provider store keyring 2>/dev/null; then fail "the secrets left the file for a keyring that is not there"; fi
+[ -e "$file" ] || fail "a failed move to the keyring lost the file"
 echo "device list, revoke and no-keyring link checks passed"

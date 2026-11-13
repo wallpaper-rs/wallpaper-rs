@@ -181,10 +181,10 @@ Kirigami.ScrollablePage {
         codes: codes
     }
 
-    AccountFiler {
+    SecretFiler {
         id: filer
 
-        page: page
+        onChosen: page.link(page.lastName, page.lastPlain)
     }
 
     AccountRevoke {

@@ -66,4 +66,13 @@ impl Providers {
     async fn forget_secret(&self, id: String) -> Result<()> {
         self.d()?.forget_secret(id).await
     }
+
+    async fn set_secret_store(&self, store: String) -> Result<()> {
+        let file = match store.as_str() {
+            "file" => true,
+            "keyring" => false,
+            _ => return Err(crate::error::invalid("the store is keyring or file")),
+        };
+        self.d()?.set_secret_store(file).await
+    }
 }

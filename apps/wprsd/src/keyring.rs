@@ -23,8 +23,14 @@ const SLOW: &str = "the keyring did not answer in time";
 type Secret = (OwnedObjectPath, Vec<u8>, Vec<u8>, String);
 type Paths = Vec<OwnedObjectPath>;
 
+mod file;
+mod moving;
+mod pick;
 mod proxy;
 mod write;
+
+pub use file::{Home, NAME};
+pub use moving::relocate;
 
 use proxy::{CollectionProxy, ItemProxy, PromptProxy, ServiceProxy};
 
@@ -39,6 +45,7 @@ pub struct Keyring {
     lookup: Duration,
     write: Duration,
     kind: (&'static str, &'static str),
+    home: Arc<Home>,
     silent: Arc<Mutex<Option<Instant>>>,
     known: Arc<Mutex<HashMap<String, bool>>>,
 }
@@ -58,16 +65,22 @@ async fn bounded<T>(limit: Duration, work: impl Future<Output = Result<T>>) -> R
 impl Keyring {
     pub fn new(bus: zbus::Connection) -> Self {
         let (silent, known) = (Arc::default(), Arc::default());
-        Keyring { bus, lookup: LOOKUP, write: WRITE, kind: (SCHEMA, "provider"), silent, known }
+        let home = Arc::new(Home::default());
+        Keyring { bus, lookup: LOOKUP, write: WRITE, kind: (SCHEMA, "provider"), home, silent, known }
     }
 
-    pub fn server(bus: zbus::Connection) -> Self {
-        Keyring { kind: ("io.github.wallpaper_rs.Server", "server"), ..Keyring::new(bus) }
+    pub fn with_home(self, home: Arc<Home>) -> Self {
+        Keyring { home, ..self }
+    }
+
+    pub fn server(bus: zbus::Connection, home: Arc<Home>) -> Self {
+        Keyring { kind: ("io.github.wallpaper_rs.Server", "server"), ..Keyring::new(bus).with_home(home) }
     }
 
     pub fn properties(&self) -> Self {
         let kind = ("io.github.wallpaper_rs.Property", "property");
-        Keyring { kind, silent: self.silent.clone(), ..Keyring::new(self.bus.clone()) }
+        let home = self.home.clone();
+        Keyring { kind, home, silent: self.silent.clone(), ..Keyring::new(self.bus.clone()) }
     }
 
     pub fn known(&self, id: &str) -> Option<bool> {
@@ -99,14 +112,14 @@ impl Keyring {
         self.service().await?.search_items(self.attributes(id)).await
     }
 
-    pub async fn has(&self, id: &str) -> Result<bool> {
+    pub(crate) async fn ring_has(&self, id: &str) -> Result<bool> {
         let found = self.asked(async { Ok(self.search(id).await) }).await?;
         let stored = found.is_ok_and(|(open, locked)| !open.is_empty() || !locked.is_empty());
         self.remember(id, stored);
         Ok(stored)
     }
 
-    pub async fn read(&self, id: &str, prompt: bool) -> Result<Stored> {
+    pub(crate) async fn ring_read(&self, id: &str, prompt: bool) -> Result<Stored> {
         match prompt {
             true => bounded(self.write, self.fetch(id, prompt)).await,
             false => self.asked(self.fetch(id, prompt)).await,

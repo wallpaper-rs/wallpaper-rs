@@ -107,6 +107,7 @@ mod stacking;
 mod staged;
 mod staging;
 mod steps;
+pub mod storing;
 mod swarmed;
 mod swarming;
 mod swinging;

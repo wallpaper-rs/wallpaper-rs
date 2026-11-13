@@ -249,30 +249,6 @@ msgstr ""
 "Úsalo solo cuando ninguno de tus equipos tenga ya la clave: escribe la frase "
 "de recuperación que pusiste en uno de ellos."
 
-#: apps/wprs-app/qml/AccountFiler.qml
-msgid "Keep the access in a private file"
-msgstr "Guardar el acceso en un archivo privado"
-
-#: apps/wprs-app/qml/AccountFiler.qml
-msgid "Keep it in a private file"
-msgstr "Guardarlo en un archivo privado"
-
-#: apps/wprs-app/qml/AccountFiler.qml
-msgid ""
-"Without a keyring, this computer would keep the token that identifies it to "
-"your server, and the sync key, in a private file in its data folder. Only "
-"you can read that file on this computer, but anyone who gets a copy of your "
-"files, or who uses this account on this computer, could use your account and "
-"read what you sync. Choose this only on a computer where you cannot use a "
-"keyring."
-msgstr ""
-"Sin llavero, este equipo guardaría la ficha que lo identifica ante tu "
-"servidor, y la clave de sincronización, en un archivo privado de su carpeta "
-"de datos. Solo tú puedes leer ese archivo en este equipo, pero quien consiga "
-"una copia de tus archivos, o use tu cuenta en este equipo, podría usar tu "
-"cuenta y leer lo que sincronizas. Elige esto solo en un equipo en el que no "
-"puedas usar un llavero."
-
 #: apps/wprs-app/qml/AccountFiles.qml
 msgid "waiting to upload"
 msgstr "esperando para subir"
@@ -497,18 +473,6 @@ msgstr ""
 
 #: apps/wprs-app/qml/AccountProblem.qml
 msgid ""
-"This computer could not keep its access to the server because no system "
-"keyring is available. Start or unlock your keyring and link again. If this "
-"computer has none, you can keep the access in a private file instead: anyone "
-"who can read your files could then use it."
-msgstr ""
-"Este equipo no pudo guardar su acceso al servidor porque no hay ningún "
-"llavero del sistema disponible. Inicia o desbloquea tu llavero y vuelve a "
-"enlazar. Si este equipo no tiene ninguno, puedes guardar el acceso en un "
-"archivo privado: quien pueda leer tus archivos podría usarlo."
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid ""
 "The link was refused on the server. Link again when you are ready to approve "
 "it on your own computer."
 msgstr ""
@@ -545,22 +509,8 @@ msgid "Link again…"
 msgstr "Volver a enlazar…"
 
 #: apps/wprs-app/qml/AccountProblem.qml
-msgid "Keep the access in a private file…"
-msgstr "Guardar el acceso en un archivo privado…"
-
-#: apps/wprs-app/qml/AccountProblem.qml
 msgid "Details: %1"
 msgstr "Detalles: %1"
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid ""
-"This computer keeps its access to the server in a private file, not in the "
-"system keyring: whoever can read your files can use it. To use the keyring "
-"again, remove the server and add it again."
-msgstr ""
-"Este equipo guarda su acceso al servidor en un archivo privado y no en el "
-"llavero del sistema: quien pueda leer tus archivos puede usarlo. Para volver "
-"a usar el llavero, quita el servidor y añádelo de nuevo."
 
 #: apps/wprs-app/qml/AccountProblem.qml
 msgid ""
@@ -667,15 +617,6 @@ msgstr "Añadirlo aquí"
 #: apps/wprs-app/qml/AccountShared.qml
 msgid "Not here"
 msgstr "Aquí no"
-
-#: apps/wprs-app/qml/AccountShared.qml
-msgid "Provider secrets"
-msgstr "Secretos de los proveedores"
-
-#: apps/wprs-app/qml/AccountShared.qml
-msgid "Sync the secret of %1 with my devices, end-to-end encrypted"
-msgstr ""
-"Sincronizar el secreto de %1 con mis equipos, cifrado de extremo a extremo"
 
 #: apps/wprs-app/qml/AccountShared.qml
 msgid "Recovery"
@@ -4747,16 +4688,6 @@ msgstr "Obligatorio"
 #: apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Optional"
 msgstr "Opcional"
-
-#: apps/wprs-app/qml/ProviderDialog.qml
-msgid "Advanced:"
-msgstr "Avanzado:"
-
-#: apps/wprs-app/qml/ProviderDialog.qml
-msgid ""
-"Without encryption the secret and the pictures travel in clear text over the "
-"network."
-msgstr "Sin cifrado, el secreto y las imágenes viajan en claro por la red."
 
 #: apps/wprs-app/qml/ProviderDialogs.qml
 msgid "Secret of %1"
@@ -14728,10 +14659,6 @@ msgid "Server"
 msgstr "Servidor"
 
 #: apps/wprs-app/qml/facade/Labels.qml
-msgid "Allow unencrypted HTTP"
-msgstr "Permitir HTTP sin cifrar"
-
-#: apps/wprs-app/qml/facade/Labels.qml
 msgid "API key"
 msgstr "Clave de API"
 
@@ -17581,3 +17508,79 @@ msgstr "Pega una dirección de búsqueda de wallhaven.cc y pulsa Intro"
 #: apps/wprs-app/qml/WallhavenDialog.qml
 msgid "The address will fill the search options when you save."
 msgstr "La dirección llenará las opciones de búsqueda al guardar."
+
+
+msgid "Keep secrets in a private file"
+msgstr "Guardar los secretos en un archivo privado"
+
+msgid "Keep secrets in a private file…"
+msgstr "Guardar los secretos en un archivo privado…"
+
+msgid "Keep them in a private file"
+msgstr "Guardarlos en un archivo privado"
+
+msgid ""
+"No system keyring answers, so the secret cannot be stored. Start or unlock"
+" your keyring, or keep secrets in a private file."
+msgstr ""
+"Ningún llavero del sistema responde, así que el secreto no se puede "
+"guardar. Inicia o desbloquea tu llavero, o guarda los secretos en un "
+"archivo privado."
+
+msgid ""
+"No system keyring was found on this computer, so passwords and API keys "
+"cannot be stored. Start or unlock your keyring, or keep them in a private "
+"file instead: anyone who can read your files could then use them."
+msgstr ""
+"No se encontró ningún llavero del sistema en este equipo, así que no se "
+"pueden guardar contraseñas ni claves de API. Inicia o desbloquea tu "
+"llavero, o guárdalas en un archivo privado: quien pueda leer tus archivos "
+"podría usarlas."
+
+msgid ""
+"This address uses plain http: the password or key, and the pictures, "
+"travel over the network without encryption."
+msgstr ""
+"Esta dirección usa http sin cifrar: la contraseña o la clave, y las "
+"imágenes, viajan por la red sin cifrar."
+
+msgid ""
+"This computer could not keep its access to the server because no system "
+"keyring is available. Start or unlock your keyring and link again. If this"
+" computer has none, you can keep it in a private file instead: anyone who "
+"can read your files could then use it."
+msgstr ""
+"Este equipo no pudo guardar su acceso al servidor porque no hay ningún "
+"llavero del sistema disponible. Inicia o desbloquea tu llavero y vuelve a "
+"enlazar. Si este equipo no tiene ninguno, puedes guardarlo en un archivo "
+"privado: quien pueda leer tus archivos podría usarlo."
+
+msgid ""
+"This computer keeps its secrets (the passwords and API keys of providers, "
+"and its access to the sync server) in a private file, not in the system "
+"keyring: whoever can read your files can use them."
+msgstr ""
+"Este equipo guarda sus secretos (las contraseñas y claves de API de los "
+"proveedores, y su acceso al servidor de sincronización) en un archivo "
+"privado y no en el llavero del sistema: quien pueda leer tus archivos "
+"puede usarlos."
+
+msgid "Use the system keyring"
+msgstr "Usar el llavero del sistema"
+
+msgid ""
+"Without a keyring, this computer would keep the passwords and API keys of "
+"your providers, and the token that identifies it to your server with the "
+"sync key, in a private file in its data folder. Only you can read that "
+"file on this computer, but anyone who gets a copy of your files, or who "
+"uses your account on this computer, could use them and read what you sync."
+" Choose this only on a computer where you cannot use a keyring. You can "
+"move them back to the keyring at any time."
+msgstr ""
+"Sin llavero, este equipo guardaría las contraseñas y claves de API de tus "
+"proveedores, y la ficha que lo identifica ante tu servidor con la clave de"
+" sincronización, en un archivo privado de su carpeta de datos. Solo tú "
+"puedes leer ese archivo en este equipo, pero quien consiga una copia de "
+"tus archivos, o use tu cuenta en este equipo, podría usarlos y leer lo que"
+" sincronizas. Elige esto solo en un equipo en el que no puedas usar un "
+"llavero. Puedes volver a pasarlos al llavero cuando quieras."

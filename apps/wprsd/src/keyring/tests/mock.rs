@@ -149,6 +149,12 @@ impl MockItem {
         self.0.lock().unwrap().items.retain(|item| item.0 != self.1);
         path("/")
     }
+
+    #[zbus(property)]
+    fn attributes(&self) -> HashMap<String, String> {
+        let vault = self.0.lock().unwrap();
+        vault.items.iter().find(|item| item.0 == self.1).map(|item| item.1.clone()).unwrap_or_default()
+    }
 }
 
 struct MockPrompt(Shared);

@@ -3,6 +3,7 @@ use mock::{Shared, Vault, serve};
 use std::sync::Mutex;
 
 pub(crate) mod mock;
+mod relocation;
 
 use mock::Bus;
 

@@ -16,7 +16,7 @@ ColumnLayout {
     function words(code) {
         switch (code) {
         case "keyring":
-            return App.tr("This computer could not keep its access to the server because no system keyring is available. Start or unlock your keyring and link again. If this computer has none, you can keep the access in a private file instead: anyone who can read your files could then use it.");
+            return App.tr("This computer could not keep its access to the server because no system keyring is available. Start or unlock your keyring and link again. If this computer has none, you can keep it in a private file instead: anyone who can read your files could then use it.");
         case "refused":
             return App.tr("The link was refused on the server. Link again when you are ready to approve it on your own computer.");
         case "expired":
@@ -29,6 +29,11 @@ ColumnLayout {
 
     onKindChanged: hidden = false
     spacing: Kirigami.Units.smallSpacing
+
+    SecretNotice {
+        Layout.fillWidth: true
+        filer: problem.page.filer
+    }
 
     Kirigami.InlineMessage {
         Layout.fillWidth: true
@@ -45,7 +50,7 @@ ColumnLayout {
                 onTriggered: problem.page.dialogs.linker.open()
             },
             Kirigami.Action {
-                text: App.tr("Keep the access in a private file…")
+                text: App.tr("Keep secrets in a private file…")
                 icon.name: "document-encrypt"
                 visible: problem.kind === "keyring"
                 onTriggered: problem.page.filer.open()
@@ -57,13 +62,6 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: problem.kind === "other" && problem.detail !== "" && !problem.hidden
         text: App.tr("Details: %1", problem.detail)
-    }
-
-    Kirigami.InlineMessage {
-        Layout.fillWidth: true
-        visible: problem.account?.file_secrets === true
-        type: Kirigami.MessageType.Warning
-        text: App.tr("This computer keeps its access to the server in a private file, not in the system keyring: whoever can read your files can use it. To use the keyring again, remove the server and add it again.")
     }
 
     Kirigami.InlineMessage {

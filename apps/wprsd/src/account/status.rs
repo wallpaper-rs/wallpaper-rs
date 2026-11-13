@@ -64,7 +64,6 @@ impl Saved {
             quarantined: self.quarantine.len() as u32,
             unapplied: self.unapplied.len() as u32,
             offers: self.offers.clone(),
-            secrets: self.shared.iter().cloned().collect(),
             recovery: match self.recovery {
                 None => Recovery::Off,
                 Some(epoch) if epoch == self.epoch => Recovery::Current,
@@ -75,7 +74,7 @@ impl Saved {
             job,
             link_problem: self.link_problem.clone(),
             link_error: self.link_error.clone(),
-            file_secrets: self.file_secrets,
+            file_secrets: false,
         })
     }
 }
@@ -85,7 +84,8 @@ impl Daemon {
         let serial = self.changes.serial();
         let job = super::KINDS.into_iter().flat_map(|kind| self.jobs_of(kind)).min();
         let linking = !self.jobs.find(JobKind::Link, "link").is_empty();
-        let account = self.saved().model(linking, job);
+        let account =
+            self.saved().model(linking, job).map(|a| Account { file_secrets: self.secrets_in_file(), ..a });
         reply(AccountReply { model: MODEL, serial, account })
     }
 }

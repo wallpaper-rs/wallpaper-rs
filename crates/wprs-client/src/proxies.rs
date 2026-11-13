@@ -34,14 +34,12 @@ pub trait Sync1 {
     fn sync_now(&self) -> Result<u64>;
     fn set_paused(&self, paused: bool) -> Result<()>;
     fn revoke_device(&self, device: &str, password: &str) -> Result<u64>;
-    fn set_file_secrets(&self, allow: bool) -> Result<()>;
     fn join(&self, device: &str) -> Result<u64>;
     fn share_key(&self, device: &str) -> Result<u64>;
     fn confirm_share(&self, device: &str, code: &str) -> Result<u64>;
     fn rotate(&self) -> Result<u64>;
     fn reset(&self) -> Result<u64>;
     fn confirm_repo(&self, repo: &str, add: bool) -> Result<u64>;
-    fn share_secret(&self, provider: &str, share: bool) -> Result<()>;
     fn set_escrow(&self, passphrase: &str) -> Result<u64>;
     fn restore(&self, passphrase: &str) -> Result<u64>;
     fn share_files(&self, targets: &[&str], share: bool) -> Result<u64>;

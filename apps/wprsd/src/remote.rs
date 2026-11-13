@@ -2,7 +2,7 @@ use crate::compositor::lock;
 use crate::daemon::Daemon;
 use crate::error::{Error, Result, failed, invalid, not_found};
 use crate::jobs::now;
-use crate::keyring::Keyring;
+use crate::keyring::{Home, Keyring, NAME};
 use crate::kinds::{Options, entry};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fs;
@@ -30,6 +30,7 @@ pub struct Health {
 #[derive(Default)]
 pub struct Remote {
     pub keyring: OnceLock<Keyring>,
+    pub home: OnceLock<Arc<Home>>,
     pub health: Mutex<HashMap<String, Health>>,
     pub syncing: Mutex<HashSet<String>>,
     pub adding: Mutex<HashSet<String>>,
@@ -56,7 +57,7 @@ pub fn claim<'a>(set: &'a Mutex<HashSet<String>>, id: &str) -> Option<Claim<'a>>
 }
 
 pub fn start(daemon: &Arc<Daemon>, bus: zbus::Connection) {
-    daemon.remote.keyring.set(Keyring::new(bus.clone())).ok();
+    daemon.remote.keyring.set(Keyring::new(bus.clone()).with_home(daemon.secret_home())).ok();
     daemon.load_orphans();
     tokio::spawn(crate::orphans::watch(daemon.clone(), bus));
     for (id, value) in daemon.state().config.providers.iter() {
@@ -99,6 +100,10 @@ pub fn last_sync(dir: &Path) -> Option<i64> {
 impl Daemon {
     pub fn library_ready(&self) -> Result<()> {
         self.store.error.as_ref().map_or(Ok(()), |e| Err(failed(e.clone())))
+    }
+
+    pub fn secret_home(&self) -> Arc<Home> {
+        self.remote.home.get_or_init(|| Arc::new(Home::at(self.store.data.join(NAME)))).clone()
     }
 
     pub fn keyring(&self) -> Result<&Keyring> {

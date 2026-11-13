@@ -3,7 +3,7 @@ use crate::daemon::Daemon;
 use crate::error::{Error, Result, invalid};
 use crate::items::reply;
 use crate::jobs::now;
-use crate::kinds::{Options, effective, entry, hosts, kind_of, table};
+use crate::kinds::{Options, effective, entry, hosts, kind_of, plain_http, table};
 use crate::remote::{check_secret, claim, last_sync};
 use crate::store::private_dir;
 use std::collections::{BTreeMap, HashMap};
@@ -47,7 +47,9 @@ impl Daemon {
             };
             providers.push(self.run(move |d| Ok::<_, Error>(d.describe(&id, &value, has_secret))).await?);
         }
-        reply(ProvidersReply { model: MODEL, serial, providers })
+        let store = if self.secrets_in_file() { "file" } else { "keyring" };
+        let keyring_found = store == "file" || self.keyring_found().await;
+        reply(ProvidersReply { model: MODEL, serial, providers, store: store.into(), keyring_found })
     }
 
     fn describe(&self, id: &str, value: &toml::Value, found: Option<bool>) -> Provider {
@@ -84,6 +86,7 @@ impl Daemon {
             last_error,
             job,
             orphan_secret: self.orphaned(id),
+            plain_http: false,
         };
         let (known, _, options) = match entry(value) {
             Ok(parsed) => parsed,
@@ -100,7 +103,7 @@ impl Daemon {
         };
         let needs = provider.state == ProviderState::NeedsSecret;
         provider.next_sync = self.next_sync(id, &options).filter(|_| !needs);
-        Provider { hosts: hosts(&known, &options), options, ..provider }
+        Provider { hosts: hosts(&known, &options), plain_http: plain_http(&options), options, ..provider }
     }
 
     pub async fn add_provider(

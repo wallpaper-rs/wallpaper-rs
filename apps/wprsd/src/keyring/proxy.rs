@@ -37,6 +37,8 @@ pub trait Collection {
 #[zbus::proxy(interface = "org.freedesktop.Secret.Item", default_service = "org.freedesktop.secrets")]
 pub trait Item {
     fn delete(&self) -> zbus::Result<OwnedObjectPath>;
+    #[zbus(property)]
+    fn attributes(&self) -> zbus::Result<HashMap<String, String>>;
 }
 
 #[zbus::proxy(interface = "org.freedesktop.Secret.Prompt", default_service = "org.freedesktop.secrets")]

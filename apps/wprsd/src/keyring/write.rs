@@ -4,7 +4,7 @@ use zbus::Variant;
 use zeroize::Zeroize;
 
 impl Keyring {
-    pub async fn store(&self, id: &str, secret: &str) -> Result<()> {
+    pub(crate) async fn ring_store(&self, id: &str, secret: &str) -> Result<()> {
         bounded(self.write, self.create(id, secret)).await?;
         self.remember(id, true);
         Ok(())
@@ -28,7 +28,7 @@ impl Keyring {
         self.complete(created.map_err(refused)?.1).await
     }
 
-    pub async fn delete(&self, id: &str) -> Result<()> {
+    pub(crate) async fn ring_delete(&self, id: &str) -> Result<()> {
         bounded(self.write, async {
             let Ok((open, locked)) = self.search(id).await else { return Ok(()) };
             if !locked.is_empty() {
@@ -44,11 +44,11 @@ impl Keyring {
         Ok(())
     }
 
-    pub async fn reachable(&self, id: &str) -> bool {
+    pub(crate) async fn ring_reachable(&self, id: &str) -> bool {
         self.search(id).await.is_ok()
     }
 
-    pub async fn discard(&self, id: &str) -> Result<bool> {
+    pub(crate) async fn ring_discard(&self, id: &str) -> Result<bool> {
         bounded(self.write, async {
             let Ok((open, locked)) = self.search(id).await else { return Ok(false) };
             for path in open {

@@ -148,6 +148,7 @@ pub trait Providers1 {
     fn reseed(&self, id: &str) -> Result<u64>;
     fn set_secret(&self, id: &str, secret: &str) -> Result<()>;
     fn forget_secret(&self, id: &str) -> Result<()>;
+    fn set_secret_store(&self, store: &str) -> Result<()>;
 }
 
 #[proxy(

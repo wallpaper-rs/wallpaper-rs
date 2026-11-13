@@ -48,18 +48,6 @@ msgstr ""
 
 #: apps/wprs-ctl/src/account.rs
 msgid ""
-"No keyring is available to keep the access of this computer. Start or unlock "
-"the system keyring and link again, or keep the access in a private file with "
-"`wprs-ctl server access file` (whoever can read your files could then use "
-"it)."
-msgstr ""
-"No hay un llavero para guardar el acceso de este equipo. Inicia o desbloquea "
-"el llavero del sistema y vuelve a vincular, o guarda el acceso en un archivo "
-"privado con `wprs-ctl server access file` (quien pueda leer tus archivos "
-"podría usarlo)."
-
-#: apps/wprs-ctl/src/account.rs
-msgid ""
 "The device can no longer sync with this account, and the sync key is "
 "replaced."
 msgstr ""
@@ -6379,13 +6367,6 @@ msgid "Options of the kind; see wprs-ctl schema"
 msgstr "Opciones del tipo; ver wprs-ctl schema"
 
 #: apps/wprs-ctl/src/providers.rs
-msgid ""
-"Allow plain http to a remote server: the secret then travels unencrypted"
-msgstr ""
-"Permitir http sin cifrar hacia un servidor remoto: el secreto viaja entonces "
-"sin cifrar"
-
-#: apps/wprs-ctl/src/providers.rs
 msgid "Add the provider without a secret"
 msgstr "Añadir el proveedor sin secreto"
 
@@ -7804,28 +7785,6 @@ msgstr "Quitarlo sin preguntar"
 
 #: apps/wprs-ctl/src/server.rs
 msgid ""
-"Choose where this computer keeps its access to the server: the system "
-"keyring or a file"
-msgstr ""
-"Elige dónde guarda este equipo su acceso al servidor: el llavero del sistema "
-"o un archivo"
-
-#: apps/wprs-ctl/src/server.rs
-msgid ""
-"Choose where this computer keeps its access to the server: the system "
-"keyring or a private file in the data folder, for computers with no keyring. "
-"Whoever can read your files can then use the access. Only before linking."
-msgstr ""
-"Elige dónde guarda este equipo su acceso al servidor: el llavero del sistema "
-"o un archivo privado en la carpeta de datos, para equipos sin llavero. Quien "
-"pueda leer tus archivos podrá usar el acceso. Solo antes de enlazar."
-
-#: apps/wprs-ctl/src/server.rs
-msgid "Where to keep it"
-msgstr "Dónde guardarlo"
-
-#: apps/wprs-ctl/src/server.rs
-msgid ""
 "Show the server, this device, the sync state and the devices of the account"
 msgstr ""
 "Mostrar el servidor, este dispositivo, el estado de la sincronización y los "
@@ -7920,21 +7879,6 @@ msgstr ""
 #: apps/wprs-ctl/src/server.rs
 msgid "Do not add it on this computer and stop asking"
 msgstr "No añadirlo en este equipo y dejar de preguntar"
-
-#: apps/wprs-ctl/src/server.rs
-msgid ""
-"Sync the secret of a provider with the other devices, end-to-end encrypted"
-msgstr ""
-"Sincronizar el secreto de un proveedor con los demás dispositivos, cifrado "
-"de extremo a extremo"
-
-#: apps/wprs-ctl/src/server.rs
-msgid "Id of the provider whose secret the server keeps"
-msgstr "Id del proveedor cuyo secreto guarda el servidor"
-
-#: apps/wprs-ctl/src/server.rs
-msgid "Stop syncing it; the copies other devices hold stay"
-msgstr "Dejar de sincronizarlo; las copias de los demás dispositivos se quedan"
 
 #: apps/wprs-ctl/src/server.rs
 msgid ""
@@ -8039,18 +7983,6 @@ msgstr ""
 #: apps/wprs-ctl/src/server.rs
 msgid "Also delete the local copies of the synced records"
 msgstr "Borrar también las copias locales de los registros sincronizados"
-
-#: apps/wprs-ctl/src/serving.rs
-msgid ""
-"The access of this computer will be kept in a private file in the data "
-"folder of wallpaper-rs: whoever can read your files can use it, and on an "
-"encrypted account read the synced data. Use it only on a computer with no "
-"keyring."
-msgstr ""
-"El acceso de este equipo se guardará en un archivo privado de la carpeta de "
-"datos de wallpaper-rs: quien pueda leer tus archivos puede usarlo y, en una "
-"cuenta cifrada, leer los datos sincronizados. Úsalo solo en un equipo sin "
-"llavero."
 
 #: apps/wprs-ctl/src/serving.rs
 msgid "Link without end-to-end encryption?"
@@ -10524,3 +10456,64 @@ msgstr ""
 #: apps/wprs-ctl/src/adopting.rs
 msgid "the library refused the file"
 msgstr "la biblioteca rechazó el archivo"
+
+msgid ""
+"%1 uses plain http: its password or key travels unencrypted. Use https if "
+"the server allows it."
+msgstr ""
+"%1 usa http sin cifrar: su contraseña o clave viaja sin cifrar. Usa https "
+"si el servidor lo permite."
+
+msgid ""
+"Choose where this computer keeps every secret (provider passwords and API "
+"keys, the access to the sync server): the system keyring or a private file"
+" in the data folder, for computers with no keyring. Whoever can read your "
+"files can then use them. Secrets move in both directions without removing "
+"anything. Without a value, it shows where they are now."
+msgstr ""
+"Elige dónde guarda este equipo todos sus secretos (contraseñas y claves de"
+" API de los proveedores, el acceso al servidor de sincronización): el "
+"llavero del sistema o un archivo privado en la carpeta de datos, para "
+"equipos sin llavero. Quien pueda leer tus archivos podrá usarlos. Los "
+"secretos pasan de un lado a otro sin quitar nada. Sin valor, muestra dónde"
+" están ahora."
+
+msgid ""
+"Choose where this computer keeps every secret: the system keyring or a "
+"private file"
+msgstr ""
+"Elige dónde guarda este equipo todos sus secretos: el llavero del sistema "
+"o un archivo privado"
+
+msgid ""
+"No keyring is available to keep the access of this computer. Start or "
+"unlock the system keyring and link again, or keep the secrets in a private"
+" file with `wprs-ctl provider store file` (whoever can read your files "
+"could then use them)."
+msgstr ""
+"No hay un llavero para guardar el acceso de este equipo. Inicia o "
+"desbloquea el llavero del sistema y vuelve a vincular, o guarda los "
+"secretos en un archivo privado con `wprs-ctl provider store file` (quien "
+"pueda leer tus archivos podría usarlos)."
+
+msgid ""
+"No system keyring was found, so secrets cannot be stored. Run `wprs-ctl "
+"provider store file` to keep them in a private file instead (whoever can "
+"read your files could then use them)."
+msgstr ""
+"No se encontró ningún llavero del sistema, así que no se pueden guardar "
+"secretos. Ejecuta `wprs-ctl provider store file` para guardarlos en un "
+"archivo privado (quien pueda leer tus archivos podría usarlos)."
+
+msgid ""
+"Secrets (provider passwords and API keys, and the access to the sync "
+"server) are kept in a private file in the data folder, not in the system "
+"keyring: whoever can read your files can use them."
+msgstr ""
+"Los secretos (contraseñas y claves de API de los proveedores, y el acceso "
+"al servidor de sincronización) están en un archivo privado de la carpeta "
+"de datos, no en el llavero del sistema: quien pueda leer tus archivos "
+"puede usarlos."
+
+msgid "Where to keep them; empty shows where they are"
+msgstr "Dónde guardarlos; vacío muestra dónde están"

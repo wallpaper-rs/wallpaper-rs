@@ -9,7 +9,6 @@ ColumnLayout {
 
     required property var account
     required property var dialogs
-    property var providers: []
     readonly property bool encrypted: shared.account?.encrypted === true
     readonly property var offers: shared.account?.offers ?? []
     readonly property var recovery: ({
@@ -17,21 +16,6 @@ ColumnLayout {
             "current": App.tr("The server keeps the current sync key, locked with your recovery passphrase."),
             "stale": App.tr("A device that may know the recovery passphrase was revoked, so the server keeps an older sync key: set a new, different passphrase.")
         })
-
-    function load() {
-        App.query("List", [], "Providers1", reply => shared && (shared.providers = reply.providers.filter(p => !!(App.schema.providers ?? []).find(k => k.kind === p.kind)?.secret)));
-    }
-
-    Component.onCompleted: load()
-
-    Connections {
-        target: App
-
-        function onUpdated(topic) {
-            if (topic === "providers")
-                shared.load();
-        }
-    }
 
     Kirigami.Heading {
         level: 3
@@ -76,24 +60,6 @@ ColumnLayout {
                 icon.name: "dialog-cancel"
                 onClicked: App.act("ConfirmRepo", [modelData.id, false], "Sync1")
             }
-        }
-    }
-
-    Kirigami.Heading {
-        level: 3
-        visible: shared.encrypted && shared.providers.length > 0
-        text: App.tr("Provider secrets")
-    }
-
-    Repeater {
-        model: shared.encrypted ? shared.providers : []
-
-        delegate: QQC2.CheckBox {
-            required property var modelData
-
-            text: App.tr("Sync the secret of %1 with my devices, end-to-end encrypted", modelData.id)
-            checked: (shared.account?.secrets ?? []).includes(modelData.id)
-            onToggled: App.act("ShareSecret", [modelData.id, checked], "Sync1")
         }
     }
 

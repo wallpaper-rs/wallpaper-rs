@@ -82,30 +82,20 @@ pub fn providers() -> Vec<ProviderKind> {
                 int("max_items", 240, 1.0, 240.0),
             ],
         ),
-        provider(
-            "webdav",
-            &[],
-            3600.0,
-            Some(("password", true)),
-            vec![url("url"), user(), flag("allow_plain_http", false)],
-        ),
+        provider("webdav", &[], 3600.0, Some(("password", true)), vec![url("url"), user()]),
         provider(
             "nextcloud",
             &[],
             3600.0,
             Some(("password", true)),
-            vec![url("server"), user(), text("folder", ""), flag("allow_plain_http", false)],
+            vec![url("server"), user(), text("folder", "")],
         ),
         provider(
             "immich",
             &[],
             3600.0,
             Some(("api_key", true)),
-            vec![
-                url("server"),
-                required(field("album", FieldKind::Text, Value::Null)),
-                flag("allow_plain_http", false),
-            ],
+            vec![url("server"), required(field("album", FieldKind::Text, Value::Null))],
         ),
     ]
 }

@@ -21,6 +21,8 @@ Kirigami.ScrollablePage {
 
     function exercise() {
         adder.open();
+        filer.open();
+        filer.close();
     }
 
     title: App.tr("Providers")
@@ -49,6 +51,11 @@ Kirigami.ScrollablePage {
     }
 
     ColumnLayout {
+        SecretNotice {
+            Layout.fillWidth: true
+            filer: filer
+        }
+
         Kirigami.PlaceholderMessage {
             Layout.fillWidth: true
             visible: page.providers.length === 0
@@ -71,5 +78,11 @@ Kirigami.ScrollablePage {
 
     ProviderDialog {
         id: adder
+
+        filer: filer
+    }
+
+    SecretFiler {
+        id: filer
     }
 }

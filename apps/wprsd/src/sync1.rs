@@ -50,10 +50,6 @@ impl Sync {
         self.d()?.run(move |d| d.revoke_device(&device, password).inspect_err(|e| d.track_access(e))).await
     }
 
-    async fn set_file_secrets(&self, allow: bool) -> Result<()> {
-        self.d()?.run(move |d| d.use_file_secrets(allow)).await
-    }
-
     #[zbus(out_args("json"))]
     async fn get_status(&self) -> Result<String> {
         self.d()?.run(|d| d.account_status()).await
@@ -96,10 +92,6 @@ impl Sync {
     #[zbus(out_args("job"))]
     async fn confirm_repo(&self, repo: String, add: bool) -> Result<u64> {
         self.d()?.run(move |d| d.confirm_repo(&repo, add)).await
-    }
-
-    async fn share_secret(&self, provider: String, share: bool) -> Result<()> {
-        self.d()?.run(move |d| d.share_secret(&provider, share)).await
     }
 
     #[zbus(out_args("job"))]

@@ -94,14 +94,8 @@ for dev in a b; do
   "$dev" provider add nas webdav url=http://127.0.0.1:9/dav user=reader refresh=0s --no-secret >/dev/null
 done
 printf 'swordfish-on-the-quay\n' | a provider secret nas --secret-stdin
-a server secret nas
 a server sync --wait >/dev/null
 b server sync --wait >/dev/null
-[ "$(b provider ls --json | jq_ "[p['has_secret'] for p in r['providers'] if p['id'] == 'nas']")" = "[True]" ] ||
-  fail "the provider secret did not arrive: $(b provider ls)"
-[ "$(value b "['secrets']")" = "['nas']" ] || fail "shared secrets: $(b server status)"
-b provider set nas user someone-else >/dev/null
-b server sync --wait >/dev/null
 [ "$(b provider ls --json | jq_ "[p['has_secret'] for p in r['providers'] if p['id'] == 'nas']")" = "[False]" ] ||
-  fail "a secret reached a provider with another user"
+  fail "a provider secret was synced between devices: $(b provider ls)"
 echo "secret checks passed"

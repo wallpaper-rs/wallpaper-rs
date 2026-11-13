@@ -22,7 +22,7 @@ fn options_are_validated_and_completed_with_defaults() {
         ])
     );
     let immich = options(&[("server", "http://127.0.0.1:2283"), ("album", "0d6a-11"), ("refresh", "0s")]);
-    assert_eq!(effective(&kind_of("immich").unwrap(), &immich).unwrap()["allow_plain_http"], "false");
+    assert!(effective(&kind_of("immich").unwrap(), &immich).is_ok());
     assert!(refused("bing", &[("count", "9")]).contains("from 1 to 8"));
     assert!(refused("bing", &[("refresh", "5m")]).contains("15m to 30d"));
     assert!(refused("bing", &[("password", "x")]).contains("is a secret"));
@@ -33,9 +33,11 @@ fn options_are_validated_and_completed_with_defaults() {
     {
         assert!(refused("webdav", &[("url", url), ("user", "me")]).contains("not in the URL"), "{url}");
     }
-    assert!(refused("webdav", &[("url", "http://example.org/dav"), ("user", "me")]).contains("plain http"));
-    let plain = [("url", "http://example.org/dav"), ("user", "me"), ("allow_plain_http", "true")];
-    assert!(effective(&kind_of("webdav").unwrap(), &options(&plain)).is_ok());
+    let plain = [("url", "http://example.org/dav"), ("user", "me")];
+    let plain = effective(&kind_of("webdav").unwrap(), &options(&plain)).unwrap();
+    assert!(plain_http(&plain) && !plain_http(&options(&[("url", "http://127.0.0.1/dav")])));
+    assert!(!plain_http(&options(&[("url", "https://example.org/dav")])));
+    assert!(refused("webdav", &[("url", "ftp://example.org/dav"), ("user", "me")]).contains("http"));
     assert!(kind_of("local").is_err() && check_id("Photos").is_err() && check_id("photos-2_x").is_ok());
 }
 

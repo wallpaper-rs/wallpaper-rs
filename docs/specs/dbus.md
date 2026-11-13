@@ -1386,8 +1386,10 @@ sync draws a new selection. One sync makes
 URL, the configuration or the logs. A `429` is retried after `Retry-After` or 2, 4 and 8 s and
 then fails the sync, which is retried later like any failed sync.
 
-URL options (`url`, `server`) must be `https://`, or `http://` to this computer; any other
-`http://` URL needs the option `allow_plain_http = true`, given explicitly. URLs with user
+URL options (`url`, `server`) must be `https://` or `http://`: the address of a person's own
+server may use plain http, always allowed, and `Provider.plain_http` is `true` for an `http://`
+address that is not this computer so that clients show a permanent notice that the password or key
+and the pictures travel unencrypted. URLs with user
 information, a query or a fragment return `InvalidArgs` (`put credentials in the secret, not in
 the URL`). Requests that carry a secret never follow a redirect to another origin or from HTTPS
 to HTTP.
@@ -1414,7 +1416,7 @@ state becomes `locked` and the sync waits for its next due time.
 
 ### `List() → (s json)`
 
-A `ProvidersReply`. Entries of `config.toml` that cannot be read (an unknown kind or option, a
+A `ProvidersReply`; `store` is `keyring` or `file` and `keyring_found` says whether a Secret Service answers (always `true` with `file`). Entries of `config.toml` that cannot be read (an unknown kind or option, a
 bad value, a secret written by hand) are listed with state `error`, their reason in
 `last_error` and no options; they are never synced and are kept in the file unchanged.
 
@@ -1484,6 +1486,25 @@ a kind without secret.
 ### `ForgetSecret(s id)`
 
 Deletes the provider's secret. Kinds without secret never touch the keyring.
+
+### `SetSecretStore(s store)`
+
+Chooses where this computer keeps every secret of the program: the passwords and API keys of
+providers, the secret texts of scene properties and the token and sync key of the server
+(`Sync1`). `store` is `keyring` (the Secret Service, the default) or `file` (`InvalidArgs` for
+anything else): a private file `secrets.json` (mode 0600, replaced whole through a temporary file)
+in the data folder, for a computer that has no keyring. The choice is the existence of that
+file, so there is one place that decides and nothing else to keep in step. Weakening secrecy is the
+person's explicit choice: clients show the notice before they call it with `file`, and show a
+notice that stays while `List().store` is `file` (whoever can read the files of the person can use the secrets
+and read what an encrypted account syncs) and, with the keyring chosen but none found
+(`keyring_found = false`), say so with the choice. Switching moves every secret in the direction
+asked, with nothing removed or linked again: to the file, it reads all of them from the keyring
+(the unlock prompt may show; if one cannot be read nothing changes), writes the file, then deletes
+the keyring items; to the keyring, it needs a Secret Service (`KeyringUnavailable`, and the
+file stays), stores them all and then deletes the file. Secrets never appear in replies, logs,
+errors or signals. `Changed("providers")` and `Changed("account")` follow; `GetStatus` reports it
+as `file_secrets`.
 
 ## `io.github.wallpaper_rs.Repos1`
 
@@ -1920,8 +1941,7 @@ the grant, for the editor; `NotFound` when the output has none.
 ## `io.github.wallpaper_rs.Sync1`
 
 Connects this computer to one self-hosted `wprs-server` (see `server.md`) and keeps its library
-metadata, playlists, profiles, presets, settings, added repositories, chosen provider secrets and
-chosen wallpaper files in sync with the other devices of the account. The server address is `https://`, or `http://` to this computer, without user
+metadata, playlists, profiles, presets, settings, added repositories and chosen wallpaper files in sync with the other devices of the account. The server address is `https://`, or `http://` to this computer, without user
 information, query or fragment; the daemon contacts no other host for sync, follows no redirect
 and sends the generic `User-Agent`. Every answer is limited in size (1 MiB, 8 MiB for pages of
 changes, 2 MiB for the mailbox, 64 KiB per event); a larger one fails the job without being used.
@@ -1929,7 +1949,7 @@ The device token, the private X25519 key of this device, the sync key (a 32-byte
 the current key epoch and a 32-byte naming key) with its epoch, the next key during a key
 rotation and the devices that still wait for it, the key that seals the recovery escrow and the
 synced copies of `secrets` records live
-only in the Secret Service, in one item labelled `wallpaper-rs: server` with the
+only where secrets are kept (see `SetSecretStore`: the Secret Service or a private file), in one item labelled `wallpaper-rs: server` with the
 attributes `xdg:schema = io.github.wallpaper_rs.Server` and `server = server`, with the timeouts
 and unlock rules of `Providers1`; they never appear in replies, signals, job targets, job errors,
 logs, `config.toml` or command lines. The rest of the state (server address, device names, sync
@@ -1965,7 +1985,6 @@ synced `device` record names the key the server lists.
 | `settings` | keyed hash | `kind` (`profile` or `preset`) and the profile or preset, with items, playlists and presets named by their synced ids; the options of a profile leave out the settings above that stay on each device, and a received profile keeps their values from this computer |
 | `device` | device id | `name`, `platform`, `key` (base64 of the public X25519 key); never applied, shown in `devices[].label` |
 | `repos` | keyed hash of the repo id | `url` (with its trust anchor), `repo_id`, `name`, `fingerprints` of the repositories added with an `https://` or loopback `http://` URL; a new one is only offered (`offers`) until `ConfirmRepo` |
-| `secrets` | keyed hash of the provider id | `provider`, `kind`, `bind` (its `url`, `server` and `user`), `secret`; only with end-to-end encryption and for providers chosen with `ShareSecret` |
 
 Every record holds per field a value and a hybrid logical clock (milliseconds, counter, device);
 a sync pulls the changes since the last head, merges each record field by field with the later
@@ -2004,13 +2023,9 @@ and the other side is kept as a new playlist named `<name> (conflict)`, the suff
 of the daemon (`LC_ALL`, `LC_MESSAGES` or `LANG`); a deleted side leaves no copy.
 
 A repository removed on one device is removed on the others too, keeping its installed packages.
-Provider secrets travel only inside end-to-end encrypted records and are stored on a receiving
-device only in the Secret Service item of a provider with the same id, kind, `url`, `server` and
-`user`; they are never written to `sync.json`, and their synced copies live in the server keyring
-item. Only a device where `ShareSecret` chose a provider sends its secret; the others apply the
-received one when the provider matches and never send their own. A received record without the
-secret, or with a secret for another `url`, `server` or `user`, ends the choice of this device, so
-the last device that chose wins.
+Provider settings and keys are never synced between devices: each computer keeps its own
+providers and their secrets. Records `secrets/*` that an older version synced are not applied and
+are deleted from the server by the next sync of the device that sent them.
 
 Private files are files of the library that come from no repository: `ShareFiles` chooses items and
 folders, and a `files` job (kind `upload`) encrypts each file and uploads it to
@@ -2075,20 +2090,12 @@ needs the sync key from another device: state `needs_key`, see `Join`. When the 
 without encryption and `plaintext` is false, the job fails, asks the server to revoke the new
 device and forgets its token; any other failure after the code was approved does the same, so a
 failed link leaves no device on the account. Before asking for a code the method checks that the
-token can be kept: with no Secret Service (and `SetFileSecrets` off) it returns `KeyringUnavailable`
+token can be kept: with no Secret Service (and secrets not kept in a private file, see
+`Providers1.SetSecretStore`) it returns `KeyringUnavailable`
 at once. When a `link` job fails, `GetStatus` keeps why in `link_problem` (`keyring`, `refused`,
 `expired`, `encryption` or `other`) and `link_error` until the next `Link`. `NotFound` without a
 server, `Exists` when this computer is linked or linking, `InvalidArgs` for a name over 64
 characters or with control characters.
-
-### `SetFileSecrets(b allow)`
-
-Chooses where this computer keeps the token and the sync key of the server: the Secret Service
-(`allow = false`, the default) or, for a computer that has none, a private file `server-secrets.json`
-(mode 0600) in the data folder. Clients show a notice before they call it with `true`: whoever can read
-the user's files can use the access and read what an encrypted account syncs. Only while this computer
-is not linked (`Failed` otherwise); `RemoveServer` deletes the file and sets it back to the keyring.
-`GetStatus` reports it as `file_secrets`.
 
 ### `RevokeDevice(s device, s password) → (t job)`
 
@@ -2127,7 +2134,7 @@ quota are those of the last sync. `pairing` is the running comparison of `Join` 
 other device's id, the code once both nonces are known, and `sharing` on the device that holds
 the key. `quarantined` counts the records skipped because they cannot be decrypted and `unapplied`
 the received changes that wait to be applied. `offers` are repositories synced from other devices
-that wait for `ConfirmRepo`, `secrets` the providers whose secret is synced, `recovery` whether the
+that wait for `ConfirmRepo`, `recovery` whether the
 server holds an escrow of the current key (`current`), of an older one (`stale`) or none (`off`),
 and `files_bytes` of `files_quota_bytes` the private files on the server. `stale` means that a
 device that may know the recovery passphrase was revoked: clients ask for a new, different
@@ -2229,13 +2236,6 @@ Decides on a repository that another device synced and that waits in `offers`; `
 `Repos1.Add` with the synced URL, its trust anchor completed with `repo_id=`; without it the offer
 is declined on this computer, returns `0`, and is not offered again. `NotFound` when no such offer
 waits, `InvalidArgs` when the URL names another repository than the record.
-
-### `ShareSecret(s provider, b share)`
-
-Starts or stops sending the secret of a provider of a kind with a secret from this device, only on
-an encrypted account (`Failed` otherwise, `InvalidArgs` for a provider without secret). Stopping
-removes the secret from the synced record once and keeps the copies that other devices already
-hold.
 
 ### `SetEscrow(s passphrase) → (t job)`
 
@@ -3098,9 +3098,11 @@ struct Provider {
     id: String, kind: String, options: BTreeMap<String, String>, source: Option<Uid>,
     state: ProviderState, has_secret: bool, hosts: Vec<String>, items: u32, cache_bytes: u64,
     last_sync: Option<Time>, next_sync: Option<Time>, last_error: Option<String>, job: Option<u64>,
-    orphan_secret: bool,
+    orphan_secret: bool, plain_http: bool,
 }
-struct ProvidersReply { model: u32, serial: u64, providers: Vec<Provider> }
+struct ProvidersReply {
+    model: u32, serial: u64, providers: Vec<Provider>, store: String, keyring_found: bool,
+}
 struct SyncReport {
     provider: String, listed: u32, downloaded: u32, reused: u32, skipped: u32, failed: u32,
     scan: SourceScan,
@@ -3160,7 +3162,7 @@ struct Account {
     warning: Option<String>, paused: bool, last_sync: Option<Time>, last_error: Option<String>,
     records: u32, used_bytes: u64, quota_bytes: u64, devices: Vec<AccountDevice>,
     pairing: Option<Pairing>, quarantined: u32, unapplied: u32, offers: Vec<RepoOffer>,
-    secrets: Vec<String>, recovery: Recovery, files_bytes: u64, files_quota_bytes: u64,
+    recovery: Recovery, files_bytes: u64, files_quota_bytes: u64,
     job: Option<u64>, pin: Option<String>, link_problem: Option<String>, link_error: Option<String>,
     file_secrets: bool,
 }
@@ -3227,7 +3229,6 @@ server = "127.0.0.1:6742" # host:port of the OpenRGB server
 kind = "immich"
 server = "https://photos.example.org"
 album = "0d6a…"
-allow_plain_http = false
 refresh = "1h"
 cache_mb = 1024
 

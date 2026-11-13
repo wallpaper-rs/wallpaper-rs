@@ -31,8 +31,6 @@ pub enum Provider {
         kind: String,
         #[arg(value_name = "KEY=VALUE", help = "Options of the kind; see wprs-ctl schema")]
         options: Vec<String>,
-        #[arg(long, help = "Allow plain http to a remote server: the secret then travels unencrypted")]
-        allow_plain_http: bool,
         #[arg(long, help = "Add the provider without a secret")]
         no_secret: bool,
         #[arg(long, help = SECRET_STDIN)]
@@ -53,6 +51,18 @@ pub enum Provider {
         id: String,
         #[arg(long, help = SECRET_STDIN)]
         secret_stdin: bool,
+    },
+    #[command(
+        about = "Choose where this computer keeps every secret: the system keyring or a private file",
+        long_about = "Choose where this computer keeps every secret (provider passwords and API keys, the \
+                      access to the sync server): the system keyring or a private file in the data folder, \
+                      for computers with no keyring. Whoever can read your files can then use them. \
+                      Secrets move in both directions without removing anything. Without a value, it \
+                      shows where they are now."
+    )]
+    Store {
+        #[arg(value_parser = ["keyring", "file"], help = "Where to keep them; empty shows where they are")]
+        store: Option<String>,
     },
     #[command(about = "Delete the stored password or API key of a provider")]
     ForgetSecret {
@@ -84,8 +94,8 @@ pub async fn run(client: &Client, command: Provider) -> Result<()> {
     let providers = &client.providers;
     match command {
         Provider::Ls { json } => show::reply(providers.list().await?, json, list_providers)?,
-        Provider::Add { id, kind, options, allow_plain_http, no_secret, secret_stdin } => {
-            add(client, &id, &kind, pairs(&options)?, allow_plain_http, (no_secret, secret_stdin)).await?
+        Provider::Add { id, kind, options, no_secret, secret_stdin } => {
+            add(client, &id, &kind, pairs(&options)?, (no_secret, secret_stdin)).await?
         }
         Provider::Set { id, key, value } => {
             public(&key)?;
@@ -108,6 +118,7 @@ pub async fn run(client: &Client, command: Provider) -> Result<()> {
             ensure!(!secret.is_empty(), Usage(tr(told("the secret is empty"))));
             patient(providers.set_secret(&id, &secret)).await?
         }
+        Provider::Store { store } => crate::storing::run(client, store.as_deref()).await?,
         Provider::ForgetSecret { id } => providers.forget_secret(&id).await?,
         Provider::Sync { id, wait } => {
             job(client, providers.sync(id.as_deref().unwrap_or("")).map_ok(|id| ((), id)), &wait).await?
@@ -122,8 +133,7 @@ pub async fn add(
     client: &Client,
     id: &str,
     kind: &str,
-    mut options: HashMap<&str, &str>,
-    allow_plain_http: bool,
+    options: HashMap<&str, &str>,
     (no_secret, secret_stdin): (bool, bool),
 ) -> Result<()> {
     let schema: Schema = parse(&client.daemon.get_schema().await?)?;
@@ -132,9 +142,6 @@ pub async fn add(
     let unknown = || Usage(fill(told("unknown provider kind %1; the kinds are %2"), &[&kind, &kinds()]));
     let known = known.ok_or_else(unknown)?;
     options.keys().try_for_each(|key| public(key))?;
-    if allow_plain_http {
-        options.insert("allow_plain_http", "true");
-    }
     let secret = known.secret.as_ref().filter(|_| !no_secret).map(|f| ask(f, id, kind, secret_stdin));
     let secret = secret.transpose()?.unwrap_or_default();
     println!("{}", patient(client.providers.add(id, kind, options, &secret)).await?);
@@ -168,6 +175,7 @@ async fn has_secret(client: &Client, id: &str) -> Result<bool> {
 }
 
 pub fn list_providers(reply: ProvidersReply) -> String {
+    let plain: Vec<String> = reply.providers.iter().filter(|p| p.plain_http).map(|p| p.id.clone()).collect();
     let rows = reply.providers.into_iter().map(|p| {
         let (state, items, cache) = (text(&p.state), p.items.to_string(), bytes(p.cache_bytes));
         let orphan = p
@@ -176,5 +184,6 @@ pub fn list_providers(reply: ProvidersReply) -> String {
         let error = p.last_error.into_iter().chain(orphan).collect::<Vec<_>>().join(", ");
         vec![p.id, p.kind, state, items, cache, when(p.last_sync), when(p.next_sync), error]
     });
-    table(&["PROVIDER", "KIND", "STATE", "ITEMS", "CACHE", "SYNCED", "NEXT", "ERROR"], rows)
+    let notes = crate::storing::notes(&reply.store, reply.keyring_found, &plain);
+    table(&["PROVIDER", "KIND", "STATE", "ITEMS", "CACHE", "SYNCED", "NEXT", "ERROR"], rows) + &notes
 }

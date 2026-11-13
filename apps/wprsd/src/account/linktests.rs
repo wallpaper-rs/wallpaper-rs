@@ -43,16 +43,14 @@ fn a_signed_out_computer_shows_it_and_stops_syncing() {
 }
 
 #[test]
-fn a_failed_link_and_the_file_choice_reach_the_status() {
+fn a_failed_link_reaches_the_status() {
     let saved = Saved {
         url: "https://wallpapers.example.org".into(),
         link_problem: Some("keyring".into()),
         link_error: Some("no keyring answers".into()),
-        file_secrets: true,
         ..Saved::default()
     };
     let account = saved.model(false, None).unwrap();
     assert_eq!(account.state, AccountState::Unlinked);
     assert_eq!(account.link_problem.as_deref(), Some("keyring"));
-    assert!(account.file_secrets);
 }

@@ -84,6 +84,7 @@ mod sceneshown;
 mod scenevalues;
 mod schema;
 mod secrets;
+mod secretstore;
 mod serve;
 mod service;
 mod shortcuts;

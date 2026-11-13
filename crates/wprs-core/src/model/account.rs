@@ -52,7 +52,6 @@ model! {
         pub quarantined: u32,
         pub unapplied: u32,
         pub offers: Vec<RepoOffer>,
-        pub secrets: Vec<String>,
         pub recovery: Recovery,
         pub files_bytes: u64,
         pub files_quota_bytes: u64,

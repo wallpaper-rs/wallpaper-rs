@@ -68,10 +68,12 @@ fn providers_and_repositories_show_their_state() {
         "source": null, "state": "needs_secret", "has_secret": false, "hosts": ["photos.example.org"], "items": 0,
         "cache_bytes": 0, "last_sync": null, "next_sync": null, "last_error": "the key was rejected", "job": null});
     assert_eq!(
-        providers::list_providers(parse(&reply(json!({"providers": [provider]}))).unwrap()),
+        providers::list_providers(parse(&reply(json!({"providers": [provider.clone()]}))).unwrap()),
         "PROVIDER  KIND    STATE         ITEMS  CACHE  SYNCED  NEXT  ERROR\n\
          photos    immich  needs_secret  0      0 B    -       -     the key was rejected\n"
     );
+    let lone = json!({"providers": [provider], "store": "keyring", "keyring_found": false});
+    assert!(providers::list_providers(parse(&reply(lone)).unwrap()).contains("No system keyring was found"));
     assert_eq!(
         remote::list(parse(&reply(json!({"repos": [repo()]}))).unwrap()),
         format!(

@@ -166,10 +166,12 @@ fn provider_and_package_commands_parse() {
     let wait = r#"wait: Wait { wait: true, json: true }"#;
     let cases = [
         ("provider ls", "Provider(Ls { json: false })".into()),
-        ("provider add photos immich server=https://photos.example.org album=a1 --allow-plain-http --secret-stdin", r#"Provider(Add { id: "photos", kind: "immich", options: ["server=https://photos.example.org", "album=a1"], allow_plain_http: true, no_secret: false, secret_stdin: true })"#.to_string()),
-        ("provider add daily bing --no-secret", r#"Provider(Add { id: "daily", kind: "bing", options: [], allow_plain_http: false, no_secret: true, secret_stdin: false })"#.into()),
+        ("provider add photos immich server=https://photos.example.org album=a1 --secret-stdin", r#"Provider(Add { id: "photos", kind: "immich", options: ["server=https://photos.example.org", "album=a1"], no_secret: false, secret_stdin: true })"#.to_string()),
+        ("provider add daily bing --no-secret", r#"Provider(Add { id: "daily", kind: "bing", options: [], no_secret: true, secret_stdin: false })"#.into()),
         ("provider set photos album b2", r#"Provider(Set { id: "photos", key: "album", value: "b2" })"#.into()),
         ("provider secret photos", r#"Provider(Secret { id: "photos", secret_stdin: false })"#.into()),
+        ("provider store file", r#"Provider(Store { store: Some("file") })"#.into()),
+        ("provider store", "Provider(Store { store: None })".into()),
         ("provider forget-secret photos", r#"Provider(ForgetSecret { id: "photos" })"#.into()),
         ("provider sync --wait --json", format!("Provider(Sync {{ id: None, {wait} }})")),
         ("provider wallhaven add art --sorting random --ratios 16x9,landscape --colors 660000 --no-secret", r#"Provider(Wallhaven(Add { id: "art", filters: Filters { query: None, link: None, categories: None, purity: None, sorting: Some("random"), order: None, top_range: None, atleast: None, resolutions: None, ratios: Some("16x9,landscape"), colors: Some("660000"), similar: None, tag: None, uploader: None, collection: None, page: None, pages: None, max_items: None, refresh: None, cache_mb: None }, no_secret: true, secret_stdin: false }))"#.into()),

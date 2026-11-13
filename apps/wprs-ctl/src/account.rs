@@ -18,8 +18,8 @@ const OWN: &str = told(
 
 const NO_KEYRING: &str = told(
     "No keyring is available to keep the access of this computer. Start or unlock the \
-                          system keyring and link again, or keep the access in a private file with `wprs-ctl \
-                          server access file` (whoever can read your files could then use it).",
+                          system keyring and link again, or keep the secrets in a private file with `wprs-ctl \
+                          provider store file` (whoever can read your files could then use them).",
 );
 
 pub fn keyring_hint(error: &anyhow::Error) {
@@ -87,7 +87,6 @@ pub fn status(reply: AccountReply) -> String {
         (&tr(told("not applied")), a.unapplied.to_string()),
         ("comparison", comparison),
         ("recovery", recovery(text(&a.recovery))),
-        ("shared secrets", if a.secrets.is_empty() { "-".into() } else { a.secrets.join(", ") }),
         ("private files", format!("{} of {}", bytes(a.files_bytes), bytes(a.files_quota_bytes))),
     ];
     let offers = a.offers.into_iter().map(|o| {

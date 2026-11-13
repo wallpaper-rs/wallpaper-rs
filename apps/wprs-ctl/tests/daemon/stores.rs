@@ -79,6 +79,19 @@ impl Providers {
         self.0.push(format!("Add {id} {kind} {options:?} [{secret}]"));
         UIDS[0].into()
     }
+
+    fn set_secret_store(&self, store: String) {
+        self.0.push(format!("SetSecretStore {store}"));
+    }
+
+    fn list(&self) -> String {
+        let nas = json!({"id": "nas", "kind": "webdav", "options": {"url": "http://nas.example.org/dav"},
+            "source": null, "state": "idle", "has_secret": true, "hosts": ["nas.example.org"], "items": 0,
+            "cache_bytes": 0, "last_sync": null, "next_sync": null, "last_error": null, "job": null,
+            "plain_http": true});
+        json!({"model": 1, "serial": 9, "providers": [nas], "store": "file", "keyring_found": false})
+            .to_string()
+    }
 }
 
 pub(super) struct Repos(pub(super) Log);

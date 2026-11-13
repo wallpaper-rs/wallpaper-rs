@@ -55,16 +55,6 @@ pub enum Server {
         #[command(flatten)]
         wait: Wait,
     },
-    #[command(
-        about = "Choose where this computer keeps its access to the server: the system keyring or a file",
-        long_about = "Choose where this computer keeps its access to the server: the system keyring or a \
-                      private file in the data folder, for computers with no keyring. Whoever can read your \
-                      files can then use the access. Only before linking."
-    )]
-    Access {
-        #[arg(value_parser = ["keyring", "file"], help = "Where to keep it")]
-        store: String,
-    },
     #[command(about = "Show the server, this device, the sync state and the devices of the account")]
     Status {
         #[arg(long, help = JSON)]
@@ -124,13 +114,6 @@ pub enum Server {
         decline: bool,
         #[command(flatten)]
         wait: Wait,
-    },
-    #[command(about = "Sync the secret of a provider with the other devices, end-to-end encrypted")]
-    Secret {
-        #[arg(help = "Id of the provider whose secret the server keeps")]
-        provider: String,
-        #[arg(long, help = "Stop syncing it; the copies other devices hold stay")]
-        stop: bool,
     },
     #[command(
         about = "Store the sync key on the server, locked with a passphrase, for when no device is left",

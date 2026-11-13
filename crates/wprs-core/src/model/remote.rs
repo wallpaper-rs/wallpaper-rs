@@ -21,9 +21,19 @@ model! {
         pub job: Option<u64>,
         #[serde(default)]
         pub orphan_secret: bool,
+        #[serde(default)]
+        pub plain_http: bool,
     }
 
-    pub struct ProvidersReply { pub model: u32, pub serial: u64, pub providers: Vec<Provider> }
+    pub struct ProvidersReply {
+        pub model: u32,
+        pub serial: u64,
+        pub providers: Vec<Provider>,
+        #[serde(default)]
+        pub store: String,
+        #[serde(default)]
+        pub keyring_found: bool,
+    }
 
     pub struct WallhavenCollection { pub id: u64, pub label: String, pub count: u64, pub public: bool }
 

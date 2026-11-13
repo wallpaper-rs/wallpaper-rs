@@ -29,10 +29,7 @@ impl Daemon {
         present: &BTreeSet<String>,
         kept: &mut Kept,
     ) -> Result<Local> {
-        let (files, encrypted) = {
-            let s = self.saved();
-            (s.files.clone(), s.encrypted == Some(true))
-        };
+        let files = self.saved().files.clone();
         let installed = self.state().installed.clone();
         let (hashed, playlists, profiles, presets) = self.store.read(|lib| {
             let lists = lib.playlists()?.into_iter().map(|p| {
@@ -124,9 +121,6 @@ impl Daemon {
         }
         local.views.extend(settings(&self.state().config.options(), replica, ids, &DEVICE_KEYS));
         self.repo_views(ids, replica, present, &mut local, kept)?;
-        if encrypted {
-            self.secret_views(ids, replica, &mut local)?;
-        }
         for key in files.dropped.keys().map(|key| format!("library/{key}")) {
             if let Some(view) = base(&key).filter(|_| !local.views.contains_key(&key)) {
                 local.views.insert(key, view.into_iter().filter(|(field, _)| field != "blob").collect());

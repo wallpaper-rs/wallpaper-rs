@@ -9,8 +9,12 @@ Kirigami.Dialog {
 
     readonly property var kinds: App.schema.providers ?? []
     readonly property var kind: kinds[chooser.currentIndex] ?? {}
-    readonly property var fields: (kind.options ?? []).filter(field => field.key !== "allow_plain_http")
-    readonly property bool plain: (kind.options ?? []).some(field => field.key === "allow_plain_http")
+    readonly property var fields: kind.options ?? []
+    readonly property string address: values.url ?? values.server ?? ""
+    readonly property bool plain: /^http:\/\/(?!localhost|127\.|\[::1\])/i.test(address)
+    readonly property bool noKeyring: error !== "" && errorName.endsWith("KeyringUnavailable")
+    property var filer: null
+    property string errorName
     property var values: ({})
     property string error
 
@@ -21,10 +25,11 @@ Kirigami.Dialog {
             text: App.tr("Add")
             icon.name: "list-add"
             onTriggered: {
-                const options = Object.assign({}, dialog.values);
-                if (dialog.plain)
-                    options.allow_plain_http = String(insecure.checked);
-                App.addProvider(name.text, dialog.kind.kind, options, secret.text, () => dialog.close(), error => dialog.error = error.message);
+                dialog.errorName = "";
+                App.addProvider(name.text, dialog.kind.kind, dialog.values, secret.text, () => dialog.close(), error => {
+                    dialog.errorName = error.name;
+                    dialog.error = error.message;
+                });
                 secret.clear();
             }
         }
@@ -32,6 +37,7 @@ Kirigami.Dialog {
     onOpened: {
         values = {};
         error = "";
+        errorName = "";
     }
     onClosed: secret.clear()
 
@@ -40,7 +46,15 @@ Kirigami.Dialog {
             Layout.fillWidth: true
             type: Kirigami.MessageType.Error
             visible: dialog.error !== ""
-            text: dialog.error
+            text: dialog.noKeyring ? App.tr("No system keyring answers, so the secret cannot be stored. Start or unlock your keyring, or keep secrets in a private file.") : dialog.error
+            actions: [
+                Kirigami.Action {
+                    text: App.tr("Keep secrets in a private file…")
+                    icon.name: "document-encrypt"
+                    visible: dialog.noKeyring && dialog.filer !== null
+                    onTriggered: dialog.filer.open()
+                }
+            ]
         }
 
         QQC2.TextField {
@@ -78,18 +92,10 @@ Kirigami.Dialog {
             placeholderText: dialog.kind.secret?.required ? App.tr("Required") : App.tr("Optional")
         }
 
-        QQC2.CheckBox {
-            id: insecure
-
-            Kirigami.FormData.label: App.tr("Advanced:")
-            visible: dialog.plain
-            text: Labels.field("allow_plain_http")
-        }
-
         QQC2.Label {
-            visible: insecure.visible && insecure.checked
+            visible: dialog.plain
             Layout.maximumWidth: Kirigami.Units.gridUnit * 18
-            text: App.tr("Without encryption the secret and the pictures travel in clear text over the network.")
+            text: App.tr("This address uses plain http: the password or key, and the pictures, travel over the network without encryption.")
             color: Kirigami.Theme.negativeTextColor
             wrapMode: Text.Wrap
         }

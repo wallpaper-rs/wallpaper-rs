@@ -62,7 +62,6 @@ impl Daemon {
         self.copy_playlists(&local, synced.copies, &mut links, &ids);
         let unapplied = hold(&mut replica, &start, &local, &errors, &now);
         let away = wprs_sync::away(&replica, &local, &links, &self.offered_keys(&ids), &self.added_repos());
-        self.settle_secrets(&replica)?;
         if secrets.split(&mut replica) {
             self.store_secrets(&secrets)?;
         }
