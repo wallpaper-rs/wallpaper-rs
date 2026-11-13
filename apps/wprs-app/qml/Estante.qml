@@ -20,6 +20,7 @@ Coleccion {
         orientation: ListView.Horizontal
         spacing: Look.huecoEstante
         leftMargin: Look.filete + Look.anillo
+        rightMargin: Look.filete + Look.anillo
         focus: true
         clip: true
         reuseItems: true
@@ -43,7 +44,7 @@ Coleccion {
             readonly property alias name: cover.name
             readonly property alias caption: cover.caption
 
-            width: cover.width
+            width: cover.width + (cover.lit ? Look.filete + Look.anillo : 0)
             height: cover.y + cover.height
             z: cover.lit ? 1 : 0
 
