@@ -133,3 +133,57 @@ fn fitting_a_child_of_a_turned_parent_still_covers_the_canvas() {
     let middle = seat(&p, "kid").flat([0.5, 0.5]);
     assert!(near(middle, [500.0, 500.0], 0.05), "{middle:?}");
 }
+
+fn leaning() -> Value {
+    json!([card("kid", json!({"position": [500, 450], "tilt": [25, -30], "z": 120, "rotation": 15}))])
+}
+
+#[test]
+fn scaling_and_turning_a_tilted_layer_follow_the_pointer() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = scene(&root, leaning());
+    let goal = {
+        let c = seat(&p, "kid").at([1.0, 1.0]);
+        [c[0] + 30.0, c[1] + 20.0]
+    };
+    grip(&mut p, json!({"scale": {"corner": [1, 1]}}), goal);
+    let reached = seat(&p, "kid").at([1.0, 1.0]);
+    assert!(near(reached, goal, 0.5), "{reached:?} {goal:?}");
+    let top = seat(&p, "kid").at([0.5, 0.0]);
+    let aim = [top[0] + 40.0, top[1] + 10.0];
+    grip(&mut p, json!("turn"), aim);
+    let d = seat(&p, "kid");
+    let (c, t) = (d.at([0.5, 0.5]), d.at([0.5, 0.0]));
+    let want = (aim[0] - d.at([0.5, 0.5])[0]).atan2(-(aim[1] - c[1]));
+    let got = (t[0] - c[0]).atan2(-(t[1] - c[1]));
+    assert!((want - got).abs() < 0.3, "{want} {got}");
+}
+
+fn under_a_leaning_parent() -> Value {
+    json!([
+        card("base", json!({"position": [500, 450], "tilt": [20, -25], "z": 90, "rotation": 10})),
+        {"id": "kid", "type": "solid", "color": "#ff0000", "size": [120, 80], "parent": "base",
+            "transform": {"position": [60, 20], "rotation": -20, "tilt": [15, 10], "z": 40}}
+    ])
+}
+
+#[test]
+fn handles_follow_the_pointer_on_a_layer_under_a_leaning_parent() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = scene(&root, under_a_leaning_parent());
+    let goal = {
+        let c = seat(&p, "kid").at([1.0, 1.0]);
+        [c[0] + 30.0, c[1] + 20.0]
+    };
+    grip(&mut p, json!({"scale": {"corner": [1, 1]}}), goal);
+    let reached = seat(&p, "kid").at([1.0, 1.0]);
+    assert!(near(reached, goal, 0.5), "scale {reached:?} {goal:?}");
+    let top = seat(&p, "kid").at([0.5, 0.0]);
+    let aim = [top[0] + 40.0, top[1] + 10.0];
+    grip(&mut p, json!("turn"), aim);
+    let d = seat(&p, "kid");
+    let (c, t) = (d.at([0.5, 0.5]), d.at([0.5, 0.0]));
+    let want = (aim[0] - c[0]).atan2(-(aim[1] - c[1]));
+    let got = (t[0] - c[0]).atan2(-(t[1] - c[1]));
+    assert!((want - got).abs() < 0.3, "turn {want} {got}");
+}
