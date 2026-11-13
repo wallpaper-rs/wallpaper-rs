@@ -201,8 +201,28 @@ msgid "some of %1 are not operations"
 msgstr "algunas de %1 no son operaciones"
 
 #: crates/wprs-core/src/edit/regions.rs
-msgid "use at most %1 joins and %2 splits"
-msgstr "usa como mucho %1 uniones y %2 divisiones"
+msgid "use at most %1 joins, %2 splits and %3 moves"
+msgstr "usa como mucho %1 uniones, %2 divisiones y %3 desplazamientos"
+
+#: crates/wprs-core/src/edit/regions.rs
+msgid "give two or more points, or clear to remove the joins"
+msgstr "da dos o más puntos, o usa clear para quitar las uniones"
+
+#: crates/wprs-core/src/edit/regions.rs
+msgid "a join takes 2 to %1 points, one in each region"
+msgstr "una unión lleva de 2 a %1 puntos, uno en cada región"
+
+#: crates/wprs-core/src/edit/regions.rs
+msgid "give a stroke, or clear to remove the splits"
+msgstr "da un trazo, o usa clear para quitar las divisiones"
+
+#: crates/wprs-core/src/edit/regions.rs
+msgid "give a point of the region, or clear to put the regions back"
+msgstr "da un punto de la región, o usa clear para devolver las regiones a su sitio"
+
+#: crates/wprs-core/src/edit/regions.rs
+msgid "say how far with by: above 0 moves it nearer, below 0 farther"
+msgstr "di cuánto con by: más de 0 la acerca, menos de 0 la aleja"
 
 #: crates/wprs-core/src/edit/set.rs
 msgid "%1 is not a number"

@@ -79,6 +79,7 @@ pub mod providers;
 mod pulling;
 mod quiet;
 pub mod refusing;
+mod regioning;
 pub mod remote;
 mod rendering;
 pub mod repo;

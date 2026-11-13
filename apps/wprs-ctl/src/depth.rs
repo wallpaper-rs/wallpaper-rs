@@ -68,6 +68,16 @@ pub enum Maps {
         about = "Paint where the fill must always (refill) or never (protect) reach behind near objects"
     )]
     FillMask(crate::touching::Marks),
+    #[command(
+        about = "Make the regions under two or more points one region, so they share a layer and move together"
+    )]
+    Join(crate::touching::Join),
+    #[command(about = "Cut the regions a stroke crosses in two, so each part can move on its own")]
+    Split(crate::touching::Split),
+    #[command(about = "Move the region under a point nearer or farther, as a whole")]
+    Move(crate::touching::Move),
+    #[command(about = "List the regions of the picture from the nearest, each with a point inside it")]
+    Regions(crate::regioning::Show),
 }
 
 pub fn key(path: &Path, edit: &Edit) -> Result<String> {
@@ -90,6 +100,10 @@ pub fn run(command: Maps) -> Result<()> {
         Maps::Brush(args) => return crate::touching::brush(args),
         Maps::Cuts(args) => return crate::touching::cuts(args),
         Maps::FillMask(args) => return crate::touching::marks(args),
+        Maps::Join(args) => return crate::touching::join(args),
+        Maps::Split(args) => return crate::touching::split(args),
+        Maps::Move(args) => return crate::touching::shift(args),
+        Maps::Regions(args) => return crate::regioning::show(args),
         other => other,
     };
     let places = Places::default();

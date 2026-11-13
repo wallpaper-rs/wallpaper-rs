@@ -24,7 +24,9 @@ fn documented(text: &str) -> Vec<(String, Vec<String>)> {
 
 fn command_of(action: &str) -> String {
     match action {
-        "depth_brush" | "depth_cuts" => format!("edit depth {}", &action[6..]),
+        "depth_brush" | "depth_cuts" | "depth_join" | "depth_split" | "depth_move" => {
+            format!("edit depth {}", &action[6..])
+        }
         "fill_mask" => "edit depth fill-mask".into(),
         _ => format!("edit {action}"),
     }
