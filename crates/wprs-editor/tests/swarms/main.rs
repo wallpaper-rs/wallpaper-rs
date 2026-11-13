@@ -7,6 +7,7 @@ use wprs_editor::actions::Action;
 use wprs_editor::starters::starter;
 
 mod edits;
+mod emitters;
 mod emits;
 mod fields;
 mod handles;

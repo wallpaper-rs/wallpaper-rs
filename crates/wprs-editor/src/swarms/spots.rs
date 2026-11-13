@@ -4,9 +4,14 @@ use anyhow::{Result, ensure};
 use serde_json::{Value, json};
 use wprs_core::message::said;
 
-pub(super) fn shape(doc: &Value, sys: &str, emitter: usize, shape: &Value) -> Result<Vec<Op>> {
-    parsed::<wprs_scene::EmitShape>(shape, "shape")?;
+pub(super) fn shape(doc: &Value, sys: &str, emitter: usize, shape: &Value, remove: bool) -> Result<Vec<Op>> {
     let count = doc.pointer(&format!("{sys}/emitters")).and_then(Value::as_array).map_or(0, Vec::len);
+    if remove {
+        ensure!(emitter < count, said("editor.no_emitter", "the system has no emitter %1", &[&emitter]));
+        ensure!(count > 1, said("editor.last_emitter", "a system keeps at least one emitter", &[]));
+        return Ok(vec![Op::Remove { path: format!("{sys}/emitters/{emitter}") }]);
+    }
+    parsed::<wprs_scene::EmitShape>(shape, "shape")?;
     ensure!(emitter <= count, said("editor.no_emitter", "the system has no emitter %1", &[&emitter]));
     if emitter == count {
         let value = json!({ "shape": shape, "rate": 10 });

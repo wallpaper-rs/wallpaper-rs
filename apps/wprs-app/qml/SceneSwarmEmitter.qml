@@ -77,6 +77,20 @@ ColumnLayout {
                     "shape": row.fresh(row.kinds[index])
                 })
         }
+
+        QQC2.ToolButton {
+            objectName: "removeEmitter"
+            icon.name: "edit-delete"
+            text: App.tr("Remove this emitter")
+            display: QQC2.AbstractButton.IconOnly
+            enabled: (row.tools.info?.emitters?.length ?? 0) > 1
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.text: text
+            onClicked: row.tools.edit("shape", {
+                    "emitter": row.emitter.index,
+                    "remove": true
+                })
+        }
     }
 
     RowLayout {

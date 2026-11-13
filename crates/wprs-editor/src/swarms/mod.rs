@@ -104,8 +104,8 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &ParticleEdit) -> Result<Vec<Op>>
         return named::rewrite(dir, doc, from, to);
     }
     let ops = match e {
-        ParticleEdit::Shape { system: s, emitter, shape } => {
-            spots::shape(doc, &system(doc, s)?, *emitter, shape)?
+        ParticleEdit::Shape { system: s, emitter, shape, remove } => {
+            spots::shape(doc, &system(doc, s)?, *emitter, shape, *remove)?
         }
         ParticleEdit::Point { system: s, point, at, follow, angle, remove } => {
             spots::point(doc, &system(doc, s)?, *point, (*at, *follow, *angle), *remove)?
@@ -134,7 +134,7 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &ParticleEdit) -> Result<Vec<Op>>
             threshold.iter().for_each(|t| source["threshold"] = json!(t));
             jitter.iter().for_each(|j| source["jitter"] = json!(j));
             refresh.iter().for_each(|r| source["refresh"] = json!(r));
-            spots::shape(doc, &system(doc, s)?, *emitter, &json!({ "layer": source }))?
+            spots::shape(doc, &system(doc, s)?, *emitter, &json!({ "layer": source }), false)?
         }
         ParticleEdit::Inherit { system: s, child, inherit, follow } => {
             let at = format!("{}/children/{child}", system(doc, s)?);

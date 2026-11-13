@@ -83,6 +83,19 @@ ColumnLayout {
         }
     }
 
+    QQC2.Button {
+        objectName: "addEmitter"
+        icon.name: "list-add"
+        text: App.tr("Add an emitter")
+        enabled: (tools.info?.emitters?.length ?? 0) < 64
+        onClicked: tools.edit("shape", {
+                "emitter": tools.info?.emitters?.length ?? 0,
+                "shape": {
+                    "point": [960, 540]
+                }
+            })
+    }
+
     SceneSwarmPoints {
         Layout.fillWidth: true
         tools: tools

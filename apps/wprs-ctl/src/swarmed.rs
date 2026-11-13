@@ -20,7 +20,7 @@ fn parsed<T: serde::de::DeserializeOwned>(text: &str) -> Option<T> {
 fn edit(system: String, what: Particle) -> P {
     let layered = |l: Option<String>| l.filter(|l| !l.is_empty());
     match what {
-        Particle::Shape { emitter, shape } => P::Shape { system, emitter, shape: value(&shape) },
+        Particle::Shape { emitter, shape } => P::Shape { system, emitter, shape: value(&shape), remove: false },
         Particle::ControlPoint { point, at, angle, cursor, remove } => {
             let point = point[1..].parse().unwrap_or(0);
             let follow = if cursor { Some(true) } else { at.as_ref().map(|_| false) };

@@ -133,6 +133,9 @@ QtObject {
         Qt.createComponent("SceneKeptCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("SceneEmitterAddCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         Qt.createComponent("SceneHullLabelCheck.qml").createObject(page, {
             "page": page
         }).exercise();

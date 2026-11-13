@@ -17588,3 +17588,11 @@ msgstr ""
 #: apps/wprs-app/qml/SceneModelColliders.qml
 msgid "How wide the collider is"
 msgstr "Qué tan ancho es el colisionador"
+
+#: apps/wprs-app/qml/SceneSwarmEmitter.qml
+msgid "Remove this emitter"
+msgstr "Quitar este emisor"
+
+#: apps/wprs-app/qml/SceneSwarmTools.qml
+msgid "Add an emitter"
+msgstr "Añadir un emisor"

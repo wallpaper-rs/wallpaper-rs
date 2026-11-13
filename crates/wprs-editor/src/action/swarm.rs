@@ -11,7 +11,10 @@ pub enum ParticleEdit {
     Shape {
         system: String,
         emitter: usize,
+        #[serde(default)]
         shape: Value,
+        #[serde(default)]
+        remove: bool,
     },
     Point {
         system: String,

@@ -108,7 +108,7 @@ vuelve a empezar, precalentadas, al seguir.
 
 ### Emisores
 
-Cada emisor tiene una `shape`, un ritmo y, si quieres, ráfagas.
+Cada emisor tiene una `shape`, un ritmo y, si quieres, ráfagas. En el panel de partículas se añaden con «Añadir un emisor» y se quitan con el botón de cada emisor (un sistema conserva al menos uno).
 
 | Campo | Qué hace |
 |-------|----------|
