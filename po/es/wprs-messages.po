@@ -1573,6 +1573,7 @@ msgstr ""
 "para quedarte con el valor del fotograma clave"
 
 #: crates/wprs-editor/src/keys.rs crates/wprs-editor/src/shaping/mod.rs
+#: crates/wprs-editor/src/starts.rs
 msgid "%1 follows another source; set a plain value first"
 msgstr "%1 sigue a otra fuente; pon antes un valor fijo"
 
@@ -3057,6 +3058,26 @@ msgstr "Hora"
 #: crates/wprs-editor/src/starters.rs
 msgid "Seconds"
 msgstr "Segundos"
+
+#: crates/wprs-editor/src/starts.rs
+msgid "a time or date format has at most 64 characters"
+msgstr "un formato de hora o de fecha tiene como mucho 64 caracteres"
+
+#: crates/wprs-editor/src/starts.rs
+msgid "the size of the text goes from 1 to 4000 pixels"
+msgstr "el tamaño del texto va de 1 a 4000 píxeles"
+
+#: crates/wprs-editor/src/starts.rs
+msgid "a loop lasts from 0.5 to 86400 seconds"
+msgstr "un bucle dura de 0,5 a 86400 segundos"
+
+#: crates/wprs-editor/src/starts.rs
+msgid "a spin takes only seconds and reverse"
+msgstr "un giro solo admite segundos y sentido contrario"
+
+#: crates/wprs-editor/src/starts.rs
+msgid "a drift goes at most 100000 pixels each way"
+msgstr "un desplazamiento llega como mucho a 100000 píxeles hacia cada lado"
 
 #: crates/wprs-editor/src/stock.rs
 msgid "%1 is not an assets package"

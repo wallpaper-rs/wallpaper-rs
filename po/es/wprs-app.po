@@ -854,9 +854,18 @@ msgstr "Detalles"
 msgid "Apply to…"
 msgstr "Aplicar a…"
 
-#: apps/wprs-app/qml/Actions.qml
+#: apps/wprs-app/qml/Actions.qml apps/wprs-app/qml/SelectionBar.qml
 msgid "Add to playlist…"
 msgstr "Añadir a una lista…"
+
+#: apps/wprs-app/qml/Actions.qml apps/wprs-app/qml/RotateDialogs.qml
+#: apps/wprs-app/qml/SelectionBar.qml
+msgid "Rotate every…"
+msgstr "Rotar cada…"
+
+#: apps/wprs-app/qml/Actions.qml
+msgid "Add a folder to a playlist…"
+msgstr "Añadir una carpeta a una lista…"
 
 #: apps/wprs-app/qml/Actions.qml
 msgid "Tags…"
@@ -948,6 +957,24 @@ msgstr ""
 "Este fondo está hecho para extenderse sobre todas las pantallas, así que se "
 "coloca a lo largo de ellas. Elige otra colocación para verlo entero en cada "
 "pantalla."
+
+#: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/PackagePlayback.qml
+msgid "Sound:"
+msgstr "Sonido:"
+
+#: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/SceneClipBar.qml
+#: apps/wprs-app/qml/SceneSpriteStrip.qml apps/wprs-app/qml/SceneTimeBar.qml
+#: apps/wprs-app/qml/facade/SceneNames.qml
+msgid "Play"
+msgstr "Reproducir"
+
+#: apps/wprs-app/qml/ApplyDialog.qml
+msgid "Silent"
+msgstr "Sin sonido"
+
+#: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/PackagePlayback.qml
+msgid "Volume:"
+msgstr "Volumen:"
 
 #: apps/wprs-app/qml/ApplyDialog.qml
 msgid "Preset:"
@@ -2611,6 +2638,10 @@ msgstr "Paquete:"
 #: apps/wprs-app/qml/ItemCopy.qml apps/wprs-app/qml/RepoCharter.qml
 
 #: apps/wprs-app/qml/SceneOffer.qml apps/wprs-app/qml/ScenesPage.qml
+
+#: apps/wprs-app/qml/ItemCopy.qml apps/wprs-app/qml/PlaylistEditor.qml
+#: apps/wprs-app/qml/RepoCharter.qml apps/wprs-app/qml/SceneOffer.qml
+#: apps/wprs-app/qml/ScenesPage.qml
 msgid "Folder:"
 msgstr "Carpeta:"
 
@@ -3176,7 +3207,7 @@ msgstr "Silenciar"
 msgid "Another screen plays the sound of this scene"
 msgstr "Otra pantalla reproduce el sonido de esta escena"
 
-#: apps/wprs-app/qml/OutputControls.qml apps/wprs-app/qml/SceneEntry.qml
+#: apps/wprs-app/qml/OutputDialogs.qml apps/wprs-app/qml/SceneEntry.qml
 msgid "Images and videos"
 msgstr "Imágenes y vídeos"
 
@@ -3975,14 +4006,6 @@ msgid "%1 frames a second"
 msgstr "%1 fotogramas por segundo"
 
 #: apps/wprs-app/qml/PackagePlayback.qml
-msgid "Volume:"
-msgstr "Volumen:"
-
-#: apps/wprs-app/qml/PackagePlayback.qml
-msgid "Sound:"
-msgstr "Sonido:"
-
-#: apps/wprs-app/qml/PackagePlayback.qml
 msgid "Start without sound"
 msgstr "Empezar sin sonido"
 
@@ -4456,6 +4479,14 @@ msgstr ""
 "Plasma, pulsa «Usar el fondo propio de Plasma» o elígelo en los "
 "ajustes del escritorio."
 
+#: apps/wprs-app/qml/PlaylistChoice.qml
+msgid "A new playlist…"
+msgstr "Una lista nueva…"
+
+#: apps/wprs-app/qml/PlaylistChoice.qml
+msgid "Name of the new playlist"
+msgstr "Nombre de la lista nueva"
+
 #: apps/wprs-app/qml/PlaylistEditor.qml apps/wprs-app/qml/PlaylistsPage.qml
 
 #: apps/wprs-app/qml/PresetDialog.qml apps/wprs-app/qml/ProfilesPage.qml
@@ -4483,6 +4514,14 @@ msgid "Make manual"
 msgstr "Convertir en manual"
 
 #: apps/wprs-app/qml/PlaylistEditor.qml
+msgid "Add a folder…"
+msgstr "Añadir una carpeta…"
+
+#: apps/wprs-app/qml/PlaylistEditor.qml
+msgid "Keep following it: new files join the playlist"
+msgstr "Seguir la carpeta: los archivos nuevos entran en la lista"
+
+#: apps/wprs-app/qml/PlaylistEditor.qml
 msgid "Show on:"
 msgstr "Mostrar en:"
 
@@ -4493,6 +4532,10 @@ msgstr "Iniciar"
 #: apps/wprs-app/qml/PlaylistEditor.qml
 msgid "Playing on %1:"
 msgstr "Reproduciéndose en %1:"
+
+#: apps/wprs-app/qml/PlaylistEditor.qml apps/wprs-app/qml/RotateDialogs.qml
+msgid "The folder has %1 pictures and videos"
+msgstr "La carpeta tiene %1 imágenes y vídeos"
 
 #: apps/wprs-app/qml/PlaylistItems.qml
 msgid "Items (%1)"
@@ -4959,6 +5002,8 @@ msgstr "Añadir una clave pública…"
 #: apps/wprs-app/qml/RepoKeyList.qml apps/wprs-app/qml/SceneShortcut.qml
 
 #: apps/wprs-app/qml/Settings.qml
+
+#: apps/wprs-app/qml/SelectionBar.qml apps/wprs-app/qml/Settings.qml
 msgid "Clear"
 msgstr "Borrar"
 
@@ -5391,6 +5436,63 @@ msgstr "La imagen de la que las luces toman sus colores"
 #: apps/wprs-app/qml/RgbPicture.qml
 msgid "Size of the frame"
 msgstr "Tamaño del marco"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Add a folder to a playlist"
+msgstr "Añadir una carpeta a una lista"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Choose the folder…"
+msgstr "Elegir la carpeta…"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "No folder chosen"
+msgstr "Ninguna carpeta elegida"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Keep following the folder: new files join the playlist"
+msgstr "Seguir la carpeta: los archivos nuevos entran en la lista"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "The wallpaper changes every %1 %2 from now on."
+msgstr "El fondo cambiará cada %1 %2 a partir de ahora."
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Folder: %1"
+msgstr "Carpeta: %1"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Pictures chosen: %1"
+msgstr "Imágenes elegidas: %1"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Use a folder instead…"
+msgstr "Usar una carpeta en su lugar…"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Keep following the folder: new files join the rotation"
+msgstr "Seguir la carpeta: los archivos nuevos entran en la rotación"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Change the wallpaper every"
+msgstr "Cambiar el fondo cada"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "seconds"
+msgstr "segundos"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "minutes"
+msgstr "minutos"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "hours"
+msgstr "horas"
+
+#
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Name of the playlist (optional)"
+msgstr "Nombre de la lista (opcional)"
 
 #: apps/wprs-app/qml/SavedPresets.qml apps/wprs-app/qml/SceneBoneRow.qml
 
@@ -6371,10 +6473,6 @@ msgid "Pause"
 msgstr "Pausar"
 
 #: apps/wprs-app/qml/SceneClipBar.qml apps/wprs-app/qml/SceneSpriteStrip.qml
-
-#: apps/wprs-app/qml/SceneTimeBar.qml apps/wprs-app/qml/facade/SceneNames.qml
-msgid "Play"
-msgstr "Reproducir"
 
 #: apps/wprs-app/qml/SceneClipBar.qml
 msgid "Key"
@@ -7960,6 +8058,40 @@ msgstr "Bloquear"
 #: apps/wprs-app/qml/SceneLayerRow.qml apps/wprs-app/qml/SceneLightsPanel.qml
 msgid "Solo"
 msgstr "Solo"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Spin clockwise"
+msgstr "Girar a la derecha"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Spin counterclockwise"
+msgstr "Girar a la izquierda"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Drift to the right and back"
+msgstr "Ir a la derecha y volver"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Drift to the left and back"
+msgstr "Ir a la izquierda y volver"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Ready-made starts"
+msgstr "Puntos de partida"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Add a clock or a date, or make the selected layer turn or drift forever"
+msgstr ""
+"Añade un reloj o una fecha, o haz que la capa elegida gire o se desplace sin "
+"parar"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Add a clock or a date"
+msgstr "Añadir un reloj o una fecha"
+
+#: apps/wprs-app/qml/SceneLayerStarts.qml
+msgid "Keep the selected layer moving"
+msgstr "Mantener en movimiento la capa elegida"
 
 #: apps/wprs-app/qml/SceneLayerTools.qml
 msgid "Duplicate"
@@ -12398,6 +12530,19 @@ msgstr "Curva y base del fotograma clave"
 msgid "Timelines"
 msgstr "Líneas de tiempo"
 
+#
+#: apps/wprs-app/qml/SceneTimeText.qml
+msgid "Show the time or the date…"
+msgstr "Mostrar la hora o la fecha…"
+
+#: apps/wprs-app/qml/SceneTimeText.qml
+msgid ""
+"Words in braces such as {time} are shown as typed: use this button to follow "
+"the clock or the date."
+msgstr ""
+"Las palabras entre llaves, como {time}, se muestran tal cual: usa este botón "
+"para seguir el reloj o la fecha."
+
 #: apps/wprs-app/qml/SceneTimeline.qml
 msgid ""
 "No keyframes yet: the ◇ button next to a value adds one at the current time."
@@ -12730,6 +12875,22 @@ msgstr "Abrir una carpeta de escena o paquete…"
 #: apps/wprs-app/qml/ScenesPage.qml
 msgid "Edit a copy of a package from the library"
 msgstr "Editar una copia de un paquete de la biblioteca"
+
+#: apps/wprs-app/qml/SelectionBar.qml
+msgid "%1 chosen"
+msgstr "%1 elegidas"
+
+#: apps/wprs-app/qml/SelectionBar.qml
+msgid ""
+"Click a picture to choose it. Ctrl+click adds one, Shift+click chooses a "
+"range, Ctrl+A chooses all."
+msgstr ""
+"Haz clic en una imagen para elegirla. Ctrl+clic añade otra, Mayús+clic elige "
+"un tramo y Ctrl+A las elige todas."
+
+#: apps/wprs-app/qml/SelectionBar.qml
+msgid "Choose all"
+msgstr "Elegir todas"
 
 #: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "Allow these wallpapers?"
@@ -13089,6 +13250,22 @@ msgstr "Probar"
 msgid "Test every device"
 msgstr "Probar todos los dispositivos"
 
+#: apps/wprs-app/qml/SoundPicker.qml
+msgid "Sound of this wallpaper"
+msgstr "Sonido de este fondo"
+
+#: apps/wprs-app/qml/SoundPicker.qml
+msgid ""
+"Silences or plays the sound of the wallpaper of this screen only. The global "
+"mute stays the master: while it is on, nothing plays."
+msgstr ""
+"Silencia o reproduce el sonido del fondo de esta pantalla solamente. El "
+"silencio general manda: mientras esté activo, no suena nada."
+
+#: apps/wprs-app/qml/SoundPicker.qml
+msgid "Volume of this wallpaper"
+msgstr "Volumen de este fondo"
+
 #: apps/wprs-app/qml/Stars.qml
 msgid "Stars: %1"
 msgstr "Estrellas: %1"
@@ -13148,6 +13325,11 @@ msgid ""
 msgstr ""
 "Destella o muestra patrones rápidos; las listas lo saltan hasta que lo "
 "permitas en sus detalles"
+
+#: apps/wprs-app/qml/Tile.qml
+msgid ""
+"Choose this picture; choose several to add them to a playlist or rotate them"
+msgstr "Elegir esta imagen; elige varias para añadirlas a una lista o rotarlas"
 
 #: apps/wprs-app/qml/UploadDialog.qml
 msgid "Upload to the server"
@@ -14378,6 +14560,10 @@ msgid "Pause on battery"
 msgstr "Pausar con batería"
 
 #: apps/wprs-app/qml/facade/Labels.qml
+msgid "Pause on battery below this charge (%, 0 = never)"
+msgstr "Pausar con batería por debajo de esta carga (%, 0 = nunca)"
+
+#: apps/wprs-app/qml/facade/Labels.qml
 msgid "Pause while the screen is locked"
 msgstr "Pausar con la pantalla bloqueada"
 
@@ -14416,6 +14602,12 @@ msgstr "Ancho del marco de las pantallas al extender (mm)"
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "Allow downloading the depth model"
 msgstr "Permitir descargar el modelo de profundidad"
+
+#: apps/wprs-app/qml/facade/Labels.qml
+msgid "Lowest scene quality on battery below this charge (%, 0 = never)"
+msgstr ""
+"Calidad mínima de las escenas con batería por debajo de esta carga (%, 0 = "
+"nunca)"
 
 #: apps/wprs-app/qml/facade/Labels.qml apps/wprs-app/qml/facade/SceneTerms.qml
 msgid "Order"

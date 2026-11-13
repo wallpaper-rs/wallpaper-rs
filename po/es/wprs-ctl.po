@@ -1024,6 +1024,12 @@ msgid "Volume in percent"
 msgstr "Volumen en porcentaje"
 
 #: apps/wprs-ctl/src/cli.rs
+msgid ""
+"Play, silence or lower the sound of the wallpaper of a screen; print what "
+"each has"
+msgstr "Reproducir, silenciar o bajar el sonido del fondo de una pantalla; muestra lo que tiene cada una"
+
+#: apps/wprs-ctl/src/cli.rs
 msgid "Mute videos and scenes with sound"
 msgstr "Silenciar los vídeos y escenas con sonido"
 
@@ -3317,6 +3323,22 @@ msgstr "%1 no es un archivo local"
 #: apps/wprs-ctl/src/input.rs
 msgid "wprsd resolved no item"
 msgstr "wprsd no encontró ningún elemento"
+
+#: apps/wprs-ctl/src/hearing.rs
+msgid ""
+"on to play the sound of the wallpaper on that screen, off to silence it, "
+"follow to follow the global volume again; the global mute stays the master"
+msgstr ""
+"on para reproducir el sonido del fondo en esa pantalla, off para silenciarlo "
+"y follow para volver a seguir el volumen general; el silencio general sigue "
+"mandando"
+
+#: apps/wprs-ctl/src/hearing.rs
+msgid ""
+"Volume of the wallpaper on that screen in percent, below the global volume"
+msgstr ""
+"Volumen del fondo en esa pantalla, en porcentaje, por debajo del volumen "
+"general"
 
 #: apps/wprs-ctl/src/input.rs
 msgid ""
@@ -5679,6 +5701,18 @@ msgid "Playlist uid or name"
 msgstr "Uid o nombre de la lista"
 
 #: apps/wprs-ctl/src/playlists.rs
+msgid "Add every picture and video inside this folder and its subfolders"
+msgstr "Añade todas las imágenes y vídeos de esta carpeta y de sus subcarpetas"
+
+#: apps/wprs-ctl/src/playlists.rs
+msgid ""
+"With --folder, keep following the folder: files that appear in it join the "
+"playlist"
+msgstr ""
+"Con --folder, sigue a la carpeta: los archivos que aparezcan en ella entran "
+"en la lista"
+
+#: apps/wprs-ctl/src/playlists.rs
 msgid "List the playlists"
 msgstr "Listar las listas de reproducción"
 
@@ -5721,8 +5755,37 @@ msgid "Delete a playlist"
 msgstr "Borrar una lista"
 
 #: apps/wprs-ctl/src/playlists.rs
-msgid "Append items to a manual playlist"
-msgstr "Añadir elementos al final de una lista manual"
+msgid "Append items, or every picture and video of a folder, to a playlist"
+msgstr ""
+"Añade elementos, o todas las imágenes y vídeos de una carpeta, a una lista"
+
+#: apps/wprs-ctl/src/playlists.rs
+msgid ""
+"Rotate items or a folder every so often: make the playlist, set the time and "
+"start it"
+msgstr ""
+"Rota elementos o una carpeta cada cierto tiempo: crea la lista, pone el "
+"tiempo y la empieza"
+
+#: apps/wprs-ctl/src/playlists.rs
+msgid ""
+"Rotate items or a folder every so often. It makes a playlist from the items "
+"(or from the folder with --folder), sets the time between pictures with --"
+"every and starts it on the output, all in one step; print the uid of the new "
+"playlist."
+msgstr ""
+"Rota elementos o una carpeta cada cierto tiempo. Crea una lista con los "
+"elementos (o con la carpeta, con --folder), pone el tiempo entre imágenes "
+"con --every y la empieza en la salida, todo en un paso; imprime el uid de la "
+"lista nueva."
+
+#: apps/wprs-ctl/src/playlists.rs
+msgid "Time between pictures, such as 10m, 1h or 90s (at least 10s)"
+msgstr "Tiempo entre imágenes, como 10m, 1h o 90s (al menos 10s)"
+
+#: apps/wprs-ctl/src/playlists.rs
+msgid "Name of the new playlist; the folder name when left out"
+msgstr "Nombre de la lista nueva; el de la carpeta si se omite"
 
 #: apps/wprs-ctl/src/playlists.rs
 msgid "Remove every occurrence of items from a manual playlist"
@@ -5788,6 +5851,9 @@ msgstr "Número de entradas que se imprimen"
 #: apps/wprs-ctl/src/playlists/act.rs
 msgid "the playlist has no entry %1"
 msgstr "la lista no tiene la entrada %1"
+
+msgid "The folder has %1 pictures and videos"
+msgstr "La carpeta tiene %1 imágenes y vídeos"
 
 #: apps/wprs-ctl/src/posing.rs
 msgid "Add a model layer from a model asset"
