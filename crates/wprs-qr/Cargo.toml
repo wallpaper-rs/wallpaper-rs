@@ -1,0 +1,14 @@
+[package]
+name = "wprs-qr"
+description = "The text a connect-to-this-server code carries, and its QR drawing, for wallpaper-rs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+qrcodegen.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+rqrr.workspace = true
