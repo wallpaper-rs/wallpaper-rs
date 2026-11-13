@@ -55,4 +55,9 @@
     <string name="checking_server">Comprobando el servidor…</string>
     <string name="server_added">Servidor añadido</string>
     <string name="server_blank">Escribe primero la dirección de tu servidor</string>
+    <string name="revoke">Revocar</string>
+    <string name="revoke_device">¿Revocar %1$s?</string>
+    <string name="revoke_warning">Este dispositivo sale de la cuenta al instante y ya no recibe la clave nueva de sincronización. Revocar pide la contraseña de la cuenta.</string>
+    <string name="revoked">Se revocó %1$s</string>
+    <string name="signed_out">El servidor ya no acepta este teléfono: lo revocaron desde otro dispositivo o lo quitaron de la cuenta. Quita el servidor aquí y vincula el teléfono otra vez para seguir sincronizando.</string>
 </resources>

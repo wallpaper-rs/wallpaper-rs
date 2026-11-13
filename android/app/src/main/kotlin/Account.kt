@@ -77,7 +77,7 @@ fun Account(main: Main) {
             state == "unlinked" -> item { Link(status, run) }
             else -> {
                 item { Summary(main, status, run) { approving = true } }
-                items(devices(status).filterNot { it.optBoolean("current") }) { Device(it, state == "needs_key", run) }
+                items(devices(status).filterNot { it.optBoolean("current") }) { Device(main, it, state == "needs_key", run) }
                 item { Recovery(status, run) }
                 item { PrivateFiles(main, status, run) }
             }
@@ -114,10 +114,11 @@ private fun Summary(main: Main, status: JSONObject, run: Run, approve: () -> Uni
             Text(if (last > 0) stringResource(R.string.last_sync, time) else stringResource(R.string.never_synced))
             Text(stringResource(if (status.optBoolean("encrypted")) R.string.encrypted else R.string.not_encrypted))
             if (status.optBoolean("encrypted")) Text(stringResource(R.string.names_key), style = MaterialTheme.typography.bodySmall)
+            val closed = stringResource(R.string.signed_out).takeIf { status.optBoolean("signed_out") }
             val outdated = stringResource(R.string.outdated).takeIf { status.optBoolean("outdated") }
             val revoked = stringResource(R.string.recovery_revoked).takeIf { status.optBoolean("recovery_stale") }
             val failed = status.optJSONObject("last_reply")?.let(::refusal)?.let(main::told) ?: status.text("last_error")
-            listOfNotNull(outdated ?: failed, status.text("warning"), revoked).forEach {
+            listOfNotNull(closed ?: outdated ?: failed, status.text("warning"), revoked).forEach {
                 Text(it, color = MaterialTheme.colorScheme.error)
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -148,16 +149,21 @@ private fun Summary(main: Main, status: JSONObject, run: Run, approve: () -> Uni
     }
 
 @Composable
-private fun Device(device: JSONObject, join: Boolean, run: Run) {
+private fun Device(main: Main, device: JSONObject, join: Boolean, run: Run) {
+    var revoking by remember { mutableStateOf(false) }
     val name = device.text("label") ?: device.getString("name")
     val waiting = stringResource(if (join) R.string.waiting_join else R.string.waiting_share, name)
     ListItem(
         headlineContent = { Text(name) },
         supportingContent = { Text(device.getString("name") + " · " + device.optString("platform")) },
         trailingContent = {
-            TextButton({ run(waiting) { account(if (join) "join" else "share", "device" to device.getString("id")) } }) {
-                Text(stringResource(if (join) R.string.get_key else R.string.share_key))
+            Row {
+                TextButton({ run(waiting) { account(if (join) "join" else "share", "device" to device.getString("id")) } }) {
+                    Text(stringResource(if (join) R.string.get_key else R.string.share_key))
+                }
+                TextButton({ revoking = true }) { Text(stringResource(R.string.revoke)) }
             }
         },
     )
+    if (revoking) Revoke(main, run, device.getString("id"), name) { revoking = false }
 }

@@ -53,6 +53,10 @@ enum Request {
         conflict: String,
     },
     Remove,
+    Revoke {
+        device: String,
+        password: String,
+    },
     Rotate,
     Escrow {
         passphrase: String,
@@ -119,7 +123,7 @@ fn status() -> Value {
             "devices": s.peers.iter().map(device).collect::<Vec<_>>(), "link": link::shown(),
             "pairing": pairing::shown(), "network": settings::chosen(NETWORK),
             "listen": settings::chosen(LISTEN), "active": s.active(),
-            "outdated": s.outdated, "recovery_stale": s.recovery_stale, "pin": s.pin,
+            "outdated": s.outdated, "signed_out": s.signed_out, "recovery_stale": s.recovery_stale, "pin": s.pin,
             "recovery": match (s.recovery, s.recovery_stale) { (None, _) => "off", (_, true) => "stale", _ => "current" },
             "offers": s.offers.len(), "files": s.files.items.len(),
         })
@@ -182,6 +186,7 @@ fn run(request: Request) -> Result<Value, Error> {
             }
             Request::Sync { conflict } => cycle::sync(&conflict).await,
             Request::Remove => link::remove().await.map(|()| status()),
+            Request::Revoke { device, password } => crate::revoking::revoke(&device, &password).await,
             Request::Rotate => keys::rotate_now().await,
             Request::Escrow { passphrase } => escrow::set(Zeroizing::new(passphrase)).await,
             Request::Restore { passphrase } => escrow::restore(Zeroizing::new(passphrase)).await,

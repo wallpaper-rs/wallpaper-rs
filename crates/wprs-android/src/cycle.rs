@@ -21,7 +21,9 @@ pub(crate) async fn sync(conflict: &str) -> Result<Value, Error> {
     }
     let (error, reply) =
         (result.as_ref().err().map(ToString::to_string), result.as_ref().err().map(Error::reply));
+    let closed = crate::revoking::closed(&result);
     update(|s| {
+        s.signed_out = closed;
         s.last_sync = if error.is_none() { Some(crate::library::now()) } else { s.last_sync };
         (s.last_error, s.last_reply) = (error, reply);
     })?;

@@ -127,6 +127,8 @@ b server join "$pocket" --code "$shown" --wait >/dev/null
 await b "$job"
 b server sync --wait >/dev/null
 b playlist ls | grep "Phone mix" >/dev/null || fail "the laptop that joined from the phone: $(b playlist ls)"
+ask "account {\"op\": \"revoke\", \"device\": \"$laptop\", \"password\": \"correct-horse-battery\"}" >/dev/null
+[ "$(phone "['devices'] if 0 else [d['id'] for d in r['devices']].count('$laptop')")" = 0 ] || fail "the phone still lists the laptop it revoked: $(phone "")"
 ask 'account {"op": "pause", "paused": true}' >/dev/null
 [ "$(phone "['state']")" = paused ] || fail "the paused phone: $(phone "")"
 if grep -r -q -s -a -e 'wprs_d_' -e correct-horse-battery "$WORK/phone/sync.json" "$WORK/phone.log"; then

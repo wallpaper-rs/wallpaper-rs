@@ -60,6 +60,7 @@ mod reel;
 mod relief;
 mod reply;
 mod repos;
+mod revoking;
 mod rotation;
 mod saved;
 mod server;

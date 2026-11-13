@@ -52,6 +52,7 @@ pub(crate) struct Saved {
     pub(crate) offers: Vec<crate::repos::Offer>,
     pub(crate) away: Vec<wprs_core::model::Away>,
     pub(crate) declined: BTreeSet<String>,
+    pub(crate) signed_out: bool,
     pub(crate) repo_id: Option<String>,
 }
 
@@ -81,6 +82,7 @@ impl Saved {
             _ if self.url.is_empty() => "none",
             _ if link::shown().is_some() => "linking",
             _ if self.device.is_none() => "unlinked",
+            _ if self.signed_out => "signed_out",
             _ if !self.ready => "needs_key",
             _ if self.paused => "paused",
             _ if self.last_error.is_some() => "error",

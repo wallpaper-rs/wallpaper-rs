@@ -55,4 +55,9 @@
     <string name="checking_server">Checking the server…</string>
     <string name="server_added">Server added</string>
     <string name="server_blank">Type the address of your server first</string>
+    <string name="revoke">Revoke</string>
+    <string name="revoke_device">Revoke %1$s?</string>
+    <string name="revoke_warning">This device is signed out of the account at once and will not receive the new sync key. Revoking asks for the password of the account.</string>
+    <string name="revoked">%1$s was revoked</string>
+    <string name="signed_out">The server no longer accepts this phone: it was revoked from another device or removed from the account. Remove the server here and link this phone again to keep syncing.</string>
 </resources>
