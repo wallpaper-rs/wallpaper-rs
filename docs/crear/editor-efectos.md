@@ -227,7 +227,7 @@ El lienzo repite lo que dice el inspector: «El lienzo muestra la máscara sobre
 
 ## Cómo pintar una máscara, un mapa gris o un mapa de dirección
 
-Algunos efectos leen una imagen que tú pintas: un mapa gris que dice dónde actúa algo, o un mapa de dirección (de flujo) que dice hacia dónde se mueve. El pincel escribe en una imagen del paquete; no hace falta tener una antes.
+Algunos efectos leen una imagen que tú pintas: un mapa gris que dice dónde actúa algo, o un mapa de dirección (de flujo) que dice hacia dónde se mueve. El pincel escribe en una imagen del paquete; no hace falta tener una antes. El pincel de máscara pinta en coordenadas de la caja de la capa: en una malla coincide con la hoja solo en la pose de reposo; fuera de ella, pausa el clip para pintar.
 
 **Dónde está:** inspector, en el parámetro de imagen del efecto (por ejemplo `map`, `phase` o el de un efecto del paquete que declare un parámetro de máscara). El botón de pintar aparece junto al parámetro.
 
@@ -339,7 +339,7 @@ Una escena sin nada que cambie se duerme y no gasta. Cada parámetro de un efect
 
 ## Cómo ver cuánto cuesta un efecto
 
-Cada efecto cuesta unidades de trabajo por cuadro. El programa baja la calidad si la escena pesa demasiado (con batería, si el equipo es lento) y entonces recorta efectos: los ligeros siguen en todos los niveles; los medios y pesados trabajan a menor tamaño o se omiten, los marcados **Opcional** primero.
+Cada efecto cuesta unidades de trabajo por cuadro. El programa baja la calidad si la escena pesa demasiado (con batería, si el equipo es lento) y entonces recorta efectos: los ligeros siguen en todos los niveles; los medios y pesados trabajan a menor tamaño o se omiten, los marcados **Opcional** primero. El costo de un efecto con máscara cuenta la capa entera, aunque la máscara cubra solo un trozo. El de un efecto de paquete cuenta toda la función que llama (una mezcla con muchos modos sube cada uso a unas 2 unidades), y un script que usa la cámara hace que todas las capas cuenten como lienzo entero.
 
 **Dónde está:** inspector, con un efecto elegido, sección **Coste**.
 
