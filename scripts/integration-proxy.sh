@@ -15,6 +15,12 @@ else
   start_daemon "$WORK/proxied.log"
   ctl state >/dev/null || fail "the daemon did not answer through the bus proxy"
   ctl lib search "" >/dev/null || fail "the library did not answer through the bus proxy"
+  for cycle in $(seq 1 15); do
+    stop_daemon "$daemon" "$WORK/proxied.log"
+    start_daemon "$WORK/proxied.log"
+    ctl state >/dev/null || fail "the daemon did not answer through the bus proxy after restart $cycle"
+    if grep -q "Invalid" "$WORK/proxy.log"; then fail "the bus proxy refused a message: $(tail -n 5 "$WORK/proxy.log")"; fi
+  done
   export DBUS_SESSION_BUS_ADDRESS=$plain WPRS_PRIVATE_BUS_ADDRESS=$plain
   stop_daemon "$daemon" "$WORK/proxied.log"
   kill "$proxy" 2>/dev/null || true
