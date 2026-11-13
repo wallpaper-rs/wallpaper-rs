@@ -6,7 +6,7 @@ use std::process::{Child, Command, ExitCode, Stdio};
 use std::sync::{Arc, Mutex, mpsc};
 use std::time::Duration;
 
-const CHECK_TIME: Duration = Duration::from_secs(360);
+const CHECK_TIME: Duration = Duration::from_secs(900);
 const FONT_DIRS: [&str; 1] = ["/usr/share/fonts"];
 
 fn fonts(state: &Path) -> Option<PathBuf> {
