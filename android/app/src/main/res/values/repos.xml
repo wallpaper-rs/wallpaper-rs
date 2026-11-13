@@ -19,4 +19,5 @@
     <string name="needs_failed">This package is incomplete: %1$s could not be installed, so it may not work.</string>
     <string name="auto_update">Update repositories automatically</string>
     <string name="away_note">%1$s exists only on another device. Publishing it to the server or to a repository makes it available here.</string>
+    <string name="away_note_repo">%1$s comes from the repository %2$s, which is not added on this device. Adding the repository makes it available here.</string>
 </resources>

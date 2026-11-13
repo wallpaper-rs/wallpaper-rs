@@ -19,4 +19,5 @@
     <string name="needs_failed">Este paquete quedó incompleto: no se pudo instalar %1$s, así que puede no funcionar.</string>
     <string name="auto_update">Actualizar los repositorios automáticamente</string>
     <string name="away_note">%1$s existe solo en otro equipo. Publicarlo en el servidor o en un repositorio lo hace disponible aquí.</string>
+    <string name="away_note_repo">%1$s viene del repositorio %2$s, que no está agregado en este dispositivo. Agregar el repositorio lo hace disponible aquí.</string>
 </resources>

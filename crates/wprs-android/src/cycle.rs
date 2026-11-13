@@ -51,6 +51,7 @@ async fn cycle(conflict: &str) -> Result<Value, Error> {
     };
     let key = secrets.sync_key()?;
     let ids = key.ids();
+    crate::away::remember(&ids);
     let session = Session::new(api.clone(), saved.user(), epoch, encrypted, key);
     let names = ids.named("names", "");
     let (mut replica, mut links, mut clock, mut kept) = match saved.names.is_empty() || saved.names == names {

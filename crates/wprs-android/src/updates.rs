@@ -23,7 +23,7 @@ pub(crate) fn request(request: Request) -> Result<Value, Error> {
         Request::Updates => list(),
         Request::RefreshRepos { force } => refresh(force),
         Request::Update { uid } => update(&uid, false),
-        Request::Away => Ok(json!(crate::state::read(|s| s.away.clone()))),
+        Request::Away => Ok(json!(crate::away::current())),
     }
 }
 

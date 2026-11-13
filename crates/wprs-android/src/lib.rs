@@ -5,6 +5,7 @@ mod account;
 mod acting;
 mod address;
 mod apply;
+mod away;
 mod bench;
 mod blanked;
 mod blend;
