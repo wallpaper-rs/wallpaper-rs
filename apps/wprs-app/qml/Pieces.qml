@@ -22,6 +22,6 @@ QQC2.ApplicationWindow {
     Loader {
         anchors.fill: parent
         focus: true
-        source: /^[a-z]+$/.test(window.sheet) ? "Pieces" + window.sheet[0].toUpperCase() + window.sheet.slice(1) + ".qml" : ""
+        source: /^[A-Za-z]+$/.test(window.sheet) ? "Pieces" + window.sheet[0].toUpperCase() + window.sheet.slice(1) + ".qml" : ""
     }
 }
