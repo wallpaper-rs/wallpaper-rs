@@ -1001,12 +1001,7 @@ jobs:
 
       - name: Install Flatpak and a sound server
         run: |
-          scripts/ci-apt.sh flatpak pipewire pipewire-bin wireplumber dbus-x11 dbus-bin meson ninja-build libglib2.0-dev
-          git clone --quiet --branch 0.1.9 --depth 1 https://github.com/flatpak/xdg-dbus-proxy "$RUNNER_TEMP/xdg-dbus-proxy"
-          test "$(git -C "$RUNNER_TEMP/xdg-dbus-proxy" rev-parse 0.1.9)" = 980f7588aac69e20b5ed820472137e29ce076f3e
-          meson setup "$RUNNER_TEMP/xdg-dbus-proxy/build" "$RUNNER_TEMP/xdg-dbus-proxy" -Dman=disabled
-          ninja -C "$RUNNER_TEMP/xdg-dbus-proxy/build"
-          sudo install -m 755 "$RUNNER_TEMP/xdg-dbus-proxy/build/xdg-dbus-proxy" /usr/bin/xdg-dbus-proxy
+          scripts/ci-apt.sh flatpak pipewire pipewire-bin wireplumber dbus-x11 dbus-bin
           xdg-dbus-proxy --version
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
