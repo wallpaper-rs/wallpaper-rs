@@ -51,7 +51,10 @@ impl Runtime {
     }
 
     pub fn glide(&self) -> [f32; 2] {
-        self.glide.smooth.map(|v| (v - 0.5) * 2.0)
+        let tilted = !self.still && crate::kin::glide(&self.context()).gyro;
+        let tilt = if tilted { self.tilt } else { [0.0; 2] };
+        let at = |i: usize| ((self.glide.smooth[i] - 0.5) * 2.0 + tilt[i]).clamp(-1.0, 1.0);
+        [at(0), at(1)]
     }
 
     pub fn parallax(&self) -> [f32; 2] {

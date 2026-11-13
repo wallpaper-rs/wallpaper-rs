@@ -122,3 +122,18 @@ fn tints_brightness_and_mask_strength_reach_the_draws() {
     assert!(frame.draws[1].isolate && frame.draws[1].tint.0 == [0.0, 1.0, 0.0, 1.0]);
     assert!(frame.draws[2].tint.0 == [1.0; 4] && frame.draws[2].brightness == 1.0);
 }
+
+#[test]
+fn the_glide_given_to_shaders_carries_the_tilt_only_when_the_gyro_is_on() {
+    let view = |gyro: bool| json!({ "size": [100, 50], "parallax": { "delay": 0, "gyro": gyro } });
+    let mut on = runtime(view(true), json!([box_at("n", json!({ "parallax": [0.1, 0.1] }))]));
+    let mut off = runtime(view(false), json!([box_at("n", json!({ "parallax": [0.1, 0.1] }))]));
+    for rt in [&mut on, &mut off] {
+        rt.advance(0.05);
+        rt.set_pointer(PointerState { pos: Some([0.5; 2]), smooth: [0.5; 2], inside: true, ..Default::default() });
+    }
+    on.set_tilt([0.5, -0.25]);
+    off.set_tilt([0.5, -0.25]);
+    assert_eq!(on.glide(), [0.5, -0.25]);
+    assert_eq!(off.glide(), [0.0, 0.0]);
+}
