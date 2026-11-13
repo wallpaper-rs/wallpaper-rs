@@ -35,8 +35,8 @@ pub(super) fn simulate(p: &mut Particle, s: &Sim, mirror: &[Event], points: &[[f
                 [0.0; 2]
             }
             3 => {
-                let at = [(p.pos[0] - a[0] * s.clock[1]) * f[2], p.pos[1] * f[2]];
-                let c = curl(s.ids[0], at, s.clock[1] * a[1]);
+                let at = [p.pos[0] * f[2] - b[0], p.pos[1] * f[2]];
+                let c = curl(s.ids[0], at, b[1]);
                 [c[0] * f[1] * a[2], c[1] * f[1] * a[3]]
             }
             4 => n.map(|v| v * f[3] * reach(r, a)),

@@ -41,7 +41,8 @@ fn noise(seed: u32, p: [f32; 2]) -> f32 {
     let f = [p[0] - i, p[1] - j];
     let u = f.map(|v| v * v * (3.0 - 2.0 * v));
     let g = |x: i32, y: i32| {
-        let a = rand(seed, (i as i32).wrapping_add(x) as u32, (j as i32).wrapping_add(y) as u32) * TAU;
+        let cell = |v: i32| (v & (super::phase::LATTICE as i32 - 1)) as u32;
+        let a = rand(seed, cell((i as i32).wrapping_add(x)), cell((j as i32).wrapping_add(y))) * TAU;
         a.cos() * (f[0] - x as f32) + a.sin() * (f[1] - y as f32)
     };
     lerp(lerp(g(0, 0), g(1, 0), u[0]), lerp(g(0, 1), g(1, 1), u[0]), u[1])

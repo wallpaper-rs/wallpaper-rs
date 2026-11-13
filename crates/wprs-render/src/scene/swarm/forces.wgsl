@@ -28,7 +28,7 @@ fn pull(p: ptr<function, Particle>, k: u32, t: f32, dt: f32, g: ptr<function, Pu
             (*g).drag += f.y * w;
         }
         case 3u: {
-            let c = curl(vec2<f32>(((*p).pos.x - a.x * sim.clock.y) * f.z, (*p).pos.y * f.z), sim.clock.y * a.y);
+            let c = curl(vec2<f32>((*p).pos.x * f.z - b.x, (*p).pos.y * f.z), b.y);
             add = c * f.y * a.zw;
         }
         case 4u: {

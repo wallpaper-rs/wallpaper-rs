@@ -1,5 +1,7 @@
 use super::{MAX_EMITTERS2, MAX_REMAPS, Sim};
 
+pub const LATTICE: u32 = 256;
+
 pub(super) const PERIOD: f64 = 4096.0;
 
 pub(super) fn wrap(v: f64, period: f64) -> f32 {
@@ -44,6 +46,11 @@ impl Sim {
         }
         for k in 0..(self.counts[2] as usize).min(16) {
             let (f, a, b) = (self.forces[4 * k], self.forces[4 * k + 1], self.forces[4 * k + 2]);
+            if f[0] as u32 == 3 {
+                let lattice = f64::from(LATTICE);
+                self.forces[4 * k + 2][0] = wrap(f64::from(a[0]) * f64::from(f[2]) * t, lattice);
+                self.forces[4 * k + 2][1] = wrap(f64::from(a[1]) * t, lattice);
+            }
             if f[0] as u32 == 15 && f[1] as u32 == 1 {
                 let bits = b[3] as u32;
                 let clamps = [(bits & 1) as f32, (bits >> 1 & 1) as f32];

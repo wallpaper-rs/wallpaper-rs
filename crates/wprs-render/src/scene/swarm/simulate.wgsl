@@ -6,7 +6,7 @@ fn noise(p: vec2<f32>) -> f32 {
     var g: array<f32, 4>;
     for (var k = 0; k < 4; k++) {
         let o = vec2<i32>(k & 1, k >> 1u);
-        let a = rand(bitcast<u32>(c.x + o.x), bitcast<u32>(c.y + o.y)) * TAU;
+        let a = rand(bitcast<u32>((c.x + o.x) & 255), bitcast<u32>((c.y + o.y) & 255)) * TAU;
         g[k] = cos(a) * (f.x - f32(o.x)) + sin(a) * (f.y - f32(o.y));
     }
     return lerp(lerp(g[0], g[1], u.x), lerp(g[2], g[3], u.x), u.y);
