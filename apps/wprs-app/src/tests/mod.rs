@@ -1,7 +1,7 @@
 mod choices;
 mod covered;
-mod details;
 mod depth;
+mod details;
 mod editor;
 mod fake;
 mod gone;
