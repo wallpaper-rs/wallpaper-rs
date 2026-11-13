@@ -86,8 +86,7 @@ impl Renderer {
             staged.key = key;
             staged.renders += 1;
         }
-        let live: Vec<&str> = frame.stages.iter().map(|s| s.layer).collect();
-        view.solids.retain(|k, _| live.contains(&k.as_str()));
+        view.solids.retain(|k, _| frame.stages.iter().any(|s| s.layer == k.as_str()));
         view.models.retain(|d, _| frame.placed.iter().any(|p| p.model.digest == *d || drawn(p) == *d));
         view.envs.retain(|k, _| frame.placed.iter().any(|p| p.env == Some(k.as_str())));
         Ok(())
