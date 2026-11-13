@@ -10580,3 +10580,53 @@ msgstr "está quieto porque la pantalla está bloqueada"
 #: apps/wprs-ctl/src/stillness.rs
 msgid "it is still because it was paused (wprs-ctl resume)"
 msgstr "está quieto porque se pausó (wprs-ctl resume)"
+msgid "Browse the playlist of the screen or the whole library; by default the playlist when the screen plays one"
+msgstr "Recorrer la lista de la pantalla o toda la biblioteca; por omisión, la lista si la pantalla muestra una"
+
+msgid "Preview it without applying it: starts browsing, or moves on while browsing; browse apply keeps it"
+msgstr "Verlo antes sin aplicarlo: empieza a recorrer o avanza mientras recorres; browse apply lo deja puesto"
+
+msgid "fade, none, or empty for the usual transition"
+msgstr "fade, none o vacío para la transición de siempre"
+
+msgid "The wallpaper being previewed: apply it, stop, or choose its transition"
+msgstr "El fondo que estás mirando: aplicarlo, dejar de recorrer o elegir su transición"
+
+msgid "Apply the wallpaper being previewed and stop browsing"
+msgstr "Aplicar el fondo que estás mirando y dejar de recorrer"
+
+msgid "Choose the transition used when the previewed wallpaper is applied"
+msgstr "Elegir la transición con la que se aplica el fondo que estás mirando"
+
+msgid "Stop browsing and leave the wallpaper as it was"
+msgstr "Dejar de recorrer y dejar el fondo como estaba"
+
+msgid "Show what is being previewed"
+msgstr "Mostrar el fondo que estás mirando"
+
+msgid "applied on %1"
+msgstr "aplicado en %1"
+
+msgid "browsing ended on %1"
+msgstr "se dejó de recorrer en %1"
+
+msgid "nothing is being browsed on %1"
+msgstr "no se está recorriendo nada en %1"
+
+msgid "(none)"
+msgstr "(ninguno)"
+
+msgid "playlist %1"
+msgstr "lista %1"
+
+msgid "library"
+msgstr "biblioteca"
+
+msgid "%1 of %2"
+msgstr "%1 de %2"
+
+msgid "candidate on %1: %2"
+msgstr "a la vista en %1: %2"
+
+msgid "transition: %1"
+msgstr "transición: %1"

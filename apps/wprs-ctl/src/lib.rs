@@ -14,6 +14,7 @@ mod backdrop;
 mod bench;
 mod benching;
 mod blanks;
+mod browsing;
 mod calls;
 mod capturing;
 mod catalog;

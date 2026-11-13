@@ -35,8 +35,8 @@ fn daemon_commands_keep_their_syntax_and_gain_json() {
         ("jobs --json", "Jobs { json: true }"),
         ("job 3", "Job { id: 3, json: false }"),
         ("cancel 3", "Cancel { id: 3 }"),
-        ("next -o DP-1", r#"Next(Out { output: "DP-1" })"#),
-        ("prev", r#"Prev(Out { output: "" })"#),
+        ("next -o DP-1", r#"Browsing(Next(Step { output: "DP-1", preview: false, from: "", json: false }))"#),
+        ("prev --preview", r#"Browsing(Prev(Step { output: "", preview: true, from: "", json: false }))"#),
     ];
     for (line, debug) in cases {
         assert_eq!(parsed(line), debug, "{line}");

@@ -105,4 +105,9 @@ pub trait Playlists1 {
     fn next(&self, output: &str) -> Result<()>;
     fn previous(&self, output: &str) -> Result<()>;
     fn history(&self, output: &str, limit: u32) -> Result<String>;
+    fn browse(&self, output: &str, source: &str, steps: i32) -> Result<String>;
+    fn browse_apply(&self, output: &str, transition: &str) -> Result<String>;
+    fn browse_transition(&self, output: &str, transition: &str) -> Result<String>;
+    fn browse_cancel(&self, output: &str) -> Result<String>;
+    fn get_browse(&self, output: &str) -> Result<String>;
 }

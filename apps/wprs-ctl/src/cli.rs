@@ -158,10 +158,8 @@ pub enum Command {
     Preset(Preset),
     #[command(subcommand, about = "Playlists and their rotation")]
     Playlist(Playlist),
-    #[command(about = "Show the next item of the playlist of an output")]
-    Next(Out),
-    #[command(about = "Show the previous item of the playlist of an output")]
-    Prev(Out),
+    #[command(flatten)]
+    Browsing(crate::browsing::Browsing),
     #[command(subcommand, about = "Profiles: saved assignments of every output")]
     Profile(Profile),
     #[command(subcommand, about = "Online sources of wallpapers")]

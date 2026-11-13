@@ -95,12 +95,7 @@ pub async fn run(command: Command) -> Result<()> {
         Command::Lib(command) => library::run(client, command).await?,
         Command::Preset(command) => crate::presets::preset(client, command).await?,
         Command::Playlist(command) => playlists::run(client, command).await?,
-        Command::Next(out) => {
-            inputs::asking_changed(client, &out.output, client.playlists.next(&out.output)).await?
-        }
-        Command::Prev(out) => {
-            inputs::asking_changed(client, &out.output, client.playlists.previous(&out.output)).await?
-        }
+        Command::Browsing(command) => crate::browsing::run(client, command).await?,
         Command::Profile(command) => profiles::run(client, command).await?,
         Command::Provider(command) => providers::run(client, command).await?,
         Command::Remote(command) => remote::run(client, command).await?,
