@@ -349,7 +349,8 @@ Android 14; antes, las dos muestran lo mismo), y cada pantalla guarda su propio 
 lista, igual que una pantalla del escritorio (`[outputs.lock]` en la configuración). Si la app ya
 es el fondo de esa pantalla, el cambio entra con un fundido sin pasar por la vista previa del
 sistema; si no, o si un mismo fondo de la app cubre las dos pantallas y se elige solo una, abre la
-vista previa del sistema para ponerlo allí. También se llega desde los fondos animados del sistema. Se dibuja con la GPU (Vulkan, u
+vista previa del sistema para ponerlo allí; lo que se guarda es lo que el sistema puso de verdad (si allí
+eliges solo la pantalla de inicio, la de bloqueo conserva su fondo). También se llega desde los fondos animados del sistema. Se dibuja con la GPU (Vulkan, u
 OpenGL ES si Vulkan falla) con el mismo renderizador que el escritorio, y se recupera sola si el
 sistema le quita la GPU o la superficie. La edición hecha en el escritorio se aplica igual: el giro,
 el enderezado, el color y las máscaras, también las de profundidad, que seleccionan sobre el mapa de

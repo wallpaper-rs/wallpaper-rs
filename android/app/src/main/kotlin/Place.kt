@@ -28,6 +28,12 @@ fun Main.setWallpaper() {
     if (separate() && (active(HOME) || active(LOCK))) placing.value = true else place(BOTH)
 }
 
+fun assigned(target: String, flags: Int) = when (flags) {
+    WallpaperManager.FLAG_SYSTEM -> HOME
+    WallpaperManager.FLAG_LOCK -> LOCK
+    else -> target
+}
+
 fun Context.announce() = Toast.makeText(this, R.string.applied, Toast.LENGTH_LONG).show()
 
 fun Main.place(target: String) {
