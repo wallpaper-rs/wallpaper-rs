@@ -95,7 +95,7 @@ ctl lib scan --wait >/dev/null
 if ctl playlist add Colors --folder "$fresh" --follow 2>/dev/null; then fail "a folder was followed by a playlist that holds a list"; fi
 rotation=$(ctl playlist rotate --folder "$fresh" --every 10m -o TEST-8 --name Spin)
 [ "$(ctl playlist rule Spin interval)" = 10m ] || fail "rotate interval: $(ctl playlist rule Spin)"
-expect "s['outputs']['TEST-8']['playlist']['name']" "'Spin'"
+expect "s['outputs']['TEST-8']['playlist']['name']" Spin
 if ctl playlist rotate --every 0s "$red" 2>/dev/null; then fail "a rotation without time was accepted"; fi
 ctl playlist stop -o TEST-8
 ctl playlist rm Folded && ctl playlist rm Followed && ctl playlist rm "$rotation"
