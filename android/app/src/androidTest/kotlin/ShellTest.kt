@@ -1,5 +1,6 @@
 package io.github.wallpaper_rs
 
+import android.content.res.Configuration
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -17,6 +18,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.core.view.WindowCompat
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
@@ -85,17 +87,13 @@ class ShellTest {
 
     @Test
     fun theSystemBarsKeepLightIconsWhileThePhoneIsInLightMode() {
-        val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
-        automation.executeShellCommand("cmd uimode night no").close()
-        try {
-            opened()
-            scenario?.onActivity { main ->
-                val bars = WindowCompat.getInsetsController(main.window, main.window.decorView)
-                assertFalse(bars.isAppearanceLightStatusBars)
-                assertFalse(bars.isAppearanceLightNavigationBars)
-            }
-        } finally {
-            automation.executeShellCommand("cmd uimode night auto").close()
+        val night = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        assertEquals(Configuration.UI_MODE_NIGHT_NO, night)
+        opened()
+        scenario?.onActivity { main ->
+            val bars = WindowCompat.getInsetsController(main.window, main.window.decorView)
+            assertFalse(bars.isAppearanceLightStatusBars)
+            assertFalse(bars.isAppearanceLightNavigationBars)
         }
     }
 
