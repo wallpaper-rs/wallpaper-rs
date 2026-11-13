@@ -118,7 +118,7 @@ fn hidden_files_wake_nothing_and_a_burst_of_changes_settles_before_a_look() {
     let watch = state.listed.watch.as_ref().unwrap();
     assert!(watch.first_heard() + Duration::from_millis(2) >= before, "a hidden file woke the listing");
     let wait = watch.pending(before).unwrap_or_default();
-    assert!(wait >= 0.49 && wait <= 5.01, "the look waits for the copy to settle: {wait} s");
+    assert!((0.49..=5.01).contains(&wait), "the look waits for the copy to settle: {wait} s");
     state.listing(before);
     assert!(state.listed.scanning.is_none(), "a look started while files were still arriving");
     assert!(listed(&mut state, later) && state.listed.text.contains("b.png"));
