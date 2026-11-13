@@ -45,8 +45,14 @@ impl Daemon {
     pub(crate) fn page_problem(&self, path: &Path) -> Option<String> {
         let status = self.compositor.status();
         let shown = status.values().filter(|s| s.package.as_deref() == Some(path));
-        let last = shown.flat_map(|s| s.problems.last()).next_back()?;
-        Some(crate::words::web_page_error(last))
+        let shown: Vec<_> = shown.collect();
+        let last =
+            shown.iter().flat_map(|s| s.problems.last().map(|l| (s.kind == "scene", l))).next_back()?;
+        Some(if last.0 {
+            crate::words::scene_script_error(last.1)
+        } else {
+            crate::words::web_page_error(last.1)
+        })
     }
 }
 

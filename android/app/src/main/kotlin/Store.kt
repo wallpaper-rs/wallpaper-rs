@@ -58,6 +58,7 @@ class Item(json: JSONObject) {
     val mature = pack?.optString("content") == "mature" && "mature" !in confirmed && !Unveil.mature
     val flashing = pack?.optBoolean("photosensitive") == true && "photosensitive" !in confirmed
     val moving = "motion" in confirmed
+    val failing: String? = json.optString("error").takeIf { it.isNotEmpty() }
     val flashes = pack?.optBoolean("photosensitive") == true
 }
 

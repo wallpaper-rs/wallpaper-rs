@@ -134,6 +134,7 @@ fun Thumb(item: Item, modifier: Modifier = Modifier, picked: Boolean = false) {
         bitmap?.let { Image(it, "$kind ${item.title}".trim(), Modifier.fillMaxSize().then(hidden), contentScale = ContentScale.Crop) }
         if (item.mature) Icon(Icons.Default.Lock, stringResource(R.string.mature), Modifier.align(Alignment.Center), Color.White)
         if (item.flashing) Icon(Icons.Default.Warning, stringResource(R.string.flashing), Modifier.align(Alignment.TopEnd).padding(4.dp), Color.White)
+        if (item.failing != null) Icon(Icons.Default.Warning, stringResource(R.string.page_error), Modifier.align(Alignment.BottomEnd).padding(4.dp), MaterialTheme.colorScheme.error)
         val corner = Modifier.align(Alignment.BottomStart).padding(4.dp)
         if (item.video) Icon(Icons.Default.PlayArrow, null, corner, Color.White)
         if (item.scene) Icon(if (item.web) Icons.Default.Menu else Icons.Default.Star, null, corner, Color.White)

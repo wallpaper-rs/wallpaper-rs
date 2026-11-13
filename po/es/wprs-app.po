@@ -3311,6 +3311,10 @@ msgid ""
 msgstr "La imagen queda quieta hasta que se construyan sus capas de profundidad. Se construyen con el relleno simple porque LaMa, que rellena mejor las partes ocultas, no está instalado. Puedes descargarlo desde la herramienta de profundidad del editor; no se descarga nada hasta que lo pidas."
 
 #: apps/wprs-app/qml/OutputNotes.qml
+msgid "A script of the scene reported an error: %1"
+msgstr "Un script de la escena informó de un error: %1"
+
+#: apps/wprs-app/qml/OutputNotes.qml
 msgid "The page reported an error and may not be drawing: %1"
 msgstr "La página informó de un error y puede que no se esté dibujando: %1"
 

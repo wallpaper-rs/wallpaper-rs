@@ -78,6 +78,7 @@ pub(super) fn pages_are_served_from_their_package_only() {
     );
     assert!(api.contains("})(false, false, null, \"https://") && !api.contains("WEBGL_debug_renderer_info"));
     values_reach_the_running_page(&uid, &path, &url);
+    super::failed::a_page_error_marks_its_library_item(HANDLE, &uid, &path);
     privacy_is_chosen_per_package(&uid, &path, &url);
     page::close(HANDLE);
     assert_eq!(served(&url), json!({}));

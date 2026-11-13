@@ -10,6 +10,7 @@ use wprs_core::model::Input;
 
 #[cfg(target_os = "android")]
 mod exports;
+mod failed;
 mod folders;
 mod heard;
 pub(crate) mod kept;
@@ -130,6 +131,9 @@ pub(crate) fn spec(
         kept: [0; 2],
     };
     let mut views = views();
+    if views.get(&handle).is_none_or(|v| v.key != key) {
+        failed::clear(&pack.id);
+    }
     let view = views.entry(handle).or_insert_with(fresh);
     if view.key != key {
         *view = fresh();
@@ -166,6 +170,10 @@ pub(crate) fn touched(handle: i64) -> bool {
     let Some(v) = views.get(&handle) else { return false };
     let granted = props::granted(&v.pack.id);
     v.pack.web.as_ref().is_some_and(|w| (w.uses[1] && granted[1]) || (w.uses[2] && granted[2]))
+}
+
+pub(crate) fn failure(pack: &str) -> Option<String> {
+    failed::of(pack)
 }
 
 pub(crate) fn exposes(package: &wprs_library::PackageInfo) -> Vec<String> {

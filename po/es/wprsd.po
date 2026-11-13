@@ -229,6 +229,10 @@ msgid ""
 msgstr "Aquí no se pueden mostrar fondos web: el auxiliar web no arranca (%1)."
 
 #: apps/wprsd/src/words.rs
+msgid "A script of the scene reported an error: %1"
+msgstr "Un script de la escena informó de un error: %1"
+
+#: apps/wprsd/src/words.rs
 msgid "The page reported an error and may not be drawing: %1"
 msgstr "La página informó de un error y puede que no se esté dibujando: %1"
 

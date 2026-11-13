@@ -19,12 +19,18 @@ pub(crate) fn is_problem(line: &str) -> bool {
     !LOGGED.iter().any(|level| line.starts_with(level))
 }
 
+pub(crate) fn scene_problem(line: &str) -> bool {
+    line.starts_with("error ")
+}
+
 impl State {
     pub(in crate::compositor) fn page_problems(&self, name: &str, o: &Output) -> Vec<String> {
         let page = o.shown.content.page();
         let page = page.and_then(|p| self.pages.get(&p.key(self.power.choice)));
         let view = page.and_then(|p| p.views.get(name));
-        view.into_iter().flat_map(|v| &v.console).filter(|l| is_problem(l)).cloned().collect()
+        let scene = o.shown.scene.iter().flat_map(|s| &s.console).filter(|l| scene_problem(l));
+        let page = view.into_iter().flat_map(|v| &v.console).filter(|l| is_problem(l));
+        page.chain(scene).cloned().collect()
     }
 
     pub(in crate::compositor) fn page_package(&self, o: &Output) -> Option<std::path::PathBuf> {
@@ -53,7 +59,15 @@ impl State {
 
 #[cfg(test)]
 mod tests {
-    use super::is_problem;
+    use super::{is_problem, scene_problem};
+
+    #[test]
+    fn only_error_lines_of_a_scene_script_are_problems() {
+        assert!(scene_problem("error scripts/a.js: TypeError: x is not a function"));
+        for line in ["log scripts/a.js: hi", "warn scripts/a.js: careful", "errors are fine: no"] {
+            assert!(!scene_problem(line), "{line}");
+        }
+    }
 
     #[test]
     fn only_errors_of_a_page_are_problems_and_its_plain_logging_is_not() {

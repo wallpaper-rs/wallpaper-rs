@@ -138,6 +138,10 @@ pub fn web_page_error(line: &str) -> String {
     tr("The page reported an error and may not be drawing: %1").replace("%1", line)
 }
 
+pub fn scene_script_error(line: &str) -> String {
+    tr("A script of the scene reported an error: %1").replace("%1", line)
+}
+
 pub fn web_failed() -> String {
     tr("The web page stopped three times in a row and is off; the background color shows instead.")
 }

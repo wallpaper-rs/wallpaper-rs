@@ -17,4 +17,5 @@
     <string name="web_clear">Clear data</string>
     <string name="web_cleared">Its data is cleared</string>
     <string name="web_full">The web page keeps much more data than it declared, so it runs without keeping anything until its data is cleared.</string>
+    <string name="page_error">This page reported an error and may not be drawing</string>
 </resources>

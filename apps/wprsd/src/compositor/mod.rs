@@ -82,7 +82,7 @@ impl Compositor {
         renderer: &'static Renderer,
         exporter: Arc<Exporter>,
         settings: Settings,
-        on_status: impl Fn(Vec<String>) + Send + 'static,
+        on_status: impl Fn(Vec<String>, bool) + Send + 'static,
     ) -> std::io::Result<Self> {
         renderer.on_device_lost(|reason| stops::lost(&format!("the GPU device was lost ({reason})")));
         let limits = renderer.limits();

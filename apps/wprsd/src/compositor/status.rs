@@ -59,3 +59,14 @@ impl OutputStatus {
         }
     }
 }
+
+pub(super) fn problems_changed(
+    now: &std::collections::BTreeMap<String, OutputStatus>,
+    old: &std::collections::BTreeMap<String, OutputStatus>,
+    names: &[String],
+) -> bool {
+    let problems = |all: &std::collections::BTreeMap<String, OutputStatus>, n: &String| {
+        all.get(n).map(|s| s.problems.clone())
+    };
+    names.iter().any(|n| problems(now, n) != problems(old, n))
+}

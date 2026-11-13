@@ -133,6 +133,7 @@ pub(crate) fn heard(handle: i64, text: &str) -> Option<String> {
     }
     if let Some(said) = message.get("error").and_then(Value::as_str) {
         view.said += 1;
+        super::failed::note(&view.pack.id, said);
         if view.said <= MAX_SAID {
             log::info!("page: {}", said.chars().take(512).collect::<String>());
         }

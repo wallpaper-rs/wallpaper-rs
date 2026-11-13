@@ -11,6 +11,7 @@ mod capped;
 mod chosen;
 mod converted;
 mod cued;
+mod failed;
 mod flight;
 mod frames;
 mod graded;

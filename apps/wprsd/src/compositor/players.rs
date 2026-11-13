@@ -187,8 +187,9 @@ impl State {
                 names.filter(|n| published.get(*n) != old.get(*n)).cloned().collect();
             changed.sort();
             changed.dedup();
+            let problems = super::status::problems_changed(&published, &old, &changed);
             drop(published);
-            (self.on_status)(changed);
+            (self.on_status)(changed, problems);
         }
     }
 }

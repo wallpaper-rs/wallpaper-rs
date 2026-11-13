@@ -35,6 +35,7 @@ class Page(private val context: Context, private val handle: Long, spec: JSONObj
     private val presentation = Presentation(context, display.display)
     val web = WebView(presentation.context)
     private val touches = Touches(web)
+    private var failed = false
 
     init {
         Refusing.workers()
@@ -120,6 +121,10 @@ class Page(private val context: Context, private val handle: Long, spec: JSONObj
 
     private fun told(message: String) {
         val reply = Native.heard(handle, message)
+        if (message.startsWith(ERROR) && !failed) {
+            failed = true
+            Converting.finished?.invoke("")
+        }
         if (message.startsWith(OPEN)) Shortcuts.each(Native.opened(handle)) { Shortcuts.open(context, it) }
         if (message.startsWith(AUDIO) || message.startsWith(MEDIA)) heard()
         if (message.startsWith(KEPT) || message.startsWith(USED)) measured()
@@ -135,6 +140,7 @@ class Page(private val context: Context, private val handle: Long, spec: JSONObj
     }
 
     companion object {
+        private const val ERROR = "{\"error\""
         private const val NAME = "wprs-page"
         private const val BRIDGE = "wprsHost"
         private const val AUDIO = "{\"audio\""

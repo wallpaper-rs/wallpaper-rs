@@ -27,6 +27,8 @@ pub enum Signal {
 
 type Ids = Option<BTreeSet<String>>;
 
+mod notify;
+
 pub struct Changes {
     pub start: u64,
     serial: watch::Sender<u64>,
@@ -48,11 +50,6 @@ impl Changes {
 
     pub fn changed(&self, topic: &'static str, ids: Vec<String>) {
         self.send(Signal::Changed(topic, ids))
-    }
-
-    pub fn notifier(&self) -> impl Fn(Vec<String>) + Send + 'static {
-        let tx = self.tx.clone();
-        move |outputs| drop(tx.send(Signal::Changed("state", outputs)))
     }
 
     pub fn subscribe(&self) -> watch::Receiver<u64> {

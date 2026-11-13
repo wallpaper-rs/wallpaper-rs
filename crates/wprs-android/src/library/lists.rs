@@ -66,12 +66,16 @@ pub(super) fn rotate(lib: &mut Library, name: &str, items: &[String], every: &st
 pub(super) fn listed(items: Vec<Item>) -> Result<Value, Error> {
     let listed = items.into_iter().map(|item| {
         let exposes = item.package.as_ref().map(crate::page::exposes);
+        let failure = item.package.as_ref().and_then(|p| crate::page::failure(&p.id));
         let thumb = store::thumb_file(&item.uid, "jpg").ok().filter(|path| path.is_file());
         let mut value = serde_json::to_value(item)?;
         if let Some(exposes) = exposes {
             value["package"]["exposes"] = json!(exposes);
         }
         value["thumb"] = json!(thumb);
+        if let Some(failure) = failure.filter(|_| value["error"].is_null()) {
+            value["error"] = json!(failure);
+        }
         Ok(value)
     });
     listed.collect::<Result<_, Error>>().map(Value::Array)

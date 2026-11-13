@@ -25,7 +25,7 @@ pub(super) struct State {
     pub(super) pages: HashMap<crate::pages::PageKey, super::pages::PageSlot>,
     pub(super) tx: mpsc::Sender<Command>,
     pub(super) status: Arc<Mutex<BTreeMap<String, OutputStatus>>>,
-    pub(super) on_status: Box<dyn Fn(Vec<String>) + Send>,
+    pub(super) on_status: Box<dyn Fn(Vec<String>, bool) + Send>,
     pub(super) windows: HashMap<String, Window>,
     pub(super) motion: Motion,
     pub(super) power: Power,
@@ -46,7 +46,7 @@ impl State {
         status: Arc<Mutex<BTreeMap<String, OutputStatus>>>,
     ) -> Self {
         let (outputs, players, windows) = (BTreeMap::new(), HashMap::new(), HashMap::new());
-        let (on_status, motion) = (Box::new(|_| {}), Motion::new(renderer.software()));
+        let (on_status, motion) = (Box::new(|_, _| {}), Motion::new(renderer.software()));
         let power =
             Power { choice: settings.quality, ..Power::new(renderer.tier(), false, settings.max_fps) };
         let (speakers, locked) = (BTreeMap::new(), false);
