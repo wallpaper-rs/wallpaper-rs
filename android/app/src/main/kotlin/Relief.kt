@@ -59,7 +59,13 @@ fun Relief(main: Main, uid: String, state: JSONObject) {
     }
     val tune = { change: Pair<String, Any> -> main.act { withContext(Dispatchers.IO) { depth("parallax", "uid" to uid, change) } } }
     val moving = state.optBoolean("parallax")
-    Toggle(stringResource(R.string.parallax), moving) { tune("on" to it) }
+    val build = state.optBoolean("map") && !state.optBoolean("layers") && busy == null
+    Toggle(stringResource(R.string.parallax), moving) { on ->
+        main.act {
+            withContext(Dispatchers.IO) { depth("parallax", "uid" to uid, "on" to on) }
+            if (on && build) Depth.layers(uid)
+        }
+    }
     if (moving && state.optString("still") == "no_model") {
         Note(stringResource(R.string.still_no_model, state.optString("model_size")), MaterialTheme.colorScheme.error)
         TextButton(make, Modifier.padding(horizontal = 8.dp), enabled = busy == null) { Text(stringResource(R.string.get_depth_model)) }
