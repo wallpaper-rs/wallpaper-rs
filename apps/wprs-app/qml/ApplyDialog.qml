@@ -70,12 +70,10 @@ Kirigami.Dialog {
     }
 
     function hear() {
-        const screen = output.currentValue || "default";
         if (sound.currentValue === "")
             return;
-        App.act("SetOption", ["playback.muted." + screen, sound.currentValue], "Daemon1");
-        if (sound.currentValue === "false")
-            App.act("SetOption", ["playback.volume." + screen, level.value.toFixed(2)], "Daemon1");
+        const volume = sound.currentValue === "false" ? String(Math.round(level.value * 100)) : "";
+        App.act("SetSound", [[uid], sound.currentValue, volume], "Library1");
     }
 
     Kirigami.FormLayout {

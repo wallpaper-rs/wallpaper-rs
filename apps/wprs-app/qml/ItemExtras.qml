@@ -14,6 +14,12 @@ ColumnLayout {
         host: extras.host
     }
 
+    SoundPicker {
+        Layout.fillWidth: true
+        daemon: App
+        item: extras.host.item.kind === "video" || ["video", "scene", "web"].includes(extras.host.pkg?.kind) ? extras.host.uid : ""
+    }
+
     Kirigami.Heading {
         level: 4
         text: App.tr("Tags")

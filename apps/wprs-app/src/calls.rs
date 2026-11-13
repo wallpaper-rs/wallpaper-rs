@@ -57,6 +57,7 @@ calls! {
         GetItem get_item(uid: str) json;
         SetTitle set_title(uid: str, title: str);
         SetRating set_rating(uids: strs, rating: u32);
+        SetSound set_sound(uids: strs, muted: str, volume: str);
         SetFavorite set_favorite(uids: strs, favorite: bool);
         SetTags set_tags(uids: strs, add: strs, remove: strs);
         ListTags list_tags() json;

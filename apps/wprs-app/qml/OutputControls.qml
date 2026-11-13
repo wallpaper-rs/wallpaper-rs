@@ -145,10 +145,9 @@ ColumnLayout {
     }
 
     SoundPicker {
-        visible: host.sound !== ""
+        visible: host.sound !== "" && host.item !== ""
         daemon: host.daemon
-        output: host.name
-        info: host.info
+        item: host.item
     }
 
     Loader {
