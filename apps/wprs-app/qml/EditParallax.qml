@@ -99,6 +99,18 @@ ColumnLayout {
         }
     }
 
+    EditLayersProgress {
+        Layout.fillWidth: true
+        page: tool.page
+    }
+
+    EditRegions {
+        Layout.fillWidth: true
+        visible: maps.map !== ""
+        page: tool.page
+        map: maps.map
+    }
+
     QQC2.Label {
         Layout.fillWidth: true
         text: App.tr("Turn on Show on the desktop to try it. The parallax needs a depth map, pauses like videos and stays still when the system asks for reduced motion.")

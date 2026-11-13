@@ -13,6 +13,7 @@ pub struct Zone {
     pub depth: f32,
     pub share: f32,
     pub at: [f32; 2],
+    pub colour: String,
 }
 
 #[derive(Debug, Clone, PartialEq)]

@@ -14,6 +14,9 @@ pub mod qobject {
         #[qproperty(QString, shown)]
         #[qproperty(QString, other)]
         #[qproperty(QString, survey)]
+        #[qproperty(QString, chart)]
+        #[qproperty(QString, regions)]
+        #[qproperty(QString, frame)]
         #[qproperty(QString, stage)]
         #[qproperty(QString, error)]
         #[qproperty(f64, progress)]
@@ -29,6 +32,10 @@ pub mod qobject {
         fn trace(self: Pin<&mut Relief>, edit: &QString, cuts: &QString);
         #[qinvokable]
         fn measure(self: Pin<&mut Relief>, edit: &QString);
+        #[qinvokable]
+        fn regions_of(self: Pin<&mut Relief>, edit: &QString);
+        #[qinvokable]
+        fn peek(self: Pin<&mut Relief>, edit: &QString, x: f64, y: f64);
         #[qinvokable]
         fn sync(self: Pin<&mut Relief>, edit: &QString);
         #[qinvokable]
@@ -56,6 +63,9 @@ pub struct ReliefRust {
     pub shown: QString,
     pub other: QString,
     pub survey: QString,
+    pub chart: QString,
+    pub regions: QString,
+    pub frame: QString,
     pub stage: QString,
     pub error: QString,
     pub progress: f64,
@@ -63,7 +73,7 @@ pub struct ReliefRust {
     pub built: u32,
     pub file: PathBuf,
     pub stop: Arc<AtomicBool>,
-    pub waiting: [Option<String>; 3],
-    pub working: [bool; 3],
+    pub waiting: [Option<String>; crate::reliefland::KINDS],
+    pub working: [bool; crate::reliefland::KINDS],
     pub turn: u64,
 }

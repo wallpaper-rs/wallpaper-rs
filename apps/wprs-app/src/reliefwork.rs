@@ -4,14 +4,20 @@ use image::{DynamicImage, RgbaImage};
 use serde_json::json;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::AtomicBool;
+use std::sync::{Arc, Mutex};
 use wprs_core::Fill;
-use wprs_core::edit::{Depth, Edit};
-use wprs_depth::{Device, Places, coloured, histogram, load, outlines, settings, split, tint};
+use wprs_core::edit::{Depth, Edit, Parallax};
+use wprs_depth::{
+    Device, Places, Preview, chart, coloured, histogram, load, outlines, settings, split, tint,
+};
 
 const OVERLAY_EDGE: u32 = 1024;
 const OUTLINE_EDGE: u32 = 512;
 const SURVEY_EDGE: u32 = 256;
 const BINS: usize = 64;
+const FRAME_EDGE: u32 = 480;
+
+static SEEN: Mutex<Option<(PathBuf, Arc<Preview>)>> = Mutex::new(None);
 
 pub struct Target {
     pub image: PathBuf,
@@ -66,6 +72,9 @@ pub fn survey(places: &Places, target: &Target) -> Result<String> {
         "sets": {"lama": built(Fill::Lama).is_some(), "simple": built(Fill::Simple).is_some()},
         "lama": places.fill(Fill::Lama) == Fill::Lama,
         "strokes": depth.strokes.len(), "marks": depth.fills.len(), "regions": regions,
+        "reach": current.as_ref().map(|l| l.info.reach.shift),
+        "moves": current.as_ref().map(|l| l.info.reach.moves(l.info.size[0])),
+        "joins": depth.joins.len(), "splits": depth.splits.len(), "shifts": depth.moves.len(),
         "still": still.map(|s| wprs_depth::still_note(places, s).local()).unwrap_or_default()
     })
     .to_string())
@@ -109,4 +118,26 @@ pub fn layer(
     }
     let (found, _) = places.layer_band((&target.image, &target.sha), &depth, (&made.info, index))?;
     Ok(tint(image, &found))
+}
+
+pub fn regions(places: &Places, target: &Target) -> Result<(RgbaImage, String)> {
+    let found = chart(&target.map(places, OUTLINE_EDGE)?, &target.depth());
+    let (w, h, cells) = found.grid();
+    let text = json!({"zones": found.zones, "grid": {"w": w, "h": h, "cells": cells}}).to_string();
+    Ok((found.painted(), text))
+}
+
+pub fn frame(places: &Places, target: &Target, pointer: [f32; 2]) -> Result<Option<RgbaImage>> {
+    let (depth, set) = (target.depth(), settings(places, &target.edit, None));
+    let Some(path) = places.layer_set(&target.image, &target.sha, &depth, &set) else { return Ok(None) };
+    let mut seen = SEEN.lock().unwrap_or_else(|e| e.into_inner());
+    if seen.as_ref().is_none_or(|(at, _)| *at != path) {
+        let Some(made) = load(&path)? else { return Ok(None) };
+        *seen = Some((path, Arc::new(Preview::new(&made, FRAME_EDGE))));
+    }
+    let preview = seen.as_ref().map(|(_, p)| p.clone()).context("no preview")?;
+    drop(seen);
+    let p = target.edit.parallax.clone().unwrap_or_default();
+    let Parallax { strength, focus, overscan, .. } = p;
+    Ok(Some(preview.frame(pointer, (strength, focus, overscan))))
 }

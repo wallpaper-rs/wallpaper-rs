@@ -17170,13 +17170,6 @@ msgstr "Cualquier vertical"
 msgid "its particle system has no perspective"
 msgstr "su sistema de partículas no tiene perspectiva"
 
-
-
-
-
-
-
-
 #: apps/wprs-app/qml/SceneDepthToggle.qml
 msgid ""
 "Each particle hides on its own behind nearer models; at the lowest quality "
@@ -17228,3 +17221,95 @@ msgstr "Permitir el sonido"
 
 msgid "The shown scene does not use sound yet: save it and show it on a screen after binding a value to the sound."
 msgstr "La escena que se muestra todavía no usa sonido: enlaza un valor al sonido, guárdala y muéstrala en una pantalla."
+
+#: apps/wprs-app/qml/EditRegionRows.qml
+msgid "Region %1: depth %2, %3 % of the picture"
+msgstr "Región %1: profundidad %2, %3 % de la imagen"
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "joining regions"
+msgstr "unir regiones"
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "splitting a region"
+msgstr "dividir una región"
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "moving a region"
+msgstr "mover una región"
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "the last change"
+msgstr "el último cambio"
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "The movement limit dropped after %1: the picture can now move up to %2 % of its width, it was %3 %. Less movement keeps the picture from stretching."
+msgstr "El límite de movimiento bajó tras %1: ahora la imagen puede moverse hasta un %2 % de su ancho, antes un %3 %. Menos movimiento evita que la imagen se estire."
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "Dismiss"
+msgstr "Descartar"
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "Movement limit: %1 % of the width"
+msgstr "Límite de movimiento: %1 % del ancho"
+
+#: apps/wprs-app/qml/EditRegionPreview.qml
+msgid "Preview the movement while you edit"
+msgstr "Ver el movimiento mientras editas"
+
+#: apps/wprs-app/qml/EditRegionPreview.qml
+msgid "The preview needs the layers of this picture; it starts when they are built."
+msgstr "La vista previa necesita las capas de esta imagen; empieza cuando estén construidas."
+
+#: apps/wprs-app/qml/EditRegionPreview.qml
+msgid "Move the dot to play the pointer, or let it orbit. Over the picture, the pointer moves it too."
+msgstr "Mueve el punto para simular el puntero, o deja que gire. Sobre la imagen, tu puntero también la mueve."
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Regions"
+msgstr "Regiones"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Show the regions on the picture"
+msgstr "Mostrar las regiones sobre la imagen"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "%1 regions, the nearest first. %2 joined, %3 split, %4 moved."
+msgstr "%1 regiones, la más cercana primero. %2 unidas, %3 divididas, %4 movidas."
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Join"
+msgstr "Unir"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Nearer"
+msgstr "Acercar"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Farther"
+msgstr "Alejar"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Move by"
+msgstr "Mover"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Split along a stroke"
+msgstr "Dividir con un trazo"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Put the regions back"
+msgstr "Devolver las regiones"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "A region is a part of the picture between depth jumps; each moves as one piece. Click regions on the picture or tick them here, then join them or move them nearer or farther. To cut a region in two, turn on Split along a stroke and draw across it."
+msgstr "Una región es una parte de la imagen entre saltos de profundidad; cada una se mueve como una pieza. Pulsa regiones sobre la imagen o márcalas aquí, y luego únelas o acércalas o aléjalas. Para cortar una región en dos, activa Dividir con un trazo y dibuja a través de ella."
+
+#: apps/wprs-app/qml/EditLayersProgress.qml
+msgid "Building the layers of this picture"
+msgstr "Construyendo las capas de esta imagen"
+
+#: apps/wprs-app/qml/EditLayersProgress.qml
+msgid "The desktop is building the layers of a picture"
+msgstr "El escritorio está construyendo las capas de una imagen"

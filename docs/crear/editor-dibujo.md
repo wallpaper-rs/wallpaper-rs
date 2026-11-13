@@ -333,6 +333,36 @@ wprs-ctl edit depth fill-mask foto.png --clear
 
 **En la terminal:** `wprs-ctl edit depth layers ARCHIVO` construye las capas, `show ARCHIVO --layer N --out PNG [--band PNG]` guarda una y `compare ARCHIVO --out PNG` guarda la comparación. En los ajustes de la aplicación están **Comprobar LaMa**, **Quitar LaMa** y **Recalcular las capas**; en la terminal, `wprs-ctl models verify` y `models remove`.
 
+## Cómo unir, dividir y mover regiones
+
+**Dónde está:** **Paralaje**, grupo **Regiones** (la imagen debe tener mapa de profundidad).
+
+Una región es una parte de la imagen entre saltos de profundidad; se mueve como una pieza y va entera a una capa. La herramienta pinta cada región sobre la imagen, de azul (la más lejana) a rojo (la más cercana), con un número que es su lugar en el orden de profundidad: 1 es la más cercana.
+
+**Pasos:**
+
+1. Pulsa regiones sobre la imagen, o márcalas en la lista, para elegirlas; otro clic las suelta.
+2. **Unir** hace una sola región con las elegidas: comparten capa y se mueven juntas. Sirve cuando una cosa se partió en trozos que no deberían separarse.
+3. **Acercar** y **Alejar** mueven las regiones elegidas en profundidad, tanto como diga **Mover**.
+4. Para cortar una región en dos, activa **Dividir con un trazo** y dibuja a través de ella; al soltar se corta. Cada parte puede ir a una capa distinta.
+5. **Deshacer** y **Rehacer** valen para cada unión, corte y movimiento. **Devolver las regiones** quita todos.
+6. **Ver el movimiento mientras editas** (cuando las capas están construidas) muestra la imagen moviéndose: el puntero sobre la imagen, el punto del cuadro o la **Órbita** hacen de puntero. Las flechas mueven el punto cuando el cuadro tiene el foco.
+
+Si un cambio baja el límite de movimiento, la herramienta avisa con el cambio que lo causó y el límite de antes y de ahora; menos movimiento evita que la imagen se estire. Arriba, una barra muestra cómo avanza la construcción de las capas, la de la app y la del escritorio.
+
+**En la terminal:**
+
+```sh
+wprs-ctl edit depth regions foto.png
+wprs-ctl edit depth join foto.png "0.25,0.5;0.7,0.5"
+wprs-ctl edit depth split foto.png "0.0,0.5;1.0,0.5" --radius 0.004
+wprs-ctl edit depth move foto.png 0.25,0.5 --by -0.2
+wprs-ctl edit depth move foto.png --clear
+wprs-ctl edit undo foto.png
+```
+
+`regions` lista las regiones desde la más cercana, cada una con un punto dentro: ese punto es el que se da a `join` y a `move`. `--png` guarda las regiones pintadas y `--json` imprime la lista como JSON. Con `edit depth layers foto.png --list` se ve el límite de movimiento de cada juego de capas.
+
 ## Cómo se mueve la imagen y por qué a veces se queda quieta
 
 Cada capa se mueve con su propio campo de profundidad suave, y el movimiento total tiene un límite: nunca pasa de lo que las capas cubren, así que no se ve el borde del fondo ni se estira un trozo de imagen. Con una fuerza alta, el límite recorta el desplazamiento en vez de deformar la imagen. Las capas se construyen a la resolución de la pantalla (la app y `wprs-ctl` las construyen a 1920 como mucho, y el teléfono también).

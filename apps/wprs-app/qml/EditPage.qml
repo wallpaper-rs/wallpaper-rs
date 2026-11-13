@@ -19,6 +19,11 @@ Kirigami.Page {
     property bool overlayColour: true
     property bool outlineOn
     property bool bandOn
+    property var regionPicks: []
+    property bool regionsOn: true
+    property bool regionSplit
+    property bool regionPreview
+    property var pointer: [0, 0]
     property bool splitOn
     property real splitAt: 0.5
     property int layerPick: -1
@@ -48,6 +53,7 @@ Kirigami.Page {
         editor.run("depth_cuts", '{"cuts": "0.3,0.6"}');
         editor.run("fill_mask", '{"points": "0.5,0.5", "protect": true}');
         depthCheck.exercise();
+        regionsCheck.exercise();
         editor.undo();
         editor.redo();
         editor.compare(true);
@@ -76,6 +82,12 @@ Kirigami.Page {
 
     EditDepthCheck {
         id: depthCheck
+
+        page: page
+    }
+
+    EditRegionsCheck {
+        id: regionsCheck
 
         page: page
     }

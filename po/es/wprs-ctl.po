@@ -9984,7 +9984,6 @@ msgstr "se mueve"
 msgid "stays still"
 msgstr "queda quieta"
 
-
 #: apps/wprs-ctl/src/blanks.rs
 msgid ""
 "Plasma now shows the background color; plasma-back gives the screens "
@@ -10034,3 +10033,59 @@ msgstr ""
 #: apps/wprs-ctl/src/webshot.rs
 msgid "no screen to show the page on; name one with --output"
 msgstr "no hay pantalla donde mostrar la página; indica una con --output"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "2 to 8 points in fractions of the image, one inside each region to make one; see edit depth regions"
+msgstr "De 2 a 8 puntos en fracciones de la imagen, uno dentro de cada región que se quiere unir; mira edit depth regions"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "Remove all joins before adding this one, or alone to remove them"
+msgstr "Quita todas las uniones antes de añadir esta, o solo para quitarlas"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "Stroke of 1 to 1024 points that cuts the regions it crosses"
+msgstr "Trazo de 1 a 1024 puntos que corta las regiones que cruza"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "Half the width of the cut as a fraction of the longer side, 0.004 by default"
+msgstr "Mitad del ancho del corte como fracción del lado más largo, 0.004 por defecto"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "Remove all splits before adding this one, or alone to remove them"
+msgstr "Quita todas las divisiones antes de añadir esta, o solo para quitarlas"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "A point inside the region, in fractions of the image"
+msgstr "Un punto dentro de la región, en fracciones de la imagen"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "How far to move its depth, -1 to 1: above 0 nearer, below 0 farther"
+msgstr "Cuánto mover su profundidad, de -1 a 1: más de 0 la acerca, menos de 0 la aleja"
+
+#: apps/wprs-ctl/src/touching.rs
+msgid "Put every moved region back, or add this move after putting them back"
+msgstr "Devuelve cada región movida a su sitio, o añade este movimiento después de devolverlas"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "Make the regions under two or more points one region, so they share a layer and move together"
+msgstr "Hace una sola región con las regiones bajo dos o más puntos, para que compartan capa y se muevan juntas"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "Cut the regions a stroke crosses in two, so each part can move on its own"
+msgstr "Corta en dos las regiones que cruza un trazo, para que cada parte se mueva por su cuenta"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "Move the region under a point nearer or farther, as a whole"
+msgstr "Acerca o aleja entera la región que hay bajo un punto"
+
+#: apps/wprs-ctl/src/depth.rs
+msgid "List the regions of the picture from the nearest, each with a point inside it"
+msgstr "Lista las regiones de la imagen desde la más cercana, cada una con un punto dentro"
+
+#: apps/wprs-ctl/src/regioning.rs
+msgid "Also save the regions as a PNG, blue far to red near"
+msgstr "Guarda también las regiones como PNG, azul lejos y rojo cerca"
+
+#: apps/wprs-ctl/src/regioning.rs
+msgid "Print the list as JSON"
+msgstr "Imprime la lista como JSON"

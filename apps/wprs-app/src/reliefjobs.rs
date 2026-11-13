@@ -1,6 +1,6 @@
-use crate::picture::{write, write_png};
 use crate::relief::qobject::Relief;
-use crate::reliefwork::{Target, build, outline, overlay, survey};
+use crate::reliefland::{CHART, OUTLINE, OVERLAY, PEEK, SURVEY, work};
+use crate::reliefwork::{Target, build};
 use cxx_qt::{CxxQtType, Threading};
 use cxx_qt_lib::QString;
 use std::path::PathBuf;
@@ -13,9 +13,6 @@ use wprs_depth::Places;
 
 const SETTLE: Duration = Duration::from_millis(600);
 const RETRY: Duration = Duration::from_millis(250);
-const OVERLAY: usize = 0;
-const OUTLINE: usize = 1;
-const SURVEY: usize = 2;
 
 pub(crate) fn url(path: &std::path::Path) -> QString {
     QString::from(&crate::bus::url(&path.to_string_lossy()))
@@ -43,6 +40,14 @@ impl Relief {
         self.quick(SURVEY, edit.to_string());
     }
 
+    pub fn regions_of(self: Pin<&mut Self>, edit: &QString) {
+        self.quick(CHART, format!("\n{edit}"));
+    }
+
+    pub fn peek(self: Pin<&mut Self>, edit: &QString, x: f64, y: f64) {
+        self.quick(PEEK, format!("[{x},{y}]\n{edit}"));
+    }
+
     fn quick(mut self: Pin<&mut Self>, kind: usize, args: String) {
         if std::mem::replace(&mut self.as_mut().rust_mut().working[kind], true) {
             self.as_mut().rust_mut().waiting[kind] = Some(args);
@@ -53,20 +58,7 @@ impl Relief {
             let made = work(kind, &file, &args);
             qt.queue(move |mut relief| {
                 relief.as_mut().rust_mut().working[kind] = false;
-                match (kind, made) {
-                    (SURVEY, Ok(Made::Text(text))) => relief.as_mut().set_survey(QString::from(&text)),
-                    (_, Ok(Made::File(path))) => {
-                        let old =
-                            if kind == OVERLAY { relief.overlay.clone() } else { relief.outline.clone() };
-                        match kind {
-                            OVERLAY => relief.as_mut().set_overlay(url(&path)),
-                            _ => relief.as_mut().set_outline(url(&path)),
-                        }
-                        forget(&old);
-                    }
-                    (_, Err(e)) => relief.as_mut().set_error(QString::from(&format!("{e:#}"))),
-                    _ => {}
-                }
+                relief.as_mut().land(kind, made);
                 if let Some(next) = relief.as_mut().rust_mut().waiting[kind].take() {
                     relief.quick(kind, next);
                 }
@@ -158,27 +150,11 @@ impl Relief {
     }
 }
 
-enum Made {
-    File(PathBuf),
-    Text(String),
-}
-
-fn work(kind: usize, file: &std::path::Path, args: &str) -> anyhow::Result<Made> {
-    let (head, edit) = args.split_once('\n').unwrap_or(("", args));
-    let (places, target) = (Places::default(), Target::new(file, if kind == SURVEY { args } else { edit })?);
-    Ok(match kind {
-        OVERLAY => Made::File(write(&overlay(&places, &target, head == "true")?)?),
-        OUTLINE => {
-            let cuts: Vec<f32> = serde_json::from_str(head)?;
-            Made::File(write_png(&outline(&places, &target, &cuts)?)?)
-        }
-        _ => Made::Text(survey(&places, &target)?),
-    })
-}
-
 impl Drop for crate::relief::ReliefRust {
     fn drop(&mut self) {
-        [&self.overlay, &self.outline, &self.shown, &self.other].into_iter().for_each(forget);
+        [&self.overlay, &self.outline, &self.shown, &self.other, &self.chart, &self.frame]
+            .into_iter()
+            .for_each(forget);
         self.stop.store(true, Relaxed);
     }
 }

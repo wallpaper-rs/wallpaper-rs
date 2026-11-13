@@ -46,7 +46,7 @@ fn depth_work_reports_assets_maps_and_failures() {
     assert!(stages.is_empty());
 }
 
-fn setup(depth: Depth) -> (tempfile::TempDir, Places, Shot) {
+pub(super) fn setup(depth: Depth) -> (tempfile::TempDir, Places, Shot) {
     let dir = tempfile::tempdir().unwrap();
     let image = dir.path().join("hills.png");
     let near = |x: u32, y: u32| (21..32).contains(&x) && (14..28).contains(&y);

@@ -33,6 +33,18 @@ ctl edit depth export "$tools" "$WORK/tools-seen.png" --adjusted >/dev/null
 for _ in 1 2 3 4; do ctl edit undo "$tools"; done
 [ "$(ctl edit depth layers "$tools" --fill simple --layers 4)" = "$plain" ] || fail "undo did not bring the first layers back"
 [ "$(sets)" = 2 ] || fail "$(sets) layer sets after the strokes, expected 2"
+zones=$(ctl edit depth regions "$tools")
+count() { printf '%s\n' "$1" | wc -l; }
+[ "$(count "$zones")" -ge 3 ] || fail "the generated picture has fewer than 3 regions: $zones"
+first=$(printf '%s\n' "$zones" | sed -n 1p | sed 's/.* at //')
+second=$(printf '%s\n' "$zones" | sed -n 2p | sed 's/.* at //')
+ctl edit depth join "$tools" "$first;$second" >/dev/null
+[ "$(count "$(ctl edit depth regions "$tools")")" -lt "$(count "$zones")" ] || fail "joining two regions did not merge them"
+ctl edit depth split "$tools" "0.0,0.5;1.0,0.5" --radius 0.02 >/dev/null
+ctl edit depth move "$tools" "$first" --by -0.3 >/dev/null
+ctl edit depth regions "$tools" --json | grep -q '"order":1' || fail "the regions of the moved picture cannot be listed"
+for _ in 1 2 3; do ctl edit undo "$tools"; done
+[ "$(count "$(ctl edit depth regions "$tools")")" = "$(count "$zones")" ] || fail "undo did not bring the regions back"
 ctl edit depth layers "$tools" --clear >/dev/null
 ctl config playback.software_parallax true
 ctl edit parallax "$tools" --source auto --steps 8

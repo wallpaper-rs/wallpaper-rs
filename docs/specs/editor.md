@@ -1719,11 +1719,15 @@ picture, before the crop and the rotation, and a radius is a fraction of its lon
 | `depth_brush` | `points` (a stroke of 1 to 1 024 points, `X,Y;X,Y;...`), `by` (0 to 1, 0.1 by default: the depth added at the middle of the brush, fading to nothing at its edge), `raise` or `lower` (`raise` when neither), `radius` (above 0 and up to 1, 0.05 by default), `falloff` (0 hard to 1 soft, 0.5 by default: how much of the radius fades) and `clear` (removes the earlier strokes first, or alone removes them); adds the stroke to `depth.strokes`, which are applied in order to the adjusted depth map (after `near`, `far`, `gamma`, `dilate` and `smooth`), so every use of the map sees them: the depth masks, the regions and layers and the overlay. At most 256 strokes and 3 000 points in all | `brush FILE X,Y;X,Y;... [--raise\|--lower] [--by V] [--radius R] [--falloff F] [--clear]` |
 | `depth_cuts` | `cuts` (1 to 5 growing levels between 0.005 and 0.995, at least 0.005 apart, `L,L,...`) or `auto`; the regions of the picture (the connected parts between depth jumps, `dbus.md`, "Depth layers") are grouped into layers by their mean depth at those levels instead of at the ones the clustering finds, so a region is never torn (a layer left without pixels is dropped, and then the cut that bounded it), so the number of layers follows the cuts and not `parallax.layers`; `auto` goes back to the clustering | `cuts FILE L,L,... \| --auto` |
 | `fill_mask` | `points`, `radius` and `falloff` as the brush, `refill` or `protect` (one of them with `points`) and `clear`; marks, in `depth.fills`, where the band of a layer, the pixels behind nearer layers that moving can uncover, ignores its reach and is always filled (`refill`), or where it is never filled (`protect`, the pixels stay transparent in the layers behind); a later mark paints over an earlier one where they meet | `fill-mask FILE X,Y;X,Y;... (--refill\|--protect) [--radius R] [--falloff F] [--clear]` |
+| `depth_join` | `points` (2 to 8 points, `X,Y;X,Y;...`, one inside each region to make one) or `clear`; adds to `depth.joins` one join of the first point with each of the others, so the regions under them become one region, share a layer and move together; `clear` removes the earlier joins first, or alone removes them. At most 64 joins | `join FILE X,Y;X,Y;... [--clear]` |
+| `depth_split` | `points` (a stroke of 1 to 1 024 points), `radius` (half the width of the cut as a fraction of the longer side, 0.004 by default) and `clear`; adds a hard stroke to `depth.splits`: the pixels it covers are a jump, so a region it crosses falls in two regions that can take different layers. At most 64 splits | `split FILE X,Y;X,Y;... [--radius R] [--clear]` |
+| `depth_move` | `at` (`X,Y`, a point inside the region), `by` (`-1` to `1`: above 0 nearer, below 0 farther) and `clear`; adds to `depth.moves` a move of the whole region under `at`, after the regions are found: its depth, its layer and its movement follow; `clear` puts every moved region back first, or alone puts them back. At most 64 moves | `move FILE X,Y --by V [--clear]` |
 
-The `joins` and `splits` of `depth` (`dbus.md`, "Edits and spanning") merge two regions or cut one along a
-stroke; they are part of the edit format and of the build, and the tools to draw them on the canvas
-come later. The layers (`wprs-ctl edit depth layers`) and the key of their cache follow the
-strokes, cuts, marks, joins and splits, so a change builds a new set and the old one is trimmed with the cache. The map of the app
+The `joins`, `splits` and `moves` of `depth` (`dbus.md`, "Edits and spanning") merge two regions, cut one along a
+stroke or move one as a whole; `edit depth regions FILE [--png FILE] [--json]` lists the regions from the nearest
+with a point inside each (the ones to give to `join` and `move`) and saves them painted, blue far to red near.
+The layers (`wprs-ctl edit depth layers`) and the key of their cache follow the
+strokes, cuts, marks, joins, splits and moves, so a change builds a new set and the old one is trimmed with the cache. The map of the app
 and `edit depth export --adjusted` include the strokes. `edit depth show FILE --layer N --out PNG`
 saves one layer with its transparency, `--band PNG` also saves the band of that layer, white on
 black, computed again with the cuts, strokes and marks of the set, and `--fill lama|simple` picks
@@ -1765,6 +1769,33 @@ rotation and the straightening come back with the other tools), and offers:
   LaMa layer on the left of a divider that is dragged and the simple one on the right
   (`edit depth compare`). A set that is missing is built then, with its progress and a *Cancel*
   button, and the comparison is offered only while LaMa and ONNX Runtime are installed.
+
+The *Parallax* tool of the picture editor, once the picture has a depth map, shows the whole picture
+as the *Depth* tool does and adds the *Regions* group, the author tools for the regions of the picture:
+
+- *Show the regions on the picture*: every region painted over the picture, blue the farthest to red
+  the nearest, with a number at a point inside it that is its place in the order of depth (1 the
+  nearest). The chart (`Relief.regions_of`, `wprs_depth::chart`, at 512 pixels, drawn once per change of
+  the edit) also gives each region its depth, its share of the picture and a coarse grid of the order
+  of each cell, which is what a click on the picture reads.
+- Picking: a click on a region of the picture, or a tick in the list under the switch (each row
+  reachable with Tab), picks it; a second click drops it. Picked regions are tinted white.
+- *Join*: with two or more regions picked, sends one `depth_join` with a point of each; *Nearer* and
+  *Farther* send one `depth_move` per picked region, `by` the amount of *Move by*; *Put the regions
+  back* is the three `clear` actions (`depth_join`, `depth_split` and `depth_move`).
+- *Split along a stroke*: while on, a drag on the picture draws a stroke (thinned to a point every 0.3
+  % of the picture, 1 000 points at most) and sends it on release as one `depth_split`.
+- *Undo* and *Redo* are the undo and redo of the picture, so each join, split and move is one step.
+- *Preview the movement while you edit*: once the layers of the current edit are built, a CPU
+  rendering of the layers at 480 pixels (`wprs_depth::Preview`, the same travel limit, field lookups and
+  zoom as the desktop, `Relief.peek`) replaces the painted regions on the canvas. The pointer is the
+  mouse over the picture, the dot of a pad (arrow keys move it when it has focus) or an orbit; each new
+  position replaces the one waiting, never queues, and nothing runs while the switch is off.
+- The movement limit: the line *Movement limit* gives the safe shift of the layers of the current edit
+  as a share of the width. When a change lowers it by 3 % or more, a warning says which change did it
+  and the limit before and after; it goes when the limit comes back (undo) or on *Dismiss*.
+- Progress of the layers: a bar at the top of the tool follows the build the app starts after each
+  change and the `layers` job of the daemon, with *Cancel* for the app's own build.
 
 The settings page of the app has, next to the LaMa download, *Check LaMa* (`wprs-ctl models verify
 lama-big-fp32`), *Remove LaMa* (`models remove lama-big-fp32`) and *Rebuild the layers*, which

@@ -2467,7 +2467,9 @@ that cannot be used is ignored with a warning.
   the regions of the picture by their mean depth, and none leaves it to the clustering; `joins`
   (at most 64 `{a, b}` pairs of `[x, y]` fractions) make the regions under `a` and `b` one region
   and `splits` (at most 64 strokes of the shape of `strokes`, whose `by` is not used) cut a region
-  along the stroke. Each list holds at most 256 entries and 3 000 points, and all of them are left
+  along the stroke; `moves` (at most 64 `{at, by}`, `at` an `[x, y]` fraction and `by` from `-1` to `1`)
+  add `by` to the depth of the whole region under `at`, after the regions are found, so the region
+  keeps its shape but changes layer and movement. Each list holds at most 256 entries and 3 000 points, and all of them are left
   out of the file while empty. See `editor.md`, "Picture depth tools".
 - `parallax` moves the image in depth on the desktop while `enabled`: `source` is `auto` (a slow
   orbit), `pointer` (the pointer feed of `Inputs1`, back to the centre when the pointer leaves the
@@ -2538,7 +2540,9 @@ the picture; `wprs-ctl` and the app build at 1920, the phone at 1920 at most), a
    `depth` are added to the jumps, the jump pixels then join the neighbouring region they reach
    through the smallest steps of depth (so a thin strand stays with the object it grows from),
    regions under 0.1 % of the picture join the neighbour they share the longest border with, and
-   the `joins` of `depth` merge the regions under their two points;
+   the `joins` of `depth` merge the regions under their two points, and the `moves` of `depth` then
+   add their `by` to the depth of the region under their point (the regions keep their labels, the
+   means and the depth fields of the layers follow the moved depth);
 3. `parallax.layers` layers at most, grouping whole regions by their mean depth (a one dimensional
    k-means on those means, or the `cuts` of `depth`), so a region is never torn between two layers;
 4. for every layer, its depth field: the depth of its own pixels only, smoothed, at a quarter of the
@@ -2567,7 +2571,7 @@ the reach in pixels and the pixels filled, `field` with the size of the fields, 
 with the shift it was built for and `reach` with the largest safe shift and the lowest and highest
 field), in the cache of depth maps (written first the fields, then the JSON and then the PNG, which
 the daemon watches). The key hashes the format, the picture, the model, the input size, the `near`,
-`far` and `gamma` of `depth` and its `cuts`, `strokes`, `fills`, `joins` and `splits`, the fill
+`far` and `gamma` of `depth` and its `cuts`, `strokes`, `fills`, `joins`, `splits` and `moves`, the fill
 actually used, the number of layers, the shift (rounded to a thousandth), the long side, the size
 and time of the depth map file and the LaMa file, so sets of an older format are built again; the
 256 MB limit of the cache covers them and trimming a PNG deletes its JSON, fields and failure mark.
@@ -2589,8 +2593,8 @@ and the window shown, about the centre of the picture as the GPU zooms, and is n
 A `geometry` (crop, rotation, straightening or flip) does not make another set: the daemon and the
 phone turn the layers and fields of the set of the whole picture, once and in memory, with the
 matrix the GPU uses for the picture (bilinear, on premultiplied colours, at the size of the layers
-cropped to the frame), so that they line up with the edited picture; strokes, cuts, marks, joins and
-splits stay in the coordinates of the original.
+cropped to the frame), so that they line up with the edited picture; strokes, cuts, marks, joins, splits and
+moves stay in the coordinates of the original.
 
 `wprs-ctl edit depth layers FILE [--fill lama|simple|off] [--layers N] [--force] [--list] [--clear]`
 builds the set in its own process (the same code, with the settings of the configuration

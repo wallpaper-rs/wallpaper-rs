@@ -10,7 +10,7 @@ ColumnLayout {
     required property var page
     property int section
     readonly property var editor: page.editor
-    readonly property bool plain: section === 6
+    readonly property bool plain: section === 6 || section === 7
     readonly property bool whole: section === 0 || plain
     readonly property string shape: whole + "/" + plain
     readonly property var crop: page.edit.geometry?.crop ?? [0, 0, 1, 1]
@@ -74,7 +74,13 @@ ColumnLayout {
 
             EditDepthPaint {
                 anchors.fill: parent
-                visible: canvas.plain && canvas.page.paint !== null
+                visible: canvas.section === 6 && canvas.page.paint !== null
+                page: canvas.page
+            }
+
+            EditRegionsCanvas {
+                anchors.fill: parent
+                visible: canvas.section === 7
                 page: canvas.page
             }
 

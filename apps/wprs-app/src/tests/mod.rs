@@ -11,6 +11,7 @@ mod landing;
 mod notes;
 mod pages;
 mod picture;
+mod regions;
 mod replies;
 mod stall;
 mod tables;
