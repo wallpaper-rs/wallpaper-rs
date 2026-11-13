@@ -60,6 +60,7 @@
     <string name="error_android_phone_holds_token">This phone holds no token for the server; link it again</string>
     <string name="error_android_phone_linked_server">This phone is linked to a server; remove it first</string>
     <string name="error_android_phone_sync_key">This phone has no sync key yet; join from a linked device</string>
+    <string name="error_android_syncing_off">Syncing is off on this phone; turn it on first</string>
     <string name="error_android_phrase_encryption">A recovery passphrase needs end-to-end encryption</string>
     <string name="error_android_phrase_same">Use another passphrase: the one before may be known to a revoked device</string>
     <string name="error_android_phrase_short">A recovery passphrase has at least %1$s characters</string>

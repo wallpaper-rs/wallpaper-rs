@@ -71,7 +71,7 @@ pub(crate) async fn device_code(code: &str, action: &str, mut body: Value) -> Re
 }
 
 pub(crate) async fn rotate_now() -> Result<Value, Error> {
-    linked()?;
+    crate::level::syncing()?;
     if !read(|s| s.ready) {
         return Err(said(
             "android.phone_sync_key",

@@ -39,6 +39,7 @@ mod heif;
 mod keeping;
 mod keys;
 mod kin;
+mod level;
 mod library;
 mod link;
 mod listen;

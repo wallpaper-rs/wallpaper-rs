@@ -1,13 +1,13 @@
 use crate::link::PLATFORM;
 use crate::said;
-use crate::state::{api, linked, read, update};
+use crate::state::{api, read, update};
 use crate::{Error, apply, escrow, keys, local, private, repos, rotation};
 use serde_json::{Value, json};
 use std::collections::BTreeSet;
 use wprs_sync::{Session, View, arrived, carry, encode, hold, now_ms, rules};
 
 pub(crate) async fn sync(conflict: &str) -> Result<Value, Error> {
-    linked()?;
+    crate::level::syncing()?;
     if !read(|s| s.ready || s.stale) {
         return Err(said(
             "android.phone_sync_key",

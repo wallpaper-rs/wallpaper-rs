@@ -1,6 +1,6 @@
 use crate::keys::{peer, pin, rekeyed};
 use crate::said;
-use crate::state::{api, linked, pause, read, update};
+use crate::state::{api, pause, read, update};
 use crate::{Error, rotation, vault};
 use serde_json::{Value, json};
 use std::sync::{Mutex, PoisonError};
@@ -53,7 +53,7 @@ fn keep(pairing: Pairing) -> Value {
 }
 
 pub(crate) async fn join(device: &str) -> Result<Value, Error> {
-    linked()?;
+    crate::level::syncing()?;
     if read(|s| s.ready) {
         return Err(said("android.phone_already_holds", "this phone already holds the sync key", &[]));
     }
@@ -72,7 +72,7 @@ pub(crate) async fn join(device: &str) -> Result<Value, Error> {
 }
 
 pub(crate) async fn share(device: &str) -> Result<Value, Error> {
-    linked()?;
+    crate::level::syncing()?;
     if !read(|s| s.ready) {
         return Err(said(
             "android.phone_sync_key",

@@ -1,11 +1,10 @@
 use crate::said;
-use crate::state::{CANCEL, linked, read, update};
-use crate::{Error, cycle, escrow, keys, link, listen, pairing, private, repos, settings, votes};
+use crate::state::{CANCEL, linked, update};
+use crate::{Error, cycle, escrow, keys, link, listen, pairing, private, repos, votes};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::sync::Mutex;
 use std::sync::atomic::Ordering::Relaxed;
-use wprs_sync::Peer;
 use zeroize::Zeroizing;
 
 pub(crate) const NETWORK: &str = "sync_network";
@@ -28,6 +27,13 @@ enum Request {
     },
     Link {
         label: String,
+        plaintext: bool,
+    },
+    Connect {
+        label: String,
+    },
+    Syncing {
+        on: bool,
         plaintext: bool,
     },
     Wait,
@@ -108,27 +114,7 @@ enum Request {
     },
 }
 
-fn status() -> Value {
-    read(|s| {
-        let device = |p: &Peer| {
-            let current = s.device.as_ref() == Some(&p.id);
-            json!({"id": p.id, "name": p.name, "label": s.label_of(&p.id), "platform": p.platform,
-                "seen_at": p.seen_at, "current": current})
-        };
-        json!({
-            "url": s.url, "name": s.name, "handle": s.handle, "device": s.device_name, "label": s.label,
-            "state": s.state(), "encrypted": s.encrypted, "paused": s.paused, "last_sync": s.last_sync,
-            "last_error": s.last_error, "last_reply": s.last_reply, "warning": s.warning, "records": s.replica.bases.len(),
-            "quarantined": s.quarantine.len(), "unapplied": s.unapplied.len(),
-            "devices": s.peers.iter().map(device).collect::<Vec<_>>(), "link": link::shown(),
-            "pairing": pairing::shown(), "network": settings::chosen(NETWORK),
-            "listen": settings::chosen(LISTEN), "active": s.active(),
-            "outdated": s.outdated, "signed_out": s.signed_out, "recovery_stale": s.recovery_stale, "pin": s.pin,
-            "recovery": match (s.recovery, s.recovery_stale) { (None, _) => "off", (_, true) => "stale", _ => "current" },
-            "offers": s.offers.len(), "files": s.files.items.len(),
-        })
-    })
-}
+use crate::level::status;
 
 pub(crate) fn request(text: &str) -> String {
     let answer = crate::reply::tried(text, crate::updates::request)
@@ -175,7 +161,9 @@ fn run(request: Request) -> Result<Value, Error> {
     runtime.block_on(async {
         match request {
             Request::Add { url, fingerprint } => link::add(&url, fingerprint.as_deref()).await,
-            Request::Link { label, plaintext } => link::start(&label, plaintext).await,
+            Request::Link { label, plaintext } => link::start(&label, Some(plaintext)).await,
+            Request::Connect { label } => link::start(&label, None).await,
+            Request::Syncing { on, plaintext } => crate::level::set(on, plaintext).await,
             Request::Wait => link::wait().await,
             Request::Join { device } => pairing::join(&device).await,
             Request::Share { device } => pairing::share(&device).await,
@@ -191,6 +179,7 @@ fn run(request: Request) -> Result<Value, Error> {
             Request::Escrow { passphrase } => escrow::set(Zeroizing::new(passphrase)).await,
             Request::Restore { passphrase } => escrow::restore(Zeroizing::new(passphrase)).await,
             Request::Fetch { id } => {
+                crate::level::syncing()?;
                 let (api, secrets) = crate::state::api()?;
                 private::fetch(&api, &secrets, &id).await
             }

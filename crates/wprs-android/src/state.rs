@@ -28,6 +28,7 @@ pub(crate) struct Saved {
     pub(crate) ready: bool,
     pub(crate) stale: bool,
     pub(crate) paused: bool,
+    pub(crate) sync_off: bool,
     pub(crate) last_sync: Option<i64>,
     pub(crate) last_error: Option<String>,
     pub(crate) last_reply: Option<serde_json::Value>,
@@ -74,7 +75,7 @@ impl Saved {
     }
 
     pub(crate) fn active(&self) -> bool {
-        self.device.is_some() && (self.ready || self.stale) && !self.paused
+        self.device.is_some() && (self.ready || self.stale) && !self.paused && !self.sync_off
     }
 
     pub(crate) fn state(&self) -> &'static str {
@@ -83,6 +84,7 @@ impl Saved {
             _ if link::shown().is_some() => "linking",
             _ if self.device.is_none() => "unlinked",
             _ if self.signed_out => "signed_out",
+            _ if self.sync_off => "connected",
             _ if !self.ready => "needs_key",
             _ if self.paused => "paused",
             _ if self.last_error.is_some() => "error",
@@ -141,4 +143,21 @@ pub(crate) async fn pause(seconds: u64) -> Result<(), Error> {
 
 pub(crate) fn active() -> bool {
     read(Saved::active)
+}
+
+#[cfg(test)]
+#[test]
+fn a_connected_phone_does_not_sync_until_syncing_is_on() {
+    let mut saved = Saved {
+        url: "https://wallpapers.example.org".into(),
+        device: Some("d".into()),
+        ready: true,
+        sync_off: true,
+        ..Saved::default()
+    };
+    assert_eq!((saved.state(), saved.active()), ("connected", false));
+    saved.sync_off = false;
+    assert_eq!((saved.state(), saved.active()), ("ready", true));
+    saved.ready = false;
+    assert_eq!((saved.state(), saved.active()), ("needs_key", false));
 }

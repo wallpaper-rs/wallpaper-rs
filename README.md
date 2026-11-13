@@ -2230,6 +2230,8 @@ El servicio de cada equipo se enlaza con el servidor desde *Cuenta* en la app o 
 wprs-ctl server add https://fondos.example.org
 wprs-ctl server add https://192.168.1.10:8443 --fingerprint <huella>   # un servidor de casa con su propio certificado
 wprs-ctl server link --name Escritorio          # muestra un código para /link o para:
+wprs-ctl server connect --name Portátil         # solo conectar: repositorios, catálogo, instalar y votos, sin sincronizar
+wprs-ctl server syncing on                       # … más tarde, enciende la sincronización; `off` la apaga y sigue conectado
 wprs-ctl server approve BCDF-GHJK                # … en un equipo ya enlazado, tras ver quién lo pide y con la contraseña
 wprs-ctl server join "Device 1" --wait           # equipo nuevo de una cuenta cifrada: muestra sus cifras y pide las del otro
 wprs-ctl server share "Device 2"                 # en el equipo con la clave: muestra sus cifras y pide las del otro
@@ -2272,6 +2274,12 @@ llavero del sistema donde guardar el acceso (GNOME Keyring, KWallet…): sin él
 momento y lo dice, sin dejar un equipo fantasma en la cuenta, y `provider store file` lo guarda en un
 archivo privado tras un aviso (se puede volver al llavero con `provider store keyring`). Los equipos siguientes se aprueban desde uno
 ya enlazado con `server approve CÓDIGO`, que pide la contraseña de la cuenta.
+
+Un equipo puede quedar **conectado sin sincronizar** (`server connect`): usa los repositorios de la
+cuenta, el catálogo, instala y vota, pero no envía ni recibe nada de la biblioteca, y su estado dice
+«conectado, sin sincronizar», que es normal y no un error. `server syncing on` enciende la
+sincronización después (con la clave de otro equipo, como `server join`); `server syncing off` la
+apaga y el equipo sigue conectado, con su clave guardada. `server link` hace los dos pasos juntos.
 
 La sincronización mueve registros (títulos, etiquetas, valoraciones, favoritos y ediciones de la
 biblioteca, listas, perfiles, preajustes y ajustes), no archivos de paquetes ni lo que está puesto:

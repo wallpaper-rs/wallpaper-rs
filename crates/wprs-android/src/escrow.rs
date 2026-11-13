@@ -1,5 +1,5 @@
 use crate::said;
-use crate::state::{api, linked, read, update};
+use crate::state::{api, read, update};
 use crate::{Error, keys, vault};
 use base64::Engine;
 use base64::prelude::BASE64_STANDARD as B64;
@@ -21,7 +21,7 @@ async fn put(api: &Api, escrow: Option<Vec<u8>>) -> Result<(), Error> {
 }
 
 pub(crate) async fn set(passphrase: Zeroizing<String>) -> Result<Value, Error> {
-    linked()?;
+    crate::level::syncing()?;
     if !read(|s| s.ready) {
         return Err(said(
             "android.phone_sync_key",
@@ -68,7 +68,7 @@ pub(crate) async fn set(passphrase: Zeroizing<String>) -> Result<Value, Error> {
 }
 
 pub(crate) async fn restore(passphrase: Zeroizing<String>) -> Result<Value, Error> {
-    linked()?;
+    crate::level::syncing()?;
     if read(|s| s.ready) {
         return Err(said("android.phone_holds_key", "this phone already holds the sync key", &[]));
     }

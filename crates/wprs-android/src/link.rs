@@ -1,11 +1,11 @@
 use crate::said;
 use crate::state::{self, pause, read, update};
-use crate::{Error, keys, vault};
+use crate::{Error, keys, level, vault};
 use reqwest::{Method, Url};
 use serde_json::{Value, json};
 use std::sync::{Mutex, PoisonError};
 use std::time::{Duration, Instant};
-use wprs_sync::{AGENT, Api, DeviceKey, Poll, Secrets, SyncKey, encode, poll};
+use wprs_sync::{AGENT, Api, DeviceKey, Poll, Secrets, encode, poll};
 
 pub(crate) use crate::server::add;
 
@@ -18,7 +18,7 @@ struct Pending {
     interval: u64,
     until: Instant,
     label: String,
-    plaintext: bool,
+    sync: Option<bool>,
 }
 
 static PENDING: Mutex<Option<Pending>> = Mutex::new(None);
@@ -39,7 +39,7 @@ pub(crate) fn cancel() {
     SHOWN.lock().unwrap_or_else(PoisonError::into_inner).take();
 }
 
-pub(crate) async fn start(label: &str, plaintext: bool) -> Result<Value, Error> {
+pub(crate) async fn start(label: &str, sync: Option<bool>) -> Result<Value, Error> {
     let url = read(|s| s.url.clone());
     match () {
         _ if url.is_empty() => return Err(said("android.add_server", "add a server first", &[])),
@@ -65,7 +65,7 @@ pub(crate) async fn start(label: &str, plaintext: bool) -> Result<Value, Error> 
     let until = Instant::now() + Duration::from_secs(expires);
     let code = text("device_code");
     *PENDING.lock().unwrap_or_else(PoisonError::into_inner) =
-        Some(Pending { api, key, code, interval, until, label, plaintext });
+        Some(Pending { api, key, code, interval, until, label, sync });
     let uri = Some(text("verification_uri")).filter(|uri| same_origin(uri, &url));
     let shown = (text("user_code"), uri.unwrap_or_else(|| format!("{url}/link")));
     *SHOWN.lock().unwrap_or_else(PoisonError::into_inner) = Some(shown.clone());
@@ -105,20 +105,18 @@ async fn finish(pending: Pending, token: Value) -> Result<Value, Error> {
     vault::store(&secrets)?;
     let api = pending.api.with_token(&secrets.token);
     let me = api.get("/api/v1/me").await?;
-    let existing = match api.get("/api/v1/sync/state").await {
-        Err(e) if e.code() == "sync_not_set_up" => None,
-        state => Some(state?),
+    let existing = match pending.sync {
+        None => None,
+        Some(plaintext) => match level::sync_state(&api, plaintext).await {
+            Ok(existing) => Some((existing, plaintext)),
+            Err(e) => {
+                let path = format!("/api/v1/me/devices/{}", text("device_id"));
+                drop(api.call(Method::DELETE, &path, None).await);
+                vault::forget()?;
+                return Err(e);
+            }
+        },
     };
-    if existing.as_ref().is_some_and(|state| state["encrypted"] != true) && !pending.plaintext {
-        let path = format!("/api/v1/me/devices/{}", text("device_id"));
-        drop(api.call(Method::DELETE, &path, None).await);
-        vault::forget()?;
-        return Err(said(
-            "android.account_syncs_without",
-            "the account syncs without end-to-end encryption; link with plain text only if you accept that",
-            &[],
-        ));
-    }
     let owner = (read(|s| s.url.clone()), me["id"].as_i64().unwrap_or_default());
     update(|s| {
         if s.owner.as_ref() != Some(&owner) {
@@ -128,42 +126,22 @@ async fn finish(pending: Pending, token: Value) -> Result<Value, Error> {
         }
         (s.device, s.device_name, s.label) =
             (Some(text("device_id")), Some(text("device_name")), pending.label);
-        (s.plaintext, s.pinned, s.members) =
-            (pending.plaintext, Some(Default::default()), Default::default());
+        (s.plaintext, s.pinned, s.members) = (false, Some(Default::default()), Default::default());
+        (s.ready, s.stale, s.encrypted, s.warning, s.sync_off) = (false, false, None, None, true);
+        (s.last_error, s.last_reply, s.last_sync) = (None, None, None);
         s.handle = me["handle"].as_str().map(String::from);
     })?;
     let state = match existing {
-        Some(state) => state,
+        Some((existing, plaintext)) => Some(level::setup(&api, &mut secrets, existing, plaintext).await?),
         None => {
-            let sync = SyncKey::generate();
-            secrets.set_key(&sync, 0);
-            vault::store(&secrets)?;
-            let (encrypted, plaintext) = (!pending.plaintext, pending.plaintext);
-            let body = json!({"encrypted": encrypted, "confirm_plaintext": plaintext, "key_id": sync.id()});
-            let state = api.post("/api/v1/sync/setup", body).await?;
-            if state["encrypted"].as_bool() != Some(encrypted) {
-                return Err(said(
-                    "android.server_set_up",
-                    "the server set up sync with another encryption than asked",
-                    &[],
-                ));
-            }
-            secrets.set_key(&sync, state["epoch"].as_i64().unwrap_or(0));
-            vault::store(&secrets)?;
-            state
+            drop(keys::refresh(&api).await);
+            None
         }
     };
-    update(|s| {
-        (s.encrypted, s.epoch) = (state["encrypted"].as_bool(), state["epoch"].as_i64().unwrap_or(0));
-        (s.warning, s.ready, s.stale) =
-            (state["warning"].as_str().map(String::from), !secrets.key.is_empty(), false);
-        (s.last_error, s.last_reply, s.last_sync) = (None, None, None);
-    })?;
-    drop(keys::refresh(&api).await);
-    let needs_key = secrets.key.is_empty();
-    Ok(
-        json!({"device": text("device_name"), "encrypted": state["encrypted"], "needs_key": needs_key, "active": state::active()}),
-    )
+    let encrypted = state.as_ref().map_or(Value::Null, |state| state["encrypted"].clone());
+    let needs_key = state.is_some() && secrets.key.is_empty();
+    Ok(json!({"device": text("device_name"), "syncing": state.is_some(), "encrypted": encrypted,
+        "needs_key": needs_key, "active": state::active()}))
 }
 
 pub(crate) async fn remove() -> Result<(), Error> {

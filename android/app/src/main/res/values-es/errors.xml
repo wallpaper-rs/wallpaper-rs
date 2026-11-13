@@ -60,6 +60,7 @@
     <string name="error_android_phone_holds_token">Este teléfono no tiene ningún token del servidor; vuelve a enlazarlo</string>
     <string name="error_android_phone_linked_server">Este teléfono está enlazado a un servidor; quítalo primero</string>
     <string name="error_android_phone_sync_key">Este teléfono aún no tiene la clave de sincronización; únete desde un dispositivo enlazado</string>
+    <string name="error_android_syncing_off">La sincronización está desactivada en este teléfono; actívala primero</string>
     <string name="error_android_phrase_encryption">La frase de recuperación necesita cifrado de extremo a extremo</string>
     <string name="error_android_phrase_same">Usa otra frase: la anterior puede conocerla un equipo revocado</string>
     <string name="error_android_phrase_short">Una frase de recuperación tiene al menos %1$s caracteres</string>
