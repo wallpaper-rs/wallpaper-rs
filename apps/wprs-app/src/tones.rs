@@ -47,7 +47,9 @@ mod tests {
     fn a_picture_gives_its_own_tones() {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("warm.png");
-        image::RgbImage::from_fn(192, 108, |x, y| image::Rgb([200 - (y as u8), 90 + (x as u8 / 4), 40])).save(&path).unwrap();
+        image::RgbImage::from_fn(192, 108, |x, y| image::Rgb([200 - (y as u8), 90 + (x as u8 / 4), 40]))
+            .save(&path)
+            .unwrap();
         let set: serde_json::Value = serde_json::from_str(&for_path(path.to_str().unwrap())).unwrap();
         assert_ne!(set["noche"], "#0a1322");
         assert!(set["velo"].as_f64().is_some_and(|velo| (0.6..=0.97).contains(&velo)));
