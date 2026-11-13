@@ -6,6 +6,7 @@ mod editor;
 mod fake;
 mod gone;
 mod grid;
+mod icons;
 mod keys;
 mod labels;
 mod landing;
