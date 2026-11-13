@@ -3133,7 +3133,7 @@ interfaz completa; lo esencial:
   build`, `pack check` y el editor lo rechazan y el motor no se lo da.
 - **Errores**: `wprs-ctl scene validate`, `pack check` y el editor compilan cada script sin ejecutarlo y
   dicen, con el archivo y la línea, un error de sintaxis o un script que falta; `wprs-ctl scene render
-  --time-of-day HORA` ejecuta los scripts en su proceso aislado y escribe su consola. Una función que
+  --time-of-day HORA` ejecuta los scripts en su proceso aislado y escribe su consola (con `--media pista.json`, ven una pista inventada del reproductor). Una función que
   lanza un error lo escribe en la consola y el resto sigue; un módulo
   que falla tres fotogramas seguidos se detiene solo, con sus temporizadores, y la escena sigue sin
   él con un aviso traducido en la app, la bandeja y `wprs-ctl status`. Si los scripts agotan su

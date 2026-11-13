@@ -229,9 +229,9 @@ Para guardar lo que ves:
 2. Pulsa **Guardar una imagen…** (un cuadro del segundo donde esté el cabezal; PNG, JPG o WebP) o **Guardar un clip…** (90 cuadros a 30 por segundo; un GIF animado o, con otra extensión, una secuencia de imágenes).
 3. Debajo sale **Guardado: <archivo>**.
 
-Todo esto se dibuja desde lo que tienes en el editor, guardado o no.
+Marca **Fijar la hora que marca el reloj** y elige la hora y los minutos para que los relojes y los scripts vean esa hora en el archivo (sin marcarlo, la de tu equipo). Si el reproductor simulado de la vista previa está encendido, el archivo lo muestra con su carátula. Todo esto se dibuja desde lo que tienes en el editor, guardado o no, con lo mismo que ves en la vista previa: la capa en solitario, la semilla de las partículas y los scripts.
 
-En la terminal: `wprs-ctl scene preview DIR --quality Q [--battery] [--calm] [--without-bloom] [--restart]` y `wprs-ctl scene render DIR --out ARCHIVO [--time-of-day HORA] [--quality Q] [--battery] [--calm] [--frames N] [--pointer X,Y[:X,Y]] [--click] [--against Q] [--without-bloom] [--split F]`. Mira [cli](cli.md).
+En la terminal: `wprs-ctl scene preview DIR --quality Q [--battery] [--calm] [--without-bloom] [--restart]` y `wprs-ctl scene render DIR --out ARCHIVO [--time-of-day HORA] [--media PISTA.json] [--quality Q] [--battery] [--calm] [--frames N] [--pointer X,Y[:X,Y]] [--click] [--against Q] [--without-bloom] [--split F]`. Mira [cli](cli.md).
 
 ## Cómo ver cuánto cuesta algo
 

@@ -578,8 +578,10 @@ con `wprs-ctl scene import mi-escena fondo.mp4`.
 2. Las entradas del manifiesto son las que la escena usa, ni una más.
 3. `content` y `photosensitive` dicen la verdad, y la licencia es la que quieres.
 4. La escena con scripts se vio en la vista previa (o con `scene render`) y la consola no tiene errores.
-5. La miniatura se ve bien sin scripts (la captura del demonio no los ejecuta), o es una imagen
-   hecha con `scene render`.
+5. La miniatura se ve bien con la captura de `scene thumbnail --capture`, que ejecuta los scripts. El
+   teléfono no tiene proceso aislado para scripts: muestra la vista previa del paquete y, si no
+   trae una, dibuja la escena sin ejecutarlos (un texto que llena un script sale con su valor
+   inicial). Por eso conviene empaquetar siempre una vista previa hecha con la captura.
 6. `version` subió, y `pack sign` y `pack build` se hicieron después del último cambio.
 7. `pack validate --key autor.pub` imprime `ok … signer=`.
 8. No hay claves, contraseñas ni rutas personales dentro de la carpeta.

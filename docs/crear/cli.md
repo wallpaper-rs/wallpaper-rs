@@ -225,13 +225,16 @@ vista.png
 ```
 
 Dibuja la escena como la dibujaría el demonio, sin demonio ni pantalla, y escribe el archivo.
-Imprime los archivos que escribió.
+Imprime los archivos que escribió. Dibuja lo mismo que la vista previa del editor: si elegiste
+«mostrar solo» una capa, solo esa; con la semilla de las partículas fijada (una escena sin
+`clock.seed` sale igual en cada archivo de la misma corrida) y con las luces silenciadas o en solitario.
 
 | Opción | Qué hace |
 |--------|----------|
 | `-o ARCHIVO` | `.png`, `.jpg`, `.webp`, `.avif` o `.gif` (animado). Obligatorio. |
 | `--time S` | El segundo de la escena del primer cuadro. |
 | `--time-of-day HORA` | La hora de pared que ven la escena y sus scripts: `HH:MM[:SS]` de hoy o `AAAA-MM-DD HH:MM[:SS]`. Sin ella, la hora de este equipo; ponla para que la imagen salga igual siempre. |
+| `--media ARCHIVO` | Una pista inventada del reproductor (JSON: `title`, `artist`, `album`, `playing`, `position`, `duration`, `rate`, `cover`…; la carátula es una imagen de la carpeta) que ven los scripts y las imágenes que siguen a la carátula. Sin ella, no hay reproductor. |
 | `--quality q0`…`q3` | El nivel de calidad más alto (`q3` por defecto). |
 | `--size PX` | El lado mayor de la imagen (1280 por defecto). |
 | `--frames N`, `--fps F` | Con más de un cuadro, un clip: `.gif`, o una secuencia `NOMBRE-0001.EXT` (hasta 600 cuadros). |
@@ -243,7 +246,7 @@ Imprime los archivos que escribió.
 pared de `--time-of-day` (o la de este equipo) y escribe en la salida de error lo que imprimen con
 `console` (`script: log scripts/reloj.js: ...`) y sus errores, con archivo y línea
 (`script: error scripts/reloj.js: TypeError: ... (scripts/reloj.js line 4)`). Antes del primer cuadro
-da unos pasos a los scripts para que arranquen, así que las líneas de `console` salen repetidas (una por paso y por cuadro). No simula el sonido ni el reproductor. Los scripts
+da unos pasos a los scripts para que arranquen, así que las líneas de `console` salen repetidas (una por paso y por cuadro). No simula el sonido; el reproductor solo si pasas `--media`. Los scripts
 nunca corren en el proceso de `wprs-ctl` (ni en el de la app): van a un proceso aparte con sandbox,
 el mismo que usa el demonio y con los mismos límites de tiempo y memoria. Si ese proceso no puede
 arrancar, dibuja sin scripts y lo dice en una línea en la salida de error.
@@ -265,7 +268,9 @@ que das, reducida si pasa de 1024 píxeles o 1 MiB; o, con `--capture`, un cuadr
 tarjeta gráfica (con demonio). Con `--animated`, un `.gif` o `.webp` de hasta 640 píxeles de lado,
 15 s y 8 MiB (`assets/preview-animated.gif`, en `previews.animated`). `--time` es el segundo que se
 guarda, `--from` donde empieza la grabación, `--seconds` (0,1 a 15; 4 por defecto) cuánto dura y
-`--fps` (1 a 30; 10 por defecto) a cuántos cuadros por segundo. Tampoco ejecuta los scripts.
+`--fps` (1 a 30; 10 por defecto) a cuántos cuadros por segundo. Con `--capture` los scripts de la
+escena sí corren, en el proceso aislado de siempre y con la hora de este equipo, así que un texto
+que llenan sale con su valor y no con el inicial. No simula el reproductor ni el sonido.
 
 ## Revisar
 

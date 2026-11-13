@@ -1322,9 +1322,9 @@ frame (.png, .jpg, .webp or .avif); a clip is 90 frames at 30 a second, written 
 .gif or, for any other extension, as an image sequence named `NAME-0001.EXT`. *Move a pointer
 across and click* adds a made-up pointer that crosses the canvas and presses over the middle of
 the clip, so that what follows the pointer moves in the file too. The app tells where the files
-went with the `rendered` signal.
+went with the `rendered` signal. The file shows what the preview shows (`wprs_editor::reach::shown`: the layer shown alone, the lights muted or alone, the particle seed pinned), runs the scripts in the sandboxed script host, and gives them the clock of *Set the time the clock shows* (the wall clock of the computer when it is off) and, when the simulated player of the preview is on, its track and cover (`Rehearsal::media`, `media::dress`). The same scene document is drawn by `scene thumbnail --capture` and by the poster of the screen layout preview (`--layout`).
 
-`wprs-ctl scene render DIR --out FILE [--time S] [--quality Q] [--battery] [--calm] [--frames N
+`wprs-ctl scene render DIR --out FILE [--media TRACK.json] [--time-of-day T] [--time S] [--quality Q] [--battery] [--calm] [--frames N
 --fps F] [--size PX] [--pointer X,Y[:X,Y] [--click]] [--against Q] [--without-bloom] [--split
 F]` does the same from the saved folder: a picture for one frame, an animated .gif or an image
 sequence for more (up to 600 frames), a made-up pointer at fractions of the canvas that moves to

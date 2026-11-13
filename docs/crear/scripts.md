@@ -477,10 +477,11 @@ por segundo descarta las de más, y cada línea se corta a 512 caracteres.
   ```
 
   Antes del primer cuadro da unos pasos a los scripts para que arranquen, así que cada línea sale
-  más de una vez. No simula el sonido ni el reproductor. Los scripts corren en el mismo proceso
+  más de una vez. No simula el sonido; el reproductor solo con `--media pista.json`, el mismo archivo que
+  `scene preview --media`. Los scripts corren en el mismo proceso
   aislado que usa el demonio, nunca en el de `wprs-ctl`; si no puede arrancar, dibuja sin scripts y
-  dice `script stopped: …` en una línea. `scene bench` y la captura de `scene thumbnail --capture`, en
-  cambio, no ejecutan los scripts.
+  dice `script stopped: …` en una línea. La captura de `scene thumbnail --capture` y las miniaturas de la biblioteca de escritorio también
+  ejecutan los scripts, cada una en su proceso aislado. `scene bench`, en cambio, no.
 - Si la escena tiene un error de script, `wprs-ctl state` lo imprime junto a la salida.
 - **En el registro del servicio** (`wprsd`): lo que escribe `console` sale a nivel `debug`
   (`RUST_LOG=wprsd=debug`) y un módulo que se detiene sale a nivel `warn`.
