@@ -2,7 +2,6 @@ use crate::ops::{Op, apply};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use wprs_core::message::{Message, said};
 
 pub const MAX_STEPS: usize = 500;
 pub const MAX_BYTES: usize = 64 << 20;
@@ -148,44 +147,4 @@ impl History {
     }
 }
 
-pub fn step(name: &str) -> Message {
-    if let Some(names) = name.strip_prefix("batch:") {
-        return crate::batch::named(names);
-    }
-    match name {
-        "set" => said("editor.step.set", "Change a value", &[]),
-        "add" => said("editor.step.add", "Add to a list", &[]),
-        "remove" => said("editor.step.remove", "Remove a value", &[]),
-        "move" => said("editor.step.move", "Move a value", &[]),
-        "add_layer" => said("editor.step.add_layer", "Add a layer", &[]),
-        "remove_layer" => said("editor.step.remove_layer", "Remove a layer", &[]),
-        "duplicate_layer" => said("editor.step.duplicate_layer", "Duplicate a layer", &[]),
-        "move_layer" => said("editor.step.move_layer", "Move a layer", &[]),
-        "group" => said("editor.step.group", "Group layers", &[]),
-        "ungroup" => said("editor.step.ungroup", "Ungroup layers", &[]),
-        "hide" => said("editor.step.hide", "Hide or show a layer", &[]),
-        "lock" => said("editor.step.lock", "Lock or unlock a layer", &[]),
-        "solo" => said("editor.step.solo", "Show one layer alone", &[]),
-        "keyframe" => said("editor.step.keyframe", "Change a keyframe", &[]),
-        "import" => said("editor.step.import", "Import an asset", &[]),
-        "import_effect" => said("editor.step.import_effect", "Import an effect", &[]),
-        "remove_effect" => said("editor.step.remove_effect", "Remove an effect", &[]),
-        "import_script" => said("editor.step.import_script", "Import a script", &[]),
-        "script" => said("editor.step.script", "Edit a script", &[]),
-        "template" => said("editor.step.template", "Edit a template", &[]),
-        "translate" => said("editor.step.translate", "Translate a text", &[]),
-        "rename" => said("editor.step.rename", "Rename an id", &[]),
-        "paste" => said("editor.step.paste", "Paste layers", &[]),
-        "thumbnail" => said("editor.step.thumbnail", "Change the preview", &[]),
-        "upgrade" => said("editor.step.upgrade", "Upgrade the manifest", &[]),
-        "add_property" => said("editor.step.add_property", "Add a property", &[]),
-        "move_property" => said("editor.step.move_property", "Move a property", &[]),
-        "rename_property" => said("editor.step.rename_property", "Rename a property", &[]),
-        "remove_property" => said("editor.step.remove_property", "Remove a property", &[]),
-        "condition" => said("editor.step.condition", "Change a condition", &[]),
-        "add_preset" => said("editor.step.add_preset", "Add a preset", &[]),
-        "batch" => said("editor.step.batch", "Several changes", &[]),
-        "sync" => said("editor.step.sync", "Update what the package uses", &[]),
-        other => said("editor.step", "%1", &[&other]),
-    }
-}
+pub use crate::steps::step;

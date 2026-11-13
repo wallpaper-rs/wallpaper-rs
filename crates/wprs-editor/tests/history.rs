@@ -186,3 +186,14 @@ fn steps_layers_refusals_and_problems_keep_ids_and_speak_spanish() {
         json!(format!("{} must match [a-z0-9_]{{1,32}}", shown["said"]["args"][0].as_str().unwrap()))
     );
 }
+
+#[test]
+fn every_action_has_its_own_history_label() {
+    for name in wprs_editor::ACTIONS {
+        if matches!(name, "undo" | "redo") {
+            continue;
+        }
+        let label = wprs_editor::history::step(name).local();
+        assert!(!label.is_empty() && label != name, "{name} has no history label");
+    }
+}

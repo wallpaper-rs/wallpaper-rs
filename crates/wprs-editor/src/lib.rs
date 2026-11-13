@@ -44,6 +44,7 @@ pub mod graph;
 mod handles;
 mod hidden;
 pub mod history;
+mod steps;
 mod hulls;
 pub mod ids;
 pub mod inspect;

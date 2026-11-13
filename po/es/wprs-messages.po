@@ -5097,3 +5097,191 @@ msgstr ""
 #: crates/wprs-editor/src/swarms/spots.rs
 msgid "a system keeps at least one emitter"
 msgstr "un sistema conserva al menos un emisor"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Import assets"
+msgstr "Importar recursos"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Change an asset"
+msgstr "Cambiar un recurso"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Change a color"
+msgstr "Cambiar un color"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Take a screenshot"
+msgstr "Tomar una captura"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Change an effect rule"
+msgstr "Cambiar una regla de efecto"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Paint a mask"
+msgstr "Pintar una máscara"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Comb a flow"
+msgstr "Peinar un flujo"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Cut a mesh from the picture"
+msgstr "Cortar una malla de la imagen"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a bone"
+msgstr "Editar un hueso"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Paint mesh depth"
+msgstr "Pintar la profundidad de la malla"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Paint bone weights"
+msgstr "Pintar pesos de huesos"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Compute bone weights"
+msgstr "Calcular pesos de huesos"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a clip"
+msgstr "Editar un clip"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Change a clip key"
+msgstr "Cambiar una clave de clip"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit several keys"
+msgstr "Editar varias claves"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a clip event"
+msgstr "Editar un evento de clip"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Sculpt a shape"
+msgstr "Esculpir una forma"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit an expression"
+msgstr "Editar una expresión"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a bone chain"
+msgstr "Editar una cadena de huesos"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a physics body"
+msgstr "Editar un cuerpo físico"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a collider"
+msgstr "Editar un colisionador"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a bone rule"
+msgstr "Editar una regla de hueso"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the wind"
+msgstr "Editar el viento"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Attach a layer to a bone"
+msgstr "Unir una capa a un hueso"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a point"
+msgstr "Editar un punto"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the parts of a figure"
+msgstr "Editar las partes de una figura"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit particles"
+msgstr "Editar partículas"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a light"
+msgstr "Editar una luz"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the lighting"
+msgstr "Editar la iluminación"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Make normals"
+msgstr "Crear normales"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Paint a map"
+msgstr "Pintar un mapa"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a ramp"
+msgstr "Editar una rampa"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the depth map"
+msgstr "Editar el mapa de profundidad"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the ambient light"
+msgstr "Editar la luz ambiente"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the 3D scene"
+msgstr "Editar la escena 3D"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit an animation"
+msgstr "Editar una animación"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit effects"
+msgstr "Editar efectos"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a layer"
+msgstr "Editar una capa"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the manifest"
+msgstr "Editar el manifiesto"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a property"
+msgstr "Editar una propiedad"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the canvas"
+msgstr "Editar el lienzo"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the timeline"
+msgstr "Editar la línea de tiempo"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a pool"
+msgstr "Editar un grupo"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit what is used"
+msgstr "Editar lo que se usa"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a film"
+msgstr "Editar una película"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit sprites"
+msgstr "Editar sprites"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit a shader"
+msgstr "Editar un shader"
