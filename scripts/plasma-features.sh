@@ -104,8 +104,8 @@ QT_QPA_PLATFORM=offscreen timeout 60 /usr/lib/qt6/bin/qmltestrunner -input "$WOR
 echo "===== handing the screens back to Plasma"
 plugins() {
   dbus-send --session --print-reply --dest=org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \
-    string:'var all = desktops(); var kinds = []; for (var i = 0; i < all.length; i++) { kinds.push(all[i].wallpaperPlugin); } kinds.join(",")' |
-    sed -n 's/^ *string "\(.*\)"$/\1/p'
+    string:'var all = desktops(); var kinds = []; for (var i = 0; i < all.length; i++) { kinds.push(all[i].wallpaperPlugin); } print(kinds.join(","));' |
+    sed -n 's/^ *string "\(.*\)"$/\1/p' | tr , '\n' | sort -u | paste -sd,
 }
 [ "$(plugins)" = io.github.wallpaper_rs ] || fail "the screen is not on the wallpaper-rs plugin before handing back: $(plugins)"
 back=$(ctl plasma-back) || fail "plasma-back failed: $back"
@@ -113,5 +113,10 @@ echo "$back"
 [ "$(plugins)" = org.kde.image ] || fail "the screens are not on the Plasma image wallpaper after plasma-back: $(plugins)"
 is kind video && fail "the daemon still holds the video after plasma-back"
 ctl state >"$OUT/state-back.json" || fail "the daemon died after plasma-back"
+case $back in "no screen was using"*) fail "plasma-back counted no screen on the wallpaper-rs type: $back" ;; esac
+ctl set "$WORK/magenta.webm" --fit stretch
+ours() { [ "$(plugins)" = io.github.wallpaper_rs ]; }
+wait_for 30 ours || fail "the screens did not return to the wallpaper-rs plugin after setting a wallpaper: $(plugins)"
+wait_for 30 is kind video || fail "the video does not play again after plasma-back: $(ctl state)"
 
 echo "plasma test passed"
