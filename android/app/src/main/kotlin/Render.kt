@@ -89,6 +89,8 @@ object Native {
 
     external fun poster(item: String, pixels: IntArray, width: Int, size: IntArray, audio: Boolean)
 
+    external fun connectCode(text: String): String
+
     external fun library(request: String): String
 
     external fun account(request: String): String

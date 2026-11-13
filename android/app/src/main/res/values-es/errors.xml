@@ -141,4 +141,10 @@
     <string name="error_android_repo_fingerprint">La huella tiene 64 letras y números (del 0 al 9 y de la a a la f): cópiala de nuevo tal como la dio quien publica</string>
     <string name="error_android_repo_needs_fingerprint">Pide a quien publica la huella del repositorio: así este teléfono sabe que nadie lo cambió</string>
     <string name="error_android_repo_two_fingerprints">La dirección ya lleva una huella: deja vacío el cuadro de la huella</string>
+    <string name="error_android_connect_not_ours">Esto no es un código de conexión de wallpaper-rs</string>
+    <string name="error_android_connect_version">Este código viene de una versión más nueva: actualiza la aplicación para leerlo</string>
+    <string name="error_android_connect_malformed">Este código de conexión está dañado</string>
+    <string name="error_android_connect_server">La dirección del servidor de este código no es válida</string>
+    <string name="error_android_connect_fingerprint">La huella del certificado de este código no es válida</string>
+    <string name="error_android_connect_invite">La invitación de este código no es válida</string>
 </resources>

@@ -141,4 +141,10 @@
     <string name="error_android_repo_fingerprint">The fingerprint has 64 letters and digits (0 to 9 and a to f): copy it again as the publisher gave it</string>
     <string name="error_android_repo_needs_fingerprint">Ask the publisher for the fingerprint of the repository: it is how this phone knows nobody swapped it</string>
     <string name="error_android_repo_two_fingerprints">The address already holds a fingerprint: leave the fingerprint box empty</string>
+    <string name="error_android_connect_not_ours">This is not a wallpaper-rs connection code</string>
+    <string name="error_android_connect_version">This code comes from a newer version: update the app to read it</string>
+    <string name="error_android_connect_malformed">This connection code is damaged</string>
+    <string name="error_android_connect_server">The server address in this code is not valid</string>
+    <string name="error_android_connect_fingerprint">The certificate fingerprint in this code is not valid</string>
+    <string name="error_android_connect_invite">The invitation in this code is not valid</string>
 </resources>

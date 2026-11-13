@@ -53,6 +53,11 @@ pub fn poster<'a>(
 }
 
 #[jni_mangle("io.github.wallpaper_rs.Native")]
+pub fn connect_code<'a>(mut env: EnvUnowned<'a>, _: JObject<'a>, text: JString<'a>) -> JString<'a> {
+    on(&mut env, |env| Ok(env.new_string(crate::connect::reply(&text.try_to_string(env)?))?))
+}
+
+#[jni_mangle("io.github.wallpaper_rs.Native")]
 pub fn library<'a>(mut env: EnvUnowned<'a>, _: JObject<'a>, request: JString<'a>) -> JString<'a> {
     on(&mut env, |env| {
         let answer = library::request(&request.try_to_string(env)?, on_battery());

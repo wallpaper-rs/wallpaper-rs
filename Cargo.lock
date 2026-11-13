@@ -6822,6 +6822,7 @@ dependencies = [
  "wprs-library",
  "wprs-mix",
  "wprs-providers",
+ "wprs-qr",
  "wprs-render",
  "wprs-scene",
  "wprs-schedule",
