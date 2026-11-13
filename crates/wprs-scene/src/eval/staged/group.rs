@@ -1,15 +1,13 @@
-use super::{MAX_PLANES, Stage3d};
+mod walk;
+
+use super::Stage3d;
 use crate::eval::{Content, Draw, Frame};
 use crate::figure::Space;
 use crate::resolve::Context;
 use crate::{Affine, Blend, Color, Kind, Layer, Quality};
+use walk::{block, cuts};
 
-fn plane(cx: &Context, layer: &Layer, eye: &crate::eye::Eye, height: f32) -> f32 {
-    let z = layer.transform.z.as_ref().map_or(0.0, |z| z.get(cx));
-    (eye.distance() - z * eye.unit(height)).max(eye.near)
-}
-
-fn loose(cx: &Context, d: &Draw) -> bool {
+pub(super) fn loose(cx: &Context, d: &Draw) -> bool {
     let tilted = d.layer.transform.tilt.is_some() || d.layer.transform.z.is_some();
     matches!(d.content, Content::Group { clip: false })
         && !d.isolate
@@ -71,37 +69,28 @@ pub(super) fn gather<'a>(
     }
     let stage = frame.stages.len();
     let (eye, cross) = super::camera(cx, canvas[0] / canvas[1].max(1e-3), frame.quality);
+    let lens = (&eye, canvas[1]);
     let end = frame.draws[at].end;
-    let mut blocks: Vec<(std::ops::Range<usize>, Option<f32>)> = Vec::new();
     let (mut i, mut seen) = (at + 1, false);
     while i < end {
-        let d = &frame.draws[i];
-        if loose(cx, d) && !d.layer.depth_test {
-            blocks.push((i..i + 1, None));
-            i += 1;
-            continue;
-        }
-        let deep = d.layer.depth_test && !matches!(d.content, Content::Model { .. });
-        let (far, next, one) = (deep.then(|| plane(cx, d.layer, &eye, canvas[1])), d.end, apart(cx, d.layer));
-        match (far, &mut frame.draws[i].content) {
-            (Some(far), Content::Particles { seen: s, .. }) if one && frame.quality != Quality::Q0 => {
-                (*s, seen) = (Some((stage, far)), true);
-                blocks.push((i..next, None));
-            }
-            _ => blocks.push((i..next, far)),
+        let (next, far, _) = block(cx, &frame.draws[i], i, lens, stage);
+        let one = far.is_some() && frame.quality != Quality::Q0 && apart(cx, frame.draws[i].layer);
+        if let (true, Content::Particles { seen: s, .. }) = (one, &mut frame.draws[i].content) {
+            (*s, seen) = (Some((stage, far.unwrap_or_default())), true);
         }
         i = next;
     }
-    let mut planes: Vec<f32> = blocks.iter().filter_map(|b| b.1).collect();
-    planes.sort_by(|a, b| b.total_cmp(a));
-    planes.dedup_by(|a, b| (*a - *b).abs() < 1e-5);
-    planes.truncate(MAX_PLANES);
-    let snap = |d: f32| planes.iter().position(|p| d >= *p - 1e-5).unwrap_or(planes.len().saturating_sub(1));
-    let group = frame.draws[at].clone();
-    let world = group.world.then(Affine::translate([canvas[0] / 2.0, canvas[1] / 2.0]));
+    let (planes, count) = cuts(cx, frame, (at, end), lens, stage);
+    let planes_in = &planes[..count];
+    let snap = |d: f32| planes_in.iter().position(|p| d >= *p - 1e-5).unwrap_or(count.saturating_sub(1));
+    let (group_layer, lean, group_world) =
+        (frame.draws[at].layer, frame.draws[at].lean, frame.draws[at].world);
+    let world = group_world.then(Affine::translate([canvas[0] / 2.0, canvas[1] / 2.0]));
     let dynamic = frame.draws[at + 1..end].iter().any(|d| d.dynamic) || cx.wake.get() == crate::Wake::Frame;
     let none = frame.effects.len()..frame.effects.len();
     let slice = |k: usize| Draw {
+        layer: group_layer,
+        lean,
         end: 0,
         world,
         origin: [0.5, 0.5],
@@ -118,40 +107,51 @@ pub(super) fn gather<'a>(
         isolate: false,
         hidden: false,
         lit: None,
-        ..group.clone()
     };
-    let old: Vec<Draw<'a>> = frame.draws.drain(at + 1..end).collect();
-    let mut moved = vec![usize::MAX; old.len()];
-    let mut put = |range: &std::ops::Range<usize>, frame: &mut Frame<'a>| {
+    let filler = slice(0);
+    let put = |range: std::ops::Range<usize>, frame: &mut Frame<'a>| {
         let shift = frame.draws.len() as isize - range.start as isize;
         for k in range.clone() {
-            let mut d = old[k - at - 1].clone();
+            let left = Draw { end: range.end, ..filler.clone() };
+            let mut d = std::mem::replace(&mut frame.draws[k], left);
             d.end = ((d.end as isize + shift) as usize).min(range.end.saturating_add_signed(shift));
-            moved[k - at - 1] = frame.draws.len();
+            let to = frame.draws.len();
+            frame.placed[models.clone()].iter_mut().filter(|p| p.draw == k).for_each(|p| p.draw = to);
             frame.draws.push(d);
         }
     };
-    for k in 0..=planes.len() {
+    for k in 0..=count {
         let mut s = slice(k);
         s.end = frame.draws.len() + 1;
         frame.draws.push(s);
-        for b in blocks.iter().filter(|b| b.1.is_some_and(|d| snap(d) == k)) {
-            put(&b.0, frame);
+        let mut i = at + 1;
+        while i < end {
+            let (next, far, moved) = block(cx, &frame.draws[i], i, lens, stage);
+            if !moved && far.is_some_and(|d| snap(d) == k) {
+                put(i..next, frame);
+            }
+            i = next;
         }
     }
-    for b in blocks.iter().filter(|b| b.1.is_none()) {
-        put(&b.0, frame);
+    let mut i = at + 1;
+    while i < end {
+        let (next, _, moved) = block(cx, &frame.draws[i], i, lens, stage);
+        if !moved {
+            put(i..next, frame);
+        }
+        i = next;
     }
+    let gone = end - at - 1;
+    frame.draws.drain(at + 1..end);
+    frame.draws[at + 1..].iter_mut().for_each(|d| d.end -= gone);
     frame.draws[at].end = frame.draws.len();
     for p in &mut frame.placed[models.clone()] {
-        p.draw = moved.get(p.draw - at - 1).copied().unwrap_or(p.draw);
+        p.draw -= gone;
         frame.draws[p.draw].hidden = true;
         p.stage = stage;
     }
-    let mut cut = [0.0; MAX_PLANES];
-    cut[..planes.len()].copy_from_slice(&planes);
     let size = canvas;
-    let (origin, slices) = ([0.5, 0.5], planes.len() + 1);
+    let (origin, slices) = ([0.5, 0.5], count + 1);
     frame.stages.push(Stage3d {
         layer: &layer.id,
         size,
@@ -159,7 +159,7 @@ pub(super) fn gather<'a>(
         world,
         origin,
         models,
-        planes: cut,
+        planes,
         slices,
         key: 0,
         still: 0,

@@ -1,3 +1,5 @@
+mod deep;
+
 use super::{Op, SceneAssets, SceneView, encode, pipes};
 use crate::allocations::allocations;
 use crate::{Pixels, Renderer};
