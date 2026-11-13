@@ -1426,6 +1426,10 @@ msgid "%1 items added to playlist %2"
 msgstr "%1 elementos añadidos a la lista %2"
 
 #: apps/wprs-ctl/src/confirming.rs
+msgid "folder %1 added to playlist %2"
+msgstr "carpeta %1 añadida a la lista %2"
+
+#: apps/wprs-ctl/src/confirming.rs
 msgid "%1 items removed from playlist %2"
 msgstr "%1 elementos quitados de la lista %2"
 

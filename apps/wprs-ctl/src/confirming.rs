@@ -44,8 +44,11 @@ fn lists(command: &Playlist) -> Option<String> {
             fill(told("playlist %1 now follows the query %2"), &[playlist, query])
         }
         Playlist::Rm { playlist } => fill(told("playlist %1 deleted"), &[playlist]),
-        Playlist::Add { playlist, items } => {
+        Playlist::Add { playlist, items, folder: None, .. } => {
             fill(told("%1 items added to playlist %2"), &[&count(items), playlist])
+        }
+        Playlist::Add { playlist, folder: Some(folder), .. } => {
+            fill(told("folder %1 added to playlist %2"), &[folder, playlist])
         }
         Playlist::Remove { playlist, items } => {
             fill(told("%1 items removed from playlist %2"), &[&count(items), playlist])
