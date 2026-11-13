@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+declare daemon
 shipped=$XDG_DATA_HOME/wallpaper-rs/examples
 mkdir -p "$shipped"
 count=0
