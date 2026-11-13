@@ -93,7 +93,7 @@ async fn cycle(conflict: &str) -> Result<Value, Error> {
     let here =
         local.items.iter().filter_map(|(key, uids)| Some((key.clone(), uids.first()?.clone()))).collect();
     let offers = repos::offers(&local, &replica);
-    let away = wprs_sync::away(&replica, &local, &links, &repos::offered(&ids));
+    let away = wprs_sync::away(&replica, &local, &links, &repos::offered(&ids), &repos::added());
     let shared = secrets.records.values().filter_map(|(_, doc)| {
         let view = doc.view().filter(|v| v.contains_key("secret"))?;
         view.get("provider")?.as_str().map(String::from)

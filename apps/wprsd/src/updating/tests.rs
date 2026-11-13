@@ -28,3 +28,18 @@ fn only_what_is_new_is_asked() {
     let new: Vec<_> = after.difference(&before).cloned().collect();
     assert_eq!(new, ["pointer", "rgb"]);
 }
+
+#[test]
+fn updates_wait_for_the_setting_and_for_the_mains() {
+    assert!(postponed(false, false));
+    assert!(postponed(true, true));
+    assert!(!postponed(true, false));
+}
+
+#[test]
+fn only_announced_asks_that_are_new_hold_a_release_before_the_download() {
+    let before: BTreeSet<String> = ["audio".to_owned()].into();
+    let announced = ["audio".to_owned(), "network https://a.example".to_owned()];
+    assert_eq!(unseen(&announced, &before), ["network https://a.example"]);
+    assert!(unseen(&announced[..1], &before).is_empty());
+}

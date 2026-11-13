@@ -41,6 +41,8 @@ pub struct Release {
     pub hidden: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub listed: Option<bool>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub asks: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

@@ -33,6 +33,7 @@ pub(crate) fn mark(updates: Vec<Value>) -> Vec<Value> {
 
 pub(crate) fn keep_back(
     uid: &str,
+    id: &str,
     fresh: &str,
     old: &Path,
     new: &Path,
@@ -50,6 +51,7 @@ pub(crate) fn keep_back(
     }
     library::with(|lib| Ok(lib.remove_items(&[fresh])?))?;
     drop(fs::remove_file(new));
+    drop(wprs_format::remove(&repos::dir()?, id, Some(&version)));
     let mut installed = repos::installed();
     installed.remove(fresh);
     store::write(&repos::dir()?.join(repos::ITEMS), &serde_json::to_vec(&installed)?)?;

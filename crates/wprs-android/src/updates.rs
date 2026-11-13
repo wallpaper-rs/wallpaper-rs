@@ -95,13 +95,20 @@ fn automatic() -> Result<Value, Error> {
     list()
 }
 
+fn forget_older(id: &str, version: &str) {
+    let Ok(dir) = repos::dir() else { return };
+    if let Err(e) = wprs_format::remove(&dir, id, Some(version)) {
+        log::warn!("cannot forget an older version: {e}");
+    }
+}
+
 fn update(uid: &str, quiet: bool) -> Result<Value, Error> {
     let Some((repo, id)) = repos::installed().remove(uid) else { return Ok(json!({ "item": null })) };
     let old = library::with(|lib| Ok(lib.item(uid)?))?;
     let (fresh, path) = repos::fetched(&format!("{repo}/{id}"))?;
     if fresh != uid
         && quiet
-        && let Some(asks) = held::keep_back(uid, &fresh, &old.path, &path)?
+        && let Some(asks) = held::keep_back(uid, &id, &fresh, &old.path, &path)?
     {
         store::changed();
         return Ok(json!({ "item": uid, "failed": [], "asks": asks }));
@@ -113,6 +120,7 @@ fn update(uid: &str, quiet: bool) -> Result<Value, Error> {
             Ok(lib.item(uid)?.path)
         })?;
         crate::settings::relinked(&old.path, &path)?;
+        forget_older(&id, &old.package.as_ref().map(|p| p.version.clone()).unwrap_or_default());
         let mut installed = repos::installed();
         installed.remove(&fresh);
         store::write(&repos::dir()?.join(repos::ITEMS), &serde_json::to_vec(&installed)?)?;

@@ -65,6 +65,7 @@ impl Daemon {
                 }
                 (1, old) => {
                     let mut view = item_view(&item);
+                    view.extend(package.map(|p| ("repo".to_owned(), json!(p.repo_id))));
                     view.extend(blob_field(&files, ids, &item, old.as_ref()).filter(|_| package.is_none()));
                     view.extend(edit_fields(self.shared_edit(&item).as_ref(), old.as_ref()));
                     local.views.insert(record, view);

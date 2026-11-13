@@ -17553,3 +17553,11 @@ msgid ""
 msgstr ""
 "Marco del dispositivo sobre la imagen; las flechas lo mueven y Mayús con las "
 "flechas le cambia el tamaño"
+
+#: apps/wprs-app/qml/AwayNote.qml
+msgid ""
+"%1 comes from the repository %2, which is not added on this device. Adding "
+"the repository makes it available here."
+msgstr ""
+"%1 viene del repositorio %2, que no está agregado en este dispositivo. "
+"Agregar el repositorio lo deja disponible aquí."

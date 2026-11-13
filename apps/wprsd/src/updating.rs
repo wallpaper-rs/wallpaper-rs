@@ -7,6 +7,8 @@ use std::sync::Arc;
 use wprs_core::model::JobKind;
 use wprs_format::{Installed, asks};
 
+type Announced = BTreeMap<(String, String), Vec<String>>;
+
 pub type Held = BTreeMap<(String, String), (String, Vec<String>)>;
 
 pub fn follow(daemon: &Arc<Daemon>, key: &str, value: &str) {
@@ -14,6 +16,19 @@ pub fn follow(daemon: &Arc<Daemon>, key: &str, value: &str) {
         let daemon = daemon.clone();
         std::thread::spawn(move || daemon.update_installed());
     }
+}
+
+pub fn plugged(daemon: &Arc<Daemon>) {
+    let daemon = daemon.clone();
+    std::thread::spawn(move || daemon.update_installed());
+}
+
+fn unseen(announced: &[String], before: &std::collections::BTreeSet<String>) -> Vec<String> {
+    announced.iter().filter(|a| !before.contains(*a)).cloned().collect()
+}
+
+pub fn postponed(auto_update: bool, on_battery: bool) -> bool {
+    !auto_update || on_battery
 }
 
 impl Daemon {
@@ -25,12 +40,17 @@ impl Daemon {
     }
 
     pub fn update_installed(self: &Arc<Self>) {
-        if !self.state().config.repos.auto_update || self.library_ready().is_err() {
+        let (auto_update, on_battery) = {
+            let st = self.state();
+            (st.config.repos.auto_update, st.on_battery)
+        };
+        if postponed(auto_update, on_battery) || self.library_ready().is_err() {
             return;
         }
         let (Ok(list), Ok(latest)) = (wprs_format::installed(&self.store.data), self.latest()) else {
             return;
         };
+        let announced = self.announced_asks();
         let newest = |r: &&Installed| {
             r.revoked.is_none()
                 && list.iter().filter(|i| i.id == r.id).all(|i| !newer(&i.version, &r.version))
@@ -43,6 +63,9 @@ impl Daemon {
             if !newer(version, &record.version) || !held.is_empty() {
                 continue;
             }
+            if self.hold_announced(record, version, &announced) {
+                continue;
+            }
             let spec = format!("{}/{}", record.repo_id, record.id);
             let target = format!("{}/{}@{version}", record.repo_id, record.id);
             if self.jobs.find(JobKind::Install, &target).is_empty()
@@ -51,6 +74,24 @@ impl Daemon {
                 tracing::warn!(package = record.id, "cannot update a package: {e}");
             }
         }
+    }
+
+    fn announced_asks(&self) -> Announced {
+        let items = wprs_format::browse(&self.store.data, "").unwrap_or_default();
+        items.into_iter().map(|i| ((i.repo_id, i.id), i.release.asks)).collect()
+    }
+
+    fn hold_announced(&self, record: &Installed, version: &str, announced: &Announced) -> bool {
+        let key = (record.repo_id.clone(), record.id.clone());
+        let Some(asked) = announced.get(&key).filter(|a| !a.is_empty()) else { return false };
+        let before = wprs_format::peek(&record.path).map(|m| asks(&m)).unwrap_or_default();
+        let new = unseen(asked, &before);
+        if new.is_empty() {
+            return false;
+        }
+        lock(&self.remote.held).insert(key, (version.to_owned(), new));
+        self.changes.changed("repos", Vec::new());
+        true
     }
 
     pub fn replace_older(&self, record: &Installed) -> Result<()> {

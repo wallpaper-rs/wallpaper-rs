@@ -144,6 +144,10 @@ pub(super) fn dependencies_and_updates_follow_a_repository() {
     assert_eq!(item.package.map(|p| p.version), Some("1.1.0".to_owned()));
     assert_ne!(item.path, before, "the item points at the new file");
     assert!(!before.exists(), "the old file went away");
+    let records = wprs_format::installed(&repos::dir().unwrap()).unwrap();
+    let base: Vec<&str> =
+        records.iter().filter(|i| i.id == "org.example.base").map(|i| i.version.as_str()).collect();
+    assert_eq!(base, ["1.1.0"], "only the new version stays installed");
     assert_eq!(account(json!({ "op": "updates" })), json!([]));
     assert_eq!(
         library::with(|lib| variant::preset(lib, &preset)).unwrap(),

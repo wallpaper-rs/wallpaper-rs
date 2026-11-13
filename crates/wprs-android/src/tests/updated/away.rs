@@ -10,6 +10,7 @@ pub(super) fn notes_follow_the_records_that_have_no_item_here() {
         title: "Hand made".into(),
         playlists: vec![list.clone()],
         profiles: vec![],
+        repo: None,
     };
     state::update(|s| s.away = vec![away.clone()]).unwrap();
     let listed: Value = serde_json::from_str(&account::request(r#"{ "op": "away" }"#)).unwrap();

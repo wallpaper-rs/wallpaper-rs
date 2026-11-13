@@ -9,6 +9,7 @@ pub struct SyncKey {
     ids: Zeroizing<[u8; 32]>,
 }
 
+#[derive(Clone)]
 pub struct Ids(Zeroizing<[u8; 32]>);
 
 fn derive(key: &[u8], info: &[u8]) -> Zeroizing<[u8; 32]> {

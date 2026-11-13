@@ -65,6 +65,8 @@ pub struct Account {
     confirmed: Mutex<Option<(String, String)>>,
     edits: AtomicBool,
     tries: AtomicU32,
+    ids: Mutex<Option<wprs_sync::Ids>>,
+    pruned: std::sync::atomic::AtomicU64,
 }
 
 pub fn block_on<T>(work: impl Future<Output = T>) -> T {

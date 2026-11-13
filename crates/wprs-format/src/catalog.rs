@@ -180,5 +180,6 @@ fn release(package: &mut Opened, dir: &Path, wpak: &Path, size: u64, now: i64) -
         base,
         hidden: false,
         listed: None,
+        asks: crate::asks(&manifest).into_iter().collect(),
     })
 }

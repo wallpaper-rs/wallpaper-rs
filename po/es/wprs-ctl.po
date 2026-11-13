@@ -10184,3 +10184,11 @@ msgstr "%1 %2 no se aplica: %3 (en %4,%5); borra los %1 o rehazlo"
 #: apps/wprs-ctl/src/regioning.rs
 msgid "%1  depth %2  %3 % of the picture  at %4,%5"
 msgstr "%1  profundidad %2  %3 % de la imagen  en %4,%5"
+
+#: apps/wprs-ctl/src/away.rs
+msgid ""
+"comes from the repository %1, which is not added on this device; adding the "
+"repository makes it available here"
+msgstr ""
+"viene del repositorio %1, que no está agregado en este dispositivo; agregar "
+"el repositorio lo deja disponible aquí"

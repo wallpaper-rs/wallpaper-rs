@@ -99,7 +99,16 @@ pub async fn battery(daemon: Arc<Daemon>, known: tokio::sync::oneshot::Sender<()
         upower.on_battery().await.map(|v| daemon.set_on_battery(v)).ok();
         drop(known);
         while let Some(change) = changes.next().await {
-            change.get().await.map(|v| daemon.set_on_battery(v)).ok();
+            change
+                .get()
+                .await
+                .map(|v| {
+                    daemon.set_on_battery(v);
+                    if !v {
+                        crate::updating::plugged(&daemon);
+                    }
+                })
+                .ok();
         }
         zbus::Result::Ok(())
     };

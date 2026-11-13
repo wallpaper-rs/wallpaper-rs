@@ -30,6 +30,7 @@ pub fn away(
     local: &Local,
     links: &BTreeMap<String, String>,
     offered: &HashSet<String>,
+    added: &HashSet<String>,
 ) -> Vec<Away> {
     let (library, playlists, settings) =
         (views(replica, "library/"), views(replica, "playlists/"), views(replica, "settings/"));
@@ -39,6 +40,10 @@ pub fn away(
         .map(|r| (item(r), r.1.get("title").and_then(Value::as_str).unwrap_or_default()))
         .collect();
     let stored: HashSet<String> = library.iter().filter(|r| r.1.contains_key("blob")).map(item).collect();
+    let repos: BTreeMap<String, &str> = library
+        .iter()
+        .filter_map(|r| Some((item(r), r.1.get("repo")?.as_str()?)))
+        .collect();
     let named = playlists.iter().flat_map(|(_, view, _)| entries(view));
     let shown = settings.iter().flat_map(|(_, view, kind)| screens(view, kind).map(|(_, item)| item));
     let asked = settings.iter().filter_map(presets);
@@ -48,12 +53,13 @@ pub fn away(
         wanted.filter(|k| !local.items.contains_key(*k) && !stored.contains(*k) && !offered.contains(*k))
     {
         let title = titles.get(key).copied().unwrap_or_default().to_owned();
-        let playlists = Vec::new();
+        let repo = repos.get(key).filter(|repo| !added.contains(**repo)).map(|repo| (*repo).to_owned());
         found.entry(key.to_owned()).or_insert_with(|| Away {
             key: key.to_owned(),
             title,
-            playlists,
+            playlists: Vec::new(),
             profiles: Vec::new(),
+            repo,
         });
     }
     for (key, view, _) in &playlists {

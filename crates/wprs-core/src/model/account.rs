@@ -86,6 +86,8 @@ model! {
         pub playlists: Vec<Uid>,
         #[serde(default)]
         pub profiles: Vec<AwayProfile>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub repo: Option<String>,
     }
 
     pub struct AwayReply { pub model: u32, pub serial: u64, pub items: Vec<Away> }

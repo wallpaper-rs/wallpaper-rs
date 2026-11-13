@@ -46,6 +46,7 @@ pub(crate) fn snapshot(
             }
             (1, old) => {
                 let mut view = item_view(&item);
+                view.extend(package.map(|(repo, _)| ("repo".to_owned(), serde_json::json!(repo))));
                 let own = private::blob_field(&files, ids, &item, old.as_ref());
                 view.extend(own.filter(|_| item.kind != wprs_library::Kind::Package && package.is_none()));
                 view.extend(edit_fields(depth::shared(&item).as_ref(), old.as_ref()));
