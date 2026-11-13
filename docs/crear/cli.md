@@ -270,7 +270,7 @@ tarjeta gráfica (con demonio). Con `--animated`, un `.gif` o `.webp` de hasta 6
 guarda, `--from` donde empieza la grabación, `--seconds` (0,1 a 15; 4 por defecto) cuánto dura y
 `--fps` (1 a 30; 10 por defecto) a cuántos cuadros por segundo. Con `--capture` los scripts de la
 escena sí corren, en el proceso aislado de siempre y con la hora de este equipo, así que un texto
-que llenan sale con su valor y no con el inicial. No simula el reproductor ni el sonido.
+que llenan sale con su valor y no con el inicial. No simula el reproductor. El cuadro sale sin sonido ni puntero: una escena que reacciona a ellos se ve en reposo.
 
 ## Revisar
 
