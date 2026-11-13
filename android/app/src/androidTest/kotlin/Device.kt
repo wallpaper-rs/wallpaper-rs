@@ -61,5 +61,5 @@ object Device {
         powerReset()
     }
 
-    fun powerReset() = Native.power(false, false, false, 0, 0f, false)
+    fun powerReset() = Native.power(false, false, false, 0, 0f, false, -1)
 }
