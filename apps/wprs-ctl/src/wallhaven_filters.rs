@@ -13,6 +13,13 @@ pub struct Filters {
     query: Option<String>,
     #[arg(
         long,
+        value_name = "ADDRESS",
+        conflicts_with = "query",
+        help = "A wallhaven.cc search address copied from the browser; it fills the search words and every option it carries"
+    )]
+    link: Option<String>,
+    #[arg(
+        long,
         value_name = "NAMES",
         help = "Categories: general, anime and people separated by commas, or three digits like 101"
     )]
@@ -111,6 +118,7 @@ impl Filters {
         }
         let given = [
             ("query", &self.query),
+            ("query", &self.link),
             ("atleast", &self.atleast),
             ("resolutions", &self.resolutions),
             ("ratios", &self.ratios),

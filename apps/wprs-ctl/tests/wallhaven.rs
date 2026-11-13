@@ -58,3 +58,11 @@ fn wrong_values_are_refused_before_anything_is_sent() {
         assert!(refused.contains(hint), "{line}: {refused}");
     }
 }
+
+#[test]
+fn a_pasted_search_address_has_its_own_flag() {
+    let address = "https://wallhaven.cc/search?q=sea&categories=101";
+    let pairs = run(&["--link", address]).unwrap();
+    assert!(has(&pairs, "query", address), "{pairs:?}");
+    assert!(run(&["--link", address, "--query", "sea"]).is_err());
+}

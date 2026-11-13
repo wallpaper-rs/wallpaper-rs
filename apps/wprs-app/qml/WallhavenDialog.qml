@@ -14,6 +14,7 @@ Kirigami.Dialog {
     property var values: ({})
     property var found: []
     property string error
+    property string notice
 
     function list(owner) {
         App.query("Collections", [provider.id, owner], "Providers1", reply => {
@@ -49,6 +50,7 @@ Kirigami.Dialog {
         values = {};
         found = [];
         error = "";
+        notice = "";
         owner.text = (provider.options.collection ?? "").split("/")[0];
     }
 
@@ -67,6 +69,31 @@ Kirigami.Dialog {
             onEdited: (key, value) => dialog.values = Object.assign({}, dialog.values, {
                         [key]: value
                     })
+        }
+
+        QQC2.TextField {
+            id: pasted
+
+            Kirigami.FormData.label: App.tr("Search address:")
+            placeholderText: App.tr("Paste a wallhaven.cc search address and press Enter")
+            Layout.fillWidth: true
+            onAccepted: {
+                if (text.trim() === "")
+                    return;
+                dialog.values = Object.assign({}, dialog.values, {
+                    "query": text.trim()
+                });
+                text = "";
+                dialog.notice = App.tr("The address will fill the search options when you save.");
+            }
+        }
+
+        QQC2.Label {
+            Layout.fillWidth: true
+            visible: dialog.notice !== ""
+            text: dialog.notice
+            wrapMode: Text.Wrap
+            textFormat: Text.PlainText
         }
 
         QQC2.Label {
