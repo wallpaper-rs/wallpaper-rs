@@ -129,7 +129,9 @@ mod tests {
                 "{source} ! tee name=t t. ! queue ! appsink name=plain t. ! queue \
                  ! taginject tags=image-orientation={name} ! videoflip video-direction=auto ! appsink name=flipped"
             );
-            let launched = crate::init().ok().and_then(|()| gst::parse::launch(&line).ok());
+            let launched = crate::init()
+                .ok()
+                .and_then(|()| wprs_core::loader::serialised(|| gst::parse::launch(&line)).ok());
             let Some(pipeline) = launched.and_then(|p| p.downcast::<gst::Bin>().ok()) else {
                 return assert!(std::env::var_os("WPRS_REQUIRE_VIDEO").is_none(), "videoflip required");
             };

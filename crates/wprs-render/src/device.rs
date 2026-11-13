@@ -72,8 +72,9 @@ impl Renderer {
             required_features,
             ..Default::default()
         };
-        let (device, queue) = pollster::block_on(adapter.request_device(&descriptor))
-            .map_err(|e| RenderError::Device(e.to_string()))?;
+        let (device, queue) =
+            wprs_core::loader::serialised(|| pollster::block_on(adapter.request_device(&descriptor)))
+                .map_err(|e| RenderError::Device(e.to_string()))?;
         let lost = crate::lost::watch(&device);
         let granted = device.limits();
         let limits = TargetLimits {

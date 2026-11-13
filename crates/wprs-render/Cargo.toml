@@ -32,6 +32,7 @@ ash.workspace = true
 rustix.workspace = true
 
 [dev-dependencies]
+wprs-video.workspace = true
 ab_glyph.workspace = true
 fontdb.workspace = true
 wprs-ktx2 = { workspace = true, features = ["encode"] }

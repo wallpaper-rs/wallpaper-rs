@@ -58,7 +58,7 @@ pub(crate) fn pick(choice: &GpuChoice, found: &[Card]) -> Option<usize> {
 }
 
 pub(crate) fn listed(instance: &wgpu::Instance, backends: Backends) -> Vec<wgpu::Adapter> {
-    pollster::block_on(instance.enumerate_adapters(backends))
+    wprs_core::loader::serialised(|| pollster::block_on(instance.enumerate_adapters(backends)))
 }
 
 fn described(adapters: &[wgpu::Adapter]) -> Vec<Card> {

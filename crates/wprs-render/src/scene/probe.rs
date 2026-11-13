@@ -17,7 +17,8 @@ impl Renderer {
 impl Probe {
     pub(crate) fn open(&self) -> Option<wgpu::Device> {
         let instance = crate::adapter::instance(Backends::GL, None);
-        let adapters = pollster::block_on(instance.enumerate_adapters(Backends::GL));
+        let adapters =
+            wprs_core::loader::serialised(|| pollster::block_on(instance.enumerate_adapters(Backends::GL)));
         let Some(adapter) = adapters.into_iter().find(|a| a.get_info().name == self.name) else {
             tracing::debug!("no second context of {} to try package shaders in", self.name);
             return None;

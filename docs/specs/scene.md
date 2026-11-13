@@ -1360,6 +1360,16 @@ helper are kept nowhere, and the daemon reads the library packages they refused 
 and on `RetryEffects`. The phone keeps the check in its own process, bounded by the limits of naga's
 constant evaluation.
 
+At start-up, the first opening of a foreign library is serialised in the whole process, because the
+graphics driver and a codec plug-in take the dynamic loader's lock and the driver's own lock in
+opposite orders, and two threads doing one each would wait for each other for ever (the daemon
+starts the renderer and the first video on different threads). The one-time paths that may open such
+a library run under one lock (`wprs_core::loader::serialised`): creating the graphics instance,
+asking for an adapter or a device, listing adapters, creating the first video element or pipeline,
+and loading the depth model runtime. Starting video support also opens the plug-ins of hardware codecs
+right then, under that lock, instead of on the first thread that needs one. The lock is never taken
+per frame.
+
 The engine builds every pass and every variant a use may need when the scene loads, each inside an
 error scope of the graphics driver, on up to four threads beside the one that draws, and waits for
 them at most 10 seconds. On OpenGL ES, whose driver serves one context to one thread at a time, those

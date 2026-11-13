@@ -18,7 +18,10 @@ pub(crate) fn raw(mono: bool) -> gst::Caps {
 
 pub(crate) fn decoder(path: &Path, queued: Option<u32>) -> Result<(gst::Pipeline, AppSink), Error> {
     crate::init()?;
-    let decoder = gst::ElementFactory::make("uridecodebin").property("uri", local_uri(path)?).build();
+    let uri = local_uri(path)?;
+    let decoder = wprs_core::loader::serialised(|| {
+        gst::ElementFactory::make("uridecodebin").property("uri", uri).build()
+    });
     let decoder = decoder.map_err(|_| Error::MissingElement("uridecodebin"))?;
     let (convert, resample) = (make("audioconvert")?, make("audioresample")?);
     let caps = raw(true);

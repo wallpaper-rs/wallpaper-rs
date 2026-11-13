@@ -10,6 +10,7 @@ pub mod hdr;
 mod keep;
 pub mod layer;
 pub mod layout;
+pub mod loader;
 pub mod locale;
 pub mod markup;
 pub mod message;

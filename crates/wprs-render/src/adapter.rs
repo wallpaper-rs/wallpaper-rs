@@ -24,7 +24,7 @@ pub(crate) fn instance(
         desc.flags.remove(wgpu::InstanceFlags::VALIDATION);
     }
     desc.display = display.map(|d| Box::new(Shared(d.clone())) as Display);
-    wgpu::Instance::new(desc)
+    wprs_core::loader::serialised(|| wgpu::Instance::new(desc))
 }
 
 fn open(
@@ -36,7 +36,7 @@ fn open(
         ..Default::default()
     };
     let instance = instance(backends, display);
-    let adapter = pollster::block_on(instance.request_adapter(&options));
+    let adapter = wprs_core::loader::serialised(|| pollster::block_on(instance.request_adapter(&options)));
     adapter
         .inspect_err(|e| tracing::debug!(?backends, "no adapter: {e}"))
         .ok()

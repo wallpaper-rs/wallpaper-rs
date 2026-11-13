@@ -144,7 +144,10 @@ impl Audio {
         tracing::info!("no audio output, the picture goes on without sound until one appears");
         self.delay = (self.delay * 2).clamp(RETRY, RETRY_MAX);
         self.outputs = Some(Outputs::watch(bus, Instant::now() + self.delay));
-        let silent = gst::ElementFactory::make("fakesink").property("sync", true).build().ok();
+        let silent = wprs_core::loader::serialised(|| {
+            gst::ElementFactory::make("fakesink").property("sync", true).build()
+        })
+        .ok();
         self.rebuild(playbin, bus, silent);
     }
 

@@ -21,7 +21,7 @@ pub(crate) fn environment(libraries: &[PathBuf]) -> Result<Environment> {
     );
     unsafe { std::env::set_var(TELEMETRY, "1") };
     let loaded = libraries.iter().find_map(|lib| {
-        ort::init_from(lib)
+        wprs_core::loader::serialised(|| ort::init_from(lib))
             .inspect_err(|e| {
                 failure = anyhow!(
                     "{}",

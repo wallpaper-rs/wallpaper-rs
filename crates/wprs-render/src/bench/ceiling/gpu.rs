@@ -43,8 +43,9 @@ impl Gpu {
             power_preference: wgpu::PowerPreference::HighPerformance,
             ..Default::default()
         };
-        let adapter = pollster::block_on(instance.request_adapter(&options))
-            .map_err(|e| RenderError::NoAdapter(format!("{backends:?}: {e}")))?;
+        let adapter =
+            wprs_core::loader::serialised(|| pollster::block_on(instance.request_adapter(&options)))
+                .map_err(|e| RenderError::NoAdapter(format!("{backends:?}: {e}")))?;
         let offered = adapter.limits();
         let required_limits = wgpu::Limits {
             max_texture_dimension_2d: offered.max_texture_dimension_2d,

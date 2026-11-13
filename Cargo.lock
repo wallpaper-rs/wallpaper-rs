@@ -7041,6 +7041,7 @@ dependencies = [
  "wprs-scene",
  "wprs-script",
  "wprs-type",
+ "wprs-video",
 ]
 
 [[package]]
@@ -7177,6 +7178,7 @@ dependencies = [
  "tempfile",
  "thiserror 2.0.21",
  "tracing",
+ "wprs-core",
  "wprs-mix",
  "wprs-scene",
 ]

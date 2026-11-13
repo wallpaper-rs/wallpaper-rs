@@ -4,6 +4,7 @@ mod bus;
 mod deep;
 mod dmabuf;
 mod feed;
+mod loading;
 mod outputs;
 mod pipewire;
 mod player;
@@ -18,6 +19,7 @@ pub use bank::{Bank, decode, probe as probe_sound};
 pub use deep::{Hdr, Transfer};
 pub use dmabuf::{Dmabuf, accept as accept_dmabuf};
 pub use feed::Disk;
+pub use loading::create_first_elements;
 pub use player::Player;
 pub use probe::probe;
 pub use sound::Soundtrack;
@@ -26,7 +28,6 @@ pub use strip::{MAX_STRIP, strip};
 pub use wprs_mix::{Clip, Mix, RATE, Source, Track};
 
 use gstreamer as gst;
-use gstreamer::prelude::*;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::AtomicU64;
 use std::sync::{Arc, Mutex, MutexGuard, OnceLock};
@@ -164,20 +165,15 @@ impl Options {
 
 pub fn init() -> Result<(), Error> {
     static READY: OnceLock<Result<(), String>> = OnceLock::new();
-    let ready = READY.get_or_init(|| gst::init().map(|()| local_sources_only()).map_err(|e| e.to_string()));
-    ready.clone().map_err(Error::Init)
-}
-
-fn local_sources_only() {
-    let registry = gst::Registry::get();
-    let remote = |feature: &gst::PluginFeature| {
-        feature.downcast_ref::<gst::ElementFactory>().is_some_and(|f| {
-            let fetches = f.uri_type() == gst::URIType::Src
-                && f.uri_protocols().iter().any(|p| !["file", "appsrc"].contains(&p.as_str()));
-            fetches || ["Network", "Adaptive"].iter().any(|k| f.klass().contains(k))
+    let ready = READY.get_or_init(|| {
+        wprs_core::loader::serialised(|| {
+            gst::init()
+                .map(|()| (loading::local_sources_only(), loading::preload_hardware()))
+                .map(drop)
+                .map_err(|e| e.to_string())
         })
-    };
-    registry.features_filtered(remote, false).iter().for_each(|f| registry.remove_feature(f));
+    });
+    ready.clone().map_err(Error::Init)
 }
 
 fn local_uri(path: &Path) -> Result<String, Error> {
@@ -193,5 +189,6 @@ pub fn path_from_uri(uri: &str) -> Option<PathBuf> {
 }
 
 fn make(factory: &'static str) -> Result<gst::Element, Error> {
-    gst::ElementFactory::make(factory).build().map_err(|_| Error::MissingElement(factory))
+    wprs_core::loader::serialised(|| gst::ElementFactory::make(factory).build())
+        .map_err(|_| Error::MissingElement(factory))
 }
