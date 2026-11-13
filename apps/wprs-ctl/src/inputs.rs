@@ -13,7 +13,7 @@ mod asking;
 mod position;
 mod shown;
 
-pub use asking::{asking, asking_for};
+pub use asking::{asking, asking_changed, asking_for};
 use position::at_fraction;
 use shown::status;
 

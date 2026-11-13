@@ -1,3 +1,4 @@
+use super::asking::Filter;
 use super::at_fraction;
 
 #[test]
@@ -25,9 +26,17 @@ fn applying_a_scene_asks_only_for_that_scene_even_when_another_screen_waits_for_
     }))
     .unwrap();
     let every = |_: &String| true;
-    let all = super::asking::requests(&reply, &every, None);
+    let all = super::asking::requests(&reply, &every, &Filter { only: None, seen: None });
     assert_eq!(all.len(), 2);
-    let lights = super::asking::requests(&reply, &every, Some("org.example.lights"));
+    let lights = super::asking::requests(
+        &reply,
+        &every,
+        &Filter { only: Some("org.example.lights".into()), seen: None },
+    );
     assert_eq!(lights.len(), 1);
     assert!(lights[0].starts_with("Lights follows the pointer"), "{lights:?}");
+    let seen = Some([("DP-1".to_string(), String::new())].into());
+    let changed = super::asking::requests(&reply, &every, &Filter { only: None, seen });
+    assert_eq!(changed.len(), 1, "a package that was already shown asked again: {changed:?}");
+    assert!(changed[0].starts_with("Lights"), "{changed:?}");
 }
