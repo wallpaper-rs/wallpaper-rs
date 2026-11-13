@@ -2,7 +2,7 @@ use crate::color::LUT;
 use crate::decode::{scaled, shown};
 use crate::parallax::{DepthMap, halves};
 use crate::shader::{bind_group_layout, module, pipeline};
-use crate::stack::{Plan, plan};
+use crate::stack::{Plan, levels, plan};
 use crate::texture::{GpuImage, create_texture, gpu_image, texture};
 use crate::{RenderError, Renderer};
 use image::RgbaImage;
@@ -39,10 +39,6 @@ impl Developer {
     }
 }
 
-fn levels(radius: f32, (w, h): (u32, u32)) -> u32 {
-    ((radius / 2.0).log2().ceil().max(1.0) as u32).min(6).min(w.min(h).max(1).ilog2().max(1))
-}
-
 fn view(texture: &wgpu::Texture) -> TextureView {
     texture.create_view(&Default::default())
 }
@@ -65,11 +61,22 @@ impl Renderer {
         depth: Option<&DepthMap>,
         size: (u32, u32),
     ) -> Result<GpuImage, RenderError> {
+        self.developed(image, edit, depth, (size, false)).map(gpu_image)
+    }
+
+    pub(crate) fn developed(
+        &self,
+        image: &RgbaImage,
+        edit: &Edit,
+        depth: Option<&DepthMap>,
+        (size, keep): ((u32, u32), bool),
+    ) -> Result<wgpu::Texture, RenderError> {
         self.check_target(size.0, size.1)?;
         let frame = edit.geometry.frame(image.dimensions());
         let factor = (size.0 as f32 / frame.0 as f32).max(size.1 as f32 / frame.1 as f32);
-        let (source, mut plan) =
-            (scaled(image, factor, self.max_edge()), plan(edit, image.dimensions(), size, depth.is_some()));
+        let source = scaled(image, factor, self.max_edge());
+        let mut plan = plan(edit, image.dimensions(), size, depth.is_some());
+        plan.stack.keep = u32::from(keep);
         self.scoped(|| {
             let d = self.developer();
             let [src, lut, aux, dep] = self.inputs(&source, &plan, depth);
@@ -95,7 +102,7 @@ impl Renderer {
             let views = [&current, &current, &lut, &aux, &dep];
             self.pass(&mut encoder, &d.output, &d.layout, bytemuck::bytes_of(&plan.stack), &views, &out);
             self.queue.submit([encoder.finish()]);
-            gpu_image(out)
+            out
         })
     }
 

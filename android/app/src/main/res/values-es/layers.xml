@@ -15,7 +15,6 @@
     <string name="make_layers">Construir las capas de profundidad</string>
     <string name="still_no_map">La imagen queda quieta: todavía no tiene mapa de profundidad.</string>
     <string name="still_fill_off">La imagen queda quieta: el relleno del paralaje está apagado.</string>
-    <string name="still_edited">La imagen queda quieta: sus operaciones de color no se dibujan en las capas de profundidad.</string>
     <string name="still_building">La imagen queda quieta hasta que estén listas sus capas de profundidad.</string>
     <string name="still_failed">La imagen queda quieta: no se pudieron construir sus capas de profundidad.</string>
     <string name="still_flat">La imagen queda quieta: su profundidad no permite moverla sin estirarla.</string>

@@ -1763,7 +1763,7 @@ rotation and the straightening come back with the other tools), and offers:
   progress. A double click on a handle removes it, a click on the strip or *Add a cut* adds one in the
   widest gap (at most 5), and *Back to automatic* is `depth_cuts` with `auto`. The line under the
   strip counts the layers and the regions of the set, and when the picture stays still it says why
-  in one line (no depth map, fill off, colour operations, set being built, failed build, or depth
+  in one line (no depth map, fill off, set being built, failed build, or depth
   that gives no movement without stretching); `wprs-ctl edit depth layers` prints the same line on the standard error
   after building and `--list` shows the regions, the size, the safe shift and whether each set moves.
 - *Fill brush*: the same brush for `fill_mask`, with *Refill* and *Protect*, size and soft edge (no

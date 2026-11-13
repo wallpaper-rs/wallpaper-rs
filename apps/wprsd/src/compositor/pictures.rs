@@ -65,15 +65,15 @@ pub(super) fn develop(
             Some(edit) => renderer.develop(&p, edit, depth, renderer.develop_size(frame, uv, size))?,
             None => renderer.upload_placed(&p, uv, size)?,
         };
-        let deck = picture
-            .depth
-            .as_ref()
-            .and_then(|d| d.deck.as_ref())
-            .filter(|_| !edit.is_some_and(Edit::operates));
+        let deck = picture.depth.as_ref().and_then(|d| d.deck.as_ref());
         let relief = match (moving, deck) {
             (Some(parallax), Some(deck)) if !uv.repeat => {
                 let set = &deck.layers;
-                let made = renderer.upload_layers(&set.images, &set.fields, &set.info.depths);
+                let parts = (&set.images[..], &set.fields[..], &set.info.depths[..]);
+                let made = match edit.filter(|e| e.operates()) {
+                    Some(edit) => renderer.develop_layers(parts, edit, depth),
+                    None => renderer.upload_layers(parts.0, parts.1, parts.2),
+                };
                 let made = made.inspect_err(|e| tracing::warn!(output, "cannot show the layers: {e}")).ok();
                 made.map(|stack| (stack, parallax.clone(), set.info.reach))
             }

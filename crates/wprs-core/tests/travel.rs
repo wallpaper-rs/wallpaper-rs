@@ -48,7 +48,6 @@ fn still_reasons_have_words_and_messages() {
         Still::NoModel,
         Still::NoMap,
         Still::FillOff,
-        Still::Edited,
         Still::Building,
         Still::BuildingSimple,
         Still::Software,

@@ -1151,7 +1151,7 @@ de los mismos 256 MB) con una clave que reúne la imagen, el modelo, el relleno,
 la fuerza, la resolución y los ajustes del mapa. El movimiento se recorta por imagen para no pasar
 nunca de la franja rellenada y la ampliación se calcula con la fuerza, el enfoque y la forma de la
 imagen para que nunca se vea el borde del cuadro. Mientras se calculan las capas, si fallan, si el
-relleno está apagado, si la imagen tiene operaciones de color activas o si su profundidad no permite
+relleno está apagado o si su profundidad no permite
 moverla sin estirarla, la imagen queda quieta, y la app, `wprs-ctl edit parallax`, `wprs-ctl edit depth
 layers` y el teléfono dicen por qué en una línea; si falta el modelo de profundidad lo dicen al activar
 el paralaje, con su tamaño y el botón o la orden que lo descarga (nunca se descarga solo). Al moverse, la GPU dibuja las capas de atrás adelante y en reposo

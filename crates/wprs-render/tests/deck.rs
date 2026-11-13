@@ -143,3 +143,34 @@ fn each_layer_moves_by_its_own_depth_and_rest_shows_the_picture() {
     let still = stacked(r, 0.0);
     assert!(near(still[30], [255; 3]) && near(still[10], [255, 0, 0]) && near(still[5], ground(5)));
 }
+
+fn dimmed(c: u8) -> u8 {
+    let c = f64::from(c) / 255.0;
+    let lin = if c <= 0.04045 { c / 12.92 } else { ((c + 0.055) / 1.055).powf(2.4) } / 2.0;
+    let e = if lin <= 0.0031308 { lin * 12.92 } else { 1.055 * lin.powf(1.0 / 2.4) - 0.055 };
+    (e * 255.0).round() as u8
+}
+
+#[test]
+fn colour_operations_are_applied_to_every_layer_and_keep_their_cut_outs() {
+    let Some(r) = renderer() else { return };
+    let edit = wprs_core::Edit::from_value(serde_json::json!({
+        "version": 1,
+        "ops": [{"id": "a", "type": "exposure", "ev": -1.0}]
+    }))
+    .unwrap();
+    let fields = [level(0.0), level(0.5), level(1.0)];
+    let layers = [back(), middle(), front()];
+    let deck = r.develop_layers((&layers, &fields, &[0.0, 0.5, 1.0]), &edit, None).unwrap();
+    let plain = r.upload_layers(&layers, &fields, &[0.0, 0.5, 1.0]).unwrap();
+    let moved = row(r, |_| (deck.clone(), 8.0));
+    let untouched = row(r, |_| (plain.clone(), 8.0));
+    let white = dimmed(255);
+    assert!(near(moved[36], [white; 3]), "the near layer is graded: {:?}", moved[36]);
+    assert!(near(moved[50], [dimmed(ground(50)[0]), 0, dimmed(128)]), "the far layer is graded");
+    assert!(near(untouched[36], [255; 3]), "without operations nothing changes");
+    for x in [25, 27, 29, 31] {
+        let g = ground(x as u32);
+        assert!(near(moved[x], [dimmed(g[0]), 0, dimmed(g[2])]), "x {x}: the filled part is graded too");
+    }
+}

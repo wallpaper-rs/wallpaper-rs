@@ -31,7 +31,6 @@ private val STILL = mapOf("saver" to R.string.still_saver, "battery" to R.string
 private val UNMOVED = mapOf(
     "no_map" to R.string.still_no_map,
     "fill_off" to R.string.still_fill_off,
-    "edited" to R.string.still_edited,
     "building" to R.string.still_building,
     "failed" to R.string.still_failed,
     "flat" to R.string.still_flat,

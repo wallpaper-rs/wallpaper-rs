@@ -28,7 +28,6 @@ impl Places {
         };
         let found = match () {
             _ if set.fill == Fill::Off => return Some(Still::FillOff),
-            _ if edit.operates() => return Some(Still::Edited),
             _ if has_failed(&path) => return Some(Still::Failed),
             _ => load(&path).ok().flatten(),
         };

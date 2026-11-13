@@ -25,7 +25,6 @@ pub enum Still {
     NoModel,
     NoMap,
     FillOff,
-    Edited,
     Building,
     BuildingSimple,
     Software,
@@ -39,7 +38,6 @@ impl Still {
             Still::NoModel => "no_model",
             Still::NoMap => "no_map",
             Still::FillOff => "fill_off",
-            Still::Edited => "edited",
             Still::Building => "building",
             Still::BuildingSimple => "building_simple",
             Still::Software => "software",
@@ -63,11 +61,6 @@ impl Still {
             Still::FillOff => {
                 said("still.fill_off", "The picture stays still: the parallax fill is off.", &[])
             }
-            Still::Edited => said(
-                "still.edited",
-                "The picture stays still: its colour operations are not drawn on depth layers.",
-                &[],
-            ),
             Still::Building => {
                 said("still.building", "The picture stays still until its depth layers are built.", &[])
             }

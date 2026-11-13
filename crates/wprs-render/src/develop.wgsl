@@ -1,6 +1,6 @@
 struct Op { kind: u32, mask: u32, mode: u32, opacity: f32, a: vec4<f32>, m: mat3x3<f32> };
 struct Mask { kind: u32, invert: u32, channel: u32, pad: u32, a: vec4<f32>, b: vec4<f32> };
-struct Stack { geo: mat3x3<f32>, start: u32, end: u32, aspect: f32, ratio: f32, ops: array<Op, 24>, masks: array<Mask, 8> };
+struct Stack { geo: mat3x3<f32>, start: u32, end: u32, aspect: f32, ratio: f32, keep: u32, ops: array<Op, 24>, masks: array<Mask, 8> };
 struct VertexOut { @builtin(position) position: vec4<f32>, @location(0) uv: vec2<f32> };
 
 @group(0) @binding(0) var<uniform> s: Stack;
@@ -74,7 +74,8 @@ fn mask(i: u32, p: vec2<f32>, c: vec3<f32>) -> f32 {
 @fragment
 fn fs_develop(in: VertexOut) -> @location(0) vec4<f32> {
     let p = (s.geo * vec3(in.uv, 1.0)).xy;
-    var c = textureSampleLevel(src, smp, select(in.uv, p, s.start == 0u), 0.0).rgb;
+    let first = textureSampleLevel(src, smp, select(in.uv, p, s.start == 0u), 0.0);
+    var c = first.rgb;
     for (var i = s.start; i < s.end; i++) {
         let o = s.ops[i];
         var r = c;
@@ -98,7 +99,7 @@ fn fs_develop(in: VertexOut) -> @location(0) vec4<f32> {
         }
         c = mix(c, r, mask(o.mask, p, c) * o.opacity);
     }
-    return vec4(c, 1.0);
+    return vec4(c, select(1.0, first.a, s.keep == 1u));
 }
 
 fn hash(p: vec2<f32>) -> f32 {
@@ -107,7 +108,8 @@ fn hash(p: vec2<f32>) -> f32 {
 
 @fragment
 fn fs_output(in: VertexOut) -> @location(0) vec4<f32> {
-    let c = textureSampleLevel(src, smp, in.uv, 0.0).rgb;
+    let sample = textureSampleLevel(src, smp, in.uv, 0.0);
+    let c = sample.rgb;
     let n = hash(in.position.xy) + hash(in.position.yx + 0.37) - 1.0;
-    return vec4(dec(clamp(enc(c) + n / 255.0, vec3(0.0), vec3(1.0))), 1.0);
+    return vec4(dec(clamp(enc(c) + n / 255.0, vec3(0.0), vec3(1.0))), select(1.0, sample.a, s.keep == 1u));
 }

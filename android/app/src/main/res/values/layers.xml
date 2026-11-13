@@ -15,7 +15,6 @@
     <string name="make_layers">Build the depth layers</string>
     <string name="still_no_map">The picture stays still: it has no depth map yet.</string>
     <string name="still_fill_off">The picture stays still: the parallax fill is off.</string>
-    <string name="still_edited">The picture stays still: its colour operations are not drawn on depth layers.</string>
     <string name="still_building">The picture stays still until its depth layers are built.</string>
     <string name="still_failed">The picture stays still: its depth layers could not be built.</string>
     <string name="still_flat">The picture stays still: its depth gives no movement that would not stretch it.</string>

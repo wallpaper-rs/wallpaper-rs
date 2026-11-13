@@ -97,10 +97,8 @@ impl Daemon {
     ) -> Result<Deck, Option<Still>> {
         let moving = edit.moving().ok_or(None)?;
         let config = self.state().config.parallax.clone();
-        match () {
-            _ if edit.operates() => return Err(Some(Still::Edited)),
-            _ if config.fill == Fill::Off => return Err(Some(Still::FillOff)),
-            _ => {}
+        if config.fill == Fill::Off {
+            return Err(Some(Still::FillOff));
         }
         let depth = edit.depth.clone().unwrap_or_default();
         let set = Settings {

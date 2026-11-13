@@ -34,6 +34,8 @@ pub(crate) struct Stack {
     pub(crate) end: u32,
     aspect: f32,
     ratio: f32,
+    pub(crate) keep: u32,
+    spare: [u32; 3],
     ops: [Op; 24],
     masks: [Gate; 8],
 }
@@ -132,4 +134,8 @@ pub(crate) fn plan(edit: &Edit, image: (u32, u32), size: (u32, u32), deep: bool)
         .collect();
     let brush = (!strokes.is_empty()).then(|| brush(&strokes, stack.aspect));
     Plan { stack, lut: (lut, rows), brush, blurs }
+}
+
+pub(crate) fn levels(radius: f32, (w, h): (u32, u32)) -> u32 {
+    ((radius / 2.0).log2().ceil().max(1.0) as u32).min(6).min(w.min(h).max(1).ilog2().max(1))
 }
