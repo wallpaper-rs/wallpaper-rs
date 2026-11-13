@@ -55,7 +55,7 @@ fn a_scene_brings_its_transition_in_and_out() {
     assert_eq!(out.slots[0][0], 0.1);
     let module = transition_shader(&coming.effect).unwrap();
     let entries: Vec<_> = module.entry_points.iter().map(|e| e.name.as_str()).collect();
-    assert_eq!(entries, ["wprs_vs", "wprs_fs"]);
+    assert_eq!(entries, ["vs_main", "wprs_fs"]);
     assert!(scene.passages.problems().is_empty());
     let back = Scene::from_json(&scene.to_json().unwrap()).unwrap();
     assert_eq!(back.transition, scene.transition);
