@@ -40,8 +40,15 @@ pub(super) fn scripted() {
     let form = ask(json!({ "op": "scene", "uid": uid, "languages": [] }));
     assert_eq!((&form["uses"]["taps"], &form["granted"]["taps"]), (&json!(true), &json!(false)), "{form}");
     let path = library::with(|lib| Ok(lib.item(&uid)?.path)).unwrap();
-    let power =
-        power::Power { charging: true, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
+    let power = power::Power {
+        charging: true,
+        saver: false,
+        low: false,
+        thermal: 0,
+        headroom: 0.0,
+        still: false,
+        percent: -1,
+    };
     let Some(r) = renderer() else { return };
     let mut stage = Stage::new(uid.clone(), pack::load(&path).unwrap());
     let mut clock = 0;
@@ -102,8 +109,15 @@ pub(super) fn shortcuts_open_only_after_a_press() {
     let target = json!({ "app": "org.example.notes" });
     assert_eq!(ask(json!({ "op": "property", "uid": uid, "key": "open", "value": target })), Value::Null);
     let path = library::with(|lib| Ok(lib.item(&uid)?.path)).unwrap();
-    let power =
-        power::Power { charging: true, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
+    let power = power::Power {
+        charging: true,
+        saver: false,
+        low: false,
+        thermal: 0,
+        headroom: 0.0,
+        still: false,
+        percent: -1,
+    };
     if let Some(r) = renderer() {
         let mut stage = Stage::new(uid.clone(), pack::load(&path).unwrap());
         let (mut clock, mut opened) = (0, Vec::new());

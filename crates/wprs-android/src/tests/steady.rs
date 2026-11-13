@@ -21,8 +21,15 @@ fn wall_clock() {
 pub(super) fn frames() {
     wall_clock();
     let Some(r) = renderer() else { return };
-    let power =
-        power::Power { charging: true, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
+    let power = power::Power {
+        charging: true,
+        saver: false,
+        low: false,
+        thermal: 0,
+        headroom: 0.0,
+        still: false,
+        percent: -1,
+    };
     let listed = ask(json!({ "op": "items", "query": "kind:scene" }));
     for item in listed.as_array().unwrap() {
         let (uid, path) = (item["uid"].as_str().unwrap(), item["path"].as_str().unwrap());

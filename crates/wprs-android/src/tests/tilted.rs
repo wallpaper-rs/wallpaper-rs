@@ -24,8 +24,15 @@ pub(super) fn scenes_follow_the_phone() {
     assert!(tilt::wanted(true, false));
     let mut stage = Stage::new(uid.clone(), pack);
     assert!(!stage.offset(0.5) && stage.offset(0.0) && !stage.offset(0.0));
-    let charging =
-        power::Power { charging: true, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
+    let charging = power::Power {
+        charging: true,
+        saver: false,
+        low: false,
+        thermal: 0,
+        headroom: 0.0,
+        still: false,
+        percent: -1,
+    };
     if let Some(r) = renderer() {
         let draw = |stage: &mut Stage, nanos: i64, force: bool| {
             let power = (charging, wprs_scene::Tier::T3);

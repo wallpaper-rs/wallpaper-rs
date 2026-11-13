@@ -18,7 +18,6 @@ const DEFAULT_HZ: u32 = 60_000;
 static REFRESH: AtomicU32 = AtomicU32::new(DEFAULT_HZ);
 static CAPS: [AtomicU32; 2] = [AtomicU32::new(BATTERY_FPS), AtomicU32::new(CHARGING_FPS)];
 static CLASS: AtomicI32 = AtomicI32::new(0);
-static BELOW: [AtomicU32; 2] = [AtomicU32::new(0), AtomicU32::new(0)];
 static GUARD: AtomicBool = AtomicBool::new(false);
 static HEARS: AtomicBool = AtomicBool::new(true);
 static HALVES: AtomicBool = AtomicBool::new(true);
@@ -27,11 +26,6 @@ static CHOICE: std::sync::Mutex<QualityChoice> = std::sync::Mutex::new(QualityCh
 
 pub(crate) fn choose(choice: QualityChoice) {
     *CHOICE.lock().unwrap_or_else(std::sync::PoisonError::into_inner) = choice;
-}
-
-pub(crate) fn below(pause: u8, lowest: u8) {
-    BELOW[0].store(pause.into(), Relaxed);
-    BELOW[1].store(lowest.into(), Relaxed);
 }
 
 pub(crate) fn choice() -> QualityChoice {
@@ -86,23 +80,18 @@ impl Power {
 }
 
 impl Power {
-    const BATTERY: Power =
-        Power { charging: false, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
-
-    fn drained(self, below: u32) -> bool {
-        below > 0 && !self.charging && self.percent >= 0 && (self.percent as u32) < below
-    }
+    const BATTERY: Power = Power {
+        charging: false,
+        saver: false,
+        low: false,
+        thermal: 0,
+        headroom: 0.0,
+        still: false,
+        percent: -1,
+    };
 
     fn paused(self) -> bool {
-        self.paused_below(BELOW[0].load(Relaxed))
-    }
-
-    fn paused_below(self, below: u32) -> bool {
-        self.saver || (self.low && !self.charging) || self.drained(below) || self.thermal >= CRITICAL
-    }
-
-    pub(crate) fn lowest(self) -> bool {
-        self.drained(BELOW[1].load(Relaxed))
+        self.paused_below(charge::limits().0)
     }
 
     pub(crate) fn fps(self, preview: bool) -> u32 {
@@ -122,9 +111,14 @@ impl Power {
     }
 
     pub(crate) fn differs(self, other: Power) -> bool {
-        let (pause, lowest) = (BELOW[0].load(Relaxed), BELOW[1].load(Relaxed));
+        let (pause, lowest) = charge::limits();
         let warm = |p: Power| {
-            (Power { headroom: 0.0, percent: -1, ..p }, p.headroom >= WARM, p.drained(pause), p.drained(lowest))
+            (
+                Power { headroom: 0.0, percent: -1, ..p },
+                p.headroom >= WARM,
+                p.drained(pause),
+                p.drained(lowest),
+            )
         };
         warm(self) != warm(other)
     }
@@ -137,7 +131,7 @@ impl Power {
         match () {
             _ if self.saver => Some("saver"),
             _ if self.low && !self.charging => Some("battery"),
-            _ if self.drained(BELOW[0].load(Relaxed)) => Some("battery"),
+            _ if self.drained(charge::limits().0) => Some("battery"),
             _ => (!self.moving()).then_some("heat"),
         }
     }
@@ -193,6 +187,8 @@ pub(crate) fn delay_ms(fps: u32) -> i64 {
     (interval - (interval / 4.0).min(8.0)).floor().max(1.0) as i64
 }
 
+mod charge;
+pub(crate) use charge::below;
 pub(crate) mod pace;
 #[cfg(test)]
 mod tests;

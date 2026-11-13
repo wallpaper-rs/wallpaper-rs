@@ -48,8 +48,15 @@ fn stall(stage: &mut Stage) {
 
 pub(super) fn only_automatic_stops_heavy_scenes() {
     let (uid, path) = heavy();
-    let power =
-        power::Power { charging: false, saver: true, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
+    let power = power::Power {
+        charging: false,
+        saver: true,
+        low: false,
+        thermal: 0,
+        headroom: 0.0,
+        still: false,
+        percent: -1,
+    };
     let Some(r) = renderer() else {
         return assert_eq!(ask(json!({ "op": "remove", "uids": [uid] })), Value::Null);
     };

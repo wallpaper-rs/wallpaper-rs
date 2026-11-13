@@ -22,8 +22,15 @@ fn blink(id: &str, photosensitive: bool) -> (String, std::path::PathBuf) {
 pub(super) fn calmed() {
     let (uid, path) = blink("org.example.blink", true);
     let (glow, glowing) = blink("org.example.glow", false);
-    let power =
-        power::Power { charging: true, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
+    let power = power::Power {
+        charging: true,
+        saver: false,
+        low: false,
+        thermal: 0,
+        headroom: 0.0,
+        still: false,
+        percent: -1,
+    };
     let still = power::Power { still: true, ..power };
     if let Some(r) = renderer() {
         let mut stage = Stage::new(uid.clone(), pack::load(&path).unwrap());
