@@ -3,11 +3,12 @@ package io.github.wallpaper_rs
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -46,6 +47,8 @@ class SourcesTest {
 
     private fun text(id: Int, vararg args: Any) = compose.onNodeWithText(context.getString(id, *args))
 
+    private fun reached(text: String) = compose.onNode(hasScrollAction()).performScrollToNode(hasText(text)).let { compose.onNode(hasText(text)) }
+
     private fun patient(done: () -> Boolean): Boolean {
         val end = System.currentTimeMillis() + PATIENCE_MS
         while (!done() && System.currentTimeMillis() < end) Thread.sleep(100)
@@ -67,9 +70,9 @@ class SourcesTest {
         shown { Sources(it) {} }
         text(R.string.sources).assertIsDisplayed()
         text(R.string.providers).assertIsDisplayed()
-        text(kindTitle("bing")).performScrollTo().assertIsDisplayed()
-        text(R.string.repos_none).performScrollTo().assertIsDisplayed()
-        text(R.string.repo_fingerprint).performScrollTo().assertIsDisplayed()
+        reached(context.getString(kindTitle("bing"))).assertIsDisplayed()
+        reached(context.getString(R.string.repos_none)).assertIsDisplayed()
+        reached(context.getString(R.string.repo_fingerprint)).assertIsDisplayed()
         assertEquals(0, providers().length())
     }
 
@@ -89,9 +92,9 @@ class SourcesTest {
                 account("provider_add", "kind" to "webdav", "options" to JSONObject().put("url", dav.url).put("user", "me"), "secret" to "pw", "on" to false)
             }
             shown { Sources(it) {} }
-            text(R.string.sent_dav, "127.0.0.1").performScrollTo().assertIsDisplayed()
+            reached(context.getString(R.string.sent_dav, "127.0.0.1")).assertIsDisplayed()
             text(R.string.provider_never).assertIsDisplayed()
-            compose.onNode(hasText(context.getString(R.string.provider_turn_on))).performScrollTo().assertIsOff()
+            reached(context.getString(R.string.provider_turn_on)).assertIsOff()
             Thread.sleep(SILENCE_MS)
             assertEquals("nothing is contacted while it is off", 0, dav.listings.get() + dav.downloads.get())
             compose.onNode(hasText(context.getString(R.string.provider_turn_on))).performClick()
