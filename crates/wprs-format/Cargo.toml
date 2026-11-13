@@ -29,6 +29,10 @@ tempfile.workspace = true
 image.workspace = true
 
 [[test]]
+name = "anchor_mismatch"
+required-features = ["sign"]
+
+[[test]]
 name = "sign"
 required-features = ["sign"]
 

@@ -4184,6 +4184,10 @@ msgid "%1 does not match its signed hash or size"
 msgstr "%1 no coincide con su hash o tamaño firmados"
 
 #: crates/wprs-format/src/said.rs
+msgid "the fingerprint does not match the repository at %1"
+msgstr "la huella no coincide con el repositorio de %1"
+
+#: crates/wprs-format/src/said.rs
 msgid "%1 is revoked"
 msgstr "%1 está revocado"
 
@@ -4554,10 +4558,6 @@ msgstr ""
 #: crates/wprs-format/src/store.rs
 msgid "expected 64 lowercase hex digits"
 msgstr "se esperaban 64 cifras hexadecimales en minúsculas"
-
-#: crates/wprs-format/src/update.rs
-msgid "root/1.json is not signed by the anchor key"
-msgstr "root/1.json no lo firma la clave de anclaje"
 
 #: crates/wprs-format/src/update.rs
 msgid "is more than a day in the future"

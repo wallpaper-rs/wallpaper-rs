@@ -90,7 +90,7 @@ impl Run<'_> {
             root.check(1, &id)?;
             let signers = root.meets(&root.roles.root, &json, &sig, &comment("root", 1, &id))?;
             let anchored = anchor.fingerprint.as_ref().is_none_or(|fp| signers.contains(fp));
-            ensure(anchored, || Error::Signature("root/1.json is not signed by the anchor key".into()))?;
+            ensure(anchored, || Error::Unanchored(base.to_owned()))?;
             Ok(Some(Doc { value: root, json, sig }))
         })?;
         let root = root.ok_or_else(|| Error::Missing("root/1.json".into()))?;

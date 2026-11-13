@@ -35,10 +35,10 @@ fun Sources(main: Main, library: (String) -> Unit) {
         }
     }
     LazyColumn {
-        item { Header(stringResource(R.string.sources)) }
-        item { Note(stringResource(R.string.sources_intro)) }
-        task?.let { waiting -> item { Waiting(main, waiting) } }
-        item { Column { Providers(main, providers, run, library) } }
-        item { Column { Repos(main, status, run) } }
+        item(key = "header") { Header(stringResource(R.string.sources)) }
+        item(key = "intro") { Note(stringResource(R.string.sources_intro)) }
+        task?.let { waiting -> item(key = "waiting") { Waiting(main, waiting) } }
+        item(key = "providers") { Column { Providers(main, providers, run, library) } }
+        item(key = "repos") { Column { Repos(main, status, run) } }
     }
 }

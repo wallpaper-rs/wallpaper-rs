@@ -137,6 +137,7 @@
     <string name="error_android_provider_failed">%1$s no respondió: %2$s</string>
     <string name="error_android_provider_off">%1$s está apagada: enciéndela para que descargue</string>
     <string name="error_android_provider_busy">Otra fuente de imágenes está descargando: inténtalo de nuevo cuando termine</string>
+    <string name="error_format_unanchored">La huella no coincide con el repositorio de %1$s: revísala y cópiala de nuevo tal como la dio quien publica</string>
     <string name="error_android_repo_fingerprint">La huella tiene 64 letras y números (del 0 al 9 y de la a a la f): cópiala de nuevo tal como la dio quien publica</string>
     <string name="error_android_repo_needs_fingerprint">Pide a quien publica la huella del repositorio: así este teléfono sabe que nadie lo cambió</string>
     <string name="error_android_repo_two_fingerprints">La dirección ya lleva una huella: deja vacío el cuadro de la huella</string>

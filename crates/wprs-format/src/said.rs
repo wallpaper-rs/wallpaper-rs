@@ -39,6 +39,9 @@ impl Error {
                 said("format.equivocation", "entry %1 was published twice with different content", &[n])
             }
             Error::Mismatch(r) => said("format.mismatch", "%1 does not match its signed hash or size", &[r]),
+            Error::Unanchored(r) => {
+                said("format.unanchored", "the fingerprint does not match the repository at %1", &[r])
+            }
             Error::Revoked(r) => said("format.revoked", "%1 is revoked", &[r]),
             Error::NotFound(r) => said("format.not_found", "%1 not found", &[r]),
             Error::Exists(r) => said("format.exists", "%1 already exists", &[r]),

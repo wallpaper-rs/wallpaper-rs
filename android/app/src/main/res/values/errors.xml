@@ -137,6 +137,7 @@
     <string name="error_android_provider_failed">%1$s did not answer: %2$s</string>
     <string name="error_android_provider_off">%1$s is off: turn it on to let it download</string>
     <string name="error_android_provider_busy">Another picture source is downloading: try again when it ends</string>
+    <string name="error_format_unanchored">The fingerprint does not match the repository at %1$s: check it and copy it again as the publisher gave it</string>
     <string name="error_android_repo_fingerprint">The fingerprint has 64 letters and digits (0 to 9 and a to f): copy it again as the publisher gave it</string>
     <string name="error_android_repo_needs_fingerprint">Ask the publisher for the fingerprint of the repository: it is how this phone knows nobody swapped it</string>
     <string name="error_android_repo_two_fingerprints">The address already holds a fingerprint: leave the fingerprint box empty</string>

@@ -85,6 +85,36 @@ class SourcesTest {
         text(R.string.repo_sent, "example.org").assertIsDisplayed()
     }
 
+    private fun refused(url: String, print: String) {
+        shown { Sources(it) {} }
+        reached(context.getString(R.string.repo_url))
+        compose.onNode(hasText(context.getString(R.string.repo_url))).performTextInput(url)
+        if (print.isNotEmpty()) compose.onNode(hasText(context.getString(R.string.repo_fingerprint))).performTextInput(print)
+        text(R.string.repo_add_url).performClick()
+        val help = context.getString(R.string.repo_fingerprint_help)
+        patient { compose.onAllNodes(hasText(help)).fetchSemanticsNodes().isEmpty() }
+        assertTrue("a refusal replaces the help text", compose.onAllNodes(hasText(help)).fetchSemanticsNodes().isEmpty())
+        compose.onNode(hasText(url)).assertIsDisplayed()
+        if (print.isNotEmpty()) compose.onNode(hasText(print)).assertIsDisplayed()
+        assertEquals(0, (runBlocking { account("repos") } as JSONObject).optJSONArray("repos")?.length() ?: 0)
+    }
+
+    @Test
+    fun aRefusedRepositoryKeepsItsMessageAndWhatWasTyped() {
+        val print = "ab".repeat(32)
+        refused("http://127.0.0.1:1/", print)
+    }
+
+    @Test
+    fun anAddressThatIsNotARepositoryKeepsItsMessageAndWhatWasTyped() {
+        FakeDav().use { dav -> refused(dav.url, "cd".repeat(32)) }
+    }
+
+    @Test
+    fun aFingerprintOfTheWrongLengthKeepsItsMessageAndWhatWasTyped() {
+        refused("https://example.org/wallpapers/", "abc123")
+    }
+
     @Test
     fun aPictureSourceStaysOffAndSilentUntilTheUserTurnsItOn() {
         FakeDav().use { dav ->

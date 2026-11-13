@@ -163,6 +163,8 @@ pub enum Error {
     #[error("{}", self.message())]
     Mismatch(String),
     #[error("{}", self.message())]
+    Unanchored(String),
+    #[error("{}", self.message())]
     Revoked(String),
     #[error("{}", self.message())]
     NotFound(String),
