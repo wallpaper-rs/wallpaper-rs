@@ -1,5 +1,6 @@
 package io.github.wallpaper_rs
 
+import android.app.WallpaperManager
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,6 +13,9 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +29,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import org.json.JSONObject
 
 enum class Veil { Shelf, Title, Strip, Panel }
@@ -52,7 +59,15 @@ fun Shell(main: Main, veil: Veil, bar: (@Composable () -> Unit)?, content: @Comp
 
 @Composable
 private fun Backdrop(main: Main, veil: Veil) {
-    val poster by loaded(null, main.revision.intValue) {
+    val owner = LocalLifecycleOwner.current
+    val started = remember { mutableIntStateOf(0) }
+    DisposableEffect(owner) {
+        val watch = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_START) started.intValue++ }
+        owner.lifecycle.addObserver(watch)
+        onDispose { owner.lifecycle.removeObserver(watch) }
+    }
+    val poster by loaded(null, main.revision.intValue, started.intValue) {
+        if (!main.oursInUse()) return@loaded null
         val uid = (ask("current") as? JSONObject)?.takeUnless { it.isNull("image") }?.getString("image")
         uid?.let { (ask("thumb", "uid" to it) as? String) }?.let(BitmapFactory::decodeFile)?.asImageBitmap()
     }
@@ -61,6 +76,8 @@ private fun Backdrop(main: Main, veil: Veil) {
     Image(picture, null, Modifier.fillMaxSize().testTag("poster"), Alignment.TopCenter, ContentScale.Crop)
     Box(Modifier.fillMaxSize().drawBehind { veils(veil, t) })
 }
+
+private fun Main.oursInUse() = runCatching { WallpaperManager.getInstance(this).wallpaperInfo?.packageName == packageName }.getOrDefault(false)
 
 private fun DrawScope.veils(veil: Veil, t: Tones) = when (veil) {
     Veil.Shelf -> drawRect(Brush.verticalGradient(listOf(t.veiled(0.9f), t.veiled(0.95f))))

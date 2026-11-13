@@ -25,11 +25,7 @@ fun App(main: Main) = Theme {
     }
     if (main.placing.value) Placing(main)
     val (shown, list, away) = Triple(item, playlist, aside)
-    val veil = when {
-        shown != null || away != null -> Veil.Panel
-        tab == Tab.Settings -> Veil.Strip
-        else -> Veil.Shelf
-    }
+    val veil = if (shown != null || away != null) Veil.Panel else Veil.Shelf
     val bar: (@Composable () -> Unit)? = if (shown == null && away == null) {
         {
             Tabs(tab, Updates.count.intValue) {
