@@ -116,13 +116,13 @@ QQC2.ToolButton {
             title: App.tr("Follow a user property")
 
             SceneRepeater {
-                id: listed
+                id: choices
 
                 rows: (bind.page.view.properties ?? []).filter(p => !["button", "group", "label", "divider"].includes(p.type))
 
                 delegate: QQC2.MenuItem {
                     required property int index
-                    readonly property var modelData: listed.rows[index]
+                    readonly property var modelData: choices.rows[index]
 
                     text: modelData.label
                     onTriggered: bind.follow(modelData)
