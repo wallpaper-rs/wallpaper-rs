@@ -21,14 +21,14 @@ fn an_action_shortcut_is_written_as_keys_so_its_tooltip_never_shows_a_number() {
 }
 
 #[test]
-fn the_side_menu_closes_with_its_own_translated_button() {
-    let menu = read("qml/Navigation.qml");
-    assert!(menu.contains("collapseButtonVisible: false"));
-    for text in literals(&menu, "App.tr(").into_iter().filter(|t| t.ends_with("sidebar")) {
+fn every_menu_word_reads_in_spanish() {
+    let menu = read("qml/WordMenu.qml");
+    let words = literals(&menu, "App.tr(");
+    assert_eq!(words.len(), 8, "{words:?}");
+    for text in words {
         assert!(!spanish(text).is_empty() && spanish(text) != text, "{text}");
     }
-    assert_eq!(literals(&menu, "App.tr(").iter().filter(|t| t.ends_with("sidebar")).count(), 2);
-    assert!(menu.contains("sequence: \"Escape\""));
+    assert!(!read("qml/Main.qml").contains("globalDrawer"));
 }
 
 #[test]

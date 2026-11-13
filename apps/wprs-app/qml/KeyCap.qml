@@ -31,7 +31,7 @@ Rectangle {
         width: Look.teclaIcono
         height: Look.teclaIcono
         visible: cap.arrow
-        source: cap.arrow ? "arrow-" + cap.key + "-bold" : ""
+        source: cap.key === "left" ? "arrow-left" : cap.key === "right" ? "arrow-right" : cap.key === "up" ? "arrow-up" : cap.key === "down" ? "arrow-down" : ""
     }
 
     Text {
