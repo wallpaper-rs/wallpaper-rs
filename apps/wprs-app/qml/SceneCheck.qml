@@ -121,7 +121,7 @@ QtObject {
                     ran(check);
             if (kind === "parallax") {
                 ran("SceneManifestCheck.qml");
-                for (const check of ["SceneSettingsCheck.qml", "SceneTryCheck.qml", "SceneAuthorCheck.qml"])
+                for (const check of ["SceneSettingsCheck.qml", "SceneTryCheck.qml", "SceneAuthorCheck.qml", "SceneImportCheck.qml"])
                     ran(check);
             }
             page.jump("/scene/layers/0/opacity");

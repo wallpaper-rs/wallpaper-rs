@@ -39,10 +39,40 @@ Item {
             }
         ]
 
-        QQC2.Switch {
-            id: copy
+        ColumnLayout {
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 28
 
-            text: App.tr("Copy into the library")
+            QQC2.Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: App.tr("Type or paste the full paths of the files to add, one per line, or choose them with the button below.")
+            }
+
+            Area {
+                id: typed
+
+                Layout.fillWidth: true
+                Layout.preferredHeight: Kirigami.Units.gridUnit * 6
+                placeholderText: App.tr("One path per line")
+                Accessible.name: App.tr("Paths to import")
+            }
+
+            QQC2.Button {
+                icon.name: "document-import"
+                text: App.tr("Import these paths")
+                enabled: typed.text.trim() !== ""
+                onClicked: {
+                    App.act("Import", [typed.text.split("\n").map(line => line.trim()).filter(line => line !== "").map(line => line.startsWith("file://") ? decodeURIComponent(line.slice(7)) : line), copy.checked], "Library1");
+                    typed.text = "";
+                    importer.close();
+                }
+            }
+
+            QQC2.Switch {
+                id: copy
+
+                text: App.tr("Copy into the library")
+            }
         }
     }
 

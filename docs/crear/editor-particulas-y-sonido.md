@@ -501,7 +501,7 @@ Para volver a un valor fijo, abre el menú y elige **Valor fijo**.
 
 El cuadro puede avisar de dos cosas:
 
-- **La escena todavía no puede seguir el sonido. Permite la entrada de sonido del paquete para ver los niveles.** El paquete debe declarar la entrada de sonido y el usuario concederla. Mira [paquete](paquete.md).
+- **La escena todavía no puede seguir el sonido. Permite la entrada de sonido del paquete para ver los niveles.** El paquete debe declarar la entrada de sonido y la persona que lo usa concederla. El aviso trae el botón **Permitir el sonido**: concede la entrada en un clic (el escritorio puede pedir confirmarlo en una notificación). Si la escena mostrada todavía no usa sonido, el cuadro lo dice: enlaza un valor al sonido, guarda y muestra la escena en una pantalla. Mira [paquete](paquete.md).
 - **Esperando sonido. Reproduce algo y deja la vista previa en marcha; los niveles solo se leen mientras esta ventana está abierta y no se graba nada.**
 
 Los niveles son los que la escena misma oiría. No se graba, ni se guarda, ni se envía nada.

@@ -17,6 +17,7 @@ ColumnLayout {
     readonly property real low: modelData.min ?? 0
     readonly property real high: modelData.max ?? 1
     readonly property int places: modelData.decimals ?? 0
+    readonly property alias flag: toggle
 
     signal edited(string key, var value)
     signal fold(string key, bool on)
@@ -74,10 +75,18 @@ ColumnLayout {
     }
 
     QQC2.Switch {
+        id: toggle
+
         visible: field.kind === "bool"
         Accessible.name: field.modelData.label
-        checked: field.modelData.value === true
         onToggled: field.edited(field.modelData.key, checked)
+
+        Binding {
+            target: toggle
+            property: "checked"
+            value: field.modelData.value === true
+            restoreMode: Binding.RestoreNone
+        }
     }
 
     RowLayout {
@@ -111,14 +120,22 @@ ColumnLayout {
         }
 
         QQC2.TextField {
+            id: number
+
             visible: field.modelData.editable === true
             Accessible.name: field.modelData.label
             implicitWidth: Kirigami.Units.gridUnit * 5
-            text: Number(field.modelData.value ?? field.low).toLocaleString(Qt.locale(), "f", field.places)
             onEditingFinished: {
                 const typed = Number.fromLocaleString(Qt.locale(), text);
                 if (!isNaN(typed))
                     field.edited(field.modelData.key, typed);
+            }
+
+            Binding {
+                target: number
+                property: "text"
+                value: Number(field.modelData.value ?? field.low).toLocaleString(Qt.locale(), "f", field.places)
+                restoreMode: Binding.RestoreNone
             }
         }
     }

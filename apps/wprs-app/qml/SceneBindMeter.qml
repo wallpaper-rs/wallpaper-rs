@@ -13,10 +13,28 @@ Kirigami.Dialog {
         })
     readonly property int of: [16, 32, 64].includes(source.of) ? source.of : 64
     readonly property var reply: strip.reply
+    property var uses: ({})
+    property string asked: ""
+    readonly property bool canAllow: uses.audio === true && (uses.granted ?? []).includes("audio") === false
+
+    function look() {
+        App.query("GetInputs", [], "Inputs1", reply => dialog && (dialog.uses = (reply.shown ?? {})[dialog.page.editor.output] ?? ({})), () => {});
+    }
+
+    function allow() {
+        asked = "";
+        App.act("GrantPackage", [uses.scene, uses.key, "audio"], "Inputs1", () => dialog && dialog.look(), error => {
+            if (!dialog)
+                return;
+            dialog.asked = String(error.name).endsWith(".Unconfirmed") ? App.tr("Confirm it in the desktop notification.") : error.message;
+            dialog.look();
+        });
+    }
 
     title: App.tr("Levels of the sound")
     standardButtons: Kirigami.Dialog.Close
     padding: Kirigami.Units.largeSpacing
+    onOpened: look()
 
     ColumnLayout {
         spacing: Kirigami.Units.smallSpacing
@@ -25,6 +43,28 @@ Kirigami.Dialog {
             Layout.fillWidth: true
             visible: dialog.reply.granted === false
             text: App.tr("The scene may not follow the sound yet. Allow the sound input of the package to see the levels.")
+            actions: [
+                Kirigami.Action {
+                    text: App.tr("Allow the sound")
+                    icon.name: "audio-input-microphone"
+                    enabled: dialog.canAllow
+                    onTriggered: dialog.allow()
+                }
+            ]
+        }
+
+        QQC2.Label {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            visible: dialog.reply.granted === false && dialog.uses.audio !== true
+            text: App.tr("The shown scene does not use sound yet: save it and show it on a screen after binding a value to the sound.")
+        }
+
+        QQC2.Label {
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
+            visible: dialog.asked !== ""
+            text: dialog.asked
         }
 
         Kirigami.InlineMessage {

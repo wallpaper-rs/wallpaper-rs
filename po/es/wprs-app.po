@@ -17198,3 +17198,33 @@ msgstr ""
 "Su desvío también se oculta tras los modelos más cercanos, pero junto a uno "
 "de ellos aún puede arrastrar algunos de sus píxeles, porque la imagen que "
 "desvía no guarda profundidad."
+
+msgid "Installed assets packages"
+msgstr "Paquetes de recursos instalados"
+
+msgid "No assets packages are installed in the library yet. Pick a package file or type its path."
+msgstr "Todavía no hay paquetes de recursos instalados en la biblioteca. Elige un archivo de paquete o escribe su ruta."
+
+msgid "Path of an assets package"
+msgstr "Ruta de un paquete de recursos"
+
+msgid "Use path"
+msgstr "Usar la ruta"
+
+msgid "Type or paste the full paths of the files to add, one per line, or choose them with the button below."
+msgstr "Escribe o pega las rutas completas de los archivos que quieres añadir, una por línea, o elígelos con el botón de abajo."
+
+msgid "One path per line"
+msgstr "Una ruta por línea"
+
+msgid "Paths to import"
+msgstr "Rutas que importar"
+
+msgid "Import these paths"
+msgstr "Importar estas rutas"
+
+msgid "Allow the sound"
+msgstr "Permitir el sonido"
+
+msgid "The shown scene does not use sound yet: save it and show it on a screen after binding a value to the sound."
+msgstr "La escena que se muestra todavía no usa sonido: enlaza un valor al sonido, guárdala y muéstrala en una pantalla."

@@ -483,7 +483,7 @@ Para crear un paquete:
 
 Para traer partes de un paquete:
 
-1. Pulsa **Importar de un paquete de recursos…** y elige el archivo `.wpak`.
+1. Pulsa **Importar de un paquete de recursos…**. El diálogo lista los paquetes de recursos instalados en la biblioteca: elige uno. También puedes escribir la ruta de un archivo `.wpak` y pulsar **Usar la ruta**, o elegirlo con el selector de archivos.
 2. El diálogo muestra el título, la versión, la licencia y los autores, y cada parte con su miniatura y, por cada archivo, su licencia y su crédito.
 3. Marca las partes que quieres y acepta. Las partes y sus archivos se copian a tu escena, que así funciona sin el paquete; los créditos y el origen se escriben solos. Es un solo paso del historial.
 

@@ -25,23 +25,39 @@ ColumnLayout {
     }
 
     QQC2.TextField {
+        id: line
+
         Layout.fillWidth: true
         visible: entry.kind === "text" && !entry.modelData.multiline && !entry.secret
-        text: entry.text
         maximumLength: entry.modelData.max_len ?? 1024
         onEditingFinished: {
             if (text !== entry.text)
                 entry.edited(entry.modelData.key, text);
         }
+
+        Binding {
+            target: line
+            property: "text"
+            value: entry.text
+            restoreMode: Binding.RestoreNone
+        }
     }
 
     Area {
+        id: block
+
         Layout.fillWidth: true
         visible: entry.kind === "text" && entry.modelData.multiline && !entry.secret
-        text: entry.text
         onEditingFinished: {
             if (text !== entry.text)
                 entry.edited(entry.modelData.key, text);
+        }
+
+        Binding {
+            target: block
+            property: "text"
+            value: entry.text
+            restoreMode: Binding.RestoreNone
         }
     }
 

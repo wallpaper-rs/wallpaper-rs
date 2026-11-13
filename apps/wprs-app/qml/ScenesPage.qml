@@ -25,6 +25,10 @@ Kirigami.ScrollablePage {
         App.compose(helper.folderFor("check"), "empty", "");
     }
 
+    function make(starter) {
+        App.compose(folder.typed ? folder.text : helper.folderFor(name.text), starter, name.text);
+    }
+
     function edit(path) {
         copying.start(path);
     }
@@ -70,9 +74,12 @@ Kirigami.ScrollablePage {
             QQC2.TextField {
                 id: folder
 
+                property bool typed: false
+
                 Kirigami.FormData.label: App.tr("Folder:")
                 Layout.fillWidth: true
                 text: helper.folderFor(name.text)
+                onTextEdited: typed = true
             }
         }
 
@@ -96,7 +103,7 @@ Kirigami.ScrollablePage {
                     implicitHeight: Kirigami.Units.gridUnit * 5
                     QQC2.ToolTip.visible: hovered && (page.hints[modelData[0]] ?? "") !== ""
                     QQC2.ToolTip.text: page.hints[modelData[0]] ?? ""
-                    onClicked: App.compose(folder.text, modelData[0], name.text)
+                    onClicked: page.make(modelData[0])
                 }
             }
         }

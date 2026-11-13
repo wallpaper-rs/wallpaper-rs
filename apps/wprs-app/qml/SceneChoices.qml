@@ -14,8 +14,14 @@ QQC2.ComboBox {
     model: combo.modelData.options
     textRole: "label"
     valueRole: "value"
-    currentIndex: (combo.modelData.options ?? []).findIndex(option => option.value === combo.modelData.value)
     onActivated: combo.edited(combo.modelData.key, currentValue)
+
+    Binding {
+        target: combo
+        property: "currentIndex"
+        value: (combo.modelData.options ?? []).findIndex(option => option.value === combo.modelData.value)
+        restoreMode: Binding.RestoreNone
+    }
 
     delegate: QQC2.ItemDelegate {
         id: choice
