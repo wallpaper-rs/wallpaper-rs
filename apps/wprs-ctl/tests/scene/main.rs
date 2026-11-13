@@ -1,5 +1,4 @@
 mod acting;
-mod asking;
 mod authoring;
 mod cues;
 mod dedicated;
@@ -18,8 +17,10 @@ use clap::CommandFactory;
 use image::{Rgba, RgbaImage};
 use language::show_in;
 use serde_json::{Value, json};
-use std::path::Path;
-use std::process::{Command, Output, Stdio};
+use std::{
+    path::Path,
+    process::{Command, Output, Stdio},
+};
 use wprs_ctl::Cli;
 use wprs_editor::Action;
 
