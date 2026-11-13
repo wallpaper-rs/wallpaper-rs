@@ -69,6 +69,8 @@ Item {
     }
 
     DragHandler {
+        id: stroke
+
         property var points: []
 
         target: null
@@ -97,6 +99,13 @@ Item {
             if (active && points.length < 1024)
                 points = points.concat([bones.at(centroid.position)]);
         }
+    }
+
+    SceneBrushRing {
+        anchors.fill: parent
+        host: bones
+        brush: bones.mesh.rigging === bones.layerId ? (bones.mesh.sculpt ?? bones.mesh.carving ?? bones.mesh.weighing) : null
+        trail: stroke.points
     }
 
     SceneLimbs {

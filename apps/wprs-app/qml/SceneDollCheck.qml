@@ -74,6 +74,26 @@ QtObject {
         page.mesh.tool("puppet", "shape", null);
         page.mesh.shapes = {};
         panel.destroy();
+        ring();
+    }
+
+    function ring() {
+        const host = Qt.createQmlObject("import QtQuick; Item { width: 400; height: 200 }", page);
+        const ring = Qt.createComponent("SceneBrushRing.qml").createObject(host, {
+                "host": host,
+                "brush": {
+                    "radius": 0.1
+                }
+            });
+        if (Math.round(ring.diameter) !== 80)
+            throw new Error("brush ring: the ring does not follow the radius: " + ring.diameter);
+        ring.trail = [[0.25, 0.5], [0.5, 0.5]];
+        if (!ring.visible || Math.round(ring.spotX) !== 200 || Math.round(ring.spotY) !== 100)
+            throw new Error("brush ring: the ring does not follow the stroke: " + ring.spotX + " " + ring.visible);
+        ring.brush = null;
+        if (ring.visible)
+            throw new Error("brush ring: the ring shows without a brush");
+        host.destroy();
     }
 
     function script() {

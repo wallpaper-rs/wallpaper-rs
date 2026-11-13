@@ -204,7 +204,7 @@ Una forma de mezcla es un cambio de la malla (una sonrisa, un parpadeo) que se m
 1. Pulsa **Esculpir una forma de mezcla en la vista previa**. El botón se activa cuando hay una forma elegida o un nombre escrito en el paso siguiente.
 2. En **Forma** elige una existente, o **Forma nueva…** y escribe su **Nombre** (la forma se crea con el primer trazo).
 3. Elige el **Pincel**: **Empujar hacia fuera**, **Tirar hacia dentro**, **Suavizar** o **Borrar**. Ajusta **Fuerza**, **Tamaño del pincel** y **Borde suave**.
-4. Arrastra sobre la malla. La vista previa enseña la forma con todo su peso mientras esculpes. Cada trazo es un paso.
+4. Pasa el puntero sobre la malla: un anillo muestra el radio del pincel y cambia al mover **Tamaño del pincel**. Arrastra sobre la malla; el trazo queda marcado mientras lo haces. La vista previa enseña la forma con todo su peso mientras esculpes. Cada trazo es un paso.
 
 **Pasos para las expresiones:**
 
