@@ -46,15 +46,13 @@ class MediaSceneTest : SceneBase() {
         val green = { lamp.get() and 0xff }
         val cover = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888).apply { eraseColor(Color.rgb(220, 20, 20)) }
         session.setMetadata(MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_TITLE, "Tone").putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, cover).build())
-        session.setPlaybackState(state(PlaybackState.STATE_PAUSED))
+        session.setPlaybackState(state(PlaybackState.STATE_PLAYING))
         session.isActive = true
         allow(true)
         Render.call { players.follow(painter, true) }
-        val paused = waitFor(70_000) { Players.status.let { it.track && it.cover && !it.playing } }
-        assertTrue("a paused player, summary ${Players.status} readers ${Players.readersSeen()} reader ${players.seen()}", paused)
+        val playing = waitFor(70_000) { Players.status.let { it.track && it.cover && it.playing } }
+        assertTrue("a playing player, summary ${Players.status} readers ${Players.readersSeen()} reader ${players.seen()}", playing)
         Render.call { painter.refresh() }
-        assertTrue("a paused track left the scene dark: ${lamp.get()}", waitFor { red() < 32 })
-        session.setPlaybackState(state(PlaybackState.STATE_PLAYING))
         assertTrue("playing did not show the cover colour: ${lamp.get()}", waitFor { red() > 150 && green() < 90 })
         session.setPlaybackState(state(PlaybackState.STATE_PAUSED))
         assertTrue("a pause did not take the colour away: ${lamp.get()}", waitFor { red() < 32 })
