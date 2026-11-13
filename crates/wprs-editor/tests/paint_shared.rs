@@ -18,9 +18,11 @@ fn painting_a_picture_another_effect_uses_makes_a_copy_for_the_painted_one() {
         dir
     });
     let root = tempfile::tempdir().unwrap();
-    let mut p =
-        Project::create(&root.path().join("veil"), starter("empty", "org.example.veil", "Veil", "en").unwrap())
-            .unwrap();
+    let mut p = Project::create(
+        &root.path().join("veil"),
+        starter("empty", "org.example.veil", "Veil", "en").unwrap(),
+    )
+    .unwrap();
     let effect = json!({ "effect": "blend_gradient" });
     let layers = json!([
         { "id": "a", "type": "solid", "color": "#ffffff", "effects": [effect] },
@@ -28,9 +30,7 @@ fn painting_a_picture_another_effect_uses_makes_a_copy_for_the_painted_one() {
     ]);
     act(&mut p, json!({ "set": { "pointer": "/scene/layers", "value": layers } })).unwrap();
     let (first, second) = ("/scene/layers/0/effects/0/params/map", "/scene/layers/1/effects/0/params/map");
-    let stroke = |pointer: &str| {
-        json!({ "paint_mask": { "pointer": pointer, "radius": 0.1, "value": 1.0, "points": [[0.5, 0.5]] } })
-    };
+    let stroke = |pointer: &str| json!({ "paint_mask": { "pointer": pointer, "radius": 0.1, "value": 1.0, "points": [[0.5, 0.5]] } });
     act(&mut p, stroke(first)).unwrap();
     let shared = p.doc.pointer(first).and_then(Value::as_str).unwrap().to_owned();
     act(&mut p, json!({ "set": { "pointer": second, "value": shared } })).unwrap();
