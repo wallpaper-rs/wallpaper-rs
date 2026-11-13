@@ -9,9 +9,7 @@ QtObject {
     readonly property var shell: host.shell
     readonly property var allowed: ["left", "right", "up", "down", "Intro", "Esc", "Tab"]
     readonly property Component blank: Component {
-        Kirigami.Page {
-            title: "probe"
-        }
+        Kirigami.Page {}
     }
 
     function fail(what) {
