@@ -10,7 +10,7 @@ fn a_fatal_error_exits_at_once_even_when_exit_handlers_hang() {
         unsafe { libc::atexit(hang) };
         super::fatal("a test failure");
     }
-    let name = "tests::a_fatal_error_exits_at_once_even_when_exit_handlers_hang";
+    let name = "exit_tests::a_fatal_error_exits_at_once_even_when_exit_handlers_hang";
     let mut child = std::process::Command::new(std::env::current_exe().unwrap())
         .args(["--exact", name, "--nocapture"])
         .env("WPRS_FATAL_CHILD", "1")
