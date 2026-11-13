@@ -3,7 +3,7 @@ use crate::history::Step;
 use crate::ops::Op;
 use crate::project::Project;
 use anyhow::{Result, ensure};
-use wprs_core::message::said;
+use wprs_core::message::{Message, said};
 
 fn folded(steps: Vec<Step>) -> Option<Step> {
     let at = steps.last()?.at;
@@ -13,11 +13,20 @@ fn folded(steps: Vec<Step>) -> Option<Step> {
             label.push(&step.label);
         }
     }
-    let label = if label.len() == 1 { label[0].to_owned() } else { "batch".to_owned() };
+    let label = if label.len() == 1 { label[0].to_owned() } else { format!("batch:{}", label.join(",")) };
     let undo = steps.iter().rev().flat_map(|s| s.undo.iter().cloned()).collect();
     let redo = steps.iter().flat_map(|s| s.redo.iter().cloned()).collect();
     let size = steps.iter().map(|s| s.size).sum();
     Some(Step { label, undo, redo, at, size, gesture: false })
+}
+
+pub(crate) fn named(names: &str) -> Message {
+    match names.split_once(',') {
+        None => crate::history::step(names),
+        Some((first, rest)) => said("editor.step.batch_then", "%1, %2", &[&"", &""])
+            .with(1, crate::history::step(first))
+            .with(2, named(rest)),
+    }
 }
 
 impl Project {

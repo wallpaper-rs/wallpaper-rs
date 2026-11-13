@@ -45,3 +45,18 @@ fn a_failing_action_leaves_the_project_untouched() {
     assert_eq!((p.doc.clone(), p.history.clone()), before);
     assert!(p.act_all(&actions(json!([{"undo": {}}]))).is_err());
 }
+
+#[test]
+fn the_undo_step_of_a_batch_names_its_actions() {
+    let (_root, mut p) = made();
+    p.act_all(&actions(json!([
+        {"add_layer": {"kind": "solid", "id": "a"}},
+        {"hide": {"id": "a", "hidden": true}},
+        {"add_layer": {"kind": "solid", "id": "b"}}
+    ])))
+    .unwrap();
+    let ask = p.ask("", &json!({ "history": {} }));
+    let said = |name| wprs_editor::history::step(name).local();
+    assert_eq!(ask["undo"]["text"], format!("{}, {}", said("add_layer"), said("hide")));
+    assert_eq!(ask["undo"]["label"], "batch:add_layer,hide");
+}

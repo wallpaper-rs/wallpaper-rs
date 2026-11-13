@@ -149,6 +149,9 @@ impl History {
 }
 
 pub fn step(name: &str) -> Message {
+    if let Some(names) = name.strip_prefix("batch:") {
+        return crate::batch::named(names);
+    }
     match name {
         "set" => said("editor.step.set", "Change a value", &[]),
         "add" => said("editor.step.add", "Add to a list", &[]),

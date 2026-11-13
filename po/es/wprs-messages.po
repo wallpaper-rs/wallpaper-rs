@@ -1508,6 +1508,10 @@ msgstr "Añadir un ajuste predefinido"
 msgid "Several changes"
 msgstr "Varios cambios"
 
+#: crates/wprs-editor/src/batch.rs
+msgid "%1, %2"
+msgstr "%1, %2"
+
 #: crates/wprs-editor/src/history.rs
 msgid "Update what the package uses"
 msgstr "Actualizar lo que usa el paquete"
