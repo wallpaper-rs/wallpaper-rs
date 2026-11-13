@@ -1,4 +1,4 @@
-use super::atlas::{pack, placed};
+use super::atlas::{pack, pictures, placed, repeated};
 use image::{Rgba, RgbaImage};
 use wprs_scene::{Rigged, VERTEX_FLOATS};
 
@@ -27,4 +27,36 @@ fn pictures_of_one_mesh_share_an_atlas_and_each_part_reads_its_own() {
     let huge = vec![RgbaImage::new(3000, 3000), RgbaImage::new(3000, 3000)];
     let shrunk = pack(huge, 2048).unwrap();
     assert!(shrunk.rgba.width() <= 2048 && shrunk.rgba.height() <= 2048);
+}
+
+fn encoded(w: u32, h: u32) -> Vec<u8> {
+    let mut out = std::io::Cursor::new(Vec::new());
+    RgbaImage::from_fn(w, h, |x, _| Rgba([x as u8 * 60, 0, 0, 255]))
+        .write_to(&mut out, image::ImageFormat::Png)
+        .unwrap();
+    out.into_inner()
+}
+
+#[test]
+fn a_picture_that_repeats_over_its_part_is_tiled_into_the_atlas() {
+    let mut vertex = vec![0.0; VERTEX_FLOATS * 2];
+    vertex[3..5].copy_from_slice(&[-0.5, 0.0]);
+    vertex[VERTEX_FLOATS + 3..VERTEX_FLOATS + 5].copy_from_slice(&[1.5, 1.0]);
+    let rig = Rigged {
+        vertices: vertex,
+        pictures: vec![encoded(4, 2)],
+        sheets: vec![0],
+        repeats: vec![[-1.0, 0.0, 3.0, 1.0]],
+        ..Rigged::default()
+    };
+    assert!(repeated(&rig));
+    assert_eq!(pictures(&rig, false)[0].dimensions(), (4, 2));
+    let tiled = pictures(&rig, true);
+    assert_eq!(tiled[0].dimensions(), (12, 2));
+    assert_eq!(tiled[0].get_pixel(5, 0), tiled[0].get_pixel(1, 0));
+    let atlas = pack(tiled, 4096).unwrap();
+    let laid = placed(&rig, &atlas.rects);
+    let [x, _, w, _] = atlas.rects[0];
+    assert!((laid[3] - (x + w / 6.0)).abs() < 1e-6, "{} {}", laid[3], x + w / 6.0);
+    assert!((laid[VERTEX_FLOATS + 3] - (x + w * 2.5 / 3.0)).abs() < 1e-6);
 }

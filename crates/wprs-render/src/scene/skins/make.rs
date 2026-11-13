@@ -23,9 +23,9 @@ pub(crate) struct Skin {
 }
 
 fn embedded(r: &Renderer, rig: &Rigged, atlased: bool) -> (Option<GpuImage>, Option<Vec<f32>>) {
-    let mut pictures = super::atlas::pictures(rig);
+    let mut pictures = super::atlas::pictures(rig, atlased);
     let upload = |p: &image::RgbaImage| r.upload_rgba(p.as_raw(), p.width(), p.height(), p.width() * 4).ok();
-    if !atlased || pictures.len() < 2 {
+    if !atlased || pictures.is_empty() {
         return (pictures.drain(..).next().as_ref().and_then(upload), None);
     }
     match super::atlas::pack(pictures, r.max_edge()) {

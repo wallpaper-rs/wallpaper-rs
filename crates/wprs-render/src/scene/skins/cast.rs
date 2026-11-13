@@ -20,7 +20,7 @@ impl Renderer {
             let Content::Mesh { layer, size, pose, texture, relief } = &d.content else { continue };
             let Some(p) = runtime.puppet(layer) else { continue };
             let edge = self.max_edge();
-            let atlased = texture.is_none() && p.rig.pictures.len() > 1;
+            let atlased = texture.is_none() && (p.rig.pictures.len() > 1 || super::atlas::repeated(&p.rig));
             if view.skins.get(*layer).is_none_or(|s| s.digest != p.rig.digest || s.atlased != atlased) {
                 let made = self.fresh_skin(&p.rig, sized(*size, scale, frame.quality, edge), atlased)?;
                 view.skins.insert(layer.to_string(), made);

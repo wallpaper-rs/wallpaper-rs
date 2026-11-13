@@ -128,3 +128,44 @@ fn every_picture_its_parts_name_is_kept_with_the_part_that_shows_it() {
     let rig = Rigged::decode(&gl.bytes()).unwrap();
     assert_eq!((rig.pictures.len(), rig.sheets), (1, vec![0, 0]));
 }
+
+fn textured(images: usize) -> Gl {
+    let mut gl = arm();
+    let data = gl.indices(&[1, 2, 3]);
+    let view = gl.doc["accessors"][data]["bufferView"].clone();
+    gl.doc["images"] = json!((0..images).map(|_| json!({ "bufferView": view })).collect::<Vec<_>>());
+    gl.doc["textures"] = json!((0..images).map(|i| json!({ "source": i })).collect::<Vec<_>>());
+    let paint = |i: usize| json!({ "pbrMetallicRoughness": { "baseColorTexture": { "index": i } } });
+    gl.doc["materials"] = json!((0..images).map(paint).collect::<Vec<_>>());
+    gl.doc["meshes"][0]["primitives"][0]["material"] = json!(0);
+    gl
+}
+
+#[test]
+fn a_file_may_hold_more_than_eight_pictures() {
+    let mut gl = textured(12);
+    let nodes = gl.doc["nodes"].as_array().unwrap().len();
+    for k in 1..12 {
+        let mut mesh = gl.doc["meshes"][1].clone();
+        mesh["primitives"][0]["material"] = json!(k);
+        gl.doc["meshes"].as_array_mut().unwrap().push(mesh);
+        let at = gl.doc["meshes"].as_array().unwrap().len() - 1;
+        gl.doc["nodes"].as_array_mut().unwrap().push(json!({ "mesh": at }));
+    }
+    assert_eq!(gl.doc["nodes"].as_array().unwrap().len(), nodes + 11);
+    let rig = Rigged::decode(&gl.bytes()).unwrap();
+    assert_eq!(rig.pictures.len(), 12);
+    assert_eq!(rig.sheets.iter().copied().max(), Some(11));
+}
+
+#[test]
+fn texture_coordinates_past_one_ask_for_that_many_repeats() {
+    let mut gl = textured(1);
+    let rig = Rigged::decode(&gl.bytes()).unwrap();
+    assert!(rig.repeats.is_empty(), "{:?}", rig.repeats);
+    let uvs: Vec<f32> = (0..10).flat_map(|i| [i as f32 * 0.3 - 0.2, 0.5]).collect();
+    let uv = gl.floats("VEC2", &uvs);
+    gl.doc["meshes"][0]["primitives"][0]["attributes"]["TEXCOORD_0"] = json!(uv);
+    let rig = Rigged::decode(&gl.bytes()).unwrap();
+    assert_eq!(rig.repeats, [[-1.0, 0.0, 4.0, 1.0]]);
+}

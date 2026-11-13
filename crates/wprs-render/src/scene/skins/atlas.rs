@@ -13,8 +13,31 @@ fn decoded(bytes: &[u8]) -> Option<RgbaImage> {
     Some(crate::decode_limited(reader, crate::picture_limits()).ok()?.into_rgba8())
 }
 
-pub(crate) fn pictures(rig: &Rigged) -> Vec<RgbaImage> {
-    rig.pictures.iter().filter_map(|b| decoded(b)).collect()
+const FLAT: [f32; 4] = [0.0, 0.0, 1.0, 1.0];
+
+pub(crate) fn repeated(rig: &Rigged) -> bool {
+    rig.repeats.iter().any(|r| r[2] > 1.0 || r[3] > 1.0)
+}
+
+fn repeat_of(rig: &Rigged, sheet: usize) -> [f32; 4] {
+    rig.repeats.get(sheet).copied().unwrap_or(FLAT)
+}
+
+fn tiled(picture: RgbaImage, [_, _, nu, nv]: [f32; 4]) -> RgbaImage {
+    let (nu, nv) = (nu as u32, nv as u32);
+    if nu <= 1 && nv <= 1 {
+        return picture;
+    }
+    let (w, h) = picture.dimensions();
+    RgbaImage::from_fn(w * nu.max(1), h * nv.max(1), |x, y| *picture.get_pixel(x % w, y % h))
+}
+
+pub(crate) fn pictures(rig: &Rigged, repeat: bool) -> Vec<RgbaImage> {
+    let each = rig.pictures.iter().enumerate().filter_map(|(i, b)| {
+        let picture = decoded(b)?;
+        Some(if repeat { tiled(picture, repeat_of(rig, i)) } else { picture })
+    });
+    each.collect()
 }
 
 fn layout(sizes: &[(u32, u32)]) -> (u32, u32, Vec<(u32, u32)>) {
@@ -39,7 +62,7 @@ pub(crate) fn pack(mut pictures: Vec<RgbaImage>, edge: u32) -> Option<Atlas> {
     let sizes = |p: &[RgbaImage]| p.iter().map(RgbaImage::dimensions).collect::<Vec<_>>();
     let (w, h, _) = layout(&sizes(&pictures));
     if w.max(h) > edge {
-        let k = f64::from(edge - 4 * PAD * pictures.len() as u32) / f64::from(w.max(h));
+        let k = f64::from(edge.saturating_sub(4 * PAD * pictures.len() as u32).max(1)) / f64::from(w.max(h));
         let shrink = |p: &RgbaImage| {
             let (pw, ph) = p.dimensions();
             let size = |v: u32| ((f64::from(v) * k).floor() as u32).max(1);
@@ -74,8 +97,9 @@ pub(crate) fn placed(rig: &Rigged, rects: &[[f32; 4]]) -> Vec<f32> {
         let piece = v[VERTEX_FLOATS - 1] as usize;
         let sheet = rig.sheets.get(piece).copied().unwrap_or(0) as usize;
         let Some([x, y, w, h]) = rects.get(sheet).copied() else { continue };
-        v[3] = x + v[3].clamp(0.0, 1.0) * w;
-        v[4] = y + v[4].clamp(0.0, 1.0) * h;
+        let [lu, lv, nu, nv] = repeat_of(rig, sheet);
+        v[3] = x + ((v[3] - lu) / nu).clamp(0.0, 1.0) * w;
+        v[4] = y + ((v[4] - lv) / nv).clamp(0.0, 1.0) * h;
     }
     out
 }

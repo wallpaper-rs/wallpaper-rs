@@ -66,6 +66,7 @@ pub struct Rigged {
     pub motions: Vec<Motion>,
     pub pictures: Vec<Vec<u8>>,
     pub sheets: Vec<u16>,
+    pub repeats: Vec<[f32; 4]>,
     pub stack: Vec<Vec<(u16, [f32; 4])>>,
     pub swells: Vec<Vec<(u16, u16, [f32; 3])>>,
     pub digest: u64,
