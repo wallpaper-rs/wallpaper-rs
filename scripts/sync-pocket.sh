@@ -2,7 +2,7 @@
 set -euo pipefail
 declare own
 sync_phone() { ask 'account {"op": "sync", "conflict": "%1 (conflict)"}'; }
-[ "$(phone "['secrets']")" = "[]" ] || fail "the phone lists a provider secret that is no longer synced: $(phone "")"
+[ "$(phone "['secrets'] if 'secrets' in r else 'gone'")" = gone ] || fail "the phone still lists shared secrets: $(phone "")"
 short=$(send 'account {"op": "escrow", "passphrase": "too short"}' && IFS= read -r -t 900 line <&8 && echo "$line")
 grep -q '"id":"android.phrase_short"' <<<"$short" || fail "a short passphrase was taken: $short"
 pocket_phrase="seven lanterns wander past a sleeping lighthouse"

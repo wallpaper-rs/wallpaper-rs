@@ -83,7 +83,10 @@ pub(crate) fn load() -> Result<Secrets, Error> {
             &[],
         )
     };
-    serde_json::from_slice(&open(&sealed).map_err(|_| broken())?).map_err(|_| broken())
+    let mut stored: serde_json::Value =
+        serde_json::from_slice(&open(&sealed).map_err(|_| broken())?).map_err(|_| broken())?;
+    crate::unshared::forget(&mut stored);
+    serde_json::from_value(stored).map_err(|_| broken())
 }
 
 pub(crate) fn store(secrets: &Secrets) -> Result<(), Error> {

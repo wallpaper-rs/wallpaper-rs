@@ -11,7 +11,6 @@
     <string name="rotate_key">Cambiar la clave de sincronización</string>
     <string name="rotating">Cifrando todo de nuevo con una clave nueva…</string>
     <string name="restoring">Abriendo la custodia de la clave, que tarda un poco…</string>
-    <string name="secrets_shared">Claves de proveedores sincronizadas: %1$s. El teléfono las guarda selladas por el almacén de claves de Android para los ordenadores que las usan.</string>
     <string name="private_files">Archivos privados</string>
     <string name="private_none">Aún no hay archivos privados. Activa Guardar cifrado en el servidor en la página de una imagen o un vídeo.</string>
     <string name="private_waiting">Esperando para subirse</string>

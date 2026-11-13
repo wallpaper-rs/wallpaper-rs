@@ -1,7 +1,7 @@
 use crate::link::PLATFORM;
 use crate::said;
 use crate::state::{api, linked, read, update};
-use crate::{Error, apply, escrow, keys, local, private, repos, rotation, vault};
+use crate::{Error, apply, escrow, keys, local, private, repos, rotation};
 use serde_json::{Value, json};
 use std::collections::BTreeSet;
 use wprs_sync::{Session, View, arrived, carry, encode, hold, now_ms, rules};
@@ -56,7 +56,7 @@ async fn cycle(conflict: &str) -> Result<Value, Error> {
         false => (Default::default(), Default::default(), saved.clock, Default::default()),
     };
     let present = if saved.names == names { saved.present } else { Default::default() };
-    secrets.join(&mut replica);
+    crate::unshared::strip(&mut replica);
     wprs_sync::removals(&ids, &saved.removed, &mut replica, now_ms());
     let mut local = local::snapshot(&ids, &replica, &mut links, &present, &mut kept)?;
     if encrypted {
@@ -77,14 +77,13 @@ async fn cycle(conflict: &str) -> Result<Value, Error> {
         update(|s| s.outdated = true)?;
     }
     let synced = synced?;
+    crate::unshared::strip(&mut replica);
     let (mut applied, unsent) = (synced.applied, synced.left);
+    crate::unshared::keep(&mut applied);
     applied.extend(arrived(&local, &replica, &applied, &start));
     let (changed, errors) = local::apply(&local, applied, &mut links, &replica, &mut kept);
     let copied = apply::copies(&local, synced.copies, &mut links, &ids, conflict);
     let unapplied = hold(&mut replica, &start, &local, &errors, &now);
-    if secrets.split(&mut replica) {
-        vault::store(&secrets)?;
-    }
     replica.bases.values().for_each(|(_, doc)| clock.observe(&doc.clock()));
     let (rejected, records) = (session.rejected(), replica.bases.len());
     let left =
@@ -94,25 +93,19 @@ async fn cycle(conflict: &str) -> Result<Value, Error> {
         local.items.iter().filter_map(|(key, uids)| Some((key.clone(), uids.first()?.clone()))).collect();
     let offers = repos::offers(&local, &replica);
     let away = wprs_sync::away(&replica, &local, &links, &repos::offered(&ids), &repos::added());
-    let shared = secrets.records.values().filter_map(|(_, doc)| {
-        let view = doc.view().filter(|v| v.contains_key("secret"))?;
-        view.get("provider")?.as_str().map(String::from)
-    });
-    let shared: Vec<String> = shared.collect();
     let mut present: BTreeSet<String> = local.items.into_keys().chain(local.repos).collect();
     present.retain(|key| !unapplied.contains_key(&format!("library/{key}")));
     let (mut fresh, mut broken) = (0, 0);
     update(|s| {
         fresh = rejected.iter().filter(|(k, seq)| s.quarantine.get(*k) != Some(seq)).count();
         broken = unapplied.iter().filter(|(k, seq)| s.unapplied.get(*k) != Some(seq)).count();
-        s.quarantine.extend(rejected);
-        let base = |k: &String| replica.bases.get(k).or_else(|| secrets.records.get(k));
-        s.quarantine.retain(|k, seq| base(k).is_none_or(|(base, _)| base < seq));
+        s.quarantine.extend(rejected.into_iter().filter(|(key, _)| !key.starts_with("secrets/")));
+        s.quarantine.retain(|k, seq| replica.bases.get(k).is_none_or(|(base, _)| base < seq));
         (s.replica, s.links, s.clock, s.kept, s.names) = (replica, links, clock, kept, names);
         (s.present, s.unapplied) = (present, unapplied);
         s.removed.retain(|key, _| !saved.removed.contains_key(key));
         s.warning = state["warning"].as_str().map(String::from);
-        (s.files.here, s.offers, s.shared, s.away) = (here, offers, shared, away);
+        (s.files.here, s.offers, s.away) = (here, offers, away);
     })?;
     if encrypted && (state["rotate"] == true || left) {
         rotation::rotate(&api, &mut secrets, true).await?;

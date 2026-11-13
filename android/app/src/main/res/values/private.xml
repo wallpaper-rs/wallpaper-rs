@@ -11,7 +11,6 @@
     <string name="rotate_key">Replace the sync key</string>
     <string name="rotating">Encrypting everything again with a new key…</string>
     <string name="restoring">Opening the recovery escrow, which takes a while…</string>
-    <string name="secrets_shared">Provider keys synced: %1$s. The phone keeps them sealed by the Android keystore for the computers that use them.</string>
     <string name="private_files">Private files</string>
     <string name="private_none">No private files yet. Turn on Keep encrypted on the server in the page of a picture or a video.</string>
     <string name="private_waiting">Waiting to be uploaded</string>

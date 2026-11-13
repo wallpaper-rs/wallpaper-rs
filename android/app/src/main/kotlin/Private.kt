@@ -65,8 +65,6 @@ fun Recovery(status: JSONObject, run: Run) = Column(Modifier.padding(horizontal 
             Text(stringResource(R.string.rotate_key))
         }
     }
-    val shared = status.optJSONArray("secrets")?.let { list -> List(list.length(), list::getString) }.orEmpty()
-    if (shared.isNotEmpty()) Text(stringResource(R.string.secrets_shared, shared.joinToString()), style = MaterialTheme.typography.bodySmall)
     asking?.let { op ->
         val label = stringResource(if (op == "restore") R.string.restore else R.string.recovery_set)
         Phrase(label, { asking = null }) { phrase ->

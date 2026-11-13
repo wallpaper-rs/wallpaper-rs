@@ -121,7 +121,7 @@ fn status() -> Value {
             "listen": settings::chosen(LISTEN), "active": s.active(),
             "outdated": s.outdated, "recovery_stale": s.recovery_stale, "pin": s.pin,
             "recovery": match (s.recovery, s.recovery_stale) { (None, _) => "off", (_, true) => "stale", _ => "current" },
-            "secrets": s.shared, "offers": s.offers.len(), "files": s.files.items.len(),
+            "offers": s.offers.len(), "files": s.files.items.len(),
         })
     })
 }
