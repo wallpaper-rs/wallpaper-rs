@@ -33,6 +33,7 @@ fn state_note(state: String) -> String {
         "signed_out" => "signed out: the server no longer accepts this computer (it was removed from the \
                          account or the account was deleted); run `wprs-ctl server remove` and link again"
             .into(),
+        "connected" => tr(level::CONNECTED),
         _ => state,
     }
 }
@@ -139,6 +140,8 @@ pub async fn approve(client: &Client, code: &str, yes: bool, wait: &Wait) -> Res
     job(client, sync.approve_device(code, &password).map_ok(|id| ((), id)), wait).await
 }
 
+mod level;
 mod linking;
 
+pub use level::{Connect, Syncing, connect, syncing};
 pub use linking::{join, share};

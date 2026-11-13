@@ -43,7 +43,7 @@ impl Daemon {
     }
 
     pub fn join(self: &Arc<Self>, device: &str) -> Result<u64> {
-        self.linked()?;
+        self.syncing()?;
         if self.saved().ready {
             return Err(invalid("this computer already holds the sync key"));
         }

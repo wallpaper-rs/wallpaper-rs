@@ -78,7 +78,7 @@ impl Daemon {
     }
 
     pub fn require_ready(&self) -> Result<()> {
-        self.linked()?;
+        self.syncing()?;
         let ready = self.saved().ready;
         if ready {
             Ok(())

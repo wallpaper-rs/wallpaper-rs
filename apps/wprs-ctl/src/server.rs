@@ -26,6 +26,10 @@ pub enum Server {
         #[command(flatten)]
         wait: Wait,
     },
+    #[command(about = "Connect this computer to an account without syncing: prints the code to approve")]
+    Connect(crate::account::Connect),
+    #[command(about = "Turn syncing of the library, playlists and settings on or off, staying connected")]
+    Syncing(crate::account::Syncing),
     #[command(
         about = "Show the device that waits for a code, then approve it after you confirm",
         long_about = "Show the device that waits for a code, then approve it after you confirm. Approving \

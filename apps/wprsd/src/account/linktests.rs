@@ -54,3 +54,24 @@ fn a_failed_link_reaches_the_status() {
     assert_eq!(account.state, AccountState::Unlinked);
     assert_eq!(account.link_problem.as_deref(), Some("keyring"));
 }
+
+#[test]
+fn a_connected_computer_is_not_syncing_and_shows_no_warning() {
+    let mut saved = Saved {
+        url: "https://wallpapers.example.org".into(),
+        device: Some("d".into()),
+        sync_off: true,
+        warning: Some("the account syncs in plain text".into()),
+        ..Saved::default()
+    };
+    let account = saved.model(false, None).unwrap();
+    assert_eq!((account.state, account.warning, saved.active()), (AccountState::Connected, None, false));
+    saved.ready = true;
+    assert_eq!(saved.model(false, None).map(|a| a.state), Some(AccountState::Connected));
+    assert!(!saved.active());
+    saved.sync_off = false;
+    assert_eq!(saved.model(false, None).map(|a| a.state), Some(AccountState::Ready));
+    assert!(saved.active());
+    saved.ready = false;
+    assert_eq!(saved.model(false, None).map(|a| a.state), Some(AccountState::NeedsKey));
+}

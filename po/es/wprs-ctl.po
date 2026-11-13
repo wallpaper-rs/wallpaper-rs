@@ -7735,6 +7735,46 @@ msgstr ""
 
 #: apps/wprs-ctl/src/server.rs
 msgid ""
+"Connect this computer to an account without syncing: prints the code to approve"
+msgstr ""
+"Conectar este equipo a una cuenta sin sincronizar: imprime el código que se "
+"aprueba"
+
+#: apps/wprs-ctl/src/server.rs
+msgid ""
+"Turn syncing of the library, playlists and settings on or off, staying connected"
+msgstr ""
+"Activar o desactivar la sincronización de la biblioteca, las listas y los "
+"ajustes, sin desconectarse"
+
+#: apps/wprs-ctl/src/account/level.rs
+msgid ""
+"on: sync the library, playlists and settings with your other devices; off: "
+"stop syncing and stay connected"
+msgstr ""
+"on: sincronizar la biblioteca, las listas y los ajustes con tus otros "
+"dispositivos; off: dejar de sincronizar y seguir conectado"
+
+#: apps/wprs-ctl/src/account/level.rs
+msgid ""
+"connected, not syncing: repositories, browsing, installing and votes work; "
+"nothing of the library is sent. Turn syncing on with `wprs-ctl server syncing "
+"on`"
+msgstr ""
+"conectado, sin sincronizar: funcionan los repositorios, explorar, instalar y "
+"votar; no se envía nada de la biblioteca. Activa la sincronización con "
+"`wprs-ctl server syncing on`"
+
+#: apps/wprs-ctl/src/account/level.rs
+msgid "Sync without end-to-end encryption?"
+msgstr "¿Sincronizar sin cifrado de extremo a extremo?"
+
+#: apps/wprs-ctl/src/account/level.rs
+msgid "syncing stays off"
+msgstr "la sincronización sigue desactivada"
+
+#: apps/wprs-ctl/src/server.rs
+msgid ""
 "Name of this computer, seen only by your devices; the host name when empty"
 msgstr ""
 "Nombre de este equipo, que solo ven tus dispositivos; el nombre del host si "

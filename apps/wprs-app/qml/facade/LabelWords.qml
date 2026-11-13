@@ -59,6 +59,7 @@ QtObject {
             "upload": App.tr("Transfer with the server"),
             "unlinked": App.tr("Not linked"),
             "linking": App.tr("Waiting for approval"),
+            "connected": App.tr("Connected, not syncing"),
             "needs_key": App.tr("Needs the sync key from another device"),
             "signed_out": App.tr("Signed out by the server"),
             "ready": App.tr("Ready"),

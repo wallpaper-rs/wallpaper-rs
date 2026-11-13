@@ -27,6 +27,8 @@ pub trait Sync1 {
     fn add_server(&self, url: &str) -> Result<u64>;
     fn add_pinned_server(&self, url: &str, fingerprint: &str) -> Result<u64>;
     fn link(&self, name: &str, plaintext: bool) -> Result<(String, String, u64)>;
+    fn connect(&self, name: &str) -> Result<(String, String, u64)>;
+    fn set_syncing(&self, on: bool, plaintext: bool) -> Result<u64>;
     fn preview_code(&self, user_code: &str) -> Result<u64>;
     fn approve(&self, user_code: &str) -> Result<u64>;
     fn approve_device(&self, user_code: &str, password: &str) -> Result<u64>;

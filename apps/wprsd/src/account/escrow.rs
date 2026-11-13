@@ -61,7 +61,7 @@ impl Daemon {
     }
 
     pub fn restore(self: &Arc<Self>, passphrase: Zeroizing<String>) -> Result<u64> {
-        self.linked()?;
+        self.syncing()?;
         if self.saved().ready {
             return Err(invalid("this computer already holds the sync key"));
         }

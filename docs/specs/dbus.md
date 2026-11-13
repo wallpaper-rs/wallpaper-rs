@@ -2176,9 +2176,39 @@ failed link leaves no device on the account. Before asking for a code the method
 token can be kept: with no Secret Service (and secrets not kept in a private file, see
 `Providers1.SetSecretStore`) it returns `KeyringUnavailable`
 at once. When a `link` job fails, `GetStatus` keeps why in `link_problem` (`keyring`, `refused`,
-`expired`, `encryption` or `other`) and `link_error` until the next `Link`. `NotFound` without a
+`expired`, `encryption` or `other`) and `link_error` until the next `Link`. `Link` is `Connect` followed by `SetSyncing(true,
+plaintext)` in one job, except that a failure of either part revokes the new device. `NotFound` without a
 server, `Exists` when this computer is linked or linking, `InvalidArgs` for a name over 64
 characters or with control characters.
+
+### `Connect(s name) → (s user_code, s verification_uri, t job)`
+
+The first of the two levels of an account: `Link` without sync. It asks for a code and stores the
+token in the same way and with the same checks and errors, adds the server's repository, and
+stops there: it makes no sync key, sets up nothing and calls no `/api/v1/sync/` endpoint. The
+state becomes `connected`, a normal state that clients show as connected and not syncing, without
+any warning: repositories, browsing, installing and `Votes`/`Vote` work, `ApproveDevice`,
+`PreviewCode` and `RevokeDevice` too, and nothing of the library, playlists, profiles, presets,
+settings or private files is sent or received. `SyncNow`, `Join`, `ConfirmShare`, `ShareKey`,
+`Restore`, `Rotate`, `Reset`, `ShareFiles`, `ListFiles`, `FetchFile` and `SetEscrow` fail with
+`syncing is off on this computer; turn it on first`. The job output is `{device, syncing: false,
+encrypted: null, needs_key: false}`.
+
+### `SetSyncing(b on, b plaintext) → (t job)`
+
+The second level. `on` starts a `link` job that reads `/api/v1/sync/state`: on an account that
+does not sync yet it sets sync up with a new key, encrypted unless `plaintext`, as `Link` does;
+on an account that syncs without encryption it fails with the message of `Link` unless
+`plaintext`; on an account that syncs it keeps the key this computer still holds (from before it
+was turned off) or, without one, leaves the state `needs_key` until `Join` or `Restore`. It then
+syncs as usual. The output is `{syncing: true, encrypted, needs_key}`. `on` false turns syncing
+off at once: it stops automatic sync and the event stream, cancels a running sync and transfer of
+private files, clears `last_error` and the comparison, and the state becomes `connected`; the
+token, the server's repository and the sync key stay, so turning syncing on again needs no new
+comparison while the key is current. Its job ends at once with `{syncing: false}`. Both fail with
+`Exists` while a `link`, `Join` or `ShareKey` job runs, and `Failed` until this computer is
+connected or linked. Pausing (`SetPaused`) is a different thing: a paused computer still syncs with
+`SyncNow`.
 
 ### `RevokeDevice(s device, s password) → (t job)`
 
@@ -2212,7 +2242,12 @@ showed.
 
 ### `GetStatus() → (s json)`
 
-An `AccountReply`; `account` is `null` without a server. It reads no network; `devices` and the
+An `AccountReply`; `account` is `null` without a server. `state` is the level of this computer:
+`unlinked` (a server is added, no token), `linking`, `connected` (a token, syncing off: see
+`Connect`), and with syncing on `needs_key`, `ready`, `paused` or `error`; `signed_out` above all.
+A one-line summary is `connected`: «connected · not syncing»; any other state of a linked computer:
+«connected to `name` · synced `last_sync` · encrypted when `encrypted`». `warning` is always `null`
+while `connected`. It reads no network; `devices` and the
 quota are those of the last sync. `pairing` is the running comparison of `Join` or `ShareKey`: the
 other device's id, the code once both nonces are known, and `sharing` on the device that holds
 the key. `quarantined` counts the records skipped because they cannot be decrypted and `unapplied`
@@ -2228,7 +2263,8 @@ way out is `RemoveServer` and a new link.
 
 ### `SyncNow() → (t job)`
 
-Starts an `account_sync` job. `Failed` until this computer is linked and holds a sync key, and
+Starts an `account_sync` job. `Failed` until this computer is linked and holds a sync key, while
+syncing is off (state `connected`), and
 with a translated message when the account was synced by a newer sync format (`server.md`): this
 version then neither sends nor applies anything until it is updated.
 
@@ -3231,7 +3267,7 @@ struct InputsReply {
     declined: BTreeMap<String, Vec<Input>>, asking: BTreeMap<String, Vec<Input>>,
     quiet: BTreeMap<String, Vec<Input>>, clicks: Vec<String>, clicking: Vec<String>, media: MediaStatus,
 }
-enum AccountState { Unlinked, Linking, NeedsKey, Ready, Paused, Error, SignedOut }
+enum AccountState { Unlinked, Linking, Connected, NeedsKey, Ready, Paused, Error, SignedOut }
 struct AccountDevice {
     id: String, name: String, label: Option<String>, platform: String, created_at: Time,
     seen_at: Option<Time>, current: bool,

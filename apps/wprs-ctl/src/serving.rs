@@ -11,7 +11,7 @@ use futures_util::TryFutureExt;
 use std::io::{self, IsTerminal};
 use wprs_client::{Client, explain};
 
-const PLAINTEXT: &str =
+pub const PLAINTEXT: &str =
     "Plain-text sync lets the operator of the server read your library, playlists and settings.";
 const RESET: &str = "This deletes every synced record on the server and uploads this computer's library, \
                      playlists and settings under a new key. Every other device has to join again.";
@@ -41,6 +41,8 @@ pub async fn run(client: &Client, command: Server) -> Result<()> {
             });
             job(client, start, &wait).await.inspect_err(crate::account::keyring_hint)?
         }
+        Server::Connect(args) => crate::account::connect(client, args).await?,
+        Server::Syncing(args) => crate::account::syncing(client, args).await?,
         Server::Revoke { device, yes, wait } => crate::account::revoke(client, &device, yes, &wait).await?,
         Server::Approve { code, yes, wait } => approve(client, &code, yes, &wait).await?,
         Server::Status { json } => show::reply(sync.get_status().await?, json, status)?,

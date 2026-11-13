@@ -71,7 +71,7 @@ impl Daemon {
         if digits.len() != 6 {
             return Err(invalid("the code has 6 digits"));
         }
-        self.linked()?;
+        self.syncing()?;
         let peers = self.saved().peers.clone();
         let peer = find(&peers, device, |id| self.saved().label_of(id))?;
         let pairing = self.saved().pairing.clone().filter(|p| p.device == peer.id);

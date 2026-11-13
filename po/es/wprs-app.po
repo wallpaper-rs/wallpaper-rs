@@ -14393,6 +14393,10 @@ msgid "Needs the sync key from another device"
 msgstr "Necesita la clave de sincronización de otro equipo"
 
 #: apps/wprs-app/qml/facade/LabelWords.qml
+msgid "Connected, not syncing"
+msgstr "Conectado, sin sincronizar"
+
+#: apps/wprs-app/qml/facade/LabelWords.qml
 msgid "Signed out by the server"
 msgstr "Rechazado por el servidor"
 

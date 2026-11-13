@@ -2,7 +2,7 @@ use super::{Time, Uid};
 
 model! {
     #[derive(Copy, Eq, Hash)]
-    pub enum AccountState { Unlinked, Linking, NeedsKey, Ready, Paused, Error, SignedOut, #[serde(other)] Unknown }
+    pub enum AccountState { Unlinked, Linking, Connected, NeedsKey, Ready, Paused, Error, SignedOut, #[serde(other)] Unknown }
 
     pub struct AccountDevice {
         pub id: String,

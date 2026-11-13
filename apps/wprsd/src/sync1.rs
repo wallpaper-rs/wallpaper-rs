@@ -25,7 +25,17 @@ impl Sync {
 
     #[zbus(out_args("user_code", "verification_uri", "job"))]
     async fn link(&self, name: String, plaintext: bool) -> Result<(String, String, u64)> {
-        self.d()?.run(move |d| d.link_device(&name, plaintext)).await
+        self.d()?.run(move |d| d.link_device(&name, plaintext, true)).await
+    }
+
+    #[zbus(out_args("user_code", "verification_uri", "job"))]
+    async fn connect(&self, name: String) -> Result<(String, String, u64)> {
+        self.d()?.run(move |d| d.link_device(&name, false, false)).await
+    }
+
+    #[zbus(out_args("job"))]
+    async fn set_syncing(&self, on: bool, plaintext: bool) -> Result<u64> {
+        self.d()?.run(move |d| d.set_syncing(on, plaintext)).await
     }
 
     #[zbus(out_args("job"))]

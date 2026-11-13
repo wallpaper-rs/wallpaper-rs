@@ -1,3 +1,4 @@
+use super::level::sync_state;
 use super::secrets::{Secrets, encode};
 use super::server::{exists, pause, same_origin};
 use super::{block_on, hostname, sync_error};
@@ -10,7 +11,7 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use wprs_core::dbus::error::{EXISTS, KEYRING_UNAVAILABLE};
 use wprs_core::model::JobKind;
-use wprs_sync::{AGENT, Api, DeviceKey, Poll, SyncKey, poll};
+use wprs_sync::{AGENT, Api, DeviceKey, Poll, poll};
 
 pub const REFUSED: &str = "the link was refused";
 pub const EXPIRED: &str = "the code expired before it was approved; link again";
@@ -51,7 +52,12 @@ impl Daemon {
         }
     }
 
-    pub fn link_device(self: &Arc<Self>, name: &str, plaintext: bool) -> Result<(String, String, u64)> {
+    pub fn link_device(
+        self: &Arc<Self>,
+        name: &str,
+        plaintext: bool,
+        sync: bool,
+    ) -> Result<(String, String, u64)> {
         let url = self.server_url()?;
         if self.saved().device.is_some() || !self.jobs.find(JobKind::Link, "link").is_empty() {
             return Err(exists("this computer is already linked or linking"));
@@ -73,7 +79,7 @@ impl Daemon {
         let job = self.start_job(JobKind::Link, "link", move |d, ctl| {
             let done = d
                 .enroll(&api, &code, interval, expires, ctl)
-                .and_then(|token| d.finish_link(api, token, key, label, plaintext));
+                .and_then(|token| d.finish_link(api, token, key, label, sync.then_some(plaintext)));
             d.note_link(&done);
             done
         });
@@ -102,11 +108,11 @@ impl Daemon {
         token: Value,
         key: DeviceKey,
         label: String,
-        plaintext: bool,
+        sync: Option<bool>,
     ) -> Result<Value> {
         let text = |field: &str| token[field].as_str().unwrap_or_default().to_owned();
         let (device, secret) = (text("device_id"), text("token"));
-        let done = self.complete_link(api.clone(), token, key, label, plaintext);
+        let done = self.complete_link(api.clone(), token, key, label, sync);
         if done.is_err() && self.saved().device.is_none() {
             self.undo_link(&api, &device, &secret);
         }
@@ -119,7 +125,7 @@ impl Daemon {
         token: Value,
         key: DeviceKey,
         label: String,
-        plaintext: bool,
+        sync: Option<bool>,
     ) -> Result<Value> {
         let text = |field: &str| token[field].as_str().unwrap_or_default().to_owned();
         let mut secrets = Secrets::default();
@@ -127,13 +133,7 @@ impl Daemon {
         self.store_secrets(&secrets)?;
         let api = api.with_token(&secrets.token);
         let me = block_on(api.get("/api/v1/me")).map_err(sync_error)?;
-        let existing = match block_on(api.get("/api/v1/sync/state")) {
-            Err(e) if e.code() == "sync_not_set_up" => None,
-            state => Some(state.map_err(sync_error)?),
-        };
-        if existing.as_ref().is_some_and(|state| state["encrypted"] != true) && !plaintext {
-            return Err(failed(NEEDS_PLAIN));
-        }
+        let existing = sync.map(|plaintext| sync_state(&api, plaintext)).transpose()?;
         let owner = (self.server_url()?, me["id"].as_i64().unwrap_or_default());
         self.update(|s| {
             if s.owner.as_ref() != Some(&owner) {
@@ -143,31 +143,16 @@ impl Daemon {
                 s.owner = Some(owner.clone());
             }
             (s.device, s.device_name, s.label) = (Some(text("device_id")), Some(text("device_name")), label);
-            (s.plaintext, s.pinned, s.members) = (plaintext, Some(Default::default()), Default::default());
+            (s.plaintext, s.pinned, s.members) = (false, Some(Default::default()), Default::default());
+            (s.ready, s.stale, s.encrypted, s.warning, s.sync_off) = (false, false, None, None, true);
             s.handle = me["handle"].as_str().map(String::from);
         })?;
-        let state = match existing {
-            None => {
-                let sync = SyncKey::generate();
-                secrets.set_key(&sync, 0);
-                self.store_secrets(&secrets)?;
-                let body =
-                    json!({"encrypted": !plaintext, "confirm_plaintext": plaintext, "key_id": sync.id()});
-                let state = block_on(api.post("/api/v1/sync/setup", body)).map_err(sync_error)?;
-                if state["encrypted"].as_bool() != Some(!plaintext) {
-                    return Err(failed("the server set up sync with another encryption than asked"));
-                }
-                secrets.set_key(&sync, state["epoch"].as_i64().unwrap_or(0));
-                self.store_secrets(&secrets)?;
-                state
+        let state = match (existing, sync) {
+            (Some(existing), Some(plaintext)) => {
+                Some(self.setup_sync(&api, &mut secrets, existing, plaintext)?)
             }
-            Some(state) => state,
+            _ => None,
         };
-        self.update(|s| {
-            (s.encrypted, s.epoch) = (state["encrypted"].as_bool(), state["epoch"].as_i64().unwrap_or(0));
-            (s.warning, s.ready, s.stale) =
-                (state["warning"].as_str().map(String::from), !secrets.key.is_empty(), false);
-        })?;
         let repo = self.saved().repo_url.clone();
         if let Some(Err(e)) =
             repo.map(|url| self.add_repo(&url)).filter(|r| r.as_ref().is_err_and(|e| e.parts().0 != EXISTS))
@@ -177,8 +162,10 @@ impl Daemon {
         let _ = self.refresh_peers(&api);
         self.account.wake.notify_one();
         self.account.restart.notify_one();
+        let encrypted = state.as_ref().map_or(Value::Null, |state| state["encrypted"].clone());
+        let needs_key = state.is_some() && secrets.key.is_empty();
         Ok(
-            json!({"device": text("device_name"), "encrypted": state["encrypted"], "needs_key": secrets.key.is_empty()}),
+            json!({"device": text("device_name"), "syncing": state.is_some(), "encrypted": encrypted, "needs_key": needs_key}),
         )
     }
 }

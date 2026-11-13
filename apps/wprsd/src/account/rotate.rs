@@ -153,7 +153,7 @@ impl Daemon {
     }
 
     pub fn reset_sync(self: &Arc<Self>) -> Result<u64> {
-        self.linked()?;
+        self.syncing()?;
         Ok(self.start_job(JobKind::Account, "reset", |d, _| {
             let (api, mut secrets) = d.account_api(true)?;
             let encrypted = {

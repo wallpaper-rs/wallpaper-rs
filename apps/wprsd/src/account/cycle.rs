@@ -17,7 +17,7 @@ const KEY_POLL: Duration = Duration::from_millis(500);
 
 impl Daemon {
     pub fn sync_now(self: &Arc<Self>) -> Result<u64> {
-        self.linked()?;
+        self.syncing()?;
         let keyed = {
             let s = self.saved();
             s.ready || s.stale

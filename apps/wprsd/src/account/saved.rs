@@ -62,6 +62,7 @@ pub struct Saved {
     pub ready: bool,
     pub stale: bool,
     pub paused: bool,
+    pub sync_off: bool,
     pub last_sync: Option<i64>,
     pub last_error: Option<String>,
     pub warning: Option<String>,
@@ -115,6 +116,7 @@ impl Saved {
             && self.device.is_some()
             && (self.ready || self.stale)
             && !self.paused
+            && !self.sync_off
             && !self.signed_out
     }
 

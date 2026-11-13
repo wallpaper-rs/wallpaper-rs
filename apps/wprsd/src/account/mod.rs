@@ -9,6 +9,7 @@ mod files;
 mod gone;
 mod keys;
 mod legacy;
+mod level;
 mod link;
 #[cfg(test)]
 mod linktests;
