@@ -32,12 +32,12 @@ echo "stream: node $node serial $serial"
 [ "$serial" -gt 0 ] || { echo "FAIL: object serial not resolved"; exit 1; }
 
 "$BIN/wprs-ctl" set "$ROOT/tests/fixtures/green-64x32.png" --fit fit
-sleep 1
 state=$("$BIN/wprs-ctl" state)
 echo "state: $state"
 grep -q '"TEST-1"' <<<"$state" || { echo "FAIL: output missing from state"; exit 1; }
 
-result=$("$BIN/probe" "$serial" 10)
+shown() { result=$("$BIN/probe" "$serial" 10) && grep -q "center bgra \[0, 255, 0, 255\]" <<<"$result"; }
+wait_for 30 shown || true
 echo "probe: $result"
 grep -q "frame 320x180" <<<"$result" || { echo "FAIL: unexpected frame size"; exit 1; }
 grep -q "center bgra \[0, 255, 0, 255\]" <<<"$result" || { echo "FAIL: unexpected center color"; exit 1; }
