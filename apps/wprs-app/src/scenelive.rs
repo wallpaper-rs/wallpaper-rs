@@ -17,6 +17,10 @@ fn previewable(doc: &Value) -> bool {
 }
 
 impl SceneEditor {
+    pub fn pass_time(&self, ms: i32) {
+        wprs_editor::project::skip_clock(u64::try_from(ms).unwrap_or(0));
+    }
+
     pub fn hold(mut self: Pin<&mut Self>, on: bool) {
         if let Some(project) = self.as_mut().rust_mut().project.as_mut() {
             project.hold(on);

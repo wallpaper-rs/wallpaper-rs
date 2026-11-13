@@ -49,6 +49,8 @@ pub mod qobject {
         #[qinvokable]
         fn run(self: Pin<&mut SceneEditor>, action: &QString, args: &QString, gesture: bool);
         #[qinvokable]
+        fn pass_time(self: &SceneEditor, ms: i32);
+        #[qinvokable]
         fn hold(self: Pin<&mut SceneEditor>, on: bool);
         #[qinvokable]
         fn select(self: Pin<&mut SceneEditor>, pointer: &QString);

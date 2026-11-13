@@ -46,9 +46,7 @@ QtObject {
         overlay.put({
                 "feather": 20
             });
-        const until = Date.now() + 700;
-        while (Date.now() < until) {
-        }
+        page.editor.passTime(700);
         overlay.put({
                 "feather": 30
             });

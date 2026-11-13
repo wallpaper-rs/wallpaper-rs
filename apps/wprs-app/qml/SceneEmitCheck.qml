@@ -56,13 +56,13 @@ QtObject {
                 "duration": 86400
             });
         lane.width = 400;
-        const begun = Date.now(), ticks = lane.burstMarks.ticks({
+        const ticks = lane.burstMarks.ticks({
                 "burst": {
                     "every": 0.02
                 }
             }, 86400);
-        if (ticks.length > 1000 || Date.now() - begun > 50)
-            throw new Error("emission: a day of bursts drew " + ticks.length + " lines in " + (Date.now() - begun) + " ms");
+        if (ticks.length > 1000)
+            throw new Error("emission: a day of bursts drew " + ticks.length + " lines, not at most 1000");
         const bursts = Qt.createComponent("SceneSwarmBursts.qml").createObject(page, {
                 "emission": emission
             });

@@ -73,8 +73,7 @@ QtObject {
         const before = page.view.history.done.length;
         page.editor.hold(true);
         gizmo.commit("tilt", [20, 0]);
-        const until = Date.now() + 700;
-        while (Date.now() < until) {}
+        page.editor.passTime(700);
         gizmo.commit("tilt", [30, 5]);
         page.editor.hold(false);
         if (page.view.history.done.length !== before + 1)

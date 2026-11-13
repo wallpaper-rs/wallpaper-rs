@@ -22,8 +22,7 @@ QtObject {
     }
 
     function pause() {
-        const until = Date.now() + 600;
-        while (Date.now() < until) {}
+        page.editor.passTime(600);
     }
 
     function exercise() {

@@ -7,6 +7,7 @@ use anyhow::{Result, bail, ensure};
 use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 use wprs_core::message::said;
 use wprs_format::{MANIFEST, check_path, sha256};
@@ -25,8 +26,15 @@ pub fn stamp(doc: &Value) -> String {
     sha256(doc.to_string().as_bytes()).unwrap_or_default()
 }
 
+static SKIPPED: AtomicU64 = AtomicU64::new(0);
+
 pub fn now() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).map_or(0, |d| d.as_millis() as u64)
+    let real = SystemTime::now().duration_since(UNIX_EPOCH).map_or(0, |d| d.as_millis() as u64);
+    real + SKIPPED.load(Ordering::Relaxed)
+}
+
+pub fn skip_clock(ms: u64) {
+    SKIPPED.fetch_add(ms, Ordering::Relaxed);
 }
 
 pub fn entry(doc: &Value) -> Result<String> {
