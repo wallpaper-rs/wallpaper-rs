@@ -128,7 +128,7 @@ wprs-ctl scene act mi-escena layer '{"figure":{"text_width":{"layer":"titulo","r
 4. En el campo "Fallback" hay la lista de fuentes de respaldo, hasta 8. Una letra que la fuente no tiene se dibuja con la primera de esta lista que la tenga. **Añadir una fuente de respaldo** abre la misma lista de selección. Cada fila tiene **Subir**, **Bajar** y **Quitar**.
 5. Si una fuente de la lista ya no está en el paquete ni instalada, aparece el aviso **%1 no está en el paquete ni instalada aquí, así que se usa la fuente siguiente**, con su nombre.
 
-Para que una fuente viaje con la escena, impórtala antes en la pestaña **Recursos** con **Importar…** (acepta archivos ttf, otf, ttc, otc y woff2).
+Para que una fuente viaje con la escena, impórtala antes en la pestaña **Recursos** con **Importar…** (acepta archivos ttf, otf, ttc, otc y woff2). La vista previa de la lista la dibuja el editor con el nombre de la familia: una fuente que se resuelve distinto allí que al dibujar la escena puede verse algo distinta en la lista. Fíate de la vista previa del lienzo.
 
 **En la terminal:** `layer` con `figure` y `fonts`: `font` (texto vacío la quita) y `fallback` (lista de nombres).
 
@@ -370,6 +370,8 @@ Antes de esos comandos, `wprs-ctl edit depth regions foto.png` (con el mapa de p
 Cada capa se mueve con su propio campo de profundidad suave, y el movimiento total tiene un límite: nunca pasa de lo que las capas cubren, así que no se ve el borde del fondo ni se estira un trozo de imagen. Con una fuerza alta, el límite recorta el desplazamiento en vez de deformar la imagen. Las capas se construyen a la resolución de la pantalla (la app y `wprs-ctl` las construyen a 1920 como mucho, y el teléfono también).
 
 Mientras las capas no están listas, o si no pueden moverla sin estirarla, la imagen se queda quieta. El motivo se lee en la línea roja de **Cortes de capa**, en la herramienta **Paralaje** y en `wprs-ctl edit depth layers ARCHIVO` (en la salida de errores; `--list` muestra además las regiones, el desplazamiento seguro y si cada juego se mueve). Los motivos son: no hay mapa de profundidad, no hay modelo de profundidad, el relleno está apagado, la imagen tiene operaciones de color, las capas se están construyendo, no se pudieron construir, o su profundidad no permite moverla sin estirarla. El daemon dice lo mismo en `GetState`, en el campo `still` de cada salida.
+
+**Límites de las capas.** En recortes netos y en pelo, las capas por regiones quedan algo menos limpias que un corte simple, incluso con un mapa de profundidad exacto; con un mapa estimado el resultado es el mismo por cualquier vía, porque el límite es la estimación. El pelo muy fino más allá de la banda de unos 4 píxeles junto al borde queda como un contorno tenue fijo, y un borde semitransparente (el pétalo de una flor) puede dejar huecos mínimos. La vista previa del movimiento es una aproximación calculada en el procesador a 480 píxeles, sin compararla con lo que dibuja la tarjeta gráfica; el mapa de regiones se calcula a 512 píxeles, así que una región muy chica puede diferir de las capas construidas.
 
 ## Cómo descargar el modelo desde la herramienta de paralaje
 
