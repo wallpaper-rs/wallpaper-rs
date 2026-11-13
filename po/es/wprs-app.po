@@ -17326,14 +17326,14 @@ msgstr "La división %1 no se aplica: su trazo no cruza ninguna región. Devuelv
 msgid "Move %1 does not apply: its region was already moved or joined with another. Put the regions back, or undo, and redo it."
 msgstr "El movimiento %1 no se aplica: su región ya se movió o se unió a otra. Devuelve las regiones, o deshaz, y vuelve a hacerlo."
 
-#: apps/wprs-app/qml/EditRegions.qml
+#: apps/wprs-app/qml/EditRegionStraight.qml
 msgid "Straight split of the picked region"
 msgstr "División recta de la región elegida"
 
-#: apps/wprs-app/qml/EditRegions.qml
+#: apps/wprs-app/qml/EditRegionStraight.qml
 msgid "Where to cut"
 msgstr "Dónde cortar"
 
-#: apps/wprs-app/qml/EditRegions.qml
+#: apps/wprs-app/qml/EditRegionStraight.qml
 msgid "Cut along the line"
 msgstr "Cortar por la línea"
