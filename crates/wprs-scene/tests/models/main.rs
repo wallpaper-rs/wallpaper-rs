@@ -14,6 +14,7 @@ mod pictures;
 mod posing;
 mod priced;
 mod reading;
+mod sculpted;
 mod swaying;
 mod walking;
 

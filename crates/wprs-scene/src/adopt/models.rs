@@ -32,7 +32,8 @@ impl Scene {
         for (id, (mesh, solid, posed)) in &figures {
             let Some(asset) = self.assets.get(id) else { continue };
             let seen = paths.entry(asset.path.clone()).or_default();
-            (seen.0, seen.1, seen.2) = (seen.0 | mesh, seen.1 | solid, seen.2 | posed);
+            let sculpted = !asset.shapes.is_empty();
+            (seen.0, seen.1, seen.2) = (seen.0 | mesh, seen.1 | solid, seen.2 | posed | sculpted);
         }
         let (mut read, mut json, mut left, mut whole) =
             (BTreeMap::<String, Read>::new(), 0, MAX_MODEL_ENTRIES, 0);
@@ -42,7 +43,7 @@ impl Scene {
             let (path, at) = (asset.path.clone(), format!("/assets/{id}"));
             let (mesh, solid, posed) = paths.get(&path).copied().unwrap_or_default();
             let carved: Vec<(String, String)> =
-                asset.shapes.clone().into_iter().filter(|_| solid && posed).collect();
+                asset.shapes.clone().into_iter().filter(|_| solid).collect();
             let key = format!("{path}\n{carved:?}");
             if let Some((file, rig, model)) = read.get(&key) {
                 self.models.insert(id.clone(), file.clone());
@@ -96,6 +97,13 @@ impl Scene {
             let mut shapes = Vec::with_capacity(carved.len());
             for (name, from) in &carved {
                 let bytes = files.read(from, MAX_MODEL_BYTES).map_err(|e| fail(at.clone(), e.to_string()))?;
+                whole += bytes.len();
+                if whole > crate::MAX_RIG_BYTES {
+                    return Err(wrong(format!(
+                        "passes the {} MiB of meshes a scene may read",
+                        crate::MAX_RIG_BYTES >> 20
+                    )));
+                }
                 shapes.push((name.clone(), bytes));
             }
             let shaped = |mut m: Model| m.carve(&shapes).map(|_| m);
