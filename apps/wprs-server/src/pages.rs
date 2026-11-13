@@ -4,7 +4,10 @@ use crate::auth::Auth;
 use crate::creds::{self, check_handle, check_password, digest};
 use crate::db::now;
 use crate::error::{Problem, Res};
+use crate::frame::Frame;
+use crate::layout::setup_screen;
 use crate::net::{Client, LOGIN};
+use crate::ui::{Kind, button, button_named, field, form_actions, link_button};
 use crate::web::{page, text};
 use crate::{App, Router, St};
 use axum::extract::{Form, Query, State};
@@ -50,15 +53,15 @@ async fn start_session(app: &App, user: i64, next: &str) -> Res<Response> {
 async fn login_page(State(app): St, Query(n): Query<Next>) -> Markup {
     let next = local(&n.next);
     let body = html! {
-        form.stack method="post" action="/login" {
+        form.formulario method="post" action="/login" {
             input type="hidden" name="next" value=(next);
-            label { "Handle" input name="handle" autocomplete="username" required; }
-            label { "Password"
-                input type="password" name="password" autocomplete="current-password" required; }
-            button { "Sign in" }
+            (field("Handle", html! { input name="handle" autocomplete="username" required; }, None, None))
+            (field("Password", html! {
+                input type="password" name="password" autocomplete="current-password" required; }, None, None))
+            (form_actions(button(Kind::Primary, "Sign in")))
         }
         @if app.cfg.oidc.is_some() {
-            p { a href={ "/api/v1/auth/oidc/start?next=" (next) } { "Sign in with single sign-on" } }
+            p { (link_button(Kind::Plain, &format!("/api/v1/auth/oidc/start?next={next}"), "Sign in with single sign-on")) }
         }
         p { "No account yet? " a href="/register" { "Register" } }
     };
@@ -86,13 +89,14 @@ async fn logout(State(app): St, auth: Option<Auth>) -> Res<Response> {
 
 async fn register_page(State(app): St, Query(n): Query<Next>) -> Markup {
     let body = html! {
-        form.stack method="post" action="/register" {
-            label { "Handle"
-                input name="handle" autocomplete="username" required minlength="3" maxlength="32"; }
-            label { "Password (10 characters or more)"
-                input type="password" name="password" autocomplete="new-password" required minlength="10"; }
-            label { "Invitation code" input name="invite" value=(n.invite) autocomplete="off"; }
-            button { "Create account" }
+        form.formulario method="post" action="/register" {
+            (field("Handle", html! {
+                input name="handle" autocomplete="username" required minlength="3" maxlength="32"; }, None, None))
+            (field("Password (10 characters or more)", html! {
+                input type="password" name="password" autocomplete="new-password" required minlength="10"; },
+                None, None))
+            (field("Invitation code", html! { input name="invite" value=(n.invite) autocomplete="off"; }, None, None))
+            (form_actions(button(Kind::Primary, "Create account")))
         }
         p { "By registering you accept the " a href="/legal/terms" { "terms" } " and the "
             a href="/legal/privacy" { "privacy notice" } "." }
@@ -109,15 +113,16 @@ async fn setup_page(State(app): St) -> Markup {
     let body = html! {
         p { "Enter the one-time setup token printed in the server log, or made with "
             code { "wprs-server setup-token" } "." }
-        form.stack method="post" action="/setup" {
-            label { "Setup token" input name="token" autocomplete="off" required; }
-            label { "Handle" input name="handle" autocomplete="username" required; }
-            label { "Password (10 characters or more)"
-                input type="password" name="password" autocomplete="new-password" required minlength="10"; }
-            button { "Create administrator" }
+        form.formulario method="post" action="/setup" {
+            (field("Setup token", html! { input name="token" autocomplete="off" required; }, None, None))
+            (field("Handle", html! { input name="handle" autocomplete="username" required; }, None, None))
+            (field("Password (10 characters or more)", html! {
+                input type="password" name="password" autocomplete="new-password" required minlength="10"; },
+                None, None))
+            (form_actions(button(Kind::Primary, "Create administrator")))
         }
     };
-    page(&app, None, "Create the first administrator", body)
+    setup_screen(&app, Frame::new("Create the first administrator"), body)
 }
 
 #[derive(Deserialize)]
@@ -171,18 +176,19 @@ async fn link(State(app): St, auth: Option<Auth>, Query(n): Query<Next>) -> Resp
                 dt { "Software" } dd { (d["client"].as_str().filter(|c| !c.is_empty()).unwrap_or("not given")) }
                 dt { "Requested" } dd { (at(&d["requested_at"]).format("%Y-%m-%d %H:%M UTC")) }
             }
-            form.stack method="post" action="/api/v1/auth/device/approve?back=/account" {
+            form.formulario method="post" action="/api/v1/auth/device/approve?back=/account" {
                 input type="hidden" name="user_code" value=(code);
-                div {
-                    button name="approve" value="true" { "This is my device: approve" } " "
-                    button name="approve" value="false" { "Deny" }
-                }
+                (form_actions(html! {
+                    (button_named(Kind::Primary, "approve", "true", "This is my device: approve"))
+                    (button_named(Kind::Plain, "approve", "false", "Deny"))
+                }))
             }
         } @else {
             @if !code.is_empty() { p { "No device waits for this code: it is wrong, used or expired." } }
-            form.stack method="get" action="/link" {
-                label { "Code shown on the new device" input name="code" value=(code) autocomplete="off" required; }
-                button { "Look up" }
+            form.formulario method="get" action="/link" {
+                (field("Code shown on the new device", html! {
+                    input name="code" value=(code) autocomplete="off" required; }, None, None))
+                (form_actions(button(Kind::Primary, "Look up")))
             }
         }
     };

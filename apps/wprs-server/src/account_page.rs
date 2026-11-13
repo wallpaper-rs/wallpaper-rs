@@ -47,13 +47,13 @@ pub async fn account(State(app): St, auth: Option<Auth>) -> Res<Response> {
             p { "Sync data: " (h.used) " of " (app.cfg.sync_quota) " bytes. Private files: " (h.files) " of "
                 (app.cfg.files_quota) " bytes." }
         }
-        section.card { h2 { "Upload a wallpaper package" }
+        section.seccion { h2 { "Upload a wallpaper package" }
             form method="post" action="/upload?back=/account" enctype="multipart/form-data" {
                 label { "Visibility" (crate::admin::choose("visibility", "Visibility", &VISIBILITY, "public")) }
                 label { ".wpak file" input type="file" name="package" accept=".wpak" required; }
                 button { "Upload" }
             }
-            p.muted { (UNLISTED) }
+            p.texto { (UNLISTED) }
             table {
                 thead { tr { th { "Package" } th { "Version" } th { "State" } th { "Visibility" } th { "Moderation" } } }
                 tbody {
@@ -69,14 +69,14 @@ pub async fn account(State(app): St, auth: Option<Auth>) -> Res<Response> {
                 }
             }
         }
-        section.card { h2 { "Devices" }
+        section.seccion { h2 { "Devices" }
             p { a href="/link" { "Link a new device with its code" } }
             table { tbody { @for d in &devices { tr {
                 td { (text(d, "name")) } td { (text(d, "platform")) }
                 td { (remove(format!("/api/v1/me/devices/{}", text(d, "id")))) }
             } } } }
         }
-        section.card { h2 { "Access tokens" }
+        section.seccion { h2 { "Access tokens" }
             table { tbody { @for t in &tokens { tr {
                 td { (text(t, "name")) } td { code { (text(t, "scopes")) } }
                 td { @if t["device_id"].is_null() { (remove(format!("/api/v1/me/tokens/{}", t["id"]))) } }
@@ -88,7 +88,7 @@ pub async fn account(State(app): St, auth: Option<Auth>) -> Res<Response> {
                 button { "Create token" }
             }
         }
-        section.card { h2 { "Author keys" }
+        section.seccion { h2 { "Author keys" }
             @if app.repo.online() {
                 p { "Public minisign keys that sign your packages. Clients trust the key that signed the first \
                     version they installed of each package, so a new key needs a rotation signed by the old \
@@ -104,7 +104,7 @@ pub async fn account(State(app): St, auth: Option<Auth>) -> Res<Response> {
                 label { "Public key" input name="public_key" required; } button { "Add key" }
             }
             @if app.repo.online() {
-                form.stack method="post" action="/api/v1/me/author-keys/rotate?back=/account" {
+                form.formulario method="post" action="/api/v1/me/author-keys/rotate?back=/account" {
                     label { "Old key fingerprint" input name="from" required pattern="[0-9a-f]{64}"; }
                     label { "New public key" input name="public_key" required; }
                     label { "Rotation signature" textarea name="signature" rows="4" required {} }
@@ -112,11 +112,11 @@ pub async fn account(State(app): St, auth: Option<Auth>) -> Res<Response> {
                 }
             }
         }
-        section.card { h2 { "Password and data" }
+        section.seccion { h2 { "Password and data" }
             @if app.cfg.oidc.is_some() {
                 p { a href="/api/v1/auth/oidc/start?link=true" { "Link single sign-on" } }
             }
-            p.muted { "A new password signs out every other session and deletes your access tokens. Your "
+            p.texto { "A new password signs out every other session and deletes your access tokens. Your "
                 "devices stay linked unless you also sign them out." }
             form method="post" action="/api/v1/me/password?back=/account" {
                 label { "Current password"
@@ -124,7 +124,7 @@ pub async fn account(State(app): St, auth: Option<Auth>) -> Res<Response> {
                 label { "New password"
                     input type="password" name="new" autocomplete="new-password" minlength="10" required; }
                 label { input type="checkbox" name="devices" value="true"; "Also sign out every device" }
-                p.muted { "Signed-out devices have to be linked again and to get the sync key from a device "
+                p.texto { "Signed-out devices have to be linked again and to get the sync key from a device "
                     "that still holds it; without one, or a recovery passphrase, the encrypted sync data "
                     "has to be reset." }
                 button { "Change password" }

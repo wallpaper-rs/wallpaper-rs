@@ -115,7 +115,7 @@ pub fn ballot(id: &str, latest: &Value, signed: bool) -> maud::Markup {
         @if signed { @for (vote, label) in [("up", "Vote up"), ("down", "Vote down"), ("none", "Withdraw my vote")] {
             form.inline method="post" action={ "/api/v1/packages/" (id) "/vote?back=/packages/" (id) } {
                 input type="hidden" name="vote" value=(vote);
-                button { (label) }
+                (crate::ui::button(crate::ui::Kind::Plain, label))
             }
         } }
     }

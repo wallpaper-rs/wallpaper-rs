@@ -24,7 +24,8 @@ async fn discovery_health_and_legal_pages() {
     for doc in ["terms", "privacy", "content", "notice", "counter-notice"] {
         let page = server.call(Method::GET, &format!("/legal/{doc}"), &Who::Nobody).send().await.unwrap();
         assert_eq!((doc, page.status()), (doc, StatusCode::OK));
-        assert!(!page.text().await.unwrap().contains("<script"));
+        let text = page.text().await.unwrap().replace("<script src=\"/static/copy.js\" defer></script>", "");
+        assert!(!text.contains("<script"));
     }
     let missing = server.call(Method::GET, "/nowhere", &Who::Nobody).send().await.unwrap();
     assert_eq!(

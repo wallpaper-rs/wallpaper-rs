@@ -1,27 +1,19 @@
 use crate::error::Problem;
 use crate::net::{API, client_ip, key};
-use crate::pages::local;
-use crate::web::layout;
 use crate::{
     App, St, account, admin, catalog, device, featuring, files, hiding, legal, mailbox, me, moderation,
     pages, records, served, sync, upload, visibility, votes, web,
 };
 use axum::Router;
-use axum::body::{Body, to_bytes};
 use axum::extract::{ConnectInfo, DefaultBodyLimit, MatchedPath, Request, State};
 use axum::http::header::{self, HeaderName, HeaderValue};
 use axum::http::{Method, StatusCode};
 use axum::middleware::{self, Next};
 use axum::response::{IntoResponse, Response};
 use axum::routing::get;
-use maud::html;
-use serde_json::Value;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
-
-const CSP: &str = "default-src 'none'; img-src 'self'; style-src 'self'; form-action 'self'; \
-                   frame-ancestors 'none'; base-uri 'none'";
 
 pub fn router(app: Arc<App>) -> Router {
     let mut modules: Vec<fn() -> crate::Router> =
@@ -39,7 +31,7 @@ pub fn router(app: Arc<App>) -> Router {
         votes::routes,
         featuring::routes,
     ]);
-    modules.extend([web::routes, pages::routes, legal::routes]);
+    modules.extend([web::routes, crate::assets::routes, pages::routes, legal::routes]);
     #[cfg(feature = "oidc")]
     modules.push(crate::oidc::routes);
     let inner = modules
@@ -121,7 +113,7 @@ async fn guard(State(app): St, req: Request, next: Next) -> Response {
     };
     let api = ["/api/", "/repo/", "/.well-known/"].iter().any(|p| path.starts_with(p));
     if form || !api {
-        response = html(&app, response, form, back.as_deref()).await;
+        response = crate::result::screen(&app, response, form, back.as_deref()).await;
     }
     secure(&app, &method, &path, signed, &mut response);
     let status = response.status().as_u16();
@@ -132,40 +124,6 @@ async fn guard(State(app): St, req: Request, next: Next) -> Response {
     }
     app.clients.write(ip, agent.as_deref(), method.as_str(), &route, status);
     response
-}
-
-async fn html(app: &App, response: Response, form: bool, back: Option<&str>) -> Response {
-    let kind = response
-        .headers()
-        .get(header::CONTENT_TYPE)
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or_default()
-        .to_string();
-    let problem = kind.starts_with("application/problem+json");
-    let done = form
-        && response.status().is_success()
-        && (kind.starts_with("application/json") || response.status() == StatusCode::NO_CONTENT);
-    if !problem && !done {
-        return response;
-    }
-    let (mut parts, body) = response.into_parts();
-    let value: Value =
-        serde_json::from_slice(&to_bytes(body, 1 << 20).await.unwrap_or_default()).unwrap_or_default();
-    let back = local(back.unwrap_or("/"));
-    let title = if problem { parts.status.canonical_reason().unwrap_or("Error") } else { "Done" };
-    let shown = |v: &Value| v.as_str().map_or_else(|| v.to_string(), String::from);
-    let body = html! {
-        @if problem { p { (shown(&value["detail"])) } } @else {
-            dl { @for (k, v) in value.as_object().into_iter().flatten() {
-                dt { (k.replace('_', " ")) } dd { code { (shown(v)) } }
-            } }
-        }
-        p { a href=(back) { "Continue" } }
-    };
-    parts.status = if problem { parts.status } else { StatusCode::OK };
-    parts.headers.remove(header::CONTENT_LENGTH);
-    parts.headers.insert(header::CONTENT_TYPE, HeaderValue::from_static("text/html; charset=utf-8"));
-    Response::from_parts(parts, Body::from(layout(app, None, title, body).into_string()))
 }
 
 fn secure(app: &App, method: &Method, path: &str, signed: bool, response: &mut Response) {
@@ -183,7 +141,7 @@ fn secure(app: &App, method: &Method, path: &str, signed: bool, response: &mut R
     set("cross-origin-resource-policy", if open { "cross-origin" } else { "same-site" });
     set("permissions-policy", "camera=(), microphone=(), geolocation=()");
     if page {
-        set("content-security-policy", CSP);
+        set("content-security-policy", crate::assets::CSP);
     }
     if open {
         set("access-control-allow-origin", "*");

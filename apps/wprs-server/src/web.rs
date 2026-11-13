@@ -2,8 +2,9 @@ use crate::auth::Auth;
 use crate::catalog::{Search, details, search};
 use crate::db::one;
 use crate::error::{Problem, Res};
-use crate::layout::{STYLE, preview};
-pub use crate::layout::{layout, page};
+pub use crate::layout::page;
+use crate::layout::preview;
+use crate::ui::{Kind, Tone, button, checkbox, empty, notice};
 use crate::{Router, St};
 use axum::body::Body;
 use axum::extract::{Path, Query, State};
@@ -16,14 +17,10 @@ use serde_json::Value;
 use wprs_format::markup;
 
 pub fn routes() -> Router {
-    let style = || async {
-        ([(header::CONTENT_TYPE, "text/css"), (header::CACHE_CONTROL, "public, max-age=3600")], STYLE)
-    };
     Router::new()
         .route("/", get(home))
         .route("/packages/{id}", get(package))
         .route("/media/{file}", get(media))
-        .route("/static/style.css", get(style))
 }
 
 pub fn text<'a>(value: &'a Value, key: &str) -> &'a str {
@@ -57,10 +54,10 @@ async fn home(State(app): St, auth: Option<Auth>, Query(s): Query<Search>) -> Re
                 option value="" { "Anything" }
                 @for f in FACETS { option value=(f) selected[facet == f] { (f) } }
             } }
-            label { input type="checkbox" name="featured" value="true" checked[picked]; "Featured only" }
-            button { "Search" }
+            (checkbox(html! { input type="checkbox" name="featured" value="true" checked[picked]; }, "Featured only", None))
+            (button(Kind::Primary, "Search"))
         }
-        @if items.is_empty() { p { "Nothing found." } }
+        @if items.is_empty() { (empty("Nothing found", html! { "Try other words or clear the filters." })) }
         ul.grid { @for i in &items { li {
             (preview(text(i, "thumbnail"), "", 320, i["content"] == "mature"))
             a href={ "/packages/" (text(i, "id")) } { (text(i, "title")) }
@@ -90,16 +87,16 @@ async fn package(State(app): St, auth: Option<Auth>, Path(id): Path<String>) -> 
     let body = html! {
         (preview(text(&latest, "thumbnail"), &format!("Preview of {title}"), 640, latest["content"] == "mature"))
         @if let Some(reason) = latest["hidden"].as_str() {
-            p.warning { "The moderators took this wallpaper out of the catalog: " (reason) }
+            (notice(Tone::Warn, "Out of the catalog", html! { p { "The moderators took this wallpaper out of the catalog: " (reason) } }, None))
         }
         @if versions.iter().any(|v| v["listed"] == false) {
-            p.muted { "Unlisted: this wallpaper, or some of its versions, stays out of the catalog and search; \
+            p.texto { "Unlisted: this wallpaper, or some of its versions, stays out of the catalog and search; \
                 whoever has this link can see and install it. It is not private: it stays in the signed \
                 repository files, which anyone can read." }
         }
         @if latest["photosensitive"] == true {
-            p.warning { "This wallpaper has flashing lights or patterns that can affect people with \
-                photosensitive epilepsy." }
+            (notice(Tone::Warn, "Flashing lights", html! { p { "This wallpaper has flashing lights or patterns that can affect people with \
+                photosensitive epilepsy." } }, None))
         }
         (PreEscaped(description))
         (crate::votes::ballot(&id, &latest, auth.is_some()))
@@ -121,7 +118,7 @@ async fn package(State(app): St, auth: Option<Auth>, Path(id): Path<String>) -> 
         h2 { "Versions" }
         ul { @for v in &versions { li { a href=(text(v, "download")) { (text(v, "version")) } } } }
         h2 { "Report this wallpaper" }
-        form.stack method="post" action={ "/api/v1/packages/" (id) "/reports?back=/packages/" (id) } {
+        form.formulario method="post" action={ "/api/v1/packages/" (id) "/reports?back=/packages/" (id) } {
             label { "Reason" select name="category" {
                 @for c in ["copyright", "illegal", "malware", "mature", "spam", "other"] {
                     option value=(c) { (c) }
@@ -130,7 +127,7 @@ async fn package(State(app): St, auth: Option<Auth>, Path(id): Path<String>) -> 
             label { "Details" textarea name="details" rows="3" maxlength="4000" {} }
             button { "Send report" }
         }
-        p.muted {
+        p.texto {
             "For legal notices with your contact details use the "
             a href="/legal/notice" { "notice form" } "."
         }

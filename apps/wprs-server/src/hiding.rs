@@ -76,7 +76,7 @@ async fn moderation(State(app): St, auth: Option<Auth>) -> Res<Response> {
     let reasons = ["other", "malware", "license", "takedown", "broken"];
     let body = html! {
         @if cases.is_empty() { p { "No open cases." } }
-        @for case in &cases { section.card {
+        @for case in &cases { section.seccion {
             h2 { "Case " (case["id"]) ": " (text(case, "reason")) " · " (text(case, "title")) }
             img width="320" src={ "/media/" (text(case, "sha256")) ".jpg" }
                 alt={ "Preview of " (text(case, "title")) };
@@ -86,7 +86,7 @@ async fn moderation(State(app): St, auth: Option<Auth>) -> Res<Response> {
                 dt { "Uploaded by" } dd { (text(case, "uploader")) }
                 dt { "Details" } dd { (text(case, "detail")) }
             }
-            form.stack method="post" action={ "/api/v1/mod/cases/" (case["id"]) "/decision?back=/mod" } {
+            form.formulario method="post" action={ "/api/v1/mod/cases/" (case["id"]) "/decision?back=/mod" } {
                 label { "Decision" (choose("decision", "Decision", &decisions, "approve")) }
                 label { "Reason sent to the author (required to reject, remove or revoke)"
                     textarea name="statement" rows="3" {} }
@@ -96,7 +96,7 @@ async fn moderation(State(app): St, auth: Option<Auth>) -> Res<Response> {
             }
         } }
         h2 { "Hidden packages" }
-        p.muted { "Hidden packages leave the catalog and search; whoever installed them keeps them and their updates." }
+        p.texto { "Hidden packages leave the catalog and search; whoever installed them keeps them and their updates." }
         table { tbody { @for h in &hidden { tr {
             td { a href={ "/packages/" (text(h, "id")) } { code { (text(h, "id")) } } } td { (text(h, "reason")) }
             td { form method="post" action={ "/api/v1/mod/hidden/" (text(h, "id")) "?_method=DELETE&back=/mod" } {

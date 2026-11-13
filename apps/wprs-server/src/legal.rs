@@ -78,7 +78,7 @@ async fn form(State(app): St, auth: Option<Auth>, counter: bool) -> Markup {
             p { "Use this form for copyright and other legal notices. "
                 "You get a receipt number to follow the decision." }
         }
-        form.stack method="post" action=(action) {
+        form.formulario method="post" action=(action) {
             @if counter {
                 input type="hidden" name="kind" value="counter";
                 label { "Receipt number of the notice, if you have it" input name="work" autocomplete="off"; }

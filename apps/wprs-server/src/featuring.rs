@@ -87,7 +87,7 @@ async fn screen(State(app): St, auth: Option<Auth>) -> Res<Response> {
     };
     let items = app.db.run(|c| rows(c, LIST, [])).await?;
     let body = html! {
-        p.muted { "Featured packages are signed into the repository; clients show them apart in their catalog." }
+        p.texto { "Featured packages are signed into the repository; clients show them apart in their catalog." }
         table { tbody { @for i in &items { tr {
             td { a href={ "/packages/" (text(i, "id")) } { code { (text(i, "id")) } } } td { (text(i, "note")) }
             td { form method="post" action={ "/api/v1/admin/featured/" (text(i, "id")) "?_method=DELETE&back=/admin/featured" } {

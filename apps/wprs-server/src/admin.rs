@@ -151,7 +151,7 @@ async fn administration(State(app): St, auth: Option<Auth>) -> Res<Response> {
     let repo = app.repo.info(&app.cfg);
     let shown = |v: &Value| v.as_str().map_or(v.to_string(), String::from);
     let body = html! {
-        section.card { h2 { "Repository" }
+        section.seccion { h2 { "Repository" }
             @if let Some(r) = &repo {
                 dl { @for (k, v) in r.as_object().into_iter().flatten() { dt { (k) } dd { (shown(v)) } } }
                 form method="post" action="/api/v1/admin/repo/publish?back=/admin" {
@@ -162,7 +162,7 @@ async fn administration(State(app): St, auth: Option<Auth>) -> Res<Response> {
                     " and keep the printed root key offline." }
             }
         }
-        section.card { h2 { "Invitations" }
+        section.seccion { h2 { "Invitations" }
             table { tbody { @for i in &invites { tr {
                 td { (text(i, "role")) } td { (i["uses_left"]) " uses left" }
                 td { form method="post"
@@ -177,7 +177,7 @@ async fn administration(State(app): St, auth: Option<Auth>) -> Res<Response> {
                 button { "Create invitation" }
             }
         }
-        section.card { h2 { "Accounts" }
+        section.seccion { h2 { "Accounts" }
             table {
                 thead { tr { th { "Handle" } th { "Role and status" } } }
                 tbody { @for u in &users { tr { td { (text(u, "handle")) } td {
