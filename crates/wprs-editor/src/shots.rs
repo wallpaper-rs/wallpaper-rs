@@ -39,7 +39,7 @@ pub fn frames(dir: &Path, doc: &Value, spec: (u32, &[f64]), each: impl FnMut(Rgb
         true => std::fs::read(dir.join(path)).map_err(|e| format!("{path}: {e}")),
         false => Err(format!("{path} is outside the scene folder")),
     };
-    let wanted = Wanted { properties: &properties, values: &wprs_scene::Values::new(), language };
+    let wanted = Wanted { properties: &properties, values: &wprs_scene::Values::new(), language, files: &[] };
     draw(&scene, wanted, (&read, &crate::reach::reader(dir)), spec, each)
 }
 
@@ -47,6 +47,7 @@ pub struct Wanted<'a> {
     pub properties: &'a BTreeMap<String, wprs_format::Property>,
     pub values: &'a wprs_scene::Values,
     pub language: &'a str,
+    pub files: &'a [(String, std::path::PathBuf)],
 }
 
 type Read<'a> = &'a dyn Fn(&str) -> std::result::Result<Vec<u8>, String>;
@@ -59,7 +60,8 @@ pub fn draw(
     each: impl FnMut(RgbaImage),
 ) -> Result<()> {
     let assets = SceneAssets::read(scene, read).map_err(|e| anyhow!(e))?;
-    let assets = assets.with_scripts(scene, scripts).map_err(|e| anyhow!(e))?;
+    let mut assets = assets.with_scripts(scene, scripts).map_err(|e| anyhow!(e))?;
+    crate::shotmedia::swap(&mut assets, wanted.properties, wanted.files);
     let props = wprs_scene::effective(wanted.properties, &[wanted.values]);
     let renderer = Renderer::shared().map_err(|e| {
         said("editor.no_graphics", "there is no graphics device to draw the scene: %1", &[&e])
@@ -87,7 +89,7 @@ pub fn still(
         "video" => return crate::shotmedia::video(dir, doc, edge, time),
         "preset" => {
             let mut found = None;
-            crate::shotmedia::preset(doc, base, (edge, time.map(|t| vec![t]).as_deref()), |i| {
+            crate::shotmedia::preset(doc, (dir, base), (edge, time.map(|t| vec![t]).as_deref()), |i| {
                 found = Some(i)
             })?;
             return found.ok_or_else(|| anyhow!(said("editor.shot_none", "the scene drew no picture", &[])));
@@ -140,7 +142,7 @@ pub fn animation(
                     images.push(crate::shotmedia::video(dir, doc, edge, Some(*time))?);
                 }
             }
-            "preset" => crate::shotmedia::preset(doc, base, (edge, Some(&times)), |i| images.push(i))?,
+            "preset" => crate::shotmedia::preset(doc, (dir, base), (edge, Some(&times)), |i| images.push(i))?,
             _ => frames(dir, doc, (edge, &times), |image| images.push(image))?,
         }
         let gif = encode(&images, fps, format)?;

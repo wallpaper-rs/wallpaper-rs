@@ -56,7 +56,7 @@ pub fn video(dir: &Path, doc: &Value, edge: u32, time: Option<f64>) -> Result<Rg
 
 pub fn preset(
     doc: &Value,
-    base: Option<&Path>,
+    (dir, base): (&Path, Option<&Path>),
     (edge, times): (u32, Option<&[f64]>),
     each: impl FnMut(RgbaImage),
 ) -> Result<()> {
@@ -87,13 +87,14 @@ pub fn preset(
         .flatten()
         .map(|(k, v)| (k.clone(), v.clone()))
         .collect();
+    let files = chosen_files(dir, doc);
     let poster = serde_json::to_value(&scene).ok().and_then(|s| s["clock"]["poster_time"].as_f64());
     let second = poster.unwrap_or(0.0);
     let times = times.map_or_else(|| vec![second], <[f64]>::to_vec);
     let package = std::cell::RefCell::new(package);
     let read = |path: &str| package.borrow_mut().read_file(path).map_err(|e| e.to_string());
     let language = doc["manifest"]["default_locale"].as_str().unwrap_or("en");
-    let wanted = crate::shots::Wanted { properties: &properties, values: &values, language };
+    let wanted = crate::shots::Wanted { properties: &properties, values: &values, language, files: &files };
     crate::shots::draw(&scene, wanted, (&read, &read), (edge, &times), each)
 }
 
@@ -147,4 +148,26 @@ fn media_base<R: std::io::Read + std::io::Seek>(
     })();
     std::fs::remove_dir_all(&dir).ok();
     drawn
+}
+
+pub fn chosen_files(dir: &Path, doc: &Value) -> Vec<(String, std::path::PathBuf)> {
+    let files = doc["preset"]["files"].as_object().into_iter().flatten();
+    files.filter_map(|(id, p)| Some((id.clone(), dir.join(p.as_str()?)))).collect()
+}
+
+pub fn swap(
+    assets: &mut wprs_render::SceneAssets,
+    properties: &std::collections::BTreeMap<String, wprs_format::Property>,
+    files: &[(String, std::path::PathBuf)],
+) {
+    for (id, path) in files {
+        let Some(wprs_scene::Control::File { default_asset: Some(asset), .. }) =
+            properties.get(id).map(|p| &p.control)
+        else {
+            continue;
+        };
+        if let Ok(image) = wprs_render::decode_image(path, 4096) {
+            assets.images.insert(asset.clone(), wprs_render::Pixels::new(image));
+        }
+    }
 }
