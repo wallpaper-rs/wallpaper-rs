@@ -1,4 +1,6 @@
 mod halves;
+mod serials;
+mod shared;
 
 pub use halves::split;
 
