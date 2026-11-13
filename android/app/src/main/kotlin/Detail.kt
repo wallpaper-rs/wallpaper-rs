@@ -79,6 +79,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
                         "script_camera" -> R.string.lacks_script_camera
                         "script_hierarchy" -> R.string.lacks_script_hierarchy
                         "rgb" -> R.string.lacks_rgb
+                        "transition" -> R.string.lacks_transition
                         "media_info" -> R.string.lacks_media_info
                         else -> null
                     }
