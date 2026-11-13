@@ -80,3 +80,19 @@ fn bounds_show_on_the_preview_and_can_be_lifted_again() {
     act(&mut p, json!({ "undo": {} })).unwrap();
     assert_eq!(bodies(&p)[0]["rotation"], json!([-20.0, 40.0]));
 }
+
+#[test]
+fn colliders_of_a_mesh_are_added_tuned_and_removed_in_pixels() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = rigged(&root);
+    let add = json!({ "collider": { "layer": "net", "bone": "root" } });
+    act(&mut p, add).unwrap();
+    let tune = json!({ "collider": { "layer": "net", "index": 0, "shape": "sphere", "radius": 30 } });
+    act(&mut p, tune).unwrap();
+    let list = p.doc["scene"]["layers"][0]["colliders"].clone();
+    assert_eq!(list, json!([{ "bone": "root", "radius": 30.0, "shape": "sphere" }]));
+    let bad = json!({ "collider": { "layer": "net", "bone": "nobody" } });
+    assert!(act(&mut p, bad).is_err());
+    act(&mut p, json!({ "collider": { "layer": "net", "index": 0, "remove": true } })).unwrap();
+    assert!(p.doc["scene"]["layers"][0]["colliders"].is_null());
+}

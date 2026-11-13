@@ -662,15 +662,15 @@ wprs-ctl scene act mi-escena physics '{"layer":"malla","bones":["cola"],"rope":[
 
 #### `collider`
 
-Añade, cambia o quita una cápsula o una esfera que mantiene fuera los huesos que se balancean de un modelo. Sirve para que el pelo no atraviese la cabeza. En la app, **Colisionadores**: **Elige un hueso para añadir un colisionador**, **Cápsula a lo largo del hueso** o **Esfera en su cabeza**, y **Quitar**. En la vista previa arrastras el ancho.
+Añade, cambia o quita una cápsula o una esfera que mantiene fuera los huesos que se balancean de un modelo o de una malla. Sirve para que el pelo no atraviese la cabeza. En la app, **Colisionadores**: **Elige un hueso para añadir un colisionador**, **Cápsula a lo largo del hueso** o **Esfera en su cabeza**, y **Quitar**. En la vista previa arrastras el ancho.
 
 | Argumento | Tipo | Qué significa |
 |---|---|---|
-| `layer` | texto (obligatorio) | Capa de modelo. |
+| `layer` | texto (obligatorio) | Capa de modelo o de malla. |
 | `index` | entero | Lugar del colisionador que se cambia o quita (0 es el primero). Sin él se añade uno nuevo. |
 | `bone` | texto | Hueso al que va ligado. Obligatorio al añadir. |
 | `shape` | texto | `capsule` (a lo largo del hueso) o `sphere` (en su cabeza). |
-| `radius` | número | Radio en unidades del modelo, de 0 a 100. Un colisionador nuevo empieza en 0,1. |
+| `radius` | número | Radio, de 0 a 100: en unidades del modelo, o en píxeles en una malla. Un colisionador nuevo empieza en 0,1 en un modelo y en 8 en una malla. |
 | `offset` | `[x, y, z]` | Desplazamiento en el espacio del hueso. Tres ceros lo dejan sin desplazamiento. |
 | `remove` | sí/no | Con `index`: quita el colisionador. |
 

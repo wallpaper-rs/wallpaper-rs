@@ -9,6 +9,7 @@ use wprs_core::message::said;
 use wprs_scene::MAX_BONE_COLLIDERS;
 
 pub const DEFAULT_RADIUS: f32 = 0.1;
+pub const DEFAULT_MESH_RADIUS: f32 = 8.0;
 
 fn tune(entry: &mut Value, c: &ColliderEdit, rig: &wprs_scene::Rigged) -> Result<()> {
     if let Some(bone) = &c.bone {
@@ -41,7 +42,6 @@ fn tune(entry: &mut Value, c: &ColliderEdit, rig: &wprs_scene::Rigged) -> Result
 
 pub(crate) fn collider(dir: &Path, doc: &Value, c: &ColliderEdit) -> Result<Vec<Op>> {
     let (path, l) = crate::motion::figure(doc, &c.layer)?;
-    ensure!(l["type"] == "model", said("editor.not_model_layer", "%1 is not a model layer", &[&c.layer]));
     let (_, _, rig) = crate::skin::rigged(dir, doc, l)?;
     let mut list = l["colliders"].as_array().cloned().unwrap_or_default();
     match c.index {
@@ -60,7 +60,8 @@ pub(crate) fn collider(dir: &Path, doc: &Value, c: &ColliderEdit) -> Result<Vec<
                 said("editor.colliders_most", "a model has at most %1 colliders", &[&MAX_BONE_COLLIDERS])
             );
             ensure!(c.bone.is_some(), said("editor.collider_new", "a new collider names its bone", &[]));
-            let mut entry = json!({ "bone": "", "radius": num(DEFAULT_RADIUS) });
+            let radius = if l["type"] == "mesh" { DEFAULT_MESH_RADIUS } else { DEFAULT_RADIUS };
+            let mut entry = json!({ "bone": "", "radius": num(radius) });
             tune(&mut entry, c, &rig)?;
             list.push(entry);
         }

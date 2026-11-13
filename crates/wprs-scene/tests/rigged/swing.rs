@@ -177,3 +177,16 @@ fn a_swinging_bone_follows_a_moving_parent_alike_at_every_frame_rate() {
         assert!(turns.iter().all(|t| (t - turns[0]).abs() < 2.0), "inertia {inertia}: {turns:?}");
     }
 }
+
+#[test]
+fn a_collider_on_another_bone_keeps_a_hanging_mesh_rope_out() {
+    let body = json!({ "bone": "arm", "mode": "rope", "gravity": 2, "stiffness": 0, "damping": 0.5 });
+    let mut free = runtime(json!({ "physics": [body.clone()] }));
+    let ball = json!({ "bone": "root", "shape": "sphere", "radius": 40 });
+    let mut blocked = runtime(json!({ "physics": [body], "colliders": [ball] }));
+    run(&mut free, 20.0, 1.0 / 60.0);
+    run(&mut blocked, 20.0, 1.0 / 60.0);
+    let (open, kept) = (at(&free, "hand"), at(&blocked, "hand"));
+    assert!(open[0].abs() < 0.5, "{open:?}");
+    assert!(kept[0] > 2.0 && kept[0] > open[0] + 2.0, "the ball pushes the tip aside: {open:?} {kept:?}");
+}

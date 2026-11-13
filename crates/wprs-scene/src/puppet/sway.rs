@@ -9,7 +9,7 @@ fn mix(a: [f32; 2], b: [f32; 2], f: f32) -> [f32; 2] {
     [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]
 }
 
-fn advance(b: &mut Body, e: &BonePhysics, sim: &Sim, (f0, f1): (f32, f32)) {
+fn advance(b: &mut Body, e: &BonePhysics, sim: &Sim, (f0, f1): (f32, f32), hit: &super::collide::Shapes) {
     let (h, scale) = (sim.h, sim.h / b.step.max(1e-6));
     let lerp = |b: &Body, i: usize, f: f32| mix(b.before[i], b.pins[i], f);
     let decay = (-e.damping * 10.0 * h).exp();
@@ -55,7 +55,8 @@ fn advance(b: &mut Body, e: &BonePhysics, sim: &Sim, (f0, f1): (f32, f32)) {
         if let Some([lo, hi]) = limit {
             a = angle(home) + wrap(a - angle(home)).clamp(lo, hi);
         }
-        b.at[i] = [b.at[i - 1][0] + rest * a.cos(), b.at[i - 1][1] + rest * a.sin()];
+        let p = [b.at[i - 1][0] + rest * a.cos(), b.at[i - 1][1] + rest * a.sin()];
+        b.at[i] = hit.out_flat(p, &b.nodes);
         speed = speed.max(length(gap(b.was[i], b.at[i])));
     }
     b.quiet = if speed < QUIET * sim.unit * h { (b.quiet + h).min(QUIET_TIME) } else { 0.0 };
@@ -74,6 +75,7 @@ impl Puppet {
         }
         for k in 0..self.bodies.len() {
             let e = &m.rig.physics[self.bodies[k].entry];
+            self.shapes.place(&self.worlds, sim.colliders);
             let body = &mut self.bodies[k];
             body.pin(&self.worlds);
             if sim.frozen {
@@ -88,7 +90,7 @@ impl Puppet {
             if busy {
                 for s in 0..steps {
                     let t = sim.t - (steps - 1 - s) as f32 * sim.h;
-                    advance(body, e, &Sim { t, ..*sim }, (at(s), at(s + 1)));
+                    advance(body, e, &Sim { t, ..*sim }, (at(s), at(s + 1)), &self.shapes);
                 }
             }
             if steps > 0 {

@@ -66,4 +66,22 @@ impl Shapes {
         }
         p
     }
+
+    pub(crate) fn out_flat(&self, p: [f32; 2], own: &[u16]) -> [f32; 2] {
+        let flat = |v: P3| [v[0], v[1], 0.0];
+        let mut q = [p[0], p[1], 0.0];
+        for &(a, b, r, node) in &self.placed[..self.count] {
+            if own.contains(&node) || r <= 0.0 {
+                continue;
+            }
+            let c = nearest(q, flat(a), flat(b));
+            let d = sub(c, q);
+            let l = dot(d, d).sqrt();
+            if l < r {
+                let n = if l > 1e-9 { d.map(|v| v / l) } else { [0.0, 1.0, 0.0] };
+                q = std::array::from_fn(|i| c[i] + n[i] * r);
+            }
+        }
+        [q[0], q[1]]
+    }
 }
