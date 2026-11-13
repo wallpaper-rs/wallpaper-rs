@@ -12,7 +12,7 @@ Antes de empezar:
 
 ## Qué es una malla
 
-Una malla es una capa que se puede deformar con huesos. Todas las herramientas de esta página están en el campo de la malla del inspector (se llama "Mesh") y dibujan sobre la vista previa. Una capa de malla puede tener hasta 64 piezas. Los huesos son las articulaciones; cada hueso mueve los vértices según sus pesos.
+Una malla es una capa que se puede deformar con huesos. Todas las herramientas de esta página están en el campo de la malla del inspector (se llama "Mesh") y dibujan sobre la vista previa. Una capa de malla puede tener hasta 64 piezas. Las herramientas leen una sola imagen del archivo: si el `.glb` trae varias, sus vistas de coordenadas de textura usan la primera. Los huesos son las articulaciones; cada hueso mueve los vértices según sus pesos.
 
 ## Cómo hacer una malla desde una imagen
 
