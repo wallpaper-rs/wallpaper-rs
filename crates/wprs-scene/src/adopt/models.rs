@@ -42,8 +42,7 @@ impl Scene {
             let Some(asset) = self.assets.get(&id).filter(|a| a.extension() == "glb") else { continue };
             let (path, at) = (asset.path.clone(), format!("/assets/{id}"));
             let (mesh, solid, posed) = paths.get(&path).copied().unwrap_or_default();
-            let carved: Vec<(String, String)> =
-                asset.shapes.clone().into_iter().filter(|_| solid).collect();
+            let carved: Vec<(String, String)> = asset.shapes.clone().into_iter().filter(|_| solid).collect();
             let key = format!("{path}\n{carved:?}");
             if let Some((file, rig, model)) = read.get(&key) {
                 self.models.insert(id.clone(), file.clone());

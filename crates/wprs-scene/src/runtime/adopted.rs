@@ -63,7 +63,8 @@ impl Runtime {
         let mut pairs: Vec<(String, String)> =
             self.scene.sheets.iter().map(|(f, s)| (f.clone(), s.clone())).collect();
         for (template, layer) in &self.spawned {
-            let (Some(source), feeders) = (self.scene.templates.get(template), self.scene.rooted.get(template))
+            let (Some(source), feeders) =
+                (self.scene.templates.get(template), self.scene.rooted.get(template))
             else {
                 continue;
             };

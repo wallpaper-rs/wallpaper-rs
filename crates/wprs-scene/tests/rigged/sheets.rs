@@ -1,8 +1,8 @@
 use super::kit::arm;
-use wprs_scene::{BoneSet, RigControl, Runtime, ScriptOutputs, Values};
 use serde_json::json;
 use std::collections::BTreeMap;
 use wprs_scene::*;
+use wprs_scene::{BoneSet, RigControl, Runtime, ScriptOutputs, Values};
 
 #[test]
 fn picture_masks_of_a_mesh_are_posed_with_it_by_one_hidden_copy_per_picture() {
@@ -35,7 +35,10 @@ fn picture_masks_of_a_mesh_are_posed_with_it_by_one_hidden_copy_per_picture() {
     let Kind::Mesh(m) = &copy.kind else { panic!("not a mesh") };
     assert_eq!((m.texture.clone(), m.color.clone()), (Some(Value::Fixed("ink".into())), None));
     assert!(copy.effects.is_empty() && copy.mask.is_none() && copy.visible == Value::Fixed(false));
-    assert!(scene.sheets.get("sheet_2").map(String::as_str) == Some("fox") && !scene.sheets.contains_key("sheet_0"));
+    assert!(
+        scene.sheets.get("sheet_2").map(String::as_str) == Some("fox")
+            && !scene.sheets.contains_key("sheet_0")
+    );
     let again = scene.clone();
     scene.adopt(&BTreeMap::new(), |_: &str, _: usize| Ok::<_, String>(arm().bytes())).unwrap();
     assert_eq!(scene.layers, again.layers, "a second adoption changes nothing");
@@ -82,11 +85,8 @@ fn bones_moved_by_scripts_reach_the_hidden_copy_of_a_mask() {
 fn masks_of_templates_get_hidden_copies_that_follow_each_spawn() {
     let group = json!({ "id": "pack", "type": "group", "layers": [inked_fox("body")] });
     let mut rt = inked(json!({ "templates": { "solo": inked_fox("solo"), "pack": group } }));
-    let spawned = vec![
-        ("a".to_string(), "solo".to_string()),
-        ("b".into(), "pack".into()),
-        ("c".into(), "solo".into()),
-    ];
+    let spawned =
+        vec![("a".to_string(), "solo".to_string()), ("b".into(), "pack".into()), ("c".into(), "solo".into())];
     rt.set_script(ScriptOutputs { spawned: spawned.clone(), ..Default::default() });
     rt.set_script(ScriptOutputs { spawned, ..turned(&["a", "b.body"]) });
     for _ in 0..3 {
@@ -109,4 +109,3 @@ fn masks_of_templates_get_hidden_copies_that_follow_each_spawn() {
     rt.set_script(ScriptOutputs { spawned: Vec::new(), ..Default::default() });
     assert!(rt.layer("a.sheet_1").is_none() && rt.layer("b.sheet_0").is_none());
 }
-
