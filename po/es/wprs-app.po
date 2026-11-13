@@ -9725,6 +9725,10 @@ msgstr ""
 msgid "Script console"
 msgstr "Consola de los scripts"
 
+#: apps/wprs-app/qml/SceneProblems.qml
+msgid "Script error"
+msgstr "Error del script"
+
 #: apps/wprs-app/qml/ScenePropLevels.qml
 msgid "Value in effect at every level"
 msgstr "Valor vigente en cada nivel"

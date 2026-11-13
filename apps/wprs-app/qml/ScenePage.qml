@@ -186,7 +186,6 @@ Kirigami.Page {
             SceneProblems {
                 Layout.fillWidth: true
                 Layout.fillHeight: false
-                Layout.preferredHeight: Kirigami.Units.gridUnit * ((page.view.problems ?? []).length ? 7 : 2)
                 page: page
             }
         }

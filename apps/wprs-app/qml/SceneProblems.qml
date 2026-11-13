@@ -10,8 +10,10 @@ ColumnLayout {
     required property var page
     readonly property var problems: page.view.problems ?? []
     readonly property string output: page.editor.output
-    readonly property var scriptLines: App.state.previews?.[panel.output]?.console ?? []
-    readonly property string scriptError: App.state.previews?.[panel.output]?.error ?? ""
+    property var scriptLines: App.state.previews?.[panel.output]?.console ?? []
+    property string scriptError: App.state.previews?.[panel.output]?.error ?? ""
+    readonly property real wanted: Kirigami.Units.gridUnit * (scriptError !== "" || scriptLines.length > 0 ? 16 : problems.length ? 7 : 2)
+    Layout.preferredHeight: wanted
     property var inputs: ({})
     readonly property var uses: (inputs.shown ?? {})[panel.output] ?? {}
     readonly property var off: panel.unmet(panel.uses)
@@ -50,12 +52,13 @@ ColumnLayout {
 
     Kirigami.Heading {
         level: 4
-        text: panel.problems.length ? App.tr("Problems (%1)", panel.problems.length) : App.tr("No problems")
+        text: panel.problems.length ? App.tr("Problems (%1)", panel.problems.length) : panel.scriptError !== "" ? App.tr("Script error") : App.tr("No problems")
     }
 
     QQC2.ScrollView {
         Layout.fillWidth: true
         Layout.fillHeight: true
+        visible: panel.problems.length > 0
 
         ListView {
             model: panel.problems
@@ -82,11 +85,18 @@ ColumnLayout {
         }
     }
 
-    Kirigami.InlineMessage {
+    QQC2.ScrollView {
         Layout.fillWidth: true
+        Layout.preferredHeight: Kirigami.Units.gridUnit * 5
         visible: panel.scriptError !== ""
-        type: Kirigami.MessageType.Error
-        text: panel.scriptError
+
+        Area {
+            objectName: "scriptError"
+            readOnly: true
+            wrapMode: TextEdit.Wrap
+            text: panel.scriptError
+            color: Kirigami.Theme.negativeTextColor
+        }
     }
 
     Kirigami.InlineMessage {
