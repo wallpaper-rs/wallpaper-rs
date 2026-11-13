@@ -1,5 +1,6 @@
 use crate::stage::Stage;
 use crate::{choice, depth, library, pack, power, settings, store};
+use gpu::renderer;
 use serde_json::{Value, json};
 use std::fs::{self, File};
 use std::path::Path;
@@ -14,6 +15,7 @@ mod cued;
 mod failed;
 mod flight;
 mod frames;
+mod gpu;
 mod graded;
 mod guarded;
 mod hushed;
@@ -187,15 +189,4 @@ fn unreadable() {
     fs::write(&path, saved).unwrap();
     settings::reload();
     assert!(settings::downloads());
-}
-
-pub(super) fn renderer() -> Option<&'static wprs_render::Renderer> {
-    match wprs_render::Renderer::shared() {
-        Ok(r) => Some(r),
-        Err(e) if std::env::var_os("WPRS_REQUIRE_GPU").is_none() => {
-            eprintln!("skipping the scene render: {e}");
-            None
-        }
-        Err(e) => panic!("GPU required but unavailable: {e}"),
-    }
 }
