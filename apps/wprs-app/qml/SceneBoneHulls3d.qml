@@ -39,7 +39,7 @@ Item {
             SceneLightLines {
                 anchors.fill: parent
                 ratio: hulls.bones.stage.ratio
-                tint: Kirigami.Theme.negativeTextColor
+                tint: Look.coral
                 dashed: true
                 segments: hulls.ring(entry.modelData)
             }
@@ -47,7 +47,7 @@ Item {
             SceneKnob {
                 at: entry.modelData.rim
                 ratio: hulls.bones.stage.ratio
-                tint: Kirigami.Theme.negativeTextColor
+                tint: Look.coral
                 label: App.tr("Collider on %1", entry.modelData.bone)
                 tip: App.tr("Drag to set how wide the collider is")
                 onMoved: (to, done) => {

@@ -22,7 +22,7 @@ Rectangle {
     width: Kirigami.Units.smallSpacing * 2
     height: lane.height - 4
     radius: width / 2
-    color: drag.active || menu.opened ? Kirigami.Theme.highlightColor : Kirigami.Theme.neutralTextColor
+    color: drag.active || menu.opened ? Kirigami.Theme.highlightColor : Look.ambar
 
     QQC2.Label {
         anchors.left: parent.right

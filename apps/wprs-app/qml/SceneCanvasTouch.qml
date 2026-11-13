@@ -1,12 +1,13 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 MouseArea {
     id: touch
 
     required property var page
     required property bool testing
-    readonly property color tint: touch.pressedButtons ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.highlightColor
+    readonly property color tint: touch.pressedButtons ? Look.coral : Kirigami.Theme.highlightColor
 
     function buttons(held) {
         return (held & Qt.LeftButton ? 1 : 0) | (held & Qt.RightButton ? 2 : 0) | (held & Qt.MiddleButton ? 4 : 0);
@@ -60,7 +61,7 @@ MouseArea {
         radius: width / 2
         color: "transparent"
         border.width: 3
-        border.color: Kirigami.Theme.negativeTextColor
+        border.color: Look.coral
         opacity: 0
 
         ParallelAnimation {

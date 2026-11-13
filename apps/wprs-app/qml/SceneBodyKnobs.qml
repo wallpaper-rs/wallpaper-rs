@@ -43,7 +43,7 @@ Item {
             y: modelData.at[1] * knobs.height + gravity * knobs.unit - height / 2
             width: Kirigami.Units.gridUnit * 0.7
             height: width
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
             QQC2.ToolTip.visible: hover.hovered
             QQC2.ToolTip.text: App.tr("Drag up or down to set the gravity of %1", modelData.bone)
 
@@ -92,7 +92,7 @@ Item {
             width: Kirigami.Units.gridUnit * 0.7
             height: width
             radius: width / 2
-            color: Kirigami.Theme.neutralTextColor
+            color: Look.ambar
 
             DragHandler {
                 target: null

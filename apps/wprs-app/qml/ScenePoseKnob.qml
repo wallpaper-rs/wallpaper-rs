@@ -17,8 +17,8 @@ Rectangle {
     width: Kirigami.Units.gridUnit * (modelData === "move" ? 1.1 : 0.8)
     height: width
     radius: modelData === "grow" ? 0 : width / 2
-    color: modelData === "move" ? "transparent" : Kirigami.Theme.positiveTextColor
-    border.color: Kirigami.Theme.positiveTextColor
+    color: modelData === "move" ? "transparent" : Look.brote
+    border.color: Look.brote
     border.width: 2
 
     QQC2.ToolTip.visible: hover.hovered

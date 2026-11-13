@@ -3,6 +3,7 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 ColumnLayout {
     id: shortcut
@@ -117,7 +118,7 @@ ColumnLayout {
         text: shortcut.problem
         textFormat: Text.PlainText
         wrapMode: Text.Wrap
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
     }
 
     QQC2.Label {

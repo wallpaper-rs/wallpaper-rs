@@ -25,7 +25,7 @@ Item {
         anchors.fill: parent
         ratio: bones.stage.ratio
         dashed: true
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         segments: bones.path.slice(1).map((p, i) => [bones.path[i], p])
     }
 
@@ -74,7 +74,7 @@ Item {
             width: Kirigami.Units.gridUnit * (chosen ? 0.8 : 0.55)
             height: width
             radius: width / 2
-            color: chosen ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.highlightColor
+            color: chosen ? Look.brote : Kirigami.Theme.highlightColor
             border.color: Kirigami.Theme.backgroundColor
             QQC2.ToolTip.visible: hover.hovered
             QQC2.ToolTip.text: modelData.name

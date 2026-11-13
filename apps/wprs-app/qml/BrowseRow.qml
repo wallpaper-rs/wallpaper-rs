@@ -94,7 +94,7 @@ RowLayout {
             Layout.fillWidth: true
             visible: row.modelData.photosensitive === true
             wrapMode: Text.Wrap
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
             text: App.tr("Flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy.")
         }
 

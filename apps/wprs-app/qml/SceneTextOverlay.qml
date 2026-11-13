@@ -53,7 +53,7 @@ SceneSeat {
         at: overlay.shown?.handle ?? null
         ratio: overlay.ratio
         square: true
-        tint: overlay.shown?.wrapped ? Kirigami.Theme.highlightColor : Kirigami.Theme.neutralTextColor
+        tint: overlay.shown?.wrapped ? Kirigami.Theme.highlightColor : Look.ambar
         tip: overlay.shown?.wrapped ? App.tr("Set the width of the text; double-click to stop wrapping") : App.tr("Drag to wrap the text at a width")
         onMoved: to => overlay.wrap(to)
 

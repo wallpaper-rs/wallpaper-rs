@@ -41,7 +41,7 @@ Kirigami.Dialog {
     }
 
     function tint(s, part) {
-        const colors = [Kirigami.Theme.negativeTextColor, Kirigami.Theme.positiveTextColor, Kirigami.Theme.linkColor, Kirigami.Theme.neutralTextColor];
+        const colors = [Look.coral, Look.brote, Look.luna, Look.ambar];
         return (shown[s]?.tracks.length ?? 0) > 1 ? colors[part % 4] : Kirigami.Theme.highlightColor;
     }
 

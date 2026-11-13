@@ -48,7 +48,7 @@ Item {
             SceneLightLines {
                 anchors.fill: parent
                 ratio: swing.bones.stage.ratio
-                tint: entry.chosen ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.neutralTextColor
+                tint: entry.chosen ? Look.brote : Look.ambar
                 dashed: entry.modelData.rotation === null
                 segments: entry.modelData.arc.slice(1).map((p, i) => [entry.modelData.arc[i], p]).concat(entry.modelData.rotation ? [[entry.modelData.at, entry.modelData.arc[0]], [entry.modelData.at, entry.modelData.arc[entry.modelData.arc.length - 1]]] : [])
             }
@@ -64,7 +64,7 @@ Item {
 
                     at: entry.modelData.ends[modelData]
                     ratio: swing.bones.stage.ratio
-                    tint: Kirigami.Theme.neutralTextColor
+                    tint: Look.ambar
                     label: modelData === 0 ? App.tr("Least") : App.tr("Most")
                     tip: App.tr("Drag to bound how far the bone swings, in its own plane")
                     onMoved: (to, done) => swing.bound(entry.modelData, modelData, to, done)

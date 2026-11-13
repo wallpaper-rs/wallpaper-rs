@@ -70,7 +70,7 @@ RowLayout {
             x: row.line.now / row.line.length * lane.width
             width: 1
             height: parent.height
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
         }
 
         SceneRepeater {

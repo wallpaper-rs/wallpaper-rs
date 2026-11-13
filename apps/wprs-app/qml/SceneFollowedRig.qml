@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: followed
@@ -76,7 +77,7 @@ Item {
                     width: Kirigami.Units.gridUnit * (followedNow ? 0.9 : 0.65)
                     height: width
                     radius: modelData.kind === "bone" ? width / 2 : 0
-                    color: followedNow ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.highlightColor
+                    color: followedNow ? Look.brote : Kirigami.Theme.highlightColor
                     border.color: Kirigami.Theme.backgroundColor
                     opacity: hover.hovered || followedNow ? 1 : 0.7
                     QQC2.ToolTip.visible: hover.hovered

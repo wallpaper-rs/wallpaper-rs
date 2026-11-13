@@ -52,7 +52,7 @@ Kirigami.Dialog {
             Layout.preferredWidth: Kirigami.Units.gridUnit * 22
             wrapMode: Text.Wrap
             visible: dialog.info?.error !== undefined
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
             text: dialog.info?.error ?? ""
         }
 

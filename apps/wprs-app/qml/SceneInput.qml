@@ -36,7 +36,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 2
         visible: input.page.spot === input.field.pointer
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
     }
 
     RowLayout {

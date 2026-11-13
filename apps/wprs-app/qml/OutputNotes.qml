@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 ColumnLayout {
     id: notes
@@ -30,7 +31,7 @@ ColumnLayout {
         maximumLineCount: 3
         text: notes.errorText
         textFormat: Text.PlainText
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
         font: Kirigami.Theme.smallFont
     }
 

@@ -95,7 +95,7 @@ Item {
                 Layout.fillWidth: true
                 visible: codes.found?.state === "failed"
                 wrapMode: Text.Wrap
-                color: Kirigami.Theme.negativeTextColor
+                color: Look.coral
                 text: codes.found?.error?.message ?? ""
             }
         }

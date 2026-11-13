@@ -118,7 +118,7 @@ ColumnLayout {
 
                     QQC2.Label {
                         text: cell.modelData
-                        color: cell.text === "" ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                        color: cell.text === "" ? Look.coral : Kirigami.Theme.textColor
                     }
 
                     QQC2.TextField {

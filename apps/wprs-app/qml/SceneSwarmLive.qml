@@ -36,13 +36,13 @@ Item {
                 ctx.stroke();
             };
             ctx.lineWidth = 1.5;
-            ctx.strokeStyle = Kirigami.Theme.visitedLinkColor;
+            ctx.strokeStyle = Look.bruma;
             c.trails.forEach(line);
             ctx.lineWidth = 2;
-            ctx.strokeStyle = Kirigami.Theme.positiveTextColor;
+            ctx.strokeStyle = Look.brote;
             line(c.rope);
             live.dots.forEach(p => {
-                    ctx.fillStyle = live.near(p) ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.textColor;
+                    ctx.fillStyle = live.near(p) ? Look.brote : Kirigami.Theme.textColor;
                     ctx.fillRect(p[0] * r - 1.5, p[1] * r - 1.5, 3, 3);
                 });
             const p = live.picked;

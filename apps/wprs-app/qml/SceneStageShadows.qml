@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: frusta
@@ -41,7 +42,7 @@ Item {
             anchors.fill: parent
             ratio: frusta.stage.ratio
             dashed: true
-            tint: Kirigami.Theme.negativeTextColor
+            tint: Look.coral
             segments: modelData.frustum ?? []
         }
     }

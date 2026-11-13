@@ -27,7 +27,7 @@ Item {
         width: depth.width - Kirigami.Units.gridUnit * 2
         height: 3
         radius: 1
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
         opacity: 0.7
     }
 
@@ -39,7 +39,7 @@ Item {
         width: Kirigami.Units.gridUnit * 0.9
         height: width
         radius: 2
-        color: drag.active ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.neutralTextColor
+        color: drag.active ? Look.brote : Look.ambar
         border.color: Kirigami.Theme.backgroundColor
         z: 6
 

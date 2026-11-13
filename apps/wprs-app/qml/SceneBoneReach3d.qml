@@ -35,7 +35,7 @@ Item {
 
             at: modelData.at
             ratio: reach.bones.stage.ratio
-            tint: Kirigami.Theme.positiveTextColor
+            tint: Look.brote
             label: App.tr("Target of %1", modelData.chain.join(" → "))
             tip: App.tr("Drag the point the chain reaches for")
             onMoved: (to, done) => reach.aim(modelData, to, done)

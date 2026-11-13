@@ -35,7 +35,7 @@ Item {
     }
 
     function paint(ctx, h, end) {
-        ctx.strokeStyle = Kirigami.Theme.positiveTextColor;
+        ctx.strokeStyle = Look.brote;
         ctx.lineWidth = 2;
         ctx.beginPath();
         list.forEach(row => ticks(row, end).forEach(s => {
@@ -66,7 +66,7 @@ Item {
             width: Kirigami.Units.gridUnit * (repeat ? 0.6 : 0.8)
             height: width
             radius: repeat ? 2 : width / 2
-            color: drag.active ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.highlightColor
+            color: drag.active ? Look.brote : Kirigami.Theme.highlightColor
             border.color: Kirigami.Theme.backgroundColor
 
             QQC2.ToolTip.text: modelData[2]

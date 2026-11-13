@@ -9,7 +9,7 @@ Item {
     required property var model
     readonly property real ratio: stage.ratio
     readonly property bool chosen: stage.selected === model.pointer
-    readonly property var tints: [Kirigami.Theme.negativeTextColor, Kirigami.Theme.positiveTextColor, Kirigami.Theme.linkColor]
+    readonly property var tints: [Look.coral, Look.brote, Look.luna]
 
     function three(field) {
         return model.now[field].slice();

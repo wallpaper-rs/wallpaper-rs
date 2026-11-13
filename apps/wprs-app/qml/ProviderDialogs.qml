@@ -61,7 +61,7 @@ Item {
             QQC2.Label {
                 visible: !!dialogs.kind.secret && ["url", "server", "user"].includes(option.key)
                 text: App.tr("Changing this forgets the stored secret.")
-                color: Kirigami.Theme.neutralTextColor
+                color: Look.ambar
             }
         }
     }

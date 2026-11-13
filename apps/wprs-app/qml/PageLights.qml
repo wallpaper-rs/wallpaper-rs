@@ -78,7 +78,7 @@ Kirigami.Dialog {
         QQC2.Label {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            color: trial.problem ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.disabledTextColor
+            color: trial.problem ? Look.coral : Kirigami.Theme.disabledTextColor
             text: trial.problem || App.tr("Here window.wprs.rgb.setImage returns true and its colors are only shown, never sent. On the desktop it returns false and sends nothing until RGB lighting is on and you allow it for this package.")
         }
     }

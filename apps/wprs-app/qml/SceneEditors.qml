@@ -97,7 +97,7 @@ Item {
             QQC2.Label {
                 visible: toggle.unset
                 text: App.tr("Not set")
-                color: Kirigami.Theme.negativeTextColor
+                color: Look.coral
             }
 
             Repeater {

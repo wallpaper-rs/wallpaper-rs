@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Rectangle {
     id: knob
@@ -23,7 +24,7 @@ Rectangle {
     width: Kirigami.Units.gridUnit * 0.8
     height: width
     radius: square ? 2 : width / 2
-    color: drag.active ? Kirigami.Theme.positiveTextColor : tint
+    color: drag.active ? Look.brote : tint
     border.color: Kirigami.Theme.backgroundColor
     z: 6
 

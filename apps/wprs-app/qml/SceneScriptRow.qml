@@ -87,7 +87,7 @@ ColumnLayout {
             Layout.fillWidth: true
             elide: Text.ElideMiddle
             text: [row.script.path, row.script.missing ? App.tr("missing") : App.bytes(row.script.size), row.script.bound.length > 0 ? App.tr("followed by %1", row.script.bound.length) : ""].filter(part => part !== "").join(" · ")
-            color: row.script.missing ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+            color: row.script.missing ? Look.coral : Kirigami.Theme.textColor
         }
 
         Kirigami.Icon {

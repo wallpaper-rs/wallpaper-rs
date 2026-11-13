@@ -107,7 +107,7 @@ ColumnLayout {
                 height: ListView.view.height - Kirigami.Units.gridUnit
                 color: Kirigami.Theme.alternateBackgroundColor
                 opacity: index < strip.count ? 1 : 0.4
-                border.color: strip.selected === index ? Kirigami.Theme.highlightColor : (strip.shown === index ? Kirigami.Theme.positiveTextColor : "transparent")
+                border.color: strip.selected === index ? Kirigami.Theme.highlightColor : (strip.shown === index ? Look.brote : "transparent")
                 border.width: 2
 
                 Image {

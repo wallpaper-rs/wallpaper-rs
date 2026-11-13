@@ -20,8 +20,8 @@ Item {
 
     function tint(c) {
         if (c.response === "kill")
-            return Kirigami.Theme.negativeTextColor;
-        return c.response === "stick" ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.neutralTextColor;
+            return Look.coral;
+        return c.response === "stick" ? Look.brote : Look.ambar;
     }
 
     onListChanged: art.requestPaint()

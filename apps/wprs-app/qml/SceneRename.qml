@@ -59,7 +59,7 @@ Kirigami.PromptDialog {
             Layout.fillWidth: true
             visible: dialog.lines.length > 0
             wrapMode: Text.Wrap
-            color: Kirigami.Theme.neutralTextColor
+            color: Look.ambar
             text: App.tr("These lines of scripts name %1 and are not rewritten: %2", dialog.current, dialog.lines.join(", "))
         }
     }

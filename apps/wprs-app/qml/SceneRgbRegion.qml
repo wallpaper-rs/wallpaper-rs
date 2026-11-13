@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: region
@@ -34,7 +35,7 @@ Item {
         width: region.shown ? region.entry.size[0] * region.ratio : 0
         height: region.shown ? region.entry.size[1] * region.ratio : 0
         color: "transparent"
-        border.color: Kirigami.Theme.positiveTextColor
+        border.color: Look.brote
         border.width: 2
 
         Repeater {
@@ -50,7 +51,7 @@ Item {
                 width: Kirigami.Units.gridUnit * 0.8
                 height: width
                 radius: width / 4
-                color: Kirigami.Theme.positiveTextColor
+                color: Look.brote
 
                 DragHandler {
                     id: pull

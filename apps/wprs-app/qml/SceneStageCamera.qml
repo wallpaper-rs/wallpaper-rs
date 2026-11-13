@@ -19,7 +19,7 @@ Item {
         at: cam.handles?.eye ?? null
         ratio: cam.stage.ratio
         label: App.tr("Camera")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: App.tr("Drag to move the scene camera in the plane of the view, with Ctrl along the line of sight")
         onMoved: (to, done) => {
             if (done)
@@ -32,7 +32,7 @@ Item {
         ratio: cam.stage.ratio
         square: true
         label: App.tr("Aim")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: App.tr("Drag to move what the scene camera looks at in the plane of the view, with Ctrl along the line of sight")
         onMoved: (to, done) => {
             if (done)
@@ -43,7 +43,7 @@ Item {
     SceneLightLines {
         anchors.fill: parent
         ratio: cam.stage.ratio
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         segments: cam.handles?.eye && cam.handles?.up ? [[cam.handles.eye, cam.handles.up]] : []
     }
 

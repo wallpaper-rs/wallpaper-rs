@@ -3,6 +3,7 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 RowLayout {
     id: row
@@ -121,7 +122,7 @@ RowLayout {
             visible: row.pkg.photosensitive === true
             wrapMode: Text.Wrap
             text: row.allowed ? row.daemon.tr("Flashes or shows fast patterns; you allowed it") : row.daemon.tr("Flashes or shows fast patterns that can trigger seizures")
-            color: row.allowed ? Kirigami.Theme.disabledTextColor : Kirigami.Theme.negativeTextColor
+            color: row.allowed ? Kirigami.Theme.disabledTextColor : Look.coral
             font: Kirigami.Theme.smallFont
         }
 

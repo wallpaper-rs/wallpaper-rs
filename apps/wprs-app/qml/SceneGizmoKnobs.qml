@@ -84,7 +84,7 @@ SceneSeat {
     SceneKnob {
         at: knobs.model.handles?.pivot ?? knobs.model.pivot
         ratio: knobs.ratio
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         width: Kirigami.Units.gridUnit * 0.65
         tip: App.tr("Pivot: drag to move the origin of the layer; the layer stays where it is")
         onMoved: to => knobs.grip("origin", to, false)

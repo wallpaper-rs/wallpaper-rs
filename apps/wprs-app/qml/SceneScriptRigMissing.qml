@@ -24,7 +24,7 @@ ColumnLayout {
 
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            color: Kirigami.Theme.neutralTextColor
+            color: Look.ambar
             text: modelData.kind === "shape" ? App.tr("Line %1 names the blend shape %2, which %3 does not have", modelData.line, modelData.name, modelData.layers.join(", ")) : App.tr("Line %1 names the bone %2, which %3 does not have", modelData.line, modelData.name, modelData.layers.join(", "))
         }
     }

@@ -18,7 +18,7 @@ Item {
         height: width
         radius: width / 2
         color: "transparent"
-        border.color: Kirigami.Theme.neutralTextColor
+        border.color: Look.ambar
         border.width: 1
     }
 

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: spots
@@ -25,7 +26,7 @@ Item {
             width: Kirigami.Units.gridUnit * 0.8
             height: width
             radius: 2
-            color: spots.mesh.spot === modelData.name ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.neutralTextColor
+            color: spots.mesh.spot === modelData.name ? Look.brote : Look.ambar
             border.color: Kirigami.Theme.backgroundColor
 
             QQC2.Label {

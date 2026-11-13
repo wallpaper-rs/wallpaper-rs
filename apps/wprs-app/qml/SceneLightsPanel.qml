@@ -132,7 +132,7 @@ ColumnLayout {
 
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            color: modelData.left_out > 0 ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+            color: modelData.left_out > 0 ? Look.coral : Kirigami.Theme.textColor
             text: App.tr("%1: %2 of %3 lights, %4 left out", modelData.tier.toUpperCase(), modelData.kept, modelData.cap, modelData.left_out)
         }
     }

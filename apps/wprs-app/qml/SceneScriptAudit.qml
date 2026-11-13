@@ -33,7 +33,7 @@ ColumnLayout {
         visible: audit.words(audit.missing) !== ""
         text: App.tr("Used but not declared: %1", audit.words(audit.missing))
         wrapMode: Text.Wrap
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
     }
 
     QQC2.Label {
@@ -41,7 +41,7 @@ ColumnLayout {
         visible: audit.words(audit.extra) !== ""
         text: App.tr("Declared but not used: %1", audit.words(audit.extra))
         wrapMode: Text.Wrap
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
     }
 
     QQC2.Button {

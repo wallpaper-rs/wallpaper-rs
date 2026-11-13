@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: poser
@@ -120,7 +121,7 @@ Item {
                     ctx.lineTo(b.at[0] * width, b.at[1] * height);
                     ctx.stroke();
                 }
-                ctx.fillStyle = b.name === poser.mesh.bone ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.highlightColor;
+                ctx.fillStyle = b.name === poser.mesh.bone ? Look.brote : Kirigami.Theme.highlightColor;
                 ctx.beginPath();
                 ctx.arc(b.at[0] * width, b.at[1] * height, 4, 0, 2 * Math.PI);
                 ctx.fill();

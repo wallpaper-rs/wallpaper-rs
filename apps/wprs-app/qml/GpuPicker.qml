@@ -88,7 +88,7 @@ ColumnLayout {
         Layout.maximumWidth: Kirigami.Units.gridUnit * 30
         wrapMode: Text.Wrap
         text: App.tr("The new choice takes effect the next time the daemon starts.")
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
     }
 
     QQC2.Button {
@@ -103,7 +103,7 @@ ColumnLayout {
         Layout.maximumWidth: Kirigami.Units.gridUnit * 30
         wrapMode: Text.Wrap
         text: App.state.gpu_note ?? ""
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
     }
 
     QQC2.Label {
@@ -111,6 +111,6 @@ ColumnLayout {
         Layout.maximumWidth: Kirigami.Units.gridUnit * 30
         wrapMode: Text.Wrap
         text: App.state.gpu_warning ?? ""
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
     }
 }

@@ -85,7 +85,7 @@ Item {
                 width: modelData[2] * board.fit
                 height: modelData[3] * board.fit
                 color: board.selected === index ? Qt.rgba(Kirigami.Theme.highlightColor.r, Kirigami.Theme.highlightColor.g, Kirigami.Theme.highlightColor.b, 0.25) : "transparent"
-                border.color: board.selected === index ? Kirigami.Theme.highlightColor : Kirigami.Theme.positiveTextColor
+                border.color: board.selected === index ? Kirigami.Theme.highlightColor : Look.brote
                 border.width: 1
 
                 QQC2.Label {
@@ -106,7 +106,7 @@ Item {
             width: board.live[2] * board.fit
             height: board.live[3] * board.fit
             color: "transparent"
-            border.color: Kirigami.Theme.neutralTextColor
+            border.color: Look.ambar
             border.width: 2
         }
 

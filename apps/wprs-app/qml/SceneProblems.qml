@@ -95,7 +95,7 @@ ColumnLayout {
             readOnly: true
             wrapMode: TextEdit.Wrap
             text: panel.scriptError
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
         }
     }
 
@@ -129,7 +129,7 @@ ColumnLayout {
                 textFormat: Text.PlainText
                 font.family: "monospace"
                 elide: Text.ElideRight
-                color: /^error\b/.test(modelData) ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                color: /^error\b/.test(modelData) ? Look.coral : Kirigami.Theme.textColor
             }
         }
     }

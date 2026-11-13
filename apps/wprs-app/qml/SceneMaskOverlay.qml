@@ -101,7 +101,7 @@ SceneSeat {
         SceneArea {
             loops: overlay.shown?.from_box ? [overlay.shown.from_box] : []
             ratio: overlay.ratio
-            ink: Kirigami.Theme.neutralTextColor
+            ink: Look.ambar
             fill: 0.15
         }
 
@@ -137,7 +137,7 @@ SceneSeat {
                 at: modelData.at
                 ratio: overlay.ratio
                 square: modelData.grip === "size"
-                tint: modelData.grip === "feather" ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.highlightColor
+                tint: modelData.grip === "feather" ? Look.ambar : Kirigami.Theme.highlightColor
                 tip: overlay.tip(modelData.grip)
                 onMoved: to => overlay.hold(modelData.grip, to)
             }

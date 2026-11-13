@@ -29,7 +29,7 @@ Kirigami.FormLayout {
         visible: text !== ""
         text: host.item.missing ? App.tr("The file is missing") : elsewhere ? App.tr("This package is made for %1 only", made.map(Labels.value).join(", ")) : refused.length > 0 ? App.tr("This package needs a newer version of wallpaper-rs: it %1", refused.map(Labels.feature).join(", ")) : host.item.error ?? ""
         textFormat: Text.PlainText
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
     }
 
     QQC2.Label {
@@ -53,7 +53,7 @@ Kirigami.FormLayout {
         visible: !!host.details.revoked
         text: Labels.value(host.details.revoked)
         textFormat: Text.PlainText
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
     }
 
     QQC2.Label {

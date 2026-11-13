@@ -72,7 +72,7 @@ ColumnLayout {
         Layout.maximumWidth: Kirigami.Units.gridUnit * 30
         wrapMode: Text.Wrap
         text: App.tr("The new name takes effect the next time the daemon starts.")
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
     }
 
     QQC2.Button {
@@ -87,6 +87,6 @@ ColumnLayout {
         Layout.maximumWidth: Kirigami.Units.gridUnit * 30
         wrapMode: Text.Wrap
         text: App.tr("A name given when the daemon started was refused, so the next source was used: %1", field.shell.ignored ?? "")
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
     }
 }

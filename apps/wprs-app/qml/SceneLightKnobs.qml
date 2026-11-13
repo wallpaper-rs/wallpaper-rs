@@ -25,7 +25,7 @@ Item {
     SceneKnob {
         at: knobs.light.radius_knob
         ratio: knobs.ratio
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         tip: App.tr("Drag to change where the light ends")
         onMoved: (to, done) => knobs.gizmo.keyed({
                 "radius": Math.max(1, Math.round(Math.hypot(to[0] - knobs.gizmo.at[0], to[1] - knobs.gizmo.at[1])))
@@ -43,7 +43,7 @@ Item {
         at: knobs.light.tilt_knob ?? null
         ratio: knobs.ratio
         square: true
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         label: App.tr("Tilt %1°", Math.round(knobs.light.tilt))
         tip: App.tr("Drag along the aim line to tilt the light: nearer the light it faces the canvas, nearer the end it lies flat")
         onMoved: (to, done) => knobs.gizmo.tilt(to)
@@ -61,7 +61,7 @@ Item {
             at: modelData[0]
             ratio: knobs.ratio
             square: true
-            tint: modelData[1] ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.negativeTextColor
+            tint: modelData[1] ? Look.brote : Look.coral
             tip: modelData[1] ? App.tr("Drag to widen or narrow the bright middle of the cone") : App.tr("Drag to widen or narrow the cone")
             onMoved: (to, done) => knobs.gizmo.cone(to, modelData[1])
         }

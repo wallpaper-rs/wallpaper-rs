@@ -126,7 +126,7 @@ Kirigami.ScrollablePage {
 
                     QQC2.Label {
                         text: [modelData.path, modelData.recursive ? "" : App.tr("without subfolders"), modelData.provider ?? "", App.tr("Items: %1", modelData.items)].filter(t => t).join(" · ")
-                        color: modelData.error ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                        color: modelData.error ? Look.coral : Kirigami.Theme.textColor
                     }
 
                     QQC2.ToolButton {
@@ -185,7 +185,7 @@ Kirigami.ScrollablePage {
                 Kirigami.FormData.label: App.tr("Configuration:")
                 visible: !!App.state.config_error || !!App.state.library_error
                 text: [App.state.config_error, App.state.library_error].filter(t => t).join("\n")
-                color: Kirigami.Theme.negativeTextColor
+                color: Look.coral
                 wrapMode: Text.Wrap
             }
         }

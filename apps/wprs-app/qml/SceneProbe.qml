@@ -34,7 +34,7 @@ Item {
     SceneKnob {
         at: probe.held ? [probe.held.pointer[0] * probe.size[0], probe.held.pointer[1] * probe.size[1]] : null
         ratio: probe.ratio
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         label: App.tr("Pointer")
         tip: App.tr("Simulated pointer: drag it and every layer moves by its parallax depth")
         onMoved: to => probe.send({
@@ -47,7 +47,7 @@ Item {
         at: probe.held ? [probe.size[0] * (1 + probe.held.tilt[0]) / 2, probe.size[1] * (1 + probe.held.tilt[1]) / 2] : null
         ratio: probe.ratio
         square: true
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         label: App.tr("Tilt")
         tip: App.tr("Simulated tilt of a phone: drag it away from the middle to lean the phone that way")
         onMoved: to => probe.send({

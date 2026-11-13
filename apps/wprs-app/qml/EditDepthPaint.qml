@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: paint
@@ -60,7 +61,7 @@ Item {
             ctx.reset();
             if (paint.stroke.length === 0)
                 return;
-            ctx.strokeStyle = paint.hot ? Kirigami.Theme.highlightColor : Kirigami.Theme.negativeTextColor;
+            ctx.strokeStyle = paint.hot ? Kirigami.Theme.highlightColor : Look.coral;
             ctx.globalAlpha = 0.5;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
@@ -82,7 +83,7 @@ Item {
         visible: paint.at.x >= 0 && paint.brush !== null
         color: "transparent"
         border.width: 1
-        border.color: paint.hot ? Kirigami.Theme.highlightColor : Kirigami.Theme.negativeTextColor
+        border.color: paint.hot ? Kirigami.Theme.highlightColor : Look.coral
     }
 
     MouseArea {

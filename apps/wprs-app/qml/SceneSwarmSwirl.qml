@@ -58,8 +58,8 @@ Item {
             }
             if (d) {
                 ctx.globalAlpha = 0.9;
-                ctx.strokeStyle = Kirigami.Theme.positiveTextColor;
-                ctx.fillStyle = Kirigami.Theme.positiveTextColor;
+                ctx.strokeStyle = Look.brote;
+                ctx.fillStyle = Look.brote;
                 ctx.lineWidth = 1;
                 d.arrows.forEach(pair => {
                         ctx.beginPath();
@@ -108,7 +108,7 @@ Item {
     SceneKnob {
         at: swirl.drift?.knob ?? null
         ratio: swirl.r
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         label: swirl.drift ? App.tr("%1 px", Math.round(swirl.drift.offset.distance)) : ""
         tip: App.tr("Drag to change how far births move")
         onMoved: (to, done) => swirl.swarm.edit("offset", {

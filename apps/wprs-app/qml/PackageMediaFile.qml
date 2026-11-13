@@ -61,7 +61,7 @@ ColumnLayout {
         Layout.fillWidth: true
         wrapMode: Text.Wrap
         visible: !file.info?.present
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
         text: file.video ? App.tr("Choose a video (webm, mp4 or mkv): it is copied into the package.") : App.tr("Choose a picture (png, jpeg, webp, gif or ktx2): it is copied into the package.")
     }
 

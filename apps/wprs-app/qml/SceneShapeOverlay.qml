@@ -70,7 +70,7 @@ SceneSeat {
             at: modelData.at
             ratio: overlay.ratio
             square: modelData.kind === "corner" || modelData.kind === "edge"
-            tint: gradient ? Kirigami.Theme.positiveTextColor : modelData.kind === "round" || modelData.kind === "count" || modelData.kind === "depth" ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.highlightColor
+            tint: gradient ? Look.brote : modelData.kind === "round" || modelData.kind === "count" || modelData.kind === "depth" ? Look.ambar : Kirigami.Theme.highlightColor
             tip: overlay.tips[modelData.name] ?? ""
             onMoved: to => overlay.put(modelData.name, to, (held & Qt.ShiftModifier) !== 0)
         }

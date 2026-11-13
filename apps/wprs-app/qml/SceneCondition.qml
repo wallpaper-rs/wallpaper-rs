@@ -36,7 +36,7 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: condition.problem !== ""
         text: condition.problem
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
         wrapMode: Text.Wrap
     }
 }

@@ -69,7 +69,7 @@ ColumnLayout {
                 width: Kirigami.Units.smallSpacing * 3
                 height: lane.height - 4
                 radius: width / 2
-                color: events.chosen === index ? Kirigami.Theme.highlightColor : Kirigami.Theme.neutralTextColor
+                color: events.chosen === index ? Kirigami.Theme.highlightColor : Look.ambar
 
                 QQC2.ToolTip.text: App.tr("%1 at %2 s: drag to move it", modelData.name, modelData.t)
                 QQC2.ToolTip.visible: hover.hovered

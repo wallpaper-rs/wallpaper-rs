@@ -58,7 +58,7 @@ Item {
             SceneLightLines {
                 anchors.fill: parent
                 ratio: paths.stage.ratio
-                tint: Kirigami.Theme.positiveTextColor
+                tint: Look.brote
                 segments: one.modelData.spline.slice(1).map((p, i) => [one.modelData.spline[i], p])
             }
 
@@ -74,7 +74,7 @@ Item {
                     at: modelData.at
                     ratio: paths.stage.ratio
                     label: App.tr("%1 at %2 s", one.modelData.id, modelData.t)
-                    tint: Kirigami.Theme.positiveTextColor
+                    tint: Look.brote
                     tip: App.tr("Drag to move this key of the camera path in the plane of the view, with Ctrl along the line of sight")
                     onMoved: (to, done) => {
                         if (done)
@@ -87,7 +87,7 @@ Item {
                 anchors.fill: parent
                 ratio: paths.stage.ratio
                 dashed: true
-                tint: Kirigami.Theme.positiveTextColor
+                tint: Look.brote
                 segments: one.modelData.keys.filter(k => k.at && k.aim).map(k => [k.at, k.aim])
             }
 
@@ -104,7 +104,7 @@ Item {
                     ratio: paths.stage.ratio
                     square: true
                     label: App.tr("Aim at %1 s", modelData.t)
-                    tint: Kirigami.Theme.positiveTextColor
+                    tint: Look.brote
                     tip: App.tr("Drag to move the point this key of the camera path looks at, with Ctrl along the line of sight")
                     onMoved: (to, done) => {
                         if (done)
@@ -120,7 +120,7 @@ Item {
         ratio: paths.stage.ratio
         square: true
         label: App.tr("Camera now")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: App.tr("Where the paths put the camera at this time")
     }
 }

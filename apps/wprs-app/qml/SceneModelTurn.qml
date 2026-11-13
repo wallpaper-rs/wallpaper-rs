@@ -16,7 +16,7 @@ Item {
         at: [turn.model.at[0], turn.model.box[1] - 24 / turn.ratio]
         ratio: turn.ratio
         label: App.tr("Turn")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: turn.gizmo.free("rotation") ? App.tr("Drag sideways to turn the model, up and down to tip it") : App.tr("The rotation follows a binding; change it in the inspector")
         opacity: turn.gizmo.free("rotation") ? 1 : 0.4
         onMoved: (to, done) => {
@@ -34,7 +34,7 @@ Item {
         ratio: turn.ratio
         square: true
         label: App.tr("Size")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: turn.gizmo.free("scale") ? App.tr("Drag away from the model to make it bigger") : App.tr("The scale follows a binding; change it in the inspector")
         opacity: turn.gizmo.free("scale") ? 1 : 0.4
         onMoved: (to, done) => {

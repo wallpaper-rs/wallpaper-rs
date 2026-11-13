@@ -1,12 +1,13 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Canvas {
     id: lines
 
     required property real ratio
     property var segments: []
-    property color tint: Kirigami.Theme.neutralTextColor
+    property color tint: Look.ambar
     property bool dashed
 
     onSegmentsChanged: requestPaint()

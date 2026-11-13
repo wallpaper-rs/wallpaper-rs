@@ -190,4 +190,8 @@ Kirigami.ApplicationWindow {
     Tour {
         host: root
     }
+
+    LookWindow {
+        host: root
+    }
 }

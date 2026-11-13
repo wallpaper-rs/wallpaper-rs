@@ -190,7 +190,7 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: (cuts.survey.still ?? "") !== ""
         text: cuts.survey.still ?? ""
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
         wrapMode: Text.Wrap
     }
 }

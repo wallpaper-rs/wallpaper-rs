@@ -31,7 +31,7 @@ Item {
         height: width
         radius: width / 2
         border.width: 0
-        color: Qt.alpha(Kirigami.Theme.neutralTextColor, 0.08 + 0.2 * (cone.light.volumetric?.density ?? 0.2))
+        color: Qt.alpha(Look.ambar, 0.08 + 0.2 * (cone.light.volumetric?.density ?? 0.2))
     }
 
     Image {

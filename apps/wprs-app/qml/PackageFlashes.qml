@@ -28,7 +28,7 @@ ColumnLayout {
         QQC2.Label {
             visible: flashes.unset
             text: App.tr("Not set")
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
         }
 
         Repeater {
@@ -60,6 +60,6 @@ ColumnLayout {
         visible: flashes.scene && flashes.report !== null
         wrapMode: Text.Wrap
         text: flashes.report?.flashing ? App.tr("It flashes more than three times a second near second %1.", (flashes.report.at ?? 0).toFixed(1)) : App.tr("No flashing found in the %1 seconds that were drawn.", flashes.report?.seconds ?? 0)
-        color: flashes.report?.flashing ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+        color: flashes.report?.flashing ? Look.coral : Kirigami.Theme.textColor
     }
 }

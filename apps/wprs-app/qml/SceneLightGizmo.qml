@@ -60,7 +60,7 @@ Item {
         height: width
         radius: width / 2
         color: "transparent"
-        border.color: Kirigami.Theme.neutralTextColor
+        border.color: Look.ambar
         opacity: gizmo.chosen ? 0.9 : 0.35
     }
 
@@ -71,7 +71,7 @@ Item {
         width: gizmo.light.box[2] * gizmo.ratio
         height: gizmo.light.box[3] * gizmo.ratio
         color: "transparent"
-        border.color: Kirigami.Theme.negativeTextColor
+        border.color: Look.coral
         border.width: 2
     }
 
@@ -91,7 +91,7 @@ Item {
         at: gizmo.at
         ratio: gizmo.ratio
         label: gizmo.light.id
-        tint: gizmo.light.muted ? Kirigami.Theme.disabledTextColor : Kirigami.Theme.neutralTextColor
+        tint: gizmo.light.muted ? Kirigami.Theme.disabledTextColor : Look.ambar
         tip: App.tr("Drag to move the light")
         onMoved: (to, done) => {
             gizmo.owner.page.editor.select(gizmo.light.pointer);

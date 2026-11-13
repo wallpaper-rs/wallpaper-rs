@@ -80,7 +80,7 @@ Item {
             onPaint: {
                 const ctx = getContext("2d"), r = pose.reach;
                 ctx.reset();
-                ctx.strokeStyle = Kirigami.Theme.positiveTextColor;
+                ctx.strokeStyle = Look.brote;
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 ctx.arc(r, r, r - 3, 0, 2 * Math.PI);

@@ -169,7 +169,7 @@ Kirigami.Dialog {
                     y: at.y
                     width: area.width
                     height: at.height
-                    color: Kirigami.Theme.negativeBackgroundColor
+                    color: Look.coral
                     opacity: 0.5
                     z: -1
                 }

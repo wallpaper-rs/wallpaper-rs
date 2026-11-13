@@ -41,7 +41,7 @@ QQC2.ScrollView {
                 Layout.fillWidth: true
                 visible: text !== ""
                 wrapMode: Text.Wrap
-                color: Kirigami.Theme.negativeTextColor
+                color: Look.coral
                 text: (modelData.broken ? [App.tr("The stored copy of this repository cannot be read: refresh it to fetch it again from its address, or remove it. (%1)", modelData.broken)] : []).concat(modelData.warnings.map(w => Labels.value(w))).concat(modelData.last_error ? [modelData.last_error] : []).join("\n")
                 textFormat: Text.PlainText
             }

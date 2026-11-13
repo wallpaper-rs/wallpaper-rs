@@ -57,7 +57,7 @@ Item {
             height: width
             radius: width / 2
             color: "transparent"
-            border.color: Kirigami.Theme.neutralTextColor
+            border.color: Look.ambar
             border.width: 3
 
             DragHandler {
@@ -95,7 +95,7 @@ Item {
             height: width
             radius: width / 2
             color: Kirigami.Theme.backgroundColor
-            border.color: Kirigami.Theme.neutralTextColor
+            border.color: Look.ambar
 
             Kirigami.Icon {
                 anchors.fill: parent
@@ -137,7 +137,7 @@ Item {
             width: Kirigami.Units.gridUnit * 0.7
             height: width
             radius: width / 2
-            color: Kirigami.Theme.positiveTextColor
+            color: Look.brote
 
             DragHandler {
                 target: null

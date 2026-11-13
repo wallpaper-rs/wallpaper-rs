@@ -108,7 +108,7 @@ SceneSeat {
             at: modelData.at
             ratio: overlay.ratio
             square: modelData.kind === "corner"
-            tint: modelData.kind === "vector" || turns ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.highlightColor
+            tint: modelData.kind === "vector" || turns ? Look.ambar : Kirigami.Theme.highlightColor
             tip: turns ? App.tr("Turn the angle around its point") : modelData.kind === "vector" ? App.tr("Aim the direction") : modelData.partner ? App.tr("Place this end; hold Shift to move the whole line") : App.tr("Place this point")
             onMoved: to => overlay.put(modelData.param, to, (held & Qt.ShiftModifier) !== 0)
         }
@@ -127,7 +127,7 @@ SceneSeat {
             at: [(modelData.ends[0][0] + modelData.ends[1][0]) / 2, (modelData.ends[0][1] + modelData.ends[1][1]) / 2]
             ratio: overlay.ratio
             square: true
-            tint: Kirigami.Theme.neutralTextColor
+            tint: Look.ambar
             tip: App.tr("Move the whole line")
             onGrabbedChanged: {
                 if (grabbed)

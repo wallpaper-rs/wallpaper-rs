@@ -63,7 +63,7 @@ ColumnLayout {
                         Layout.fillWidth: true
                         text: row.modelData.id + " " + row.modelData.version + (row.modelData.revoked ? " · " + App.tr("revoked: %1", Labels.value(row.modelData.revoked)) : "")
                         textFormat: Text.PlainText
-                        color: row.modelData.revoked ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+                        color: row.modelData.revoked ? Look.coral : Kirigami.Theme.textColor
                         elide: Text.ElideRight
                     }
 
@@ -82,7 +82,7 @@ ColumnLayout {
                         text: App.tr("Not updated automatically: it now asks for %1", (row.modelData.asks ?? []).join(", "))
                         textFormat: Text.PlainText
                         wrapMode: Text.Wrap
-                        color: Kirigami.Theme.neutralTextColor
+                        color: Look.ambar
                         font: Kirigami.Theme.smallFont
                     }
                 }

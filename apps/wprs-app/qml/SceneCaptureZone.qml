@@ -16,7 +16,7 @@ Item {
                             "time": page.editor.time
                         }
                     })) || "null")) : null
-    readonly property color alarm: Kirigami.Theme.negativeTextColor
+    readonly property color alarm: Look.coral
 
     function size(corner, to) {
         page.run("layer", {
@@ -55,7 +55,7 @@ Item {
         visible: zone.shown?.redraw ?? false
         loops: zone.shown?.drawn ? [zone.shown.drawn] : []
         ratio: zone.ratio
-        ink: Kirigami.Theme.positiveTextColor
+        ink: Look.brote
         fill: 0
         dashed: true
     }

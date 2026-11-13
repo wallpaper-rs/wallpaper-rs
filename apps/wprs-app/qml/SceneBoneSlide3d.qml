@@ -43,7 +43,7 @@ Item {
             SceneLightLines {
                 anchors.fill: parent
                 ratio: slide.bones.stage.ratio
-                tint: entry.chosen ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.neutralTextColor
+                tint: entry.chosen ? Look.brote : Look.ambar
                 dashed: !entry.chosen
                 segments: entry.modelData.lines
             }
@@ -60,7 +60,7 @@ Item {
                     at: entry.modelData.ends[modelData]
                     square: true
                     ratio: slide.bones.stage.ratio
-                    tint: Kirigami.Theme.neutralTextColor
+                    tint: Look.ambar
                     label: modelData === 0 ? App.tr("Least") : App.tr("Most")
                     tip: App.tr("Drag to bound how far the head of the bone slides each way")
                     onMoved: (to, done) => slide.bound(entry.modelData, modelData, to, done)

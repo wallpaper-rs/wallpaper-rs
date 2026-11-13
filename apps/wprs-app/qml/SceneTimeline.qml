@@ -120,7 +120,7 @@ ColumnLayout {
                         x: timeline.page.clock / timeline.length * lane.width
                         width: 1
                         height: parent.height
-                        color: Kirigami.Theme.negativeTextColor
+                        color: Look.coral
                     }
 
                     SceneRepeater {

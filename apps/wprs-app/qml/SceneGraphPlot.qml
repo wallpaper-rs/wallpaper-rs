@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Canvas {
     id: plot
@@ -93,7 +94,7 @@ Canvas {
         ctx.fillStyle = Kirigami.Theme.alternateBackgroundColor;
         ctx.fillRect(0, 0, width, height);
         const now = tx(graph.now + (graph.shown[0]?.offset ?? 0));
-        ctx.strokeStyle = Kirigami.Theme.negativeTextColor;
+        ctx.strokeStyle = Look.coral;
         ctx.beginPath();
         ctx.moveTo(now, 0);
         ctx.lineTo(now, height);

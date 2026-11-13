@@ -71,7 +71,7 @@ Kirigami.Card {
         QQC2.Label {
             Kirigami.FormData.label: App.tr("State:")
             text: Labels.value(card.provider.state)
-            color: ["error", "needs_secret", "locked"].includes(card.provider.state) ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+            color: ["error", "needs_secret", "locked"].includes(card.provider.state) ? Look.coral : Kirigami.Theme.textColor
         }
 
         QQC2.Label {

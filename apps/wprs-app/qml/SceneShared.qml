@@ -117,7 +117,7 @@ Kirigami.Dialog {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
             visible: dialog.info?.error !== undefined
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
             text: dialog.info?.error ?? ""
         }
 

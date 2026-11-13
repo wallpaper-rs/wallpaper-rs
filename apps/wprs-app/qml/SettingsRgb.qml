@@ -110,7 +110,7 @@ ColumnLayout {
     QQC2.Label {
         Layout.maximumWidth: Kirigami.Units.gridUnit * 30
         wrapMode: Text.Wrap
-        color: lights.problem || lights.status.error ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+        color: lights.problem || lights.status.error ? Look.coral : Kirigami.Theme.textColor
         text: lights.problem || lights.status.error || (lights.status.connected ? App.tr("Connected; %1 sends the colors now.", lights.status.source ?? App.tr("nothing")) : App.tr("Not connected."))
     }
 

@@ -48,7 +48,7 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: license.current === ""
         wrapMode: Text.Wrap
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
         text: App.tr("Choose the license that says what others may do with your package.")
     }
 }

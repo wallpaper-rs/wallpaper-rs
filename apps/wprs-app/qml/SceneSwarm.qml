@@ -119,7 +119,7 @@ Item {
             ratio: swarm.ratio
             square: true
             label: modelData.name
-            tint: Kirigami.Theme.neutralTextColor
+            tint: Look.ambar
             tip: swarm.own ? App.tr("Drag to move this control point for this layer only") : modelData.bound ? App.tr("This control point follows a value; moving it replaces the value") : App.tr("Drag to move the control point")
             onMoved: (to, done) => swarm.move(Number(modelData.name.slice(1)), modelData.world ? to : swarm.local(to))
         }

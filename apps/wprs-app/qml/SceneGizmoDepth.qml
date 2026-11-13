@@ -32,7 +32,7 @@ Item {
             anchors.fill: parent
 
             ShapePath {
-                strokeColor: Kirigami.Theme.neutralTextColor
+                strokeColor: Look.ambar
                 strokeWidth: 1
                 fillColor: "transparent"
                 startX: modelData[0][0] * depth.ratio

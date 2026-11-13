@@ -23,6 +23,7 @@ mod items;
 mod keyboard;
 mod landing;
 mod library;
+mod looks;
 mod packer;
 mod picture;
 mod relief;
@@ -59,13 +60,11 @@ mod strips;
 mod tests;
 mod tr;
 
-use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQuickStyle, QString, QUrl};
-use std::path::Path;
+use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QString, QUrl};
 use std::process::ExitCode;
 use wprs_core::dbus::launcher;
 
 const MAIN: &str = "qrc:/qt/qml/io/github/wallpaper_rs/app/qml/Main.qml";
-const STYLE: &str = "org.kde.desktop";
 
 fn main() -> ExitCode {
     wprs_render::serve_script_host();
@@ -122,11 +121,7 @@ fn run() -> ExitCode {
     let (Some(mut app), Some(mut engine)) = (app.as_mut(), engine.as_mut()) else { return ExitCode::FAILURE };
     app.as_mut().set_application_name(&QString::from("wallpaper-rs"));
     engine.as_mut().add_import_path(&QString::from("qrc:/qt/qml"));
-    let paths = engine.import_path_list();
-    let style = paths.iter().any(|p| Path::new(&p.to_string()).join(STYLE.replace('.', "/")).is_dir());
-    if style && std::env::var_os("QT_QUICK_CONTROLS_STYLE").is_none() {
-        QQuickStyle::set_style(&QString::from(STYLE));
-    }
+    looks::install();
     if bus::checking() {
         engine.as_mut().on_object_creation_failed(|_, _| std::process::exit(1)).release();
     }

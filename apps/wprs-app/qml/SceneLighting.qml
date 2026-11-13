@@ -90,7 +90,7 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: lit.colored.length > 0 && !lit.sprites
         wrapMode: Text.Wrap
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
         text: App.tr("%1 is read as colors and shades wrong; pick it again to read it as a map.", lit.colored.map(k => lit.block[k]).join(", "))
     }
 

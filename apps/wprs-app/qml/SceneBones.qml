@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: bones
@@ -132,8 +133,8 @@ Item {
             width: Kirigami.Units.gridUnit * 0.9
             height: width
             radius: width / 2
-            color: bones.mesh.bone === modelData.name ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.highlightColor
-            border.color: (bones.rig.hit ?? []).includes(modelData.name) ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.backgroundColor
+            color: bones.mesh.bone === modelData.name ? Look.brote : Kirigami.Theme.highlightColor
+            border.color: (bones.rig.hit ?? []).includes(modelData.name) ? Look.ambar : Kirigami.Theme.backgroundColor
             border.width: (bones.rig.hit ?? []).includes(modelData.name) ? 3 : 1
             visible: modelData.at !== undefined
 

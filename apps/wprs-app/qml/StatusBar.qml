@@ -52,7 +52,7 @@ QQC2.ToolBar {
         QQC2.Label {
             Layout.fillWidth: true
             text: App.backend.lastError
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
             elide: Text.ElideRight
         }
 
@@ -118,7 +118,7 @@ QQC2.ToolBar {
                         Layout.fillWidth: true
                         visible: !!job.modelData.error
                         text: job.modelData.error?.message || App.tr("The job failed without giving a reason")
-                        color: Kirigami.Theme.negativeTextColor
+                        color: Look.coral
                         wrapMode: Text.Wrap
                     }
                 }

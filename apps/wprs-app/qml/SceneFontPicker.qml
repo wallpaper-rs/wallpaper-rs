@@ -149,7 +149,7 @@ ColumnLayout {
 
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            color: Kirigami.Theme.neutralTextColor
+            color: Look.ambar
             text: App.tr("%1 is not in the package or installed here, so the next font is used", missing.rows[index])
         }
     }

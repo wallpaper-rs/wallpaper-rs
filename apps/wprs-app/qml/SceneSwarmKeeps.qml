@@ -28,7 +28,7 @@ Item {
         onPaint: {
             const ctx = getContext("2d"), r = keeps.r;
             ctx.reset();
-            ctx.strokeStyle = Kirigami.Theme.linkColor;
+            ctx.strokeStyle = Look.luna;
             ctx.lineWidth = 1.5;
             ctx.setLineDash([3, 3]);
             keeps.list.forEach(e => {
@@ -69,7 +69,7 @@ Item {
                     at: modelData.at
                     ratio: keeps.r
                     label: modelData.label ?? ""
-                    tint: Kirigami.Theme.linkColor
+                    tint: Look.luna
                     tip: modelData.tip ?? App.tr("Drag to move the point kept to")
                     onMoved: (to, done) => modelData.act(to)
                 }

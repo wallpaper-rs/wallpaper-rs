@@ -64,7 +64,7 @@ Item {
         visible: grips.onCanvas && grips.offset !== null
         at: grips.offset ? [grips.size[0] * (1 + grips.offset[0]) / 2, grips.size[1] * (1 + grips.offset[1]) / 2] : null
         ratio: grips.ratio
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         label: App.tr("Parallax center")
         tip: App.tr("Where the parallax rests: drag it away from the middle of the canvas to shift the whole picture")
         onMoved: to => grips.shift(to)
@@ -84,7 +84,7 @@ Item {
         visible: grips.trying && grips.chosen !== null && !grips.bound
         at: grips.middle ? [grips.middle[0] + grips.pair[0] * grips.unit, grips.middle[1] + grips.pair[1] * grips.unit] : null
         ratio: grips.ratio
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         label: App.tr("Depth %1, %2", grips.pair[0], grips.pair[1])
         tip: App.tr("Parallax depth of the layer: drag it away from the layer, a quarter of the canvas width is 1; hold Shift to set the depth across and the depth up and down apart")
         onMoved: to => grips.slide(to, (depth.held & Qt.ShiftModifier) !== 0)

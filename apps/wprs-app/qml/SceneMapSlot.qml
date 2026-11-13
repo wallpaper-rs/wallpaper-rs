@@ -50,7 +50,7 @@ ColumnLayout {
     QQC2.Label {
         visible: slot.chosen?.warn ?? false
         text: App.tr("Read as colors: import it as data")
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
         font: Kirigami.Theme.smallFont
     }
 

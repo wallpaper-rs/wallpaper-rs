@@ -62,7 +62,7 @@ ColumnLayout {
         Layout.fillWidth: true
         wrapMode: Text.Wrap
         visible: !clip.info?.present
-        color: Kirigami.Theme.neutralTextColor
+        color: Look.ambar
         text: App.tr("Choose the video first: the part that plays is cut on its timeline.")
     }
 

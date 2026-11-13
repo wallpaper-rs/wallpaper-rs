@@ -55,7 +55,7 @@ Item {
         ratio: rings.ratio
         square: true
         label: App.tr("Depth")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: rings.gizmo.free("position") ? App.tr("Drag up to push the model away along the line of sight, down to bring it closer") : App.tr("The position follows a binding; drag with Shift to replace it with a value")
         opacity: rings.gizmo.free("position") ? 1 : 0.4
         onMoved: (to, done) => {

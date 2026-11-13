@@ -64,7 +64,7 @@ Item {
                 Layout.fillWidth: true
                 visible: plaintext.checked
                 wrapMode: Text.Wrap
-                color: Kirigami.Theme.negativeTextColor
+                color: Look.coral
                 text: App.tr("The operator of the server will be able to read your library, playlists and settings.")
             }
         }

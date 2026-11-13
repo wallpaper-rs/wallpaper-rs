@@ -40,7 +40,7 @@ ColumnLayout {
 
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            color: modelData.fits ? Kirigami.Theme.textColor : Kirigami.Theme.negativeTextColor
+            color: modelData.fits ? Kirigami.Theme.textColor : Look.coral
             text: App.tr("%1: %2, textures at most %3 px, %4 of texture memory", modelData.tier.toUpperCase(), modelData.fits ? App.tr("fits") : App.tr("too heavy"), modelData.texture, card.size(modelData.memory)) + (modelData.reasons.length > 0 ? " (" + modelData.reasons.join("; ") + ")" : "")
         }
     }
@@ -57,7 +57,7 @@ ColumnLayout {
 
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            color: Kirigami.Theme.neutralTextColor
+            color: Look.ambar
             text: modelData
         }
     }

@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Canvas {
     id: plot
@@ -46,7 +47,7 @@ Canvas {
         if (!plot.shaded)
             return;
         ctx.setLineDash([4, 2]);
-        ctx.strokeStyle = Kirigami.Theme.neutralTextColor;
+        ctx.strokeStyle = Look.ambar;
         ctx.beginPath();
         plot.shaded.forEach((p, i) => {
             const s = plot.spot(p);

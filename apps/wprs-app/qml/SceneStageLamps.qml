@@ -35,7 +35,7 @@ Item {
                 anchors.fill: parent
                 ratio: lamps.stage.ratio
                 dashed: true
-                tint: Kirigami.Theme.neutralTextColor
+                tint: Look.ambar
                 segments: one.modelData.at && one.modelData.aim ? [[one.modelData.at, one.modelData.aim]] : []
             }
 
@@ -43,7 +43,7 @@ Item {
                 at: one.modelData.at
                 ratio: lamps.stage.ratio
                 label: one.modelData.id
-                tint: one.modelData.space ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.disabledTextColor
+                tint: one.modelData.space ? Look.ambar : Kirigami.Theme.disabledTextColor
                 tip: one.modelData.space ? App.tr("Drag to move this light among the models in the plane of the view, with Ctrl along the line of sight") : App.tr("This light follows its layer on the plane; drag it to place it in 3D")
                 onMoved: (to, done) => {
                     if (done)
@@ -56,7 +56,7 @@ Item {
                 ratio: lamps.stage.ratio
                 square: true
                 label: App.tr("Aim")
-                tint: Kirigami.Theme.neutralTextColor
+                tint: Look.ambar
                 tip: App.tr("Drag to move the point this light points at, with Ctrl along the line of sight")
                 onMoved: (to, done) => {
                     if (done)

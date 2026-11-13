@@ -58,7 +58,7 @@ ColumnLayout {
             required property var modelData
 
             Layout.fillWidth: true
-            color: Kirigami.Theme.neutralTextColor
+            color: Look.ambar
             wrapMode: Text.Wrap
             text: modelData.kind === "join" ? App.tr("Join %1 does not apply: both its points are in one region. Put the regions back, or undo, and redo it.", modelData.index) : modelData.kind === "split" ? App.tr("Split %1 does not apply: its stroke crosses no region. Put the regions back, or undo, and redo it.", modelData.index) : App.tr("Move %1 does not apply: its region was already moved or joined with another. Put the regions back, or undo, and redo it.", modelData.index)
         }
@@ -75,7 +75,7 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: (note.survey.still ?? "") !== ""
         text: note.survey.still ?? ""
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
         wrapMode: Text.Wrap
     }
 }

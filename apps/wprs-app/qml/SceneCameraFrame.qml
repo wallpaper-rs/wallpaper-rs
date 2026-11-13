@@ -46,7 +46,7 @@ Item {
             at: frame.camera?.corners[index] ?? null
             ratio: frame.ratio
             square: true
-            tint: Kirigami.Theme.neutralTextColor
+            tint: Look.ambar
             tip: App.tr("Camera zoom %1×: drag a corner of the frame closer to zoom in", frame.camera?.zoom ?? 1)
             onMoved: to => frame.grip({
                     "zoom": {
@@ -59,7 +59,7 @@ Item {
     SceneKnob {
         at: frame.camera?.center ?? null
         ratio: frame.ratio
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         label: App.tr("Camera")
         tip: App.tr("Center of the camera: drag to move what it shows")
         onMoved: to => frame.grip("move", to)
@@ -68,7 +68,7 @@ Item {
     SceneKnob {
         at: frame.camera?.top ?? null
         ratio: frame.ratio
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: App.tr("Camera turned %1°: drag to turn the top of the view toward the pointer", frame.camera?.rotation ?? 0)
         onMoved: to => frame.grip("turn", to)
     }

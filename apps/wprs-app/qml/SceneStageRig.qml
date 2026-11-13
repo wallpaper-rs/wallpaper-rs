@@ -11,7 +11,7 @@ Item {
     SceneLightLines {
         anchors.fill: parent
         ratio: rig.cam.stage.ratio
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         segments: rig.parts?.roll ?? []
     }
 
@@ -19,7 +19,7 @@ Item {
         at: rig.parts?.roll_grip ?? null
         ratio: rig.cam.stage.ratio
         label: App.tr("Roll")
-        tint: Kirigami.Theme.positiveTextColor
+        tint: Look.brote
         tip: App.tr("Drag along the ring to roll the scene camera around its line of sight")
         onMoved: (to, done) => {
             if (done)
@@ -31,7 +31,7 @@ Item {
         at: rig.parts?.orbit ?? null
         ratio: rig.cam.stage.ratio
         label: App.tr("Orbit")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: App.tr("Drag to swing the scene camera around what it looks at")
         onMoved: (to, done) => {
             if (done)
@@ -44,7 +44,7 @@ Item {
         ratio: rig.cam.stage.ratio
         square: true
         label: App.tr("Dolly")
-        tint: Kirigami.Theme.neutralTextColor
+        tint: Look.ambar
         tip: App.tr("Drag up to bring the scene camera closer to what it looks at, down to back away")
         onMoved: (to, done) => {
             if (done)

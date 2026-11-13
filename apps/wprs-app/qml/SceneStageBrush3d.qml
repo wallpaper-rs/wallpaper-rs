@@ -48,7 +48,7 @@ Item {
             const ctx = getContext("2d");
             ctx.reset();
             const r = (brush.tool?.radius ?? 0) * brush.stage.ratio;
-            ctx.strokeStyle = brush.tool?.erase ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.highlightColor;
+            ctx.strokeStyle = brush.tool?.erase ? Look.coral : Kirigami.Theme.highlightColor;
             ctx.lineWidth = 2;
             if (brush.combing && brush.hover) {
                 ctx.beginPath();

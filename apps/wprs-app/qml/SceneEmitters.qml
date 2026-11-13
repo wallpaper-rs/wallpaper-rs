@@ -107,7 +107,7 @@ Item {
             const ctx = getContext("2d");
             ctx.reset();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = Kirigami.Theme.positiveTextColor;
+            ctx.strokeStyle = Look.brote;
             emitters.spots.filter(s => s.end === "from").forEach(s => {
                 const d = emitters.drawn(s);
                 ctx.beginPath();
@@ -135,7 +135,7 @@ Item {
             width: Kirigami.Units.gridUnit * 0.8
             height: width
             radius: modelData.line ? 2 : width / 2
-            color: Kirigami.Theme.positiveTextColor
+            color: Look.brote
             border.color: Kirigami.Theme.backgroundColor
             onXChanged: emitters.follow(modelData, modelData.end, knob, move.active)
             onYChanged: emitters.follow(modelData, modelData.end, knob, move.active)
@@ -174,7 +174,7 @@ Item {
             height: width
             radius: width / 2
             color: Kirigami.Theme.backgroundColor
-            border.color: Kirigami.Theme.positiveTextColor
+            border.color: Look.brote
             border.width: 2
             onXChanged: emitters.follow(modelData, "tip", grip, turn.active)
             onYChanged: emitters.follow(modelData, "tip", grip, turn.active)

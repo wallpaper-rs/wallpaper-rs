@@ -19,7 +19,6 @@ Requires:       gstreamer1-plugins-good >= 1.24
 Requires:       pipewire-gstreamer
 Requires:       kf6-kirigami
 Recommends:     wpewebkit >= 2.54
-Requires:       kf6-qqc2-desktop-style
 Recommends:     %{name}-examples
 
 %description

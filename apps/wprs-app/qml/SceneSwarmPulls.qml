@@ -39,7 +39,7 @@ Item {
         onPaint: {
             const ctx = getContext("2d"), r = pulls.r;
             ctx.reset();
-            ctx.strokeStyle = Kirigami.Theme.neutralTextColor;
+            ctx.strokeStyle = Look.ambar;
             ctx.lineWidth = 1.5;
             ctx.setLineDash([4, 3]);
             pulls.list.forEach(e => e.rings.forEach(ring => {
@@ -67,7 +67,7 @@ Item {
                 at: pull.modelData.at
                 ratio: pulls.r
                 label: SceneWords.value(pull.modelData.kind)
-                tint: Kirigami.Theme.neutralTextColor
+                tint: Look.ambar
                 tip: App.tr("Drag to move the center of the force")
                 onMoved: (to, done) => SceneSwarmGrips.spot(pulls, pull.modelData, pull.modelData.ref, to, (v, p) => v[pull.modelData.field] = p)
             }
@@ -85,7 +85,7 @@ Item {
                     ratio: pulls.r
                     square: true
                     label: SceneWords.label(modelData.key)
-                    tint: Kirigami.Theme.neutralTextColor
+                    tint: Look.ambar
                     tip: App.tr("Drag to change how far the force reaches")
                     onMoved: (to, done) => pulls.reach(pull.modelData, modelData, to)
                 }

@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: canvas
@@ -142,7 +143,7 @@ Item {
             const ctx = getContext("2d");
             ctx.reset();
             const straight = canvas.page.regionLine;
-            ctx.strokeStyle = Kirigami.Theme.negativeTextColor;
+            ctx.strokeStyle = Look.coral;
             if (straight) {
                 ctx.lineWidth = 3;
                 ctx.setLineDash([8, 6]);

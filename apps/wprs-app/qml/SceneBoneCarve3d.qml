@@ -22,7 +22,7 @@ Item {
         radius: width / 2
         color: "transparent"
         border.width: 2
-        border.color: carve.brush?.mode === "pull" ? Kirigami.Theme.negativeTextColor : carve.brush?.mode === "smooth" ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.positiveTextColor
+        border.color: carve.brush?.mode === "pull" ? Look.coral : carve.brush?.mode === "smooth" ? Look.ambar : Look.brote
     }
 
     HoverHandler {

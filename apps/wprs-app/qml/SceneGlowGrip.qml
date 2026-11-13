@@ -38,7 +38,7 @@ Item {
         width: Kirigami.Units.gridUnit
         height: Kirigami.Units.gridUnit * 2
         radius: width / 2
-        color: drag.active ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.highlightColor
+        color: drag.active ? Look.brote : Kirigami.Theme.highlightColor
         border.color: Kirigami.Theme.backgroundColor
 
         QQC2.ToolTip.text: App.tr("Drag to move the split between the glow and no glow")

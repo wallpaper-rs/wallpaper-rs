@@ -158,7 +158,7 @@ Kirigami.Dialog {
         QQC2.Label {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
-            color: dialog.outcome?.error ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.textColor
+            color: dialog.outcome?.error ? Look.coral : Kirigami.Theme.textColor
             visible: dialog.outcome !== null
             text: dialog.outcome?.error ?? App.tr("The assets package is in %1; build it from its own editor.", dialog.outcome?.folder ?? "")
         }

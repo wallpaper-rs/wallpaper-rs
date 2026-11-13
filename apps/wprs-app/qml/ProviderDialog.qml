@@ -96,7 +96,7 @@ Kirigami.Dialog {
             visible: dialog.plain
             Layout.maximumWidth: Kirigami.Units.gridUnit * 18
             text: App.tr("This address uses plain http: the password or key, and the pictures, travel over the network without encryption.")
-            color: Kirigami.Theme.negativeTextColor
+            color: Look.coral
             wrapMode: Text.Wrap
         }
     }

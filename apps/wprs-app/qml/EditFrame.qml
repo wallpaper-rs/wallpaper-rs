@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Rectangle {
     id: frame
@@ -32,7 +33,7 @@ Rectangle {
     width: shown[2] * parent.width
     height: shown[3] * parent.height
     color: "transparent"
-    border.color: Kirigami.Theme.neutralTextColor
+    border.color: Look.ambar
     border.width: 2
 
     Rectangle {
@@ -54,7 +55,7 @@ Rectangle {
         visible: text !== ""
 
         background: Rectangle {
-            color: Kirigami.Theme.neutralTextColor
+            color: Look.ambar
         }
     }
 
@@ -80,7 +81,7 @@ Rectangle {
             Rectangle {
                 anchors.fill: parent
                 visible: parent.modelData
-                color: Kirigami.Theme.neutralTextColor
+                color: Look.ambar
             }
         }
     }

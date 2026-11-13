@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 Item {
     id: handles
@@ -78,7 +79,7 @@ Item {
             const ctx = getContext("2d");
             ctx.reset();
             if (handles.stroke.length > 0) {
-                ctx.strokeStyle = handles.page.brush?.erase ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.highlightColor;
+                ctx.strokeStyle = handles.page.brush?.erase ? Look.coral : Kirigami.Theme.highlightColor;
                 ctx.globalAlpha = 0.6;
                 ctx.lineCap = "round";
                 ctx.lineJoin = "round";

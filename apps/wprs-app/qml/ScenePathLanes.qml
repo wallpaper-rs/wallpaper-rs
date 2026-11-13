@@ -76,7 +76,7 @@ ColumnLayout {
                     x: lanes.page.clock / lanes.span * lane.width
                     width: 1
                     height: parent.height
-                    color: Kirigami.Theme.negativeTextColor
+                    color: Look.coral
                 }
 
                 SceneRepeater {
@@ -94,7 +94,7 @@ ColumnLayout {
                         x: (moved >= 0 ? moved : modelData.t) / lanes.span * lane.width - width / 2
                         anchors.verticalCenter: parent.verticalCenter
                         text: "◆"
-                        color: Kirigami.Theme.positiveTextColor
+                        color: Look.brote
                         QQC2.ToolTip.visible: key.moved >= 0 || hover.hovered
                         QQC2.ToolTip.text: App.tr("%1 s", (key.moved >= 0 ? key.moved : key.modelData.t).toFixed(2))
 

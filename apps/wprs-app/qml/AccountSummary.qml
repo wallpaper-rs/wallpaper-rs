@@ -101,7 +101,7 @@ Kirigami.FormLayout {
         Kirigami.FormData.label: App.tr("Error:")
         visible: !!summary.account.last_error
         text: summary.account.last_error ?? ""
-        color: Kirigami.Theme.negativeTextColor
+        color: Look.coral
         wrapMode: Text.Wrap
     }
 }

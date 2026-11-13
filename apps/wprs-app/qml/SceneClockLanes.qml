@@ -120,7 +120,7 @@ ColumnLayout {
                     x: Math.min(row.modelData.at, row.total) / row.total * bar.width - 1
                     width: 2
                     height: bar.height
-                    color: Kirigami.Theme.negativeTextColor
+                    color: Look.coral
                 }
 
                 Repeater {
