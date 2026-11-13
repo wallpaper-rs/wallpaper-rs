@@ -2,7 +2,7 @@ use crate::library::with;
 use std::collections::HashMap;
 use std::sync::{Mutex, PoisonError};
 
-type Seen = [HashMap<String, f64>; 2];
+type Seen = HashMap<String, f64>;
 
 static SEEN: Mutex<Option<Seen>> = Mutex::new(None);
 
@@ -14,9 +14,9 @@ pub(crate) fn factor(muted: Option<bool>, volume: Option<u8>) -> f64 {
     if muted == Some(true) { 0.0 } else { volume.map_or(1.0, |v| f64::from(v.min(100)) / 100.0) }
 }
 
-fn heard(which: usize, column: &str, value: &str) -> f64 {
+fn heard(column: &str, value: &str) -> f64 {
     let known = SEEN.lock().unwrap_or_else(PoisonError::into_inner);
-    if let Some(known) = known.as_ref().and_then(|s| s[which].get(value)) {
+    if let Some(known) = known.as_ref().and_then(|s| s.get(value)) {
         return *known;
     }
     drop(known);
@@ -26,10 +26,6 @@ fn heard(which: usize, column: &str, value: &str) -> f64 {
     found
 }
 
-pub(crate) fn of_path(path: &str) -> f64 {
-    heard(0, "path", path)
-}
-
 pub(crate) fn of_package(id: &str) -> f64 {
-    heard(1, "pkg_id", id)
+    heard("pkg_id", id)
 }
