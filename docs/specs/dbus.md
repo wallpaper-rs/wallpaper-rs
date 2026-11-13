@@ -1546,7 +1546,7 @@ replaced. The job verifies the repository fully and stores its signed state.
 ### `AddExamples() → (t job)`
 
 Adds again the repository of the example wallpapers that come with the program (`repo.md`,
-«Repositorio de los fondos de ejemplo»), also after the user removed it. `NotFound` when the
+«Bundled example repository»), also after the user removed it. `NotFound` when the
 installation carries none; `Exists` when it is already added. `List` marks that repository with
 `bundled: true`, which is how a screen gives it its own name and icon. On its first start the
 daemon adds it by itself; once removed with `Remove` it is not added again until this call, and the

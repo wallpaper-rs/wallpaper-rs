@@ -469,7 +469,8 @@ profundidad* (`models.allow_download`) bloquea la descarga, y ahí mismo se pued
 
 Los filtros *Escenas* y *Páginas web* de la biblioteca tienen *Añadir las escenas de ejemplo*, que
 instala las seis escenas y la página web *Luces* que trae el APK (los mismos ejemplos que el
-escritorio), y *Abrir un paquete*, que importa un `.wpak` con el selector de documentos de Android.
+escritorio) y vuelve a añadir el repositorio local «Example wallpapers» que la app añade al
+primer arranque, y *Abrir un paquete*, que importa un `.wpak` con el selector de documentos de Android.
 Se admiten los cuatro tipos de paquete que son un fondo, como en el escritorio: los de imagen se
 muestran como una foto más (con su ajuste, su encuadre, su edición y su paralaje), los de vídeo como
 un vídeo más, los de escena con el motor de escenas y los de página web con el WebView del sistema
@@ -2492,8 +2493,11 @@ de 20 ms cuando el sonido va a PipeWire. Si la salida de audio falla o no
 hay ninguna (también con el plugin de PipeWire viejo), la escena y los vídeos siguen sin sonido y lo
 recuperan solos cuando aparece una salida. `install.sh` las instala en
 `~/.local/share/wallpaper-rs/examples` (`--no-examples` las omite), el RPM en el paquete opcional
-`wallpaper-rs-examples` y el Flatpak las incluye. Aparecen en la biblioteca y, si se quitan de
-ella, no vuelven.
+`wallpaper-rs-examples` y el Flatpak las incluye. El daemon las ofrece como un repositorio local
+ya añadido, «Example wallpapers» (`remote ls` lo marca `bundled`), que se firma en la primera
+ejecución con claves propias de cada instalación (ninguna va en el código ni en los paquetes) y se
+actualiza al arrancar y una vez al día. Se instalan desde ahí como cualquier paquete. Si se quita
+con `remote rm`, no vuelve a añadirse solo; `wprs-ctl remote examples` lo añade de nuevo.
 
 ## Editor de escenas
 

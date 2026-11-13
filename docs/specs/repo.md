@@ -319,6 +319,39 @@ catalogue with an older or newer list of installed packages. Each `browse` item 
 display name of its repository. Downloads finish
 before the lock is taken, so readers never wait for the network.
 
+## Bundled example repository
+
+The example wallpapers that come with the program are a repository that is already added, so that
+a new installation has something to explore without any server. The packages are the `.wpak` files
+every way of installing carries: `wallpaper-rs/examples/` under the user data folder (`install.sh`
+and the tarball) or under `/usr/share` or `/app/share` (RPM, Flatpak); the phone builds them from
+the scene folders of its assets.
+
+`wprs_format::bundled(repo, keys, name, packages, now)` makes and keeps that repository. No key
+is in the source tree or in a package: the first run creates two passwordless minisign keys (root
+and online) in a folder of mode `0700` beside the repository, signs `root/1.json`, adds the
+packages and publishes. The repository is local, so its trust is the folder the daemon owns, like
+the library; its anchor is the `file://` address with `fingerprint=` and `repo_id=` that
+`status` prints. It is signed again on later runs, never at build time, because a signed index
+cannot outlive `entry_max_days` (90 for this repository) and a build is older than that on
+most machines. Each run adds the packages whose `id` and version are not in it, publishes a new
+index when anything changed or fewer than 45 days remain, and writes a new root (signed by the
+same key) when fewer than 90 days remain of its 1096. A package whose version is already
+published with other content is refused, so a change to an example bumps its version.
+
+- Desktop: the daemon runs it at startup and once a day, adds the repository when it is not added
+  and refreshes it when it changed. `examples-repo.json` in the data folder remembers its
+  `repo_id` and whether the user removed it. After `Repos1.Remove` it is not added again, and
+  `Repos1.AddExamples` (`wprs-ctl remote examples`) adds it again; the repository folder and the
+  keys are kept, so it keeps its `repo_id`. `Repos1.List` marks it `bundled: true`; a screen uses
+  that, not the name, to give it its own name and icon. A program update only has to replace the
+  packages in the shipped folder.
+- Phone: `examples_due` and `examples_repo` do the same from the assets; the app asks at start
+  and the repository is built again only when the app was updated, apart from renewing its index
+  without unpacking anything. The repository list marks it `bundled`. Removing it is remembered;
+  the *Add the example scenes* action adds it again, besides importing the scenes as before.
+- It is never synced, because only repositories added with `https://` or loopback `http://` are.
+
 ## Network interface
 
 The library does no networking. Callers implement `Fetch::get(base, path, max)`, returning
