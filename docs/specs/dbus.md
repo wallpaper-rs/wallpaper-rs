@@ -23,7 +23,11 @@ goes through `wprs_client::bus`, which sends each authentication command only af
 answered the one before. Inside the Flatpak both buses are reached through `xdg-dbus-proxy`, and
 its releases before 0.1.6 drop a client that sends its authentication commands in one write; with
 this handshake the daemon and the clients connect through any proxy version.
-`scripts/integration-proxy.sh` checks it when `WPRS_BUS_PROXY` names a proxy binary.
+Those releases also drop a client whose message serials do not increase strictly, and the bus
+library numbers a message when it builds it, not when it writes it; so after the handshake the
+adapter gives every outgoing message the next serial of its connection, in the order the messages
+reach the socket, and gives each reply back the serial of the call it answers.
+`scripts/integration-proxy.sh` checks both when `WPRS_BUS_PROXY` names a proxy binary, restarting the daemon fifteen times behind it.
 
 A panic in any thread of the daemon, a lost GPU device, a GPU that stops responding or a Wayland
 protocol error from the compositor makes the daemon exit with status 70 at once, without running the
