@@ -120,3 +120,22 @@ fn clicks_reach_a_scene_only_on_screens_that_take_them_and_with_the_grant() {
     lock(&hub.control).views.insert("DP-1".into(), view);
     assert_eq!(hub.touch("DP-1"), (PointerState { buttons: 0, ..at(1).1 }, Vec::new(), [true, false]));
 }
+
+#[test]
+fn a_made_up_pointer_reaches_a_granted_scene_without_a_real_pointer_source() {
+    let idle = View { active: false, covered: true, rect: None, clicks: false };
+    let hub = hub(Arc::default());
+    let mut control = lock(&hub.control);
+    control.grants.extend(bound("sha256:aa", &[Input::Pointer]));
+    control.shown.insert("preview".into(), scene(SEA, "sha256:aa", false, true));
+    control.shown.insert("plain".into(), scene(SEA, "sha256:bb", false, true));
+    control.views.extend(["preview", "plain"].map(|o| (o.to_string(), idle)));
+    assert!(control.followed.is_empty());
+    drop(control);
+    let state = PointerState { pos: Some([0.25, 0.75]), inside: true, ..PointerState::default() };
+    hub.simulate("preview", state);
+    hub.simulate("plain", state);
+    let pointers = lock(&hub.pointers).clone();
+    assert_eq!(pointers.keys().collect::<Vec<_>>(), ["preview"]);
+    assert_eq!(hub.touch("preview").0.pos, Some([0.25, 0.75]));
+}

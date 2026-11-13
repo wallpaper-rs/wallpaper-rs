@@ -186,7 +186,7 @@ pub(crate) fn touch(output: &str) -> (PointerState, Vec<Press>, [bool; 2]) {
 pub(crate) fn surface_pointer(output: &str, pos: Option<[f32; 2]>, buttons: u8) {
     if let Some(hub) = hub() {
         let state = PointerState { pos, buttons, inside: pos.is_some(), ..PointerState::default() };
-        hub.store([(output.to_owned(), state)]);
+        hub.simulate(output, state);
     }
 }
 

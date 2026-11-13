@@ -167,9 +167,20 @@ impl Hub {
     }
 
     pub(super) fn store(&self, states: impl IntoIterator<Item = (String, PointerState)>) {
-        let control = lock(&self.control);
+        let followed = lock(&self.control).followed.clone();
+        self.keep(states.into_iter().filter(|(output, _)| followed.contains(output)));
+    }
+
+    pub(crate) fn simulate(&self, output: &str, state: PointerState) {
+        let taken = |input| lock(&self.control).allows(output, input);
+        if taken(Input::Pointer) || taken(Input::Clicks) {
+            self.keep([(output.to_owned(), state)]);
+        }
+    }
+
+    fn keep(&self, states: impl IntoIterator<Item = (String, PointerState)>) {
         let (mut pointers, mut presses, mut moved) = (lock(&self.pointers), lock(&self.presses), false);
-        for (output, state) in states.into_iter().filter(|(output, _)| control.followed.contains(output)) {
+        for (output, state) in states {
             if pointers.get(&output).map_or(0, |p| p.buttons) != state.buttons {
                 super::pressed(&mut presses, &output, &state);
             }
