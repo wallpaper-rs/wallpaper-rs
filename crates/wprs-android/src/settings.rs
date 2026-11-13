@@ -55,7 +55,12 @@ pub(crate) fn prepare() -> Result<(), Error> {
 fn cached() -> Result<MutexGuard<'static, Option<Config>>, Error> {
     let mut cached = CONFIG.lock().unwrap_or_else(PoisonError::into_inner);
     if cached.is_none() {
-        *cached = Some(Config::load(&store::dir()?.join(SHARED))?);
+        let path = store::dir()?.join(SHARED);
+        let mut config = Config::load(&path)?;
+        if !std::fs::read_to_string(&path).is_ok_and(|text| text.contains("on_battery")) {
+            config.pause.on_battery = wprs_core::BatteryPause::Never;
+        }
+        *cached = Some(config);
     }
     Ok(cached)
 }
@@ -162,7 +167,7 @@ fn caps() {
     power::caps(on_battery(config.playback.max_fps), chosen(CHARGER).parse().unwrap_or(60));
     power::guard(config.playback.flash_guard, config.playback.scene_capture);
     power::choose(config.playback.quality);
-    power::below(config.pause.below_percent, config.playback.lowest_below_percent);
+    power::below(config.pause.on_battery.limit(), config.playback.lowest_below_percent);
     power::pace(config.playback.auto_pace);
     crate::hdr::choose(config.playback.hdr);
 }

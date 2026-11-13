@@ -41,12 +41,14 @@ private val FILLS = listOf("simple" to R.string.fill_simple, "lama" to R.string.
 private val CONVERTS = listOf("auto" to R.string.convert_auto, "keep" to R.string.convert_keep, "off" to R.string.never)
 private fun percents(steps: List<String>) =
     listOf("0" to R.string.never) + steps.map { it to R.string.below_percent }
+private val PAUSES = listOf("never" to R.string.never, "always" to R.string.pause_always) +
+    listOf("10", "15", "20", "30").map { "below:$it" to R.string.below_percent }
 
 private val CHOICES = listOf(
     Triple(R.string.fit, "fit", FIT),
     Triple(R.string.battery_fps, "playback.max_fps", listOf("60", "30", "15", "10").map { it to R.string.fps }),
     Triple(R.string.charger_fps, "charger_fps", listOf("60", "30").map { it to R.string.fps }),
-    Triple(R.string.pause_below, "pause.below_percent", percents(listOf("10", "15", "20", "30"))),
+    Triple(R.string.pause_below, "pause.on_battery", PAUSES),
     Triple(R.string.lowest_below, "playback.lowest_below_percent", percents(listOf("20", "30", "50"))),
     Triple(R.string.system_colors, "system_colors", COLORS),
     Triple(R.string.backend, "backend", BACKENDS),
@@ -106,7 +108,7 @@ fun Settings(main: Main, account: () -> Unit = {}) {
         item { Header(stringResource(R.string.settings)) }
         item { Setting(stringResource(R.string.account), onClick = account) }
         items(CHOICES) { (label, key, options) ->
-            val texts = options.map { (value, text) -> value to stringResource(text, value.toIntOrNull() ?: 0) }
+            val texts = options.map { (value, text) -> value to stringResource(text, value.substringAfter(":").toIntOrNull() ?: 0) }
             Choices(stringResource(label), texts, values[key].orEmpty()) { set(key, it) }
             if (key == "playback.quality") CostWarning(report)
             if (key == "playback.auto_pace") PaceNote()

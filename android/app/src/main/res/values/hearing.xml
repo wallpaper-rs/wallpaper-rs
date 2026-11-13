@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="below_percent">Below %d%%</string>
-    <string name="pause_below">Pause on battery when the charge is</string>
+    <string name="pause_below">Pause on battery</string>
+    <string name="pause_always">Always</string>
     <string name="lowest_below">Lowest scene quality on battery when the charge is</string>
     <string name="every_10m">Every 10 minutes</string>
     <string name="rotate_every">Rotate every…</string>

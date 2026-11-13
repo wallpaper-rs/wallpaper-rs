@@ -42,7 +42,7 @@ fn profiles_and_presets_show_their_sections() {
             "background": "#000000", "preset": null},
             "DP-1": {"item": "01J9Z0X9Z6Q7X4F3K5E1V0R1AB", "path": null, "playlist": null, "fit": null,
             "background": null, "preset": "01J9Z0X9Z6Q7X4F3K5E1V0P001"}},
-        "options": {"pause.on_battery": "true"}, "auto": {"outputs": ["DP-1", "HDMI-A-1"], "on_battery": null}});
+        "options": {"pause.on_battery": "always"}, "auto": {"outputs": ["DP-1", "HDMI-A-1"], "on_battery": null}});
     let list = reply(json!({"active": "01J9Z0X9Z6Q7X4F3K5E1V0F001", "profiles": [profile]}));
     assert_eq!(
         profiles::list_profiles(parse(&list).unwrap()),
@@ -52,7 +52,7 @@ fn profiles_and_presets_show_their_sections() {
         profiles::details(serde_json::from_value(profile).unwrap()),
         "profile = 01J9Z0X9Z6Q7X4F3K5E1V0F001\nname = Desk\nactive = true\noutputs = DP-1,HDMI-A-1\n\
          on_battery =\npriority = 5\noutput default = playlist E1V0L001, fill, #000000\n\
-         output DP-1 = item E1V0R1AB, preset E1V0P001\noption pause.on_battery = true\n"
+         output DP-1 = item E1V0R1AB, preset E1V0P001\noption pause.on_battery = always\n"
     );
     let preset = json!({"uid": "01J9Z0X9Z6Q7X4F3K5E1V0P002", "item": null, "name": "night",
         "value": {"fit": null, "background": "#101010"}});

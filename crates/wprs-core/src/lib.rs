@@ -1,3 +1,4 @@
+pub mod battery;
 pub mod blank;
 pub mod config;
 pub mod damage;
@@ -29,6 +30,7 @@ pub mod stash;
 mod store;
 pub use edit::travel;
 
+pub use battery::BatteryPause;
 pub use config::{Config, ConfigError, OutputConfig, Resolved};
 pub use damage::{Ages, Region};
 pub use edit::Edit;

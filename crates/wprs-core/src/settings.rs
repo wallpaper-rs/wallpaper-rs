@@ -128,14 +128,13 @@ impl Transition {
 #[serde(default, deny_unknown_fields)]
 pub struct Pause {
     pub when_covered: bool,
-    pub on_battery: bool,
+    pub on_battery: crate::BatteryPause,
     pub when_locked: bool,
-    pub below_percent: u8,
 }
 
 impl Default for Pause {
     fn default() -> Self {
-        Self { when_covered: true, on_battery: true, when_locked: true, below_percent: 0 }
+        Self { when_covered: true, on_battery: crate::BatteryPause::Always, when_locked: true }
     }
 }
 

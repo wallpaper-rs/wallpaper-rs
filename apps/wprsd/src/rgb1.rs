@@ -17,7 +17,7 @@ impl Rgb {
         let pause = &st.config.pause;
         let asleep = match () {
             _ if st.locked && pause.when_locked && !st.user_paused => "locked",
-            _ if st.on_battery && pause.on_battery && !st.user_paused => "battery",
+            _ if !st.user_paused && pause.on_battery.pauses(st.on_battery, st.battery_percent) => "battery",
             _ => "paused",
         };
         let rgb = st.config.rgb.clone();

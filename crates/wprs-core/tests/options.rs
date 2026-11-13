@@ -52,7 +52,7 @@ fn options_are_listed_and_validated() {
     assert!(toml::to_string(&c).unwrap().contains("[parallax]\nfill = \"simple\"\nlayers = 6"));
     c.set_option("layout.bezel_mm", "8.5").unwrap();
     assert!(toml::to_string(&c).unwrap().contains("[layout]\nbezel_mm = 8.5"));
-    c.set_option("pause.on_battery", "false").unwrap();
+    c.set_option("pause.on_battery", "never").unwrap();
     c.set_option("transition.kind", "none").unwrap();
     c.set_option("playback.max_fps", "0").unwrap();
     assert!(toml::to_string(&c).unwrap().contains("max_fps = \"display\""));
@@ -62,7 +62,7 @@ fn options_are_listed_and_validated() {
     assert_eq!(c.playback.max_fps, 0);
     c.set_option("playback.max_fps", "60").unwrap();
     c.set_option("playback.volume", "0.25").unwrap();
-    assert!(!c.pause.on_battery && c.transition.duration().is_zero());
+    assert!(c.pause.on_battery == wprs_core::BatteryPause::Never && c.transition.duration().is_zero());
     assert_eq!((c.playback.max_fps, c.playback.volume), (60, 0.25));
     let invalid = [
         ("playback.max_fps", "241"),
@@ -74,6 +74,9 @@ fn options_are_listed_and_validated() {
         ("layout.monitors", "x"),
         ("transition.kind", "spin"),
         ("pause.on_battery", "maybe"),
+        ("pause.on_battery", "below:0"),
+        ("pause.on_battery", "below:101"),
+        ("pause.on_battery", "true"),
         ("default.image", "/x"),
         ("parallax.fill", "gentle"),
         ("parallax.layers", "3"),
@@ -96,7 +99,7 @@ fn hand_edited_values_are_clamped_and_only_the_changed_key_is_validated() {
         .unwrap();
     let mut c = Config::load(&path).unwrap();
     assert_eq!((c.playback.volume, c.playback.max_fps, c.transition.duration_ms), (1.0, 240, 10_000));
-    c.set_option("pause.on_battery", "false").unwrap();
+    c.set_option("pause.on_battery", "never").unwrap();
     let mut raw: Config = toml::from_str("[playback]\nvolume = 2.0").unwrap();
     raw.set_option("playback.muted", "false").unwrap();
     let error = raw.set_option("transition.duration_ms", "20000").unwrap_err();

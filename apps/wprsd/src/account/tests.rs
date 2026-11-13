@@ -106,10 +106,10 @@ fn device_settings_stay_out_of_synced_settings_and_profiles() {
     assert!(DEVICE_KEYS.iter().all(|key| options.contains_key(*key) && !synced.contains(key)));
     assert!(!sections.contains_key(&format!("settings/{}", ids.named("section", "models"))));
     let (volume, parallax, battery) = ("playback.volume", "playback.software_parallax", "pause.on_battery");
-    let profile = json!({volume: "0.2", "models.allow_download": "false", battery: "false"});
-    let here = json!({volume: "0.9", parallax: "true", battery: "true"});
-    assert_eq!(synced_options(&profile, None), json!({battery: "false"}));
-    let kept = json!({battery: "false", volume: "0.9", parallax: "true"});
+    let profile = json!({volume: "0.2", "models.allow_download": "false", battery: "never"});
+    let here = json!({volume: "0.9", parallax: "true", battery: "always"});
+    assert_eq!(synced_options(&profile, None), json!({battery: "never"}));
+    let kept = json!({battery: "never", volume: "0.9", parallax: "true"});
     assert_eq!(synced_options(&profile, Some(&here)), kept);
     assert_eq!(synced_options(&json!(null), Some(&here)), json!(null));
 }

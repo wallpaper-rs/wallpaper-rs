@@ -16,8 +16,6 @@ QtObject {
             "transition.kind": App.tr("Transition"),
             "transition.duration_ms": App.tr("Transition length (ms)"),
             "pause.when_covered": App.tr("Pause when a window covers the screen"),
-            "pause.on_battery": App.tr("Pause on battery"),
-            "pause.below_percent": App.tr("Pause on battery below this charge (%, 0 = never)"),
             "pause.when_locked": App.tr("Pause while the screen is locked"),
             "library.watch": App.tr("Watch library folders for changes"),
             "library.thumb_cache_mb": App.tr("Thumbnail cache (MB)"),

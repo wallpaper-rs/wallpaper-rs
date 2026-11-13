@@ -43,11 +43,13 @@ pub(crate) async fn follow(daemon: Arc<Daemon>) {
 mod tests {
     use super::level;
     use crate::daemon::State;
+    use wprs_core::BatteryPause;
 
     fn state(on_battery: bool, percent: Option<u8>, pause: u8, lowest: u8) -> State {
         let mut st = State { on_battery, battery_percent: percent, ..State::default() };
-        st.config.pause.on_battery = false;
-        (st.config.pause.below_percent, st.config.playback.lowest_below_percent) = (pause, lowest);
+        st.config.pause.on_battery =
+            if pause == 0 { BatteryPause::Never } else { BatteryPause::Below(pause) };
+        st.config.playback.lowest_below_percent = lowest;
         st
     }
 

@@ -56,10 +56,10 @@ echo "sync format checks passed"
 [ "$(value b "['devices'][0]['label']")" = Desk ] || fail "device names: $(b server status --json)"
 b config models.allow_download false
 b config playback.software_parallax true
-a config pause.on_battery false
+a config pause.on_battery never
 a profile save Calm >/dev/null
 for d in a b a; do "$d" server sync --wait >/dev/null; done
-[ "$(b config pause.on_battery)" = "pause.on_battery = false" ] || fail "a setting did not arrive"
+[ "$(b config pause.on_battery)" = "pause.on_battery = never" ] || fail "a setting did not arrive"
 [ "$(a config models.allow_download)/$(b config models.allow_download)" = \
   "models.allow_download = true/models.allow_download = false" ] || fail "the download switch left its device"
 [ "$(a config playback.software_parallax)" = "playback.software_parallax = false" ] ||

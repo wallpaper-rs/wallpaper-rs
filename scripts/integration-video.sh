@@ -9,7 +9,7 @@ expect "s['config_error'] is not None" True
 if ctl reload 2>/dev/null; then fail "reload accepted a broken configuration"; fi
 expect "s['config_error'] is not None" True
 expect "s['options']['models.allow_download']" False
-ctl config pause.on_battery false
+ctl config pause.on_battery never
 expect "s['config_error']" None
 grep -qx '\[playback' "$broken.broken" || fail "the broken configuration was not kept"
 grep -q 'on_battery = false' "$broken" || fail "the new configuration was not saved"

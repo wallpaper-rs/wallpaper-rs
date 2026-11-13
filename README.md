@@ -651,7 +651,7 @@ wprs-ctl pause | resume | toggle                # pausar los fondos animados
 wprs-ctl volume 40 | mute | unmute              # sonido de los vídeos y las escenas
 wprs-ctl sound off -o DP-1                       # el fondo que se ve ahí, sin sonido donde sea que se muestre (on, follow); --volume 30 lo baja
 wprs-ctl lib apply UID -o DP-1 --sound off      # aplicar un vídeo ya sin sonido (lo recuerda ese fondo; es un ajuste local, no va en el paquete)
-wprs-ctl config pause.below_percent 20          # pausar con batería por debajo del 20 % (0 = nunca)
+wprs-ctl config pause.on_battery below:20      # pausar con batería por debajo del 20 % (never = nunca, always = siempre)
 wprs-ctl config playback.lowest_below_percent 30  # calidad mínima de las escenas con batería por debajo del 30 %
 wprs-ctl playlist add Mar --folder ~/Fotos/Mar --follow   # carpeta entera; sigue a la carpeta
 wprs-ctl playlist rotate --folder ~/Fotos/Mar --every 10m   # crea la lista, pone el tiempo y la empieza

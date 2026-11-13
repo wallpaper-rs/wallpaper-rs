@@ -729,8 +729,7 @@ Changes one setting and saves the configuration. Keys and their current values a
 | `transition.kind` | `fade`, `none` | `fade` |
 | `transition.duration_ms` | `0` to `10000` | `600` |
 | `pause.when_covered` | pause while a maximized or fullscreen window covers the output | `true` |
-| `pause.on_battery` | pause while running on battery | `true` |
-| `pause.below_percent` | `0` to `100`: pause while running on battery with a charge under this percentage (`0` turns it off); it applies as set, whatever `playback.quality` says, and does nothing while the charge is unknown (`battery_percent` is `null`) | `0` |
+| `pause.on_battery` | one setting for pausing on battery, with three values: `never`, `always` (pause whenever the machine runs on battery) and `below:N` with `N` from `1` to `100` (pause on battery with a charge under `N` percent; it applies as set, whatever `playback.quality` says, and does nothing while the charge is unknown, `battery_percent` being `null`); the phone reads the same key and its default is `never`; a file that still has the old boolean `on_battery` or the old `below_percent` key is not valid: the daemon reports it in `config_error`, keeps a copy of the file and runs with the defaults until the setting is written again | `always` |
 | `pause.when_locked` | pause while the screen is locked; whatever it says, videos are muted and scenes play no sound while it is locked | `true` |
 | `library.watch` | rescan folder sources when files in them change (a new file once it is written, a hard or symbolic link, a moved, renamed or removed folder), one scan per source at most every 5 s; a change during a scan of the same source starts another scan after it | `true` |
 | `library.thumb_cache_mb` | `64` to `8192`, size of the thumbnail cache | `512` |
@@ -2558,7 +2557,7 @@ old. The daemon never runs the depth model: it reads the map at
 1024 pixels at most, applies `depth` and reloads it when any of these files changes. A parallax
 image is rendered only while its smoothed offset moves by a quarter of a pixel or more, at most
 at the frame rate of the output, under the same pause rules as videos (`pause.when_covered`,
-`pause.on_battery`, `pause.when_locked` and `SetPaused`), and stays still while the desktop asks
+`pause.on_battery` (any of its values), `pause.when_locked` and `SetPaused`), and stays still while the desktop asks
 for reduced motion (`reduced-motion` of the Settings portal). With software rendering (a GPU
 emulated on the CPU) the image stays still unless `playback.software_parallax` is set, and then
 moves at 15 frames per second at most. On `span` outputs every

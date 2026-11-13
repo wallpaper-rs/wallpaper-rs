@@ -11,7 +11,7 @@ exec 8>"$WORK/power"
 wait_for 10 grep -q ready "$WORK/upower.out" || fail "the power service did not start: $(cat "$WORK/upower.out")"
 DBUS_SYSTEM_BUS_ADDRESS=$power_bus start_daemon "$WORK/quality.log"
 expect "s['on_battery']" True
-ctl config pause.on_battery false
+ctl config pause.on_battery never
 read -r _ _ _ watched < <(ctl stream TEST-Q 160 90)
 "$BIN/probe" "$watched" 120 --hold >/dev/null 2>&1 & held=$!; pids+=("$held")
 ctl lib import "$WORK/scene/glow.wpak" --wait >/dev/null

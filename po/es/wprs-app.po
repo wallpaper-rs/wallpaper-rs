@@ -6560,7 +6560,7 @@ msgstr "Arrastra para peinar el pelo sobre la superficie"
 msgid "Toward the viewer"
 msgstr "Hacia quien mira"
 
-#: apps/wprs-app/qml/SceneCondition.qml
+#: apps/wprs-app/qml/BatteryPicker.qml apps/wprs-app/qml/SceneCondition.qml
 msgid "Always"
 msgstr "Siempre"
 
@@ -14522,13 +14522,9 @@ msgstr "Duración de la transición (ms)"
 msgid "Pause when a window covers the screen"
 msgstr "Pausar cuando una ventana cubre la pantalla"
 
-#: apps/wprs-app/qml/facade/Labels.qml
+#: apps/wprs-app/qml/BatteryPicker.qml apps/wprs-app/qml/SettingsPage.qml
 msgid "Pause on battery"
 msgstr "Pausar con batería"
-
-#: apps/wprs-app/qml/facade/Labels.qml
-msgid "Pause on battery below this charge (%, 0 = never)"
-msgstr "Pausar con batería por debajo de esta carga (%, 0 = nunca)"
 
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "Pause while the screen is locked"
@@ -17908,3 +17904,10 @@ msgstr "De dónde vienen los fondos de esta lista."
 #: apps/wprs-app/qml/PiecesSaid.qml
 msgid "You have no lists yet"
 msgstr "Aún no tienes listas"
+#: apps/wprs-app/qml/BatteryPicker.qml
+msgid "Below %1 %"
+msgstr "Por debajo de %1 %"
+
+#: apps/wprs-app/qml/BatteryPicker.qml
+msgid "Never"
+msgstr "Nunca"

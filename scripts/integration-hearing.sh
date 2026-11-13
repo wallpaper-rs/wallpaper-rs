@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 expect "s['battery_percent'] is None or 0 <= s['battery_percent'] <= 100" True
-ctl config pause.below_percent 20
-expect "s['options']['pause.below_percent']" 20
+ctl config pause.on_battery below:20
+expect "s['options']['pause.on_battery']" below:20
 ctl config playback.lowest_below_percent 35
-if ctl config pause.below_percent 101 2>/dev/null; then fail "a battery level over 100 was accepted"; fi
-ctl config pause.below_percent 0 && ctl config playback.lowest_below_percent 0
+if ctl config pause.on_battery below:101 2>/dev/null; then fail "a battery level over 100 was accepted"; fi
+ctl config pause.on_battery always && ctl config playback.lowest_below_percent 0
 ctl stream TEST-30 160 90 >/dev/null
 cp "$ROOT/tests/fixtures/green-64x32.png" "$WORK/hearing.png"
 cp "$ROOT/tests/fixtures/green-64x32.png" "$WORK/hearing2.png"

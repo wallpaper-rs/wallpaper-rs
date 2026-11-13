@@ -104,9 +104,9 @@ async fn two_devices_converge_through_conflicts() {
     let sea = view(&[("name", json!("Sea"))]);
     let mut a = Device::new(
         "a",
-        &[("playlists/p1", sea.clone()), ("settings/pause", view(&[("pause.on_battery", json!(false))]))],
+        &[("playlists/p1", sea.clone()), ("settings/pause", view(&[("pause.on_battery", json!("never"))]))],
     );
-    let mut b = Device::new("b", &[("settings/pause", view(&[("pause.on_battery", json!(true))]))]);
+    let mut b = Device::new("b", &[("settings/pause", view(&[("pause.on_battery", json!("always"))]))]);
     a.sync(&server, 10).await;
     b.sync(&server, 11).await;
     assert_eq!(b.local, a.local);

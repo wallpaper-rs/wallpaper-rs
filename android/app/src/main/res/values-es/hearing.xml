@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="below_percent">Menos de %d%%</string>
-    <string name="pause_below">Pausar con batería cuando la carga es</string>
+    <string name="below_percent">Por debajo de %d %%</string>
+    <string name="pause_below">Pausar con batería</string>
+    <string name="pause_always">Siempre</string>
     <string name="lowest_below">Calidad mínima de las escenas con batería cuando la carga es</string>
     <string name="every_10m">Cada 10 minutos</string>
     <string name="rotate_every">Rotar cada…</string>
