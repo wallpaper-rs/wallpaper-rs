@@ -21,7 +21,9 @@ fn heard(column: &str, value: &str) -> f64 {
     }
     drop(known);
     let found = with(|lib| Ok(lib.sound_where(column, value)?)).map_or(1.0, |(m, v)| factor(m, v));
-    SEEN.lock().unwrap_or_else(PoisonError::into_inner).get_or_insert_default()[which]
+    SEEN.lock()
+        .unwrap_or_else(PoisonError::into_inner)
+        .get_or_insert_default()
         .insert(value.to_owned(), found);
     found
 }
