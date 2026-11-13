@@ -110,18 +110,13 @@ QtObject {
     readonly property int filaFin: 20
     readonly property int explicaHueco: 52
     readonly property int valorHueco: 10
-    readonly property int icono: 18
     readonly property int iconoEstado: 17
     readonly property int iconoNota: 15
     readonly property int iconoAviso: 20
     readonly property int iconoError: 28
     readonly property int iconoErrorGrande: 40
-    readonly property int rielAlto: 4
-    readonly property int rielPunto: 14
     readonly property int altoSublista: 48
-    readonly property int altoOpcion: 38
     readonly property int altoCerrar: 30
-    readonly property int radioPanel: 10
     readonly property int panelChico: 360
     readonly property int menuChico: 280
     readonly property int listaHueco: 6
@@ -129,7 +124,6 @@ QtObject {
     readonly property int vacioAncho: 760
     readonly property int errorAncho: 640
     readonly property int errorGrandeAncho: 780
-    readonly property int avisoAncho: 480
     readonly property int avisoDura: 8000
     readonly property int rielAncho: 120
     readonly property int huecoEstado: 7
@@ -139,12 +133,9 @@ QtObject {
 
     readonly property real tCuenta: 13
     readonly property real tQuitable: 14
-    readonly property int icono: 18
     readonly property int filtroLado: 12
     readonly property int filtroHueco: 7
     readonly property int seccionesLado: 14
-    readonly property int marcaAncho: 16
-    readonly property int marcaAlto: 4
     readonly property int marcaAbajo: 2
     readonly property int buscarAncho: 300
     readonly property int buscarLado: 14
