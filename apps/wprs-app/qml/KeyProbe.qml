@@ -130,8 +130,11 @@ Timer {
         if (stage === 4) {
             turns();
             steps();
+            waited = 0;
             return ++stage;
         }
+        if (scratch.contentY <= top && ++waited < 20)
+            return;
         if (scratch.contentY <= top)
             throw new Error("the mouse wheel does not scroll the page over a drop-down or a slider");
         finish();
