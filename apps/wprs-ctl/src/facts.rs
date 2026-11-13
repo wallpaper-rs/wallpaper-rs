@@ -20,8 +20,9 @@ pub fn check(path: &Path, json: bool) -> Result<()> {
         checked if manifest.v2() => checked?,
         _ => {}
     }
-    let problems: Vec<String> =
+    let mut problems: Vec<String> =
         crate::scriptfaults::of(path, &manifest).iter().map(|f| f.said().local()).collect();
+    problems.extend(crate::scriptfaults::passages(path, &manifest));
     let listed = manifest.features();
     let (needed, missing) = review::needs(&manifest, &facts);
     let platforms = review::platforms(&manifest, &facts);

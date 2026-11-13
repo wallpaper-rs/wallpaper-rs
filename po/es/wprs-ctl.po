@@ -2190,6 +2190,19 @@ msgstr "Cuánto retiene la máscara, de 0 a 1"
 msgid "Remove the mask"
 msgstr "Quitar la máscara"
 
+#: apps/wprs-ctl/src/scriptfaults.rs
+msgid ""
+"the transition for coming in does not play, the plain fade plays instead: %1"
+msgstr ""
+"la transición de entrada no se reproduce y en su lugar se ve el fundido de "
+"siempre: %1"
+
+#: apps/wprs-ctl/src/scriptfaults.rs
+msgid "the transition for leaving does not play, the plain fade plays instead: %1"
+msgstr ""
+"la transición de salida no se reproduce y en su lugar se ve el fundido de "
+"siempre: %1"
+
 #: apps/wprs-ctl/src/facts.rs
 msgid "plays without %1"
 msgstr "funciona sin %1"
