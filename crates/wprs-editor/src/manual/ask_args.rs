@@ -93,7 +93,7 @@ pub fn check(query: &str, args: &Value, layer: &str) -> Result<(), Message> {
             &[&query],
         ));
     };
-    for key in given.keys().filter(|k| !all.iter().any(|f| f.name == k.as_str())) {
+    if let Some(key) = given.keys().find(|k| !all.iter().any(|f| f.name == k.as_str())) {
         let listed = all.iter().map(|f| f.name).collect::<Vec<_>>().join(", ");
         let listed = if listed.is_empty() { "none".to_owned() } else { listed };
         return Err(said(
