@@ -79,6 +79,9 @@ fun ProviderForm(main: Main, kind: JSONObject, current: JSONObject?, run: Run, c
                         visualTransformation = PasswordVisualTransformation(), supportingText = { if (held) Text(stringResource(R.string.secret_kept)) },
                     )
                 }
+                if (fields.any { it.getString("type") == "url" && values[it.getString("key")].orEmpty().trim().startsWith("http://") }) {
+                    Text(stringResource(R.string.provider_plain), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                }
                 Text(stringResource(kindSent(name), sentTo(kind, hosts)), style = MaterialTheme.typography.bodySmall)
                 if (current == null) Toggle(stringResource(R.string.provider_turn_on), on) { on = it }
                 problem?.let { Text(it, color = MaterialTheme.colorScheme.error) }

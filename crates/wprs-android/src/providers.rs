@@ -68,13 +68,20 @@ pub(crate) fn request(request: Request) -> Result<Value, Error> {
     }
 }
 
+fn plain(entry: &Entry) -> bool {
+    ["url", "server"]
+        .iter()
+        .filter_map(|key| entry.options.get(*key))
+        .any(|v| v.trim().starts_with("http://"))
+}
+
 fn shown(entry: &Entry, now: i64) -> Result<Value, Error> {
     let known = kind(&entry.kind)?;
     let count = library::with(|lib| Ok(lib.count(&format!("tag:{}", tag(&entry.id)), now)?))?;
     let secret = secret_of(known).map(|(name, required)| json!({"name": name, "required": required, "held": saved::secret(&entry.id).is_some()}));
     Ok(
         json!({"id": entry.id, "kind": entry.kind, "options": entry.options, "on": entry.on, "last_sync": entry.last_sync,
-        "last_error": entry.last_error, "hosts": hosts(known, &entry.options), "count": count, "secret": secret,
+        "last_error": entry.last_error, "hosts": hosts(known, &entry.options), "count": count, "secret": secret, "plain": plain(entry),
         "credits": entry.credits.iter().map(|c| json!({"uid": c.uid, "title": c.title, "attribution": c.attribution,
             "license": c.license, "link": c.link})).collect::<Vec<_>>()}),
     )

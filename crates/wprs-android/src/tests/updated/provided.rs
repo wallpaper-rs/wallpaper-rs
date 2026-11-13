@@ -111,7 +111,12 @@ pub(super) fn picture_sources_download_only_when_turned_on() {
         )
     };
     assert_eq!(add(&url, "", false)["id"], json!("android.provider_secret"));
-    assert_eq!(add("http://example.org/dav/", "x", false)["id"], json!("android.provider_https"));
+    assert_eq!(add("https://example.org/dav/?a=b", "x", false)["id"], json!("android.provider_https"));
+    let plain = account(json!({ "op": "provider_add", "kind": "nextcloud",
+        "options": { "server": "http://nas.example.org", "user": "me" }, "secret": "x", "on": false }));
+    assert_eq!(plain, json!("nextcloud"), "an unencrypted address of an own server is accepted");
+    assert_eq!(mine("nextcloud")["plain"], json!(true));
+    account(json!({ "op": "provider_remove", "id": "nextcloud", "purge": false }));
     assert_eq!(add("not a web address", "x", false)["id"], json!("android.provider_address"));
     let wrong =
         account(json!({ "op": "provider_add", "kind": "bing", "options": { "market": "bad market" } }));
@@ -123,6 +128,7 @@ pub(super) fn picture_sources_download_only_when_turned_on() {
 
     assert_eq!(add(&url, "hunter2", false), json!("webdav"));
     let shown = mine("webdav");
+    assert_eq!(shown["plain"], json!(true));
     assert_eq!(
         (&shown["on"], &shown["count"], &shown["hosts"]),
         (&json!(false), &json!(0), &json!(["127.0.0.1"]))

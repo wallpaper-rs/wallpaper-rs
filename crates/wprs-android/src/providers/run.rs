@@ -28,11 +28,6 @@ fn failure(id: &str, e: &wprs_providers::Error, keyed: bool) -> Error {
             "%1 rejected the key or password: enter it again",
             &[&id],
         ),
-        wprs_providers::Error::Invalid(m) if m.contains("plain http") => said(
-            "android.provider_https",
-            "the address of %1 starts with https:// and holds no password or search part",
-            &[&"server"],
-        ),
         e => said("android.provider_failed", "%1 did not answer: %2", &[&id, e]),
     }
 }

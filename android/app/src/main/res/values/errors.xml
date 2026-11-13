@@ -126,7 +126,7 @@
     <string name="error_android_layers_off">The fill is off: pictures stay still</string>
     <string name="error_android_provider_kind">%1$s is not a kind of picture source</string>
     <string name="error_android_provider_address">The value of %1$s is not a web address</string>
-    <string name="error_android_provider_https">A web address here starts with https:// and holds no password or search part</string>
+    <string name="error_android_provider_https">A web address here starts with https:// or http:// and holds no password or search part</string>
     <string name="error_android_provider_option">The value of %1$s is not valid</string>
     <string name="error_android_provider_option_unknown">%1$s has no option called %2$s</string>
     <string name="error_android_provider_needs">%1$s needs the option %2$s</string>

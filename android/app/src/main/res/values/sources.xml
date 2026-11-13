@@ -19,6 +19,7 @@
     <string name="provider_credits">Credits</string>
     <string name="provider_remove_question">Remove this picture source? Pictures it already brought stay in your library unless you tick the box.</string>
     <string name="provider_remove_pictures">Also remove the pictures it brought</string>
+    <string name="provider_plain">This address is not encrypted (http://): the password or key travels in the clear and anyone on the network can read it.</string>
     <string name="provider_add">Add</string>
     <string name="provider_save">Save</string>
     <string name="provider_nothing">Nothing new to download.</string>

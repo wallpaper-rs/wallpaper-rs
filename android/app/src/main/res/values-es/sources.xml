@@ -19,6 +19,7 @@
     <string name="provider_credits">Créditos</string>
     <string name="provider_remove_question">¿Quitar esta fuente de imágenes? Las imágenes que ya trajo se quedan en tu biblioteca, salvo que marques la casilla.</string>
     <string name="provider_remove_pictures">Quitar también las imágenes que trajo</string>
+    <string name="provider_plain">Esta dirección no está cifrada (http://): la contraseña o la clave viaja sin cifrar y cualquiera en la red puede leerla.</string>
     <string name="provider_add">Añadir</string>
     <string name="provider_save">Guardar</string>
     <string name="provider_nothing">No hay nada nuevo que descargar.</string>

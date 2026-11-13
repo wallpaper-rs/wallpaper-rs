@@ -126,7 +126,7 @@
     <string name="error_android_layers_off">El relleno está apagado: las imágenes quedan quietas</string>
     <string name="error_android_provider_kind">%1$s no es un tipo de fuente de imágenes</string>
     <string name="error_android_provider_address">El valor de %1$s no es una dirección web</string>
-    <string name="error_android_provider_https">Una dirección web aquí empieza con https:// y no lleva contraseña ni parte de búsqueda</string>
+    <string name="error_android_provider_https">Una dirección web aquí empieza con https:// o http:// y no lleva contraseña ni parte de búsqueda</string>
     <string name="error_android_provider_option">El valor de %1$s no es válido</string>
     <string name="error_android_provider_option_unknown">%1$s no tiene una opción llamada %2$s</string>
     <string name="error_android_provider_needs">%1$s necesita la opción %2$s</string>

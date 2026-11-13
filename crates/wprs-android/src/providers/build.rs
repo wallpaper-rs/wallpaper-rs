@@ -28,10 +28,17 @@ pub(super) fn build(kind: &Kind, o: &Options, secret: Option<&str>) -> Result<Bo
                 ..Wallhaven::new().map_err(shut)?
             })
         }
-        "webdav" => Box::new(WebDav::new(text("url"), text("user"), key).map_err(shut)?),
-        "nextcloud" => {
-            Box::new(WebDav::nextcloud(&text("server"), &text("user"), key, &text("folder")).map_err(shut)?)
-        }
-        _ => Box::new(Immich::new(&text("server"), key, text("album")).map_err(shut)?),
+        "webdav" => Box::new(WebDav {
+            allow_plain_http: true,
+            ..WebDav::new(text("url"), text("user"), key).map_err(shut)?
+        }),
+        "nextcloud" => Box::new(WebDav {
+            allow_plain_http: true,
+            ..WebDav::nextcloud(&text("server"), &text("user"), key, &text("folder")).map_err(shut)?
+        }),
+        _ => Box::new(Immich {
+            allow_plain_http: true,
+            ..Immich::new(&text("server"), key, text("album")).map_err(shut)?
+        }),
     })
 }

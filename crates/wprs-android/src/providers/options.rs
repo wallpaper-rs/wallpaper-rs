@@ -1,23 +1,17 @@
 use super::kinds::{Field, KEPT, Kind, Options, Shape, WHEN};
 use crate::{Error, said};
 
-fn local(host: &str) -> bool {
-    host == "localhost"
-        || host.trim_matches(['[', ']']).parse::<std::net::IpAddr>().is_ok_and(|ip| ip.is_loopback())
-}
-
 fn address(key: &str, text: &str) -> Result<(), Error> {
     let url = reqwest::Url::parse(text).ok().filter(|u| u.host_str().is_some());
     let url = url.ok_or_else(|| said("android.provider_address", "%1 is not a web address", &[&key]))?;
-    let plain = url.scheme() == "http" && url.host_str().is_some_and(local);
     let clean = url.username().is_empty()
         && url.password().is_none()
         && url.query().is_none()
         && url.fragment().is_none();
-    if (url.scheme() != "https" && !plain) || !clean {
+    if !matches!(url.scheme(), "https" | "http") || !clean {
         return Err(said(
             "android.provider_https",
-            "the address of %1 starts with https:// and holds no password or search part",
+            "the address of %1 starts with https:// or http:// and holds no password or search part",
             &[&key],
         ));
     }

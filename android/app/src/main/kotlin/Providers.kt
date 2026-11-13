@@ -75,6 +75,7 @@ private fun Provider(main: Main, provider: JSONObject, kind: JSONObject, run: Ru
                 if (now) main.report(account("provider_sync", "id" to id, "force" to true))
             }
         }
+        if (provider.optBoolean("plain")) Note(stringResource(R.string.provider_plain), MaterialTheme.colorScheme.error)
         Note(stringResource(kindSent(name), sentTo(kind, provider.optJSONArray("hosts").strings())), Color.Unspecified)
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             if (on) TextButton({ run(downloading) { main.report(account("provider_sync", "id" to id, "force" to true)) } }) { Text(stringResource(R.string.provider_sync)) }
