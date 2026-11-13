@@ -1,3 +1,5 @@
+mod removing;
+
 use super::{fails, ok, show};
 
 #[test]

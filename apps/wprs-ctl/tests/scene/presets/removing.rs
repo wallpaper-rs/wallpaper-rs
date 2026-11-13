@@ -1,4 +1,4 @@
-use super::{ok, run};
+use crate::{ok, run};
 use serde_json::{Value, json};
 
 #[test]
