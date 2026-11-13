@@ -102,8 +102,6 @@ Kirigami.ApplicationWindow {
     Component.onCompleted: {
         size.restore();
         showPage(Math.max(0, names.indexOf(App.backend.requested())));
-        const pieces = Qt.application.arguments.indexOf("--pieces");
-        pieces > 0 && (open(Qt.createComponent("Pieces" + Qt.application.arguments[pieces + 1] + ".qml")), showMaximized());
         loadInputs();
     }
     Frame {

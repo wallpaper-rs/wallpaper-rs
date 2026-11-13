@@ -5,7 +5,7 @@ de dibujar las suyas. Solo reciben datos y avisan con señales: ningún color ni
 desde la pantalla; todo sale de `Look` (ver `look.md`). Todas se usan con el teclado solo y tienen
 nombre para las herramientas de accesibilidad.
 
-Una página de prueba las muestra en cada estado: `wprs-app --pieces Adjust` (teclas 1 a 4 cambian
+Una página de prueba las muestra en cada estado: `wprs-app --pieces adjust` (teclas 1 a 4 cambian
 de parte). No es una pantalla para personas: ningún menú lleva a ella. `wprs-app --check` la recorre.
 
 ## Filas de opciones

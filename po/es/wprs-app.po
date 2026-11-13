@@ -17670,6 +17670,7 @@ msgid "Back to %1"
 msgstr "Volver a %1"
 
 #: apps/wprs-app/qml/Notices.qml
+#: apps/wprs-app/qml/Aviso.qml
 msgid "Close"
 msgstr "Cerrar"
 
@@ -17751,10 +17752,6 @@ msgstr "Revisa la conexión y prueba de nuevo."
 #: apps/wprs-app/qml/PiecesSaid.qml
 msgid "“Cintas” has flashes: it stays paused until you allow it in Settings."
 msgstr "«Cintas» tiene destellos: queda en pausa hasta que lo permitas en Ajustes."
-
-#: apps/wprs-app/qml/Aviso.qml
-msgid "Close"
-msgstr "Cerrar"
 
 #: apps/wprs-app/qml/PiecesPanels.qml
 msgid "Connect to casa.example"
