@@ -92,7 +92,8 @@ fn a_bad_transition_falls_back_without_refusing_the_scene() {
     }
     let wrong = crossing(json!({ "in": way(json!({ "rings": 3 })) }), iris(), IRIS);
     assert_eq!(wrong.passages.problems(), [(Way::In, "its descriptor has no parameter rings")]);
-    let missing = crossing(json!({ "out": { "descriptor": "t/none.json", "wgsl": "t/iris.wgsl" } }), iris(), IRIS);
+    let missing =
+        crossing(json!({ "out": { "descriptor": "t/none.json", "wgsl": "t/iris.wgsl" } }), iris(), IRIS);
     assert!(missing.passages.problems()[0].1.starts_with("t/none.json"));
     let typed = crossing(json!({ "in": way(json!({ "soft": true })) }), iris(), IRIS);
     assert!(typed.passages.problems()[0].1.contains("does not fit"));
@@ -100,11 +101,18 @@ fn a_bad_transition_falls_back_without_refusing_the_scene() {
 
 #[test]
 fn the_shape_of_a_transition_is_checked_with_the_scene() {
-    let text = |t: Json| json!({ "schema": SCHEMA, "canvas": { "size": [64, 32] }, "transition": t }).to_string();
+    let text =
+        |t: Json| json!({ "schema": SCHEMA, "canvas": { "size": [64, 32] }, "transition": t }).to_string();
     for (t, problem) in [
-        (json!({ "in": { "descriptor": "t/a.json", "wgsl": "t/a.wgsl", "duration_ms": 20 } }), "/transition/in/duration_ms"),
+        (
+            json!({ "in": { "descriptor": "t/a.json", "wgsl": "t/a.wgsl", "duration_ms": 20 } }),
+            "/transition/in/duration_ms",
+        ),
         (json!({ "out": { "descriptor": "t/a.txt", "wgsl": "t/a.wgsl" } }), "/transition/out/descriptor"),
-        (json!({ "in": { "descriptor": "t/a.json", "wgsl": "t/a.wgsl", "curve": "wobbly" } }), "unknown easing"),
+        (
+            json!({ "in": { "descriptor": "t/a.json", "wgsl": "t/a.wgsl", "curve": "wobbly" } }),
+            "unknown easing",
+        ),
         (json!({ "sideways": {} }), "unknown field"),
     ] {
         let fault = Scene::load(&text(t), &BTreeMap::new()).unwrap_err().to_string();

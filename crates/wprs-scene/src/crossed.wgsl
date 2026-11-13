@@ -39,7 +39,7 @@ fn after(uv: vec2<f32>) -> vec4<f32> {
 }
 
 @vertex
-fn wprs_vs(@builtin(vertex_index) i: u32) -> WprsCrossed {
+fn vs_main(@builtin(vertex_index) i: u32) -> WprsCrossed {
     let p = vec2<f32>(f32((i << 1u) & 2u), f32(i & 2u));
     return WprsCrossed(vec4<f32>(p.x * 2.0 - 1.0, 1.0 - p.y * 2.0, 0.0, 1.0), p);
 }

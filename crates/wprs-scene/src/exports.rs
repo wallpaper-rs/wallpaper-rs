@@ -103,6 +103,10 @@ pub use crate::particles::{
     cells, distance_field, fbm, flocks, fractal, gradient, hash, largest, mark, noise1, particle_salt,
     remap_input, remap_table, remapped, seen, stacked, strung, swirl, taper, turbulent_ray, turn,
 };
+pub use crate::passage::shader::{MAX_TRANSITION_UNITS, transition_shader};
+pub use crate::passage::{
+    MAX_TRANSITION_MS, MIN_TRANSITION_MS, Passage, Passages, Readied, Ready, Transition, Way,
+};
 pub use crate::pilot::{Pilot, Step, Window, halved, lowers, periods};
 pub use crate::pointing::{MAX_PRESSES, MAX_TOUCHES, Press, Touch, TouchKind};
 pub use crate::projected::projectable;
@@ -113,10 +117,6 @@ pub use crate::props::{
 pub use crate::puppet::{
     CATCH_UP, COURSE_STEPS, Drawn, IK_ROUNDS, LONGEST_STEP, MODEL_UNIT, Posed, Puppet, QUIET, QUIET_TIME,
     clip_course,
-};
-pub use crate::passage::shader::{MAX_TRANSITION_UNITS, transition_shader};
-pub use crate::passage::{
-    MAX_TRANSITION_MS, MIN_TRANSITION_MS, Passage, Passages, Ready, Readied, Transition, Way,
 };
 pub use crate::quality::{Class, Quality, Why};
 pub use crate::released::{newer_manifest_keys, newer_scene_keys};

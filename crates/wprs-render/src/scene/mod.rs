@@ -51,7 +51,7 @@ mod steady;
 mod stops;
 mod straight;
 mod strip;
-mod swarm;
+pub(crate) mod swarm;
 mod timed;
 mod under;
 mod uploads;

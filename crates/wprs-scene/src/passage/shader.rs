@@ -17,7 +17,10 @@ fn source(d: &Descriptor) -> String {
 fn placed(e: impl std::fmt::Display, at: Option<naga::SourceLocation>, lines: usize) -> String {
     match at.filter(|a| a.line_number as usize <= lines) {
         Some(a) => {
-            format!("it does not build as a transition shader: wgsl:{}:{}: {e}", a.line_number, a.line_position)
+            format!(
+                "it does not build as a transition shader: wgsl:{}:{}: {e}",
+                a.line_number, a.line_position
+            )
         }
         None => format!("it does not build as a transition shader: {e}"),
     }
@@ -31,11 +34,15 @@ pub(crate) fn check(d: &Descriptor) -> Result<(), String> {
         matches!(p.kind, ParamKind::Texture | ParamKind::Lut | ParamKind::Mask | ParamKind::Emitters)
     };
     if let Some(p) = d.params.iter().find(pictured) {
-        return Err(format!("a transition takes no picture, lut, mask or emitters parameter such as {}", p.id));
+        return Err(format!(
+            "a transition takes no picture, lut, mask or emitters parameter such as {}",
+            p.id
+        ));
     }
     let source = source(d);
     let lines = d.wgsl.lines().count();
-    let module = naga::front::wgsl::parse_str(&source).map_err(|e| placed(e.message(), e.location(&source), lines))?;
+    let module =
+        naga::front::wgsl::parse_str(&source).map_err(|e| placed(e.message(), e.location(&source), lines))?;
     let mut validator = Validator::new(ValidationFlags::all(), Capabilities::default());
     validator.validate(&module).map_err(|e| placed(&e, e.location(&source), lines))?;
     Ok(())
@@ -53,7 +60,9 @@ pub fn transition_shader(d: &Descriptor) -> Result<naga::Module, String> {
         let mut module = crate::shader::compile(&source)?.0;
         crate::fence::guard(&mut module);
         let mut validator = Validator::new(ValidationFlags::all(), Capabilities::default());
-        validator.validate(&module).map_err(|e| format!("its guarded shader: {}", e.emit_to_string(&source)))?;
+        validator
+            .validate(&module)
+            .map_err(|e| format!("its guarded shader: {}", e.emit_to_string(&source)))?;
         Ok(module)
     })
 }
