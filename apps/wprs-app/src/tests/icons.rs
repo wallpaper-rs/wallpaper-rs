@@ -79,7 +79,7 @@ fn asked(text: &str) -> BTreeSet<String> {
     names
 }
 
-fn bundled() -> BTreeSet<String> {
+pub(super) fn bundled() -> BTreeSet<String> {
     let mut names = BTreeSet::new();
     for weight in WEIGHTS {
         for entry in std::fs::read_dir(root().join("look/icons").join(weight)).unwrap() {
@@ -90,7 +90,7 @@ fn bundled() -> BTreeSet<String> {
     names
 }
 
-fn sources(dir: &Path, into: &mut Vec<std::path::PathBuf>) {
+pub(super) fn sources(dir: &Path, into: &mut Vec<std::path::PathBuf>) {
     for path in std::fs::read_dir(dir).unwrap().map(|e| e.unwrap().path()) {
         if path.is_dir() {
             sources(&path, into);

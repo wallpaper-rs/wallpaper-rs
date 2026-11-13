@@ -16,6 +16,7 @@ mod picture;
 mod regions;
 mod replies;
 mod stall;
+mod styled;
 mod tables;
 mod words;
 
