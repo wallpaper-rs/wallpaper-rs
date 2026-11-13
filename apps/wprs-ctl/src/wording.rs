@@ -85,7 +85,10 @@ pub fn tag(name: &str) -> String {
 
 fn tag_with(name: &str, say: impl Fn(&str) -> String) -> String {
     let lower = name.to_lowercase();
-    TAGS.iter().find(|(key, _)| *key == lower).map_or_else(|| name.to_owned(), |(_, text)| say(text))
+    TAGS.iter().find(|(key, _)| *key == lower).map_or_else(
+        || name.to_owned(),
+        |(_, text)| Some(say(text)).filter(|said| said != text).unwrap_or_else(|| name.to_owned()),
+    )
 }
 
 #[cfg(test)]
