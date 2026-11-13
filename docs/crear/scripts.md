@@ -197,7 +197,7 @@ Todo sale de `import { ... } from "wprs"`.
 | `time`, `dt` | El tiempo de la escena y lo que pasó desde el cuadro anterior, en segundos. |
 | `daytime` | La hora local del día, de 0 (medianoche) a casi 1. |
 | `fps`, `quality` | El ritmo de cuadros y el nivel de calidad (0 a 3). |
-| `locale`, `language` | El idioma elegido entre los del paquete, como una etiqueta de idioma válida (`es`, `en-US`); `en-US` si el paquete no trae ninguno. |
+| `locale`, `language` | El idioma elegido entre los del paquete (incluidos los de sus capas de texto), como una etiqueta de idioma válida (`es`, `en-US`); `en-US` si el paquete no trae ninguno. |
 | `canvas`, `screen` | `[ancho, alto]` del lienzo y de la pantalla, sin nombres de salidas. |
 | `device` | `desktop` o `mobile`. |
 | `mode` | `wallpaper`, `lockscreen`, `screensaver`, `editor` o `preview`. |
@@ -267,7 +267,7 @@ Se leen y se escriben con el nombre: `capa.opacity = 0.5`.
 | `visible` | `true` o `false` |
 | `color` | `[r, g, b, a]` de 0 a 1, `{ r, g, b, a }` o `"#rrggbb"` |
 | `size` | `[ancho, alto]` de imágenes, vídeos, sólidos y espectros; el tamaño en puntos de un texto |
-| `text`, `font`, `align` | el texto (hasta 4096 caracteres), la fuente (una de la escena, o `sans-serif`, `serif`, `monospace`) y `left`, `center` o `right` |
+| `text`, `font`, `align` | el texto (hasta 4096 caracteres), la fuente (una de la escena, o `sans-serif`, `serif`, `monospace`) y `left`, `center` o `right`; el texto que fija un script vale en todos los idiomas, y al leerlo de una capa con texto por idioma se recibe el del idioma que se muestra |
 
 Los vectores aceptan listas, `{ x, y }` o los de `wprs/math`. Leer un campo da lo que escribió el
 script o, si no escribió nada, lo que la escena calculó en el cuadro anterior. Lo que escribes dura

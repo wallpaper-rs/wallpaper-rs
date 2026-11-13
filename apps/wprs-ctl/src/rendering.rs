@@ -41,6 +41,12 @@ pub enum Rendering {
         pointer: Option<([f32; 2], [f32; 2])>,
         #[arg(long, requires = "pointer", help = "Press the pointer over the middle of the clip")]
         click: bool,
+        #[arg(
+            long,
+            value_name = "LANGUAGE",
+            help = "Language the texts and the scripts see, such as es or pt-BR; the default language of the package when omitted"
+        )]
+        language: Option<String>,
         #[arg(long, value_parser = ["q0", "q1", "q2", "q3"], help = "Show the right part at this level instead of the left one's")]
         against: Option<String>,
         #[arg(long, help = "Show the right part without the glow of the canvas")]
@@ -85,6 +91,7 @@ pub fn run(command: Rendering) -> Result<()> {
         size,
         pointer,
         click,
+        language,
         against,
         without_bloom,
         split,
@@ -101,7 +108,7 @@ pub fn run(command: Rendering) -> Result<()> {
         wall: time_of_day.unwrap_or_else(wprs_render::local_wall),
         script_host: None,
         media: played.as_ref().map(|p| p.state.clone()),
-        lang: project.doc["manifest"]["default_locale"].as_str().unwrap_or("en").to_owned(),
+        lang: wprs_editor::texts::preview_locale(&project.doc, language.as_deref().unwrap_or_default()),
         frames: frames as usize,
         fps,
         pointer: pointer.map(|(from, to)| Trace { from, to, click }),

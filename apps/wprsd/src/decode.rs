@@ -121,7 +121,7 @@ fn poster(
     };
     let props = wprs_scene::effective(&manifest.properties, &[]);
     wprs_render::Renderer::shared().map_err(|_| "no graphics device".to_owned()).and_then(|gpu| {
-        let lang = manifest.locale_in(&wprs_core::locale::languages());
+        let lang = manifest.scene_locale_in(scene, &wprs_core::locale::languages());
         gpu.poster(scene, &assets, &props, (crate::zone::wall(), &lang), POSTER)
             .map(DynamicImage::ImageRgba8)
             .map_err(|e| e.to_string())

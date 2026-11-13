@@ -130,6 +130,7 @@ mod verdicts;
 mod voice;
 mod wake;
 mod weigh;
+mod words;
 
 pub use exports::*;
 

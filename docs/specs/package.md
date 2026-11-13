@@ -318,6 +318,7 @@ the scene sound, runs `sound2`, `script_sounds`, `scripts2`, `script_layers` and
 | `animated_textures` | sets `frames`, `fps`, `durations`, `rects` or `animated` on an asset | runs | runs |
 | `text_layout` | sets `valign`, `wrap`, `line_height`, `background` or `padding` on a text | runs | runs |
 | `text_styles` | sets `letter_spacing`, `outline`, `shadow`, `blur` or `render: sdf` on a text | runs | runs |
+| `text_languages` | writes the `text` of a text layer as one text per language | runs | runs |
 | `fonts2` | uses ttc, otc or woff2 fonts, `face` or `fallback` | runs | runs |
 | `sound2` | plays MP3, `sounds` lists, `mode`, `pause`, `stream` or `play_on` | runs | runs |
 | `camera` | sets `canvas.camera` | runs | runs |

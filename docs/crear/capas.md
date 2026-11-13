@@ -228,7 +228,7 @@ decodificador no va más rápido que `clock.max_fps`. Con una propiedad de archi
 
 | Campo | Por defecto | Rango | Qué hace |
 |-------|-------------|-------|----------|
-| `text` | obligatorio | | Un texto, o un valor: `{ "clock": "HH:mm" }`, `{ "date": "EEE d MMM yyyy" }`, `{ "prop": "mensaje" }`, `{ "media": "title" }`. |
+| `text` | obligatorio | | Un texto, un texto por idioma (`{ "es": "Buenos días", "en": "Good morning" }`, que pide `text_languages`) o un valor: `{ "clock": "HH:mm" }`, `{ "date": "EEE d MMM yyyy" }`, `{ "prop": "mensaje" }`, `{ "media": "title" }`. |
 | `font` | la del sistema | | El id de un recurso de fuente, o una familia del sistema (`sans-serif`, `serif`, `monospace`). |
 | `fallback` | ninguna | hasta 8 | Más fuentes para los caracteres que `font` no tiene. |
 | `size` | 48 | 1 a 1024 px | El tamaño de las letras. |
@@ -253,9 +253,16 @@ de otra con el espaciado de la fuente, sin unir ni reordenar: la escritura de de
 y las escrituras que necesitan formas unidas (árabe, escrituras de la India) no se ven bien. Una
 fuente que no se puede leer se cambia por la del sistema.
 
+Un texto por idioma funciona como el título del paquete y las etiquetas de las propiedades: cada
+clave es un idioma (`es`, `pt-BR`), el texto del idioma por defecto del paquete (`default_locale`
+del manifiesto) es obligatorio y se usa cuando el idioma de quien mira no está. Se elige el idioma
+completo (`es-AR`) y después su base (`es`). Un texto que sigue un valor (reloj, fecha, propiedad)
+no tiene idiomas; un script que fija el texto de la capa lo fija en todos los idiomas, y un script que
+lo lee recibe el del idioma que se muestra.
+
 Los relojes y las fechas se explican en [escena.md](escena.md). El ejemplo
 [`texto`](ejemplos/texto/scene.json) lleva texto con contorno, sombra, caja, ajuste de líneas,
-hora y fecha:
+un título en español e inglés, hora y fecha:
 
 ```json
     { "id": "parrafo", "type": "text",

@@ -13623,6 +13623,14 @@ msgid "outlines, shadows, blurs or spaces its texts"
 msgstr "pone contorno, sombra, desenfoque o espaciado a sus textos"
 
 #: apps/wprs-app/qml/facade/LabelFeatureWords.qml
+msgid "writes a text layer in several languages"
+msgstr "escribe una capa de texto en varios idiomas"
+
+#: apps/wprs-app/qml/ScenePreviewLanguage.qml
+msgid "Language of the preview"
+msgstr "Idioma de la vista previa"
+
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "uses font collections, compressed fonts or fallback fonts"
 msgstr "usa colecciones de fuentes, fuentes comprimidas o fuentes de respaldo"
 

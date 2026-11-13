@@ -98,3 +98,38 @@ fn long_sounds_need_streaming_and_font_collections_are_allowed() {
     let fault = load(&manifest(&wanted), &held).map(drop).unwrap_err().to_string();
     assert!(fault.contains("song.mp3") && fault.contains("lasts 104.5 s, at most 60 s"), "{fault}");
 }
+
+#[test]
+fn a_text_layer_in_several_languages_needs_the_default_language_and_names_its_feature() {
+    let layers = json!([{ "id": "hello", "type": "text", "text": { "es": "Hola", "en": "Hello" } }]);
+    let text = scene(layers, json!({}));
+    let files: [(&str, &[u8]); 1] = [("scene.json", text.as_bytes())];
+    let mut listed = manifest(&["text_languages"]);
+    listed.default_locale = Some("en".into());
+    let package = load(&listed, &files).unwrap();
+    assert!(package.facts.features.contains("text_languages"));
+    let unlisted = load(&manifest(&[]), &files).map(drop).unwrap_err().to_string();
+    assert!(unlisted.contains("text_languages") || unlisted.contains("default_locale"), "{unlisted}");
+    let mut other = manifest(&["text_languages"]);
+    other.default_locale = Some("fr".into());
+    let refused = load(&other, &files).map(drop).unwrap_err().to_string();
+    assert!(refused.contains("hello") && refused.contains("default language"), "{refused}");
+    let mut none = manifest(&["text_languages"]);
+    none.default_locale = None;
+    let refused = load(&none, &files).map(drop).unwrap_err().to_string();
+    assert!(refused.contains("default_locale"), "{refused}");
+}
+
+#[test]
+fn the_language_of_a_scene_is_chosen_among_those_its_text_layers_speak() {
+    let layers = json!([{ "id": "hello", "type": "text", "text": { "es": "Hola", "en": "Hello" } }]);
+    let text = scene(layers, json!({}));
+    let mut listed = manifest(&["text_languages"]);
+    listed.default_locale = Some("en".into());
+    let mut package = load(&listed, &[("scene.json", text.as_bytes())]).unwrap();
+    let scene = package.scene().unwrap();
+    let user = |l: &str| vec![l.to_string()];
+    assert_eq!(package.manifest.scene_locale_in(&scene, &user("es_AR.UTF-8")), "es");
+    assert_eq!(package.manifest.scene_locale_in(&scene, &user("fr")), "en");
+    assert_eq!(package.manifest.locale_in(&user("es")), "en");
+}

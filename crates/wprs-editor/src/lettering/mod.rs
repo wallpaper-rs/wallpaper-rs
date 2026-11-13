@@ -21,10 +21,10 @@ pub fn asks(q: &Value) -> bool {
     ["text_box", "font_list", "clock_sample", "clock_help"].iter().any(|k| q.get(k).is_some())
 }
 
-fn shown(layer: &Value, t: f64) -> String {
+fn shown(doc: &Value, layer: &Value, t: f64) -> String {
     let value = value_at(&layer["text"], t);
-    if let Some(text) = value.as_str() {
-        return text.to_owned();
+    if let Some(text) = crate::texts::words(doc, &value) {
+        return text;
     }
     let source = &layer["text"];
     if let Some(pattern) = source["clock"].as_str() {
@@ -45,7 +45,7 @@ fn clock_now() -> f64 {
 pub(crate) fn measure(dir: &Path, doc: &Value, layer: &Value, t: f64) -> Option<Measured> {
     let chain = set::chain(dir, doc, layer);
     let size = layer["size"].as_f64().unwrap_or(48.0) as f32;
-    wprs_type::measure(&chain, &shown(layer, t), size, &set::layout(layer, t))
+    wprs_type::measure(&chain, &shown(doc, layer, t), size, &set::layout(layer, t))
 }
 
 pub fn query(dir: &Path, doc: &Value, q: &Value) -> Value {

@@ -6,6 +6,7 @@ QtObject {
     property int restart: 0
     property bool battery: false
     property bool calm: false
+    property string language: ""
     property bool rival: false
     property string versus: "q1"
     property bool versusGlow: false
@@ -30,6 +31,10 @@ QtObject {
         look.restart = restart;
         look.battery = battery;
         look.calm = calm;
+        if (language !== "")
+            look.language = language;
+        else
+            delete look.language;
         if (rival && versusGlow)
             look.bloom = false;
         else

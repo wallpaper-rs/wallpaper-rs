@@ -75,7 +75,7 @@ impl Daemon {
             wpak.display()
         );
         let m = package.manifest.localized();
-        let locale = m.locale_in(&wprs_core::locale::languages());
+        let locale = m.scene_locale_in(&scene, &wprs_core::locale::languages());
         let languages = m.languages(&wprs_core::locale::languages());
         let authored = crate::sceneprops::Authored::of(&m);
         let loudness = authored.playback.loudness();

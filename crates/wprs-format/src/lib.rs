@@ -43,6 +43,7 @@ mod release;
 mod repo;
 mod said;
 mod scenery;
+mod scenetexts;
 mod settings;
 mod shape;
 mod sign;

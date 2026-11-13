@@ -16,6 +16,7 @@ ColumnLayout {
             "quality": SceneLook.quality,
             "battery": SceneLook.battery,
             "calm": SceneLook.calm,
+            "language": SceneLook.language,
             "time": save.page.editor.time,
             "frames": save.frames,
             "fps": 30

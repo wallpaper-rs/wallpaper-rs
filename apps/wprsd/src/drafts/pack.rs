@@ -119,8 +119,11 @@ impl Daemon {
         });
         let scripts = scripts.collect::<Result<Vec<_>>>()?;
         let (m, inputs) = (manifest.localized(), manifest.declared());
-        let user = wprs_core::locale::languages();
-        let (locale, languages) = (m.locale_in(&user), m.languages(&user));
+        let user = match doc["preview"]["language"].as_str().filter(|l| wprs_format::valid_tag(l)) {
+            Some(language) => vec![language.to_owned()],
+            None => wprs_core::locale::languages(),
+        };
+        let (locale, languages) = (m.scene_locale_in(&scene, &user), m.languages(&user));
         let authored = crate::sceneprops::Authored::of(&m);
         let loudness = authored.playback.loudness();
         let properties = scene.properties(&m.properties, &crate::words::volume(), loudness);

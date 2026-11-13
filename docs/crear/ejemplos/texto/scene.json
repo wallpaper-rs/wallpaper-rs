@@ -2,7 +2,7 @@
   "schema": "wallpaper-rs.scene/1",
   "canvas": { "size": [1920, 1080], "background": "#14181f" },
   "layers": [
-    { "id": "titulo", "type": "text", "text": "Buenos días", "font": "sans-serif", "size": 160,
+    { "id": "titulo", "type": "text", "text": { "es": "Buenos días", "en": "Good morning" }, "font": "sans-serif", "size": 160,
       "color": "#ffffff", "align": "center",
       "outline": { "color": "#3b4a6b", "width": 6 },
       "shadow": { "color": "#00000099", "offset": [6, 8], "blur": 12 },

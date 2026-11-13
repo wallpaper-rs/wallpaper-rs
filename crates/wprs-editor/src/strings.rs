@@ -72,6 +72,7 @@ pub fn query(dir: &Path, doc: &Value) -> Value {
     languages.extend(default.map(String::from));
     let spoken = wprs_format::Manifest::deserialize(&doc["manifest"]).map(|m| m.locales());
     languages.extend(spoken.unwrap_or_default());
+    languages.extend(crate::texts::scene_languages(doc));
     let referenced = used(doc);
     let mut names: BTreeSet<String> =
         referenced.iter().filter(|k| !k.starts_with("wprs.")).cloned().collect();

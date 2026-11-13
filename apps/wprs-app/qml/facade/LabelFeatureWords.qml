@@ -50,6 +50,7 @@ QtObject {
             "animated_textures": App.tr("plays sprite sheets or animated pictures"),
             "text_layout": App.tr("wraps or boxes its texts"),
             "text_styles": App.tr("outlines, shadows, blurs or spaces its texts"),
+            "text_languages": App.tr("writes a text layer in several languages"),
             "fonts2": App.tr("uses font collections, compressed fonts or fallback fonts"),
             "sound2": App.tr("plays MP3 or long sounds, lists of sounds or sounds started by events"),
             "camera": App.tr("moves, zooms, turns or shakes the whole scene"),

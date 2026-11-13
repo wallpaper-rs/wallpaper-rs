@@ -5,7 +5,7 @@ use crate::{Kind, Layer};
 
 impl Check<'_> {
     pub(crate) fn text(&mut self, p: &str, t: &TextLayer) {
-        self.value(&format!("{p}/text"), &t.text);
+        self.words(&format!("{p}/text"), &t.text);
         self.value(&format!("{p}/color"), &t.color);
         self.range(&format!("{p}/size"), t.size, 1.0, 1024.0);
         self.count(&format!("{p}/fallback"), t.fallback.len(), MAX_FALLBACK);

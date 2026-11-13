@@ -13,22 +13,29 @@ pub fn languages() -> Vec<String> {
 
 pub const PLAIN: &str = "en-US";
 
+pub fn valid(name: &str) -> bool {
+    let mut parts = name.split('-');
+    let first = parts
+        .next()
+        .is_some_and(|p| (2..=3).contains(&p.len()) && p.bytes().all(|b| b.is_ascii_alphabetic()));
+    let rest: Vec<&str> = parts.collect();
+    first
+        && rest.len() <= 3
+        && rest.iter().all(|p| (1..=8).contains(&p.len()) && p.bytes().all(|b| b.is_ascii_alphanumeric()))
+}
+
 pub fn bcp47(raw: &str) -> String {
     let name = raw.split(['.', '@']).next().unwrap_or_default().replace('_', "-");
-    let mut parts = name.split('-');
-    let language = parts.next().unwrap_or_default();
-    let rest: Vec<&str> = parts.collect();
-    let valid = (2..=3).contains(&language.len())
-        && language.bytes().all(|b| b.is_ascii_alphabetic())
-        && !matches!(language, "C" | "POSIX")
-        && rest.len() <= 3
-        && rest.iter().all(|p| (1..=8).contains(&p.len()) && p.bytes().all(|b| b.is_ascii_alphanumeric()));
-    if valid { name } else { PLAIN.into() }
+    if valid(&name) && !matches!(name.as_str(), "C" | "POSIX") { name } else { PLAIN.into() }
+}
+
+pub fn variants(language: &str) -> [&str; 2] {
+    let name = language.split(['.', '@']).next().unwrap_or_default();
+    [name, name.split(['_', '-']).next().unwrap_or_default()]
 }
 
 pub fn names(languages: &[String]) -> impl Iterator<Item = &str> {
-    let names = languages.iter().map(|l| l.split(['.', '@']).next().unwrap_or_default());
-    names.flat_map(|l| [l, l.split('_').next().unwrap_or_default()])
+    languages.iter().flat_map(|l| variants(l))
 }
 
 pub fn catalog(catalogs: &[(&str, &str)], languages: &[String]) -> HashMap<String, String> {

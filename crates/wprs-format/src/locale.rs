@@ -170,14 +170,7 @@ impl Manifest {
 }
 
 pub fn valid_tag(name: &str) -> bool {
-    let mut parts = name.split('-');
-    let first = parts
-        .next()
-        .is_some_and(|p| (2..=3).contains(&p.len()) && p.bytes().all(|b| b.is_ascii_alphabetic()));
-    let rest: Vec<&str> = parts.collect();
-    first
-        && rest.len() <= 3
-        && rest.iter().all(|p| (1..=8).contains(&p.len()) && p.bytes().all(|b| b.is_ascii_alphanumeric()))
+    wprs_core::locale::valid(name)
 }
 
 pub(crate) fn valid_key(key: &str) -> bool {

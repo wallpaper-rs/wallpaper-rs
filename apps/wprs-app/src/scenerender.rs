@@ -35,7 +35,7 @@ pub fn wanted(spec: &Value, doc: &Value) -> (Rehearsal, Option<Versus>) {
             .unwrap_or_else(wprs_render::local_wall),
         script_host: None,
         media: None,
-        lang: doc["manifest"]["default_locale"].as_str().unwrap_or("en").to_owned(),
+        lang: wprs_editor::texts::preview_locale(doc, spec["language"].as_str().unwrap_or_default()),
         frames: number("frames", 1.0, 1.0, 600.0) as usize,
         fps: number("fps", 30.0, 1.0, 240.0) as u32,
         pointer,

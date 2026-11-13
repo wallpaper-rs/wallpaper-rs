@@ -67,8 +67,8 @@ pub(crate) fn entry(path: &Path) -> Result<PathBuf, Error> {
 fn drawn(package: &mut Package<BufReader<fs::File>>, scene: &Scene) -> Option<RgbaImage> {
     let assets = SceneAssets::read(scene, |path| package.read_file(path).map_err(|e| e.to_string())).ok()?;
     let props = wprs_scene::effective(&package.manifest.properties, &[]);
-    let clock =
-        (crate::stage::report::wall(), package.manifest.default_locale.as_deref().unwrap_or_default());
+    let lang = package.manifest.scene_locale_in(scene, &crate::library::languages());
+    let clock = (crate::stage::report::wall(), lang.as_str());
     wprs_render::Renderer::shared().ok()?.poster(scene, &assets, &props, clock, POSTER).ok()
 }
 

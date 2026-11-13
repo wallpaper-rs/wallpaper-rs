@@ -29,7 +29,7 @@ fn locate(scene: &Value) -> String {
     format!("/scene{}", found.unwrap_or_default())
 }
 
-fn pointer(doc: &Value, path: &str) -> String {
+pub(crate) fn pointer(doc: &Value, path: &str) -> String {
     if path.starts_with("/properties") {
         return format!("/manifest{path}");
     }
@@ -54,6 +54,7 @@ pub fn introduced(before: &[Problem], after: &[Problem]) -> Vec<Problem> {
 
 pub fn review(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
     let mut out = Vec::new();
+    let mut held = None;
     let props: BTreeMap<String, Property> = match crate::meta::read(doc, dir) {
         Ok(manifest) => {
             if !crate::pages::scened(doc) && doc.get("scene").is_some() {
@@ -68,7 +69,9 @@ pub fn review(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
                     out.push(fault);
                 }
             }
-            manifest.properties
+            let props = manifest.properties.clone();
+            held = Some(manifest);
+            props
         }
         Err(e) => {
             out.push(problem("/manifest", said("editor.manifest", "%1", &[&e])));
@@ -97,6 +100,9 @@ pub fn review(doc: &Value, dir: Option<&Path>) -> Vec<Problem> {
                     file.notes.iter().map(|n| warning(&at, said("editor.model_file", "%1 %2", &[&path, n]))),
                 );
             }
+            out.extend(
+                held.iter().flat_map(|m| m.scene_texts(&scene)).map(|e| crate::textcheck::about(doc, e)),
+            );
             out.extend(crate::hidden::problems(&doc["scene"]));
             out.extend(dir.iter().flat_map(|d| crate::scriptcheck::problems(&scene, d)));
             let issues = unread.chain(scene.validate(&props)).map(|issue| {

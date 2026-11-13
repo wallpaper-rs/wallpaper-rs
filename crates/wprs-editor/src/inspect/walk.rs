@@ -56,6 +56,17 @@ impl Walk<'_> {
         if untyped && !branches(schema).is_empty() && !tagged(self.root, schema) {
             (schema, name) = deref(self.root, choose(self.root, schema, probe));
         }
+        if name == "Words" {
+            f.bindable = true;
+            f.source = SOURCES.iter().find(|s| current.get(**s).is_some()).map_or("", |s| *s).into();
+            let free = f.source.is_empty() && crate::texts::worded(&current);
+            f.translatable = free && self.doc["manifest"]["schema"] == wprs_format::SCHEMA;
+            f.widget = if free && current.is_object() { "texts" } else { "multiline" }.into();
+            if f.widget == "texts" {
+                f.options = rows(self.doc, &pointer, &current);
+            }
+            return self.out.push(f);
+        }
         if name.starts_with("Value_for_") {
             f.bindable = true;
             f.source = SOURCES.iter().find(|s| current.get(**s).is_some()).map_or("", |s| *s).into();

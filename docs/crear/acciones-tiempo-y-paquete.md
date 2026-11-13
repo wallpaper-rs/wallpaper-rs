@@ -359,7 +359,7 @@ wprs-ctl scene act mi-escena manifest '{"media":{"file":"foto.png"}}'
 
 #### `translate`
 
-Escribe, añade o quita el texto de un campo en un idioma. Sirve para los textos de la ficha (`/manifest/title`, `/manifest/description`, `/manifest/changes`), las etiquetas, ayudas y opciones de las propiedades de usuario, y los textos de reserva de los medios. No sirve para el texto de una capa `text`, que no tiene idiomas: la acción lo dice y ese texto se cambia con [`set`](acciones-capas.md#set). Al escribir en un idioma distinto del del paquete, un texto simple se convierte en un texto con varios idiomas. En la app, el campo de idiomas junto a cada texto.
+Escribe, añade o quita el texto de un campo en un idioma. Sirve para los textos de la ficha (`/manifest/title`, `/manifest/description`, `/manifest/changes`), las etiquetas, ayudas y opciones de las propiedades de usuario, y los textos de reserva de los medios. Sirve también para el texto de una capa `text` (`/scene/layers/0/text`), salvo que siga un valor como un reloj: entonces la acción lo dice. Un texto de capa nunca se queda sin texto: no se puede quitar el último idioma. Al escribir en un idioma distinto del del paquete, un texto simple se convierte en un texto con varios idiomas. En la app, el campo de idiomas junto a cada texto.
 
 | Argumento | Tipo | Qué significa |
 |-----------|------|---------------|
@@ -372,6 +372,8 @@ Escribe, añade o quita el texto de un campo en un idioma. Sirve para los textos
 wprs-ctl scene act mi-escena translate '{"pointer":"/manifest/title","language":"es","text":"Mi escena"}'
 wprs-ctl scene act mi-escena translate '{"pointer":"/manifest/title","language":"fr","add":true}'
 wprs-ctl scene act mi-escena translate '{"pointer":"/manifest/title","language":"fr"}'
+wprs-ctl scene act mi-escena add_layer '{"kind":"text","id":"saludo"}'
+wprs-ctl scene act mi-escena translate '{"pointer":"/scene/layers/0/text","language":"es","text":"Buenos días"}'
 ```
 
 #### `thumbnail`

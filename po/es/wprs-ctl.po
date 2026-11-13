@@ -6919,6 +6919,14 @@ msgid "Press the pointer over the middle of the clip"
 msgstr "Pulsar el puntero hacia la mitad del clip"
 
 #: apps/wprs-ctl/src/rendering.rs
+msgid ""
+"Language the texts and the scripts see, such as es or pt-BR; the default "
+"language of the package when omitted"
+msgstr ""
+"Idioma que ven los textos y los scripts, como es o pt-BR; el idioma por "
+"defecto del paquete si se omite"
+
+#: apps/wprs-ctl/src/rendering.rs
 msgid "Show the right part at this level instead of the left one's"
 msgstr "Mostrar la parte derecha en este nivel en vez del de la izquierda"
 

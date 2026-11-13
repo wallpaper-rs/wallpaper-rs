@@ -1,6 +1,6 @@
 use crate::layers::{assets_of, walk};
 use crate::meta::{ORDER, adjust, hidden};
-use crate::schema::{MANIFEST, PROPERTY, at, choose, deref, root_of};
+use crate::schema::{MANIFEST, PROPERTY, at, branches, choose, deref, root_of};
 use serde::Serialize;
 use serde_json::{Value, json};
 use std::collections::BTreeMap;
@@ -41,6 +41,7 @@ pub struct Field {
     pub names: Vec<String>,
     pub help: String,
     pub dial: bool,
+    pub translatable: bool,
 }
 
 pub(crate) fn candidates(doc: &Value, reference: &str, pointer: &str) -> Vec<Value> {
@@ -126,7 +127,11 @@ pub fn fields_in(dir: Option<&Path>, doc: &Value, pointer: &str, own: &Own) -> V
     };
     let mut walk = Walk { dir, doc, own, root, hidden, order, out: Vec::new() };
     let (mut resolved, _) = deref(root, &schema);
-    if value.is_object() && !resolved["properties"].is_object() && resolved.get("oneOf").is_none() {
+    for _ in 0..3 {
+        let open = !resolved["properties"].is_object() && resolved.get("oneOf").is_none();
+        if !(value.is_object() && open && !branches(resolved).is_empty()) {
+            break;
+        }
         resolved = deref(root, choose(root, resolved, &value)).0;
     }
     match resolved["properties"].is_object() || resolved.get("oneOf").is_some() {

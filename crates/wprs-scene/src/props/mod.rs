@@ -24,6 +24,7 @@ use std::collections::BTreeMap;
 mod control;
 
 pub use control::{Choice, Control, Mode, Pick};
+pub(crate) use text::choose;
 
 pub type Values = BTreeMap<String, Json>;
 

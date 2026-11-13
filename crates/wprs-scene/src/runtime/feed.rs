@@ -7,6 +7,11 @@ use std::collections::BTreeSet;
 impl Runtime {
     pub fn set_language(&mut self, lang: &str) {
         self.lang = lang.to_owned();
+        self.languages = vec![lang.to_owned()];
+    }
+
+    pub fn set_languages(&mut self, languages: &[String]) {
+        self.languages = languages.to_vec();
     }
 
     pub fn set_props(&mut self, raw: Values) -> bool {

@@ -96,6 +96,21 @@ wprs-ctl scene act mi-escena layer '{"figure":{"stop":{"layer":"caja","stop":{"r
 
 **En la terminal:** `add_layer` con `"kind":"text"` y `set` sobre el campo del texto.
 
+## Cómo escribir un texto en varios idiomas
+
+**Dónde está:** capa de texto, campo "Text" del inspector, y debajo la casilla **Idioma, como es o pt-BR**.
+
+**Pasos:**
+
+1. Escribe el texto en el idioma por defecto del paquete.
+2. Debajo del campo, escribe el código de otro idioma (`es`, `pt-BR`) y pulsa **Traducir**. Aparece una fila por idioma, cada una con su caja de varias líneas, y la nueva parte del texto del idioma por defecto.
+3. Escribe el texto de cada fila. Quien mira ve el de su idioma y, si no está, el del idioma por defecto. **Quitar este idioma** borra una fila; el último texto de la capa no se puede quitar.
+4. Para ver la escena en otro idioma, elige el idioma en **Idioma de la vista previa** (panel de vista previa). También sirve al guardar una imagen o un clip.
+
+Si el texto sigue un valor (una hora, una fecha, una propiedad) no tiene idiomas. En la lista de problemas aparece un aviso si a la capa le falta el texto en el idioma por defecto. Un script que escribe el texto de la capa lo escribe en todos los idiomas.
+
+**En la terminal:** `translate` con `"pointer":"/scene/layers/0/text"`, el idioma y el texto, o con `"add":true` para partir del texto del idioma por defecto; `wprs-ctl scene render DIR -o vista.png --language es` dibuja la escena en un idioma.
+
 ## Cómo fijar el ancho del texto con el asa
 
 **Dónde está:** vista previa, borde derecho de la caja del texto.

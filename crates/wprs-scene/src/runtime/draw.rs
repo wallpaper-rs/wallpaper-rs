@@ -41,6 +41,7 @@ impl Runtime {
             wall: self.wall,
             step: f64::from(self.scene.clock.step.unwrap_or(60.0)).max(1.0),
             lang: &self.lang,
+            languages: &self.languages,
             audio: &self.audio,
             pointer: &self.pointer,
             media: &self.media,

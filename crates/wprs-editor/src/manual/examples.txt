@@ -494,6 +494,9 @@ wprs-ctl scene act DIR manifest '{"origin":{"kind":"derived","derived_from":[{"a
 act translate
 wprs-ctl scene act DIR translate '{"pointer":"/manifest/title","language":"es","text":"Mi escena"}'
 
+wprs-ctl scene act DIR add_layer '{"kind":"text","id":"greeting"}'
+wprs-ctl scene act DIR translate '{"pointer":"/scene/layers/0/text","language":"es","text":"Buenos días"}'
+
 act thumbnail
 wprs-ctl scene act DIR thumbnail '{"file":"picture.png"}'
 

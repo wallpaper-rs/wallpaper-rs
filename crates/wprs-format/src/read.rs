@@ -110,6 +110,7 @@ impl<R: Read + Seek> Package<R> {
         })?;
         let props = self.manifest.properties.clone();
         scene.adopt(&props, crate::archive::Entries(self)).map_err(|e| invalid(e.to_string()))?;
+        self.manifest.scene_texts(&scene).into_iter().next().map_or(Ok(()), Err)?;
         Ok((scene, text))
     }
 

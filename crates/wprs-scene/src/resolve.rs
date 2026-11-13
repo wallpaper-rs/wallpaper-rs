@@ -17,6 +17,7 @@ pub(crate) struct Context<'a> {
     pub(crate) wall: f64,
     pub(crate) step: f64,
     pub(crate) lang: &'a str,
+    pub(crate) languages: &'a [String],
     pub(crate) audio: &'a AudioFrame,
     pub(crate) pointer: &'a PointerState,
     pub(crate) media: &'a (MediaState, f64),

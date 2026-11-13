@@ -3196,8 +3196,16 @@ msgid "the scene has no template %1"
 msgstr "la escena no tiene la plantilla %1"
 
 #: crates/wprs-editor/src/texts.rs
-msgid "the text of a text layer has no languages; change it with set"
-msgstr "el texto de una capa de texto no tiene idiomas; cámbialo con set"
+msgid "the text of this layer follows a value; make it a fixed text first"
+msgstr "el texto de esta capa sigue un valor; haz primero que sea un texto fijo"
+
+#: crates/wprs-editor/src/check.rs
+msgid "the text of %1 needs a text in the default language"
+msgstr "el texto de %1 necesita un texto en el idioma por defecto"
+
+#: crates/wprs-editor/src/texts.rs
+msgid "a text layer needs a text"
+msgstr "una capa de texto necesita un texto"
 
 #: crates/wprs-editor/src/texts.rs
 msgid ""
@@ -4247,6 +4255,10 @@ msgstr "ajusta sus textos en líneas o les pone una caja"
 #: crates/wprs-format/src/scenery.rs
 msgid "outlines, shadows, blurs or spaces its texts"
 msgstr "pone contorno, sombra, desenfoque o espaciado a sus textos"
+
+#: crates/wprs-format/src/scenery.rs
+msgid "writes a text layer in several languages"
+msgstr "escribe una capa de texto en varios idiomas"
 
 #: crates/wprs-format/src/scenery.rs
 msgid "uses font collections, compressed fonts or fallback fonts"

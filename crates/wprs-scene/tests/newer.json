@@ -31,7 +31,7 @@
       "playback": { "rate": 2, "frame": { "keys": [[0, 0], [1, 5]] } } },
     { "id": "clip", "type": "video", "video": "rain", "color": "#88aaff",
       "playback": { "rate": 0.5, "start": 1, "end": 4, "loop": false } },
-    { "id": "title", "type": "text", "text": "Hello", "font": "serif", "fallback": ["sans", "serif"], "valign": "bottom",
+    { "id": "title", "type": "text", "text": { "en": "Hello", "es": "Hola" }, "font": "serif", "fallback": ["sans", "serif"], "valign": "bottom",
       "wrap": { "width": 600, "lines": 2, "ellipsis": true }, "line_height": 1.2,
       "background": { "color": "#00000080", "padding": [12, 6], "radius": 8 }, "padding": 16, "letter_spacing": 2,
       "outline": { "color": "#000000", "width": 2 }, "shadow": { "offset": [3, 3], "blur": 4 }, "blur": 1, "render": "sdf" },

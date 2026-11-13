@@ -241,6 +241,7 @@ Imprime los archivos que escribió. Dibuja lo mismo que la vista previa del edit
 | `--pointer X,Y[:X,Y]`, `--click` | Un puntero inventado en esas fracciones del lienzo, que se mueve al segundo par y pulsa hacia la mitad del clip. |
 | `--against q0`, `--without-bloom`, `--split F` | La parte derecha se ve a otro nivel o sin brillo, para comparar. |
 | `--battery`, `--calm` | Como con batería, o con menos movimiento. |
+| `--language IDIOMA` | El idioma que ven los textos por idioma y los scripts (`es`, `pt-BR`); si el paquete no lo tiene, el idioma por defecto. |
 
 **Ejecuta los scripts.** Para los cuadros que dibuja, corre los scripts de la escena con la hora de
 pared de `--time-of-day` (o la de este equipo) y escribe en la salida de error lo que imprimen con

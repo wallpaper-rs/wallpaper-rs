@@ -61,7 +61,7 @@ pub(super) fn samples(dir: &Path, doc: &Value, v: &Value, t: f64) -> Value {
         return out;
     }
     let text = (layer["type"] == "text")
-        .then(|| crate::keys::value_at(&layer["text"], t).as_str().map(str::to_owned))
+        .then(|| crate::texts::words(doc, &crate::keys::value_at(&layer["text"], t)))
         .flatten();
     let font = layer["font"].as_str().unwrap_or("");
     if let Some(image) = text.and_then(|s| super::glyphs::raster(dir, doc, font, &s)) {

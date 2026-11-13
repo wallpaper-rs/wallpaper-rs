@@ -46,6 +46,7 @@
  "animated_textures": {"scene": {"assets": {"sky": {"path": "sky.png", "atlas": [1, 2], "frames": 2, "fps": 12}}, "layers": [{"id": "sky", "type": "image", "image": "sky"}]}},
  "text_layout": {"scene": {"layers": [{"id": "title", "type": "text", "text": "Hi", "valign": "bottom"}]}},
  "text_styles": {"scene": {"layers": [{"id": "title", "type": "text", "text": "Hi", "letter_spacing": 2}]}},
+ "text_languages": {"manifest": {"default_locale": "en"}, "scene": {"layers": [{"id": "title", "type": "text", "text": {"en": "Hi", "es": "Hola"}}]}},
  "fonts2": {"scene": {"layers": [{"id": "title", "type": "text", "text": "Hi", "fallback": ["serif"]}]}},
  "sound2": {"scene": {"assets": {"rain": {"path": "rain.wav"}}, "layers": [{"id": "rain", "type": "sound", "sound": "rain", "stream": true}]}, "files": {"rain.wav": "base64:UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YRAAAACAgICAgICAgICAgICAgICA"}},
  "camera": {"scene": {"canvas": {"size": [64, 32], "camera": {"zoom": 1.2}}}},

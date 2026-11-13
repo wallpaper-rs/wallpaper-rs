@@ -446,7 +446,7 @@ layer's own box (default `[0.5, 0.5]`, or the anchor point).
 | `group` | `layers`, `clip` (later children only show where the first one is) |
 | `image` | `image` (asset id), `size` |
 | `video` | `video` (asset id, or a value such as `{ "prop", "map" }`), `size`; plays in a loop |
-| `text` | `text`, `font` (asset id or system family), `size`, `color`, `align` |
+| `text` | `text` (a text, a value, or a text per language such as `{ "en": "Hi", "es": "Hola" }`, which lists `text_languages`; the language is the one the player was given, whole and then its base, then the default language of the package, then `en`; each language is a tag such as `es` or `pt-BR`, its text is not empty and the manifest needs a text in its `default_locale`), `font` (asset id or system family), `size`, `color`, `align` |
 | `shape` | `shape` (`rect` with `radius`, `ellipse`, `ring`, `polygon`, `star`, `line`), `fill`, `gradient` (`radial`, `from`, `to`, 2 to 4 `stops`), `stroke` (`color`, `width`) |
 | `spectrum` | `size`, `style` (`bars`, `circle`, `wave`), `bands` (16, 32 or 64), `channel`, `color`, `gap` |
 | `solid` | `color`, `size` (the canvas by default) |

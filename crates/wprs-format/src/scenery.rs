@@ -16,6 +16,7 @@ pub const SCENE: &[(&str, &str, [Support; 2])] = &[
     ("animated_textures", "plays sprite sheets or animated pictures", [Yes, Yes]),
     ("text_layout", "wraps or boxes its texts", [Yes, Yes]),
     ("text_styles", "outlines, shadows, blurs or spaces its texts", [Yes, Yes]),
+    ("text_languages", "writes a text layer in several languages", [Yes, Yes]),
     ("fonts2", "uses font collections, compressed fonts or fallback fonts", [Yes, Yes]),
     ("sound2", "plays MP3 or long sounds, lists of sounds or sounds started by events", [Yes, Yes]),
     ("camera", "moves, zooms, turns or shakes the whole scene", [Yes, Yes]),

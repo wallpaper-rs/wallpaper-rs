@@ -10,7 +10,8 @@ ColumnLayout {
     required property var host
     readonly property var field: host.field
     readonly property bool multiline: field.widget === "markup"
-    readonly property bool last: field.key === "title" && field.options.length < 2
+    readonly property bool lines: field.pointer.startsWith("/scene/")
+    readonly property bool last: (field.key === "title" || lines) && field.options.length < 2
 
     function put(language, text) {
         host.page.run("translate", {
@@ -41,9 +42,23 @@ ColumnLayout {
                 text: ManifestWords.language(row.modelData.language)
             }
 
+            Area {
+                Layout.fillWidth: true
+                visible: texts.lines
+                enterApplies: true
+                text: row.text
+                wrapMode: TextEdit.Wrap
+                selectByMouse: true
+                Accessible.name: SceneWords.label(texts.field.key) + " " + ManifestWords.language(row.modelData.language)
+                onEditingFinished: {
+                    if (text !== row.text)
+                        texts.put(row.modelData.language, text);
+                }
+            }
+
             QQC2.TextField {
                 Layout.fillWidth: true
-                visible: !texts.multiline
+                visible: !texts.multiline && !texts.lines
                 text: row.text
                 Accessible.name: SceneWords.label(texts.field.key) + " " + ManifestWords.language(row.modelData.language)
                 onEditingFinished: {
@@ -54,7 +69,7 @@ ColumnLayout {
 
             MarkupField {
                 Layout.fillWidth: true
-                visible: texts.multiline
+                visible: texts.multiline && !texts.lines
                 text: row.text
                 label: SceneWords.label(texts.field.key) + " " + ManifestWords.language(row.modelData.language)
                 onCommitted: value => {
@@ -76,36 +91,8 @@ ColumnLayout {
         }
     }
 
-    RowLayout {
-        Layout.fillWidth: true
-        visible: texts.host.page.view.v2 !== false
-
-        QQC2.TextField {
-            id: tag
-
-            Layout.fillWidth: true
-            placeholderText: App.tr("Language, such as es or pt-BR")
-            onAccepted: add.clicked()
-        }
-
-        TextsKeys {
-            host: texts.host
-        }
-
-        QQC2.Button {
-            id: add
-
-            icon.name: "list-add"
-            text: App.tr("Translate")
-            enabled: /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8}){0,3}$/.test(tag.text)
-            onClicked: {
-                texts.host.page.run("translate", {
-                        "pointer": texts.field.pointer,
-                        "language": tag.text,
-                        "add": true
-                    });
-                tag.clear();
-            }
-        }
+    SceneTranslate {
+        host: texts.host
+        keys: !texts.lines
     }
 }

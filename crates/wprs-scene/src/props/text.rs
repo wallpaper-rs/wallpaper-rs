@@ -1,33 +1,20 @@
 use super::Text;
-use wprs_core::locale::names;
+use std::collections::BTreeMap;
+use wprs_core::locale::{names, variants};
 
 impl Text {
     pub fn pick(&self, languages: &[String]) -> String {
-        let map = match self {
-            Text::Plain(text) => return text.clone(),
-            Text::Localized(map) => map,
-        };
-        let tags: Vec<(String, &String)> = map.iter().map(|(k, v)| (tag(k), v)).collect();
-        let find = |name: String| {
-            let exact = tags.iter().find(|(k, _)| *k == name);
-            let base = || tags.iter().find(|(k, _)| k.split('-').next() == Some(name.as_str()));
-            exact.or_else(base).map(|(_, v)| (*v).clone())
-        };
-        let found = names(languages).chain(["en"]).map(tag).find_map(find);
-        found.or_else(|| map.values().next().cloned()).unwrap_or_default()
+        match self {
+            Text::Plain(text) => text.clone(),
+            Text::Localized(map) => choose(map, names(languages)).to_owned(),
+        }
     }
 
     pub fn chosen(&self, lang: &str) -> &str {
-        let map = match self {
-            Text::Plain(text) => return text,
-            Text::Localized(map) => map,
-        };
-        let base = |s: &str| s.split(['-', '_']).next().unwrap_or_default().to_owned();
-        let exact = map.iter().find(|(k, _)| k.eq_ignore_ascii_case(lang));
-        let near = || map.iter().find(|(k, _)| !lang.is_empty() && base(k).eq_ignore_ascii_case(&base(lang)));
-        let english = || map.iter().find(|(k, _)| k.eq_ignore_ascii_case("en"));
-        let found = exact.or_else(near).or_else(english).or_else(|| map.iter().next());
-        found.map_or("", |(_, v)| v.as_str())
+        match self {
+            Text::Plain(text) => text,
+            Text::Localized(map) => choose(map, variants(lang).into_iter()),
+        }
     }
 
     pub fn is_empty(&self) -> bool {
@@ -57,4 +44,31 @@ pub fn tag(name: &str) -> String {
         "zh-cht" | "zh-tw" | "zh-hk" | "zh-mo" => "zh-hant".into(),
         _ => tag,
     }
+}
+
+pub fn alike(a: &str, b: &str) -> bool {
+    let plain = |s: &str| !s.get(..2).is_some_and(|p| p.eq_ignore_ascii_case("zh"));
+    if plain(a) && plain(b) {
+        a.len() == b.len()
+            && a.bytes().zip(b.bytes()).all(|(x, y)| {
+                let fold = |c: u8| if c == b'_' { b'-' } else { c.to_ascii_lowercase() };
+                fold(x) == fold(y)
+            })
+    } else {
+        tag(a) == tag(b)
+    }
+}
+
+pub fn choose<'a, 'b>(map: &'a BTreeMap<String, String>, names: impl Iterator<Item = &'b str>) -> &'a str {
+    let find = |name: &str| {
+        let exact = map.iter().find(|(k, _)| alike(k, name));
+        let base = || {
+            map.iter().find(|(k, _)| {
+                !name.is_empty() && alike(k.split(['-', '_']).next().unwrap_or_default(), name)
+            })
+        };
+        exact.or_else(base).map(|(_, v)| v.as_str())
+    };
+    let found = names.chain(["en"]).find_map(find);
+    found.or_else(|| map.values().next().map(String::as_str)).unwrap_or_default()
 }

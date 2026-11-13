@@ -33,13 +33,9 @@ pub(crate) fn content<'a>(
         }
         Kind::Text(t) => {
             let ink = t.ink(cx, quality);
-            let text = match (&set.text, &t.text) {
-                (Some(t), _) => Cow::Owned(t.clone()),
-                (None, crate::Value::Fixed(t)) => Cow::Borrowed(t.as_str()),
-                (None, bound) => match bound.binding().and_then(|b| cx.said(b)) {
-                    Some(said) => Cow::Borrowed(said),
-                    None => Cow::Owned(bound.get(cx)),
-                },
+            let text = match &set.text {
+                Some(t) => Cow::Owned(t.clone()),
+                None => t.text.get(cx),
             };
             Content::Text {
                 text,

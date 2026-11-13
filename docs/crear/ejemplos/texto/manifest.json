@@ -15,6 +15,7 @@
   "requires": {
     "features": [
       "clock_dates",
+      "text_languages",
       "text_layout",
       "text_styles"
     ]

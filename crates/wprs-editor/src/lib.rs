@@ -123,6 +123,7 @@ mod strings;
 pub mod strips;
 pub mod swarms;
 pub mod templates;
+mod textcheck;
 pub mod textools;
 pub mod texts;
 mod tidy;

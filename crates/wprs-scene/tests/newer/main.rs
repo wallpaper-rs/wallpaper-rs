@@ -8,7 +8,7 @@ mod schema;
 const FULL: &str = include_str!("../newer.json");
 const SAMPLE: &str = include_str!("../sample.json");
 
-const EXPECTED: [&str; 35] = [
+const EXPECTED: [&str; 36] = [
     "ambient_light",
     "animated_textures",
     "audio_ranges",
@@ -36,6 +36,7 @@ const EXPECTED: [&str; 35] = [
     "shaping",
     "sound2",
     "tangents",
+    "text_languages",
     "text_layout",
     "text_styles",
     "texture_options",

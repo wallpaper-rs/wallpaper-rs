@@ -24,3 +24,12 @@ fn a_system_locale_becomes_a_valid_language_tag() {
         assert_eq!(bcp47(plain), "en-US", "{plain}");
     }
 }
+
+#[test]
+fn a_language_is_tried_whole_and_then_by_its_base_whatever_its_separator() {
+    use wprs_core::locale::{valid, variants};
+    assert_eq!(variants("es_AR.UTF-8"), ["es_AR", "es"]);
+    assert_eq!(variants("pt-BR"), ["pt-BR", "pt"]);
+    assert_eq!(variants("en"), ["en", "en"]);
+    assert!(valid("pt-BR") && valid("zh-Hans") && !valid("english") && !valid("e") && !valid("es_AR"));
+}

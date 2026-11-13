@@ -36,15 +36,49 @@ fn a_script_is_made_from_a_template_without_a_file() {
 }
 
 #[test]
-fn the_text_of_a_text_layer_says_to_use_set_and_set_changes_it() {
+fn a_text_layer_is_translated_like_the_title_and_the_inspector_offers_its_languages() {
     let root = tempfile::tempdir().unwrap();
     let mut p = project(&root);
     act(&mut p, json!({"add_layer": {"kind": "text", "id": "words"}})).unwrap();
-    let text = json!({"translate": {"pointer": "/scene/layers/1/text", "language": "en", "text": "Hi"}});
-    let why = refused(&mut p, text);
-    assert!(why.contains("set") && why.contains("text layer"), "{why}");
-    act(&mut p, json!({"set": {"pointer": "/scene/layers/1/text", "value": "Hi"}})).unwrap();
-    assert_eq!(at(&p, "/scene/layers/1/text"), "Hi");
+    let words = "/scene/layers/1/text";
+    let put = |language: &str, text: &str| json!({"translate": {"pointer": words, "language": language, "text": text}});
+    act(&mut p, put("en", "Good morning")).unwrap();
+    assert_eq!(at(&p, words), "Good morning");
+    act(&mut p, put("es", "Buenos días")).unwrap();
+    assert_eq!(at(&p, words), json!({"en": "Good morning", "es": "Buenos días"}));
+    let shown = wprs_editor::inspect::fields(&p.doc, "/scene/layers/1");
+    let field = shown.iter().find(|f| f.pointer == words).unwrap();
+    assert_eq!((field.widget.as_str(), field.options.len()), ("texts", 2));
+    act(&mut p, json!({"translate": {"pointer": words, "language": "fr", "add": true}})).unwrap();
+    assert_eq!(at(&p, &format!("{words}/fr")), "Good morning");
+    act(&mut p, json!({"translate": {"pointer": words, "language": "fr"}})).unwrap();
+    act(&mut p, json!({"translate": {"pointer": words, "language": "es"}})).unwrap();
+    assert_eq!(at(&p, words), json!({"en": "Good morning"}));
+    let last = refused(&mut p, json!({"translate": {"pointer": words, "language": "en"}}));
+    assert!(last.contains("text layer needs a text"), "{last}");
+    assert!(wprs_editor::check::review(&p.doc, None).iter().all(|q| !q.pointer.contains("words")));
+}
+
+#[test]
+fn a_text_layer_without_the_default_language_is_a_problem_and_a_bound_one_has_no_languages() {
+    let root = tempfile::tempdir().unwrap();
+    let mut p = project(&root);
+    act(&mut p, json!({"add_layer": {"kind": "text", "id": "words"}})).unwrap();
+    let words = "/scene/layers/1/text";
+    act(&mut p, json!({"set": {"pointer": words, "value": {"es": "Hola", "fr": "Salut"}}})).unwrap();
+    let problems = wprs_editor::check::review(&p.doc, None);
+    assert!(problems.iter().any(|q| q.pointer == words), "{problems:?}");
+    act(&mut p, json!({"translate": {"pointer": words, "language": "en", "text": "Hi"}})).unwrap();
+    assert!(wprs_editor::check::review(&p.doc, None).iter().all(|q| q.pointer != words));
+    act(&mut p, json!({"set": {"pointer": words, "value": {"clock": "HH:mm"}}})).unwrap();
+    let bound = refused(&mut p, json!({"translate": {"pointer": words, "language": "es", "add": true}}));
+    assert!(bound.contains("follows a value"), "{bound}");
+    assert_eq!(wprs_editor::texts::preview_locale(&p.doc, "es"), "en");
+    act(&mut p, json!({"set": {"pointer": words, "value": {"en": "Hi", "es": "Hola"}}})).unwrap();
+    assert_eq!(wprs_editor::texts::preview_locale(&p.doc, "es-AR"), "es");
+    assert_eq!(wprs_editor::texts::preview_locale(&p.doc, "fr"), "en");
+    let strings = p.ask("", &json!({"strings": {}}));
+    assert!(strings["languages"].as_array().unwrap().contains(&json!("es")), "{strings}");
 }
 
 #[test]

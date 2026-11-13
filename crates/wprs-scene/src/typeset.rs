@@ -20,7 +20,7 @@ pub struct Layout {
 #[serde(deny_unknown_fields)]
 pub struct TextLayer {
     #[schemars(extend("x-multiline" = true))]
-    pub text: Value<String>,
+    pub text: crate::words::Words,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[schemars(extend("x-ref" = "font"))]
     pub font: Option<String>,
@@ -136,7 +136,7 @@ impl TextLayer {
         let (letter_spacing, outline, shadow, blur, render) = Default::default();
         let (size, color, align) = (size(), white(), Align::default());
         TextLayer {
-            text,
+            text: text.into(),
             font,
             fallback,
             size,

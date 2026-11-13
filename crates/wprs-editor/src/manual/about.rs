@@ -32,10 +32,7 @@ pub const ABOUT: [(&str, &str); 80] = [
     ("import_assets", "Copy assets from another package into the scene"),
     ("asset", "Change how an asset is stored: texture compression, cover, placeholder, cube faces"),
     ("rgb", "Turn the lighting of a layer on or off, or set its zone size"),
-    (
-        "translate",
-        "Set, add or remove the text of a manifest field in one language; the text of a text layer has no languages and is changed with set",
-    ),
+    ("translate", "Set, add or remove the text of a manifest field or of a text layer in one language"),
     ("rename", "Rename a layer, timeline, asset or particle system and what refers to it"),
     ("paste", "Paste layers copied with the copy query, into a group or at a position"),
     ("thumbnail", "Set the thumbnail of the package, or its animated preview"),

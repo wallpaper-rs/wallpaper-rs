@@ -33,6 +33,11 @@ ColumnLayout {
         }
     }
 
+    ScenePreviewLanguage {
+        Layout.fillWidth: true
+        page: panel.page
+    }
+
     ScenePreviewEffects {
         Layout.fillWidth: true
         page: panel.page

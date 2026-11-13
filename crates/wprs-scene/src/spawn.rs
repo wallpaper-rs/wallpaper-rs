@@ -164,7 +164,7 @@ impl Runtime {
             _ => None,
         };
         let text = match &layer.kind {
-            Kind::Text(text) => Some(set.text.clone().unwrap_or_else(|| text.text.get(&cx))),
+            Kind::Text(text) => Some(set.text.clone().unwrap_or_else(|| text.text.get(&cx).into_owned())),
             _ => None,
         };
         Some(LayerRead {
