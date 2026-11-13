@@ -3,6 +3,7 @@ use crate::creds::{digest, hex, random};
 use crate::db::{DAY, audit, changed, now, rows};
 use crate::error::{Input, Problem, Res, require};
 use crate::jobs::republish;
+use crate::lang::{count, t, tm, word};
 use crate::web::{page, text};
 use crate::{Reply, Router, St};
 use axum::Json;
@@ -138,7 +139,7 @@ async fn transparency(State(app): St, auth: Auth) -> Res<Response> {
 pub fn choose(name: &str, label: &str, options: &[&str], chosen: &str) -> Markup {
     html! {
         select name=(name) aria-label=(label) {
-            @for o in options { option value=(o) selected[*o == chosen] { (o) } }
+            @for o in options { option value=(o) selected[*o == chosen] { (word(o)) } }
         }
     }
 }
@@ -151,49 +152,49 @@ async fn administration(State(app): St, auth: Option<Auth>) -> Res<Response> {
     let repo = app.repo.info(&app.cfg);
     let shown = |v: &Value| v.as_str().map_or(v.to_string(), String::from);
     let body = html! {
-        section.seccion { h2 { "Repository" }
+        section.seccion { h2 { (t("Repository")) }
             @if let Some(r) = &repo {
                 dl { @for (k, v) in r.as_object().into_iter().flatten() { dt { (k) } dd { (shown(v)) } } }
                 form method="post" action="/api/v1/admin/repo/publish?back=/admin" {
-                    button { "Sign and publish now" }
+                    button { (t("Sign and publish now")) }
                 }
             } @else {
-                p { "No repository yet. Create one with " code { "wprs-server repo init --name \"…\"" }
-                    " and keep the printed root key offline." }
+                p { (tm("No repository yet. Create one with {} and keep the printed root key offline.",
+                    &[html! { code { "wprs-server repo init --name \"…\"" } }])) }
             }
         }
-        section.seccion { h2 { "Invitations" }
+        section.seccion { h2 { (t("Invitations")) }
             table { tbody { @for i in &invites { tr {
-                td { (text(i, "role")) } td { (i["uses_left"]) " uses left" }
+                td { (word(text(i, "role"))) } td { (count(i["uses_left"].as_i64().unwrap_or(0), "{} use left", "{} uses left")) }
                 td { form method="post"
                     action={ "/api/v1/admin/invites/" (i["id"]) "?_method=DELETE&back=/admin" } {
-                    button { "Revoke" }
+                    button { (t("Revoke")) }
                 } }
             } } } }
             form method="post" action="/api/v1/admin/invites?back=/admin" {
-                label { "Role" (choose("role", "Role", &ROLES, "user")) }
-                label { "Uses" input type="number" name="uses" min="1" max="1000" value="1"; }
-                label { "Days" input type="number" name="days" min="1" max="90" value="7"; }
-                button { "Create invitation" }
+                label { (t("Role")) (choose("role", t("Role"), &ROLES, "user")) }
+                label { (t("Uses")) input type="number" name="uses" min="1" max="1000" value="1"; }
+                label { (t("Days")) input type="number" name="days" min="1" max="90" value="7"; }
+                button { (t("Create invitation")) }
             }
         }
-        section.seccion { h2 { "Accounts" }
+        section.seccion { h2 { (t("Accounts")) }
             table {
-                thead { tr { th { "Handle" } th { "Role and status" } } }
+                thead { tr { th { (t("Handle")) } th { (t("Role and status")) } } }
                 tbody { @for u in &users { tr { td { (text(u, "handle")) } td {
-                    @if u["id"] == auth.user { (text(u, "role")) } @else {
+                    @if u["id"] == auth.user { (word(text(u, "role"))) } @else {
                         form method="post"
                             action={ "/api/v1/admin/users/" (u["id"]) "?_method=PATCH&back=/admin" } {
-                            (choose("role", "Role", &ROLES, text(u, "role")))
-                            (choose("status", "Status", &["active", "suspended"], text(u, "status")))
-                            button { "Save" }
+                            (choose("role", t("Role"), &ROLES, text(u, "role")))
+                            (choose("status", t("Status"), &["active", "suspended"], text(u, "status")))
+                            button { (t("Save")) }
                         }
                     }
                 } } } }
             }
         }
-        p { a href="/api/v1/admin/transparency" { "Transparency report (CSV)" } " · "
-            a href="/api/v1/mod/audit" { "Audit log (JSON)" } " · " a href="/admin/featured" { "Featured packages" } }
+        p { a href="/api/v1/admin/transparency" { (t("Transparency report (CSV)")) } " · "
+            a href="/api/v1/mod/audit" { (t("Audit log (JSON)")) } " · " a href="/admin/featured" { (t("Featured packages")) } }
     };
-    Ok(page(&app, Some(&auth), "Administration", body).into_response())
+    Ok(page(&app, Some(&auth), "/admin", t("Administration"), body).into_response())
 }

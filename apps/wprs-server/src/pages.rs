@@ -5,6 +5,7 @@ use crate::creds::{self, check_handle, check_password, digest};
 use crate::db::now;
 use crate::error::{Problem, Res};
 use crate::frame::Frame;
+use crate::lang::{since, t, tm};
 use crate::layout::setup_screen;
 use crate::net::{Client, LOGIN};
 use crate::ui::{Kind, button, button_named, field, form_actions, link_button};
@@ -17,7 +18,6 @@ use axum::routing::{get, post};
 use maud::{Markup, html};
 use rusqlite::params;
 use serde::Deserialize;
-use serde_json::Value;
 
 pub fn routes() -> Router {
     Router::new()
@@ -55,17 +55,17 @@ async fn login_page(State(app): St, Query(n): Query<Next>) -> Markup {
     let body = html! {
         form.formulario method="post" action="/login" {
             input type="hidden" name="next" value=(next);
-            (field("Handle", html! { input name="handle" autocomplete="username" required; }, None, None))
-            (field("Password", html! {
+            (field(t("Handle"), html! { input name="handle" autocomplete="username" required; }, None, None))
+            (field(t("Password"), html! {
                 input type="password" name="password" autocomplete="current-password" required; }, None, None))
-            (form_actions(button(Kind::Primary, "Sign in")))
+            (form_actions(button(Kind::Primary, t("Sign in"))))
         }
         @if app.cfg.oidc.is_some() {
-            p { (link_button(Kind::Plain, &format!("/api/v1/auth/oidc/start?next={next}"), "Sign in with single sign-on")) }
+            p { (link_button(Kind::Plain, &format!("/api/v1/auth/oidc/start?next={next}"), t("Sign in with single sign-on"))) }
         }
-        p { "No account yet? " a href="/register" { "Register" } }
+        p { (t("No account yet?")) " " a href="/register" { (t("Register")) } }
     };
-    page(&app, None, "Sign in", body)
+    page(&app, None, "/login", t("Sign in"), body)
 }
 
 #[derive(Deserialize)]
@@ -90,18 +90,22 @@ async fn logout(State(app): St, auth: Option<Auth>) -> Res<Response> {
 async fn register_page(State(app): St, Query(n): Query<Next>) -> Markup {
     let body = html! {
         form.formulario method="post" action="/register" {
-            (field("Handle", html! {
-                input name="handle" autocomplete="username" required minlength="3" maxlength="32"; }, None, None))
-            (field("Password (10 characters or more)", html! {
+            (field(t("Handle"), html! {
+                input name="handle" autocomplete="username" required minlength="3" maxlength="32"; },
+                Some(t("3 to 32 characters.")), None))
+            (field(t("Password (10 characters or more)"), html! {
                 input type="password" name="password" autocomplete="new-password" required minlength="10"; },
                 None, None))
-            (field("Invitation code", html! { input name="invite" value=(n.invite) autocomplete="off"; }, None, None))
-            (form_actions(button(Kind::Primary, "Create account")))
+            (field(t("Invitation code"), html! { input name="invite" value=(n.invite) autocomplete="off"; },
+                Some(t("It comes filled in if you opened the invitation link.")), None))
+            (form_actions(button(Kind::Primary, t("Create account"))))
         }
-        p { "By registering you accept the " a href="/legal/terms" { "terms" } " and the "
-            a href="/legal/privacy" { "privacy notice" } "." }
+        p { (tm("By registering you accept the {} and the {}.", &[
+            html! { a href="/legal/terms" { (t("terms")) } },
+            html! { a href="/legal/privacy" { (t("privacy notice")) } },
+        ])) }
     };
-    page(&app, None, "Register", body)
+    page(&app, None, "", t("Register"), body)
 }
 
 async fn register(State(app): St, client: Client, Form(r): Form<Register>) -> Res<Response> {
@@ -111,18 +115,18 @@ async fn register(State(app): St, client: Client, Form(r): Form<Register>) -> Re
 
 async fn setup_page(State(app): St) -> Markup {
     let body = html! {
-        p { "Enter the one-time setup token printed in the server log, or made with "
-            code { "wprs-server setup-token" } "." }
+        p { (tm("Enter the one-time setup token printed in the server log, or made with {}.",
+            &[html! { code { "wprs-server setup-token" } }])) }
         form.formulario method="post" action="/setup" {
-            (field("Setup token", html! { input name="token" autocomplete="off" required; }, None, None))
-            (field("Handle", html! { input name="handle" autocomplete="username" required; }, None, None))
-            (field("Password (10 characters or more)", html! {
+            (field(t("Setup token"), html! { input name="token" autocomplete="off" required; }, None, None))
+            (field(t("Handle"), html! { input name="handle" autocomplete="username" required; }, None, None))
+            (field(t("Password (10 characters or more)"), html! {
                 input type="password" name="password" autocomplete="new-password" required minlength="10"; },
                 None, None))
-            (form_actions(button(Kind::Primary, "Create administrator")))
+            (form_actions(button(Kind::Primary, t("Create administrator"))))
         }
     };
-    setup_screen(&app, Frame::new("Create the first administrator"), body)
+    setup_screen(&app, Frame::new(t("Create the first administrator")), body)
 }
 
 #[derive(Deserialize)]
@@ -163,34 +167,31 @@ async fn link(State(app): St, auth: Option<Auth>, Query(n): Query<Next>) -> Resp
         Ok(key) => app.db.run(move |c| pending_device(c, &key)).await.ok(),
         Err(_) => None,
     };
-    let at = |v: &Value| {
-        chrono::DateTime::from_timestamp_millis(v.as_i64().unwrap_or_default()).unwrap_or_default()
-    };
     let body = html! {
-        p { strong { "Approve only a code that your own new device shows on its screen." } " "
-            "Someone who sends you a code or a link is trying to get into your account." }
+        p { strong { (t("Approve only a code that your own new device shows on its screen.")) } " "
+            (t("Someone who sends you a code or a link is trying to get into your account.")) }
         @if let Some(d) = &pending {
             dl {
-                dt { "Code" } dd { code { (code) } }
-                dt { "Platform" } dd { (text(d, "platform")) }
-                dt { "Software" } dd { (d["client"].as_str().filter(|c| !c.is_empty()).unwrap_or("not given")) }
-                dt { "Requested" } dd { (at(&d["requested_at"]).format("%Y-%m-%d %H:%M UTC")) }
+                dt { (t("Code")) } dd { code { (code) } }
+                dt { (t("Platform")) } dd { (text(d, "platform")) }
+                dt { (t("Software")) } dd { (d["client"].as_str().filter(|c| !c.is_empty()).unwrap_or(t("not given"))) }
+                dt { (t("Requested")) } dd { (since((now() - d["requested_at"].as_i64().unwrap_or_default()) / 1000)) }
             }
             form.formulario method="post" action="/api/v1/auth/device/approve?back=/account" {
                 input type="hidden" name="user_code" value=(code);
                 (form_actions(html! {
-                    (button_named(Kind::Primary, "approve", "true", "This is my device: approve"))
-                    (button_named(Kind::Plain, "approve", "false", "Deny"))
+                    (button_named(Kind::Primary, "approve", "true", t("This is my device: approve")))
+                    (button_named(Kind::Plain, "approve", "false", t("Deny")))
                 }))
             }
         } @else {
-            @if !code.is_empty() { p { "No device waits for this code: it is wrong, used or expired." } }
+            @if !code.is_empty() { p { (t("No device waits for this code: it is wrong, used or expired.")) } }
             form.formulario method="get" action="/link" {
-                (field("Code shown on the new device", html! {
+                (field(t("Code shown on the new device"), html! {
                     input name="code" value=(code) autocomplete="off" required; }, None, None))
-                (form_actions(button(Kind::Primary, "Look up")))
+                (form_actions(button(Kind::Primary, t("Look up"))))
             }
         }
     };
-    page(&app, Some(&auth), "Link a device", body).into_response()
+    page(&app, Some(&auth), "/account", t("Link a device"), body).into_response()
 }

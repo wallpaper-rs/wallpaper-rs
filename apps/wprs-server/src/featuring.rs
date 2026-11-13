@@ -1,6 +1,7 @@
 use crate::auth::{Auth, Role};
 use crate::db::{audit, changed, now, rows};
 use crate::error::{Input, Problem, Res, require};
+use crate::lang::t;
 use crate::web::{page, text};
 use crate::{Reply, Router, St};
 use axum::Json;
@@ -87,18 +88,18 @@ async fn screen(State(app): St, auth: Option<Auth>) -> Res<Response> {
     };
     let items = app.db.run(|c| rows(c, LIST, [])).await?;
     let body = html! {
-        p.texto { "Featured packages are signed into the repository; clients show them apart in their catalog." }
+        p.texto { (t("Featured packages are signed into the repository; clients show them apart in their catalog.")) }
         table { tbody { @for i in &items { tr {
             td { a href={ "/packages/" (text(i, "id")) } { code { (text(i, "id")) } } } td { (text(i, "note")) }
             td { form method="post" action={ "/api/v1/admin/featured/" (text(i, "id")) "?_method=DELETE&back=/admin/featured" } {
-                button { "Stop featuring" }
+                button { (t("Stop featuring")) }
             } }
         } } } }
         form method="post" action="/api/v1/admin/featured?back=/admin/featured" {
-            label { "Package id" input name="id" required; }
-            label { "Note" input name="note" maxlength="200"; }
-            button { "Feature" }
+            label { (t("Package id")) input name="id" required; }
+            label { (t("Note")) input name="note" maxlength="200"; }
+            button { (t("Feature")) }
         }
     };
-    Ok(page(&app, Some(&auth), "Featured packages", body).into_response())
+    Ok(page(&app, Some(&auth), "/admin", t("Featured packages"), body).into_response())
 }

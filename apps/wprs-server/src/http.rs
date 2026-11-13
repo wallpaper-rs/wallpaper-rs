@@ -45,7 +45,10 @@ pub fn router(app: Arc<App>) -> Router {
         .layer(middleware::from_fn_with_state(app.clone(), guard))
         .layer(DefaultBodyLimit::max(1 << 20))
         .with_state(app);
-    Router::new().fallback_service(inner).layer(middleware::from_fn(rewrite))
+    Router::new()
+        .fallback_service(inner)
+        .layer(middleware::from_fn(rewrite))
+        .layer(middleware::from_fn(crate::lang::follow))
 }
 
 async fn rewrite(mut req: Request, next: Next) -> Response {

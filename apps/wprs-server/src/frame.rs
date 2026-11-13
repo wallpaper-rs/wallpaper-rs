@@ -1,4 +1,5 @@
 use crate::App;
+use crate::lang::{current, t};
 use maud::{DOCTYPE, Markup, html};
 
 pub const NO_WALLPAPER: &str = "f-ninguno";
@@ -42,7 +43,7 @@ pub fn render(app: &App, nav: Markup, frame: Frame, body: Markup) -> Markup {
     let band = if frame.cover.is_some() { "banda" } else { "banda sin" };
     html! {
         (DOCTYPE)
-        html lang="en" class=(frame.tone) {
+        html lang=(current().code()) class=(frame.tone) {
             head {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
@@ -51,13 +52,13 @@ pub fn render(app: &App, nav: Markup, frame: Frame, body: Markup) -> Markup {
                 script src="/static/copy.js" defer {}
             }
             body {
-                a.saltar href="#contenido" { "Skip to content" }
+                a.saltar href="#contenido" { (t("Skip to content")) }
                 div.pagina {
                     header class=(band) {
                         @if let Some(c) = &frame.cover { img.portada-img src=(c.src) alt="" ; }
                         div.barra {
                             a.marca href="/" { (app.cfg.name) }
-                            nav.nav aria-label="Site" { (nav) }
+                            nav.nav aria-label=(t("Site")) { (nav) }
                         }
                         div.cabeza {
                             h1 { (frame.title) }
@@ -69,12 +70,12 @@ pub fn render(app: &App, nav: Markup, frame: Frame, body: Markup) -> Markup {
                     }
                     main.columna #contenido { (body) }
                     footer.pie {
-                        nav.pie-enlaces aria-label="Legal" {
-                            a href="/legal" { "Legal notice" }
-                            a href="/legal/terms" { "Terms" }
-                            a href="/legal/privacy" { "Privacy" }
-                            a href="/legal/content" { "Content policy" }
-                            a href="/legal/notice" { "Report content" }
+                        nav.pie-enlaces aria-label=(t("Legal")) {
+                            a href="/legal" { (t("Legal notice")) }
+                            a href="/legal/terms" { (t("Terms")) }
+                            a href="/legal/privacy" { (t("Privacy")) }
+                            a href="/legal/content" { (t("Content policy")) }
+                            a href="/legal/notice" { (t("Report content")) }
                         }
                     }
                 }

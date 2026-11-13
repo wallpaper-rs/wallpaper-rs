@@ -1,6 +1,7 @@
 use crate::auth::Auth;
 use crate::db::{HOUR, now};
 use crate::error::{Input, Problem, Res};
+use crate::lang::t;
 use crate::{Reply, Router, St};
 use axum::Json;
 use axum::extract::{Path, Query, State};
@@ -109,10 +110,10 @@ pub fn ballot(id: &str, latest: &Value, signed: bool) -> maud::Markup {
     let (up, down) = (&latest["votes"]["up"], &latest["votes"]["down"]);
     maud::html! {
         p {
-            @if latest["featured"] == true { strong { "Featured by this server. " } }
-            "▲ " (up) " · ▼ " (down) " votes, counted without any list of who voted."
+            @if latest["featured"] == true { strong { (t("Featured by this server.")) " " } }
+            "▲ " (up) " · ▼ " (down) " " (t("votes, counted without any list of who voted."))
         }
-        @if signed { @for (vote, label) in [("up", "Vote up"), ("down", "Vote down"), ("none", "Withdraw my vote")] {
+        @if signed { @for (vote, label) in [("up", t("Vote up")), ("down", t("Vote down")), ("none", t("Withdraw my vote"))] {
             form.inline method="post" action={ "/api/v1/packages/" (id) "/vote?back=/packages/" (id) } {
                 input type="hidden" name="vote" value=(vote);
                 (crate::ui::button(crate::ui::Kind::Plain, label))

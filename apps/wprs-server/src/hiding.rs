@@ -3,6 +3,7 @@ use crate::auth::{Auth, Role};
 use crate::db::{audit, changed, now};
 use crate::error::Res;
 use crate::error::{Input, Problem, require};
+use crate::lang::{t, tf, word};
 use crate::moderation::open_cases;
 use crate::web::{page, text};
 use crate::{Reply, Router, St};
@@ -75,45 +76,45 @@ async fn moderation(State(app): St, auth: Option<Auth>) -> Res<Response> {
     let decisions = ["approve", "reject", "remove", "revoke", "restore", "dismiss"];
     let reasons = ["other", "malware", "license", "takedown", "broken"];
     let body = html! {
-        @if cases.is_empty() { p { "No open cases." } }
+        @if cases.is_empty() { p { (t("No open cases.")) } }
         @for case in &cases { section.seccion {
-            h2 { "Case " (case["id"]) ": " (text(case, "reason")) " · " (text(case, "title")) }
+            h2 { (tf("Case {}", &[&case["id"]])) ": " (word(text(case, "reason"))) " · " (text(case, "title")) }
             img width="320" src={ "/media/" (text(case, "sha256")) ".jpg" }
-                alt={ "Preview of " (text(case, "title")) };
+                alt=(tf("Preview of {}", &[&text(case, "title")]));
             dl {
-                dt { "Package" } dd { code { (text(case, "package")) " " (text(case, "version")) } }
-                dt { "State" } dd { (text(case, "state")) }
-                dt { "Uploaded by" } dd { (text(case, "uploader")) }
-                dt { "Details" } dd { (text(case, "detail")) }
+                dt { (t("Package")) } dd { code { (text(case, "package")) " " (text(case, "version")) } }
+                dt { (t("State")) } dd { (word(text(case, "state"))) }
+                dt { (t("Uploaded by")) } dd { (text(case, "uploader")) }
+                dt { (t("Details")) } dd { (text(case, "detail")) }
             }
             form.formulario method="post" action={ "/api/v1/mod/cases/" (case["id"]) "/decision?back=/mod" } {
-                label { "Decision" (choose("decision", "Decision", &decisions, "approve")) }
-                label { "Reason sent to the author (required to reject, remove or revoke)"
+                label { (t("Decision")) (choose("decision", t("Decision"), &decisions, "approve")) }
+                label { (t("Reason sent to the author (required to reject, remove or revoke)"))
                     textarea name="statement" rows="3" {} }
-                label { "Revocation reason" (choose("reason", "Revocation reason", &reasons, "other")) }
-                label { input type="checkbox" name="strike" value="true"; "Give the uploader a strike" }
-                button { "Decide" }
+                label { (t("Revocation reason")) (choose("reason", t("Revocation reason"), &reasons, "other")) }
+                label { input type="checkbox" name="strike" value="true"; (t("Give the uploader a strike")) }
+                button { (t("Decide")) }
             }
         } }
-        h2 { "Hidden packages" }
-        p.texto { "Hidden packages leave the catalog and search; whoever installed them keeps them and their updates." }
+        h2 { (t("Hidden packages")) }
+        p.texto { (t("Hidden packages leave the catalog and search; whoever installed them keeps them and their updates.")) }
         table { tbody { @for h in &hidden { tr {
             td { a href={ "/packages/" (text(h, "id")) } { code { (text(h, "id")) } } } td { (text(h, "reason")) }
             td { form method="post" action={ "/api/v1/mod/hidden/" (text(h, "id")) "?_method=DELETE&back=/mod" } {
-                button { "Show again" }
+                button { (t("Show again")) }
             } }
         } } } }
         form method="post" action="/api/v1/mod/hidden?back=/mod" {
-            label { "Package id" input name="id" required; }
-            label { "Reason sent to the author" input name="reason" required minlength="10"; }
-            button { "Hide" }
+            label { (t("Package id")) input name="id" required; }
+            label { (t("Reason sent to the author")) input name="reason" required minlength="10"; }
+            button { (t("Hide")) }
         }
-        h2 { "Blocklist" }
+        h2 { (t("Blocklist")) }
         form method="post" action="/api/v1/mod/blocklist?back=/mod" {
-            label { "SHA-256 of a .wpak" input name="sha256" required pattern="[0-9a-f]{64}"; }
-            label { "Reason" input name="reason" required; }
-            button { "Block" }
+            label { (t("SHA-256 of a .wpak")) input name="sha256" required pattern="[0-9a-f]{64}"; }
+            label { (t("Reason")) input name="reason" required; }
+            button { (t("Block")) }
         }
     };
-    Ok(page(&app, Some(&auth), "Moderation queue", body).into_response())
+    Ok(page(&app, Some(&auth), "/mod", t("Moderation queue"), body).into_response())
 }

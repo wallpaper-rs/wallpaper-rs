@@ -21,6 +21,7 @@ mod http;
 mod icons;
 mod jobs;
 pub mod lan;
+mod lang;
 mod layout;
 mod legal;
 mod mailbox;
@@ -52,6 +53,7 @@ mod web;
 
 pub use backup::{backup, restore};
 pub use config::Config;
+pub use lang::missed_texts;
 pub use records::SYNC_FORMAT;
 pub use repo::{import, init, status};
 pub use validate::check;

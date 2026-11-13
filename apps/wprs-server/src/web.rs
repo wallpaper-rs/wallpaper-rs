@@ -2,6 +2,7 @@ use crate::auth::Auth;
 use crate::catalog::{Search, details, search};
 use crate::db::one;
 use crate::error::{Problem, Res};
+use crate::lang::{t, tf, tm, word};
 pub use crate::layout::page;
 use crate::layout::preview;
 use crate::ui::{Kind, Tone, button, checkbox, empty, notice};
@@ -41,98 +42,97 @@ async fn home(State(app): St, auth: Option<Auth>, Query(s): Query<Search>) -> Re
     let encode = |text: &str| utf8_percent_encode(text, NON_ALPHANUMERIC).to_string();
     let body = html! {
         form role="search" method="get" action="/" {
-            label { "Search" input type="search" name="q" value=(q); }
-            label { "Type" select name="kind" {
-                option value="" { "Any" }
-                @for k in ["image", "video", "scene", "web"] { option value=(k) selected[kind == k] { (k) } }
+            label { (t("Search")) input type="search" name="q" value=(q); }
+            label { (t("Type")) select name="kind" {
+                option value="" { (t("Any")) }
+                @for k in ["image", "video", "scene", "web"] { option value=(k) selected[kind == k] { (word(k)) } }
             } }
-            label { "Rating" select name="content" {
-                option value="" { "Any" }
-                @for r in ["general", "mature", "unrated"] { option value=(r) selected[rating == r] { (r) } }
+            label { (t("Rating")) select name="content" {
+                option value="" { (t("Any")) }
+                @for r in ["general", "mature", "unrated"] { option value=(r) selected[rating == r] { (word(r)) } }
             } }
-            label { "With" select name="facet" {
-                option value="" { "Anything" }
-                @for f in FACETS { option value=(f) selected[facet == f] { (f) } }
+            label { (t("With")) select name="facet" {
+                option value="" { (t("Anything")) }
+                @for f in FACETS { option value=(f) selected[facet == f] { (word(f)) } }
             } }
-            (checkbox(html! { input type="checkbox" name="featured" value="true" checked[picked]; }, "Featured only", None))
-            (button(Kind::Primary, "Search"))
+            (checkbox(html! { input type="checkbox" name="featured" value="true" checked[picked]; }, t("Featured only"), None))
+            (button(Kind::Primary, t("Search")))
         }
-        @if items.is_empty() { (empty("Nothing found", html! { "Try other words or clear the filters." })) }
+        @if items.is_empty() { (empty(t("Nothing found"), html! { (t("Try other words or clear the filters.")) })) }
         ul.grid { @for i in &items { li {
             (preview(text(i, "thumbnail"), "", 320, i["content"] == "mature"))
             a href={ "/packages/" (text(i, "id")) } { (text(i, "title")) }
             br;
             small {
-                @if i["featured"] == true { "Featured · " }
-                (text(i, "kind")) " · " (text(i, "license")) " · ▲ " (i["votes"]["up"]) " ▼ " (i["votes"]["down"])
+                @if i["featured"] == true { (t("Featured")) " · " }
+                (word(text(i, "kind"))) " · " (text(i, "license")) " · ▲ " (i["votes"]["up"]) " ▼ " (i["votes"]["down"])
                 @if let Some(o) = i["owner"].as_str() { " · " (o) }
             }
         } } }
         @if let Some(next) = next {
             p { a rel="next" href={ "/?cursor=" (next) "&q=" (encode(&q)) "&kind=" (encode(&kind))
                 "&content=" (encode(&rating)) "&facet=" (encode(&facet)) } {
-                "More wallpapers"
+                (t("More wallpapers"))
             } }
         }
     };
-    Ok(page(&app, auth.as_ref(), "Wallpapers", body))
+    Ok(page(&app, auth.as_ref(), "/", t("Wallpapers"), body))
 }
 
 async fn package(State(app): St, auth: Option<Auth>, Path(id): Path<String>) -> Res<Markup> {
     let key = id.clone();
     let (latest, versions) = app.db.run(move |c| details(c, &key)).await?;
-    let (title, owner) = (text(&latest, "title"), latest["owner"].as_str().unwrap_or("a deleted account"));
+    let (title, owner) = (text(&latest, "title"), latest["owner"].as_str().unwrap_or(t("a deleted account")));
     let render = if latest["content"].is_null() { markup::verbatim } else { markup::html };
     let description = render(text(&latest, "description"));
     let body = html! {
-        (preview(text(&latest, "thumbnail"), &format!("Preview of {title}"), 640, latest["content"] == "mature"))
+        (preview(text(&latest, "thumbnail"), &tf("Preview of {}", &[&title]), 640, latest["content"] == "mature"))
         @if let Some(reason) = latest["hidden"].as_str() {
-            (notice(Tone::Warn, "Out of the catalog", html! { p { "The moderators took this wallpaper out of the catalog: " (reason) } }, None))
+            (notice(Tone::Warn, t("Out of the catalog"), html! { p { (tm("The moderators took this wallpaper out of the catalog: {}", &[html! { (reason) }])) } }, None))
         }
         @if versions.iter().any(|v| v["listed"] == false) {
-            p.texto { "Unlisted: this wallpaper, or some of its versions, stays out of the catalog and search; \
+            p.texto { (t("Unlisted: this wallpaper, or some of its versions, stays out of the catalog and search; \
                 whoever has this link can see and install it. It is not private: it stays in the signed \
-                repository files, which anyone can read." }
+                repository files, which anyone can read.")) }
         }
         @if latest["photosensitive"] == true {
-            (notice(Tone::Warn, "Flashing lights", html! { p { "This wallpaper has flashing lights or patterns that can affect people with \
-                photosensitive epilepsy." } }, None))
+            (notice(Tone::Warn, t("Flashing lights"), html! { p { (t("This wallpaper has flashing lights or patterns that can affect people with \
+                photosensitive epilepsy.")) } }, None))
         }
         (PreEscaped(description))
         (crate::votes::ballot(&id, &latest, auth.is_some()))
         dl {
-            dt { "Package" } dd { code { (id) } }
-            dt { "Type" } dd { (text(&latest, "kind")) }
-            dt { "License" } dd { (text(&latest, "license")) }
-            dt { "Authors" } dd { (joined(&latest["authors"])) }
-            dt { "Tags" } dd { (joined(&latest["tags"])) }
-            dt { "Rating" } dd { (latest["content"].as_str().unwrap_or("unrated")) }
-            dt { "Facets" } dd { (joined(&latest["facets"])) }
-            dt { "Uploaded by" } dd { (owner) }
+            dt { (t("Package")) } dd { code { (id) } }
+            dt { (t("Type")) } dd { (word(text(&latest, "kind"))) }
+            dt { (t("License")) } dd { (text(&latest, "license")) }
+            dt { (t("Authors")) } dd { (joined(&latest["authors"])) }
+            dt { (t("Tags")) } dd { (joined(&latest["tags"])) }
+            dt { (t("Rating")) } dd { (word(latest["content"].as_str().unwrap_or("unrated"))) }
+            dt { (t("Facets")) } dd { (joined(&latest["facets"])) }
+            dt { (t("Uploaded by")) } dd { (owner) }
             dt { "SHA-256" } dd { code { (text(&latest, "sha256")) } }
         }
         p {
-            a href=(text(&latest, "download")) { "Download version " (text(&latest, "version")) }
-            " · or install it with a client that verifies the signed repository."
+            a href=(text(&latest, "download")) { (tf("Download version {}", &[&text(&latest, "version")])) }
+            " · " (t("or install it with a client that verifies the signed repository."))
         }
-        h2 { "Versions" }
+        h2 { (t("Versions")) }
         ul { @for v in &versions { li { a href=(text(v, "download")) { (text(v, "version")) } } } }
-        h2 { "Report this wallpaper" }
+        h2 { (t("Report this wallpaper")) }
         form.formulario method="post" action={ "/api/v1/packages/" (id) "/reports?back=/packages/" (id) } {
-            label { "Reason" select name="category" {
+            label { (t("Reason")) select name="category" {
                 @for c in ["copyright", "illegal", "malware", "mature", "spam", "other"] {
-                    option value=(c) { (c) }
+                    option value=(c) { (word(c)) }
                 }
             } }
-            label { "Details" textarea name="details" rows="3" maxlength="4000" {} }
-            button { "Send report" }
+            label { (t("Details")) textarea name="details" rows="3" maxlength="4000" {} }
+            button { (t("Send report")) }
         }
         p.texto {
-            "For legal notices with your contact details use the "
-            a href="/legal/notice" { "notice form" } "."
+            (tm("For legal notices with your contact details use the {}.", &[html! { a href="/legal/notice" { (t("notice form")) } }]))
         }
     };
-    Ok(page(&app, auth.as_ref(), title, body))
+    Ok(page(&app, auth.as_ref(), "/", title, body))
 }
 
 async fn media(State(app): St, Path(file): Path<String>) -> Res<Response> {
