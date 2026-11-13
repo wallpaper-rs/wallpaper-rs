@@ -17624,3 +17624,23 @@ msgstr "Dar forma al tamaño"
 #: apps/wprs-app/qml/SceneSwarmOverLife.qml
 msgid "Fade the color"
 msgstr "Degradar el color"
+
+#: apps/wprs-app/qml/PackageParts.qml
+msgid "Each part has a title and a thumbnail that whoever imports it sees."
+msgstr "Cada parte tiene un título y una miniatura que ve quien la importa."
+
+#: apps/wprs-app/qml/PackageParts.qml
+msgid "Change the thumbnail…"
+msgstr "Cambiar la miniatura…"
+
+#: apps/wprs-app/qml/PackageParts.qml
+msgid "Choose a thumbnail…"
+msgstr "Elegir una miniatura…"
+
+#: apps/wprs-app/qml/PackageParts.qml
+msgid "Remove the thumbnail"
+msgstr "Quitar la miniatura"
+
+#: apps/wprs-app/qml/PackageParts.qml
+msgid "Pictures (*.png *.jpg *.jpeg *.webp)"
+msgstr "Imágenes (*.png *.jpg *.jpeg *.webp)"
