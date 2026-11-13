@@ -133,6 +133,9 @@ QtObject {
         Qt.createComponent("SceneKeptCheck.qml").createObject(page, {
             "page": page
         }).exercise();
+        Qt.createComponent("SceneHullLabelCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         Qt.createComponent("SceneWallGripCheck.qml").createObject(page, {
             "page": page
         }).exercise();

@@ -17584,3 +17584,7 @@ msgstr ""
 "tus archivos, o use tu cuenta en este equipo, podría usarlos y leer lo que"
 " sincronizas. Elige esto solo en un equipo en el que no puedas usar un "
 "llavero. Puedes volver a pasarlos al llavero cuando quieras."
+
+#: apps/wprs-app/qml/SceneModelColliders.qml
+msgid "How wide the collider is"
+msgstr "Qué tan ancho es el colisionador"

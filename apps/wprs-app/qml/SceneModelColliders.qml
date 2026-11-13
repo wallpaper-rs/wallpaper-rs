@@ -61,8 +61,16 @@ ColumnLayout {
                     })
             }
 
+            QQC2.Label {
+                text: App.tr("Radius")
+            }
+
             SceneSlider {
+                objectName: "hullRadius"
                 Layout.fillWidth: true
+                Accessible.name: App.tr("Radius")
+                QQC2.ToolTip.text: App.tr("How wide the collider is")
+                QQC2.ToolTip.visible: hovered
                 from: 0
                 to: 2
                 value: hull.modelData.radius ?? 0.1
