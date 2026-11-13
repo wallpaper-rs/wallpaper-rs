@@ -154,7 +154,7 @@ async fn administration(State(app): St, auth: Option<Auth>) -> Res<Response> {
     let body = html! {
         section.seccion { h2 { (t("Repository")) }
             @if let Some(r) = &repo {
-                dl { @for (k, v) in r.as_object().into_iter().flatten() { dt { (k) } dd { (shown(v)) } } }
+                dl { @for (k, v) in r.as_object().into_iter().flatten() { dt { (word(k)) } dd { (word(&shown(v))) } } }
                 form method="post" action="/api/v1/admin/repo/publish?back=/admin" {
                     button { (t("Sign and publish now")) }
                 }

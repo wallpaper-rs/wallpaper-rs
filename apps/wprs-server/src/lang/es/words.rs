@@ -1,4 +1,13 @@
 pub const WORDS: super::Texts = &[
+    ("entry_expires", "La firma vence"),
+    ("entry_version", "Versión de la firma"),
+    ("online_key", "Autores en línea"),
+    ("repo_id", "Identificador"),
+    ("root_signed", "Raíz firmada"),
+    ("root_version", "Versión de la raíz"),
+    ("url", "Dirección"),
+    ("true", "sí"),
+    ("false", "no"),
     ("user", "usuario"),
     ("trusted", "de confianza"),
     ("moderator", "moderador"),
