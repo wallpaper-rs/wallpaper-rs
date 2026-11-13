@@ -27,7 +27,7 @@ fn a_bundled_repository_is_added_updated_and_renewed_without_a_key_in_the_source
     assert_eq!(browse(&data, "").unwrap().len(), 2);
 
     let later = NOW + 60 * DAY;
-    let renewed = bundled(&repo, &keys, "Examples", &[dawn.clone()], later).unwrap();
+    let renewed = bundled(&repo, &keys, "Examples", std::slice::from_ref(&dawn), later).unwrap();
     assert!(renewed.changed);
     wprs_format::update_repo(&data, &FileFetch, &first.repo_id, later).unwrap();
     assert!(repos(&data, later).unwrap().iter().all(|r| !r.stale && r.broken.is_none()));
@@ -48,7 +48,7 @@ fn the_example_scenes_make_a_repository_that_installs_them() {
         std::fs::read_dir(scenes).unwrap().flatten().filter(|e| e.path().join("manifest.json").is_file())
     {
         let out = tmp.path().join(format!("{}.wpak", entry.file_name().to_string_lossy()));
-        wprs_format::build(&entry.path(), &out, &wprs_format::Limits::default()).unwrap();
+        wprs_format::build(entry.path(), &out, &wprs_format::Limits::default()).unwrap();
         wpaks.push(out);
     }
     assert!(wpaks.len() >= 6);

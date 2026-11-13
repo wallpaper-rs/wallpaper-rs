@@ -36,11 +36,14 @@ fn make(keys: &Path, name: &str) -> Result<String> {
 }
 
 fn create(repo: &Path, keys: &Path, name: &str, now: i64) -> Result<()> {
-    let mut start = Settings::default();
-    start.name = name.to_owned();
-    start.root_keys = vec![make(keys, "root")?];
-    start.online_keys = vec![make(keys, "online")?];
-    (start.entry_max_days, start.root_days) = (ENTRY_DAYS, ROOT_DAYS);
+    let start = Settings {
+        name: name.to_owned(),
+        root_keys: vec![make(keys, "root")?],
+        online_keys: vec![make(keys, "online")?],
+        entry_max_days: ENTRY_DAYS,
+        root_days: ROOT_DAYS,
+        ..Settings::default()
+    };
     init(repo, &start, now)?;
     sign_root(repo, &secret(keys, "root")?)?;
     Ok(())
