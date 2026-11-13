@@ -44,6 +44,8 @@ class ShellTest {
         compose.waitForIdle()
     }
 
+    private fun page(label: Int) = compose.onNode(hasText(context.getString(label)) and !hasAnyAncestor(hasTestTag("tabs")))
+
     private fun tab(label: Int) = compose.onNode(hasText(context.getString(label)) and hasAnyAncestor(hasTestTag("tabs")) and isTab)
 
     @Test
@@ -52,7 +54,7 @@ class ShellTest {
         compose.onAllNodes(isTab).assertCountEquals(3)
         tab(R.string.library).assertIsSelected()
         tab(R.string.playlists).performClick().assertIsSelected()
-        compose.onNodeWithText(context.getString(R.string.new_playlist)).assertIsDisplayed()
+        page(R.string.playlists).assertIsDisplayed()
         tab(R.string.settings).performClick().assertIsSelected()
         compose.onNodeWithText(context.getString(R.string.account)).assertIsDisplayed()
     }
@@ -72,7 +74,7 @@ class ShellTest {
     @Test
     fun fromInternetInTheAddMenuOpensTheSourcesPage() {
         opened()
-        compose.onNodeWithText(context.getString(R.string.choose)).performClick()
+        compose.onNodeWithText(context.getString(R.string.choose), useUnmergedTree = true).performClick()
         compose.onNodeWithText(context.getString(R.string.from_internet)).performClick()
         compose.onNodeWithText(context.getString(R.string.sources)).assertIsDisplayed()
         back()
