@@ -100,3 +100,11 @@ fn query_arguments_are_checked() {
     assert_eq!(ask_schema("pose").unwrap()["required"], json!(["clip"]));
     assert!(describe_ask("pose").unwrap().contains("  clip: string (required) - Clip to pose"));
 }
+
+#[test]
+fn every_description_has_a_spanish_text() {
+    let po = include_str!("../../../../po/es/wprs-messages.po");
+    for (name, about) in ABOUT.iter().chain(ASKS.iter()) {
+        assert!(po.contains(&format!("msgid {about:?}\n")), "{name} is not translated");
+    }
+}

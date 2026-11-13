@@ -10,6 +10,10 @@ pub use examples::lines as example_lines;
 use serde_json::{Value, json};
 use std::sync::OnceLock;
 
+pub(crate) const fn w(text: &'static str) -> &'static str {
+    text
+}
+
 pub(crate) const DEPTH: usize = 6;
 
 fn root() -> &'static Value {
@@ -38,7 +42,7 @@ pub fn schema(name: &str) -> Option<Value> {
 pub fn describe(name: &str) -> Option<String> {
     let schema = schema(name)?;
     let defs = &schema["$defs"];
-    let mut out = vec![format!("{name}: {}", about(name).unwrap_or_default())];
+    let mut out = vec![format!("{name}: {}", wprs_core::message::tr(about(name).unwrap_or_default()))];
     let args = shape::resolved(&schema["allOf"][0], defs);
     let before = out.len();
     shape::lines(&args, defs, name, DEPTH, &mut out);
@@ -59,7 +63,7 @@ pub fn ask_schema(name: &str) -> Option<Value> {
 pub fn describe_ask(name: &str) -> Option<String> {
     let about = ask_about(name)?;
     Some(
-        std::iter::once(format!("{name}: {about}"))
+        std::iter::once(format!("{name}: {}", wprs_core::message::tr(about)))
             .chain(ask_args::describe(name))
             .collect::<Vec<_>>()
             .join("\n"),

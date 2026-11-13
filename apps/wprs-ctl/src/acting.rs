@@ -103,7 +103,7 @@ fn listed(what: &[(&str, &str)], json: bool) -> Result<()> {
         return Ok(());
     }
     let width = what.iter().map(|(n, _)| n.len()).max().unwrap_or(0);
-    what.iter().for_each(|(n, a)| println!("{n:width$}  {a}"));
+    what.iter().for_each(|(n, a)| println!("{n:width$}  {}", wprs_core::message::tr(a)));
     Ok(())
 }
 

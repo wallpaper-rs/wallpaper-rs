@@ -5285,3 +5285,639 @@ msgstr "Editar sprites"
 #: crates/wprs-editor/src/steps.rs
 msgid "Edit a shader"
 msgstr "Editar un shader"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set the value at a JSON Pointer, creating the objects on the way; a value of the wrong kind is refused, one that breaks a rule is kept and the problems it adds are listed"
+msgstr "Fija el valor en un puntero JSON, creando los objetos del camino; se rechaza un valor de tipo equivocado, y uno que rompe una regla se conserva y se listan los problemas que agrega"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Insert a value into a list or an object at a JSON Pointer; the problems it adds are listed as for set"
+msgstr "Inserta un valor en una lista o un objeto en un puntero JSON; los problemas que agrega se listan como en set"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Remove the value at a JSON Pointer"
+msgstr "Quita el valor en un puntero JSON"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Move the value at one JSON Pointer to another"
+msgstr "Mueve el valor de un puntero JSON a otro"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add a layer of a kind, optionally from a source, into a group or at a position"
+msgstr "Agrega una capa de un tipo, opcionalmente desde una fuente, en un grupo o en una posición"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Remove a layer by id"
+msgstr "Quita una capa por id"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Copy a layer, or make a template of it"
+msgstr "Copia una capa o hace una plantilla de ella"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Move a layer to a position, optionally into a group"
+msgstr "Mueve una capa a una posición, opcionalmente dentro de un grupo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Put layers into a new group"
+msgstr "Reúne capas en un grupo nuevo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Dissolve a group, keeping its layers"
+msgstr "Disuelve un grupo conservando sus capas"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Show or hide a layer"
+msgstr "Muestra u oculta una capa"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Mark a layer locked or unlocked; only the canvas handles of the app honour the mark, while actions, the inspector and wprs-ctl still change a locked layer"
+msgstr "Marca una capa como bloqueada o desbloqueada; solo las asas del lienzo de la app respetan la marca, mientras que las acciones, el inspector y wprs-ctl siguen cambiando una capa bloqueada"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Show only one layer, or all of them when no id is given"
+msgstr "Muestra solo una capa, o todas cuando no se da id"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove a keyframe of an animated value"
+msgstr "Agrega, cambia o quita un fotograma clave de un valor animado"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Import a picture as an asset, optionally as a linear image or an atlas"
+msgstr "Importa una imagen como recurso, opcionalmente como imagen lineal o atlas"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Import an effect from a descriptor and its shader"
+msgstr "Importa un efecto desde un descriptor y su shader"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Remove an imported effect"
+msgstr "Quita un efecto importado"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Copy the script module in file into the scene, or make one from a template, which needs no file"
+msgstr "Copia el módulo de script del archivo a la escena, o crea uno desde una plantilla, que no necesita archivo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Copy assets from another package into the scene"
+msgstr "Copia recursos de otro paquete a la escena"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Change how an asset is stored: texture compression, cover, placeholder, cube faces"
+msgstr "Cambia cómo se guarda un recurso: compresión de textura, portada, marcador de posición, caras de cubo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Turn the lighting of a layer on or off, or set its zone size"
+msgstr "Activa o desactiva la iluminación de una capa, o fija el tamaño de su zona"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set, add or remove the text of a manifest field or of a text layer in one language"
+msgstr "Fija, agrega o quita el texto de un campo del manifiesto o de una capa de texto en un idioma"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Rename a layer, timeline, asset or particle system and what refers to it"
+msgstr "Renombra una capa, línea de tiempo, recurso o sistema de partículas y lo que se refiere a él"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Paste layers copied with the copy query, into a group or at a position"
+msgstr "Pega capas copiadas con la consulta copy, en un grupo o en una posición"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set the thumbnail of the package, or its animated preview"
+msgstr "Fija la miniatura del paquete o su vista previa animada"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Draw the scene: keep a frame as the thumbnail, record a short gif as the animated preview, or measure how much it flashes"
+msgstr "Dibuja la escena: guarda un cuadro como miniatura, graba un gif corto como vista previa animada o mide cuánto destella"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Move a first-version manifest to the current format"
+msgstr "Pasa un manifiesto de primera versión al formato actual"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add a user property to the manifest"
+msgstr "Agrega una propiedad de usuario al manifiesto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Move a user property to a position or group"
+msgstr "Mueve una propiedad de usuario a una posición o grupo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Rename a user property and what refers to it"
+msgstr "Renombra una propiedad de usuario y lo que se refiere a ella"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Remove a user property"
+msgstr "Quita una propiedad de usuario"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove a condition that shows or hides parts of the scene"
+msgstr "Agrega, cambia o quita una condición que muestra u oculta partes de la escena"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set the scheduling rules of an effect parameter"
+msgstr "Fija las reglas de orden de un parámetro de efecto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add a preset of the user properties"
+msgstr "Agrega un preajuste de las propiedades de usuario"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Paint a stroke into the mask picture of an effect parameter"
+msgstr "Pinta un trazo en la imagen de máscara de un parámetro de efecto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Comb a flow map of an effect parameter so that it points along the stroke"
+msgstr "Peina un mapa de flujo de un parámetro de efecto para que apunte a lo largo del trazo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Make a mesh from the outline of the picture of a layer"
+msgstr "Hace una malla a partir del contorno de la imagen de una capa"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, move, rename, parent or remove the bones of a mesh"
+msgstr "Agrega, mueve, renombra, emparenta o quita los huesos de una malla"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Paint the depth of a mesh"
+msgstr "Pinta la profundidad de una malla"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Paint the weights of the bones on a mesh"
+msgstr "Pinta los pesos de los huesos en una malla"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Compute the weights of the bones on a mesh"
+msgstr "Calcula los pesos de los huesos en una malla"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Create, change or remove an animation clip of a rig"
+msgstr "Crea, cambia o quita un clip de animación de un esqueleto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set or remove a key of a bone in a clip"
+msgstr "Fija o quita una clave de un hueso en un clip"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit keys picked in the curve editor: move, scale, lift or set a part of them, bend or straighten handles of every part or of one part, link the parts of the handles, remove, or paste copied keys"
+msgstr "Edita las claves elegidas en el editor de curvas: mover, escalar, subir o fijar una parte de ellas, curvar o enderezar las asas de todas las partes o de una, enlazar las partes de las asas, quitar o pegar claves copiadas"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, move, rename or remove a named event of a clip, which fires when the clip passes it"
+msgstr "Agrega, mueve, renombra o quita un evento con nombre de un clip, que se dispara cuando el clip lo pasa"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Sculpt a blend shape of a mesh with a brush that pushes, pulls, smooths or erases, making the shape when it is new"
+msgstr "Esculpe una forma combinada de una malla con un pincel que empuja, tira, suaviza o borra, creando la forma si es nueva"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove a facial expression of a rig"
+msgstr "Agrega, cambia o quita una expresión facial de un esqueleto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove an inverse kinematics chain"
+msgstr "Agrega, cambia o quita una cadena de cinemática inversa"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Make bones follow physics: stiffness, damping and mode"
+msgstr "Hace que los huesos sigan la física: rigidez, amortiguación y modo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove a capsule or sphere that keeps the swinging bones of a model or a mesh out"
+msgstr "Agrega, cambia o quita una cápsula o esfera que mantiene fuera los huesos oscilantes de un modelo o una malla"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove a rule that drives a bone from another"
+msgstr "Agrega, cambia o quita una regla que mueve un hueso desde otro"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set the wind that moves the physical bones and particles"
+msgstr "Fija el viento que mueve los huesos físicos y las partículas"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Attach a layer to a bone or to a point of another layer"
+msgstr "Une una capa a un hueso o a un punto de otra capa"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, move, rename or remove a named point of a layer"
+msgstr "Agrega, mueve, renombra o quita un punto con nombre de una capa"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Order, hide or show the parts of a layered picture"
+msgstr "Ordena, oculta o muestra las partes de una imagen por capas"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit a particle system: starting kits, shape, bursts, forces, colliders, strands, lighting and settings"
+msgstr "Edita un sistema de partículas: kits iniciales, forma, ráfagas, fuerzas, colisionadores, hebras, iluminación y ajustes"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change, mute or remove the lights of the scene; add places a light at a position in its group, set moves it to a point of the canvas"
+msgstr "Agrega, cambia, silencia o quita las luces de la escena; add pone una luz en una posición de su grupo, set la mueve a un punto del lienzo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set the lighting model of the scene"
+msgstr "Fija el modelo de iluminación de la escena"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Make a normal map for a layer"
+msgstr "Crea un mapa de normales para una capa"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Paint a roughness or emissive map"
+msgstr "Pinta un mapa de rugosidad o emisivo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Make a gradient picture or color table from color stops and use it in an effect parameter"
+msgstr "Crea una imagen de degradado o tabla de colores a partir de paradas de color y la usa en un parámetro de efecto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Make a grey depth map of a picture with the depth model and use it in an effect parameter"
+msgstr "Crea un mapa de profundidad gris de una imagen con el modelo de profundidad y lo usa en un parámetro de efecto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Set the ambient light"
+msgstr "Fija la luz ambiente"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit a 3D layer: models, materials, sculpted shapes, camera, view, tones, shadows, camera paths and 3D handle drags"
+msgstr "Edita una capa 3D: modelos, materiales, formas esculpidas, cámara, vista, tonos, sombras, trayectorias de cámara y arrastres de asas 3D"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit the animation of a mesh or model layer: clips, presets and morphs"
+msgstr "Edita la animación de una capa de malla o modelo: clips, preajustes y morfos"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, set, remove, move or mask the effects of a layer, and drag their handles and masks on the canvas"
+msgstr "Agrega, fija, quita, mueve o enmascara los efectos de una capa, y arrastra sus asas y máscaras en el lienzo"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit the transform, blend or instancing of a layer, or start from a ready-made clock or date text and a movement that spins or drifts forever"
+msgstr "Edita la transformación, la mezcla o la instanciación de una capa, o parte de un texto de reloj o fecha listo y un movimiento que gira o deriva sin fin"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit the manifest: origin, license, tags, authors, credits, texts by key, locale files, display, playback, web, network, inputs"
+msgstr "Edita el manifiesto: origen, licencia, etiquetas, autores, créditos, textos por clave, archivos de idioma, pantalla, reproducción, web, red, entradas"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit a user property of the manifest"
+msgstr "Edita una propiedad de usuario del manifiesto"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Edit the canvas: bloom and parallax"
+msgstr "Edita el lienzo: resplandor y paralaje"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove a timeline and its events"
+msgstr "Agrega, cambia o quita una línea de tiempo y sus eventos"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Attach, remove, move or declare a script, write its code, or set its typed settings"
+msgstr "Une, quita, mueve o declara un script, escribe su código o fija sus ajustes tipados"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Make a template from layers, or rename or remove one"
+msgstr "Hace una plantilla a partir de capas, o renombra o quita una"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Add, change or remove a mesh pool: the shapes that scripts build and shapes layers draw"
+msgstr "Agrega, cambia o quita un grupo de mallas: las formas que construyen los scripts y que dibujan las capas de formas"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Declare the parts of the scripting interface a script uses, or take undeclared ones from its source"
+msgstr "Declara las partes de la interfaz de scripts que usa un script, o toma las no declaradas de su fuente"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Trim a video layer to a part of the video, set its speed, or size its box from the video"
+msgstr "Recorta una capa de video a una parte del video, fija su velocidad o dimensiona su caja según el video"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Cut a picture into frames with a grid or drawn rectangles, or change, add, remove and reorder them"
+msgstr "Corta una imagen en cuadros con una cuadrícula o rectángulos dibujados, o cambia, agrega, quita y reordena los cuadros"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Write a package effect or material shader: make one from a template, write its WGSL or descriptor, or edit its parameters, passes and fields"
+msgstr "Escribe un shader de efecto o material del paquete: crea uno desde una plantilla, escribe su WGSL o descriptor, o edita sus parámetros, pasadas y campos"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Undo the last change"
+msgstr "Deshace el último cambio"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Redo the last undone change"
+msgstr "Rehace el último cambio deshecho"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Bones, points, parts and clips of a layer; what is asked when no other query is named"
+msgstr "Huesos, puntos, partes y clips de una capa; lo que se consulta cuando no se nombra otra consulta"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Weights of a bone over the mesh of a layer, as a heat map"
+msgstr "Pesos de un hueso sobre la malla de una capa, como mapa de calor"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The rig of a layer posed by clip, time or bone angles"
+msgstr "El esqueleto de una capa en pose por clip, tiempo o ángulos de huesos"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Keys of a clip of a layer"
+msgstr "Claves de un clip de una capa"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Handles of the bones and points of a layer"
+msgstr "Asas de los huesos y puntos de una capa"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "What a particle system shows at a time and sound level"
+msgstr "Lo que muestra un sistema de partículas en un tiempo y nivel de sonido"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Cost of a particle system at a quality level"
+msgstr "Costo de un sistema de partículas en un nivel de calidad"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The lights of the scene at a time"
+msgstr "Las luces de la escena en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Falloff of the lights over a layer at a time"
+msgstr "Caída de las luces sobre una capa en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Preview of the normal map a normals action would make"
+msgstr "Vista previa del mapa de normales que haría una acción normals"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Heat map of the roughness or emissive map of a layer"
+msgstr "Mapa de calor del mapa de rugosidad o emisivo de una capa"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The ambient hemisphere light of the scene"
+msgstr "La luz ambiente hemisférica de la escena"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Cost of the lighting at a time and quality level"
+msgstr "Costo de la iluminación en un tiempo y nivel de calidad"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Volumetric light of a layer at a time"
+msgstr "Luz volumétrica de una capa en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Projected light of a layer at a time"
+msgstr "Luz proyectada de una capa en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Light cast by a particle system"
+msgstr "Luz que emite un sistema de partículas"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Meshes, materials and animations of a model asset"
+msgstr "Mallas, materiales y animaciones de un recurso de modelo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The 3D stage at a time"
+msgstr "El escenario 3D en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Materials of a 3D layer"
+msgstr "Materiales de una capa 3D"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Cost of the 3D stage at a quality level"
+msgstr "Costo del escenario 3D en un nivel de calidad"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Shadows of the 3D stage at a time"
+msgstr "Sombras del escenario 3D en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Camera paths of the 3D stage at a time"
+msgstr "Trayectorias de cámara del escenario 3D en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Check the code of a package material shader"
+msgstr "Revisa el código de un shader de material del paquete"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "A bone of a 3D model"
+msgstr "Un hueso de un modelo 3D"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Bounds of a 3D model"
+msgstr "Límites de un modelo 3D"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The model surface under a point of the 3D view: layer, material, texture place and color"
+msgstr "La superficie del modelo bajo un punto de la vista 3D: capa, material, lugar de textura y color"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "How a layer inside a 3D group is hidden behind nearer models: one particle at a time or as a plane, and why"
+msgstr "Cómo una capa dentro de un grupo 3D queda oculta tras modelos más cercanos: una partícula a la vez o como un plano, y por qué"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Clips and motion of a mesh or model layer"
+msgstr "Clips y movimiento de una capa de malla o modelo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Bones, blend shapes and bodies of a mesh or model for a script, and with kind, name and what the call that moves one"
+msgstr "Huesos, formas combinadas y cuerpos de una malla o modelo para un script, con su tipo, nombre y la llamada que mueve cada uno"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Outline of the picture of a layer"
+msgstr "Contorno de la imagen de una capa"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Colors of a picture asset"
+msgstr "Colores de un recurso de imagen"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The wind as an arrow"
+msgstr "El viento como una flecha"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The color stops of a ramp made by the ramp action"
+msgstr "Las paradas de color de una rampa hecha por la acción ramp"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Whether the depth model and the library that runs it are installed"
+msgstr "Si el modelo de profundidad y la biblioteca que lo ejecuta están instalados"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Scheduling rules of the parameters of an effect"
+msgstr "Reglas de orden de los parámetros de un efecto"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Cost of an effect"
+msgstr "Costo de un efecto"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Video layers that run their own clock (playback.own_clock) with where each clock is at a time, and optional thumbnails of the video"
+msgstr "Capas de video que corren su propio reloj (playback.own_clock) con el punto de cada reloj en un tiempo, y miniaturas opcionales del video"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Mesh pools of the scene with the layers that draw them and the scripts that build them"
+msgstr "Grupos de mallas de la escena con las capas que los dibujan y los scripts que los construyen"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "What each script declares, what its source uses and what it lacks"
+msgstr "Lo que declara cada script, lo que usa su fuente y lo que le falta"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Which part of the canvas each simulated screen shows when the scene spans several outputs, for a dual, triple, vertical or own layout"
+msgstr "Qué parte del lienzo muestra cada pantalla simulada cuando la escena abarca varias salidas, para una disposición doble, triple, vertical o propia"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Descriptor, WGSL, parameter kinds and fields of a package effect or material shader"
+msgstr "Descriptor, WGSL, tipos de parámetros y campos de un shader de efecto o material del paquete"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Check a package effect as readers do, optionally with unsaved descriptor or WGSL text; reports the line and column of an error and the canvas handles"
+msgstr "Revisa un efecto del paquete como lo hacen los lectores, opcionalmente con texto de descriptor o WGSL sin guardar; informa la línea y columna de un error y las asas del lienzo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The table of texts by key: languages, keys with the languages they lack, files and the texts of the engine"
+msgstr "La tabla de textos por clave: idiomas, claves con los idiomas que les faltan, archivos y los textos del motor"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "What the last measure of the flashes found for the scene as it is now, kept between calls, or null; run measures first"
+msgstr "Lo que halló la última medición de destellos para la escena tal como está, conservada entre llamadas, o null; ejecuta measure primero"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "What a preset package still lacks before it is published: base package, values, title, license, preview and a clean check, each done or not"
+msgstr "Lo que aún le falta a un paquete de preajustes antes de publicarse: paquete base, valores, título, licencia, vista previa y una revisión limpia, cada uno hecho o no"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The files of the package that can be credited, the credits and the files with none"
+msgstr "Los archivos del paquete que pueden acreditarse, los créditos y los archivos sin ninguno"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Keys of an animated value or of a clip channel, part by part, with their handles and the sampled curve"
+msgstr "Claves de un valor animado o de un canal de clip, parte por parte, con sus asas y la curva muestreada"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Copied keys as a clipboard text, or the keys a clipboard text holds (none for any other text)"
+msgstr "Claves copiadas como texto de portapapeles, o las claves que contiene un texto de portapapeles (ninguna para cualquier otro texto)"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The timelines and sound layers a trigger starts"
+msgstr "Las líneas de tiempo y capas de sonido que inicia un disparador"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "What a sound binding reacts to: the levels of the bands read from the preview folded to 16, 32 or 64, the marked bands and the value it gives"
+msgstr "A qué reacciona un enlace de sonido: los niveles de las bandas leídos de la vista previa plegados a 16, 32 o 64, las bandas marcadas y el valor que da"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The response of smooth to a step up and down: points of time and value and the seconds it takes to settle"
+msgstr "La respuesta de smooth a un escalón de subida y bajada: puntos de tiempo y valor y los segundos que tarda en asentarse"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The sound layers of the scene with their sounds, trigger and fades, and the sound assets"
+msgstr "Las capas de sonido de la escena con sus sonidos, disparador y fundidos, y los recursos de sonido"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The peaks of a sound asset in the given number of buckets, computed once and kept in the cache"
+msgstr "Los picos de un recurso de sonido en el número de cubos dado, calculados una vez y guardados en la caché"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Where the made-up pointer of the preview is at a second"
+msgstr "Dónde está en un segundo el puntero inventado de la vista previa"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The layers to copy as a text the paste action takes back, with the assets, particle systems and effects they use"
+msgstr "Las capas a copiar como texto que la acción paste recupera, con los recursos, sistemas de partículas y efectos que usan"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The video of a layer: its file, size, length, trim, speed and optional thumbnails along its length"
+msgstr "El video de una capa: su archivo, tamaño, duración, recorte, velocidad y miniaturas opcionales a lo largo de su duración"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The frames a picture asset is cut into: its rectangles, atlas, speed and durations"
+msgstr "Los cuadros en que se corta un recurso de imagen: sus rectángulos, atlas, velocidad y duraciones"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Where the scene uses an asset: the pointers that name it and the layer that owns each"
+msgstr "Dónde usa la escena un recurso: los punteros que lo nombran y la capa que posee cada uno"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The layers whose references would be lost if a layer or group were removed"
+msgstr "Las capas cuyas referencias se perderían si se quitara una capa o un grupo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The lines of the scripts that name an id in quotes"
+msgstr "Las líneas de los scripts que nombran un id entre comillas"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The problems and notes of the package as the problem list of the editor shows them, with its signature state"
+msgstr "Los problemas y notas del paquete como los muestra la lista de problemas del editor, con el estado de su firma"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "Whether a package folder or file is signed, by whom and whether the signature holds, checked against the given keys"
+msgstr "Si una carpeta o archivo de paquete está firmado, por quién y si la firma se sostiene, comprobada con las claves dadas"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The form of the user properties with the values of a preset or some values tried on top of the defaults"
+msgstr "La forma de las propiedades de usuario con los valores de un preajuste o algunos valores probados sobre los predeterminados"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The picture or video of a media package: its file, size and length; null for other packages"
+msgstr "La imagen o el video de un paquete multimedia: su archivo, tamaño y duración; null para otros paquetes"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "What a property is at each quality level and which levels set it themselves"
+msgstr "Qué es una propiedad en cada nivel de calidad y qué niveles la fijan ellos mismos"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The properties of the package a preset package is for, with the values the preset gives them"
+msgstr "Las propiedades del paquete al que sirve un paquete de preajustes, con los valores que el preajuste les da"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The audio bands, with their frequency ranges, at 16, 32 or 64 bands, or what a band pick or pointer direction reads"
+msgstr "Las bandas de audio, con sus rangos de frecuencia, a 16, 32 o 64 bandas, o lo que lee una selección de banda o dirección del puntero"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The layers and bones that take the pointer and how they take it"
+msgstr "Las capas y huesos que toman el puntero y cómo lo toman"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The handles on the canvas of the shape of a layer at a time, and its gradient ends"
+msgstr "Las asas en el lienzo de la forma de una capa en un tiempo, y los extremos de su degradado"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The size, lines and handles of a text layer at a time"
+msgstr "El tamaño, las líneas y las asas de una capa de texto en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The fonts a text layer can use and the ones it has chosen"
+msgstr "Las fuentes que puede usar una capa de texto y las que ha elegido"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "A clock pattern shown at a wall-clock time and when it changes next"
+msgstr "Un patrón de reloj mostrado a una hora de pared y cuándo cambia a continuación"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The tokens a clock pattern takes with a sample of each and the numbers a clock gives"
+msgstr "Las fichas que acepta un patrón de reloj con una muestra de cada una y los números que da un reloj"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The mask of an effect of a layer at a time: its source, area, feather and handles"
+msgstr "La máscara de un efecto de una capa en un tiempo: su fuente, área, difuminado y asas"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "A picture asset prepared as a mask on one channel, optionally inverted or tinted, as a picture file"
+msgstr "Un recurso de imagen preparado como máscara en un canal, opcionalmente invertido o teñido, como archivo de imagen"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The handles on the canvas of an effect of a layer at a time"
+msgstr "Las asas en el lienzo de un efecto de una capa en un tiempo"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The capture zone of an adjustment layer at a time: its size, limits and corner handles"
+msgstr "La zona de captura de una capa de ajuste en un tiempo: su tamaño, límites y asas de esquina"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "What a quality level does: scale, density, particles, the effects it keeps and the cost, optionally on battery"
+msgstr "Lo que hace un nivel de calidad: escala, densidad, partículas, los efectos que conserva y el costo, opcionalmente con batería"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The steps that undo would take back (oldest first) and redo would bring back (next first), and whether the scene has unsaved changes"
+msgstr "Los pasos que deshacer retrocedería (el más antiguo primero) y rehacer traería de vuelta (el siguiente primero), y si la escena tiene cambios sin guardar"
