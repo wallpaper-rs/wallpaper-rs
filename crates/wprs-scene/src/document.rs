@@ -45,6 +45,11 @@ pub struct Scene {
     pub pools: BTreeMap<String, Pool>,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub ext: BTreeMap<String, Json>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub transition: Option<crate::Transition>,
+    #[serde(skip)]
+    #[schemars(skip)]
+    pub passages: crate::Passages,
     #[serde(skip)]
     #[schemars(skip)]
     pub loaded: BTreeMap<String, Arc<Descriptor>>,
@@ -78,6 +83,7 @@ impl Scene {
     pub fn new(size: [u32; 2]) -> Scene {
         let (assets, layers, particles, timelines, scripts, effects, audio, ext, loaded) = Default::default();
         let (camera3d, templates, pools, models, rigs, solids, draft, sheets, rooted) = Default::default();
+        let (transition, passages) = Default::default();
         Scene {
             schema: SCHEMA.into(),
             canvas: Canvas::new(size),
@@ -93,6 +99,8 @@ impl Scene {
             templates,
             pools,
             ext,
+            transition,
+            passages,
             loaded,
             models,
             rigs,
@@ -163,6 +171,8 @@ impl Scene {
         let shapes = self.assets.values().flat_map(|a| a.shapes.values().map(String::as_str));
         let assets = self.assets.values().map(|a| a.path.as_str()).chain(shapes);
         let effects = self.effects.values().flat_map(|f| [f.descriptor.as_str(), f.wgsl.as_str()]);
+        let ways = self.transition.iter().flat_map(|t| t.coming.iter().chain(&t.out));
+        let effects = effects.chain(ways.flat_map(|p| [p.descriptor.as_str(), p.wgsl.as_str()]));
         assets.chain(self.scripts.iter().map(|s| s.path.as_str())).chain(effects).collect()
     }
 }

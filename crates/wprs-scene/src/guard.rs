@@ -19,7 +19,11 @@ pub fn straightened(source: String) -> String {
 }
 
 pub(crate) fn source(d: &Descriptor) -> String {
-    let pictured = if d.stage == crate::Stage::Material { include_str!("pictured.wgsl") } else { "" };
+    let pictured = match d.stage {
+        crate::Stage::Material => include_str!("pictured.wgsl"),
+        crate::Stage::Transition => include_str!("crossing.wgsl"),
+        _ => "",
+    };
     format!("{CONTRACT}{}{pictured}", &effect_source(&[d])[PRELUDE.len()..])
 }
 

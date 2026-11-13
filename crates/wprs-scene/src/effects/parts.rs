@@ -10,6 +10,7 @@ pub enum Stage {
     Layer,
     Material,
     Particle,
+    Transition,
 }
 
 impl Stage {
@@ -22,6 +23,7 @@ impl Stage {
             Stage::Layer => None,
             Stage::Material => Some(("material", "Surface")),
             Stage::Particle => Some(("particle", "Sprite")),
+            Stage::Transition => Some(("transition", "Crossing")),
         }
     }
 }

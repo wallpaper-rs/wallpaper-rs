@@ -65,6 +65,7 @@ impl Scene {
         c.sounds();
         c.lights();
         c.files();
+        c.passages();
         for (id, prop) in props {
             if let crate::Control::File { default_asset: Some(asset), .. } = &prop.control {
                 c.known(

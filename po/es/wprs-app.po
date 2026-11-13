@@ -13870,6 +13870,10 @@ msgstr ""
 "muestra el título, la carátula o el avance de lo que suena en el reproductor"
 
 #: apps/wprs-app/qml/facade/LabelFeatureWords.qml
+msgid "comes in or leaves with a transition of its own"
+msgstr "entra o sale con una transición propia"
+
+#: apps/wprs-app/qml/facade/LabelFeatureWords.qml
 msgid "sends its colors to RGB lighting"
 msgstr "envía sus colores a la iluminación RGB"
 

@@ -1500,6 +1500,72 @@ above, and then lists the effect among the ones a layer can add. Its parameters 
 the inspector with their localized `label`, sliders within `min` and `max`, choices for `enum` and
 `blend`, and may be bound to properties, keyframes or scripts like any parameter.
 
+### Package transitions
+
+A scene may bring its own transition, for when it comes in and, if it wants, for when it leaves.
+It is declared in `scene.json` under `transition`, with up to two passages, `in` and `out`; each
+passage names its own two files, a descriptor and a shader, like a package effect:
+
+```json
+"transition": {
+  "in": {
+    "descriptor": "transitions/porthole.json",
+    "wgsl": "transitions/porthole.wgsl",
+    "duration_ms": 1200,
+    "curve": "in_out_sine",
+    "params": { "soft": 0.2 }
+  }
+}
+```
+
+```json
+{
+  "id": "porthole",
+  "stage": "transition",
+  "cost": { "taps": 1, "passes": 1, "scale": 1 },
+  "params": [{ "id": "soft", "type": "float", "default": 0.1, "min": 0, "max": 1 }]
+}
+```
+
+```wgsl
+fn transition(c: Crossing) -> Crossing {
+    var o = c;
+    let soft = param(0u).x;
+    let d = length((c.uv - 0.5) * vec2<f32>(c.resolution.x / c.resolution.y, 1.0)) / 0.75;
+    let k = smoothstep(c.progress * (1.0 + soft) - soft, c.progress * (1.0 + soft), d);
+    o.color = mix(after(c.uv), before(c.uv), k);
+    return o;
+}
+```
+
+The shader defines `fn transition(c: Crossing) -> Crossing`, called once per pixel of each screen
+for every frame of the transition. `Crossing` carries `uv` (0 to 1, top left origin), `resolution`
+in pixels, `progress` (0 to 1, already shaped by the curve), `quality` (0 to 3, the level the screen
+draws at) and `color`, which arrives as the plain fade of the two pictures. `before(uv)` samples the
+picture that was showing and `after(uv)` the one that comes in; `param(i)` reads the parameters in
+the order of the descriptor, and the shared helpers of package effects (`TAU`, `LUMA`, the Oklab,
+noise and dither functions) are there too. The color the shader leaves is drawn opaque. For an
+`out` passage, `before` is this scene and `after` is a plain picture in the background color of the
+wallpaper that comes next.
+
+`duration_ms` goes from 100 to 10000 (1000 when it is missing); `curve` takes the easing names of
+keyframes (`in_out_sine`, a cubic Bézier…) (`linear` when it is missing) and its result is kept between 0 and 1; `params` holds
+literal values for at most 24 parameters, each one named in the descriptor and of its type. The
+descriptor has the `transition` stage and goes through every check of package effects: the
+sandboxed shader, the declared cost compared with the measured one, the strikes. A transition takes
+no picture, lut, mask or emitter parameter, and it may cost at most 8 units, so it is never
+heavier than a medium effect; it plays at the quality levels where an optional effect of its class
+plays (a light one everywhere, a medium one only at levels 2 and 3).
+
+A transition is not part of the picture: one that fails its checks does not refuse the scene. The
+check of the package (`wprs-ctl pack check`) lists the reason in words, the log notes it, and the
+screen uses the plain fade of the settings instead. The transition chosen in the settings still
+rules over it: with `none` the change is a cut, and with reduced motion it is the plain fade.
+When a wallpaper with an `out` passage gives way to one with an `in` passage, `out` plays first
+and `in` after it, each with its own duration; the work exists only while a transition plays and
+each screen plays its own. The phone does not play package transitions yet (feature `transition`
+is `without` there) and uses its own fade.
+
 ### Newer effects and parameters
 
 The effects and parameters below came after the first built-in set. Each names a feature:

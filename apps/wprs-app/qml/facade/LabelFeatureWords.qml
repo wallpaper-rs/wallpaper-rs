@@ -119,6 +119,7 @@ QtObject {
             "script_hierarchy": App.tr("lets its scripts read and change the parents of layers"),
             "layer_events": App.tr("reacts to the pointer on its layers"),
             "media_info": App.tr("shows the title, cover or progress of what the media player plays"),
-            "rgb": App.tr("sends its colors to RGB lighting")
+            "rgb": App.tr("sends its colors to RGB lighting"),
+            "transition": App.tr("comes in or leaves with a transition of its own")
         })
 }

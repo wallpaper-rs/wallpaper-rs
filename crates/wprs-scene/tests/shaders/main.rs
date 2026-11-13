@@ -5,6 +5,7 @@ use wprs_scene::*;
 mod adopt;
 mod contract;
 mod lighter;
+mod passage;
 
 const WGSL: &str = r#"
 override taps: i32 = 4;

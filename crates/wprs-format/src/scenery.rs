@@ -93,4 +93,5 @@ pub const SCENE: &[(&str, &str, [Support; 2])] = &[
     ("layer_events", "reacts to the pointer on its layers", [Yes, Yes]),
     ("media_info", "shows the title, cover or progress of what the media player plays", [Yes, Yes]),
     ("rgb", "sends its colors to RGB lighting", [Yes, Without]),
+    ("transition", "comes in or leaves with a transition of its own", [Yes, Without]),
 ];

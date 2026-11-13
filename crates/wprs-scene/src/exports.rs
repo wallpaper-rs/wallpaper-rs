@@ -114,6 +114,10 @@ pub use crate::puppet::{
     CATCH_UP, COURSE_STEPS, Drawn, IK_ROUNDS, LONGEST_STEP, MODEL_UNIT, Posed, Puppet, QUIET, QUIET_TIME,
     clip_course,
 };
+pub use crate::passage::shader::{MAX_TRANSITION_UNITS, transition_shader};
+pub use crate::passage::{
+    MAX_TRANSITION_MS, MIN_TRANSITION_MS, Passage, Passages, Ready, Readied, Transition, Way,
+};
 pub use crate::quality::{Class, Quality, Why};
 pub use crate::released::{newer_manifest_keys, newer_scene_keys};
 pub use crate::rig::{

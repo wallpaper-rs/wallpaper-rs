@@ -74,6 +74,7 @@ mod mpeg;
 mod oklab;
 mod outside;
 mod package;
+mod passage;
 mod particles;
 mod patch;
 mod pilot;

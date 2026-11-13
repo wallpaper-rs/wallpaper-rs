@@ -114,7 +114,7 @@ impl Descriptor {
         let layered = self.stage == crate::effects::Stage::Layer;
         fail(
             self.passes.is_empty() != layered,
-            "a layer effect needs passes, a material or particle shader has none".into(),
+            "a layer effect needs passes, a material, particle or transition shader has none".into(),
         );
         for (n, pass) in self.passes.iter().enumerate() {
             fail(unit(pass.scale), format!("pass {n} has a scale outside (0, 1]"));

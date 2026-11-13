@@ -385,6 +385,7 @@ the scene sound, runs `sound2`, `script_sounds`, `scripts2`, `script_layers` and
 | `script_shortcuts` | has scripts that use `shortcuts` | runs | runs |
 | `script_hierarchy` | has scripts that use `hierarchy` | runs | runs |
 | `layer_events` | sets `solid: { "alpha" }`, `hit` bones, `click:`, `enter:` or `leave:` triggers or scripts that handle pointer events | runs | runs |
+| `transition` | declares `transition` in `scene.json`, its own transition when it comes in or leaves | runs | without |
 | `media_info` | follows `media` values, cover assets, `media:` triggers or scripts that use the media player | runs | runs |
 
 ## Profiles

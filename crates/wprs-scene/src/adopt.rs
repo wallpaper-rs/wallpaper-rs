@@ -34,7 +34,7 @@ type Compiled = Result<Arc<Descriptor>, String>;
 
 static COMPILED: Mutex<BTreeMap<[u8; 32], Compiled>> = Mutex::new(BTreeMap::new());
 
-fn compiled(id: &str, json: &str, wgsl: &str) -> Compiled {
+pub(crate) fn compiled(id: &str, json: &str, wgsl: &str) -> Compiled {
     let key: [u8; 32] = Sha256::new()
         .chain_update(id)
         .chain_update([0])
@@ -84,6 +84,7 @@ impl Scene {
             }
             self.loaded.insert(id.clone(), compiled(&id, &json, &wgsl).map_err(|e| fail(at, e))?);
         }
+        self.read_passages(&mut files);
         self.read_models(&mut files, fail)
     }
 }

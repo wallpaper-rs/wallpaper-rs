@@ -115,6 +115,7 @@
  "script_hierarchy": {"scene": {"scripts": [{"path": "scripts/pulse.js", "uses": ["hierarchy"]}], "layers": [{"id": "glow", "type": "solid", "color": "#ffffff", "opacity": {"script": "scripts/pulse.js"}}]}, "files": {"scripts/pulse.js": "export function update(frame) {\n  return 1;\n}\n"}},
  "layer_events": {"scene": {"layers": [{"id": "sky", "type": "image", "image": "sky", "solid": {"alpha": 0.5}}]}},
  "media_info": {"manifest": {"inputs": ["media"]}, "scene": {"layers": [{"id": "title", "type": "text", "text": {"media": "title"}}]}},
+ "transition": {"scene": {"transition": {"in": {"descriptor": "transitions/wipe.json", "wgsl": "transitions/wipe.wgsl", "duration_ms": 800}}}, "files": {"transitions/wipe.json": "{\"id\": \"wipe\", \"stage\": \"transition\", \"cost\": {\"taps\": 1, \"passes\": 1, \"scale\": 1}}", "transitions/wipe.wgsl": "fn transition(c: Crossing) -> Crossing {\n    var o = c;\n    o.color = mix(before(c.uv), after(c.uv), step(c.uv.x, c.progress));\n    return o;\n}\n"}},
  "rgb": {"manifest": {"permissions": {"rgb": true}}, "scene": {"layers": [{"id": "lights", "type": "adjustment", "size": [32, 8], "rgb": true}]}},
  "effect.light_shafts": {"scene": {"layers": [{"id": "sky", "type": "image", "image": "sky", "effects": [{"effect": "light_shafts"}]}]}},
  "effect.blur.blend": {"scene": {"layers": [{"id": "sky", "type": "image", "image": "sky", "effects": [{"effect": "blur", "params": {"blend": "screen"}}]}]}}
