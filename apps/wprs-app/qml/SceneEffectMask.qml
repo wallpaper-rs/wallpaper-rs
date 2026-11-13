@@ -28,6 +28,16 @@ Kirigami.FormLayout {
             }, gesture === true);
     }
 
+    function count(n) {
+        const shape = Object.assign({}, mask.shape[kind]);
+        shape[kind === "polygon" ? "sides" : "points"] = n;
+        const next = {};
+        next[kind] = shape;
+        put({
+                "shape": next
+            });
+    }
+
     function shaped(kind) {
         const box = gizmo ? gizmo.size.map(v => Math.round(v / 2)) : [200, 200];
         const side = Math.min(box[0], box[1]);

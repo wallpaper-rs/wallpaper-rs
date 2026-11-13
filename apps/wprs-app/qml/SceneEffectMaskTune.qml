@@ -38,6 +38,22 @@ ColumnLayout {
     }
 
     RowLayout {
+        visible: tune.panel.kind === "polygon" || tune.panel.kind === "star"
+
+        QQC2.Label {
+            text: tune.panel.kind === "polygon" ? App.tr("Sides") : App.tr("Points")
+        }
+
+        QQC2.SpinBox {
+            from: 3
+            to: 64
+            editable: true
+            value: tune.panel.kind === "polygon" ? (tune.panel.mask.shape.polygon.sides ?? 6) : tune.panel.kind === "star" ? (tune.panel.mask.shape.star.points ?? 5) : 3
+            onValueModified: tune.panel.count(value)
+        }
+    }
+
+    RowLayout {
         visible: tune.panel.source === "shape"
 
         QQC2.Label {

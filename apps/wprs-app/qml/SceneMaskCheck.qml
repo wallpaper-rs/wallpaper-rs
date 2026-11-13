@@ -59,6 +59,15 @@ QtObject {
         overlay.hold("size", overlay.at([0.5 + 40 / owner.size[0], 0.5 + 10 / owner.size[1]]));
         if (read(use + "/mask/shape/star/size") !== 80)
             throw new Error("mask: the star was not sized from its handle");
+        panel.count(7);
+        if (read(use + "/mask/shape/star/points") !== 7 || read(use + "/mask/shape/star/size") !== 80)
+            throw new Error("mask: the points of the star were not set: " + JSON.stringify(read(use + "/mask")));
+        panel.put({
+                "shape": panel.shaped("polygon")
+            });
+        panel.count(8);
+        if (read(use + "/mask/shape/polygon/sides") !== 8)
+            throw new Error("mask: the sides of the polygon were not set");
         const thumb = Qt.createComponent("SceneMaskThumb.qml").createObject(page, {
                 "page": page,
                 "layerId": id,
