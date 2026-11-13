@@ -1,5 +1,5 @@
 use super::super::SceneView;
-use super::size::sized;
+use super::size::{expanded, extent, sized};
 use super::{PIECES, Skin};
 use crate::texture::GpuImage;
 use crate::{RenderError, Renderer};
@@ -22,10 +22,13 @@ impl Renderer {
             let edge = self.max_edge();
             let atlased = texture.is_none() && (p.rig.pictures.len() > 1 || super::atlas::repeated(&p.rig));
             if view.skins.get(*layer).is_none_or(|s| s.digest != p.rig.digest || s.atlased != atlased) {
-                let made = self.fresh_skin(&p.rig, sized(*size, scale, frame.quality, edge), atlased)?;
+                let big = expanded(*size, extent(&p.rig));
+                let made = self.fresh_skin(&p.rig, sized(big, scale, frame.quality, edge), atlased)?;
                 view.skins.insert(layer.to_string(), made);
             }
             let skin = view.skins.get_mut(*layer).expect("made above");
+            let big = expanded(*size, skin.extent);
+            let size = &big;
             let named = texture.as_deref();
             let video = named.and_then(|t| videos.iter().find(|(n, _)| *n == t)).map(|(_, v)| *v);
             let sized_as = video

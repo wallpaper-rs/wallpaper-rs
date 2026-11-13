@@ -1,4 +1,28 @@
-use wprs_scene::{Affine, Quality};
+use wprs_scene::{Affine, Quality, Rigged, VERTEX_FLOATS};
+
+const MAX_REACH: f32 = 0.5;
+const SLACK: f32 = 0.5;
+
+pub(crate) fn extent(rig: &Rigged) -> [f32; 2] {
+    let reach = |k: usize| {
+        let each = rig.vertices.chunks_exact(VERTEX_FLOATS).map(|v| v[k]).filter(|v| v.is_finite());
+        each.fold(0.0f32, |most, v| most.max(v.abs()))
+    };
+    [reach(0), reach(1)]
+}
+
+pub(crate) fn margins(size: [f32; 2], extent: [f32; 2]) -> [f32; 2] {
+    let beyond = |k: usize| match size[k] > 0.0 && extent[k] - size[k] / 2.0 > SLACK {
+        true => ((extent[k] - size[k] / 2.0) / size[k]).min(MAX_REACH),
+        false => 0.0,
+    };
+    [beyond(0), beyond(1)]
+}
+
+pub(crate) fn expanded(size: [f32; 2], extent: [f32; 2]) -> [f32; 2] {
+    let [mx, my] = margins(size, extent);
+    [size[0] * (1.0 + 2.0 * mx), size[1] * (1.0 + 2.0 * my)]
+}
 
 fn shrink(quality: Quality) -> f32 {
     match quality {
@@ -8,7 +32,7 @@ fn shrink(quality: Quality) -> f32 {
     }
 }
 
-pub(super) fn sized(size: [f32; 2], scale: f32, quality: Quality, edge: u32) -> (u32, u32) {
+pub(crate) fn sized(size: [f32; 2], scale: f32, quality: Quality, edge: u32) -> (u32, u32) {
     let [w, h] = size.map(|v| ((v * scale * shrink(quality)).round() as u32).clamp(1, edge));
     (w, h)
 }

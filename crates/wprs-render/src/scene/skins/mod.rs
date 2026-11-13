@@ -7,7 +7,7 @@ mod make;
 mod mipped;
 #[cfg(test)]
 mod sharp;
-mod size;
+pub(crate) mod size;
 #[cfg(test)]
 mod steady;
 #[cfg(test)]

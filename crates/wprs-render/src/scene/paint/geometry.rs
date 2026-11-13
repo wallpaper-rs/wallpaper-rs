@@ -1,6 +1,7 @@
 use super::super::item::{Rect, scale_of, shape};
 use super::super::sampling::Sampling;
 use super::Painter;
+use crate::scene::skins::size::margins;
 use wprs_scene::{Affine, Content};
 
 impl<'a> Painter<'a, '_, '_> {
@@ -16,9 +17,11 @@ impl<'a> Painter<'a, '_, '_> {
                 let (size, [rx, ry]) = self.lettered(i)?;
                 Some((size, [-rx, -ry, 1.0 + rx, 1.0 + ry]))
             }
-            Content::Solid { size, .. } | Content::Mesh { size, .. } | Content::Model { size, .. } => {
-                Some((*size, unit))
+            Content::Mesh { layer, size, .. } => {
+                let [mx, my] = self.skins.get(*layer).map_or([0.0; 2], |s| margins(*size, s.extent));
+                Some((*size, [-mx, -my, 1.0 + mx, 1.0 + my]))
             }
+            Content::Solid { size, .. } | Content::Model { size, .. } => Some((*size, unit)),
             Content::Spectrum { spectrum, .. } => Some((spectrum.size, unit)),
             Content::Particles { .. } => Some((self.swarms.as_ref()?.canvas, unit)),
             Content::Shape { shape: s, stroke, .. } => {
