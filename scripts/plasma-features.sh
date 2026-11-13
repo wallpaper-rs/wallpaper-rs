@@ -101,4 +101,17 @@ QT_QPA_PLATFORM=offscreen timeout 60 /usr/lib/qt6/bin/qmltestrunner -input "$WOR
 QT_QPA_PLATFORM=offscreen timeout 60 /usr/lib/qt6/bin/qmltestrunner -input "$WORK/tray-left-out.qml" >"$OUT/tray-left-out.log" 2>&1 ||
   fail "the cost notes of the tray: $(grep -A 3 FAIL "$OUT/tray-left-out.log")"
 
+echo "===== handing the screens back to Plasma"
+plugins() {
+  dbus-send --session --print-reply --dest=org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript \
+    string:'var all = desktops(); var kinds = []; for (var i = 0; i < all.length; i++) { kinds.push(all[i].wallpaperPlugin); } kinds.join(",")' |
+    sed -n 's/^ *string "\(.*\)"$/\1/p'
+}
+[ "$(plugins)" = io.github.wallpaper_rs ] || fail "the screen is not on the wallpaper-rs plugin before handing back: $(plugins)"
+back=$(ctl plasma-back) || fail "plasma-back failed: $back"
+echo "$back"
+[ "$(plugins)" = org.kde.image ] || fail "the screens are not on the Plasma image wallpaper after plasma-back: $(plugins)"
+is kind video && fail "the daemon still holds the video after plasma-back"
+ctl state >"$OUT/state-back.json" || fail "the daemon died after plasma-back"
+
 echo "plasma test passed"
