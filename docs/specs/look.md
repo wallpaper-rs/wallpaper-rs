@@ -45,6 +45,10 @@ Dos letras van dentro de la app: `letraTexto` («Onest», la letra de la aplicac
 - Tamaños: `menuAncho`, `menuAlto`, `aparteAlto`, `tapa`, `tapaFoco`, `tapaRejilla`,
   `huecoEstante`, `altoControl`, `altoBoton`, `altoFila`, `altoCampo`, `filasAncho`,
   `explicaAncho`, `atajosAlto`, `llaveAncho`, `llaveAlto`, `llavePunto`.
+- Medidas de los controles: `altoHerr` (32, herramienta y botón chico), `altoOpcion` (38, opción
+  de un menú), `radioPanel` (10, panel chico), `rielAlto` y `rielPunto` (riel de 4 px y su punto
+  de 14), `marca` (18, casilla y opción redonda), `icono` (18, ícono dentro de un control), `barra`
+  (6, barra de desplazamiento) y la letra `tHerr` (14).
 - Duración `paso` (180 ms) con la curva `pasoCurva`.
 - Escalón: `escalon` vale `compacto` hasta 800 px de alto, `amplio` desde 1800 × 1000 y `normal`
   en el resto; la ventana lo fija sola y las medidas que cambian con él cambian solas.
@@ -61,13 +65,32 @@ nombre que el juego no tiene. Los íconos toman el color del texto que los rodea
 ## Controles
 
 El estilo de controles es propio (`io.github.wallpaper_rs.style`) y se elige siempre al arrancar.
-Dibuja el botón y la llave; los demás controles caen en el estilo básico de Qt con los tonos de
-arriba.
+Dibuja cada control que la app usa; una prueba de la app (`styled`) falla si una pantalla usa un
+control que el estilo no dibuja. Todos tienen reposo, puntero encima, pulsado, apagado y el anillo
+de foco de teclado en Escarcha.
 
 - Botón: callado por defecto; `highlighted: true` es la acción principal (en Luna, letra de
   título); `flat: true` es un botón de palabra, sin superficie. La principal de un borrado lleva
   `palette.highlight: Look.coral`. Apagado, pulsado, con el puntero encima y con foco de teclado
   (anillo en Escarcha) se dibujan solos.
 - Llave: `Switch`, 40 × 22 px; encendida en Escarcha con el punto en Noche.
+- Casilla (`CheckBox`, `CheckDelegate`) y opción redonda (`RadioButton`): de la familia de la
+  llave; apagada en Noche línea, marcada en Escarcha con la marca en Noche.
+- Campo de texto (`TextField`, `TextArea`, también la búsqueda y la contraseña): Noche alta con
+  línea, letra Escarcha, texto de ayuda en Bruma; el anillo aparece al escribir.
+- Número (`SpinBox`): un campo con las flechas ‹ › a los lados.
+- Lista desplegable (`ComboBox`) y menú (`Menu`, `MenuItem`, `MenuSeparator`): el panel chico
+  (Noche, línea, radio 10) con opciones de 38 px; la opción con el puntero encima en Noche alta y
+  la elegida con el teclado en Escarcha con letra Noche.
+- Herramienta (`ToolButton`): palabra o ícono en Bruma sin superficie; la que queda elegida
+  (`checked` o `highlighted`) en Escarcha con letra Noche.
+- Pestañas (`TabBar`, `TabButton`): palabras de filtro en letra de título; la actual en Escarcha
+  con su marca en Luna.
+- Riel (`Slider`, `RangeSlider`, `ProgressBar`, `Dial`): riel de 4 px en Noche línea, lleno en
+  Escarcha, punto de 14 px.
+- Barras de desplazamiento finas en Noche línea, que aparecen solo al moverse.
+- Aviso emergente (`ToolTip`), ventana emergente (`Popup`) y diálogo (`Dialog`): panel en Noche
+  con línea; en la fila de botones de un diálogo, Aceptar o Sí es la acción principal.
+- Barra (`ToolBar`): Noche alta con una línea hacia el contenido.
 
 Licencias de las letras y los íconos: `apps/wprs-app/licenses/`.

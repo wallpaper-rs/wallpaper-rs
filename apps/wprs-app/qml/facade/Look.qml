@@ -1,5 +1,4 @@
 pragma Singleton
-
 import QtQuick
 import io.github.wallpaper_rs.app
 
@@ -95,6 +94,15 @@ QtObject {
     readonly property int llaveAncho: 40
     readonly property int llaveAlto: 22
     readonly property int llavePunto: 16
+    readonly property int altoHerr: 32
+    readonly property int altoOpcion: 38
+    readonly property int radioPanel: 10
+    readonly property int rielAlto: 4
+    readonly property int rielPunto: 14
+    readonly property int marca: 18
+    readonly property int icono: 18
+    readonly property int barra: 6
+    readonly property real tHerr: 14
 
     readonly property real tValor: 16.5
     readonly property string letraFija: "monospace"
