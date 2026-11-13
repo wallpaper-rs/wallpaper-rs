@@ -1,5 +1,6 @@
 use crate::Map;
 use crate::shifted::found;
+use crate::stale::{Note, stale};
 use image::{Rgba, RgbaImage};
 use serde::Serialize;
 use wprs_core::edit::Depth;
@@ -14,6 +15,7 @@ pub struct Zone {
     pub share: f32,
     pub at: [f32; 2],
     pub colour: String,
+    pub bounds: [f32; 4],
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -21,6 +23,7 @@ pub struct Chart {
     pub size: (usize, usize),
     pub zones: Vec<Zone>,
     pub order: Vec<u32>,
+    pub notes: Vec<Note>,
 }
 
 pub fn colour(t: f32) -> [u8; 3] {
@@ -63,6 +66,12 @@ pub fn chart(map: &Map, depth: &Depth) -> Chart {
             best[*l as usize] = (d, k);
         }
     }
+    let mut edges = vec![[1.0f32, 1.0, 0.0, 0.0]; count];
+    for (k, l) in order.iter().enumerate() {
+        let (x, y) = ((k % size.0) as f32 / size.0 as f32, (k / size.0) as f32 / size.1 as f32);
+        let e = &mut edges[*l as usize];
+        *e = [e[0].min(x), e[1].min(y), e[2].max(x + 1.0 / size.0 as f32), e[3].max(y + 1.0 / size.1 as f32)];
+    }
     let total = order.len().max(1) as f32;
     let zones = ranked
         .iter()
@@ -79,10 +88,12 @@ pub fn chart(map: &Map, depth: &Depth) -> Chart {
                 share: regions.sizes[*label] as f32 / total,
                 at,
                 colour,
+                bounds: edges[o],
             }
         })
         .collect();
-    Chart { size, zones, order }
+    let notes = stale(&levels, size, depth);
+    Chart { size, zones, order, notes }
 }
 
 impl Chart {

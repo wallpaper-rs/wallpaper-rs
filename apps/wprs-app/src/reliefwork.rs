@@ -123,7 +123,8 @@ pub fn layer(
 pub fn regions(places: &Places, target: &Target) -> Result<(RgbaImage, String)> {
     let found = chart(&target.map(places, OUTLINE_EDGE)?, &target.depth());
     let (w, h, cells) = found.grid();
-    let text = json!({"zones": found.zones, "grid": {"w": w, "h": h, "cells": cells}}).to_string();
+    let text = json!({"zones": found.zones, "notes": found.notes, "grid": {"w": w, "h": h, "cells": cells}})
+        .to_string();
     Ok((found.painted(), text))
 }
 

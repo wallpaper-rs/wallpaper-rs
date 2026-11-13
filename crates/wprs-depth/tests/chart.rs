@@ -99,3 +99,50 @@ fn the_preview_moves_near_things_more_than_far_ones_and_rests_at_the_middle() {
     assert!(a[0] != b[0], "the near box does not move: {a:?} {b:?}");
     assert!(left != right && rest != left);
 }
+
+fn notes(depth: &Depth) -> Vec<(&'static str, usize, &'static str)> {
+    chart(&scene().1, depth).notes.iter().map(|n| (n.kind, n.index, n.why)).collect()
+}
+
+#[test]
+fn marks_that_no_longer_apply_are_reported_and_never_break_the_layers() {
+    assert!(notes(&Depth::default()).is_empty());
+    let apart = Join { a: [0.25, 0.5], b: [0.7, 0.5] };
+    let inside = Join { a: [0.2, 0.3], b: [0.3, 0.6] };
+    let depth = Depth { joins: vec![apart.clone(), inside], ..Depth::default() };
+    assert_eq!(notes(&depth), [("join", 2, "same_region")]);
+    let again = Depth { joins: vec![apart.clone(), apart], ..Depth::default() };
+    assert_eq!(notes(&again), [("join", 2, "same_region")]);
+    assert_eq!(built(&again, 0.02).images.len(), 2);
+}
+
+#[test]
+fn a_split_that_crosses_no_region_is_reported() {
+    let stroke = |y: f32| Touch { points: vec![[0.0, y], [1.0, y]], radius: 0.01, falloff: 0.0, by: 1.0 };
+    let off = Touch { points: vec![[0.02, 0.02], [0.05, 0.02]], radius: 0.004, falloff: 0.0, by: 1.0 };
+    let depth = Depth { splits: vec![stroke(0.5), off], ..Depth::default() };
+    assert_eq!(notes(&depth), [("split", 2, "crosses_nothing")]);
+    assert!(built(&depth, 0.02).images.len() >= 3);
+}
+
+#[test]
+fn a_move_into_a_region_already_moved_or_joined_is_not_applied_and_reported() {
+    let first = Shift { at: [0.25, 0.5], by: -0.6 };
+    let again = Shift { at: [0.3, 0.4], by: -0.2 };
+    let depth = Depth { moves: vec![first.clone(), again], ..Depth::default() };
+    assert_eq!(notes(&depth), [("move", 2, "same_region")]);
+    let found = chart(&scene().1, &depth);
+    assert!((found.zones[0].depth - 0.55).abs() < 0.02 && (found.zones[1].depth - 0.3).abs() < 0.02);
+    let join = Join { a: [0.25, 0.5], b: [0.7, 0.5] };
+    let second = Shift { at: [0.7, 0.5], by: 0.1 };
+    let joined = Depth { joins: vec![join], moves: vec![first, second], ..Depth::default() };
+    assert_eq!(notes(&joined), [("move", 2, "same_region")]);
+    assert_eq!(built(&joined, 0.02).images.len(), 2);
+}
+
+#[test]
+fn the_zones_know_their_bounds() {
+    let found = chart(&scene().1, &Depth::default());
+    let b = found.zones[0].bounds;
+    assert!((b[0] - 0.125).abs() < 0.02 && (b[2] - 0.375).abs() < 0.02 && (b[1] - 0.2).abs() < 0.02, "{b:?}");
+}

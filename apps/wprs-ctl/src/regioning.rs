@@ -25,6 +25,16 @@ pub fn show(args: Show) -> Result<()> {
     if let Some(file) = &args.png {
         found.painted().save_with_format(file, image::ImageFormat::Png)?;
     }
+    for note in &found.notes {
+        let (kind, index) = (note.kind, note.index);
+        let why = match note.why {
+            "crosses_nothing" => "its stroke crosses no region",
+            _ if kind == "join" => "both its points are already in one region",
+            _ => "its point is in a region that an earlier move or join already took",
+        };
+        let (x, y) = (note.at[0], note.at[1]);
+        eprintln!("{kind} {index} is not applied: {why} (at {x:.3},{y:.3}); clear the {kind}s or redo it");
+    }
     if args.json {
         println!("{}", serde_json::to_string(&found.zones)?);
         return Ok(());

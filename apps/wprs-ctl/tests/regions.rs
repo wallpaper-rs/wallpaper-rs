@@ -73,6 +73,14 @@ fn regions_are_listed_joined_split_and_moved_from_the_command_line() {
     assert!(listed(dir)[0]["depth"].as_f64().unwrap() < 0.6);
     ok(dir, &["edit", "depth", "move", "park.png", "--clear"]);
     assert!((listed(dir)[0]["depth"].as_f64().unwrap() - 0.9).abs() < 0.05);
+    ok(dir, &["edit", "depth", "move", "park.png", &near, "--by", "-0.2"]);
+    ok(dir, &["edit", "depth", "move", "park.png", &near, "--by", "0.2"]);
+    let out = run(dir, &["edit", "depth", "regions", "park.png"]);
+    let said = String::from_utf8_lossy(&out.stderr);
+    assert!(out.status.success() && said.contains("move 2 is not applied"), "{said}");
+    assert!(said.contains("clear the moves"), "{said}");
+    ok(dir, &["edit", "depth", "move", "park.png", "--clear"]);
+    assert!(run(dir, &["edit", "depth", "regions", "park.png"]).stderr.is_empty());
     let said = fails(dir, &["edit", "depth", "join", "park.png", "0.1,0.1"], 2);
     assert!(said.contains("2 to 8"), "{said}");
     assert!(fails(dir, &["edit", "depth", "move", "park.png", &near], 2).contains("by"));

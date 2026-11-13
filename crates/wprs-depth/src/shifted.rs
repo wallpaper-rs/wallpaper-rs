@@ -8,11 +8,13 @@ pub(crate) fn found<'a>(levels: &'a [f32], size: Size, depth: &Depth) -> (Cow<'a
     if depth.moves.is_empty() {
         return (Cow::Borrowed(levels), found);
     }
-    let (w, h) = size;
     let mut by = vec![0.0f32; found.means.len()];
+    let mut moved_already = vec![false; by.len()];
     for shift in &depth.moves {
-        let (x, y) = ((shift.at[0] * w as f32) as usize, (shift.at[1] * h as f32) as usize);
-        by[found.label[y.min(h - 1) * w + x.min(w - 1)] as usize] += shift.by;
+        let l = crate::stale::label_at(&found.label, size, shift.at) as usize;
+        if !std::mem::replace(&mut moved_already[l], true) {
+            by[l] = shift.by;
+        }
     }
     let mut sums = vec![0.0f64; by.len()];
     let moved: Vec<f32> = levels
