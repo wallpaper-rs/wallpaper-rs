@@ -461,7 +461,7 @@ layer's own box (default `[0.5, 0.5]`, or the anchor point).
 `hard_light`, `difference`, `exclusion`, `color_dodge`, `color_burn`, `hue`, `saturation`,
 `color` or `luminosity`. Composition uses premultiplied alpha. `mask` is an asset id or
 `{ "texture" | "layer" | "shape", "channel", "invert", "feather", "strength" }`: textures and layers mask by
-luminance or alpha (`r`, `g`, `b`, `a`, `luminance`), shapes by their outline. A layer used as a
+luminance or alpha (`r`, `g`, `b`, `a`, `luminance`; without `channel`, a texture mask reads luminance and a layer or shape mask reads alpha), shapes by their outline. A layer used as a
 mask (or a group holding one) may set `visible: false`: it is then not drawn but still masks. At
 most 256 layers nested at most 8 levels; masks may not refer to each other in a cycle.
 
@@ -892,7 +892,7 @@ is faded as a whole.
 `camera3d` at the root of the scene (`camera3d`) is the camera of models, 3D groups and tilted
 layers: `fov` (1 to 179 degrees, may be bound), `near` and `far` planes, `eye`, `center` (both may be
 bound) and `up`; `paths` (at most 16 `{ "id", "keys", "ease", "loop" }`, each with 2 to 256 keys `{
-"t", "eye", "center", "up", "fov" }` in increasing time) play one after another or at random
+"t", "eye", "center", "up", "fov" }`, where `t`, `eye` and `center` are required, in increasing time) play one after another or at random
 (`order`), joined by a `fade` `{ "to": "black" | "cross", "duration" (0 to 10 s) }`.
 Without `camera3d` the camera stands at `[0, 0, 5]`, looks at the origin with `up` `[0, 1, 0]`, a
 `fov` of 60 degrees, `near` 0.1 and `far` 1000; depth is reversed (1 near, 0 far) in 32-bit floats.
