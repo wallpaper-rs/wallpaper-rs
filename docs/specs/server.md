@@ -379,6 +379,16 @@ the sender's name, email and signature for `WPRS_NOTICE_DAYS`, then only its con
 
 Sync stores the latest state of each item per account. The server never interprets payloads.
 
+A client is at one of two levels. **Connected** (`Sync1.Connect`, `wprs-ctl server connect`, the
+phone op `{"op":"connect","label"}`) holds a device token and uses the repositories of the account,
+the catalog, installs and votes, and never calls `/api/v1/sync/*`: it sends and receives nothing of
+the library, asks for no sync key, and its state is `connected` with no warning. **Syncing**
+(`Sync1.SetSyncing(true, plaintext)`, `wprs-ctl server syncing on`, the phone op
+`{"op":"syncing","on":true,"plaintext"}`) sets sync up or joins it, as linking did. Turning it off
+cancels sync, pairing and file jobs and keeps the device, its token and its sync key, so turning it
+on again needs no new pairing. `Sync1.Link` and the phone op `link` do both steps at once. Sync,
+pairing, key rotation, escrow, files and reset answer `syncing is off` while connected.
+
 On a local network without a public name, `WPRS_TLS=self-signed` and `WPRS_ADVERTISE=true` let
 a computer of the house run the server for its devices: the phone finds `_wprs._tcp` with the
 system's network service discovery, and every client refuses the certificate until the user
