@@ -171,21 +171,9 @@ pub fn main() -> ExitCode {
         Command::Scene(command) => scoped::run(command),
         Command::Edit(command) => edit::run(command),
         Command::Models(command) => models::run(command),
-        Command::Repo(command) => tokio::runtime::Builder::new_current_thread()
-            .enable_all()
-            .build()
-            .map_err(anyhow::Error::from)
-            .and_then(|runtime| runtime.block_on(repo::run(command))),
-        Command::Moderate(command) => tokio::runtime::Builder::new_current_thread()
-            .enable_all()
-            .build()
-            .map_err(anyhow::Error::from)
-            .and_then(|runtime| runtime.block_on(moderate::run(command))),
-        command => tokio::runtime::Builder::new_current_thread()
-            .enable_all()
-            .build()
-            .map_err(anyhow::Error::from)
-            .and_then(|runtime| runtime.block_on(daemon::run(command))),
+        Command::Repo(command) => blocking(repo::run(command)),
+        Command::Moderate(command) => blocking(moderate::run(command)),
+        command => blocking(daemon::run(command)),
     };
     wprs_scene::end_trials();
     let Err(error) = result else {
@@ -197,6 +185,14 @@ pub fn main() -> ExitCode {
     let code = if misused(&error) { 2 } else { 1 };
     wprs_render::finish_builds(i32::from(code));
     ExitCode::from(code)
+}
+
+fn blocking<T>(work: impl Future<Output = anyhow::Result<T>>) -> anyhow::Result<T> {
+    tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .map_err(anyhow::Error::from)
+        .and_then(|runtime| runtime.block_on(work))
 }
 
 fn misused(error: &anyhow::Error) -> bool {
