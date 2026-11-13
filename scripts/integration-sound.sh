@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-examples=$XDG_DATA_HOME/wallpaper-rs/examples
+examples=$WORK/packed-examples
 mkdir -p "$examples"
 for dir in "$ROOT"/scenes/*/; do ctl pack build "$dir" -o "$examples/$(basename "$dir").wpak" >/dev/null; done
 packed=$(cat "$examples"/*.wpak | wc -c) && count=$(grep -l '"kind": "scene"' "$ROOT"/scenes/*/manifest.json | wc -l)
@@ -11,7 +11,7 @@ rescanned() {
   wait_for 60 finished "$job" || fail "rescan: $(bus Daemon1 GetJob t "$job")"
 }
 listed() { [ "$(reply "r['total'], {i['package']['kind'] for i in r['items']}" Library1 Search suu "kind:scene" 0 50)" = "$1" ]; }
-rescanned
+ctl lib import --wait "$examples"/*.wpak >/dev/null
 wait_for 10 listed "($count, {'scene'})" || fail "examples in the library: $(ctl lib search kind:scene)"
 example() { reply "r['items'][0]['uid']" Library1 Search suu "kind:scene $1" 0 1; }
 snow=$(example snowfall) && dusk=$(example dusk) && orbits=$(example orbits) && flashing=$(example pulse)
@@ -111,7 +111,7 @@ ctl input revoke "$lilies" pointer && ctl mute
 leave && ctl release TEST-15 && ctl release TEST-16 && expect "list(s['outputs'])" "[]"
 kill "$pulse" && { wait "$pulse" 2>/dev/null || true; }
 echo "scene sound and consent checks passed"
-rm "$examples/pulse.wpak" && rescanned
+bus Library1 Remove asb 1 "$flashing" false >/dev/null && rescanned
 wait_for 10 listed "($((count - 1)), {'scene'})" || fail "an uninstalled example stayed: $(ctl lib search kind:scene)"
 mapfile -t uids < <(reply "'\\n'.join(i['uid'] for i in r['items'])" Library1 Search suu "kind:scene" 0 50)
 bus Library1 Remove asb "${#uids[@]}" "${uids[@]}" false >/dev/null && rescanned
