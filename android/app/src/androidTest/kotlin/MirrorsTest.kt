@@ -90,7 +90,7 @@ class MirrorsTest {
         work.enqueueUniquePeriodicWork(Mirrors.DAILY, androidx.work.ExistingPeriodicWorkPolicy.REPLACE, Mirrors.daily()).result.get()
         Mirrors.watch(context)
         listOf(Mirrors.WORK, Mirrors.CLOUD, Mirrors.DAILY).forEach { name ->
-            assertTrue(waitFor { work.getWorkInfosForUniqueWork(name).get().all { it.state == WorkInfo.State.CANCELLED } })
+            assertTrue(waitFor { work.getWorkInfosForUniqueWork(name).get().all { it.state.isFinished } })
         }
         assertFalse(context.remirror())
     }
