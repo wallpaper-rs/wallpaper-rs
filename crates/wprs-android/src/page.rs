@@ -93,7 +93,8 @@ pub(crate) fn settings(pack: &Pack, preview: bool, privacy: Privacy) -> Value {
     let added = pack.web.as_ref().filter(|w| !w.own_volume).map(|_| props::values(pack));
     let own =
         added.and_then(|v| v.get(wprs_scene::VOLUME)?.as_f64()).map_or(1.0, |v| v.clamp(0.0, 100.0) / 100.0);
-    let volume = if muted { 0.0 } else { f64::from(ducking()) * own };
+    let volume =
+        if muted { 0.0 } else { f64::from(ducking()) * own * crate::own_sound::of_package(&pack.id) };
     json!({"fps": fps(pack, preview), "quality": power.ceiling() as u8, "locale": locale, "volume": volume})
 }
 

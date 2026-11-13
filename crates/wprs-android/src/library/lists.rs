@@ -91,3 +91,39 @@ pub(crate) fn drop_playlist(lib: &mut Library, playlist: &str) -> Result<(), Err
     }
     Ok(())
 }
+
+pub(super) fn sound(
+    lib: &mut Library,
+    uids: &[String],
+    (muted, volume): (Option<String>, Option<String>),
+) -> Result<Value, Error> {
+    let parsed = sound_words(muted.as_deref(), volume.as_deref())?;
+    crate::own_sound::forget();
+    Ok(json!(lib.set_sound_many(&known(lib, uids), parsed.0, parsed.1)?))
+}
+
+fn word(text: Option<&str>) -> Option<&str> {
+    text.map(str::trim).filter(|t| !t.is_empty())
+}
+
+type Words = (Option<Option<bool>>, Option<Option<u8>>);
+
+pub(super) fn sound_words(muted: Option<&str>, volume: Option<&str>) -> Result<Words, Error> {
+    let bad = |word: &str| said("android.sound_value", "%1 is not a sound value", &[&word]);
+    let muted = match word(muted) {
+        None => None,
+        Some("none") => Some(None),
+        Some(other) => Some(Some(other.parse::<bool>().map_err(|_| bad(other))?)),
+    };
+    let volume = match word(volume) {
+        None => None,
+        Some("none") => Some(None),
+        Some(other) => Some(Some(other.parse::<u8>().ok().filter(|v| *v <= 100).ok_or_else(|| bad(other))?)),
+    };
+    Ok((muted, volume))
+}
+
+pub(super) fn heard(lib: &Library, path: &str) -> Result<Value, Error> {
+    let (muted, volume) = lib.sound_where("path", path)?;
+    Ok(json!(crate::own_sound::factor(muted, volume)))
+}

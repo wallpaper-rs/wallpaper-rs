@@ -88,6 +88,7 @@
     <string name="error_android_server_own_certificate">This server uses its own certificate with the fingerprint %1$s; add it only if the server shows the same one</string>
     <string name="error_android_server_set_up">The server set up sync with another encryption than asked</string>
     <string name="error_android_setting_value">%1$s cannot be %2$s</string>
+    <string name="error_android_sound_value">%1$s is not a sound value</string>
     <string name="error_android_stopped">Stopped</string>
     <string name="error_android_stored_server_secrets">The stored server secrets are broken; remove the server and link again</string>
     <string name="error_android_sync_crypto">Encryption failed: %1$s</string>

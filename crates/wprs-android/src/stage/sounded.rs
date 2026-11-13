@@ -10,7 +10,11 @@ impl Stage {
             return None;
         }
         let gate = Gate { silent: self.silent, shown: self.audible, running: power.moving() && !still };
-        let decided = sound::decide(&settings::playback(), sound::property(&self.runtime), gate);
+        let decided = sound::decide(
+            &settings::playback(),
+            sound::property(&self.runtime) * crate::own_sound::of_package(&self.pack.id),
+            gate,
+        );
         let wait = self.sounds.follow(&self.runtime, decided, Instant::now());
         wait.map(|wait| i64::try_from(wait.as_millis()).unwrap_or(i64::MAX).max(1))
     }

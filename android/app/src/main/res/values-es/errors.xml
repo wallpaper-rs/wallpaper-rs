@@ -88,6 +88,7 @@
     <string name="error_android_server_own_certificate">Este servidor usa un certificado propio con la huella %1$s; añádelo solo si el servidor muestra la misma</string>
     <string name="error_android_server_set_up">El servidor preparó la sincronización con otro cifrado del pedido</string>
     <string name="error_android_setting_value">%1$s no puede valer %2$s</string>
+    <string name="error_android_sound_value">%1$s no es un valor de sonido</string>
     <string name="error_android_stopped">Detenido</string>
     <string name="error_android_stored_server_secrets">Los secretos guardados del servidor están dañados; quita el servidor y vuelve a enlazarlo</string>
     <string name="error_android_sync_crypto">El cifrado falló: %1$s</string>

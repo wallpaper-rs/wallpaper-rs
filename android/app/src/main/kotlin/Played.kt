@@ -109,7 +109,7 @@ internal class Video(
         player?.volume = (loudness * own()).coerceIn(0f, 1f) * Duck.gain
     }
 
-    private fun own() = Native.setting("sound.heard", null).toFloatOrNull() ?: 1f
+    private fun own() = (answer(Native::library, "heard", arrayOf("path" to uri.removePrefix(FILE))) as? Number)?.toFloat() ?: 1f
 
     private fun heard() = Duck.want(context, this, player?.playWhenReady == true && !muted && loudness > 0f)
 

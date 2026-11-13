@@ -43,6 +43,7 @@ mod listen;
 mod local;
 mod media;
 mod opened;
+mod own_sound;
 mod pack;
 mod page;
 mod pairing;

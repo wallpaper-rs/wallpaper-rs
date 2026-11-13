@@ -47,6 +47,8 @@ class Item(json: JSONObject) {
     val favorite = json.optBoolean("favorite")
     val rating = json.optInt("rating")
     val tags: List<String> = json.optJSONArray("tags").strings()
+    val silent = json.optBoolean("sound_muted")
+    val loudness = if (json.isNull("sound_volume")) 100 else json.optInt("sound_volume", 100)
     private val details = json.optJSONObject("about")
     val about: String = details?.optString("description").orEmpty()
     val animated: String? = details?.takeUnless { it.isNull("animated") }?.optString("animated")?.takeIf { it.isNotEmpty() }
@@ -83,7 +85,7 @@ class Playlist(json: JSONObject) {
 fun Playlist.ruled(key: String, value: Any): JSONObject =
     JSONObject(info.toString()).apply { getJSONObject("rules").put(key, value) }
 
-private fun answer(native: (String) -> String, op: String, args: Array<out Pair<String, Any?>>): Any? {
+internal fun answer(native: (String) -> String, op: String, args: Array<out Pair<String, Any?>>): Any? {
     val answer = JSONTokener(native(JSONObject(mapOf("op" to op, *args)).toString())).nextValue()
     if (answer is JSONObject) refusal(answer)?.let { throw it }
     return answer.takeUnless { it == JSONObject.NULL }

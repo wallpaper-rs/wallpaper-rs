@@ -129,20 +129,18 @@ fn rotating_in_one_step() {
 }
 
 fn sound_of_the_wallpaper() {
-    let own = |key: &str, value: Option<&str>| settings::setting(key, value).unwrap();
-    assert_eq!(
-        (own("sound.heard", None).as_str(), own("playback.muted.default", None).as_str()),
-        ("1", "none")
-    );
-    own("playback.volume.default", Some("0.4"));
-    assert_eq!(own("sound.heard", None), "0.4");
-    own("playback.muted.default", Some("true"));
-    assert_eq!(
-        (own("sound.heard", None).as_str(), own("playback.volume.default", None).as_str()),
-        ("0", "0.4")
-    );
-    assert!(settings::setting("playback.volume.default", Some("loud")).is_err());
-    own("playback.muted.default", Some("none"));
-    own("playback.volume.default", Some("none"));
-    assert_eq!(own("sound.heard", None), "1", "a sound set back to follow left a trace");
+    let green = store::store(&mut open("green-64x32.png"), "green.png").unwrap().0;
+    let path = crate::library::with(|lib| Ok(lib.item(&green)?.path)).unwrap();
+    let heard = || ask(json!({ "op": "heard", "path": path }));
+    assert_eq!(heard(), json!(1.0));
+    ask(json!({ "op": "sound", "uids": [green], "volume": "40" }));
+    assert_eq!(heard(), json!(0.4));
+    ask(json!({ "op": "sound", "uids": [green], "muted": "true" }));
+    assert_eq!(heard(), json!(0.0));
+    let item = ask(json!({ "op": "item", "uid": green }));
+    assert_eq!((&item["sound_muted"], &item["sound_volume"]), (&json!(true), &json!(40)));
+    assert!(ask(json!({ "op": "sound", "uids": [green], "volume": "loud" }))["error"].is_string());
+    ask(json!({ "op": "sound", "uids": [green], "muted": "none", "volume": "none" }));
+    assert_eq!(heard(), json!(1.0), "a sound set back to follow left a trace");
+    assert_eq!(ask(json!({ "op": "remove", "uids": [green] })), Value::Null);
 }

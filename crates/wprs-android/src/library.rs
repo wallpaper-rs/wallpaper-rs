@@ -47,6 +47,8 @@ enum Request {
     Save { playlist: PlaylistInfo },
     Delete { playlist: String },
     Add { playlist: String, items: Vec<String> },
+    Sound { uids: Vec<String>, muted: Option<String>, volume: Option<String> },
+    Heard { path: String },
     Rotate { name: String, items: Vec<String>, every: String },
     Take { playlist: String, items: Vec<String> },
     Move { playlist: String, from: usize, to: usize },
@@ -105,6 +107,7 @@ fn answer(lib: &mut Library, request: Request, on_battery: bool) -> Result<Value
             | Request::Entries { .. }
             | Request::Current
             | Request::Cleared
+            | Request::Heard { .. }
     );
     let value = match request {
         Request::Items { query, languages } => {
@@ -155,6 +158,8 @@ fn answer(lib: &mut Library, request: Request, on_battery: bool) -> Result<Value
             Value::Null
         }
         Request::Add { playlist, items } => lists::add(lib, &playlist, &items)?,
+        Request::Sound { uids, muted, volume } => lists::sound(lib, &uids, (muted, volume))?,
+        Request::Heard { path } => lists::heard(lib, &path)?,
         Request::Rotate { name, items, every } => lists::rotate(lib, &name, &items, &every)?,
         Request::Take { playlist, items } => {
             json!(lib.remove_from_playlist_many(&playlist, &known(lib, &items))?)

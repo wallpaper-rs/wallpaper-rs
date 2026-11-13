@@ -12,7 +12,6 @@ pub(crate) const COLORS: &str = "system_colors";
 pub(crate) const BACKEND: &str = "backend";
 const CHARGER: &str = "charger_fps";
 const FIT: &str = "fit";
-const HEARD: &str = "sound.heard";
 const BATTERY: &str = "playback.max_fps";
 const CHOICES: [(&str, &[&str]); 6] = [
     (COLORS, &["chosen", "always", "never"]),
@@ -141,29 +140,12 @@ pub(crate) fn setting(key: &str, value: Option<&str>) -> Result<String, Error> {
         })?;
     }
     let config = loaded()?;
-    if let Some(sound) = heard(&config, key) {
-        return Ok(sound);
-    }
     match (key, config.options().remove(key)) {
         (FIT, _) => Ok(config.resolve("").fit.to_string()),
         (BATTERY, _) => Ok(on_battery(config.playback.max_fps).to_string()),
         (_, Some(toml::Value::String(text))) => Ok(text),
         (_, Some(value)) => Ok(value.to_string()),
         (_, None) => Err(said("android.unknown_setting", "unknown setting %1", &[&key])),
-    }
-}
-
-fn heard(config: &Config, key: &str) -> Option<String> {
-    let own = config.own_sound("");
-    match key {
-        HEARD => Some(config.heard_at("").to_string()),
-        k if k.starts_with(wprs_core::sound::VOLUME) => {
-            Some(own.volume.map_or("none".into(), |v| v.to_string()))
-        }
-        k if k.starts_with(wprs_core::sound::MUTED) => {
-            Some(own.muted.map_or("none".into(), |m| m.to_string()))
-        }
-        _ => None,
     }
 }
 
