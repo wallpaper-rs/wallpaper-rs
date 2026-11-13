@@ -6787,6 +6787,13 @@ msgid "Repository id, or at least its first 8 hex digits"
 msgstr "Id del repositorio, o al menos sus 8 primeras cifras hexadecimales"
 
 #: apps/wprs-ctl/src/remote.rs
+msgid ""
+"Add the example wallpapers that come with the program, after removing them"
+msgstr ""
+"Añadir de nuevo los fondos de ejemplo que trae el programa, tras haberlos "
+"quitado"
+
+#: apps/wprs-ctl/src/remote.rs
 msgid "Remove a repository"
 msgstr "Quitar un repositorio"
 
