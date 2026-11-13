@@ -16,7 +16,7 @@ Kirigami.Page {
     }
 
     padding: 0
-    title: qsTr("Pieces")
+    title: App.tr("Pieces")
     background: Rectangle {
         color: Look.noche
     }

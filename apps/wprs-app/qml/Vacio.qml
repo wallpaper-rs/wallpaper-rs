@@ -13,7 +13,7 @@ Column {
 
     signal acted
 
-    width: Math.min(Look.vacioAncho, parent ? parent.width : Look.vacioAncho)
+    width: Look.vacioAncho
     spacing: Look.e3
     Accessible.role: Accessible.Grouping
     Accessible.name: title

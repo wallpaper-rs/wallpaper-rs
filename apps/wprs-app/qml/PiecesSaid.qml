@@ -11,12 +11,12 @@ FocusScope {
         notices.queue = [];
         notices.shown = null;
         notices.show({
-            "text": qsTr("12 wallpapers were added."),
+            "text": App.tr("12 wallpapers were added."),
             "tone": "brote",
-            "action": qsTr("Show")
+            "action": App.tr("Show")
         });
         notices.show({
-            "text": qsTr("“Cintas” has flashes: it stays paused until you allow it in Settings."),
+            "text": App.tr("“Cintas” has flashes: it stays paused until you allow it in Settings."),
             "tone": "ambar"
         });
         forceActiveFocus(Qt.TabFocusReason);
@@ -35,22 +35,22 @@ FocusScope {
             Estado {
                 tone: "ambar"
                 icon: "pause-fill"
-                text: qsTr("Paused: a window covers the screen")
+                text: App.tr("Paused: a window covers the screen")
             }
 
             Estado {
                 tone: "coral"
-                text: qsTr("Could not set it: the file is missing")
+                text: App.tr("Could not set it: the file is missing")
             }
 
             Estado {
                 tone: "brote"
-                text: qsTr("Set a moment ago")
+                text: App.tr("Set a moment ago")
             }
 
             Nota {
                 icon: "clock"
-                text: qsTr("Shows the time")
+                text: App.tr("Shows the time")
             }
 
             Rectangle {
@@ -68,20 +68,20 @@ FocusScope {
                     Estado {
                         lit: true
                         tone: "coral"
-                        text: qsTr("Not found")
+                        text: App.tr("Not found")
                     }
 
                     Estado {
                         lit: true
                         tone: "ambar"
                         icon: "pause-fill"
-                        text: qsTr("Paused")
+                        text: App.tr("Paused")
                     }
 
                     Nota {
                         lit: true
                         tone: "brote"
-                        text: qsTr("Set a moment ago")
+                        text: App.tr("Set a moment ago")
                     }
                 }
             }
@@ -97,26 +97,29 @@ FocusScope {
 
             Aviso {
                 tone: "coral"
-                text: qsTr("“Estanque” was removed from the library.")
-                action: qsTr("Undo")
+                text: App.tr("“Estanque” was removed from the library.")
+                action: App.tr("Undo")
             }
         }
 
         ColumnLayout {
             Layout.alignment: Qt.AlignTop
+            Layout.preferredWidth: Look.avisoAncho
             spacing: Look.e6
 
             Vacio {
-                title: qsTr("You have no lists yet")
-                text: qsTr("A list rotates its wallpapers on a screen. Choose wallpapers in your library and add them to a new list.")
-                action: qsTr("New list")
+                Layout.fillWidth: true
+                title: App.tr("You have no lists yet")
+                text: App.tr("A list rotates its wallpapers on a screen. Choose wallpapers in your library and add them to a new list.")
+                action: App.tr("New list")
                 actionIcon: "plus"
             }
 
             Vacio {
+                Layout.fillWidth: true
                 small: true
-                title: qsTr("Nothing matches “luna roja”")
-                text: qsTr("Try another word or remove the filters.")
+                title: App.tr("Nothing matches “luna roja”")
+                text: App.tr("Try another word or remove the filters.")
             }
         }
 
@@ -125,18 +128,18 @@ FocusScope {
             spacing: Look.e6
 
             Fallo {
-                title: qsTr("Could not read the library")
-                text: qsTr("What you already have is still there. Try again; if it happens again, the details say why.")
-                action: qsTr("Try again")
+                title: App.tr("Could not read the library")
+                text: App.tr("What you already have is still there. Try again; if it happens again, the details say why.")
+                action: App.tr("Try again")
                 details: "library: permission denied (os error 13)"
                 detailsOpen: true
             }
 
             Fallo {
                 big: true
-                title: qsTr("Could not reach the service")
-                text: qsTr("Check the connection and try again.")
-                action: qsTr("Try again")
+                title: App.tr("Could not reach the service")
+                text: App.tr("Check the connection and try again.")
+                action: App.tr("Try again")
                 details: "connect: connection refused"
             }
         }

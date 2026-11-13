@@ -42,7 +42,7 @@ Item {
     implicitWidth: line.implicitWidth + 2 * Look.e3
     implicitHeight: Look.altoControl
     Accessible.role: Accessible.Button
-    Accessible.name: listening || keys.length === 0 ? qsTr("Press the combination…") : keys.join("+")
+    Accessible.name: listening || keys.length === 0 ? App.tr("Press the combination…") : keys.join("+")
     Keys.onPressed: event => {
         event.accepted = true;
         if (event.key === Qt.Key_Escape)
@@ -85,7 +85,7 @@ Item {
         Text {
             visible: captura.listening || captura.keys.length === 0
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("Press the combination…")
+            text: App.tr("Press the combination…")
             font.family: Look.letraTexto
             font.pixelSize: Look.tCuerpo
             color: captura.ink

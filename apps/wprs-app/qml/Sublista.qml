@@ -9,7 +9,7 @@ Column {
 
     property var model: []
     property string addText
-    property string removeText: qsTr("Remove")
+    property string removeText: App.tr("Remove")
 
     signal removed(int index)
     signal added
@@ -54,20 +54,36 @@ Column {
                 anchors.fill: parent
                 anchors.leftMargin: Look.e4
                 anchors.rightMargin: Look.filaFin
-                spacing: Look.e4
+                spacing: Look.listaHueco
 
                 Text {
+                    Layout.maximumWidth: implicitWidth
                     Layout.fillWidth: true
                     elide: Text.ElideRight
-                    textFormat: Text.StyledText
                     font.family: Look.letraTexto
                     font.pixelSize: Look.tCuerpo
                     color: item.lit ? Look.noche : Look.escarcha
-                    text: {
-                        const small = "<span style=\"font-size:" + Look.tPie + "px; color:" + (item.lit ? Look.noche : Look.bruma) + "\"> · " + item.modelData.where + "</span>";
-                        const problem = "<span style=\"color:" + Tono.of("coral", item.lit, Look.coral) + "\"> · " + item.modelData.problem + "</span>";
-                        return item.modelData.name + (item.modelData.where ? small : "") + (item.modelData.problem ? problem : "");
-                    }
+                    text: item.modelData.name
+                }
+
+                Text {
+                    visible: (item.modelData.where ?? "") !== ""
+                    font.family: Look.letraTexto
+                    font.pixelSize: Look.tPie
+                    color: item.lit ? Look.noche : Look.bruma
+                    text: "· " + (item.modelData.where ?? "")
+                }
+
+                Text {
+                    visible: (item.modelData.problem ?? "") !== ""
+                    font.family: Look.letraTexto
+                    font.pixelSize: Look.tPie
+                    color: Tono.of("coral", item.lit, Look.coral)
+                    text: "· " + (item.modelData.problem ?? "")
+                }
+
+                Item {
+                    Layout.fillWidth: true
                 }
 
                 QQC2.Button {

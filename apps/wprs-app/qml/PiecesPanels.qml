@@ -18,26 +18,26 @@ FocusScope {
     onVisibleChanged: visible || [menu, question, confirm].forEach(panel => panel.close())
 
     Row {
-        spacing: Look.e8
+        spacing: Look.panelChico
 
         QQC2.Button {
             id: fit
 
-            text: qsTr("Fill the screen")
+            text: App.tr("Fill the screen")
             onClicked: menu.open()
         }
 
         QQC2.Button {
             id: ask
 
-            text: qsTr("Set")
+            text: App.tr("Set")
             onClicked: question.open()
         }
 
         QQC2.Button {
             id: remove
 
-            text: qsTr("Remove 3 wallpapers")
+            text: App.tr("Remove 3 wallpapers")
             onClicked: confirm.open()
         }
     }
@@ -49,25 +49,25 @@ FocusScope {
         current: 1
         options: [
             {
-                "text": qsTr("Fit"),
+                "text": App.tr("Fit"),
                 "icon": "frame-corners"
             },
             {
-                "text": qsTr("Fill the screen"),
+                "text": App.tr("Fill the screen"),
                 "icon": "arrows-out",
-                "note": qsTr("current")
+                "note": App.tr("current")
             },
             {
-                "text": qsTr("Stretch"),
+                "text": App.tr("Stretch"),
                 "icon": "arrows-horizontal"
             },
             {
                 "separator": true
             },
             {
-                "text": qsTr("Tile"),
+                "text": App.tr("Tile"),
                 "icon": "squares-four",
-                "note": qsTr("images only"),
+                "note": App.tr("images only"),
                 "off": true
             }
         ]
@@ -77,23 +77,23 @@ FocusScope {
         id: question
 
         opener: ask
-        title: qsTr("“Pulso” asks for permission")
-        text: qsTr("It asks once; you can change it later in its options.")
-        quiet: qsTr("Not now")
-        principal: qsTr("Allow")
+        title: App.tr("“Pulso” asks for permission")
+        text: App.tr("It asks once; you can change it later in its options.")
+        quiet: App.tr("Not now")
+        principal: App.tr("Allow")
 
         Pide {
             width: question.width - 2 * Look.e4
             icon: "speaker-high"
-            text: qsTr("Listen to the computer’s sound")
-            reason: qsTr("To move with the music that plays.")
+            text: App.tr("Listen to the computer’s sound")
+            reason: App.tr("To move with the music that plays.")
         }
 
         Pide {
             width: question.width - 2 * Look.e4
             icon: "globe"
-            text: qsTr("Connect to casa.example")
-            reason: qsTr("To bring the weather of your city.")
+            text: App.tr("Connect to casa.example")
+            reason: App.tr("To bring the weather of your city.")
         }
     }
 
@@ -101,17 +101,17 @@ FocusScope {
         id: confirm
 
         opener: remove
-        title: qsTr("Remove 3 wallpapers?")
-        text: qsTr("They leave your library. The files in your folders are not deleted.")
-        quiet: qsTr("Cancel")
-        principal: qsTr("Remove")
+        title: App.tr("Remove 3 wallpapers?")
+        text: App.tr("They leave your library. The files in your folders are not deleted.")
+        quiet: App.tr("Cancel")
+        principal: App.tr("Remove")
         principalIcon: "trash"
         borra: true
 
         Progreso {
             width: confirm.width - 2 * Look.e4
-            text: qsTr("Removing…")
-            count: qsTr("%1 of %2").arg(2).arg(3)
+            text: App.tr("Removing…")
+            count: App.tr("%1 of %2", 2, 3)
             value: 2 / 3
         }
     }

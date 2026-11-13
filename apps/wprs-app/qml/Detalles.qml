@@ -6,7 +6,7 @@ import io.github.wallpaper_rs.app
 Column {
     id: detalles
 
-    property string text: qsTr("Details")
+    property string text: App.tr("Details")
     property string details
     property bool open: false
 
@@ -67,22 +67,20 @@ Column {
         implicitHeight: technical.implicitHeight + 2 * 10
         radius: Look.radioChico
         color: Look.nocheAlta
-        border.width: Look.linea
-        border.color: Look.nocheLinea
 
-        QQC2.TextArea {
+        Area {
             id: technical
 
             anchors.fill: parent
-            anchors.leftMargin: Look.e3
-            anchors.rightMargin: Look.e3
             readOnly: true
             selectByMouse: true
             activeFocusOnTab: false
-            padding: 0
+            leftPadding: Look.e3
+            rightPadding: Look.e3
             topPadding: 10
             bottomPadding: 10
-            background: null
+            palette.mid: Look.nocheLinea
+            palette.highlight: Look.luna
             text: detalles.details
             wrapMode: Text.WrapAnywhere
             font.family: Look.letraFija

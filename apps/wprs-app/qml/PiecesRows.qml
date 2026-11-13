@@ -16,21 +16,21 @@ FocusScope {
         width: Look.filasAncho
 
         Seccion {
-            text: qsTr("Performance")
+            text: App.tr("Performance")
         }
 
         Fila {
             id: quality
 
-            text: qsTr("Quality")
+            text: App.tr("Quality")
             kind: "elige"
-            options: [qsTr("Low"), qsTr("Medium"), qsTr("High")]
+            options: [App.tr("Low"), App.tr("Medium"), App.tr("High")]
             current: 2
-            explain: qsTr("How much detail each scene draws. Lower uses less battery.")
+            explain: App.tr("How much detail each scene draws. Lower uses less battery.")
         }
 
         Fila {
-            text: qsTr("Frame rate")
+            text: App.tr("Frame rate")
             kind: "riel"
             from: 0
             to: 60
@@ -40,34 +40,34 @@ FocusScope {
         }
 
         Fila {
-            text: qsTr("Pause when a window covers the screen")
+            text: App.tr("Pause when a window covers the screen")
             kind: "llave"
             checked: true
-            value: checked ? qsTr("On") : qsTr("Off")
+            value: checked ? App.tr("On") : App.tr("Off")
         }
 
         Fila {
-            text: qsTr("Pause on battery")
-            note: qsTr("This computer has no battery")
-            value: qsTr("not detected")
+            text: App.tr("Pause on battery")
+            note: App.tr("This computer has no battery")
+            value: App.tr("not detected")
             off: true
-            explain: qsTr("This computer has no battery, so there is nothing to save here.")
+            explain: App.tr("This computer has no battery, so there is nothing to save here.")
         }
 
         Fila {
-            text: qsTr("Graphics card")
+            text: App.tr("Graphics card")
             kind: "pliega"
-            value: qsTr("Automatic")
+            value: App.tr("Automatic")
         }
 
         Seccion {
-            text: qsTr("Library")
+            text: App.tr("Library")
         }
 
         Fila {
             id: folders
 
-            text: qsTr("Library folders")
+            text: App.tr("Library folders")
             kind: "despliega"
             open: true
             number: String(list.model.length)
@@ -78,16 +78,16 @@ FocusScope {
 
             width: parent.width
             visible: folders.open
-            addText: qsTr("Add a folder…")
+            addText: App.tr("Add a folder…")
             model: [
                 {
-                    "name": qsTr("Wallpapers"),
-                    "where": qsTr("Pictures")
+                    "name": App.tr("Wallpapers"),
+                    "where": App.tr("Pictures")
                 },
                 {
-                    "name": qsTr("Animated wallpapers"),
-                    "where": qsTr("Videos"),
-                    "problem": qsTr("Not found")
+                    "name": App.tr("Animated wallpapers"),
+                    "where": App.tr("Videos"),
+                    "problem": App.tr("Not found")
                 }
             ]
             onRemoved: index => model = model.filter((entry, at) => at !== index)

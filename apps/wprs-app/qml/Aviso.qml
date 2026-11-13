@@ -71,7 +71,7 @@ FocusScope {
             implicitWidth: Look.altoCerrar
             implicitHeight: Look.altoCerrar
             Accessible.role: Accessible.Button
-            Accessible.name: qsTr("Close")
+            Accessible.name: App.tr("Close")
             onClicked: aviso.closed()
 
             Rectangle {
