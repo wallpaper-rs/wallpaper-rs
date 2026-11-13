@@ -184,16 +184,13 @@ pub enum Command {
     Rgb(crate::rgb::Rgb),
     #[command(subcommand, about = "Whether the media player is read now, and for which screens")]
     Media(crate::media::Media),
-    #[command(
-        subcommand,
-        about = "Download, check and remove the depth model and its runtime; needs no daemon"
-    )]
+    #[command(subcommand, about = "Download, check and remove the depth model and runtime; needs no daemon")]
     Models(Models),
     #[command(subcommand, about = "Build, sign and check .wpak packages; needs no daemon")]
     Pack(Pack),
     #[command(
         name = "connect-code",
-        about = "Print the text of the connect-to-this-server code, and draw it; needs no daemon"
+        about = "Print and draw the connect-to-this-server code; needs no daemon"
     )]
     ConnectCode(crate::connecting::Connect),
     #[command(subcommand, about = "Operate a package repository; needs no daemon")]
