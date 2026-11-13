@@ -4,7 +4,8 @@ use serde_json::json;
 use wprs_scene::Quality;
 
 fn model(wrap: u32) -> Vec<u8> {
-    let picture = RgbaImage::from_fn(4, 1, |x, _| Rgba(if x < 2 { [255, 0, 0, 255] } else { [0, 0, 255, 255] }));
+    let picture =
+        RgbaImage::from_fn(4, 1, |x, _| Rgba(if x < 2 { [255, 0, 0, 255] } else { [0, 0, 255, 255] }));
     let mut png = std::io::Cursor::new(Vec::new());
     picture.write_to(&mut png, image::ImageFormat::Png).unwrap();
     let mut bin = Vec::new();
@@ -20,9 +21,7 @@ fn model(wrap: u32) -> Vec<u8> {
     let uv = add(f(&[0.0, 1.0, 2.0, 1.0, 2.0, 0.0, 0.0, 0.0]));
     let list = add([0u32, 1, 2, 0, 2, 3].iter().flat_map(|i| i.to_le_bytes()).collect());
     let image = add(png.into_inner());
-    let accessor = |view: usize, kind: &str, component: u32, count: usize| {
-        json!({ "bufferView": view, "type": kind, "componentType": component, "count": count })
-    };
+    let accessor = |view: usize, kind: &str, component: u32, count: usize| json!({ "bufferView": view, "type": kind, "componentType": component, "count": count });
     let doc = json!({ "asset": { "version": "2.0" },
         "nodes": [{ "name": "quad", "mesh": 0 }],
         "meshes": [{ "name": "quad", "primitives": [{ "attributes": { "POSITION": 0, "TEXCOORD_0": 1 }, "indices": 2, "material": 0 }] }],

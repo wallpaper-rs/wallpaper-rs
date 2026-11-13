@@ -46,7 +46,11 @@ fn tiled(picture: RgbaImage, [lu, lv, nu, nv]: [f32; 4], wrap: [MapWrap; 2]) -> 
 pub(crate) fn pictures(rig: &Rigged, repeat: bool) -> Vec<RgbaImage> {
     let each = rig.pictures.iter().enumerate().filter_map(|(i, b)| {
         let picture = decoded(b)?;
-        Some(if repeat { tiled(picture, repeat_of(rig, i), rig.wraps.get(i).copied().unwrap_or([MapWrap::Repeat; 2])) } else { picture })
+        Some(if repeat {
+            tiled(picture, repeat_of(rig, i), rig.wraps.get(i).copied().unwrap_or([MapWrap::Repeat; 2]))
+        } else {
+            picture
+        })
     });
     each.collect()
 }

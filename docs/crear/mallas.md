@@ -50,7 +50,7 @@ capa de malla, y es la forma de ver con qué nombres cuentas.
 | Campo | Por defecto | Qué hace |
 |-------|-------------|----------|
 | `mesh` | obligatorio | El recurso `.glb`. |
-| `texture` | las del archivo | Un recurso de imagen o de vídeo (o un valor) que reemplaza las texturas del archivo. Sin él, cada parte enseña la imagen de su material (hasta 64 por archivo; una imagen que se repite sobre su parte, con coordenadas fuera de 0 a 1, se repite hasta 4 veces por lado), o blanco. |
+| `texture` | las del archivo | Un recurso de imagen o de vídeo (o un valor) que reemplaza las texturas del archivo. Sin él, cada parte enseña la imagen de su material (hasta 64 por archivo; una imagen que se repite sobre su parte, con coordenadas fuera de 0 a 1, se repite hasta 4 veces por lado, según el modo de envoltura del muestreador de su textura en el archivo: repetir, repetir en espejo o fijar al borde; más allá de 4 veces se ve el borde), o blanco. |
 | `size` | el lienzo | La caja en píxeles que llena la malla. |
 | `color` | blanco | Color que multiplica la malla. |
 | `parts` | | Por parte (el nombre de una malla del archivo): `order`, `clip_to` y `visible`. |
