@@ -24,9 +24,14 @@ QtObject {
             });
         const sizes = () => tools.info.render.size_over_life ?? [];
         const colors = () => tools.info.render.color_over_life ?? [];
-        const made = sizes().length > 0 || colors().length > 0;
-        if (made)
-            throw new Error("over life: the sample system starts with curves");
+        const steps = page.view.history.done.length;
+        tools.edit("over", {
+            "size": [],
+            "color": []
+        });
+        tools.load();
+        if (sizes().length > 0 || colors().length > 0)
+            throw new Error("over life: the curves did not clear");
         find(tools, "sizeOverLife").clicked();
         find(tools, "colorOverLife").clicked();
         tools.load();
@@ -43,7 +48,7 @@ QtObject {
         tools.load();
         if (sizes().length !== 0 || colors().length !== 0)
             throw new Error("over life: the remove buttons left curves");
-        for (let k = 0; k < 4; k++)
+        while (page.view.history.done.length > steps)
             page.run("undo");
         tools.destroy();
     }
