@@ -65,6 +65,11 @@ assert plain[:8] not in stored[0].read_bytes() and plain[-16:] not in stored[0].
 CHECK
 echo "private file checks passed"
 
+cp "$ROOT/tests/fixtures/bands-640x180.png" "$WORK/plain.png"
+a server files share "$WORK/plain.png" --wait >/dev/null || fail "a plain file path was refused"
+a server files ls | grep -q "plain.png" || fail "the shared plain file is not listed: $(a server files ls)"
+echo "plain file share checks passed"
+
 b server pause
 a playlist query "Quiet evenings" "tag:evening-glow" >/dev/null
 a server sync --wait >/dev/null

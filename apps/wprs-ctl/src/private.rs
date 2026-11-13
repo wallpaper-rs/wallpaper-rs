@@ -1,6 +1,7 @@
 use crate::cli::{JSON, Wait};
 use crate::daemon::job;
-use crate::input::{confirm, one, secret, strs};
+use crate::adopting::file_or_item;
+use crate::input::{confirm, secret, strs};
 use crate::show::{self, bytes, table};
 use crate::told::{told, tr};
 use anyhow::{Result, bail};
@@ -36,7 +37,7 @@ pub enum Files {
     Share {
         #[arg(
             required = true,
-            help = "Items (path or uid), folders, or with --stop the id of a file on the server"
+            help = "Library items (uid or title), files (added to the library if needed), folders, or with --stop the id of a file on the server"
         )]
         targets: Vec<String>,
         #[arg(long, help = "Stop sharing them and delete them from the server")]
@@ -74,7 +75,7 @@ async fn target(client: &Client, text: &str) -> Result<String> {
     match () {
         () if Path::new(text).is_dir() => Ok(std::path::absolute(text)?.display().to_string()),
         () if hex => Ok(text.to_owned()),
-        () => one(client, text).await,
+        () => file_or_item(client, text).await,
     }
 }
 

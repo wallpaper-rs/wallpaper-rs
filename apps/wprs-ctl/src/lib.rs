@@ -4,6 +4,7 @@ mod acting;
 mod address;
 mod animated;
 mod applying;
+mod adopting;
 mod args;
 pub mod author;
 mod author_words;
