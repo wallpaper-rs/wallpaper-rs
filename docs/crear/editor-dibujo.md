@@ -353,7 +353,6 @@ Si un cambio baja el límite de movimiento, la herramienta avisa con el cambio q
 **En la terminal:**
 
 ```sh
-wprs-ctl edit depth regions foto.png
 wprs-ctl edit depth join foto.png "0.25,0.5;0.7,0.5"
 wprs-ctl edit depth split foto.png "0.0,0.5;1.0,0.5" --radius 0.004
 wprs-ctl edit depth move foto.png 0.25,0.5 --by -0.2
@@ -361,7 +360,7 @@ wprs-ctl edit depth move foto.png --clear
 wprs-ctl edit undo foto.png
 ```
 
-`regions` lista las regiones desde la más cercana, cada una con un punto dentro: ese punto es el que se da a `join` y a `move`. `--png` guarda las regiones pintadas y `--json` imprime la lista como JSON. Con `edit depth layers foto.png --list` se ve el límite de movimiento de cada juego de capas.
+Antes de esos comandos, `wprs-ctl edit depth regions foto.png` (con el mapa de profundidad ya hecho) lista las regiones desde la más cercana, cada una con un punto dentro: ese punto es el que se da a `join` y a `move`. `--png` guarda las regiones pintadas y `--json` imprime la lista como JSON. Con `edit depth layers foto.png --list` se ve el límite de movimiento de cada juego de capas.
 
 ## Cómo se mueve la imagen y por qué a veces se queda quieta
 
