@@ -21,6 +21,14 @@ pub mod qobject {
         fn lookHasFamily(family: &QString) -> bool;
         #[rust_name = "look_has_icon"]
         fn lookHasIcon(name: &QString) -> bool;
+        #[rust_name = "look_style_files"]
+        fn lookStyleFiles() -> QString;
+    }
+
+    unsafe extern "C++" {
+        include!("wprs-app/compiled.h");
+        #[rust_name = "compile_qml"]
+        pub fn compileQml();
     }
 
     #[auto_cxx_name]
@@ -45,6 +53,8 @@ pub mod qobject {
         fn icon_names(self: &Looks) -> QString;
         #[qinvokable]
         fn derive(self: &Looks, path: &QString) -> QString;
+        #[qinvokable]
+        fn style_files(self: &Looks) -> QString;
     }
 }
 
@@ -98,5 +108,9 @@ impl Looks {
 
     fn derive(&self, path: &QString) -> QString {
         QString::from(crate::tones::for_path(&path.to_string()).as_str())
+    }
+
+    fn style_files(&self) -> QString {
+        look_style_files()
     }
 }

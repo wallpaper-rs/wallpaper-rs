@@ -67,7 +67,9 @@ nombre que el juego no tiene. Los íconos toman el color del texto que los rodea
 El estilo de controles es propio (`io.github.wallpaper_rs.style`) y se elige siempre al arrancar.
 Dibuja cada control que la app usa; una prueba de la app (`styled`) falla si una pantalla usa un
 control que el estilo no dibuja. Todos tienen reposo, puntero encima, pulsado, apagado y el anillo
-de foco de teclado en Escarcha.
+de foco de teclado en Escarcha. `wprs-app --check` crea una vez cada archivo del estilo y falla
+nombrando el archivo que no carga o no crea su control; además compila cada archivo QML de la app y
+del estilo e imprime el error de cada componente que no carga (archivo, línea y mensaje).
 
 - Botón: callado por defecto; `highlighted: true` es la acción principal (en Luna, letra de
   título); `flat: true` es un botón de palabra, sin superficie. La principal de un borrado lleva

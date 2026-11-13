@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QtCore/QDir>
 #include <QtCore/QStringList>
 #include <QtGui/QColor>
 #include <QtGui/QFont>
@@ -75,4 +76,9 @@ inline bool lookHasFamily(const QString& family)
 inline bool lookHasIcon(const QString& name)
 {
     return QIcon::hasThemeIcon(name);
+}
+
+inline QString lookStyleFiles()
+{
+    return QDir(QStringLiteral(":/qt/qml/io/github/wallpaper_rs/style")).entryList({ QStringLiteral("*.qml") }, QDir::Files, QDir::Name).join(QLatin1Char(','));
 }

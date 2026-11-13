@@ -42,6 +42,32 @@ QtObject {
         made.destroy();
     }
 
+    function styled() {
+        const files = Look.bridge.styleFiles().split(",").filter(file => file !== "");
+        if (files.length === 0)
+            throw new Error("look: the own style has no files");
+        const probe = Qt.createQmlObject("import QtQuick.Templates\nAbstractButton {}", host, "LookProbe");
+        const needs = {
+            "CheckText.qml": {
+                "control": probe
+            },
+            "FocusRing.qml": {
+                "corner": Look.radio
+            }
+        };
+        for (const file of files) {
+            const url = "qrc:/qt/qml/io/github/wallpaper_rs/style/" + file;
+            const component = Qt.createComponent(url);
+            if (component.status !== Component.Ready)
+                throw new Error("look: the style file " + file + " does not load: " + component.errorString());
+            const made = component.createObject(host, needs[file] ?? {});
+            if (!made)
+                throw new Error("look: the style file " + file + " does not create its control");
+            made.destroy();
+        }
+        probe.destroy();
+    }
+
     function exercise() {
         if (Look.bridge.style() !== "io.github.wallpaper_rs.style")
             throw new Error("look: the controls style is " + Look.bridge.style());
@@ -54,6 +80,7 @@ QtObject {
             throw new Error("look: an icon outside the own set resolved from the system");
         tones("start");
         controls();
+        styled();
         Look.tone({
             "noche": "#1c1003",
             "nocheAlta": "#2a1b09",

@@ -129,6 +129,9 @@ fn show(url: &str) -> ExitCode {
     app.as_mut().set_application_name(&QString::from("wallpaper-rs"));
     engine.as_mut().add_import_path(&QString::from("qrc:/qt/qml"));
     looks::install();
+    if bus::checking() && shards::claim("compiled") {
+        looks::qobject::compile_qml();
+    }
     if bus::checking() {
         engine.as_mut().on_object_creation_failed(|_, _| std::process::exit(1)).release();
     }
