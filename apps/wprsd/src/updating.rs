@@ -102,12 +102,31 @@ impl Daemon {
             .filter(|i| {
                 i.repo_id == record.repo_id && i.id == record.id && newer(&record.version, &i.version)
             })
-            .filter(|i| !shared(&i.version) && self.shown_on(&i.path).is_ok())
+            .filter(|i| !shared(&i.version))
             .collect();
         for old in older {
+            self.repoint(&old.path, &record.path)?;
             wprs_format::remove(&self.store.data, &old.id, Some(&old.version))?;
         }
         Ok(())
+    }
+
+    fn repoint(&self, from: &std::path::Path, to: &std::path::Path) -> Result<()> {
+        let shown = |c: &wprs_core::Config| {
+            c.default.image.as_deref() == Some(from)
+                || c.outputs.values().any(|o| o.image.as_deref() == Some(from))
+        };
+        if !shown(&self.state().config) {
+            return Ok(());
+        }
+        self.update_config(|c| {
+            let sections = std::iter::once(&mut c.default).chain(c.outputs.values_mut());
+            for section in sections.filter(|s| s.image.as_deref() == Some(from)) {
+                section.image = Some(to.to_owned());
+            }
+            Ok(())
+        })
+        .map_err(|e| failed(format!("cannot move the screens to the new version: {e}")))
     }
 
     pub fn keep_back(&self, record: &Installed) -> Result<()> {
