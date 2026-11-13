@@ -141,7 +141,7 @@ copyleft, condiciones propias). El texto legal de la licencia es el que manda; e
 avisa.
 
 **Licencias que no permiten obras derivadas.** Una licencia no las permite si todas sus
-alternativas llevan `ND` (por ejemplo `CC-BY-ND-4.0`) o si está vacía. Editar una copia de un
+alternativas llevan `ND` (por ejemplo `CC-BY-ND-4.0`) o si está vacía. El veredicto lee solo el texto de la licencia: una `LicenseRef-` pasa con una nota de condiciones propias, porque ese texto libre no se puede leer; revisa tú esas condiciones. Editar una copia de un
 paquete así se rechaza y no se escribe nada, salvo que confirmes que el paquete es tuyo o que su
 autor lo permite:
 
