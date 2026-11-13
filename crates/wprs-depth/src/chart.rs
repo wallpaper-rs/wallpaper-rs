@@ -71,11 +71,14 @@ pub fn chart(map: &Map, depth: &Depth) -> Chart {
             let k = best[o].1;
             let at =
                 [((k % size.0) as f32 + 0.5) / size.0 as f32, ((k / size.0) as f32 + 0.5) / size.1 as f32];
+            let [r, g, b] = colour(1.0 - o as f32 / (ranked.len().max(2) - 1) as f32);
+            let colour = format!("#{r:02x}{g:02x}{b:02x}");
             Zone {
                 order: o + 1,
                 depth: regions.means[*label],
                 share: regions.sizes[*label] as f32 / total,
                 at,
+                colour,
             }
         })
         .collect();

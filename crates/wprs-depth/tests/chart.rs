@@ -38,6 +38,7 @@ fn the_chart_lists_the_regions_from_the_nearest_with_a_point_inside_each() {
     assert_eq!(found.zones.iter().map(|z| z.order).collect::<Vec<_>>(), [1, 2, 3]);
     assert!(found.zones.windows(2).all(|z| z[0].depth > z[1].depth), "{:?}", found.zones);
     assert!((found.zones.iter().map(|z| z.share).sum::<f32>() - 1.0).abs() < 1e-3);
+    assert_eq!((found.zones[0].colour.as_str(), found.zones[2].colour.as_str()), ("#ef4444", "#4287f5"));
     for zone in &found.zones {
         let (x, y) = ((zone.at[0] * W as f32) as usize, (zone.at[1] * H as f32) as usize);
         assert_eq!(found.order[y * W as usize + x] as usize, zone.order - 1, "{zone:?}");
