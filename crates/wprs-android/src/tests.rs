@@ -7,6 +7,7 @@ use std::path::Path;
 use wprs_library::Kind;
 
 mod acting;
+mod bundled;
 mod calm;
 mod capped;
 mod chosen;

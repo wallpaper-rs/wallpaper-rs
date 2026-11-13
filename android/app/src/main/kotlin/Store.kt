@@ -97,11 +97,14 @@ suspend fun ask(op: String, vararg args: Pair<String, Any?>): Any? =
 
 fun depth(op: String, vararg args: Pair<String, Any?>): Any? = answer(Native::depth, op, args)
 
-fun examples(context: Context) {
+fun examples(context: Context, force: Boolean = true) {
+    val stamp = context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime
+    if (!force && answer(Native::library, "examples_due", arrayOf("stamp" to stamp)) != true) return
     val root = File(context.cacheDir, "examples").apply { deleteRecursively() }
     unpack(context.assets, "scenes", root)
     try {
-        answer(Native::library, "examples", arrayOf("dir" to root.path))
+        if (force) answer(Native::library, "examples", arrayOf("dir" to root.path))
+        answer(Native::library, "examples_repo", arrayOf("dir" to root.path, "stamp" to stamp, "force" to force))
     } finally {
         root.deleteRecursively()
     }

@@ -24,6 +24,8 @@ pub(crate) enum Request {
     Reset { uid: String },
     Grant { uid: String, input: String, on: bool },
     Examples { dir: String },
+    ExamplesRepo { dir: String, stamp: i64, force: bool },
+    ExamplesDue { stamp: i64 },
     Save { uid: String, name: String },
     Rename { preset: String, name: String },
     Forget { preset: String },
@@ -51,6 +53,10 @@ pub(crate) fn request(request: Request) -> Result<Value, Error> {
         Request::Reset { uid } => done(change(&*scene(&uid)?, BTreeMap::clear)),
         Request::Grant { uid, input, on } => done(grant(&*scene(&uid)?, &input, on)),
         Request::Examples { dir } => Ok(json!(pack::examples(Path::new(&dir))?)),
+        Request::ExamplesRepo { dir, stamp, force } => {
+            crate::repos::bundled::offer(Path::new(&dir), stamp, force)
+        }
+        Request::ExamplesDue { stamp } => Ok(json!(crate::repos::bundled::due(stamp)?)),
         Request::Save { uid, name } => done(saved::save(&*scene(&uid)?, &name)),
         Request::Rename { preset, name } => done(saved::rename(&preset, &name)),
         Request::Forget { preset } => done(saved::forget(&preset)),

@@ -12,6 +12,7 @@ use wprs_providers::HttpFetch;
 use wprs_sync::{Ids, Kept, Local, Replica, View};
 
 pub(crate) mod anchored;
+pub(crate) mod bundled;
 mod install;
 pub(crate) mod preview;
 
@@ -124,6 +125,10 @@ pub(crate) fn add(url: &str) -> Result<Value, Error> {
             &[],
         ));
     }
+    add_url(url)
+}
+
+fn add_url(url: &str) -> Result<Value, Error> {
     std::fs::create_dir_all(dir()?)?;
     let info = wprs_format::add_repo(&dir()?, &fetch()?, url, now())?;
     store::changed();
@@ -166,7 +171,8 @@ pub(crate) fn list() -> Result<Value, Error> {
         .iter()
         .map(|r| {
             json!({"repo_id": r.repo_id, "name": r.name, "url": r.url,
-        "packages": r.packages, "stale": r.stale, "fingerprints": r.fingerprints, "broken": r.broken})
+        "packages": r.packages, "stale": r.stale, "fingerprints": r.fingerprints, "broken": r.broken,
+        "bundled": bundled::is_bundled(&r.repo_id)})
         })
         .collect();
     let offers = read(|s| s.offers.clone());
@@ -176,6 +182,7 @@ pub(crate) fn list() -> Result<Value, Error> {
 pub(crate) fn remove(repo_id: &str) -> Result<Value, Error> {
     preview::forget(repo_id);
     wprs_format::remove_repo(&dir()?, repo_id)?;
+    bundled::declined(repo_id);
     store::changed();
     Ok(Value::Null)
 }

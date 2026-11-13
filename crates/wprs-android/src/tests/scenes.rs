@@ -170,6 +170,7 @@ pub(super) fn scenes() {
     stopped::the_engine_follows_the_pace_the_pilot_chose();
     flight::flown();
     looks::drawn();
+    super::bundled::the_examples_come_as_a_repository_that_stays_removed(&examples);
     super::previewed::repository_previews_come_from_that_repository_once_and_within_a_bound();
     super::sounded::scene_sounds_play_pause_and_release();
     super::sounded::a_one_shot_sound_pauses_when_it_ends_and_is_dropped_later();
