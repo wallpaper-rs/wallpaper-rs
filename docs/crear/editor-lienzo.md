@@ -117,7 +117,7 @@ Dónde está: en el lienzo. El círculo de giro está sobre el borde de arriba d
 Pasos:
 
 1. Arrastra el círculo de giro: la capa gira alrededor del pivote.
-2. Para cambiar el centro de giro y de escala, arrastra el círculo del pivote. La capa se queda donde está; solo cambia su **Origen**.
+2. Para cambiar el centro de giro y de escala, arrastra el círculo del pivote. La capa se queda donde está; solo cambia su **Origen**. En una capa inclinada la imagen puede correrse unos píxeles al mover el pivote.
 3. O escribe **Giro (°)** y **Origen** en el grupo **Transformación**.
 
 En la terminal: `layer` con `grip` y `turn` o `origin`, o `transform` con `rotation` y `origin`.

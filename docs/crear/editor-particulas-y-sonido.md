@@ -69,7 +69,7 @@ Si algún script todavía nombra el nombre viejo, el editor lo avisa con cada l�
 
 ## Cómo elegir la forma de un emisor
 
-Un sistema tiene de uno a cuatro emisores. Cada uno es un bloque **Emisor 1**, **Emisor 2**, etc., bajo **Emisores**. El panel no añade ni quita emisores: para añadir uno se escribe la forma con el número siguiente por la terminal (acción `particles`, clave `shape`, con el índice del emisor nuevo).
+Un sistema tiene de uno a cuatro emisores. Cada uno es un bloque **Emisor 1**, **Emisor 2**, etc., bajo **Emisores**. **Añadir un emisor** agrega uno al final y **Quitar este emisor**, en cada bloque, lo elimina; un sistema conserva al menos un emisor. Al quitar uno, los siguientes pasan a ocupar su número: lo que nombra a un emisor por su número fuera del sistema no se reescribe, y si el cambio deja la escena rota, la revisión lo rechaza.
 
 **Dónde está.** Inspector del sistema, bloque **Emisores**.
 
