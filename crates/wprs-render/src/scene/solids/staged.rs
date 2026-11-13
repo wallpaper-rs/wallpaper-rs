@@ -50,6 +50,7 @@ pub(crate) struct Staged {
     pub(crate) shadow_renders: u64,
     pub(crate) cross_key: u64,
     pub(crate) cross_renders: u64,
+    pub(crate) refused: Vec<u64>,
 }
 
 impl Renderer {
@@ -114,6 +115,7 @@ impl Renderer {
             shadow_renders: 0,
             cross_key: 0,
             cross_renders: 0,
+            refused: Vec::new(),
         }
     }
 }

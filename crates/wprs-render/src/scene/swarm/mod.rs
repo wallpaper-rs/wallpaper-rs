@@ -21,7 +21,7 @@ mod sort;
 mod sprite;
 mod stage;
 mod stages;
-mod staging;
+pub(crate) mod staging;
 mod step;
 mod store;
 mod strands;

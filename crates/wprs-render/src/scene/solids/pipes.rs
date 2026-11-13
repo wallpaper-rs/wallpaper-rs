@@ -17,7 +17,7 @@ pub(crate) struct Key {
 }
 
 impl Key {
-    fn code(self) -> (u16, u64) {
+    pub(super) fn code(self) -> (u16, u64) {
         let bits = u16::from(self.cull)
             | u16::from(self.blend) << 2
             | u16::from(self.write) << 4
@@ -52,110 +52,105 @@ impl Solids {
         if let Some(p) = pipes.get(&key.code()) {
             return Some(p.clone());
         }
-        let module = match key.code().1 {
-            0 => (self.module(device), ""),
-            k => (
-                self.packages.lock().unwrap_or_else(PoisonError::into_inner).get(&k)?.as_ref().ok()?.clone(),
-                "wprs_",
-            ),
-        };
-        let made = self.build(device, key, (&module.0, module.1));
+        if key.code().1 != 0 {
+            return None;
+        }
+        let made = build(device, &self.layouts, key, (&self.module(device), ""));
         pipes.insert(key.code(), made.clone());
         Some(made)
     }
+}
 
-    fn build(
-        &self,
-        device: &wgpu::Device,
-        key: Key,
-        (shader, pre): (&wgpu::ShaderModule, &str),
-    ) -> wgpu::RenderPipeline {
-        super::super::pipes::compiled(1);
-        let base = wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3, 2 => Float32x2, 3 => Float32x4, 7 => Float32x2];
-        let paint = wgpu::vertex_attr_array![4 => Float32];
-        let skin = wgpu::vertex_attr_array![5 => Float32x4, 6 => Float32x4];
-        let step = wgpu::VertexStepMode::Vertex;
-        let mut buffers = vec![
-            Some(wgpu::VertexBufferLayout {
-                array_stride: (wprs_scene::MODEL_FLOATS * 4) as u64,
-                step_mode: step,
-                attributes: &base,
-            }),
-            Some(wgpu::VertexBufferLayout { array_stride: 4, step_mode: step, attributes: &paint }),
-        ];
-        if key.skinned {
-            buffers.push(Some(wgpu::VertexBufferLayout {
-                array_stride: (wprs_scene::SKIN_FLOATS * 4) as u64,
-                step_mode: step,
-                attributes: &skin,
-            }));
-        }
-        let layouts: Vec<Option<&wgpu::BindGroupLayout>> = self.layouts.iter().map(Some).collect();
-        let layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
-            label: Some("wprs-render solids"),
-            bind_group_layouts: &layouts,
-            immediate_size: 0,
-        });
-        let format = if key.hdr { Format::Rgba16Float } else { Format::Rgba8UnormSrgb };
-        let cull = match key.cull {
-            1 if !key.shadow || key.prime => Some(wgpu::Face::Back),
-            2 if !key.shadow || key.prime => Some(wgpu::Face::Front),
-            _ => None,
-        };
-        let compare = match (key.shadow, key.test) {
-            (true, _) if key.prime => wgpu::CompareFunction::GreaterEqual,
-            (true, _) => wgpu::CompareFunction::LessEqual,
-            (false, true) => wgpu::CompareFunction::GreaterEqual,
-            (false, false) => wgpu::CompareFunction::Always,
-        };
-        let vs = match (key.shadow, key.cut, key.skinned) {
-            (true, false, false) => "vs_shadow",
-            (true, false, true) => "vs_shadow_skinned",
-            (true, true, false) => "vs_shadow_cut",
-            (true, true, true) => "vs_shadow_cut_skinned",
-            (false, _, false) => "vs_solid",
-            (false, _, true) => "vs_skinned",
-        };
-        let vs = format!("{pre}{vs}");
-        let fs = match (key.shadow, key.cut) {
-            (false, _) => Some(format!("{pre}fs_solid")),
-            (true, true) => Some(format!("{pre}fs_shadow_cut")),
-            (true, false) => None,
-        };
-        let writes = if key.prime { wgpu::ColorWrites::empty() } else { wgpu::ColorWrites::ALL };
-        let colored =
-            [Some(wgpu::ColorTargetState { blend: blend(key), write_mask: writes, ..format.into() })];
-        let targets: &[Option<wgpu::ColorTargetState>] = if key.shadow { &[] } else { &colored };
-        let bias = match key.shadow && !key.prime {
-            true => wgpu::DepthBiasState { constant: 2, slope_scale: 2.0, clamp: 0.0 },
-            false => Default::default(),
-        };
-        device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
-            label: Some("wprs-render solids"),
-            layout: Some(&layout),
-            vertex: wgpu::VertexState {
-                module: shader,
-                entry_point: Some(&vs),
-                compilation_options: Default::default(),
-                buffers: &buffers,
-            },
-            fragment: fs.as_ref().map(|fs| wgpu::FragmentState {
-                module: shader,
-                entry_point: Some(fs),
-                compilation_options: Default::default(),
-                targets,
-            }),
-            primitive: wgpu::PrimitiveState { cull_mode: cull, ..Default::default() },
-            depth_stencil: Some(wgpu::DepthStencilState {
-                format: DEPTH,
-                depth_write_enabled: Some(key.write || key.shadow),
-                depth_compare: Some(compare),
-                stencil: Default::default(),
-                bias,
-            }),
-            multisample: Default::default(),
-            multiview_mask: None,
-            cache: None,
-        })
+pub(super) fn build(
+    device: &wgpu::Device,
+    layouts: &[wgpu::BindGroupLayout],
+    key: Key,
+    (shader, pre): (&wgpu::ShaderModule, &str),
+) -> wgpu::RenderPipeline {
+    super::super::pipes::compiled(1);
+    let base = wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3, 2 => Float32x2, 3 => Float32x4, 7 => Float32x2];
+    let paint = wgpu::vertex_attr_array![4 => Float32];
+    let skin = wgpu::vertex_attr_array![5 => Float32x4, 6 => Float32x4];
+    let step = wgpu::VertexStepMode::Vertex;
+    let mut buffers = vec![
+        Some(wgpu::VertexBufferLayout {
+            array_stride: (wprs_scene::MODEL_FLOATS * 4) as u64,
+            step_mode: step,
+            attributes: &base,
+        }),
+        Some(wgpu::VertexBufferLayout { array_stride: 4, step_mode: step, attributes: &paint }),
+    ];
+    if key.skinned {
+        buffers.push(Some(wgpu::VertexBufferLayout {
+            array_stride: (wprs_scene::SKIN_FLOATS * 4) as u64,
+            step_mode: step,
+            attributes: &skin,
+        }));
     }
+    let layouts: Vec<Option<&wgpu::BindGroupLayout>> = layouts.iter().map(Some).collect();
+    let layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+        label: Some("wprs-render solids"),
+        bind_group_layouts: &layouts,
+        immediate_size: 0,
+    });
+    let format = if key.hdr { Format::Rgba16Float } else { Format::Rgba8UnormSrgb };
+    let cull = match key.cull {
+        1 if !key.shadow || key.prime => Some(wgpu::Face::Back),
+        2 if !key.shadow || key.prime => Some(wgpu::Face::Front),
+        _ => None,
+    };
+    let compare = match (key.shadow, key.test) {
+        (true, _) if key.prime => wgpu::CompareFunction::GreaterEqual,
+        (true, _) => wgpu::CompareFunction::LessEqual,
+        (false, true) => wgpu::CompareFunction::GreaterEqual,
+        (false, false) => wgpu::CompareFunction::Always,
+    };
+    let vs = match (key.shadow, key.cut, key.skinned) {
+        (true, false, false) => "vs_shadow",
+        (true, false, true) => "vs_shadow_skinned",
+        (true, true, false) => "vs_shadow_cut",
+        (true, true, true) => "vs_shadow_cut_skinned",
+        (false, _, false) => "vs_solid",
+        (false, _, true) => "vs_skinned",
+    };
+    let vs = format!("{pre}{vs}");
+    let fs = match (key.shadow, key.cut) {
+        (false, _) => Some(format!("{pre}fs_solid")),
+        (true, true) => Some(format!("{pre}fs_shadow_cut")),
+        (true, false) => None,
+    };
+    let writes = if key.prime { wgpu::ColorWrites::empty() } else { wgpu::ColorWrites::ALL };
+    let colored = [Some(wgpu::ColorTargetState { blend: blend(key), write_mask: writes, ..format.into() })];
+    let targets: &[Option<wgpu::ColorTargetState>] = if key.shadow { &[] } else { &colored };
+    let bias = match key.shadow && !key.prime {
+        true => wgpu::DepthBiasState { constant: 2, slope_scale: 2.0, clamp: 0.0 },
+        false => Default::default(),
+    };
+    device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
+        label: Some("wprs-render solids"),
+        layout: Some(&layout),
+        vertex: wgpu::VertexState {
+            module: shader,
+            entry_point: Some(&vs),
+            compilation_options: Default::default(),
+            buffers: &buffers,
+        },
+        fragment: fs.as_ref().map(|fs| wgpu::FragmentState {
+            module: shader,
+            entry_point: Some(fs),
+            compilation_options: Default::default(),
+            targets,
+        }),
+        primitive: wgpu::PrimitiveState { cull_mode: cull, ..Default::default() },
+        depth_stencil: Some(wgpu::DepthStencilState {
+            format: DEPTH,
+            depth_write_enabled: Some(key.write || key.shadow),
+            depth_compare: Some(compare),
+            stencil: Default::default(),
+            bias,
+        }),
+        multisample: Default::default(),
+        multiview_mask: None,
+        cache: None,
+    })
 }

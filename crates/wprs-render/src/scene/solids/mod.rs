@@ -11,6 +11,7 @@ mod groups;
 mod layout;
 mod looks;
 mod maps;
+mod material;
 mod mix;
 mod package;
 mod paint;
@@ -33,13 +34,11 @@ pub(crate) const BONES_SLOT: u64 = 12288;
 pub(crate) const SOURCE: [&str; 3] =
     [include_str!("solid_head.wgsl"), include_str!("solid.wgsl"), include_str!("solid_light.wgsl")];
 
-pub(crate) type Built = Result<wgpu::ShaderModule, (String, String)>;
-
 pub(crate) struct Solids {
     pub(crate) layouts: [wgpu::BindGroupLayout; 4],
     pub(crate) seen: wgpu::BindGroupLayout,
     pub(crate) pipes: Mutex<HashMap<(u16, u64), wgpu::RenderPipeline>>,
-    pub(crate) packages: Mutex<HashMap<u64, Built>>,
+    pub(crate) packages: Mutex<HashMap<u64, wgpu::ShaderModule>>,
     pub(crate) module: OnceLock<wgpu::ShaderModule>,
     pub(crate) mixer: OnceLock<mix::Mixer>,
     pub(crate) samplers: Mutex<HashMap<wprs_scene::Sampling, wgpu::Sampler>>,

@@ -3,6 +3,7 @@ mod blame;
 mod exits;
 #[path = "../hostile/mod.rs"]
 mod hostile;
+mod material;
 mod slow;
 mod spans;
 mod stack;

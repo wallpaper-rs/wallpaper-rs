@@ -1366,7 +1366,13 @@ them at most 10 seconds. On OpenGL ES, whose driver serves one context to one th
 threads build each shader first in a context of their own on the same driver, and only a shader
 that built there in time is built again in the context that draws, on its thread; the same goes for
 the pipelines of particle shaders. So a slow or broken shader is left out on OpenGL ES exactly as
-on Vulkan, and never holds the context that draws. The package shaders a scene builds may be at most 262 144 operations long
+on Vulkan, and never holds the context that draws. Material shaders (`stage: "material"`) follow
+the same rule when a 3D stage first draws them: the shader and the pipelines its draws need are
+built on a thread beside the one that draws (on OpenGL ES first in a context of their own), waited
+for at most the same 10 seconds, and one that is not built in time is left out with `its models are
+shaded with pbr instead, since its shader took more than 10 s to build` and struck like a slow
+effect; the stage then shades with `pbr` and does not try it again while it lives. A material
+pipeline is never built on the drawing thread outside that wait. The package shaders a scene builds may be at most 262 144 operations long
 together, each pass counted once for each variant built; the effects past that are left out. An
 effect the driver refuses, or whose shader is not built in time, is left out and the layer is drawn
 without it; so is every package effect drawn in a frame the driver rejects. Only the variants built

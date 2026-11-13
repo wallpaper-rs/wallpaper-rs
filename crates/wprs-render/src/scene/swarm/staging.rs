@@ -5,9 +5,9 @@ use std::sync::{Arc, atomic::AtomicBool, mpsc};
 
 const ROOM: usize = 64 << 20;
 
-pub(super) type Trial = Box<dyn FnOnce(&wgpu::Device) + Send>;
+pub(crate) type Trial = Box<dyn FnOnce(&wgpu::Device) + Send>;
 
-pub(super) fn left(key: u64) -> Option<String> {
+pub(crate) fn left(key: u64) -> Option<String> {
     if stopped(key) {
         return Some(UNBUILT.into());
     }
@@ -19,7 +19,7 @@ fn attempt<T>(device: &wgpu::Device, work: impl FnOnce(&wgpu::Device) -> T) -> R
     failure.map_or(Ok(made), |e| Err(e.to_string()))
 }
 
-pub(super) fn within<T: Send + 'static>(
+pub(crate) fn within<T: Send + 'static>(
     (key, r): (u64, &Renderer),
     trial: Option<Trial>,
     work: impl FnOnce(&wgpu::Device) -> T + Send + 'static,
