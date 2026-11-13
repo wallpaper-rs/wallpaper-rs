@@ -1178,7 +1178,7 @@ msgstr "Si ahora se lee el reproductor multimedia, y para qué pantallas"
 
 #: apps/wprs-ctl/src/cli.rs
 msgid ""
-"Download, check and remove the depth model and its runtime; needs no daemon"
+"Download, check and remove the depth model and runtime; needs no daemon"
 msgstr ""
 "Descargar, comprobar y quitar el modelo de profundidad y su motor; no "
 "necesita el daemon"
@@ -10517,3 +10517,27 @@ msgstr ""
 
 msgid "Where to keep them; empty shows where they are"
 msgstr "Dónde guardarlos; vacío muestra dónde están"
+
+#: apps/wprs-ctl/src/connecting.rs
+msgid "Print and draw the server connect code; needs no daemon"
+msgstr "Imprimir y dibujar el código de conexión del servidor; no necesita el daemon"
+
+#: apps/wprs-ctl/src/connecting.rs
+msgid "Address of the server, https://host[:port][/path]"
+msgstr "Dirección del servidor, https://host[:puerto][/ruta]"
+
+#: apps/wprs-ctl/src/connecting.rs
+msgid "SHA-256 of the server's certificate, as wprs-server fingerprint prints it"
+msgstr "SHA-256 del certificado del servidor, como lo imprime wprs-server fingerprint"
+
+#: apps/wprs-ctl/src/connecting.rs
+msgid "Invitation code the phone uses to create its account"
+msgstr "Código de invitación con el que el teléfono crea su cuenta"
+
+#: apps/wprs-ctl/src/connecting.rs
+msgid "Also draw the QR code with block characters"
+msgstr "Dibujar además el código QR con caracteres de bloque"
+
+#: apps/wprs-ctl/src/connecting.rs
+msgid "Draw for a light terminal background instead of a dark one"
+msgstr "Dibujar para un terminal de fondo claro en lugar de uno oscuro"
