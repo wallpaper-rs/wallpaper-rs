@@ -140,10 +140,43 @@ QtObject {
             });
     }
 
+    function shapes() {
+        page.run("add_layer", {
+                "kind": "shape",
+                "id": "drawn"
+            });
+        const layer = page.view.layers.find(item => item.id === "drawn");
+        page.editor.select(layer.pointer);
+        const field = page.fields.find(item => item.key === "shape" && item.widget === "variant");
+        if (!field)
+            throw new Error("fields: a shape layer shows no choice of shape");
+        const input = Qt.createComponent("SceneInput.qml").createObject(page, {
+                "page": page,
+                "field": field,
+                "width": 400,
+                "height": 100,
+                "z": 1000
+            });
+        const gather = (item, out) => {
+            out.push(item);
+            item.children.forEach(child => gather(child, out));
+            return out;
+        };
+        const box = gather(input, []).find(item => item.variant !== undefined && item.model !== undefined);
+        if (!box)
+            throw new Error("fields: the shape has no choice box");
+        same(box.model.length, field.options.length, "the choices of a shape are only its kinds");
+        input.destroy();
+        page.run("remove_layer", {
+                "id": "drawn"
+            });
+    }
+
     function exercise() {
         color();
         lines();
         effects();
         pairs();
+        shapes();
     }
 }

@@ -153,7 +153,7 @@ ColumnLayout {
         QQC2.ComboBox {
             readonly property bool variant: input.field.widget === "variant"
             readonly property var known: variant || input.field.required ? input.field.options : [null].concat(input.field.options)
-            readonly property var options: input.at(known, input.value) >= 0 || input.value === null ? known : known.concat([input.value])
+            readonly property var options: variant || input.at(known, input.value) >= 0 || input.value === null ? known : known.concat([input.value])
 
             model: options.map(option => option === null ? App.tr("Not set") : input.name(option))
             currentIndex: variant ? options.findIndex(option => Object.keys(input.field.value ?? {}).includes(option) || option === input.field.value) : input.at(options, input.value)

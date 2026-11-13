@@ -11,7 +11,7 @@ impl Walk<'_> {
         f.sample = Value::Object(
             branches(schema)
                 .iter()
-                .filter_map(|b| Some((tag(b)?.as_str()?.to_owned(), sample(self.root, b))))
+                .filter_map(|b| Some((tag(b)?.as_str()?.to_owned(), visible(sample(self.root, b)))))
                 .collect(),
         );
         f.widget = "variant".into();
@@ -111,4 +111,17 @@ pub(super) fn array(root: &Value, meta: &Value, schema: &Value) -> String {
         (true, _, Some("array")) if pair => "points".into(),
         _ => "list".into(),
     }
+}
+
+fn visible(mut shape: Value) -> Value {
+    if let Some(inner) = shape.as_object_mut().and_then(|o| o.values_mut().next()) {
+        match inner.get_mut("size") {
+            Some(size) if size.as_f64() == Some(0.0) => *size = Value::from(220),
+            Some(size) if size.as_array().is_some_and(|a| a.iter().all(|n| n.as_f64() == Some(0.0))) => {
+                *size = Value::from(vec![220, 220])
+            }
+            _ => {}
+        }
+    }
+    shape
 }
