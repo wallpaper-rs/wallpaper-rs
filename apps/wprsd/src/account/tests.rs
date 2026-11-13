@@ -104,12 +104,13 @@ fn device_settings_stay_out_of_synced_settings_and_profiles() {
     assert!(synced.contains("playback.max_fps") && synced.len() + DEVICE_KEYS.len() == options.len());
     assert!(["rgb.enabled", "rgb.server", "rgb.when_covered"].iter().all(|key| synced.contains(key)));
     assert!(DEVICE_KEYS.iter().all(|key| options.contains_key(*key) && !synced.contains(key)));
+    assert!(!synced.contains("pause.on_battery") && DEVICE_KEYS.contains(&"pause.on_battery"));
     assert!(!sections.contains_key(&format!("settings/{}", ids.named("section", "models"))));
-    let (volume, parallax, battery) = ("playback.volume", "playback.software_parallax", "pause.on_battery");
-    let profile = json!({volume: "0.2", "models.allow_download": "false", battery: "never"});
-    let here = json!({volume: "0.9", parallax: "true", battery: "always"});
-    assert_eq!(synced_options(&profile, None), json!({battery: "never"}));
-    let kept = json!({battery: "never", volume: "0.9", parallax: "true"});
+    let (volume, parallax, battery) = ("playback.volume", "playback.software_parallax", "pause.when_covered");
+    let profile = json!({volume: "0.2", "models.allow_download": "false", battery: "none"});
+    let here = json!({volume: "0.9", parallax: "true", battery: "fade"});
+    assert_eq!(synced_options(&profile, None), json!({battery: "none"}));
+    let kept = json!({battery: "none", volume: "0.9", parallax: "true"});
     assert_eq!(synced_options(&profile, Some(&here)), kept);
     assert_eq!(synced_options(&json!(null), Some(&here)), json!(null));
 }

@@ -12,7 +12,7 @@ expect "s['options']['models.allow_download']" False
 ctl config pause.on_battery never
 expect "s['config_error']" None
 grep -qx '\[playback' "$broken.broken" || fail "the broken configuration was not kept"
-grep -q 'on_battery = false' "$broken" || fail "the new configuration was not saved"
+grep -q 'on_battery = "never"' "$broken" || fail "the new configuration was not saved"
 grep -qx 'allow_download = false' "$broken" || fail "a broken configuration turned downloads back on"
 [ "$(stat -c %a "$broken")" = 600 ] || fail "config.toml is not private"
 [ "$(stat -c %a "$broken.broken")" = 600 ] || fail "config.toml.broken is not private"
