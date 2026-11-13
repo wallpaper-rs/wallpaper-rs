@@ -29,8 +29,12 @@ pub fn wanted(spec: &Value, doc: &Value) -> (Rehearsal, Option<Versus>) {
         calm: spec["calm"] == true,
         edge: number("size", 1280.0, 16.0, 4096.0) as u32,
         time: number("time", 0.0, 0.0, 86_400.0),
-        wall: spec["wall"].as_f64().unwrap_or_else(wprs_render::local_wall),
+        wall: spec["wall"]
+            .as_f64()
+            .or_else(|| spec["time_of_day"].as_f64().map(wprs_render::on_today))
+            .unwrap_or_else(wprs_render::local_wall),
         script_host: None,
+        media: None,
         lang: doc["manifest"]["default_locale"].as_str().unwrap_or("en").to_owned(),
         frames: number("frames", 1.0, 1.0, 600.0) as usize,
         fps: number("fps", 30.0, 1.0, 240.0) as u32,
@@ -45,12 +49,21 @@ pub fn wanted(spec: &Value, doc: &Value) -> (Rehearsal, Option<Versus>) {
 }
 
 pub fn shoot(dir: &Path, doc: &Value, out: &Path, spec: &Value) -> anyhow::Result<String> {
-    let (rehearsal, versus) = wanted(spec, doc);
+    let (mut rehearsal, versus) = wanted(spec, doc);
+    let played = match &spec["media"] {
+        Value::Object(_) => Some(wprs_editor::media::played_from(spec["media"].clone(), dir)?),
+        Value::String(file) if !file.is_empty() => Some(wprs_editor::media::played(Path::new(file), dir)?),
+        _ => None,
+    };
+    rehearsal.media = played.as_ref().map(|p| p.state.clone());
     let open = |bloom: bool| -> anyhow::Result<wprs_render::Opened> {
         let (scene, props) = wprs_editor::reach::open(doc, bloom)?;
-        let assets = SceneAssets::read(&scene, wprs_editor::reach::reader(dir))
+        let mut assets = SceneAssets::read(&scene, wprs_editor::reach::reader(dir))
             .and_then(|a| a.with_scripts(&scene, wprs_editor::reach::reader(dir)))
             .map_err(anyhow::Error::msg)?;
+        if let Some(cover) = played.as_ref().and_then(|p| p.cover.as_ref()) {
+            wprs_editor::media::dress(&mut assets, &scene, cover);
+        }
         Ok((scene, assets, props))
     };
     let reel = Renderer::shared()?.rehearse_versus(open, &rehearsal, versus.as_ref())?;

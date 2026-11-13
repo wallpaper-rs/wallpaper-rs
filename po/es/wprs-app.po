@@ -9555,6 +9555,14 @@ msgid "Split the picture with the other side"
 msgstr "Partir la imagen con el otro lado"
 
 #: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "Set the time the clock shows"
+msgstr "Fijar la hora que marca el reloj"
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
+msgid "The picture shows the simulated media player of the preview."
+msgstr "La imagen muestra el reproductor simulado de la vista previa."
+
+#: apps/wprs-app/qml/ScenePreviewSave.qml
 msgid "Save a picture…"
 msgstr "Guardar una imagen…"
 

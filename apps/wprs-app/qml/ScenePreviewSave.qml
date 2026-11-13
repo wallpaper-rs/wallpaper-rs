@@ -20,6 +20,10 @@ ColumnLayout {
             "frames": save.frames,
             "fps": 30
         };
+        if (clock.checked)
+            wanted.time_of_day = hour.value * 3600 + minute.value * 60;
+        if (SceneLook.media !== null)
+            wanted.media = SceneLook.media;
         if (sweep.checked)
             wanted.pointer = {
                 "from": [0.2, 0.5],
@@ -31,6 +35,51 @@ ColumnLayout {
             wanted.without_bloom = SceneLook.versusGlow;
         }
         return JSON.stringify(wanted);
+    }
+
+    QQC2.CheckBox {
+        id: clock
+
+        text: App.tr("Set the time the clock shows")
+    }
+
+    RowLayout {
+        enabled: clock.checked
+
+        QQC2.SpinBox {
+            id: hour
+
+            from: 0
+            to: 23
+            value: 12
+            textFromValue: value => String(value).padStart(2, "0")
+            QQC2.ToolTip.text: App.tr("Hour")
+            QQC2.ToolTip.visible: hovered
+            Accessible.name: App.tr("Hour")
+        }
+
+        QQC2.Label {
+            text: ":"
+        }
+
+        QQC2.SpinBox {
+            id: minute
+
+            from: 0
+            to: 59
+            value: 0
+            textFromValue: value => String(value).padStart(2, "0")
+            QQC2.ToolTip.text: App.tr("Minute")
+            QQC2.ToolTip.visible: hovered
+            Accessible.name: App.tr("Minute")
+        }
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        wrapMode: Text.Wrap
+        visible: SceneLook.media !== null
+        text: App.tr("The picture shows the simulated media player of the preview.")
     }
 
     QQC2.CheckBox {

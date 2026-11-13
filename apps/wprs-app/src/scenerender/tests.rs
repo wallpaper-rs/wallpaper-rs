@@ -33,3 +33,13 @@ fn the_panel_asks_for_a_picture_or_a_clip_and_the_limits_hold() {
     assert_eq!((wild.frames, wild.fps, wild.edge, wild.time), (600, 1, 16, 0.0));
     assert_eq!(wild.pointer.unwrap().from, [1.0, 0.0]);
 }
+
+#[test]
+fn the_panel_sets_the_clock_by_the_time_of_day_and_an_explicit_wall_wins() {
+    let (day, _) = wanted(&json!({ "time_of_day": 15.0 * 3600.0 + 1800.0 }), &json!({}));
+    assert_eq!((day.wall % 86_400.0, day.wall > 1.5e9), (55_800.0, true));
+    let (fixed, _) = wanted(&json!({ "time_of_day": 3600.0, "wall": 42.0 }), &json!({}));
+    assert_eq!(fixed.wall, 42.0);
+    let (late, _) = wanted(&json!({ "time_of_day": 1e9 }), &json!({}));
+    assert_eq!(late.wall % 86_400.0, 86_399.0);
+}
