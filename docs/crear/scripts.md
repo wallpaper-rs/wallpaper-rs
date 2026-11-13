@@ -481,7 +481,7 @@ por segundo descarta las de más, y cada línea se corta a 512 caracteres.
   `scene preview --media`. Los scripts corren en el mismo proceso
   aislado que usa el demonio, nunca en el de `wprs-ctl`; si no puede arrancar, dibuja sin scripts y
   dice `script stopped: …` en una línea. La captura de `scene thumbnail --capture` y las miniaturas de la biblioteca de escritorio también
-  ejecutan los scripts, cada una en su proceso aislado. `scene bench`, en cambio, no.
+  ejecutan los scripts, cada una en su proceso aislado. `scene bench`, en cambio, no. El póster del teléfono no corre scripts: usa la vista previa del paquete y, si no la hay, un dibujo sin scripts con el texto inicial.
 - Si la escena tiene un error de script, `wprs-ctl state` lo imprime junto a la salida.
 - **En el registro del servicio** (`wprsd`): lo que escribe `console` sale a nivel `debug`
   (`RUST_LOG=wprsd=debug`) y un módulo que se detiene sale a nivel `warn`.
