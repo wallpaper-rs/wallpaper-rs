@@ -6,8 +6,10 @@ la letra ni el estilo de controles del sistema: todo sale de la app.
 ## Tonos
 
 Viven en el singleton QML `Look` (`apps/wprs-app/qml/facade/Look.qml`). Los siete primeros salen
-del fondo en uso y se reemplazan en marcha con `Look.tone({...})`; mientras nadie los cambie valen
-el juego «sin fondo».
+del fondo en uso: la ventana toma el póster del fondo que se ve en su pantalla, saca los tonos con
+`wprs-palette` (`Looks.derive`), los guarda por fondo y los aplica con `Look.tone({...})`. Sin
+fondo en uso, o si el póster no se puede leer, valen el juego fijo «sin fondo». La ventana y sus
+partes se describen en `shell.md`.
 
 | Propiedad | Nombre | Para qué |
 |---|---|---|
