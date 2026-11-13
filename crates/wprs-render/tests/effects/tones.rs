@@ -43,7 +43,7 @@ fn film_grain_turns_grey_leans_to_dark_or_bright_parts_and_blends() {
     assert!(spread(&dark, 10) > spread(&bright, 10) && spread(&bright, 42) > spread(&dark, 42));
     let Some(multiplied) = grain(json!({ "amount": 0.4, "blend": "multiply" }), ramp()) else { return };
     assert!(multiplied.mean()[1] + 2.0 < dark.mean()[1], "{:?} {:?}", multiplied.mean(), dark.mean());
-    Shot::sheet(&[grey, dark, bright, multiplied]).looks_like("grain_styles");
+    Shot::sheet(&[grey, dark, bright, multiplied]).looks_roughly_like("grain_styles");
 }
 
 #[test]

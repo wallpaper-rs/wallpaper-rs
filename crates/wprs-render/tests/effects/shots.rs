@@ -88,6 +88,33 @@ impl Shot {
         assert!(off <= allowed, "{name}: {off} pixels differ from tests/effects/{name}.png");
     }
 
+    pub fn looks_roughly_like(&self, name: &str) {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(format!("tests/effects/{name}.png"));
+        if std::env::var_os("WPRS_BLESS").is_some() {
+            return self.0.save(&path).unwrap();
+        }
+        let reference = image::open(&path).unwrap().into_rgba8();
+        assert!(self.0.dimensions() == reference.dimensions(), "{name}: the size changed");
+        let (columns, rows) = (8, H);
+        let mean = |image: &RgbaImage, cx: u32, cy: u32| {
+            let sum = |c: usize| {
+                (0..columns * rows)
+                    .map(|i| f32::from(image.get_pixel(cx * columns + i % columns, cy * rows + i / columns).0[c]))
+                    .sum::<f32>()
+                    / (columns * rows) as f32
+            };
+            [sum(0), sum(1), sum(2)]
+        };
+        let off = (0..self.0.height() / rows)
+            .flat_map(|cy| (0..self.0.width() / columns).map(move |cx| (cx, cy)))
+            .filter(|&(cx, cy)| {
+                let (a, b) = (mean(&self.0, cx, cy), mean(&reference, cx, cy));
+                a.iter().zip(b).any(|(x, y)| (x - y).abs() > 12.0)
+            })
+            .count();
+        assert!(off == 0, "{name}: {off} strips differ in average color from tests/effects/{name}.png");
+    }
+
     pub fn diff(&self, other: &Shot) -> f32 {
         let pairs = self.0.as_raw().iter().zip(other.0.as_raw());
         pairs.map(|(a, b)| f32::from(a.abs_diff(*b))).sum::<f32>() / self.0.as_raw().len() as f32

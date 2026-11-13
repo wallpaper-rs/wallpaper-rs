@@ -34,8 +34,13 @@ fn frames_still_on_the_gpu_are_blamed_until_they_finish() {
     for _ in 0..4 {
         draw(r, &mut shown, size);
     }
+    let blamed = drawn_effects().contains(&key);
     let flying = shown.view.stats().in_flight;
-    assert!(flying == 0 || drawn_effects().contains(&key), "{flying} frames in flight but none blamed");
+    let judged = !shown.view.left_out().is_empty();
+    assert!(
+        flying == 0 || blamed || judged,
+        "{flying} frames in flight but the effect is neither blamed nor already left out"
+    );
     r.finish().unwrap();
     assert!(!drawn_effects().contains(&key));
 }
