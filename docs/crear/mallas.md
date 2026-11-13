@@ -50,7 +50,7 @@ capa de malla, y es la forma de ver con qué nombres cuentas.
 | Campo | Por defecto | Qué hace |
 |-------|-------------|----------|
 | `mesh` | obligatorio | El recurso `.glb`. |
-| `texture` | las del archivo | Un recurso de imagen o de vídeo (o un valor) que reemplaza las texturas del archivo. Sin él, cada parte enseña la imagen de su material (hasta 8 por archivo), o blanco. |
+| `texture` | las del archivo | Un recurso de imagen o de vídeo (o un valor) que reemplaza las texturas del archivo. Sin él, cada parte enseña la imagen de su material (hasta 64 por archivo; una imagen que se repite sobre su parte, con coordenadas fuera de 0 a 1, se repite hasta 4 veces por lado), o blanco. |
 | `size` | el lienzo | La caja en píxeles que llena la malla. |
 | `color` | blanco | Color que multiplica la malla. |
 | `parts` | | Por parte (el nombre de una malla del archivo): `order`, `clip_to` y `visible`. |
@@ -67,7 +67,8 @@ Las posiciones del archivo están en píxeles, desde el medio de la caja que lle
 `x` a la derecha e `y` hacia arriba, como los escribe glTF; las coordenadas de textura empiezan
 arriba a la izquierda. El tamaño de la malla es el de sus coordenadas: la figura del ejemplo mide
 20 por 40 píxeles y por eso la capa lleva `"transform": { "scale": 8 }`. Las partes que salen de la caja
-se cortan en su borde, así que `size` les deja sitio.
+en reposo tienen un margen alrededor, de hasta la mitad de la caja por lado, y no se cortan; las que una
+pose lleva más lejos que eso se cortan en el borde del margen, así que `size` les deja sitio.
 
 Cada nodo del archivo es una articulación: los huesos de los esqueletos, los nodos que llevan una
 malla sin esqueleto (que se mueven en una pieza) y los nodos sin malla, como los puntos de
