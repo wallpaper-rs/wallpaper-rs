@@ -153,6 +153,7 @@ impl Daemon {
             serial,
             paused: st.user_paused,
             on_battery: st.on_battery,
+            battery_percent: st.battery_percent,
             locked: st.locked,
             volume: playback.volume,
             muted: playback.muted,

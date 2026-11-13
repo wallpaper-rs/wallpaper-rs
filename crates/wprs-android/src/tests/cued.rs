@@ -32,6 +32,7 @@ pub(super) fn cued() {
         thermal: 0,
         headroom: 0.0,
         still: false,
+        percent: -1,
     };
     if let Some(r) = renderer() {
         let mut draw = |nanos: i64| {

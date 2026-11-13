@@ -53,6 +53,7 @@ enum Command {
     Settings(Settings),
     Calm(bool),
     Power(bool),
+    Lowest(bool),
     Saver(bool),
     Locked(bool),
     Press(String, String),
@@ -128,6 +129,10 @@ impl Compositor {
 
     pub fn set_power(&self, on_battery: bool) {
         self.send(Command::Power(on_battery))
+    }
+
+    pub fn set_lowest(&self, lowest: bool) {
+        self.send(Command::Lowest(lowest))
     }
 
     pub fn set_saver(&self, saver: bool) {

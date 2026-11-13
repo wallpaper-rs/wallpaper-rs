@@ -48,6 +48,7 @@ pub(super) fn framing(green: &str, bands: &str) {
             thermal: 0,
             headroom: 0.0,
             still: false,
+            percent: -1,
         };
         f(&mut state);
         [tilt::rate(true, state, false), tilt::rate(true, state, true)]

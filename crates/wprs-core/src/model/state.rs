@@ -19,6 +19,8 @@ model! {
         pub serial: u64,
         pub paused: bool,
         pub on_battery: bool,
+        #[serde(default)]
+        pub battery_percent: Option<u8>,
         pub locked: bool,
         pub volume: f64,
         pub muted: bool,

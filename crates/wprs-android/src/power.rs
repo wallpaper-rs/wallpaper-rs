@@ -18,6 +18,7 @@ const DEFAULT_HZ: u32 = 60_000;
 static REFRESH: AtomicU32 = AtomicU32::new(DEFAULT_HZ);
 static CAPS: [AtomicU32; 2] = [AtomicU32::new(BATTERY_FPS), AtomicU32::new(CHARGING_FPS)];
 static CLASS: AtomicI32 = AtomicI32::new(0);
+static BELOW: [AtomicU32; 2] = [AtomicU32::new(0), AtomicU32::new(0)];
 static GUARD: AtomicBool = AtomicBool::new(false);
 static HEARS: AtomicBool = AtomicBool::new(true);
 static HALVES: AtomicBool = AtomicBool::new(true);
@@ -28,7 +29,15 @@ pub(crate) fn choose(choice: QualityChoice) {
     *CHOICE.lock().unwrap_or_else(std::sync::PoisonError::into_inner) = choice;
 }
 
+pub(crate) fn below(pause: u8, lowest: u8) {
+    BELOW[0].store(pause.into(), Relaxed);
+    BELOW[1].store(lowest.into(), Relaxed);
+}
+
 pub(crate) fn choice() -> QualityChoice {
+    if Power::now().lowest() {
+        return QualityChoice::Fixed(0);
+    }
     *CHOICE.lock().unwrap_or_else(std::sync::PoisonError::into_inner)
 }
 
@@ -63,6 +72,7 @@ pub(crate) struct Power {
     pub(crate) thermal: i32,
     pub(crate) headroom: f32,
     pub(crate) still: bool,
+    pub(crate) percent: i32,
 }
 
 impl Power {
@@ -77,10 +87,22 @@ impl Power {
 
 impl Power {
     const BATTERY: Power =
-        Power { charging: false, saver: false, low: false, thermal: 0, headroom: 0.0, still: false };
+        Power { charging: false, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
+
+    fn drained(self, below: u32) -> bool {
+        below > 0 && !self.charging && self.percent >= 0 && (self.percent as u32) < below
+    }
 
     fn paused(self) -> bool {
-        self.saver || (self.low && !self.charging) || self.thermal >= CRITICAL
+        self.paused_below(BELOW[0].load(Relaxed))
+    }
+
+    fn paused_below(self, below: u32) -> bool {
+        self.saver || (self.low && !self.charging) || self.drained(below) || self.thermal >= CRITICAL
+    }
+
+    pub(crate) fn lowest(self) -> bool {
+        self.drained(BELOW[1].load(Relaxed))
     }
 
     pub(crate) fn fps(self, preview: bool) -> u32 {
@@ -100,7 +122,10 @@ impl Power {
     }
 
     pub(crate) fn differs(self, other: Power) -> bool {
-        let warm = |p: Power| (Power { headroom: 0.0, ..p }, p.headroom >= WARM);
+        let (pause, lowest) = (BELOW[0].load(Relaxed), BELOW[1].load(Relaxed));
+        let warm = |p: Power| {
+            (Power { headroom: 0.0, percent: -1, ..p }, p.headroom >= WARM, p.drained(pause), p.drained(lowest))
+        };
         warm(self) != warm(other)
     }
 
@@ -112,6 +137,7 @@ impl Power {
         match () {
             _ if self.saver => Some("saver"),
             _ if self.low && !self.charging => Some("battery"),
+            _ if self.drained(BELOW[0].load(Relaxed)) => Some("battery"),
             _ => (!self.moving()).then_some("heat"),
         }
     }

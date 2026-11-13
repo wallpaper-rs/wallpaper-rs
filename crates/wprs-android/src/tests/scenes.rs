@@ -68,6 +68,7 @@ pub(super) fn scenes() {
         thermal: 0,
         headroom: 0.0,
         still: false,
+        percent: -1,
     };
     let r = renderer();
     let draw = |stage: &mut Stage, nanos: i64, cap: u32, force: bool| {

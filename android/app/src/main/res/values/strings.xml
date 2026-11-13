@@ -59,6 +59,9 @@
     <string name="every_6h">Every 6 hours</string>
     <string name="every_1d">Every day</string>
     <string name="never">Never</string>
+    <string name="below_percent">Below %d%%</string>
+    <string name="pause_below">Pause on battery when the charge is</string>
+    <string name="lowest_below">Lowest scene quality on battery when the charge is</string>
     <string name="shuffle">Shuffle</string>
     <string name="skip_videos">Skip videos on battery</string>
     <string name="resume_list">Go on where it was left</string>

@@ -41,6 +41,11 @@ impl State {
                 self.power.on_battery = on_battery;
                 self.outputs.values_mut().filter(|o| o.shown.scene.is_some()).for_each(|o| o.dirty = true);
             }
+            Command::Lowest(lowest) => {
+                if std::mem::replace(&mut self.power.lowest, lowest) != lowest {
+                    self.outputs.values_mut().filter(|o| o.shown.scene.is_some()).for_each(|o| o.dirty = true);
+                }
+            }
             Command::Saver(saver) => {
                 self.power.saver = saver;
                 self.outputs.values_mut().filter(|o| o.shown.scene.is_some()).for_each(|o| o.dirty = true);

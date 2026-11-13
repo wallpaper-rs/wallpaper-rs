@@ -714,10 +714,12 @@ Changes one setting and saves the configuration. Keys and their current values a
 | `playback.hdr.<output>` | the same values for one output, or `none` to follow `playback.hdr`; kept as `hdr` in `[outputs."<output>"]`, not listed in `options` but in `hdrs`, read back with `wprs-ctl config playback.hdr.<output>` and kept when a profile is used | none |
 | `playback.quality.<output>` | the same values for the scenes and web pages of one output, or `none` (or an empty value) to follow `playback.quality` again; kept as `quality` in `[outputs."<output>"]`, not listed in `options` but in `qualities`, read back with `wprs-ctl config playback.quality.<output>` even while the output is not connected, kept when a profile is used; outputs that show the same page share one helper while the choice they end up with is the same, whether their own or the general one, so a page reads the level of the output that shows it, and a page whose choice changes without splitting keeps its helper and only hears the new level | none |
 | `playback.duck` | fade the sound of every wallpaper (videos, scene sounds and web pages) out in 0.5 s while another application plays sound, and back in when it stops; a PipeWire watcher counts the running playback streams of other processes (not the daemon, its helpers or their children), reading neither their names nor their sound | `false` |
+| `playback.lowest_below_percent` | `0` to `100`: draw scenes at the lowest quality (`q0`) while running on battery with a charge under this percentage (`0` turns it off); it applies as set, also over a fixed `playback.quality` and the quality of one output, and does nothing while the charge is unknown | `0` |
 | `transition.kind` | `fade`, `none` | `fade` |
 | `transition.duration_ms` | `0` to `10000` | `600` |
 | `pause.when_covered` | pause while a maximized or fullscreen window covers the output | `true` |
 | `pause.on_battery` | pause while running on battery | `true` |
+| `pause.below_percent` | `0` to `100`: pause while running on battery with a charge under this percentage (`0` turns it off); it applies as set, whatever `playback.quality` says, and does nothing while the charge is unknown (`battery_percent` is `null`) | `0` |
 | `pause.when_locked` | pause while the screen is locked; whatever it says, videos are muted and scenes play no sound while it is locked | `true` |
 | `library.watch` | rescan folder sources when files in them change (a new file once it is written, a hard or symbolic link, a moved, renamed or removed folder), one scan per source at most every 5 s; a change during a scan of the same source starts another scan after it | `true` |
 | `library.thumb_cache_mb` | `64` to `8192`, size of the thumbnail cache | `512` |
@@ -944,6 +946,7 @@ filters (listed in `GetSchema().query`), `-` negates and quotes group words. `so
 results (newest first by default). `uid:` keeps up to 500 items named by their uids, separated by
 commas, which lets a client ask again for the items a `library` change names. `limit` is
 `0..=500`; `0` returns only `total`.
+
 
 The query is normalized first and `SearchPage.query` echoes it: `in:<name>` becomes `in:<uid>`
 (`in:` takes a manual playlist; a smart or unknown playlist returns `InvalidArgs`), and a bare
@@ -2901,7 +2904,7 @@ console so that scripts that write often never wake the bus.
 struct State {
     model: u32, version: String, adapter: String, tier: String, tier_measured: bool, config: PathBuf,
     config_error: Option<String>,
-    library_error: Option<String>, serial: u64, paused: bool, on_battery: bool, locked: bool,
+    library_error: Option<String>, serial: u64, paused: bool, on_battery: bool, battery_percent: Option<u8>, locked: bool,
     volume: f64, muted: bool, profile: Option<Uid>, jobs: u32,
     options: BTreeMap<String, Value>,
     outputs: BTreeMap<String, OutputState>, previews: BTreeMap<String, PreviewState>, calibrating: bool, compute: bool,
@@ -3135,6 +3138,9 @@ struct AwayReply { model: u32, serial: u64, items: Vec<Away> }
 struct FilesReply { model: u32, serial: u64, folders: Vec<String>, files: Vec<PrivateFile> }
 struct UploadOutput { id: String, state: String, package: Option<String>, version: Option<String>, errors: Vec<String> }
 ```
+
+
+`battery_percent` is the charge of the machine's battery as UPower reports it (0 to 100, rounded), read from the same service as `on_battery` and followed when it changes. It is `null` when the machine has no battery or when the power service cannot be reached, so a script must treat `null` as "unknown" and not as zero. Together with `on_battery` it feeds the settings `pause.below_percent` and `playback.lowest_below_percent`.
 
 Bulk replies (`Search`, playlist pages, history, installed packages) carry no file paths except
 cached thumbnail paths; an item's path appears only in `GetItem` and in `GetState().outputs`.

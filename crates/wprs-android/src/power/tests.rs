@@ -74,3 +74,11 @@ fn a_new_headroom_only_wakes_the_wallpaper_when_it_crosses_the_warm_mark() {
     assert!(cool.differs(on(|p| p.headroom = 0.8)));
     assert!(cool.differs(on(|p| (p.headroom, p.charging) = (0.3, true))));
 }
+
+#[test]
+fn a_chosen_charge_pauses_the_phone_only_on_battery_and_when_known() {
+    let at = |percent, charging| on(|p| (p.percent, p.charging) = (percent, charging));
+    assert!(at(19, false).paused_below(20) && !at(20, false).paused_below(20));
+    assert!(!at(5, true).paused_below(20) && !at(-1, false).paused_below(20) && !at(5, false).paused_below(0));
+    assert!(at(19, false).drained(20) && !at(19, true).drained(20) && !at(-1, false).drained(20));
+}

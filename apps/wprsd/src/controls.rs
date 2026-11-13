@@ -11,7 +11,13 @@ impl State {
 
     pub(crate) fn awake(&self) -> bool {
         let p = &self.config.pause;
-        !(self.user_paused || (p.on_battery && self.on_battery) || (p.when_locked && self.locked))
+        let drained = p.below_percent > 0 && self.on_battery && self.battery_percent.is_some_and(|b| b < p.below_percent);
+        !(self.user_paused || (p.on_battery && self.on_battery) || drained || (p.when_locked && self.locked))
+    }
+
+    pub(crate) fn lowest(&self) -> bool {
+        let below = self.config.playback.lowest_below_percent;
+        below > 0 && self.on_battery && self.battery_percent.is_some_and(|b| b < below)
     }
 }
 
@@ -140,6 +146,15 @@ impl Daemon {
         self.changes.changed("state", Vec::new());
     }
 
+    pub fn set_battery_percent(&self, percent: Option<u8>) {
+        if std::mem::replace(&mut self.state().battery_percent, percent) == percent {
+            return;
+        }
+        tracing::debug!(?percent, "battery level changed");
+        self.apply_activity();
+        self.changes.changed("state", Vec::new());
+    }
+
     pub fn set_saver(&self, saver: bool) {
         self.compositor.set_saver(saver);
         tracing::debug!(saver, "power saving changed");
@@ -166,6 +181,7 @@ impl Daemon {
     }
 
     pub(crate) fn activity(&self, st: &State) {
+        self.compositor.set_lowest(st.lowest());
         for (name, info) in &st.outputs {
             self.compositor.set_active(name, st.active(info), (info.covered(), st.awake()));
         }

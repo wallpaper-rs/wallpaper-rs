@@ -110,3 +110,13 @@ fn a_scene_measured_far_too_slow_at_the_lowest_level_stays_still_only_in_automat
     fed.state.level(fixed);
     assert!(!fed.state.still && fed.state.quality().automatic.is_empty(), "a fixed level stayed still");
 }
+
+#[test]
+fn a_low_battery_holds_the_lowest_level_even_over_a_fixed_choice() {
+    let mains = Power::new(Tier::T3, false, 0);
+    let low = Power { lowest: true, ..mains };
+    let fixed = Some(QualityChoice::Fixed(3));
+    assert_eq!(level(&SceneState::new(snowfall(fixed), mains)), ("q3", "user"));
+    assert_eq!(level(&SceneState::new(snowfall(fixed), low)), ("q0", "user"));
+    assert_eq!(level(&SceneState::new(snowfall(None), low)).0, "q0");
+}

@@ -17,6 +17,7 @@ pub struct Playback {
     pub quality: QualityChoice,
     pub auto_pace: crate::AutoPace,
     pub hdr: crate::HdrChoice,
+    pub lowest_below_percent: u8,
 }
 
 impl Default for Playback {
@@ -36,6 +37,7 @@ impl Default for Playback {
             quality,
             auto_pace: crate::AutoPace::Detail,
             hdr: crate::HdrChoice::Auto,
+            lowest_below_percent: 0,
         }
     }
 }
@@ -84,6 +86,7 @@ impl Playback {
         Playback {
             volume: if self.volume.is_finite() { self.volume.clamp(0.0, 1.0) } else { 0.0 },
             max_fps: self.max_fps.min(Self::MAX_FPS),
+            lowest_below_percent: self.lowest_below_percent.min(100),
             ..self.clone()
         }
     }
@@ -127,11 +130,12 @@ pub struct Pause {
     pub when_covered: bool,
     pub on_battery: bool,
     pub when_locked: bool,
+    pub below_percent: u8,
 }
 
 impl Default for Pause {
     fn default() -> Self {
-        Self { when_covered: true, on_battery: true, when_locked: true }
+        Self { when_covered: true, on_battery: true, when_locked: true, below_percent: 0 }
     }
 }
 

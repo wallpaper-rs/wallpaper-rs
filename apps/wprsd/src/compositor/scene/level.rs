@@ -8,8 +8,9 @@ use wprs_scene::{Quality, Why};
 mod tests;
 
 pub(super) fn owned(spec: &super::SceneSpec, power: Power) -> Power {
+    let held = if power.lowest { wprs_core::QualityChoice::Fixed(0) } else { spec.quality.unwrap_or(power.choice) };
     Power {
-        choice: spec.quality.unwrap_or(power.choice),
+        choice: held,
         on_battery: power.on_battery || spec.pack.battery,
         ..power
     }

@@ -24,6 +24,7 @@ pub struct Budget {
     pub heat: Heat,
     pub choice: QualityChoice,
     pub pace: wprs_core::AutoPace,
+    pub lowest: bool,
 }
 
 fn display(refresh: u32) -> u32 {
@@ -43,7 +44,7 @@ impl Heat {
 impl Budget {
     pub fn new(tier: Tier, on_battery: bool, max_fps: u32) -> Budget {
         let (saver, heat, choice, pace) = (false, Heat::Cool, QualityChoice::Auto, Default::default());
-        Budget { tier, on_battery, max_fps, saver, heat, choice, pace }
+        Budget { tier, on_battery, max_fps, saver, heat, choice, pace, lowest: false }
     }
 
     pub fn quality(&self, runtime: &Runtime) -> Quality {

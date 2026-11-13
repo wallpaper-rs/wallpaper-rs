@@ -40,10 +40,15 @@ private val PACES = listOf("detail" to R.string.pace_detail, "smooth" to R.strin
 private val HDRS = listOf("auto" to R.string.hdr_auto, "on" to R.string.hdr_on, "off" to R.string.hdr_off)
 private val FILLS = listOf("simple" to R.string.fill_simple, "lama" to R.string.fill_lama, "off" to R.string.fill_off)
 private val CONVERTS = listOf("auto" to R.string.convert_auto, "keep" to R.string.convert_keep, "off" to R.string.never)
+private fun percents(steps: List<String>) =
+    listOf("0" to R.string.never) + steps.map { it to R.string.below_percent }
+
 private val CHOICES = listOf(
     Triple(R.string.fit, "fit", FIT),
     Triple(R.string.battery_fps, "playback.max_fps", listOf("60", "30", "15", "10").map { it to R.string.fps }),
     Triple(R.string.charger_fps, "charger_fps", listOf("60", "30").map { it to R.string.fps }),
+    Triple(R.string.pause_below, "pause.below_percent", percents(listOf("10", "15", "20", "30"))),
+    Triple(R.string.lowest_below, "playback.lowest_below_percent", percents(listOf("20", "30", "50"))),
     Triple(R.string.system_colors, "system_colors", COLORS),
     Triple(R.string.backend, "backend", BACKENDS),
     Triple(R.string.scene_quality, "playback.quality", QUALITIES),

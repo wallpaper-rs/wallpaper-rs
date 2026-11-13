@@ -76,6 +76,7 @@ impl Config {
     pub fn normalize(&mut self) -> Vec<String> {
         let before = self.options();
         self.playback = self.playback.sanitized();
+        self.pause.below_percent = self.pause.below_percent.min(100);
         self.parallax = self.parallax.sanitized();
         self.rgb = std::mem::take(&mut self.rgb).sanitized();
         self.transition.duration_ms = self.transition.duration_ms.min(Transition::MAX_MS);

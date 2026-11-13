@@ -43,6 +43,7 @@ class Power(private val context: Context) :
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED)
         filter.addAction(Intent.ACTION_BATTERY_LOW)
         filter.addAction(Intent.ACTION_BATTERY_OKAY)
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED)
         filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)
         ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
         manager().addThermalStatusListener(context.mainExecutor, this)
@@ -57,7 +58,7 @@ class Power(private val context: Context) :
         displays()?.unregisterDisplayListener(this)
     }
 
-    override fun onReceive(context: Context, intent: Intent) = update()
+    override fun onReceive(context: Context, intent: Intent) = update(intent.action != Intent.ACTION_BATTERY_CHANGED)
 
     override fun onThermalStatusChanged(status: Int) = update()
 
@@ -88,6 +89,7 @@ class Power(private val context: Context) :
             power.currentThermalStatus,
             headroom,
             !ValueAnimator.areAnimatorsEnabled(),
+            level(battery),
         )
         if (full) display()
         handler.removeCallbacks(again)
@@ -95,6 +97,12 @@ class Power(private val context: Context) :
         if (!full && !changed) return
         powered.intValue++
         Render.post { Wallpaper.wake() }
+    }
+
+    private fun level(battery: Intent?): Int {
+        val now = battery?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val top = battery?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+        return if (now < 0 || top <= 0 || battery?.getBooleanExtra(BatteryManager.EXTRA_PRESENT, true) == false) -1 else now * 100 / top
     }
 
     private fun display() {

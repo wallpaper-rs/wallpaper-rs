@@ -56,6 +56,9 @@
     <string name="every_6h">Cada 6 horas</string>
     <string name="every_1d">Cada día</string>
     <string name="never">Nunca</string>
+    <string name="below_percent">Menos de %d%%</string>
+    <string name="pause_below">Pausar con batería cuando la carga es</string>
+    <string name="lowest_below">Calidad mínima de las escenas con batería cuando la carga es</string>
     <string name="shuffle">Orden aleatorio</string>
     <string name="skip_videos">Saltar los vídeos con batería</string>
     <string name="resume_list">Seguir donde se quedó</string>

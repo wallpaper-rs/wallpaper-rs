@@ -21,7 +21,7 @@ pub(super) fn flown() {
     let uid = store::store(&mut File::open(&built).unwrap(), "fuse.wpak").unwrap().0;
     let path = library::with(|lib| Ok(lib.item(&uid)?.path)).unwrap();
     let power =
-        power::Power { charging: true, saver: false, low: false, thermal: 0, headroom: 0.0, still: false };
+        power::Power { charging: true, saver: false, low: false, thermal: 0, headroom: 0.0, still: false, percent: -1 };
     if let Some(r) = renderer() {
         let mut stage = Stage::new(uid.clone(), pack::load(&path).unwrap());
         let fps: Vec<u32> = (0..30)

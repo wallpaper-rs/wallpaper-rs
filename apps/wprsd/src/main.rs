@@ -9,6 +9,7 @@ mod calibration;
 mod callers;
 mod catalogue;
 mod changes;
+mod charge;
 mod choice;
 mod clock;
 mod compositor;

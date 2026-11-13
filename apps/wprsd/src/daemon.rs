@@ -31,6 +31,7 @@ pub(crate) struct State {
     pub(crate) pixels: HashMap<PathBuf, (Option<SystemTime>, Weak<wprs_render::Pixels>)>,
     pub(crate) user_paused: bool,
     pub(crate) on_battery: bool,
+    pub(crate) battery_percent: Option<u8>,
     pub(crate) locked: bool,
     pub(crate) items: HashMap<PathBuf, String>,
     pub(crate) installed: Vec<Installed>,
@@ -172,6 +173,7 @@ impl Daemon {
         };
         self.compositor.set_settings(settings);
         crate::rgb::follow(self);
+        self.apply_activity();
         self.configure_all();
         self.refresh_items();
         self.watch_sources();

@@ -92,6 +92,7 @@ pub async fn motion(connection: zbus::Connection, daemon: Arc<Daemon>) {
 }
 
 pub async fn battery(daemon: Arc<Daemon>, known: tokio::sync::oneshot::Sender<()>) {
+    tokio::spawn(crate::charge::follow(daemon.clone()));
     let follow = async {
         let upower = UPowerProxy::new(&zbus::Connection::system().await?).await?;
         let mut changes = upower.receive_on_battery_changed().await;
