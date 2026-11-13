@@ -78,6 +78,20 @@ QtObject {
     readonly property int filasAncho: compacto ? 600 : amplio ? 740 : 660
     readonly property int explicaAncho: compacto ? 260 : amplio ? 340 : 300
     readonly property int atajosAlto: 26
+    readonly property int teclaAncho: 28
+    readonly property int teclaAlto: 26
+    readonly property int teclaRadio: 5
+    readonly property int teclaIcono: 13
+    readonly property int logoLetra: 17
+    readonly property int logoLuna: 14
+    readonly property int marcaAncho: 16
+    readonly property int marcaAlto: 4
+    readonly property int menuSangria: 30
+    readonly property int avisoAncho: compacto ? 340 : 480
+    readonly property int arribaAlto: 52
+    readonly property int tArriba: 18
+    readonly property int lateralIzq: 280
+    readonly property int barraLienzoAlto: 44
     readonly property int llaveAncho: 40
     readonly property int llaveAlto: 22
     readonly property int llavePunto: 16

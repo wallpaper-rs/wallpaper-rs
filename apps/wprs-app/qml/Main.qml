@@ -7,34 +7,45 @@ Kirigami.ApplicationWindow {
 
     property int current: 0
     property var inputs: ({})
-    property var asked: ({})
+    property int from: 0
     property int waiting: 0
     property var held: []
     readonly property var names: ["library", "playlists", "profiles", "providers", "repos", "settings", "account", "scenes"]
+    readonly property alias shell: shell
+    readonly property string kind: current < 0 ? "work" : [2, 5, 6].includes(current) ? "options" : "title"
+    readonly property string backWord: (shell.menu.all.find(entry => entry[0] === shell.menu.owner(from)) ?? [0, ""])[1]
     readonly property list<Component> pages: [
         Component {
-            LibraryPage {}
+            LibraryPage {
+            }
         },
         Component {
-            PlaylistsPage {}
+            PlaylistsPage {
+            }
         },
         Component {
-            ProfilesPage {}
+            ProfilesPage {
+            }
         },
         Component {
-            ProvidersPage {}
+            ProvidersPage {
+            }
         },
         Component {
-            ReposPage {}
+            ReposPage {
+            }
         },
         Component {
-            SettingsPage {}
+            SettingsPage {
+            }
         },
         Component {
-            AccountPage {}
+            AccountPage {
+            }
         },
         Component {
-            ScenesPage {}
+            ScenesPage {
+            }
         }
     ]
 
@@ -47,6 +58,26 @@ Kirigami.ApplicationWindow {
 
     function loadInputs() {
         App.query("GetInputs", [], "Inputs1", reply => root && (root.inputs = reply));
+    }
+
+    function work(component, properties) {
+        if (current >= 0)
+            from = current;
+        current = -1;
+        open(component, properties);
+        size.roomy();
+    }
+
+    function leave() {
+        showPage(from);
+    }
+
+    function showPassiveNotification(message, timeout, actionText, callBack) {
+        shell.notices.show(message, timeout, actionText, callBack);
+    }
+
+    function hidePassiveNotification() {
+        shell.notices.hide();
     }
 
     function showPage(index, properties) {
@@ -65,19 +96,24 @@ Kirigami.ApplicationWindow {
     }
 
     title: "wallpaper-rs"
-    width: Kirigami.Units.gridUnit * 60
-    height: Kirigami.Units.gridUnit * 40
-    minimumWidth: Kirigami.Units.gridUnit * 24
-    minimumHeight: Kirigami.Units.gridUnit * 20
+    minimumWidth: Kirigami.Units.gridUnit * 30
+    minimumHeight: Kirigami.Units.gridUnit * 24
+    pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.None
     Component.onCompleted: {
+        size.restore();
         showPage(Math.max(0, names.indexOf(App.backend.requested())));
         loadInputs();
     }
-    footer: StatusBar {}
-    header: AccountBanners {
+    Frame {
+        id: shell
+
         host: root
+        focus: true
     }
-    globalDrawer: Navigation {
+
+    WindowSize {
+        id: size
+
         host: root
     }
 
@@ -94,47 +130,8 @@ Kirigami.ApplicationWindow {
         }
     }
 
-    Consent {
-        id: consent
-
-        visible: false
-        daemon: App
-        inputs: root.inputs
-        onAskChanged: {
-            if (ask.scene === "")
-                return asking.close();
-            if (root.asked[ask.scene])
-                return;
-            root.asked[ask.scene] = true;
-            asking.open();
-        }
-    }
-
-    Kirigami.PromptDialog {
-        id: asking
-
-        y: parent ? Math.round((parent.height - implicitHeight) / 2) : 0
-        title: App.tr("Allow this scene?")
-        subtitle: consent.text
-        standardButtons: Kirigami.Dialog.NoButton
-        customFooterActions: [
-            Kirigami.Action {
-                text: App.tr("Allow")
-                icon.name: "dialog-ok-apply"
-                onTriggered: {
-                    consent.answer(true);
-                    asking.close();
-                }
-            },
-            Kirigami.Action {
-                text: App.tr("Not now")
-                icon.name: "dialog-cancel"
-                onTriggered: {
-                    consent.answer(false);
-                    asking.close();
-                }
-            }
-        ]
+    ConsentAsk {
+        host: root
     }
 
     Connections {
@@ -142,45 +139,46 @@ Kirigami.ApplicationWindow {
 
         function onNavigate(page, query) {
             root.showPage(page, {
-                "query": query
-            });
+                    "query": query
+                });
         }
 
         function onEdit(item) {
-            root.current = -1;
-            root.open(editor, {
-                "item": item
-            });
+            root.work(editor, {
+                    "item": item
+                });
         }
 
         function onCompose(folder, starter, text) {
-            root.current = -1;
             const kind = starter ? (["web", "preset", "image", "video"].includes(starter) ? starter : "scene") : probe.kindOf(folder, text);
-            root.open(["scene", "assets"].includes(kind) ? composer : packager, {
-                "folder": folder,
-                "starter": starter,
-                "heading": starter ? text : "",
-                "source": starter ? "" : text
-            });
+            root.work(["scene", "assets"].includes(kind) ? composer : packager, {
+                    "folder": folder,
+                    "starter": starter,
+                    "heading": starter ? text : "",
+                    "source": starter ? "" : text
+                });
         }
     }
 
     Component {
         id: editor
 
-        EditPage {}
+        EditPage {
+        }
     }
 
     Component {
         id: composer
 
-        ScenePage {}
+        ScenePage {
+        }
     }
 
     Component {
         id: packager
 
-        PackagePage {}
+        PackagePage {
+        }
     }
 
     SceneEditor {

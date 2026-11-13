@@ -1,0 +1,112 @@
+import QtQuick
+import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
+
+Item {
+    id: frame
+
+    required property var page
+    required property real sideBottom
+    required property bool none
+    readonly property alias seat: seat
+    readonly property point noticeAt: Qt.point(seat.x + Look.e4, seat.y + seat.height - Look.e3)
+    readonly property point hintsAt: Qt.point(width - Look.margen, height - Look.margenAbajo)
+
+    signal escaped
+
+    Keys.onEscapePressed: frame.escaped()
+
+    RoundVeil {
+        y: -120
+        width: Look.menuAncho + 300
+        height: frame.sideBottom + 320
+        centerX: 0
+        centerY: 0.4
+        reachY: height * 0.6
+        inner: Look.velo * 0.95
+        middle: Look.velo * 0.82
+    }
+
+    RoundVeil {
+        x: now.x - 132
+        y: now.y - 96
+        width: frame.width - x
+        height: now.height + 96 + 176
+        centerX: 1
+        centerY: 0.4
+        reachY: height * 0.72
+        inner: 0.2 + Look.velo * 0.78
+        middle: 0.14 + Look.velo * 0.76
+    }
+
+    BandVeil {
+        y: frame.height * 0.55
+        width: frame.width
+        height: frame.height - y
+    }
+
+    Column {
+        id: now
+
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: Look.margenArriba
+        anchors.rightMargin: Look.margen
+        spacing: Look.e3
+
+        Rectangle {
+            anchors.right: parent.right
+            visible: frame.none
+            width: example.implicitWidth + Look.e3 * 2
+            height: example.implicitHeight + Look.e2 * 2
+            radius: Look.radioChico
+            color: Qt.rgba(Look.noche.r, Look.noche.g, Look.noche.b, 0.82)
+
+            RowLayout {
+                id: example
+
+                anchors.centerIn: parent
+                spacing: Look.e2
+
+                Kirigami.Icon {
+                    Layout.preferredWidth: Look.e4
+                    Layout.preferredHeight: Look.e4
+                    source: "info"
+                    color: Look.bruma
+                }
+
+                Text {
+                    text: App.tr("Example picture: “%1”, one of the bundled scenes", App.tr("Snowfall"))
+                    color: Look.bruma
+                    font.family: Look.letraTexto
+                    font.pixelSize: Look.tPie
+                }
+            }
+        }
+
+        StatusBar {
+            anchors.right: parent.right
+            width: Math.min(implicitWidth, frame.width - Look.menuAncho - Look.margen * 2)
+        }
+    }
+
+    Kirigami.ActionToolBar {
+        id: tools
+
+        x: seat.x
+        y: now.y + now.height + Look.e5
+        width: seat.width
+        alignment: Qt.AlignRight
+        actions: frame.page?.actions ?? []
+    }
+
+    Item {
+        id: seat
+
+        x: Look.margen + Look.menuAncho
+        y: tools.actions.length > 0 ? tools.y + tools.height + Look.e3 : tools.y
+        width: frame.width - x - Look.margen
+        height: frame.height - y - Look.margenAbajo - Look.atajosAlto - Look.e4
+    }
+}

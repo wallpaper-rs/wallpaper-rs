@@ -14,41 +14,44 @@ Timer {
     property real top: 0
     property real width: 0
 
-    readonly property var drawer: host.globalDrawer
+    readonly property var words: host.shell.menu
 
     function begin() {
         if (!finished)
             start();
     }
 
-    function entries() {
-        return walk.gather(drawer.contentItem, []).filter(item => item.tAction !== undefined && item.down !== undefined && walk.shown(item));
+    function pick(at) {
+        words.forceActiveFocus(Qt.TabFocusReason);
+        for (let n = 0; n < words.all.length; n++)
+            walk.press(Qt.Key_Up, 0);
+        for (let n = 0; n < at; n++)
+            walk.press(Qt.Key_Down, 0);
+        walk.press(Qt.Key_Return, 0);
+        return host.current;
     }
 
-    function menu(mode) {
-        const seen = walk.tabs(drawer.modal);
-        const found = entries();
-        const actions = Array.from(new Set(found.map(item => item.tAction)));
-        const lost = actions.filter(action => !found.some(item => item.tAction === action && seen.includes(item)));
-        if (actions.length !== drawer.actions.length)
-            throw new Error("the " + mode + " side menu shows " + actions.length + " of its " + drawer.actions.length + " entries");
-        if (lost.length > 0)
-            throw new Error("the Tab key does not reach the " + mode + " side menu entries " + lost.map(action => action.text).join(", "));
-        const pages = [];
-        for (const action of actions) {
-            found.find(item => item.tAction === action && seen.includes(item)).forceActiveFocus(Qt.TabFocusReason);
-            walk.press(Qt.Key_Return, 0);
-            pages.push(host.current);
-        }
+    function menu() {
+        if (!walk.tabs(false).includes(words))
+            throw new Error("the Tab key does not reach the menu");
+        const pages = words.all.map((entry, at) => pick(at));
+        host.showPage(5);
+        const section = walk.gather(host.shell, []).find(item => item.current === false && item.text === App.tr("Profiles and presets") && walk.shown(item));
+        if (!section)
+            throw new Error("the settings do not show their sections");
+        section.forceActiveFocus(Qt.TabFocusReason);
+        walk.press(Qt.Key_Return, 0);
+        pages.push(host.current);
         const all = pages.slice().sort((a, b) => a - b).join();
         if (all !== Array.from({
                 "length": host.pages.length
             }, (v, at) => at).join())
-            throw new Error("the Enter key on the " + mode + " side menu entries opened the pages " + pages.join(", "));
-        found[0].forceActiveFocus(Qt.TabFocusReason);
+            throw new Error("the arrow and Enter keys on the menu opened the pages " + pages.join(", "));
+        section.forceActiveFocus(Qt.TabFocusReason);
         walk.press(Qt.Key_Escape, 0);
-        if (drawer.opened && !drawer.collapsed)
-            throw new Error("the Escape key does not close the " + mode + " side menu");
+        if (!words.activeFocus)
+            throw new Error("the Escape key does not bring the focus back to the menu");
+        host.showPage(0);
     }
 
     function wheel(item) {
@@ -100,30 +103,15 @@ Timer {
 
     function next() {
         if (stage === 0) {
-            drawer.open();
-            return ++stage;
-        }
-        if (stage === 1) {
-            if (!drawer.opened && ++waited < 20)
-                return;
-            menu("narrow");
+            menu();
             width = host.width;
             host.width = width + Kirigami.Units.gridUnit * 80;
-            waited = 0;
             return ++stage;
         }
-        if (stage === 2) {
-            if (drawer.modal && ++waited < 20)
-                return;
-            drawer.collapsed = false;
-            drawer.open();
-            waited = 0;
+        if (stage < 3)
             return ++stage;
-        }
         if (stage === 3) {
-            if (!drawer.opened && ++waited < 20)
-                return;
-            menu("wide");
+            menu();
             scratch = Qt.createComponent("KeyScratch.qml").createObject(host.overlay);
             return ++stage;
         }

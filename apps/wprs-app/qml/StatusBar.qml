@@ -73,7 +73,7 @@ QQC2.ToolBar {
         id: jobs
 
         x: bar.width - width
-        y: -height
+        y: bar.height + Look.e2
         width: Kirigami.Units.gridUnit * 24
         height: Math.min(Kirigami.Units.gridUnit * 20, Math.max(list.contentHeight, empty.implicitHeight) + padding * 2)
 

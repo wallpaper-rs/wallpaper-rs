@@ -52,6 +52,10 @@ Timer {
                 Qt.createComponent("LookCheck.qml").createObject(host, {
                     "host": host
                 }).exercise();
+            if (App.backend.claim("shell"))
+                Qt.createComponent("ShellCheck.qml").createObject(host, {
+                    "host": host
+                }).exercise();
             if (App.backend.claim("repo"))
                 Qt.createComponent("RepoCheck.qml").createObject(host, {
                     "host": host

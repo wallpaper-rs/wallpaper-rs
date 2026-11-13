@@ -17648,3 +17648,55 @@ msgstr "Quitar la miniatura"
 #: apps/wprs-app/qml/PackageParts.qml
 msgid "Pictures (*.png *.jpg *.jpeg *.webp)"
 msgstr "Imágenes (*.png *.jpg *.jpeg *.webp)"
+
+#: apps/wprs-app/qml/Frame.qml
+msgid "Move around"
+msgstr "Moverse"
+
+#: apps/wprs-app/qml/Frame.qml
+msgid "Next part"
+msgstr "Siguiente parte"
+
+#: apps/wprs-app/qml/Frame.qml
+msgid "Menu"
+msgstr "Menú"
+
+#: apps/wprs-app/qml/OptionsFrame.qml
+msgid "back"
+msgstr "volver"
+
+#: apps/wprs-app/qml/WorkFrame.qml
+msgid "Back to %1"
+msgstr "Volver a %1"
+
+#: apps/wprs-app/qml/Notices.qml
+msgid "Close"
+msgstr "Cerrar"
+
+#: apps/wprs-app/qml/WordMenu.qml
+msgid "Explore"
+msgstr "Explorar"
+
+#: apps/wprs-app/qml/WordMenu.qml
+msgid "Lists"
+msgstr "Listas"
+
+#: apps/wprs-app/qml/WordMenu.qml
+msgid "Sources"
+msgstr "Fuentes"
+
+#: apps/wprs-app/qml/WordMenu.qml
+msgid "Create"
+msgstr "Crear"
+
+#: apps/wprs-app/qml/WordMenu.qml
+msgid "Sections"
+msgstr "Secciones"
+
+#: apps/wprs-app/qml/TitleFrame.qml
+msgid "Example picture: “%1”, one of the bundled scenes"
+msgstr "Imagen de ejemplo: «%1», una de las escenas incluidas"
+
+#: apps/wprs-app/qml/TitleFrame.qml
+msgid "Snowfall"
+msgstr "Nevada"
