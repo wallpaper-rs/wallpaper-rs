@@ -31,7 +31,13 @@ pub(crate) fn paint(dir: &Path, doc: &Value, s: &Stroke) -> Result<Vec<Op>> {
     );
     let asset = |id: &str| format!("/scene/assets/{}", escape(id));
     let named = doc.pointer(s.pointer).and_then(Value::as_str).filter(|id| doc.pointer(&asset(id)).is_some());
-    let id = named.map_or_else(|| unique(doc, s.pointer.rsplit('/').next().unwrap_or("mask")), String::from);
+    let shared = named.is_some_and(|id| {
+        let uses = crate::gallery::uses(doc, id);
+        uses["uses"].as_array().is_some_and(|u| u.iter().any(|row| row["pointer"] != s.pointer))
+    });
+    let id = named
+        .filter(|_| !shared)
+        .map_or_else(|| unique(doc, s.pointer.rsplit('/').next().unwrap_or("mask")), String::from);
     let path = named.and_then(|id| doc.pointer(&format!("{}/path", asset(id)))?.as_str());
     let old = named.and_then(|id| crate::pictures::asset(dir, doc, id).ok()).map(|i| i.into_rgba8());
     let mut picture = old

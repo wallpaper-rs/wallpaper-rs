@@ -240,7 +240,7 @@ Algunos efectos leen una imagen que tú pintas: un mapa gris que dice dónde act
    - **Tamaño del pincel**.
    - **Gris** (o **Valor**, en un parámetro de máscara): cuánto pinta el pincel, de 0 a 1.
    - Solo en un parámetro de máscara: **Dureza** y, si la imagen tiene varios canales, el desplegable de canal (**Rojo**, **Verde**, **Azul**, **Alfa**).
-4. Pinta sobre la capa en la vista previa. El canal que pintas se ve teñido. Cada trazo es un paso de **Deshacer**.
+4. Pinta sobre la capa en la vista previa. El canal que pintas se ve teñido. Cada trazo es un paso de **Deshacer**. Si otro efecto o capa usa la misma imagen, el primer trazo crea una copia propia para el parámetro que pintas y el otro queda igual.
 5. Vuelve a pulsar el botón para dejar de pintar.
 
 **Pasos para un mapa de dirección:**
