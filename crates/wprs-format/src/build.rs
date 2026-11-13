@@ -69,7 +69,23 @@ fn current(source: &Path, keys: &[(&str, &str)]) -> Result<()> {
     }
     let comment = manifest_comment(&manifest.id, &manifest.version);
     let signers = verify_blocks(&json, &signed, &comment, keys);
-    crate::ensure(signers.is_ok_and(|s| !s.is_empty()), again)
+    let other_key = || {
+        crate::refuse(
+            SIGNATURE,
+            said(
+                "format.other_key",
+                "it was not signed by any of the given keys; pass the key that signed it with --key",
+                &[],
+            ),
+        )
+    };
+    if signers.is_ok_and(|s| !s.is_empty()) {
+        Ok(())
+    } else if named.is_some() {
+        Err(other_key())
+    } else {
+        Err(again())
+    }
 }
 
 pub fn build_staged(

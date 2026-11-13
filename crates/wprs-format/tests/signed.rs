@@ -95,3 +95,16 @@ fn a_stale_old_form_signature_is_refused_by_build() {
     assert!(refused(build_with(&src, &out, &Limits::default(), &[pair(&author)])));
     assert!(!out.exists());
 }
+
+#[test]
+fn a_signature_by_another_key_names_the_key() {
+    let tmp = tempfile::tempdir().unwrap();
+    let (src, out) = (tmp.path().join("page"), tmp.path().join("page.wpak"));
+    folder(&src);
+    sign_source(&src, &signer(&key())).unwrap();
+    let other = key();
+    let keys = [pair(&other)];
+    let error = build_with(&src, &out, &Limits::default(), &keys).unwrap_err().to_string();
+    assert!(error.contains("not signed by any of the given keys"), "{error}");
+    assert!(!error.contains("another version"), "{error}");
+}
