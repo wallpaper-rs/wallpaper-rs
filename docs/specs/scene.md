@@ -1755,7 +1755,9 @@ The newer fields behave as follows.
   turns fully inside `inner` and fades out at `outer`, and its `ring` pulls particles toward a circle
   of that `radius` with `pull`, fully at `width` pixels away. `turbulence` scrolls its noise `speed`
   pixels per second to the right, changes it `time_scale` times as fast and scales its x and y by
-  `mask`. `oscillate` picks a frequency, a scale and a phase for each particle and moves it around
+  `mask`. La fuerza `turbulence` usa un ruido periódico de 256 celdas y su fase la envuelve el
+  anfitrión, por lo que no salta con el reloj encendido durante días; con `smooth` y `gyro`,
+  `depth_parallax` también sigue la inclinación del teléfono. `oscillate` picks a frequency, a scale and a phase for each particle and moves it around
   where it would be without drifting (x and y a quarter of a turn apart, scaled by `mask`), fades its
   alpha by up to the scale or grows and shrinks its size by that fraction. `cap` limits the speed,
   `torque` adds degrees per second to the spin each second, `spin_drag` slows the spin and
