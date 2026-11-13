@@ -141,10 +141,11 @@ fn asked(name: &str, json: bool) -> Result<()> {
     };
     let lines = manual::example_lines("ask", name).unwrap_or_default();
     if json {
-        println!("{}", json!({ "name": name, "about": about, "example": lines }));
+        let schema = manual::ask_schema(name);
+        println!("{}", json!({ "name": name, "about": about, "schema": schema, "example": lines }));
         return Ok(());
     }
-    println!("{name}: {about}\n{}", example_text("ask", name));
+    println!("{}\n{}", manual::describe_ask(name).unwrap_or_default(), example_text("ask", name));
     Ok(())
 }
 
@@ -166,6 +167,9 @@ pub fn run(command: Acting) -> Result<()> {
                     &[&format!("{query:?}")]
                 ))
             );
+            let layer =
+                if layer.is_empty() { args["layer"].as_str().unwrap_or_default().to_owned() } else { layer };
+            manual::check_ask(&query, &args, &layer).map_err(|e| usage(e.local()))?;
             let project = Project::open(&dir)?;
             let found = project.ask(&layer, &manual::question(&query, args));
             println!("{}", serde_json::to_string_pretty(&found)?);

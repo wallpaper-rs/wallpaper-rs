@@ -5062,3 +5062,19 @@ msgstr "los campos de profundidad difieren en tamaño"
 #: crates/wprs-depth/src/stack.rs
 msgid "the depth fields are torn"
 msgstr "los campos de profundidad están rotos"
+
+#: crates/wprs-editor/src/manual/ask_args.rs
+msgid "the argument %1 of the query %2 must be a JSON %3"
+msgstr "el argumento %1 de la consulta %2 debe ser un %3 de JSON"
+
+#: crates/wprs-editor/src/manual/ask_args.rs
+msgid "the arguments of the query %1 must be a JSON object"
+msgstr "los argumentos de la consulta %1 deben ser un objeto JSON"
+
+#: crates/wprs-editor/src/manual/ask_args.rs
+msgid "%1 is not an argument of the query %2; it takes: %3"
+msgstr "%1 no es un argumento de la consulta %2; acepta: %3"
+
+#: crates/wprs-editor/src/manual/ask_args.rs
+msgid "the query %1 needs the argument %2"
+msgstr "la consulta %1 necesita el argumento %2"

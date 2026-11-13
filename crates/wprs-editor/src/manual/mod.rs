@@ -1,4 +1,5 @@
 mod about;
+mod ask_args;
 mod asks;
 mod examples;
 mod shape;
@@ -49,6 +50,24 @@ pub fn describe(name: &str) -> Option<String> {
 
 pub fn ask_about(name: &str) -> Option<&'static str> {
     ASKS.iter().find(|(n, _)| *n == name).map(|(_, a)| *a)
+}
+
+pub fn ask_schema(name: &str) -> Option<Value> {
+    ask_args::known(name).then(|| ask_args::schema(name))
+}
+
+pub fn describe_ask(name: &str) -> Option<String> {
+    let about = ask_about(name)?;
+    Some(
+        std::iter::once(format!("{name}: {about}"))
+            .chain(ask_args::describe(name))
+            .collect::<Vec<_>>()
+            .join("\n"),
+    )
+}
+
+pub fn check_ask(name: &str, args: &Value, layer: &str) -> Result<(), wprs_core::message::Message> {
+    ask_args::check(name, args, layer)
 }
 
 pub fn question(name: &str, args: Value) -> Value {

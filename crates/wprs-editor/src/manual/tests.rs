@@ -65,3 +65,38 @@ fn the_particles_lighting_error_names_the_field_that_is_taken() {
     let why = crate::lamps::act(std::path::Path::new("."), &doc, &action).unwrap().unwrap_err().to_string();
     assert!(why.contains("emissive") && !why.contains("glow"), "{why}");
 }
+
+#[test]
+fn every_query_has_a_schema_and_every_example_fits_it() {
+    for (name, _) in ASKS {
+        assert!(ask_schema(name).is_some(), "{name} has no argument schema");
+        assert!(describe_ask(name).is_some_and(|d| d.starts_with(name)), "{name}");
+        for line in example_lines("ask", name).unwrap_or_default() {
+            let Some(rest) = line.strip_prefix(&format!("wprs-ctl scene ask DIR {name} ")) else { continue };
+            let text = rest.split(" --layer").next().unwrap_or(rest).trim_matches('\'');
+            let args: Value = serde_json::from_str(text).unwrap();
+            let layer = if rest.contains("--layer") { "x" } else { "" };
+            check_ask(name, &args, layer).unwrap_or_else(|e| panic!("{name} {text}: {e}"));
+        }
+    }
+    assert!(ASKS.iter().all(|(n, _)| ask_args::known(n)));
+}
+
+#[test]
+fn query_arguments_are_checked() {
+    let why = |name: &str, args: Value| check_ask(name, &args, "").unwrap_err().to_string();
+    assert!(
+        why("pose", json!({ "clip": "a", "tim": 1 })).contains("tim is not an argument of the query pose")
+    );
+    assert!(why("pose", json!({})).contains("needs the argument clip"));
+    assert!(
+        why("pose", json!({ "clip": "a", "time": "1" }))
+            .contains("time of the query pose must be a JSON number")
+    );
+    assert!(why("wind", json!({ "x": 1 })).contains("it takes: none"));
+    assert!(why("keys", json!({})).contains("keys"));
+    assert!(check_ask("rig", &json!({}), "").is_ok() && check_ask("weights", &json!("arm"), "").is_ok());
+    assert!(check_ask("shape_handles", &json!({}), "form").is_ok());
+    assert_eq!(ask_schema("pose").unwrap()["required"], json!(["clip"]));
+    assert!(describe_ask("pose").unwrap().contains("  clip: string (required) - Clip to pose"));
+}

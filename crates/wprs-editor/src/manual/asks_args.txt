@@ -1,0 +1,163 @@
+rig|layer|string|optional|Layer to look at; --layer does the same
+weights||string|optional|Bone to show the weights of
+pose|layer|string|optional|Layer to pose; --layer does the same
+pose|clip|string|required|Clip to pose
+pose|time|number|optional|Seconds into the clip
+pose|bone|string|optional|Bone to move before posing
+pose|rotation|number|optional|Rotation of that bone in degrees
+pose|position|array|optional|Position of that bone as [x, y]
+pose|scale|array|optional|Scale of that bone as [x, y]
+keys||string|required|Clip whose keys to list
+handles|layer|string|optional|Layer to look at; --layer does the same
+particles|layer|string|optional|Layer that owns the particle system
+particles|time|number|optional|Seconds into the scene
+particles|sound|number|optional|Sound level from 0 to 1
+budget|layer|string|optional|Layer that owns the particle system
+budget|time|number|optional|Seconds into the scene
+budget|quality|string|optional|Quality level such as q0, q1, q2 or q3
+lights|time|number|optional|Seconds into the scene
+falloff|layer|string|optional|Layer the lights fall on
+falloff|time|number|optional|Seconds into the scene
+normals|asset|string|optional|Picture asset to make the map from
+normals|layer|string|optional|Layer whose picture to use
+normals|strength|number|optional|Relief strength
+normals|blur|number|optional|Blur before the relief is taken
+normals|id|string|optional|Id of the asset the action would make
+normals|time|number|optional|Seconds into the scene
+map|layer|string|optional|Layer to show the map of
+map|map|string|optional|roughness or emissive
+hemisphere
+lighting|time|number|optional|Seconds into the scene
+lighting|quality|string|optional|Quality level such as q0, q1, q2 or q3
+air|layer|string|optional|Layer that casts the light
+air|time|number|optional|Seconds into the scene
+projection|layer|string|optional|Layer that projects the light
+projection|time|number|optional|Seconds into the scene
+swarm_light|system|string|optional|Particle system that casts the light
+swarm_light|layer|string|optional|Layer that owns the particle system
+model_info|asset|string|optional|Model asset
+model_info|file|string|optional|Model file not yet imported
+stage3d|time|number|optional|Seconds into the scene
+materials3d|layer|string|optional|3D layer
+cost3d|quality|string|optional|Quality level such as q0, q1, q2 or q3
+shadows3d|time|number|optional|Seconds into the scene
+paths3d|time|number|optional|Seconds into the scene
+material_check|name|string|required|Name of the package material
+bone3d|layer|string|required|3D layer
+bone3d|bone|string|required|Bone of its model
+bone3d|time|number|optional|Seconds into the scene
+bone3d|clip|string|optional|Clip whose keys the bone starts from
+bone3d|clip_time|number|optional|Seconds into that clip
+bone3d|from|object|optional|Rotation, position or scale to start from, each as [x, y, z]
+bone3d|turn|number|optional|Degrees to turn the bone
+bone3d|tilt|array|optional|Degrees to tilt the bone as [up, side]
+bone3d|slide|array|optional|Distance to slide the bone as [x, y]
+bound3d|layer|string|required|3D layer
+bound3d|bone|string|required|Bone of its model
+bound3d|time|number|optional|Seconds into the scene
+bound3d|point|array|optional|Point on the canvas to aim at as [x, y]
+surface3d|at|array|required|Point of the 3D view as [x, y]
+surface3d|time|number|optional|Seconds into the scene
+depth3d|layer|string|required|Layer inside a 3D group
+motion|layer|string|optional|Mesh or model layer
+script_calls|layer|string|optional|Mesh or model layer
+script_calls|kind|string|optional|bone, shape or impulse
+script_calls|name|string|optional|Name of the bone, blend shape or body
+script_calls|what|string|optional|What the call does, such as turn or push
+outline|layer|string|optional|Layer to look at; --layer does the same
+palette||string|optional|Picture asset
+wind
+ramp||string|optional|Id of the layer or asset that made the ramp
+depth_model
+rules|effect|string|optional|Effect of a layer
+effect_cost|effect|string|optional|Effect of a layer
+effect_cost|optional|boolean|optional|Count the optional parts too
+clocks|time|number|optional|Seconds into the scene
+clocks|strip|integer|optional|Number of thumbnails along the video
+pools
+uses
+spread|layout|string|required|dual, triple, vertical or mine
+spread|bezel|number|optional|Bezel width in millimetres
+spread|screen|string|optional|Size of each screen in millimetres
+spread|monitors|array|optional|With layout mine: screens as {id, mm: [x, y, width, height]}
+shader_source|effect|string|required|Package effect or material
+shader_check|effect|string|required|Package effect
+shader_check|descriptor|string|optional|Unsaved descriptor text
+shader_check|wgsl|string|optional|Unsaved WGSL text
+strings
+flashes|run|boolean|optional|Measure now instead of returning the last measure
+flashes|from|number|optional|Second to start measuring at
+flashes|seconds|number|optional|Seconds to measure
+flashes|fps|integer|optional|Frames per second to measure at
+preset_steps
+credits
+curves|layer|string|optional|Layer of the clip
+curves|clip|string|optional|Clip to read a channel of
+curves|pointer|string|optional|JSON Pointer of the animated value
+curves|row|array|optional|Clip channel as [part, channel]
+curves|picked|array|optional|Keys picked, to mark in the reply
+curves|from|number|optional|Second the curve starts at
+curves|to|number|optional|Second the curve ends at
+curves|samples|integer|optional|Number of sampled points
+key_clip|copy|array|optional|Keys to copy as a list of {pointer, times}
+key_clip|read|string|optional|Clipboard text to read keys back from
+fires||string|required|Trigger such as event:boom
+meter|source|object|optional|What the binding reacts to, such as {audio: [0, 3], of: 16}
+meter|reading|object|optional|Levels read from the preview
+meter|of|integer|optional|Bands the levels are folded to: 16, 32 or 64
+response|smooth|any|required|Smoothing as {up, down} in seconds
+sounds
+wave|asset|string|required|Sound asset
+wave|buckets|integer|optional|Number of peaks; 256 when omitted
+wander|time|number|optional|Seconds into the preview
+copy|ids|array|required|Ids of the layers to copy
+film|layer|string|required|Video layer
+film|strip|integer|optional|Number of thumbnails along the video
+sprites|asset|string|required|Picture asset
+asset_uses|asset|string|required|Asset to look for
+unkept|id|string|optional|Layer or group that would be removed
+script_uses|name|string|optional|Id to look for in the scripts
+review
+signature|keys|array|optional|Public keys to check against
+signature|path|string|optional|Package folder or file; the scene folder when omitted
+tried|values|object|optional|Values to try on top of the defaults
+tried|languages|array|optional|Languages to show the form in
+tried|preset|string|optional|Preset whose values to use
+media
+levels|property|string|optional|Property to show the levels of
+base|file|string|required|Package file the preset is for
+bands|of|integer|optional|Number of bands: 16, 32 or 64
+bands|channel|string|optional|Channel to read
+bands|direction|string|optional|Pointer direction to read
+bands|reduce|string|optional|How bands are reduced
+bands|pick|any|optional|Band to read: a name such as bass or a number
+bands|base|object|optional|Binding to read the band into
+touch
+shape_handles|layer|string|required|Shape layer
+shape_handles|time|number|optional|Seconds into the scene
+text_box|layer|string|required|Text layer
+text_box|time|number|optional|Seconds into the scene
+font_list|layer|string|optional|Text layer
+clock_sample|pattern|string|required|Clock pattern such as HH:mm
+clock_sample|wall|number|optional|Wall-clock time in seconds
+clock_sample|lang|string|optional|Language of the names; en when omitted
+clock_help|lang|string|optional|Language of the names; en when omitted
+clock_help|wall|number|optional|Wall-clock time in seconds
+clock_help|dates|boolean|optional|Include the date tokens
+mask_view|layer|string|required|Layer with the effect
+mask_view|index|integer|optional|Position of the effect in the layer
+mask_view|time|number|optional|Seconds into the scene
+mask_picture|asset|string|required|Picture asset
+mask_picture|channel|string|optional|luminance, r, g, b or a
+mask_picture|invert|boolean|optional|Invert the mask
+mask_picture|strength|number|optional|From 0 to 1
+mask_picture|tint|string|optional|Color such as #ffffff
+effect_handles|layer|string|required|Layer with the effect
+effect_handles|index|integer|optional|Position of the effect in the layer
+effect_handles|time|number|optional|Seconds into the scene
+capture_view|layer|string|required|Adjustment layer
+capture_view|time|number|optional|Seconds into the scene
+level|quality|string|optional|Quality level such as q0, q1, q2 or q3
+level|battery|boolean|optional|As on battery
+level|calm|boolean|optional|With calm motion
+history
