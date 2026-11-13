@@ -119,6 +119,7 @@ mod touching;
 mod triggering;
 mod undoing;
 mod unkept;
+mod usage;
 mod userprops;
 mod wallclock;
 pub mod wallhaven;
@@ -129,25 +130,10 @@ mod wording;
 
 pub use calls::CALLS;
 pub use cli::{Cli, Command};
+pub use usage::{Usage, usage};
 
-use std::fmt;
 use std::process::ExitCode;
 use wprs_client::{error_name, explain};
-
-#[derive(Debug)]
-pub struct Usage(pub String);
-
-impl fmt::Display for Usage {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str(&self.0)
-    }
-}
-
-impl std::error::Error for Usage {}
-
-pub fn usage(message: impl Into<String>) -> anyhow::Error {
-    Usage(message.into()).into()
-}
 
 fn quiet_on_closed_pipe() {
     let shown = std::panic::take_hook();

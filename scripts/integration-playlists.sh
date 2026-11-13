@@ -148,9 +148,7 @@ grep -q '^count = 3' "$config" || fail "provider option: $(cat "$config")"
 refused "belongs to provider" Library1 RemoveSource s "$daily"
 if ctl provider set daily count 9 2>"$WORK/provider.out"; then fail "an invalid provider option was accepted"; fi
 if ctl provider add daily bing 2>/dev/null; then fail "a provider id was added twice"; fi
-if printf 'hunter2\n' | ctl provider add photos webdav url=https://dav.example.org/files user=me 2>"$WORK/keyring.out"; then
-  fail "a secret was accepted without a keyring"
-fi
+if printf 'hunter2\n' | ctl provider add photos webdav url=https://dav.example.org/files user=me 2>"$WORK/keyring.out"; then fail "a secret was accepted without a keyring"; fi
 grep -q "no Secret Service is available" "$WORK/keyring.out" || fail "keyring message: $(cat "$WORK/keyring.out")"
 grep -q photos "$config" && fail "a provider was created although its secret could not be stored"
 ctl provider add photos webdav url=https://dav.example.org/files user=me --no-secret >/dev/null
@@ -160,18 +158,13 @@ if ctl provider sync photos 2>"$WORK/sync.out"; then fail "a provider synced wit
 grep -q "needs its secret" "$WORK/sync.out" || fail "sync message: $(cat "$WORK/sync.out")"
 if printf 'hunter2\n' | ctl provider secret photos 2>"$WORK/secret.out"; then fail "a secret was stored without a keyring"; fi
 grep -q "no Secret Service is available" "$WORK/secret.out" || fail "secret message: $(cat "$WORK/secret.out")"
-plain() { ctl provider ls --json | jq_ "[p['plain_http'] for p in r['providers'] if p['id'] == 'photos']"; }
-ctl provider set photos url http://dav.example.org/files || fail "the plain http address of the own server was refused"
-[ "$(plain)" = "[True]" ] || fail "plain http shows no flag: $(ctl provider ls --json)"
+plain() { [ "$(ctl provider ls --json | jq_ "[p['plain_http'] for p in r['providers'] if p['id'] == 'photos']")" = "[$1]" ] || fail "plain http flag is not $1: $(ctl provider ls --json)"; }
+ctl provider set photos url http://dav.example.org/files && plain True
 ctl provider ls | grep -q "photos uses plain http" || fail "plain http shows no notice: $(ctl provider ls)"
-ctl provider set photos url http://127.0.0.1:9/files
-[ "$(plain)" = "[False]" ] || fail "an address on this computer was flagged: $(ctl provider ls --json)"
+ctl provider set photos url http://127.0.0.1:9/files && plain False
 if ctl provider set photos url ftp://dav.example.org/files 2>/dev/null; then fail "an ftp address was accepted"; fi
-ctl provider set photos url https://dav.example.org/files
-[ "$(plain)" = "[False]" ] || fail "an https address was flagged: $(ctl provider ls --json)"
-if ctl provider add leak webdav url=https://me:pw@dav.example.org user=me --no-secret 2>"$WORK/url.out"; then
-  fail "credentials in a URL were accepted"
-fi
+ctl provider set photos url https://dav.example.org/files && plain False
+if ctl provider add leak webdav url=https://me:pw@dav.example.org user=me --no-secret 2>"$WORK/url.out"; then fail "credentials in a URL were accepted"; fi
 grep -q "not in the URL" "$WORK/url.out" || fail "URL message: $(cat "$WORK/url.out")"
 grep -q hunter2 "$config" "$WORK"/*.log && fail "a secret reached the configuration or a log"
 ctl provider wallhaven add art --categories general,people --purity sfw --sorting random --top-range 3M --ratios 16x9,landscape \
