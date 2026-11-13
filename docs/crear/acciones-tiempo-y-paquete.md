@@ -357,6 +357,25 @@ wprs-ctl scene act mi-escena set '{"pointer":"/manifest/kind","value":"image"}'
 wprs-ctl scene act mi-escena manifest '{"media":{"file":"foto.png"}}'
 ```
 
+##### variante `part`
+
+Solo para paquetes de recursos: cambia el título y la miniatura de una parte que el paquete ofrece (`ext.parts`). Si el paquete aún no lista sus partes, la primera edición escribe la lista con todas las partes de nivel superior y cambia la pedida. En la app está en la ficha del paquete, en «partes que ofrece».
+
+| Argumento | Tipo | Qué significa |
+|-----------|------|---------------|
+| `kind` | texto (obligatorio) | `layer`, `particles`, `script` o `effect`. |
+| `id` | texto (obligatorio) | El id de la parte, o la ruta del script. Debe existir en el paquete. |
+| `title` | texto | El título, de 1 a 128 caracteres en una línea, sin `<` ni `>`. Vacío, lo quita. |
+| `thumbnail` | texto | Imagen png, jpg o webp que se reduce a un jpg de a lo más 1024 píxeles de lado y se guarda en `parts/`. |
+| `clear_thumbnail` | booleano | `true` quita la miniatura. |
+
+```sh
+wprs-ctl scene new origen
+wprs-ctl scene act origen add_layer '{"kind":"image","file":"foto.png","id":"cielo"}'
+wprs-ctl pack new-assets origen partes --part layer:cielo --id org.example.partes --title Partes --license CC-BY-4.0 --attribution "Ana Perez"
+wprs-ctl scene act partes manifest '{"part":{"kind":"layer","id":"cielo","title":"Cielo","thumbnail":"foto.png"}}'
+```
+
 #### `translate`
 
 Escribe, añade o quita el texto de un campo en un idioma. Sirve para los textos de la ficha (`/manifest/title`, `/manifest/description`, `/manifest/changes`), las etiquetas, ayudas y opciones de las propiedades de usuario, y los textos de reserva de los medios. Sirve también para el texto de una capa `text` (`/scene/layers/0/text`), salvo que siga un valor como un reloj: entonces la acción lo dice. Un texto de capa nunca se queda sin texto: no se puede quitar el último idioma. Al escribir en un idioma distinto del del paquete, un texto simple se convierte en un texto con varios idiomas. En la app, el campo de idiomas junto a cada texto.

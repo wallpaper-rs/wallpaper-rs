@@ -27,6 +27,7 @@ fn a_dedicated_scene_command_for_an_action_takes_the_same_arguments() {
             ("manifest", "requires"),
             ("manifest", "preset"),
             ("manifest", "media"),
+            ("manifest", "part"),
             ("manifest", "credit"),
             ("manifest", "uncredit"),
             ("manifest", "text"),

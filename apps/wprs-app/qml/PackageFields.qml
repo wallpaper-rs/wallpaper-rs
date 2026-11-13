@@ -7,6 +7,7 @@ Loader {
 
     sourceComponent: ({
             "package:credits": credits,
+            "package:parts": parts,
             "package:strings": strings,
             "package:flashes": flashes,
             "package:license": licensing
@@ -40,6 +41,14 @@ Loader {
         id: credits
 
         PackageCredits {
+            host: fields.host
+        }
+    }
+
+    Component {
+        id: parts
+
+        PackageParts {
             host: fields.host
         }
     }

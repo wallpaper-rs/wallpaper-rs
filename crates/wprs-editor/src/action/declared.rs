@@ -104,6 +104,16 @@ pub enum ManifestEdit {
     Media {
         file: std::path::PathBuf,
     },
+    Part {
+        kind: String,
+        id: String,
+        #[serde(default)]
+        title: Option<String>,
+        #[serde(default)]
+        thumbnail: Option<std::path::PathBuf>,
+        #[serde(default)]
+        clear_thumbnail: bool,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]

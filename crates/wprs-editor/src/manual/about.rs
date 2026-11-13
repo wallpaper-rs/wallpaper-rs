@@ -126,7 +126,7 @@ pub const ABOUT: [(&str, &str); 80] = [
     (
         "manifest",
         w(
-            "Edit the manifest: origin, license, tags, authors, credits, texts by key, locale files, display, playback, web, network, inputs",
+            "Edit the manifest: origin, license, tags, authors, credits, texts by key, locale files, display, playback, web, network, inputs, and the title and thumbnail of each part a resource package offers",
         ),
     ),
     ("property", w("Edit a user property of the manifest")),

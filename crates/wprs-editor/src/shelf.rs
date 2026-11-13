@@ -46,7 +46,7 @@ pub fn strings(value: &Value, out: &mut BTreeSet<String>) {
     }
 }
 
-fn picked(scene: &Value, pick: &Pick) -> Option<Value> {
+pub(crate) fn picked(scene: &Value, pick: &Pick) -> Option<Value> {
     match pick.kind.as_str() {
         "layer" => layer(&scene["layers"], &pick.id).cloned(),
         "script" => scene["scripts"].as_array()?.iter().find(|s| s["path"] == pick.id.as_str()).cloned(),

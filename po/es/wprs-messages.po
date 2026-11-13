@@ -5555,8 +5555,8 @@ msgid "Edit the transform, blend or instancing of a layer, or start from a ready
 msgstr "Edita la transformación, la mezcla o la instanciación de una capa, o parte de un texto de reloj o fecha listo y un movimiento que gira o deriva sin fin"
 
 #: crates/wprs-editor/src/manual/about.rs
-msgid "Edit the manifest: origin, license, tags, authors, credits, texts by key, locale files, display, playback, web, network, inputs"
-msgstr "Edita el manifiesto: origen, licencia, etiquetas, autores, créditos, textos por clave, archivos de idioma, pantalla, reproducción, web, red, entradas"
+msgid "Edit the manifest: origin, license, tags, authors, credits, texts by key, locale files, display, playback, web, network, inputs, and the title and thumbnail of each part a resource package offers"
+msgstr "Edita el manifiesto: origen, licencia, etiquetas, autores, créditos, textos por clave, archivos de idioma, pantalla, reproducción, web, red, entradas y el título y la miniatura de cada parte que ofrece un paquete de recursos"
 
 #: crates/wprs-editor/src/manual/about.rs
 msgid "Edit a user property of the manifest"
@@ -5921,3 +5921,15 @@ msgstr "Lo que hace un nivel de calidad: escala, densidad, partículas, los efec
 #: crates/wprs-editor/src/manual/asks.rs
 msgid "The steps that undo would take back (oldest first) and redo would bring back (next first), and whether the scene has unsaved changes"
 msgstr "Los pasos que deshacer retrocedería (el más antiguo primero) y rehacer traería de vuelta (el siguiente primero), y si la escena tiene cambios sin guardar"
+
+#: crates/wprs-editor/src/shaping/offered.rs
+msgid "a part title has 1 to 128 characters on one line, without < or >"
+msgstr "un título de parte tiene de 1 a 128 caracteres en una línea, sin < ni >"
+
+#: crates/wprs-editor/src/shaping/offered.rs
+msgid "only a package of resources offers parts"
+msgstr "solo un paquete de recursos ofrece partes"
+
+#: crates/wprs-editor/src/shaping/offered.rs
+msgid "a package offers at most %1 parts"
+msgstr "un paquete ofrece como máximo %1 partes"
