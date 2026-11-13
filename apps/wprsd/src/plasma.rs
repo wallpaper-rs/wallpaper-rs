@@ -13,7 +13,7 @@ pub(crate) fn switch_script(from: &str, to: &str) -> String {
         "var all = desktops(); var changed = 0; \
          for (var i = 0; i < all.length; i++) {{ \
          if (all[i].wallpaperPlugin == \"{from}\") {{ all[i].wallpaperPlugin = \"{to}\"; changed++; }} }} \
-         changed"
+         print(changed);"
     )
 }
 
@@ -32,6 +32,10 @@ fn evaluate(script: &str) -> anyhow::Result<u32> {
         let text: String = reply.body().deserialize()?;
         Ok(text.trim().parse().unwrap_or(0))
     })
+}
+
+fn shows_something(config: &wprs_core::config::Config) -> bool {
+    !config.is_blank("") || config.outputs.keys().any(|name| !config.is_blank(name))
 }
 
 impl Daemon {
@@ -56,10 +60,7 @@ impl Daemon {
     }
 
     pub(crate) fn take_back_from_plasma(&self) {
-        let shown = {
-            let st = self.state();
-            st.outputs.keys().any(|name| !st.config.is_blank(name))
-        };
+        let shown = shows_something(&self.state().config);
         if !shown || !self.marker().exists() {
             return;
         }
@@ -80,6 +81,18 @@ mod tests {
         let script = switch_script(OURS, OWN);
         assert!(script.contains("wallpaperPlugin == \"io.github.wallpaper_rs\""));
         assert!(script.contains("wallpaperPlugin = \"org.kde.image\""));
-        assert!(script.starts_with("var all = desktops();") && script.ends_with("changed"));
+        assert!(script.starts_with("var all = desktops();") && script.ends_with("print(changed);"));
+    }
+
+    #[test]
+    fn the_decision_to_take_screens_back_reads_the_configuration_not_the_live_outputs() {
+        let mut config = wprs_core::config::Config::default();
+        assert!(!shows_something(&config));
+        config.set_image("", "/a.png".into(), None);
+        assert!(shows_something(&config));
+        config.clear_shown(&[], &["/a.png".into()]);
+        assert!(!shows_something(&config));
+        config.set_image("DP-2", "/b.png".into(), None);
+        assert!(shows_something(&config));
     }
 }
