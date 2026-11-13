@@ -2,7 +2,7 @@ import QtQuick
 import io.github.wallpaper_rs.app
 
 Rectangle {
-    property real corner: Look.radioChico
+    property real corner: Look.radio
     property int gap: Look.anilloHueco
 
     anchors.fill: parent

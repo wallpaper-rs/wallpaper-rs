@@ -96,6 +96,36 @@ QtObject {
     readonly property int llaveAlto: 22
     readonly property int llavePunto: 16
 
+    readonly property real tValor: 16.5
+    readonly property string letraFija: "monospace"
+    readonly property int filaLado: 24
+    readonly property int filaFin: 20
+    readonly property int explicaHueco: 52
+    readonly property int valorHueco: 10
+    readonly property int icono: 18
+    readonly property int iconoEstado: 17
+    readonly property int iconoNota: 15
+    readonly property int iconoAviso: 20
+    readonly property int iconoError: 28
+    readonly property int iconoErrorGrande: 40
+    readonly property int rielAlto: 4
+    readonly property int rielPunto: 14
+    readonly property int altoSublista: 48
+    readonly property int altoOpcion: 38
+    readonly property int altoCerrar: 30
+    readonly property int radioPanel: 10
+    readonly property int panelChico: 360
+    readonly property int menuChico: 280
+    readonly property int listaHueco: 6
+    readonly property int campoAncho: 260
+    readonly property int vacioAncho: 760
+    readonly property int errorAncho: 640
+    readonly property int errorGrandeAncho: 780
+    readonly property int avisoAncho: 480
+    readonly property int avisoDura: 8000
+    readonly property int rielAncho: 120
+    readonly property int huecoEstado: 7
+    readonly property int huecoBoton: 9
     readonly property int paso: 180
     readonly property var pasoCurva: [0.22, 1, 0.36, 1, 1, 1]
 
