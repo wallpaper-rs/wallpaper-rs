@@ -17,7 +17,8 @@ else
   ctl lib search "" >/dev/null || fail "the library did not answer through the bus proxy"
   export DBUS_SESSION_BUS_ADDRESS=$plain WPRS_PRIVATE_BUS_ADDRESS=$plain
   stop_daemon "$daemon" "$WORK/proxied.log"
-  kill "$proxy" && wait "$proxy" 2>/dev/null || true
+  kill "$proxy" 2>/dev/null || true
+  wait "$proxy" 2>/dev/null || true
   if grep -q "Invalid" "$WORK/proxy.log"; then fail "the bus proxy refused a message: $(tail -n 5 "$WORK/proxy.log")"; fi
   start_daemon "$WORK/wprsd.log"
   echo "bus proxy checks passed"
