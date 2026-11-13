@@ -34,6 +34,9 @@ QtObject {
         const drop = find(tools, item => item.objectName === "removeEmitter" && item.enabled);
         if (!drop)
             throw new Error("emitters: an emitter has no button to remove it");
+        const combo = find(drop.parent.parent, item => item.hasOwnProperty("popup") && item.parent === drop.parent);
+        if (combo && drop.parent.parent.implicitWidth >= 0 && drop.x > combo.x)
+            throw new Error("emitters: the remove button sits after the shape selector, where a narrow panel hides it");
         drop.clicked();
         tools.load();
         if (count() !== before)

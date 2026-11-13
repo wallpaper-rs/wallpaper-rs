@@ -68,16 +68,6 @@ ColumnLayout {
             text: App.tr("Emitter %1", row.emitter.index + 1)
         }
 
-        QQC2.ComboBox {
-            Layout.fillWidth: true
-            model: [App.tr("Point"), App.tr("Box"), App.tr("Circle"), App.tr("Line"), App.tr("Edge"), App.tr("Around a point"), App.tr("Between two points"), App.tr("From a layer")]
-            currentIndex: row.kinds.indexOf(row.emitter.kind)
-            onActivated: index => tools.edit("shape", {
-                    "emitter": row.emitter.index,
-                    "shape": row.fresh(row.kinds[index])
-                })
-        }
-
         QQC2.ToolButton {
             objectName: "removeEmitter"
             icon.name: "edit-delete"
@@ -89,6 +79,16 @@ ColumnLayout {
             onClicked: row.tools.edit("shape", {
                     "emitter": row.emitter.index,
                     "remove": true
+                })
+        }
+
+        QQC2.ComboBox {
+            Layout.fillWidth: true
+            model: [App.tr("Point"), App.tr("Box"), App.tr("Circle"), App.tr("Line"), App.tr("Edge"), App.tr("Around a point"), App.tr("Between two points"), App.tr("From a layer")]
+            currentIndex: row.kinds.indexOf(row.emitter.kind)
+            onActivated: index => tools.edit("shape", {
+                    "emitter": row.emitter.index,
+                    "shape": row.fresh(row.kinds[index])
                 })
         }
     }
