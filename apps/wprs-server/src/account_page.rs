@@ -3,6 +3,7 @@ use crate::account::profile;
 use crate::auth::Auth;
 use crate::error::{Problem, Res};
 use crate::me::listing;
+use crate::sync::head;
 use crate::web::{page, text};
 use axum::extract::State;
 use axum::response::{IntoResponse, Redirect, Response};
@@ -34,14 +35,18 @@ pub async fn account(State(app): St, auth: Option<Auth>) -> Res<Response> {
     let user = auth.user;
     let data = app.db.run(move |c| {
         let lists = ["versions", "uploads", "devices", "tokens", "keys"].map(|w| listing(c, user, w));
-        Ok((profile(c, user)?, lists.into_iter().collect::<Res<Vec<_>>>()?))
+        Ok((profile(c, user)?, lists.into_iter().collect::<Res<Vec<_>>>()?, head(c, user).ok()))
     });
-    let (me, lists) = data.await?;
+    let (me, lists, sync) = data.await?;
     let [versions, uploads, devices, tokens, keys] =
         <[Vec<Value>; 5]>::try_from(lists).map_err(|_| Problem::internal("account lists"))?;
     let body = html! {
-        p { "Signed in as " strong { (auth.handle) } " (" (auth.role.name()) "). Storage used: "
+        p { "Signed in as " strong { (auth.handle) } " (" (auth.role.name()) "). Package storage used: "
             (me["used_bytes"]) " of " (me["quota_bytes"]) " bytes." }
+        @if let Some(h) = sync {
+            p { "Sync data: " (h.used) " of " (app.cfg.sync_quota) " bytes. Private files: " (h.files) " of "
+                (app.cfg.files_quota) " bytes." }
+        }
         section.card { h2 { "Upload a wallpaper package" }
             form method="post" action="/upload?back=/account" enctype="multipart/form-data" {
                 label { "Visibility" (crate::admin::choose("visibility", "Visibility", &VISIBILITY, "public")) }
