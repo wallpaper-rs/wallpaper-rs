@@ -101,9 +101,49 @@ QtObject {
             });
     }
 
+    function pairs() {
+        page.run("add_layer", {
+                "kind": "solid",
+                "id": "placed"
+            });
+        const layer = page.view.layers.find(item => item.id === "placed");
+        page.editor.select(layer.pointer);
+        const field = page.fields.find(item => item.key === "position" && item.widget === "vec2");
+        if (!field)
+            throw new Error("fields: a layer shows no position");
+        const before = page.editor.value(field.pointer);
+        const input = Qt.createComponent("SceneInput.qml").createObject(page, {
+                "page": page,
+                "field": field,
+                "width": 400,
+                "height": 100,
+                "z": 1000
+            });
+        const gather = (item, out) => {
+            out.push(item);
+            item.children.forEach(child => gather(child, out));
+            return out;
+        };
+        const boxes = gather(input, []).filter(item => item.typed !== undefined && item.textEdited !== undefined);
+        same(boxes.length, 2, "the text boxes of a position");
+        boxes[0].forceActiveFocus();
+        boxes[0].editingFinished();
+        same(page.editor.value(field.pointer), before, "a click into a position that changes nothing");
+        boxes[0].text = "12";
+        boxes[0].textEdited();
+        boxes[0].editingFinished();
+        const after = JSON.parse(page.editor.value(field.pointer) || "null");
+        same(Array.isArray(after) ? after[0] : after, 12, "a position typed into its text box");
+        input.destroy();
+        page.run("remove_layer", {
+                "id": "placed"
+            });
+    }
+
     function exercise() {
         color();
         lines();
         effects();
+        pairs();
     }
 }
