@@ -1,6 +1,7 @@
 package io.github.wallpaper_rs
 
 import android.app.WallpaperManager
+import androidx.activity.SystemBarStyle
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,6 +34,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import org.json.JSONObject
+
+val DARK_BARS = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
 
 enum class Veil { Shelf, Title, Strip, Panel }
 

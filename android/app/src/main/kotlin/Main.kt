@@ -56,7 +56,7 @@ class Main : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(DARK_BARS, DARK_BARS)
         Native.prepare(noBackupFilesDir.path)
         Unveil.load()
         Heard.applied = synced

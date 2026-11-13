@@ -15,7 +15,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.core.view.WindowCompat
 import org.junit.After
+import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,6 +81,22 @@ class ShellTest {
         compose.onNodeWithText(context.getString(R.string.sources)).assertIsDisplayed()
         back()
         tab(R.string.library).assertIsSelected()
+    }
+
+    @Test
+    fun theSystemBarsKeepLightIconsWhileThePhoneIsInLightMode() {
+        val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+        automation.executeShellCommand("cmd uimode night no").close()
+        try {
+            opened()
+            scenario?.onActivity { main ->
+                val bars = WindowCompat.getInsetsController(main.window, main.window.decorView)
+                assertFalse(bars.isAppearanceLightStatusBars)
+                assertFalse(bars.isAppearanceLightNavigationBars)
+            }
+        } finally {
+            automation.executeShellCommand("cmd uimode night auto").close()
+        }
     }
 
     private companion object {
