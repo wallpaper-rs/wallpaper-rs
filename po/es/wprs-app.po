@@ -1035,8 +1035,14 @@ msgid "What's new: %1"
 msgstr "Novedades: %1"
 
 #: apps/wprs-app/qml/BrowseRow.qml
-msgid "Mature content: click the picture to show it"
-msgstr "Contenido para adultos: haz clic en la imagen para mostrarlo"
+msgid "Mature content: click the picture or press Enter on it to show it"
+msgstr ""
+"Contenido para adultos: haz clic en la imagen o pulsa Intro sobre ella para "
+"mostrarlo"
+
+#: apps/wprs-app/qml/BrowseRow.qml
+msgid "Show the mature content"
+msgstr "Mostrar el contenido para adultos"
 
 #: apps/wprs-app/qml/BrowseRow.qml
 msgid ""
@@ -17535,3 +17541,11 @@ msgstr "Dónde cortar"
 #: apps/wprs-app/qml/EditRegionStraight.qml
 msgid "Cut along the line"
 msgstr "Cortar por la línea"
+
+#: apps/wprs-app/qml/RgbPicture.qml
+msgid ""
+"Frame of the device on the picture; arrow keys move it, Shift with arrows "
+"sizes it"
+msgstr ""
+"Marco del dispositivo sobre la imagen; las flechas lo mueven y Mayús con las "
+"flechas le cambia el tamaño"

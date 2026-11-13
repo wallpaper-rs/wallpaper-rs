@@ -25,7 +25,7 @@ ColumnLayout {
         onActivated: history.load()
     }
 
-    ListView {
+    FocusList {
         Layout.fillWidth: true
         Layout.fillHeight: true
         clip: true

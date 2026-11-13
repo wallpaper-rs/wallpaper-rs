@@ -83,10 +83,31 @@ Rectangle {
     Rectangle {
         id: handle
 
+        readonly property bool keyTarget: true
+
         visible: picture.board.target !== null && picture.board.value !== "off"
+        activeFocusOnTab: true
+        Accessible.role: Accessible.Grouping
+        Accessible.name: App.tr("Frame of the device on the picture; arrow keys move it, Shift with arrows sizes it")
+        Keys.onPressed: event => {
+            const step = {
+                [Qt.Key_Left]: [-1, 0],
+                [Qt.Key_Right]: [1, 0],
+                [Qt.Key_Up]: [0, -1],
+                [Qt.Key_Down]: [0, 1]
+            }[event.key];
+            if (!step)
+                return;
+            const r = picture.board.rect, d = 0.02;
+            if (event.modifiers & Qt.ShiftModifier)
+                picture.board.put(r.x, r.y, r.w + step[0] * d, r.h + step[1] * d, r.flow);
+            else
+                picture.board.put(r.x + step[0] * d, r.y + step[1] * d, r.w, r.h, r.flow);
+            event.accepted = true;
+        }
         color: Qt.alpha(Kirigami.Theme.highlightColor, 0.25)
-        border.color: Kirigami.Theme.highlightColor
-        border.width: 2
+        border.color: activeFocus ? Kirigami.Theme.focusColor : Kirigami.Theme.highlightColor
+        border.width: activeFocus ? 4 : 2
         Component.onCompleted: picture.frame()
 
         function done() {

@@ -66,3 +66,29 @@ fn the_self_check_walks_every_page_with_the_keyboard() {
         assert!(probe.contains(needle), "{needle}");
     }
 }
+
+#[test]
+fn every_list_and_click_target_of_the_main_pages_takes_the_keyboard() {
+    for page in ["Browse", "RepoList", "RepoStatic", "Installed", "History", "StatusBar"] {
+        let text = read(&format!("qml/{page}.qml"));
+        assert!(text.contains("FocusList {") && !text.contains("ListView {"), "{page}");
+    }
+    let list = read("qml/FocusList.qml");
+    for needle in ["activeFocusOnTab: true", "keyNavigationEnabled: true", "Kirigami.Theme.focusColor"] {
+        assert!(list.contains(needle), "{needle}");
+    }
+    let row = read("qml/BrowseRow.qml");
+    assert!(
+        row.contains("activeFocusOnTab: row.veiled")
+            && row.contains("Qt.Key_Return")
+            && row.contains("row.reveal()")
+    );
+    assert!(
+        read("qml/AlignPad.qml").contains("Keys.onPressed")
+            && read("qml/RgbPicture.qml").contains("Keys.onPressed")
+    );
+    let walk = read("qml/KeyWalk.qml");
+    assert!(walk.contains("keyTarget") && walk.contains("focusList"));
+    let probe = read("qml/KeyProbe.qml");
+    assert!(probe.contains("alignment pad") && probe.contains("through a list"));
+}

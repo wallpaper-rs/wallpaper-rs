@@ -8,6 +8,9 @@ Flickable {
     readonly property alias button: button
     readonly property alias combo: combo
     readonly property alias slider: slider
+    readonly property alias pad: pad
+    readonly property alias list: list
+    property var landed: [0, 0]
 
     width: 300
     height: 200
@@ -38,6 +41,27 @@ Flickable {
             from: 0
             to: 10
             value: 5
+        }
+
+        AlignPad {
+            id: pad
+
+            px: scratch.landed[0]
+            py: scratch.landed[1]
+            onSettled: (x, y) => scratch.landed = [x, y]
+        }
+
+        FocusList {
+            id: list
+
+            width: 100
+            height: 60
+            model: 5
+            delegate: Text {
+                required property int index
+
+                text: index
+            }
         }
 
         Item {

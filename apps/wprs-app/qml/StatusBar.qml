@@ -84,7 +84,7 @@ QQC2.ToolBar {
             text: App.tr("No jobs")
         }
 
-        ListView {
+        FocusList {
             id: list
 
             anchors.fill: parent

@@ -11,7 +11,15 @@ RowLayout {
     required property var catalog
     readonly property bool veiled: modelData.content === "mature" && !modelData.revealed && !row.catalog.shown[modelData.repo_id + "/" + modelData.id] && !App.unveiled
     readonly property bool here: modelData.installed.includes(version.currentText)
-    readonly property bool wants: (pointer.hovered || version.activeFocus || install.activeFocus) && !veiled && !row.catalog.battery && modelData.photosensitive !== true
+    readonly property bool wants: (pointer.hovered || cover.activeFocus || version.activeFocus || install.activeFocus) && !veiled && !row.catalog.battery && modelData.photosensitive !== true
+
+    function reveal() {
+        const key = row.modelData.repo_id + "/" + row.modelData.id;
+        row.catalog.shown = Object.assign({}, row.catalog.shown, {
+                [key]: true
+            });
+        App.act("Reveal", [key], "Repos1");
+    }
 
     onWantsChanged: {
         if (wants)
@@ -19,12 +27,33 @@ RowLayout {
     }
 
     Image {
+        id: cover
+
+        readonly property bool keyTarget: row.veiled
+
         Layout.preferredWidth: Kirigami.Units.gridUnit * 8
         Layout.preferredHeight: Kirigami.Units.gridUnit * 5
         source: App.url(row.catalog.previews[row.catalog.spec(row.modelData)] ?? "")
         asynchronous: true
         fillMode: Image.PreserveAspectCrop
         sourceSize: row.veiled ? Qt.size(12, 12) : undefined
+        activeFocusOnTab: row.veiled
+        Accessible.role: Accessible.Button
+        Accessible.name: App.tr("Show the mature content")
+        Keys.onPressed: event => {
+            if (row.veiled && [Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].includes(event.key)) {
+                row.reveal();
+                event.accepted = true;
+            }
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            visible: cover.activeFocus
+            color: "transparent"
+            border.color: Kirigami.Theme.focusColor
+            border.width: 3
+        }
 
         HoverHandler {
             id: pointer
@@ -41,13 +70,7 @@ RowLayout {
 
         TapHandler {
             enabled: row.veiled
-            onTapped: {
-                const key = row.modelData.repo_id + "/" + row.modelData.id;
-                row.catalog.shown = Object.assign({}, row.catalog.shown, {
-                        [key]: true
-                    });
-                App.act("Reveal", [key], "Repos1");
-            }
+            onTapped: row.reveal()
         }
     }
 
@@ -64,7 +87,7 @@ RowLayout {
             Layout.fillWidth: true
             wrapMode: Text.Wrap
             textFormat: Text.PlainText
-            text: [row.modelData.content ? App.plain(row.modelData.description) : row.modelData.description, row.modelData.authors.join(", ") + " · " + row.modelData.license + " · " + App.bytes(row.modelData.size), row.modelData.id + " · " + row.modelData.repo_name, row.modelData.installed.length > 0 ? App.tr("Installed: %1", row.modelData.installed.join(", ")) : "", row.modelData.update && row.modelData.changes ? App.tr("What's new: %1", App.plain(row.modelData.changes)) : "", row.veiled ? App.tr("Mature content: click the picture to show it") : ""].filter(t => t).join("\n")
+            text: [row.modelData.content ? App.plain(row.modelData.description) : row.modelData.description, row.modelData.authors.join(", ") + " · " + row.modelData.license + " · " + App.bytes(row.modelData.size), row.modelData.id + " · " + row.modelData.repo_name, row.modelData.installed.length > 0 ? App.tr("Installed: %1", row.modelData.installed.join(", ")) : "", row.modelData.update && row.modelData.changes ? App.tr("What's new: %1", App.plain(row.modelData.changes)) : "", row.veiled ? App.tr("Mature content: click the picture or press Enter on it to show it") : ""].filter(t => t).join("\n")
         }
 
         QQC2.Label {

@@ -12,7 +12,7 @@ QQC2.ScrollView {
 
     signal remove(string repo)
 
-    ListView {
+    FocusList {
         model: list.repos
         spacing: Kirigami.Units.largeSpacing
 

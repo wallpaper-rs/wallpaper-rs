@@ -10,6 +10,8 @@ Item {
     readonly property real snap: 0.1
     readonly property real dot: Kirigami.Units.gridUnit * 0.9
 
+    readonly property bool keyTarget: true
+
     signal moved(real x, real y)
     signal settled(real x, real y)
 
@@ -26,12 +28,29 @@ Item {
     implicitHeight: implicitWidth * 9 / 16
     Accessible.role: Accessible.Slider
     Accessible.name: App.tr("Alignment")
+    activeFocusOnTab: true
+    Keys.onPressed: event => {
+        const step = {
+            [Qt.Key_Left]: [-1, 0],
+            [Qt.Key_Right]: [1, 0],
+            [Qt.Key_Up]: [0, -1],
+            [Qt.Key_Down]: [0, 1]
+        }[event.key];
+        if (!step)
+            return;
+        const x = Math.max(-1, Math.min(1, Math.round(pad.px * 2) / 2 + step[0] * 0.5));
+        const y = Math.max(-1, Math.min(1, Math.round(pad.py * 2) / 2 + step[1] * 0.5));
+        pad.moved(x, y);
+        pad.settled(x, y);
+        event.accepted = true;
+    }
 
     Rectangle {
         anchors.fill: parent
         radius: Kirigami.Units.smallSpacing
         color: Kirigami.Theme.alternateBackgroundColor
-        border.color: Kirigami.Theme.disabledTextColor
+        border.color: pad.activeFocus ? Kirigami.Theme.focusColor : Kirigami.Theme.disabledTextColor
+        border.width: pad.activeFocus ? 3 : 1
     }
 
     Repeater {

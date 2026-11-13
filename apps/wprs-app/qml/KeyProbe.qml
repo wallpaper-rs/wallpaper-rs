@@ -64,6 +64,21 @@ Timer {
         return item[property] !== old;
     }
 
+    function steps() {
+        const pad = scratch.pad;
+        const list = scratch.list;
+        pad.forceActiveFocus(Qt.TabFocusReason);
+        walk.press(Qt.Key_Right, 0);
+        walk.press(Qt.Key_Down, 0);
+        if (scratch.landed[0] !== 0.5 || scratch.landed[1] !== 0.5)
+            throw new Error("the arrow keys do not move the alignment pad: " + scratch.landed.join(","));
+        list.forceActiveFocus(Qt.TabFocusReason);
+        walk.press(Qt.Key_Down, 0);
+        walk.press(Qt.Key_Down, 0);
+        if (list.currentIndex !== 2)
+            throw new Error("the arrow keys do not move through a list: " + list.currentIndex);
+    }
+
     function turns() {
         const combo = scratch.combo;
         const slider = scratch.slider;
@@ -114,6 +129,7 @@ Timer {
         }
         if (stage === 4) {
             turns();
+            steps();
             return ++stage;
         }
         if (scratch.contentY <= top)

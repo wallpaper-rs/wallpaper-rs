@@ -135,7 +135,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        ListView {
+        FocusList {
             id: hosted
 
             readonly property var host: stall

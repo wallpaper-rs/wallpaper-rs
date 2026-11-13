@@ -46,7 +46,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        ListView {
+        FocusList {
             model: installed.packages
 
             delegate: RowLayout {

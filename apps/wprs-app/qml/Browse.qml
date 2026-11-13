@@ -81,7 +81,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        ListView {
+        FocusList {
             model: browse.packages
             spacing: Kirigami.Units.largeSpacing
 
