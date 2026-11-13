@@ -11,7 +11,8 @@ f_id=$(sql "SELECT id FROM devices ORDER BY number DESC LIMIT 1")
 [ "$(value f "['state'], r['account']['warning'], r['account']['encrypted'], r['account']['records']")" = "('connected', None, None, 0)" ] ||
   fail "a connected device: $(f server status --json)"
 f server status | grep -q "connected, not syncing" || fail "ctl does not show the level: $(f server status)"
-[ "$(f remote ls --json | jq_ "len(r['repos'])")" = 1 ] || fail "a connected device got no repository: $(f remote ls)"
+f_repos() { [ "$(f remote ls --json | jq_ "len(r['repos'])")" = 1 ]; }
+wait_for 30 f_repos || fail "a connected device got no repository: $(f remote ls)"
 f remote refresh --wait >/dev/null
 f pkg install org.example.dusk --wait >/dev/null || fail "a connected device cannot install"
 f remote votes org.example.dusk | grep -q '"shown":true' || fail "a connected device sees no votes"
