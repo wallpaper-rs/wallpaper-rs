@@ -3,7 +3,7 @@ use crate::build::MARGIN;
 use crate::field::{field, field_size, sample, slope};
 use crate::guided::Size;
 use crate::matte::width;
-use crate::regions::regions;
+use crate::shifted::found;
 use crate::split::{Split, cut, distance, indices, mask, split};
 
 pub(crate) struct Plan {
@@ -41,7 +41,8 @@ impl Plan {
         depth: &wprs_core::edit::Depth,
         (count, shift): (usize, f32),
     ) -> Plan {
-        let found = regions(levels, size, depth);
+        let (levels, found) = found(levels, size, depth);
+        let levels = &*levels;
         let per: Vec<f32> = found.label.iter().map(|l| found.means[*l as usize]).collect();
         let parts = match &depth.cuts {
             Some(cuts) => cut(&per, cuts),

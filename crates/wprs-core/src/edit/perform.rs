@@ -86,6 +86,9 @@ impl Edit {
             Action::FillMask { points, refill, protect, radius, falloff, clear } => {
                 self.touch(true, clear, points.map(|p| (p, 1.0)), [refill, protect], (radius, falloff))
             }
+            Action::DepthJoin { points, clear } => self.join(points, clear),
+            Action::DepthSplit { points, radius, clear } => self.split(points, radius, clear),
+            Action::DepthMove { at, by, clear } => self.shift(at, by, clear),
             Action::Reset { ids } => {
                 let before = self.ops.len();
                 self.ops.retain(|op| !ids.contains(&op.id));

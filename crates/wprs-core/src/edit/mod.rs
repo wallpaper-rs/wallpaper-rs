@@ -24,7 +24,7 @@ pub use geometry::{Matrix, mul};
 pub use history::History;
 pub use masks::{Mask, Stroke};
 pub use parse::numbers;
-pub use regions::{Join, MOST_JOINS, MOST_SPLITS};
+pub use regions::{Join, MOST_JOINS, MOST_MOVES, MOST_SPLITS, MOST_TOGETHER, SPLIT_RADIUS, Shift};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 pub use touch::{

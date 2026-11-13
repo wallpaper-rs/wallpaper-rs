@@ -1,5 +1,5 @@
 use crate::Map;
-use crate::regions::regions;
+use crate::shifted::found;
 use image::{GrayImage, Luma, Rgba, RgbaImage};
 use wprs_core::edit::Depth;
 
@@ -24,7 +24,7 @@ pub fn histogram(map: &Map, bins: usize) -> Vec<f32> {
 pub fn outlines(map: &Map, depth: &Depth, cuts: &[f32]) -> RgbaImage {
     let (w, h) = map.dimensions();
     let levels: Vec<f32> = map.as_raw().iter().map(|v| f32::from(*v) / 65535.0).collect();
-    let found = regions(&levels, (w as usize, h as usize), depth);
+    let (_, found) = found(&levels, (w as usize, h as usize), depth);
     let per: Vec<f32> = found.label.iter().map(|l| found.means[*l as usize]).collect();
     let layer = |x: u32, y: u32| cuts.partition_point(|c| *c <= per[(y * w + x) as usize]);
     RgbaImage::from_fn(w, h, |x, y| {

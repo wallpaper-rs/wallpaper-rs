@@ -1,6 +1,7 @@
 mod bands;
 mod brush;
 mod build;
+mod chart;
 #[cfg(feature = "fetch")]
 mod fetch;
 mod field;
@@ -21,11 +22,13 @@ pub mod models;
 mod normals;
 mod persist;
 mod plan;
+mod preview;
 mod process;
 #[cfg(feature = "infer")]
 mod rebuild;
 mod regions;
 mod runtime;
+mod shifted;
 mod split;
 mod stack;
 mod still;
@@ -37,6 +40,7 @@ mod windows;
 pub use bands::band;
 pub use brush::{lift, lift_map, marks, stamp};
 pub use build::{EDGE, MARGIN, MOST_EDGE, TIERS, edge_for, layers};
+pub use chart::{Chart, Zone, chart, colour};
 #[cfg(feature = "fetch")]
 pub use fetch::{AGENT, Cancelled, allowed, download};
 pub use field::{BEND, FIELD, field, field_size, sample, slope};
@@ -52,6 +56,7 @@ pub use made::{Bench, bench, generate, generate_until};
 pub use matte::{Matte, matte};
 pub use models::{Asset, LAMA, MODEL, Part, RUNTIME};
 pub use normals::{MAX_BLUR, MAX_STRENGTH, normals, relief, sphere};
+pub use preview::Preview;
 pub use process::{adjust, coloured, input_size, normalize, shrink, tensor};
 #[cfg(feature = "infer")]
 pub use rebuild::{settings, sized};

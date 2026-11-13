@@ -1,7 +1,7 @@
 use crate::message::Message;
 use serde::Deserialize;
 
-pub const ACTIONS: [&str; 16] = [
+pub const ACTIONS: [&str; 19] = [
     "set",
     "crop",
     "curve",
@@ -18,6 +18,9 @@ pub const ACTIONS: [&str; 16] = [
     "depth_brush",
     "depth_cuts",
     "fill_mask",
+    "depth_join",
+    "depth_split",
+    "depth_move",
 ];
 
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
@@ -138,6 +141,23 @@ pub enum Action {
         protect: bool,
         radius: Option<f32>,
         falloff: Option<f32>,
+        #[serde(default)]
+        clear: bool,
+    },
+    DepthJoin {
+        points: Option<String>,
+        #[serde(default)]
+        clear: bool,
+    },
+    DepthSplit {
+        points: Option<String>,
+        radius: Option<f32>,
+        #[serde(default)]
+        clear: bool,
+    },
+    DepthMove {
+        at: Option<String>,
+        by: Option<f32>,
         #[serde(default)]
         clear: bool,
     },

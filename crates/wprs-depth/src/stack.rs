@@ -91,8 +91,14 @@ impl Places {
             meta.len(),
             crate::models::LAMA.id,
             crate::build::VERSION,
-            serde_json::to_string(&(&depth.cuts, &depth.strokes, &depth.fills, &depth.joins, &depth.splits))
-                .unwrap_or_default()
+            serde_json::to_string(&(
+                &depth.cuts,
+                &depth.strokes,
+                &depth.fills,
+                &depth.joins,
+                (&depth.splits, &depth.moves)
+            ))
+            .unwrap_or_default()
         );
         let hash: String =
             Sha256::digest(used.as_bytes()).iter().take(8).map(|b| format!("{b:02x}")).collect();
