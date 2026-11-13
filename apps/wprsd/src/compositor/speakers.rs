@@ -55,7 +55,8 @@ fn ticks(outputs: &BTreeMap<String, Output>, chosen: Chosen) -> impl Iterator<It
 
 fn level(o: &Output) -> f64 {
     let percent = o.shown.scene.as_ref().and_then(|s| s.spec.values.get(VOLUME)?.as_f64());
-    percent.map_or(1.0, |v| (v / 100.0).clamp(0.0, 1.0))
+    let own = o.shown.scene.as_ref().map_or(1.0, |s| s.spec.heard);
+    percent.map_or(1.0, |v| (v / 100.0).clamp(0.0, 1.0)) * own
 }
 
 impl State {

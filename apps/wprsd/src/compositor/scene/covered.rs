@@ -25,6 +25,7 @@ fn slowed(lights: bool) -> (Quality, &'static str) {
         quality: None,
         span: None,
         drafted: false,
+        heard: 1.0,
     };
     let mains = Power { pace: wprs_core::AutoPace::Smooth, ..Power::new(Tier::T3, false, 0) };
     let mut state = SceneState::new(spec, mains);

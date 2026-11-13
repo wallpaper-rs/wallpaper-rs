@@ -141,6 +141,8 @@ impl Daemon {
             used_at: None,
             use_count: 0,
             missing: false,
+            sound_muted: None,
+            sound_volume: None,
         };
         std::fs::remove_file(self.thumbs.path(&item, 1024)).ok();
         let (tx, rx) = tokio::sync::oneshot::channel();

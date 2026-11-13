@@ -46,6 +46,7 @@ pub struct SceneSpec {
     pub quality: Option<wprs_core::QualityChoice>,
     pub span: Option<[f32; 4]>,
     pub drafted: bool,
+    pub heard: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -107,7 +108,9 @@ impl Content {
             _ => None,
         };
         let values = |c: &Content| match c {
-            Content::Scene(s) => Some((s.values.clone(), s.media(), s.hold, s.moving, s.quality, s.span)),
+            Content::Scene(s) => {
+                Some((s.values.clone(), s.media(), s.hold, s.moving, (s.quality, s.span, s.heard)))
+            }
             _ => None,
         };
         let frame = |c: &Content| match c {
@@ -153,22 +156,6 @@ impl Content {
 impl Reel {
     pub fn plain(path: PathBuf) -> Reel {
         Reel { path, cut: Cut::default(), once: false, lane: String::new() }
-    }
-}
-
-impl SceneSpec {
-    pub(crate) fn media(&self) -> Vec<(String, usize, Option<Reel>)> {
-        let files = self.extra.iter().map(|(k, i)| (k.clone(), Arc::as_ptr(i) as usize, None));
-        files.chain(self.clips.iter().map(|(k, reel)| (k.clone(), 0, Some(reel.clone())))).collect()
-    }
-
-    pub(crate) fn reels(&self) -> impl Iterator<Item = (&str, &Reel, u32)> {
-        let replaced =
-            |id: &String| self.clips.iter().any(|(k, _)| k == id) || self.extra.iter().any(|(k, _)| k == id);
-        let own =
-            self.pack.videos.iter().filter(move |(id, _)| !replaced(id)).map(|(id, r)| (id.as_str(), r, 100));
-        let loud = |id: &str| if id.starts_with(wprs_scene::USER_FILES) { 100 } else { 0 };
-        own.chain(self.clips.iter().map(move |(id, reel)| (id.as_str(), reel, loud(id))))
     }
 }
 

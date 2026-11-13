@@ -18,6 +18,7 @@ fn shown(scene: Option<Scene>) -> Shown {
             clips: Vec::new(),
             hold: None,
             drafted: false,
+            heard: 1.0,
             moving: false,
             quality: None,
             span: None,

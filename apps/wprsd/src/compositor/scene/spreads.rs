@@ -19,6 +19,7 @@ fn halves() -> Arc<ScenePack> {
 
 fn part(pack: &Arc<ScenePack>, span: [f32; 4]) -> SceneState {
     let spec = SceneSpec {
+        heard: 1.0,
         values: Default::default(),
         pack: pack.clone(),
         extra: Vec::new(),

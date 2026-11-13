@@ -10,6 +10,7 @@ mod helper;
 mod kept;
 mod shape;
 
+pub use crate::pagespec::{PageKey, PageSpec};
 pub use helper::{available, helper, unavailable};
 pub use kept::within;
 use shape::color;
@@ -42,35 +43,6 @@ pub struct WebPack {
     pub plain: Json,
     pub own_volume: bool,
     pub max_fps: u32,
-}
-
-#[derive(Clone)]
-pub struct PageSpec {
-    pub pack: Arc<WebPack>,
-    pub values: Values,
-    pub privacy: Privacy,
-    pub files: Vec<(String, PathBuf)>,
-    pub folders: Vec<(String, PathBuf, bool)>,
-    pub storage: Option<PathBuf>,
-    pub quality: Option<wprs_core::QualityChoice>,
-    pub drafted: bool,
-}
-
-pub type PageKey = (PathBuf, wprs_core::QualityChoice);
-
-impl PageSpec {
-    pub fn key(&self, general: wprs_core::QualityChoice) -> PageKey {
-        (self.pack.path.clone(), self.quality.unwrap_or(general))
-    }
-}
-
-impl PartialEq for PageSpec {
-    fn eq(&self, other: &PageSpec) -> bool {
-        let same = (&self.values, self.privacy, &self.files, &self.folders, &self.storage, self.quality);
-        let theirs =
-            (&other.values, other.privacy, &other.files, &other.folders, &other.storage, other.quality);
-        self.pack.path == other.pack.path && same == theirs
-    }
 }
 
 impl Daemon {
@@ -144,7 +116,7 @@ impl Daemon {
         let privacy = self.privacy(&pack);
         let storage = (privacy.storage && pack.storage_kib > 0).then(|| self.page_storage(&pack.props.id));
         let storage = storage.filter(|dir| crate::store::private_dir(dir).is_ok());
-        PageSpec { pack, values, privacy, files, folders, storage, quality: None, drafted: false }
+        PageSpec { pack, values, privacy, files, folders, storage, quality: None, drafted: false, heard: 1.0 }
     }
 
     pub fn page_on(
@@ -153,6 +125,7 @@ impl Daemon {
         pack: Arc<WebPack>,
         shown: &mut Option<Arc<Props>>,
         (drafted, tried): (Option<Option<wprs_core::QualityChoice>>, Option<crate::sceneprops::Stored>),
+        heard: f64,
     ) -> PageSpec {
         let values = pack.props.values(&crate::drafts::layers(
             &self.state().config,
@@ -162,7 +135,7 @@ impl Daemon {
         ));
         *shown = Some(pack.props.clone());
         let quality = drafted.unwrap_or_else(|| self.state().config.own_quality(output));
-        PageSpec { quality, drafted: drafted.is_some(), ..self.page_spec(pack, values) }
+        PageSpec { quality, drafted: drafted.is_some(), heard, ..self.page_spec(pack, values) }
     }
 
     pub fn exposes(&self, item: &wprs_library::Item) -> Vec<String> {

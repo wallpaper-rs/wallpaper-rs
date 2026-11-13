@@ -54,6 +54,7 @@ pub(in crate::compositor) fn page(language: bool, more: Json) -> PageSpec {
         storage: None,
         quality: None,
         drafted: false,
+        heard: 1.0,
     }
 }
 

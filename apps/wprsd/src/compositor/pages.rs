@@ -117,7 +117,8 @@ impl State {
             .and_then(Json::as_f64)
             .filter(|_| !slot.spec.pack.own_volume);
         let own = own.map_or(1.0, |v| v.clamp(0.0, 100.0) / 100.0);
-        let volume = if silent { 0.0 } else { self.settings.volume * self.settings.duck * own };
+        let volume =
+            if silent { 0.0 } else { self.settings.volume * self.settings.duck * own * slot.spec.heard };
         let quality = level(self.power, &slot.spec) as u8;
         Settings { fps, quality, locale: language(&slot.spec).0, volume }
     }

@@ -78,6 +78,10 @@ impl Library {
         self.d()?.run(move |d| d.edit_items(&uids, |lib, uids| lib.set_rating_many(uids, rating))).await
     }
 
+    async fn set_sound(&self, uids: Vec<String>, muted: String, volume: String) -> Result<()> {
+        self.d()?.run(move |d| d.set_sound(&uids, &muted, &volume)).await
+    }
+
     async fn set_favorite(&self, uids: Vec<String>, favorite: bool) -> Result<()> {
         self.d()?.run(move |d| d.edit_items(&uids, |lib, uids| lib.set_favorite_many(uids, favorite))).await
     }

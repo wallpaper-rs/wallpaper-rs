@@ -14,6 +14,7 @@ mod pictures;
 mod players;
 mod power;
 mod pushed;
+mod reels;
 mod relays;
 mod scene;
 mod scripts;

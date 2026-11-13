@@ -1,6 +1,10 @@
 use super::Movie;
 
 impl Movie {
+    pub fn plain(path: std::path::PathBuf) -> Movie {
+        Movie { reel: super::Reel::plain(path), volume: 100, zoom: 1.0, pan: [0.0; 2], max_fps: 0 }
+    }
+
     pub fn heard(self, factor: f64) -> Movie {
         Movie { volume: (f64::from(self.volume) * factor).round() as u32, ..self }
     }

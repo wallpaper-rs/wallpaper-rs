@@ -22,6 +22,7 @@ fn heavy() -> SceneSpec {
         quality: None,
         span: None,
         drafted: false,
+        heard: 1.0,
     }
 }
 
@@ -69,6 +70,7 @@ fn light() -> SceneSpec {
         quality: None,
         span: None,
         drafted: false,
+        heard: 1.0,
     }
 }
 

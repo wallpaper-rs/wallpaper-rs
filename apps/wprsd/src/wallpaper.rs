@@ -1,5 +1,5 @@
 use crate::apply::Media;
-use crate::compositor::{Content, Movie, Picture, Reel, SceneSpec, Spec, lock};
+use crate::compositor::{Content, Movie, Picture, SceneSpec, Spec, lock};
 use crate::daemon::Daemon;
 use anyhow::Context;
 use image::RgbaImage;
@@ -36,9 +36,7 @@ impl Daemon {
         let shown = image.as_deref().map(|_| crate::look::look(chosen, || crate::look::author(&display)));
         (resolved.fit, resolved.background) = shown.unwrap_or((resolved.fit, resolved.background));
         let draft = self.state().drafts.get(output).map(|d| (d.pack.clone(), d.hold, d.values.clone()));
-        if draft.is_some() {
-            transition = Some(Duration::ZERO);
-        }
+        transition = draft.as_ref().map_or(transition, |_| Some(Duration::ZERO));
         let tried = draft.as_ref().and_then(|d| d.2.clone());
         let (hold, page_quality) =
             (draft.as_ref().and_then(|d| d.1), draft.as_ref().and_then(|d| d.0.quality()));
@@ -46,6 +44,7 @@ impl Daemon {
             Some((d, _, _)) => Some(Ok(d.media())),
             None => image.clone().map(|image| self.media(image)),
         };
+        let heard = self.heard(image.as_deref());
         let (mut shown_scene, mut shown_video, mut turn, mut fit) = (None, None, None, resolved.fit);
         let (content, upload) = match media {
             None => (Content::Color, None),
@@ -57,12 +56,10 @@ impl Daemon {
             Some(Ok(Media::Video(path, props))) => {
                 let movie = match &props {
                     Some(p) => p.movie(path, &p.values(&self.state().config.scene_values(output, &p.id))),
-                    None => {
-                        Movie { reel: Reel::plain(path), volume: 100, zoom: 1.0, pan: [0.0; 2], max_fps: 0 }
-                    }
+                    None => Movie::plain(path),
                 };
                 shown_video = props;
-                (Content::Video(movie.heard(self.state().config.heard_at(output))), None)
+                (Content::Video(movie.heard(heard)), None)
             }
             Some(Ok(Media::Scene(pack))) => {
                 let (values, stale) = {
@@ -88,13 +85,15 @@ impl Daemon {
                         quality,
                         span,
                         drafted: draft.is_some(),
+                        heard,
                     }),
                     None,
                 )
             }
-            Some(Ok(Media::Web(pack))) => {
-                (Content::Web(self.page_on(output, pack, &mut shown_video, (page_quality, tried))), None)
-            }
+            Some(Ok(Media::Web(pack))) => (
+                Content::Web(self.page_on(output, pack, &mut shown_video, (page_quality, tried), heard)),
+                None,
+            ),
             Some(Ok(Media::Picture(file))) => {
                 match self.picture(output, file, (size, resolved.fit), uploaded) {
                     Ok((picture, upload)) => {

@@ -24,6 +24,7 @@ pub(super) fn state(folder: Option<&std::path::Path>) -> SceneState {
         clips: Vec::new(),
         hold: None,
         drafted: false,
+        heard: 1.0,
         moving: false,
         quality: None,
         span: None,

@@ -63,8 +63,6 @@ impl Daemon {
         }
         if key.starts_with(wprs_core::QualityChoice::OWN)
             || key.starts_with(wprs_core::HdrChoice::KEY)
-            || key.starts_with(wprs_core::sound::VOLUME)
-            || key.starts_with(wprs_core::sound::MUTED)
             || key.starts_with("parallax.")
         {
             self.configure_all();

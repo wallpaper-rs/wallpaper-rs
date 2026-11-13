@@ -21,6 +21,7 @@ fn snowfall() -> SceneSpec {
         clips: Vec::new(),
         hold: None,
         drafted: false,
+        heard: 1.0,
         moving: false,
         quality: None,
         span: None,
@@ -132,17 +133,7 @@ fn a_scene_frame_that_changed_nothing_is_not_composed_again() {
       "layers": [{ "id": "card", "type": "solid", "color": "#4060ff", "size": [16, 9],
         "transform": { "rotation": { "timeline": "t", "keys": [[0, 0], [4, 360]] } } }] }"##;
     let pack = Arc::new(ScenePack::bare(Scene::from_json(text).unwrap(), Default::default(), Vec::new()));
-    let spec = SceneSpec {
-        values: Default::default(),
-        pack,
-        extra: Vec::new(),
-        clips: Vec::new(),
-        hold: None,
-        drafted: false,
-        moving: false,
-        quality: None,
-        span: None,
-    };
+    let spec = SceneSpec { values: Default::default(), pack, ..snowfall() };
     let (content, fit, background) = (Content::Scene(spec.clone()), Fit::Stretch, [0; 3]);
     let (image, transition, uv, relief, scene) = (None, None, None, None, Some(SceneState::new(spec, power)));
     let shown =
