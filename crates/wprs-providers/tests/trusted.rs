@@ -37,9 +37,8 @@ fn client() -> reqwest::Client {
 
 #[tokio::test(flavor = "multi_thread")]
 async fn the_phone_trusts_the_public_roots_and_what_the_user_added_from_the_next_client_on() {
-    let chain = CertificateDer::pem_slice_iter(&std::fs::read(PEM).unwrap())
-        .collect::<Result<Vec<_>, _>>()
-        .unwrap();
+    let chain =
+        CertificateDer::pem_slice_iter(&std::fs::read(PEM).unwrap()).collect::<Result<Vec<_>, _>>().unwrap();
     let dir = tempfile::tempdir().unwrap();
     let file = dir.path().join("roots.der");
     roots::load_added(&file);
