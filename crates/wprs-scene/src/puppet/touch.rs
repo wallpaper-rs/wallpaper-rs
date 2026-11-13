@@ -2,6 +2,7 @@ use super::Puppet;
 use super::limb::{end, frame};
 use crate::MeshLayer;
 use crate::rigged::VERTEX_FLOATS;
+use crate::rigged::math::Mat;
 
 type Skinned = ([f32; 2], [(usize, f32); 4]);
 
@@ -57,6 +58,15 @@ impl Puppet {
     }
 
     pub fn bone_frames(&self, size: [f32; 2]) -> Vec<[f32; 6]> {
-        self.worlds.iter().map(|w| frame(w, size).0).collect()
+        self.bone_frames_in(size, 1.0)
+    }
+
+    pub fn bone_frames_in(&self, size: [f32; 2], unit: f32) -> Vec<[f32; 6]> {
+        let scaled = |w: &Mat| {
+            let mut w = *w;
+            [3, 7, 11].iter().for_each(|i| w[*i] /= unit);
+            frame(&w, size).0
+        };
+        self.worlds.iter().map(scaled).collect()
     }
 }

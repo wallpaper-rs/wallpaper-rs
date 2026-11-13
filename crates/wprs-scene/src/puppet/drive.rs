@@ -19,7 +19,7 @@ impl Puppet {
             match b.world {
                 true => {
                     if let Some(p) = b.position {
-                        let [x, y] = seat.boxed_at(p);
+                        let [x, y] = seat.boxed_at(p).map(|v| v * m.unit);
                         let back = parent.map_or(IDENTITY, |p| invert(&p));
                         l.t = apply(&back, [x, y, worlds[n][11]]);
                     }
@@ -33,7 +33,7 @@ impl Puppet {
                         l.r = qmul(rest.r, crate::rigged::math::turn(r));
                     }
                     if let Some([x, y]) = b.position {
-                        l.t = [rest.t[0] + x, rest.t[1] - y, rest.t[2]];
+                        l.t = [rest.t[0] + x * m.unit, rest.t[1] - y * m.unit, rest.t[2]];
                     }
                 }
             }

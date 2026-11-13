@@ -4,6 +4,7 @@ use std::sync::Arc;
 use wprs_scene::*;
 
 mod crafted;
+mod driven;
 mod flight;
 mod frames;
 mod grips;

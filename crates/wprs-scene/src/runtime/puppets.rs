@@ -142,6 +142,8 @@ impl Runtime {
     pub(crate) fn bones_read(&self, cx: &Context, layer: &crate::Layer) -> Vec<[f32; 6]> {
         let asked = self.script.watch.iter().any(|w| w.strip_suffix("#bones") == Some(layer.id.as_str()));
         let found = figure(layer).zip(self.puppet(&layer.id)).filter(|_| asked);
-        found.map_or_else(Vec::new, |(m, p)| p.bone_frames(crate::puppet::mount::size(cx, layer, &m)))
+        found.map_or_else(Vec::new, |(m, p)| {
+            p.bone_frames_in(crate::puppet::mount::size(cx, layer, &m), m.unit)
+        })
     }
 }

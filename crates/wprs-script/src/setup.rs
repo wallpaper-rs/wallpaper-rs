@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{Value as Json, json};
 use std::collections::BTreeMap;
-use wprs_scene::{Layer, MAX_SCRIPT_BYTES, Scene, ScriptApi, Site, sites};
+use wprs_scene::{Layer, MAX_SCRIPT_BYTES, MODEL_UNIT, Scene, ScriptApi, Site, sites};
 
 pub type Source = (String, String);
 
@@ -49,17 +49,23 @@ fn info(layer: &Layer, scene: &Scene) -> Json {
 }
 
 fn rig(layer: &Layer, scene: &Scene) -> Json {
-    let wprs_scene::Kind::Mesh(m) = &layer.kind else { return Json::Null };
-    let Some(r) = scene.rigs.get(&m.mesh) else { return Json::Null };
+    let (rig, hit, size, unit) = match &layer.kind {
+        wprs_scene::Kind::Mesh(m) => (scene.rigs.get(&m.mesh).map(|r| &**r), &m.rig.hit, m.size, 1.0),
+        wprs_scene::Kind::Model(m) => {
+            (scene.solids.get(&m.model).and_then(|s| s.rig.as_deref()), &m.rig.hit, m.size, MODEL_UNIT)
+        }
+        _ => return Json::Null,
+    };
+    let Some(r) = rig else { return Json::Null };
     let bones: Vec<Json> = (r.joints.iter())
         .map(|j| {
             let ([x, y, _], q, s) = (j.rest.t, j.rest.r, j.rest.s);
             let turn = -2.0 * q[2].atan2(q[3]).to_degrees();
-            json!({ "name": j.name, "parent": j.parent, "position": [x, -y], "rotation": turn, "scale": [s[0], s[1]] })
+            json!({ "name": j.name, "parent": j.parent, "position": [x / unit, -y / unit], "rotation": turn, "scale": [s[0], s[1]] })
         })
         .collect();
-    let size = m.size.unwrap_or(scene.canvas.size.map(|v| v as f32));
-    json!({ "size": size, "bones": bones, "shapes": r.shapes, "hit": m.rig.hit })
+    let size = size.unwrap_or(scene.canvas.size.map(|v| v as f32));
+    json!({ "size": size, "bones": bones, "shapes": r.shapes, "hit": hit })
 }
 
 fn nested(prefix: &str, layer: &Layer, scene: &Scene, out: &mut BTreeMap<String, Json>) {

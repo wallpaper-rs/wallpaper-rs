@@ -19,7 +19,7 @@ const stretch = (m) => {
 
 function rigOf(id) {
     const r = info(id)?.rig;
-    if (!r) throw new TypeError(`${id} is not a mesh layer`);
+    if (!r) throw new TypeError(`${id} is not a mesh or model layer`);
     return r;
 }
 

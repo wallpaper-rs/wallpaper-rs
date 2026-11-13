@@ -284,7 +284,7 @@ Otros miembros de una capa:
 | `effect(índice o nombre)` | Un efecto de la capa (declara `effects`). |
 | `video`, `anim(clip)` | Control de vídeos y de clips (declara `animations`). |
 | `parent`, `children`, `world`, `setParent(id, mantener)` | La jerarquía (declara `hierarchy`). |
-| `bones`, `bone(nombre)`, `shape(nombre, peso)`, `impulse(hueso, [vx, vy])`, `hit(x, y)`, `attachment(nombre)` | Huesos, formas de mezcla y anclajes de una capa `mesh` (declara `animations`). |
+| `bones`, `bone(nombre)`, `shape(nombre, peso)`, `impulse(hueso, [vx, vy])`, `hit(x, y)`, `attachment(nombre)` | Huesos, formas de mezcla y anclajes de una capa `mesh` o `model` (declara `animations`). En un modelo las posiciones van en píxeles de su caja y el hueso conserva su profundidad. |
 | `destroy()` | Quita la capa si es una copia que hizo un script. |
 
 **Efectos.** `capa.effect(0)` o `capa.effect("brillo")` (el nombre se pone en `uses`, `[a-z0-9_]{1,32}`)
