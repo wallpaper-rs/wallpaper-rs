@@ -701,8 +701,6 @@ Changes one setting and saves the configuration. Keys and their current values a
 |-----|--------|---------|
 | `playback.volume` | `0.0` to `1.0`, for videos and scenes with sound | `0.5` |
 | `playback.muted` | `true`, `false`, for videos and scenes with sound | `true` |
-| `playback.volume.<output>` | the volume of the wallpaper of one output (`default` for every output without its own), `0.0` to `1.0`, or `none` to follow again; it lowers what the global `playback.volume` lets through (the two multiply), and it plays on videos, including the videos of a package; kept as `volume` in `[outputs."<output>"]`, not listed in `options`, read back from `OutputState.sound_volume` | `none` |
-| `playback.muted.<output>` | `true` silences the wallpaper of one output (`default` for every output without its own), `false` plays it, `none` follows again; the global `playback.muted` stays the master: a muted global setting silences every output whatever this says; kept as `muted` in `[outputs."<output>"]`, read back from `OutputState.sound_muted` | `none` |
 | `playback.max_fps` | `1` to `240`, or `display` (also `0`) for the refresh rate of each output, up to 60 on battery (see "Frame rate") | `display` |
 | `playback.software_parallax` | move depth parallax images even when the GPU is emulated on the CPU (such as llvmpipe), with 8 steps at 15 frames per second at most | `false` |
 | `parallax.fill` | how the layers of a depth parallax picture are filled behind near objects (see "Depth layers"): `lama` (the LaMa model, when it and ONNX Runtime are installed, else `simple`), `simple` (push-pull extension of the nearest background) or `off` (no layers: the picture stays still); not synced, because each device has its own default | `lama` (`simple` on the phone) |
@@ -987,6 +985,19 @@ Renames an item.
 ### `SetRating(as uids, u rating)`
 
 Sets the rating, `0` to `5`, of every item.
+
+### `SetSound(as uids, s muted, s volume)`
+
+Sets the own sound of wallpapers. It belongs to the wallpaper, not to a screen: wherever the wallpaper is
+shown (any screen, a playlist, the lock), it plays with it. It is a setting of this computer: it lives in the
+library database (columns `sound_muted` and `sound_volume` of `items`), is not part of the package and is not
+synced. `muted` is `true` (silent), `false` (plays), `none` (follows the global setting again) or empty (keep it
+as it is); `volume` is a whole percent `0` to `100`, `none` or empty. Every uid is checked first. The volume
+multiplies the global one, and the global `playback.muted` stays the master over everything: while it is on,
+nothing plays whatever a wallpaper says. It reaches videos (also the videos of a package and of a scene), the
+sound layers of scenes (they scale with the `volume` property of the scene) and web pages (the volume the daemon
+tells the page engine; the page decides what it does with it, and `0` mutes it). `Item` and `ItemSummary` carry
+`sound_muted` and `sound_volume` (`null` follows). Outputs showing the wallpaper change at once.
 
 ### `SetFavorite(as uids, b favorite)`
 
@@ -2943,7 +2954,6 @@ struct OutputState {
     edited: bool, screen: Option<Screen>, mm: Option<[f64; 4]>, parallax: bool, frames: u64, page_frames: u64, refresh: u32, fps: u32,
     buffers: String, sound: String, shown_fit: Fit, flashes: String, left_out: Vec<String>,
     particles: String, quality: String, quality_reason: String, quality_choice: Option<String>,
-    sound_muted: Option<bool>, sound_volume: Option<f64>,
     quality_cost: f64, quality_budget: f64, quality_auto: String, quality_frame_ms: Option<f64>,
     quality_period_ms: Option<f64>, quality_step: String, quality_pace: u32, sandbox: String,
     accent: Option<String>, filter: Option<Filter>, hdr: HdrState, away: Option<String>,

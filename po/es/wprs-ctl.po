@@ -1027,7 +1027,9 @@ msgstr "Volumen en porcentaje"
 msgid ""
 "Play, silence or lower the sound of the wallpaper of a screen; print what "
 "each has"
-msgstr "Reproducir, silenciar o bajar el sonido del fondo de una pantalla; muestra lo que tiene cada una"
+msgstr ""
+"Reproducir, silenciar o bajar el sonido del fondo de una pantalla; muestra "
+"lo que tiene cada una"
 
 #: apps/wprs-ctl/src/cli.rs
 msgid "Mute videos and scenes with sound"
@@ -3326,19 +3328,14 @@ msgstr "wprsd no encontró ningún elemento"
 
 #: apps/wprs-ctl/src/hearing.rs
 msgid ""
-"on to play the sound of the wallpaper on that screen, off to silence it, "
-"follow to follow the global volume again; the global mute stays the master"
-msgstr ""
-"on para reproducir el sonido del fondo en esa pantalla, off para silenciarlo "
-"y follow para volver a seguir el volumen general; el silencio general sigue "
-"mandando"
+"on to play the sound of the wallpaper wherever it is shown, off to silence "
+"it, follow to follow the global volume again; the global mute stays the "
+"master"
+msgstr "on para reproducir el sonido del fondo donde se muestre, off para silenciarlo y follow para volver a seguir el volumen general; el silencio general sigue mandando"
 
 #: apps/wprs-ctl/src/hearing.rs
-msgid ""
-"Volume of the wallpaper on that screen in percent, below the global volume"
-msgstr ""
-"Volumen del fondo en esa pantalla, en porcentaje, por debajo del volumen "
-"general"
+msgid "Volume of the wallpaper in percent, below the global volume"
+msgstr "Volumen del fondo en porcentaje, por debajo del volumen general"
 
 #: apps/wprs-ctl/src/input.rs
 msgid ""

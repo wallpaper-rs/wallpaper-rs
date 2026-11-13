@@ -13256,11 +13256,9 @@ msgstr "Sonido de este fondo"
 
 #: apps/wprs-app/qml/SoundPicker.qml
 msgid ""
-"Silences or plays the sound of the wallpaper of this screen only. The global "
-"mute stays the master: while it is on, nothing plays."
-msgstr ""
-"Silencia o reproduce el sonido del fondo de esta pantalla solamente. El "
-"silencio general manda: mientras esté activo, no suena nada."
+"Silences or plays this wallpaper wherever it is shown, with its own volume. "
+"The global mute stays the master: while it is on, nothing plays."
+msgstr "Silencia o reproduce este fondo donde se muestre, con su propio volumen. El silencio general manda: mientras esté activo, no suena nada."
 
 #: apps/wprs-app/qml/SoundPicker.qml
 msgid "Volume of this wallpaper"
