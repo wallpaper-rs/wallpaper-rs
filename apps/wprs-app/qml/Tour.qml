@@ -48,6 +48,10 @@ Timer {
             host.showPage(at);
             keeps(host.names[at]);
         } else if (at === host.pages.length) {
+            if (App.backend.claim("look"))
+                Qt.createComponent("LookCheck.qml").createObject(host, {
+                    "host": host
+                }).exercise();
             if (App.backend.claim("repo"))
                 Qt.createComponent("RepoCheck.qml").createObject(host, {
                     "host": host
