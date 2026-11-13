@@ -43,7 +43,10 @@ impl State {
             }
             Command::Lowest(lowest) => {
                 if std::mem::replace(&mut self.power.lowest, lowest) != lowest {
-                    self.outputs.values_mut().filter(|o| o.shown.scene.is_some()).for_each(|o| o.dirty = true);
+                    self.outputs
+                        .values_mut()
+                        .filter(|o| o.shown.scene.is_some())
+                        .for_each(|o| o.dirty = true);
                 }
             }
             Command::Saver(saver) => {

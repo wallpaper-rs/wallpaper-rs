@@ -93,6 +93,8 @@ pub enum Command {
         #[arg(value_parser = clap::value_parser!(u8).range(0..=100), help = "Volume in percent")]
         percent: u8,
     },
+    #[command(about = "Play, silence or lower the sound of the wallpaper of a screen; print what each has")]
+    Sound(crate::hearing::Hearing),
     #[command(about = "Mute videos and scenes with sound")]
     Mute,
     #[command(about = "Unmute videos and scenes with sound")]

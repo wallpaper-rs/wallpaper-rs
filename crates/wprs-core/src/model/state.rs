@@ -1,4 +1,4 @@
-use super::{Credit, HdrState, LayerShellState, OutputPlaylist, Uid};
+use super::{Credit, GpuAdapter, HdrState, LayerShellState, OutputPlaylist, PreviewState, Uid};
 use crate::{Filter, Fit, Screen};
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -50,22 +50,6 @@ model! {
         pub layer_shell: LayerShellState,
         #[serde(default)]
         pub plasma: bool,
-    }
-
-    pub struct PreviewState {
-        pub error: Option<String>,
-        pub console: Vec<String>,
-    }
-
-    pub struct GpuAdapter {
-        pub name: String,
-        pub kind: String,
-        pub backend: String,
-        pub used: bool,
-        #[serde(default)]
-        pub bus: String,
-        #[serde(default)]
-        pub compositor: bool,
     }
 
     pub struct OutputState {
@@ -131,6 +115,10 @@ model! {
         pub quality_reason: String,
         #[serde(default)]
         pub quality_choice: Option<String>,
+        #[serde(default)]
+        pub sound_muted: Option<bool>,
+        #[serde(default)]
+        pub sound_volume: Option<f64>,
         #[serde(default)]
         pub quality_cost: f64,
         #[serde(default)]

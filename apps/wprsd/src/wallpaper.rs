@@ -62,7 +62,7 @@ impl Daemon {
                     }
                 };
                 shown_video = props;
-                (Content::Video(movie), None)
+                (Content::Video(movie.heard(self.state().config.heard_at(output))), None)
             }
             Some(Ok(Media::Scene(pack))) => {
                 let (values, stale) = {

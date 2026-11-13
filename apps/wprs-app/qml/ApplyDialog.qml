@@ -13,6 +13,7 @@ Kirigami.Dialog {
     property var exposes: []
     property bool known
     property bool spread
+    property bool sounds
     readonly property var fits: App.schema.fits ?? ["fill", "fit", "stretch", "center", "tile"]
 
     function show(uid) {
@@ -22,6 +23,8 @@ Kirigami.Dialog {
         dialog.exposes = [];
         dialog.known = false;
         dialog.spread = false;
+        dialog.sounds = false;
+        sound.currentIndex = 0;
         fit.currentIndex = 0;
         App.query("GetItem", [uid], "Library1", reply => {
             if (!dialog)
@@ -31,6 +34,7 @@ Kirigami.Dialog {
             const pkg = reply.item.package;
             dialog.flashing = !!pkg && pkg.photosensitive === true && !(pkg.confirmed ?? []).includes("photosensitive");
             dialog.exposes = pkg?.exposes ?? [];
+            dialog.sounds = reply.item.kind === "video" || (pkg?.facets ?? []).some(f => f === "audio" || f === "sound");
             dialog.spread = reply.about?.spread === true;
             if (dialog.spread && dialog.fits.includes("span"))
                 fit.currentIndex = fit.indexOfValue("span");
@@ -58,10 +62,20 @@ Kirigami.Dialog {
     onOpened: standardButton(Kirigami.Dialog.Ok).enabled = Qt.binding(() => dialog.known)
     onAccepted: {
         const args = [uid, output.currentValue, fit.currentValue, preset.currentValue];
+        const done = () => dialog && dialog.hear();
         if (flashing)
-            App.act("Confirm", [[uid], "photosensitive"], "Library1", () => App.act("Apply", args, "Library1"));
+            App.act("Confirm", [[uid], "photosensitive"], "Library1", () => App.act("Apply", args, "Library1", done));
         else
-            App.act("Apply", args, "Library1");
+            App.act("Apply", args, "Library1", done);
+    }
+
+    function hear() {
+        const screen = output.currentValue || "default";
+        if (sound.currentValue === "")
+            return;
+        App.act("SetOption", ["playback.muted." + screen, sound.currentValue], "Daemon1");
+        if (sound.currentValue === "false")
+            App.act("SetOption", ["playback.volume." + screen, level.value.toFixed(2)], "Daemon1");
     }
 
     Kirigami.FormLayout {
@@ -105,6 +119,39 @@ Kirigami.Dialog {
         EditLayout {
             Layout.fillWidth: true
             visible: fit.currentValue === "span"
+        }
+
+        QQC2.ComboBox {
+            id: sound
+
+            Kirigami.FormData.label: App.tr("Sound:")
+            visible: dialog.sounds
+            model: [
+                {
+                    "value": "",
+                    "text": App.tr("Keep")
+                },
+                {
+                    "value": "false",
+                    "text": App.tr("Play")
+                },
+                {
+                    "value": "true",
+                    "text": App.tr("Silent")
+                }
+            ]
+            textRole: "text"
+            valueRole: "value"
+        }
+
+        QQC2.Slider {
+            id: level
+
+            Kirigami.FormData.label: App.tr("Volume:")
+            visible: dialog.sounds && sound.currentValue === "false"
+            from: 0
+            to: 1
+            value: 1
         }
 
         QQC2.ComboBox {

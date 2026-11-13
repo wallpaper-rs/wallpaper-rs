@@ -11,7 +11,9 @@ impl State {
 
     pub(crate) fn awake(&self) -> bool {
         let p = &self.config.pause;
-        let drained = p.below_percent > 0 && self.on_battery && self.battery_percent.is_some_and(|b| b < p.below_percent);
+        let drained = p.below_percent > 0
+            && self.on_battery
+            && self.battery_percent.is_some_and(|b| b < p.below_percent);
         !(self.user_paused || (p.on_battery && self.on_battery) || drained || (p.when_locked && self.locked))
     }
 
@@ -61,6 +63,8 @@ impl Daemon {
         }
         if key.starts_with(wprs_core::QualityChoice::OWN)
             || key.starts_with(wprs_core::HdrChoice::KEY)
+            || key.starts_with(wprs_core::sound::VOLUME)
+            || key.starts_with(wprs_core::sound::MUTED)
             || key.starts_with("parallax.")
         {
             self.configure_all();

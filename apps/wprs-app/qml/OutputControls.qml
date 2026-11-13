@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
@@ -21,7 +20,7 @@ ColumnLayout {
         QQC2.Button {
             text: host.daemon.tr("Choose…")
             icon.name: "document-open"
-            onClicked: files.open()
+            onClicked: dialogs.files.open()
         }
 
         RemoveButton {
@@ -53,7 +52,7 @@ ColumnLayout {
         QQC2.Button {
             text: host.daemon.tr("Background color")
             icon.name: "color-picker"
-            onClicked: colors.open()
+            onClicked: dialogs.colors.open()
         }
 
         QQC2.ComboBox {
@@ -145,6 +144,13 @@ ColumnLayout {
         info: host.info
     }
 
+    SoundPicker {
+        visible: host.sound !== ""
+        daemon: host.daemon
+        output: host.name
+        info: host.info
+    }
+
     Loader {
         Layout.fillWidth: true
         active: host.tunable && settings.checked
@@ -184,16 +190,9 @@ ColumnLayout {
         }
     }
 
-    FileDialog {
-        id: files
+    OutputDialogs {
+        id: dialogs
 
-        nameFilters: [host.daemon.tr("Images and videos") + " (*.png *.jpg *.jpeg *.webp *.gif *.bmp *.mp4 *.m4v *.webm *.mkv *.mov *.avi *.ogv *.mpg *.mpeg)"]
-        onAccepted: host.daemon.act("SetWallpaper", [host.daemon.path(selectedFile), host.name, ""])
-    }
-
-    ColorDialog {
-        id: colors
-
-        onAccepted: host.daemon.act("SetBackground", [selectedColor.toString(), host.name])
+        host: controls.host
     }
 }

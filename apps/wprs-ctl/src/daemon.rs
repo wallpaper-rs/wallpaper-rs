@@ -38,6 +38,7 @@ pub async fn run(command: Command) -> Result<()> {
         Command::Config { key, json, .. } => options(&daemon.get_state().await?, key.as_deref(), json)?,
         Command::Gpu(args) => crate::gpus::run(client, args).await?,
         Command::Quality(args) => crate::levels::run(client, args).await?,
+        Command::Sound(args) => crate::hearing::run(client, args).await?,
         Command::Reload => daemon.reload().await?,
         Command::Restart => crate::gpus::restart(client).await?,
         Command::RetryEffects => daemon.retry_effects().await?,

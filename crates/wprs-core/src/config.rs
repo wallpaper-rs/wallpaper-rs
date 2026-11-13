@@ -2,42 +2,14 @@ use crate::filter::Filter;
 use crate::fit::Fit;
 use crate::gpu::Render;
 use crate::layout::Layout;
-use crate::quality::QualityChoice;
 use crate::settings::{Library, Media, Models, Pause, Playback, Repos, Transition};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
+pub use crate::outputs::OutputConfig;
 pub use crate::store::ConfigError;
-
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
-#[serde(default, deny_unknown_fields)]
-pub struct OutputConfig {
-    pub image: Option<PathBuf>,
-    pub fit: Option<Fit>,
-    pub background: Option<String>,
-    pub playlist: Option<String>,
-    pub preset: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub blank: Option<crate::blank::Kept>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub clicks: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub filter: Option<Filter>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub quality: Option<QualityChoice>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub hdr: Option<crate::HdrChoice>,
-    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
-    pub scenes: BTreeMap<String, BTreeMap<String, toml::Value>>,
-}
-
-impl OutputConfig {
-    pub fn sets_content(&self) -> bool {
-        self.image.is_some() || self.playlist.is_some() || self.blank.is_some()
-    }
-}
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 #[serde(default, deny_unknown_fields)]
@@ -115,7 +87,7 @@ impl Config {
         (self.pick(output, |o| o.fit), background)
     }
 
-    fn pick<T>(&self, output: &str, field: impl Fn(&OutputConfig) -> Option<T>) -> Option<T> {
+    pub(crate) fn pick<T>(&self, output: &str, field: impl Fn(&OutputConfig) -> Option<T>) -> Option<T> {
         self.outputs.get(output).and_then(&field).or_else(|| field(&self.default))
     }
 
@@ -163,7 +135,11 @@ impl Config {
         self.section(output, |o| o.filter = None).filter = kept;
     }
 
-    fn section(&mut self, output: &str, clear: impl FnMut(&mut OutputConfig)) -> &mut OutputConfig {
+    pub(crate) fn section(
+        &mut self,
+        output: &str,
+        clear: impl FnMut(&mut OutputConfig),
+    ) -> &mut OutputConfig {
         if !output.is_empty() {
             return self.outputs.entry(output.to_owned()).or_default();
         }

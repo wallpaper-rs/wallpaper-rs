@@ -646,6 +646,12 @@ wprs-ctl filter warm --strength 0.6 -o DP-1      # filtro de color de una pantal
 wprs-ctl filter --list                          # los filtros que hay
 wprs-ctl pause | resume | toggle                # pausar los fondos animados
 wprs-ctl volume 40 | mute | unmute              # sonido de los vídeos y las escenas
+wprs-ctl sound off -o DP-1                       # sin sonido solo en esa pantalla (on, follow); --volume 30 lo baja
+wprs-ctl lib apply UID -o DP-1 --sound off      # aplicar un vídeo ya sin sonido en esa pantalla
+wprs-ctl config pause.below_percent 20          # pausar con batería por debajo del 20 % (0 = nunca)
+wprs-ctl config playback.lowest_below_percent 30  # calidad mínima de las escenas con batería por debajo del 30 %
+wprs-ctl playlist add Mar --folder ~/Fotos/Mar --follow   # carpeta entera; sigue a la carpeta
+wprs-ctl playlist rotate --folder ~/Fotos/Mar --every 10m   # crea la lista, pone el tiempo y la empieza
 wprs-ctl config                                 # ver los ajustes
 wprs-ctl config transition.duration_ms 1000     # cambiar un ajuste
 wprs-ctl state                                  # estado en JSON

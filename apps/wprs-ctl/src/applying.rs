@@ -17,12 +17,17 @@ pub struct Applying {
     span: bool,
     #[arg(short, long, default_value = "", help = "Preset uid or name")]
     preset: String,
+    #[arg(long, value_parser = ["on", "off", "follow"], help = crate::hearing::SOUND)]
+    sound: Option<String>,
+    #[arg(long, value_parser = clap::value_parser!(u8).range(0..=100), help = crate::hearing::LEVEL)]
+    volume: Option<u8>,
 }
 
 impl Applying {
     pub async fn run(self, client: &Client) -> Result<()> {
-        let Applying { item, output, fit, span, preset } = self;
+        let Applying { item, output, fit, span, preset, sound, volume } = self;
         let (uid, fit) = (one(client, &item).await?, if span { Some(Fit::Span) } else { fit });
-        crate::caution::apply(client, &uid, &output, fit.map_or("", Fit::as_str), &preset).await
+        crate::caution::apply(client, &uid, &output, fit.map_or("", Fit::as_str), &preset).await?;
+        crate::hearing::set(client, &output, sound.as_deref(), volume).await
     }
 }

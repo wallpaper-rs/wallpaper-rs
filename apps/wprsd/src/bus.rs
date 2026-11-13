@@ -118,6 +118,8 @@ impl Daemon {
                 quality: s.level.quality.into(),
                 quality_reason: s.level.reason.into(),
                 quality_choice: st.config.own_quality(name).map(|q| q.as_str().into()),
+                sound_muted: st.config.own_sound(name).muted,
+                sound_volume: st.config.own_sound(name).volume,
                 quality_cost: f64::from((s.level.cost * 10.0).round() / 10.0),
                 quality_budget: f64::from(s.level.budget),
                 quality_auto: s.level.automatic.into(),

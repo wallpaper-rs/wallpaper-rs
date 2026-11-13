@@ -42,6 +42,7 @@ mod forcing;
 mod foreign;
 mod glowing;
 mod gpus;
+mod hearing;
 mod held;
 pub mod input;
 pub mod inputs;

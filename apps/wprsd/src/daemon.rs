@@ -173,7 +173,6 @@ impl Daemon {
         };
         self.compositor.set_settings(settings);
         crate::rgb::follow(self);
-        self.apply_activity();
         self.configure_all();
         self.refresh_items();
         self.watch_sources();

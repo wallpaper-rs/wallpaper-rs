@@ -83,7 +83,7 @@ internal class Video(
         val stretch = Native.setting(FITTING, null) == STRETCH
         active.videoScalingMode =
             if (stretch) C.VIDEO_SCALING_MODE_SCALE_TO_FIT else C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-        muted = Audible.muted(fixed != null && !audible, Native.setting(SOUND, null), loudness)
+        muted = Audible.muted(fixed != null && !audible, Native.setting(SOUND, null), loudness * own())
         active.trackSelectionParameters =
             active.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, muted).build()
         heard()
@@ -106,8 +106,10 @@ internal class Video(
     }
 
     fun duck() {
-        player?.volume = loudness.coerceIn(0f, 1f) * Duck.gain
+        player?.volume = (loudness * own()).coerceIn(0f, 1f) * Duck.gain
     }
+
+    private fun own() = Native.setting("sound.heard", null).toFloatOrNull() ?: 1f
 
     private fun heard() = Duck.want(context, this, player?.playWhenReady == true && !muted && loudness > 0f)
 

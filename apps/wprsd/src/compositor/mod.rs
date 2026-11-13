@@ -6,6 +6,7 @@ mod hidden;
 mod iio;
 mod light;
 mod motion;
+mod movie;
 mod output;
 mod pages;
 mod parallax;

@@ -30,6 +30,7 @@ source "$(dirname "$0")"/integration-web.sh
 source "$(dirname "$0")"/integration-pages.sh
 source "$(dirname "$0")"/integration-gpu.sh
 source "$(dirname "$0")"/integration-quality.sh
+source "$(dirname "$0")"/integration-hearing.sh
 
 stop_daemon "$daemon" "$WORK/wprsd.log"
 WPRS_RENDER_STOP=1 start_daemon "$WORK/stopped.log"
