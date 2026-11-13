@@ -5,7 +5,7 @@ const SLACK: f32 = 0.5;
 
 pub(crate) fn extent(rig: &Rigged) -> [f32; 2] {
     let reach = |k: usize| {
-        let each = rig.vertices.chunks_exact(VERTEX_FLOATS).map(|v| v[k]).filter(|v| v.is_finite());
+        let each = rig.vertices.as_chunks::<VERTEX_FLOATS>().0.iter().map(|v| v[k]).filter(|v| v.is_finite());
         each.fold(0.0f32, |most, v| most.max(v.abs()))
     };
     [reach(0), reach(1)]

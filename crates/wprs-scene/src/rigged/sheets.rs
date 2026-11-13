@@ -36,7 +36,7 @@ pub(crate) fn sheets(bin: &Bin, rig: &mut Rigged) {
 
 fn repeats(rig: &Rigged) -> Vec<[f32; 4]> {
     let mut reach = vec![[f32::MAX, f32::MAX, f32::MIN, f32::MIN]; rig.pictures.len()];
-    for v in rig.vertices.chunks_exact(VERTEX_FLOATS) {
+    for v in rig.vertices.as_chunks::<VERTEX_FLOATS>().0 {
         let piece = v[VERTEX_FLOATS - 1] as usize;
         let Some(r) = rig.sheets.get(piece).and_then(|s| reach.get_mut(usize::from(*s))) else { continue };
         let (u, w) = (v[3], v[4]);
