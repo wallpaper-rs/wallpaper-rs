@@ -9,6 +9,7 @@ ColumnLayout {
 
     required property var survey
     required property string last
+    property var notes: []
     property real known
     property var drop: null
     readonly property var names: ({
@@ -48,6 +49,19 @@ ColumnLayout {
                 onTriggered: note.drop = null
             }
         ]
+    }
+
+    Repeater {
+        model: note.notes
+
+        delegate: QQC2.Label {
+            required property var modelData
+
+            Layout.fillWidth: true
+            color: Kirigami.Theme.neutralTextColor
+            wrapMode: Text.Wrap
+            text: modelData.kind === "join" ? App.tr("Join %1 does not apply: both its points are in one region. Put the regions back, or undo, and redo it.", modelData.index) : modelData.kind === "split" ? App.tr("Split %1 does not apply: its stroke crosses no region. Put the regions back, or undo, and redo it.", modelData.index) : App.tr("Move %1 does not apply: its region was already moved or joined with another. Put the regions back, or undo, and redo it.", modelData.index)
+        }
     }
 
     QQC2.Label {

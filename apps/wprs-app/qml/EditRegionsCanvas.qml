@@ -69,6 +69,10 @@ Item {
         function onRegionPicksChanged() {
             marks.requestPaint();
         }
+
+        function onRegionLineChanged() {
+            line.requestPaint();
+        }
     }
 
     Image {
@@ -137,9 +141,19 @@ Item {
         onPaint: {
             const ctx = getContext("2d");
             ctx.reset();
+            const straight = canvas.page.regionLine;
+            ctx.strokeStyle = Kirigami.Theme.negativeTextColor;
+            if (straight) {
+                ctx.lineWidth = 3;
+                ctx.setLineDash([8, 6]);
+                ctx.beginPath();
+                ctx.moveTo(straight[0][0] * width, straight[0][1] * height);
+                ctx.lineTo(straight[1][0] * width, straight[1][1] * height);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
             if (canvas.stroke.length === 0)
                 return;
-            ctx.strokeStyle = Kirigami.Theme.negativeTextColor;
             ctx.lineWidth = 3;
             ctx.lineCap = "round";
             ctx.beginPath();

@@ -345,8 +345,11 @@ Una región es una parte de la imagen entre saltos de profundidad; se mueve como
 2. **Unir** hace una sola región con las elegidas: comparten capa y se mueven juntas. Sirve cuando una cosa se partió en trozos que no deberían separarse.
 3. **Acercar** y **Alejar** mueven las regiones elegidas en profundidad, tanto como diga **Mover**.
 4. Para cortar una región en dos, activa **Dividir con un trazo** y dibuja a través de ella; al soltar se corta. Cada parte puede ir a una capa distinta.
+   Sin ratón: elige una región, activa **División recta de la región elegida** y mueve **Dónde cortar** con las flechas; la línea discontinua sigue el lado más largo de la región. **Cortar por la línea** la corta.
 5. **Deshacer** y **Rehacer** valen para cada unión, corte y movimiento. **Devolver las regiones** quita todos.
 6. **Ver el movimiento mientras editas** (cuando las capas están construidas) muestra la imagen moviéndose: el puntero sobre la imagen, el punto del cuadro o la **Órbita** hacen de puntero. Las flechas mueven el punto cuando el cuadro tiene el foco.
+
+Una unión, división o movimiento que ya no se aplica (porque cambió la imagen, el mapa u otra marca: sus dos puntos caen en una región, el trazo no cruza ninguna o la región ya se movió o se unió) no se aplica ni rompe las capas; la herramienta y `wprs-ctl edit depth regions` lo avisan con el número de la marca.
 
 Si un cambio baja el límite de movimiento, la herramienta avisa con el cambio que lo causó y el límite de antes y de ahora; menos movimiento evita que la imagen se estire. Arriba, una barra muestra cómo avanza la construcción de las capas, la de la app y la del escritorio.
 

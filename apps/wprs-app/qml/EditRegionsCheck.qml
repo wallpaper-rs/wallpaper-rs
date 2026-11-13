@@ -19,6 +19,7 @@ QtObject {
                 "depth": 0.9,
                 "share": 0.3,
                 "at": [0.25, 0.5],
+                "bounds": [0.1, 0.2, 0.4, 0.8],
                 "colour": "#ef4444"
             }, {
                 "order": 2,
@@ -71,6 +72,15 @@ QtObject {
         expect((depth().splits ?? []).length === 0 && depth().moves.length === 1, "undo did not take the split back");
         page.editor.redo();
         expect(depth().splits.length === 1, "redo did not bring the split back");
+        tool.reset();
+        page.regionPicks = [1];
+        tool.straight = true;
+        tool.cut = 0.5;
+        expect(page.regionLine !== null, "no straight line for the picked region");
+        const line = page.regionLine;
+        expect(Math.abs(line[0][0] - 0.25) < 1e-6 && Math.abs(line[1][0] - 0.25) < 1e-6 && line[0][1] < 0.2 && line[1][1] > 0.8, "the line does not run along the longer side");
+        tool.cutStraight();
+        expect(depth().splits?.length === 1 && page.regionLine === null && !tool.straight, "the straight split was not made");
         tool.reset();
         expect(!depth().joins && !depth().moves && !depth().splits, "the regions were not put back");
         page.regionPicks = [];

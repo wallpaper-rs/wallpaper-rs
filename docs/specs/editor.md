@@ -1785,6 +1785,15 @@ as the *Depth* tool does and adds the *Regions* group, the author tools for the 
   back* is the three `clear` actions (`depth_join`, `depth_split` and `depth_move`).
 - *Split along a stroke*: while on, a drag on the picture draws a stroke (thinned to a point every 0.3
   % of the picture, 1 000 points at most) and sends it on release as one `depth_split`.
+- *Straight split of the picked region*: with one region picked, a dashed line along the longer side of
+  its bounds, moved across with *Where to cut* (a slider, so the arrow keys move it), and *Cut along the
+  line* sends it as one `depth_split`; it is the keyboard way to split.
+- Marks that no longer apply: `wprs_depth::stale` checks every saved mark against the regions of the
+  current depth map: a join whose points are already in one region, a split whose stroke crosses no
+  region (taking it out leaves the same number of regions) and a move whose point is in a region that an
+  earlier move or join already took. Such a move is not applied (the first one stays) and none of them
+  fails the build; the tool lists them by number and `edit depth regions` prints them on the standard
+  error, so they can be cleared or redone.
 - *Undo* and *Redo* are the undo and redo of the picture, so each join, split and move is one step.
 - *Preview the movement while you edit*: once the layers of the current edit are built, a CPU
   rendering of the layers at 480 pixels (`wprs_depth::Preview`, the same travel limit, field lookups and

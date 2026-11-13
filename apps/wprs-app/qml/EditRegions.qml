@@ -17,6 +17,8 @@ ColumnLayout {
     readonly property var picks: page.regionPicks
     readonly property int edits: (survey.joins ?? 0) + (survey.splits ?? 0) + (survey.shifts ?? 0)
     property real step: 0.1
+    property real cut: 0.5
+    property bool straight
 
     function zone(order) {
         return zones.find(z => z.order === order);
@@ -54,6 +56,29 @@ ColumnLayout {
             }));
     }
 
+    function aimLine() {
+        const z = straight && picks.length === 1 ? zone(picks[0]) : undefined;
+        if (!z) {
+            page.regionLine = null;
+            return;
+        }
+        const b = z.bounds, wide = b[2] - b[0] >= b[3] - b[1];
+        const edge = v => Math.max(0, Math.min(1, v));
+        const at = (wide ? b[1] : b[0]) + cut * (wide ? b[3] - b[1] : b[2] - b[0]);
+        page.regionLine = wide ? [[edge(b[0] - 0.01), at], [edge(b[2] + 0.01), at]] : [[at, edge(b[1] - 0.01)], [at, edge(b[3] + 0.01)]];
+    }
+
+    function cutStraight() {
+        const points = page.regionLine;
+        page.regionLine = null;
+        straight = false;
+        page.regionPicks = [];
+        if (points)
+            page.run("depth_split", {
+                "points": points.map(p => p[0].toFixed(4) + "," + p[1].toFixed(4)).join(";")
+            });
+    }
+
     function reset() {
         page.regionPicks = [];
         page.regionLast = "depth_move";
@@ -68,6 +93,10 @@ ColumnLayout {
         });
     }
 
+    onStraightChanged: aimLine()
+    onCutChanged: aimLine()
+    onPicksChanged: aimLine()
+    onZonesChanged: aimLine()
     onKeyChanged: {
         refresh();
         if (visible && map !== "")
@@ -155,6 +184,31 @@ ColumnLayout {
         onClicked: tool.page.regionSplit = checked
     }
 
+    QQC2.Switch {
+        text: App.tr("Straight split of the picked region")
+        enabled: tool.picks.length === 1
+        checked: tool.straight && tool.picks.length === 1
+        onToggled: tool.straight = checked
+    }
+
+    EditSlider {
+        visible: tool.straight && tool.picks.length === 1
+        text: App.tr("Where to cut")
+        from: 0.1
+        to: 0.9
+        stepSize: 0.05
+        value: tool.cut
+        onMoved: value => tool.cut = value
+    }
+
+    QQC2.Button {
+        Layout.fillWidth: true
+        visible: tool.straight && tool.picks.length === 1
+        icon.name: "edit-cut"
+        text: App.tr("Cut along the line")
+        onClicked: tool.cutStraight()
+    }
+
     RowLayout {
         QQC2.ToolButton {
             icon.name: "edit-undo"
@@ -181,6 +235,7 @@ ColumnLayout {
     EditRegionNote {
         Layout.fillWidth: true
         survey: tool.survey
+        notes: tool.chart.notes ?? []
         last: tool.page.regionLast
     }
 

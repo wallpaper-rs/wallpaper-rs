@@ -17313,3 +17313,27 @@ msgstr "Construyendo las capas de esta imagen"
 #: apps/wprs-app/qml/EditLayersProgress.qml
 msgid "The desktop is building the layers of a picture"
 msgstr "El escritorio está construyendo las capas de una imagen"
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "Join %1 does not apply: both its points are in one region. Put the regions back, or undo, and redo it."
+msgstr "La unión %1 no se aplica: sus dos puntos están en una misma región. Devuelve las regiones, o deshaz, y vuelve a hacerla."
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "Split %1 does not apply: its stroke crosses no region. Put the regions back, or undo, and redo it."
+msgstr "La división %1 no se aplica: su trazo no cruza ninguna región. Devuelve las regiones, o deshaz, y vuelve a hacerla."
+
+#: apps/wprs-app/qml/EditRegionNote.qml
+msgid "Move %1 does not apply: its region was already moved or joined with another. Put the regions back, or undo, and redo it."
+msgstr "El movimiento %1 no se aplica: su región ya se movió o se unió a otra. Devuelve las regiones, o deshaz, y vuelve a hacerlo."
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Straight split of the picked region"
+msgstr "División recta de la región elegida"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Where to cut"
+msgstr "Dónde cortar"
+
+#: apps/wprs-app/qml/EditRegions.qml
+msgid "Cut along the line"
+msgstr "Cortar por la línea"

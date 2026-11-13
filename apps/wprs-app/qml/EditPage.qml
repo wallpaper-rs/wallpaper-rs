@@ -23,6 +23,7 @@ Kirigami.Page {
     property bool regionsOn: true
     property bool regionSplit
     property string regionLast
+    property var regionLine: null
     property bool regionPreview
     property var pointer: [0, 0]
     property bool splitOn
