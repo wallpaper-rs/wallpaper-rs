@@ -1,0 +1,9 @@
+[package]
+name = "wprs-palette"
+description = "Derives the tones of the interface from the pixels of a small picture of the wallpaper in use"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
