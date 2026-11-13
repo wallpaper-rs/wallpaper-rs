@@ -99,6 +99,7 @@ pub trait Library1 {
     fn get_item(&self, uid: &str) -> Result<String>;
     fn set_title(&self, uid: &str, title: &str) -> Result<()>;
     fn set_rating(&self, uids: &[&str], rating: u32) -> Result<()>;
+    fn set_sound(&self, uids: &[&str], muted: &str, volume: &str) -> Result<()>;
     fn set_favorite(&self, uids: &[&str], favorite: bool) -> Result<()>;
     fn set_tags(&self, uids: &[&str], add: &[&str], remove: &[&str]) -> Result<()>;
     fn list_tags(&self) -> Result<String>;

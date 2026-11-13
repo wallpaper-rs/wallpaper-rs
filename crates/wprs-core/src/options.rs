@@ -35,12 +35,6 @@ impl Config {
         if let Some(output) = key.strip_prefix(Layout::FOLLOW) {
             return self.layout.follow(output, value);
         }
-        if let Some(output) = key.strip_prefix(crate::sound::VOLUME) {
-            return self.set_own_sound(output, value, true);
-        }
-        if let Some(output) = key.strip_prefix(crate::sound::MUTED) {
-            return self.set_own_sound(output, value, false);
-        }
         if let Some(output) = key.strip_prefix(QualityChoice::OWN) {
             return self.set_own_quality(output, value);
         }

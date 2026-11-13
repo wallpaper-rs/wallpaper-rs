@@ -87,7 +87,7 @@ impl Config {
         (self.pick(output, |o| o.fit), background)
     }
 
-    pub(crate) fn pick<T>(&self, output: &str, field: impl Fn(&OutputConfig) -> Option<T>) -> Option<T> {
+    fn pick<T>(&self, output: &str, field: impl Fn(&OutputConfig) -> Option<T>) -> Option<T> {
         self.outputs.get(output).and_then(&field).or_else(|| field(&self.default))
     }
 
@@ -135,11 +135,7 @@ impl Config {
         self.section(output, |o| o.filter = None).filter = kept;
     }
 
-    pub(crate) fn section(
-        &mut self,
-        output: &str,
-        clear: impl FnMut(&mut OutputConfig),
-    ) -> &mut OutputConfig {
+    fn section(&mut self, output: &str, clear: impl FnMut(&mut OutputConfig)) -> &mut OutputConfig {
         if !output.is_empty() {
             return self.outputs.entry(output.to_owned()).or_default();
         }

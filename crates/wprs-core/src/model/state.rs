@@ -116,10 +116,6 @@ model! {
         #[serde(default)]
         pub quality_choice: Option<String>,
         #[serde(default)]
-        pub sound_muted: Option<bool>,
-        #[serde(default)]
-        pub sound_volume: Option<f64>,
-        #[serde(default)]
         pub quality_cost: f64,
         #[serde(default)]
         pub quality_budget: f64,

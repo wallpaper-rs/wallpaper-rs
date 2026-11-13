@@ -32,6 +32,28 @@ impl Library {
         self.update(uids, "favorite = ?2", &favorite)
     }
 
+    pub fn set_sound_many(
+        &mut self,
+        uids: &[&str],
+        muted: Option<Option<bool>>,
+        volume: Option<Option<u8>>,
+    ) -> Result<()> {
+        let bad = volume.flatten().is_some_and(|v| v > 100);
+        ensure(!bad, || Error::Invalid("volume", "a volume goes from 0 to 100".into()))?;
+        let tx = self.db.transaction()?;
+        for id in item_ids(&tx, uids)? {
+            let sql = "SELECT sound_muted, sound_volume FROM items WHERE id = ?1";
+            let (was_muted, was_volume): (Option<bool>, Option<u8>) =
+                tx.query_row(sql, [id], |r| Ok((r.get(0)?, r.get(1)?)))?;
+            let (muted, volume) = (muted.unwrap_or(was_muted), volume.unwrap_or(was_volume));
+            tx.execute(
+                "UPDATE items SET sound_muted = ?2, sound_volume = ?3 WHERE id = ?1",
+                params![id, muted, volume],
+            )?;
+        }
+        Ok(tx.commit()?)
+    }
+
     fn update(&mut self, uids: &[&str], set: &'static str, value: &dyn ToSql) -> Result<()> {
         let tx = self.db.transaction()?;
         for id in item_ids(&tx, uids)? {

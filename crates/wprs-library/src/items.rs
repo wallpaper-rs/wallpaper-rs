@@ -52,6 +52,8 @@ pub struct Item {
     pub used_at: Option<i64>,
     pub use_count: u32,
     pub missing: bool,
+    pub sound_muted: Option<bool>,
+    pub sound_volume: Option<u8>,
 }
 
 pub(crate) fn item_row(row: &Row<'_>) -> rusqlite::Result<Item> {
@@ -98,6 +100,8 @@ pub(crate) fn item_row(row: &Row<'_>) -> rusqlite::Result<Item> {
         used_at: row.get("used_at")?,
         use_count: row.get("use_count")?,
         missing: row.get("missing")?,
+        sound_muted: row.get("sound_muted")?,
+        sound_volume: row.get("sound_volume")?,
     })
 }
 
@@ -107,6 +111,16 @@ pub(crate) fn item_in(db: &Connection, uid: &str) -> Result<Item> {
 }
 
 impl Library {
+    pub fn sound_where(&self, column: &str, value: &str) -> Result<(Option<bool>, Option<u8>)> {
+        let wanted = matches!(column, "path" | "pkg_id");
+        crate::db::ensure(wanted, || {
+            Error::Invalid("column", format!("{column} is not a way to find a sound"))
+        })?;
+        let sql = format!("SELECT sound_muted, sound_volume FROM items WHERE {column} = ?1 LIMIT 1");
+        let found = self.db.query_row(&sql, [value], |r| Ok((r.get(0)?, r.get(1)?))).optional()?;
+        Ok(found.unwrap_or((None, None)))
+    }
+
     pub fn item(&self, uid: &str) -> Result<Item> {
         item_in(&self.db, uid)
     }

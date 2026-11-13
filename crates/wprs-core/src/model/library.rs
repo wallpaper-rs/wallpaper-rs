@@ -96,6 +96,10 @@ model! {
         pub used_at: Option<Time>,
         pub use_count: u32,
         pub missing: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub sound_muted: Option<bool>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub sound_volume: Option<u8>,
     }
 
     pub struct ItemSummary {
@@ -114,6 +118,10 @@ model! {
         pub revoked: Option<Reason>,
         pub removable: bool,
         pub imported: bool,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub sound_muted: Option<bool>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pub sound_volume: Option<u8>,
         pub thumb: Option<PathBuf>,
         #[serde(default)]
         pub package: Option<PackageInfo>,

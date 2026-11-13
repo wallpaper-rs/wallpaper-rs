@@ -23,7 +23,6 @@ pub mod quality;
 pub mod rgb;
 pub mod roots;
 pub mod settings;
-pub mod sound;
 pub mod spread;
 pub mod stash;
 mod store;

@@ -23,10 +23,6 @@ pub struct OutputConfig {
     pub quality: Option<QualityChoice>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hdr: Option<crate::HdrChoice>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub muted: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub volume: Option<f64>,
     #[serde(skip_serializing_if = "BTreeMap::is_empty")]
     pub scenes: BTreeMap<String, BTreeMap<String, toml::Value>>,
 }
