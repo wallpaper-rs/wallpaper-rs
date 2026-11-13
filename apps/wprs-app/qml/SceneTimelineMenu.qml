@@ -4,10 +4,11 @@ import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 QQC2.Menu {
-    id: menu
+    id: root
 
     required property var timeline
     property string renaming: ""
+    readonly property alias naming: rename
 
     function fresh() {
         const list = timeline.page.view.timelines ?? [];
@@ -18,9 +19,9 @@ QQC2.Menu {
     }
 
     Instantiator {
-        model: menu.timeline.page.view.timelines ?? []
-        onObjectAdded: (index, object) => menu.insertMenu(index, object)
-        onObjectRemoved: (index, object) => menu.removeMenu(object)
+        model: root.timeline.page.view.timelines ?? []
+        onObjectAdded: (index, object) => root.insertMenu(index, object)
+        onObjectRemoved: (index, object) => root.removeMenu(object)
 
         delegate: QQC2.Menu {
             id: line
@@ -41,14 +42,14 @@ QQC2.Menu {
             QQC2.MenuItem {
                 text: App.tr("Show in the inspector")
                 icon.name: "document-properties"
-                onTriggered: menu.timeline.page.editor.select(line.modelData.pointer)
+                onTriggered: root.timeline.page.editor.select(line.modelData.pointer)
             }
 
             QQC2.MenuItem {
                 text: App.tr("Rename…")
                 icon.name: "edit-rename"
                 onTriggered: {
-                    menu.renaming = line.modelData.id;
+                    root.renaming = line.modelData.id;
                     named.text = line.modelData.id;
                     rename.open();
                 }
@@ -57,7 +58,7 @@ QQC2.Menu {
             QQC2.MenuItem {
                 text: App.tr("Remove; the values it drives follow the scene clock")
                 icon.name: "edit-delete"
-                onTriggered: menu.timeline.page.run("timeline", {
+                onTriggered: root.timeline.page.run("timeline", {
                     "id": line.modelData.id,
                     "remove": true
                 })
@@ -68,8 +69,8 @@ QQC2.Menu {
     QQC2.MenuItem {
         text: App.tr("Add a timeline")
         icon.name: "list-add"
-        onTriggered: menu.timeline.page.run("timeline", {
-            "id": menu.fresh(),
+        onTriggered: root.timeline.page.run("timeline", {
+            "id": root.fresh(),
             "add": true,
             "duration": 5,
             "loop": "repeat"
@@ -80,7 +81,7 @@ QQC2.Menu {
         id: editing
 
         parent: QQC2.Overlay.overlay
-        page: menu.timeline.page
+        page: root.timeline.page
     }
 
     Kirigami.PromptDialog {
@@ -89,8 +90,8 @@ QQC2.Menu {
         parent: QQC2.Overlay.overlay
         title: App.tr("Rename the timeline")
         standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-        onAccepted: menu.timeline.page.run("timeline", {
-            "id": menu.renaming,
+        onAccepted: root.timeline.page.run("timeline", {
+            "id": root.renaming,
             "to": named.text
         })
 

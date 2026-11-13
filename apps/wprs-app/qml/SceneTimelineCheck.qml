@@ -85,6 +85,14 @@ QtObject {
         menu.itemAt(menu.count - 1).triggered();
         if ((page.view.timelines ?? []).length !== lines + 1)
             throw new Error("timeline menu: Add a timeline added none");
+        const first = menu.menuAt(0);
+        first.itemAt(1).triggered();
+        if (page.editor.selected !== page.view.timelines[0].pointer)
+            throw new Error("timeline menu: Show in the inspector selected nothing");
+        first.itemAt(2).triggered();
+        if (menu.renaming !== page.view.timelines[0].id || !menu.naming.visible)
+            throw new Error("timeline menu: Rename did not open the dialog");
+        menu.naming.close();
         menu.close();
         menu.destroy();
         while (page.view.history.done.length > steps)
