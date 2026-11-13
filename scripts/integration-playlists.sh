@@ -98,7 +98,7 @@ rotation=$(ctl playlist rotate --folder "$fresh" --every 10m -o TEST-8 --name Sp
 expect "s['outputs']['TEST-8']['playlist']['name']" Spin
 if ctl playlist rotate --every 0s "$red" 2>/dev/null; then fail "a rotation without time was accepted"; fi
 ctl playlist stop -o TEST-8
-ctl playlist rm Folded && ctl playlist rm Followed && ctl playlist rm "$rotation" && ctl lib unsource "$fresh"
+ctl playlist rm Folded && ctl playlist rm Followed && ctl playlist rm "$rotation" && ctl lib unsource "$(ctl lib sources --json | js "[s['uid'] for s in r['sources'] if s['path'].endswith('/fresh')][0]")"
 echo "playlist checks passed"
 
 ctl lib apply "$red" -o TEST-8 -f center
