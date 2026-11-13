@@ -41,4 +41,5 @@ sleep 1
 looks "$s31" 0 0 255 || fail "the transition of a scene played with transitions turned off: $("$BIN/probe" "$s31" 3)"
 ctl config transition.kind fade
 ctl release TEST-31
+bus Library1 Remove asb 1 "$own" false >/dev/null
 echo "a wallpaper with a transition comes in with it"
