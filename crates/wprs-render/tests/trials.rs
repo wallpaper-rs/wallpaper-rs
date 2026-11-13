@@ -1,10 +1,16 @@
 mod hostile;
 
-use hostile::{entry, frame, renderer, scene, show, unchecked};
+use hostile::{entry, frame, scene, show, unchecked};
 use std::path::PathBuf;
 use std::sync::{Mutex, PoisonError};
 use std::time::{Duration, Instant};
-use wprs_render::{drawn_effects, set_build_timeout};
+use wprs_render::{Renderer, drawn_effects, set_build_timeout};
+
+fn renderer() -> Option<&'static Renderer> {
+    let r = hostile::renderer()?;
+    wprs_render::set_gpu_budget(Some(Duration::from_secs(60)));
+    Some(r)
+}
 
 static ONE: Mutex<()> = Mutex::new(());
 

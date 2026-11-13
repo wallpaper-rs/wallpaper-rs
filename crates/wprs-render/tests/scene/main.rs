@@ -25,7 +25,10 @@ const SIZE: (u32, u32) = (100, 50);
 
 fn renderer() -> Option<&'static Renderer> {
     match Renderer::shared() {
-        Ok(r) => Some(r),
+        Ok(r) => {
+            wprs_render::set_gpu_budget(Some(std::time::Duration::from_secs(60)));
+            Some(r)
+        }
         Err(e) if std::env::var_os("WPRS_REQUIRE_GPU").is_none() => {
             eprintln!("skipping GPU test: {e}");
             None
