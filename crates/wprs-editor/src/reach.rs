@@ -57,12 +57,15 @@ pub fn query(dir: &Path, doc: &Value, q: &Value) -> Value {
         "effects": effects, "left_out": left, "units": spent })
 }
 
-pub fn open(doc: &Value, bloom: bool) -> anyhow::Result<(wprs_scene::Scene, wprs_scene::Values)> {
+pub fn shown(doc: &Value, bloom: bool) -> Value {
     let mut scene = crate::actions::visible(doc);
-    if !bloom {
-        scene["canvas"].as_object_mut().into_iter().for_each(|c| drop(c.remove("bloom")));
-    }
-    let scene = wprs_scene::Scene::from_json(&scene.to_string())?;
+    crate::swarms::pin_seed(&mut scene);
+    crate::rigs::preview(&mut scene, &json!({ "bloom": bloom }));
+    scene
+}
+
+pub fn open(doc: &Value, bloom: bool) -> anyhow::Result<(wprs_scene::Scene, wprs_scene::Values)> {
+    let scene = wprs_scene::Scene::from_json(&shown(doc, bloom).to_string())?;
     let properties: std::collections::BTreeMap<String, wprs_format::Property> =
         serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
     Ok((scene, wprs_scene::effective(&properties, &[])))

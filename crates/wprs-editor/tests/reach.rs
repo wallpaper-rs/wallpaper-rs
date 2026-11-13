@@ -94,3 +94,17 @@ fn effects_and_emitters_that_follow_the_pointer_are_named() {
     assert_eq!(follows, [(json!("blur"), json!(false)), (json!("water_ripple"), json!(true))]);
     assert_eq!(shown["pointer"]["emitters"], json!(["dust"]));
 }
+
+#[test]
+fn a_render_draws_what_the_preview_draws_with_one_alone_and_a_pinned_seed() {
+    let doc = json!({ "scene": { "clock": { "seed": null }, "canvas": { "bloom": { "strength": 1.0 } },
+        "layers": [{ "id": "a", "type": "solid", "color": "#ffffff" }, { "id": "b", "type": "solid", "color": "#ff0000" }],
+        "ext": { "editor": { "solo": "b" } } } });
+    let shown = wprs_editor::reach::shown(&doc, true);
+    assert!(shown["clock"]["seed"].as_u64().is_some_and(|s| s > 0), "the seed stayed random: {shown}");
+    assert_eq!(shown["layers"][0]["visible"], false);
+    assert!(shown["layers"][1]["visible"].is_null());
+    assert!(shown["canvas"]["bloom"].is_object());
+    assert_eq!(shown["clock"]["seed"], wprs_editor::reach::shown(&doc, false)["clock"]["seed"]);
+    assert!(wprs_editor::reach::shown(&doc, false)["canvas"].get("bloom").is_none());
+}

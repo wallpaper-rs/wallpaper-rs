@@ -6,7 +6,6 @@ use std::path::{Component, Path, PathBuf};
 use wprs_core::layout::Monitor;
 use wprs_core::spread::{bounds, checked, rects, sized};
 use wprs_editor::Project;
-use wprs_editor::actions::visible;
 use wprs_render::{Renderer, SceneAssets};
 
 pub const EDGE: u32 = 1600;
@@ -52,7 +51,7 @@ fn inside(path: &str) -> bool {
 
 fn poster(dir: &Path, edge: u32, time: Option<f64>) -> Result<RgbaImage> {
     let project = Project::open(dir)?;
-    let scene = wprs_scene::Scene::from_json(&visible(&project.doc).to_string())?;
+    let scene = wprs_scene::Scene::from_json(&wprs_editor::reach::shown(&project.doc, true).to_string())?;
     let read = |path: &str| match inside(path) {
         true => std::fs::read(project.dir.join(path)).map_err(|e| format!("{path}: {e}")),
         false => Err(fill(told("%1 is outside the scene folder"), &[&path])),

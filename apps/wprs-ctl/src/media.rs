@@ -103,10 +103,8 @@ pub(crate) fn preview_document(
     if wprs_editor::reels::media(doc) {
         return Ok(wprs_editor::reels::preview_document(dir, doc, &look));
     }
-    let mut document = json!({"manifest": doc["manifest"], "scene": wprs_editor::actions::visible(doc)});
-    if without_bloom {
-        document["scene"]["canvas"].as_object_mut().into_iter().for_each(|c| drop(c.remove("bloom")));
-    }
+    let mut document =
+        json!({"manifest": doc["manifest"], "scene": wprs_editor::reach::shown(doc, !without_bloom)});
     wprs_editor::scripts::stamped(&mut document["scene"], dir, doc);
     wprs_editor::rigs::staged(&look).into_iter().for_each(|s| document["preview"] = s);
     wprs_editor::tried::stage(doc, &look, &mut document);
