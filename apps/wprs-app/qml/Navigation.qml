@@ -44,6 +44,8 @@ Kirigami.GlobalDrawer {
         onActivated: drawer.leave()
     }
 
+    onOpened: modal && contentItem.forceActiveFocus(Qt.PopupFocusReason)
+
     actions: [
         Kirigami.Action {
             text: App.tr("Library")

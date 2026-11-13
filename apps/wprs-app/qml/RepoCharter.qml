@@ -53,6 +53,7 @@ Kirigami.Dialog {
     title: fresh ? App.tr("New static repository") : App.tr("Rotate the root")
     standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
     padding: Kirigami.Units.largeSpacing
+    y: parent ? Math.round(Math.max(0, parent.height - Math.min(implicitHeight, absoluteMaximumHeight)) / 2) : 0
     onAccepted: made(folder, written())
     onOpened: standardButton(Kirigami.Dialog.Ok).enabled = Qt.binding(() => charter.ready)
 
