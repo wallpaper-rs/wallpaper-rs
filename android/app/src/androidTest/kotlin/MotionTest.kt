@@ -72,12 +72,7 @@ class MotionTest {
 
     @Test
     fun nearThingsMoveMoreThanTheBackground() {
-        val map = File(storage(), "halves.png").apply {
-            val pixels = IntArray(SIDE * SIDE) { if (it % SIDE < SIDE / 2) Color.WHITE else Color.BLACK }
-            outputStream().use { Bitmap.createBitmap(pixels, SIDE, SIDE, Bitmap.Config.ARGB_8888).compress(Bitmap.CompressFormat.PNG, 100, it) }
-        }
-        ParcelFileDescriptor.open(map, ParcelFileDescriptor.MODE_READ_ONLY).use { depth("import", "uid" to uid, "fd" to it.fd) }
-        assertTrue((depth("item", "uid" to uid) as JSONObject).getBoolean("map"))
+        layered(FOCUS_FAR)
         val (near, far) = moved(Sensor.TYPE_GAME_ROTATION_VECTOR) { angle -> floatArrayOf(0f, sin(angle / 2), 0f, cos(angle / 2)) }
         assertTrue("near moved $near and far $far", near * far < 0 && abs(near) > abs(far))
     }
@@ -96,7 +91,19 @@ class MotionTest {
         assertTrue(waitFor { abs(reds.get(1) - before) <= TOLERANCE })
     }
 
+    private fun layered(focus: Float) {
+        depth("parallax", "uid" to uid, "on" to true, "strength" to STRENGTH, "focus" to focus)
+        val map = File(storage(), "halves.png").apply {
+            val pixels = IntArray(SIDE * SIDE) { if (it % SIDE < SIDE / 2) Color.WHITE else Color.BLACK }
+            outputStream().use { Bitmap.createBitmap(pixels, SIDE, SIDE, Bitmap.Config.ARGB_8888).compress(Bitmap.CompressFormat.PNG, 100, it) }
+        }
+        ParcelFileDescriptor.open(map, ParcelFileDescriptor.MODE_READ_ONLY).use { depth("import", "uid" to uid, "fd" to it.fd) }
+        val item = depth("item", "uid" to uid) as JSONObject
+        assertTrue("the picture has its map and its depth layers: $item", item.getBoolean("map") && item.getBoolean("layers") && item.isNull("still"))
+    }
+
     private fun moves(type: Int, reading: (Float) -> FloatArray) {
+        layered(FOCUS_MIDDLE)
         val (near, far) = moved(type, reading)
         assertTrue("the whole picture moved $near and $far", abs(near) >= MOVED && abs(far) >= MOVED)
         Thread.sleep(2000)
@@ -120,9 +127,9 @@ class MotionTest {
         assertTrue(waitFor { frames.get() > still })
         val turned = waitFor {
             hold(type, reading(0.2f), 100)
-            abs(reds.get(1) - before[1]) >= MOVED
+            (0..2).any { abs(reds.get(it) - before[it]) >= MOVED }
         }
-        assertTrue("red went from ${before[1]} to ${reds.get(1)}", turned)
+        assertTrue("red went from ${before.toList()} to ${(0..2).map(reds::get)}", turned)
         assertTrue("the picture kept moving", waitFor { frames.get().let { seen -> settled(frames) == seen } })
         return reds.get(0) - before[0] to reds.get(2) - before[2]
     }
@@ -142,5 +149,8 @@ class MotionTest {
         const val MOVED = 4
         const val TOLERANCE = 3
         const val STEP_MS = 20L
+        const val STRENGTH = 0.03f
+        const val FOCUS_MIDDLE = 0.5f
+        const val FOCUS_FAR = 0.3f
     }
 }
