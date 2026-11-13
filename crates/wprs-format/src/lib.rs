@@ -6,6 +6,8 @@ mod authors;
 mod broken;
 mod browse;
 mod build;
+#[cfg(feature = "sign")]
+mod bundled;
 mod catalog;
 mod charter;
 mod check;
@@ -65,6 +67,8 @@ pub use asks::asks;
 pub use authors::{AUTHORS_FORMAT, Authors, ONLINE, OnlineAuthor, Rotation, Trusted, rotation_text};
 pub use browse::{Item, browse, browse_with};
 pub use build::{build, build_staged, build_with, sha256, sha256_file};
+#[cfg(feature = "sign")]
+pub use bundled::{Bundled, bundled};
 pub use catalog::{Added, add, hide, list, revoke, revoke_key, unrevoke};
 pub use charter::{Charter, key_text};
 pub use client::{Outcome, RepoInfo, Update, add_repo, remove_repo, repos, update_repo, verify};

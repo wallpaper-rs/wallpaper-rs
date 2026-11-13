@@ -63,3 +63,7 @@ required-features = ["sign"]
 [[test]]
 name = "signed"
 required-features = ["sign"]
+
+[[test]]
+name = "bundled"
+required-features = ["sign"]
