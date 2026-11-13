@@ -1420,6 +1420,7 @@ msgid "Far level"
 msgstr "Nivel lejano"
 
 #: apps/wprs-app/qml/EditDepth.qml apps/wprs-app/qml/SceneSwarmSpread.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Curve"
 msgstr "Curva"
 
@@ -14515,6 +14516,7 @@ msgid "Silence wallpapers while another application plays sound"
 msgstr "Silenciar los fondos mientras otra aplicación reproduce sonido"
 
 #: apps/wprs-app/qml/facade/Labels.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Transition"
 msgstr "Transición"
 
@@ -15440,6 +15442,7 @@ msgstr "Posición"
 #: apps/wprs-app/qml/facade/SceneMediaWords.qml
 
 #: apps/wprs-app/qml/facade/SceneWords.qml
+#: apps/wprs-app/qml/facade/SceneLabels.qml
 msgid "Duration"
 msgstr "Duración"
 

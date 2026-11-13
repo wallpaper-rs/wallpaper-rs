@@ -5,6 +5,9 @@ QtObject {
     readonly property var words: ({
             "t": App.tr("Time"),
             "taper": App.tr("Taper"),
+            "transition": App.tr("Transition"),
+            "curve": App.tr("Curve"),
+            "duration_ms": App.tr("Duration"),
             "target": App.tr("Target"),
             "templates": App.tr("Templates"),
             "text": App.tr("Text"),
