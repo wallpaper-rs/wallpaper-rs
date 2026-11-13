@@ -78,7 +78,7 @@ pub(crate) fn played(pack: &Pack) -> Reel {
         rate: num("speed").clamp(0.1, 4.0),
         start,
         end: (end > start + 100).then_some(end),
-        volume: (num("volume") / 100.0).clamp(0.0, 1.0),
+        volume: ((num("volume") / 100.0) * crate::own_sound::of_package(&pack.id)).clamp(0.0, 1.0),
         once: playback.once(),
         fps: playback.frame_cap(),
         zoom: (num("zoom") as f32).clamp(1.0, 8.0),

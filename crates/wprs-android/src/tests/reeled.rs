@@ -58,6 +58,15 @@ pub(super) fn video_settings_play_on_the_phone() {
     };
     assert_eq!(shown, authored);
     assert!(shown.framed() && !shown.direct());
+    for (word, value, heard) in [("volume", "50", 0.2), ("muted", "true", 0.0), ("muted", "none", 0.2)] {
+        ask(json!({ "op": "sound", "uids": [uid], word: value }));
+        assert_eq!(
+            reel::of(Some(&path)).volume,
+            heard,
+            "the wallpaper's own sound ({word}) must reach the reel"
+        );
+    }
+    ask(json!({ "op": "sound", "uids": [uid], "volume": "none", "muted": "none" }));
     assert_eq!(
         shown.told(),
         json!({ "rate": 0.75, "start": 500, "end": 1250, "loop": false, "volume": 0.4, "fps": 24 })
