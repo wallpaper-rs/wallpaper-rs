@@ -1,8 +1,7 @@
 import QtQuick
-import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-QQC2.ApplicationWindow {
+Window {
     id: window
 
     readonly property var args: Qt.application.arguments
