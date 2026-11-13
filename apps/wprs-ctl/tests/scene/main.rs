@@ -8,6 +8,7 @@ mod language;
 mod marks;
 mod more;
 mod presets;
+mod removing;
 mod shading;
 mod textures;
 mod timing;

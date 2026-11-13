@@ -6,9 +6,9 @@ use serde_json::{Value, json};
 use std::fs;
 use std::path::{Path, PathBuf};
 use wprs_editor::actions::{
-    Action, MaskStroke, ParticleEdit, ScriptFile, ShotEdit, ShotFormat, SowEdit, TemplateEdit, UpgradeEdit,
+    Action, MaskStroke, ParticleEdit, ScriptFile, ShotEdit, ShotFormat, SowEdit, UpgradeEdit,
 };
-use wprs_editor::{Op, Project, references};
+use wprs_editor::{Op, Project};
 
 pub(crate) const NEW: &str = "Create a package folder from a starting point: the scenes empty, particles, parallax or clock, web for a web page or preset for the values of another package";
 pub(crate) const OPEN: &str = "Describe a scene folder, or first extract a .wpak scene package into it as an unsigned copy with the id <id>.copy";
@@ -29,26 +29,9 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
     let single = actions.len() == 1;
     let action = actions.first().cloned().unwrap_or(Action::Undo {});
     let undoing = single && matches!(action, Action::Undo {} | Action::Redo {});
-    let named: Vec<(String, String)> = actions
-        .iter()
-        .flat_map(|action| match action {
-            Action::RenameProperty { id, .. }
-            | Action::RemoveProperty { id }
-            | Action::Template(TemplateEdit::Rename { name: id, .. } | TemplateEdit::Remove { name: id })
-            | Action::Particles(ParticleEdit::Sow(SowEdit::Rename { system: id, .. })) => {
-                references::scripts(&project.dir, &project.doc, id)
-                    .into_iter()
-                    .map(|p| (p, id.clone()))
-                    .collect()
-            }
-            Action::Rename(r) => references::scripts(&project.dir, &project.doc, &r.id)
-                .into_iter()
-                .map(|p| (p, r.id.clone()))
-                .collect(),
-            _ => Vec::new(),
-        })
-        .collect();
+    let named = crate::unkept::named(&project, &actions);
     let scripts = project.doc.pointer("/scene/scripts").cloned().unwrap_or_default();
+    let lost = crate::unkept::lost(&project.doc, &actions);
     let before = wprs_editor::check::review(&project.doc, Some(&project.dir));
     let ops = if single { project.act(&action)? } else { project.act_all(&actions)? };
     let after = wprs_editor::check::review(&project.doc, Some(&project.dir));
@@ -69,6 +52,9 @@ pub(crate) fn edit_all(dir: &Path, actions: Vec<Action>, json: bool) -> Result<(
             fill(told("warning: %1 names %2; scripts are not rewritten"), &[&path, &format!("{id:?}")])
         )
     });
+    if let Some(text) = crate::unkept::warning(&lost) {
+        eprintln!("{text}");
+    }
     for p in &problems {
         eprintln!("{}: {}: {}", if p.warning { "warning" } else { "problem" }, p.pointer, p.said.local());
     }

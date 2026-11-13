@@ -10192,3 +10192,13 @@ msgid ""
 msgstr ""
 "viene del repositorio %1, que no está agregado en este dispositivo; agregar "
 "el repositorio lo deja disponible aquí"
+
+#: apps/wprs-ctl/src/unkept.rs
+msgid ""
+"warning: %1 followed the removed layer and a value of its place is bound to "
+"something other than keyframes, so it could not be kept where it was: check "
+"where it sits now."
+msgstr ""
+"aviso: %1 seguía a la capa quitada y un valor de su lugar depende de algo que "
+"no son fotogramas clave, así que no se pudo dejar donde estaba: revisa dónde "
+"queda ahora."

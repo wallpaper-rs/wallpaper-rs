@@ -80,7 +80,11 @@ fn given(args: Option<String>, file: Option<PathBuf>) -> Result<Value> {
 }
 
 fn actions(name: &str, args: Value) -> Result<Vec<Action>> {
-    let each = |value: Value| serde_json::from_value::<Action>(value).map_err(|e| usage(e.to_string()));
+    let each = |value: Value| {
+        let mut action = serde_json::from_value::<Action>(value).map_err(|e| usage(e.to_string()))?;
+        crate::paths::resolve(&mut action);
+        Ok(action)
+    };
     if name != "batch" {
         return Ok(vec![each(json!({ name: args }))?]);
     }
