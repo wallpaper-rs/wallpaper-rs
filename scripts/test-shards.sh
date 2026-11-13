@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 shards=(
   "wprs-render wprs-scene wprs-core wprs-ktx2 wprs-depth wprs-video wprs-mix wprs-audio wprs-script wprs-rgb wprs-schedule wprs-editor wprs-type"
   "wprsd wprs-ctl wprs-web wprs-pipewire wprs-wayland"
-  "wprs-app wprs-android wprs-server wprs-sync wprs-library wprs-format wprs-providers wprs-client"
+  "wprs-app wprs-palette wprs-android wprs-server wprs-sync wprs-library wprs-format wprs-providers wprs-client"
 )
 case ${1:?usage: $0 <shard number>|check} in
   check)
