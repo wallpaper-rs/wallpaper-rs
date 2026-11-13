@@ -90,10 +90,14 @@ class SourcesTest {
         reached(context.getString(R.string.repo_url))
         compose.onNode(hasText(context.getString(R.string.repo_url))).performTextInput(url)
         if (print.isNotEmpty()) compose.onNode(hasText(context.getString(R.string.repo_fingerprint))).performTextInput(print)
-        text(R.string.repo_add_url).performClick()
+        reached(context.getString(R.string.repo_add_url)).performClick()
         val help = context.getString(R.string.repo_fingerprint_help)
-        patient { compose.onAllNodes(hasText(help)).fetchSemanticsNodes().isEmpty() }
-        assertTrue("a refusal replaces the help text", compose.onAllNodes(hasText(help)).fetchSemanticsNodes().isEmpty())
+        val label = context.getString(R.string.repo_fingerprint)
+        val refused = patient {
+            runCatching { compose.onNode(hasScrollAction()).performScrollToNode(hasText(label)) }
+            compose.onAllNodes(hasText(label)).fetchSemanticsNodes().isNotEmpty() && compose.onAllNodes(hasText(help)).fetchSemanticsNodes().isEmpty()
+        }
+        assertTrue("a refusal replaces the help text", refused)
         compose.onNode(hasText(url)).assertIsDisplayed()
         if (print.isNotEmpty()) compose.onNode(hasText(print)).assertIsDisplayed()
         assertEquals(0, (runBlocking { account("repos") } as JSONObject).optJSONArray("repos")?.length() ?: 0)
@@ -107,7 +111,7 @@ class SourcesTest {
 
     @Test
     fun anAddressThatIsNotARepositoryKeepsItsMessageAndWhatWasTyped() {
-        FakeDav().use { dav -> refused(dav.url, "cd".repeat(32)) }
+        Stalling().use { slow -> refused(slow.url, "cd".repeat(32)) }
     }
 
     @Test
