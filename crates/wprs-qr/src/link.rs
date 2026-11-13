@@ -22,7 +22,7 @@ pub enum Error {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Link {
     pub server: String,
-    pub fingerprint: String,
+    pub fingerprint: Option<String>,
     pub invite: Option<String>,
 }
 
@@ -83,13 +83,13 @@ fn invite_ok(code: &str) -> bool {
 }
 
 impl Link {
-    pub fn new(server: &str, fingerprint: &str, invite: Option<&str>) -> Result<Link, Error> {
+    pub fn new(server: &str, fingerprint: Option<&str>, invite: Option<&str>) -> Result<Link, Error> {
         let server = server.trim().trim_end_matches('/');
         let (scheme, rest) = server.split_once("://").unwrap_or(("", server));
         let (head, path) = rest.split_once('/').map_or((rest, ""), |(h, p)| (h, p));
         let slash = if path.is_empty() { "" } else { "/" };
         let server = format!("{}://{}{slash}{path}", scheme.to_ascii_lowercase(), head.to_ascii_lowercase());
-        let fingerprint = fingerprint.trim().to_ascii_lowercase();
+        let fingerprint = fingerprint.map(|f| f.trim().to_ascii_lowercase());
         let link = Link { server, fingerprint, invite: invite.map(String::from) };
         link.check()?;
         Ok(link)
@@ -99,7 +99,7 @@ impl Link {
         if !server_ok(&self.server) {
             return Err(Error::Server);
         }
-        if !fingerprint_ok(&self.fingerprint) {
+        if self.fingerprint.as_deref().is_some_and(|f| !fingerprint_ok(f)) {
             return Err(Error::Fingerprint);
         }
         if self.invite.as_deref().is_some_and(|code| !invite_ok(code)) {
@@ -110,7 +110,8 @@ impl Link {
 
     pub fn text(&self) -> String {
         let invite = self.invite.as_ref().map(|code| format!("&invite={code}")).unwrap_or_default();
-        format!("{PREFIX}server={}&fp={}{invite}", self.server, self.fingerprint)
+        let pin = self.fingerprint.as_ref().map(|f| format!("&fp={f}")).unwrap_or_default();
+        format!("{PREFIX}server={}{pin}{invite}", self.server)
     }
 
     pub fn parse(text: &str) -> Result<Link, Error> {
@@ -124,17 +125,24 @@ impl Link {
         };
         let mut parts = fields.split('&');
         let mut field = |name: &str| parts.next().and_then(|p| p.strip_prefix(name)?.strip_prefix('='));
-        let (server, fingerprint) =
-            (field("server").ok_or(Error::Fields)?, field("fp").ok_or(Error::Fields)?);
-        let invite = match parts.next() {
+        let server = field("server").ok_or(Error::Fields)?;
+        let mut next = parts.next();
+        let fingerprint = next.and_then(|p| p.strip_prefix("fp="));
+        if fingerprint.is_some() {
+            next = parts.next();
+        }
+        let invite = match next {
             None => None,
             Some(extra) => Some(extra.strip_prefix("invite=").ok_or(Error::Fields)?),
         };
         if parts.next().is_some() {
             return Err(Error::Fields);
         }
-        let link =
-            Link { server: server.into(), fingerprint: fingerprint.into(), invite: invite.map(String::from) };
+        let link = Link {
+            server: server.into(),
+            fingerprint: fingerprint.map(String::from),
+            invite: invite.map(String::from),
+        };
         link.check()?;
         Ok(link)
     }

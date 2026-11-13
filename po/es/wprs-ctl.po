@@ -10527,8 +10527,12 @@ msgid "Address of the server, https://host[:port][/path]"
 msgstr "Dirección del servidor, https://host[:puerto][/ruta]"
 
 #: apps/wprs-ctl/src/connecting.rs
-msgid "SHA-256 of the server's certificate, as wprs-server fingerprint prints it"
-msgstr "SHA-256 del certificado del servidor, como lo imprime wprs-server fingerprint"
+msgid ""
+"SHA-256 of the server's own certificate, as wprs-server fingerprint prints "
+"it; leave it out when the certificate validates the normal way"
+msgstr ""
+"SHA-256 del certificado propio del servidor, como lo imprime wprs-server "
+"fingerprint; omítelo cuando el certificado se valida de la forma normal"
 
 #: apps/wprs-ctl/src/connecting.rs
 msgid "Invitation code the phone uses to create its account"

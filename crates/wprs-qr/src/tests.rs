@@ -3,7 +3,7 @@ use super::*;
 const FP: &str = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
 
 fn link(server: &str, invite: Option<&str>) -> Link {
-    Link::new(server, FP, invite).unwrap()
+    Link::new(server, Some(FP), invite).unwrap()
 }
 
 pub(crate) fn decode(code: &Code) -> String {
@@ -33,6 +33,20 @@ fn text_round_trips() {
 }
 
 #[test]
+fn a_code_without_a_pin_carries_the_address_alone() {
+    for invite in [None, Some("abcdefgh")] {
+        let l = Link::new("https://h.example", None, invite).unwrap();
+        assert!(!l.text().contains("fp="));
+        assert_eq!(Link::parse(&l.text()).unwrap(), l);
+        assert_eq!(decode(&Code::new(&l.text()).unwrap()), l.text());
+    }
+    assert_eq!(
+        Link::new("https://h.example", None, None).unwrap().text(),
+        "wprs://connect/1?server=https://h.example"
+    );
+}
+
+#[test]
 fn text_is_fixed() {
     assert_eq!(
         link("https://host.example:8443", None).text(),
@@ -45,26 +59,26 @@ fn text_is_fixed() {
 
 #[test]
 fn builder_tidies_what_people_paste() {
-    let l = Link::new(" HTTPS://Host.Example/Wp/ ", &FP.to_uppercase(), None).unwrap();
-    assert_eq!((l.server.as_str(), l.fingerprint.as_str()), ("https://host.example/Wp", FP));
+    let l = Link::new(" HTTPS://Host.Example/Wp/ ", Some(&FP.to_uppercase()), None).unwrap();
+    assert_eq!((l.server.as_str(), l.fingerprint.as_deref().unwrap()), ("https://host.example/Wp", FP));
 }
 
 #[test]
 fn builder_refuses_bad_parts() {
-    assert_eq!(Link::new("http://h.example", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://h.example/a//b", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://h.example/a/../b", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://h.example/a?x=1", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://h.example/a b", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://h.example:0", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://h.example:70000", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://user@h.example", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://-h.example", FP, None), Err(Error::Server));
-    assert_eq!(Link::new("https://h.example", &FP[1..], None), Err(Error::Fingerprint));
-    assert_eq!(Link::new("https://h.example", &FP.replace('0', "g"), None), Err(Error::Fingerprint));
-    assert_eq!(Link::new("https://h.example", FP, Some("short")), Err(Error::Invite));
-    assert_eq!(Link::new("https://h.example", FP, Some("has space here")), Err(Error::Invite));
+    assert_eq!(Link::new("http://h.example", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://h.example/a//b", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://h.example/a/../b", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://h.example/a?x=1", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://h.example/a b", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://h.example:0", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://h.example:70000", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://user@h.example", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://-h.example", Some(FP), None), Err(Error::Server));
+    assert_eq!(Link::new("https://h.example", Some(&FP[1..]), None), Err(Error::Fingerprint));
+    assert_eq!(Link::new("https://h.example", Some(&FP.replace('0', "g")), None), Err(Error::Fingerprint));
+    assert_eq!(Link::new("https://h.example", Some(FP), Some("short")), Err(Error::Invite));
+    assert_eq!(Link::new("https://h.example", Some(FP), Some("has space here")), Err(Error::Invite));
 }
 
 #[test]
@@ -76,7 +90,6 @@ fn parser_refuses_hostile_text() {
         ("wprs://connect/2?server=https://h.example", Error::Version),
         ("wprs://connect/x?server=a", Error::NotOurs),
         ("wprs://connect/1?", Error::Fields),
-        ("wprs://connect/1?server=https://h.example", Error::Fields),
         (&format!("wprs://connect/1?fp={FP}&server=https://h.example"), Error::Fields),
         (&format!("wprs://connect/1?server=https://h.example&fp={FP}&x=1"), Error::Fields),
         (
@@ -84,6 +97,9 @@ fn parser_refuses_hostile_text() {
             Error::Fields,
         ),
         (&format!("wprs://connect/1?server=https://h.example&fp={FP}&"), Error::Fields),
+        ("wprs://connect/1?server=https://h.example&", Error::Fields),
+        ("wprs://connect/1?server=https://h.example&fp=&invite=abcdefgh", Error::Fingerprint),
+        ("wprs://connect/1?server=https://h.example&invite=abcdefgh&fp=0", Error::Fields),
         (&format!("wprs://connect/1?server=https://H.example&fp={FP}"), Error::Server),
         (&format!("wprs://connect/1?server=https://h.example%2f&fp={FP}"), Error::Server),
         (&format!("wprs://connect/1?server=https://h.example&fp={}", FP.to_uppercase()), Error::Fingerprint),

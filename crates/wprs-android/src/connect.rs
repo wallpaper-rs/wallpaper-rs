@@ -49,6 +49,12 @@ mod tests {
     }
 
     #[test]
+    fn a_code_without_a_pin_has_no_fingerprint() {
+        let got = parse("wprs://connect/1?server=https://a.example").unwrap();
+        assert!(got["fingerprint"].is_null() && got["invite"].is_null());
+    }
+
+    #[test]
     fn every_refusal_names_its_message() {
         let id = |t: &str| {
             serde_json::from_str::<serde_json::Value>(&reply(t)).unwrap()["id"].as_str().unwrap().to_owned()
@@ -57,6 +63,6 @@ mod tests {
         assert_eq!(id("wprs://connect/9?x"), "android.connect_version");
         assert_eq!(id("wprs://connect/1?server=http://a.example&fp=1"), "android.connect_server");
         assert_eq!(id("wprs://connect/1?server=https://a.example&fp=1"), "android.connect_fingerprint");
-        assert_eq!(id("wprs://connect/1?server=https://a.example"), "android.connect_malformed");
+        assert_eq!(id("wprs://connect/1?server=https://a.example&x=1"), "android.connect_malformed");
     }
 }

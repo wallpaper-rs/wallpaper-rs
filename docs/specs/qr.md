@@ -1,19 +1,19 @@
 # Código QR de conexión
 
-Un código «conectar a este servidor» lleva la dirección del servidor y la huella de su certificado, y una invitación si hay una. No lleva nada secreto: la huella es pública (cualquiera que abra la conexión TLS la ve) y el código de invitación es el mismo que ya va en el enlace de invitación.
+Un código «conectar a este servidor» lleva la dirección del servidor, la huella de su certificado cuando el servidor usa uno propio (autofirmado), y una invitación si hay una. No lleva nada secreto: la huella es pública (cualquiera que abra la conexión TLS la ve) y el código de invitación es el mismo que ya va en el enlace de invitación.
 
 El módulo compartido es el crate `wprs-qr`. Construye el texto, lo valida de forma estricta y dibuja el código. No lee imágenes: leer con la cámara es cosa del teléfono.
 
 ## Texto
 
 ```
-wprs://connect/1?server=<dirección>&fp=<huella>[&invite=<código>]
+wprs://connect/1?server=<dirección>[&fp=<huella>][&invite=<código>]
 ```
 
 - Versión: el `1` de la ruta. Otro número se rechaza con «versión no admitida»; lo que no empieza por `wprs://connect/` se rechaza como «no es un código de conexión».
 - Los campos van en ese orden, sin repetirse, sin otros, sin espacios ni saltos de línea al final. Máximo 256 caracteres.
 - `server`: `https://` + host + `:puerto` opcional + ruta opcional (segmentos de letras, cifras y `._~-`, sin `..`, sin segmentos vacíos). El host va en minúsculas: nombre DNS (etiquetas de `a-z0-9-`), IPv4 o IPv6 entre corchetes. Sin usuario, sin `?`, sin `#`, sin barra final. Solo `https`, porque el código lleva una huella de certificado.
-- `fp`: SHA-256 del certificado en DER, 64 dígitos hexadecimales en minúsculas (lo que imprime `wprs-server fingerprint`).
+- `fp`: opcional. Un servidor autofirmado (`WPRS_TLS=self-signed`) siempre la lleva; uno cuyo certificado se valida de la forma normal (por ejemplo, con su propio certificado de una autoridad) va sin ella y el teléfono lo valida como cualquier sitio. Es el SHA-256 del certificado en DER, 64 dígitos hexadecimales en minúsculas (lo que imprime `wprs-server fingerprint`).
 - `invite`: de 8 a 64 caracteres de `A-Za-z0-9_-`. El servidor genera 32 hexadecimales.
 - No hay codificación por porcentaje: lo que no cabe en esa gramática no se puede llevar.
 
@@ -30,9 +30,9 @@ El enlace de invitación (`<servidor>/register?invite=<código>`) no se pone en 
 
 | Quién | Cómo |
 | --- | --- |
-| `wprs-server` | `qr::connect_svg(server, fingerprint, invite)` devuelve el SVG en línea para las páginas; `qr::own_connect_svg` lo arma con el certificado propio del servidor |
-| `wprs-ctl` | `wprs-ctl connect-code SERVIDOR HUELLA [--invite CÓDIGO] [--draw] [--light]` imprime el texto y, con `--draw`, el código con bloques |
-| `wprs-android` | `Native.connectCode(texto)` solo analiza: responde un JSON con `server`, `fingerprint` e `invite`, o el error con su mensaje |
+| `wprs-server` | `qr::connect_svg(server, fingerprint, invite)` devuelve el SVG en línea para las páginas; `qr::own_connect_svg` lo arma para cualquiera de las dos formas de correr el servidor: con la huella si es autofirmado, sin ella si no |
+| `wprs-ctl` | `wprs-ctl connect-code SERVIDOR [--fingerprint HUELLA] [--invite CÓDIGO] [--draw] [--light]` imprime el texto y, con `--draw`, el código con bloques |
+| `wprs-android` | `Native.connectCode(texto)` solo analiza: responde un JSON con `server`, `fingerprint` (nulo si no hay) e `invite`, o el error con su mensaje |
 
 ## Pruebas
 

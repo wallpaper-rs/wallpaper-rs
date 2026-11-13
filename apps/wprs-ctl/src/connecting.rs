@@ -6,8 +6,11 @@ use wprs_qr::{Code, Link};
 pub struct Connect {
     #[arg(help = "Address of the server, https://host[:port][/path]")]
     server: String,
-    #[arg(help = "SHA-256 of the server's certificate, as wprs-server fingerprint prints it")]
-    fingerprint: String,
+    #[arg(
+        long,
+        help = "SHA-256 of the server's own certificate, as wprs-server fingerprint prints it; leave it out when the certificate validates the normal way"
+    )]
+    fingerprint: Option<String>,
     #[arg(long, help = "Invitation code the phone uses to create its account")]
     invite: Option<String>,
     #[arg(long, help = "Also draw the QR code with block characters")]
@@ -17,7 +20,7 @@ pub struct Connect {
 }
 
 pub fn run(args: Connect) -> Result<()> {
-    let text = Link::new(&args.server, &args.fingerprint, args.invite.as_deref())?.text();
+    let text = Link::new(&args.server, args.fingerprint.as_deref(), args.invite.as_deref())?.text();
     println!("{text}");
     if args.draw {
         print!("{}", Code::new(&text)?.blocks(args.light));
