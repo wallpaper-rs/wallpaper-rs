@@ -10,9 +10,16 @@ fn parsed(line: &str) -> String {
 #[test]
 fn the_sound_of_a_screen_and_the_folders_and_rotations_of_playlists_parse() {
     let cases = [
-        ("sound", r#"Sound(Hearing { state: None, volume: None, output: "" })"#),
-        ("sound off -o DP-1", r#"Sound(Hearing { state: Some("off"), volume: None, output: "DP-1" })"#),
-        ("sound --volume 30", r#"Sound(Hearing { state: None, volume: Some(30), output: "" })"#),
+        ("sound", r#"Sound(Hearing { state: None, volume: None, item: None, output: "" })"#),
+        (
+            "sound off -o DP-1",
+            r#"Sound(Hearing { state: Some("off"), volume: None, item: None, output: "DP-1" })"#,
+        ),
+        (
+            "sound on --item R1AB2C",
+            r#"Sound(Hearing { state: Some("on"), volume: None, item: Some("R1AB2C"), output: "" })"#,
+        ),
+        ("sound --volume 30", r#"Sound(Hearing { state: None, volume: Some(30), item: None, output: "" })"#),
         (
             "lib apply R1AB2C -o DP-1 --sound off --volume 30",
             r#"Lib(Apply(Applying { item: "R1AB2C", output: "DP-1", fit: None, span: false, preset: "", sound: Some("off"), volume: Some(30) }))"#,

@@ -28,6 +28,6 @@ impl Applying {
         let Applying { item, output, fit, span, preset, sound, volume } = self;
         let (uid, fit) = (one(client, &item).await?, if span { Some(Fit::Span) } else { fit });
         crate::caution::apply(client, &uid, &output, fit.map_or("", Fit::as_str), &preset).await?;
-        crate::hearing::set(client, &output, sound.as_deref(), volume).await
+        crate::hearing::set(client, &uid, sound.as_deref(), volume).await
     }
 }

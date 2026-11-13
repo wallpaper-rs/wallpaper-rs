@@ -7,16 +7,19 @@ ctl config playback.lowest_below_percent 35
 if ctl config pause.below_percent 101 2>/dev/null; then fail "a battery level over 100 was accepted"; fi
 ctl config pause.below_percent 0 && ctl config playback.lowest_below_percent 0
 ctl stream TEST-30 160 90 >/dev/null
-ctl sound off -o TEST-30
-expect "s['outputs']['TEST-30']['sound_muted']" True
-ctl sound on --volume 30 -o TEST-30
-expect "s['outputs']['TEST-30']['sound_muted'], s['outputs']['TEST-30']['sound_volume']" "(False, 0.3)"
 cp "$ROOT/tests/fixtures/green-64x32.png" "$WORK/hearing.png"
-ctl lib import "$WORK/hearing.png" --wait >/dev/null
-ctl lib apply "$WORK/hearing.png" -o TEST-30 --sound off
-expect "s['outputs']['TEST-30']['sound_muted']" True
+cp "$ROOT/tests/fixtures/green-64x32.png" "$WORK/hearing2.png"
+ctl lib import "$WORK/hearing.png" "$WORK/hearing2.png" --wait >/dev/null
+sound() { ctl lib search "hearing" --json | python3 -c "import json, sys; r = json.load(sys.stdin); print(sorted((i['title'], i.get('sound_muted'), i.get('sound_volume')) for i in r['items']))"; }
+ctl lib apply "$WORK/hearing.png" -o TEST-30 --sound off --volume 30
+[ "$(sound)" = "[('hearing', True, 30), ('hearing2', None, None)]" ] || fail "the sound of one wallpaper: $(sound)"
+ctl sound on -o TEST-30
+ctl sound --item "$WORK/hearing2.png" off
+[ "$(sound)" = "[('hearing', False, 30), ('hearing2', True, None)]" ] || fail "the sound per wallpaper: $(sound)"
 ctl sound follow -o TEST-30
-expect "s['outputs']['TEST-30']['sound_muted'], s['outputs']['TEST-30']['sound_volume']" "(None, None)"
-if ctl config playback.volume.TEST-30 1.5 2>/dev/null; then fail "a volume over 1 was accepted for a screen"; fi
+ctl sound follow --item "$WORK/hearing2.png"
+[ "$(sound)" = "[('hearing', None, None), ('hearing2', None, None)]" ] || fail "the sound back to follow: $(sound)"
+if ctl sound --volume 101 2>/dev/null; then fail "a volume over 100 was accepted"; fi
 ctl release TEST-30 && expect "list(s['outputs'])" "[]"
-echo "battery level and sound of a screen checks passed"
+ctl lib rm "$WORK/hearing.png" "$WORK/hearing2.png"
+echo "battery level and sound of a wallpaper checks passed"

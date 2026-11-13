@@ -86,6 +86,7 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Playlists1", "RemoveEntries", "playlist remove-at", &["PL", "INDEX", "=uids read with Get"]),
     ("Playlists1", "MoveItem", "playlist move", &["PL", "FROM", "TO", "=uid read with Get"]),
     ("Playlists1", "SetRule", "playlist rule", &["PL", "KEY", "VALUE"]),
+    ("Library1", "SetSound", "sound", &["--item", "STATE", "--volume"]),
     ("Playlists1", "AddFolder", "playlist add", &["PL", "--folder", "--follow"]),
     (
         "Playlists1",
