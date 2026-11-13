@@ -58,6 +58,7 @@ mod stallwork;
 mod strips;
 #[cfg(test)]
 mod tests;
+mod tones;
 mod tr;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QString, QUrl};

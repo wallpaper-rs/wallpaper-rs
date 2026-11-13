@@ -43,6 +43,8 @@ pub mod qobject {
         fn has_icon(self: &Looks, name: &QString) -> bool;
         #[qinvokable]
         fn icon_names(self: &Looks) -> QString;
+        #[qinvokable]
+        fn derive(self: &Looks, path: &QString) -> QString;
     }
 }
 
@@ -92,5 +94,9 @@ impl Looks {
     fn icon_names(&self) -> QString {
         let all: Vec<&str> = names().flat_map(|(old, new)| [old, new]).collect();
         QString::from(all.join(",").as_str())
+    }
+
+    fn derive(&self, path: &QString) -> QString {
+        QString::from(crate::tones::for_path(&path.to_string()).as_str())
     }
 }

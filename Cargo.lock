@@ -6800,6 +6800,7 @@ dependencies = [
  "wprs-depth",
  "wprs-editor",
  "wprs-format",
+ "wprs-palette",
  "wprs-render",
  "wprs-scene",
  "zbus",

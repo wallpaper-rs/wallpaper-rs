@@ -60,6 +60,8 @@ pub fn write(here: &Path, out: &Path) -> PathBuf {
     for font in ["Onest.ttf", "RedHatDisplay.ttf"] {
         file(&mut qrc, font, &here.join("fonts").join(font).canonicalize().unwrap());
     }
+    qrc.push_str("</qresource>\n<qresource prefix=\"/wprs/pictures\">\n");
+    file(&mut qrc, "example.jpg", &here.join("pictures/example.jpg").canonicalize().unwrap());
     qrc.push_str("</qresource>\n<qresource prefix=\"/qt/qml/io/github/wallpaper_rs/style\">\n");
     let mut style: Vec<_> = fs::read_dir(here.join("style")).unwrap().map(|e| e.unwrap().path()).collect();
     style.sort();
