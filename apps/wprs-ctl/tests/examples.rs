@@ -14,6 +14,7 @@ const SOUNDS: &[&str] = &["pond", "snowfall"];
 const DEPTHS: [(&str, f32, f32); 4] =
     [("far", 0.3, 0.3), ("lake", 0.4, 0.65), ("left", 0.85, 0.85), ("right", 0.95, 0.95)];
 const SOFT: f32 = 4.0;
+const LIKE: f64 = 10.0;
 
 fn scenes() -> Vec<PathBuf> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scenes");
@@ -125,11 +126,18 @@ fn example_scenes_pack_small_render_and_rest() {
             assert!(changed > (SIZE.0 * SIZE.1 / 10) as usize, "{name} hardly follows the pointer");
         }
         let preview = source.join("preview.jpg");
-        if std::env::var_os("WPRS_BLESS").is_some() {
+        if std::env::var("WPRS_BLESS").is_ok_and(|v| v == "1" || v == name) {
             let file = std::fs::File::create(&preview).unwrap();
             JpegEncoder::new_with_quality(file, 82).encode_image(&shot).unwrap();
         }
         assert_eq!(image::image_dimensions(&preview).unwrap(), SIZE, "{name}");
+        let kept = image::open(&preview).unwrap().into_rgb8();
+        let off = kept.pixels().zip(shot.pixels()).flat_map(|(a, b)| (0..3).map(|c| a.0[c].abs_diff(b.0[c])));
+        let off = off.map(f64::from).sum::<f64>() / (count * 3.0);
+        assert!(
+            off < LIKE,
+            "{name}: preview.jpg is not a render of the scene ({off:.1}); bless it with WPRS_BLESS={name}"
+        );
     }
     assert!(total < 400 << 10, "the example scenes take {total} bytes");
 }
