@@ -19,7 +19,7 @@ impl<'a> Check<'a> {
     pub(crate) fn figures(&mut self) {
         let scene = self.scene;
         let figures =
-            scene.layers().filter(|l| l.figure().is_some() && !scene.sheets.contains(&l.id)).count();
+            scene.layers().filter(|l| l.figure().is_some() && !scene.sheets.contains_key(&l.id)).count();
         if figures > MAX_FIGURES {
             self.issues.push(Issue::Figures(figures));
         }

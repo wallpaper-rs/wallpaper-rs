@@ -144,7 +144,9 @@ impl ScriptOutputs {
         self.stage = self.stage.map(crate::StageSet::bounded);
         self.storage = self.storage.filter(|s| s.is_object());
         self.meshes.retain(|id, _| scene.pools.contains_key(id));
-        let rigs = std::mem::take(&mut self.rigs).into_iter().filter(|(id, _)| scene.layer(id).is_some());
+        let copies: BTreeSet<String> = self.spawned.iter().map(|(id, _)| id.clone()).collect();
+        let known = |id: &str| scene.layer(id).is_some() || copies.contains(id.split('.').next().unwrap_or(id));
+        let rigs = std::mem::take(&mut self.rigs).into_iter().filter(|(id, _)| known(id));
         self.rigs = rigs.take(crate::MAX_DRIVEN_RIGS).map(|(id, r)| (id, r.bounded())).collect();
         self
     }

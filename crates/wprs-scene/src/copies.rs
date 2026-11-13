@@ -45,12 +45,28 @@ fn renamed(layer: &mut Layer, id: &str, to: &HashMap<String, String>) {
     }
 }
 
-pub(crate) fn copied(template: &Layer, id: &str) -> Layer {
+pub(crate) fn renames(template: &Layer, id: &str, feeders: &[Layer]) -> HashMap<String, String> {
     let mut to = HashMap::new();
     names(template, id, &mut to);
+    for f in feeders {
+        to.insert(f.id.clone(), format!("{id}.{}", f.id));
+    }
+    to
+}
+
+pub(crate) fn copied(template: &Layer, id: &str, feeders: &[Layer]) -> (Layer, Vec<Layer>) {
+    let to = renames(template, id, feeders);
     let mut layer = template.clone();
     renamed(&mut layer, id, &to);
-    layer
+    let fed = feeders
+        .iter()
+        .map(|f| {
+            let mut copy = f.clone();
+            renamed(&mut copy, &to[&f.id], &to);
+            copy
+        })
+        .collect();
+    (layer, fed)
 }
 
 pub(crate) fn found<'a>(

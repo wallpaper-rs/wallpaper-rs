@@ -21,18 +21,27 @@ impl Runtime {
         let mut room = (MAX_LAYERS + MAX_SPAWNED).saturating_sub(self.scene.layers().count());
         let mut rebuilt = Vec::new();
         for (id, template) in &outputs.spawned {
-            let Some(size) =
-                self.scene.templates.get(template).map(crate::copies::flat).filter(|n| *n <= room)
-            else {
+            let feeders = self.scene.rooted.get(template).map_or(&[][..], |f| &f[..]);
+            let Some(source) = self.scene.templates.get(template) else { continue };
+            let size = crate::copies::flat(source) + feeders.len();
+            if size > room {
                 continue;
-            };
+            }
             room -= size;
             let old = kept.remove(id).filter(|(t, _)| t == template);
-            let made = old.or_else(|| {
-                let layer = crate::copies::copied(self.scene.templates.get(template)?, id);
-                rebuilt.push(id.clone());
-                Some((template.clone(), Box::new(layer)))
-            });
+            let made = match old {
+                Some(layer) => {
+                    let fed = feeders.iter().filter_map(|f| kept.remove(&format!("{id}.{}", f.id)));
+                    self.spawned.extend(fed.collect::<Vec<_>>());
+                    Some(layer)
+                }
+                None => {
+                    let (layer, fed) = crate::copies::copied(source, id, feeders);
+                    rebuilt.push(id.clone());
+                    self.spawned.extend(fed.into_iter().map(|l| (template.clone(), Box::new(l))));
+                    Some((template.clone(), Box::new(layer)))
+                }
+            };
             self.spawned.extend(made);
         }
         outputs.spawned.retain(|(id, _)| self.spawned.iter().any(|(_, l)| l.id == *id));
@@ -40,6 +49,7 @@ impl Runtime {
             self.costs.set((0, [None; 4]));
             self.homes = crate::kin::homes(self.scene.layers.iter().chain(self.spawned()));
             self.recast(&rebuilt);
+            self.rematte();
         }
         for (id, list) in outputs.effects.iter_mut() {
             let Some(layer) = self.layer(id) else {
@@ -76,6 +86,7 @@ impl Runtime {
         }
         self.parents(&mut outputs);
         self.molds(&mut outputs);
+        self.mirror_sheets(&mut outputs);
         let (wake, busy) = (outputs.wake, outputs.busy);
         (outputs.wake, outputs.busy, outputs.console) = (self.script.wake, self.script.busy, Vec::new());
         let changed = outputs != self.script;

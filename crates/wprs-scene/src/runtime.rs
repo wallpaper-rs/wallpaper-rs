@@ -87,17 +87,7 @@ impl Runtime {
     pub fn new(scene: Arc<Scene>, props: Values) -> Runtime {
         let timelines = scene.timelines.iter().map(|tl| (tl.clone(), tl.start())).collect();
         let uses = uses::of(&scene, &props);
-        let targets = scene.layers().flat_map(|l| {
-            let masks = l.mask.iter().chain(l.effects.iter().filter_map(|e| e.mask.as_ref()));
-            let fed =
-                l.effects.iter().flat_map(|e| e.params.values()).filter_map(|v| v.binding()?.layer.clone());
-            let lit = match &l.kind {
-                crate::Kind::Light(light) => light.texture.as_ref().and_then(|t| t.binding()?.layer.clone()),
-                _ => None,
-            };
-            masks.filter_map(|m| m.layer.clone()).chain(fed).chain(lit)
-        });
-        let targets = targets.collect();
+        let targets = adopted::targets(scene.layers());
         let mut mattes = BTreeSet::new();
         holds(&scene.layers, &targets, &mut mattes);
         let (audio, pointer, script, memo) = Default::default();

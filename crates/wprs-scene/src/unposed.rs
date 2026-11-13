@@ -19,7 +19,9 @@ fn feeder(mesh: &Layer, id: String, texture: &str) -> Layer {
     fed
 }
 
-fn posed(mesh: &mut Layer, taken: &mut std::collections::BTreeSet<String>) -> Vec<Layer> {
+type Taken = std::collections::BTreeSet<String>;
+
+fn posed(mesh: &mut Layer, taken: &mut Taken) -> Vec<Layer> {
     if !matches!(mesh.kind, Kind::Mesh(_)) {
         return Vec::new();
     }
@@ -44,25 +46,43 @@ fn posed(mesh: &mut Layer, taken: &mut std::collections::BTreeSet<String>) -> Ve
     fed.into_iter().map(|(_, l)| l).collect()
 }
 
-fn walk(layers: &mut Vec<Layer>, taken: &mut std::collections::BTreeSet<String>, made: &mut Vec<String>) {
+fn walk(layers: &mut Vec<Layer>, taken: &mut Taken, made: &mut Vec<(String, String)>) {
     let mut out = Vec::with_capacity(layers.len());
     for mut layer in std::mem::take(layers) {
         if let Kind::Group { layers, .. } = &mut layer.kind {
             walk(layers, taken, made);
         }
         let fed = posed(&mut layer, taken);
-        made.extend(fed.iter().map(|l| l.id.clone()));
+        made.extend(fed.iter().map(|l| (l.id.clone(), layer.id.clone())));
         out.extend(fed);
         out.push(layer);
     }
     *layers = out;
 }
 
+fn named(layer: &Layer, out: &mut Taken) {
+    out.insert(layer.id.clone());
+    layer.children().iter().for_each(|child| named(child, out));
+}
+
 impl Scene {
     pub(crate) fn pose_sheet_masks(&mut self) {
-        let mut taken = self.layers().map(|l| l.id.clone()).collect();
+        let mut taken: Taken = self.layers().map(|l| l.id.clone()).collect();
+        self.templates.values().for_each(|t| named(t, &mut taken));
         let mut made = Vec::new();
         walk(&mut self.layers, &mut taken, &mut made);
+        for (key, template) in &mut self.templates {
+            match &mut template.kind {
+                Kind::Group { layers, .. } => walk(layers, &mut taken, &mut made),
+                _ => {
+                    let fed = posed(template, &mut taken);
+                    made.extend(fed.iter().map(|l| (l.id.clone(), template.id.clone())));
+                    if !fed.is_empty() {
+                        self.rooted.entry(key.clone()).or_default().extend(fed);
+                    }
+                }
+            }
+        }
         self.sheets.extend(made);
     }
 }

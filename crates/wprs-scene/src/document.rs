@@ -62,7 +62,10 @@ pub struct Scene {
     pub draft: crate::Drafted,
     #[serde(skip)]
     #[schemars(skip)]
-    pub sheets: std::collections::BTreeSet<String>,
+    pub sheets: BTreeMap<String, String>,
+    #[serde(skip)]
+    #[schemars(skip)]
+    pub rooted: BTreeMap<String, Vec<Layer>>,
 }
 
 impl Default for Color {
@@ -74,7 +77,7 @@ impl Default for Color {
 impl Scene {
     pub fn new(size: [u32; 2]) -> Scene {
         let (assets, layers, particles, timelines, scripts, effects, audio, ext, loaded) = Default::default();
-        let (camera3d, templates, pools, models, rigs, solids, draft, sheets) = Default::default();
+        let (camera3d, templates, pools, models, rigs, solids, draft, sheets, rooted) = Default::default();
         Scene {
             schema: SCHEMA.into(),
             canvas: Canvas::new(size),
@@ -96,6 +99,7 @@ impl Scene {
             solids,
             draft,
             sheets,
+            rooted,
         }
     }
 
