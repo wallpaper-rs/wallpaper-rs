@@ -14,7 +14,7 @@ use wprs_library::Rotation;
 use wprs_schedule::PlaylistState;
 
 impl Daemon {
-    fn read(
+    pub(super) fn read(
         &self,
         assigned: &[(String, String, bool)],
         on_battery: bool,
@@ -68,7 +68,7 @@ impl Daemon {
             let has = |outputs: &[String]| members.iter().any(|(o, _)| outputs.contains(o));
             let start = matches!(act, Act::Start(p, o) if p == uid && (o.is_empty() || has(&[o.to_owned()])));
             let step = match act {
-                Act::Step(outputs, forward) if has(outputs) => Some(forward),
+                Act::Step(outputs, steps) if has(outputs) => Some(steps),
                 _ => None,
             };
             let live = info.rules.advance_while_paused || members.iter().any(|(_, active)| *active);

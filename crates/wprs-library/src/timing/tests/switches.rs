@@ -43,8 +43,8 @@ fn rotation_waits_while_paused_and_advances_once() {
     assert_eq!(turn(&mut row, 1801, live), (true, "b".into(), 3601));
     assert_eq!(turn(&mut row, 4000, Turn::default()), (false, "b".into(), 3601));
     assert_eq!(turn(&mut row, 5000, live), (true, "c".into(), 6800));
-    assert_eq!(turn(&mut row, 5100, Turn { step: Some(false), ..live }), (true, "b".into(), 6900));
-    assert_eq!(turn(&mut row, 5200, Turn { step: Some(true), ..live }), (true, "c".into(), 7000));
+    assert_eq!(turn(&mut row, 5100, Turn { step: Some(-1), ..live }), (true, "b".into(), 6900));
+    assert_eq!(turn(&mut row, 5200, Turn { step: Some(1), ..live }), (true, "c".into(), 7000));
     assert_eq!(turn(&mut row, 9000, Turn { start: true, ..live }), (false, "c".into(), 10800));
     let mut fresh = super::row();
     let resume = Rules { resume: false, ..Rules::default() };

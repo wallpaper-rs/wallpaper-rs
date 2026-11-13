@@ -20,7 +20,7 @@ fn list_changes_keep_the_item_shown() {
     assert_eq!(row.current, shown);
     let mut seen = vec![row.current.clone().unwrap()];
     for _ in 1..6 {
-        rotate(&mut row, Some(&more.uids), &more, &rules, Turn { step: Some(true), ..live }, now, &Utc);
+        rotate(&mut row, Some(&more.uids), &more, &rules, Turn { step: Some(1), ..live }, now, &Utc);
         seen.push(row.current.clone().unwrap());
     }
     seen.sort();

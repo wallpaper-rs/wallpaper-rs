@@ -4,6 +4,7 @@ mod activate;
 mod announce;
 mod apply;
 mod blank;
+mod browse;
 mod bus;
 mod calibration;
 mod callers;

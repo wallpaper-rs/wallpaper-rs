@@ -76,4 +76,33 @@ model! {
     pub struct Preset { pub uid: Uid, pub item: Option<Uid>, pub name: String, pub value: PresetValue }
 
     pub struct PresetsReply { pub model: u32, pub serial: u64, pub item: Option<Uid>, pub presets: Vec<Preset> }
+
+    #[derive(Copy, Eq, Hash)]
+    pub enum BrowseSource { Playlist, Library, #[serde(other)] Unknown }
+
+    #[derive(Copy, Eq, Hash)]
+    pub enum BrowseEnd { Applied, Cancelled, Expired, #[serde(other)] Unknown }
+
+    #[derive(Copy, Eq, Hash)]
+    pub enum ShortcutsState { Off, Asking, Bound, Refused, Unavailable, #[serde(other)] Unknown }
+
+    pub struct BrowseState {
+        pub model: u32,
+        pub serial: u64,
+        pub output: String,
+        pub active: bool,
+        pub ended: Option<BrowseEnd>,
+        pub source: Option<BrowseSource>,
+        pub playlist: Option<Uid>,
+        pub playlist_name: String,
+        pub steps: i32,
+        pub position: u32,
+        pub count: u32,
+        pub shown: Option<Uid>,
+        pub candidate: Option<ItemSummary>,
+        pub path: Option<PathBuf>,
+        pub transition: String,
+        pub idle_ms: u32,
+        pub shortcuts: ShortcutsState,
+    }
 }

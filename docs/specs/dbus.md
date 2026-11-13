@@ -728,6 +728,9 @@ Changes one setting and saves the configuration. Keys and their current values a
 | `playback.lowest_below_percent` | `0` to `100`: draw scenes at the lowest quality (`q0`) while running on battery with a charge under this percentage (`0` turns it off); it applies as set, also over a fixed `playback.quality` and the quality of one output, and does nothing while the charge is unknown | `0` |
 | `transition.kind` | `fade`, `none` | `fade` |
 | `transition.duration_ms` | `0` to `10000` | `600` |
+| `shortcuts.enabled` | `true`, `false`: ask the desktop for the keys that browse wallpapers | `false` |
+| `shortcuts.next` | keys joined by `+`, such as `LOGO+ALT+N`; a proposal the desktop may change | `LOGO+ALT+N` |
+| `shortcuts.previous` | the same, to browse back | `LOGO+ALT+P` |
 | `pause.when_covered` | pause while a maximized or fullscreen window covers the output | `true` |
 | `pause.on_battery` | one setting for pausing on battery, with three values: `never`, `always` (pause whenever the machine runs on battery) and `below:N` with `N` from `1` to `100` (pause on battery with a charge under `N` percent; it applies as set, whatever `playback.quality` says, and does nothing while the charge is unknown, `battery_percent` being `null`); the key belongs to each device and is never synced (a value set on one device does not change how another behaves); the phone reads the same key and its default is `never`; a file that still has the old boolean `on_battery` or the old `below_percent` key is not valid: the daemon reports it in `config_error`, keeps a copy of the file and runs with the defaults until the setting is written again | `always` |
 | `pause.when_locked` | pause while the screen is locked; whatever it says, videos are muted and scenes play no sound while it is locked | `true` |
@@ -1269,6 +1272,67 @@ changed or wprsd restarted; an item that left the list is skipped.
 ### `History(s output, u limit) → (s json)`
 
 A `HistoryReply`, newest first. `output` is a connector name; `limit` is `1..=1000`.
+
+**Browsing wallpapers.** A browsing session lets the user look at wallpapers one by one on a screen and keep one, without
+changing anything until they apply it. It belongs to one output (`""` means the only screen when
+there is one; with several screens it browses the library for every screen at once). It holds a
+candidate, never shows it on the desktop (a window or the tray draws the preview from the
+`BrowseState` data), and ends by itself after 30 s without input. Nothing runs while nobody
+browses: one timer per open session.
+
+`source` is `playlist` (the playlist the screen plays: the candidate is exactly the item `Next`
+or `Previous` would show, shuffle and history included, and `position` is its place in the list),
+`library` (every item of the library that can be shown, hidden mature items excepted, in library
+order; `position` and `count` are its place and the number of items) or `""`: the playlist when the
+screen plays one, else the library. Every method answers with a `BrowseState` and sends
+`BrowseChanged` with the same JSON. Fields: `output`, `active`, `ended` (`applied`, `cancelled`,
+`expired`; only in the reply or signal that ends a session), `source`, `playlist`,
+`playlist_name`, `steps` (how far the candidate is from what the screen shows), `position`,
+`count`, `shown` (uid shown when browsing began), `candidate` (an `ItemSummary`: title, kind,
+thumbnail and package), `path`, `transition`, `idle_ms` (time left before it ends by itself) and
+`shortcuts` (`off`, `asking`, `bound`, `refused`, `unavailable`).
+
+### `Browse(s output, s source, i steps) → (s json)`
+
+Starts a session on `output` (from `source`) or moves the candidate of the open one by `steps`
+(negative goes back, `0` only starts or refreshes it). A `source` other than the open session's
+starts a new session. `NotFound` when `source` is `playlist` and the screen plays none; `Failed`
+when the library is empty.
+
+### `BrowseApply(s output, s transition) → (s json)`
+
+Shows the candidate on `output` and ends the session. A playlist candidate moves the playlist to
+it, as `Next` would, so the rotation goes on from there; a library candidate replaces the
+playlist of that screen, as `Apply` does. `transition` is `fade`, `none` or `""` (the one chosen
+with `BrowseTransition`, else the usual one); it is used only for this change. `Failed`, keeping
+the session, when the playlist moved on by itself while browsing: the reply's new candidate
+must be looked at first. `NotFound` without a session.
+
+### `BrowseTransition(s output, s transition) → (s json)`
+
+Chooses the transition `BrowseApply` uses: `fade`, `none` or `""`. `InvalidArgs` for another
+word.
+
+### `BrowseCancel(s output) → (s json)`
+
+Ends the session and leaves everything as it was. Without a session it changes nothing and
+answers `active: false` with no `ended`.
+
+### `GetBrowse(s output) → (s json)`
+
+The `BrowseState` of `output`, with `active: false` when nobody browses there.
+
+### Signal `BrowseChanged(s output, s json)`
+
+Sent on every change of a session, with the `BrowseState`, also when it ends by itself.
+
+**Global shortcuts.** With `shortcuts.enabled` the daemon asks the desktop portal for global shortcuts to bind two
+keys: `browse-next` and `browse-previous`, proposing `shortcuts.next` and `shortcuts.previous`
+(`LOGO+ALT+N` and `LOGO+ALT+P`; the desktop may show its own dialog and let the user pick other
+keys). A key press starts or moves a session on the only screen (on every screen with several)
+and, when it starts one, opens `wprs-app --browse OUTPUT` to show the preview. Where the desktop
+has no such portal (wlroots compositors, X11) the state is `unavailable` and the user binds
+`wprs-ctl next --preview` and `wprs-ctl prev --preview` to keys in the compositor.
 
 ## `io.github.wallpaper_rs.Profiles1`
 

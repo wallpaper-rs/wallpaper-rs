@@ -11,6 +11,7 @@ use tokio::sync::Notify;
 use wprs_core::model::{OutputPlaylist, OutputState};
 use wprs_library::{Library, PlaylistInfo, Resolved, Rotation};
 
+mod peek;
 mod sync;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -31,13 +32,14 @@ pub struct Rotations {
     due: Mutex<Option<i64>>,
     retime: AtomicBool,
     pub wake: Notify,
+    pub browse: crate::browse::Browsing,
 }
 
 #[derive(Clone, Copy)]
 pub enum Act<'a> {
     Check,
     Start(&'a str, &'a str),
-    Step(&'a [String], bool),
+    Step(&'a [String], i32),
 }
 
 type Found = HashMap<String, Result<(PlaylistInfo, Resolved), String>>;

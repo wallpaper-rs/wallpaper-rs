@@ -77,6 +77,7 @@ pub(crate) async fn run(args: Args) -> anyhow::Result<()> {
     tokio::spawn(playback::run(daemon.clone()));
     tokio::spawn(picks::run(daemon.clone()));
     tokio::spawn(crate::shortcuts::serve(connection.clone(), daemon.clone()));
+    tokio::spawn(crate::browse::shortcuts::serve(connection.clone(), daemon.clone()));
     crate::duck::follow(&daemon);
     crate::rgb::follow(&daemon);
     tokio::spawn(crate::choice::follow(daemon.clone(), known));

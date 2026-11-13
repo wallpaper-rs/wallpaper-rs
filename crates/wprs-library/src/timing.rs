@@ -6,7 +6,7 @@ pub struct Turn {
     pub live: bool,
     pub fresh: bool,
     pub start: bool,
-    pub step: Option<bool>,
+    pub step: Option<i32>,
     pub retime: bool,
 }
 
@@ -74,11 +74,12 @@ pub fn rotate<Tz: TimeZone>(
     }
     let due = row.next_at.is_some_and(|at| at <= now.timestamp());
     let begun = turn.fresh || turn.start;
-    let step = turn.step.or(((begun && !rules.resume) || (due && turn.live && !turn.start)).then_some(true));
-    match step {
-        Some(true) => drop(row.state.advance(list, now)),
-        Some(false) => drop(row.state.back(list, now)),
-        None => {}
+    let step = turn.step.or(((begun && !rules.resume) || (due && turn.live && !turn.start)).then_some(1));
+    for _ in 0..step.unwrap_or_default().unsigned_abs() {
+        match step > Some(0) {
+            true => drop(row.state.advance(list, now)),
+            false => drop(row.state.back(list, now)),
+        }
     }
     if step.is_some() || turn.start || row.next_at.is_none() {
         row.state.restart(now);

@@ -85,7 +85,7 @@ impl Daemon {
         if outputs.is_empty() && !output.is_empty() {
             return Err(not_found(format!("{output} has no playlist")));
         }
-        self.show(Act::Step(&outputs, forward));
+        self.show(Act::Step(&outputs, if forward { 1 } else { -1 }));
         Ok(())
     }
 

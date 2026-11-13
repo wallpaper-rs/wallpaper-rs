@@ -3,6 +3,7 @@ use crate::error::{Result, failed};
 use crate::items::{MAX_UIDS, limited};
 use std::sync::{Arc, Weak};
 use wprs_library::EntryEdit;
+use zbus::object_server::SignalEmitter;
 
 pub struct Playlists(pub Weak<Daemon>);
 
@@ -114,6 +115,58 @@ impl Playlists {
     async fn previous(&self, output: String) -> Result<()> {
         library(&self.0)?.render(move |d| d.step(&output, false)).await
     }
+
+    #[zbus(out_args("json"))]
+    async fn browse(
+        &self,
+        output: String,
+        source: String,
+        steps: i32,
+        #[zbus(signal_emitter)] emitter: SignalEmitter<'_>,
+    ) -> Result<String> {
+        let told = library(&self.0)?.run(move |d| d.browse_move(&output, &source, steps)).await?;
+        crate::browse::told(&self.0, emitter, told).await
+    }
+
+    #[zbus(out_args("json"))]
+    async fn browse_apply(
+        &self,
+        output: String,
+        transition: String,
+        #[zbus(signal_emitter)] emitter: SignalEmitter<'_>,
+    ) -> Result<String> {
+        let told = library(&self.0)?.render(move |d| d.browse_apply(&output, &transition)).await?;
+        crate::browse::told(&self.0, emitter, told).await
+    }
+
+    #[zbus(out_args("json"))]
+    async fn browse_transition(
+        &self,
+        output: String,
+        transition: String,
+        #[zbus(signal_emitter)] emitter: SignalEmitter<'_>,
+    ) -> Result<String> {
+        let told = library(&self.0)?.run(move |d| d.browse_transition(&output, &transition)).await?;
+        crate::browse::told(&self.0, emitter, told).await
+    }
+
+    #[zbus(out_args("json"))]
+    async fn browse_cancel(
+        &self,
+        output: String,
+        #[zbus(signal_emitter)] emitter: SignalEmitter<'_>,
+    ) -> Result<String> {
+        let told = library(&self.0)?.run(move |d| d.browse_cancel(&output)).await?;
+        crate::browse::told(&self.0, emitter, told).await
+    }
+
+    #[zbus(out_args("json"))]
+    async fn get_browse(&self, output: String) -> Result<String> {
+        library(&self.0)?.run(move |d| d.get_browse(&output)).await
+    }
+
+    #[zbus(signal)]
+    pub async fn browse_changed(emitter: &SignalEmitter<'_>, output: &str, json: &str) -> zbus::Result<()>;
 
     #[zbus(out_args("json"))]
     async fn history(&self, output: String, limit: u32) -> Result<String> {

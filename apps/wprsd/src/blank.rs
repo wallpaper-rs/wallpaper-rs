@@ -36,7 +36,7 @@ impl Daemon {
         };
         let moved = playing(files);
         if !moved.is_empty() {
-            self.show(crate::rotation::Act::Step(&moved, true));
+            self.show(crate::rotation::Act::Step(&moved, 1));
         }
         let known: Vec<String> = self.state().outputs.keys().cloned().collect();
         let emptied = |name: &String| self.state().playing.get(name).is_none_or(|p| p.path.is_none());

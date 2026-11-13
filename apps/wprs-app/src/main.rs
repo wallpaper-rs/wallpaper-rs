@@ -85,12 +85,13 @@ fn start() -> ExitCode {
     match args.first().map(String::as_str) {
         Some("--version" | "-V") => println!("wprs-app {}", wprs_core::VERSION),
         Some("--help" | "-h") => {
-            println!("usage: wprs-app [--check | --version | --page PAGE] [FILE | URI]...");
+            println!("usage: wprs-app [--check | --version | --page PAGE | --browse OUTPUT] [FILE | URI]...");
             println!("pages: {}", app::PAGES.join(", "));
         }
         Some("--check") if !bus::checking() => return checkrun::run(),
         Some("--pieces") => return show(PIECES),
         Some("--depth") => return depthproc::child(&args[1..]),
+        Some("--browse") => {}
         Some("--page") => match app::page(args.get(1).map(String::as_str)) {
             Some(page) => return open(&args[2..], Some(page)),
             None => {

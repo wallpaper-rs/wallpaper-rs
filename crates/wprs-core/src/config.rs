@@ -26,6 +26,7 @@ pub struct Config {
     pub media: Media,
     pub parallax: crate::parallax::Parallax,
     pub rgb: crate::rgb::Rgb,
+    pub shortcuts: crate::shortcuts::Shortcuts,
     #[serde(skip_serializing_if = "Layout::is_default")]
     pub layout: Layout,
     #[serde(skip_serializing_if = "Render::is_default")]

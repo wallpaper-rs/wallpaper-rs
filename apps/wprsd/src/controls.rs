@@ -66,6 +66,9 @@ impl Daemon {
         if key.starts_with("rgb.") {
             crate::rgb::follow(self);
         }
+        if key.starts_with("shortcuts.") {
+            crate::browse::shortcuts::rebind();
+        }
         if key == "library.hide_mature" || key == "library.show_mature" {
             self.library_changed(Vec::new());
             self.changes.changed("repos", Vec::new());

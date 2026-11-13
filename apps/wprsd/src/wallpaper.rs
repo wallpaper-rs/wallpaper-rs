@@ -30,8 +30,7 @@ impl Daemon {
         if self.surface_rests(output) || self.show_pattern(output, size, refresh) {
             return None;
         }
-        let (image, mut transition) =
-            self.playlist_media(output, resolved.playlist.take()).unwrap_or((resolved.image.take(), None));
+        let (image, mut transition) = self.media_of(output, resolved.playlist.take(), resolved.image.take());
         let display = image.as_deref().map(crate::look::display).unwrap_or_default();
         let shown = image.as_deref().map(|_| crate::look::look(chosen, || crate::look::author(&display)));
         (resolved.fit, resolved.background) = shown.unwrap_or((resolved.fit, resolved.background));

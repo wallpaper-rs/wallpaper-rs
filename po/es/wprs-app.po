@@ -17918,3 +17918,14 @@ msgstr "Por debajo de %1 %"
 #: apps/wprs-app/qml/BatteryPicker.qml
 msgid "Never"
 msgstr "Nunca"
+#: apps/wprs-app/qml/facade/Labels.qml
+msgid "Keys to browse wallpapers"
+msgstr "Teclas para recorrer fondos"
+
+#: apps/wprs-app/qml/facade/Labels.qml
+msgid "Key for the next wallpaper"
+msgstr "Tecla para el fondo siguiente"
+
+#: apps/wprs-app/qml/facade/Labels.qml
+msgid "Key for the previous wallpaper"
+msgstr "Tecla para el fondo anterior"
