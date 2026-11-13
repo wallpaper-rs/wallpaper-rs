@@ -87,6 +87,7 @@ pub mod references;
 mod rename;
 mod repair;
 pub mod response;
+mod resting;
 pub mod review;
 mod revisions;
 mod rgb;
