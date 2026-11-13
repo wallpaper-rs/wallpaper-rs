@@ -68,6 +68,10 @@ echo "private file checks passed"
 cp "$ROOT/tests/fixtures/bands-640x180.png" "$WORK/plain.png"
 a server files share "$WORK/plain.png" --wait >/dev/null || fail "a plain file path was refused"
 a server files ls | grep -q "plain.png" || fail "the shared plain file is not listed: $(a server files ls)"
+plain=$(a lib search plain --json | jq_ "r['items'][0]['uid']")
+a server files share "$plain" --stop --yes --wait >/dev/null
+a lib rm "$plain" >/dev/null
+a server sync --wait >/dev/null
 echo "plain file share checks passed"
 
 b server pause
