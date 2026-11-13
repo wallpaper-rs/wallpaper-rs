@@ -11,6 +11,7 @@ ColumnLayout {
     property var stream: null
     property bool missing: false
     readonly property var rates: [0, 15, 30, 60]
+    readonly property bool web: page.kind === "web"
 
     function connect() {
         stream?.destroy();
@@ -108,7 +109,7 @@ ColumnLayout {
                 wrapMode: Text.Wrap
                 color: "white"
                 style: Text.Outline
-                text: preview.missing ? App.tr("Install the KPipeWire QML module to see the preview here.") : App.tr("The page appears here while wprsd runs.")
+                text: preview.missing ? App.tr("Install the KPipeWire QML module to see the preview here.") : (preview.web ? App.tr("The page appears here while wprsd runs.") : App.tr("The preview appears here while wprsd runs."))
             }
         }
     }
@@ -117,18 +118,18 @@ ColumnLayout {
         Layout.fillWidth: true
         wrapMode: Text.Wrap
         color: Kirigami.Theme.disabledTextColor
-        text: App.tr("Reload builds the page again from its files, so what you changed in another editor shows; what the page writes with console.log and its errors appear in the console on the right.")
+        text: preview.web ? App.tr("Reload builds the page again from its files, so what you changed in another editor shows; what the page writes with console.log and its errors appear in the console on the right.") : App.tr("Reload builds the preview again from its files, so what you changed in another editor shows.")
     }
 
     Kirigami.Heading {
         Layout.fillWidth: true
         Layout.topMargin: Kirigami.Units.smallSpacing
         level: 4
-        text: App.tr("The page and its lights")
+        text: preview.web ? App.tr("The page and its lights") : App.tr("The preview and its lights")
     }
 
     QQC2.Switch {
-        text: App.tr("Allow the page to send colors to the lights")
+        text: preview.web ? App.tr("Allow the page to send colors to the lights") : App.tr("Allow the package to send colors to the lights")
         checked: preview.page.manifest.permissions?.rgb === true
         onToggled: checked ? preview.page.change("/manifest/permissions/rgb", true) : preview.page.run("remove", {
             "pointer": "/manifest/permissions/rgb"

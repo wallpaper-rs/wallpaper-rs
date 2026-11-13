@@ -4114,6 +4114,22 @@ msgstr "La página aparece aquí mientras wprsd está en marcha."
 
 #: apps/wprs-app/qml/PackagePreview.qml
 msgid ""
+"Reload builds the preview again from its files, so what you changed in "
+"another editor shows."
+msgstr ""
+"Recargar vuelve a construir la vista previa desde sus archivos, así que se "
+"ve lo que cambiaste en otro editor."
+
+#: apps/wprs-app/qml/PackagePreview.qml
+msgid "The preview and its lights"
+msgstr "La vista previa y sus luces"
+
+#: apps/wprs-app/qml/PackagePreview.qml
+msgid "Allow the package to send colors to the lights"
+msgstr "Permitir que el paquete mande colores a las luces"
+
+#: apps/wprs-app/qml/PackagePreview.qml
+msgid ""
 "Reload builds the page again from its files, so what you changed in another "
 "editor shows; what the page writes with console.log and its errors appear in "
 "the console on the right."

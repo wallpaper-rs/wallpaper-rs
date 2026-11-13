@@ -79,8 +79,10 @@ ColumnLayout {
         QQC2.Label {
             Kirigami.FormData.label: App.tr("Uses:")
             visible: text !== ""
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 14
             text: about.words(about.info.inputs)
             textFormat: Text.PlainText
+            wrapMode: Text.Wrap
         }
 
         QQC2.Label {
