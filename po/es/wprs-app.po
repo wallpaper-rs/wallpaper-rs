@@ -17700,3 +17700,20 @@ msgstr "Imagen de ejemplo: «%1», una de las escenas incluidas"
 #: apps/wprs-app/qml/TitleFrame.qml
 msgid "Snowfall"
 msgstr "Nevada"
+
+#: apps/wprs-app/qml/Elegir.qml
+msgid "Chosen"
+msgstr "Elegida"
+
+#: apps/wprs-app/qml/Quitable.qml
+msgid "Remove the filter %1"
+msgstr "Quitar el filtro %1"
+
+#: apps/wprs-app/qml/Seleccion.qml
+msgctxt "covers"
+msgid "%1 chosen"
+msgstr "%1 elegidos"
+
+#: apps/wprs-app/qml/Uso.qml
+msgid "In use"
+msgstr "En uso"

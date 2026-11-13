@@ -1,0 +1,43 @@
+import QtQuick
+import io.github.wallpaper_rs.app
+
+FocusScope {
+    property var model
+    property string label
+    property string pictureRole: "picture"
+    property string nameRole: "name"
+    property string captionRole: "caption"
+    property string noteRole: "note"
+    property string noteIconRole: "noteIcon"
+    property string noteToneRole: "noteTone"
+    property string inUseRole: "inUse"
+    property string offRole: "off"
+    property bool choosing
+    property var chosen: []
+    readonly property string currentName: view.currentItem?.name ?? ""
+    readonly property string currentCaption: view.currentItem?.caption ?? ""
+    property Item view
+
+    signal activated(int index)
+    signal toggled(int index)
+
+    function role(entry, name) {
+        const found = entry[name];
+        return found !== undefined ? found : entry.modelData ? entry.modelData[name] : undefined;
+    }
+
+    function tap(index, modifiers) {
+        view.currentIndex = index;
+        view.forceActiveFocus();
+        if (choosing || modifiers & Qt.ControlModifier)
+            toggled(index);
+    }
+
+    Keys.onReturnPressed: activated(view.currentIndex)
+    Keys.onEnterPressed: activated(view.currentIndex)
+    Keys.onSpacePressed: event => {
+        event.accepted = choosing;
+        if (choosing)
+            toggled(view.currentIndex);
+    }
+}

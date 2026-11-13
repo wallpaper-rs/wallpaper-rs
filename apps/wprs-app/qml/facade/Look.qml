@@ -99,6 +99,36 @@ QtObject {
     readonly property int paso: 180
     readonly property var pasoCurva: [0.22, 1, 0.36, 1, 1, 1]
 
+    readonly property real tCuenta: 13
+    readonly property real tQuitable: 14
+    readonly property int icono: 18
+    readonly property int filtroLado: 12
+    readonly property int filtroHueco: 7
+    readonly property int seccionesLado: 14
+    readonly property int marcaAncho: 16
+    readonly property int marcaAlto: 4
+    readonly property int marcaAbajo: 2
+    readonly property int buscarAncho: 300
+    readonly property int buscarLado: 14
+    readonly property int buscarHueco: 10
+    readonly property int quitableAlto: 32
+    readonly property int quitableBoton: 22
+    readonly property int quitableHueco: 6
+    readonly property int usoAlto: 26
+    readonly property int usoHueco: 6
+    readonly property int marcaTapa: 10
+    readonly property int elegirLado: 26
+    readonly property int filete: 5
+    readonly property int notaArriba: 3
+    readonly property int pieArriba: 5
+    readonly property int accionesArriba: 14
+    readonly property real veloTapa: 0.42
+    readonly property real veloTapaSobre: 0.2
+    readonly property real veloTapaElegida: 0.15
+    readonly property real veloElegir: 0.6
+    readonly property real tapaApagada: 0.6
+    readonly property real apretado: -0.02
+
     readonly property string tones: [noche, nocheAlta, nocheLinea, escarcha, bruma, brumaBaja, luna].map(String).join(",")
     readonly property Looks bridge: Looks {}
 

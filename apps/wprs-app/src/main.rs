@@ -66,6 +66,7 @@ use std::process::ExitCode;
 use wprs_core::dbus::launcher;
 
 const MAIN: &str = "qrc:/qt/qml/io/github/wallpaper_rs/app/qml/Main.qml";
+const PIECES: &str = "qrc:/qt/qml/io/github/wallpaper_rs/app/qml/Pieces.qml";
 
 fn main() -> ExitCode {
     wprs_render::serve_script_host();
@@ -88,6 +89,7 @@ fn start() -> ExitCode {
             println!("pages: {}", app::PAGES.join(", "));
         }
         Some("--check") if !bus::checking() => return checkrun::run(),
+        Some("--pieces") => return show(PIECES),
         Some("--depth") => return depthproc::child(&args[1..]),
         Some("--page") => match app::page(args.get(1).map(String::as_str)) {
             Some(page) => return open(&args[2..], Some(page)),
@@ -114,6 +116,10 @@ fn file(arg: &str) -> Option<String> {
 }
 
 fn run() -> ExitCode {
+    show(MAIN)
+}
+
+fn show(url: &str) -> ExitCode {
     let mut app = QGuiApplication::new();
     QGuiApplication::set_desktop_file_name(&QString::from(
         launcher(std::env::var("FLATPAK_ID").ok()).as_str(),
@@ -126,6 +132,6 @@ fn run() -> ExitCode {
     if bus::checking() {
         engine.as_mut().on_object_creation_failed(|_, _| std::process::exit(1)).release();
     }
-    engine.load(&QUrl::from(MAIN));
+    engine.load(&QUrl::from(url));
     ExitCode::from(app.exec() as u8)
 }
