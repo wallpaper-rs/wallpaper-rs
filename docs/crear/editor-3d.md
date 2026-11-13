@@ -180,7 +180,7 @@ Sobre la vista previa cada luz tiene una marca. Arrástrala para moverla (**Arra
 - En el tubo: una perilla en cada extremo que lo mueve, lo gira y lo alarga.
 - En la direccional: una flecha con una perilla que la gira.
 
-Si el valor tiene claves o la luz está animada, las asas ponen una clave en el tiempo actual, igual que en las demás capas. Las luces aparecen también en la línea de tiempo.
+Si el valor tiene claves o la luz está animada, las asas ponen una clave en el tiempo actual, igual que en las demás capas. Las luces aparecen también en la línea de tiempo. Las asas de las luces y el panel de luces usan solo el primer grupo 3D: con varios grupos 3D en la escena muestran la colocación del primero.
 
 En la terminal: acción `light` (`add`, `set`, `remove`, `solo`, `mute`). La consulta `lights` lista las luces y `falloff` da la curva de caída. Ver [acciones](acciones.md).
 
