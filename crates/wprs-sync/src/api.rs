@@ -58,13 +58,7 @@ impl Api {
     pub fn pinned(base: &str, pin: Option<&str>) -> Result<Api> {
         let builder = reqwest::Client::builder().user_agent(AGENT).referer(false).redirect(Policy::none());
         #[cfg(target_os = "android")]
-        let builder = builder.tls_certs_only(
-            webpki_root_certs::TLS_SERVER_ROOT_CERTS
-                .iter()
-                .map(|der| &der[..])
-                .chain(wprs_core::roots::added().iter().map(Vec::as_slice))
-                .filter_map(|der| reqwest::Certificate::from_der(der).ok()),
-        );
+        let builder = builder.tls_certs_only(wprs_core::roots::certificates());
         let builder = match pin.filter(|p| !p.is_empty()) {
             Some(pin) if crate::pin::valid_pin(pin) => {
                 builder.tls_backend_preconfigured(crate::pin::config(Some(pin))?)

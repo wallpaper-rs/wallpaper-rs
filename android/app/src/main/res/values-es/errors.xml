@@ -133,6 +133,7 @@
     <string name="error_android_provider_missing">No hay una fuente de imágenes %1$s</string>
     <string name="error_android_provider_secret">%1$s necesita primero su clave o contraseña</string>
     <string name="error_android_provider_secret_rejected">%1$s rechazó la clave o contraseña: vuelve a escribirla</string>
+    <string name="error_android_provider_untrusted">%1$s tiene un certificado en el que este teléfono no confía: si es tu propio servidor, instala su autoridad de certificación en los ajustes del teléfono</string>
     <string name="error_android_provider_failed">%1$s no respondió: %2$s</string>
     <string name="error_android_provider_off">%1$s está apagada: enciéndela para que descargue</string>
     <string name="error_android_provider_busy">Otra fuente de imágenes está descargando: inténtalo de nuevo cuando termine</string>

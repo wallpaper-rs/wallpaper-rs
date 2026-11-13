@@ -28,4 +28,4 @@ tokio-util.workspace = true
 zeroize.workspace = true
 
 [target.'cfg(target_os = "android")'.dependencies]
-webpki-root-certs.workspace = true
+wprs-core = { workspace = true, features = ["http"] }

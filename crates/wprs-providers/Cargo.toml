@@ -20,11 +20,11 @@ tokio = { workspace = true, features = ["fs", "io-util"] }
 wprs-format.workspace = true
 
 [target.'cfg(target_os = "android")'.dependencies]
-webpki-root-certs.workspace = true
-wprs-core.workspace = true
+wprs-core = { workspace = true, features = ["http"] }
 
 [dev-dependencies]
 tempfile.workspace = true
+wprs-core = { workspace = true, features = ["http"] }
 tokio-rustls.workspace = true
 tokio.workspace = true
 wiremock.workspace = true

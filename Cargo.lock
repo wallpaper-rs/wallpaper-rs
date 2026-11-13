@@ -6839,6 +6839,7 @@ name = "wprs-core"
 version = "0.3.0"
 dependencies = [
  "dirs",
+ "reqwest",
  "serde",
  "serde_json",
  "serde_path_to_error",
@@ -6848,6 +6849,7 @@ dependencies = [
  "toml",
  "toml_edit",
  "tracing",
+ "webpki-root-certs",
 ]
 
 [[package]]
@@ -7012,7 +7014,6 @@ dependencies = [
  "thiserror 2.0.21",
  "tokio",
  "tokio-rustls",
- "webpki-root-certs",
  "wiremock",
  "wprs-core",
  "wprs-format",
@@ -7150,7 +7151,6 @@ dependencies = [
  "tokio-rustls",
  "tokio-util",
  "toml",
- "webpki-root-certs",
  "wprs-core",
  "wprs-library",
  "zeroize",

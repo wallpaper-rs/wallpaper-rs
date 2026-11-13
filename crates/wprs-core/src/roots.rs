@@ -1,20 +1,21 @@
-//! Certificate authorities the user installed on the phone, trusted beside the built-in roots.
-
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
-static ADDED: OnceLock<Vec<Vec<u8>>> = OnceLock::new();
+static ADDED: OnceLock<PathBuf> = OnceLock::new();
 
-/// Reads `path`, where each DER certificate follows its length as four big-endian bytes. Only the
-/// first call counts; a missing or cut file adds what it holds whole.
 pub fn load_added(path: &Path) {
-    let bytes = fs::read(path).unwrap_or_default();
-    let _ = ADDED.set(split(&bytes));
+    let _ = ADDED.set(path.to_owned());
 }
 
-pub fn added() -> &'static [Vec<u8>] {
-    ADDED.get().map_or(&[], Vec::as_slice)
+pub fn added() -> Vec<Vec<u8>> {
+    ADDED.get().map_or_else(Vec::new, |path| split(&fs::read(path).unwrap_or_default()))
+}
+
+#[cfg(feature = "http")]
+pub fn certificates() -> Vec<reqwest::Certificate> {
+    let public = webpki_root_certs::TLS_SERVER_ROOT_CERTS.iter().map(|der| der.to_vec());
+    public.chain(added()).filter_map(|der| reqwest::Certificate::from_der(&der).ok()).collect()
 }
 
 fn split(mut bytes: &[u8]) -> Vec<Vec<u8>> {

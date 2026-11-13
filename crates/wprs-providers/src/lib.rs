@@ -137,6 +137,8 @@ fn redirect(attempt: Attempt, same_host: bool) -> Action {
 
 fn build(redirects: Policy) -> Result<reqwest::Client> {
     let builder = reqwest::Client::builder().user_agent(AGENT);
+    #[cfg(target_os = "android")]
+    let builder = builder.tls_certs_only(wprs_core::roots::certificates());
     let builder = builder.connect_timeout(Duration::from_secs(15)).read_timeout(Duration::from_secs(30));
     Ok(builder.referer(false).redirect(redirects).build()?)
 }

@@ -3,21 +3,21 @@ package io.github.wallpaper_rs
 import android.graphics.Bitmap
 import android.graphics.Color
 import java.io.ByteArrayOutputStream
-import java.net.ServerSocket
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
 
-class FakeDav(private val pictures: Int = 3) : AutoCloseable {
-    private val socket = ServerSocket(0, 8, java.net.InetAddress.getByName("127.0.0.1"))
+class FakeDav(private val pictures: Int = 3, secure: Boolean = false) : AutoCloseable {
+    private val socket = Loopback.socket(secure)
+    private val scheme = if (secure) "https" else "http"
     val listings = AtomicInteger()
     val downloads = AtomicInteger()
-    val url get() = "http://127.0.0.1:${socket.localPort}/dav/"
+    val url get() = "$scheme://127.0.0.1:${socket.localPort}/dav/"
 
     init {
         thread(isDaemon = true) {
             while (!socket.isClosed) {
                 val client = runCatching { socket.accept() }.getOrNull() ?: break
-                thread(isDaemon = true) { client.use { answer(it) } }
+                thread(isDaemon = true) { client.use { runCatching { answer(it) } } }
             }
         }
     }

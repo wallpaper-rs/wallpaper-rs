@@ -28,6 +28,11 @@ fn failure(id: &str, e: &wprs_providers::Error, keyed: bool) -> Error {
             "%1 rejected the key or password: enter it again",
             &[&id],
         ),
+        wprs_providers::Error::Http(e) if wprs_sync::untrusted(e) => said(
+            "android.provider_untrusted",
+            "%1 has a certificate this phone does not trust: if it is your own server, install its certificate authority in the phone's settings",
+            &[&id],
+        ),
         e => said("android.provider_failed", "%1 did not answer: %2", &[&id, e]),
     }
 }

@@ -133,6 +133,7 @@
     <string name="error_android_provider_missing">There is no picture source %1$s</string>
     <string name="error_android_provider_secret">%1$s needs its key or password first</string>
     <string name="error_android_provider_secret_rejected">%1$s rejected the key or password: enter it again</string>
+    <string name="error_android_provider_untrusted">%1$s has a certificate this phone does not trust: if it is your own server, install its certificate authority in the phone\'s settings</string>
     <string name="error_android_provider_failed">%1$s did not answer: %2$s</string>
     <string name="error_android_provider_off">%1$s is off: turn it on to let it download</string>
     <string name="error_android_provider_busy">Another picture source is downloading: try again when it ends</string>

@@ -1275,7 +1275,10 @@ la descarga ahora ni la automática hacen nada; si cambia la dirección a la que
 clave. Descarga solo imágenes, cada seis horas como mucho y con las reglas de red y batería de la sincronización
 (*Usar también datos móviles en segundo plano*; *Descargar ahora* lo pide la persona y va sin esa espera), guarda
 cada una en la biblioteca con la etiqueta `from-ID`, conserva las últimas *N* (no quita favoritas, de listas ni la
-puesta) y muestra los créditos. Debajo están los *Repositorios*: los que se añaden en otro equipo llegan como
+puesta) y muestra los créditos. Por HTTPS, el teléfono (fuentes, repositorios y servidor propio) confía en las
+raíces públicas que trae el programa y en las autoridades de certificación que instalaste en los ajustes de Android,
+que lee al abrir la app y vuelve a mirar en cada conexión nueva; si un servidor presenta un certificado que no pasa
+esa comprobación, la fuente lo dice debajo de su nombre en vez de quedarse sin descargar. Debajo están los *Repositorios*: los que se añaden en otro equipo llegan como
 propuesta con su clave y se añaden o se rechazan una vez, también se añade uno por su dirección y su huella
 (la huella se pide aparte y se explica con palabras: el teléfono solo lo acepta si responde con esa clave), y
 al añadirlo se abre *Explorar*, que busca sus paquetes (los marca si son para adultos y los oculta con *Ocultar el

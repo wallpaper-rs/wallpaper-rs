@@ -17,6 +17,11 @@ dirs.workspace = true
 tempfile.workspace = true
 tracing.workspace = true
 sha2.workspace = true
+reqwest = { workspace = true, optional = true }
+webpki-root-certs = { workspace = true, optional = true }
+
+[features]
+http = ["dep:reqwest", "dep:webpki-root-certs"]
 
 [dev-dependencies]
 toml.workspace = true
