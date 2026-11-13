@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 
 Item {
     id: hosts
@@ -95,8 +96,16 @@ Item {
     Component {
         id: multilineEditor
 
-        SceneMultiline {
-            host: hosts.input
+        ColumnLayout {
+            SceneMultiline {
+                host: hosts.input
+            }
+
+            SceneTimeText {
+                Layout.fillWidth: true
+                visible: hosts.input.field.bindable && hosts.input.field.key === "text"
+                host: hosts.input
+            }
         }
     }
 

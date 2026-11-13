@@ -127,6 +127,7 @@ pub(crate) fn edit(dir: &Path, doc: &Value, e: &L) -> Result<Vec<Op>> {
         }
         L::Grip { .. } | L::Fit { .. } | L::Parent { .. } => super::grips::edit(dir, doc, e)?,
         L::Figure(f) => crate::figures::edit(dir, doc, f)?,
+        L::Start(s) => crate::starts::edit(doc, s)?,
         L::Blend { layer: id, blend } => {
             let (path, _) = layer(doc, id)?;
             set(doc, &format!("{path}/blend"), json!(blend))

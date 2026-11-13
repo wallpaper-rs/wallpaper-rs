@@ -324,6 +324,24 @@ wprs-ctl scene act mi-escena duplicate_layer '{"id":"nombre"}'
 wprs-ctl scene act mi-escena ungroup '{"id":"cielo"}'
 ```
 
+## Cómo empezar con un reloj, una fecha o un movimiento sin fin
+
+Dónde está: pestaña **Capas**, botón **Puntos de partida** (el icono del cronómetro, junto a **Añadir una capa**).
+
+Pasos:
+
+1. Abre el botón. **Añadir un reloj o una fecha** lista formatos como `HH:mm`, `hh:mm a` o `EEEE d MMMM yyyy`, cada uno con cómo se ve ahora. Al elegir uno se crea una capa de texto que sigue al reloj; si tenías un grupo elegido, entra en él.
+2. **Mantener en movimiento la capa elegida** gira la capa sin parar (**Girar a la derecha**, **Girar a la izquierda**) o la desplaza y la devuelve sin parar (**Ir a la derecha y volver**, **Ir a la izquierda y volver**). Quedan claves lineales con repetición en el giro o la posición de la capa: puedes cambiarlas después en las claves.
+3. Cuando escribes el texto de una capa de texto, debajo aparece **Mostrar la hora o la fecha…**. Escribir `{time}` no muestra la hora: el texto sale tal cual. Ese botón pone en su lugar el reloj o la fecha con un formato a elegir.
+
+En la terminal: acción `layer` con la variante `start`, que tiene `clock` y `forever`. Mira [acciones](acciones.md).
+
+```sh
+wprs-ctl scene act mi-escena layer '{"start":{"clock":{"format":"HH:mm","id":"hora"}}}'
+wprs-ctl scene act mi-escena add_layer '{"kind":"shape","id":"rueda"}'
+wprs-ctl scene act mi-escena layer '{"start":{"forever":{"layer":"rueda","motion":"spin"}}}'
+```
+
 ## Cómo agrupar y desagrupar capas
 
 Dónde está: pestaña **Capas**, botones **Agrupar**, **Desagrupar**, **Meter en un grupo** y **Sacar del grupo**.

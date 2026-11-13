@@ -129,6 +129,8 @@ wprs-ctl scene act DIR rgb '{"layer":"setting","on":true}'
 act layer
 wprs-ctl scene act DIR add_layer '{"kind":"image","file":"picture.png","id":"sky"}'
 wprs-ctl scene act DIR layer '{"transform":{"layer":"sky","position":[400,300],"rotation":10,"scale":[1.5,1.5],"size":[800,600]}}'
+wprs-ctl scene act DIR layer '{"start":{"clock":{"format":"HH:mm","id":"hora"}}}'
+wprs-ctl scene act DIR layer '{"start":{"forever":{"layer":"sky","motion":"spin","seconds":30}}}'
 
 act import
 wprs-ctl scene act DIR import '{"file":"picture.png"}'

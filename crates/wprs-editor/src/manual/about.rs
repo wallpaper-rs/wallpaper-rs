@@ -110,7 +110,10 @@ pub const ABOUT: [(&str, &str); 80] = [
         "effects",
         "Add, set, remove, move or mask the effects of a layer, and drag their handles and masks on the canvas",
     ),
-    ("layer", "Edit the transform, blend or instancing of a layer"),
+    (
+        "layer",
+        "Edit the transform, blend or instancing of a layer, or start from a ready-made clock or date text and a movement that spins or drifts forever",
+    ),
     (
         "manifest",
         "Edit the manifest: origin, license, tags, authors, credits, texts by key, locale files, display, playback, web, network, inputs",

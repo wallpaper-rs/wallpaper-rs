@@ -317,7 +317,7 @@ wprs-ctl scene act mi-escena rgb '{"layer":"ajuste","whole":true}'
 
 #### `layer`
 
-Una sola acción con varias variantes: se pasa un objeto con el nombre de la variante (`transform`, `grip`, `fit`, `parent`, `blend`, `depth`, `instance`, `touch` o `figure`) y dentro sus argumentos. Todas piden `layer`, el id de la capa. Lo que no se nombra se queda como estaba. Si un campo sigue una animación u otra fuente, ver «Valores que se animan» más arriba.
+Una sola acción con varias variantes: se pasa un objeto con el nombre de la variante (`transform`, `grip`, `fit`, `parent`, `blend`, `depth`, `instance`, `touch`, `figure` o `start`) y dentro sus argumentos. Todas piden `layer`, el id de la capa, salvo `start` con `clock`, que crea una capa nueva. Lo que no se nombra se queda como estaba. Si un campo sigue una animación u otra fuente, ver «Valores que se animan» más arriba.
 
 ##### variante `transform`
 
@@ -559,6 +559,49 @@ wprs-ctl scene act mi-escena layer '{"figure":{"fonts":{"layer":"texto","font":"
 ### Recursos
 
 Los recursos son los archivos de la escena: imágenes, videos, sonidos, fuentes, tablas de color `.cube` y modelos `.glb`. Viven en la carpeta `assets/` y se declaran en `/scene/assets`. La lista está en el panel **Recursos** de la app. Para efectos y scripts que se importan como archivos, mira [Shaders](acciones.md) y [Scripts y plantillas](acciones.md).
+
+##### variante `start`
+
+Puntos de partida ya hechos para lo que más se pide: un reloj o una fecha, y un movimiento que no se acaba. Dentro de `start` se elige `clock` o `forever`.
+
+###### `start` con `clock`
+
+Añade una capa de texto que muestra la hora o la fecha del equipo y se actualiza sola. Es lo mismo que escribir `{ "clock": "HH:mm" }` o `{ "date": "EEEE d MMMM yyyy" }` en el texto de una capa; escribir `{time}` no hace nada, porque el texto que se escribe sale tal cual.
+
+| Argumento | Tipo | Qué significa |
+|-----------|------|---------------|
+| `format` | texto | El formato de la hora o de la fecha, como `HH:mm`, `hh:mm a` o `d MMMM yyyy` (las letras están en [escena](escena.md#reloj-y-fechas), y la consulta `clock_help` las lista con un ejemplo). Si falta, `HH:mm` para la hora y `EEEE d MMMM yyyy` para la fecha. Hasta 64 caracteres. |
+| `date` | sí/no | `true` muestra una fecha (`date`) en lugar de la hora (`clock`). Por defecto `false`. |
+| `id` | texto | Id de la capa. Si falta, `clock` o `date` con un número si ya existe. |
+| `into` | texto | Id de un grupo donde meter la capa. |
+| `size` | número | Tamaño del texto, de 1 a 4000 píxeles. Por defecto 160. |
+
+```sh
+wprs-ctl scene act mi-escena layer '{"start":{"clock":{"format":"HH:mm","id":"hora"}}}'
+wprs-ctl scene act mi-escena layer '{"start":{"clock":{"date":true,"id":"fecha","size":80}}}'
+```
+
+###### `start` con `forever`
+
+Hace que una capa gire o se desplace sin parar, sin construir claves a mano: escribe en su giro o en su posición dos claves lineales con `loop`, que repite o va y vuelve.
+
+| Argumento | Tipo | Qué significa |
+|-----------|------|---------------|
+| `layer` | texto (obligatorio) | Id de la capa. |
+| `motion` | texto (obligatorio) | `spin` da una vuelta completa cada `seconds` y empieza otra; `drift` la desplaza `by` píxeles y la devuelve. |
+| `seconds` | número | Lo que dura una vuelta (`spin`) o un trayecto (`drift`), de 0,5 a 86400 segundos. Por defecto 20. |
+| `reverse` | sí/no | Gira en sentido contrario, o se desplaza al otro lado. Por defecto `false`. |
+| `by` | lista de 2 números | Solo con `drift`: cuánto se desplaza, en píxeles del lienzo. Por defecto `[200, 0]`. |
+| `back` | sí/no | Solo con `drift`: `true` (por defecto) va y vuelve suavemente; `false` salta al principio y repite el trayecto. |
+
+Parte del giro o de la posición que la capa tiene ahora (sin posición, el centro del lienzo) y reemplaza las claves que hubiera. Si el giro o la posición siguen otra fuente (el sonido, una propiedad…), la acción lo rechaza: fija antes un valor con `transform` y `replace`.
+
+```sh
+wprs-ctl scene act mi-escena add_layer '{"kind":"shape","id":"rueda"}'
+wprs-ctl scene act mi-escena layer '{"start":{"forever":{"layer":"rueda","motion":"spin","seconds":12}}}'
+wprs-ctl scene act mi-escena add_layer '{"kind":"shape","id":"nube"}'
+wprs-ctl scene act mi-escena layer '{"start":{"forever":{"layer":"nube","motion":"drift","by":[300,0],"seconds":30}}}'
+```
 
 #### `import`
 

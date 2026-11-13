@@ -85,6 +85,7 @@ pub enum LayerEdit {
         alpha: Option<f64>,
     },
     Figure(super::FigureEdit),
+    Start(StartEdit),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
@@ -103,4 +104,40 @@ impl Takes {
             Takes::Alpha => "alpha",
         }
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum Forever {
+    Spin,
+    Drift,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, schemars::JsonSchema)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
+pub enum StartEdit {
+    Clock {
+        #[serde(default)]
+        format: Option<String>,
+        #[serde(default)]
+        date: bool,
+        #[serde(default)]
+        id: Option<String>,
+        #[serde(default)]
+        into: Option<String>,
+        #[serde(default)]
+        size: Option<f64>,
+    },
+    Forever {
+        layer: String,
+        motion: Forever,
+        #[serde(default)]
+        seconds: Option<f64>,
+        #[serde(default)]
+        reverse: bool,
+        #[serde(default)]
+        by: Option<[f64; 2]>,
+        #[serde(default)]
+        back: Option<bool>,
+    },
 }

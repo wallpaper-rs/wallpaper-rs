@@ -116,6 +116,7 @@ mod spots;
 pub mod spread;
 pub mod stage3d;
 pub mod starters;
+mod starts;
 pub mod stock;
 mod straight;
 mod strings;

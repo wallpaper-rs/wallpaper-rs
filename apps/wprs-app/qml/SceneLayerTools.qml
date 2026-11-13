@@ -11,6 +11,10 @@ Flow {
         owner: tools.owner
     }
 
+    SceneLayerStarts {
+        owner: tools.owner
+    }
+
     Repeater {
         model: [["duplicate_layer", "edit-copy", App.tr("Duplicate")], ["remove_layer", "edit-delete", App.tr("Remove")], ["ungroup", "format-remove-node", App.tr("Ungroup")]]
 
