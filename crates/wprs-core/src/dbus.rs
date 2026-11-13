@@ -13,6 +13,10 @@ pub const APP_PATH: &str = "/io/github/wallpaper_rs";
 pub const DEFAULT_OUTPUT: &str = "default";
 pub const MAX_STREAM_EDGE: u32 = 16384;
 
+pub fn launcher(sandbox_id: Option<String>) -> String {
+    sandbox_id.filter(|id| !id.is_empty()).unwrap_or_else(|| APP_ID.into())
+}
+
 pub fn uri_scheme(text: &str) -> Option<&str> {
     let (scheme, _) = text.split_once(':')?;
     let mut chars = scheme.chars();

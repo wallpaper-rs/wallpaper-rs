@@ -87,6 +87,17 @@ fn uri_schemes() {
     assert_eq!(scheme("1x:y"), None);
 }
 
+#[test]
+fn the_window_names_the_launcher_of_the_sandbox_it_runs_in() {
+    let launcher = wprs_core::dbus::launcher;
+    assert_eq!(
+        launcher(Some("io.github.wallpaper_rs.WallpaperRs".into())),
+        "io.github.wallpaper_rs.WallpaperRs"
+    );
+    assert_eq!(launcher(Some(String::new())), wprs_core::dbus::APP_ID);
+    assert_eq!(launcher(None), wprs_core::dbus::APP_ID);
+}
+
 fn mode(path: &Path) -> u32 {
     std::fs::metadata(path).unwrap().permissions().mode() & 0o777
 }

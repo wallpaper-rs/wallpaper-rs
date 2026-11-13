@@ -62,7 +62,7 @@ mod tr;
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQuickStyle, QString, QUrl};
 use std::path::Path;
 use std::process::ExitCode;
-use wprs_core::dbus::APP_ID;
+use wprs_core::dbus::launcher;
 
 const MAIN: &str = "qrc:/qt/qml/io/github/wallpaper_rs/app/qml/Main.qml";
 const STYLE: &str = "org.kde.desktop";
@@ -115,7 +115,9 @@ fn file(arg: &str) -> Option<String> {
 
 fn run() -> ExitCode {
     let mut app = QGuiApplication::new();
-    QGuiApplication::set_desktop_file_name(&QString::from(APP_ID));
+    QGuiApplication::set_desktop_file_name(&QString::from(
+        launcher(std::env::var("FLATPAK_ID").ok()).as_str(),
+    ));
     let mut engine = QQmlApplicationEngine::new();
     let (Some(mut app), Some(mut engine)) = (app.as_mut(), engine.as_mut()) else { return ExitCode::FAILURE };
     app.as_mut().set_application_name(&QString::from("wallpaper-rs"));
