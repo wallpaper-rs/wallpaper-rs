@@ -10552,3 +10552,18 @@ msgstr "Dibujar además el código QR con caracteres de bloque"
 #: apps/wprs-ctl/src/connecting.rs
 msgid "Draw for a light terminal background instead of a dark one"
 msgstr "Dibujar para un terminal de fondo claro en lugar de uno oscuro"
+#: apps/wprs-ctl/src/stillness.rs
+msgid "it is still because a window covers the screen"
+msgstr "está quieto porque una ventana tapa la pantalla"
+
+#: apps/wprs-ctl/src/stillness.rs
+msgid "it is still because the computer is on battery"
+msgstr "está quieto porque el equipo funciona con batería"
+
+#: apps/wprs-ctl/src/stillness.rs
+msgid "it is still because the screen is locked"
+msgstr "está quieto porque la pantalla está bloqueada"
+
+#: apps/wprs-ctl/src/stillness.rs
+msgid "it is still because it was paused (wprs-ctl resume)"
+msgstr "está quieto porque se pausó (wprs-ctl resume)"

@@ -65,6 +65,20 @@ mod tests {
     }
 
     #[test]
+    fn one_function_says_why_a_wallpaper_is_still_and_the_manual_pause_comes_first() {
+        use wprs_core::model::StillReason::{Battery, Locked, Paused};
+        let mut st = state(true, Some(5), 20, 0);
+        assert_eq!(st.still_reason(None), Some(Battery));
+        st.locked = true;
+        assert_eq!(st.still_reason(None), Some(Locked));
+        st.user_paused = true;
+        assert_eq!(st.still_reason(None), Some(Paused));
+        (st.user_paused, st.locked, st.on_battery) = (false, false, false);
+        assert_eq!(st.still_reason(None), None);
+        assert!(st.awake());
+    }
+
+    #[test]
     fn the_level_is_none_without_a_battery_and_rounded_with_one() {
         assert_eq!(level(false, 0.0), None);
         assert_eq!(level(false, 87.0), None);

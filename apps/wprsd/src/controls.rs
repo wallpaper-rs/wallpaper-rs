@@ -1,19 +1,29 @@
 use crate::daemon::{Daemon, State, settings};
 use crate::streams::OutputInfo;
 use std::path::Path;
+use wprs_core::model::StillReason;
 use wprs_core::{Config, Fit};
 use zbus::fdo::Error::InvalidArgs;
 
 impl State {
+    pub(crate) fn still_reason(&self, info: Option<&OutputInfo>) -> Option<StillReason> {
+        let p = &self.config.pause;
+        let covered = p.when_covered && info.is_some_and(OutputInfo::covered);
+        let reasons = [
+            (self.user_paused, StillReason::Paused),
+            (p.when_locked && self.locked, StillReason::Locked),
+            (p.on_battery.pauses(self.on_battery, self.battery_percent), StillReason::Battery),
+            (covered, StillReason::Covered),
+        ];
+        reasons.into_iter().find_map(|(holds, reason)| holds.then_some(reason))
+    }
+
     pub(crate) fn active(&self, info: &OutputInfo) -> bool {
-        self.awake() && !(self.config.pause.when_covered && info.covered())
+        self.still_reason(Some(info)).is_none()
     }
 
     pub(crate) fn awake(&self) -> bool {
-        let p = &self.config.pause;
-        !(self.user_paused
-            || p.on_battery.pauses(self.on_battery, self.battery_percent)
-            || (p.when_locked && self.locked))
+        self.still_reason(None).is_none()
     }
 
     pub(crate) fn lowest(&self) -> bool {

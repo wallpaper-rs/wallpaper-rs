@@ -1,6 +1,7 @@
 use crate::daemon::Daemon;
 use crate::error::{Result, failed, invalid, not_found};
 use std::sync::Weak;
+use wprs_core::model::StillReason;
 
 pub struct Rgb(pub Weak<Daemon>);
 
@@ -14,10 +15,9 @@ impl Rgb {
     async fn get_status(&self) -> Result<String> {
         let d = self.0.upgrade().ok_or_else(|| failed("the daemon is stopping"))?;
         let st = d.state();
-        let pause = &st.config.pause;
-        let asleep = match () {
-            _ if st.locked && pause.when_locked && !st.user_paused => "locked",
-            _ if !st.user_paused && pause.on_battery.pauses(st.on_battery, st.battery_percent) => "battery",
+        let asleep = match st.still_reason(None) {
+            Some(StillReason::Locked) => "locked",
+            Some(StillReason::Battery) => "battery",
             _ => "paused",
         };
         let rgb = st.config.rgb.clone();

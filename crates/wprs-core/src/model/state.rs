@@ -63,6 +63,8 @@ model! {
         pub playing: bool,
         pub active: bool,
         pub covered: bool,
+        #[serde(default)]
+        pub still_reason: Option<StillReason>,
         pub clients: u32,
         pub error: Option<String>,
         pub item: Option<Uid>,
@@ -140,6 +142,9 @@ model! {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub away: Option<String>,
     }
+
+    #[derive(Copy, Eq, Hash)]
+    pub enum StillReason { Covered, Battery, Locked, Paused }
 
     #[derive(Copy, Eq, Hash)]
     pub enum Shown { Color, Image, Video, Scene, Web, #[serde(other)] Unknown }

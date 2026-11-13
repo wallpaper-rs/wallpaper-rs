@@ -111,7 +111,8 @@ pub fn notes(state: &str, inputs: &str) {
         return;
     };
     state.outputs.iter().for_each(|(name, o)| {
-        note(o).into_iter().for_each(|n| eprintln!("{name}: {n}"));
+        let words = crate::stillness::note(o).into_iter().chain(note(o));
+        words.for_each(|n| eprintln!("{name}: {n}"));
         let more = sandbox_note(o).into_iter().chain(o.error.clone());
         let more = more.chain(o.away.as_deref().map(crate::away::note)).chain(page_notes(o));
         more.for_each(|n| eprintln!("{name}: {n}"));

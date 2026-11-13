@@ -90,6 +90,7 @@ impl Daemon {
                 playing: s.playing,
                 active: st.active(info),
                 covered: info.covered(),
+                still_reason: st.still_reason(Some(info)),
                 clients: info.claims.len() as u32,
                 error: s.error.or_else(|| st.held.get(name).cloned()),
                 item,

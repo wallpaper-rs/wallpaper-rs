@@ -729,7 +729,7 @@ Changes one setting and saves the configuration. Keys and their current values a
 | `transition.kind` | `fade`, `none` | `fade` |
 | `transition.duration_ms` | `0` to `10000` | `600` |
 | `pause.when_covered` | pause while a maximized or fullscreen window covers the output | `true` |
-| `pause.on_battery` | one setting for pausing on battery, with three values: `never`, `always` (pause whenever the machine runs on battery) and `below:N` with `N` from `1` to `100` (pause on battery with a charge under `N` percent; it applies as set, whatever `playback.quality` says, and does nothing while the charge is unknown, `battery_percent` being `null`); the phone reads the same key and its default is `never`; a file that still has the old boolean `on_battery` or the old `below_percent` key is not valid: the daemon reports it in `config_error`, keeps a copy of the file and runs with the defaults until the setting is written again | `always` |
+| `pause.on_battery` | one setting for pausing on battery, with three values: `never`, `always` (pause whenever the machine runs on battery) and `below:N` with `N` from `1` to `100` (pause on battery with a charge under `N` percent; it applies as set, whatever `playback.quality` says, and does nothing while the charge is unknown, `battery_percent` being `null`); the key belongs to each device and is never synced (a value set on one device does not change how another behaves); the phone reads the same key and its default is `never`; a file that still has the old boolean `on_battery` or the old `below_percent` key is not valid: the daemon reports it in `config_error`, keeps a copy of the file and runs with the defaults until the setting is written again | `always` |
 | `pause.when_locked` | pause while the screen is locked; whatever it says, videos are muted and scenes play no sound while it is locked | `true` |
 | `library.watch` | rescan folder sources when files in them change (a new file once it is written, a hard or symbolic link, a moved, renamed or removed folder), one scan per source at most every 5 s; a change during a scan of the same source starts another scan after it | `true` |
 | `library.thumb_cache_mb` | `64` to `8192`, size of the thumbnail cache | `512` |
@@ -2968,7 +2968,7 @@ struct LayerShellState { namespace: Option<String>, from: String, restart: bool,
 struct GpuAdapter { name: String, kind: String, backend: String, used: bool, bus: String, compositor: bool }
 struct OutputState {
     width: u32, height: u32, image: Option<PathBuf>, fit: Fit, background: String,
-    kind: Shown, playing: bool, active: bool, covered: bool, clients: u32, error: Option<String>,
+    kind: Shown, playing: bool, active: bool, covered: bool, still_reason: Option<StillReason>, clients: u32, error: Option<String>,
     item: Option<Uid>, preset: Option<Uid>, playlist: Option<OutputPlaylist>, credit: Option<Credit>,
     edited: bool, screen: Option<Screen>, mm: Option<[f64; 4]>, parallax: bool, frames: u64, page_frames: u64, refresh: u32, fps: u32,
     buffers: String, sound: String, shown_fit: Fit, flashes: String, left_out: Vec<String>,
@@ -3194,6 +3194,8 @@ struct FilesReply { model: u32, serial: u64, folders: Vec<String>, files: Vec<Pr
 struct UploadOutput { id: String, state: String, package: Option<String>, version: Option<String>, errors: Vec<String> }
 ```
 
+
+`outputs.<name>.still_reason` says why the wallpaper of one output is not moving, or is `null` while it plays (`active` is true exactly then). One function of the daemon decides it, from these in order: `paused` (`SetPaused`, the manual pause), `locked` (the screen is locked and `pause.when_locked` holds), `battery` (`pause.on_battery` says to pause with the present power source and charge) and `covered` (a window covers the output and `pause.when_covered` holds); the first that applies is reported, so the other reasons show up once it ends. `wprs-ctl state` prints the JSON as before and, on a terminal, one line per screen on the error output with the reason in words. The app does not show it. Whether a window covers an output is known as follows: on Plasma, the wallpaper plugin of each screen reports it with `SetOutputCovered` (an output with no claimant reports nothing, so it is never covered); on layer-shell and X11 outputs the daemon works it out itself, as described above (frame callbacks that stop, fullscreen or maximized windows, Hyprland workspaces, COSMIC overlap notices, X11 window geometry and visibility). It cannot be known on a compositor that sends frame callbacks all the time and offers no way to list its windows (a window then covers the screen without the wallpaper pausing), nor for a window that covers the screen only through transparency or only in part.
 
 `battery_percent` is the charge of the machine's battery as UPower reports it (0 to 100, rounded), read from the same service as `on_battery` and followed when it changes. It is `null` when the machine has no battery or when the power service cannot be reached, so a script must treat `null` as "unknown" and not as zero. Together with `on_battery` it feeds the settings `pause.below_percent` and `playback.lowest_below_percent`.
 

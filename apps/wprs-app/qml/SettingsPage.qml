@@ -35,13 +35,8 @@ Kirigami.ScrollablePage {
         }
     ]
 
-    Connections {
-        target: App.backend
-
-        function onChanged(topic) {
-            if (topic === "library" || topic === "inputs")
-                page.load();
-        }
+    SettingsWatch {
+        owner: page
     }
 
     ColumnLayout {
