@@ -183,7 +183,7 @@ Parámetros: `speed` (`[x, y]`, por defecto `[0.01, 0]`; de -4 a 4); `repeat_x` 
 
 **`shake`** (Sacudida, ligero). Sacude la imagen a lo largo de una dirección o de un mapa de flujo pintado, con ruido o con un empuje periódico.
 
-Parámetros: `strength` (número, por defecto 0; de 0 a 256); `speed` (número, por defecto 2; de 0 a 60); `direction` (`[x, y]`, por defecto `[1, 1]`; de -1 a 1); `noise` (número, por defecto 0; de 0 a 1); `friction` (número, por defecto 0; de 0 a 1); `bounds` (`[x, y]`, por defecto `[1, 1]`; de 0 a 1); `phase` (imagen); `flow` (imagen); `motion` (opción, por defecto 0): 0 ruido, 1 empuje periódico; `side` (opción, por defecto 0): 0 a los dos lados, 1 solo hacia delante, 2 solo hacia atrás.
+Parámetros: `strength` (número, por defecto 0; de 0 a 256); `speed` (número, por defecto 2; de 0 a 60); `direction` (`[x, y]`, por defecto `[1, 1]`; de -1 a 1); `noise` (número, por defecto 0; de 0 a 1); `friction` (número, por defecto 0; de 0 a 1); `bounds` (`[x, y]`, por defecto `[1, 1]`; de 0 a 1); `phase` (imagen); `flow` (imagen); `motion` (opción, por defecto 0): 0 ruido, 1 empuje periódico; `side` (opción, por defecto 0): 0 a los dos lados, 1 solo hacia delante, 2 solo hacia atrás. El empuje periódico es un empuje suave con el retorno que fija `friction`, no el diente de sierra exacto del efecto de paquete `flow_shake`; al migrar un paquete puedes conservar su efecto.
 
 **`spin`** (Giro, ligero). Gira la parte de la imagen cercana a un centro, con menos fuerza hacia `radius`.
 
