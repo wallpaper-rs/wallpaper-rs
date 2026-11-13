@@ -32,7 +32,10 @@ fn main() {
     println!("cargo::rerun-if-changed=../../po");
     println!("cargo::rerun-if-changed=qml");
     shim::install();
-    let look = look::write(&PathBuf::from("look").canonicalize().unwrap(), &PathBuf::from(env::var("OUT_DIR").unwrap()));
+    let look = look::write(
+        &PathBuf::from("look").canonicalize().unwrap(),
+        &PathBuf::from(env::var("OUT_DIR").unwrap()),
+    );
     let pages = files("qml").into_iter().map(QmlFile::from);
     let singletons = files("qml/facade").into_iter().map(|p| QmlFile::from(p).singleton(true));
     CxxQtBuilder::new_qml_module(

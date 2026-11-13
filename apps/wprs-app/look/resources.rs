@@ -43,7 +43,10 @@ pub fn write(here: &Path, out: &Path) -> PathBuf {
     }
     for line in fs::read_to_string(here.join("icons/names.txt")).unwrap().lines() {
         let (old, new) = line.split_once(' ').unwrap_or_else(|| panic!("bad icon line {line}"));
-        let target = names.get(new).unwrap_or_else(|| panic!("icon {old} maps to {new}, which is not bundled")).clone();
+        let target = names
+            .get(new)
+            .unwrap_or_else(|| panic!("icon {old} maps to {new}, which is not bundled"))
+            .clone();
         if let Some(had) = names.insert(old.to_owned(), target.clone()) {
             assert!(had == target, "icon {old} is also a bundled name with another drawing");
         }
