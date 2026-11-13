@@ -130,7 +130,12 @@ fn the_glide_given_to_shaders_carries_the_tilt_only_when_the_gyro_is_on() {
     let mut off = runtime(view(false), json!([box_at("n", json!({ "parallax": [0.1, 0.1] }))]));
     for rt in [&mut on, &mut off] {
         rt.advance(0.05);
-        rt.set_pointer(PointerState { pos: Some([0.5; 2]), smooth: [0.5; 2], inside: true, ..Default::default() });
+        rt.set_pointer(PointerState {
+            pos: Some([0.5; 2]),
+            smooth: [0.5; 2],
+            inside: true,
+            ..Default::default()
+        });
     }
     on.set_tilt([0.5, -0.25]);
     off.set_tilt([0.5, -0.25]);
