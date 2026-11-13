@@ -52,7 +52,7 @@ fn wrap(code: Option<u32>) -> MapWrap {
     }
 }
 
-pub(super) fn sampling(doc: &Gltf, texture: usize) -> Sampling {
+pub(crate) fn sampling(doc: &Gltf, texture: usize) -> Sampling {
     let found = doc.textures.get(texture).and_then(|t| doc.samplings.get(t.sampler?));
     let Some(s) = found else { return Sampling::default() };
     let (shrink_sharp, mips) = match s.min {

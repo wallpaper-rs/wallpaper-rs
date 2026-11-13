@@ -19,6 +19,7 @@ pub use pictures::picture_size;
 pub use sculpt::{Carved, MAX_SCULPTS, carve_decode, carve_encode};
 pub use surface::{Alpha, Finish, SLOTS};
 pub use tiers::{ModelCaps, Verdict, caps, fur_shells, shadow_side, verdict};
+pub(crate) use uvs::sampling as sampling_of;
 pub use uvs::{MapUv, MapWrap, SAME_UV, Sampling};
 
 pub const MODEL_FLOATS: usize = 14;

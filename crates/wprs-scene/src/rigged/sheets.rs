@@ -1,5 +1,6 @@
 use super::read::Bin;
 use super::{Rigged, VERTEX_FLOATS};
+use crate::MapWrap;
 
 pub const MAX_SHEETS: usize = 64;
 pub const MAX_REPEATS: u32 = 4;
@@ -31,7 +32,13 @@ pub(crate) fn sheets(bin: &Bin, rig: &mut Rigged) {
     let at = |w: &Option<usize>| w.and_then(|i| chosen.iter().position(|c| *c == i)).unwrap_or(0) as u16;
     rig.sheets = wanted.iter().map(at).collect();
     rig.pictures = chosen.iter().filter_map(|i| bytes(bin, *i)).collect();
+    rig.wraps = chosen.iter().filter_map(|i| bytes(bin, *i).map(|_| wrap_of(bin, *i))).collect();
     rig.repeats = repeats(rig);
+}
+
+fn wrap_of(bin: &Bin, image: usize) -> [MapWrap; 2] {
+    let at = bin.doc.textures.iter().position(|t| t.source == Some(image));
+    at.map_or([MapWrap::Repeat; 2], |t| crate::model::sampling_of(bin.doc, t).wrap)
 }
 
 fn repeats(rig: &Rigged) -> Vec<[f32; 4]> {
@@ -50,8 +57,13 @@ fn repeats(rig: &Rigged) -> Vec<[f32; 4]> {
     };
     let all: Vec<[f32; 4]> = reach
         .iter()
-        .map(|[u0, v0, u1, v1]| {
-            let ((lu, nu), (lv, nv)) = (span(*u0, *u1), span(*v0, *v1));
+        .zip(&rig.wraps)
+        .map(|([u0, v0, u1, v1], wrap)| {
+            let axis = |k: usize, lo: f32, hi: f32| match wrap[k] {
+                MapWrap::Clamp => (0.0, 1.0),
+                _ => span(lo, hi),
+            };
+            let ((lu, nu), (lv, nv)) = (axis(0, *u0, *u1), axis(1, *v0, *v1));
             match u0 <= u1 && v0 <= v1 {
                 true => [lu, lv, nu, nv],
                 false => [0.0, 0.0, 1.0, 1.0],

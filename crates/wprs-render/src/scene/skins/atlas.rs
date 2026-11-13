@@ -1,5 +1,5 @@
 use image::{RgbaImage, imageops};
-use wprs_scene::{Rigged, VERTEX_FLOATS};
+use wprs_scene::{MapWrap, Rigged, VERTEX_FLOATS};
 
 const PAD: u32 = 2;
 
@@ -23,19 +23,30 @@ fn repeat_of(rig: &Rigged, sheet: usize) -> [f32; 4] {
     rig.repeats.get(sheet).copied().unwrap_or(FLAT)
 }
 
-fn tiled(picture: RgbaImage, [_, _, nu, nv]: [f32; 4]) -> RgbaImage {
+fn fold(at: u32, side: u32, first: i32, mirror: bool) -> u32 {
+    let (tile, inside) = (at / side, at % side);
+    let odd = (first + tile as i32).rem_euclid(2) == 1;
+    if mirror && odd { side - 1 - inside } else { inside }
+}
+
+fn tiled(picture: RgbaImage, [lu, lv, nu, nv]: [f32; 4], wrap: [MapWrap; 2]) -> RgbaImage {
     let (nu, nv) = (nu as u32, nv as u32);
     if nu <= 1 && nv <= 1 {
         return picture;
     }
     let (w, h) = picture.dimensions();
-    RgbaImage::from_fn(w * nu.max(1), h * nv.max(1), |x, y| *picture.get_pixel(x % w, y % h))
+    let mirrored = wrap.map(|m| m == MapWrap::Mirror);
+    RgbaImage::from_fn(w * nu.max(1), h * nv.max(1), |x, y| {
+        let sx = fold(x, w, lu as i32, mirrored[0]);
+        let sy = fold(y, h, lv as i32, mirrored[1]);
+        *picture.get_pixel(sx, sy)
+    })
 }
 
 pub(crate) fn pictures(rig: &Rigged, repeat: bool) -> Vec<RgbaImage> {
     let each = rig.pictures.iter().enumerate().filter_map(|(i, b)| {
         let picture = decoded(b)?;
-        Some(if repeat { tiled(picture, repeat_of(rig, i)) } else { picture })
+        Some(if repeat { tiled(picture, repeat_of(rig, i), rig.wraps.get(i).copied().unwrap_or([MapWrap::Repeat; 2])) } else { picture })
     });
     each.collect()
 }

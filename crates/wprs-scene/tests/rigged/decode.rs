@@ -169,3 +169,16 @@ fn texture_coordinates_past_one_ask_for_that_many_repeats() {
     let rig = Rigged::decode(&gl.bytes()).unwrap();
     assert_eq!(rig.repeats, [[-1.0, 0.0, 4.0, 1.0]]);
 }
+
+#[test]
+fn the_sampler_of_a_texture_sets_its_wrap_modes_and_clamped_directions_ask_for_no_repeats() {
+    let mut gl = textured(1);
+    let uvs: Vec<f32> = (0..10).flat_map(|i| [i as f32 * 0.3, i as f32 * 0.3]).collect();
+    let uv = gl.floats("VEC2", &uvs);
+    gl.doc["meshes"][0]["primitives"][0]["attributes"]["TEXCOORD_0"] = json!(uv);
+    gl.doc["samplers"] = json!([{ "wrapS": 33071, "wrapT": 33648 }]);
+    gl.doc["textures"][0]["sampler"] = json!(0);
+    let rig = Rigged::decode(&gl.bytes()).unwrap();
+    assert_eq!(rig.wraps, [[wprs_scene::MapWrap::Clamp, wprs_scene::MapWrap::Mirror]]);
+    assert_eq!(rig.repeats, [[0.0, 0.0, 1.0, 3.0]]);
+}

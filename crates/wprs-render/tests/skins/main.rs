@@ -6,6 +6,7 @@ mod moving;
 mod parts;
 mod poses;
 mod reach;
+mod wraps;
 mod settle;
 mod smooth;
 mod straight;
