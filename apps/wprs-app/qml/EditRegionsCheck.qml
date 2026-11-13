@@ -64,7 +64,7 @@ QtObject {
         expect(depth().moves?.length === 1 && depth().moves[0].by === -0.2, "a picked region was not moved");
         canvas.add(20, 10);
         canvas.add(100, 50);
-        canvas.add(100.5, 50.5);
+        canvas.add(100.2, 50.1);
         canvas.lay();
         expect(depth().splits?.length === 1 && depth().splits[0].points.length === 2, "a stroke did not split");
         page.editor.undo();
