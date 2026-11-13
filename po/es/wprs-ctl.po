@@ -10156,3 +10156,31 @@ msgstr "Guarda también las regiones como PNG, azul lejos y rojo cerca"
 #: apps/wprs-ctl/src/regioning.rs
 msgid "Print the list as JSON"
 msgstr "Imprime la lista como JSON"
+
+#: apps/wprs-ctl/src/hearing.rs
+msgid "no wallpaper of the library is shown there; name an item with --item"
+msgstr "ningún fondo de la biblioteca se muestra ahí; indica uno con --item"
+
+#: apps/wprs-ctl/src/hearing.rs
+msgid "%1: sound %2, volume %3, global %4 at %5%"
+msgstr "%1: sonido %2, volumen %3, global %4 al %5%"
+
+#: apps/wprs-ctl/src/regioning.rs
+msgid "its stroke crosses no region"
+msgstr "su trazo no cruza ninguna región"
+
+#: apps/wprs-ctl/src/regioning.rs
+msgid "both its points are already in one region"
+msgstr "sus dos puntos ya están en una misma región"
+
+#: apps/wprs-ctl/src/regioning.rs
+msgid "its point is in a region that an earlier move or join already took"
+msgstr "su punto está en una región que un movimiento o unión anterior ya tomó"
+
+#: apps/wprs-ctl/src/regioning.rs
+msgid "%1 %2 is not applied: %3 (at %4,%5); clear the %1s or redo it"
+msgstr "%1 %2 no se aplica: %3 (en %4,%5); borra los %1 o rehazlo"
+
+#: apps/wprs-ctl/src/regioning.rs
+msgid "%1  depth %2  %3 % of the picture  at %4,%5"
+msgstr "%1  profundidad %2  %3 % de la imagen  en %4,%5"

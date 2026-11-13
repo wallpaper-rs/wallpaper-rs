@@ -4702,6 +4702,10 @@ msgid "a manual playlist uid or name"
 msgstr "el uid o el nombre de una lista manual"
 
 #: crates/wprs-library/src/filter.rs
+msgid "an absolute folder path: the items inside it and its subfolders"
+msgstr "la ruta absoluta de una carpeta: los elementos que contiene y los de sus subcarpetas"
+
+#: crates/wprs-library/src/filter.rs
 msgid "an age like <7d"
 msgstr "una antigüedad como <7d"
 

@@ -1,5 +1,6 @@
 use crate::cli::OUTPUT;
 use crate::input::one;
+use crate::told::{fill, told, tr};
 use anyhow::{Result, bail};
 use clap::Args;
 use wprs_client::Client;
@@ -45,7 +46,7 @@ async fn shown(client: &Client, output: &str) -> Result<String> {
     let found = state.outputs.iter().find(|(name, _)| output.is_empty() || name.as_str() == output);
     match found.and_then(|(_, o)| o.item.clone()) {
         Some(uid) => Ok(uid),
-        None => bail!("no wallpaper of the library is shown there; name an item with --item"),
+        None => bail!("{}", tr(told("no wallpaper of the library is shown there; name an item with --item"))),
     }
 }
 
@@ -65,10 +66,13 @@ pub async fn run(client: &Client, args: Hearing) -> Result<()> {
     let volume = item.sound_volume.map_or("follow".to_owned(), |v| format!("{v}%"));
     let state: State = serde_json::from_str(&client.daemon.get_state().await?)?;
     let global = if state.muted { "muted" } else { "on" };
+    let level = format!("{:.0}", state.volume * 100.0);
     println!(
-        "{}: sound {sound}, volume {volume}, global {global} at {:.0}%",
-        item.title,
-        state.volume * 100.0
+        "{}",
+        fill(
+            told("%1: sound %2, volume %3, global %4 at %5%"),
+            &[&item.title, &sound, &volume, &global, &level]
+        )
     );
     Ok(())
 }
