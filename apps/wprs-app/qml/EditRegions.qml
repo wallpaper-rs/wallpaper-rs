@@ -113,47 +113,9 @@ ColumnLayout {
         zones: tool.zones
     }
 
-    RowLayout {
+    EditRegionMoves {
         Layout.fillWidth: true
-
-        QQC2.Button {
-            icon.name: "edit-link"
-            text: App.tr("Join")
-            enabled: tool.picks.length >= 2
-            onClicked: tool.join()
-        }
-
-        QQC2.Button {
-            icon.name: "arrow-up"
-            text: App.tr("Nearer")
-            enabled: tool.picks.length >= 1
-            onClicked: tool.nudge(tool.step)
-        }
-
-        QQC2.Button {
-            icon.name: "arrow-down"
-            text: App.tr("Farther")
-            enabled: tool.picks.length >= 1
-            onClicked: tool.nudge(-tool.step)
-        }
-    }
-
-    EditSlider {
-        text: App.tr("Move by")
-        from: 0.01
-        to: 0.5
-        stepSize: 0.01
-        value: tool.step
-        onMoved: value => tool.step = value
-    }
-
-    QQC2.Button {
-        Layout.fillWidth: true
-        checkable: true
-        checked: tool.page.regionSplit
-        icon.name: "edit-cut"
-        text: App.tr("Split along a stroke")
-        onClicked: tool.page.regionSplit = checked
+        owner: tool
     }
 
     EditRegionStraight {
