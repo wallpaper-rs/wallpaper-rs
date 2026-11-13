@@ -1,7 +1,18 @@
 use image::{ImageFormat, RgbImage};
 use serde_json::{Value, json};
+use std::sync::OnceLock;
+use tempfile::TempDir;
 use wprs_editor::starters::starter;
 use wprs_editor::{Project, package, stock};
+
+fn state() {
+    static STATE: OnceLock<TempDir> = OnceLock::new();
+    STATE.get_or_init(|| {
+        let dir = tempfile::tempdir().unwrap();
+        unsafe { std::env::set_var("XDG_STATE_HOME", dir.path()) };
+        dir
+    });
+}
 
 fn act(project: &mut Project, action: Value) -> anyhow::Result<()> {
     project.act(&serde_json::from_value(action)?).map(drop)
@@ -10,7 +21,7 @@ fn act(project: &mut Project, action: Value) -> anyhow::Result<()> {
 #[test]
 fn the_titles_and_thumbnails_of_an_open_resource_package_are_edited_in_place() {
     let root = tempfile::tempdir().unwrap();
-    unsafe { std::env::set_var("XDG_STATE_HOME", root.path()) };
+    state();
     let mut doc = starter("assets", "org.example.kit", "Kit", "en").unwrap();
     doc["manifest"]["authors"] = json!(["Kit Maker"]);
     doc["manifest"]["license"] = json!("CC-BY-4.0");
@@ -51,7 +62,7 @@ fn the_titles_and_thumbnails_of_an_open_resource_package_are_edited_in_place() {
 #[test]
 fn the_form_of_a_resource_package_has_a_parts_field_and_other_packages_do_not() {
     let root = tempfile::tempdir().unwrap();
-    unsafe { std::env::set_var("XDG_STATE_HOME", root.path()) };
+    state();
     let kit = starter("assets", "org.example.kit", "Kit", "en").unwrap();
     let kit = Project::create(&root.path().join("kit"), kit).unwrap();
     let scene = starter("empty", "org.example.scene", "Scene", "en").unwrap();

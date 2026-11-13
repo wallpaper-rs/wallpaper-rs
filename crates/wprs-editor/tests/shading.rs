@@ -1,9 +1,20 @@
 use serde_json::{Value, json};
 use std::fs;
+use std::sync::OnceLock;
+use tempfile::TempDir;
 use wprs_editor::Project;
 use wprs_editor::actions::Action;
 use wprs_editor::outline::outline;
 use wprs_editor::starters::starter;
+
+fn state() {
+    static STATE: OnceLock<TempDir> = OnceLock::new();
+    STATE.get_or_init(|| {
+        let dir = tempfile::tempdir().unwrap();
+        unsafe { std::env::set_var("XDG_STATE_HOME", dir.path()) };
+        dir
+    });
+}
 
 const WGSL: &str = "override soft: bool = false;
 @fragment fn fs_glow(in: VertexOut) -> @location(0) vec4<f32> {
@@ -19,7 +30,7 @@ fn descriptor(id: &str) -> Value {
 #[test]
 fn package_effects_are_removed_unless_a_layer_still_uses_them() {
     let root = tempfile::tempdir().unwrap();
-    unsafe { std::env::set_var("XDG_STATE_HOME", root.path().join("state")) };
+    state();
     let dir = root.path().join("glow");
     let mut project =
         Project::create(&dir, starter("empty", "org.example.glow", "Glow", "en").unwrap()).unwrap();
@@ -50,7 +61,7 @@ fn package_effects_are_removed_unless_a_layer_still_uses_them() {
 #[test]
 fn the_cost_of_an_effect_is_shown_at_every_quality_level_and_drops_for_heavy_and_optional_effects() {
     let root = tempfile::tempdir().unwrap();
-    unsafe { std::env::set_var("XDG_STATE_HOME", root.path().join("state")) };
+    state();
     let dir = root.path().join("weigh");
     let mut project =
         Project::create(&dir, starter("empty", "org.example.weigh", "Weigh", "en").unwrap()).unwrap();
