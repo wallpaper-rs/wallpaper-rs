@@ -14,7 +14,8 @@ class Wallpaper : WallpaperService() {
     private val hearing by lazy { Hearing(this) }
     private val paging = lazy { Pages(this) }
     private val pages by paging
-    private val players by lazy { Players(this) }
+    private val playing = lazy { Players(this) }
+    private val players by playing
 
     override fun onCreate() {
         super.onCreate()
@@ -26,6 +27,7 @@ class Wallpaper : WallpaperService() {
     override fun onDestroy() {
         Render.call { Native.finish() }
         videos.close()
+        if (playing.isInitialized()) Render.call { players.close() }
         if (paging.isInitialized()) pages.close()
         super.onDestroy()
     }

@@ -67,6 +67,13 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
         check()
     }
 
+    fun close() {
+        listeners.clear()
+        observe(false)
+        check()
+        synchronized(all) { all -= this }
+    }
+
     private fun observe(on: Boolean) {
         if (on == observing) return
         observing = on
@@ -148,7 +155,7 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
     }
 
     private fun tell(shown: MediaShown) = synchronized(readers) {
-        readers[this] = shown
+        if (shown.listening) readers[this] = shown else readers.remove(this)
         status = MediaShown.of(readers.values)
     }
 
@@ -169,12 +176,14 @@ class Players(private val context: Context) : MediaSessionManager.OnActiveSessio
     companion object {
         private const val SIDE = 256
         private const val ENABLED = "enabled_notification_listeners"
-        private val readers = mutableMapOf<Players, MediaShown>()
+        private val readers = WeakHashMap<Players, MediaShown>()
         private val all = Collections.newSetFromMap(WeakHashMap<Players, Boolean>())
         var status by mutableStateOf(MediaShown())
             private set
         var changes by mutableIntStateOf(0)
             private set
+
+        fun readersSeen(): String = synchronized(readers) { readers.values.toString() }
 
         fun recheck() = Render.post {
             changes++
