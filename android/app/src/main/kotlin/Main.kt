@@ -65,8 +65,7 @@ class Main : ComponentActivity() {
         if (savedInstanceState == null) {
             Sync.soon(this, 0)
             thread(isDaemon = true) {
-                remirror()
-                runCatching { examples(this, false) }
+                remirror(); runCatching { examples(this, false) }
                 Updates.found(Updates.count())
             }
         }

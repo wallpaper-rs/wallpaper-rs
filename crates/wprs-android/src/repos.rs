@@ -6,9 +6,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
-use std::sync::Arc;
 use wprs_format::Anchor;
-use wprs_providers::HttpFetch;
 use wprs_sync::{Ids, Kept, Local, Replica, View};
 
 pub(crate) mod anchored;
@@ -16,7 +14,7 @@ pub(crate) mod bundled;
 mod install;
 pub(crate) mod preview;
 
-pub(crate) use install::{fetched, install};
+pub(crate) use install::{add_url, fetch, fetched, install};
 
 const DIR: &str = "repos";
 pub(crate) const ITEMS: &str = "items.json";
@@ -112,11 +110,6 @@ pub(crate) fn offered(ids: &Ids) -> std::collections::HashSet<String> {
     found.into_iter().map(|i| ids.library(&i.repo_id, &i.id)).collect()
 }
 
-pub(crate) fn fetch() -> Result<HttpFetch, Error> {
-    HttpFetch::new(Arc::default())
-        .map_err(|e| said("android.web_client", "web connections cannot start: %1", &[&e]))
-}
-
 pub(crate) fn add(url: &str) -> Result<Value, Error> {
     if !shared(url) {
         return Err(said(
@@ -126,13 +119,6 @@ pub(crate) fn add(url: &str) -> Result<Value, Error> {
         ));
     }
     add_url(url)
-}
-
-fn add_url(url: &str) -> Result<Value, Error> {
-    std::fs::create_dir_all(dir()?)?;
-    let info = wprs_format::add_repo(&dir()?, &fetch()?, url, now())?;
-    store::changed();
-    Ok(json!({"repo_id": info.repo_id, "name": info.name, "packages": info.packages}))
 }
 
 pub(crate) fn confirm(repo: &str, add_it: bool) -> Result<Value, Error> {

@@ -1,8 +1,11 @@
-use super::{ITEMS, dir, fetch, installed};
+use super::{ITEMS, dir, installed};
 use crate::library::now;
+use crate::said;
 use crate::{Error, library, store};
 use serde_json::{Value, json};
 use std::path::PathBuf;
+use std::sync::Arc;
+use wprs_providers::HttpFetch;
 
 pub(crate) fn install(repo_id: &str, id: &str) -> Result<Value, Error> {
     let (uid, path) = fetched(&format!("{repo_id}/{id}"))?;
@@ -24,4 +27,16 @@ pub(crate) fn fetched(spec: &str) -> Result<(String, PathBuf), Error> {
     items.insert(uid.clone(), (done.repo_id, done.id));
     store::write(&dir()?.join(ITEMS), &serde_json::to_vec(&items)?)?;
     Ok((uid.clone(), library::with(|lib| Ok(lib.item(&uid)?.path))?))
+}
+
+pub(crate) fn fetch() -> Result<HttpFetch, Error> {
+    HttpFetch::new(Arc::default())
+        .map_err(|e| said("android.web_client", "web connections cannot start: %1", &[&e]))
+}
+
+pub(crate) fn add_url(url: &str) -> Result<Value, Error> {
+    std::fs::create_dir_all(dir()?)?;
+    let info = wprs_format::add_repo(&dir()?, &fetch()?, url, now())?;
+    store::changed();
+    Ok(json!({"repo_id": info.repo_id, "name": info.name, "packages": info.packages}))
 }

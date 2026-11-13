@@ -1,5 +1,6 @@
 use crate::library::with;
 use crate::pack::{self, Pack};
+use crate::repos::bundled;
 use crate::said;
 use crate::{Error, chosen, opened, saved, settings, store};
 use serde::Deserialize;
@@ -53,10 +54,8 @@ pub(crate) fn request(request: Request) -> Result<Value, Error> {
         Request::Reset { uid } => done(change(&*scene(&uid)?, BTreeMap::clear)),
         Request::Grant { uid, input, on } => done(grant(&*scene(&uid)?, &input, on)),
         Request::Examples { dir } => Ok(json!(pack::examples(Path::new(&dir))?)),
-        Request::ExamplesRepo { dir, stamp, force } => {
-            crate::repos::bundled::offer(Path::new(&dir), stamp, force)
-        }
-        Request::ExamplesDue { stamp } => Ok(json!(crate::repos::bundled::due(stamp)?)),
+        Request::ExamplesRepo { dir, stamp, force } => bundled::offer(Path::new(&dir), stamp, force),
+        Request::ExamplesDue { stamp } => Ok(json!(bundled::due(stamp)?)),
         Request::Save { uid, name } => done(saved::save(&*scene(&uid)?, &name)),
         Request::Rename { preset, name } => done(saved::rename(&preset, &name)),
         Request::Forget { preset } => done(saved::forget(&preset)),
