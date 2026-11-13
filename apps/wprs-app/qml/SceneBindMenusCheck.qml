@@ -33,16 +33,19 @@ QtObject {
     }
 
     function made(file, field) {
-        const menu = Qt.createComponent(file).createObject(page, {
-                "page": fake,
-                "field": field
-            });
+        const given = field === undefined ? {
+            "page": fake
+        } : {
+            "page": fake,
+            "field": field
+        };
+        const menu = Qt.createComponent(file).createObject(page, given);
         menu.popup();
         return menu;
     }
 
     function exercise() {
-        const script = made("SceneBindScript.qml", {});
+        const script = made("SceneBindScript.qml");
         script.load();
         let chosen = null;
         script.chosen.connect(source => chosen = source);
