@@ -90,7 +90,7 @@ ctl playlist new Folded >/dev/null && ctl playlist add Folded --folder "$fresh"
   fail "folder added to a list: $(ctl playlist show Folded --json)"
 ctl playlist new Followed >/dev/null && ctl playlist add Followed --folder "$fresh" --follow
 png "$fresh/f-pink.png" ffc0cb
-ctl lib rescan --wait >/dev/null
+ctl lib scan --wait >/dev/null
 [ "$(ctl playlist show Followed --json | js "r['total']")" = 3 ] || fail "followed folder: $(ctl playlist show Followed --json)"
 if ctl playlist add Colors --folder "$fresh" --follow 2>/dev/null; then fail "a folder was followed by a playlist that holds a list"; fi
 rotation=$(ctl playlist rotate --folder "$fresh" --every 10m -o TEST-8 --name Spin)
