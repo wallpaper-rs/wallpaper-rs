@@ -38,3 +38,23 @@ fn a_bundled_repository_is_added_updated_and_renewed_without_a_key_in_the_source
     wprs_format::update_repo(&data, &FileFetch, &first.repo_id, years).unwrap();
     assert!(repos(&data, years).unwrap().iter().all(|r| !r.stale && r.broken.is_none()));
 }
+
+#[test]
+fn the_example_scenes_make_a_repository_that_installs_them() {
+    let tmp = tempfile::tempdir().unwrap();
+    let scenes = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scenes");
+    let mut wpaks = Vec::new();
+    for entry in
+        std::fs::read_dir(scenes).unwrap().flatten().filter(|e| e.path().join("manifest.json").is_file())
+    {
+        let out = tmp.path().join(format!("{}.wpak", entry.file_name().to_string_lossy()));
+        wprs_format::build(&entry.path(), &out, &wprs_format::Limits::default()).unwrap();
+        wpaks.push(out);
+    }
+    assert!(wpaks.len() >= 6);
+    let made = bundled(&tmp.path().join("repo"), &tmp.path().join("keys"), "Examples", &wpaks, NOW).unwrap();
+    let data = tmp.path().join("data");
+    let info = add_repo(&data, &FileFetch, &made.url, NOW).unwrap();
+    assert_eq!(info.packages, wpaks.len());
+    assert_eq!(browse(&data, "").unwrap().len(), wpaks.len());
+}

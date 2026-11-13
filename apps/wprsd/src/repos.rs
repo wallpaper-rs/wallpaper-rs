@@ -76,6 +76,7 @@ impl Daemon {
             last_error,
             job,
             broken: info.broken,
+            bundled: self.is_examples(&info.repo_id),
             repo_id: info.repo_id,
         }
     }

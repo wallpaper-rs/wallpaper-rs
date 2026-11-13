@@ -123,7 +123,7 @@ impl Daemon {
             reports.push(scanned(Some(uid), report));
         }
         if target.is_empty() && ctl.check().is_ok() {
-            stored |= self.offer_examples();
+            self.offer_examples();
             reports.push(scanned(None, lib.check_loose(now())?));
             self.library_changed(Vec::new());
         }

@@ -58,6 +58,7 @@ impl Daemon {
             ids.iter().try_for_each(|package| self.uninstall(package, ""))?;
         }
         wprs_format::remove_repo(&self.store.data, &id)?;
+        self.examples_removed(&id);
         let ours = format!("{id}/");
         self.reveals(|set| set.extract_if(.., |key| key.starts_with(&ours)).count() > 0)?;
         previews.iter().for_each(|path| drop(std::fs::remove_file(path)));

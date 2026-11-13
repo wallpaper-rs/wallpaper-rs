@@ -122,6 +122,7 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Providers1", "SetSecretStore", "provider store", &["STORE"]),
     ("Repos1", "List", "remote ls", &[]),
     ("Repos1", "Add", "remote add", &["URL"]),
+    ("Repos1", "AddExamples", "remote examples", &[]),
     ("Repos1", "Refresh", "remote refresh", &["REPO"]),
     ("Repos1", "Remove", "remote rm", &["REPO", "--uninstall"]),
     ("Repos1", "Browse", "pkg search", &["QUERY", "--offset", "--limit"]),

@@ -27,6 +27,11 @@ impl Repos {
     }
 
     #[zbus(out_args("job"))]
+    async fn add_examples(&self) -> Result<u64> {
+        self.d()?.run(|d| d.add_examples()).await
+    }
+
+    #[zbus(out_args("job"))]
     async fn refresh(&self, repo: String) -> Result<u64> {
         self.d()?.run(move |d| d.refresh_repos(&repo)).await
     }

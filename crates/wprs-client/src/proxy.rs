@@ -159,6 +159,7 @@ pub trait Providers1 {
 pub trait Repos1 {
     fn list(&self) -> Result<String>;
     fn add(&self, url: &str) -> Result<u64>;
+    fn add_examples(&self) -> Result<u64>;
     fn refresh(&self, repo: &str) -> Result<u64>;
     fn remove(&self, repo: &str, uninstall: bool) -> Result<()>;
     fn browse(&self, query: &str, offset: u32, limit: u32) -> Result<String>;

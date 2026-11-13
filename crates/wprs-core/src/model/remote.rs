@@ -76,6 +76,8 @@ model! {
         pub job: Option<u64>,
         #[serde(default)]
         pub broken: Option<String>,
+        #[serde(default)]
+        pub bundled: bool,
     }
 
     pub struct ReposReply { pub model: u32, pub serial: u64, pub repos: Vec<Repo> }

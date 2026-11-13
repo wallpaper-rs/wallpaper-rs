@@ -24,6 +24,11 @@ pub enum Remote {
         #[command(flatten)]
         wait: Wait,
     },
+    #[command(about = "Add the example wallpapers that come with the program, after removing them")]
+    Examples {
+        #[command(flatten)]
+        wait: Wait,
+    },
     #[command(
         about = "Check a repository, or every repository when omitted, for updates and revocations",
         long_about = "Check a repository, or every repository when omitted, for updates and revocations. \
@@ -69,6 +74,7 @@ pub async fn run(client: &Client, command: Remote) -> Result<()> {
             let url = crate::address::repository(&url)?;
             job(client, repos.add(&url).map_ok(|id| ((), id)), &wait).await?
         }
+        Remote::Examples { wait } => job(client, repos.add_examples().map_ok(|id| ((), id)), &wait).await?,
         Remote::Refresh { repo, wait } => {
             job(client, repos.refresh(repo.as_deref().unwrap_or("")).map_ok(|id| ((), id)), &wait).await?
         }

@@ -1543,6 +1543,15 @@ Adds a repository whose URL carries its trust anchor. The URL is `https://`, `fi
 `repo_id=` names an added repository, or when the job finds it already added; a `broken` one is
 replaced. The job verifies the repository fully and stores its signed state.
 
+### `AddExamples() → (t job)`
+
+Adds again the repository of the example wallpapers that come with the program (`repo.md`,
+«Repositorio de los fondos de ejemplo»), also after the user removed it. `NotFound` when the
+installation carries none; `Exists` when it is already added. `List` marks that repository with
+`bundled: true`, which is how a screen gives it its own name and icon. On its first start the
+daemon adds it by itself; once removed with `Remove` it is not added again until this call, and the
+daemon updates it with the program, at startup and once a day.
+
 ### `Refresh(s repo) → (t job)`
 
 Refreshes a repository (`""` = all) and applies revocations to the installed packages, also
@@ -3124,7 +3133,7 @@ struct Repo {
     repo_id: String, url: String, name: String, hosts: Vec<String>, fingerprints: Vec<String>,
     root_version: u64, root_expires: Time, entry_version: u64, entry_expires: Time, checked: Time,
     stale: bool, packages: u32, warnings: Vec<RepoWarning>, last_error: Option<String>,
-    job: Option<u64>, broken: Option<String>,
+    job: Option<u64>, broken: Option<String>, bundled: bool,
 }
 struct ReposReply { model: u32, serial: u64, repos: Vec<Repo> }
 enum Reason { Malware, License, Takedown, Broken, Other }
