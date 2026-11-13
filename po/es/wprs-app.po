@@ -17727,3 +17727,187 @@ msgstr "Intro"
 msgctxt "key"
 msgid "Esc"
 msgstr "Esc"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "12 wallpapers were added."
+msgstr "Se añadieron 12 fondos."
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "A list rotates its wallpapers on a screen. Choose wallpapers in your library and add them to a new list."
+msgstr "Una lista hace rotar sus fondos en una pantalla. Elige fondos en tu biblioteca y añádelos a una lista nueva."
+
+#: apps/wprs-app/qml/PiecesMore.qml
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "Animated wallpapers"
+msgstr "Fondos animados"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Check the connection and try again."
+msgstr "Revisa la conexión y prueba de nuevo."
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "“Cintas” has flashes: it stays paused until you allow it in Settings."
+msgstr "«Cintas» tiene destellos: queda en pausa hasta que lo permitas en Ajustes."
+
+#: apps/wprs-app/qml/Aviso.qml
+msgid "Close"
+msgstr "Cerrar"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "Connect to casa.example"
+msgstr "Conectarse a casa.example"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Could not reach the service"
+msgstr "No se pudo llegar al servicio"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Could not read the library"
+msgstr "No se pudo leer la biblioteca"
+
+#: apps/wprs-app/qml/PiecesMore.qml
+msgid "Could not set it: the file is missing"
+msgstr "No se pudo poner: falta el archivo"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "current"
+msgstr "actual"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "“Estanque” was removed from the library."
+msgstr "Se quitó «Estanque» de la biblioteca."
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "High"
+msgstr "Alta"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "How much detail each scene draws. Lower uses less battery."
+msgstr "Cuánto detalle dibuja cada escena. Más baja gasta menos batería."
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "images only"
+msgstr "solo imágenes"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "It asks once; you can change it later in its options."
+msgstr "Lo pide una vez; lo puedes cambiar después en sus opciones."
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "Listen to the computer’s sound"
+msgstr "Escuchar el sonido del equipo"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "Low"
+msgstr "Baja"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "Medium"
+msgstr "Media"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "New list"
+msgstr "Nueva lista"
+
+#: apps/wprs-app/qml/PiecesMore.qml
+msgid "No name"
+msgstr "Sin nombre"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "not detected"
+msgstr "no detectado"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "Not found"
+msgstr "No se encuentra"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Nothing matches “luna roja”"
+msgstr "Nada coincide con «luna roja»"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Paused: a window covers the screen"
+msgstr "En pausa: una ventana cubre la pantalla"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "Performance"
+msgstr "Rendimiento"
+
+#: apps/wprs-app/qml/PiecesAdjust.qml
+msgid "Pieces"
+msgstr "Piezas"
+
+#: apps/wprs-app/qml/PiecesMore.qml
+msgid "Press Enter, then the keys you want."
+msgstr "Pulsa Intro y después las teclas que quieras."
+
+#: apps/wprs-app/qml/Captura.qml
+msgid "Press the combination…"
+msgstr "Pulsa la combinación…"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "“Pulso” asks for permission"
+msgstr "«Pulso» pide permiso"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "Remove 3 wallpapers"
+msgstr "Quitar 3 fondos"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "Remove 3 wallpapers?"
+msgstr "¿Quitar 3 fondos?"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "Removing…"
+msgstr "Quitando…"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Set a moment ago"
+msgstr "Puesto hace un momento"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Shows the time"
+msgstr "Muestra la hora"
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "They leave your library. The files in your folders are not deleted."
+msgstr "Salen de tu biblioteca. Los archivos de tus carpetas no se borran."
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "This computer has no battery"
+msgstr "Este equipo no tiene batería"
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "This computer has no battery, so there is nothing to save here."
+msgstr "Este equipo no tiene batería, así que no hay nada que ahorrar aquí."
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "To bring the weather of your city."
+msgstr "Para traer el tiempo de tu ciudad."
+
+#: apps/wprs-app/qml/PiecesPanels.qml
+msgid "To move with the music that plays."
+msgstr "Para moverse con la música que suena."
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "Try another word or remove the filters."
+msgstr "Prueba otra palabra o quita los filtros."
+
+#: apps/wprs-app/qml/PiecesRows.qml
+msgid "Wallpapers"
+msgstr "Fondos"
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "What you already have is still there. Try again; if it happens again, the details say why."
+msgstr "Lo que ya tienes sigue ahí. Prueba de nuevo; si vuelve a pasar, los detalles dicen por qué."
+
+#: apps/wprs-app/qml/PiecesMore.qml
+msgid "Where the wallpapers of this list come from."
+msgstr "De dónde vienen los fondos de esta lista."
+
+#: apps/wprs-app/qml/PiecesSaid.qml
+msgid "You have no lists yet"
+msgstr "Aún no tienes listas"
