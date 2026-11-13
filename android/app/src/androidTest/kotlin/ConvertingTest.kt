@@ -157,6 +157,7 @@ class ConvertingTest {
         val path = item(uid).getString("path")
         Converting.offer(context, Conversion(uid, path, "clip", false, 64 to 32))
         Converting.stop(uid)
+        androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         assertTrue(waitFor { uid !in Converting.progress })
         assertEquals(path, item(uid).getString("path"))
         assertFalse(File(File(path).parentFile?.parentFile, "converting/$uid.mp4").exists())
