@@ -74,7 +74,9 @@ y un ajuste para que el usuario elija el color del sol. Para cada paso hay dos c
 de `wprs-ctl` y dónde está en el editor. El resultado final es la carpeta
 [`ejemplos/primera-escena`](ejemplos/primera-escena/).
 
-Pon `cielo.png` (cualquier imagen tuya) en la carpeta donde vas a trabajar.
+Pon `cielo.png` en la carpeta donde vas a trabajar: puede ser cualquier imagen tuya con ese nombre
+o la que trae la carpeta del ejemplo, `ejemplos/primera-escena/assets/cielo.png`. En el editor no
+importa el nombre: elegirás el archivo que tengas.
 
 ### 1. Crear la escena
 
@@ -96,11 +98,11 @@ wprs-ctl scene add-layer mi-escena image --file cielo.png --name Fondo
 wprs-ctl scene layer mi-escena fondo transform --size 1920,1080
 ```
 
-*Editor:* *Añadir una capa* > *Capa desde un archivo* y elige `cielo.png` (también puedes soltar
+*Editor:* *Añadir una capa* > *Capa desde un archivo* > *Imagen…* y elige tu imagen (también puedes soltar
 el archivo en la lista *Capas*, donde dice «Suelta los archivos para añadirlos como capas», si tu
-gestor de archivos permite arrastrar). La capa nace con el id `image`: en el inspector, *Cambiar el
-id de la capa*, y escribe `fondo`. Luego, en el inspector de la capa, baja hasta *Reproducción* y
-en *Tamaño* pon 1920 por 1080.
+gestor de archivos permite arrastrar). La capa nace con el id `image`: abajo a la izquierda del inspector está el botón
+del lápiz (*Cambiar el id de la capa*, solo lo dice al pasar el ratón); escribe `fondo`. Luego, en el inspector de la capa, baja, pasada la mitad, hasta *Reproducción* y
+en *Tamaño* pon 1920 por 1080 (antes vale 0 por 0, y la imagen ya llena el lienzo).
 
 La primera orden copia la imagen a `assets/` como recurso `cielo`, añade una capa que la enseña e
 imprime su id: `fondo`. Sin `size`, una imagen se ve de su tamaño real y centrada, y casi nunca es
@@ -119,8 +121,8 @@ wprs-ctl scene add-layer mi-escena shape --name Sol
 wprs-ctl scene set mi-escena /scene/layers/1/shape '{"ellipse": {"size": [220, 220]}}'
 ```
 
-*Editor:* *Añadir una capa*, tipo *Forma*; la capa nace con el id `forma` y un rectángulo: con
-*Cambiar el id de la capa* llámala `sol`. En el inspector, en *Forma* elige *Elipse* (nace de 220 por 220;
+*Editor:* *Añadir una capa*, tipo *Forma*; la capa nace con el id `forma` y un rectángulo: con el lápiz
+de *Cambiar el id de la capa* llámala `sol`. Más abajo en el inspector, en *Forma*, elige *Elipse* (nace de 220 por 220;
 cambia su tamaño si quieres) y deja el relleno azul de momento: lo cambias en el paso 5.
 
 Después una línea de tiempo que dure 12 segundos y vaya y vuelva, y dos fotogramas clave de la
@@ -132,21 +134,24 @@ wprs-ctl scene keyframe mi-escena /scene/layers/1/transform/position 0 '[260, 82
 wprs-ctl scene keyframe mi-escena /scene/layers/1/transform/position 12 '[1660, 260]' --timeline vuelta
 ```
 
-*Editor:* en *Líneas de tiempo*, *Añadir una línea de tiempo*: nace con el id `timeline_1` (con
-*Cambiar el nombre…*, llámala `vuelta`); ponle *Duración* 12 segundos y, en *Se reproduce*,
-`pingpong`. En el desplegable de la franja de tiempo de abajo, que dice *Reloj de la escena*,
-elige esa línea de tiempo. Con el cabezal en 0, pulsa el rombo de *Posición* de la capa del sol
+*Editor:* en la barra de abajo, *Líneas de tiempo* > *Añadir una línea de tiempo* (el menú se cierra
+sin más aviso; al abrirlo otra vez verás `timeline_1 · 5 s`). Esa línea de tiempo nace con el id
+`timeline_1`: en su submenú, *Cambiar el nombre…* y llámala `vuelta`. En el mismo submenú, *Editar la
+línea de tiempo y sus eventos…* abre un cuadro: en *Segundos* pon 12 y en *Se reproduce* elige
+*Ida y vuelta*. Con el cabezal en 0, pulsa el rombo de *Posición* de la capa del sol
 (*Fotograma clave aquí*): la posición sin tocar vale el centro del lienzo, así que el fotograma
-nace ahí; escribe 260 y 820 en *Posición* o arrastra el sol abajo a la izquierda. Lleva el cabezal
-a 12 y escribe 1660 y 260, o arrastra el sol arriba a la derecha.
+nace ahí. Solo entonces aparece en la franja de tiempo una fila *sol · Posición* con un
+desplegable que dice *Reloj de la escena*: elige en él `vuelta`. Escribe 260 y 820 en *Posición* o
+arrastra el sol abajo a la izquierda. Lleva el cabezal a 12 y escribe 1660 y 260, o arrastra el sol
+arriba a la derecha.
 
 Las capas se cuentan desde 0 desde abajo, y por eso el sol, la segunda, es `/scene/layers/1`. Para ver
 lo que hay en cualquier sitio: `wprs-ctl scene show mi-escena /scene/layers/1`. El puntero empieza
 por `/scene` (lo de `scene.json`) o por `/manifest` (lo de `manifest.json`); `/layers` solo no existe.
 
 La posición es un punto del lienzo en píxeles con el origen arriba a la izquierda. `pingpong`
-hace que la línea de tiempo vaya y vuelva sin parar, `in_out_sine` suaviza el principio del
-trayecto.
+es el valor de `--loop` (y de `loop` en `scene.json`) que hace que la línea de tiempo vaya y vuelva sin
+parar, y es lo que el editor llama *Ida y vuelta*; `in_out_sine` suaviza el principio del trayecto.
 
 ### 4. Un efecto
 
@@ -156,8 +161,10 @@ Un efecto cambia cómo se ve una capa. `waves` hace ondular el cielo:
 wprs-ctl scene effects mi-escena fondo add waves --param amplitude=6 --param frequency=3
 ```
 
-*Editor:* elige la capa del cielo, *Añadir un efecto*, *Ondas*; la ficha del efecto está al final
-del inspector: ajusta *amplitude* (amplitud) y *frequency* (frecuencia).
+*Editor:* elige la capa del cielo, *Añadir un efecto* y *Ondas*. Para ajustarlo, en *Efectos*
+del inspector abre el desplegable *Editar…* y elige *Elemento 1* (el efecto no muestra su nombre
+aquí): pon *Amplitud* 6 y *Frecuencia* 3. En la orden, `amplitude` y `frequency` son los ids de esos
+parámetros en `scene.json`.
 
 Los efectos están en [efectos.md](efectos.md).
 
