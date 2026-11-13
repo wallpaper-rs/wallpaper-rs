@@ -153,17 +153,12 @@ root with other keys, removed or added authors and another policy (`stall::rotat
 rotate-root`). `stall::opened` also answers the root status, the fingerprints of the root, online and
 author keys, the revoked keys and the policy. Every change to the
 catalog runs off the window thread, one after another, and answers when done; the page shows that it
-is busy meanwhile and keeps the other changes and *Open* disabled until then. The phone does the
-same from *Static repository* in *Devices*: it opens a folder picked through the system picker, copies
-its files except `packages/` and `previews/` into its cache, runs the same `wprs_format::stall`
-functions there (`Native.stall`, ops `open`, `add`, `list`, `feature` and `publish`, each answering
-with the files it changed), writes those files back into the folder and clears the copy; the
-picked `.wpak` files and the online key are read only for that step. Its steps run one at a time, and
-the buttons that change the catalog stay disabled until every step that runs has ended. The picked
-folder is kept with a persistable read and write grant: its tree URI stays in the app's private
-preferences, it is forgotten once that grant is gone, and picking another folder releases the grant
-of the previous one, except the read grant while a folder setting of a wallpaper mirrors the same
-folder; dropping such a folder setting likewise keeps the grant the repository folder needs.
+is busy meanwhile and keeps the other changes and *Open* disabled until then. The phone has no tool to create, sign or
+publish a repository: it is a client only. From *Repositories* in *Sources* it adds a repository by
+its address and its fingerprint, or accepts once a proposal that arrives from another device with its
+key; it reads the signed index (see *Client update*), browses its packages in *Explore* with their
+previews, installs them checked against that index (see *Package installation*) and checks them for
+updates.
 
 `featured/<sha256>.json` (optional): `format` (`wpak-repo-featured/1.0`), `repo_id` and `items`: at
 most 64 `{id, note?}`, ids of packages of the repository, each once, with a note of at most 200
