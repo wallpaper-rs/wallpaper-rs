@@ -40,10 +40,8 @@ pub fn away(
         .map(|r| (item(r), r.1.get("title").and_then(Value::as_str).unwrap_or_default()))
         .collect();
     let stored: HashSet<String> = library.iter().filter(|r| r.1.contains_key("blob")).map(item).collect();
-    let repos: BTreeMap<String, &str> = library
-        .iter()
-        .filter_map(|r| Some((item(r), r.1.get("repo")?.as_str()?)))
-        .collect();
+    let repos: BTreeMap<String, &str> =
+        library.iter().filter_map(|r| Some((item(r), r.1.get("repo")?.as_str()?))).collect();
     let named = playlists.iter().flat_map(|(_, view, _)| entries(view));
     let shown = settings.iter().flat_map(|(_, view, kind)| screens(view, kind).map(|(_, item)| item));
     let asked = settings.iter().filter_map(presets);

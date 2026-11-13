@@ -1,10 +1,10 @@
 use crate::compositor::lock;
 use crate::daemon::Daemon;
-use crate::jobs::now;
-use std::sync::atomic::Ordering;
 use crate::error::Result;
 use crate::items::reply;
+use crate::jobs::now;
 use std::collections::HashSet;
+use std::sync::atomic::Ordering;
 use wprs_core::model::{Away, AwayReply, MODEL};
 use wprs_sync::Ids;
 

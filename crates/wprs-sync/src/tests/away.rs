@@ -52,7 +52,10 @@ fn only_records_without_an_item_and_without_an_offer_are_away() {
     );
     local.items.insert(THEIRS.into(), vec!["u2".into()]);
     local.items.insert(BARE.into(), vec!["u3".into()]);
-    assert!(away(&replica(), &local, &links, &offered, &added).is_empty(), "once the items are here the notes go");
+    assert!(
+        away(&replica(), &local, &links, &offered, &added).is_empty(),
+        "once the items are here the notes go"
+    );
 }
 
 #[test]
@@ -62,8 +65,10 @@ fn a_package_of_a_repository_that_is_not_added_here_says_which() {
         (format!("library/{BARE}"), doc(&[("title", json!("Other"), 1), ("repo", json!("known"), 1)])),
         (format!("library/{FILE}"), doc(&[("title", json!("Hand made"), 1)])),
     ];
-    let replica =
-        Replica { bases: records.into_iter().map(|(key, doc)| (key, (1, doc))).collect(), ..Replica::default() };
+    let replica = Replica {
+        bases: records.into_iter().map(|(key, doc)| (key, (1, doc))).collect(),
+        ..Replica::default()
+    };
     let added = HashSet::from(["known".to_owned()]);
     let found = away(&replica, &Local::default(), &BTreeMap::new(), &HashSet::new(), &added);
     let repo = |key: &str| found.iter().find(|a| a.key == key).unwrap().repo.clone();
