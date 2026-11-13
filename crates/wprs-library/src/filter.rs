@@ -40,7 +40,14 @@ fn keys() -> [(&'static str, Message); 19] {
         ("audio", said("library.key_audio", "yes or no", &[])),
         ("source", said("library.key_source", "a source id", &[])),
         ("in", said("library.key_in", "a manual playlist uid or name", &[])),
-        ("folder", said("library.key_folder", "an absolute folder path: the items inside it and its subfolders", &[])),
+        (
+            "folder",
+            said(
+                "library.key_folder",
+                "an absolute folder path: the items inside it and its subfolders",
+                &[],
+            ),
+        ),
         ("added", said("library.key_added", "an age like <7d", &[])),
         ("used", said("library.key_used", "never or an age like <7d", &[])),
         ("missing", said("library.key_missing", "nothing, yes or no", &[])),
