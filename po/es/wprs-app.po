@@ -17717,3 +17717,13 @@ msgstr "%1 elegidos"
 #: apps/wprs-app/qml/Uso.qml
 msgid "In use"
 msgstr "En uso"
+
+#: apps/wprs-app/qml/PiecesChoose.qml
+msgctxt "key"
+msgid "Enter"
+msgstr "Intro"
+
+#: apps/wprs-app/qml/PiecesChoose.qml
+msgctxt "key"
+msgid "Esc"
+msgstr "Esc"

@@ -121,7 +121,7 @@ Flickable {
 
                 PiecesTecla {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "Intro"
+                    text: App.trc("key", "Enter")
                 }
 
                 QQC2.Button {
@@ -171,7 +171,7 @@ Flickable {
                 }
 
                 PiecesTecla {
-                    text: "Esc"
+                    text: App.trc("key", "Esc")
                 }
             }
         }
