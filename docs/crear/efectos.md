@@ -522,6 +522,23 @@ material de un modelo (ver [3d.md](3d.md)); con `"stage": "particle"`, define
 `fn particle(p: Sprite) -> Sprite` y cambia cómo se dibuja cada partícula (ver
 [particulas-y-sonido.md](particulas-y-sonido.md)).
 
+### Una transición propia
+
+Un fondo puede traer su propia transición para cuando entra y, si quiere, otra para cuando sale.
+Se declara en `scene.json`, bajo `transition`, con `in` y `out`; cada una nombra su descriptor
+(`"stage": "transition"`) y su `.wgsl`, dura de 100 a 10000 ms (`duration_ms`), lleva una curva
+(`curve`, los mismos nombres que las claves) y valores fijos para sus parámetros (`params`). El
+sombreador define `fn transition(c: Crossing) -> Crossing`: `before(uv)` es la imagen que se
+estaba viendo, `after(uv)` la que entra y `c.progress` va de 0 a 1; el color que deja se dibuja
+opaco. Mira [`ejemplos/transicion-propia`](ejemplos/transicion-propia/scene.json).
+
+Una transición no puede usar imágenes, tablas de color, máscaras ni emisores, y cuesta a lo sumo
+8 unidades: una liviana se ve en todos los niveles de calidad y una mediana solo en los niveles 2
+y 3. Si no pasa las comprobaciones, la escena igual se abre: `wprs-ctl pack check` dice por qué y
+el fondo entra con el fundido de siempre. Lo que el usuario elige manda: sin transición, el cambio
+es directo, y con movimiento reducido es un fundido. Al pasar de un fondo con `out` a uno con `in`,
+primero se ve la salida y después la entrada. En el teléfono, por ahora, entra con su fundido.
+
 ## No cubierto aquí
 
 - Efectos de las partículas y de los materiales 3D: [particulas-y-sonido.md](particulas-y-sonido.md)

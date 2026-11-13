@@ -1,0 +1,17 @@
+{
+  "schema": "wallpaper-rs.scene/1",
+  "canvas": { "size": [1920, 1080], "background": "#0b1026" },
+  "transition": {
+    "in": { "descriptor": "transiciones/ojo.json", "wgsl": "transiciones/ojo.wgsl", "duration_ms": 1400,
+      "curve": "in_out_sine", "params": { "borde": 0.25, "tinte": "#ffcf8a" } },
+    "out": { "descriptor": "transiciones/ojo.json", "wgsl": "transiciones/ojo.wgsl", "duration_ms": 700,
+      "curve": "in_cubic", "params": { "borde": 0.1 } }
+  },
+  "layers": [
+    { "id": "fondo", "type": "solid", "color": "#0b1026" },
+    { "id": "luna", "type": "shape", "shape": { "ellipse": { "size": [320, 320] } },
+      "fill": "#fff3c4", "transform": { "position": [1320, 420] } },
+    { "id": "aro", "type": "shape", "shape": { "ring": { "size": [440, 440], "width": 10 } },
+      "fill": "#ffb347", "transform": { "position": [1320, 420] } }
+  ]
+}

@@ -62,7 +62,7 @@ copiarla y cambiarla.
 | [`formas`](ejemplos/formas/), [`texto`](ejemplos/texto/), [`video`](ejemplos/video/), [`grupos-y-mascaras`](ejemplos/grupos-y-mascaras/) | Las capas. |
 | [`animacion-e-interaccion`](ejemplos/animacion-e-interaccion/) | Hojas de dibujos, clics y sonido que salta con un evento. |
 | [`valores`](ejemplos/valores/) | Valores que siguen el sonido, el puntero, el reloj y claves. |
-| [`efectos-apilados`](ejemplos/efectos-apilados/), [`efecto-propio`](ejemplos/efecto-propio/) | Efectos, máscaras y efectos propios. |
+| [`efectos-apilados`](ejemplos/efectos-apilados/), [`efecto-propio`](ejemplos/efecto-propio/), [`transicion-propia`](ejemplos/transicion-propia/) | Efectos, máscaras, efectos propios y una transición propia. |
 | [`particulas`](ejemplos/particulas/), [`particulas-avanzadas`](ejemplos/particulas-avanzadas/), [`sonido`](ejemplos/sonido/) | Partículas y sonido. |
 | [`propiedades`](ejemplos/propiedades/) | Todos los tipos de propiedad de usuario, preajustes y traducciones. |
 | [`luces`](ejemplos/luces/), [`modelo-3d`](ejemplos/modelo-3d/), [`profundidad`](ejemplos/profundidad/), [`malla-con-huesos`](ejemplos/malla-con-huesos/) | Luces, 3D, profundidad y huesos. |

@@ -1,0 +1,10 @@
+{
+  "id": "ojo",
+  "name": { "es": "Ojo de buey", "en": "Porthole" },
+  "stage": "transition",
+  "cost": { "taps": 1, "passes": 1, "scale": 1 },
+  "params": [
+    { "id": "borde", "type": "float", "default": 0.15, "min": 0, "max": 1, "label": { "es": "Borde", "en": "Edge" } },
+    { "id": "tinte", "type": "color", "default": "#ffffff", "label": { "es": "Tinte del borde", "en": "Edge tint" } }
+  ]
+}

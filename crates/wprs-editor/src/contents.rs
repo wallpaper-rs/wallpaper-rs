@@ -26,6 +26,10 @@ pub fn used(doc: &Value) -> BTreeSet<String> {
     let effects = doc.pointer("/scene/effects").and_then(Value::as_object).into_iter().flatten();
     let effects = effects.flat_map(|(_, e)| [&e["descriptor"], &e["wgsl"]]);
     used.extend(effects.filter_map(Value::as_str).map(String::from));
+    let passages =
+        ["in", "out"].map(|w| doc.pointer(&format!("/scene/transition/{w}")).cloned().unwrap_or_default());
+    let passages = passages.iter().flat_map(|p| [&p["descriptor"], &p["wgsl"]]);
+    used.extend(passages.filter_map(Value::as_str).map(String::from));
     used
 }
 

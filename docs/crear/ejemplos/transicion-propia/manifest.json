@@ -1,0 +1,23 @@
+{
+  "content": {
+    "rating": "general"
+  },
+  "default_locale": "es",
+  "entry": "scene.json",
+  "id": "org.example.transicion-propia",
+  "kind": "scene",
+  "license": "CC0-1.0",
+  "origin": {
+    "kind": "original"
+  },
+  "photosensitive": false,
+  "properties": {},
+  "schema": "wallpaper-rs.wpak/2",
+  "title": "Transición propia",
+  "version": "0.1.0",
+  "requires": {
+    "features": [
+      "transition"
+    ]
+  }
+}
