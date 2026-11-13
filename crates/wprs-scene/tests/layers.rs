@@ -142,3 +142,14 @@ fn the_glide_given_to_shaders_carries_the_tilt_only_when_the_gyro_is_on() {
     assert_eq!(on.glide(), [0.5, -0.25]);
     assert_eq!(off.glide(), [0.0, 0.0]);
 }
+
+#[test]
+fn a_depth_parallax_effect_alone_makes_the_scene_redraw_on_tilt() {
+    let view = |gyro: bool| json!({ "size": [100, 50], "parallax": { "delay": 0, "gyro": gyro } });
+    let fx = json!({ "effects": [{ "effect": "depth_parallax", "params": { "smooth": true } }] });
+    let mut on = runtime(view(true), json!([box_at("n", fx.clone())]));
+    let mut off = runtime(view(false), json!([box_at("n", fx)]));
+    let mut plain = runtime(view(true), json!([box_at("n", json!({}))]));
+    assert!(on.set_tilt([1.0, 0.0]) && !on.set_tilt([1.0, 0.0]));
+    assert!(!off.set_tilt([1.0, 0.0]) && !plain.set_tilt([1.0, 0.0]));
+}

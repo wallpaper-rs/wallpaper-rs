@@ -25,7 +25,8 @@ pub(crate) fn homes<'a>(top: impl Iterator<Item = &'a Layer>) -> HashMap<String,
 impl Scene {
     pub fn tilts(&self) -> bool {
         let gyro = self.canvas.parallax.as_ref().is_some_and(|g| g.gyro);
-        gyro && self.any_layer(|l| !l.parallax.is_zero())
+        gyro && self
+            .any_layer(|l| !l.parallax.is_zero() || l.effects.iter().any(|e| e.effect == "depth_parallax"))
     }
 }
 
