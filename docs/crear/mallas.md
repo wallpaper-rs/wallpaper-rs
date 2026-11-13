@@ -201,7 +201,7 @@ movimiento coincide a cualquier ritmo.
 
 El viento de la escena (`canvas.wind`, con `canvas.gusts`) se fija desde la terminal con
 `wprs-ctl scene wind`. En los modelos 3D, la física se mueve en el plano x e y del modelo y cuenta
-una unidad del modelo como 100 píxeles para la gravedad, el viento y la traslación. Un cuerpo que
+una unidad del modelo como 100 píxeles para la gravedad, el viento y la traslación. El viento y la gravedad actúan según x, y y -y del modelo, no del mundo: un modelo girado los recibe girados. Un cuerpo que
 no se ha movido en medio segundo, con la pose y el viento quietos, no pide fotogramas. En el
 nivel más bajo los cuerpos se quedan con la pose de la animación. `wprs-ctl scene physics`
 crea los cuerpos y dibuja una cuerda de huesos nuevos.
