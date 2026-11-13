@@ -22,6 +22,7 @@ pub mod cli;
 mod clipkey;
 mod clipping;
 mod confirming;
+mod connecting;
 mod consent;
 mod console;
 mod copying;
@@ -155,6 +156,7 @@ pub fn main() -> ExitCode {
     wprs_core::stopped_effects().inspect(|p| wprs_scene::keep_strikes(p));
     let result = match told::parse().command {
         Command::Pack(command) => pack::run(command),
+        Command::ConnectCode(command) => connecting::run(command),
         Command::Scene(command) => scoped::run(command),
         Command::Edit(command) => edit::run(command),
         Command::Models(command) => models::run(command),

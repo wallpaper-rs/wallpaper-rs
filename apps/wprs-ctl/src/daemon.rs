@@ -110,6 +110,7 @@ pub async fn run(command: Command) -> Result<()> {
         Command::Media(command) => crate::media::run(client, command).await?,
         Command::Server(command) => serving::run(client, command).await?,
         Command::Pack(_)
+        | Command::ConnectCode(_)
         | Command::Repo(_)
         | Command::Edit(_)
         | Command::Scene(_)

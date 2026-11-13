@@ -191,6 +191,11 @@ pub enum Command {
     Models(Models),
     #[command(subcommand, about = "Build, sign and check .wpak packages; needs no daemon")]
     Pack(Pack),
+    #[command(
+        name = "connect-code",
+        about = "Print the text of the connect-to-this-server code, and draw it; needs no daemon"
+    )]
+    ConnectCode(crate::connecting::Connect),
     #[command(subcommand, about = "Operate a package repository; needs no daemon")]
     Repo(Repo),
     #[command(

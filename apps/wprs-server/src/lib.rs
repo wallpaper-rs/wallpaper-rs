@@ -32,6 +32,7 @@ mod net;
 mod oidc;
 mod pages;
 mod policies;
+pub mod qr;
 mod records;
 mod repo;
 mod result;
