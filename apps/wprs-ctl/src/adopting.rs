@@ -12,8 +12,9 @@ pub async fn file_or_item(client: &Client, text: &str) -> Result<String> {
         return Ok(uid);
     }
     let path = path_arg(text)?;
-    let started = client.library.import(&[path.as_str()], false).await?;
-    let (_, job) = client.run_job(async { Ok(((), started)) }, |_, _| {}).await?;
+    let imported =
+        client.run_job(async { Ok(((), client.library.import(&[path.as_str()], false).await?)) }, |_, _| {});
+    let (_, job) = imported.await?;
     let report = job.output.unwrap_or_default();
     let refused = report["failed"][0]["error"]
         .as_str()
