@@ -101,6 +101,11 @@ impl Watch {
         self.waiting && !self.dead.load(Ordering::Acquire)
     }
 
+    #[cfg(test)]
+    pub(super) fn first_heard(&self) -> Instant {
+        self.born + Duration::from_millis(self.heard[1].load(Ordering::Acquire))
+    }
+
     pub(super) fn whole(&self) -> bool {
         !self.waiting && !self.dead.load(Ordering::Acquire)
     }

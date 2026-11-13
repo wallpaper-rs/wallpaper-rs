@@ -15,6 +15,8 @@ mod compositor;
 mod confirm;
 mod controls;
 mod daemon;
+#[cfg(test)]
+mod deadline;
 mod deck;
 mod decode;
 mod drafts;
