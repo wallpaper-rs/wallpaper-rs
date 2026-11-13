@@ -4,7 +4,8 @@ use super::*;
 fn emitters_are_added_at_the_next_index_and_removed_by_index() {
     let root = tempfile::tempdir().unwrap();
     let mut p = project(&root);
-    let count = |p: &Project| p.doc.pointer("/scene/particles/flakes/emitters").unwrap().as_array().unwrap().len();
+    let count =
+        |p: &Project| p.doc.pointer("/scene/particles/flakes/emitters").unwrap().as_array().unwrap().len();
     let before = count(&p);
     let circle = json!({ "circle": { "center": [0, 0], "radius": 10 } });
     edit(&mut p, "shape", json!({ "emitter": before, "shape": circle })).unwrap();
@@ -15,5 +16,8 @@ fn emitters_are_added_at_the_next_index_and_removed_by_index() {
     for _ in 1..before {
         edit(&mut p, "shape", json!({ "emitter": 0, "remove": true })).unwrap();
     }
-    assert!(edit(&mut p, "shape", json!({ "emitter": 0, "remove": true })).is_err(), "the last emitter stays");
+    assert!(
+        edit(&mut p, "shape", json!({ "emitter": 0, "remove": true })).is_err(),
+        "the last emitter stays"
+    );
 }
