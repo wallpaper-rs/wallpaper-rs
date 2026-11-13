@@ -99,7 +99,7 @@ private fun Credits(credits: List<JSONObject>, close: () -> Unit) = AlertDialog(
     title = { Text(stringResource(R.string.provider_credits)) },
     text = {
         Column(Modifier.verticalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) {
-            credits.forEach { Text(listOfNotNull(it.optString("title"), it.optString("attribution").ifEmpty { null }, it.optString("license").ifEmpty { null }).joinToString(" · ")) }
+            credits.forEach { Text(listOfNotNull(it.optString("title"), it.takeUnless { c -> c.isNull("attribution") }?.optString("attribution")?.ifEmpty { null }, it.takeUnless { c -> c.isNull("license") }?.optString("license")?.ifEmpty { null }).joinToString(" · ")) }
         }
     },
 )
