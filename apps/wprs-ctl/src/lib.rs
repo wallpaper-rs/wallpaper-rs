@@ -2,9 +2,9 @@ mod about;
 mod account;
 mod acting;
 mod address;
+mod adopting;
 mod animated;
 mod applying;
-mod adopting;
 mod args;
 pub mod author;
 mod author_words;
@@ -124,6 +124,7 @@ pub mod wallhaven;
 mod wallhaven_filters;
 mod watching;
 mod webshot;
+mod wording;
 
 pub use calls::CALLS;
 pub use cli::{Cli, Command};

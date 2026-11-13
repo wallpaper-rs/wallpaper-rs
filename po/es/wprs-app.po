@@ -17561,3 +17561,15 @@ msgid ""
 msgstr ""
 "%1 viene del repositorio %2, que no está agregado en este dispositivo. "
 "Agregar el repositorio lo deja disponible aquí."
+
+#: apps/wprs-app/qml/WallhavenDialog.qml
+msgid "Search address:"
+msgstr "Dirección de búsqueda:"
+
+#: apps/wprs-app/qml/WallhavenDialog.qml
+msgid "Paste a wallhaven.cc search address and press Enter"
+msgstr "Pega una dirección de búsqueda de wallhaven.cc y pulsa Intro"
+
+#: apps/wprs-app/qml/WallhavenDialog.qml
+msgid "The address will fill the search options when you save."
+msgstr "La dirección llenará las opciones de búsqueda al guardar."

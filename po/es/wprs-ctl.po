@@ -6052,9 +6052,11 @@ msgstr ""
 
 #: apps/wprs-ctl/src/private.rs
 msgid ""
-"Items (path or uid), folders, or with --stop the id of a file on the server"
+"Library items (uid or title), files (added to the library if needed), "
+"folders, or with --stop the id of a file on the server"
 msgstr ""
-"Elementos (ruta o uid), carpetas, o con --stop el id de un archivo del "
+"Elementos de la biblioteca (uid o título), archivos (se agregan a la "
+"biblioteca si hace falta), carpetas, o con --stop el id de un archivo del "
 "servidor"
 
 #: apps/wprs-ctl/src/private.rs
@@ -10202,3 +10204,315 @@ msgstr ""
 "aviso: %1 seguía a la capa quitada y un valor de su lugar depende de algo que "
 "no son fotogramas clave, así que no se pudo dejar donde estaba: revisa dónde "
 "queda ahora."
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Abstract"
+msgstr "Abstracto"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Animals"
+msgstr "Animales"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Anime"
+msgstr "Anime"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Architecture"
+msgstr "Arquitectura"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Art"
+msgstr "Arte"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Autumn"
+msgstr "Otoño"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Beach"
+msgstr "Playa"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Black"
+msgstr "Negro"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Blue"
+msgstr "Azul"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Car"
+msgstr "Coche"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Cars"
+msgstr "Coches"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Cat"
+msgstr "Gato"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "City"
+msgstr "Ciudad"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Clouds"
+msgstr "Nubes"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Colorful"
+msgstr "Colorido"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Cyberpunk"
+msgstr "Ciberpunk"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Dark"
+msgstr "Oscuro"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Desert"
+msgstr "Desierto"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Dog"
+msgstr "Perro"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Dragon"
+msgstr "Dragón"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Dream"
+msgstr "Sueño"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Fantasy"
+msgstr "Fantasía"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Fire"
+msgstr "Fuego"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Flowers"
+msgstr "Flores"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Forest"
+msgstr "Bosque"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Galaxy"
+msgstr "Galaxia"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Game"
+msgstr "Juego"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Games"
+msgstr "Juegos"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Geometric"
+msgstr "Geométrico"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Gradient"
+msgstr "Degradado"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Green"
+msgstr "Verde"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Lake"
+msgstr "Lago"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Landscape"
+msgstr "Paisaje"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Light"
+msgstr "Luz"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Lo-fi"
+msgstr "Lo-fi"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Minimal"
+msgstr "Minimalista"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Minimalism"
+msgstr "Minimalismo"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Minimalist"
+msgstr "Minimalista"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Moon"
+msgstr "Luna"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Mountain"
+msgstr "Montaña"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Mountains"
+msgstr "Montañas"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Music"
+msgstr "Música"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Nature"
+msgstr "Naturaleza"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Neon"
+msgstr "Neón"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Night"
+msgstr "Noche"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Ocean"
+msgstr "Océano"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Orange"
+msgstr "Naranja"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Pastel"
+msgstr "Pastel"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Pink"
+msgstr "Rosa"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Pixel art"
+msgstr "Arte de píxeles"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Portrait"
+msgstr "Retrato"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Purple"
+msgstr "Morado"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Rain"
+msgstr "Lluvia"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Red"
+msgstr "Rojo"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Retro"
+msgstr "Retro"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "River"
+msgstr "Río"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Robot"
+msgstr "Robot"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Sci-fi"
+msgstr "Ciencia ficción"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Sea"
+msgstr "Mar"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Sky"
+msgstr "Cielo"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Snow"
+msgstr "Nieve"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Space"
+msgstr "Espacio"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Stars"
+msgstr "Estrellas"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Summer"
+msgstr "Verano"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Sunrise"
+msgstr "Amanecer"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Sunset"
+msgstr "Atardecer"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Technology"
+msgstr "Tecnología"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Texture"
+msgstr "Textura"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Train"
+msgstr "Tren"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Trees"
+msgstr "Árboles"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Water"
+msgstr "Agua"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Waves"
+msgstr "Ondas"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "White"
+msgstr "Blanco"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Winter"
+msgstr "Invierno"
+
+#: apps/wprs-ctl/src/wording.rs
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: apps/wprs-ctl/src/wallhaven_filters.rs
+msgid ""
+"A wallhaven.cc search address copied from the browser; it fills the search "
+"words and every option it carries"
+msgstr ""
+"Una dirección de búsqueda de wallhaven.cc copiada del navegador; llena las "
+"palabras de búsqueda y todas las opciones que trae"
+
+#: apps/wprs-ctl/src/adopting.rs
+msgid "the library refused the file"
+msgstr "la biblioteca rechazó el archivo"

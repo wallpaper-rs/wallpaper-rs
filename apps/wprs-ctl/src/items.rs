@@ -109,5 +109,8 @@ pub fn details(reply: ItemDetails) -> String {
 }
 
 pub fn tags(reply: TagsReply) -> String {
-    table(&["COUNT", "TAG"], reply.tags.into_iter().map(|t| vec![t.count.to_string(), t.name]))
+    table(
+        &["COUNT", "TAG"],
+        reply.tags.into_iter().map(|t| vec![t.count.to_string(), crate::wording::tag(&t.name)]),
+    )
 }

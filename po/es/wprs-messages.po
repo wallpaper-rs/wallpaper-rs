@@ -5074,3 +5074,10 @@ msgstr "%1 no es un argumento de la consulta %2; acepta: %3"
 #: crates/wprs-editor/src/manual/ask_args.rs
 msgid "the query %1 needs the argument %2"
 msgstr "la consulta %1 necesita el argumento %2"
+
+#: crates/wprs-format/src/build.rs
+msgid ""
+"it was not signed by any of the given keys; pass the key that signed it with "
+"--key"
+msgstr ""
+"no la firmó ninguna de las claves dadas; pasa con --key la clave que la firmó"
