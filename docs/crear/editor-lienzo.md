@@ -300,7 +300,7 @@ Dónde está: pestaña **Capas**, botón **Añadir una capa**.
 Pasos:
 
 1. Abre el botón. El menú lista los tipos: **Imagen**, **Vídeo**, **Texto**, **Forma**, **Color sólido**, **Espectro del sonido**, **Partículas**, **Sonido**, **Grupo**, **Ajuste**, **Malla**, **Modelo 3D**, **Grupo 3D** y **Formas de una reserva**.
-2. Los tipos que necesitan un archivo (imagen, vídeo, sonido, malla, modelo 3D) están apagados con el aviso **importa antes un archivo de este tipo** mientras la escena no tenga un recurso de ese tipo. **Formas de una reserva** pide antes una reserva (**agrega una reserva primero**).
+2. Los tipos que necesitan un archivo (imagen, vídeo, sonido, malla, modelo 3D) están apagados con el aviso **importa antes un archivo de este tipo** mientras la escena no tenga un recurso de ese tipo. **Formas de una reserva** pide antes una reserva (**agrega una reserva primero**). Una capa de formas no tiene asas en el lienzo ni vista previa de lo que contiene la reserva, porque las formas las crean los scripts al correr.
 3. Si hay un solo recurso del tipo, la capa lo usa. Si hay varios, un menú **Qué recurso** deja elegir.
 4. Si tenías un grupo elegido, la capa entra en ese grupo.
 5. **Luz** abre otro menú: **Luz puntual**, **Foco**, **Tubo de luz** y **Luz direccional**.
