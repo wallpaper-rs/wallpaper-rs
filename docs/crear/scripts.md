@@ -448,7 +448,9 @@ error scripts/semaforo.js: TypeError: opacity takes a number (scripts/semaforo.j
 
 Primero el nivel, luego el módulo y luego el texto. Un error termina con el archivo y la línea donde
 ocurrió. Un módulo sin declaración no puede usar
-`console`: declara algo, aunque sea `"events": ["update"]`. Un objeto se escribe como JSON. Pasar de 20 líneas
+`console`: `scene validate` lo rechaza («declares nothing in scene.json but uses console») y el motor
+lanza un error. Con cualquier declaración, aunque sea `"events": ["update"]`, `console` funciona,
+pero `scene validate` avisa («usa console pero no lo declara») hasta que añadas `"console"` a `uses`. Un objeto se escribe como JSON. Pasar de 20 líneas
 por segundo descarta las de más, y cada línea se corta a 512 caracteres.
 
 ### Dónde se ve
