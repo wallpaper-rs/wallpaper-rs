@@ -12,6 +12,7 @@ pub(crate) fn run(path: &Path, args: &[String]) -> Result<Value, String> {
     pack.inputs.into_iter().for_each(|allowed| runtime.declare(allowed));
     runtime.set_leveling(Leveling::of(&pack.properties));
     runtime.set_language(pack.locale.as_deref().unwrap_or_default());
+    runtime.set_languages(&crate::bench::text_languages(pack.locale.as_deref()));
     runtime.set_battery(true);
     let films = pack.videos.iter().filter_map(|(id, path)| Some((id.clone(), wprs_scene::film_file(path)?)));
     runtime.set_lengths(films.collect());
@@ -98,6 +99,10 @@ fn parse(args: &[String]) -> Result<Bench, String> {
 
 fn number<T: std::str::FromStr>(text: &str) -> Result<T, String> {
     text.parse().map_err(|_| format!("{text} is not a number"))
+}
+
+pub(crate) fn text_languages(default: Option<&str>) -> Vec<String> {
+    crate::library::languages().into_iter().chain(default.map(String::from)).collect()
 }
 
 #[cfg(test)]

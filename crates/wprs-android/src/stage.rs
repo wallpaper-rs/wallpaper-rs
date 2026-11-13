@@ -91,6 +91,7 @@ impl Stage {
         pack.inputs.into_iter().for_each(|allowed| runtime.declare(allowed));
         runtime.set_leveling(wprs_scene::Leveling::of(&pack.properties));
         runtime.set_language(pack.locale.as_deref().unwrap_or_default());
+        runtime.set_languages(&crate::bench::text_languages(pack.locale.as_deref()));
         runtime.set_listeners(true, true);
         pack.assets.sheets.iter().for_each(|(id, d)| runtime.set_sheet(id, d.clone()));
         let films =

@@ -35,7 +35,7 @@ pub(crate) fn picture(dir: &Path, doc: &Value, layer: &Value, t: f64) -> Option<
     let size = layer["size"].as_f64().unwrap_or(48.0) as f32;
     let align = serde_json::from_value::<Align>(layer["align"].clone()).unwrap_or_default();
     let set = layout(layer, t);
-    let mut image = wprs_type::raster(&fonts, &super::shown(layer, t), size, align, 1.0, &set)?;
+    let mut image = wprs_type::raster(&fonts, &super::shown(doc, layer, t), size, align, 1.0, &set)?;
     if let Some(back) = backing(layer, t) {
         plate(&mut image, set.padding, back);
     }
