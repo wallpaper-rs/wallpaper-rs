@@ -96,8 +96,11 @@ wprs-ctl scene add-layer mi-escena image --file cielo.png --name Fondo
 wprs-ctl scene layer mi-escena fondo transform --size 1920,1080
 ```
 
-*Editor:* arrastra `cielo.png` a la lista *Capas* (dice «Suelta los archivos para añadirlos como
-capas»); luego, en el inspector de la capa, pon el tamaño en 1920 por 1080.
+*Editor:* *Añadir una capa* > *Capa desde un archivo* y elige `cielo.png` (también puedes soltar
+el archivo en la lista *Capas*, donde dice «Suelta los archivos para añadirlos como capas», si tu
+gestor de archivos permite arrastrar). La capa nace con el id `image`: en el inspector, *Cambiar el
+id de la capa*, y escribe `fondo`. Luego, en el inspector de la capa, baja hasta *Reproducción* y
+en *Tamaño* pon 1920 por 1080.
 
 La primera orden copia la imagen a `assets/` como recurso `cielo`, añade una capa que la enseña e
 imprime su id: `fondo`. Sin `size`, una imagen se ve de su tamaño real y centrada, y casi nunca es
@@ -116,7 +119,9 @@ wprs-ctl scene add-layer mi-escena shape --name Sol
 wprs-ctl scene set mi-escena /scene/layers/1/shape '{"ellipse": {"size": [220, 220]}}'
 ```
 
-*Editor:* *Añadir una capa*, tipo *Forma*; en el inspector, elige la forma *Elipse* y su tamaño.
+*Editor:* *Añadir una capa*, tipo *Forma*; la capa nace con el id `forma` y un rectángulo: con
+*Cambiar el id de la capa* llámala `sol`. En el inspector, en *Forma* elige *Elipse* (nace de 220 por 220;
+cambia su tamaño si quieres) y deja el relleno azul de momento: lo cambias en el paso 5.
 
 Después una línea de tiempo que dure 12 segundos y vaya y vuelva, y dos fotogramas clave de la
 posición del sol, uno al principio y otro al final:
@@ -127,9 +132,13 @@ wprs-ctl scene keyframe mi-escena /scene/layers/1/transform/position 0 '[260, 82
 wprs-ctl scene keyframe mi-escena /scene/layers/1/transform/position 12 '[1660, 260]' --timeline vuelta
 ```
 
-*Editor:* en *Líneas de tiempo*, *Añadir una línea de tiempo* y ponle 12 segundos y `pingpong`;
-con el cabezal en 0, pulsa el rombo de *Posición* de la capa (*Fotograma clave aquí*) y arrastra el
-sol abajo a la izquierda; lleva el cabezal a 12 y arrastra el sol arriba a la derecha.
+*Editor:* en *Líneas de tiempo*, *Añadir una línea de tiempo*: nace con el id `timeline_1` (con
+*Cambiar el nombre…*, llámala `vuelta`); ponle *Duración* 12 segundos y, en *Se reproduce*,
+`pingpong`. En el desplegable de la franja de tiempo de abajo, que dice *Reloj de la escena*,
+elige esa línea de tiempo. Con el cabezal en 0, pulsa el rombo de *Posición* de la capa del sol
+(*Fotograma clave aquí*): la posición sin tocar vale el centro del lienzo, así que el fotograma
+nace ahí; escribe 260 y 820 en *Posición* o arrastra el sol abajo a la izquierda. Lleva el cabezal
+a 12 y escribe 1660 y 260, o arrastra el sol arriba a la derecha.
 
 Las capas se cuentan desde 0 desde abajo, y por eso el sol, la segunda, es `/scene/layers/1`. Para ver
 lo que hay en cualquier sitio: `wprs-ctl scene show mi-escena /scene/layers/1`. El puntero empieza
@@ -147,8 +156,8 @@ Un efecto cambia cómo se ve una capa. `waves` hace ondular el cielo:
 wprs-ctl scene effects mi-escena fondo add waves --param amplitude=6 --param frequency=3
 ```
 
-*Editor:* elige la capa del cielo, *Añadir un efecto*, *Ondas*; ajusta *amplitude* (amplitud) y
-*frequency* (frecuencia).
+*Editor:* elige la capa del cielo, *Añadir un efecto*, *Ondas*; la ficha del efecto está al final
+del inspector: ajusta *amplitude* (amplitud) y *frequency* (frecuencia).
 
 Los efectos están en [efectos.md](efectos.md).
 
@@ -163,9 +172,11 @@ wprs-ctl scene property mi-escena color_sol --default '"#ffd23f"'
 wprs-ctl scene set mi-escena /scene/layers/1/fill '{"prop": "color_sol"}'
 ```
 
-*Editor:* en *Propiedades de usuario*, *Añadir una propiedad* de tipo color, con su etiqueta y su
-valor por defecto; en el relleno de la capa del sol, pulsa el rombo y elige *Seguir una propiedad
-de usuario*.
+*Editor:* pestaña *Paquete*, *Propiedades de usuario*, *Añadir una propiedad* de tipo *Color*:
+nace con el id `color_1`; con *Cambiar el nombre…* llámala `color_sol`, y ponle la etiqueta
+«Color del sol» y el valor por defecto `#ffd23f`. En *Color de relleno* de la capa del sol, pulsa el
+rombo y elige *Seguir una propiedad de usuario* y la propiedad. El relleno queda como
+`{ "prop": "color_sol" }`, sin más datos, y el sol se ve del color de la propiedad.
 
 La propiedad se declara en `manifest.json` y la capa la sigue con `{ "prop": "color_sol" }`.
 
@@ -175,7 +186,8 @@ La propiedad se declara en `manifest.json` y la capa la sigue con `{ "prop": "co
 wprs-ctl scene validate mi-escena
 ```
 
-*Editor:* el panel *Problemas*, que se actualiza mientras trabajas.
+*Editor:* el panel de problemas, que se actualiza mientras trabajas y dice *Sin problemas* cuando
+todo está bien. Pulsa *Guardar* antes de ver la escena.
 
 No imprime nada si todo está bien. Si algo está mal, dice la ruta del campo y qué esperaba. Esta
 orden termina con error cuando hay problemas, y por eso sirve en guiones. Si la escena tiene
