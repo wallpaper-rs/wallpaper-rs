@@ -22,6 +22,7 @@ Kirigami.Page {
     property var regionPicks: []
     property bool regionsOn: true
     property bool regionSplit
+    property string regionLast
     property bool regionPreview
     property var pointer: [0, 0]
     property bool splitOn

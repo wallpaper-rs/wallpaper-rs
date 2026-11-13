@@ -17,7 +17,6 @@ ColumnLayout {
     readonly property var picks: page.regionPicks
     readonly property int edits: (survey.joins ?? 0) + (survey.splits ?? 0) + (survey.shifts ?? 0)
     property real step: 0.1
-    property string last
 
     function zone(order) {
         return zones.find(z => z.order === order);
@@ -26,11 +25,6 @@ ColumnLayout {
     function spot(order) {
         const z = zone(order);
         return z ? z.at[0].toFixed(4) + "," + z.at[1].toFixed(4) : "";
-    }
-
-    function act(name, args) {
-        last = name;
-        page.run(name, args);
     }
 
     function refresh() {
@@ -43,26 +37,35 @@ ColumnLayout {
     function join() {
         const points = picks.map(spot).filter(p => p !== "");
         page.regionPicks = [];
+        page.regionLast = "depth_join";
         if (points.length >= 2)
-            act("depth_join", {
-                    "points": points.join(";")
-                });
+            page.run("depth_join", {
+                "points": points.join(";")
+            });
     }
 
     function nudge(by) {
         const spots = picks.map(spot).filter(p => p !== "");
         page.regionPicks = [];
-        spots.forEach(at => act("depth_move", {
-                        "at": at,
-                        "by": by
-                    }));
+        page.regionLast = "depth_move";
+        spots.forEach(at => page.run("depth_move", {
+                "at": at,
+                "by": by
+            }));
     }
 
     function reset() {
         page.regionPicks = [];
-        ["depth_join", "depth_split", "depth_move"].forEach(name => act(name, {
-                        "clear": true
-                    }));
+        page.regionLast = "depth_move";
+        page.run("depth_join", {
+            "clear": true
+        });
+        page.run("depth_split", {
+            "clear": true
+        });
+        page.run("depth_move", {
+            "clear": true
+        });
     }
 
     onKeyChanged: {
@@ -178,7 +181,7 @@ ColumnLayout {
     EditRegionNote {
         Layout.fillWidth: true
         survey: tool.survey
-        last: tool.last
+        last: tool.page.regionLast
     }
 
     EditRegionPreview {

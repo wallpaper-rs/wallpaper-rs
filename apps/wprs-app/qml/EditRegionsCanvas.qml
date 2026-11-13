@@ -52,6 +52,7 @@ Item {
         line.requestPaint();
         if (points.length < 2)
             return;
+        page.regionLast = "depth_split";
         page.run("depth_split", {
                 "points": points.map(p => p[0].toFixed(4) + "," + p[1].toFixed(4)).join(";")
             });
