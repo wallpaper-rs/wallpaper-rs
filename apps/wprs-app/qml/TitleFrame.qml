@@ -18,6 +18,8 @@ Item {
     readonly property bool fits: bandLow > 0 && bandBottom - bandTop >= bandLow && bandTop - Look.e3 - column.y >= upperLow
     property bool banded: false
     property real placedFor: 0
+    property real need: 0
+    readonly property bool tight: height < need
     readonly property real stacked: upperLow > 0 ? upperLow + Look.e4 : 0
     readonly property rect band: banded ? Qt.rect(Look.margen, bandTop, width - 2 * Look.margen, bandBottom - bandTop) : Qt.rect(column.x, column.y + stacked, column.width, Math.max(0, column.height - stacked))
     readonly property rect upper: banded ? Qt.rect(column.x, bandTop - Look.e3 - upperLow, column.width, upperLow) : Qt.rect(column.x, column.y, column.width, upperLow)
@@ -25,6 +27,12 @@ Item {
     readonly property point hintsAt: Qt.point(width - Look.margen, height - Look.margenAbajo)
 
     signal escaped
+
+    function measure() {
+        const top = column.y + Look.e3 + upperLow;
+        if (bandLow > 0 && Look.escalon === "normal" && !fits)
+            need = (sideBottom >= top ? sideBottom + bandLow : top + (page.bandHigh > 0 ? Math.max(page.bandHigh, bandLow) : Infinity)) + Look.margenAbajo;
+    }
 
     function place(grow) {
         placedFor = bandLow;
@@ -42,8 +50,13 @@ Item {
     onWidthChanged: resized()
     onHeightChanged: resized()
     onSideBottomChanged: resized()
-    onPageChanged: resized()
+    onPageChanged: {
+        need = 0;
+        resized();
+    }
     onBandLowChanged: {
+        if (bandLow <= 0)
+            need = 0;
         if (banded)
             settle.restart();
         else if (placedFor === 0)
@@ -61,7 +74,10 @@ Item {
         id: regrow
 
         interval: Look.paso * 2
-        onTriggered: frame.place(true)
+        onTriggered: {
+            frame.measure();
+            frame.place(true);
+        }
     }
 
     RoundVeil {

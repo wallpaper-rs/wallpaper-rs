@@ -9,6 +9,7 @@ FocusScope {
     property alias frame: frame
     property alias menu: menu
     property alias page: bandPage
+    property alias side: side
 
     function say(en, es) {
         return board.es ? es : en;

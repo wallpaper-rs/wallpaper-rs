@@ -16,9 +16,12 @@ Window {
 
     LookWindow {
         host: window
+        tight: !!(loaded.item && loaded.item.frame && loaded.item.frame.tight)
     }
 
     Loader {
+        id: loaded
+
         anchors.fill: parent
         focus: true
         source: /^[A-Za-z]+$/.test(window.sheet) ? "Pieces" + window.sheet[0].toUpperCase() + window.sheet.slice(1) + ".qml" : ""

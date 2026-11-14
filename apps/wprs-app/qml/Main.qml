@@ -191,5 +191,6 @@ Kirigami.ApplicationWindow {
 
     LookWindow {
         host: root
+        tight: shell.titleFrame.tight
     }
 }

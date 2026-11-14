@@ -92,6 +92,11 @@ del menú. Una página que no la pide queda como siempre, en la columna a la der
   entre `bandLow` y `bandHigh` según lo que haya bajo el menú; `upper` va a la derecha del menú,
   justo encima de la banda, con el alto pedido. Los atajos quedan en la esquina de abajo a la
   derecha de la banda.
+- Si la banda no entra en el tamaño normal pero sí en el compacto, la ventana pasa al tamaño
+  compacto aunque mida más de 800 px de alto, y vuelve al normal cuando crece hasta el alto en que
+  la banda entra también ahí. Así no hay altos en los que la banda falte entre el mínimo en que
+  cabe (unos 700 px en la hoja de muestra) y cualquier alto mayor. Solo pasa mientras la página
+  pide la banda; las demás páginas siguen el tamaño de siempre.
 - Sin lugar (ventana baja, o el bloque de arriba no entra): las dos van a la columna de la derecha
   del menú, el bloque arriba y la banda debajo, como en las páginas de siempre. El cambio ocurre al
   redimensionar, sin mover la página de lugar: el foco queda donde estaba y nada tapa el menú.

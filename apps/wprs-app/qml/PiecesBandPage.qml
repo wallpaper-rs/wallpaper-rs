@@ -17,6 +17,12 @@ FocusScope {
     property alias search: search
     property alias shelf: shelf
 
+    function layout() {
+        bar.forceLayout();
+        lower.forceLayout();
+        upperBlock.forceLayout();
+    }
+
     Column {
         id: upperBlock
 

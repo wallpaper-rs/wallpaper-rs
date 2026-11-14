@@ -4,10 +4,11 @@ import io.github.wallpaper_rs.app
 
 Binding {
     required property var host
+    property bool tight: false
 
     target: Look
     property: "escalon"
-    value: Look.step(host.width, host.height)
+    value: tight ? "compacto" : Look.step(host.width, host.height)
     Component.onCompleted: {
         const theme = host.Kirigami.Theme;
         theme.negativeTextColor = Look.coral;
