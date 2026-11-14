@@ -96,7 +96,7 @@ fn the_scripts_of_the_app_call_only_what_its_script_engine_has() {
     sources(&root().join("qml"), &mut files);
     for path in files {
         let text = std::fs::read_to_string(&path).unwrap();
-        for call in missing.iter().filter(|call| text.contains(*call)) {
+        if let Some(call) = missing.iter().find(|call| text.contains(*call)) {
             panic!("{} calls {call}, which the script engine of Qt does not have", path.display());
         }
     }
