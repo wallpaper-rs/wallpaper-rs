@@ -181,12 +181,4 @@ Column {
         height: ahora.compact ? 0 : implicitHeight
         clip: ahora.compact
     }
-
-    Estado {
-        anchors.right: parent.right
-        topPadding: Look.e3
-        visible: App.backend.lastError !== "" && App.backend.lastError !== App.backend.banner
-        tone: "coral"
-        text: App.backend.lastError
-    }
 }

@@ -42,6 +42,12 @@ Timer {
             must(Math.abs(notices.x - frame.noticeAt.x) < 1, "a notice left its place in the column");
         }
         host.hidePassiveNotification();
+        const before = App.backend.lastError;
+        App.backend.lastError = "refused probe";
+        must(notices.refusing && notices.x >= frame.noticeAt.x - 1, "a refused action does not show as a notice in the notices' place");
+        notices.waved = "refused probe";
+        must(!notices.refusing, "a refused action's notice does not close");
+        App.backend.lastError = before;
     }
 
     interval: Look.paso * 6

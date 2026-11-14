@@ -13,6 +13,9 @@ Column {
     property bool told: false
     readonly property string banner: App.backend.banner
     readonly property bool failing: banner !== "" && banner !== dismissed && !told
+    readonly property string refusal: App.backend.lastError
+    property string waved: ""
+    readonly property bool refusing: refusal !== "" && refusal !== banner && refusal !== waved && !told
     readonly property bool busy: failing || account.visible
 
     function show(message, timeout, actionText, onAction) {
@@ -37,6 +40,7 @@ Column {
     spacing: Look.e2
     Accessible.role: Accessible.StaticText
     onBannerChanged: dismissed = banner === "" ? "" : dismissed
+    onRefusalChanged: waved = refusal === "" ? "" : waved
 
     Timer {
         id: later
@@ -50,6 +54,14 @@ Column {
         text: notices.banner
         tone: "coral"
         onClosed: notices.dismissed = notices.banner
+    }
+
+    Aviso {
+        visible: notices.refusing
+        width: Math.min(notices.width, implicitWidth)
+        text: notices.refusal
+        tone: "coral"
+        onClosed: notices.waved = notices.refusal
     }
 
     AccountNotice {
