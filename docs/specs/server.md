@@ -139,6 +139,7 @@ held/<sha256>.wpak   removed or revoked packages (and their previews) for WPRS_T
 private/<user>/<id>  end-to-end encrypted private files of each account
 repo/                the static repository (docs/specs/repo.md) built with wprs-format
 keys/online.key      online signing key (0600); the root key never lives here
+keys/mail.secret     password of the mail server (0600), only when mail is set up
 tls/cert.der, key.der  certificate and key of WPRS_TLS=self-signed (0600)
 tmp/ logs/ backups/
 ```
@@ -409,6 +410,39 @@ characters, which the uploader sees in `/api/v1/me/packages`. `strike: true` add
 three strikes within a year suspend uploads. Every decision is audited. Cases come from
 uploads (priority 0), reports (1), copyright notices and counter-notices (2) and notices of
 illegal content (3).
+
+### Mail
+
+The server sends mail only after the administrator sets it up in the fold of the health row
+«Correo» (`POST /admin/mail`, administrators only; anyone else is sent to `/login` and nothing is
+stored). While it is off nothing is sent and nothing is queued. The settings live in the
+`settings` table under `mail_host`, `mail_port`, `mail_security` (`starttls`, `tls` or `none`),
+`mail_user`, `mail_from`, `mail_to` and `mail_lang` (the language of the administrator who saved
+them, used for every mail); the password goes to `keys/mail.secret` (0600), is never shown again,
+never logged and an empty password field keeps the stored one. «Apagar el correo»
+(`action=off`) drops the keys, the password and every mail still waiting. There is a single
+notice address (`mail_to`) for who moderates and who administers: accounts carry no address.
+
+Mails wait in the table `mail_queue` (`topic` `case`, `health` or `test`, `case_id`, `subject`,
+`body`, `state` `queued`, `sent` or `failed`, `tries`, `next_at`, `created_at`, `sent_at`). A
+background job sends what is due and retries a failure after 1 min, 5 min, 30 min, 2 h and 8 h;
+after the sixth try the mail is `failed`. The last result is kept in `mail_sent_at`,
+`mail_failed_at`, `mail_failed_why` (`password`, `reach`, `secure`, `address`, `other`, said in a
+person's words on the row) and `mail_failed_raw` (the raw answer of the mail server, under
+«Detalles»). Another part of the server asks for a mail with
+`mail::enqueue(app, topic, case, |setup| (subject, body))`: the closure runs in the language of
+the mail and nothing is queued when mail is off.
+
+What is sent: each case of priority 1 or more (reports, notices, counter-notices) sends one mail
+with a link to the case and nothing about who sent it; the line of the case in `/mod` says whether
+the notice went out, is on its way or did not go out. Every 15 minutes, and at once after an
+automatic signing fails, the rows certificate, index signature, last backup and disk are compared
+with the tone last seen (`health_seen`): a row that turns red or near sends one mail per change,
+not per check. Subjects carry only the name of the server and of the row. «Enviar un correo de
+prueba» (`POST /admin/mail/test`) sends at once and says whether it went out.
+
+A failed automatic signing is stored in `repo_state.failed_at` and `failed_raw`: the row «Firma del
+índice» turns red with when and why until a signing works again.
 
 ## Legal pages
 
