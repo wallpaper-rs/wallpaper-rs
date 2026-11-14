@@ -76,4 +76,4 @@ fn steady(r: &wprs_render::Renderer, item: &serde_json::Value) -> (u64, u64, u64
 }
 
 const STEPS: u64 = 16;
-const GUARD_PASS_COPY_AND_READ_BACK: u64 = 20;
+const GUARD_PASS_COPY_AND_READ_BACK: u64 = 30;
