@@ -83,6 +83,8 @@ FocusScope {
         }
 
         Fila {
+            id: secretRow
+
             visible: !!add.schema.secret
             text: add.schema.secret ? Labels.field(add.schema.secret.name) : ""
             kind: "despliega"
@@ -155,7 +157,7 @@ FocusScope {
     PanelChico {
         id: pad
 
-        opener: rows
+        opener: secretRow
         title: add.schema.secret ? Labels.field(add.schema.secret.name) : ""
         principal: App.tr("Save")
         quiet: App.tr("Cancel")
