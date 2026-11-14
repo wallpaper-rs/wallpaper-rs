@@ -18,7 +18,7 @@ QQC2.ScrollView {
             onTriggered: App.act("SetFavorite", [[panel.page.opened], !panel.host.item.favorite], "Library1")
         },
         Kirigami.Action {
-            text: App.outputs.length > 1 ? App.tr("Set as wallpaper on %1", panel.page.target) : App.tr("Set as wallpaper")
+            text: App.outputs.length > 1 ? App.tr("Set as wallpaper on %1", App.screen(panel.page.target)) : App.tr("Set as wallpaper")
             icon.name: "image"
             visible: !!panel.host.pkg ? panel.host.pkg.kind !== "assets" : true
             onTriggered: panel.page.tools.put(panel.page.opened)

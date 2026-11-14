@@ -9,7 +9,7 @@ FocusScope {
     readonly property int mature: options["library.hide_mature"] === true ? 0 : options["library.show_mature"] === true ? 2 : 1
     readonly property var lost: page.sources.filter(source => !!source.error)
     readonly property var plays: page.outputs.map(name => [name, ((App.state.outputs ?? {})[name] ?? {}).playlist ?? null])
-    readonly property string playing: plays.length === 1 ? (plays[0][1] ? plays[0][1].name : App.trc("list", "None")) : plays.map(pair => App.tr("%1: %2", pair[0], pair[1] ? pair[1].name : App.tr("none"))).join(" · ")
+    readonly property string playing: plays.length === 1 ? (plays[0][1] ? plays[0][1].name : App.trc("list", "None")) : plays.map(pair => App.tr("%1: %2", App.screen(pair[0]), pair[1] ? pair[1].name : App.tr("none"))).join(" · ")
     readonly property var rows: [
         {
             "text": adult.text,

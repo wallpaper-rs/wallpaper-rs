@@ -3009,6 +3009,18 @@ msgstr "La página informó de un error y puede que no se esté dibujando: %1"
 msgid "Every screen"
 msgstr "Todas las pantallas"
 
+#: apps/wprs-app/qml/facade/App.qml
+msgid "Laptop"
+msgstr "Portátil"
+
+#: apps/wprs-app/qml/facade/App.qml
+msgid "Monitor"
+msgstr "Monitor"
+
+#: apps/wprs-app/qml/facade/App.qml
+msgid "Monitor %1"
+msgstr "Monitor %1"
+
 #: apps/wprs-app/qml/OutputRow.qml
 msgid "Playlist %1 (%2 of %3)"
 msgstr "Lista %1 (%2 de %3)"

@@ -9,7 +9,7 @@ Column {
     readonly property var entry: page.entry
     readonly property bool hurt: !!entry && (entry.missing === true || String(entry.broken ?? "") !== "")
     readonly property string screen: App.outputs.length > 1 ? page.target : ""
-    readonly property string main: hurt ? App.tr("Show in folder") : screen !== "" ? App.tr("Set as wallpaper on %1", screen) : App.tr("Set as wallpaper")
+    readonly property string main: hurt ? App.tr("Show in folder") : screen !== "" ? App.tr("Set as wallpaper on %1", App.screen(screen)) : App.tr("Set as wallpaper")
 
     function said(entry) {
         const gone = entry.missing === true;

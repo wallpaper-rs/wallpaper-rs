@@ -20,7 +20,7 @@ FocusScope {
 
         Fila {
             text: App.tr("Every quality level")
-            note: part.several ? part.page.output : ""
+            note: part.several ? App.screen(part.page.output) : ""
             kind: "elige"
             options: part.levels.map(value => SettingsWords.level(value))
             current: Math.max(0, part.levels.indexOf(part.level))
@@ -74,7 +74,7 @@ FocusScope {
         }
 
         Seccion {
-            text: App.tr("Wallpaper of %1", part.page.output)
+            text: App.tr("Wallpaper of %1", App.screen(part.page.output))
         }
 
         Repeater {

@@ -88,6 +88,20 @@ QtObject {
         return backend.tr(text).replace(/%([1-9])/g, (mark, n) => n < args.length ? String(args[n]) : mark);
     }
 
+    function screen(output, among) {
+        const own = name => /^(eDP|LVDS|DSI)/i.test(name);
+        if (own(output))
+            return tr("Laptop");
+        const others = (among ?? outputs).filter(name => !own(name)).sort();
+        const at = others.indexOf(output);
+        return others.length > 1 && at >= 0 ? tr("Monitor %1", at + 1) : tr("Monitor");
+    }
+
+    function screens(names, among) {
+        const words = names.map(name => screen(name, among));
+        return words.length < 2 ? words.join("") : tr("%1 and %2", words.slice(0, -1).join(", "), words[words.length - 1]);
+    }
+
     function trc(context, text) {
         const args = Array.prototype.slice.call(arguments, 1);
         return tr.apply(null, [context + "\u0004" + text].concat(args.slice(1)));

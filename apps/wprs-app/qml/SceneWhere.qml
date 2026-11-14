@@ -11,7 +11,7 @@ PanelChico {
     readonly property var screens: [""].concat(App.outputs)
 
     function word(output) {
-        return output === "" ? App.tr("Every screen") : output;
+        return output === "" ? App.tr("Every screen") : App.screen(output);
     }
 
     function choose(opener, viewing, then) {

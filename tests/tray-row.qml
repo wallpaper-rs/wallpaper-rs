@@ -31,6 +31,10 @@ Item {
             property var current: ({})
             property var state: ({})
 
+            function screen(name) {
+                return name === "X-1" ? "Monitor" : name;
+            }
+
             signal updated(string topic, var ids)
             signal choose(string name)
 
@@ -97,9 +101,9 @@ Item {
             const next = find(row, item => String(item.text ?? "") === "Next");
             const choose = find(row, item => String(item.text ?? "") === "Choose…");
             const more = find(row, item => item.glyph === "dots-three");
-            const where = find(row, item => String(item.text ?? "").startsWith("X-1 · "));
+            const where = find(row, item => String(item.text ?? "").startsWith("Monitor · "));
             compare(next.enabled, false);
-            compare(where.text, "X-1 · no playlist running");
+            compare(where.text, "Monitor · no playlist running");
             compare(find(row, item => String(item.text ?? "").startsWith("Mature content")), null);
             row.info = {
                 "item": "A",

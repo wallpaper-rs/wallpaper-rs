@@ -169,6 +169,16 @@ clave y trae fotos nuevas en la próxima actualización. «Quitar esta fuente» 
   superficie, dibujar con el procesador). Los lugares dentro de Avanzado llevan la ruta completa y
   «Esc volver» regresa a Avanzado.
 
+## Nombre de las pantallas
+
+Una sola función de la ventana (`App.screen`) y su gemela en la bandeja (`Daemon.screen`) dan el
+nombre que ve la persona: el panel propio de un portátil (conectores eDP, LVDS, DSI) es «Portátil»;
+cualquier otra es «Monitor», numerada en orden estable por el nombre del conector cuando hay varias
+(«Monitor 1», «Monitor 2»). La usan el aviso del primer arranque y su menú «Aplicar a…», la marca de
+la tapa puesta, el botón principal de la tarjeta, la tira de pantallas, Ajustes › Pantallas (que
+deja el conector como texto secundario), la ventana de vista previa del atajo, la bandeja y la
+pregunta del editor «en qué pantalla». La terminal sigue usando los nombres de conector.
+
 ## Bloque ahora
 
 Arriba a la derecha de las pantallas de título está lo que hay de fondo en la pantalla elegida:

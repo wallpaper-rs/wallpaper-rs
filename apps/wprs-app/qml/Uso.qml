@@ -35,7 +35,7 @@ Rectangle {
             id: words
 
             anchors.verticalCenter: parent.verticalCenter
-            text: uso.screen !== "" ? App.tr("On %1", uso.screen) : App.tr("In use")
+            text: uso.screen !== "" ? App.tr("On %1", App.screens(uso.screen.split(", "))) : App.tr("In use")
             font.family: Look.letraTexto
             font.pixelSize: Look.tTecla
             font.weight: Font.DemiBold

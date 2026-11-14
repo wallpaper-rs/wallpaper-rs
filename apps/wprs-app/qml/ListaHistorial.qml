@@ -36,7 +36,7 @@ Column {
         visible: row.open && App.outputs.length > 1
         text: App.tr("Which screen")
         kind: "elige"
-        options: App.outputs
+        options: App.outputs.map(name => App.screen(name))
         current: history.screen
         onChosen: index => history.screen = index
     }

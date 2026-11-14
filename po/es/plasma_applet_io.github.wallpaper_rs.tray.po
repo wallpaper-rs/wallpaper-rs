@@ -719,6 +719,21 @@ msgstr "Página web"
 msgid "no playlist running"
 msgstr "sin lista en marcha"
 
+#: integrations/plasma-tray/contents/ui/Daemon.qml
+#, kde-format
+msgid "Laptop"
+msgstr "Portátil"
+
+#: integrations/plasma-tray/contents/ui/Daemon.qml
+#, kde-format
+msgid "Monitor"
+msgstr "Monitor"
+
+#: integrations/plasma-tray/contents/ui/Daemon.qml
+#, kde-format
+msgid "Monitor %1"
+msgstr "Monitor %1"
+
 #: integrations/plasma-tray/contents/ui/ScreenRow.qml
 msgid "“%1”, %2 of %3"
 msgstr "«%1», %2 de %3"

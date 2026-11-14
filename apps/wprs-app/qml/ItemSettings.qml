@@ -53,7 +53,7 @@ ColumnLayout {
 
             QQC2.Label {
                 visible: settings.screens.length > 1
-                text: App.tr("On %1", modelData)
+                text: App.tr("On %1", App.screen(modelData))
                 font.bold: true
             }
 

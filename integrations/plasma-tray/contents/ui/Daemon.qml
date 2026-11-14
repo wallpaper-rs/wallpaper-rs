@@ -150,6 +150,15 @@ QtObject {
         return i18n(text, first, second, third);
     }
 
+    function screen(output) {
+        const own = name => /^(eDP|LVDS|DSI)/i.test(name);
+        if (own(output))
+            return i18n("Laptop");
+        const others = Object.keys(current.outputs ?? {}).filter(name => !own(name)).sort();
+        const at = others.indexOf(output);
+        return others.length > 1 && at >= 0 ? i18n("Monitor %1", at + 1) : i18n("Monitor");
+    }
+
     function url(path) {
         return path ? "file://" + path.split("/").map(encodeURIComponent).join("/") : "";
     }

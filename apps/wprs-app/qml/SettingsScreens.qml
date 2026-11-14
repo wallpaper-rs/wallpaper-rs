@@ -102,7 +102,8 @@ FocusScope {
             visible: tab.several
             text: App.tr("Screen you adjust")
             kind: "elige"
-            options: tab.page.outputs
+            note: tab.page.output
+            options: tab.page.outputs.map(name => App.screen(name))
             current: tab.page.screen
             explain: App.tr("What says “On every screen” applies to all of them.")
             onChosen: index => tab.page.screen = index
@@ -124,7 +125,7 @@ FocusScope {
             id: change
 
             text: App.tr("Transition when the wallpaper changes")
-            note: tab.several ? tab.page.output : ""
+            note: tab.several ? App.screen(tab.page.output) : ""
             kind: "elige"
             options: tab.passage.words
             current: tab.passage.current
@@ -168,7 +169,7 @@ FocusScope {
         Fila {
             id: more
 
-            text: App.tr("More of %1", tab.page.output)
+            text: App.tr("More of %1", App.screen(tab.page.output))
             kind: "pliega"
             value: App.tr("Smoothness, fill color, HDR")
             onOpened: tab.page.open("screen", more)

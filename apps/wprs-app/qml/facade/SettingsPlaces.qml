@@ -51,7 +51,7 @@ QtObject {
         if (place === "pause")
             return App.tr("Pause");
         if (place === "screen")
-            return App.tr("More of %1", output);
+            return App.tr("More of %1", App.screen(output));
         return App.tr("Layouts");
     }
 

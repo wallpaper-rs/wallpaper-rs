@@ -38,7 +38,7 @@ ColumnLayout {
     }
 
     readonly property string meta: ({"scene": i18n("Scene"), "video": i18n("Video"), "image": i18n("Image"), "web": i18n("Web page"), "color": i18n("Color")})[info.kind] ?? ""
-    readonly property string where: playing ? [name, i18n("“%1”, %2 of %3", playing.name, playing.position + 1, playing.count)].join(" · ") : [name, i18n("no playlist running")].join(" · ")
+    readonly property string where: playing ? [daemon.screen(name), i18n("“%1”, %2 of %3", playing.name, playing.position + 1, playing.count)].join(" · ") : [daemon.screen(name), i18n("no playlist running")].join(" · ")
 
     spacing: Look.e2
     onItemChanged: {

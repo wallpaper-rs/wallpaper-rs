@@ -99,7 +99,7 @@ RowLayout {
             Layout.fillWidth: true
             elide: Text.ElideMiddle
             font.bold: true
-            text: row.name ? row.name + (row.info.width ? " · " + row.info.width + "×" + row.info.height : "") : row.daemon.tr("Every screen")
+            text: row.name ? row.daemon.screen(row.name) + " · " + row.name + (row.info.width ? " · " + row.info.width + "×" + row.info.height : "") : row.daemon.tr("Every screen")
             textFormat: Text.PlainText
         }
 

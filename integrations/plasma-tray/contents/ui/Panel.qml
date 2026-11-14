@@ -92,7 +92,7 @@ PlasmaExtras.Representation {
                 Layout.fillWidth: true
                 visible: panel.view !== "main"
                 glyph: "caret-left"
-                text: panel.view === "screen" ? panel.target : i18n("More")
+                text: panel.view === "screen" ? panel.daemon.screen(panel.target) : i18n("More")
                 onClicked: panel.view = "main"
             }
 

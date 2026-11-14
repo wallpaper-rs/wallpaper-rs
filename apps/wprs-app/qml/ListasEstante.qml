@@ -105,7 +105,7 @@ FocusScope {
             QQC2.Button {
                 highlighted: true
                 icon.name: "play-fill"
-                text: App.outputs.length > 1 ? App.tr("Start on %1", shelf.page.target) : App.trc("playlists", "Start")
+                text: App.outputs.length > 1 ? App.tr("Start on %1", App.screen(shelf.page.target)) : App.trc("playlists", "Start")
                 onClicked: shelf.page.start(shelf.entry)
             }
 

@@ -90,7 +90,7 @@ Item {
                 "text": App.tr("“%1” is now your wallpaper. You can change it whenever you like from here.", title),
                 "action": App.tr("Undo")
             };
-        const names = App.tr("%1 and %2", outputs.slice(0, -1).join(", "), outputs[outputs.length - 1]);
+        const names = App.screens(outputs, outputs);
         return {
             "text": App.tr("“%1” is now the wallpaper on %2.", title, names),
             "action": App.tr("Apply to…")
@@ -149,7 +149,7 @@ Item {
             delegate: QQC2.MenuItem {
                 required property string modelData
 
-                text: App.tr("Only on %1", modelData)
+                text: App.tr("Only on %1", App.screen(modelData))
                 onTriggered: run.only(modelData, App.outputs)
             }
         }

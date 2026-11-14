@@ -56,7 +56,7 @@ Column {
                 }
 
                 Text {
-                    text: screen.modelData
+                    text: App.screen(screen.modelData)
                     font.family: Look.letraTexto
                     font.pixelSize: Look.tPie
                     color: screen.chosen ? Look.escarcha : Look.bruma
@@ -69,6 +69,6 @@ Column {
         anchors.right: parent.right
         visible: top.several
         icon: "monitor"
-        text: top.preview.output === "" ? App.tr("Changes: every screen") : App.tr("Changes: %1", top.preview.output)
+        text: top.preview.output === "" ? App.tr("Changes: every screen") : App.tr("Changes: %1", App.screen(top.preview.output))
     }
 }

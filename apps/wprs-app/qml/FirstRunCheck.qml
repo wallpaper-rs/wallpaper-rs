@@ -77,8 +77,8 @@ QtObject {
         const one = run.told("Snowfall", ["DP-1"]);
         const two = run.told("Snowfall", ["DP-1", "HDMI-1"]);
         run.destroy();
-        const found = [one.action === App.tr("Undo"), one.text.includes("DP-1"), two.action === App.tr("Apply to…"), two.text.includes("DP-1"), two.text.includes("HDMI-1")];
-        must(found.join() === "true,false,true,true,true", "the first wallpaper's notice does not speak of the screens only when there are several: " + found.join());
+        const found = [one.action === App.tr("Undo"), one.text.includes("DP-1"), two.action === App.tr("Apply to…"), two.text.includes(App.tr("Monitor %1", 1)), two.text.includes(App.tr("Monitor %1", 2)), App.screen("eDP-1", ["eDP-1", "DP-1"]) === App.tr("Laptop"), App.screen("DP-1", ["eDP-1", "DP-1"]) === App.tr("Monitor")];
+        must(found.join() === "true,false,true,true,true,true,true", "the first wallpaper's notice does not speak of the screens only when there are several: " + found.join());
     }
 
     function unnoticed() {

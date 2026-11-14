@@ -80,7 +80,7 @@ Row {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: screen.modelData
+                text: App.screen(screen.modelData)
                 font.family: Look.letraTexto
                 font.pixelSize: Look.tPie
                 font.weight: screen.chosen ? Font.DemiBold : Font.Normal

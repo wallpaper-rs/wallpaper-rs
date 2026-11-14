@@ -131,7 +131,7 @@ FocusScope {
                 visible: App.outputs.length > 1
                 text: App.tr("Which screen")
                 kind: "elige"
-                options: App.outputs
+                options: App.outputs.map(name => App.screen(name))
                 current: Math.max(0, App.outputs.indexOf((editor.playlist.outputs ?? [])[0] ?? editor.page.target))
                 onChosen: index => App.act("Start", [editor.uid, App.outputs[index]], "Playlists1")
             }
