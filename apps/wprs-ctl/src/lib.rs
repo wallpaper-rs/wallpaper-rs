@@ -169,13 +169,13 @@ pub fn main() -> ExitCode {
     };
     wprs_scene::end_trials();
     let Err(error) = result else {
-        wprs_render::finish_builds(0);
+        wprs_render::finish_gpu(0);
         return ExitCode::SUCCESS;
     };
     let error = error.downcast::<zbus::Error>().map_or_else(|e| e, explain);
     eprintln!("Error: {}", show::clean(&foreign::said(&wprs_editor::told(&error))));
     let code = if misused(&error) { 2 } else { 1 };
-    wprs_render::finish_builds(i32::from(code));
+    wprs_render::finish_gpu(i32::from(code));
     ExitCode::from(code)
 }
 

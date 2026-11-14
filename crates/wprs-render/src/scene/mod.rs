@@ -59,7 +59,7 @@ mod view;
 mod warm;
 use crate::Renderer;
 use crate::texture::GpuImage;
-pub use builders::{finish_builds, stop_builds};
+pub use builders::{finish_builds, finish_gpu, stop_builds};
 pub use clock::{Stamping, set_gpu_budget};
 pub use flight::drawn_effects;
 pub(crate) use flight::hanging;

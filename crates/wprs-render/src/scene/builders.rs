@@ -37,6 +37,20 @@ pub fn finish_builds(code: i32) {
         return;
     }
     tracing::warn!("a package shader is still building; exiting without waiting for the driver");
+    leave(code)
+}
+
+pub fn finish_gpu(code: i32) {
+    if stop_builds() {
+        if crate::Renderer::kept() {
+            leave(code)
+        }
+        return;
+    }
+    finish_builds(code)
+}
+
+fn leave(code: i32) {
     drop(std::io::stdout().flush());
     drop(std::io::stderr().flush());
     wprs_scene::end_trials();

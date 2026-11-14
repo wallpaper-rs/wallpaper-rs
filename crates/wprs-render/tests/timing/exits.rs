@@ -32,3 +32,29 @@ fn exiting_while_a_package_shader_builds_never_crashes() {
         assert_eq!((status.code(), status.signal()), (Some(0), None), "{status:?}");
     }
 }
+
+#[test]
+fn a_tool_that_drew_ends_with_its_own_code_and_its_whole_output() {
+    if std::env::var_os(CHILD).is_some() {
+        let Some(r) = renderer() else { std::process::exit(3) };
+        show(r, scene(&[("plain", entry("return tap(in.uv);"))])).unwrap();
+        print!("drawn");
+        wprs_render::finish_gpu(3);
+        std::process::exit(4);
+    }
+    let _one = one();
+    if renderer().is_none() {
+        return;
+    }
+    let name = "exits::a_tool_that_drew_ends_with_its_own_code_and_its_whole_output";
+    for _ in 0..3 {
+        let out = std::process::Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", name, "--nocapture", "--test-threads=1"])
+            .env(CHILD, "1")
+            .output()
+            .unwrap();
+        let status = out.status;
+        assert_eq!((status.code(), status.signal()), (Some(3), None), "{status:?}");
+        assert!(String::from_utf8_lossy(&out.stdout).contains("drawn"), "the output was lost");
+    }
+}

@@ -150,6 +150,10 @@ impl Renderer {
         }
     }
 
+    pub(crate) fn kept() -> bool {
+        SHARED.lock().unwrap_or_else(PoisonError::into_inner).is_some()
+    }
+
     pub fn install(self) -> &'static Renderer {
         let installed: &'static Renderer = Box::leak(Box::new(self));
         let mut shared = SHARED.lock().unwrap_or_else(PoisonError::into_inner);
