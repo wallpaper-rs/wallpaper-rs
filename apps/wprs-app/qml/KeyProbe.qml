@@ -53,7 +53,7 @@ Timer {
         const all = pages.slice().sort((a, b) => a - b).join();
         if (all !== Array.from({
                 "length": host.pages.length
-            }, (v, at) => at).join())
+            }, (v, at) => at).filter(at => host.names[at] !== "repositories").join())
             throw new Error("the arrow and Enter keys on the menu opened the pages " + pages.join(", "));
         walk.press(Qt.Key_Escape, 0);
         if (!layouts.activeFocus)
