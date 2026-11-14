@@ -131,10 +131,15 @@ Kirigami.Page {
             onCurrentIndexChanged: page.at = currentIndex
             onActivated: page.pkg && fixed.act()
             Keys.onDownPressed: page.flip()
-            actions: Column {
-                spacing: Look.e4
+            actions: Item {
+                readonly property bool shown: page.open && page.pkg !== null
+
+                implicitWidth: shown ? Math.max(row.implicitWidth, Look.tapaFoco + Look.e5 + aside.implicitWidth) : row.implicitWidth
+                implicitHeight: row.implicitHeight
 
                 BrowseRow {
+                    id: row
+
                     pkg: page.pkg
                     catalog: page.catalog
                     installer: page.installer
@@ -143,7 +148,11 @@ Kirigami.Page {
                 }
 
                 BrowseDetails {
-                    visible: page.open && page.pkg !== null
+                    id: aside
+
+                    x: Look.tapaFoco + Look.e5
+                    y: row.height - height
+                    visible: parent.shown
                     pkg: page.pkg
                     catalog: page.catalog
                 }
