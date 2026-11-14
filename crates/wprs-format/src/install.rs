@@ -62,7 +62,8 @@ pub fn install<F: Fetch>(
         return Err(crate::refuse("version", reason));
     }
     let newest = newest.filter(|i| !explicit && !newer(&release.version, &i.version));
-    if let Some(done) = list.iter().find(|i| i.id == id && i.version == release.version).or(newest) {
+    let same = list.iter().find(|i| i.id == id && i.version == release.version);
+    if let Some(done) = same.map_or(newest, |s| whole(s).then_some(s)) {
         return Ok(done.clone());
     }
     let path = data.join("packages").join(id).join(format!("{}.wpak", release.version));
@@ -72,14 +73,18 @@ pub fn install<F: Fetch>(
     let done = Installed { repo_id, id, version, sha256, size, path, signer, revoked: None };
     locked(data, true, || {
         let mut list = records(data)?;
-        if let Some(same) = list.iter().find(|i| i.id == done.id && i.version == done.version) {
+        let at = list.iter().position(|i| i.id == done.id && i.version == done.version);
+        if let Some(same) = at.map(|i| &list[i]).filter(|s| whole(s)) {
             return Ok(same.clone());
         }
         require(!foreign(&list), "id", "is installed from another repository")?;
         still(data, &done)?;
         let anchors = trusted(data, &done, &list, online.as_ref(), &snap, listing.author.as_deref())?;
         tmp.keep(&done.path)?;
-        list.push(done.clone());
+        match at {
+            Some(i) => list[i] = done.clone(),
+            None => list.push(done.clone()),
+        }
         save(data, &list)?;
         anchors
             .map_or(Ok(()), |a| write(&data.join("anchors.json"), &serde_json::to_vec_pretty(&a)?, true))?;
@@ -166,6 +171,11 @@ fn still(data: &Path, item: &Installed) -> Result<()> {
         Some(reason) => Err(Error::Revoked(format!("{} {} ({reason:?})", item.id, item.version))),
         None => Ok(()),
     }
+}
+
+fn whole(item: &Installed) -> bool {
+    let sized = fs::metadata(&item.path).is_ok_and(|m| m.is_file() && m.len() == item.size);
+    sized && crate::sha256_file(&item.path).is_ok_and(|h| h == item.sha256)
 }
 
 pub fn installed(data: &Path) -> Result<Vec<Installed>> {

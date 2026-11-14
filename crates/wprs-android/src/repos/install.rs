@@ -16,11 +16,7 @@ pub(crate) fn install(repo_id: &str, id: &str) -> Result<Value, Error> {
 
 pub(crate) fn fetched(spec: &str) -> Result<(String, PathBuf), Error> {
     let (data, fetch) = (dir()?, fetch()?);
-    let mut done = wprs_format::install(&data, &fetch, spec, now(), false, false)?;
-    if !done.path.is_file() {
-        wprs_format::remove(&data, &done.id, Some(&done.version))?;
-        done = wprs_format::install(&data, &fetch, spec, now(), false, false)?;
-    }
+    let done = wprs_format::install(&data, &fetch, spec, now(), false, false)?;
     let (uid, _) = store::store(&mut std::fs::File::open(&done.path)?, &format!("{}.wpak", done.id))?;
     drop(std::fs::remove_file(&done.path));
     let mut items = installed();

@@ -130,4 +130,7 @@ muestra en la app: su motivo lo da solo la terminal (`wprs-ctl state`).
 
 Si el archivo falta o está dañado, el panel muestra «No se pudo abrir esta escena» con el motivo,
 «Volver a instalarla» cuando vino de un repositorio, «Mostrar en la carpeta» y «Quitar de la
-biblioteca…» con confirmación.
+biblioteca…» con confirmación. Volver a instalar la misma versión comprueba el archivo contra el
+tamaño y el hash que se anotaron al instalarlo: si falta o no coincide, lo descarga otra vez del
+repositorio con las mismas comprobaciones de firma y de listado que la primera instalación y
+conserva su registro y sus ajustes; si está entero, no descarga nada.
