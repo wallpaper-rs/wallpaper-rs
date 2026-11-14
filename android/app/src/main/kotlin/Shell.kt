@@ -2,7 +2,6 @@ package io.github.wallpaper_rs
 
 import android.app.WallpaperManager
 import androidx.activity.SystemBarStyle
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -33,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import org.json.JSONObject
 
 val DARK_BARS = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
 
@@ -69,10 +66,10 @@ private fun Backdrop(main: Main, veil: Veil) {
         owner.lifecycle.addObserver(watch)
         onDispose { owner.lifecycle.removeObserver(watch) }
     }
+    val screen = remember { main.wallpaperSize() }
     val poster by loaded(null, main.revision.intValue, started.intValue) {
         if (!main.oursInUse()) return@loaded null
-        val uid = (ask("current") as? JSONObject)?.takeUnless { it.isNull("image") }?.getString("image")
-        uid?.let { (ask("thumb", "uid" to it) as? String) }?.let(BitmapFactory::decodeFile)?.asImageBitmap()
+        posterOf(screen)
     }
     val picture = poster ?: return
     val t = tones
