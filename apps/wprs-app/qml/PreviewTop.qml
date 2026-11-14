@@ -12,7 +12,7 @@ Column {
     Text {
         anchors.right: parent.right
         visible: !top.several && top.preview.current !== null
-        text: App.tr("Now on your desktop: %1").arg(top.preview.current ? top.preview.current.title : "")
+        text: App.tr("Now on your desktop: %1", top.preview.current ? top.preview.current.title : "")
         font.family: Look.letraTexto
         font.pixelSize: Look.tCuerpo
         color: Look.bruma
@@ -69,6 +69,6 @@ Column {
         anchors.right: parent.right
         visible: top.several
         icon: "monitor"
-        text: top.preview.output === "" ? App.tr("Changes: every screen") : App.tr("Changes: %1").arg(top.preview.output)
+        text: top.preview.output === "" ? App.tr("Changes: every screen") : App.tr("Changes: %1", top.preview.output)
     }
 }

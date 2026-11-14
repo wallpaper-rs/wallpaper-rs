@@ -13,7 +13,7 @@ Column {
     Estado {
         anchors.right: parent.right
         icon: strip.listed ? "playlist" : "books"
-        text: strip.listed ? App.tr("List «%1» · %2 of %3").arg(strip.session.playlist_name ?? "").arg((strip.session.position ?? 0) + 1).arg(strip.session.count ?? 0) : App.tr("Your library · %1 of %2").arg((strip.session.position ?? 0) + 1).arg(strip.session.count ?? 0)
+        text: strip.listed ? App.tr("List «%1» · %2 of %3", strip.session.playlist_name ?? "", (strip.session.position ?? 0) + 1, strip.session.count ?? 0) : App.tr("Your library · %1 of %2", (strip.session.position ?? 0) + 1, strip.session.count ?? 0)
     }
 
     Row {
@@ -26,7 +26,7 @@ Column {
             item: strip.preview.current
             size: PreviewLook.tira
             opacity: PreviewLook.tiraAhora
-            caption: App.tr("%1 · now").arg(strip.preview.current ? strip.preview.current.title : "")
+            caption: App.tr("%1 · now", strip.preview.current ? strip.preview.current.title : "")
             using: true
         }
 
