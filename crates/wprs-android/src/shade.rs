@@ -1,7 +1,7 @@
 use serde_json::{Value, json};
 use wprs_palette::{AMBAR, BROTE, CORAL, ESCARCHA, Palette, derive, fixed};
 
-pub(crate) fn tones(argb: &[i32], width: usize, height: usize) -> Value {
+pub(crate) fn derived(argb: &[i32], width: usize, height: usize) -> Value {
     let rgb: Vec<u8> = argb.iter().flat_map(|pixel| pixel.to_be_bytes().into_iter().skip(1)).collect();
     named(derive(&rgb, 3, width, height).unwrap_or_else(fixed))
 }
@@ -36,13 +36,13 @@ pub fn tones<'a>(
         pixels.get_region(env, 0, &mut argb)?;
         let wide = width.unsigned_abs() as usize;
         let tall = argb.len().checked_div(wide).unwrap_or(0);
-        Ok(env.new_string(tones(&argb, wide, tall).to_string())?)
+        Ok(env.new_string(derived(&argb, wide, tall).to_string())?)
     })
 }
 
 #[cfg(test)]
 mod tests {
-    use super::tones;
+    use super::derived as tones;
     use wprs_palette::{ESCARCHA, Rgb, contrast};
 
     fn hex(value: &serde_json::Value, key: &str) -> Rgb {
