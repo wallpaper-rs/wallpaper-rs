@@ -1,15 +1,11 @@
 package io.github.wallpaper_rs
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,16 +31,10 @@ fun Field(field: JSONObject, folded: Boolean, fold: () -> Unit, set: (String, An
     when (field.getString("kind")) {
         "slider" -> Slide(field, padded, enabled) { set(key, it) }
         "bool" -> Toggle(label, value == true, enabled) { set(key, it) }
-        "combo" -> Column(padded) {
-            Text(label, style = MaterialTheme.typography.titleSmall)
-            val options = field.optJSONArray("options")
-            Row(Modifier.horizontalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) {
-                (0 until (options?.length() ?: 0)).map { options!!.getJSONObject(it) }.forEach { option ->
-                    val chosen = option.get("value").toString() == value.toString()
-                    val shown = icon(option.optString("icon"))
-                    FilterChip(chosen, { set(key, option.get("value")) }, { Text(option.getString("label")) }, enabled = enabled,
-                        leadingIcon = shown?.let { { Glyph(it, null) } })
-                }
+        "combo" -> {
+            val options = field.optJSONArray("options").let { all -> (0 until (all?.length() ?: 0)).map { all!!.getJSONObject(it) } }
+            Choices(label, options.map { it.get("value").toString() to it.getString("label") }, value.toString()) { chosen ->
+                if (enabled) options.firstOrNull { it.get("value").toString() == chosen }?.let { set(key, it.get("value")) }
             }
         }
         "color" -> Tint(label, value as? String ?: "", field.optBoolean("alpha"), padded, enabled) { set(key, it) }
