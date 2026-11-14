@@ -63,6 +63,15 @@ Sombra { kind: "panel" } }`. Solo existe cuando la ventana dibuja con la tarjeta
 dibujo por software no se crea y la superficie queda como sin ella. No trabaja por cuadro: se
 dibuja una vez y se vuelve a dibujar solo si la superficie cambia.
 
+## Fotos redondeadas
+
+`Foto` es una `Image` (las mismas propiedades, con `PreserveAspectCrop` y carga asíncrona por
+defecto) que redondea sus esquinas con `corner` (por defecto `Look.radio`); `lowCorner` cambia solo
+las dos de abajo (la cabecera del panel chico usa `corner: Look.radioPanel` y `lowCorner: 0`).
+Ejemplo: `Foto { anchors.fill: parent; source: model.picture; sourceSize.width: Look.tapaFoco }`.
+Redondea solo cuando la ventana dibuja con la tarjeta gráfica y la imagen ya cargó; con el dibujo
+por software la foto se ve con esquinas rectas, como una `Image`.
+
 ## Íconos
 
 Los íconos son un juego propio (Phosphor, licencia MIT) dentro de la app, como tema de íconos

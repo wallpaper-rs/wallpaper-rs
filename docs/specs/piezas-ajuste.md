@@ -89,4 +89,5 @@ principal, señal `acted`), `small` (dentro de una lista, sin acción en general
   las piezas los usan y no los vuelven a dibujar.
 - La fila encendida, el panel chico (también el menú de un control) y el aviso llevan su sombra
   (`Sombra`) solo cuando la ventana dibuja con la tarjeta gráfica; con el dibujo por software se
-  ven sin ella. La foto de cabecera del panel chico tiene esquinas rectas bajo el borde redondeado.
+  ven sin ella. La foto de cabecera del panel chico (`Foto`) redondea sus
+  esquinas de arriba con el mismo radio del panel; con el dibujo por software quedan rectas.

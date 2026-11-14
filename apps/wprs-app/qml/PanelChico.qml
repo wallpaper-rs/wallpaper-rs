@@ -66,13 +66,13 @@ QQC2.Popup {
 
             width: parent.width
 
-            Image {
+            Foto {
                 visible: panel.cover.toString() !== ""
                 width: parent.width
                 height: width * 7 / 16
                 source: panel.cover
-                fillMode: Image.PreserveAspectCrop
-                asynchronous: true
+                corner: Look.radioPanel
+                lowCorner: 0
                 sourceSize.width: width
 
                 Rectangle {

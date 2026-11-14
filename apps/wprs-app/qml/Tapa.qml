@@ -54,12 +54,9 @@ Item {
             kind: tapa.lit ? "foco" : "tapa"
         }
 
-        Image {
+        Foto {
             anchors.fill: parent
             source: tapa.picture
-            asynchronous: true
-            cache: true
-            fillMode: Image.PreserveAspectCrop
             sourceSize.width: Look.tapaFoco
             sourceSize.height: Math.round(Look.tapaFoco * 9 / 16)
             opacity: tapa.off ? Look.tapaApagada : 1
