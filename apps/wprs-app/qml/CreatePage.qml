@@ -69,7 +69,8 @@ Kirigami.Page {
     }
 
     function copyOf(entry) {
-        App.query("GetItem", [entry.uid], "Library1", reply => copy && copy.start(reply.item.path, footer.principal, entry.picture));
+        const tile = band.learn.view.currentItem;
+        App.query("GetItem", [entry.uid], "Library1", reply => copy && copy.start(reply.item.path, tile || footer.principal, entry.picture));
     }
 
     function forget() {

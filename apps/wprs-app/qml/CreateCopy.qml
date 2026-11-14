@@ -14,7 +14,9 @@ PanelChico {
     property bool more: false
     readonly property bool refused: facts.verdict === "refused"
     readonly property bool ready: facts.id !== undefined && folder.text !== "" && newId.text !== "" && (!refused || mine.checked)
-    readonly property string place: folder.text.split("/").filter(part => part !== "").slice(-1).join("")
+    readonly property Recents paths: Recents {
+    }
+    readonly property string spot: paths.shown(folder.text)
 
     function start(path, from, picture) {
         file = path;
@@ -49,6 +51,10 @@ PanelChico {
     principal: App.tr("Edit a copy")
     principalIcon: "copy"
     onAccepted: make()
+    onImplicitHeightChanged: {
+        if (visible)
+            place();
+    }
 
     SceneEditor {
         id: helper
@@ -102,7 +108,7 @@ PanelChico {
         font.family: Look.letraTexto
         font.pixelSize: Look.tPie
         color: Look.bruma
-        text: App.tr("It will be created as <b>“%1”</b> in %2", copying.facts.title ?? "", copying.place)
+        text: App.tr("It will be created as <b>“%1”</b> in %2", copying.facts.title ?? "", copying.spot)
     }
 
     QQC2.Button {
