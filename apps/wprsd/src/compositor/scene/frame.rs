@@ -82,16 +82,16 @@ impl SceneState {
             .reels()
             .filter_map(|(id, reel, _)| Some((id, players.get(reel)?.texture.as_ref()?)))
             .collect();
+        match self.guard.as_mut() {
+            Some(guard) => guard.watch(renderer, view, now, &self.spec.pack.props.id)?,
+            None => _ = renderer.luma(view, None)?,
+        }
         let rendered = renderer.render_scene(view, &self.runtime, &frame, inner, quality, &videos).map(drop);
         if view.left_key() != self.left_key {
             (self.left, self.left_key) = (view.left_out(), view.left_key());
         }
         rendered?;
         self.damage = wprs_core::damage::join(self.damage, view.damage().map(|r| r.scaled(inner, size)));
-        if let Some(guard) = self.guard.as_mut() {
-            let image = view.image().filter(|_| view.stats().damage > 0);
-            guard.watch(renderer, image, now, &self.spec.pack.props.id)?;
-        }
         let timed = view.gpu_time();
         let interval = Duration::from_secs(1) / fps;
         self.sent = (std::mem::take(&mut self.sent.0), frame.view, [size.0, size.1], fps);

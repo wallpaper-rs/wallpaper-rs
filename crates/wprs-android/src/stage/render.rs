@@ -40,7 +40,7 @@ impl Stage {
         }
         if crate::power::guarded() != self.guard.is_some() {
             self.guard =
-                crate::power::guarded().then(|| Box::new((FlashGuard::default(), Vec::new(), nanos, None)));
+                crate::power::guarded().then(|| Box::new((FlashGuard::default(), Vec::new(), nanos)));
             if let Some(slot) = self.reports {
                 report::mark(slot, 1, 0);
             }
@@ -146,6 +146,17 @@ impl Stage {
         let ahead = if wake == Wake::Frame { 0 } else { delay * 1_000_000 };
         self.due = (delay > 0 && wake != Wake::Idle).then_some(nanos + ahead);
         self.fps = if wake == Wake::Frame { fps } else { 0 };
+        let measured = crate::counted::gpu(|| r.luma(view, self.guard.as_deref_mut().map(|g| &mut g.1)))?;
+        if let Some((guard, luma, start)) = self.guard.as_deref_mut().filter(|_| measured) {
+            let calming = match guard.watch((nanos - *start) as f64 / 1e9, luma) {
+                wprs_scene::Calming::Steady => 0,
+                wprs_scene::Calming::Slowed(_) => 1,
+                wprs_scene::Calming::Paused => 2,
+            };
+            if let Some(slot) = self.reports {
+                report::mark(slot, 1, calming);
+            }
+        }
         let staged = started.map(|s| s.elapsed().as_secs_f32() * 1e3);
         let rendered =
             crate::counted::gpu(|| r.render_scene(view, &self.runtime, &frame, inner, quality, videos))
@@ -172,19 +183,6 @@ impl Stage {
         rendered?;
         let view: &'a SceneView = view;
         let image = view.image().expect("rendered above");
-        if let Some((guard, luma, start, meter)) = self.guard.as_deref_mut() {
-            let changed = (view.stats().damage > 0).then_some(image);
-            if r.luma(meter.get_or_insert_with(|| r.meter()), changed, luma)? {
-                let calming = match guard.watch((nanos - *start) as f64 / 1e9, luma) {
-                    wprs_scene::Calming::Steady => 0,
-                    wprs_scene::Calming::Slowed(_) => 1,
-                    wprs_scene::Calming::Paused => 2,
-                };
-                if let Some(slot) = self.reports {
-                    report::mark(slot, 1, calming);
-                }
-            }
-        }
         Ok(Shot { image: Some(image), fps: self.fps, delay: soonest(delay, hearing) })
     }
 }

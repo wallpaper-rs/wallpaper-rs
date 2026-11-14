@@ -425,8 +425,10 @@ a 32 × 18 grid. A flash is a pair of opposite changes of at least 10 % of the f
 darker side below 80 %, in at least a thirty-sixth of the grid at once (about a quarter of the
 central field of view); when a scene flashes more than three times a second, it plays slower until
 it flashes at most three times, down to a quarter of its speed, and if it still flashes faster it
-stops at its current frame. The guard measures every frame that changed, reading the grid back from
-the GPU one frame later so that drawing never waits for it; it is off by default.
+stops at its current frame. The guard measures every frame that changed: the grid is drawn by a
+small pass recorded in the frame's own submission and read back from the GPU one frame later, so
+drawing never waits for it and the guard adds no submission of its own. Since the setting is off by
+default, the guard runs by default.
 
 ## Layers
 

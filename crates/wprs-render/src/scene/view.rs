@@ -146,6 +146,13 @@ impl SceneView {
         self.clock.stamping = stamping;
     }
 
+    pub(crate) fn meter(&mut self, on: bool) -> Option<&mut crate::luma::Meter> {
+        if !on {
+            self.pool.meter = None;
+        }
+        on.then(|| self.pool.meter.get_or_insert_with(Default::default))
+    }
+
     pub fn stats(&self) -> SceneStats {
         self.stats
     }

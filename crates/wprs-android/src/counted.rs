@@ -7,12 +7,17 @@ static WATCHED: AtomicI32 = AtomicI32::new(0);
 static COUNT: AtomicU64 = AtomicU64::new(0);
 static BYTES: AtomicU64 = AtomicU64::new(0);
 static ASIDE: AtomicBool = AtomicBool::new(false);
+static GPU: AtomicU64 = AtomicU64::new(0);
 
 fn count(bytes: usize) {
     let watched = WATCHED.load(Relaxed);
-    if watched != 0 && !ASIDE.load(Relaxed) && watched == unsafe { libc::gettid() } {
-        COUNT.fetch_add(1, Relaxed);
-        BYTES.fetch_add(bytes as u64, Relaxed);
+    if watched != 0 && watched == unsafe { libc::gettid() } {
+        if ASIDE.load(Relaxed) {
+            GPU.fetch_add(1, Relaxed);
+        } else {
+            COUNT.fetch_add(1, Relaxed);
+            BYTES.fetch_add(bytes as u64, Relaxed);
+        }
     }
 }
 
@@ -44,6 +49,11 @@ pub(crate) fn watch(start: bool) -> (u64, u64) {
     let counted = (COUNT.swap(0, Relaxed), BYTES.swap(0, Relaxed));
     WATCHED.store(if start { unsafe { libc::gettid() } } else { 0 }, Relaxed);
     counted
+}
+
+#[cfg(test)]
+pub(crate) fn in_gpu_calls() -> u64 {
+    GPU.swap(0, Relaxed)
 }
 
 pub(crate) fn gpu<T>(calls: impl FnOnce() -> T) -> T {

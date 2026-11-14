@@ -8,6 +8,7 @@ const DARK: f32 = 0.8;
 const AREA: usize = CELLS / 36;
 const SLOWEST: f64 = 0.25;
 const WINDOW: f64 = 1.0;
+const TURNS: usize = 256;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Calming {
@@ -26,7 +27,7 @@ pub struct FlashGuard {
 
 impl Default for FlashGuard {
     fn default() -> Self {
-        FlashGuard { cells: Vec::new(), turns: VecDeque::new(), speed: 1.0, paused: false }
+        FlashGuard { cells: Vec::new(), turns: VecDeque::with_capacity(TURNS), speed: 1.0, paused: false }
     }
 }
 

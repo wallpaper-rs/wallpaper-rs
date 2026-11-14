@@ -39,6 +39,7 @@ pub(crate) struct Pool {
     pub(crate) exact: HashMap<u64, crate::GpuImage>,
     pub(crate) ahead: Vec<wgpu::CommandBuffer>,
     pub(crate) profile: Option<super::profile::Profile>,
+    pub(crate) meter: Option<crate::luma::Meter>,
 }
 
 impl Pool {
@@ -77,6 +78,7 @@ impl Pool {
             exact: HashMap::new(),
             ahead: Vec::new(),
             profile: None,
+            meter: None,
         }
     }
 

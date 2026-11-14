@@ -102,19 +102,22 @@ fn the_luminance_grid_follows_the_bright_parts_of_the_frame() {
     let scene = Scene::load(&text.to_string(), &Default::default()).unwrap();
     let mut view = r.scene_view(&scene, &SceneAssets::default(), &Values::new()).unwrap();
     let runtime = Runtime::new(Arc::new(scene), Values::new());
+    let mut luma = Vec::new();
+    assert!(!r.luma(&mut view, Some(&mut luma)).unwrap() && luma.is_empty());
     let frame = runtime.frame(view.view(SIZE), Quality::Q3);
-    let image = r.render_scene(&mut view, &runtime, &frame, SIZE, Quality::Q3, &[]).unwrap().clone();
-    let (mut meter, mut luma) = (r.meter(), Vec::new());
-    assert!(!r.luma(&mut meter, Some(&image), &mut luma).unwrap() && luma.is_empty());
+    r.render_scene(&mut view, &runtime, &frame, SIZE, Quality::Q3, &[]).unwrap();
     r.finish().unwrap();
     let read = (0..100).any(|_| {
-        r.luma(&mut meter, None, &mut luma).unwrap() || {
+        r.luma(&mut view, Some(&mut luma)).unwrap() || {
             std::thread::sleep(std::time::Duration::from_millis(10));
             false
         }
     });
     assert!(read, "the grid was not read once the frame finished");
-    assert!(!r.luma(&mut meter, None, &mut luma).unwrap(), "a grid was read twice");
+    assert!(!r.luma(&mut view, Some(&mut luma)).unwrap(), "a grid was read twice");
+    r.render_scene(&mut view, &runtime, &frame, SIZE, Quality::Q3, &[]).unwrap();
+    r.finish().unwrap();
+    assert!(!r.luma(&mut view, Some(&mut luma)).unwrap(), "a frame that did not change was measured");
     let [w, h] = wprs_scene::FLASH_GRID.map(|v| v as usize);
     assert_eq!(luma.len(), w * h);
     let at = |x: usize, y: usize| luma[y * w + x];

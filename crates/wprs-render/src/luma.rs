@@ -1,6 +1,6 @@
 use crate::readback::{FAILED, MAPPED, Mapped};
 use crate::shader::{bind_group_layout, module, pipeline};
-use crate::{GpuImage, RenderError, Renderer};
+use crate::{GpuImage, RenderError, Renderer, SceneView};
 use std::sync::Arc;
 use std::sync::atomic::Ordering::Relaxed;
 use wprs_scene::FLASH_GRID;
@@ -14,12 +14,21 @@ pub(crate) struct Luma {
     grid: wgpu::Buffer,
 }
 
-pub struct Meter {
+struct Parts {
     target: wgpu::Texture,
     view: wgpu::TextureView,
     buffer: wgpu::Buffer,
+}
+
+#[derive(Default)]
+pub(crate) struct Meter {
+    parts: Option<Parts>,
     state: Arc<Mapped>,
     pending: bool,
+    armed: bool,
+    fresh: bool,
+    failed: bool,
+    values: Vec<f32>,
     group: Option<(u64, wgpu::BindGroup)>,
 }
 
@@ -36,8 +45,37 @@ impl Luma {
     }
 }
 
+impl Meter {
+    pub(crate) fn submitted(&mut self) {
+        let Some(parts) = self.parts.as_ref().filter(|_| std::mem::take(&mut self.armed)) else { return };
+        let flag = self.state.clone();
+        self.state.store(0, Relaxed);
+        parts.buffer.slice(..).map_async(wgpu::MapMode::Read, move |r| {
+            flag.store(if r.is_ok() { MAPPED } else { FAILED }, Relaxed)
+        });
+        self.pending = true;
+    }
+
+    fn settle(&mut self) -> Result<(), String> {
+        let state = self.state.load(Relaxed);
+        let Some(parts) = self.parts.as_ref().filter(|_| self.pending && state != 0) else { return Ok(()) };
+        self.pending = false;
+        if state == FAILED {
+            return Err("cannot map the luminance buffer".into());
+        }
+        let [w, h] = FLASH_GRID;
+        let bytes = parts.buffer.slice(..).get_mapped_range().map_err(|e| e.to_string())?;
+        self.values.clear();
+        self.values.extend((0..h * w).map(|i| f32::from(bytes[(i / w * ROW + i % w * 4) as usize]) / 255.0));
+        drop(bytes);
+        parts.buffer.unmap();
+        self.fresh = true;
+        Ok(())
+    }
+}
+
 impl Renderer {
-    pub fn meter(&self) -> Meter {
+    fn parts(&self) -> Parts {
         let [width, height] = FLASH_GRID;
         let target = self.device.create_texture(&wgpu::TextureDescriptor {
             label: Some("wprs-render luma"),
@@ -56,44 +94,28 @@ impl Renderer {
             mapped_at_creation: false,
         });
         let view = target.create_view(&Default::default());
-        Meter { target, view, buffer, state: Arc::default(), pending: false, group: None }
+        Parts { target, view, buffer }
     }
 
-    pub fn luma(
-        &self,
-        m: &mut Meter,
-        image: Option<&GpuImage>,
-        out: &mut Vec<f32>,
-    ) -> Result<bool, RenderError> {
-        let read = m.pending && self.collect(m, out)?;
-        match image {
-            Some(image) if !m.pending => self.measure(m, image).map(|()| read),
-            _ => Ok(read),
+    pub fn luma(&self, view: &mut SceneView, out: Option<&mut Vec<f32>>) -> Result<bool, RenderError> {
+        let (Some(m), Some(out)) = (view.meter(out.is_some()), out) else { return Ok(false) };
+        m.settle().map_err(RenderError::Readback)?;
+        if std::mem::take(&mut m.failed) {
+            return Err(RenderError::Readback("cannot map the luminance buffer".into()));
         }
-    }
-
-    fn collect(&self, m: &mut Meter, out: &mut Vec<f32>) -> Result<bool, RenderError> {
-        self.polled(wgpu::PollType::Poll)?;
-        match m.state.load(Relaxed) {
-            MAPPED => {}
-            FAILED => {
-                m.pending = false;
-                return Err(RenderError::Readback("cannot map the luminance buffer".into()));
-            }
-            _ => return Ok(false),
+        if !std::mem::take(&mut m.fresh) {
+            return Ok(false);
         }
-        let [w, h] = FLASH_GRID;
-        let bytes =
-            m.buffer.slice(..).get_mapped_range().map_err(|e| RenderError::Readback(e.to_string()))?;
         out.clear();
-        out.extend((0..h * w).map(|i| f32::from(bytes[(i / w * ROW + i % w * 4) as usize]) / 255.0));
-        drop(bytes);
-        m.buffer.unmap();
-        m.pending = false;
+        out.extend_from_slice(&m.values);
         Ok(true)
     }
 
-    fn measure(&self, m: &mut Meter, image: &GpuImage) -> Result<(), RenderError> {
+    pub(crate) fn record_luma(&self, m: &mut Meter, image: &GpuImage, encoder: &mut wgpu::CommandEncoder) {
+        m.failed |= m.settle().is_err();
+        if m.pending {
+            return;
+        }
         let luma = self.luma.get_or_init(|| Luma::new((&self.device, &self.queue)));
         if m.group.as_ref().is_none_or(|(id, _)| *id != image.id) {
             let group = self.device.create_bind_group(&wgpu::BindGroupDescriptor {
@@ -113,14 +135,14 @@ impl Renderer {
             });
             m.group = Some((image.id, group));
         }
-        let mut encoder = self.device.create_command_encoder(&Default::default());
+        let parts = m.parts.get_or_insert_with(|| self.parts());
         {
             let ops = wgpu::Operations {
                 load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
                 store: wgpu::StoreOp::Store,
             };
             let attachment = wgpu::RenderPassColorAttachment {
-                view: &m.view,
+                view: &parts.view,
                 depth_slice: None,
                 resolve_target: None,
                 ops,
@@ -137,16 +159,9 @@ impl Renderer {
         let [width, height] = FLASH_GRID;
         let layout =
             wgpu::TexelCopyBufferLayout { offset: 0, bytes_per_row: Some(ROW), rows_per_image: Some(height) };
-        let to = wgpu::TexelCopyBufferInfo { buffer: &m.buffer, layout };
+        let to = wgpu::TexelCopyBufferInfo { buffer: &parts.buffer, layout };
         let size = wgpu::Extent3d { width, height, depth_or_array_layers: 1 };
-        encoder.copy_texture_to_buffer(m.target.as_image_copy(), to, size);
-        self.scoped(|| self.queue.submit([encoder.finish()]))?;
-        let flag = m.state.clone();
-        m.state.store(0, Relaxed);
-        m.buffer.slice(..).map_async(wgpu::MapMode::Read, move |r| {
-            flag.store(if r.is_ok() { MAPPED } else { FAILED }, Relaxed)
-        });
-        m.pending = true;
-        Ok(())
+        encoder.copy_texture_to_buffer(parts.target.as_image_copy(), to, size);
+        m.armed = true;
     }
 }

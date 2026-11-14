@@ -166,6 +166,9 @@ impl Renderer {
             pass.draw(0..4, 0..1);
             (stats.passes, stats.draws) = (stats.passes + 1, stats.draws + 1);
         }
+        if let Some(m) = pool.meter.as_mut() {
+            self.record_luma(m, src.output, &mut encoder);
+        }
         let profiled = profile.is_some();
         if let Some(p) = profile {
             p.finish(&self.device, &self.queue, &mut encoder);
@@ -174,6 +177,7 @@ impl Renderer {
         encoder.on_submitted_work_done(move || super::flight::done(view, serial));
         let at = Instant::now();
         let submitted = self.queue.submit(pool.ahead.drain(..).chain([encoder.finish()]));
+        pool.meter.iter_mut().for_each(crate::luma::Meter::submitted);
         if profiled {
             super::profile::submitted();
         }

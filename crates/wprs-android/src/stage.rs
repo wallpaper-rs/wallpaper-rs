@@ -5,7 +5,7 @@ use crate::{props, saved};
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicU64, Ordering::Relaxed};
-use wprs_render::{GpuImage, Meter, SceneAssets, SceneView};
+use wprs_render::{GpuImage, SceneAssets, SceneView};
 use wprs_scene::{FlashGuard, Pilot, Press, Quality, Runtime, Spare};
 
 mod heard;
@@ -18,7 +18,7 @@ pub(crate) use heard::allowed as media_allowed;
 
 static RETRIES: AtomicU64 = AtomicU64::new(0);
 
-type Guarded = (FlashGuard, Vec<f32>, i64, Option<Meter>);
+type Guarded = (FlashGuard, Vec<f32>, i64);
 
 mod render;
 pub(crate) mod report;
