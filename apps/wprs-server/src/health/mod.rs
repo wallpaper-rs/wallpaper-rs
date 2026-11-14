@@ -38,6 +38,8 @@ pub fn routes() -> Router {
 struct Open {
     #[serde(default)]
     advanced: bool,
+    #[serde(default)]
+    mail: String,
 }
 
 fn admin(auth: Option<Auth>) -> Option<Auth> {
@@ -77,7 +79,8 @@ async fn show(State(app): St, auth: Option<Auth>, Query(open): Query<Open>) -> R
     let Some(auth) = admin(auth) else {
         return Ok(Redirect::to("/login?next=/admin").into_response());
     };
-    render(&app, &auth, View { advanced: open.advanced, ..View::default() }).await
+    let asked = mail_row::Asked { off: open.mail == "off", ..Default::default() };
+    render(&app, &auth, View { advanced: open.advanced, asked, ..View::default() }).await
 }
 
 pub use facts::Facts;

@@ -52,7 +52,11 @@ pub async fn save(
     let setup = match checked(&draft) {
         Ok(setup) => setup,
         Err(error) => {
-            let asked = Asked { draft: Some(Draft { password: String::new(), ..draft }), error: Some(error) };
+            let asked = Asked {
+                draft: Some(Draft { password: String::new(), ..draft }),
+                error: Some(error),
+                off: false,
+            };
             return render(&app, &auth, View { asked, ..View::default() }).await;
         }
     };

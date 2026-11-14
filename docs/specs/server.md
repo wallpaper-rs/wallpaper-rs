@@ -436,7 +436,9 @@ stored). While it is off nothing is sent and nothing is queued. The settings liv
 `mail_user`, `mail_from`, `mail_to` and `mail_lang` (the language of the administrator who saved
 them, used for every mail); the password goes to `keys/mail.secret` (0600), is never shown again,
 never logged and an empty password field keeps the stored one. «Apagar el correo»
-(`action=off`) drops the keys, the password and every mail still waiting. There is a single
+first asks in the row of the mail (`/admin?mail=off`): the question says what is lost, and only
+its danger button (`action=off`) drops the keys, the password and every mail still waiting;
+«Cancelar» goes back to `/admin` and keeps everything. There is a single
 notice address (`mail_to`) for who moderates and who administers: accounts carry no address.
 
 Mails wait in the table `mail_queue` (`topic` `case`, `health` or `test`, `case_id`, `subject`,

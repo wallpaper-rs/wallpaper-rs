@@ -93,6 +93,20 @@ async fn the_administrator_sets_the_mail_up_and_a_test_mail_arrives() {
         assert!(spanish.contains(word), "{word}");
     }
     assert!(!spanish.contains("a mail secret"));
+    assert!(spanish.contains("href=\"/admin?mail=off#salud\"") && !spanish.contains("¿Apagar el correo?"));
+    let asking = page(&server, "/admin?mail=off", &admin, Some("es")).await;
+    assert!(
+        asking.contains("¿Apagar el correo? El servidor olvida")
+            && asking.contains("form class=\"confirmar\"")
+    );
+    assert!(
+        asking.contains("value=\"off\"")
+            && asking.contains("href=\"/admin#salud\"")
+            && asking.contains("Cancelar")
+    );
+    let kept = page(&server, "/admin", &admin, None).await;
+    assert!(kept.contains("Reaches ana@example.org") && !kept.contains("Turn the mail off?"));
+    assert!(server.dir.path().join("data/keys/mail.secret").exists());
     let response = server.form("/admin/mail", &admin, &[("action", "off")]).await;
     assert_eq!(response.status(), StatusCode::SEE_OTHER);
     assert!(page(&server, "/admin", &admin, None).await.contains("Not set up"));

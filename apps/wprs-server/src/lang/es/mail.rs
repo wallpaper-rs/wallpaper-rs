@@ -108,4 +108,8 @@ pub const TEXTS: super::Texts = &[
     (" · notice sent by mail", " · aviso enviado por correo"),
     (" · notice by mail on its way", " · aviso por correo en camino"),
     (" · the notice by mail did not go out", " · el aviso por correo no salió"),
+    (
+        "Turn the mail off? The server forgets the mail server, the user and the saved password, and drops the notices still waiting to go out. To send mail again you will have to set it up again.",
+        "¿Apagar el correo? El servidor olvida el servidor de correo, el usuario y la contraseña guardada, y descarta los avisos que todavía esperaban salir. Para volver a enviar correo tendrás que configurarlo de nuevo.",
+    ),
 ];

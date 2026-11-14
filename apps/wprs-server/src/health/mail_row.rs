@@ -2,7 +2,9 @@ use super::mail::{Found, Mail};
 use super::rows::{Line, post, state};
 use crate::lang::{since, t, tf};
 use crate::mail::{Security, Setup};
-use crate::ui::{Kind, Row, Tone, button, button_named, field, fix_fold, fold, form_actions};
+use crate::ui::{
+    Kind, Row, Tone, button, button_named, confirm, field, fix_fold, fold, form_actions, link_button,
+};
 use maud::{Markup, html};
 use serde::Deserialize;
 
@@ -45,6 +47,7 @@ impl Draft {
 pub struct Asked {
     pub draft: Option<Draft>,
     pub error: Option<(&'static str, &'static str)>,
+    pub off: bool,
 }
 
 fn security_label(s: Security) -> &'static str {
@@ -76,7 +79,7 @@ fn form(found: &Found, asked: &Asked) -> Markup {
             (field(t("Notices go to"), html! { input type="email" name="to" value=(draft.to) placeholder="you@example.org" required; }, Some(t("Who moderates and who administers get the notices here.")), wrong("to")))
             (form_actions(html! {
                 (button_named(Kind::Primary, "action", "save", t("Save")))
-                @if found.setup.is_some() { (button_named(Kind::Plain, "action", "off", t("Turn the mail off"))) }
+                @if found.setup.is_some() { (link_button(Kind::Danger, "/admin?mail=off#salud", t("Turn the mail off"))) }
             }))
         }
     }
@@ -87,7 +90,22 @@ fn settings(found: &Found, asked: &Asked) -> Markup {
     html! { details.mas open[open] { summary { (t("Mail settings")) } div.mas-cuerpo { (form(found, asked)) } } }
 }
 
+fn asking() -> Line {
+    let ask = t("Turn the mail off? The server forgets the mail server, the user and the saved password, \
+                 and drops the notices still waiting to go out. To send mail again you will have to set it up again.");
+    let buttons = html! {
+        (button_named(Kind::Danger, "action", "off", t("Turn the mail off")))
+        (link_button(Kind::Plain, "/admin#salud", t("Cancel")))
+    };
+    let row =
+        Row::new(html! { (t("Mail")) }).confirm(confirm(ask, t("Confirm"), "/admin/mail", buttons)).lit();
+    Line { row, tone: None }
+}
+
 pub fn mail(found: &Found, asked: &Asked) -> Line {
+    if asked.off && found.setup.is_some() {
+        return asking();
+    }
     let name = Row::new(html! { (t("Mail")) });
     let test = post("/admin/mail/test", button(Kind::Plain, t("Send a test mail")));
     match &found.mail {
