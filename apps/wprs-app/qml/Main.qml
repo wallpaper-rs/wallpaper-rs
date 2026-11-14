@@ -150,8 +150,7 @@ Kirigami.ApplicationWindow {
         }
 
         function onCompose(folder, starter, text) {
-            const media = App.media;
-            App.media = "";
+            const media = App.takeMedia();
             const kind = starter ? (["web", "preset", "image", "video"].includes(starter) ? starter : "scene") : probe.kindOf(folder, text);
             const scened = ["scene", "assets"].includes(kind);
             const properties = {

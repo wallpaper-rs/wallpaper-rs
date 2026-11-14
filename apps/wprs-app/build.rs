@@ -52,6 +52,7 @@ fn main() {
         "src/packer.rs",
         "src/relief.rs",
         "src/scene.rs",
+        "src/scenerecent.rs",
         "src/shadercheck.rs",
         "src/shelf.rs",
         "src/signing.rs",

@@ -23,6 +23,13 @@ QtObject {
     readonly property var outputs: Object.keys(state.outputs ?? {})
     readonly property bool checking: backend.checking
     property string media
+
+    function takeMedia() {
+        const taken = media;
+        media = "";
+        return taken;
+    }
+
     property int serial: 0
     property var pending: ({})
 

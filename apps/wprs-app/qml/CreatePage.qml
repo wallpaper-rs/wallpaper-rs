@@ -9,7 +9,7 @@ Kirigami.Page {
     id: page
 
     property var scenes: []
-    property var projects: JSON.parse(helper.projects() || "[]")
+    property var projects: JSON.parse(recents.projects() || "[]")
     property bool learn: false
     property bool more: false
     property bool changing: false
@@ -42,7 +42,7 @@ Kirigami.Page {
     }
 
     function open(folder) {
-        if (!helper.isProject(folder))
+        if (!recents.isProject(folder))
             return refuse(folder);
         App.compose(folder, "", "");
     }
@@ -72,8 +72,8 @@ Kirigami.Page {
     }
 
     function forget() {
-        helper.forgetProject(current.folder);
-        projects = JSON.parse(helper.projects() || "[]");
+        recents.forgetProject(current.folder);
+        projects = JSON.parse(recents.projects() || "[]");
         reset();
     }
 
@@ -110,13 +110,17 @@ Kirigami.Page {
         id: helper
     }
 
+    Recents {
+        id: recents
+    }
+
     FolderDialog {
         id: folders
 
         onAccepted: {
             const folder = App.path(selectedFolder);
             if (page.missing)
-                helper.forgetProject(page.current.folder);
+                recents.forgetProject(page.current.folder);
             page.open(folder);
         }
     }

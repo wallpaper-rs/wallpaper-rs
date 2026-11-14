@@ -1,3 +1,45 @@
+#[cxx_qt::bridge]
+pub mod qobject {
+    unsafe extern "C++" {
+        include!("cxx-qt-lib/qstring.h");
+        type QString = cxx_qt_lib::QString;
+    }
+
+    #[auto_cxx_name]
+    extern "RustQt" {
+        #[qobject]
+        #[qml_element]
+        type Recents = super::RecentsRust;
+
+        #[qinvokable]
+        fn projects(self: &Recents) -> QString;
+        #[qinvokable]
+        fn forget_project(self: &Recents, folder: &QString);
+        #[qinvokable]
+        fn is_project(self: &Recents, folder: &QString) -> bool;
+    }
+}
+
+use cxx_qt_lib::QString;
+use qobject::Recents;
+
+#[derive(Default)]
+pub struct RecentsRust;
+
+impl Recents {
+    pub fn projects(&self) -> QString {
+        QString::from(&serde_json::to_string(&list()).unwrap_or_default())
+    }
+
+    pub fn forget_project(&self, folder: &QString) {
+        forget(Path::new(&folder.to_string()));
+    }
+
+    pub fn is_project(&self, folder: &QString) -> bool {
+        project::read(Path::new(&folder.to_string())).is_ok()
+    }
+}
+
 use crate::scenefile::projects_dir;
 use serde_json::{Value, json};
 use std::path::{Path, PathBuf};

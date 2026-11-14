@@ -118,18 +118,6 @@ impl SceneEditor {
         QString::from(folder.unwrap_or_default().to_string_lossy().as_ref())
     }
 
-    pub fn projects(&self) -> QString {
-        QString::from(&serde_json::to_string(&crate::scenerecent::list()).unwrap_or_default())
-    }
-
-    pub fn is_project(&self, folder: &QString) -> bool {
-        project::read(Path::new(&folder.to_string())).is_ok()
-    }
-
-    pub fn forget_project(&self, folder: &QString) {
-        crate::scenerecent::forget(Path::new(&folder.to_string()));
-    }
-
     pub fn kind_of(&self, folder: &QString, package_file: &QString) -> QString {
         let file = package_file.to_string();
         let kind = match file.is_empty() {
