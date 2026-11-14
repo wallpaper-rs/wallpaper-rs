@@ -10,7 +10,7 @@ ColumnLayout {
     property string screen: App.outputs.find(name => ((App.state.outputs ?? {})[name] ?? {}).item === permits.uid) ?? ""
     readonly property var uses: (inputs.shown ?? {})[screen] ?? {}
     readonly property var granted: uses.granted ?? []
-    readonly property var wanted: Permisos.asked.filter(input => permits.granted.includes(input) || (permits.uses.without ?? []).includes(input))
+    readonly property var wanted: Permisos.asked.filter(input => permits.granted.includes(input) || (permits.uses.without ?? []).includes(input) || (permits.uses.undecided ?? []).includes(input))
 
     function load() {
         App.query("GetInputs", [], "Inputs1", reply => permits && (permits.inputs = reply));

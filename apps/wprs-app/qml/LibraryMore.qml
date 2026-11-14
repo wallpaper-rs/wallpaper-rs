@@ -55,11 +55,14 @@ ColumnLayout {
         host: more.host
     }
 
-    QQC2.Switch {
+    Fila {
         Layout.fillWidth: true
         visible: !!more.pkg && more.pkg.kind === "scene" && more.pkg.photosensitive !== true
-        text: App.tr("Keep moving when the desktop asks for reduced motion")
+        kind: "llave"
+        text: App.tr("Keep moving")
+        note: App.tr("Even when the desktop asks for reduced motion")
         checked: !!more.pkg && (more.pkg.confirmed ?? []).includes("motion")
+        value: checked ? App.tr("On") : App.tr("Off")
         onToggled: {
             App.act(checked ? "Confirm" : "Unconfirm", [[more.host.uid], "motion"], "Library1");
             checked = Qt.binding(() => !!more.pkg && (more.pkg.confirmed ?? []).includes("motion"));

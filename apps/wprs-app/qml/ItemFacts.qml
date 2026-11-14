@@ -14,14 +14,6 @@ Kirigami.FormLayout {
     }
 
     QQC2.Label {
-        Kirigami.FormData.label: App.tr("File:")
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 14
-        text: host.item.path ?? ""
-        textFormat: Text.PlainText
-        wrapMode: Text.WrapAnywhere
-    }
-
-    QQC2.Label {
         readonly property var made: host.details.about?.platforms ?? []
         readonly property bool elsewhere: made.length > 0 && !made.includes("desktop") && !!host.item.error
         readonly property var refused: host.item.error ? host.details.about?.refused ?? [] : []
@@ -35,7 +27,7 @@ Kirigami.FormLayout {
     QQC2.Label {
         Kirigami.FormData.label: App.tr("Package:")
         visible: !!host.item.package
-        text: host.item.package ? [host.item.package.id, host.item.package.version, host.item.package.license].join(" · ") : ""
+        text: host.item.package ? [host.item.package.version, host.item.package.license].join(" · ") : ""
         textFormat: Text.PlainText
     }
 
