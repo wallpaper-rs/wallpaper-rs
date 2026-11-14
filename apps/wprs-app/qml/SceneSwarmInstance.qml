@@ -12,7 +12,7 @@ ColumnLayout {
     readonly property bool shown: node !== null && node.type === "particles"
     readonly property var values: shown ? (page.view, JSON.parse(page.editor.value(node.pointer + "/instance") || "null")) ?? ({}) : ({})
     readonly property string system: shown ? (page.view, JSON.parse(page.editor.value(node.pointer + "/system") || "\"\"")) : ""
-    readonly property var locked: system ? (page.view, JSON.parse(page.editor.value(SceneSwarmKnobs.pointer(system, "/lock")) || "[]")) : []
+    readonly property var locked: system ? (page.view, JSON.parse(page.editor.value(SceneSwarmKnobs.pointer(system, "/lock")) || "null") ?? []) : []
 
     function put(values, clear, gesture) {
         page.run("layer", {
