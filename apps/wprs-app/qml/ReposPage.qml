@@ -55,10 +55,12 @@ Kirigami.Page {
     background: null
     actions: uploader.shown ? uploader.actions : []
     onAtChanged: open = false
+    onOpenChanged: open && !full && shelf.forceActiveFocus()
     Keys.onEscapePressed: event => {
-        event.accepted = full;
+        event.accepted = full || open;
         if (full)
             flip();
+        open = false;
     }
 
     Browse {
@@ -151,7 +153,6 @@ Kirigami.Page {
                     id: aside
 
                     x: Look.tapaFoco + Look.e5
-                    y: row.height - height
                     visible: parent.shown
                     pkg: page.pkg
                     catalog: page.catalog
