@@ -39,7 +39,6 @@ Item {
     }
 
     function root() {
-        key = repo.key;
         stage = "root";
         stall.sign_root(repo.target, key, publish.sign.word);
     }

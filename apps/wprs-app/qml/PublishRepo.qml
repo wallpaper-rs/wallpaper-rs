@@ -71,6 +71,7 @@ ColumnLayout {
     }
 
     function signRoot() {
+        shelf.key = key;
         shelf.root();
     }
 
