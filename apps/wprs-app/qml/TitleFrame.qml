@@ -68,9 +68,9 @@ Item {
     onBandLowChanged: {
         if (bandLow <= 0)
             need = 0;
-        if (banded)
+        if (banded || placedFor !== 0)
             settle.restart();
-        else if (placedFor === 0)
+        else
             resized();
     }
 
@@ -78,7 +78,7 @@ Item {
         id: settle
 
         interval: Look.paso * 2
-        onTriggered: frame.place(false)
+        onTriggered: frame.place(true)
     }
 
     Timer {
