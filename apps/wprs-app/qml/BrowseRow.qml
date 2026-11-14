@@ -69,9 +69,9 @@ Column {
             id: main
 
             highlighted: !row.older
-            text: row.catalog.veiled(row.p) ? App.tr("Show the picture") : row.own || row.p.update ? App.tr("Update to %1", row.own ? row.p.own.update : notes.newest(row.p)) : row.older ? App.tr("Install the older one…") : row.here || row.catalog.fresh ? App.tr("Set as wallpaper") : App.tr("Install")
+            text: row.catalog.veiled(row.p) ? App.tr("Show the picture") : row.own || row.p.update ? App.tr("Update to %1", row.own ? row.p.own?.update : notes.newest(row.p)) : row.older ? App.tr("Install the older one…") : row.here || row.catalog.fresh ? App.tr("Set as wallpaper") : App.tr("Install")
             icon.name: row.catalog.veiled(row.p) ? "eye" : row.own || row.p.update ? "arrow-circle-up" : row.older ? "clock-counter-clockwise" : row.here || row.catalog.fresh ? "image" : "download-simple"
-            visible: !(row.own && !row.p.own.update)
+            visible: !(row.own && !row.p.own?.update)
             onClicked: row.act()
         }
 

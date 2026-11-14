@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
@@ -29,20 +30,25 @@ ColumnLayout {
     Repeater {
         model: synced.missing
 
-        Kirigami.InlineMessage {
+        ColumnLayout {
             required property var modelData
 
             Layout.fillWidth: true
-            visible: true
-            type: Kirigami.MessageType.Information
-            text: App.tr("%1 (%2) was sent to your server from another computer and is not in this library yet.", modelData.name, App.bytes(modelData.size))
-            actions: [
-                Kirigami.Action {
-                    text: App.tr("Download")
-                    icon.name: "download"
-                    onTriggered: App.act("FetchFile", [modelData.id], "Sync1")
-                }
-            ]
+            spacing: Look.e1
+
+            Kirigami.InlineMessage {
+                Layout.fillWidth: true
+                visible: true
+                type: Kirigami.MessageType.Information
+                text: App.tr("%1 (%2) was sent to your server from another computer and is not in this library yet.", modelData.name, App.bytes(modelData.size))
+            }
+
+            QQC2.Button {
+                Layout.alignment: Qt.AlignRight
+                text: App.tr("Download")
+                icon.name: "download"
+                onClicked: App.act("FetchFile", [modelData.id], "Sync1")
+            }
         }
     }
 }
