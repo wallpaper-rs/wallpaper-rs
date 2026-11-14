@@ -76,8 +76,15 @@ pub fn queued<T>(job: impl FnOnce() -> T) -> T {
 }
 
 fn answer(result: anyhow::Result<Value>) -> QString {
-    let value = result.unwrap_or_else(|e| json!({ "error": e.shown() }));
+    let value = result.unwrap_or_else(|e| json!({ "error": e.shown(), "field": field(&e) }));
     QString::from(&value.to_string())
+}
+
+fn field(error: &anyhow::Error) -> Option<String> {
+    error.chain().find_map(|cause| match cause.downcast_ref::<wprs_format::Error>() {
+        Some(wprs_format::Error::Invalid { field, .. }) => Some(field.clone()),
+        _ => None,
+    })
 }
 
 fn text(q: &QString) -> Option<String> {

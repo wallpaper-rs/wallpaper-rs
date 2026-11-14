@@ -56,13 +56,14 @@ Item {
         stall.publish(repo.target, key, publish.sign.word, repo.where.days);
     }
 
-    function failed(error) {
+    function failed(error, field) {
         const was = stage;
+        const taken = was === "add" && field === "version";
         stage = "";
         publish.work.fail({
-            "kind": was === "root" ? "raiz" : "otro",
-            "title": App.tr("Could not publish to “%1”", repo.name),
-            "text": App.tr("Nothing was lost. Try again, or save it as a file."),
+            "kind": was === "root" ? "raiz" : taken ? "version" : "otro",
+            "title": taken ? App.tr("Version %1 already exists in “%2”", publish.version, repo.name) : App.tr("Could not publish to “%1”", repo.name),
+            "text": taken ? App.tr("A published version is not replaced. Upload it with the next number.") : App.tr("Nothing was lost. Try again, or save it as a file."),
             "details": error
         });
     }
@@ -92,7 +93,7 @@ Item {
     function take(answer) {
         const reply = JSON.parse(answer);
         if (reply.error !== undefined)
-            return failed(reply.error);
+            return failed(reply.error, reply.field);
         if (stage === "create")
             return root();
         if (stage === "root" && made)

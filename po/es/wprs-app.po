@@ -19363,6 +19363,10 @@ msgstr "Publicando…"
 msgid "Version %1 already exists at %2"
 msgstr "Ya existe la versión %1 en %2"
 
+#: apps/wprs-app/qml/PublishShelf.qml
+msgid "Version %1 already exists in “%2”"
+msgstr "Ya existe la versión %1 en «%2»"
+
 #: apps/wprs-app/qml/PublishWork.qml
 msgid "%1 does not know your signature “%2”"
 msgstr "%1 no conoce tu firma «%2»"
