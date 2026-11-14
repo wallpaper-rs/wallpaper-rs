@@ -84,11 +84,7 @@ fn every_list_and_click_target_of_the_main_pages_takes_the_keyboard() {
         assert!(list.contains(needle), "{needle}");
     }
     let row = read("qml/BrowseRow.qml");
-    assert!(
-        row.contains("activeFocusOnTab: row.veiled")
-            && row.contains("Qt.Key_Return")
-            && row.contains("row.reveal()")
-    );
+    assert!(row.contains("row.catalog.reveal(row.pkg)") && row.contains("Show the picture"));
     assert!(
         read("qml/AlignPad.qml").contains("Keys.onPressed")
             && read("qml/RgbPicture.qml").contains("Keys.onPressed")

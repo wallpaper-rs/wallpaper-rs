@@ -107,7 +107,7 @@ fn package_texts_render_as_plain_text() {
     let data = ["modelData", "title", "info", "credit", "item", "details", "name", "playing", "tags"];
     let shown = |line: &str| data.iter().any(|d| line.contains(d));
     let files =
-        ["PackageAbout", "Browse", "LibraryCard", "ListaEditor", "LibraryMore", "ItemFacts", "Installed"];
+        ["PackageAbout", "Browse", "LibraryCard", "ListaEditor", "LibraryMore", "ItemFacts", "BrowseNotes"];
     let files = files
         .into_iter()
         .chain([
