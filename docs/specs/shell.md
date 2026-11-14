@@ -71,7 +71,8 @@ maximiza.
   tono; la función es lo que hace la acción.
 
 El esqueleto sale del lugar: Ajustes, Perfiles y Cuenta usan el de opciones; los editores, el de
-trabajo; el resto, el de título.
+trabajo; el resto, el de título. Una página de título puede pedir otro esqueleto mientras muestra
+un nivel propio con `skeleton` («options»): la Biblioteca lo usa para las opciones de un fondo.
 
 ## Banda baja de las pantallas de título
 

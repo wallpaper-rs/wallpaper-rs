@@ -12,7 +12,7 @@ Kirigami.ApplicationWindow {
     property var held: []
     readonly property var names: ["library", "playlists", "profiles", "providers", "repos", "settings", "account", "scenes"]
     readonly property alias shell: shell
-    readonly property string kind: current < 0 ? "work" : [2, 5, 6].includes(current) ? "options" : "title"
+    readonly property string kind: current < 0 ? "work" : pageStack.currentItem && pageStack.currentItem.skeleton ? pageStack.currentItem.skeleton : [2, 5, 6].includes(current) ? "options" : "title"
     readonly property string backWord: (shell.menu.all.find(entry => entry[0] === shell.menu.owner(from)) ?? [0, ""])[1]
     readonly property list<Component> pages: [
         Component {
