@@ -20255,3 +20255,15 @@ msgstr "Deja la búsqueda vacía para elegir sus fondos a mano."
 #: apps/wprs-app/qml/ListasEstante.qml
 msgid "Search, for example fav:yes"
 msgstr "Búsqueda, por ejemplo fav:yes"
+
+#: apps/wprs-app/qml/Ahora.qml
+msgid "You have no wallpapers yet"
+msgstr "Aún no tienes fondos"
+
+#: apps/wprs-app/qml/Ahora.qml
+msgid "Choose where to start: the first thing that enters your library becomes your wallpaper."
+msgstr "Elige por dónde empezar: lo primero que entre en tu biblioteca queda de fondo."
+
+#: apps/wprs-app/qml/Ahora.qml
+msgid "Still at its poster"
+msgstr "Quieta en su póster"

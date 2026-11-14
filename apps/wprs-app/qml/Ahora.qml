@@ -6,6 +6,7 @@ Column {
 
     property var page
     property string picked
+    property bool none: false
     property bool compact: false
     readonly property var screens: App.state.outputs ?? {}
     readonly property bool several: App.outputs.length > 1
@@ -16,6 +17,7 @@ Column {
     readonly property var info: screens[screen] ?? {}
     readonly property string item: info.item ?? ""
     readonly property var playlist: info.playlist ?? null
+    readonly property string title: none ? App.tr("You have no wallpapers yet") : details.title ?? ""
     property var details: ({})
     property bool fresh: false
     readonly property alias controls: controls
@@ -37,8 +39,9 @@ Column {
 
     function load() {
         const uid = item;
-        details = {};
-        if (uid !== "")
+        if (uid === "")
+            details = {};
+        else
             App.query("GetItem", [uid], "Library1", reply => ahora && ahora.item === uid && (ahora.details = reply.item ?? {}));
     }
 
@@ -71,7 +74,7 @@ Column {
 
     Text {
         anchors.right: parent.right
-        visible: !ahora.several && !ahora.compact
+        visible: (!ahora.several || ahora.none) && !ahora.compact
         text: App.tr("On your desktop")
         font.family: Look.letraTexto
         font.pixelSize: Look.tCuerpo
@@ -81,7 +84,7 @@ Column {
 
     Pantallas {
         anchors.right: parent.right
-        visible: ahora.several && !ahora.compact
+        visible: ahora.several && !ahora.none && !ahora.compact
         current: ahora.screen
         onPicked: name => ahora.choose(name)
     }
@@ -90,7 +93,7 @@ Column {
         anchors.right: parent.right
         topPadding: Look.e2
         visible: text !== ""
-        text: ahora.details.title ?? ""
+        text: ahora.title
         width: Math.min(implicitWidth, Look.tapaFoco * 2)
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignRight
@@ -103,12 +106,33 @@ Column {
     Text {
         anchors.right: parent.right
         topPadding: Look.e3
-        visible: text !== "" && !ahora.compact
+        visible: text !== "" && !ahora.none && !ahora.compact
         text: [ahora.kindWord, ahora.info.credit ? ahora.info.credit.provider : ""].filter(t => t).join(" · ")
         font.family: Look.letraTexto
         font.pixelSize: Look.tNombre
         font.weight: Font.Medium
         color: Look.escarcha
+    }
+
+    Estado {
+        anchors.right: parent.right
+        topPadding: Look.e3
+        visible: !ahora.none && ahora.info.quality_auto === "still"
+        tone: "ambar"
+        text: App.tr("Still at its poster")
+    }
+
+    Text {
+        anchors.right: parent.right
+        topPadding: Look.e3
+        visible: ahora.none
+        width: Math.min(implicitWidth, Look.tapaFoco * 2)
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignRight
+        text: App.tr("Choose where to start: the first thing that enters your library becomes your wallpaper.")
+        font.family: Look.letraTexto
+        font.pixelSize: Look.tNombre
+        color: Look.bruma
     }
 
     Item {
@@ -118,20 +142,22 @@ Column {
 
     Estado {
         anchors.right: parent.right
-        visible: ahora.fresh
+        visible: ahora.fresh && !ahora.none
         tone: "brote"
         text: App.tr("Set a moment ago")
     }
 
     Item {
         width: 1
-        height: ahora.compact ? Look.e2 : Look.e5
+        height: Look.e5
+        visible: !ahora.none
     }
 
     AhoraMandos {
         id: controls
 
         anchors.right: parent.right
+        visible: !ahora.none
         screen: ahora.screen
         info: ahora.info
         item: ahora.item
@@ -144,7 +170,7 @@ Column {
         anchors.right: parent.right
         topPadding: Look.e3
         screen: ahora.screen
-        playlist: ahora.playlist
+        playlist: ahora.none ? null : ahora.playlist
     }
 
     AhoraTarea {

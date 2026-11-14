@@ -17,7 +17,7 @@ Item {
     readonly property real bandLow: page && page.full !== true && page.bandLow > 0 ? page.bandLow : 0
     readonly property real upperLow: bandLow > 0 && page.upperHeight > 0 ? page.upperHeight : 0
     readonly property real bandBottom: height - Look.margenAbajo
-    readonly property real bandTop: Math.max(sideBottom, bandBottom - (bandLow > 0 && page.bandHigh > 0 ? page.bandHigh : bandBottom))
+    readonly property real bandTop: Math.max(sideBottom, bandBottom - (bandLow > 0 && page && page.bandHigh > 0 ? page.bandHigh : bandBottom))
     readonly property bool fits: bandLow > 0 && bandBottom - bandTop >= bandLow && bandTop - Look.e3 - column.y >= upperLow
     property bool banded: false
     property real placedFor: 0
@@ -100,6 +100,23 @@ Item {
         anchors.rightMargin: Look.margen
         spacing: Look.e3
 
+        Loader {
+            anchors.right: parent.right
+            active: frame.owned
+            visible: active
+            sourceComponent: frame.owned ? frame.page.now : null
+        }
+
+        Ahora {
+            id: ahora
+
+            anchors.right: parent.right
+            visible: !frame.owned
+            page: frame.page
+            none: frame.none
+            compact: frame.upperLow > 0
+        }
+
         Rectangle {
             anchors.right: parent.right
             visible: frame.none
@@ -128,22 +145,6 @@ Item {
                     font.pixelSize: Look.tPie
                 }
             }
-        }
-
-        Loader {
-            anchors.right: parent.right
-            active: frame.owned
-            visible: active
-            sourceComponent: frame.owned ? frame.page.now : null
-        }
-
-        Ahora {
-            id: ahora
-
-            anchors.right: parent.right
-            visible: !frame.none && !frame.owned
-            page: frame.page
-            compact: frame.bandLow > 0
         }
     }
 

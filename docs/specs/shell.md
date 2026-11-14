@@ -50,6 +50,8 @@ de la cuenta y por último el aviso pasajero (`showPassiveNotification`), que se
 con su botón de cerrar. Los tres se dibujan con la misma pieza `Aviso` (ver `piezas-ajuste.md`): el
 error del servicio en Coral y con cruz (se oculta hasta que cambie), el pasajero con su acción
 («Deshacer», por ejemplo) y su tono. Mientras el puntero o el foco están sobre el aviso no se va.
+En una página con banda baja el aviso va arriba de la banda, a la izquierda, sin tapar la fila de
+filtros ni la ficha; en las demás, al pie de la columna.
 
 ## Tamaño
 
@@ -173,8 +175,14 @@ Arriba a la derecha de las pantallas de título está lo que hay de fondo en la 
 - Poner un fondo a mano sobre una pantalla que rota avisa «La rotación de «Tarde» se detuvo porque
   pusiste «Aurora boreal».» con Reanudar.
 - Trabajos en curso («Haciendo las miniaturas: 9 de 12») con Cancelar, y los fallidos con su motivo.
-- En una página que usa la banda baja el bloque se acorta: sin la tira de pantallas, sin la línea
-  de tipo y sin trabajos.
+- Si la escena de esa pantalla pesa demasiado y queda en su póster (`quality_auto` = `still`), una
+  línea Ámbar «Quieta en su póster» bajo la línea de tipo. El motivo de una pausa no se muestra: va
+  solo a la terminal.
+- Sin ningún fondo puesto: «En tu escritorio», «Aún no tienes fondos», «Elige por dónde empezar: lo
+  primero que entre en tu biblioteca queda de fondo.» y la nota de la imagen de ejemplo, sin mandos.
+- En la Biblioteca y en Listas, que usan la banda baja, el bloque va entero. Solo se acorta (sin
+  tira, sin línea de tipo y sin trabajos) en una página que pone su propio bloque arriba de la
+  banda. En una ventana baja la banda pasa a la columna y el bloque queda arriba, entero.
 
 ## Listas
 
