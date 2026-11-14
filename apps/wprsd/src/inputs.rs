@@ -3,6 +3,7 @@ mod hub;
 mod keys;
 mod kwin;
 mod meter;
+mod needs;
 mod parallax;
 pub(crate) mod store;
 #[cfg(test)]
@@ -22,6 +23,7 @@ use wprs_wayland::Window;
 pub(crate) use control::reported;
 pub(crate) use keys::{Keys, draft_key};
 pub(crate) use meter::{bands, metered};
+pub(crate) use needs::needs;
 pub(crate) use parallax::{pointer_over, relief};
 pub(crate) use store::{declined_path, grants_path, load, load_bound, save};
 
@@ -118,26 +120,6 @@ async fn pace(hub: Arc<Hub>) {
         hub.moved.notified().await;
         (hub.wake)();
         tokio::time::sleep(PACE).await;
-    }
-}
-
-pub(crate) fn needs(
-    output: &str,
-    (scene, title, key): (&str, &str, &str),
-    [audio, pointer, clicks, network, rgb, media]: [bool; 6],
-) {
-    let Some(hub) = hub() else { return };
-    let (scene, title, key, granted) = (scene.into(), title.into(), key.into(), BTreeSet::new());
-    let need = SceneInputs { scene, audio, pointer, clicks, network, rgb, media, title, key, granted };
-    let mut control = lock(&hub.control);
-    let changed = match audio || pointer || clicks || network || rgb || media {
-        true => control.shown.insert(output.into(), need.clone()) != Some(need),
-        false => control.shown.remove(output).is_some(),
-    };
-    drop(control);
-    if changed {
-        hub.poke.notify_one();
-        (hub.changed)();
     }
 }
 

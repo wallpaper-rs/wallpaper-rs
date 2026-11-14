@@ -116,10 +116,7 @@ impl Daemon {
         };
         self.changes.changed("library", changed);
         self.moved(what);
-        match on && what == "photosensitive" && self.compositor.running() {
-            true => crate::choice::unhold(self),
-            false => Ok(()),
-        }
+        Ok(())
     }
 
     pub fn moved(&self, what: &str) {

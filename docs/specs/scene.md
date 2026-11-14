@@ -420,7 +420,7 @@ graphics API (Wayland and X11 surfaces, the phone) still compose every frame who
 API exposes neither the age of the buffer it hands out nor a partial present; the scene behind
 them keeps redrawing only what changed.
 
-Where the user turns on `playback.flash_guard`, the engine measures the brightness of each frame on
+While the user leaves `playback.allow_flashing` off, the engine measures the brightness of each frame on
 a 32 × 18 grid. A flash is a pair of opposite changes of at least 10 % of the full brightness, the
 darker side below 80 %, in at least a thirty-sixth of the grid at once (about a quarter of the
 central field of view); when a scene flashes more than three times a second, it plays slower until

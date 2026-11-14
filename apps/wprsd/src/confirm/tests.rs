@@ -110,6 +110,8 @@ fn show(hub: &Hub, scene: &str, output: &str, key: &str) {
         title,
         key,
         granted,
+        without: Default::default(),
+        undecided: Default::default(),
     };
     lock(&hub.control).shown.insert(output.into(), shown);
 }

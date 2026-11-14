@@ -40,6 +40,13 @@ impl Daemon {
         if key.starts_with("shortcuts.") {
             crate::browse::shortcuts::rebind();
         }
+        if key == "playback.allow_flashing" {
+            self.library_changed(Vec::new());
+            self.changes.changed("repos", Vec::new());
+            if value == "true" && self.compositor.running() {
+                crate::choice::unhold(self)?;
+            }
+        }
         if key == "library.hide_mature" || key == "library.show_mature" {
             self.library_changed(Vec::new());
             self.changes.changed("repos", Vec::new());

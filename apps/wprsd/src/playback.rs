@@ -48,8 +48,9 @@ pub fn stop_sections(
 impl Daemon {
     pub fn start(&self, key: &str, output: &str) -> Result<()> {
         let (output, revoked, on_battery) = (target_output(output)?, self.revoked(), self.state().on_battery);
+        let flashing = self.state().config.playback.allow_flashing;
         let resolved =
-            self.store.read(|lib| lib.resolve(key, now(), on_battery, &excluded(lib, &revoked)))?;
+            self.store.read(|lib| lib.resolve(key, now(), on_battery, &excluded(lib, &revoked, flashing)))?;
         if resolved.uids.is_empty() {
             return Err(failed("the playlist has no items to show"));
         }

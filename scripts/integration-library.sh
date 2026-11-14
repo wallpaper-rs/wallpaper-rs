@@ -125,12 +125,12 @@ ctl config library.hide_mature true
 [ "$(reply "r['total']" Library1 Search suu "storm" 0 0), $(reply "r['total']" Library1 Search suu "content:mature" 0 0)" = "0, 1" ] ||
   fail "hidden mature content: $(ctl lib search storm)"
 ctl config library.hide_mature false
-refused "the user has not allowed it yet" Library1 Apply ssss "$storm" TEST-7 "" ""
+refused "flashing wallpapers are disabled\|are turned off" Library1 Apply ssss "$storm" TEST-7 "" ""
 if ctl lib apply "$storm" -o TEST-7 </dev/null 2>"$WORK/flash.err"; then fail "a photosensitive package was applied without consent"; fi
-grep -q "photosensitive epilepsy.*lib confirm photosensitive" <(tr '\n' ' ' <"$WORK/flash.err") ||
+grep -q "config playback.allow_flashing true" <(tr '\n' ' ' <"$WORK/flash.err") ||
   fail "photosensitivity warning: $(cat "$WORK/flash.err")"
-ctl lib show "$storm" | grep '^photosensitive = yes, asks before it is shown$' >/dev/null || fail "lib show: $(ctl lib show "$storm")"
-ctl lib confirm photosensitive "$storm" && ctl lib apply "$storm" -o TEST-7
+ctl lib show "$storm" | grep '^photosensitive = yes, disabled$' >/dev/null || fail "lib show: $(ctl lib show "$storm")"
+ctl config playback.allow_flashing true && ctl lib apply "$storm" -o TEST-7
 expect "s['outputs']['TEST-7']['item'], s['outputs']['TEST-7']['background']" "('$storm', '#000000')"
 ctl background '#102030' -o TEST-7 && ctl lib apply "$storm" -o TEST-7
 ctl lib apply "$harbour" -o TEST-7
@@ -138,7 +138,7 @@ expect "s['outputs']['TEST-7']['item'], s['outputs']['TEST-7']['background']" "(
 ctl lib apply "$storm" -o TEST-7
 source "$(dirname "$0")"/integration-flash.sh
 [ "$(reply "r['item']['package']['confirmed'], r['about']['content'], r['about']['descriptors']" Library1 GetItem s "$storm")" = \
-  "(['photosensitive'], 'mature', ['violence'])" ] || fail "rated details: $(ctl lib show "$storm" --json)"
+  "([], 'mature', ['violence'])" ] || fail "rated details: $(ctl lib show "$storm" --json)"
 sed -i 's/"1.0.0"/"1.1.0"/' "$WORK/storm/manifest.json"
 ctl pack build "$WORK/storm" -o "$WORK/import/storm-1.1.wpak" >/dev/null
 job=$(bus Library1 Import asb 1 "$WORK/import/storm-1.1.wpak" false | out "d[0]")

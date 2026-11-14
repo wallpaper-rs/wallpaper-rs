@@ -8,8 +8,7 @@ use clap::{ArgGroup, Subcommand};
 use futures_util::TryFutureExt;
 use wprs_client::Client;
 
-const DECISIONS: [&str; 7] =
-    ["mature", "photosensitive", "motion", "hide_zone", "hide_language", "hide_gpu", "hide_storage"];
+const DECISIONS: [&str; 6] = ["mature", "motion", "hide_zone", "hide_language", "hide_gpu", "hide_storage"];
 
 #[derive(Subcommand, Debug)]
 pub enum Lib {
@@ -126,7 +125,7 @@ pub enum Lib {
         size: String,
     },
     #[command(
-        about = "Show mature thumbnails of packages, allow photosensitive packages to be shown, let scenes keep moving when the desktop asks for reduced motion, or hide the time zone, the language, the graphics card or storage from a web page"
+        about = "Show mature thumbnails of packages, let scenes keep moving when the desktop asks for reduced motion, or hide the time zone, the language, the graphics card or storage from a web page"
     )]
     Confirm {
         #[arg(value_parser = DECISIONS, help = "What to allow")]

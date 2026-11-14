@@ -30,7 +30,7 @@
     <string name="auto_refresh">Buscar actualizaciones en los repositorios cada día</string>
     <string name="flashing">Destellos</string>
     <string name="mature_warning">Este fondo tiene contenido para adultos.</string>
-    <string name="flashing_warning">Este fondo destella o muestra patrones rápidos que pueden provocar crisis a personas con epilepsia fotosensible.</string>
+    <string name="flashing_warning">Este fondo destella o muestra patrones rápidos que pueden provocar crisis a personas con epilepsia fotosensible. Los fondos que destellan están deshabilitados hasta que los permitas.</string>
     <string name="show_anyway">Mostrar igualmente</string>
     <string name="lacks_gpu">Necesita shaders de cálculo, que la gráfica de este teléfono no tiene, así que puede dibujarse lento o con partes de menos.</string>
     <string name="lacks_display2">Su color alrededor de la imagen y su extensión sobre todas las pantallas no se usan en el teléfono.</string>
@@ -98,7 +98,7 @@
     <string name="model_terms">%1$s (%2$s) se descarga de %3$s con la licencia %4$s (%5$s). Después, los mapas de profundidad se calculan en el teléfono y tus fotos no salen de él.</string>
     <string name="downloads_off">La descarga del modelo de profundidad está desactivada en Ajustes</string>
     <string name="allow_download">Permitir descargar el modelo de profundidad</string>
-    <string name="flash_guard">Frenar o detener los fondos que destellan más de tres veces por segundo</string>
+    <string name="allow_flashing">Permitir fondos que destellan</string>
     <string name="scene_capture">Dejar que las escenas reaccionen al sonido que suena</string>
     <string name="depth_model">Modelo de profundidad (%s)</string>
     <string name="delete_model">Borrar</string>

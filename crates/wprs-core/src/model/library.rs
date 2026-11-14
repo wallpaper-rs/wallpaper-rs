@@ -21,6 +21,8 @@ model! {
         #[serde(default)]
         pub exposes: Vec<String>,
         #[serde(default)]
+        pub flash_disabled: bool,
+        #[serde(default)]
         pub unshown: Option<String>,
         #[serde(default)]
         pub base: Option<String>,
@@ -167,9 +169,8 @@ model! {
     }
 }
 
-pub fn asks(what: &str, content: Option<&str>, photosensitive: Option<bool>, confirmed: &[String]) -> bool {
-    let flagged = if what == "mature" { content == Some("mature") } else { photosensitive == Some(true) };
-    flagged && !confirmed.iter().any(|c| c == what)
+pub fn asks(what: &str, content: Option<&str>, confirmed: &[String]) -> bool {
+    what == "mature" && content == Some("mature") && !confirmed.iter().any(|c| c == what)
 }
 
 pub fn exposes(kind: &str, facets: &[String], confirmed: &[String], network: bool) -> Vec<String> {
@@ -183,6 +184,6 @@ pub fn exposes(kind: &str, facets: &[String], confirmed: &[String], network: boo
 
 impl PackageInfo {
     pub fn asks(&self, what: &str) -> bool {
-        asks(what, self.content.as_deref(), self.photosensitive, &self.confirmed)
+        asks(what, self.content.as_deref(), &self.confirmed)
     }
 }

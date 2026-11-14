@@ -10,7 +10,7 @@ pub struct Playback {
     #[serde(with = "fps")]
     pub max_fps: u32,
     pub software_parallax: bool,
-    pub flash_guard: bool,
+    pub allow_flashing: bool,
     pub scene_sound: bool,
     pub scene_capture: bool,
     pub duck: bool,
@@ -23,14 +23,14 @@ pub struct Playback {
 impl Default for Playback {
     fn default() -> Self {
         let (volume, muted, max_fps) = (0.5, true, fps::DISPLAY);
-        let (software_parallax, flash_guard, scene_sound, scene_capture) = (false, false, true, true);
+        let (software_parallax, allow_flashing, scene_sound, scene_capture) = (false, false, true, true);
         let (duck, quality) = (false, QualityChoice::Auto);
         Self {
             volume,
             muted,
             max_fps,
             software_parallax,
-            flash_guard,
+            allow_flashing,
             scene_sound,
             scene_capture,
             duck,

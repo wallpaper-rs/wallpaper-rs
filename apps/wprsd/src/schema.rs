@@ -52,7 +52,7 @@ fn options() -> Vec<Field> {
         flag("playback.muted"),
         values(range(option("playback.max_fps", FieldKind::Int), 1.0, 240.0, Some(1.0)), &[fps::WORD]),
         flag("playback.software_parallax"),
-        flag("playback.flash_guard"),
+        flag("playback.allow_flashing"),
         flag("playback.scene_sound"),
         flag("playback.scene_capture"),
         flag("playback.duck"),

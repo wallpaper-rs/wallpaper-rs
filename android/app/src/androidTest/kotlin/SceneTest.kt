@@ -31,11 +31,11 @@ class SceneTest : SceneBase() {
 
     @Test
     fun theFlashGuardIsOffUntilChosen() {
-        assertEquals("false", Native.setting("playback.flash_guard", null))
-        assertEquals("true", Native.setting("playback.flash_guard", "true"))
+        assertEquals("false", Native.setting("playback.allow_flashing", null))
+        assertEquals("true", Native.setting("playback.allow_flashing", "true"))
         show("Pulse")
         assertTrue(waitFor { frames.get() > 0 })
-        assertEquals("false", Native.setting("playback.flash_guard", "false"))
+        assertEquals("false", Native.setting("playback.allow_flashing", "false"))
     }
 
     @Test

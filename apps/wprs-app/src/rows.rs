@@ -77,8 +77,7 @@ impl ItemModel {
     pub fn summary(mut self: Pin<&mut Self>) {
         let all = |f: fn(&ItemSummary) -> bool| self.grid.selected().all(f);
         let flags = (all(|i| i.removable), all(|i| i.imported), all(|i| i.favorite));
-        let flashing =
-            self.grid.selected().any(|i| i.package.as_ref().is_some_and(|p| p.asks("photosensitive")));
+        let flashing = self.grid.selected().any(|i| i.package.as_ref().is_some_and(|p| p.flash_disabled));
         let count = self.grid.selected().count() as i32;
         self.as_mut().set_selected(count);
         self.as_mut().set_removable(flags.0);
@@ -119,7 +118,7 @@ impl ItemModel {
             11 => QVariant::from(&row.selected),
             12 => text(&item.tags.join(", ")),
             13 => QVariant::from(&item.package.as_ref().is_some_and(|p| p.asks("mature"))),
-            14 => QVariant::from(&item.package.as_ref().is_some_and(|p| p.asks("photosensitive"))),
+            14 => QVariant::from(&item.package.as_ref().is_some_and(|p| p.flash_disabled)),
             _ => QVariant::default(),
         }
     }

@@ -190,12 +190,12 @@ The rating and the photosensitivity flag are declared by the author and never in
 blur the thumbnails of packages rated `mature` until the user chooses to show them, from the
 details of the item or with a click or a key on the blurred thumbnail of a screen in the app's
 Settings page or the tray, and `library.hide_mature` leaves them out of searches and repository
-listings. A photosensitive package shows a clear warning before it is applied, in the app,
-`wprs-ctl` and the Android app, and the app can allow it from its details; the app's Settings page
-and the tray warn on the screen that shows one. Until the user allows it the daemon refuses to
-apply it (`Unconfirmed`), a profile leaves it out (the screen reports why) and playlists skip it.
-Both decisions are kept once per package id (`Library1.Confirm`,
-`wprs-ctl lib confirm mature|photosensitive ITEM`). The self-hosted server refuses packages rated
+listings. A photosensitive package carries the notice `flashes and is disabled` in every listing (app,
+`wprs-ctl` and the Android app) while the general setting `playback.allow_flashing` is off, which
+is its default: the daemon refuses to apply it (`FlashingDisabled`), a profile leaves it out (the
+screen reports why) and playlists and rotation skip it. With the setting on nothing is said. The
+mature decision is kept once per package id (`Library1.Confirm`,
+`wprs-ctl lib confirm mature ITEM`). The self-hosted server refuses packages rated
 `mature`.
 
 ## Inputs

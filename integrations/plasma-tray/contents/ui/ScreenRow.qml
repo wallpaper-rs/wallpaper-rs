@@ -20,7 +20,7 @@ ColumnLayout {
     readonly property var pkg: details.package ?? {}
     readonly property var confirmed: pkg.confirmed ?? []
     readonly property bool mature: pkg.content === "mature" && !confirmed.includes("mature") && daemon.current?.options?.["library.show_mature"] !== true
-    readonly property bool allowed: confirmed.includes("photosensitive")
+    readonly property bool allowed: pkg.flash_disabled !== true
 
     function load() {
         const item = row.item;

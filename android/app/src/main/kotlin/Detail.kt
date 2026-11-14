@@ -29,6 +29,8 @@ import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 @Composable
@@ -55,7 +57,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     val screen = remember(window) { main.wallpaperSize() }
     val preview = @Composable { modifier: Modifier ->
         Box(modifier.padding(horizontal = 16.dp), Alignment.Center) {
-            if (asks != null) Caution(asks) { main.act { ask("confirm", "uid" to uid, "what" to asks) } }
+            if (asks != null) Caution(asks) { main.act { withContext(Dispatchers.IO) { if (asks == "photosensitive") Native.setting("playback.allow_flashing", "true") else ask("confirm", "uid" to uid, "what" to asks) } } }
             else if (ready && (item?.refused != true || item?.animated == null)) {
                 val shape = Modifier.aspectRatio(screen.width.coerceAtLeast(1) / screen.height.coerceAtLeast(1).toFloat(), true)
                 Live(main, main.revision.intValue, Depth.working.value, modifier = if (picture) shape.framing(main, uid, screen) else shape)
@@ -142,7 +144,7 @@ private fun Caution(asks: String, confirm: () -> Unit) = Column(Modifier.fillMax
     val flashing = asks == "photosensitive"
     Glyph(if (flashing) Ph.Warning else Ph.Lock, null, Modifier.padding(8.dp), MaterialTheme.colorScheme.error)
     Text(stringResource(if (flashing) R.string.flashing_warning else R.string.mature_warning), Modifier.padding(16.dp), style = MaterialTheme.typography.bodyLarge)
-    QuietAction(confirm) { Text(stringResource(R.string.show_anyway)) }
+    QuietAction(confirm) { Text(stringResource(if (flashing) R.string.allow_flashing else R.string.show_anyway)) }
 }
 
 @Composable

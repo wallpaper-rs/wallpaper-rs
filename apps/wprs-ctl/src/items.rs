@@ -78,6 +78,10 @@ pub fn details(reply: ItemDetails) -> String {
         ("package", package.as_ref().map(|p| format!("{} {} ({}, {})", p.id, p.version, p.kind, p.license))),
         ("installed", reply.installed.map(|p| format!("{} from {}", p.version, prefix(&p.repo_id)))),
         ("revoked", reply.revoked.map(|r| text(&r))),
+        (
+            "flashes",
+            package.as_ref().filter(|p| p.flash_disabled).map(|_| tr(told("flashes and is disabled"))),
+        ),
         ("credit", credit),
         ("presets", Some(list(presets)).filter(|p| !p.is_empty())),
         ("playlists", Some(list(reply.playlists.iter().map(|p| &p.name))).filter(|p| !p.is_empty())),

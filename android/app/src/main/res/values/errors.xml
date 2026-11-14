@@ -13,7 +13,7 @@
     <string name="error_android_codes_differ_key">The codes differ: the key did not move; someone may stand between the devices</string>
     <string name="error_android_comparison_waiting_start">No comparison is waiting; start again</string>
     <string name="error_android_config">The settings cannot be read: %1$s</string>
-    <string name="error_android_confirm_photosensitive_wallpaper">Confirm this photosensitive wallpaper first</string>
+    <string name="error_android_flashing_disabled">This wallpaper flashes and is disabled: allow wallpapers that flash in the settings</string>
     <string name="error_android_depth_cancelled">The depth map was cancelled</string>
     <string name="error_android_depth_failed">The depth map failed: %1$s</string>
     <string name="error_android_depth_model_missing">The depth model is not installed: download it first</string>

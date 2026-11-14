@@ -48,8 +48,8 @@ pub fn seed() -> u32 {
     RandomState::new().hash_one(std::time::SystemTime::now()) as u32
 }
 
-pub fn excluded(lib: &Library, revoked: &[PathBuf]) -> HashSet<String> {
-    let flashing = lib.unconfirmed_flashing().unwrap_or_default();
+pub fn excluded(lib: &Library, revoked: &[PathBuf], flashing_allowed: bool) -> HashSet<String> {
+    let flashing = if flashing_allowed { Vec::new() } else { lib.flashing().unwrap_or_default() };
     revoked.iter().filter_map(|p| lib.resolve_item(p.to_str()?).ok()).chain(flashing).collect()
 }
 

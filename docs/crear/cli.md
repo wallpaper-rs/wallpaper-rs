@@ -206,7 +206,7 @@ wprs-ctl input grant org.example.mi-escena pointer
 wprs-ctl input touch DP-1 0.8,0.2
 ```
 
-`input grant ESCENA ENTRADA` concede una entrada (`audio`, `pointer`, `clicks`, `media`…) a la
+`input decide ESCENA -a ENTRADAS -x ENTRADAS` responde de una vez a todo lo que pide la escena (las de `-a` se conceden, las de `-x` se dejan fuera y la escena corre sin ellas); `input grant ESCENA ENTRADA` concede una entrada (`audio`, `pointer`, `clicks`, `media`…) a la
 escena que se muestra (`ESCENA` es el `id` de su manifiesto, que `scene new mi-escena` deja como
 `org.example.mi-escena`; no imprime nada, y `input status` confirma el permiso); `input touch SALIDA X,Y` pone un puntero inventado en esa fracción de la
 pantalla (`--stop` lo quita) y `input status` dice qué usa y qué tiene concedido cada pantalla. Sirven

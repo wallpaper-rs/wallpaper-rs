@@ -41,8 +41,10 @@ pub(super) fn scenes() {
         about["about"]["description"].as_str().unwrap().contains("\n\nDestella con el ritmo y"),
         "{about}"
     );
-    assert_eq!(ask(json!({ "op": "confirm", "uid": pulse, "what": "photosensitive" })), Value::Null);
-    assert_eq!(ask(json!({ "op": "item", "uid": pulse }))["package"]["confirmed"], json!(["photosensitive"]));
+    assert_eq!(ask(json!({ "op": "item", "uid": pulse }))["package"]["flash_disabled"], json!(true));
+    assert!(ask(json!({ "op": "pick", "choice": { "item": pulse } }))["error"].is_string());
+    crate::settings::setting("playback.allow_flashing", Some("true")).unwrap();
+    assert_eq!(ask(json!({ "op": "item", "uid": pulse }))["package"]["flash_disabled"], json!(false));
     assert_eq!(ask(json!({ "op": "pick", "choice": { "item": pulse } })), Value::Null);
     ask(json!({ "op": "pick", "choice": null }));
     let dusk = listed.as_array().unwrap().iter().find(|i| i["title"] == "Dusk hills").unwrap();

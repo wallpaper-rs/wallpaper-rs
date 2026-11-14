@@ -32,7 +32,7 @@ Kirigami.Dialog {
             if (dialog.uid !== uid)
                 return;
             const pkg = reply.item.package;
-            dialog.flashing = !!pkg && pkg.photosensitive === true && !(pkg.confirmed ?? []).includes("photosensitive");
+            dialog.flashing = pkg?.flash_disabled === true;
             dialog.exposes = pkg?.exposes ?? [];
             dialog.sounds = reply.item.kind === "video" || (pkg?.facets ?? []).some(f => f === "audio" || f === "sound");
             dialog.spread = reply.about?.spread === true;
@@ -59,14 +59,11 @@ Kirigami.Dialog {
 
     title: App.tr("Apply to…")
     standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-    onOpened: standardButton(Kirigami.Dialog.Ok).enabled = Qt.binding(() => dialog.known)
+    onOpened: standardButton(Kirigami.Dialog.Ok).enabled = Qt.binding(() => dialog.known && !dialog.flashing)
     onAccepted: {
         const args = [uid, output.currentValue, fit.currentValue, preset.currentValue];
         const done = () => dialog && dialog.hear();
-        if (flashing)
-            App.act("Confirm", [[uid], "photosensitive"], "Library1", () => App.act("Apply", args, "Library1", done));
-        else
-            App.act("Apply", args, "Library1", done);
+        App.act("Apply", args, "Library1", done);
     }
 
     function hear() {
@@ -81,7 +78,7 @@ Kirigami.Dialog {
             Layout.fillWidth: true
             visible: dialog.flashing
             type: Kirigami.MessageType.Warning
-            text: App.tr("This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy. Apply it only if that is safe for whoever sees this screen; you will not be asked again for this package.")
+            text: App.tr("This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy. Wallpapers that flash are disabled: allow them in the settings to apply it.")
         }
 
         PrivacyNotice {

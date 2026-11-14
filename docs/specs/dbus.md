@@ -98,7 +98,8 @@ Every error carries a readable English message. An error raised without a descri
 | `io.github.wallpaper_rs.Error.Stale` | A repository's signed index expired; retry with `allow_stale = true` after asking the user |
 | `io.github.wallpaper_rs.Error.Conflict` | A playlist edit by index found other entries than expected: `the playlist changed; reload it` |
 | `io.github.wallpaper_rs.Error.Newer` | A package needs a newer wallpaper-rs: a newer manifest version, a `requires.engine` this version does not meet or a feature of `requires.features` it does not know (see `package.md`) |
-| `io.github.wallpaper_rs.Error.Unconfirmed` | `Apply` of a photosensitive package the user has not allowed yet (`this wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy; the user has not allowed it yet`); ask, then call `Confirm(uids, "photosensitive")` and apply again. `Grant`/`GrantPackage` from a caller that must be confirmed: the user is asked in a desktop notification; treat it as pending, not as a failure |
+| `io.github.wallpaper_rs.Error.FlashingDisabled` | `Apply` of a package that flashes while `playback.allow_flashing` is off (`this wallpaper flashes and flashing wallpapers are disabled; allow flashing in the settings to play it`); turn the setting on and apply again |
+| `io.github.wallpaper_rs.Error.Unconfirmed` | `Grant`/`GrantPackage` from a caller that must be confirmed: the user is asked in a desktop notification; treat it as pending, not as a failure |
 | `org.freedesktop.DBus.Error.AccessDenied` | `Grant`/`GrantPackage` while the same question rests after the user answered *Not now*, closed the notification or left it unanswered (ten minutes, listed in `GetInputs().quiet`), or with no notification service to ask; `SetPointer` from a caller that may not report the pointer |
 
 If `library.db` cannot be opened (for example because a newer build wrote it), the daemon still
@@ -716,7 +717,7 @@ Changes one setting and saves the configuration. Keys and their current values a
 | `playback.software_parallax` | move depth parallax images even when the GPU is emulated on the CPU (such as llvmpipe), with 8 steps at 15 frames per second at most | `false` |
 | `parallax.fill` | how the layers of a depth parallax picture are filled behind near objects (see "Depth layers"): `lama` (the LaMa model, when it and ONNX Runtime are installed, else `simple`), `simple` (push-pull extension of the nearest background) or `off` (no layers: the picture stays still); not synced, because each device has its own default | `lama` (`simple` on the phone) |
 | `parallax.layers` | number of depth layers of a picture, `4` to `6` | `5` |
-| `playback.flash_guard` | measure the brightness of every scene frame and slow down, or stop, a scene that flashes more than three times a second (see "Cost and frame rate" in `scene.md`); it costs a small read back from the GPU per frame | `false` |
+| `playback.allow_flashing` | play the packages marked as photosensitive; while it is off they are listed with the notice `flashes and is disabled` (`PackageInfo.flash_disabled`), `Apply` refuses them with `FlashingDisabled` and playlists and rotation skip them; the setting is off by default and nothing asks per wallpaper. While it is off the compositor also measures the brightness of every scene frame and slow down, or stop, a scene that flashes more than three times a second (see "Cost and frame rate" in `scene.md`); it costs a small read back from the GPU per frame | `false` |
 | `playback.scene_sound` | let scenes play their sound layers (see "Scene sound"); `false` keeps every scene silent, whatever its permissions and volume, and leaves the sound of videos alone | `true` |
 | `playback.scene_capture` | let scenes that were granted `audio` follow the sound that plays (see "Inputs"); `false` closes the audio capture for every scene | `true` |
 | `playback.auto_pace` | how the automatic quality of the daemon, of phones and of `wprs-ctl scene bench --quality auto` uses the frame rate (see "Cost and frame rate" in `scene.md`): `detail` may halve the pace of a heavy scene, never under 30 frames a second and never under a lower user cap, to keep a higher level; `smooth` never changes it. A fixed quality level is never touched; on the desktop the halved pace halves the rate of that output | `detail` |
@@ -984,7 +985,7 @@ package its files come from (`<id> <version>`), and `spread` is `true` when its 
 spread it over every screen (`display.span` is `all-outputs`), so that clients propose `span` when
 it is applied. `animated` is the path of its animated preview
 (`previews.animated`), copied once into the thumbnail cache, or `null`; clients play it only while
-it is on screen, on mains power, and once a mature or photosensitive package was allowed. A package this device cannot play keeps its
+it is on screen, on mains power, and once a mature package was allowed. A package this device cannot play keeps its
 details, with the reason in `error` (`this package needs a newer version of wallpaper-rs: it uses
 …` or `this package is made for … only`). `variants` lists the installed preset packages whose base
 is this package (`{uid, name}`), and for a preset package `item.package.base` is the id of its base
@@ -1060,9 +1061,8 @@ playlists) and stops the playlists of the affected outputs. `fit` is a fit or `"
 current one. `preset` is `""`, a preset uid, or a preset name looked up first among the item's
 presets and then among the global ones; its `fit` and `background` are applied first, and an
 explicit `fit` wins over the preset's. `Failed` before changing anything when the item is
-missing, has an `error` (invalid packages), or is a revoked package, and `Unconfirmed` when it
-is a photosensitive package the user has not confirmed: clients warn that it flashes or shows
-fast patterns that can trigger seizures, and apply it only after the user agrees. The item's path,
+missing, has an `error` (invalid packages), or is a revoked package, and `FlashingDisabled` when it
+is a photosensitive package and `playback.allow_flashing` is off: clients show the notice `flashes and is disabled` and offer the setting instead. The item's path,
 the effective fit and background and the preset uid (as a label) are written to the affected
 configuration sections, and the use is recorded once per affected connected output; when the
 library cannot record it (a full disk, a locked database), the item stays shown, the call
@@ -1074,16 +1074,13 @@ packages are rendered live (see "Scenes"); the videos they contain are copied th
 
 Records a decision of the user about the packages of these items, once per package id, so that
 every version and copy of the package keeps it. `what` is `mature` (clients stop blurring the
-thumbnails of a package rated `mature`), `photosensitive` (`Apply` and playlists may show it) or
+thumbnails of a package rated `mature`) or
 `motion` (the scene keeps moving while the desktop asks for reduced motion, for gentle scenes the
 user chose; every screen that shows a scene is configured again; `InvalidArgs` for a package marked
 `photosensitive`, and a choice recorded before a new version marked it so is ignored while it is);
 anything else returns `InvalidArgs`, an unknown uid `NotFound`. Items that are no packages are
 accepted and change nothing. `PackageInfo.confirmed` lists the decisions, and the `library` change
-names every item that shares a package id with these items. Allowing `photosensitive` while the
-active profile left a screen out for that reason (`OutputState.error`) gives that screen what the
-profile sets for it once its packages are allowed, without another `Profiles1.Activate`; other
-screens and settings keep what they show now.
+names every item that shares a package id with these items.
 
 ### `Unconfirm(as uids, s what)`
 
@@ -1096,7 +1093,7 @@ card (WebGL keeps working with a generic renderer name) and its own storage (it 
 default a page sees all four, and `PackageInfo.exposes` lists what the package's page sees now:
 `zone`, `language`, `gpu`, `storage` (only for pages that declare `web.storage_kib`) and `network`
 (only for pages that declare origins and hold the `network` grant of `Inputs1`), so that every
-client shows the same notice. `PackageInfo.unshown` is `null`, or, for a web page that this build or
+client shows the same notice. `PackageInfo.flash_disabled` is `true` for a photosensitive package while `playback.allow_flashing` is off (`RepoPackage.flash_disabled` likewise, and `RepoPackage.asks` lists what the release asks for); `PackageInfo.unshown` is `null`, or, for a web page that this build or
 computer cannot show (no `wprs-web` helper or no WPE WebKit 2.54 or newer), the same reason that
 applying it would return, so clients warn before it is applied. Every screen that shows a web page is configured again, and its page
 starts again with the new settings.
@@ -1146,8 +1143,8 @@ daemon and needs no client:
   not switch unless `advance_while_paused` is set; when it becomes active and a switch is
   overdue, it switches once. Disconnected outputs do not switch either, and switch once when
   they come back after a missed switch.
-- Missing items, items that cannot be decoded, revoked packages and photosensitive packages the
-  user has not confirmed are left out, and so are videos on battery with
+- Missing items, items that cannot be decoded, revoked packages and photosensitive packages while
+  `playback.allow_flashing` is off are left out, and so are videos on battery with
   `skip_videos_on_battery`. If a playlist has nothing to show, the output
   keeps its last picture, or shows its background color with the reason in
   `GetState().outputs[x].error`.
@@ -1372,7 +1369,7 @@ profile of that name is replaced and keeps its uid, rules and priority.
 Applies a profile at once and marks it active; `""` only clears the active marker. Outputs not in
 the profile lose their own wallpaper. Entries whose item, file or playlist is gone or cannot be
 shown are skipped with a warning, and those outputs show the default section; so are photosensitive
-packages the user has not allowed (`Confirm`), and `GetState().outputs[x].error` says why until that
+packages while `playback.allow_flashing` is off, and `GetState().outputs[x].error` says why until that
 output is changed again. Unknown or invalid settings are skipped too. The configuration is saved
 once and every output is reconfigured.
 
@@ -1827,13 +1824,25 @@ service can ask.
 read `shown`, never gets the grant. Callers are treated as for `Grant`. `NotFound` while no output
 shows that package.
 
+### `Decide(s scene, s key, as allow, as deny)`
+
+The answer to the one question a scene asks: every input in `allow` is granted and every input in
+`deny` is declined, as `GrantPackage` and `Revoke` do for the package with id `scene` bound to `key`
+(`""` while one package has that id). Only the app, the tray and `wprs-ctl` may call it
+(`AccessDenied` otherwise). `InvalidArgs` for an unknown input, an input in both lists or a malformed
+id; nothing is changed then. Inputs left out of both lists keep their state. The inputs in `deny`
+stay off, the scene runs without them and `shown` lists them in `without`; the ones the user has not
+answered yet are in `undecided`. A scene that asks for several inputs at once gets one notification
+for all of them, with *Allow* and *Not now* for each input, and its answer is applied as `Decide`
+does; the scene starts meanwhile without what is not allowed.
+
 ### `Revoke(s scene, s input)`
 
 Takes `input` back from `scene` and stops it at once if that scene was using it. It also records
 that the user declined `input` for `scene`, in `inputs-declined.json` next to `inputs.json` (mode
 `0600`), so that clients stop asking; `Grant` and `GrantPackage` clear that record.
 
-Clients ask once per wallpaper, scene or web page, and every text speaks of the wallpaper: when `shown` lists an input that is neither in its `granted` nor
+Clients ask once per wallpaper, scene or web page, for all its inputs together (`Decide`), and every text speaks of the wallpaper: when `shown` lists an input that is neither in its `granted` nor
 declined for the scene, whether the scene was applied from a client, a playlist or `wprs-ctl`, the app and
 the tray explain what is captured and that nothing is stored or sent, and offer *Allow*
 (`GrantPackage` with the `key` of that output) or *Not now* (`Revoke`); while the notification
@@ -2993,7 +3002,7 @@ web page runs with every layer of its sandbox, and `"reduced"` when the web engi
 its own sandbox or the page could not get its own empty network, so clients can warn about it.
 `helper` is the process id of the web helper that draws the page of that output, and `null` for
 other content or while no helper runs.
-`flashes` is `""`, or `"slowed"` or `"paused"` once `playback.flash_guard` slowed or stopped the
+`flashes` is `""`, or `"slowed"` or `"paused"` once the guard of `playback.allow_flashing` (off) slowed or stopped the
 scene of that output. `left_out` lists the package effects the scene of that output plays without,
 as `the effect <id> was left out: <reason>`, and the uses the hard budget drew with their lighter
 variant as `the effect <id> on <layer> was drawn with its lighter variant: <reason>`; it is a note,
@@ -3132,7 +3141,7 @@ enum ItemKind { Image, Video, Package }
 struct PackageInfo {
     id: String, version: String, kind: String, license: String, content: Option<String>,
     photosensitive: Option<bool>, facets: Vec<String>, confirmed: Vec<String>, exposes: Vec<String>,
-    unshown: Option<String>,
+    unshown: Option<String>, flash_disabled: bool,
 }
 struct About {
     schema: String, title: String, description: String, changes: String, authors: Vec<String>,
@@ -3241,7 +3250,7 @@ struct RepoPackage {
     kind: String, title: String, description: String, tags: Vec<String>, license: String,
     authors: Vec<String>, size: u64, published: Time, preview: bool, animated: bool, versions: Vec<String>,
     installed: Vec<String>, update: bool, content: Option<String>, photosensitive: Option<bool>,
-    facets: Vec<String>, changes: String,
+    facets: Vec<String>, changes: String, asks: Vec<String>, flash_disabled: bool,
 }
 struct BrowsePage { model: u32, serial: u64, query: String, total: u32, offset: u32, packages: Vec<RepoPackage> }
 struct InstalledPackage {
@@ -3256,7 +3265,7 @@ struct RefreshOutput { repos: Vec<Repo>, updates: Vec<Update>, revoked: Vec<Inst
 enum Input { Audio, Pointer, Clicks, Network, Rgb, Media, MediaNetwork, AudioNetwork }
 struct SceneInputs {
     scene: String, audio: bool, pointer: bool, clicks: bool, network: bool, rgb: bool, media: bool, title: String,
-    key: String, granted: Vec<Input>,
+    key: String, granted: Vec<Input>, without: BTreeSet<Input>, undecided: BTreeSet<Input>,
 }
 struct MediaStatus {
     listening: bool, players: u32, playing: bool, track: bool, cover: bool, remote_covers: bool, using: Vec<String>,

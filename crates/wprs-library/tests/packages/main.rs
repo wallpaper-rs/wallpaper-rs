@@ -78,12 +78,11 @@ fn rated_packages_are_searchable_and_confirmed_once_per_package() {
             Vec::<String>::new()
         )
     );
-    assert_eq!(library.unconfirmed_flashing().unwrap(), std::slice::from_ref(&storm.uid));
-    library.confirm(&[&storm.uid], "photosensitive").unwrap();
+    assert_eq!(library.flashing().unwrap(), std::slice::from_ref(&storm.uid));
     library.confirm(&[&storm.uid, &storm.uid], "mature").unwrap();
     let confirmed = library.item(&storm.uid).unwrap().package.unwrap().confirmed;
-    assert_eq!(confirmed, ["mature", "photosensitive"]);
-    assert!(library.unconfirmed_flashing().unwrap().is_empty());
+    assert_eq!(confirmed, ["mature"]);
+    assert!(matches!(library.confirm(&[&storm.uid], "photosensitive"), Err(Error::Invalid(..))));
     assert!(matches!(library.confirm(&[&storm.uid], "spoilers"), Err(Error::Invalid(..))));
     assert!(matches!(library.confirm(&["01NOPE"], "mature"), Err(Error::NotFound(..))));
     assert_eq!(library.search("content:unrated", NOW, 0, 1).unwrap()[0].tags, ["sea"]);
@@ -93,7 +92,7 @@ fn rated_packages_are_searchable_and_confirmed_once_per_package() {
         library.search("content:mature", NOW, 0, 5).unwrap().into_iter().map(|i| i.uid).collect();
     both.sort();
     let copy = both.iter().find(|uid| **uid != storm.uid).unwrap();
-    assert_eq!(library.item(copy).unwrap().package.unwrap().confirmed, ["mature", "photosensitive"]);
+    assert_eq!(library.item(copy).unwrap().package.unwrap().confirmed, ["mature"]);
     assert_eq!(library.confirm(&[&storm.uid], "mature").unwrap(), both);
     let calm = library.search("content:unrated", NOW, 0, 1).unwrap().remove(0).uid;
     assert_eq!(library.confirm(&[&calm, &calm], "mature").unwrap(), std::slice::from_ref(&calm));

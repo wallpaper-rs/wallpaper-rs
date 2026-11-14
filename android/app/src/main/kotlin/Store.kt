@@ -56,7 +56,7 @@ class Item(json: JSONObject) {
     val lacks = json.optJSONArray("lacks")?.let { list -> List(list.length(), list::getString) }.orEmpty()
     private val confirmed = pack?.optJSONArray("confirmed")?.let { list -> List(list.length(), list::getString) }.orEmpty()
     val mature = pack?.optString("content") == "mature" && "mature" !in confirmed && !Unveil.mature
-    val flashing = pack?.optBoolean("photosensitive") == true && "photosensitive" !in confirmed
+    val flashing = pack?.optBoolean("flash_disabled") == true
     val moving = "motion" in confirmed
     val failing: String? = json.takeUnless { it.isNull("error") }?.optString("error")?.takeIf { it.isNotEmpty() }
     val flashes = pack?.optBoolean("photosensitive") == true

@@ -27,7 +27,7 @@ RowLayout {
     readonly property var confirmed: pkg.confirmed ?? []
     readonly property bool favorite: details.favorite === true
     readonly property bool mature: pkg.content === "mature" && !confirmed.includes("mature") && daemon.state?.options?.["library.show_mature"] !== true
-    readonly property bool allowed: confirmed.includes("photosensitive")
+    readonly property bool allowed: pkg.flash_disabled !== true
 
     LeftOut {
         id: reasons

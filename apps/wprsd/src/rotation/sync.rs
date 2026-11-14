@@ -20,10 +20,11 @@ impl Daemon {
         on_battery: bool,
         now: i64,
     ) -> (Vec<Rotation>, Found) {
+        let flashing = self.state().config.playback.allow_flashing;
         let (revoked, uids) =
             (self.revoked(), assigned.iter().map(|(_, uid, _)| uid).collect::<HashSet<_>>());
         let read = self.store.read(|lib| {
-            let exclude = excluded(lib, &revoked);
+            let exclude = excluded(lib, &revoked, flashing);
             let found = |uid: &str| {
                 Ok::<_, Error>((lib.playlist(uid)?, lib.resolve(uid, now, on_battery, &exclude)?))
             };

@@ -31,14 +31,14 @@ fn options_are_listed_and_validated() {
     c.set_option("repos.vote_counts", "false").unwrap();
     assert!(!c.repos.vote_counts && c.set_option("repos.vote_counts", "sometimes").is_err());
     assert!(
-        !c.playback.flash_guard && c.playback.scene_sound && c.playback.scene_capture && !c.playback.duck
+        !c.playback.allow_flashing && c.playback.scene_sound && c.playback.scene_capture && !c.playback.duck
     );
     c.set_option("playback.duck", "true").unwrap();
     assert!(c.playback.duck && c.set_option("playback.duck", "often").is_err());
     c.set_option("playback.scene_capture", "false").unwrap();
     assert!(!c.playback.sanitized().scene_capture && c.playback.scene_sound);
-    c.set_option("playback.flash_guard", "true").unwrap();
-    assert!(c.playback.sanitized().flash_guard);
+    c.set_option("playback.allow_flashing", "true").unwrap();
+    assert!(c.playback.sanitized().allow_flashing);
     c.set_option("library.hide_mature", "true").unwrap();
     c.set_option("library.show_mature", "true").unwrap();
     assert!(c.library.hide_mature && c.library.show_mature);

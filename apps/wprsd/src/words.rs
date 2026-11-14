@@ -2,6 +2,10 @@ use std::collections::HashMap;
 use std::sync::LazyLock;
 use wprs_core::locale::{catalog, languages};
 
+mod ask;
+
+pub use ask::{answers, flashing_disabled, request_group};
+
 const CATALOGS: &[(&str, &str)] = include!(concat!(env!("OUT_DIR"), "/catalogs.rs"));
 static CATALOG: LazyLock<HashMap<String, String>> = LazyLock::new(|| catalog(CATALOGS, &languages()));
 
@@ -81,34 +85,6 @@ pub fn scripts_off() -> String {
 
 pub fn script_stopped(why: &str) -> String {
     tr("A script of this scene stopped and the scene goes on without it: %1").replace("%1", why)
-}
-
-pub fn answers() -> (String, String) {
-    (tr("Allow"), tr("Not now"))
-}
-
-pub fn request(title: &str, input: wprs_core::model::Input) -> (String, String) {
-    let safe = |c| match c {
-        '<' => '‹',
-        '>' => '›',
-        '&' => '＆',
-        c => c,
-    };
-    let title: String = title.chars().map(safe).collect();
-    match input {
-        wprs_core::model::Input::Media => (
-            tr("Let a wallpaper show what plays?"),
-            tr("Let “%1” show the title, artist, album, cover and progress of what the media player plays? Nothing of it is kept, logged or sent.").replace("%1", &title),
-        ),
-        wprs_core::model::Input::Audio => (
-            tr("Let a wallpaper follow the sound?"),
-            tr("Let “%1” follow the sound that plays? The sound is turned into levels on this computer; nothing is recorded, kept or sent.").replace("%1", &title),
-        ),
-        _ => (
-            tr("Let a wallpaper follow the pointer?"),
-            tr("Let “%1” follow the pointer? Only its latest position over the screen reaches the wallpaper, and it is never kept.").replace("%1", &title),
-        ),
-    }
 }
 
 pub fn web_missing() -> String {

@@ -22,10 +22,10 @@ Item {
     Kirigami.PromptDialog {
         id: allower
 
-        title: App.tr("Allow these wallpapers?")
-        subtitle: App.tr("They flash or show fast patterns that can trigger seizures in people with photosensitive epilepsy. Allow them only if that is safe for whoever sees your screens; screens and playlists may then show them without asking again.")
+        title: App.tr("Allow wallpapers that flash?")
+        subtitle: App.tr("Wallpapers that flash or show fast patterns can trigger seizures in people with photosensitive epilepsy. Allow them only if that is safe for whoever sees your screens; every screen and playlist may then show them.")
         standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-        onAccepted: App.act("Confirm", [dialogs.owner.uids, "photosensitive"], "Library1")
+        onAccepted: App.act("SetOption", ["playback.allow_flashing", "true"])
     }
 
     Kirigami.Dialog {

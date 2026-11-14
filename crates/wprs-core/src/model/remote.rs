@@ -112,6 +112,10 @@ model! {
         #[serde(default)]
         pub facets: Vec<String>,
         #[serde(default)]
+        pub asks: Vec<String>,
+        #[serde(default)]
+        pub flash_disabled: bool,
+        #[serde(default)]
         pub changes: String,
         #[serde(default)]
         pub revealed: bool,

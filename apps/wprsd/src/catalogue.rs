@@ -81,6 +81,7 @@ impl Daemon {
             .collect();
         let total = items.len() as u32;
         let (langs, revealed) = (languages(), self.revealed());
+        let allowed = self.state().config.playback.allow_flashing;
         let package = |item: wprs_format::Item| {
             let revealed = revealed.contains(&format!("{}/{}", item.repo_id, item.id));
             let release = item.release;
@@ -110,6 +111,8 @@ impl Daemon {
                 content: release.content.map(|c| if c.mature() { "mature" } else { "general" }.into()),
                 photosensitive: release.photosensitive,
                 facets: release.facets,
+                asks: release.asks,
+                flash_disabled: release.photosensitive == Some(true) && !allowed,
                 changes,
                 revealed,
                 featured: item.featured,

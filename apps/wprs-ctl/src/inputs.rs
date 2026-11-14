@@ -1,24 +1,35 @@
 use crate::cli::JSON;
-use crate::show::{self, list};
-use crate::told::{fill, told, tr};
-use crate::usage;
-use anyhow::{Result, bail};
+use crate::show;
+use anyhow::Result;
 use clap::{Subcommand, ValueEnum};
-use std::collections::BTreeSet;
-use wprs_client::{Client, error_name, parse};
-use wprs_core::dbus::error::UNCONFIRMED;
-use wprs_core::model::{Input, InputsReply};
+use wprs_client::Client;
+use wprs_core::model::Input;
 
 mod asking;
+mod giving;
 mod position;
 mod shown;
 
 pub use asking::{asking, asking_changed, asking_for};
+use giving::{decide, grant};
 use position::at_fraction;
 use shown::status;
 
 #[derive(Subcommand, Debug)]
 pub enum Inputs {
+    #[command(
+        about = "Answer for every input a shown scene asks for in one go: allow some, leave the others out; the scene runs without what is left out"
+    )]
+    Decide {
+        #[arg(help = "Package id of the scene")]
+        scene: String,
+        #[arg(short, long, value_delimiter = ',', help = "Inputs to allow")]
+        allow: Vec<Kind>,
+        #[arg(short = 'x', long, value_delimiter = ',', help = "Inputs to leave out")]
+        without: Vec<Kind>,
+        #[arg(short, long, help = "The screen whose package answers, when several show one with this id")]
+        output: Option<String>,
+    },
     #[command(
         about = "Let the scene package shown now use an input whenever it is shown; another package with the same id does not get it"
     )]
@@ -141,6 +152,9 @@ pub async fn run(client: &Client, command: Inputs) -> Result<()> {
         Inputs::Grant { scene, input, output } => {
             grant(client, &scene, input.name(), output.as_deref()).await?
         }
+        Inputs::Decide { scene, allow, without, output } => {
+            decide(client, &scene, (&allow, &without), output.as_deref()).await?
+        }
         Inputs::Revoke { scene, input } => inputs.revoke(&scene, input.name()).await?,
         Inputs::Status { json } => show::reply(inputs.get_inputs().await?, json, status)?,
         Inputs::Pointer { x, y } => inputs.set_pointer(x, y).await?,
@@ -160,38 +174,3 @@ pub async fn run(client: &Client, command: Inputs) -> Result<()> {
 
 #[cfg(test)]
 mod tests;
-
-async fn grant(client: &Client, scene: &str, input: &str, output: Option<&str>) -> Result<()> {
-    let reply: InputsReply = parse(&client.inputs.get_inputs().await?)?;
-    let shown = reply.shown.iter().filter(|(name, s)| s.scene == scene && output.is_none_or(|o| o == *name));
-    let keys: BTreeSet<&str> = shown.map(|(_, s)| s.key.as_str()).filter(|k| !k.is_empty()).collect();
-    let sent = match (Vec::from_iter(keys).as_slice(), output) {
-        ([key], _) => client.inputs.grant_package(scene, key, input).await,
-        ([], Some(output)) => bail!("{}", fill(told("%1 does not show %2"), &[&output, &scene])),
-        ([], None) => client.inputs.grant(scene, input).await,
-        _ => {
-            let outputs = reply.shown.iter().filter(|(_, s)| s.scene == scene).map(|(name, _)| name);
-            let many = fill(
-                told("more than one package with the id %1 is shown; choose one with --output"),
-                &[&scene],
-            );
-            return Err(usage(format!("{many} ({})", list(outputs))));
-        }
-    };
-    match sent.map_err(wprs_client::explain) {
-        Err(e) if error_name(&e) == Some(UNCONFIRMED) => {
-            eprintln!(
-                "{}",
-                tr(told(
-                    "Asked in a desktop notification: the scene gets the input once you allow it there."
-                ))
-            );
-            Ok(())
-        }
-        sent => {
-            sent?;
-            println!("{}", fill(told("%1 may use %2"), &[&scene, &input]));
-            Ok(())
-        }
-    }
-}

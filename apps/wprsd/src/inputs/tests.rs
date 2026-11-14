@@ -38,6 +38,8 @@ fn scene(scene: &str, key: &str, audio: bool, pointer: bool) -> SceneInputs {
         title,
         key,
         granted,
+        without: Default::default(),
+        undecided: Default::default(),
     }
 }
 

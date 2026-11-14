@@ -86,13 +86,13 @@ fn providers_and_repositories_show_their_state() {
         "author": null, "version": "1.1.0", "kind": "image", "title": "Sky at dawn", "description": "", "tags": [],
         "license": "CC0-1.0", "authors": [], "size": 1024, "published": 0, "preview": true,
         "versions": ["1.0.0", "1.1.0"], "installed": ["1.0.0"], "update": true, "content": "general",
-        "photosensitive": true});
+        "photosensitive": true, "flash_disabled": true, "asks": ["audio", "network"]});
     let page = reply(json!({"query": "dawn", "total": 1, "offset": 0, "packages": [package]}));
     assert_eq!(
         pkg::browse(parse(&page).unwrap()),
         "query = dawn\npackages = 1 of 1\n\
-         REPO      ID                VERSION  KIND   CONTENT                  INSTALLED                 TITLE\n\
-         01234567  org.example.dawn  1.1.0    image  general, photosensitive  1.0.0 (update available)  Sky at dawn\n"
+         REPO      ID                VERSION  KIND   CONTENT                     ASKS            INSTALLED                 TITLE\n\
+         01234567  org.example.dawn  1.1.0    image  general, flashes, disabled  audio, network  1.0.0 (update available)  Sky at dawn\n"
     );
     assert_eq!(
         pkg::installed(parse(&reply(json!({"packages": [installed()]}))).unwrap()),

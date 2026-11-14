@@ -31,7 +31,7 @@
     <string name="auto_refresh">Check repositories for updates every day</string>
     <string name="flashing">Flashing lights</string>
     <string name="mature_warning">This wallpaper has mature content.</string>
-    <string name="flashing_warning">This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy.</string>
+    <string name="flashing_warning">This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy. Wallpapers that flash are disabled until you allow them.</string>
     <string name="show_anyway">Show anyway</string>
     <string name="lacks_gpu">It needs compute shaders, which the graphics of this phone lack, so it may draw slowly or leave parts out.</string>
     <string name="lacks_display2">Its color around the picture and its spreading over every screen are not used on the phone.</string>
@@ -103,7 +103,7 @@
     <string name="model_terms">%1$s (%2$s) comes from %3$s under the %4$s license (%5$s). Depth maps are then made on this phone, and your pictures never leave it.</string>
     <string name="downloads_off">Downloading the depth model is turned off in Settings</string>
     <string name="allow_download">Allow downloading the depth model</string>
-    <string name="flash_guard">Slow down or stop wallpapers that flash more than three times a second</string>
+    <string name="allow_flashing">Allow wallpapers that flash</string>
     <string name="scene_capture">Let scenes react to the sound that plays</string>
     <string name="depth_model">Depth model (%s)</string>
     <string name="delete_model">Delete</string>

@@ -75,8 +75,8 @@ fn library_and_preset_commands_parse() {
         ("lib rate 4 R1AB2C X9Y8Z7", r#"Lib(Rate { rating: 4, items: ["R1AB2C", "X9Y8Z7"] })"#.into()),
         ("lib fav R1AB2C --off", r#"Lib(Fav { items: ["R1AB2C"], off: true })"#.into()),
         (
-            "lib confirm photosensitive R1AB2C",
-            r#"Lib(Confirm { what: "photosensitive", items: ["R1AB2C"] })"#.into(),
+            "lib confirm mature R1AB2C",
+            r#"Lib(Confirm { what: "mature", items: ["R1AB2C"] })"#.into(),
         ),
         ("lib unconfirm motion R1AB2C", r#"Lib(Unconfirm { what: "motion", items: ["R1AB2C"] })"#.into()),
         (

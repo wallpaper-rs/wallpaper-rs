@@ -8,9 +8,9 @@ pub fn fields(about: &About, package: Option<&PackageInfo>) -> Vec<(&'static str
     let confirmed = |what: &str| package.is_some_and(|p| p.confirmed.iter().any(|c| c == what));
     let reasons = Some(list(&about.descriptors)).filter(|r| !r.is_empty()).map(|r| format!(" ({r})"));
     let content = about.content.clone().unwrap_or("unrated".into()) + &reasons.unwrap_or_default();
-    let flashing = about.photosensitive.map(|on| match (on, confirmed("photosensitive")) {
-        (true, true) => tr(told("yes, allowed")),
-        (true, false) => tr(told("yes, asks before it is shown")),
+    let flashing = about.photosensitive.map(|on| match (on, package.is_some_and(|p| p.flash_disabled)) {
+        (true, false) => tr(told("yes, allowed")),
+        (true, true) => tr(told("yes, disabled")),
         (false, _) => "no".into(),
     });
     let work = |w: &wprs_core::model::Work| {

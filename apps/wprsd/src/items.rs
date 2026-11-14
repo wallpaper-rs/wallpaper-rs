@@ -12,6 +12,8 @@ use wprs_format::Installed;
 use wprs_library::{Item, Kind, Library};
 
 mod resolve;
+mod shape;
+use shape::shape;
 
 pub const MAX_UIDS: usize = 10_000;
 const MAX_PAGE: u32 = 500;
@@ -38,10 +40,6 @@ pub fn preset(preset: wprs_library::Preset) -> Preset {
     Preset { uid: preset.uid, item: preset.item, name: preset.name, value }
 }
 
-fn unshown(kind: &str) -> Option<String> {
-    (kind == "web").then(crate::pages::unavailable).flatten()
-}
-
 pub fn limited<T>(list: &[T], max: usize) -> Result<()> {
     if list.len() > max { Err(invalid(format!("give at most {max} entries"))) } else { Ok(()) }
 }
@@ -59,7 +57,8 @@ impl Daemon {
         let exposes = self.exposes(&item);
         let extra = json!({"revoked": revoked, "removable": removable, "imported": imported, "thumb": thumb});
         let mut summary: ItemSummary = merged(item, extra)?;
-        summary.package.iter_mut().for_each(|p| (p.exposes, p.unshown) = (exposes.clone(), unshown(&p.kind)));
+        let off = !self.state().config.playback.allow_flashing;
+        summary.package.iter_mut().for_each(|p| shape(p, &exposes, off));
         summary.error = summary.error.or_else(|| self.page_problem(&path));
         Ok(summary)
     }
@@ -114,7 +113,8 @@ impl Daemon {
             peeked.map(|m| wprs_core::model::About { animated, ..m.about(&wprs_core::locale::languages()) });
         let (exposes, (variants, base)) = (self.exposes(&item), self.kin(&item));
         let mut item: wprs_core::model::Item = merged(item, Value::Null)?;
-        item.package.iter_mut().for_each(|p| (p.exposes, p.unshown) = (exposes.clone(), unshown(&p.kind)));
+        let off = !self.state().config.playback.allow_flashing;
+        item.package.iter_mut().for_each(|p| shape(p, &exposes, off));
         item.error = item.error.or_else(|| self.page_problem(&item.path));
         reply(ItemDetails {
             model,

@@ -139,3 +139,19 @@ fn a_made_up_pointer_reaches_a_granted_scene_without_a_real_pointer_source() {
     assert_eq!(pointers.keys().collect::<Vec<_>>(), ["preview"]);
     assert_eq!(hub.touch("preview").0.pos, Some([0.25, 0.75]));
 }
+
+#[test]
+fn a_shown_scene_lists_what_it_runs_without_and_what_is_undecided() {
+    let mut control = Control::default();
+    let mut shown = scene(SEA, "sha256:aa", true, true);
+    shown.network = true;
+    control.shown.insert("DP-1".into(), shown.clone());
+    control.grants.extend(bound("sha256:aa", &[Input::Audio]));
+    control.declined.insert(SEA.into(), [Input::Pointer].into());
+    control.fill(&mut shown);
+    assert_eq!(shown.granted, [Input::Audio].into());
+    assert_eq!(shown.without, [Input::Pointer, Input::Network].into());
+    assert_eq!(shown.undecided, [Input::Network].into());
+    assert_eq!(control.undecided(SEA, "sha256:aa"), [Input::Network].into());
+    assert!(control.undecided(SEA, "sha256:bb").is_empty());
+}

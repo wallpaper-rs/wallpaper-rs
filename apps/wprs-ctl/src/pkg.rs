@@ -167,12 +167,15 @@ pub fn browse(page: BrowsePage) -> String {
     let rows = page.packages.into_iter().map(|p| {
         let update = if p.update { tr(told(" (update available)")) } else { String::new() };
         let installed = list(&p.installed) + &update;
-        let flashing = (p.photosensitive == Some(true)).then_some("photosensitive");
+        let flashing = (p.photosensitive == Some(true)).then_some(match p.flash_disabled {
+            true => "flashes, disabled",
+            false => "flashes",
+        });
         let shown = (p.revealed && p.content.as_deref() == Some("mature")).then_some("shown");
         let content = list([p.content.as_deref().or(Some("unrated")), flashing, shown].into_iter().flatten());
-        vec![prefix(&p.repo_id), p.id, p.version, p.kind, content, installed, p.title]
+        vec![prefix(&p.repo_id), p.id, p.version, p.kind, content, list(&p.asks), installed, p.title]
     });
-    let head = ["REPO", "ID", "VERSION", "KIND", "CONTENT", "INSTALLED", "TITLE"];
+    let head = ["REPO", "ID", "VERSION", "KIND", "CONTENT", "ASKS", "INSTALLED", "TITLE"];
     show::lines([("query", page.query), ("packages", count)]) + &table(&head, rows)
 }
 

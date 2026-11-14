@@ -63,7 +63,7 @@ xgettext --c++ --from-code=UTF-8 -k -ktr:1 -ktrc:1c,2 --add-location=file --forc
   -o "$TMP/wprs-app.pot" "${sources[@]}"
 catalog wprs-app ""
 xgettext --c++ --from-code=UTF-8 -k -ktr:1 --add-location=file --force-po --package-name=wallpaper-rs \
-  -o "$TMP/wprsd.pot" apps/wprsd/src/words.rs
+  -o "$TMP/wprsd.pot" apps/wprsd/src/words.rs apps/wprsd/src/words/ask.rs
 catalog wprsd ""
 
 mapfile -t sources < <(find crates/wprs-scene/src crates/wprs-format/src crates/wprs-editor/src crates/wprs-depth/src crates/wprs-library/src crates/wprs-core/src/edit -name '*.rs' | LC_ALL=C sort)

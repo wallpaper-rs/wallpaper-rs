@@ -16,7 +16,7 @@ Kirigami.OverlayDrawer {
     readonly property var credit: details.credit ?? null
     readonly property var pkg: item.package ?? null
     readonly property bool mature: !!pkg && pkg.content === "mature" && !(pkg.confirmed ?? []).includes("mature") && !App.unveiled
-    readonly property bool flashing: !!pkg && pkg.photosensitive === true && !(pkg.confirmed ?? []).includes("photosensitive")
+    readonly property bool flashing: !!pkg && pkg.flash_disabled === true
     readonly property string animated: mature || flashing ? "" : App.url(details.about?.animated ?? "")
 
     signal apply(string uid)

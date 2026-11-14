@@ -22,6 +22,10 @@ model! {
         pub key: String,
         #[serde(default)]
         pub granted: BTreeSet<Input>,
+        #[serde(default)]
+        pub without: BTreeSet<Input>,
+        #[serde(default)]
+        pub undecided: BTreeSet<Input>,
     }
 
     pub struct InputsReply {
@@ -59,6 +63,22 @@ model! {
         pub cover: bool,
         pub remote_covers: bool,
         pub using: BTreeSet<String>,
+    }
+}
+
+impl SceneInputs {
+    pub fn wanted(&self) -> BTreeSet<Input> {
+        let flags = [
+            (self.audio, Input::Audio),
+            (self.pointer, Input::Pointer),
+            (self.clicks, Input::Clicks),
+            (self.network, Input::Network),
+            (self.rgb, Input::Rgb),
+            (self.media, Input::Media),
+            (self.audio && self.network, Input::AudioNetwork),
+            (self.media && self.network, Input::MediaNetwork),
+        ];
+        flags.into_iter().filter(|(on, _)| *on).map(|(_, input)| input).collect()
     }
 }
 

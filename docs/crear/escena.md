@@ -296,9 +296,11 @@ hora fija, `wprs-ctl scene render MI-CARPETA -o vista.png --time-of-day 15:42`.
 
 ### Cuando el usuario pide menos destellos
 
-Si el usuario activa `playback.flash_guard`, el programa mide el brillo de cada fotograma y, si la
+Mientras el usuario no active `playback.allow_flashing` (viene apagado), los paquetes marcados como
+`photosensitive` no se reproducen y se listan con el aviso «destella y está deshabilitado»; además el
+programa mide el brillo de cada fotograma y, si la
 escena destella más de tres veces por segundo, la reproduce más despacio hasta que destelle como
-mucho tres veces, y si aun así destella más rápido, se detiene en su fotograma. Viene apagado. Si
+mucho tres veces, y si aun así destella más rápido, se detiene en su fotograma. Si
 tu escena destella a propósito, dilo en el manifiesto con `photosensitive` (ver
 [paquete.md](paquete.md)).
 

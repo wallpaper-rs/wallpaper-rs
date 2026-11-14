@@ -115,44 +115,29 @@ pub(crate) async fn grant(
             "only the wallpaper-rs app, the tray and wprs-ctl grant inputs; nothing can ask the user",
         ));
     }
-    let asked = (scene.clone(), input);
-    if open(&asked, Instant::now())? {
-        hub.changed();
-        let bus = bus.clone();
-        tokio::spawn(async move {
-            let words = crate::words::request(&title, input);
-            let answer = ask(&bus, words).await.inspect_err(|e| tracing::warn!("cannot ask the user: {e}"));
-            let quiet = matches!(answer, Ok(None | Some(false)));
-            if let Ok(Some(allowed)) = answer {
-                let (hub, path) = (hub.clone(), path.clone());
-                let set = tokio::task::spawn_blocking(move || match allowed {
-                    true => hub.grant(&path, &scene, &key, input),
-                    false => hub.decline(&path, &scene, &key, input),
-                });
-                if let Ok(Err(e)) = set.await {
-                    tracing::warn!("cannot keep the answer of the user: {e:#}");
-                }
-            }
-            let until = quiet.then(|| Instant::now() + QUIET);
-            match until {
-                Some(until) => drop(lock(&ASKED).insert(asked.clone(), Some(until))),
-                None => drop(lock(&ASKED).remove(&asked)),
-            }
-            hub.changed();
-            let Some(until) = until else { return };
-            tokio::time::sleep_until(until.into()).await;
-            let mut all = lock(&ASKED);
-            if all.get(&asked) == Some(&Some(until)) {
-                all.remove(&asked);
-                drop(all);
-                hub.changed();
-            }
-        });
+    let now = Instant::now();
+    if !open(&(scene.clone(), input), now)? {
+        return Err(unconfirmed());
     }
-    Err(Error::Named(
-        UNCONFIRMED,
-        "the user is asked in a notification; the input is granted once allowed".into(),
-    ))
+    let mut group = vec![input];
+    let more = lock(&hub.control).undecided(&scene, &key);
+    for other in more.into_iter().filter(|i| *i != input && askable(*i)) {
+        if open(&(scene.clone(), other), now).unwrap_or(false) {
+            group.push(other);
+        }
+    }
+    group.sort();
+    hub.changed();
+    tokio::spawn(settle::ask_group(bus.clone(), hub, path, (scene, key, title), group));
+    Err(unconfirmed())
+}
+
+fn askable(input: Input) -> bool {
+    !matches!(input, Input::Network | Input::Rgb | Input::MediaNetwork | Input::AudioNetwork)
+}
+
+fn unconfirmed() -> Error {
+    Error::Named(UNCONFIRMED, "the user is asked in a notification; the input is granted once allowed".into())
 }
 
 async fn notifications(bus: &zbus::Connection) -> bool {
@@ -164,5 +149,6 @@ async fn notifications(bus: &zbus::Connection) -> bool {
     dbus.name_has_owner(owned).await.unwrap_or(false) || activatable.await
 }
 
+mod settle;
 #[cfg(test)]
 pub(crate) mod tests;

@@ -576,10 +576,9 @@ Las miniaturas de los paquetes para adultos salen difuminadas y su página no lo
 pulsar *Mostrar igualmente*, salvo que *Ajustes* muestre el contenido para adultos sin difuminar.
 *Ocultar el contenido para adultos* (`library.hide_mature`, desactivado por defecto), justo encima,
 los saca de la biblioteca y de sus búsquedas, igual que en la app de escritorio y en `wprs-ctl`, salvo
-que la búsqueda pida `content:` ella misma. Un paquete fotosensible no se previsualiza ni se puede usar como fondo
-hasta aceptar el aviso de que destella o muestra patrones rápidos que pueden provocar crisis a
-personas con epilepsia fotosensible; las listas lo saltan mientras tanto. Cada decisión se recuerda
-por paquete. La biblioteca y la página de un paquete muestran su título y su descripción en el
+que la búsqueda pida `content:` ella misma. Un paquete fotosensible lleva el aviso «destella y está deshabilitado» y no se previsualiza ni se
+usa como fondo mientras el ajuste general de destellos siga apagado (viene apagado); las listas lo
+saltan. El contenido para adultos se recuerda por paquete. La biblioteca y la página de un paquete muestran su título y su descripción en el
 idioma del teléfono, y la página avisa de cada parte que no funciona en él, de sus sonidos a sus
 ajustes de vídeo y las funciones nuevas que omite.
 
@@ -955,6 +954,7 @@ wprs-ctl provider wallhaven add arte --ratios 16x9,landscape --colors 660000 --s
 wprs-ctl remote add 'https://example.org/repo/?fingerprint=…'
 wprs-ctl pkg install org.example.dawn --wait    # instalar un paquete de un repositorio
 wprs-ctl jobs | watch | schema                  # trabajos, cambios en vivo, claves válidas
+wprs-ctl input decide org.example.dawn -a audio,pointer -x network   # una respuesta para todo lo que pide la escena
 wprs-ctl input grant org.example.dawn audio     # dejar que la escena que se ve siga el sonido (-o elige pantalla)
 wprs-ctl input status                           # permisos y si se captura el sonido o el puntero
 wprs-ctl input clicks on -o DP-1                # dejar que los clics de esa pantalla lleguen a su fondo
@@ -1375,7 +1375,7 @@ entradas que declaran; en los demás paquetes todas, `media` incluida, salen de 
 ```sh
 wprs-ctl lib show 1R1AB2                     # clasificación, origen, créditos, idiomas y descripción
 wprs-ctl lib search 'content:general facet:audio'
-wprs-ctl lib confirm photosensitive 1R1AB2   # permitir un paquete fotosensible
+wprs-ctl config playback.allow_flashing true       # permitir los paquetes fotosensibles
 wprs-ctl lib confirm mature 1R1AB2           # dejar de difuminar su miniatura
 wprs-ctl pkg reveal org.example.noche        # lo mismo para un paquete de un repositorio
 wprs-ctl pack check fondo/                   # qué necesita, usa y declara, y si lo reproducen el escritorio y el teléfono

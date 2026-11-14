@@ -13,7 +13,7 @@
     <string name="error_android_codes_differ_key">Los códigos no coinciden: la clave no se movió; puede que alguien se interponga entre los dispositivos</string>
     <string name="error_android_comparison_waiting_start">No hay ninguna comparación pendiente; empieza de nuevo</string>
     <string name="error_android_config">No se puede leer la configuración: %1$s</string>
-    <string name="error_android_confirm_photosensitive_wallpaper">Primero acepta el aviso de este fondo fotosensible</string>
+    <string name="error_android_flashing_disabled">Este fondo tiene destellos y está deshabilitado: permite los fondos que destellan en los ajustes</string>
     <string name="error_android_depth_cancelled">Se canceló el mapa de profundidad</string>
     <string name="error_android_depth_failed">El mapa de profundidad falló: %1$s</string>
     <string name="error_android_depth_model_missing">El modelo de profundidad no está instalado: descárgalo primero</string>

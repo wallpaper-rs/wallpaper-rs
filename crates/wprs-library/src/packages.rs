@@ -165,18 +165,17 @@ impl Library {
         Ok(changed)
     }
 
-    pub fn unconfirmed_flashing(&self) -> Result<Vec<String>> {
-        let sql = "SELECT uid FROM items WHERE photosensitive = 1 AND pkg_id NOT IN \
-            (SELECT pkg_id FROM confirmations WHERE what = 'photosensitive')";
+    pub fn flashing(&self) -> Result<Vec<String>> {
+        let sql = "SELECT uid FROM items WHERE photosensitive = 1";
         rows(&self.db, sql, [], |row| row.get(0))
     }
 }
 
-pub const DECISIONS: [&str; 7] =
-    ["mature", "photosensitive", "motion", "hide_zone", "hide_language", "hide_gpu", "hide_storage"];
+pub const DECISIONS: [&str; 6] =
+    ["mature", "motion", "hide_zone", "hide_language", "hide_gpu", "hide_storage"];
 
 impl PackageInfo {
     pub fn asks(&self, what: &str) -> bool {
-        wprs_core::model::asks(what, self.content.as_deref(), self.photosensitive, &self.confirmed)
+        wprs_core::model::asks(what, self.content.as_deref(), &self.confirmed)
     }
 }

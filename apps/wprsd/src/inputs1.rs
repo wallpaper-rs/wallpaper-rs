@@ -2,7 +2,7 @@ use crate::callers::{Caller, caller};
 use crate::compositor::lock;
 use crate::daemon::Daemon;
 use crate::error::{Result, denied, failed, invalid};
-use crate::inputs::{Hub, declined_path, grants_path, hub, load, load_bound};
+use crate::inputs::{Hub, grants_path, hub};
 use std::sync::{Arc, Weak};
 use wprs_core::model::Input;
 use zbus::message::Header;
@@ -10,16 +10,11 @@ use zbus::message::Header;
 mod give;
 mod ids;
 mod told;
-
+pub(crate) use give::start;
 pub(crate) use ids::scene_id;
 use ids::{parse, reopen};
 
 pub struct Inputs(pub Weak<Daemon>);
-
-pub(crate) fn start(daemon: &Arc<Daemon>, connection: zbus::Connection) {
-    let path = grants_path(daemon);
-    crate::inputs::start(daemon, connection, (load_bound(&path), load(&declined_path(&path))));
-}
 
 impl Inputs {
     fn parts(&self) -> Result<(Arc<Daemon>, &'static Arc<Hub>)> {
@@ -49,6 +44,18 @@ impl Inputs {
         #[zbus(connection)] bus: &zbus::Connection,
     ) -> Result<()> {
         self.give((bus, &header), &scene, Some(&key), &input).await
+    }
+
+    async fn decide(
+        &self,
+        scene: String,
+        key: String,
+        allow: Vec<String>,
+        deny: Vec<String>,
+        #[zbus(header)] header: Header<'_>,
+        #[zbus(connection)] bus: &zbus::Connection,
+    ) -> Result<()> {
+        self.decide_all((bus, &header), &scene, &key, (allow, deny)).await
     }
 
     async fn revoke(&self, scene: String, input: String) -> Result<()> {

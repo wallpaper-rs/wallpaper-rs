@@ -69,7 +69,10 @@ pub(crate) fn turn(
     let now = Utc::now();
     let rules = lib.playlist(playlist)?.rules;
     let output = if rules.synced { HOME } else { row(lock) };
-    let flashing: HashSet<String> = lib.unconfirmed_flashing()?.into_iter().collect();
+    let flashing: HashSet<String> = match crate::settings::playback().allow_flashing {
+        true => HashSet::new(),
+        false => lib.flashing()?.into_iter().collect(),
+    };
     let resolved = lib.resolve(playlist, now.timestamp(), on_battery, &flashing)?;
     let id = resolved.playlist.id.clone();
     let stored = lib.rotation(output)?.filter(|row| row.playlist == id);
@@ -115,8 +118,9 @@ fn chosen(lib: &Library, preview: bool, lock: bool) -> Result<Option<(String, Op
             {
                 Some(row) => row.current,
                 None => {
+                    let allowed = crate::settings::playback().allow_flashing;
                     let shown = |i: &wprs_library::Item| {
-                        !i.package.as_ref().is_some_and(|p| p.asks("photosensitive"))
+                        allowed || !i.package.as_ref().is_some_and(|p| p.photosensitive == Some(true))
                     };
                     lib.playlist_items(&playlist, now())?
                         .into_iter()

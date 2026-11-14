@@ -9,7 +9,7 @@ use wprs_core::config::parse_hex_color;
 use wprs_core::model::Profile;
 
 const HELD: &str = "the profile left out a wallpaper that flashes or shows fast patterns that can trigger \
-    seizures in people with photosensitive epilepsy; the profile shows it once you allow it";
+    seizures in people with photosensitive epilepsy; the profile shows it once wallpapers that flash are allowed in the settings";
 
 impl Daemon {
     pub fn activate(&self, key: &str) -> Result<()> {
@@ -75,6 +75,7 @@ impl Daemon {
     }
 
     fn plan(&self, profile: &Profile) -> Result<(BTreeMap<String, OutputConfig>, HashMap<String, String>)> {
+        let allowed = self.state().config.playback.allow_flashing;
         let found = self.store.read(|lib| {
             let found = profile.outputs.iter().map(|(name, o)| {
                 let content = match (&o.item, &o.path, &o.playlist) {
@@ -87,7 +88,8 @@ impl Daemon {
                 };
                 let image = content.as_ref().and_then(|(image, _)| image.as_ref()?.to_str());
                 let item = image.and_then(|path| lib.item(&lib.resolve_item(path).ok()?).ok());
-                let flashing = item.and_then(|i| i.package).is_some_and(|p| p.asks("photosensitive"));
+                let flashing =
+                    !allowed && item.and_then(|i| i.package).is_some_and(|p| p.photosensitive == Some(true));
                 let preset = o.preset.clone().filter(|u| lib.preset(u).is_ok());
                 (name.clone(), content.filter(|_| !flashing), preset, flashing)
             });

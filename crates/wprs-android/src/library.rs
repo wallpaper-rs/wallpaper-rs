@@ -167,13 +167,10 @@ fn answer(lib: &mut Library, request: Request, on_battery: bool) -> Result<Value
         Request::Move { playlist, from, to } => json!(lib.move_in_playlist(&playlist, from, to)?),
         Request::Pick { choice } => {
             if let Some(Choice::Item(uid)) = &choice
-                && lib.item(uid)?.package.is_some_and(|p| p.asks("photosensitive"))
+                && !settings::playback().allow_flashing
+                && lib.item(uid)?.package.is_some_and(|p| p.photosensitive == Some(true))
             {
-                return Err(said(
-                    "android.confirm_photosensitive_wallpaper",
-                    "confirm this photosensitive wallpaper first",
-                    &[],
-                ));
+                return Err(said("android.flashing_disabled", "this wallpaper flashes and is disabled", &[]));
             }
             json!(choice::pick(choice))
         }

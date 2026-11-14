@@ -9,6 +9,23 @@ impl Control {
         Input::ALL.into_iter().filter(|input| self.has(scene, key, *input)).collect()
     }
 
+    pub(crate) fn fill(&self, shown: &mut wprs_core::model::SceneInputs) {
+        shown.granted = self.granted(&shown.scene, &shown.key);
+        shown.without = shown.wanted().difference(&shown.granted).copied().collect();
+        let declined = self.declined.get(&shown.scene);
+        shown.undecided =
+            shown.without.iter().filter(|i| !declined.is_some_and(|d| d.contains(i))).copied().collect();
+    }
+
+    pub(crate) fn undecided(&self, scene: &str, key: &str) -> BTreeSet<Input> {
+        let found = self.shown.values().find(|s| s.scene == scene && s.key == key);
+        found.map_or_else(BTreeSet::new, |s| {
+            let mut s = s.clone();
+            self.fill(&mut s);
+            s.undecided
+        })
+    }
+
     pub(crate) fn has(&self, scene: &str, key: &str, input: Input) -> bool {
         let keys = self.grants.get(scene).filter(|_| !key.is_empty());
         keys.and_then(|keys| keys.get(key)).is_some_and(|inputs| inputs.contains(&input))

@@ -68,13 +68,16 @@ pub(super) fn rotate(lib: &mut Library, name: &str, items: &[String], every: &st
 }
 
 pub(super) fn listed(items: Vec<Item>) -> Result<Value, Error> {
+    let allowed = settings::playback().allow_flashing;
     let listed = items.into_iter().map(|item| {
         let exposes = item.package.as_ref().map(crate::page::exposes);
         let failure = item.package.as_ref().and_then(|p| crate::page::failure(&p.id));
         let thumb = store::thumb_file(&item.uid, "jpg").ok().filter(|path| path.is_file());
+        let off = item.package.as_ref().is_some_and(|p| p.photosensitive == Some(true)) && !allowed;
         let mut value = serde_json::to_value(item)?;
         if let Some(exposes) = exposes {
             value["package"]["exposes"] = json!(exposes);
+            value["package"]["flash_disabled"] = json!(off);
         }
         value["thumb"] = json!(thumb);
         if let Some(failure) = failure.filter(|_| value["error"].is_null()) {

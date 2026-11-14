@@ -11,7 +11,7 @@ ColumnLayout {
     property string uid
     property var pkg: null
     readonly property bool styled: info.schema === "wallpaper-rs.wpak/2"
-    readonly property bool asks: !!pkg && pkg.photosensitive === true && !(pkg.confirmed ?? []).includes("photosensitive")
+    readonly property bool asks: !!pkg && pkg.flash_disabled === true
     readonly property var works: (info.derived_from ?? []).map(w => w.title ? App.tr("%1 by %2", w.title, w.author) : w.author)
 
     function words(list) {
@@ -22,11 +22,11 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: about.info.photosensitive === true
         type: Kirigami.MessageType.Warning
-        text: about.asks ? App.tr("This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy. Playlists skip it until you allow it.") : App.tr("This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy.")
+        text: about.asks ? App.tr("This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy. It is disabled, and playlists skip it, until wallpapers that flash are allowed.") : App.tr("This wallpaper flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy.")
         actions: [
             Kirigami.Action {
                 visible: about.asks && about.uid !== ""
-                text: App.tr("Allow this wallpaper…")
+                text: App.tr("Allow wallpapers that flash…")
                 icon.name: "dialog-ok-apply"
                 onTriggered: allow.open()
             }
@@ -148,10 +148,10 @@ ColumnLayout {
     Kirigami.PromptDialog {
         id: allow
 
-        title: App.tr("Allow this wallpaper?")
-        subtitle: App.tr("It flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy. Allow it only if that is safe for whoever sees your screens; screens and playlists may then show it without asking again.")
+        title: App.tr("Allow wallpapers that flash?")
+        subtitle: App.tr("Wallpapers that flash or show fast patterns can trigger seizures in people with photosensitive epilepsy. Allow them only if that is safe for whoever sees your screens; every screen and playlist may then show them.")
         standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-        onAccepted: App.act("Confirm", [[about.uid], "photosensitive"], "Library1")
+        onAccepted: App.act("SetOption", ["playback.allow_flashing", "true"])
     }
 
     Kirigami.PromptDialog {

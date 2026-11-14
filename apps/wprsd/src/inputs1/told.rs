@@ -11,7 +11,7 @@ pub(super) fn inputs(d: &Daemon, hub: &Hub) -> Result<String> {
     let control = lock(&hub.control);
     let grants = reported(&control);
     let mut shown = control.shown.clone();
-    shown.values_mut().for_each(|s| s.granted = control.granted(&s.scene, &s.key));
+    shown.values_mut().for_each(|s| control.fill(s));
     let (parallax, declined, capturing) =
         (control.parallax.clone(), control.declined.clone(), control.capturing);
     let clicks = control.views.iter().filter(|(_, v)| v.clicks).map(|(name, _)| name.clone()).collect();

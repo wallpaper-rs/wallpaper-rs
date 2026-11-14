@@ -30,19 +30,16 @@ pub(super) fn status(reply: InputsReply) -> String {
     };
     lines.extend(reply.quiet.iter().map(quiet));
     lines.extend(reply.shown.iter().map(|(output, shown)| {
-        let used =
-            [(shown.audio, Input::Audio), (shown.pointer, Input::Pointer), (shown.clicks, Input::Clicks)];
-        let more = [(shown.network, Input::Network), (shown.rgb, Input::Rgb), (shown.media, Input::Media)];
-        let both = [(shown.media && shown.network, Input::MediaNetwork)];
-        let both = both.into_iter().chain([(shown.audio && shown.network, Input::AudioNetwork)]);
-        let more = more.into_iter().chain(both);
-        let used = used.into_iter().chain(more);
-        let used: BTreeSet<Input> = used.filter_map(|(on, input)| on.then_some(input)).collect();
+        let used = shown.wanted();
         fill(
             told("%1 shows %2 using %3 (allowed: %4)"),
             &[&output, &shown.scene, &inputs(&used), &inputs(&shown.granted)],
         )
     }));
+    let without = |(output, shown): (&String, &wprs_core::model::SceneInputs)| {
+        fill(told("%1 runs %2 without: %3"), &[output, &shown.scene, &inputs(&shown.without)])
+    };
+    lines.extend(reply.shown.iter().filter(|(_, s)| !s.without.is_empty()).map(without));
     let follows =
         |output: &String| fill(told("%1 shows an image whose parallax follows the pointer"), &[&output]);
     lines.extend(reply.parallax.iter().map(follows));

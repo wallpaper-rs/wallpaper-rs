@@ -11,7 +11,7 @@ use std::os::unix::fs::MetadataExt;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use wprs_core::Fit;
-use wprs_core::dbus::error::UNCONFIRMED;
+use wprs_core::dbus::error::FLASHING;
 use wprs_core::model::PresetValue;
 use wprs_library::{Kind, Library};
 
@@ -118,10 +118,9 @@ impl Daemon {
         if let Some(error) = &item.meta.error {
             return Err(failed(error.clone()));
         }
-        if item.package.as_ref().is_some_and(|p| p.asks("photosensitive")) {
-            let message = "this wallpaper flashes or shows fast patterns that can trigger seizures in people \
-                with photosensitive epilepsy; the user has not allowed it yet";
-            return Err(Error::Named(UNCONFIRMED, message.into()));
+        let flashes = item.package.as_ref().is_some_and(|p| p.photosensitive == Some(true));
+        if flashes && !self.state().config.playback.allow_flashing {
+            return Err(Error::Named(FLASHING, crate::words::flashing_disabled()));
         }
         if let Some(package) = self.installed(&item).filter(|i| i.revoked.is_some()) {
             let reason =

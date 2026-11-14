@@ -95,7 +95,7 @@ RowLayout {
             visible: row.modelData.photosensitive === true
             wrapMode: Text.Wrap
             color: Look.coral
-            text: App.tr("Flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy.")
+            text: row.modelData.flash_disabled ? App.tr("Flashes and is disabled: allow wallpapers that flash in the settings.") : App.tr("Flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy.")
         }
 
         BrowseVotes {

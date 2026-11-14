@@ -165,7 +165,7 @@ fn on_battery(max_fps: u32) -> u32 {
 fn caps() {
     let config = config();
     power::caps(on_battery(config.playback.max_fps), chosen(CHARGER).parse().unwrap_or(60));
-    power::guard(config.playback.flash_guard, config.playback.scene_capture);
+    power::guard(!config.playback.allow_flashing, config.playback.scene_capture);
     power::choose(config.playback.quality);
     power::below(config.pause.on_battery.limit(), config.playback.lowest_below_percent);
     power::pace(config.playback.auto_pace);
