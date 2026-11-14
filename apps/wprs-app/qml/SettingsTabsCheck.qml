@@ -85,7 +85,7 @@ QtObject {
 
     function buscar() {
         home(0);
-        page.query = App.tr("Screens").toUpperCase();
+        page.query = App.tr("Pause on battery").toUpperCase();
         if (page.found.hits.length < 1 || page.found.hits.some(hit => !SettingsReach.matches(hit.text, page.query)))
             throw new Error("searching ignores case: " + JSON.stringify(page.found.hits.map(hit => hit.text)));
         same(SettingsReach.matches("Pantallas", "PANTÁLLAS"), true, "searching ignores accents");
