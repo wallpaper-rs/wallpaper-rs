@@ -18106,3 +18106,264 @@ msgstr "Tu biblioteca"
 #: apps/wprs-app/qml/LibraryPanel.qml
 msgid "Yours"
 msgstr "Tuyo"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "%1 brought %2 photos to your library."
+msgstr "%1 trajo %2 fotos a tu biblioteca."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "%1 d ago"
+msgstr "hace %1 d"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "%1 h ago"
+msgstr "hace %1 h"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "%1 min ago"
+msgstr "hace %1 min"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "%1 photos, updated %2"
+msgstr "%1 fotos, actualizado %2"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "%1 rejected the key"
+msgstr "%1 rechazó la clave"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "A folder on your server"
+msgstr "Carpeta en tu servidor"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "A key was left behind by an earlier source of this name."
+msgstr "Quedó una clave de una fuente anterior con este nombre."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "a moment ago"
+msgstr "hace un momento"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Add %1"
+msgstr "Añadir %1"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Add a source"
+msgstr "Añadir una fuente"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Add and bring photos"
+msgstr "Añadir y traer fotos"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Also delete its stored photos"
+msgstr "Borrar también sus fotos guardadas"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Astronomy picture of the day"
+msgstr "Foto astronómica del día"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Bing: the picture of the day"
+msgstr "Bing: la foto del día"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Bringing photos…"
+msgstr "Trayendo fotos…"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Change"
+msgstr "Cambiar"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Change key"
+msgstr "Cambiar la clave"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Choose"
+msgstr "Elegir"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Connects to"
+msgstr "Se conecta con"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Immich: your library"
+msgstr "Immich: tu biblioteca"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "It could not reach %1"
+msgstr "No se pudo llegar a %1"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Its photos leave your library only if you choose so below."
+msgstr "Sus fotos salen de tu biblioteca solo si lo eliges abajo."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Keep keys in a private file…"
+msgstr "Guardar las claves en un archivo privado…"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Make a list with these photos"
+msgstr "Hacer una lista con estas fotos"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "More options"
+msgstr "Más opciones"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "NASA: astronomy picture of the day"
+msgstr "NASA: foto astronómica del día"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "nature, city at night, space…"
+msgstr "naturaleza, ciudad de noche, espacio…"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Needs your attention"
+msgstr "Necesita tu atención"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Nextcloud: your folder"
+msgstr "Nextcloud: tu carpeta"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "No connection. Your sources cannot bring new photos. What you already have stays in your library."
+msgstr "Sin conexión. Tus fuentes no pueden traer fotos nuevas. Lo que ya tienes sigue en tu biblioteca."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "No keyring answers, so the key cannot be saved."
+msgstr "Ningún llavero responde, así que no se puede guardar la clave."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "No photos yet"
+msgstr "Todavía no hay fotos"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "No system keyring was found, so keys cannot be stored."
+msgstr "No se encontró un llavero del sistema, así que no se pueden guardar las claves."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Photos"
+msgstr "Fotos"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Photos that renew themselves · %1 sources · %2 photos"
+msgstr "Fotos que se renuevan solas · %1 fuentes · %2 fotos"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Photos that renew themselves · none yet"
+msgstr "Fotos que se renuevan solas · ninguna todavía"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Pick where the photos come from. They arrive in your library and you can rotate them with one button."
+msgstr "Elige de dónde vienen las fotos. Llegan a tu biblioteca y puedes hacerlas rotar con un solo botón."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Picture of the day"
+msgstr "Imagen del día"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Remove this source"
+msgstr "Quitar esta fuente"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Remove this source?"
+msgstr "¿Quitar esta fuente?"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Rotate these photos"
+msgstr "Rotar estas fotos"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Saved in your keyring"
+msgstr "Guardada en tu llavero"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Search pictures by topic"
+msgstr "Buscar fotos por tema"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "See these photos in the library"
+msgstr "Ver estas fotos en la biblioteca"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Stored photos"
+msgstr "Fotos guardadas"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "The first photos reach your library right away. Then you can rotate them with one button."
+msgstr "Las primeras fotos llegan enseguida a tu biblioteca. Después podrás hacerlas rotar con un solo botón."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "The keyring is locked"
+msgstr "El llavero está bloqueado"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "The next update comes %1."
+msgstr "La próxima actualización llega %1."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "The picture of the day"
+msgstr "La foto del día"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "They rotate on every screen"
+msgstr "Rotan en todas las pantallas"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "This address uses plain http: the key and the pictures travel unprotected."
+msgstr "Esta dirección usa http sin cifrar: la clave y las fotos viajan sin protección."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "This computer keeps its keys in a private file, not in the system keyring."
+msgstr "Este equipo guarda sus claves en un archivo privado, no en el llavero del sistema."
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Up to date"
+msgstr "Al día"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Wallhaven: your search"
+msgstr "Wallhaven: tu búsqueda"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "WebDAV: your folder"
+msgstr "WebDAV: tu carpeta"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "What to look for"
+msgstr "Qué buscar"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Wikimedia Commons: picture of the day"
+msgstr "Wikimedia Commons: imagen del día"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "With one click, no account"
+msgstr "Con un clic, sin cuenta"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "With your search or your server"
+msgstr "Con tu búsqueda o tu servidor"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "You already have a source with this name"
+msgstr "Ya tienes una fuente con este nombre"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Your own photos? Add a folder to your library"
+msgstr "¿Tus propias fotos? Añade una carpeta a tu biblioteca"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Your photo folder"
+msgstr "Tu carpeta de fotos"
+
+#: apps/wprs-app/qml/ProvidersPage.qml
+msgid "Your photo library"
+msgstr "Tu biblioteca de fotos"
+
+#: apps/wprs-app/qml/SourceList.qml
+msgctxt "all the sources"
+msgid "All"
+msgstr "Todas"

@@ -68,13 +68,16 @@ maximiza.
 - `route` y `routeBack()` (opcional, páginas de opciones): los pasos de la ruta y qué hace Esc.
 - `full` (opcional, esqueleto de título): la página ocupa todo el alto; se ocultan el bloque
   «ahora» y sus velos, y un velo parejo en Noche cubre la imagen (la Biblioteca en «Ver todos»).
+- `now` (opcional, esqueleto de título): un `Component` que ocupa el lugar de la hora y el estado,
+  arriba a la derecha; la página pone ahí su título grande y su resumen.
 - Avisos: `applicationWindow().showPassiveNotification(texto, tiempo, acción, función)`. En lugar
   del texto puede ir `{text, tone}` (`tone`: `""`, `"ambar"`, `"coral"` o `"brote"`) para darle su
   tono; la función es lo que hace la acción.
 
 El esqueleto sale del lugar: Ajustes, Perfiles y Cuenta usan el de opciones; los editores, el de
 trabajo; el resto, el de título. Una página de título puede pedir otro esqueleto mientras muestra
-un nivel propio con `skeleton` («options»): la Biblioteca lo usa para las opciones de un fondo.
+un nivel propio con `skeleton` («options»): la Biblioteca lo usa para las opciones de un fondo y
+Fuentes para añadir una fuente y para sus detalles.
 
 ## Banda baja de las pantallas de título
 

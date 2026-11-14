@@ -1,9 +1,8 @@
 import QtQuick
-import QtQuick.Layouts
-import org.kde.kirigami as Kirigami
+import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-ColumnLayout {
+Column {
     id: notice
 
     required property var filer
@@ -20,7 +19,7 @@ ColumnLayout {
     }
 
     Component.onCompleted: load()
-    spacing: Kirigami.Units.smallSpacing
+    spacing: Look.e2
 
     Connections {
         target: App.backend
@@ -31,31 +30,30 @@ ColumnLayout {
         }
     }
 
-    Kirigami.InlineMessage {
-        Layout.fillWidth: true
+    Nota {
         visible: notice.store === "file"
-        type: Kirigami.MessageType.Warning
-        text: App.tr("This computer keeps its secrets (the passwords and API keys of providers, and its access to the sync server) in a private file, not in the system keyring: whoever can read your files can use them.")
-        actions: [
-            Kirigami.Action {
-                text: App.tr("Use the system keyring")
-                icon.name: "lock"
-                onTriggered: App.act("SetSecretStore", ["keyring"], "Providers1")
-            }
-        ]
+        tone: "ambar"
+        text: App.tr("This computer keeps its keys in a private file, not in the system keyring.")
     }
 
-    Kirigami.InlineMessage {
-        Layout.fillWidth: true
+    QQC2.Button {
+        visible: notice.store === "file"
+        flat: true
+        text: App.tr("Use the system keyring")
+        icon.name: "key"
+        onClicked: App.act("SetSecretStore", ["keyring"], "Providers1")
+    }
+
+    Nota {
         visible: notice.store === "keyring" && !notice.found
-        type: Kirigami.MessageType.Warning
-        text: App.tr("No system keyring was found on this computer, so passwords and API keys cannot be stored. Start or unlock your keyring, or keep them in a private file instead: anyone who can read your files could then use them.")
-        actions: [
-            Kirigami.Action {
-                text: App.tr("Keep secrets in a private file…")
-                icon.name: "document-encrypt"
-                onTriggered: notice.filer.open()
-            }
-        ]
+        tone: "ambar"
+        text: App.tr("No system keyring was found, so keys cannot be stored.")
+    }
+
+    QQC2.Button {
+        visible: notice.store === "keyring" && !notice.found
+        flat: true
+        text: App.tr("Keep keys in a private file…")
+        onClicked: notice.filer.open()
     }
 }

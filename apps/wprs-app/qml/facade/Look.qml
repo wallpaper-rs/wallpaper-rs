@@ -73,6 +73,13 @@ QtObject {
     readonly property int altoControl: 40
     readonly property int altoBoton: compacto ? 38 : 42
     readonly property int altoFila: compacto ? 60 : amplio ? 80 : 74
+    readonly property int fuenteQuien: compacto ? 340 : 420
+    readonly property int fuenteHueco: 14
+    readonly property int fuenteFotos: 5
+    readonly property real fuenteVelo: 0.42
+    readonly property int tipoIcono: 28
+    readonly property int fuenteIcono: 26
+    readonly property int tiposAncho: 1020
     readonly property int altoCampo: 34
     readonly property int filasAncho: compacto ? 600 : amplio ? 740 : 660
     readonly property int explicaAncho: compacto ? 260 : amplio ? 340 : 300
