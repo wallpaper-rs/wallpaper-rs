@@ -33,6 +33,7 @@ pub struct ItemModelRust {
     pub pending: Option<(i32, i32)>,
     pub range: Option<(i32, i32)>,
     pub busy: bool,
+    pub shown: crate::covers::Shown,
 }
 
 impl cxx_qt::Initialize for ItemModel {

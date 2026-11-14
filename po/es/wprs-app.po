@@ -17970,3 +17970,139 @@ msgstr "Último cambio: un fundido simple, porque la transición del fondo no se
 
 msgid "Last change: a plain fade, neither wallpaper brings a transition."
 msgstr "Último cambio: un fundido simple, ninguno de los dos fondos trae transición."
+
+#: apps/wprs-app/qml/Actions.qml
+msgid "%1 is now the wallpaper of %2"
+msgstr "%1 ya es el fondo de %2"
+
+#: apps/wprs-app/qml/Actions.qml
+msgid "%1 is now your wallpaper"
+msgstr "%1 ya es tu fondo"
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "Add wallpapers…"
+msgstr "Añadir fondos…"
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "All"
+msgstr "Todos"
+
+#: apps/wprs-app/qml/LibraryCovers.qml
+msgid "All your wallpapers"
+msgstr "Todos tus fondos"
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "Clear the filters"
+msgstr "Quitar los filtros"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this picture: the file is damaged"
+msgstr "No se pudo abrir esta imagen: el archivo está dañado"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this picture: the file is missing"
+msgstr "No se pudo abrir esta imagen: el archivo no está"
+
+#: apps/wprs-app/qml/LibraryPanel.qml
+msgid "From its author"
+msgstr "De su autora"
+
+#: apps/wprs-app/src/covers.rs
+msgid "Has flashes, turned off"
+msgstr "Tiene destellos, deshabilitado"
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "Nothing matches “%1”"
+msgstr "Nada coincide con «%1»"
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "Nothing matches these filters"
+msgstr "Nada coincide con estos filtros"
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "Packages"
+msgstr "Paquetes"
+
+#: apps/wprs-app/qml/LibraryChosen.qml
+msgid "Playlist"
+msgstr "Lista"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Remove “%1” from the library?"
+msgstr "¿Quitar «%1» de la biblioteca?"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Remove from the library…"
+msgstr "Quitar de la biblioteca…"
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "Rename tag…"
+msgstr "Renombrar la etiqueta…"
+
+#: apps/wprs-app/qml/LibraryChosen.qml
+msgid "Rotate these every…"
+msgstr "Rotar estos cada…"
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "Search your library"
+msgstr "Buscar en tu biblioteca"
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "See all"
+msgstr "Ver todos"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Set as wallpaper"
+msgstr "Poner de fondo"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Set as wallpaper on %1"
+msgstr "Poner de fondo en %1"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Show in folder"
+msgstr "Mostrar en la carpeta"
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "Show shelf"
+msgstr "Ver el estante"
+
+#: apps/wprs-app/qml/LibraryChosen.qml
+msgid "Stop choosing"
+msgstr "Dejar de elegir"
+
+#: apps/wprs-app/qml/LibraryPanel.qml
+msgid "Tags, playlists, rating, credits, details, remove"
+msgstr "Etiquetas, listas, valoración, créditos, detalles, quitar"
+
+#: apps/wprs-app/src/covers.rs
+msgid "The file is damaged"
+msgstr "El archivo está dañado"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "The file stays where it is."
+msgstr "El archivo se queda donde está."
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "The library could not be read"
+msgstr "No se pudo leer la biblioteca"
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "The service answered with an error. Try again in a moment."
+msgstr "El servicio respondió con un error. Prueba de nuevo en un momento."
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "Try other words, or look in every kind of wallpaper."
+msgstr "Prueba otra palabra, o busca en todos los tipos de fondo."
+
+#: apps/wprs-app/src/covers.rs
+msgid "Withdrawn by its repository"
+msgstr "Retirado por su repositorio"
+
+#: apps/wprs-app/qml/LibraryCovers.qml
+msgid "Your library"
+msgstr "Tu biblioteca"
+
+#: apps/wprs-app/qml/LibraryPanel.qml
+msgid "Yours"
+msgstr "Tuyo"

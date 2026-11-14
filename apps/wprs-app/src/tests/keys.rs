@@ -32,17 +32,12 @@ fn every_menu_word_reads_in_spanish() {
 }
 
 #[test]
-fn the_library_grid_takes_the_keyboard_and_its_tiles_do_not() {
-    let (library, tile) = (read("qml/LibraryPage.qml"), read("qml/Tile.qml"));
-    for needle in [
-        "activeFocusOnTab: true",
-        "keyNavigationEnabled: true",
-        "Keys.onSpacePressed",
-        "Keys.onReturnPressed",
-    ] {
-        assert!(library.contains(needle), "{needle}");
+fn the_library_covers_take_the_keyboard() {
+    let covers = read("qml/LibraryCovers.qml");
+    for needle in ["FocusScope {", "Keys.onDownPressed", "Keys.onEscapePressed", "Qt.Key_A"] {
+        assert!(covers.contains(needle), "{needle}");
     }
-    assert!(tile.contains("focusPolicy: Qt.NoFocus") && tile.contains("Kirigami.Theme.focusColor"));
+    assert!(read("qml/Estante.qml").contains("focus: true") && read("qml/Rejilla.qml").contains("focus: true"));
 }
 
 #[test]

@@ -7,6 +7,7 @@ mod bus;
 mod callmacro;
 mod calls;
 mod checkrun;
+mod covers;
 mod choices;
 mod depth;
 mod depthproc;

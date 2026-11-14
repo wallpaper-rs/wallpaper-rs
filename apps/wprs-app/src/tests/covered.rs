@@ -41,7 +41,7 @@ fn the_library_warns_before_applying_a_web_page_this_build_cannot_show() {
     let text = |name: &str| files.iter().find(|(n, _)| n == name).map(|(_, t)| t.clone()).unwrap();
     assert!(text("WebPrivacy.qml").contains("visible: !!privacy.pkg?.unshown"));
     assert!(
-        text("ItemDrawer.qml").contains("enabled: !drawer.pkg?.unshown"),
+        text("LibraryMore.qml").contains("enabled: !!more.pkg && !more.pkg.unshown"),
         "a page that cannot run was tried"
     );
     let rows = include_str!("../rows.rs");
@@ -84,7 +84,7 @@ fn a_page_preview_shows_its_lights_and_gives_its_stream_back() {
     );
     assert!(lights.contains("active: trial.opened") && strip.contains("running: lights.active"));
     assert!(text("PackagePreview.qml").contains("LightsStrip {"), "the package preview shows no lights");
-    assert!(text("ItemDrawer.qml").contains("lights.start(drawer.uid)"));
+    assert!(text("LibraryMore.qml").contains("lights.start(more.host.uid)"));
 }
 
 #[test]

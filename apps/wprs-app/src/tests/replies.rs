@@ -154,9 +154,8 @@ fn animated_previews_play_only_when_shown_allowed_and_on_mains() {
         assert!(text.contains("animated: row.pkg.photosensitive === true && !row.allowed ? \"\" :"));
         assert!(text.contains("moving: !(row.daemon.state?.on_battery ?? false)"));
     }
-    let drawer = app("ItemDrawer.qml");
-    assert!(drawer.contains("readonly property string animated: mature || flashing ? \"\" :"));
-    assert!(drawer.contains("playing: visible && drawer.opened && !(App.state.on_battery ?? false)"));
+    assert!(app("ItemHost.qml").contains("readonly property string animated: flashing ? \"\" :"));
+    assert!(app("LibraryPanel.qml").contains("playing: visible && !(App.state.on_battery ?? false)"));
 }
 
 #[test]

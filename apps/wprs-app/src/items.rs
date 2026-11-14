@@ -52,6 +52,10 @@ pub mod qobject {
         #[qinvokable]
         fn uid(self: &ItemModel, row: i32) -> QString;
         #[qinvokable]
+        fn showing(self: Pin<&mut ItemModel>, outputs: &QString);
+        #[qinvokable]
+        fn chosen(self: &ItemModel) -> QString;
+        #[qinvokable]
         fn row(self: &ItemModel, uid: &QString) -> i32;
         #[qsignal]
         fn reloaded(self: Pin<&mut ItemModel>);

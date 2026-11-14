@@ -12,6 +12,6 @@ fn a_screen_says_when_its_page_threw_and_why_a_picture_does_not_move() {
     for word in ["software", "building_simple"] {
         assert!(notes.contains(&format!("\"{word}\":")), "{word} has no note");
     }
-    let tile = text("Tile.qml");
-    assert!(tile.contains(r#"tile.missing ? App.tr("The file is missing") : "", tile.broken"#));
+    let covers = include_str!("../covers.rs");
+    assert!(covers.contains(r#"tr("The file is missing")"#) && covers.contains(r#"tr("The file is damaged")"#));
 }

@@ -105,7 +105,7 @@ fn package_texts_render_as_plain_text() {
     let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("qml");
     let data = ["modelData", "title", "info", "credit", "item", "details", "name", "playing", "tags"];
     let shown = |line: &str| data.iter().any(|d| line.contains(d));
-    let files = ["PackageAbout", "Browse", "Tile", "PlaylistItems", "ItemDrawer", "ItemFacts", "Installed"];
+    let files = ["PackageAbout", "Browse", "LibraryCard", "PlaylistItems", "LibraryMore", "ItemFacts", "Installed"];
     let files = files
         .into_iter()
         .chain([

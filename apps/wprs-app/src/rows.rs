@@ -119,7 +119,7 @@ impl ItemModel {
             12 => text(&item.tags.join(", ")),
             13 => QVariant::from(&item.package.as_ref().is_some_and(|p| p.asks("mature"))),
             14 => QVariant::from(&item.package.as_ref().is_some_and(|p| p.flash_disabled)),
-            _ => QVariant::default(),
+            other => crate::covers::data(item, &self.shown, other),
         }
     }
 
