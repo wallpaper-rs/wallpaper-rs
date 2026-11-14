@@ -8,7 +8,7 @@ use zbus::{Result, proxy};
 pub trait Inputs1 {
     fn grant(&self, scene: &str, input: &str) -> Result<()>;
     fn grant_package(&self, scene: &str, key: &str, input: &str) -> Result<()>;
-    fn decide(&self, scene: &str, key: &str, allow: Vec<String>, deny: Vec<String>) -> Result<()>;
+    fn decide(&self, scene: &str, key: &str, allow: &[&str], deny: &[&str]) -> Result<()>;
     fn revoke(&self, scene: &str, input: &str) -> Result<()>;
     fn get_inputs(&self) -> Result<String>;
     fn set_pointer(&self, x: i32, y: i32) -> Result<()>;

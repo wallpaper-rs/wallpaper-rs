@@ -64,8 +64,8 @@ pub(super) async fn decide(
             return Err(usage(format!("{many} ({})", list(outputs))));
         }
     };
-    let names = |kinds: &[Kind]| kinds.iter().map(|k| k.name().to_owned()).collect::<Vec<_>>();
-    client.inputs.decide(scene, &key, names(allow), names(without)).await.map_err(wprs_client::explain)?;
+    let names = |kinds: &[Kind]| kinds.iter().map(|k| k.name()).collect::<Vec<_>>();
+    client.inputs.decide(scene, &key, &names(allow), &names(without)).await.map_err(wprs_client::explain)?;
     println!("{}", fill(told("%1 answered"), &[&scene]));
     Ok(())
 }
