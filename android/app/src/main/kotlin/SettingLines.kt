@@ -65,7 +65,7 @@ private val SCREEN = listOf(
     Line(R.string.convert_videos, Block.Screen) { k ->
         Pick(stringResource(R.string.convert_videos), convertWords(), k[Convert.SETTING]) { k.set(Convert.SETTING, it) }
     },
-    Line(R.string.filter, Block.Screen) { Grade(it.main) },
+    Line(R.string.filter, Block.Screen, more = true) { Grade(it.main) },
     Line(R.string.lowest_below, Block.Screen, more = true) { k ->
         Pick(stringResource(R.string.lowest_below), lowestWords(), k["playback.lowest_below_percent"]) { k.set("playback.lowest_below_percent", it) }
     },
