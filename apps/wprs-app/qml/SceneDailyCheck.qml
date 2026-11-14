@@ -164,7 +164,7 @@ QtObject {
                 }
             }
         });
-        const found = [presets.all.length, presets.caption(presets.all[0]).includes("#402030")];
+        const found = [presets.all.length, presets.caption(presets.all[0]).includes(Labels.colour("#402030")) && !presets.caption(presets.all[0]).includes("#")];
         presets.destroy();
         const maker = make("PresetMaker.qml", {});
         found.push(maker.fits[0] === "" && maker.fits.includes("fill"));
