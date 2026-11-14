@@ -6,11 +6,16 @@ QtObject {
     property var findings: []
     property string kind: "scene"
     property string notice: ""
+    readonly property QtObject view: QtObject {
+        property string kind: "scene"
+    }
     readonly property QtObject editor: QtObject {
         property bool busy: false
         property bool dirty: false
         property string error: ""
         property string folder: ""
+        property string output: ""
+        property real time: 0
 
         signal finished(string message)
 
@@ -36,5 +41,8 @@ QtObject {
     }
 
     function jump(pointer) {
+    }
+
+    function run(name, args) {
     }
 }
