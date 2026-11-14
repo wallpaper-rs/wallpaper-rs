@@ -24,11 +24,11 @@ private val LACKS = mapOf(
 )
 
 @Composable
-fun Own(main: Main, uid: String, item: Item?, picture: Boolean, state: JSONObject, form: JSONObject) = Column {
+fun Own(main: Main, uid: String, item: Item?, picture: Boolean, state: JSONObject, form: JSONObject, undecided: List<String>) = Column {
     if (picture && state.optBoolean("changed")) Note(stringResource(R.string.picture_changed), MaterialTheme.colorScheme.error)
     if (picture) Relief(main, uid, state)
     item?.takeIf { it.video && !it.reel }?.let { ConvertVideo(main, it) }
-    if (item?.scene == true || item?.reel == true) SceneControls(main, uid, form)
+    if (item?.scene == true || item?.reel == true) SceneControls(main, uid, form, undecided)
 }
 
 @Composable

@@ -83,7 +83,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
         if (inUse && heavy(report)) PlayAnyway(main)
         Asks(main, uid, undecided)
         if (picture) Framing(main, uid, state)
-        Own(main, uid, item, picture, state, form)
+        Own(main, uid, item, picture, state, form, undecided)
         item?.let { shown ->
             Fold(stringResource(R.string.more_options), more, Modifier.testTag("more_wallpaper")) { more = !more }
             if (more) About(main, uid, shown, form, open)

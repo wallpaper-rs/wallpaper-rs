@@ -24,7 +24,7 @@ fun sceneForm(main: Main, uid: String): State<JSONObject> {
 }
 
 @Composable
-fun SceneControls(main: Main, uid: String, form: JSONObject, modifier: Modifier = Modifier) {
+fun SceneControls(main: Main, uid: String, form: JSONObject, undecided: List<String>, modifier: Modifier = Modifier) {
     val refused = stringResource(R.string.microphone_needed)
     var flipped by remember(uid) { mutableStateOf(setOf<String>()) }
     val set: (String, Any?) -> Unit = { key, value -> main.act { ask("property", "uid" to uid, "key" to key, "value" to value) } }
@@ -33,17 +33,19 @@ fun SceneControls(main: Main, uid: String, form: JSONObject, modifier: Modifier 
     val chooser = rememberChooser(main, uid)
     Column(modifier) {
         val (uses, granted) = form.optJSONObject("uses") to form.optJSONObject("granted")
-        if (uses?.optBoolean("audio") == true) Toggle(stringResource(R.string.react_sound), granted?.optBoolean("audio") == true) { on ->
+        val open = { input: String -> uses?.optBoolean(input) == true && input !in undecided }
+        if (open("audio")) Toggle(stringResource(R.string.react_sound), granted?.optBoolean("audio") == true) { on ->
             if (on && main.checkSelfPermission(RECORD_AUDIO) != PERMISSION_GRANTED) microphone.launch(RECORD_AUDIO) else grant("audio", on)
         }
         SoundNetworkGrants(form) { input, on -> grant(input, on) }
-        if (uses?.optBoolean("touch") == true) {
-            Toggle(stringResource(R.string.react_touch), granted?.optBoolean("touch") == true) { grant("touch", it) }
+        val touched = listOf("touch", "taps").filter { uses?.optBoolean(it) == true }
+        if (touched.isNotEmpty() && touched.none { it in undecided }) {
+            val label = stringResource(if ("touch" in touched) R.string.react_touch else R.string.react_taps)
+            Toggle(label, touched.any { granted?.optBoolean(it) == true }) { on ->
+                main.act(false) { ask("decide", "uid" to uid, "allow" to if (on) touched else emptyList(), "deny" to if (on) emptyList() else touched) }
+            }
         }
-        if (uses?.optBoolean("taps") == true) {
-            Toggle(stringResource(R.string.react_taps), granted?.optBoolean("taps") == true) { grant("taps", it) }
-        }
-        MediaGrants(form) { input, on -> grant(input, on) }
+        if (open("media")) MediaGrants(form) { input, on -> grant(input, on) }
         if (form.optBoolean("video")) Reeler(main, uid, form, set)
         val fields = form.optJSONArray("fields") ?: JSONArray()
         val renamed = if (form.optBoolean("video")) REEL.keys else if (form.optJSONObject("web")?.optBoolean("own_volume") == false || form.optBoolean("sounds")) setOf("volume") else emptySet()
