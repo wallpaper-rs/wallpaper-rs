@@ -12,16 +12,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -49,9 +45,10 @@ private val HEAD = 196.dp
 private val BLOCK_GAP = 6.dp
 
 @Composable
-fun TaskPage(foot: (@Composable RowScope.() -> Unit)?, content: @Composable ColumnScope.() -> Unit) =
-    Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.ime.exclude(WindowInsets.navigationBars))) {
+fun TaskPage(foot: (@Composable RowScope.() -> Unit)?, above: (@Composable () -> Unit)? = null, content: @Composable ColumnScope.() -> Unit) =
+    Column(Modifier.fillMaxSize().imePadding()) {
         Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), content = content)
+        above?.invoke()
         foot?.let { Foot(it) }
     }
 

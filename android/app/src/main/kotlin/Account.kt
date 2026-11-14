@@ -1,13 +1,17 @@
 package io.github.wallpaper_rs
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,12 +42,12 @@ fun Account(desk: Desk, open: (Aside) -> Unit, library: () -> Unit, close: () ->
             state == "signed_out" -> Action({ desk.connect(main.getString(R.string.this_phone)) }, Modifier.weight(1f)) { Glyph(Ph.LinkSimple, null); Text(stringResource(R.string.connect)) }
             else -> Action({ start(desk, status) }, Modifier.weight(1f)) { Glyph(Ph.ArrowsClockwise, null); Text(stringResource(R.string.sync_now)) }
         }
-    }) {
+    }, above = { if (desk.offer && state == "connected" && desk.task == null) Offer(status.server(), desk) }) {
         Header(stringResource(R.string.account), close)
         if (!linked) return@TaskPage Unlinked()
         val server = status.server()
         StripHead(stringResource(if (offline) R.string.offline_from else R.string.connected_to, server)) { Line(desk, status, offline) }
-        Setting(stringResource(R.string.server), sub = host(status.optString("url")))
+        Setting(stringResource(R.string.server_group), sub = host(status.optString("url")))
         when {
             offline -> Problem(
                 stringResource(R.string.cannot_reach, host(status.optString("url"))),
@@ -62,7 +66,6 @@ fun Account(desk: Desk, open: (Aside) -> Unit, library: () -> Unit, close: () ->
             else -> Block(stringResource(R.string.sync_block), stringResource(if (state == "connected") R.string.sync_explain else R.string.sync_digits))
         }
         Setting(stringResource(R.string.more_options), Modifier.testTag("more"), onClick = { open(Aside.More) })
-        if (desk.offer && state == "connected") Offer(server, desk)
     }
     Pairing(main, status, desk.run)
     Chooser(desk, status)
@@ -130,10 +133,20 @@ private fun Arrived(items: List<Item>) = Column(Modifier.padding(top = Measure.e
 }
 
 @Composable
-private fun Offer(server: String, desk: Desk) = Tell(stringResource(R.string.sync_offer, server), Modifier.padding(top = Measure.e5).testTag("offer"), Ph.CloudCheck) {
-    Row {
-        WordAction({ desk.offer = false }) { Text(stringResource(R.string.not_now)) }
-        WordAction(desk::syncing) { Text(stringResource(R.string.sync_short)) }
+private fun Offer(server: String, desk: Desk) {
+    val shape = RoundedCornerShape(Measure.rNotice)
+    Column(
+        Modifier.padding(Measure.e3).fillMaxWidth().background(tones.nightHigh, shape).border(Measure.line, tones.nightLine, shape)
+            .padding(start = Measure.e4, end = Measure.e2, top = Measure.e3, bottom = Measure.e1).testTag("offer"),
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Measure.e3)) {
+            Glyph(Ph.CloudCheck, null, size = Measure.iconSquare)
+            Text(stringResource(R.string.sync_offer, server), Modifier.weight(1f), style = Type.text)
+        }
+        Row(Modifier.fillMaxWidth(), Arrangement.End) {
+            WordAction({ desk.offer = false }) { Text(stringResource(R.string.not_now)) }
+            WordAction(desk::syncing) { Text(stringResource(R.string.sync_short)) }
+        }
     }
 }
 
