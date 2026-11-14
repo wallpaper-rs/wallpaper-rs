@@ -68,10 +68,8 @@ fn the_self_check_walks_every_page_with_the_keyboard() {
 fn every_list_and_click_target_of_the_main_pages_takes_the_keyboard() {
     let control = read("qml/Mando.qml");
     assert!(control.contains("activeFocusOnTab: !off") && control.contains("Keys.onReturnPressed"));
-    for page in ["RepoStatic"] {
-        let text = read(&format!("qml/{page}.qml"));
-        assert!(text.contains("FocusList {") && !text.contains("ListView {"), "{page}");
-    }
+    let text = read("qml/RepoStatic.qml");
+    assert!(text.contains("FocusList {") && !text.contains("ListView {"));
     for page in ["ListaEditor", "ListaHistorial"] {
         assert!(read(&format!("qml/{page}.qml")).contains("Sublista {"), "{page}");
     }
