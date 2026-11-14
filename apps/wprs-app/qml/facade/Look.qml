@@ -132,6 +132,9 @@ QtObject {
     readonly property int altoSublista: 48
     readonly property int altoCerrar: 30
     readonly property int panelChico: 360
+    readonly property int pantalla: 112
+    readonly property int pantallaAncha: 164
+    readonly property int marcaPantalla: 4
     readonly property int menuChico: 280
     readonly property int listaHueco: 6
     readonly property int campoAncho: 260

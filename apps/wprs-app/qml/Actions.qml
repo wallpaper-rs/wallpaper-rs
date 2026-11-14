@@ -34,6 +34,9 @@ Item {
         if (!uid)
             return;
         const output = several ? target : "";
+        const spot = output !== "" ? output : App.outputs.length > 0 ? App.outputs[0] : "";
+        const screens = App.state.outputs ?? {};
+        const rotating = screens[spot] ? screens[spot].playlist ?? null : null;
         App.query("GetItem", [uid], "Library1", reply => {
             if (!tools)
                 return;
@@ -43,6 +46,8 @@ Item {
                     return;
                 tools.applied = uid;
                 const title = reply.item ? reply.item.title ?? "" : "";
+                if (rotating)
+                    return applicationWindow().showPassiveNotification(App.tr("The rotation of “%1” stopped because you set “%2”.", rotating.name, title), "long", App.tr("Resume"), () => App.act("Start", [rotating.uid, spot], "Playlists1"));
                 applicationWindow().showPassiveNotification(output !== "" && !spread ? App.tr("%1 is now the wallpaper of %2", title, output) : App.tr("%1 is now your wallpaper", title));
             });
         });

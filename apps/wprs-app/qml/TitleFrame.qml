@@ -12,6 +12,7 @@ Item {
     readonly property bool full: !!(page && page.full)
     readonly property bool owned: !!(page && page.now)
     readonly property alias seat: seat
+    readonly property alias ahora: ahora
     readonly property alias veil: veils.band
     readonly property real bandLow: page && page.full !== true && page.bandLow > 0 ? page.bandLow : 0
     readonly property real upperLow: bandLow > 0 && page.upperHeight > 0 ? page.upperHeight : 0
@@ -136,10 +137,13 @@ Item {
             sourceComponent: frame.owned ? frame.page.now : null
         }
 
-        StatusBar {
-            visible: !frame.owned
+        Ahora {
+            id: ahora
+
             anchors.right: parent.right
-            width: Math.min(implicitWidth, frame.width - Look.menuAncho - Look.margen * 2)
+            visible: !frame.none && !frame.owned
+            page: frame.page
+            compact: frame.bandLow > 0
         }
     }
 

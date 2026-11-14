@@ -111,7 +111,7 @@ async fn page_requests_reach_the_window_even_before_it_listens() {
 #[test]
 fn a_job_that_fails_without_a_reason_is_told_in_the_users_language() {
     let silent = crate::events::SILENT;
-    assert!(read("qml/StatusBar.qml").contains(&format!("|| App.tr(\"{silent}\")")));
+    assert!(read("qml/AhoraTarea.qml").contains(&format!("|| App.tr(\"{silent}\")")));
     let spanish = crate::tr::catalog(&["es".to_owned()]);
     let es = |text: &str| spanish.get(text).cloned().unwrap_or_else(|| text.to_owned());
     assert_ne!(es(silent), silent);
