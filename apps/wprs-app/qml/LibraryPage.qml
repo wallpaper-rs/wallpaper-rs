@@ -114,10 +114,12 @@ Kirigami.Page {
         id: lower
 
         visible: page.opened === ""
-        x: page.bandLow > 0 ? page.band.x : 0
-        y: page.bandLow > 0 ? page.band.y : 0
-        width: page.bandLow > 0 ? page.band.width : page.width
-        height: page.bandLow > 0 ? page.band.height : page.height
+        readonly property bool placed: page.bandLow > 0 && page.band.width > 0
+
+        x: placed ? page.band.x : 0
+        y: placed ? page.band.y : 0
+        width: placed ? page.band.width : page.width
+        height: placed ? page.band.height : page.height
 
         Column {
             y: Math.max(0, bar.y - height - Look.e3)
