@@ -52,6 +52,10 @@ Timer {
         const at = step++;
         if (at > 0 && at <= host.pages.length && owns(at)) {
             walking.check(host.names[at - 1]);
+            if (["playlists", "repos"].includes(host.names[at - 1]))
+                Qt.createComponent("AhoraTapCheck.qml").createObject(host, {
+                    "host": host
+                }).start();
             host.pageStack.currentItem.keys?.();
             host.pageStack.currentItem.exercise?.();
         }

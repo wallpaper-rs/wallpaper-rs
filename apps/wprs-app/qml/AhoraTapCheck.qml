@@ -9,10 +9,12 @@ Item {
 
     function must(ok, text) {
         if (!ok)
-            throw new Error("now block taps: " + text);
+            throw new Error("now block taps on " + (host.pageStack.currentItem?.title ?? "?") + ": " + text);
     }
 
     function start() {
+        if (frame.owned)
+            return check.destroy();
         must(host.kind === "title" && frame.ahora.visible && !frame.ahora.none, "the block is not on the page");
         probe();
         check.destroy();
