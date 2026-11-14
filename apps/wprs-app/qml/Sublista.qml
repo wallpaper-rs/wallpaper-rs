@@ -111,7 +111,7 @@ Column {
 
                 Text {
                     Layout.maximumWidth: implicitWidth
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: implicitWidth
                     elide: Text.ElideRight
                     font.family: Look.letraTexto
                     font.pixelSize: Look.tCuerpo
