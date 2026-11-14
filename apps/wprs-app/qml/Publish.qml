@@ -26,6 +26,7 @@ Rectangle {
     readonly property string author: (manifest.authors ?? [])[0] ?? ""
     readonly property alias memory: memory
     readonly property alias work: work
+    readonly property alias revealing: revealing
     readonly property alias review: review
     readonly property alias sign: sign
     readonly property alias where: where
@@ -83,6 +84,9 @@ Rectangle {
 
     anchors.fill: parent
     color: Look.noche
+    onPlaceChanged: revealing.restart()
+    onFaultChanged: revealing.restart()
+    onAtChanged: revealing.restart()
     visible: shown
     z: 20
 
@@ -94,6 +98,13 @@ Rectangle {
         property string copied: "[]"
 
         location: Core.StandardPaths.writableLocation(Core.StandardPaths.ConfigLocation) + "/wallpaper-rs/publish.conf"
+    }
+
+    PublishReveal {
+        id: revealing
+
+        publish: publish
+        flick: scroll.contentItem
     }
 
     PublishWork {

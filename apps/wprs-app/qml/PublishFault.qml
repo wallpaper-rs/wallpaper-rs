@@ -7,12 +7,14 @@ PublishError {
     id: fault
 
     required property var where
+    required property string place
+    readonly property alias button: main
     readonly property var publish: where.publish
     readonly property var shown: publish.fault ?? ({})
     readonly property string kind: shown.kind ?? ""
     readonly property string next: Publishing.nextVersion(publish.version)
 
-    visible: publish.fault !== null && publish.at === 3
+    visible: publish.fault !== null && publish.at === 3 && publish.place === place
     title: shown.title ?? ""
     text: shown.text ?? ""
     details: shown.details ?? ""

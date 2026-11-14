@@ -19,6 +19,8 @@ PublishStep {
     readonly property string suggested: publish.editing ? Publishing.parent(publish.page.editor.folder) + "/" + (publish.manifest.id ?? "package") + "-" + publish.version + ".wpak" : publish.file
     readonly property string target: out !== "" ? out : suggested
     readonly property alias repo: repo
+    readonly property alias actions: actions
+    readonly property var trouble: publish.place === "server" ? server.fault : publish.place === "repo" ? repoFault : fileFault
     readonly property string action: publish.place === "server" ? App.tr("Upload to %1", host) : publish.place === "repo" ? (repo.making ? App.tr("Create and publish") : App.tr("Add and publish")) : App.tr("Save the file")
     readonly property bool can: publish.place === "server" ? publish.linked : publish.place === "repo" ? repo.ready : publish.editing
 
@@ -56,7 +58,7 @@ PublishStep {
             Text {
                 Layout.fillWidth: true
                 text: App.tr("In the folder “%1”, as %2", Publishing.folderName(where.target), Publishing.base(where.target))
-                wrapMode: Text.WordWrap
+                elide: Text.ElideMiddle
                 font.family: Look.letraTexto
                 font.pixelSize: Look.tPie
                 color: Look.bruma
@@ -68,9 +70,19 @@ PublishStep {
                 onClicked: saving.open()
             }
         }
+
+        PublishFault {
+            id: fileFault
+
+            Layout.fillWidth: true
+            where: where
+            place: "file"
+        }
     }
 
     PublishServer {
+        id: server
+
         where: where
     }
 
@@ -88,11 +100,14 @@ PublishStep {
             Layout.fillWidth: true
             where: where
         }
-    }
 
-    PublishFault {
-        Layout.fillWidth: true
-        where: where
+        PublishFault {
+            id: repoFault
+
+            Layout.fillWidth: true
+            where: where
+            place: "repo"
+        }
     }
 
     PublishMore {
@@ -137,6 +152,8 @@ PublishStep {
     }
 
     RowLayout {
+        id: actions
+
         spacing: Look.e3
         visible: where.publish.fault === null
 

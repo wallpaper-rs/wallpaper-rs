@@ -8,6 +8,7 @@ ColumnLayout {
 
     required property var where
     readonly property var publish: where.publish
+    readonly property alias fault: fault
 
     Layout.fillWidth: true
     spacing: Look.e1
@@ -43,6 +44,14 @@ ColumnLayout {
             Layout.fillWidth: true
             visible: !server.publish.unsigned
             text: App.tr("The first time, your signature is registered in your account by itself; we let you know.")
+        }
+
+        PublishFault {
+            id: fault
+
+            Layout.fillWidth: true
+            where: server.where
+            place: "server"
         }
     }
 

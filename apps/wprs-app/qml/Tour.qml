@@ -84,6 +84,10 @@ Timer {
                 Qt.createComponent("PublishUploadCheck.qml").createObject(host, {
                     "host": host
                 }).start();
+            if (App.backend.claim("reach"))
+                Qt.createComponent("PublishReachCheck.qml").createObject(host, {
+                    "host": host
+                }).start();
             return;
         } else if (at === host.pages.length + 1) {
             imaged = App.backend.claim("image");
