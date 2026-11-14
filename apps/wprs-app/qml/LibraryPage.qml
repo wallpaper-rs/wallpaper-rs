@@ -17,10 +17,7 @@ Kirigami.Page {
     readonly property alias covers: covers
     readonly property alias bar: bar
     readonly property alias host: host
-    readonly property var entry: {
-        const current = covers.view.view ? covers.view.view.currentItem : null;
-        return current && current.model ? current.model : null;
-    }
+    readonly property var entry: covers.view.view?.currentItem?.model ?? null
     readonly property string skeleton: opened !== "" ? "options" : ""
     readonly property bool full: all && opened === ""
     readonly property bool tellsService: opened === "" && state.failed
