@@ -1,6 +1,5 @@
 package io.github.wallpaper_rs
 
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,20 +32,11 @@ fun LamaNote(main: Main, fill: String?, changes: Int) {
         }
     }
     consent?.let { model ->
-        AlertDialog(
-            onDismissRequest = { consent = null },
-            confirmButton = {
-                WordAction({
-                    consent = null
-                    Depth.fetchLama()
-                }) { Text(stringResource(R.string.download)) }
-            },
-            dismissButton = { WordAction({ consent = null }) { Text(stringResource(R.string.cancel)) } },
-            title = { Text(stringResource(R.string.download_lama)) },
-            text = {
-                val terms = listOf("title", "size", "hosts", "license", "license_url").map(model::getString)
-                Text(stringResource(R.string.lama_terms, *terms.toTypedArray()))
-            },
-        )
+        val terms = listOf("title", "size", "hosts", "license", "license_url").map(model::getString)
+        val close = { consent = null }
+        Question(stringResource(R.string.download_lama), stringResource(R.string.lama_terms, *terms.toTypedArray()), stringResource(R.string.download), stringResource(R.string.cancel), false, close) {
+            close()
+            Depth.fetchLama()
+        }
     }
 }
