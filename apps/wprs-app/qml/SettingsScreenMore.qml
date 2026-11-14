@@ -77,12 +77,18 @@ FocusScope {
             text: App.tr("Wallpaper of %1", part.page.output)
         }
 
-        OutputRow {
-            width: parent.width
-            daemon: App
-            name: part.page.output
-            info: part.info
-            playlists: part.page.playlists
+        Repeater {
+            model: [part.page.output].concat(part.several ? [""] : [])
+
+            OutputRow {
+                required property string modelData
+
+                width: parent.width
+                daemon: App
+                name: modelData
+                info: (App.state.outputs ?? {})[modelData] ?? {}
+                playlists: part.page.playlists
+            }
         }
     }
 }

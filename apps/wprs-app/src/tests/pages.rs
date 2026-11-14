@@ -47,7 +47,7 @@ fn the_tray_leaves_every_advanced_setting_to_the_settings_page() {
         .map(|f| std::fs::read_to_string(f.unwrap().path()).unwrap())
         .collect();
     let settings = shown_by("SettingsPage");
-    assert!(settings.contains("App.outputs.concat([\"\"])"));
+    assert!(settings.contains("[part.page.output].concat(part.several ? [\"\"] : [])"));
     for call in ["SetBackground", "Start", "Stop", "Previous", "GetSceneProperties", "Every screen"] {
         let quoted = format!("\"{call}\"");
         assert!(!tray.contains(&quoted) && settings.contains(&quoted), "{call}");
