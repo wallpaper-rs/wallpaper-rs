@@ -65,7 +65,6 @@
     <string name="fade_none">None</string>
     <string name="fade_ms">%1$d ms</string>
     <string name="delete">Delete playlist</string>
-    <string name="empty_playlist">Add wallpapers from their page in the library</string>
     <string name="take_out">Remove from playlist</string>
     <plurals name="wallpapers">
         <item quantity="one">%d wallpaper</item>

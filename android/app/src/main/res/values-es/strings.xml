@@ -62,7 +62,6 @@
     <string name="fade_none">Ninguno</string>
     <string name="fade_ms">%1$d ms</string>
     <string name="delete">Borrar la lista</string>
-    <string name="empty_playlist">Añade fondos desde su página en la biblioteca</string>
     <string name="take_out">Quitar de la lista</string>
     <plurals name="wallpapers">
         <item quantity="one">%d fondo</item>
