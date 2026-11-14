@@ -2,7 +2,7 @@
 
 Un código «conectar a este servidor» lleva la dirección del servidor, la huella de su certificado cuando el servidor usa uno propio (autofirmado), y una invitación si hay una. No lleva nada secreto: la huella es pública (cualquiera que abra la conexión TLS la ve) y el código de invitación es el mismo que ya va en el enlace de invitación.
 
-El módulo compartido es el crate `wprs-qr`. Construye el texto, lo valida de forma estricta y dibuja el código. No lee imágenes: leer con la cámara es cosa del teléfono.
+El módulo compartido es el crate `wprs-qr`. Construye el texto, lo valida de forma estricta y dibuja el código. Con la función `read` también lee un código en una imagen en grises (`wprs_qr::read`); la usa solo el teléfono, así el servidor no la lleva.
 
 ## Texto
 
@@ -32,8 +32,11 @@ El enlace de invitación (`<servidor>/register?invite=<código>`) no se pone en 
 | --- | --- |
 | `wprs-server` | `qr::connect_svg(server, fingerprint, invite)` devuelve el SVG en línea para las páginas; `qr::own_connect_svg` lo arma para cualquiera de las dos formas de correr el servidor: con la huella si es autofirmado, sin ella si no |
 | `wprs-ctl` | `wprs-ctl connect-code SERVIDOR [--fingerprint HUELLA] [--invite CÓDIGO] [--draw] [--light]` imprime el texto y, con `--draw`, el código con bloques |
-| `wprs-android` | `Native.connectCode(texto)` solo analiza: responde un JSON con `server`, `fingerprint` (nulo si no hay) e `invite`, o el error con su mensaje |
+| `wprs-android` | `Native.connectCode(texto)` solo analiza: responde un JSON con `server`, `fingerprint` (nulo si no hay) e `invite`, o el error con su mensaje. `Native.readCode(imagen, [ancho, alto, paso])` lee el texto de un cuadro de la cámara (vacío si no hay código) |
+| App del teléfono | «Escanear el código QR», junto a la dirección en «Conectar al servidor», abre el lector (`Scan.kt`, cámara de la plataforma con `Lens.kt`). El permiso de la cámara se pide al tocarlo, nunca antes. Un código nuestro deja la dirección y la huella y conecta sin escribir nada; uno ajeno o dañado lo dice en una línea y la cámara sigue mirando. Sin cámara, o sin permiso, queda escribir la dirección y se dice por qué. Si el certificado no coincide, «Escanear el QR de nuevo» vuelve al lector |
 
 ## Pruebas
 
 `cargo test -p wprs-qr`: ida y vuelta del texto, entradas hostiles (campos repetidos, desordenados, mayúsculas, caracteres de control, longitud, puertos, rutas), una matriz de referencia completa y los patrones fijos del estándar (buscadores, temporización, módulo oscuro) para tres tamaños. Cada dibujo se decodifica con un lector independiente (`rqrr`, solo en pruebas) y debe devolver el mismo texto.
+
+En el teléfono, `ScanTest` alimenta el lector con imágenes de `tests/fixtures/code-ours.png` y `code-foreign.png` en lugar de la cámara: un permiso negado deja escribir, un código ajeno muestra su línea con el lector abierto y uno nuestro termina en la conexión con su servidor y su huella.

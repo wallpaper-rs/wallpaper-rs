@@ -25,7 +25,7 @@ class Desk(val main: Main) {
     var label by mutableStateOf("")
     var print by mutableStateOf<String?>(null)
     var scanned by mutableStateOf(false)
-    var noCamera by mutableStateOf(false)
+    var blind by mutableStateOf<Int?>(null)
     var failed by mutableStateOf<Refused?>(null)
     var asked by mutableStateOf<String?>(null)
     var offer by mutableStateOf(false)
@@ -33,6 +33,7 @@ class Desk(val main: Main) {
     var plain by mutableStateOf(false)
     var choosing by mutableStateOf(false)
     var status: () -> JSONObject = { Sync.status() }
+    var dial: (String) -> Unit = { connect(it) }
 
     val run: Run = { waiting, work ->
         main.act(false) {

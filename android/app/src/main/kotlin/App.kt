@@ -8,12 +8,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 
-enum class Aside { Sources, Account, Connect, More, Print }
+enum class Aside { Sources, Account, Connect, More, Print, Scan }
 
 private fun Aside.back(): Aside? = when (this) {
     Aside.Connect, Aside.More -> Aside.Account
     Aside.Print -> Aside.More
+    Aside.Scan -> Aside.Connect
     else -> null
 }
 
@@ -25,6 +27,7 @@ fun App(main: Main) = Theme {
     var aside by rememberSaveable { mutableStateOf<Aside?>(null) }
     var printFrom by rememberSaveable { mutableStateOf(Aside.More) }
     val desk = remember(main) { Desk(main) }
+    val phone = stringResource(R.string.this_phone)
     BackHandler(item != null || playlist != null || aside != null || tab != Tab.Library) {
         when {
             item != null -> item = null
@@ -70,6 +73,7 @@ fun App(main: Main) = Theme {
             away == Aside.Connect -> Connect(desk, { printFrom = Aside.Connect; aside = it }, { aside = Aside.Account }) { aside = Aside.Account }
             away == Aside.More -> More(desk, { printFrom = Aside.More; aside = it }) { aside = Aside.Account }
             away == Aside.Print -> Print(desk) { aside = printFrom }
+            away == Aside.Scan -> Scan(Camera, { desk.take(it, phone); aside = Aside.Connect }, { desk.blind = it; aside = Aside.Connect }) { aside = Aside.Connect }
             tab == Tab.Library -> Library(main, { aside = Aside.Sources }) { item = it }
             tab == Tab.Lists && list != null -> Entries(main, list, { item = it }) { playlist = null }
             tab == Tab.Lists -> Playlists(main) { playlist = it }

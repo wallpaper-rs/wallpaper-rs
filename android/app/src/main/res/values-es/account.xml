@@ -87,4 +87,9 @@
     <string name="unsealed">sin cifrar</string>
     <string name="waiting_approval">Esperando la aprobación…</string>
     <string name="your_account_password">Contraseña de tu cuenta</string>
+    <string name="scan_code">Escanear el código QR</string>
+    <string name="scan_again">Escanear el QR de nuevo</string>
+    <string name="scan_intro">Apunta la cámara al código QR que muestra tu servidor.</string>
+    <string name="camera_missing">Este teléfono no tiene cámara: escribe o pega la dirección de tu servidor.</string>
+    <string name="camera_refused">Sin permiso para la cámara no se puede leer el código: escribe o pega la dirección de tu servidor.</string>
 </resources>

@@ -87,4 +87,9 @@
     <string name="unsealed">not encrypted</string>
     <string name="waiting_approval">Waiting for the approval…</string>
     <string name="your_account_password">Password of your account</string>
+    <string name="scan_code">Scan the QR code</string>
+    <string name="scan_again">Scan the QR again</string>
+    <string name="scan_intro">Point the camera at the QR code your server shows.</string>
+    <string name="camera_missing">This phone has no camera: type or paste the address of your server.</string>
+    <string name="camera_refused">Without the camera the code cannot be read: type or paste the address of your server.</string>
 </resources>

@@ -91,6 +91,8 @@ object Native {
 
     external fun connectCode(text: String): String
 
+    external fun readCode(frame: ByteArray, size: IntArray): String
+
     external fun library(request: String): String
 
     external fun account(request: String): String

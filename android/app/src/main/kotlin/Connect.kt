@@ -29,6 +29,12 @@ fun Connect(desk: Desk, open: (Aside) -> Unit, done: () -> Unit, close: () -> Un
     val failed = desk.failed
     TaskPage(foot = when {
         link != null || (desk.task != null && failed == null) -> null
+        failed?.id == Desk.OTHER_CERTIFICATE && desk.blind == null -> {
+            {
+                QuietAction({ open(Aside.Print) }) { Glyph(Ph.ClipboardText, null); Text(stringResource(R.string.paste_print)) }
+                Action({ desk.failed = null; open(Aside.Scan) }, Modifier.weight(1f).testTag("scan-again")) { Glyph(Ph.Scan, null); Text(stringResource(R.string.scan_again)) }
+            }
+        }
         failed?.id == Desk.OTHER_CERTIFICATE -> {
             {
                 QuietAction({ desk.failed = null }) { Text(stringResource(R.string.change_address)) }
@@ -93,7 +99,9 @@ private fun Form(desk: Desk, status: JSONObject, open: (Aside) -> Unit) {
             example = stringResource(R.string.server_example),
         ) {
             Square({ context.pasted().takeIf { it.isNotEmpty() }?.let { desk.url = it; desk.print = null } }, Ph.ClipboardText, stringResource(R.string.paste), boxed = false)
+            if (desk.blind == null) Square({ open(Aside.Scan) }, Ph.Scan, stringResource(R.string.scan_code), Modifier.testTag("scan"), boxed = false)
         }
+        desk.blind?.let { Text(stringResource(it), Modifier.padding(horizontal = Measure.margin).testTag("typing-stays"), tones.mist, style = Type.foot) }
     } else {
         Found(status.server(), host(status.optString("url")))
     }
