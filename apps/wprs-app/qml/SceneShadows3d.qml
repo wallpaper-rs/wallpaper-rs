@@ -72,7 +72,10 @@ ColumnLayout {
             Layout.fillWidth: true
 
             RowLayout {
+                Layout.fillWidth: true
+
                 QQC2.CheckBox {
+                    Layout.fillWidth: true
                     text: App.tr("%1 casts shadows", light.modelData.id)
                     checked: light.found !== null
                     onToggled: shadows.cast(light.modelData.id, {
@@ -115,6 +118,7 @@ ColumnLayout {
     }
 
     QQC2.CheckBox {
+        Layout.fillWidth: true
         text: App.tr("Show where shadows fall and the frusta of the maps")
         checked: shadows.shown && !shadows.debug?.material
         onToggled: shadows.page.run("scene3d", {

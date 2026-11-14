@@ -46,6 +46,9 @@ RowLayout {
     QQC2.TextField {
         id: field
 
+        Layout.fillWidth: true
+        Layout.minimumWidth: Look.e8
+        Layout.maximumWidth: implicitWidth
         implicitWidth: Kirigami.Units.gridUnit * 6
         maximumLength: 9
         text: swatch.hex

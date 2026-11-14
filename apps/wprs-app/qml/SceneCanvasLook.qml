@@ -1,10 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.FormLayout {
+ColumnLayout {
     id: look
 
     required property var page
@@ -52,51 +51,65 @@ Kirigami.FormLayout {
             }, true);
     }
 
-    QQC2.Switch {
-        Kirigami.FormData.label: App.tr("Glow:")
+    SceneValueRow {
         text: App.tr("Bright parts glow")
-        checked: look.bloom !== null
-        onToggled: look.edit("bloom", checked ? {} : {
-            "off": true
-        })
+
+        QQC2.Switch {
+            Accessible.name: App.tr("Bright parts glow")
+            checked: look.bloom !== null
+            onToggled: look.edit("bloom", checked ? {} : {
+                "off": true
+            })
+        }
     }
 
     Repeater {
         model: look.glows
 
-        delegate: SceneSlider {
+        delegate: SceneValueRow {
+            id: glow
+
             required property var modelData
 
             visible: look.bloom !== null
-            Kirigami.FormData.label: modelData[1] + ":"
-            from: modelData[2]
-            to: modelData[3]
-            stepSize: (modelData[3] - modelData[2]) / 100
-            value: typeof look.bloom?.[modelData[0]] === "number" ? look.bloom[modelData[0]] : modelData[4]
-            onMoved: look.slid("bloom", modelData[0], value, modelData[4])
+            text: glow.modelData[1]
+
+            SceneSlider {
+                Layout.fillWidth: true
+                Layout.preferredWidth: Look.rielAncho
+                Accessible.name: glow.text
+                from: glow.modelData[2]
+                to: glow.modelData[3]
+                stepSize: (glow.modelData[3] - glow.modelData[2]) / 100
+                value: typeof look.bloom?.[glow.modelData[0]] === "number" ? look.bloom[glow.modelData[0]] : glow.modelData[4]
+                onMoved: look.slid("bloom", glow.modelData[0], value, glow.modelData[4])
+            }
         }
     }
 
-    QQC2.Switch {
-        Kirigami.FormData.label: App.tr("Parallax:")
+    SceneValueRow {
         text: App.tr("Layers move in depth")
-        checked: look.glide !== null
-        onToggled: look.edit("parallax", checked ? {} : {
-            "off": true
-        })
+
+        QQC2.Switch {
+            Accessible.name: App.tr("Layers move in depth")
+            checked: look.glide !== null
+            onToggled: look.edit("parallax", checked ? {} : {
+                "off": true
+            })
+        }
     }
 
     Repeater {
         model: look.moves
 
-        delegate: RowLayout {
+        delegate: SceneValueRow {
             id: move
 
             required property var modelData
             readonly property var held: look.glide?.[modelData[0]]
 
             visible: look.glide !== null
-            Kirigami.FormData.label: modelData[1] + ":"
+            text: modelData[1]
 
             Repeater {
                 model: move.modelData[0] === "offset" ? [0, 1] : [-1]
@@ -105,6 +118,8 @@ Kirigami.FormLayout {
                     required property int modelData
 
                     Layout.fillWidth: true
+                    Layout.preferredWidth: modelData >= 0 ? Look.rielAncho / 2 : Look.rielAncho
+                    Accessible.name: move.text
                     enabled: typeof move.held !== "object" || Array.isArray(move.held) || move.held === undefined
                     from: move.modelData[2]
                     to: move.modelData[3]
@@ -122,12 +137,16 @@ Kirigami.FormLayout {
         }
     }
 
-    QQC2.CheckBox {
+    SceneValueRow {
         visible: look.glide !== null
         text: App.tr("Follow the tilt of a phone")
-        checked: look.glide?.gyro === true
-        onToggled: look.edit("parallax", {
-            "gyro": checked
-        })
+
+        QQC2.CheckBox {
+            Accessible.name: App.tr("Follow the tilt of a phone")
+            checked: look.glide?.gyro === true
+            onToggled: look.edit("parallax", {
+                "gyro": checked
+            })
+        }
     }
 }

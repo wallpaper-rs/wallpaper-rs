@@ -29,24 +29,28 @@ ColumnLayout {
         text: App.tr("Lighting")
     }
 
-    RowLayout {
+    SceneValueRow {
+        text: App.tr("Take the light of light layers")
+
         QQC2.Switch {
-            text: App.tr("Take the light of light layers")
+            Accessible.name: App.tr("Take the light of light layers")
             checked: lit.block !== null
             onToggled: lit.edit(checked ? {} : {
                 "off": true
             })
         }
+    }
 
-        QQC2.Button {
-            visible: lit.block !== null && ["image", "video", "text"].includes(lit.node?.type ?? "")
-            text: App.tr("Generate normals…")
-            icon.name: "draw-cuboid"
-            onClicked: normals.open()
-        }
+    QQC2.Button {
+        Layout.alignment: Qt.AlignRight
+        visible: lit.block !== null && ["image", "video", "text"].includes(lit.node?.type ?? "")
+        text: App.tr("Generate normals…")
+        icon.name: "draw-cuboid"
+        onClicked: normals.open()
     }
 
     GridLayout {
+        Layout.fillWidth: true
         visible: lit.block !== null && !lit.sprites
         columns: 2
 
@@ -61,7 +65,11 @@ ColumnLayout {
 
                 Layout.row: index
                 Layout.column: 0
+                Layout.fillWidth: true
+                Layout.preferredWidth: Look.e8
                 text: modelData[1]
+                color: Look.bruma
+                elide: Text.ElideRight
             }
         }
 

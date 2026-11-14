@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-GridLayout {
+RowLayout {
     id: ambient
 
     required property var page
@@ -20,7 +20,7 @@ GridLayout {
         return typeof v === "string" ? v : "#000000";
     }
 
-    columns: 3
+    spacing: Look.e3
     Component.onCompleted: load()
 
     Connections {
@@ -32,32 +32,45 @@ GridLayout {
     }
 
     Image {
-        Layout.rowSpan: 2
+        Layout.preferredWidth: Look.e7
+        Layout.preferredHeight: Look.e7
+        sourceSize.width: Look.e7 * 2
+        sourceSize.height: Look.e7 * 2
+        fillMode: Image.PreserveAspectFit
         source: ambient.shown?.sphere ?? ""
         cache: false
     }
 
-    QQC2.Label {
-        text: App.tr("Light around")
-    }
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 0
 
-    SceneColor {
-        alpha: false
-        hex: ambient.hex("ambient")
-        onPicked: hex => ambient.page.run("ambient", {
-            "ambient": hex
-        })
-    }
+        SceneValueRow {
+            text: App.tr("Light around")
 
-    QQC2.Label {
-        text: App.tr("Light from above")
-    }
+            SceneColor {
+                Layout.fillWidth: true
+                Layout.maximumWidth: implicitWidth
+                alpha: false
+                hex: ambient.hex("ambient")
+                onPicked: hex => ambient.page.run("ambient", {
+                    "ambient": hex
+                })
+            }
+        }
 
-    SceneColor {
-        alpha: false
-        hex: ambient.hex("sky")
-        onPicked: hex => ambient.page.run("ambient", {
-            "sky": hex
-        })
+        SceneValueRow {
+            text: App.tr("Light from above")
+
+            SceneColor {
+                Layout.fillWidth: true
+                Layout.maximumWidth: implicitWidth
+                alpha: false
+                hex: ambient.hex("sky")
+                onPicked: hex => ambient.page.run("ambient", {
+                    "sky": hex
+                })
+            }
+        }
     }
 }

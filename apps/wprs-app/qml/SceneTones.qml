@@ -24,26 +24,28 @@ ColumnLayout {
         text: App.tr("Bright colors")
     }
 
-    QQC2.Switch {
+    SceneValueRow {
         text: App.tr("Keep colors brighter than white")
-        checked: tones.hdr
-        onToggled: tones.set(checked ? {
-            "hdr": true
-        } : {
-            "hdr": false,
-            "tonemap": "none"
-        })
+
+        QQC2.Switch {
+            Accessible.name: App.tr("Keep colors brighter than white")
+            checked: tones.hdr
+            onToggled: tones.set(checked ? {
+                "hdr": true
+            } : {
+                "hdr": false,
+                "tonemap": "none"
+            })
+        }
     }
 
-    RowLayout {
+    SceneValueRow {
         enabled: tones.hdr
-
-        QQC2.Label {
-            text: App.tr("Tone map")
-        }
+        text: App.tr("Tone map")
 
         QQC2.ComboBox {
             Layout.fillWidth: true
+            Accessible.name: App.tr("Tone map")
             model: [App.tr("None"), App.tr("Filmic (ACES)"), App.tr("Soft (AgX)")]
             currentIndex: Math.max(0, tones.maps.indexOf(tones.map))
             onActivated: index => tones.set({
@@ -52,15 +54,14 @@ ColumnLayout {
         }
     }
 
-    RowLayout {
+    SceneValueRow {
         enabled: tones.hdr && tones.map !== "none"
-
-        QQC2.Label {
-            text: App.tr("Before and after")
-        }
+        text: App.tr("Before and after")
 
         SceneSlider {
             Layout.fillWidth: true
+            Layout.preferredWidth: Look.rielAncho
+            Accessible.name: App.tr("Before and after")
             from: 0
             to: 1
             stepSize: 0.05

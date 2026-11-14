@@ -51,6 +51,7 @@ ColumnLayout {
             required property int index
             readonly property var modelData: listed.rows[index]
 
+            Layout.fillWidth: true
             text: App.tr("%1 in 3D", modelData.id)
             checked: modelData.space
             onToggled: placed.page.run("scene3d", {
