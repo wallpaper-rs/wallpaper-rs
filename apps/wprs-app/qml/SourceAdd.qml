@@ -48,7 +48,7 @@ FocusScope {
         });
     }
 
-    implicitHeight: rows.implicitHeight + Look.e4 + tail.implicitHeight
+    implicitHeight: rows.implicitHeight + Look.e5 + tail.implicitHeight
     Keys.onEscapePressed: cancelled()
 
     Filas {
@@ -108,7 +108,7 @@ FocusScope {
         id: tail
 
         anchors.top: rows.bottom
-        anchors.topMargin: Look.e4
+        anchors.topMargin: Look.e5
         width: rows.width
         spacing: Look.e3
 
@@ -135,12 +135,14 @@ FocusScope {
             spacing: Look.huecoBoton
 
             QQC2.Button {
+                anchors.verticalCenter: parent.verticalCenter
                 flat: true
                 text: App.tr("Cancel")
                 onClicked: add.cancelled()
             }
 
             QQC2.Button {
+                anchors.verticalCenter: parent.verticalCenter
                 highlighted: true
                 enabled: add.ready
                 text: App.tr("Add and bring photos")
