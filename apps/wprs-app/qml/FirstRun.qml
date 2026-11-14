@@ -73,8 +73,10 @@ Item {
         if (App.jobs.some(j => j.kind === "install" && j.state === "failed" && String(j.target).includes(pkg.id)))
             return reset();
         App.query("ListInstalled", [], "Repos1", reply => {
-            const found = run ? reply.packages.find(p => p.id === pkg.id && p.item) : null;
-            if (!found || !run || run.pending !== pkg || run.phase !== "installing")
+            if (!run)
+                return;
+            const found = reply.packages.find(p => p.id === pkg.id && p.item);
+            if (!found || run.pending !== pkg || run.phase !== "installing")
                 return;
             run.phase = "applying";
             App.act("Apply", [found.item, "", "", ""], "Library1", () => run && run.announce(pkg), () => run && run.reset());
