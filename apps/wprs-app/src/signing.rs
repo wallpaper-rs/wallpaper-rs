@@ -34,6 +34,10 @@ pub mod qobject {
             new_key: &QString,
             author: &QString,
         );
+        #[qinvokable]
+        fn unlocks(self: &Signing, secret: &QString, password: &QString) -> bool;
+        #[qinvokable]
+        fn keep(self: &Signing, secret: &QString, folder: &QString) -> QString;
         #[qsignal]
         fn answered(self: Pin<&mut Signing>, operation: QString, answer: QString);
     }
@@ -127,5 +131,23 @@ impl Signing {
         self.behind("rotate", move || {
             author_keys::rotate(&old, password.map(|p| p.to_string()), &new, &author)
         });
+    }
+
+    pub fn unlocks(&self, secret_key: &QString, password: &QString) -> bool {
+        let password = secret(password).map(|p| p.to_string());
+        wprs_editor::package::signer(Path::new(&secret_key.to_string()), password).is_ok()
+    }
+
+    pub fn keep(&self, secret_key: &QString, folder: &QString) -> QString {
+        let (key, dir) = (PathBuf::from(secret_key.to_string()), PathBuf::from(folder.to_string()));
+        answer((|| {
+            let mut kept = Vec::new();
+            for file in [key.clone(), key.with_extension("pub")] {
+                let name = file.file_name().ok_or_else(|| anyhow::anyhow!("no key file"))?;
+                std::fs::copy(&file, dir.join(name))?;
+                kept.push(dir.join(name).to_string_lossy().into_owned());
+            }
+            Ok(json!({ "kept": kept }))
+        })())
     }
 }

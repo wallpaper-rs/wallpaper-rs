@@ -21,48 +21,7 @@ Kirigami.Page {
     readonly property var fields: JSON.parse(editor.fields || "[]")
     readonly property var manifest: page.view.id === undefined ? ({}) : JSON.parse(editor.value("/manifest") || "{}")
     readonly property string kind: view.kind ?? ""
-
-    function run(action, args, gesture) {
-        editor.run(action, JSON.stringify(args ?? {}), gesture === true);
-    }
-
-    function change(pointer, value, gesture) {
-        run("set", {
-            "pointer": pointer,
-            "value": value
-        }, gesture);
-    }
-
-    function manifestEdit(what, args, gesture) {
-        const edit = {};
-        edit[what] = args;
-        run("manifest", edit, gesture);
-    }
-
-    function jump(pointer) {
-        editor.select(pointer);
-        spot = pointer;
-    }
-
-    title: App.tr("Package: %1", view.title ?? "")
-    padding: 0
-    Component.onCompleted: {
-        if (starter) {
-            editor.create(folder, starter, heading);
-            const media = App.takeMedia();
-            if (media)
-                manifestEdit("media", {
-                        "file": media
-                    });
-        } else
-            editor.open(folder, source);
-        editor.select("/manifest");
-        if (App.checking)
-            Qt.createComponent("PackageCheck.qml").createObject(page, {
-                "page": page
-            }).exercise();
-    }
-    actions: [
+    readonly property list<QtObject> tools: [
         Kirigami.Action {
             text: App.tr("Back")
             icon.name: "go-previous"
@@ -99,6 +58,48 @@ Kirigami.Page {
             onTriggered: builder.open()
         }
     ]
+
+    function run(action, args, gesture) {
+        editor.run(action, JSON.stringify(args ?? {}), gesture === true);
+    }
+
+    function change(pointer, value, gesture) {
+        run("set", {
+            "pointer": pointer,
+            "value": value
+        }, gesture);
+    }
+
+    function manifestEdit(what, args, gesture) {
+        const edit = {};
+        edit[what] = args;
+        run("manifest", edit, gesture);
+    }
+
+    function jump(pointer) {
+        editor.select(pointer);
+        spot = pointer;
+    }
+
+    title: builder.shown ? builder.title : App.tr("Package: %1", view.title ?? "")
+    padding: 0
+    actions: builder.shown ? builder.actions : tools
+    Component.onCompleted: {
+        if (starter) {
+            editor.create(folder, starter, heading);
+            const media = App.takeMedia();
+            if (media)
+                manifestEdit("media", {
+                        "file": media
+                    });
+        } else
+            editor.open(folder, source);
+        editor.select("/manifest");
+        if (App.checking)
+            Qt.createComponent("PackageCheck.qml").createObject(page, {
+                "page": page
+            }).exercise();
+    }
 
     SceneEditor {
         id: editor
@@ -189,7 +190,7 @@ Kirigami.Page {
         }
     }
 
-    SceneBuild {
+    Publish {
         id: builder
 
         page: page

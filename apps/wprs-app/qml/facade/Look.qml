@@ -138,6 +138,10 @@ QtObject {
     readonly property int vacioAncho: 760
     readonly property int errorAncho: 640
     readonly property int errorGrandeAncho: 780
+    readonly property int pasoNum: 32
+    readonly property int pasoLado: 36
+    readonly property int publicarAncho: 600
+    readonly property int iconoDestino: 20
     readonly property int avisoDura: 8000
     readonly property int rielAncho: 120
     readonly property int huecoEstado: 7

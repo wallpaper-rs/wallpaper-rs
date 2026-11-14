@@ -11,6 +11,24 @@ Kirigami.Page {
     property var repos: []
     property string error
     property string removing
+    readonly property list<QtObject> tools: [
+        Kirigami.Action {
+            text: App.tr("Add repository…")
+            icon.name: "list-add"
+            onTriggered: adder.open()
+        },
+        Kirigami.Action {
+            text: App.tr("Upload package…")
+            icon.name: "document-export"
+            onTriggered: packages.open()
+        },
+        Kirigami.Action {
+            text: App.tr("Refresh all")
+            icon.name: "view-refresh"
+            enabled: page.repos.length > 0
+            onTriggered: App.act("Refresh", [""], "Repos1")
+        }
+    ]
 
     function load() {
         App.query("List", [], "Repos1", reply => {
@@ -47,24 +65,7 @@ Kirigami.Page {
 
     title: App.tr("Repositories")
     Component.onCompleted: load()
-    actions: [
-        Kirigami.Action {
-            text: App.tr("Add repository…")
-            icon.name: "list-add"
-            onTriggered: adder.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Upload package…")
-            icon.name: "document-export"
-            onTriggered: packages.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Refresh all")
-            icon.name: "view-refresh"
-            enabled: page.repos.length > 0
-            onTriggered: App.act("Refresh", [""], "Repos1")
-        }
-    ]
+    actions: uploader.shown ? uploader.actions : tools
     header: QQC2.TabBar {
         id: tabs
 
@@ -142,13 +143,10 @@ Kirigami.Page {
         id: packages
 
         nameFilters: [App.tr("Packages (*.wpak)")]
-        onAccepted: {
-            uploader.file = App.path(selectedFile);
-            uploader.open();
-        }
+        onAccepted: uploader.openWith(App.path(selectedFile))
     }
 
-    UploadDialog {
+    Publish {
         id: uploader
     }
 

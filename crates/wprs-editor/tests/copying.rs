@@ -63,6 +63,7 @@ fn a_package_without_derivatives_is_refused_unless_the_author_says_it_is_theirs(
         text.contains("CC-BY-ND-4.0") && text.contains("Ana") && warned.as_array().unwrap().len() == 1,
         "{warned}"
     );
+    assert_eq!(lineage(&dir).unwrap(), warned, "the project folder of a copy warns like its package");
     assert!(extract(&file, &root.path().join("same"), Some("org.example.sky"), true).is_err());
     assert!(extract(&file, &root.path().join("bad"), Some("Not An Id"), true).is_err());
 }

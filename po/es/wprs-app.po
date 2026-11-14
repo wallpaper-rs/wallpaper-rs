@@ -18895,3 +18895,571 @@ msgstr "Error en el script"
 
 msgid "Lasts %1 s · repeats"
 msgstr "Dura %1 s · se repite"
+
+#: apps/wprs-app/qml/Publish.qml
+msgid "Publish “%1”"
+msgstr "Publicar «%1»"
+
+#: apps/wprs-app/qml/Publish.qml
+msgid "Three steps on this same page. At the end we tell you what to give the other person."
+msgstr "Tres pasos en esta misma página. Al final te decimos qué darle a la otra persona."
+
+#: apps/wprs-app/qml/PublishCopy.qml
+msgid "No copy saved"
+msgstr "Sin copia guardada"
+
+#: apps/wprs-app/qml/PublishCopy.qml
+msgid "Save a copy…"
+msgstr "Guardar una copia…"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "“%1” %2"
+msgstr "«%1» %2"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "%1 is in a file"
+msgstr "%1 está en un archivo"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "%1 was uploaded to %2"
+msgstr "%1 se subió a %2"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "%1 is in %2"
+msgstr "%1 está en %2"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "Hand this file to whoever you want. They add it to their library with “Add wallpapers…”."
+msgstr "Pásale este archivo a quien quieras. Lo suma a su biblioteca con «Añadir fondos…»."
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "%1 reviews what is uploaded: it stays in review and people see it once it is approved. Then it will be public; to give it to someone, send them the link."
+msgstr "%1 revisa lo que se sube: queda en revisión y la verán cuando la aprueben. Después será pública; para dársela a alguien, mándale el enlace."
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "This repository lives in the folder “%1” on your computer. For others to add it, that folder has to be somewhere they can reach, like your server or a shared folder. From there they add it in Explore › Repositories."
+msgstr "Este repositorio vive en la carpeta «%1» de tu equipo. Para que otros lo añadan, esa carpeta tiene que estar en un sitio que ellos alcancen, como tu servidor o una carpeta compartida. Desde ahí lo añaden en Explorar › Repositorios."
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "Signed, “%1” %2 was added and its list was published"
+msgstr "Se firmó, se añadió «%1» %2 y se publicó su lista"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "Your signature “%1” has no saved copy; without it you cannot publish as %1 from another computer."
+msgstr "Tu firma «%1» no tiene copia guardada; sin ella no podrás publicar como %1 desde otro equipo."
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "%1, in the folder “%2”"
+msgstr "%1, en la carpeta «%2»"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "Show in the folder"
+msgstr "Mostrar en la carpeta"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "Copy the link"
+msgstr "Copiar el enlace"
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "In review. How it goes: Account › Your uploads."
+msgstr "En revisión. Cómo va: Cuenta › Tus subidas."
+
+#: apps/wprs-app/qml/PublishDone.qml
+msgid "Publish again before %1: on that day the list of the repository expires."
+msgstr "Vuelve a publicar antes del %1: ese día caduca la lista del repositorio."
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "Phone"
+msgstr "Teléfono"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "Nowhere yet"
+msgstr "En ningún sitio todavía"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "%1 and %2"
+msgstr "%1 y %2"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "%1: refused, %2"
+msgstr "%1: no se reproduce, %2"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "%1: plays without %2"
+msgstr "%1: se reproduce sin %2"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "Say it yourself: what does “%1” have?"
+msgstr "Dilo tú: ¿qué tiene «%1»?"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "Flashes: lights that blink fast"
+msgstr "Destellos: luces que parpadean rápido"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "Adult content"
+msgstr "Contenido adulto"
+
+#: apps/wprs-app/qml/PublishFacts.qml
+msgid "Asked the first time you publish this wallpaper; whoever puts it on sees the notice first."
+msgstr "Se pregunta la primera vez que publicas este fondo; quien lo pone ve el aviso antes."
+
+#: apps/wprs-app/qml/PublishFault.qml
+msgid "Upload as %1"
+msgstr "Subir como %1"
+
+#: apps/wprs-app/qml/PublishFault.qml
+msgid "Register it"
+msgstr "Registrarla"
+
+#: apps/wprs-app/qml/PublishFault.qml
+msgid "Sign it now"
+msgstr "Firmarlo ahora"
+
+#: apps/wprs-app/qml/PublishFault.qml
+msgid "Publish again"
+msgstr "Publicar de nuevo"
+
+#: apps/wprs-app/qml/PublishFault.qml
+msgid "Save the file"
+msgstr "Guardar el archivo"
+
+#: apps/wprs-app/qml/PublishFinding.qml
+msgid "Go to the problem"
+msgstr "Ir al problema"
+
+#: apps/wprs-app/qml/PublishFirst.qml
+msgid "Your signature shows that a wallpaper is yours and that nobody changed it on the way. It is made once and serves for everything you publish."
+msgstr "Tu firma demuestra que un fondo es tuyo y que nadie lo cambió por el camino. Se crea una vez y sirve para todo lo que publiques."
+
+#: apps/wprs-app/qml/PublishFirst.qml
+msgid "Your author name"
+msgstr "Tu nombre de autor"
+
+#: apps/wprs-app/qml/PublishFirst.qml
+msgid "Password, if you want one"
+msgstr "Contraseña, si quieres"
+
+#: apps/wprs-app/qml/PublishFirst.qml
+msgid "It keeps anyone else who uses this computer from signing as you. We ask for it every time you publish."
+msgstr "Sirve para que nadie más que use este equipo pueda firmar como tú. Te la pedimos cada vez que publiques."
+
+#: apps/wprs-app/qml/PublishFirst.qml
+msgid "Choose a key file…"
+msgstr "Elegir un archivo de clave…"
+
+#: apps/wprs-app/qml/PublishFirst.qml
+msgid "Publish without signing"
+msgstr "Publicar sin firmar"
+
+#: apps/wprs-app/qml/PublishFirst.qml
+msgid "Create my signature"
+msgstr "Crear mi firma"
+
+#: apps/wprs-app/qml/PublishPicture.qml
+msgid "%1 (with problems)"
+msgstr "%1 (con problemas)"
+
+#: apps/wprs-app/qml/PublishPicture.qml
+msgid "Wallpaper"
+msgstr "Fondo"
+
+#: apps/wprs-app/qml/PublishPlace.qml
+msgid "Last time"
+msgstr "El de la última vez"
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "“%1” is not signed yet"
+msgstr "«%1» todavía no está firmado"
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "Without that signature nobody can install from it. It is signed once, with its key."
+msgstr "Sin esa firma nadie puede instalar desde él. Se firma una vez, con su clave."
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "root: %1 of %2 required root signatures"
+msgstr "raíz: %1 de %2 firmas de raíz necesarias"
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "The list of “%1” expired on %2"
+msgstr "La lista de «%1» caducó el %2"
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "Whoever added it sees nothing new until you publish it again."
+msgstr "Quien lo tiene añadido no ve nada nuevo hasta que lo publiques otra vez."
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "index expired %1"
+msgstr "el índice caducó el %1"
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "folder “%1”"
+msgstr "carpeta «%1»"
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "Create one here…"
+msgstr "Crear uno aquí…"
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "Its keys are created, it is signed and its list is published; we tell you each step. For others to add it, the folder has to be somewhere they can reach."
+msgstr "Se crean sus claves, se firma y se publica su lista; te contamos cada paso. Para que otros lo añadan, la carpeta tiene que estar en un sitio que ellos alcancen."
+
+#: apps/wprs-app/qml/PublishRepo.qml
+msgid "Open another…"
+msgstr "Abrir otro…"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "One problem keeps it from being published"
+msgstr "Un problema impide publicar"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "%1 problems keep it from being published"
+msgstr "%1 problemas impiden publicar"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "; there is one warning"
+msgstr "; hay un aviso"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "; there are %1 warnings"
+msgstr "; hay %1 avisos"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "One warning; nothing keeps it from being published"
+msgstr "Un aviso; nada impide publicar"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "%1 warnings; nothing keeps it from being published"
+msgstr "%1 avisos; nada impide publicar"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "fix the problems"
+msgstr "corrige los problemas"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "answer the two questions"
+msgstr "responde las dos preguntas"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "choose a license"
+msgstr "elige una licencia"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "confirm the copy"
+msgstr "confirma la copia"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "%1 to go on"
+msgstr "%1 para seguir"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid " and "
+msgstr " y "
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "Review"
+msgstr "Revisar"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "Reviewed: <b>%1, version %2</b>"
+msgstr "Revisado: <b>%1, versión %2</b>"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "A finished package: <b>%1</b>"
+msgstr "Un paquete terminado: <b>%1</b>"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "“Go to the problem” takes you to the editor; when you come back, this page is as you left it."
+msgstr "«Ir al problema» te lleva al editor; al volver, esta página sigue igual."
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "Go on"
+msgstr "Seguir"
+
+#: apps/wprs-app/qml/PublishServer.qml
+msgid "Upload to my server"
+msgstr "Subir a mi servidor"
+
+#: apps/wprs-app/qml/PublishServer.qml
+msgid "You have no server connected."
+msgstr "No tienes un servidor conectado."
+
+#: apps/wprs-app/qml/PublishServer.qml
+msgid "in the catalog and its search"
+msgstr "en el catálogo y su búsqueda"
+
+#: apps/wprs-app/qml/PublishServer.qml
+msgid "Hidden"
+msgstr "Oculto"
+
+#: apps/wprs-app/qml/PublishServer.qml
+msgid "only whoever has the link; it is not private"
+msgstr "solo quien tenga el enlace; no es privado"
+
+#: apps/wprs-app/qml/PublishServer.qml
+msgid "The first time, your signature is registered in your account by itself; we let you know."
+msgstr "La primera vez, tu firma se registra sola en tu cuenta; te avisamos."
+
+#: apps/wprs-app/qml/PublishServer.qml
+msgid "Connect one in Account ›"
+msgstr "Conectar uno en Cuenta ›"
+
+#: apps/wprs-app/qml/PublishShelf.qml
+msgid "Could not publish to “%1”"
+msgstr "No se pudo publicar en «%1»"
+
+#: apps/wprs-app/qml/PublishShelf.qml
+msgid "Nothing was lost. Try again, or save it as a file."
+msgstr "Nada se perdió. Prueba otra vez, o guárdalo como archivo."
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "A copy of your signature “%1” is in “%2”. Keep it somewhere safe."
+msgstr "Hay una copia de tu firma «%1» en «%2». Guárdala en un sitio seguro."
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "Your signature “%1” was created. Save a copy: without it you cannot publish as %1 from another computer."
+msgstr "Se creó tu firma «%1». Guarda una copia: sin ella no podrás publicar como %1 desde otro equipo."
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "Your signature"
+msgstr "Tu firma"
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "Published <b>without a signature</b>"
+msgstr "Se publica <b>sin firma</b>"
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "Signed only with <b>%1</b>: it has no password"
+msgstr "Se firma solo con <b>%1</b>: no tiene contraseña"
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "Signed with your key <b>%1</b>"
+msgstr "Se firma con tu clave <b>%1</b>"
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "Where to keep a copy of your signature"
+msgstr "Dónde guardar una copia de tu firma"
+
+#: apps/wprs-app/qml/PublishStep.qml
+msgid "Change: %1"
+msgstr "Cambiar: %1"
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "Signed with your author key “%1”."
+msgstr "Se firma con tu clave de autor «%1»."
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "That is not the password of “%1”"
+msgstr "Esa no es la contraseña de «%1»"
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "Type it again; capitals count."
+msgstr "Escríbela otra vez; distingue mayúsculas de minúsculas."
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "Forgot it? It cannot be recovered. You can create another signature and move your wallpapers to it, or publish this time without signing."
+msgstr "¿La olvidaste? No se puede recuperar. Puedes crear otra firma y pasar tus fondos a ella, o publicar esta vez sin firmar."
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "Manage keys…"
+msgstr "Administrar claves…"
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "Password of “%1”"
+msgstr "Contraseña de «%1»"
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "Sign with"
+msgstr "Firmar con"
+
+#: apps/wprs-app/qml/PublishUnlock.qml
+msgid "Fingerprint of “%1”: %2"
+msgstr "Huella de «%1»: %2"
+
+#: apps/wprs-app/qml/PublishVerify.qml
+msgid "Check the signature of a package already made"
+msgstr "Comprobar la firma de un paquete ya hecho"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "%1, at %2"
+msgstr "%1, en %2"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Upload to %1"
+msgstr "Subir a %1"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Create and publish"
+msgstr "Crear y publicar"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Add and publish"
+msgstr "Añadir y publicar"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Where?"
+msgstr "¿Dónde?"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Uploaded to <b>%1</b>, hidden"
+msgstr "Subido a <b>%1</b>, oculto"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Uploaded to <b>%1</b>, public"
+msgstr "Subido a <b>%1</b>, público"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Added to <b>%1</b>"
+msgstr "Añadido a <b>%1</b>"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Saved as <b>%1</b>"
+msgstr "Guardado como <b>%1</b>"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "A file to hand to someone."
+msgstr "Un archivo para pasárselo a alguien."
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "In the folder “%1”, as %2"
+msgstr "En la carpeta «%1», como %2"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Add to a repository in a folder"
+msgstr "Añadir a un repositorio en una carpeta"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "%1, or another"
+msgstr "%1, u otro"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "You do not have one yet; you can create it here."
+msgstr "Todavía no tienes uno; puedes crearlo aquí."
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Days until the index expires"
+msgstr "Días hasta que caduque el índice"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Add it hidden"
+msgstr "Añadir oculto"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Making the package…"
+msgstr "Haciendo el paquete…"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Uploading…"
+msgstr "Subiendo…"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Registering your signature…"
+msgstr "Registrando tu firma…"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Publishing…"
+msgstr "Publicando…"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Version %1 already exists at %2"
+msgstr "Ya existe la versión %1 en %2"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "%1 does not know your signature “%2”"
+msgstr "%1 no conoce tu firma «%2»"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "There is no connection with %1"
+msgstr "No hay conexión con %1"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Could not upload to %1"
+msgstr "No se pudo subir a %1"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "A published version is not replaced. Upload it with the next number."
+msgstr "Una versión publicada no se reemplaza. Súbela con el número siguiente."
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "It is registered once in your account and afterwards it is not needed."
+msgstr "Se registra una vez en tu cuenta y después ya no hace falta."
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Nothing was lost. Try again, or save it as a file and upload it later."
+msgstr "Nada se perdió. Prueba otra vez, o guárdalo como archivo y súbelo después."
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Your signature “%1” is now registered in your account at %2."
+msgstr "Tu firma «%1» quedó registrada en tu cuenta de %2."
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Could not make “%1”"
+msgstr "No se pudo hacer «%1»"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Nothing was lost. Fix it in the editor and try again."
+msgstr "Nada se perdió. Corrígelo en el editor y prueba otra vez."
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "anyone may use it and change it, without naming you"
+msgstr "cualquiera puede usarlo y cambiarlo, sin nombrarte"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "they may use it and change it if they name you"
+msgstr "pueden usarlo y cambiarlo si te nombran"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "the same, and their changes carry this license"
+msgstr "lo mismo, y sus cambios llevan esta licencia"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "the same, but without selling it"
+msgstr "lo mismo, pero sin venderlo"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "All rights"
+msgstr "Todos los derechos"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "they may use it, not change it or publish it"
+msgstr "pueden usarlo, no cambiarlo ni publicarlo"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "without selling it, and their changes carry this license"
+msgstr "sin venderlo, y sus cambios llevan esta licencia"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "they may share it if they name you, without changing it"
+msgstr "pueden compartirlo si te nombran, sin cambiarlo"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "they may share it if they name you, without changing it or selling it"
+msgstr "pueden compartirlo si te nombran, sin cambiarlo ni venderlo"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "anyone may use it and change it if they keep your notice"
+msgstr "cualquiera puede usarlo y cambiarlo si conserva tu aviso"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "like MIT, and they note what they changed"
+msgstr "como MIT, y anotan lo que cambiaron"
+
+#: apps/wprs-app/qml/facade/Publishing.qml
+msgid "anyone may change it, and every shared version stays free"
+msgstr "cualquiera puede cambiarlo, y toda versión compartida sigue libre"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "Fix the problems"
+msgstr "Corrige los problemas"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "Answer the two questions"
+msgstr "Responde las dos preguntas"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "Choose a license"
+msgstr "Elige una licencia"
+
+#: apps/wprs-app/qml/PublishReview.qml
+msgid "Confirm the copy"
+msgstr "Confirma la copia"

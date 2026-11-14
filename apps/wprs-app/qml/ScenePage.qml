@@ -31,7 +31,8 @@ Kirigami.Page {
     }
     property string notice
     readonly property var scenePage: page
-    property Component bar: Component {
+    property Component bar: builder.shown ? null : top
+    property Component top: Component {
         SceneTop {
             page: scenePage
         }
@@ -64,7 +65,8 @@ Kirigami.Page {
         spot = pointer;
     }
 
-    title: view.title ?? ""
+    title: builder.shown ? builder.title : view.title ?? ""
+    actions: builder.shown ? builder.actions : []
     padding: 0
     background: Rectangle {
         color: Look.noche
@@ -141,7 +143,7 @@ Kirigami.Page {
         }
     }
 
-    SceneBuild {
+    Publish {
         id: builder
 
         page: page

@@ -51,8 +51,11 @@ pub fn restricted(manifest: &Manifest) -> Vec<Message> {
 }
 
 pub fn lineage(file: &Path) -> Result<Value> {
-    let package = wprs_format::open(file, &Limits::default())?;
-    Ok(json!(restricted(&package.manifest).iter().map(Message::local).collect::<Vec<_>>()))
+    let manifest = match file.is_dir() {
+        true => Manifest::from_json(&fs::read(file.join(MANIFEST))?)?,
+        false => wprs_format::open(file, &Limits::default())?.manifest,
+    };
+    Ok(json!(restricted(&manifest).iter().map(Message::local).collect::<Vec<_>>()))
 }
 
 pub fn extract(file: &Path, dir: &Path, id: Option<&str>, mine: bool) -> Result<String> {
