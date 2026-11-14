@@ -8,15 +8,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import java.time.DayOfWeek
 import java.time.format.TextStyle
@@ -102,31 +96,16 @@ fun Smart(list: Playlist, save: (JSONObject) -> Unit) {
         delay(DEBOUNCE_MS)
         matches = if (text.isBlank()) -1 else runCatching { ask("count", "query" to text) as Int }.getOrDefault(-1)
     }
-    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-        OutlinedTextField(
-            text, { text = it }, Modifier.fillMaxWidth(), label = { Text(stringResource(R.string.smart_query)) },
-            placeholder = { Text(stringResource(R.string.manual_playlist)) }, singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions { save(list.edited("query", text.ifBlank { null })) },
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(Modifier.fillMaxWidth().padding(vertical = Measure.e2)) {
+        Typed(text, { text = it }, stringResource(R.string.smart_query), hint = stringResource(R.string.manual_playlist)) {
+            save(list.edited("query", text.ifBlank { null }))
+        }
+        Row(Modifier.padding(horizontal = Measure.margin), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (matches >= 0) Text(stringResource(R.string.matches, matches), Modifier.padding(vertical = 12.dp), style = MaterialTheme.typography.bodySmall)
             if (text != saved.orEmpty()) WordAction({ save(list.edited("query", text.ifBlank { null })) }) { Text(stringResource(R.string.save_search)) }
             if (saved != null) WordAction({ save(list.edited("query", null)) }) { Text(stringResource(R.string.make_manual)) }
         }
     }
-}
-
-@Composable
-fun Named(title: String, name: String, close: () -> Unit, done: (String) -> Unit) {
-    var typed by remember(name) { mutableStateOf(name) }
-    AlertDialog(
-        onDismissRequest = close,
-        confirmButton = { WordAction({ done(typed.trim()) }, enabled = typed.isNotBlank()) { Text(stringResource(R.string.save_name)) } },
-        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
-        title = { Text(title) },
-        text = { OutlinedTextField(typed, { typed = it }, label = { Text(stringResource(R.string.name)) }, singleLine = true) },
-    )
 }
 
 private const val DEBOUNCE_MS = 250L

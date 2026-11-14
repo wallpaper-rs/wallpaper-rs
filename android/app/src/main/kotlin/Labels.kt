@@ -7,12 +7,10 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,22 +51,10 @@ fun Labels(main: Main, item: Item) = Column(Modifier.padding(horizontal = 16.dp)
         WordAction({ tagging = true }) { Text(stringResource(R.string.tag_add)) }
         WordAction({ renaming = true }) { Text(stringResource(R.string.rename)) }
     }
-    if (tagging) Asking(R.string.tag_add, R.string.tag_name, "", { tagging = false }) { text ->
+    if (tagging) NameSheet(stringResource(R.string.tag_add), stringResource(R.string.tag_name), "", stringResource(R.string.save), { tagging = false }) { text ->
         main.act { ask("retag", "uids" to uids, "add" to text.split(',').map(String::trim).filter(String::isNotEmpty), "remove" to emptyList<String>()) }
     }
-    if (renaming) Asking(R.string.rename, R.string.title_label, item.title, { renaming = false }) { text ->
+    if (renaming) NameSheet(stringResource(R.string.rename), stringResource(R.string.title_label), item.title, stringResource(R.string.save), { renaming = false }) { text ->
         main.act { ask("rename", "uid" to item.uid, "title" to text) }
     }
-}
-
-@Composable
-private fun Asking(title: Int, label: Int, start: String, close: () -> Unit, done: (String) -> Unit) {
-    var text by remember { mutableStateOf(start) }
-    AlertDialog(
-        onDismissRequest = close,
-        title = { Text(stringResource(title)) },
-        text = { OutlinedTextField(text, { text = it }, Modifier.fillMaxWidth(), singleLine = true, label = { Text(stringResource(label)) }) },
-        confirmButton = { WordAction({ close(); done(text) }, enabled = text.isNotBlank()) { Text(stringResource(R.string.save)) } },
-        dismissButton = { WordAction(close) { Text(stringResource(R.string.cancel)) } },
-    )
 }
