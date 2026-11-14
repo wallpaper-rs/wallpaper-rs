@@ -39,8 +39,8 @@ FocusScope {
 
         Fila {
             text: App.tr("Connects to")
-            value: detail.provider.hosts.join(", ")
-            visible: detail.provider.hosts.length > 0
+            value: (detail.provider.hosts || []).join(", ")
+            visible: (detail.provider.hosts || []).length > 0
         }
 
         Fila {

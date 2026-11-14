@@ -13,7 +13,7 @@ Kirigami.Page {
     property string current
     readonly property var chosen: providers.find(p => p.id === current) || ({})
     readonly property bool options: view !== "list"
-    readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : view === "detail" ? SourceKinds.heading(chosen) : ""
+    readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : view === "detail" && !!chosen.id ? SourceKinds.heading(chosen) : ""
     readonly property var route: view === "list" ? [] : [App.tr("Sources"), leaf]
     readonly property var keyHints: [{
             "keys": ["up", "down"],
@@ -57,6 +57,8 @@ Kirigami.Page {
     }
 
     function exercise() {
+        current = providers.length > 0 ? providers[0].id : "";
+        kind = "wallhaven";
         ["pick", "add", "detail", "list"].forEach(v => page.open(v));
     }
 
