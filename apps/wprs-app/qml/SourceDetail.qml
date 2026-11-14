@@ -10,6 +10,7 @@ FocusScope {
     readonly property var kind: SourceKinds.of(provider.kind)
     readonly property bool plain: provider.plain_http === true
     property bool purge: false
+    property string store: "keyring"
     readonly property alias clearing: clear
 
     signal closed
@@ -47,7 +48,7 @@ FocusScope {
         Fila {
             visible: !!(App.schema.providers || []).find(p => p.kind === detail.provider.kind && p.secret)
             text: App.tr("Key")
-            value: detail.provider.has_secret ? App.tr("Saved in your keyring") : App.tr("None")
+            value: !detail.provider.has_secret ? App.tr("None") : detail.store === "file" ? App.tr("Saved in a private file") : App.tr("Saved in your keyring")
             words: [{
                     "text": App.tr("Change")
                 }, {

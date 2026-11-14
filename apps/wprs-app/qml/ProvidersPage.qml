@@ -10,14 +10,20 @@ Kirigami.Page {
     property var seen: ({})
     property string view: "list"
     property string kind
+    property string store: "keyring"
+    readonly property real bandLow: view === "list" && providers.length > 0 ? list.lowest : 0
+    readonly property real bandHigh: list.tallest
+    readonly property real upperHeight: notice.visible ? notice.implicitHeight : 0
+    property rect band
+    property rect upper
     property string current
     property string level
     readonly property var chosen: providers.find(p => p.id === current) || ({})
     readonly property bool options: view !== "list"
-    readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : view === "detail" && !!chosen.id ? SourceKinds.heading(chosen) : ""
+    readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : !!chosen.id ? SourceKinds.heading(chosen) : ""
     readonly property Item shown: body.shown
     readonly property alias cards: list
-    readonly property var route: view === "list" ? [] : [App.tr("Sources"), leaf]
+    readonly property var route: view === "list" ? [] : view === "more" ? [App.tr("Sources"), leaf, App.tr("More options")].concat(level ? [SourceMoreWords.level(level)] : []) : [App.tr("Sources"), leaf]
     readonly property var keyHints: [{
             "keys": ["up", "down"],
             "text": App.tr("Move around")
@@ -49,7 +55,12 @@ Kirigami.Page {
     }
 
     function load() {
-        App.query("List", [], "Providers1", reply => page && page.apply(reply.providers));
+        App.query("List", [], "Providers1", reply => {
+            if (!page)
+                return;
+            page.store = reply.store || "keyring";
+            page.apply(reply.providers);
+        });
         App.query("List", [], "Playlists1", reply => page && (page.playlists = reply.playlists));
     }
 
@@ -91,7 +102,11 @@ Kirigami.Page {
     SourceList {
         id: list
 
-        anchors.fill: parent
+        x: page.bandLow > 0 ? page.band.x : 0
+        y: page.bandLow > 0 ? page.band.y : 0
+        width: page.bandLow > 0 ? page.band.width : page.width
+        height: page.bandLow > 0 ? page.band.height : page.height
+        wide: page.bandLow > 0
         visible: page.view === "list" && page.providers.length > 0
         providers: page.providers
         playlists: page.playlists
@@ -139,9 +154,18 @@ Kirigami.Page {
     }
 
     SecretNotice {
-        anchors.left: parent.left
-        anchors.top: parent.top
+        id: notice
+
+        x: page.bandLow > 0 ? page.upper.x : 0
+        y: page.bandLow > 0 ? page.upper.y : 0
+        visible: page.view === "list"
         filer: dialogs.filer
+    }
+
+    Binding {
+        target: page.background
+        property: "visible"
+        value: page.bandLow === 0
     }
 
     SourceDialogs {

@@ -11,6 +11,9 @@ FocusScope {
     required property var playlists
     readonly property int total: providers.reduce((sum, p) => sum + p.items, 0)
     readonly property bool offline: providers.some(p => p.offline)
+    property bool wide: false
+    readonly property real tallest: column.implicitHeight
+    readonly property real lowest: Math.min(tallest, Look.altoBoton * 4 + Look.e4)
 
     signal rotate(var provider)
     signal details(var provider)
@@ -43,16 +46,16 @@ FocusScope {
             id: column
 
             anchors.bottom: parent.bottom
-            width: Math.min(flick.width, Look.tiposAncho)
+            width: list.wide ? flick.width : Math.min(flick.width, Look.tiposAncho)
             spacing: Look.e4
 
-            Row {
+            Flow {
                 visible: list.offline
+                width: column.width
                 spacing: Look.e3
 
                 Nota {
-                    width: column.width - again.width - Look.e3
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: again.height
                     tone: "ambar"
                     text: App.tr("No connection. Your sources cannot bring new photos. What you already have stays in your library.")
                 }
@@ -66,33 +69,45 @@ FocusScope {
                 }
             }
 
-            Row {
-                spacing: Look.e3
+            Item {
+                readonly property bool wraps: filter.width + Look.e3 + buttons.width > width
+
+                width: column.width
+                height: wraps ? filter.height + Look.e3 + buttons.height : buttons.height
 
                 Filtro {
+                    id: filter
+
                     words: [{
                             "text": App.trc("all the sources", "All"),
                             "count": list.providers.length
                         }]
-                    anchors.verticalCenter: parent.verticalCenter
+                    y: parent.wraps ? 0 : (parent.height - height) / 2
                 }
 
-                QQC2.Button {
-                    flat: true
-                    enabled: list.providers.length > 0
-                    text: App.tr("Update all")
-                    icon.name: "arrows-clockwise"
-                    onClicked: list.refreshAsked("")
-                }
+                Row {
+                    id: buttons
 
-                QQC2.Button {
-                    id: adding
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    spacing: Look.e3
 
-                    highlighted: list.providers.length === 0
-                    text: App.tr("Add a source")
-                    icon.name: "plus"
-                    onClicked: list.addAsked()
-                    Keys.onDownPressed: list.enter()
+                    QQC2.Button {
+                        enabled: list.providers.length > 0
+                        text: App.tr("Update all")
+                        icon.name: "arrows-clockwise"
+                        onClicked: list.refreshAsked("")
+                    }
+
+                    QQC2.Button {
+                        id: adding
+
+                        highlighted: list.providers.length === 0
+                        text: App.tr("Add a source")
+                        icon.name: "plus"
+                        onClicked: list.addAsked()
+                        Keys.onDownPressed: list.enter()
+                    }
                 }
             }
 

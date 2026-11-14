@@ -10,7 +10,7 @@ FocusScope {
     required property var provider
     property bool rotating: false
     readonly property var kind: SourceKinds.of(provider.kind)
-    readonly property string problem: provider.state === "needs_secret" ? App.tr("%1 rejected the key", kind.name) : provider.state === "locked" ? App.tr("The keyring is locked") : provider.state === "error" && !provider.offline ? (provider.last_error || App.tr("It could not reach %1", kind.name)) : ""
+    readonly property string problem: provider.state === "needs_secret" ? App.tr("%1 rejected the key", kind.name) : provider.state === "locked" ? App.tr("The keyring is locked") : provider.state === "error" && !provider.offline ? said(provider.last_error) : ""
     readonly property string tone: provider.state === "locked" || provider.state === "needs_secret" ? "coral" : "ambar"
     readonly property bool broken: problem !== ""
     readonly property bool bare: provider.items === 0
@@ -22,6 +22,13 @@ FocusScope {
     signal fix
     signal up
     signal down
+
+    function said(error) {
+        const code = /status (?:client|server) error \((\d+)/.exec(error || "");
+        if (code)
+            return App.tr("%1 answered with error %2", kind.name, code[1]);
+        return error || App.tr("It could not reach %1", kind.name);
+    }
 
     function enter() {
         (primary.visible ? primary : refreshing).forceActiveFocus(Qt.TabFocusReason);
@@ -61,6 +68,14 @@ FocusScope {
             visible: card.broken
             text: card.problem
             tone: card.tone
+        }
+
+        Text {
+            visible: card.broken && !card.bare
+            text: App.tr("The %1 photos it already brought stay in your library.", card.provider.items)
+            font.family: Look.letraTexto
+            font.pixelSize: Look.tCuerpo
+            color: Look.bruma
         }
 
         Text {
@@ -116,7 +131,7 @@ FocusScope {
         anchors.left: left.right
         anchors.leftMargin: Look.fuenteHueco
         anchors.verticalCenter: left.verticalCenter
-        height: left.height * 0.8
+        height: Math.min(left.height, (card.width - left.width - Look.fuenteHueco - (Look.fuenteFotos - 1) * Look.e2) / Look.fuenteFotos * 9 / 16)
         source: card.provider.source
         stale: card.broken
         visible: !card.bare

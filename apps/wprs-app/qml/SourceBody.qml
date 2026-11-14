@@ -24,6 +24,18 @@ Flickable {
     clip: true
 
     Connections {
+        target: scroll.host
+
+        function onViewChanged() {
+            scroll.contentY = 0;
+        }
+
+        function onLevelChanged() {
+            scroll.contentY = 0;
+        }
+    }
+
+    Connections {
         target: scroll.host.Window.window
 
         function onActiveFocusItemChanged() {
@@ -57,6 +69,7 @@ Flickable {
 
         SourceDetail {
             provider: scroll.host.chosen
+            store: scroll.host.store
             onClosed: scroll.host.open("list")
             onRemoved: scroll.host.open("list")
             onKeyAsked: scroll.dialogs.keys.ask(scroll.host.chosen.id)

@@ -18460,3 +18460,15 @@ msgstr "Sin colecciones"
 
 msgid "This user has no public collections."
 msgstr "Este usuario no tiene colecciones públicas."
+
+msgid "%1 answered with error %2"
+msgstr "%1 respondió con el error %2"
+
+msgid "The %1 photos it already brought stay in your library."
+msgstr "Las %1 fotos que ya trajo siguen en tu biblioteca."
+
+msgid "Saved in a private file"
+msgstr "Guardada en un archivo privado"
+
+msgid "Photos that renew themselves · 1 source · %1 photos"
+msgstr "Fotos que se renuevan solas · 1 fuente · %1 fotos"

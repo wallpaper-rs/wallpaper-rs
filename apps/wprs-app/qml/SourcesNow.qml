@@ -21,7 +21,7 @@ Column {
 
     Text {
         anchors.right: parent.right
-        text: now.sources === 0 ? App.tr("Photos that renew themselves · none yet") : App.tr("Photos that renew themselves · %1 sources · %2 photos", now.sources, now.photos)
+        text: now.sources === 0 ? App.tr("Photos that renew themselves · none yet") : now.sources === 1 ? App.tr("Photos that renew themselves · 1 source · %1 photos", now.photos) : App.tr("Photos that renew themselves · %1 sources · %2 photos", now.sources, now.photos)
         font.family: Look.letraTexto
         font.pixelSize: Look.tCuerpo
         color: Look.bruma

@@ -52,13 +52,13 @@ QtObject {
         const broken = Object.assign({}, art, {
             "state": "error",
             "offline": offline,
-            "last_error": offline ? "no connection: the server could not be reached" : "the server answered 500"
+            "last_error": offline ? "no connection: the server could not be reached" : "http request failed: HTTP status server error (500 Internal Server Error)"
         });
         page.apply(page.providers.map(p => p.id === "art" ? broken : p));
         const card = page.cards.card("art");
         if (page.cards.offline !== offline)
             fail(offline ? "a source without connection does not show the no connection notice" : "a source in error shows the no connection notice");
-        if (!card || card.problem !== (offline ? "" : broken.last_error))
+        if (!card || card.problem !== (offline ? "" : App.tr("%1 answered with error %2", SourceKinds.of(art.kind).name, "500")))
             fail(offline ? "a source without connection shows a problem of its own" : "a source in error does not say its problem");
     }
 
