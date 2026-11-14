@@ -96,13 +96,13 @@ Kirigami.Page {
             "text": App.tr("Stop choosing")
         }] : all ? [{
             "keys": ["left", "right", "up", "down"],
-            "text": App.tr("Move")
+            "text": App.tr("Move around")
         }, {
             "keys": ["Esc"],
             "text": App.tr("Show shelf")
         }] : [{
             "keys": ["left", "right"],
-            "text": App.tr("Move")
+            "text": App.tr("Move around")
         }, {
             "keys": ["down"],
             "text": App.tr("See all")
