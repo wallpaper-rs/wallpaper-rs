@@ -186,10 +186,6 @@ QtObject {
         }
     }
 
-    function mix(a, b, amount) {
-        return Qt.rgba(a.r + (b.r - a.r) * amount, a.g + (b.g - a.g) * amount, a.b + (b.b - a.b) * amount, 1);
-    }
-
     function step(width, height) {
         return height <= 800 ? "compacto" : width >= 1800 && height >= 1000 ? "amplio" : "normal";
     }
