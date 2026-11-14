@@ -62,8 +62,10 @@ ColumnLayout {
             icon.name: modelData.icon
             text: modelData.text
             highlighted: section.tool.open && section.tool.way === modelData.way
+            focusPolicy: Qt.StrongFocus
             Accessible.name: text + ", " + note.text
             onClicked: section.tool.start(modelData.way)
+            Keys.onReturnPressed: clicked()
 
             QQC2.Label {
                 id: note
