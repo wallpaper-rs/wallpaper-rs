@@ -56,7 +56,9 @@ mod tests {
 
     #[test]
     fn text_keeps_its_contrast_on_bright_and_dark_wallpapers() {
-        for wallpaper in [even(0xFFF8F4E8_u32 as i32), even(0xFF05060A_u32 as i32), even(0xFFE8D040_u32 as i32)] {
+        for wallpaper in
+            [even(0xFFF8F4E8_u32 as i32), even(0xFF05060A_u32 as i32), even(0xFFE8D040_u32 as i32)]
+        {
             let shown = tones(&wallpaper, 96, 54);
             assert!(contrast(ESCARCHA, hex(&shown, "night")) >= 7.0, "{shown}");
             assert!(contrast(hex(&shown, "mist"), hex(&shown, "night")) >= 4.5, "{shown}");
