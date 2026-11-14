@@ -76,8 +76,9 @@ class SettingsTest {
         SETTING_LINES.filter { it.always }.forEach { line ->
             search(text(line.label))
             compose.onNodeWithTag("nothing_found").assertDoesNotExist()
-            compose.onNodeWithTag("settings").performScrollToNode(hasText(text(line.label)) and !hasTestTag("finder"))
-            compose.onNodeWithTag("block_${line.block.name}").assertExists()
+            val list = compose.onNodeWithTag("settings")
+            list.performScrollToNode(hasText(text(line.label)) and !hasTestTag("finder"))
+            list.performScrollToNode(hasTestTag("block_${line.block.name}"))
         }
     }
 
