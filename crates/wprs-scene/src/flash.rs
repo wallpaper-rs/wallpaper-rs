@@ -27,7 +27,12 @@ pub struct FlashGuard {
 
 impl Default for FlashGuard {
     fn default() -> Self {
-        FlashGuard { cells: Vec::new(), turns: VecDeque::with_capacity(TURNS), speed: 1.0, paused: false }
+        FlashGuard {
+            cells: Vec::with_capacity(CELLS),
+            turns: VecDeque::with_capacity(TURNS),
+            speed: 1.0,
+            paused: false,
+        }
     }
 }
 
@@ -53,7 +58,8 @@ impl FlashGuard {
             return self.calming();
         }
         if self.cells.len() != CELLS {
-            self.cells = luma.iter().map(|l| (*l, 0)).collect();
+            self.cells.clear();
+            self.cells.extend(luma.iter().map(|l| (*l, 0)));
             return self.calming();
         }
         let mut turned = 0;
