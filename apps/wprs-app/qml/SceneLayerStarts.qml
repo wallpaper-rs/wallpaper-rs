@@ -1,8 +1,7 @@
 import QtQuick
-import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-QQC2.ToolButton {
+Item {
     id: starts
 
     required property var owner
@@ -48,59 +47,9 @@ QQC2.ToolButton {
             });
     }
 
-    icon.name: "chronometer"
-    text: App.tr("Ready-made starts")
-    display: QQC2.AbstractButton.IconOnly
-    QQC2.ToolTip.text: App.tr("Add a clock or a date, or make the selected layer turn or drift forever")
-    QQC2.ToolTip.visible: hovered
-    onClicked: menu.popup()
-
-    QQC2.Menu {
-        id: menu
-
-        title: App.tr("Ready-made starts")
-        onAboutToShow: {
-            const next = {};
-            starts.formats.forEach(format => next[format[1]] = starts.sample(format));
-            starts.samples = next;
-        }
-
-        QQC2.Menu {
-            title: App.tr("Add a clock or a date")
-            icon.name: "clock"
-
-            SceneRepeater {
-                id: clocks
-
-                rows: starts.formats
-
-                delegate: QQC2.MenuItem {
-                    required property int index
-                    readonly property var modelData: clocks.rows[index]
-
-                    text: modelData[1] + " → " + (starts.samples[modelData[1]] ?? "")
-                    onTriggered: starts.addClock(modelData)
-                }
-            }
-        }
-
-        QQC2.Menu {
-            title: App.tr("Keep the selected layer moving")
-            enabled: starts.owner.current !== null
-
-            SceneRepeater {
-                id: motions
-
-                rows: starts.moves
-
-                delegate: QQC2.MenuItem {
-                    required property int index
-                    readonly property var modelData: motions.rows[index]
-
-                    text: modelData[2]
-                    onTriggered: starts.keepMoving(modelData)
-                }
-            }
-        }
+    function refresh() {
+        const next = {};
+        formats.forEach(format => next[format[1]] = sample(format));
+        samples = next;
     }
 }

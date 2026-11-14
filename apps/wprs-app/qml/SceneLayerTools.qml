@@ -1,143 +1,123 @@
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-Flow {
+ColumnLayout {
     id: tools
 
     required property var owner
+    readonly property bool chosen: owner.current !== null
+
+    function picked() {
+        return [owner.current.id].concat(owner.page.picked.filter(id => id !== owner.current.id));
+    }
+
+    function add() {
+        adder.open();
+    }
+
+    function remove() {
+        const page = owner.page;
+        const id = owner.current.id;
+        const lost = JSON.parse(page.editor.rig("", JSON.stringify({
+                "unkept": {
+                    "id": id
+                }
+            })) || "{}").layers ?? [];
+        page.run("remove_layer", {
+                "id": id
+            });
+        if (lost.length > 0 && page.editor.error === "")
+            page.notice = App.tr("%1 followed the removed layer and a value of its place is bound to something other than keyframes, so it could not be kept where it was: check where it sits now.", lost.join(", "));
+    }
+
+    spacing: Look.e2
 
     SceneLayerAdd {
+        id: adder
+
+        Layout.fillWidth: true
+        implicitHeight: Look.altoBotonArriba
         owner: tools.owner
     }
 
-    SceneLayerStarts {
-        owner: tools.owner
-    }
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: Look.e1
 
-    Repeater {
-        model: [["duplicate_layer", "edit-copy", App.tr("Duplicate")], ["remove_layer", "edit-delete", App.tr("Remove")], ["ungroup", "format-remove-node", App.tr("Ungroup")]]
+        QQC2.ToolButton {
+            icon.name: "copy"
+            text: App.tr("Duplicate")
+            enabled: tools.chosen
+            onClicked: tools.owner.page.run("duplicate_layer", {
+                    "id": tools.owner.current.id
+                })
+        }
 
-        delegate: QQC2.ToolButton {
-            required property var modelData
-
-            icon.name: modelData[1]
-            text: modelData[2]
-            display: QQC2.AbstractButton.IconOnly
-            enabled: tools.owner.current !== null && (modelData[0] !== "ungroup" || tools.owner.current.type === "group")
+        QQC2.ToolButton {
+            icon.name: "stack"
+            text: App.tr("Group")
+            enabled: tools.chosen
+            QQC2.ToolTip.text: App.tr("Group the selected layer and the ones picked with Ctrl")
+            QQC2.ToolTip.visible: hovered
             onClicked: {
-                const page = tools.owner.page;
-                const id = tools.owner.current.id;
-                const lost = modelData[0] === "remove_layer" ? (JSON.parse(page.editor.rig("", JSON.stringify({
-                        "unkept": {
-                            "id": id
-                        }
-                    })) || "{}").layers ?? []) : [];
-                page.run(modelData[0], {
-                        "id": id
+                tools.owner.page.run("group", {
+                        "ids": tools.picked()
                     });
-                if (lost.length > 0 && page.editor.error === "")
-                    page.notice = App.tr("%1 followed the removed layer and a value of its place is bound to something other than keyframes, so it could not be kept where it was: check where it sits now.", lost.join(", "));
+                tools.owner.page.picked = [];
             }
         }
-    }
 
-    QQC2.ToolButton {
-        icon.name: "document-save-as-template"
-        text: App.tr("Make a template")
-        display: QQC2.AbstractButton.IconOnly
-        QQC2.ToolTip.text: App.tr("Copy the selected layer and the ones picked with Ctrl to the templates that scripts spawn")
-        QQC2.ToolTip.visible: hovered
-        enabled: tools.owner.current !== null && ["group", "image", "text", "shape", "solid", "spectrum", "mesh"].includes(tools.owner.current.type)
-        onClicked: {
-            tools.owner.page.run("template", {
-                    "make": {
-                        "layers": [tools.owner.current.id].concat(tools.owner.page.picked.filter(id => id !== tools.owner.current.id))
-                    }
-                });
-            tools.owner.page.picked = [];
+        QQC2.ToolButton {
+            icon.name: "trash"
+            text: App.tr("Remove")
+            enabled: tools.chosen
+            onClicked: tools.remove()
         }
-    }
 
-    QQC2.ToolButton {
-        icon.name: "weather-snow"
-        text: App.tr("Particle systems")
-        display: QQC2.AbstractButton.IconOnly
-        QQC2.ToolTip.text: App.tr("Create, copy, rename and remove the particle systems of the scene")
-        QQC2.ToolTip.visible: hovered
-        onClicked: tools.owner.page.editor.select("/scene/particles")
+        QQC2.ToolButton {
+            icon.name: "arrow-up"
+            text: App.tr("Raise")
+            display: QQC2.AbstractButton.IconOnly
+            enabled: tools.chosen && tools.owner.index < tools.owner.siblings.length - 1
+            QQC2.ToolTip.text: text
+            QQC2.ToolTip.visible: hovered
+            onClicked: tools.owner.move(tools.owner.index + 1, tools.owner.group)
+        }
+
+        QQC2.ToolButton {
+            icon.name: "arrow-down"
+            text: App.tr("Lower")
+            display: QQC2.AbstractButton.IconOnly
+            enabled: tools.chosen && tools.owner.index > 0
+            QQC2.ToolTip.text: text
+            QQC2.ToolTip.visible: hovered
+            onClicked: tools.owner.move(tools.owner.index - 1, tools.owner.group)
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        QQC2.ToolButton {
+            id: more
+
+            text: App.tr("More")
+            icon.name: "caret-down"
+            onClicked: menu.popup(more, 0, more.height)
+
+            SceneLayerMore {
+                id: menu
+
+                owner: tools.owner
+                tools: tools
+            }
+        }
     }
 
     SceneTemplates {
+        Layout.fillWidth: true
         page: tools.owner.page
-    }
-
-    SceneLayerClip {
-        owner: tools.owner
-    }
-
-    QQC2.ToolButton {
-        icon.name: "object-group"
-        text: App.tr("Group the layers")
-        display: QQC2.AbstractButton.IconOnly
-        QQC2.ToolTip.text: App.tr("Group the selected layer and the ones picked with Ctrl")
-        QQC2.ToolTip.visible: hovered
-        enabled: tools.owner.current !== null
-        onClicked: {
-            tools.owner.page.run("group", {
-                    "ids": [tools.owner.current.id].concat(tools.owner.page.picked.filter(id => id !== tools.owner.current.id))
-                });
-            tools.owner.page.picked = [];
-        }
-    }
-
-    QQC2.ToolButton {
-        icon.name: "folder-new"
-        text: App.tr("Move into a group")
-        display: QQC2.AbstractButton.IconOnly
-        enabled: tools.owner.groups.length > 0
-        onClicked: into.popup()
-
-        QQC2.Menu {
-            id: into
-
-            SceneRepeater {
-                id: listed
-
-                rows: tools.owner.groups
-
-                delegate: QQC2.MenuItem {
-                    required property int index
-                    readonly property var modelData: listed.rows[index]
-
-                    text: modelData.id
-                    onTriggered: tools.owner.move(1000, modelData.id)
-                }
-            }
-        }
-    }
-
-    QQC2.ToolButton {
-        icon.name: "go-up"
-        text: App.tr("Raise")
-        display: QQC2.AbstractButton.IconOnly
-        enabled: tools.owner.current !== null && tools.owner.index < tools.owner.siblings.length - 1
-        onClicked: tools.owner.move(tools.owner.index + 1, tools.owner.group)
-    }
-
-    QQC2.ToolButton {
-        icon.name: "go-down"
-        text: App.tr("Lower")
-        display: QQC2.AbstractButton.IconOnly
-        enabled: tools.owner.current !== null && tools.owner.index > 0
-        onClicked: tools.owner.move(tools.owner.index - 1, tools.owner.group)
-    }
-
-    QQC2.ToolButton {
-        icon.name: "go-parent-folder"
-        text: App.tr("Move out of the group")
-        display: QQC2.AbstractButton.IconOnly
-        enabled: tools.owner.group !== ""
-        onClicked: tools.owner.move(1000)
     }
 }

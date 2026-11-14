@@ -2,33 +2,92 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-QQC2.ToolButton {
+QQC2.Button {
     id: tools
 
     required property var owner
+    readonly property var common: ["image", "video", "text", "shape", "particles"]
+    readonly property var kinds: (owner.page.view.kinds ?? []).filter(kind => kind !== "light")
 
-    text: App.tr("Add layer")
-    icon.name: "list-add"
-    onClicked: kinds.popup()
+    function usable(kind) {
+        return kind === "shapes" ? (owner.page.view.pools ?? []).length > 0 : !["image", "video", "sound", "mesh", "model"].includes(kind) || (owner.page.view.assets ?? []).some(asset => asset.kind === (kind === "mesh" ? "model" : kind));
+    }
+
+    function open() {
+        menu.popup(tools, 0, tools.height);
+    }
+
+    function offer(kind) {
+        choice.offer(kind);
+    }
+
+    text: App.tr("Add a layer")
+    icon.name: "plus"
+    onClicked: open()
 
     QQC2.Menu {
-        id: kinds
+        id: menu
+
+        onAboutToShow: starts.refresh()
 
         SceneRepeater {
-            id: listed2
+            id: firsts
 
-            rows: tools.owner.page.view.kinds ?? []
+            rows: tools.common.filter(kind => tools.kinds.includes(kind)).slice(0, 3)
 
-            delegate: QQC2.MenuItem {
+            delegate: SceneLayerKind {
                 required property int index
-                readonly property var modelData: listed2.rows[index]
 
-                visible: modelData !== "light"
-                height: visible ? implicitHeight : 0
-                enabled: modelData === "shapes" ? (tools.owner.page.view.pools ?? []).length > 0 : !["image", "video", "sound", "mesh", "model"].includes(modelData) || (tools.owner.page.view.assets ?? []).some(asset => asset.kind === (modelData === "mesh" ? "model" : modelData))
-                text: SceneWords.kind(modelData) + (enabled ? "" : " (" + (modelData === "shapes" ? App.tr("add a pool first") : App.tr("import a file of this kind first")) + ")")
-                icon.name: tools.owner.icon(modelData)
-                onTriggered: choice.offer(modelData)
+                owner: tools
+                kind: firsts.rows[index]
+            }
+        }
+
+        QQC2.Menu {
+            title: App.tr("Time or date")
+            icon.name: "clock"
+
+            SceneRepeater {
+                id: clocks
+
+                rows: starts.formats
+
+                delegate: QQC2.MenuItem {
+                    required property int index
+                    readonly property var modelData: clocks.rows[index]
+
+                    text: modelData[1] + " → " + (starts.samples[modelData[1]] ?? "")
+                    onTriggered: starts.addClock(modelData)
+                }
+            }
+        }
+
+        SceneRepeater {
+            id: seconds
+
+            rows: tools.common.filter(kind => tools.kinds.includes(kind)).slice(3)
+
+            delegate: SceneLayerKind {
+                required property int index
+
+                owner: tools
+                kind: seconds.rows[index]
+            }
+        }
+
+        QQC2.MenuSeparator {
+        }
+
+        SceneRepeater {
+            id: rest
+
+            rows: tools.kinds.filter(kind => !tools.common.includes(kind))
+
+            delegate: SceneLayerKind {
+                required property int index
+
+                owner: tools
+                kind: rest.rows[index]
             }
         }
 
@@ -62,6 +121,12 @@ QQC2.ToolButton {
             enabled: (tools.owner.page.view.assets ?? []).some(asset => asset.kind === "image")
             onTriggered: cutter.open()
         }
+    }
+
+    SceneLayerStarts {
+        id: starts
+
+        owner: tools.owner
     }
 
     SceneAssetChoice {

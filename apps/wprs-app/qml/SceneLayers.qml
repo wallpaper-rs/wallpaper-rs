@@ -66,6 +66,10 @@ ColumnLayout {
         page.run("move_layer", args);
     }
 
+    function add() {
+        tools.add();
+    }
+
     function icon(type) {
         return ({
                 "image": "image-x-generic",
@@ -85,6 +89,24 @@ ColumnLayout {
             })[type] ?? "layer-visible-on";
     }
 
+    SceneLayerTools {
+        id: tools
+
+        Layout.fillWidth: true
+        Layout.margins: Look.e3
+        owner: panel
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        Layout.margins: Look.e3
+        visible: (panel.page.view.layers ?? []).length === 0
+        wrapMode: Text.WordWrap
+        color: Look.brumaBaja
+        font.pixelSize: Look.tPie
+        text: App.tr("There are no layers yet. The first one you add stays at the back; the next ones go on top.")
+    }
+
     QQC2.ScrollView {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -97,10 +119,5 @@ ColumnLayout {
                 owner: panel
             }
         }
-    }
-
-    SceneLayerTools {
-        Layout.fillWidth: true
-        owner: panel
     }
 }
