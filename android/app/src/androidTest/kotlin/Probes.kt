@@ -44,7 +44,7 @@ object Probes {
     val LISTENER_NAME get() = ComponentName(context, Listener::class.java).flattenToString()
 
     private val KEYS = listOf(
-        "transition.kind", "fit", "playback.quality", "playback.allow_flashing", "playback.duck", "playback.muted",
+        "transition.kind", "transition.less_motion", "fit", "playback.quality", "playback.allow_flashing", "playback.duck", "playback.muted",
         "sync_network", "sync_listen", "video_convert", "repos.auto_refresh",
     )
     private val FOREIGN = listOf("Aw", "WebView", "com.google")

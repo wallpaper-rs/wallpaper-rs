@@ -6,7 +6,7 @@ use std::path::Path;
 use std::sync::{Mutex, MutexGuard, PoisonError};
 use std::time::Duration;
 use wprs_core::settings::fps::DISPLAY;
-use wprs_core::{Config, Fit};
+use wprs_core::{Config, Fit, TransitionKind};
 
 pub(crate) const COLORS: &str = "system_colors";
 pub(crate) const BACKEND: &str = "backend";
@@ -31,6 +31,7 @@ pub(crate) struct Look {
     pub(crate) fit: Fit,
     pub(crate) background: [u8; 3],
     pub(crate) fade: Duration,
+    pub(crate) own: bool,
     pub(crate) flip: [bool; 2],
     pub(crate) grade: Option<wprs_core::Grade>,
 }
@@ -180,6 +181,9 @@ pub(crate) fn look(lock: bool) -> Look {
         listed.and_then(|uid| crate::library::with(|lib| Ok(lib.playlist(&uid)?.rules.transition_ms)).ok());
     let fade =
         own.flatten().map_or_else(|| config.transition.duration(), |ms| Duration::from_millis(ms.into()));
-    let grade = config.filter(crate::choice::screen(lock)).grade();
-    Look { fit: shown.fit, background: shown.background, fade, flip: [false; 2], grade }
+    let kind = config.transition(crate::choice::screen(lock));
+    let still = config.transition.less_motion.reduces(power::Power::now().still);
+    let fade = if still || kind == TransitionKind::None { Duration::ZERO } else { fade };
+    let (own, grade) = (kind == TransitionKind::Own, config.filter(crate::choice::screen(lock)).grade());
+    Look { fit: shown.fit, background: shown.background, fade, own, flip: [false; 2], grade }
 }

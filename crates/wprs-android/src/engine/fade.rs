@@ -1,18 +1,17 @@
-use super::{Engine, FRAMES};
+use super::Engine;
+use super::passage::Passage;
 use crate::gpu;
-use crate::power::{Power, delay_ms};
-use crate::relief::{Look as Seen, layer};
+use crate::power::Power;
 use crate::settings::{self, Look};
 use crate::stage::Stage;
 use crate::{blend, choice};
 use std::path::PathBuf;
 use std::sync::Arc;
-use std::sync::atomic::Ordering::Relaxed;
 use wprs_core::Fit;
-use wprs_render::{GpuImage, RenderError};
+use wprs_render::GpuImage;
 
-const FILM: &str = "\u{0}film";
-const GONE: &str = "\u{0}gone";
+pub(super) const FILM: &str = "\u{0}film";
+pub(super) const GONE: &str = "\u{0}gone";
 
 pub(crate) enum Gone {
     Picture(Arc<GpuImage>, (Fit, Option<[f32; 4]>)),
@@ -21,14 +20,15 @@ pub(crate) enum Gone {
 }
 
 pub(crate) struct Fading {
-    gone: Gone,
-    start: Option<i64>,
-    asked: Option<i64>,
+    pub(super) gone: Gone,
+    pub(super) start: Option<i64>,
+    pub(super) asked: Option<i64>,
+    pub(super) passage: Option<Passage>,
 }
 
 impl Fading {
     pub(super) fn new(gone: Gone) -> Self {
-        Fading { gone, start: None, asked: None }
+        Fading { gone, start: None, asked: None, passage: None }
     }
 }
 
@@ -103,98 +103,5 @@ impl Engine {
             _ => None,
         };
         own.into_iter().chain(gone).chain(self.film.clone().map(|path| (FILM.to_owned(), path))).collect()
-    }
-
-    pub(super) fn compose(&mut self, nanos: i64, fps: u32, power: Power) -> Result<(u32, i64), RenderError> {
-        let reels = self.reels();
-        let Some((gpu, surface)) = self.target.as_mut() else { return Ok((0, 0)) };
-        let (r, film) = (&gpu.renderer, self.film.as_deref());
-        let (headroom, relit) = match (film, &self.stage) {
-            (Some(film), _) => crate::hdr::light(r, surface, power.charging, crate::media::bright(film))?,
-            (None, None) => (1.0, crate::hdr::dark(r, surface)?),
-            (None, Some(_)) => (1.0, false),
-        };
-        self.dirty |= relit;
-        self.clips.take(r, (gpu.epoch, headroom));
-        let new = reels.iter().any(|(_, path)| self.clips.fresh(path));
-        let since = match self.still {
-            Some(at) if !film.is_some_and(|film| self.clips.fresh(film)) => at,
-            _ => nanos,
-        };
-        self.still = Some(since);
-        let frames = self.clips.shown(&reels);
-        let reel = |id: &str| frames.iter().find(|(key, _)| *key == id).map(|(_, image)| *image);
-        let size = self.size;
-        let (fit, background, flip, grade) =
-            (self.look.fit, self.look.background, self.look.flip, self.look.grade);
-        let look = Seen { fit, background, pan: self.shown, crop: self.crop, flip, grade };
-        let stretched = Seen { fit: Fit::Stretch, crop: None, ..look };
-        if let Some(stage) = self.stage.as_mut() {
-            let r = &gpu.renderer;
-            let tier = crate::power::tier(r.software(), r.compute()).min(r.tier());
-            (stage.reports, stage.measured) =
-                ((!self.preview).then_some(usize::from(self.lock)), self.measured);
-            stage.render(r, (size, nanos, fps), (power, tier), &frames, true)?;
-        }
-        let (now, now_look) = match (&self.film, &self.stage, &self.image) {
-            (Some(_), ..) => (reel(FILM), look),
-            (_, Some(stage), _) => (stage.image(), stretched),
-            (.., Some((_, image))) => (Some(image.as_ref()), look),
-            _ => (None, look),
-        };
-        let had = match self.fading.as_ref().map(|f| &f.gone) {
-            Some(Gone::Picture(..)) => true,
-            Some(Gone::Scene(stage)) => stage.image().is_some(),
-            Some(Gone::Film(..)) => reel(GONE).is_some(),
-            None => false,
-        };
-        let duration = self.look.fade.as_nanos().max(1) as f32;
-        let progress = self.fading.as_mut().map_or(1.0, |fading| {
-            let asked = *fading.asked.get_or_insert(nanos);
-            let ready = blend::begins(had, now.is_some(), nanos - asked);
-            let start = fading.start.or(ready.then_some(nanos));
-            fading.start = start;
-            start.map_or(0.0, |start| ((nanos - start) as f32 / duration).clamp(0.0, 1.0))
-        });
-        let (was, was_look) = match self.fading.as_ref().map(|f| &f.gone) {
-            Some(Gone::Picture(image, (fit, crop))) => {
-                (Some(image.as_ref()), Seen { fit: *fit, crop: *crop, ..look })
-            }
-            Some(Gone::Scene(stage)) => (stage.image(), stretched),
-            Some(Gone::Film(_, (fit, background))) => {
-                (reel(GONE), Seen { fit: *fit, background: *background, crop: None, ..look })
-            }
-            None => (None, look),
-        };
-        let waiting = self.fading.as_ref().is_some_and(|fading| fading.start.is_none());
-        let mut layers = match self.fading {
-            Some(_) => [layer(was, 1.0, &was_look, size, None), layer(now, progress, &now_look, size, None)],
-            None => [layer(now, 1.0, &now_look, size, None), layer(None, 0.0, &now_look, size, None)],
-        };
-        let shown = &mut layers[usize::from(self.fading.is_some())];
-        if self.film.is_some() && self.reel.framed() {
-            shown.uv = shown.uv.map(|uv| uv.framed(self.reel.zoom, self.reel.pan));
-        }
-        if !waiting && (now.is_some() || was.is_some()) && (new || self.dirty || self.fading.is_some()) {
-            self.dirty = !gpu.renderer.present_layers(surface, size, &layers, || {})?;
-            if !self.dirty {
-                self.presented = nanos;
-                FRAMES.fetch_add(1, Relaxed);
-            }
-        }
-        if self.fading.is_some() && (fps == 0 || progress >= 1.0) {
-            self.fading = None;
-            let flip = self.look.flip;
-            self.handover = self.film.is_some()
-                && self.reel.direct()
-                && direct(&settings::Look { flip, ..settings::look(self.lock) });
-            gpu::trim();
-        }
-        let ended = blend::rests(self.reel.once, now.is_some(), self.over, nanos - since);
-        let busy = self.fading.is_some() || (self.film.is_some() && power.moving() && !ended);
-        if !busy || fps == 0 {
-            self.still = None;
-        }
-        Ok(if busy && fps > 0 { (fps, delay_ms(fps)) } else { (0, 0) })
     }
 }

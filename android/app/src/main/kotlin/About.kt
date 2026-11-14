@@ -19,7 +19,6 @@ private val LACKS = mapOf(
     "script_camera" to R.string.lacks_script_camera,
     "script_hierarchy" to R.string.lacks_script_hierarchy,
     "rgb" to R.string.lacks_rgb,
-    "transition" to R.string.lacks_transition,
     "media_info" to R.string.lacks_media_info,
 )
 

@@ -77,6 +77,10 @@ impl Stage {
         self.view.iter_mut().for_each(|view| view.light(headroom));
     }
 
+    pub(crate) fn drawn_at(&self) -> Quality {
+        self.quality
+    }
+
     pub(crate) fn top(&self) -> bool {
         self.quality == Quality::Q3 && self.pack.scene.canvas.bright()
     }

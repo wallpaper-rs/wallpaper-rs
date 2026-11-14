@@ -24,6 +24,10 @@ pub(crate) fn fades(fade: Duration, fps: u32, hidden: bool, from_video: bool) ->
     !fade.is_zero() && fps > 0 && !(hidden && from_video)
 }
 
+pub(crate) fn passes(own: bool, (saver, low, charging, lowest): (bool, bool, bool, bool)) -> bool {
+    own && !saver && !(low && !charging) && !lowest
+}
+
 pub(crate) fn resumes(parked: Option<&str>, chosen: Option<&str>) -> bool {
     parked.is_some() && parked == chosen
 }
@@ -81,6 +85,16 @@ mod tests {
         assert!(plays(clip, None, Some(clip)), "a video played straight on the screen also ends");
         assert!(!plays(clip, None, None) && !plays(clip, Some(Path::new("/w/other.mp4")), None));
         assert!(!plays(clip, None, Some(Path::new("/w/other.mp4"))), "a scene clip is not the shown video");
+    }
+
+    #[test]
+    fn a_wallpaper_comes_in_with_its_own_transition_only_while_the_phone_does_not_save_battery() {
+        assert!(passes(true, (false, false, false, false)));
+        assert!(passes(true, (false, true, true, false)), "a low battery on the charger still plays it");
+        assert!(!passes(false, (false, false, true, false)), "the plain fade or none was chosen");
+        assert!(!passes(true, (true, false, true, false)), "battery saver");
+        assert!(!passes(true, (false, true, false, false)), "low battery");
+        assert!(!passes(true, (false, false, false, true)), "below the level of the lowest quality");
     }
 
     #[test]

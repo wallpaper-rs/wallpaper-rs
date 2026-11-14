@@ -1573,8 +1573,19 @@ each screen plays its own. The shaders of the passage are built away from the dr
 new wallpaper loads, within the same build limit as package effects (the log says
 when it is passed); the passage starts once they are ready, so it always plays from its first
 frame, and the old wallpaper stays on screen meanwhile. A build that fails or passes the limit
-gives the plain fade. The phone does not play package transitions yet (feature `transition`
-is `without` there) and uses its own fade.
+gives the plain fade.
+
+The phone plays package transitions with the same engine (feature `transition` is `yes` there).
+Its choice is `transition.kind` for the screen (`own`, `fade`, `none`). Less motion on the phone
+(the system's «remove animations», or `transition.less_motion` set to `always`) turns every change
+into a cut, not a fade. With battery saver or a low battery away from the charger the wallpaper
+stands still and every change is a cut; below the battery level where the lowest quality is used
+the wallpaper's transition gives way to the plain fade. A passage that does
+not play at the quality the screen draws at is left out and the other one, if any, still plays; a
+transition that fails its checks, does not build in time or fails to draw gives the plain fade,
+logged and never shown to the person. A change of wallpaper while a passage plays drops the
+passage and the plain fade carries on to the last choice. The two wallpapers and the passage's
+textures are released the moment the change ends.
 
 ### Newer effects and parameters
 

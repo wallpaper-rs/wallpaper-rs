@@ -56,6 +56,7 @@ class RenderTest {
     @Test
     fun aNewSurfaceShowsAChangedChoiceWithoutFading() {
         Device.setting("transition.kind", "fade")
+        Device.setting("transition.less_motion", "never")
         Render.call { painter.show(true) }
         assertTrue(waitFor { frames.get() > 0 })
         Render.call { painter.detach() }
@@ -92,6 +93,7 @@ class RenderTest {
     @Test
     fun videosFadeInOverPictures() {
         Device.setting("transition.kind", "fade")
+        Device.setting("transition.less_motion", "never")
         Render.call { painter.show(true) }
         assertTrue(waitFor { seen.isNotEmpty() && near(CHOSEN, seen.last(), TOLERANCE.toInt()) })
         assertEquals(VIDEO, install(fixture(CLIP)))
@@ -105,6 +107,7 @@ class RenderTest {
     @Test
     fun aVideoShownOnANewSurfaceFadesIntoTheNextPicture() = fitted {
         Device.setting("transition.kind", "fade")
+        Device.setting("transition.less_motion", "never")
         film()
         Render.call {
             painter.detach()

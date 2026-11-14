@@ -91,6 +91,7 @@ class VideoTest {
     @Test
     fun aVideoLeftOnOneScreenFadesOutFromWhereItWas() {
         Device.setting("transition.kind", "fade")
+        Device.setting("transition.less_motion", "never")
         assertEquals(VIDEO, install(fixture(CLIP)))
         listOf(lock, home).forEach { it.attach() }
         listOf(lock, home).forEach { it.show(true) }

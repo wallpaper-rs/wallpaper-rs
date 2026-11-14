@@ -537,7 +537,9 @@ Una transición no puede usar imágenes, tablas de color, máscaras ni emisores,
 y 3. Si no pasa las comprobaciones, la escena igual se abre: `wprs-ctl pack check` dice por qué y
 el fondo entra con el fundido de siempre. Lo que el usuario elige manda: sin transición, el cambio
 es directo, y con movimiento reducido es un fundido. Al pasar de un fondo con `out` a uno con `in`,
-primero se ve la salida y después la entrada. En el teléfono, por ahora, entra con su fundido.
+primero se ve la salida y después la entrada. En el teléfono se ve igual, salvo que con movimiento
+reducido el cambio es directo, y mientras ahorra batería o la calidad fijada no la permite entra
+con el fundido.
 
 ## No cubierto aquí
 

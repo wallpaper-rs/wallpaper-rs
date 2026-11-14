@@ -13,11 +13,12 @@ use std::sync::atomic::AtomicU64;
 use wprs_core::Fit;
 use wprs_render::{GpuImage, Surface};
 
+mod compose;
 mod fade;
-
 use fade::Fading;
 mod paged;
 mod parked;
+mod passage;
 mod picture;
 mod scenes;
 mod steer;
