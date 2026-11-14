@@ -28,7 +28,9 @@ private fun flip(k: Knobs, label: Int, key: String, on: String, off: String, sub
 private val WALLPAPERS = listOf(
     Line(R.string.fit, Block.Wallpapers) { Pick(stringResource(R.string.fit), fitWords(), it["fit"]) { v -> it.set("fit", v) } },
     Line(R.string.fade, Block.Wallpapers) { k ->
-        Switch(stringResource(R.string.fade), k["transition.kind"] != "none") { k.set("transition.kind", if (it) "own" else "none") }
+        Switch(stringResource(R.string.fade), k["transition.kind"] != Passage.NONE, stringResource(passageNote(k.values))) {
+            k.set("transition.kind", if (it) Passage.OWN else Passage.NONE)
+        }
     },
     Line(R.string.hide_mature, Block.Wallpapers) { flip(it, R.string.hide_mature, "library.hide_mature", "true", "false") },
     Line(R.string.allow_flashing, Block.Wallpapers) {

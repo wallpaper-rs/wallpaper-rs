@@ -1,5 +1,6 @@
 package io.github.wallpaper_rs
 
+import android.animation.ValueAnimator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 
@@ -31,8 +32,18 @@ val SETTING_KEYS = listOf(
     "fit", "playback.max_fps", "charger_fps", "pause.on_battery", "playback.lowest_below_percent", "system_colors", "backend",
     "playback.quality", "playback.auto_pace", "playback.hdr", "parallax.fill", Convert.SETTING, "transition.kind", "playback.muted",
     "playback.duck", "models.allow_download", "playback.allow_flashing", "playback.scene_capture", "library.hide_mature", Unveil.KEY,
-    "repos.vote_counts", Updates.SETTING, Updates.AUTO, Sync.NETWORK, VOLUME,
+    "repos.vote_counts", Updates.SETTING, Updates.AUTO, Sync.NETWORK, VOLUME, LESS_MOTION,
 )
+
+const val LESS_MOTION = "transition.less_motion"
+
+private val FIXED = Regex("q[0-3]")
+
+fun passageNote(values: Map<String, String>, system: Boolean = !ValueAnimator.areAnimatorsEnabled()): Int {
+    val kind = values["transition.kind"].orEmpty().ifEmpty { Passage.OWN }
+    val quality = values["playback.quality"]?.takeIf { FIXED.matches(it) }?.drop(1)?.toInt()
+    return Passage.note(kind, Passage.still(values[LESS_MOTION].orEmpty(), system), saving = false, quality = quality)
+}
 
 @Composable
 private fun words(pairs: List<Pair<String, Int>>) = pairs.map { (value, text) -> Word(value, stringResource(text)) }

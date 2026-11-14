@@ -38,7 +38,7 @@ class SettingsTest {
 
     private fun shown(before: () -> Unit = {}) {
         storage()
-        listOf(Updates.AUTO, "playback.quality").forEach { kept[it] = Native.setting(it, null) }
+        listOf(Updates.AUTO, "playback.quality", "transition.kind", LESS_MOTION).forEach { kept[it] = Native.setting(it, null) }
         before()
         scenario = ActivityScenario.launch(Main::class.java).onActivity { main -> main.setContent { Theme { Settings(main) } } }
         compose.waitUntil(TIMEOUT_MS) { compose.onAllNodes(hasTestTag("finder")).fetchSemanticsNodes().isNotEmpty() }
@@ -115,6 +115,20 @@ class SettingsTest {
         compose.waitUntil(TIMEOUT_MS) { Native.setting(Updates.AUTO, null) == "false" }
         compose.onNodeWithText(text(R.string.auto_update_off)).assertIsDisplayed()
         assertEquals("false", Native.setting(Updates.AUTO, null))
+    }
+
+    @Test
+    fun theTransitionRowSaysWhatTheChoiceDoesOnThisPhone() {
+        shown {
+            Native.setting("transition.kind", Passage.OWN)
+            Native.setting(LESS_MOTION, "never")
+            Native.setting("playback.quality", "q1")
+        }
+        search(text(R.string.fade))
+        compose.onNodeWithText(text(R.string.passage_light)).assertIsDisplayed()
+        row(R.string.fade).performClick()
+        compose.waitUntil(TIMEOUT_MS) { Native.setting("transition.kind", null) == Passage.NONE }
+        compose.onNodeWithText(text(R.string.passage_cut)).assertIsDisplayed()
     }
 
     private companion object {
