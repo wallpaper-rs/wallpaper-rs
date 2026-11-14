@@ -49,6 +49,8 @@ ancho de la tapa; el filete de foco es el anillo común (`Anillo`).
 - Lo que se le pone como hijo aparece debajo de la tapa encendida y agrandada (la ficha).
 - Señales `tapped(modifiers)` y `doubleTapped()`.
 - La imagen carga fuera del hilo principal.
+- `moving` (URL): vista previa animada que se dibuja sobre la imagen mientras no está vacía; se
+  detiene con la ventana oculta. Quien la crea decide cuándo darla.
 - Normalmente no se usa sola: la crean `Estante` y `Rejilla`.
 
 ## Ficha y FichaFija
@@ -91,6 +93,10 @@ margen. La tapa encendida no pasa del margen de la página.
 - `choosing`, `chosen` (lista de índices); `label` para accesibilidad.
 - Señales `activated(index)` (Intro o doble clic) y `toggled(index)` (Espacio o clic mientras se
   elige, o Ctrl+clic). La pantalla actualiza `chosen`.
+- Vista animada: `movingOf` (función que recibe el índice y devuelve la URL o `""`) y la señal
+  `wanted(index)`, que avisa cuando el puntero entra en una tapa o la tapa encendida tiene el foco;
+  solo esa tapa recibe `movingOf(index)` y deja de moverse al perderlo. La pantalla pide la vista en
+  `wanted` y decide en `movingOf` si se mueve (batería, destellos).
 - Teclado: flechas izquierda y derecha mueven la tapa encendida y el estante la sigue.
 - Solo crea las tapas que se ven más una de reserva, y reutiliza las que salen de la vista.
 

@@ -16,6 +16,7 @@ FocusScope {
     property string offRole: "off"
     property bool choosing
     property var chosen: []
+    property var movingOf: null
     readonly property string currentName: view.currentItem?.name ?? ""
     readonly property string currentCaption: view.currentItem?.caption ?? ""
     property Item view
@@ -24,6 +25,7 @@ FocusScope {
     signal activated(int index)
     signal toggled(int index)
     signal extended(int from, int to)
+    signal wanted(int index)
 
     function role(entry, name) {
         const found = entry[name];

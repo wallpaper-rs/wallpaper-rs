@@ -6,6 +6,7 @@ Item {
 
     property url picture
     property var pictures: []
+    property url moving
     property string name
     property string note
     property string noteIcon
@@ -81,6 +82,16 @@ Item {
             source: tapa.pictures.length === 1 ? tapa.pictures[0] : tapa.picture
             sourceSize.width: Look.tapaFoco
             sourceSize.height: Math.round(Look.tapaFoco * 9 / 16)
+            opacity: tapa.off ? Look.tapaApagada : 1
+        }
+
+        AnimatedImage {
+            anchors.fill: parent
+            visible: tapa.moving.toString() !== "" && status === AnimatedImage.Ready
+            source: tapa.moving
+            playing: visible && tapa.Window.visibility !== Window.Hidden
+            cache: false
+            fillMode: Image.PreserveAspectCrop
             opacity: tapa.off ? Look.tapaApagada : 1
         }
 

@@ -52,6 +52,25 @@ QtObject {
         catalog.word = 0;
     }
 
+    function motion() {
+        fill([examples, house], [pkg("bb22", "dunes", {
+                "animated": true
+            }), pkg("bb22", "flash", {
+                "animated": true,
+                "photosensitive": true
+            })], []);
+        catalog.asked = {};
+        catalog.moving = {};
+        page.shelf.wanted(0);
+        page.shelf.wanted(1);
+        expect("vista", catalog.asked["bb22/dunes@1.0.0"] === true && !catalog.asked["bb22/flash@1.0.0"], "a card under the pointer must ask for its animated preview, unless it flashes");
+        catalog.moving = {
+            "bb22/dunes@1.0.0": "/cache/dunes.gif",
+            "bb22/flash@1.0.0": "/cache/flash.gif"
+        };
+        expect("vista", page.shelf.movingOf(0) !== "" && page.shelf.movingOf(1) === "", "only the card that may move gets its animated preview");
+    }
+
     function exercise() {
         const notes = Qt.createComponent("BrowseNotes.qml").createObject(check.page);
         fill([examples], [pkg("aa11", "pond")], []);
@@ -139,6 +158,7 @@ QtObject {
             })], [], []);
         catalog.word = 2;
         expect("repo", page.fallo.kind === "unreadable" && catalog.words[2].count === App.tr("cannot be read"), "an unreadable repository must say so");
+        motion();
         installer.said = [];
         notes.destroy();
         catalog.load();

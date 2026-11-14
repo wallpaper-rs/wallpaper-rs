@@ -9,6 +9,8 @@ Item {
     property var repos: []
     property var installed: []
     property var previews: ({})
+    property var moving: ({})
+    property var asked: ({})
     property var shown: ({})
     property var votes: ({})
     property var versions: ({})
@@ -72,6 +74,18 @@ Item {
                     "own": u
                 })) : packages
     readonly property var covers: chosen.map(p => cover(p))
+
+    function animate(pkg) {
+        const wanted = pkg ? spec(pkg) : "";
+        if (!pkg || battery || !pkg.animated || pkg.photosensitive === true || veiled(pkg) || asked[wanted])
+            return;
+        asked[wanted] = true;
+        App.query("RequestAnimatedPreviews", [[wanted]], "Repos1", found => catalog && (catalog.moving = Object.assign({}, catalog.moving, found[0])));
+    }
+
+    function motion(pkg) {
+        return !pkg || battery || pkg.photosensitive === true || veiled(pkg) ? "" : App.url(moving[spec(pkg)] ?? "");
+    }
 
     function spec(pkg) {
         return pkg.repo_id + "/" + pkg.id + "@" + pkg.version;
@@ -143,7 +157,11 @@ Item {
         target: App.backend
 
         function onPreviewReady(spec, path) {
-            if (!spec.startsWith("animated:"))
+            if (spec.startsWith("animated:"))
+                catalog.moving = Object.assign({}, catalog.moving, {
+                    [spec.slice(9)]: path
+                });
+            else
                 catalog.previews = Object.assign({}, catalog.previews, {
                     [spec]: path
                 });

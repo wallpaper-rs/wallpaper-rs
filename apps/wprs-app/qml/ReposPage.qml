@@ -122,6 +122,8 @@ Kirigami.Page {
             visible: !page.trouble && !page.full && !none.visible
             label: App.tr("Explore")
             model: catalog.covers
+            movingOf: index => catalog.motion(catalog.chosen[index])
+            onWanted: index => catalog.animate(catalog.chosen[index])
             currentIndex: page.at
             onCurrentIndexChanged: page.at = currentIndex
             onActivated: page.pkg && fixed.act()
@@ -153,6 +155,8 @@ Kirigami.Page {
             visible: page.full && !page.trouble
             label: App.tr("All the wallpapers")
             model: catalog.covers
+            movingOf: index => catalog.motion(catalog.chosen[index])
+            onWanted: index => catalog.animate(catalog.chosen[index])
             currentIndex: page.at
             onCurrentIndexChanged: page.at = currentIndex
             onActivated: page.pkg && fixed.act()
