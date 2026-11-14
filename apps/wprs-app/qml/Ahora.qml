@@ -10,6 +10,7 @@ Column {
     property bool compact: false
     readonly property var screens: App.state.outputs ?? {}
     readonly property bool several: App.outputs.length > 1
+    readonly property bool strip: several && !none && !compact
     readonly property string screen: {
         const wanted = page && page.target !== undefined ? page.target : picked;
         return App.outputs.indexOf(wanted) >= 0 ? wanted : App.outputs.length > 0 ? App.outputs[0] : "";
@@ -84,14 +85,14 @@ Column {
 
     Pantallas {
         anchors.right: parent.right
-        visible: ahora.several && !ahora.none && !ahora.compact
+        visible: ahora.strip
         current: ahora.screen
         onPicked: name => ahora.choose(name)
     }
 
     Text {
         anchors.right: parent.right
-        topPadding: Look.e2
+        topPadding: ahora.strip ? 0 : Look.e2
         visible: text !== ""
         text: ahora.title
         width: Math.min(implicitWidth, Look.tapaFoco * 2)
@@ -105,7 +106,7 @@ Column {
 
     Text {
         anchors.right: parent.right
-        topPadding: Look.e3
+        topPadding: ahora.strip ? Look.e1 : Look.e3
         visible: text !== "" && !ahora.none && !ahora.compact
         text: [ahora.kindWord, ahora.info.credit ? ahora.info.credit.provider : ""].filter(t => t).join(" · ")
         font.family: Look.letraTexto
