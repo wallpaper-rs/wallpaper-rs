@@ -1,6 +1,11 @@
 package io.github.wallpaper_rs
 
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -46,7 +51,12 @@ class AsksTest {
 
     private fun answer(word: Int): List<String> {
         assertEquals(listOf("media"), runBlocking { asked(uid) })
-        scenario = ActivityScenario.launch(Main::class.java).onActivity { main -> main.setContent { Detail(main, uid, {}, {}) } }
+        scenario = ActivityScenario.launch(Main::class.java).onActivity { main ->
+            main.setContent {
+                val undecided by loaded(emptyList<String>(), main.revision.intValue) { asked(uid) }
+                Column(Modifier.verticalScroll(rememberScrollState())) { Asks(main, uid, undecided) }
+            }
+        }
         compose.waitUntil(TIMEOUT_MS) { compose.onAllNodes(hasText(context.getString(word))).fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithTag("ask_media").performScrollTo()
         compose.onNode(hasText(context.getString(word))).performClick()
