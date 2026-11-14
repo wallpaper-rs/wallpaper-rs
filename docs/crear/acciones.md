@@ -110,9 +110,9 @@ Preguntas: [rig](acciones-mallas.md#rig), [weights](acciones-mallas.md#weights),
 
 ### [Efectos y máscaras](acciones-efectos.md)
 
-Acciones: [effect_rule](acciones-efectos.md#effect_rule), [paint_mask](acciones-efectos.md#paint_mask), [comb_flow](acciones-efectos.md#comb_flow), [ramp](acciones-efectos.md#ramp), [depth_map](acciones-efectos.md#depth_map), [effects](acciones-efectos.md#effects)
+Acciones: [effect_rule](acciones-efectos.md#effect_rule), [paint_mask](acciones-efectos.md#paint_mask), [comb_flow](acciones-efectos.md#comb_flow), [ramp](acciones-efectos.md#ramp), [depth_map](acciones-efectos.md#depth_map), [effects](acciones-efectos.md#effects), [transition](acciones-efectos.md#transition)
 
-Preguntas: [normals](acciones-efectos.md#normals), [map](acciones-efectos.md#map), [ramp](acciones-efectos.md#ramp), [depth_model](acciones-efectos.md#depth_model), [rules](acciones-efectos.md#rules), [effect_cost](acciones-efectos.md#effect_cost), [level](acciones-efectos.md#level), [effect_handles](acciones-efectos.md#effect_handles), [mask_view](acciones-efectos.md#mask_view), [mask_picture](acciones-efectos.md#mask_picture)
+Preguntas: [normals](acciones-efectos.md#normals), [map](acciones-efectos.md#map), [ramp](acciones-efectos.md#ramp), [depth_model](acciones-efectos.md#depth_model), [rules](acciones-efectos.md#rules), [effect_cost](acciones-efectos.md#effect_cost), [level](acciones-efectos.md#level), [effect_handles](acciones-efectos.md#effect_handles), [mask_view](acciones-efectos.md#mask_view), [mask_picture](acciones-efectos.md#mask_picture), [transition](acciones-efectos.md#transition-1)
 
 ### [Partículas, luces y sonido](acciones-particulas-y-luces.md)
 

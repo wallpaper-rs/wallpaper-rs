@@ -242,6 +242,29 @@ Ejemplo (no se prueba aquí porque exige el modelo instalado):
 wprs-ctl scene act mi-escena depth_map '{"asset":"foto","pointer":"/scene/layers/0/effects/0/params/depth"}'
 ```
 
+### Transición propia
+
+#### `transition`
+
+Crea, cambia o quita la transición propia del fondo para cuando entra (`"way": "in"`) o cuando sale (`"way": "out"`). Revisa lo mismo que la carga de la escena: lo que la revisión rechaza no se guarda y la escena queda como estaba. En la app, **Opciones › Transiciones**. Guía: [transiciones](transiciones.md).
+
+| Argumento | Tipo | Qué significa |
+|---|---|---|
+| `way` | texto | `in` (al entrar, por defecto) o `out` (al salir). |
+| `make` | sí/no | `true` la crea si falta: copia el efecto de la otra dirección o escribe el de partida `transitions/opening.json`. |
+| `effect` | texto | Descriptor del paquete con `"stage": "transition"`; su `.wgsl` va al lado. Borra los valores. |
+| `duration_ms` | entero | Duración, de 100 a 10000 ms. |
+| `curve` | texto o lista | Curva con nombre (`out_cubic`…) o Bézier `[x1, y1, x2, y2]`. |
+| `params` | objeto | Valores del efecto que cambian; `null` quita uno. |
+| `remove` | sí/no | `true` quita esa dirección. |
+
+```sh
+wprs-ctl scene new mi-escena
+wprs-ctl scene act mi-escena transition '{"way":"in","make":true}'
+wprs-ctl scene act mi-escena transition '{"way":"in","duration_ms":1800,"curve":[0.2,0.8,0.4,1],"params":{"center":[0.3,0.6]}}'
+wprs-ctl scene act mi-escena transition '{"way":"in","remove":true}'
+```
+
 ## Preguntas
 
 ### Efectos de una capa
@@ -405,4 +428,16 @@ La respuesta es `{"path": ...}` con la imagen preparada, que se guarda en la cac
 ```sh
 wprs-ctl scene act mi-escena import '{"file":"foto.png"}'
 wprs-ctl scene ask mi-escena mask_picture '{"asset":"foto","channel":"luminance"}'
+```
+
+### Transición propia
+
+#### `transition`
+
+Las dos direcciones (`in`, `out`, o `null` si falta) con su curva muestreada (`shape`), el nombre y los campos del efecto, si se reproduce en cada nivel de calidad (`plays`) y el problema de la revisión dicho para personas (`problem`); además los efectos de transición del paquete (`effects`), las curvas con nombre (`curves`) y los límites (`limits`).
+
+```sh
+wprs-ctl scene new mi-escena
+wprs-ctl scene act mi-escena transition '{"way":"out","make":true}'
+wprs-ctl scene ask mi-escena transition
 ```
