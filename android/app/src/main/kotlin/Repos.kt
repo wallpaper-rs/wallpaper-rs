@@ -36,6 +36,9 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
+@Composable
+private fun repoName(bundled: Boolean, name: String) = if (bundled) stringResource(R.string.repo_examples) else name
+
 fun JSONArray?.objects() = this?.let { list -> List(list.length(), list::getJSONObject) }.orEmpty()
 
 @Composable
@@ -67,7 +70,7 @@ fun Repos(main: Main, status: JSONObject, run: Run, add: () -> Unit) {
     }
     shown.optJSONArray("repos").objects().forEach { repo ->
         ListItem(
-            headlineContent = { Text(repo.getString("name")) },
+            headlineContent = { Text(repoName(repo.optBoolean("bundled"), repo.getString("name"))) },
             supportingContent = { Text(stringResource(R.string.repo_packages, repo.optInt("packages"))) },
             trailingContent = {
                 WordAction({ act { account("remove_repo", "repo_id" to repo.getString("repo_id")) } }) { Text(stringResource(R.string.remove)) }
@@ -82,11 +85,12 @@ fun Repos(main: Main, status: JSONObject, run: Run, add: () -> Unit) {
         QuietAction(add, Modifier.fillMaxWidth()) { Text(stringResource(R.string.repo_add_title)) }
     }
     if (shown.optJSONArray("repos").objects().isNotEmpty()) RepoUpdates(main, run)
-    if (exploring) Explore(main, run) { exploring = false }
+    val examples = shown.optJSONArray("repos").objects().filter { it.optBoolean("bundled") }.map { it.getString("repo_id") }.toSet()
+    if (exploring) Explore(main, run, examples) { exploring = false }
 }
 
 @Composable
-private fun Explore(main: Main, run: Run, close: () -> Unit) {
+private fun Explore(main: Main, run: Run, examples: Set<String>, close: () -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
     var installed by remember { mutableIntStateOf(0) }
     val found by loaded(JSONArray(), query, installed) { account("browse", "query" to query) as? JSONArray ?: JSONArray() }
@@ -116,7 +120,7 @@ private fun Explore(main: Main, run: Run, close: () -> Unit) {
                                 val mature = stringResource(R.string.mature).takeIf { item.optBoolean("mature") }
                                 val mark = stringResource(R.string.repo_featured).takeIf { featured }
                                 Column {
-                                    Text(listOfNotNull(mark, item.getString("repo"), item.getString("version"), size(item.optLong("size")), mature).joinToString(" · "))
+                                    Text(listOfNotNull(mark, repoName(item.getString("repo_id") in examples, item.getString("repo")), item.getString("version"), size(item.optLong("size")), mature).joinToString(" · "))
                                     val spec = item.getString("repo_id") + "/" + id
                                     val counts = voted.optJSONObject(spec) ?: counted.optJSONObject("items")?.optJSONObject(spec)
                                     if (item.getString("repo_id") == counted.optString("repo_id").takeIf { !counted.isNull("repo_id") }) {
