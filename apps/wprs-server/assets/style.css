@@ -611,7 +611,7 @@ pre.dato { white-space: pre-wrap; padding: var(--e-3) var(--e-4); border-radius:
 .pie nav { display: contents; }
 .nav form button { font: 500 var(--t-texto) / 1 var(--titulo); }
 
-main button:not(.boton), main input[type=submit] {
+main button:not(.boton) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
