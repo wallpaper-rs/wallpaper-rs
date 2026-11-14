@@ -75,6 +75,8 @@ model! {
         pub packages: u32,
         pub warnings: Vec<RepoWarning>,
         pub last_error: Option<String>,
+        #[serde(default)]
+        pub last_error_name: Option<String>,
         pub job: Option<u64>,
         #[serde(default)]
         pub broken: Option<String>,

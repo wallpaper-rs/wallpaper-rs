@@ -19,8 +19,8 @@ Item {
             }) : null;
     }
 
-    function signed(message) {
-        return /signature|signed|hash|digest|sha256/i.test(message ?? "");
+    function signed(error) {
+        return error?.name === "io.github.wallpaper_rs.Error.Untrusted";
     }
 
     function announce(jobs) {
@@ -32,7 +32,7 @@ Item {
             const job = jobs.find(j => j.id === w.job);
             if (job.state === "done")
                 return w.apply ? installer.apply(w) : installer.tell(App.tr("“%1” is installed.", w.title), w, false);
-            if (job.state === "failed" && installer.signed(job.error ? job.error.message : ""))
+            if (job.state === "failed" && installer.signed(job.error))
                 installer.failure = Object.assign({}, w, {
                     "message": job.error.message
                 });

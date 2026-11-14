@@ -166,21 +166,21 @@ QtObject {
                 "spec": "bb22/dunes@1.0.0",
                 "job": 8,
                 "title": "dunes",
-                "author": "Ana",
                 "repoName": "Home"
             }];
         installer.announce([{
                 "id": 8,
                 "state": "failed",
                 "error": {
-                    "message": "signature mismatch"
+                    "name": "io.github.wallpaper_rs.Error.Untrusted",
+                    "message": "the key of its author does not match"
                 }
             }]);
         expect("firma", page.trouble && page.fallo.kind === "signature" && page.fallo.title === App.tr("The signature does not match"), "a bad signature must be explained");
         page.fallo.otherActed();
         expect("firma", installer.failure === null && !page.trouble, "Not now must close it");
         fill([examples, Object.assign({}, house, {
-                "last_error": "connection refused"
+                "last_error_name": "io.github.wallpaper_rs.Error.Offline"
             })], [], []);
         catalog.word = 2;
         expect("error", page.fallo.kind === "offline" && page.fallo.title === App.tr("No connection with “%1”", "Home"), "an offline repository must say so: " + page.fallo.title);

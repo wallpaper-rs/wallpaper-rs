@@ -37,7 +37,7 @@ pub struct Remote {
     pub adding: Mutex<HashSet<String>>,
     pub credits: Mutex<HashMap<PathBuf, Credit>>,
     pub poke: Notify,
-    pub repo_errors: Mutex<HashMap<String, String>>,
+    pub repo_errors: Mutex<HashMap<String, (String, String)>>,
     pub removing: Mutex<HashSet<String>>,
     pub previews: Mutex<Vec<(String, String)>>,
     pub preview_wake: Notify,

@@ -99,9 +99,9 @@ Item {
     function trouble(repo) {
         if (repo.broken)
             return "unreadable";
-        if (!repo.last_error)
-            return "";
-        return /connect|resolve|dns|timed out|timeout|unreachable|refused|network|offline/i.test(repo.last_error) ? "offline" : "unreadable";
+        if (repo.last_error_name === "io.github.wallpaper_rs.Error.Offline")
+            return "offline";
+        return repo.last_error ? "unreadable" : "";
     }
 
     function veiled(pkg) {

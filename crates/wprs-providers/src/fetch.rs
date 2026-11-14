@@ -146,7 +146,11 @@ fn allowed(url: &Url) -> bool {
 }
 
 pub(crate) fn kind(e: &reqwest::Error) -> io::ErrorKind {
-    if e.is_timeout() { io::ErrorKind::TimedOut } else { io::ErrorKind::Other }
+    match (e.is_timeout(), e.is_connect()) {
+        (true, _) => io::ErrorKind::TimedOut,
+        (_, true) => io::ErrorKind::NotConnected,
+        _ => io::ErrorKind::Other,
+    }
 }
 
 pub(crate) fn stalled(e: io::Error) -> io::Error {

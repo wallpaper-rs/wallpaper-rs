@@ -99,7 +99,8 @@ Every error carries a readable English message. An error raised without a descri
 | `io.github.wallpaper_rs.Error.Conflict` | A playlist edit by index found other entries than expected: `the playlist changed; reload it` |
 | `io.github.wallpaper_rs.Error.Newer` | A package needs a newer wallpaper-rs: a newer manifest version, a `requires.engine` this version does not meet or a feature of `requires.features` it does not know (see `package.md`) |
 | `io.github.wallpaper_rs.Error.FlashingDisabled` | `Apply` of a package that flashes while `playback.allow_flashing` is off (`this wallpaper flashes and flashing wallpapers are disabled; allow flashing in the settings to play it`); turn the setting on and apply again |
-| `io.github.wallpaper_rs.Error.Offline` | A provider sync could not reach its server: the connection failed or timed out (`no connection: …`) |
+| `io.github.wallpaper_rs.Error.Offline` | A provider sync, a repository refresh or a package download could not reach its server: the connection failed or timed out (`no connection: …` for providers) |
+| `io.github.wallpaper_rs.Error.Untrusted` | A repository index or a package failed its check: a signature or key refused, a digest or size that does not match, an index older than the one already seen or that disagrees with it. A security sign, never a network failure |
 | `io.github.wallpaper_rs.Error.Unconfirmed` | `Grant`/`GrantPackage` from a caller that must be confirmed: the user is asked in a desktop notification; treat it as pending, not as a failure |
 | `org.freedesktop.DBus.Error.AccessDenied` | `Grant`/`GrantPackage` while the same question rests after the user answered *Not now*, closed the notification or left it unanswered (ten minutes, listed in `GetInputs().quiet`), or with no notification service to ask; `SetPointer` from a caller that may not report the pointer |
 
@@ -1624,8 +1625,9 @@ and an output showing one when its revocation arrives shows its background color
 ### `List() → (s json)`
 
 A `ReposReply`. `stale` and `warnings` are computed at every call; `last_error` is the message
-of the last failed refresh since the daemon started, and it is dropped when the repository is
-removed or added again. A repository whose stored copy cannot be read (its `state.json` missing,
+of the last failed refresh since the daemon started and `last_error_name` its error name (`Offline`,
+`Untrusted` or another of the table above), so a client tells the kinds apart without reading the
+message; both are dropped when the repository is removed or added again. A repository whose stored copy cannot be read (its `state.json` missing,
 a damaged file) is listed with the reason in `broken` and its other fields as far as they can be
 read; browsing and installing skip it, and the other repositories keep working.
 

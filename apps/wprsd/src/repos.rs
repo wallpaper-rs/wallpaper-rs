@@ -1,34 +1,19 @@
 use crate::compositor::lock;
 use crate::daemon::Daemon;
 use crate::error::{Error, Result, failed, invalid, not_found};
+use wprs_core::dbus::error::EXISTS;
 use crate::items::reply;
 use crate::jobs::{Ctl, now};
 use crate::kinds::{local, parse_url};
 use serde_json::Value;
 use settle::{Settled, settle, vanished};
 use std::sync::Arc;
-use wprs_core::dbus::error::{EXISTS, NEWER, STALE};
 use wprs_core::model::{JobKind, MODEL, RefreshOutput, Repo, RepoWarning, ReposReply, Update};
 use wprs_format::{Anchor, RepoInfo};
 use wprs_providers::HttpFetch;
 
+mod named;
 mod settle;
-
-impl From<wprs_format::Error> for Error {
-    fn from(e: wprs_format::Error) -> Self {
-        use wprs_format::Error as F;
-        match e {
-            F::NotFound(_) => not_found(e.to_string()),
-            F::Exists(_) => Error::Named(EXISTS, e.to_string()),
-            F::Invalid { reason, .. } => invalid(reason),
-            F::UnsafePath(_) => invalid(e.to_string()),
-            F::Stale(_) => Error::Named(STALE, e.to_string()),
-            F::Newer(_) => Error::Named(NEWER, e.to_string()),
-            F::Io(io) if io.kind() == std::io::ErrorKind::Interrupted => Error::Cancelled,
-            e => failed(e.to_string()),
-        }
-    }
-}
 
 pub fn newer(a: &str, b: &str) -> bool {
     semver::Version::parse(a).ok() > semver::Version::parse(b).ok()
@@ -52,7 +37,7 @@ impl Daemon {
         let host =
             |base: &String| reqwest::Url::parse(base).ok().and_then(|u| u.host_str().map(String::from));
         let hosts = info.hosts.iter().map(|base| host(base).unwrap_or_else(|| base.clone())).collect();
-        let last_error = lock(&self.remote.repo_errors).get(&info.repo_id).cloned();
+        let (last_error_name, last_error) = lock(&self.remote.repo_errors).get(&info.repo_id).cloned().unzip();
         let added = info.url.split('?').next().unwrap_or_default();
         let jobs = [
             (JobKind::RepoRefresh, info.repo_id.as_str()),
@@ -74,6 +59,7 @@ impl Daemon {
             packages: info.packages as u32,
             warnings: info.warnings.iter().map(|w| warning(w)).collect(),
             last_error,
+            last_error_name,
             job,
             broken: info.broken,
             bundled: self.is_examples(&info.repo_id),
@@ -179,7 +165,7 @@ impl Daemon {
                 Settled::Gone => {}
                 Settled::Failed(e) => {
                     tracing::warn!(repo = &id[..8], "repository refresh failed");
-                    lock(&self.remote.repo_errors).insert(id.clone(), e.to_string());
+                    lock(&self.remote.repo_errors).insert(id.clone(), e.parts());
                     failure = failure.or(Some(e)).filter(|_| !target.is_empty());
                 }
             }
