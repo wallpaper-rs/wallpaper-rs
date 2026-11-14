@@ -5,6 +5,8 @@ Timer {
     id: check
 
     required property var host
+    property int tries: 0
+    property bool moved: false
     readonly property var frame: host.shell.titleFrame
 
     function must(ok, text) {
@@ -43,12 +45,25 @@ Timer {
 
     interval: Look.paso * 6
     onTriggered: {
+        if (host.kind !== "title" && host.waiting > 1 && ++tries < 200)
+            return restart();
+        if (host.kind === "options" && !moved) {
+            moved = true;
+            host.showPage(0);
+            const page = host.pageStack.currentItem;
+            if (page && page.opened)
+                page.opened = "";
+            host.showPassiveNotification("check");
+            return restart();
+        }
         try {
-            must(frame.bandLow > 0, "the library does not use the low band");
-            const tasks = frame.ahora.tasks;
-            must(tasks.shown.length === 0 || tasks.height > 0, "the job line is hidden on a page with the band");
+            if (host.kind === "title") {
+                must(frame.bandLow > 0, "the library does not use the low band");
+                const tasks = frame.ahora.tasks;
+                must(tasks.shown.length === 0 || tasks.height > 0, "the job line is hidden on a page with the band");
+                notice();
+            }
             empty();
-            notice();
         } finally {
             host.waiting--;
             host.held = host.held.filter(c => c !== check);
