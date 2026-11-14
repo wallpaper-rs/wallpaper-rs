@@ -101,6 +101,7 @@ Item {
     Column {
         id: now
 
+        z: 1
         visible: !frame.full
         anchors.top: parent.top
         anchors.right: parent.right
