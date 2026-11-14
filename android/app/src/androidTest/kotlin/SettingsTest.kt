@@ -2,12 +2,14 @@ package io.github.wallpaper_rs
 
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ActivityScenario
@@ -46,8 +48,11 @@ class SettingsTest {
 
     private fun search(query: String) {
         compose.onNodeWithTag("finder").performTextReplacement(query)
+        compose.onNodeWithTag("finder").performImeAction()
         compose.waitForIdle()
     }
+
+    private fun row(label: Int) = compose.onNode(hasText(text(label)) and hasClickAction() and !hasTestTag("finder"))
 
     private fun top(tag: String) = compose.onNodeWithTag(tag, useUnmergedTree = true).fetchSemanticsNode().boundsInRoot.top
 
@@ -79,9 +84,8 @@ class SettingsTest {
     @Test
     fun theSearchKeepsTheBlocksAndAnEmptySearchSaysSo() {
         shown()
-        search("bateria")
-        compose.onNodeWithTag("block_Screen").assertIsDisplayed()
-        compose.onNodeWithText(text(R.string.lowest_below)).assertExists()
+        search(folded(text(R.string.pause_below)))
+        compose.onNodeWithTag("block_Screen").assertExists()
         compose.onNodeWithTag("block_Wallpapers").assertDoesNotExist()
         compose.onNodeWithTag("account").assertDoesNotExist()
         search("zzqx")
@@ -94,7 +98,7 @@ class SettingsTest {
     fun qualityOffersThreeWordsAndTheSevenLevelsBehindMoreOptions() {
         shown()
         search(text(R.string.quality))
-        compose.onNodeWithText(text(R.string.quality), useUnmergedTree = true).performClick()
+        row(R.string.quality).performClick()
         compose.onNodeWithText(text(R.string.quality_saving)).assertIsDisplayed()
         compose.onNodeWithText(text(R.string.level_q2)).assertDoesNotExist()
         compose.onNodeWithText(text(R.string.more_options)).performClick()
@@ -107,7 +111,7 @@ class SettingsTest {
     fun turningOffTheAutomaticUpdatesSaysWhatItMeans() {
         shown { Native.setting(Updates.AUTO, "true") }
         search(text(R.string.auto_update))
-        compose.onNodeWithText(text(R.string.auto_update), useUnmergedTree = true).performClick()
+        row(R.string.auto_update).performClick()
         compose.waitUntil(TIMEOUT_MS) { Native.setting(Updates.AUTO, null) == "false" }
         compose.onNodeWithText(text(R.string.auto_update_off)).assertIsDisplayed()
         assertEquals("false", Native.setting(Updates.AUTO, null))

@@ -2,7 +2,9 @@ package io.github.wallpaper_rs
 
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
@@ -32,12 +34,15 @@ class RepoUpdatesTest {
     }
 
     @Test
-    fun withoutRepositoriesTheListOffersOnlyTheCheckAndItAnswersWithNothingNew() {
+    fun withoutRepositoriesTheCheckSaysEverythingIsUpToDate() {
         var ran = 0
         shown { main -> RepoUpdates(main) { _, work -> ran++; main.act(false) { work() } } }
         compose.onNodeWithText(context.getString(R.string.repo_check)).assertIsDisplayed().performClick()
         compose.waitUntil(TIMEOUT_MS) { ran > 0 }
+        compose.waitUntil(TIMEOUT_MS) { compose.onAllNodes(hasTestTag("all_updated"), true).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithText(context.getString(R.string.all_updated)).assertIsDisplayed()
         compose.onNodeWithText(context.getString(R.string.repo_updates)).assertDoesNotExist()
+        compose.onNodeWithTag("update_all").assertDoesNotExist()
         assertTrue(ran > 0)
     }
 
