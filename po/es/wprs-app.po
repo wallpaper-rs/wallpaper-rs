@@ -557,7 +557,7 @@ msgstr "Quitar de favoritos"
 
 #: apps/wprs-app/qml/OutputControls.qml
 msgid "Favorite"
-msgstr "Añadir a favoritos"
+msgstr "Favorito"
 
 #: apps/wprs-app/qml/Actions.qml
 msgid "Rate…"
@@ -20076,3 +20076,182 @@ msgstr "Tu biblioteca tiene solo «%1», que ya está puesto. Añade más fondos
 
 msgid "See as"
 msgstr "Ver como"
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "On your desktop"
+msgstr "En tu escritorio"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "List “%1”"
+msgstr "Lista «%1»"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "%1 min"
+msgstr "%1 min"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "%1 h"
+msgstr "%1 h"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "List “%1” · changes in %2"
+msgstr "Lista «%1» · cambia en %2"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "The rotation of “%1” stopped."
+msgstr "La rotación de «%1» se detuvo."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "The list that rotates"
+msgstr "La lista que rota"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Pause the list"
+msgstr "Pausar la lista"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "What is on your desktop"
+msgstr "Lo que está de fondo"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Mute everything"
+msgstr "Silenciar todo"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Overall volume"
+msgstr "Volumen general"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Fit setting"
+msgstr "Ajuste"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Making the thumbnails"
+msgstr "Haciendo las miniaturas"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "%1: %2 of %3"
+msgstr "%1: %2 de %3"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Which screen"
+msgstr "Pantalla"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "The rotation of “%1” stopped because you set “%2”."
+msgstr "La rotación de «%1» se detuvo porque pusiste «%2»."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "The list “%1” was removed."
+msgstr "Se quitó la lista «%1»."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "every day"
+msgstr "cambia cada día"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "every %1 days"
+msgstr "cambia cada %1 días"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "every %1 h"
+msgstr "cambia cada %1 h"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "every %1 min"
+msgstr "cambia cada %1 min"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "every %1 s"
+msgstr "cambia cada %1 s"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "stopped"
+msgstr "detenida"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Changes in %1 min"
+msgstr "Cambia en %1 min"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Changes in %1 h"
+msgstr "Cambia en %1 h"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Your playlists"
+msgstr "Tus listas"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Start on %1"
+msgstr "Poner en marcha en %1"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Edit"
+msgstr "Editar"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "You have no playlists yet"
+msgstr "Aún no tienes listas"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "A playlist rotates its wallpapers on your desktop. The quickest way: choose several wallpapers in your library and press “Rotate these every…”. Here you name them and change them."
+msgstr "Una lista hace rotar sus fondos en tu escritorio. Lo más rápido: elige varios fondos en tu biblioteca y pulsa «Rotar estos cada…». Aquí les pones nombre y las cambias."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Choose wallpapers in the library"
+msgstr "Elegir fondos en la biblioteca"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "“Favorites” already exists and fills itself: mark a wallpaper with the heart."
+msgstr "«Favoritos» ya existe y se llena sola: marca un fondo con el corazón."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Changes every"
+msgstr "Cambia cada"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "10 min"
+msgstr "10 min"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "30 min"
+msgstr "30 min"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "1 h"
+msgstr "1 h"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Every day"
+msgstr "Cada día"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Other…"
+msgstr "Otro…"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "How often it moves to the next wallpaper. “Other…”, at the end, takes seconds, minutes or hours."
+msgstr "Cada cuánto pasa al fondo siguiente. «Otro…», al final, admite segundos, minutos u horas."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Chosen by its search"
+msgstr "Los elige su búsqueda"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "History, search, rules and removing the list"
+msgstr "Historial, búsqueda, reglas y quitar la lista"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Remove the list"
+msgstr "Quitar la lista"
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Write a number and s, m or h: 45s, 20m or 3h."
+msgstr "Escribe un número y s, m o h: 45s, 20m o 3h."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Leave the search empty to choose its wallpapers by hand."
+msgstr "Deja la búsqueda vacía para elegir sus fondos a mano."
+
+#: apps/wprs-app/qml/ListasEstante.qml
+msgid "Search, for example fav:yes"
+msgstr "Búsqueda, por ejemplo fav:yes"

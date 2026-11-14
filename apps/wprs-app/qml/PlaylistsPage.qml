@@ -1,6 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
@@ -8,10 +6,27 @@ Kirigami.Page {
     id: page
 
     property string query
-    property string current
     property var playlists: []
+    property var pictures: ({})
     property string error
-    readonly property var playlist: playlists.find(p => p.uid === current) ?? null
+    property bool loaded: false
+    property int kind: 0
+    property string opened
+    property string level
+    property string target: App.outputs.length > 0 ? App.outputs[0] : ""
+    readonly property var screens: App.state.outputs ?? {}
+    readonly property var running: playlists.filter(p => p.outputs.length > 0)
+    readonly property var shown: kind === 1 ? running : playlists
+    readonly property var playlist: playlists.find(p => p.uid === opened) ?? null
+    readonly property string skeleton: playlist ? "options" : ""
+    readonly property var route: playlist ? [App.tr("Playlists"), playlist.name].concat(level !== "" ? [App.tr("More")] : []) : []
+    readonly property real bandLow: playlist ? 0 : shelf.low
+    readonly property real bandHigh: bandLow
+    property rect band
+    property rect upper
+    readonly property var keyHints: playlist ? undefined : shelf.hints
+    readonly property alias shelf: shelf
+    readonly property alias creator: creator
 
     function load() {
         App.query("List", [], "Playlists1", reply => {
@@ -19,30 +34,70 @@ Kirigami.Page {
                 return;
             page.playlists = reply.playlists;
             page.error = "";
-            if (!page.playlist && page.playlists.length > 0)
-                page.current = page.playlists[0].uid;
+            page.loaded = true;
+            reply.playlists.forEach(p => page.cover(p.uid));
         }, error => page && (page.error = error.message));
     }
 
-    title: App.tr("Playlists")
+    function cover(uid) {
+        App.query("Get", [uid, 0, 4], "Playlists1", reply => {
+            if (!page)
+                return;
+            const next = Object.assign({}, page.pictures);
+            next[uid] = reply.items.filter(item => !!item.thumb).map(item => "file://" + item.thumb);
+            page.pictures = next;
+        });
+    }
+
+    function next(p) {
+        const on = (p.outputs ?? []).map(name => screens[name] && screens[name].playlist ? screens[name].playlist.next_at : null).filter(at => !!at);
+        return on.length > 0 ? Math.min(...on) : 0;
+    }
+
+    function start(p) {
+        const output = App.outputs.length > 1 ? target : "";
+        App.act("Start", [p.uid, output], "Playlists1");
+    }
+
+    function remove(p) {
+        App.query("Get", [p.uid, 0, 100000], "Playlists1", reply => {
+            const uids = reply.items.map(item => item.uid);
+            App.act("Delete", [p.uid], "Playlists1", () => {
+                if (page)
+                    page.routeBack();
+                applicationWindow().showPassiveNotification(App.tr("The list “%1” was removed.", p.name), "long", App.tr("Undo"), () => App.act("Create", [p.name, p.query ?? ""], "Playlists1", made => {
+                    if (p.query === null && uids.length > 0)
+                        App.act("AddItems", [made[0], uids], "Playlists1");
+                    ["order", "interval", "synced", "resume", "advance_while_paused", "skip_videos_on_battery"].forEach(key => App.act("SetRule", [made[0], key, String(p.rules[key])], "Playlists1"));
+                }));
+            });
+        });
+    }
+
+    function keys() {
+        check.keys();
+    }
+
+    function exercise() {
+        check.exercise();
+    }
+
+    function routeBack() {
+        if (level !== "")
+            return level = "";
+        opened = "";
+        Qt.callLater(() => page && shelf.forceActiveFocus());
+    }
+
+    title: playlist ? playlist.name : App.tr("Playlists")
+    padding: 0
+    background: null
+    actions: playlist ? editor.actions : []
     Component.onCompleted: {
         load();
         if (query)
             creator.open();
     }
-    actions: [
-        Kirigami.Action {
-            text: App.tr("New playlist…")
-            icon.name: "list-add"
-            onTriggered: creator.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Delete")
-            icon.name: "edit-delete"
-            enabled: page.playlist !== null
-            onTriggered: App.act("Delete", [page.current], "Playlists1")
-        }
-    ]
 
     Connections {
         target: App.backend
@@ -53,67 +108,36 @@ Kirigami.Page {
         }
     }
 
-    RowLayout {
-        anchors.fill: parent
+    ListasEstante {
+        id: shelf
 
-        ListView {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 12
-            Layout.fillHeight: true
-            clip: true
-            model: page.playlists
-
-            delegate: QQC2.ItemDelegate {
-                required property var modelData
-
-                focusPolicy: Qt.StrongFocus
-                width: ListView.view.width
-                text: modelData.name
-                icon.name: modelData.query === null ? "view-media-playlist" : "tag-folder"
-                highlighted: modelData.uid === page.current
-                onClicked: page.current = modelData.uid
-            }
-
-            Kirigami.PlaceholderMessage {
-                anchors.centerIn: parent
-                width: parent.width
-                visible: parent.count === 0
-                text: page.error || App.tr("No playlists yet")
-            }
-        }
-
-        Kirigami.Separator {
-            Layout.fillHeight: true
-        }
-
-        PlaylistEditor {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            visible: page.playlist !== null
-            playlist: page.playlist ?? {}
-        }
+        visible: !page.playlist
+        x: page.bandLow > 0 ? page.band.x : 0
+        y: page.bandLow > 0 ? page.band.y : 0
+        width: page.bandLow > 0 ? page.band.width : page.width
+        height: page.bandLow > 0 ? page.band.height : page.height
+        page: page
+        focus: !page.playlist
     }
 
-    Kirigami.Dialog {
+    ListaEditor {
+        id: editor
+
+        visible: !!page.playlist
+        anchors.fill: parent
+        page: page
+        playlist: page.playlist ?? ({})
+    }
+
+    ListaNueva {
         id: creator
 
-        title: App.tr("New playlist")
-        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-        onOpened: smart.text = page.query
-        onAccepted: App.act("Create", [name.text, smart.text], "Playlists1", reply => page && (page.current = reply[0]))
+        page: page
+    }
 
-        Kirigami.FormLayout {
-            QQC2.TextField {
-                id: name
+    ListasCheck {
+        id: check
 
-                Kirigami.FormData.label: App.tr("Name:")
-            }
-
-            QQC2.TextField {
-                id: smart
-
-                Kirigami.FormData.label: App.tr("Smart query:")
-                placeholderText: App.tr("Empty for a manual playlist")
-            }
-        }
+        page: page
     }
 }
