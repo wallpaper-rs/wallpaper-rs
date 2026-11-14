@@ -5,6 +5,7 @@ FocusScope {
     property var model
     property string label
     property string pictureRole: "picture"
+    property string picturesRole: "pictures"
     property string nameRole: "name"
     property string captionRole: "caption"
     property string noteRole: "note"

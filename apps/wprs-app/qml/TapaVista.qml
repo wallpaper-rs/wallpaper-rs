@@ -8,6 +8,7 @@ Tapa {
     readonly property string caption: String(from.role(model, from.captionRole) ?? "")
 
     picture: from.role(model, from.pictureRole) ?? ""
+    pictures: from.role(model, from.picturesRole) ?? []
     name: from.role(model, from.nameRole) ?? ""
     note: from.role(model, from.noteRole) ?? ""
     noteIcon: from.role(model, from.noteIconRole) ?? ""

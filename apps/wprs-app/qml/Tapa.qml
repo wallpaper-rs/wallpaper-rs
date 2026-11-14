@@ -5,6 +5,7 @@ Item {
     id: tapa
 
     property url picture
+    property var pictures: []
     property string name
     property string note
     property string noteIcon
@@ -53,9 +54,31 @@ Item {
             kind: tapa.lit ? "foco" : "tapa"
         }
 
+        Grid {
+            anchors.fill: parent
+            visible: tapa.pictures.length > 1
+            columns: 2
+            spacing: Look.linea * 2
+
+            Repeater {
+                model: tapa.pictures.length > 1 ? tapa.pictures.slice(0, 4) : []
+
+                delegate: Foto {
+                    required property string modelData
+
+                    width: (tapa.width - Look.linea * 2) / 2
+                    height: (square.height - Look.linea * 2) / 2
+                    source: modelData
+                    sourceSize.width: Look.tapa
+                    opacity: tapa.off ? Look.tapaApagada : 1
+                }
+            }
+        }
+
         Foto {
             anchors.fill: parent
-            source: tapa.picture
+            visible: tapa.pictures.length < 2
+            source: tapa.pictures.length === 1 ? tapa.pictures[0] : tapa.picture
             sourceSize.width: Look.tapaFoco
             sourceSize.height: Math.round(Look.tapaFoco * 9 / 16)
             opacity: tapa.off ? Look.tapaApagada : 1
