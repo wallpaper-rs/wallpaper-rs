@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -98,6 +99,11 @@ class LibraryLookTest {
         text(R.string.lib_see_all).performClick()
         compose.waitForIdle()
         assertEquals(1, all)
+        scenario?.onActivity { main -> main.setContent { Shelf(main, {}, {}, {}, {}) } }
+        compose.waitUntil(10_000) { compose.onAllNodesWithTagCount("shelf_kinds") > 0 }
+        val title = compose.onNodeWithTag("shelf_top").getBoundsInRoot().bottom
+        val tabs = compose.onNodeWithTag("shelf_kinds").getBoundsInRoot().top
+        assertTrue("the tabs start under the title: $title, $tabs", tabs - title < 1.dp)
     }
 
     @Test

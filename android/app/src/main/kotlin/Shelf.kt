@@ -46,9 +46,9 @@ fun Shelf(main: Main, sources: () -> Unit, explore: () -> Unit, all: (Boolean) -
     BackHandler(tab != 0) { tab = 0 }
     Column(
         Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).heightIn(min = maxHeight).testTag("shelf_page"),
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = if (bare) Arrangement.SpaceBetween else Arrangement.Top,
     ) {
-        Column {
+        Column(Modifier.testTag("shelf_top")) {
             Top(linked, { all(true) }, { adding = true })
             val current = now
             when {
@@ -63,7 +63,7 @@ fun Shelf(main: Main, sources: () -> Unit, explore: () -> Unit, all: (Boolean) -
             if (bare) Empty(main, Hollow.LIBRARY, sources = explore)
         }
         if (bare) Bundled(main)
-        else Column(Modifier.padding(bottom = Measure.e4)) {
+        else Column(Modifier.padding(bottom = Measure.e4).testTag("shelf_kinds")) {
             Kinds(tab, { tab = it }) { all(false) }
             val shown = items
             when {
