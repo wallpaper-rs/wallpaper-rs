@@ -111,12 +111,13 @@ nombre, cosas)`.
 
 ## Quieta en su póster
 
-Si la escena puesta está quieta, el panel lo dice con su causa: una ventana tapa la pantalla, para
-ahorrar batería, pantalla bloqueada, reproducción en pausa (`outputs.<pantalla>.still_reason`), o es
+El panel dice que la escena puesta está quieta solo en dos casos: es
 demasiado pesada para el equipo con la calidad automática (`quality_auto` = `still`). En este último
 caso ofrece «Reproducir igual», que fija `playback.quality.<pantalla>` en `min-q1`, y además la app
 muestra una vez un aviso con el mismo botón. Un fondo con destellos mientras están apagados en
 Ajustes (`flash_disabled`) también lo dice; el ajuste general solo se cambia en Ajustes.
+Una pausa por una ventana que tapa la pantalla, por batería, por pantalla bloqueada o a mano no se
+muestra en la app: su motivo lo da solo la terminal (`wprs-ctl state`).
 
 ## Escena dañada
 

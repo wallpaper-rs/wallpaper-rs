@@ -20548,22 +20548,6 @@ msgid "Still on its poster: it is too heavy for this computer with the automatic
 msgstr "Quieta en su póster: es demasiado pesada para este equipo con la calidad automática. Si la reproduces igual usará la calidad más baja: puede perder fotogramas y gastar más batería."
 
 #: apps/wprs-app/qml/SceneStill.qml
-msgid "Still on its poster: a window covers the screen."
-msgstr "Quieta en su póster: una ventana tapa la pantalla."
-
-#: apps/wprs-app/qml/SceneStill.qml
-msgid "Still on its poster to save battery."
-msgstr "Quieta en su póster para ahorrar batería."
-
-#: apps/wprs-app/qml/SceneStill.qml
-msgid "Still on its poster while the screen is locked."
-msgstr "Quieta en su póster mientras la pantalla está bloqueada."
-
-#: apps/wprs-app/qml/SceneStill.qml
-msgid "Still on its poster: playback is paused."
-msgstr "Quieta en su póster: la reproducción está en pausa."
-
-#: apps/wprs-app/qml/SceneStill.qml
 msgid "Play anyway"
 msgstr "Reproducir igual"
 

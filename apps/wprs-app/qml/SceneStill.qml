@@ -12,7 +12,7 @@ RowLayout {
     readonly property string screen: names.find(name => (still.outputs[name] ?? {}).item === still.host.uid) ?? ""
     readonly property var shown: outputs[screen] ?? {}
     readonly property bool heavy: screen !== "" && shown.quality_auto === "still"
-    readonly property string reason: host.flashing ? "flash" : screen === "" ? "" : shown.still_reason ? String(shown.still_reason) : heavy ? "heavy" : ""
+    readonly property string reason: host.flashing ? "flash" : heavy ? "heavy" : ""
 
     function words(reason) {
         switch (reason) {
@@ -20,14 +20,6 @@ RowLayout {
             return App.tr("Still on its poster: it flashes, and flashing wallpapers are off in Settings › Playback.");
         case "heavy":
             return App.tr("Still on its poster: it is too heavy for this computer with the automatic quality. If you play it anyway it uses the lowest quality: it may drop frames and use more battery.");
-        case "covered":
-            return App.tr("Still on its poster: a window covers the screen.");
-        case "battery":
-            return App.tr("Still on its poster to save battery.");
-        case "locked":
-            return App.tr("Still on its poster while the screen is locked.");
-        case "paused":
-            return App.tr("Still on its poster: playback is paused.");
         }
         return "";
     }

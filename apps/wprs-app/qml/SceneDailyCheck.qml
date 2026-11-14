@@ -88,9 +88,9 @@ QtObject {
             "uid": check.uid,
             "flashing": true
         };
-        const found = [heavy, covered, still.reason, still.words("battery") !== ""];
+        const found = [heavy, covered, still.reason, still.words("battery")];
         still.destroy();
-        must(found.join() === "heavy,covered,flash,true", "a scene still on its poster does not say why: " + found.join());
+        must(found.join() === "heavy,,flash,", "a scene still on its poster does not say why: " + found.join());
     }
 
     function vacio() {
