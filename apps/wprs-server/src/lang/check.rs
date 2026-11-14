@@ -121,10 +121,13 @@ fn placeholders_fill_in_both_orders_and_escape_markup() {
     within(Lang::Es, || {
         assert_eq!(tf("Account ({})", &[&"ana"]), "Cuenta (ana)");
         let shown = tm(
-            "By registering you accept the {} and the {}.",
+            "By creating the account you accept the {}. Read the {} too.",
             &[maud::html! { b { "a<b" } }, maud::html! { "admin" }],
         );
-        assert_eq!(shown.into_string(), "Al crear la cuenta aceptas los <b>a&lt;b</b> y el admin.");
+        assert_eq!(
+            shown.into_string(),
+            "Al crear la cuenta aceptas los <b>a&lt;b</b>. Lee también el admin."
+        );
     });
 }
 
@@ -164,6 +167,7 @@ fn every_state_the_review_pages_show_has_a_spanish_word() {
         ["image", "video", "scene", "web", "general"],
         ["mature", "unrated", "copyright", "illegal", "malware"],
         ["spam", "other", "license", "takedown", "broken"],
+        ["received", "done", "failed", "public", "unlisted"],
     ];
     let known = super::vocabulary();
     let missing: Vec<&str> = shown.iter().flatten().copied().filter(|w| !known.contains_key(w)).collect();

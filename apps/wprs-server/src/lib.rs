@@ -1,5 +1,4 @@
 mod account;
-mod account_page;
 mod admin;
 mod approval;
 mod assets;
@@ -14,6 +13,7 @@ mod creds;
 mod db;
 mod device;
 mod discovery;
+mod entry;
 mod error;
 mod featuring;
 mod files;
@@ -37,6 +37,7 @@ mod moderation;
 mod net;
 #[cfg(feature = "oidc")]
 mod oidc;
+mod own;
 mod pages;
 mod policies;
 pub mod qr;

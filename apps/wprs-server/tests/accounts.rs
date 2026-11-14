@@ -21,7 +21,7 @@ async fn first_admin_registration_and_tokens() {
     let admin = server.admin().await;
     let account = server.call(Method::GET, "/account", &admin).send().await.unwrap();
     assert_eq!(account.headers()["cache-control"], "no-store");
-    assert!(account.text().await.unwrap().contains("Signed in as"));
+    assert!(account.text().await.unwrap().contains("You signed in as"));
     let open = json!({"handle": "eve", "password": "a long enough password"});
     assert_eq!(
         server.json(Method::POST, "/api/v1/auth/register", &Who::Nobody, Some(open)).await.0,

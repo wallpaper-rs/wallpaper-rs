@@ -15,8 +15,8 @@ async fn the_account_page_tells_packages_apart_from_sync_and_private_files() {
         server.call(Method::GET, "/account", who).send().await.unwrap().text().await.unwrap()
     };
     let before = shown(&ana).await;
-    assert!(before.contains("Package storage used: 0 of"), "{before}");
-    assert!(!before.contains("Sync data:"));
+    assert!(before.contains("you use 0\u{a0}B of"), "{before}");
+    assert!(!before.contains("Synced data"));
     let (desk, _) = server.device("ana").await;
     server.json(Method::POST, "/api/v1/sync/setup", &desk, Some(json!({}))).await;
     let mut record = vec![1u8];
@@ -27,6 +27,6 @@ async fn the_account_page_tells_packages_apart_from_sync_and_private_files() {
         .json(Method::POST, "/api/v1/sync/changes", &desk, Some(json!({"epoch": 0, "changes": change})))
         .await;
     let after = shown(&ana).await;
-    assert!(after.contains("Package storage used: 0 of"), "{after}");
-    assert!(after.contains("Sync data: 553 of"), "{after}");
+    assert!(after.contains("you use 0\u{a0}B of"), "{after}");
+    assert!(after.contains("Synced data") && after.contains("553\u{a0}B of"), "{after}");
 }

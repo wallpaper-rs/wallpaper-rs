@@ -8,7 +8,7 @@ impl Server {
         let request = self.http.request(method, format!("{}{path}", self.url));
         match who {
             Who::Nobody => request,
-            Who::Cookie(value) => request.header(COOKIE, format!("wprs={value}")),
+            Who::Cookie(value) => request.header(COOKIE, format!("{}={value}", self.cfg.cookie())),
             Who::Bearer(token) => request.bearer_auth(token),
         }
     }

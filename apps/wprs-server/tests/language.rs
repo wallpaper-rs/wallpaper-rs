@@ -41,14 +41,24 @@ async fn the_account_and_administration_pages_speak_spanish() {
     let server = start(&[]).await;
     let admin = server.admin().await;
     let (_, _, account) = page(&server, "/account", &admin, Some("es")).await;
-    for word in
-        ["Tu cuenta", "Subir un fondo", "Dispositivos", "Claves de autor", "Borrar mi cuenta", "Salir"]
-    {
+    for word in [
+        "Tu cuenta",
+        "Subir un fondo",
+        "Dispositivos",
+        "Claves de autor",
+        "Borrar mi cuenta",
+        "Salir",
+        "En tu teléfono",
+    ] {
         assert!(account.contains(word), "{word}");
     }
     assert!(account.contains("aria-current=\"page\"") && !account.contains("Upload a wallpaper"));
     let (_, _, english) = page(&server, "/account", &admin, None).await;
-    assert!(english.contains("Upload a wallpaper package") && english.contains("aria-current=\"page\""));
+    assert!(
+        english.contains("Upload a wallpaper")
+            && english.contains("On your phone")
+            && english.contains("aria-current=\"page\"")
+    );
     let (_, _, admin_es) = page(&server, "/admin", &admin, Some("es")).await;
     for word in ["Administración", "Invitaciones", "Cuentas", "Crear invitación", "Fondos destacados"] {
         assert!(admin_es.contains(word), "{word}");

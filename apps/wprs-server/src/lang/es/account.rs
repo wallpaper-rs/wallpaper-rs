@@ -12,7 +12,6 @@ pub const TEXTS: super::Texts = &[
     ("No account yet?", "¿Todavía no tienes cuenta?"),
     ("Register", "Registrarse"),
     ("Create account", "Crear cuenta"),
-    ("By registering you accept the {} and the {}.", "Al crear la cuenta aceptas los {} y el {}."),
     ("terms", "términos"),
     ("privacy notice", "aviso de privacidad"),
     (
@@ -47,15 +46,6 @@ pub const TEXTS: super::Texts = &[
     ("Your account", "Tu cuenta"),
     ("Remove", "Quitar"),
     ("Make {}", "Hacer {}"),
-    (
-        "Signed in as {} ({}). Package storage used: {} of {} bytes.",
-        "Entraste como {} ({}). Espacio usado para fondos: {} de {} bytes.",
-    ),
-    (
-        "Sync data: {} of {} bytes. Private files: {} of {} bytes.",
-        "Datos sincronizados: {} de {} bytes. Archivos privados: {} de {} bytes.",
-    ),
-    ("Upload a wallpaper package", "Subir un fondo"),
     ("Visibility", "Visibilidad"),
     (".wpak file", "Archivo .wpak"),
     ("Upload", "Subir"),
@@ -63,7 +53,6 @@ pub const TEXTS: super::Texts = &[
         "Unlisted versions stay out of the catalog and search; whoever has the link to the package can still see and install them. Unlisted is not private: they stay in the signed repository files, which anyone can read; keep private wallpapers in sync or in a repository of your own.",
         "Las versiones sin listar quedan fuera del catálogo y de la búsqueda; quien tenga el enlace del fondo todavía puede verlas e instalarlas. Sin listar no es privado: siguen en los archivos firmados del repositorio, que cualquiera puede leer; guarda los fondos privados en la sincronización o en un repositorio propio.",
     ),
-    ("Version", "Versión"),
     ("State", "Estado"),
     ("Upload {}", "Subida {}"),
     ("Devices", "Dispositivos"),
@@ -102,6 +91,5 @@ pub const TEXTS: super::Texts = &[
         "Los dispositivos desconectados tienen que vincularse otra vez y recibir la clave de sincronización de un dispositivo que todavía la tenga; sin uno, o sin una frase de recuperación, hay que reiniciar los datos cifrados de la sincronización.",
     ),
     ("Change password", "Cambiar la contraseña"),
-    ("Download all your data (JSON)", "Descargar todos mis datos (JSON)"),
     ("Delete my account", "Borrar mi cuenta"),
 ];
