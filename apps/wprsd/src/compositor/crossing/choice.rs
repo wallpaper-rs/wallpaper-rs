@@ -1,7 +1,7 @@
 use super::super::Command;
 use super::super::output::{Output, Shown};
 use super::super::status::Passage;
-use super::{Passing, Pipe};
+use super::Passing;
 use std::sync::{Arc, mpsc};
 use wprs_core::TransitionKind;
 use wprs_render::Renderer;
@@ -26,11 +26,7 @@ pub(in crate::compositor) fn choose(
         _ if steps.is_empty() && refused => "fallen",
         _ if steps.is_empty() => "plain",
         _ if reduced => "reduced",
-        _ => {
-            let pipes: Vec<Pipe> = Vec::new();
-            let passing = Passing { steps, pipes, built: None, background: new.background };
-            return (Some(passing), Passage { plays: "own", why: "own" });
-        }
+        _ => return (Passing::new(steps, new.background), Passage { plays: "own", why: "own" }),
     };
     (None, Passage { plays: "fade", why })
 }

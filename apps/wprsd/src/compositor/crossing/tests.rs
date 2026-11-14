@@ -29,19 +29,14 @@ fn passages() -> (Arc<Ready>, Arc<Ready>) {
 #[test]
 fn the_leaving_transition_plays_first_and_the_coming_one_after() {
     let (out, coming) = passages();
-    let both = Passing {
-        steps: vec![(out.clone(), Quality::Q3), (coming, Quality::Q3)],
-        pipes: Vec::new(),
-        built: None,
-        background: [0; 3],
-    };
+    let both = Passing::new(vec![(out.clone(), Quality::Q3), (coming, Quality::Q3)], [0; 3]).expect("two");
     assert_eq!(both.duration(), 4.0);
     assert_eq!(both.phase(0.0), (0, 0.0));
     assert_eq!(both.phase(0.125), (0, 0.5));
     assert_eq!(both.phase(0.625), (1, 0.5));
     assert_eq!(both.phase(1.0), (1, 1.0));
-    let alone =
-        Passing { steps: vec![(out, Quality::Q3)], pipes: Vec::new(), built: None, background: [0; 3] };
+    let alone = Passing::new(vec![(out, Quality::Q3)], [0; 3]).expect("one");
+    assert!(Passing::new(Vec::new(), [0; 3]).is_none());
     assert_eq!((alone.duration(), alone.phase(0.5)), (1.0, (0, 0.5)));
 }
 

@@ -6,8 +6,10 @@ use std::sync::Arc;
 use wprs_scene::{MAX_PARAMS, Quality, Ready};
 
 mod built;
+mod passing;
 
 pub use built::{Building, Built};
+pub use passing::Passing;
 
 const PANE: wgpu::TextureFormat = wgpu::TextureFormat::Rgba8UnormSrgb;
 const WORDS: usize = MAX_PARAMS * 4 + 4;
