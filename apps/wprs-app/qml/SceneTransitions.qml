@@ -25,6 +25,8 @@ ColumnLayout {
     Kirigami.Heading {
         Layout.fillWidth: true
         Layout.topMargin: Look.e3
+        Layout.leftMargin: Look.e3
+        Layout.rightMargin: Look.e3
         level: 4
         text: App.tr("Transitions")
     }
@@ -32,6 +34,8 @@ ColumnLayout {
     Text {
         Layout.fillWidth: true
         Layout.bottomMargin: Look.e2
+        Layout.leftMargin: Look.e3
+        Layout.rightMargin: Look.e3
         wrapMode: Text.WordWrap
         text: App.tr("Without one of its own, whoever uses it sees the one chosen in their settings.")
         color: Look.bruma
