@@ -66,6 +66,8 @@ maximiza.
   las teclas válidas son `left`, `right`, `up`, `down`, `Intro`, `Esc` y `Tab`. Sin ella la línea
   muestra «Tab Siguiente parte» y «Esc Menú».
 - `route` y `routeBack()` (opcional, páginas de opciones): los pasos de la ruta y qué hace Esc.
+- `full` (opcional, esqueleto de título): la página ocupa todo el alto; se ocultan el bloque
+  «ahora» y sus velos, y un velo parejo en Noche cubre la imagen (la Biblioteca en «Ver todos»).
 - Avisos: `applicationWindow().showPassiveNotification(texto, tiempo, acción, función)`. En lugar
   del texto puede ir `{text, tone}` (`tone`: `""`, `"ambar"`, `"coral"` o `"brote"`) para darle su
   tono; la función es lo que hace la acción.

@@ -9,6 +9,7 @@ Item {
     required property var page
     required property real sideBottom
     required property bool none
+    readonly property bool full: !!(page && page.full)
     readonly property alias seat: seat
     readonly property real bandLow: page && page.full !== true && page.bandLow > 0 ? page.bandLow : 0
     readonly property real upperLow: bandLow > 0 && page.upperHeight > 0 ? page.upperHeight : 0
@@ -75,6 +76,7 @@ Item {
     }
 
     RoundVeil {
+        visible: !frame.full
         x: now.x - 132
         y: now.y - 96
         width: frame.width - x
@@ -86,7 +88,14 @@ Item {
         middle: 0.14 + Look.velo * 0.76
     }
 
+    Rectangle {
+        visible: frame.full
+        anchors.fill: parent
+        color: Qt.rgba(Look.noche.r, Look.noche.g, Look.noche.b, 0.55 + Look.velo * 0.3)
+    }
+
     BandVeil {
+        visible: !frame.full
         y: frame.bandLow > 0 ? Math.max(0, (frame.page.bandFrom !== undefined ? frame.page.bandFrom : frame.band.y) - Look.veloBanda) : frame.height * 0.55
         width: frame.width
         height: frame.height - y
@@ -95,6 +104,7 @@ Item {
     Column {
         id: now
 
+        visible: !frame.full
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.topMargin: Look.margenArriba
@@ -141,7 +151,7 @@ Item {
         id: tools
 
         x: column.x
-        y: now.y + now.height + Look.e5
+        y: frame.full ? Look.margenArriba : now.y + now.height + Look.e5
         width: column.width
         alignment: Qt.AlignRight
         actions: frame.page?.actions ?? []
