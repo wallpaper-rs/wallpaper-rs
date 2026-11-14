@@ -60,6 +60,12 @@ QtObject {
         first.reset();
         expect(first.learn && first.atExamples, "a first visit with examples opens on the examples");
         expect(first.facts.learnModel.length === 1, "the examples are listed");
+        const late = build([], []);
+        late.reset();
+        late.take(examples);
+        expect(late.learn && late.atExamples && late.facts.learnModel.length === 1, "examples that arrive after the page opened are listed and lead");
+        late.destroy();
+        expect(empty.where.indexOf("/") >= 0, "the caption names the folder path: " + empty.where);
         const used = build(mine, examples);
         used.reset();
         expect(!used.learn, "a profile with projects opens on them");

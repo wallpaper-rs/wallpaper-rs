@@ -1,4 +1,4 @@
-use crate::scenerecent::{order, put};
+use crate::scenerecent::{order, put, short_path};
 use serde_json::json;
 use std::path::{Path, PathBuf};
 
@@ -34,4 +34,14 @@ fn present_projects_come_first_and_the_newest_edit_leads() {
     order(&mut rows);
     let folders: Vec<_> = rows.iter().map(|r| r["folder"].as_str().unwrap()).collect();
     assert_eq!(folders, ["new", "old", "gone"]);
+}
+
+#[test]
+fn a_path_shows_the_home_folder_as_a_tilde_and_shortens_in_the_middle() {
+    assert_eq!(short_path("/h/me/Documents/wallpaper-rs/a", "/h/me", 56), "~/Documents/wallpaper-rs/a");
+    assert_eq!(short_path("/h/meow/a", "/h/me", 56), "/h/meow/a");
+    assert_eq!(short_path("/srv/a", "", 56), "/srv/a");
+    let long = short_path("/h/me/one/two/three/four/five/six/seven/my-scene", "/h/me/", 20);
+    assert_eq!(long.chars().count(), 20);
+    assert!(long.starts_with("~/one/") && long.ends_with("my-scene") && long.contains('…'), "{long}");
 }

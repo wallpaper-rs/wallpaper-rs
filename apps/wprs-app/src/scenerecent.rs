@@ -17,6 +17,8 @@ pub mod qobject {
         fn forget_project(self: &Recents, folder: &QString);
         #[qinvokable]
         fn is_project(self: &Recents, folder: &QString) -> bool;
+        #[qinvokable]
+        fn shown(self: &Recents, folder: &QString) -> QString;
     }
 }
 
@@ -38,6 +40,29 @@ impl Recents {
     pub fn is_project(&self, folder: &QString) -> bool {
         project::read(Path::new(&folder.to_string())).is_ok()
     }
+
+    pub fn shown(&self, folder: &QString) -> QString {
+        let home = dirs::home_dir().map(|h| h.to_string_lossy().into_owned()).unwrap_or_default();
+        QString::from(&short_path(&folder.to_string(), &home, 56))
+    }
+}
+
+pub fn short_path(path: &str, home: &str, max: usize) -> String {
+    let home = home.trim_end_matches('/');
+    let path = match path.strip_prefix(home) {
+        Some(rest) if !home.is_empty() && (rest.is_empty() || rest.starts_with('/')) => format!("~{rest}"),
+        _ => path.to_owned(),
+    };
+    let chars: Vec<char> = path.chars().collect();
+    if chars.len() <= max || max < 3 {
+        return path;
+    }
+    let head = (max - 1) / 3;
+    let tail = max - 1 - head;
+    let mut out: String = chars[..head].iter().collect();
+    out.push('…');
+    out.extend(&chars[chars.len() - tail..]);
+    out
 }
 
 use crate::scenefile::projects_dir;

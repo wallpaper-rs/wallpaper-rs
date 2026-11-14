@@ -14,6 +14,7 @@ Kirigami.Page {
     property bool more: false
     property bool changing: false
     property bool fixed: false
+    property bool loaded: false
     property var focused: null
     property string named: App.tr("My scene %1", projects.length + 1)
     property string placed: ""
@@ -21,7 +22,7 @@ Kirigami.Page {
     readonly property bool onRecent: focused === recent.row
     readonly property bool atExamples: learn && focused !== null && focused !== recent.row
     readonly property bool missing: onRecent && current !== null && current.missing === true
-    readonly property string where: (placed !== "" ? placed : helper.folderFor(named)).split("/").filter(part => part !== "").slice(-2, -1).join("")
+    readonly property string where: recents.shown(placed !== "" ? placed : helper.folderFor(named))
     readonly property alias band: band
     readonly property alias facts: facts
 
@@ -95,15 +96,27 @@ Kirigami.Page {
             "keys": ["Tab"],
             "text": App.tr("Change row")
         }]
-    Component.onCompleted: {
-        if (fixed)
-            return reset();
-        App.query("Search", ["kind:package", 0, 500], "Library1", reply => {
-            if (!page)
-                return;
-            page.scenes = (reply && reply.items ? reply.items : []).filter(item => item.package && !item.missing);
-            page.reset();
-        });
+    Component.onCompleted: fixed ? reset() : load()
+
+    function load() {
+        App.query("Search", ["kind:package", 0, 500], "Library1", reply => page && page.take(reply && reply.items ? reply.items : []));
+    }
+
+    function take(items) {
+        const first = scenes.length === 0;
+        scenes = items.filter(item => item.package && !item.missing);
+        if (!loaded || first && scenes.length > 0)
+            reset();
+        loaded = true;
+    }
+
+    Connections {
+        target: App.backend
+
+        function onChanged(topic) {
+            if (topic === "library" && !page.fixed)
+                page.load();
+        }
     }
 
     SceneEditor {
