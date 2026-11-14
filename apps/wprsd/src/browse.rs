@@ -1,7 +1,7 @@
 use crate::compositor::lock;
 use crate::daemon::Daemon;
 use std::collections::HashMap;
-use std::sync::Mutex;
+use std::sync::{LazyLock, Mutex};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 use wprs_core::model::{BrowseEnd, BrowseSource, ShortcutsState};
@@ -10,13 +10,17 @@ mod list;
 mod reply;
 mod session;
 pub(crate) mod shortcuts;
+mod strip;
 #[cfg(test)]
 mod tests;
 mod transition;
 
 pub use reply::told;
 
-pub const IDLE: Duration = Duration::from_secs(30);
+pub static IDLE: LazyLock<Duration> = LazyLock::new(|| {
+    let ms = std::env::var("WPRS_BROWSE_IDLE_MS").ok().and_then(|v| v.parse().ok());
+    Duration::from_millis(ms.unwrap_or(30_000))
+});
 const HELD: Duration = Duration::from_secs(5);
 
 #[derive(Debug, Clone, PartialEq)]

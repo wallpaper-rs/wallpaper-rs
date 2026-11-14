@@ -86,6 +86,9 @@ model! {
     #[derive(Copy, Eq, Hash)]
     pub enum ShortcutsState { Off, Asking, Bound, Refused, Unavailable, #[serde(other)] Unknown }
 
+    #[derive(Default)]
+    pub struct BrowsePlays { pub kind: String, pub why: String, pub duration_ms: u32 }
+
     pub struct BrowseState {
         pub model: u32,
         pub serial: u64,
@@ -100,6 +103,12 @@ model! {
         pub count: u32,
         pub shown: Option<Uid>,
         pub candidate: Option<ItemSummary>,
+        #[serde(default)]
+        pub now: Option<ItemSummary>,
+        #[serde(default)]
+        pub ahead: Vec<ItemSummary>,
+        #[serde(default)]
+        pub plays: BrowsePlays,
         pub path: Option<PathBuf>,
         pub transition: String,
         pub idle_ms: u32,

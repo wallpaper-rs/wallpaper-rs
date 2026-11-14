@@ -113,4 +113,6 @@ pub trait Playlists1 {
     fn browse_transition(&self, output: &str, transition: &str) -> Result<String>;
     fn browse_cancel(&self, output: &str) -> Result<String>;
     fn get_browse(&self, output: &str) -> Result<String>;
+    #[zbus(signal)]
+    fn browse_changed(&self, output: &str, json: &str) -> Result<()>;
 }

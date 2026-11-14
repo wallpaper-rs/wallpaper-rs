@@ -18,7 +18,7 @@ impl Daemon {
             None => self.begin(&output, from)?,
         };
         self.travel(&output, &mut session, steps)?;
-        session.until = Instant::now() + IDLE;
+        session.until = Instant::now() + *IDLE;
         let json = self.browse_reply(&output, Some(&session), None)?;
         let serial = fresh.then_some(session.serial);
         sessions.insert(output.clone(), session);
@@ -31,7 +31,7 @@ impl Daemon {
         let session = sessions.get_mut(&output).ok_or_else(|| nothing(&output))?;
         let word = if transition.trim().is_empty() { session.transition.clone() } else { transition.into() };
         let held = self.transition_of(&word)?;
-        session.until = Instant::now() + IDLE;
+        session.until = Instant::now() + *IDLE;
         let mut session = session.clone();
         let outputs = self.targets(&output);
         match session.source {
@@ -81,7 +81,7 @@ impl Daemon {
         self.transition_of(transition)?;
         let mut sessions = lock(&self.rotations.browse.sessions);
         let session = sessions.get_mut(&output).ok_or_else(|| nothing(&output))?;
-        (session.transition, session.until) = (transition.trim().into(), Instant::now() + IDLE);
+        (session.transition, session.until) = (transition.trim().into(), Instant::now() + *IDLE);
         let json = self.browse_reply(&output, Some(session), None)?;
         Ok(Told { output, json, fresh: None })
     }
@@ -110,7 +110,7 @@ impl Daemon {
             position: 0,
             count: 0,
             transition: String::new(),
-            until: Instant::now() + IDLE,
+            until: Instant::now() + *IDLE,
             serial: self.rotations.browse.next_serial(),
         })
     }

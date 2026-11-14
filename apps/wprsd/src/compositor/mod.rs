@@ -38,6 +38,7 @@ pub use spec::*;
 use state::State;
 pub use status::*;
 use std::collections::BTreeMap;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard, mpsc};
 use std::thread::JoinHandle;
 use wprs_pipewire::Exporter;
@@ -75,6 +76,7 @@ pub struct Compositor {
     tx: mpsc::Sender<Command>,
     status: Arc<Mutex<BTreeMap<String, OutputStatus>>>,
     limits: TargetLimits,
+    calm: AtomicBool,
     thread: Option<JoinHandle<()>>,
 }
 
@@ -92,7 +94,7 @@ impl Compositor {
         let mut state = State::new(renderer, exporter, settings, tx.clone(), status.clone());
         state.on_status = Box::new(on_status);
         let thread = std::thread::Builder::new().name("wprs-render".into()).spawn(move || state.run(&rx))?;
-        Ok(Self { tx, status, limits, thread: Some(thread) })
+        Ok(Self { tx, status, limits, calm: AtomicBool::new(false), thread: Some(thread) })
     }
 
     pub fn check_target(&self, width: u32, height: u32) -> Result<(), RenderError> {
@@ -127,7 +129,12 @@ impl Compositor {
     }
 
     pub fn calm(&self, calm: bool) {
+        self.calm.store(calm, Ordering::Relaxed);
         self.send(Command::Calm(calm))
+    }
+
+    pub fn calmed(&self) -> bool {
+        self.calm.load(Ordering::Relaxed)
     }
 
     pub fn set_power(&self, on_battery: bool) {

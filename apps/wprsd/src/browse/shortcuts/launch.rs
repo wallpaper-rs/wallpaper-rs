@@ -9,13 +9,32 @@ const APP: &str = "wprs-app";
 pub const START: &str = "--browse";
 
 fn app() -> Option<PathBuf> {
+    if let Some(chosen) = std::env::var_os("WPRS_PREVIEW_APP") {
+        return Some(PathBuf::from(chosen)).filter(|p| p.is_file());
+    }
     let beside = std::env::current_exe().ok().and_then(|exe| Some(exe.parent()?.join(APP)));
     let path = std::env::var_os("PATH").unwrap_or_default();
     let searched = std::env::split_paths(&path).map(|dir| dir.join(APP));
     beside.into_iter().chain(searched).find(|p| p.is_file())
 }
 
-fn open(output: &str) {
+pub fn window_name() -> String {
+    format!("{}.Preview", wprs_core::dbus::APP_ID)
+}
+
+pub async fn open(conn: &zbus::Connection, output: &str) {
+    let proxy = zbus::fdo::DBusProxy::new(conn).await;
+    let name = zbus::names::BusName::try_from(window_name());
+    let owned = match (proxy, name) {
+        (Ok(proxy), Ok(name)) => proxy.name_has_owner(name).await.unwrap_or(false),
+        _ => false,
+    };
+    if !owned {
+        spawn(output);
+    }
+}
+
+fn spawn(output: &str) {
     let Some(app) = app() else { return tracing::info!("no {APP} to show the wallpaper preview") };
     let mut command = Command::new(app);
     command.arg(START).arg(output).stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null());
@@ -29,11 +48,10 @@ pub(super) async fn pressed(daemon: &Arc<Daemon>, emitter: &SignalEmitter<'stati
     let told = daemon.run(move |d| d.browse_move("", "", steps)).await;
     let told = match told {
         Ok(told) => told,
-        Err(e) => return tracing::info!("cannot browse wallpapers: {e}"),
+        Err(e) => {
+            tracing::info!("cannot browse wallpapers: {e}");
+            return open(emitter.connection(), "").await;
+        }
     };
-    let (output, fresh) = (told.output.clone(), told.fresh.is_some());
     let _ = super::super::told(&Arc::downgrade(daemon), emitter.clone(), told).await;
-    if fresh {
-        open(&output);
-    }
 }

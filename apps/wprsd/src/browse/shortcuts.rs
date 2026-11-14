@@ -10,7 +10,7 @@ use zbus::object_server::SignalEmitter;
 use zbus::proxy::CacheProperties;
 use zbus::{ObjectPath, OwnedObjectPath, OwnedVariant as OwnedValue, Variant as Value};
 
-mod launch;
+pub(crate) mod launch;
 
 static REBIND: Notify = Notify::const_new();
 pub const NEXT: &str = "browse-next";

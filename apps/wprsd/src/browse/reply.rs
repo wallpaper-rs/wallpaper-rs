@@ -21,6 +21,9 @@ impl Daemon {
         let candidate = item.map(|i| self.summary(i)).transpose()?;
         let (playlist, playlist_name) = session.and_then(|s| s.playlist.clone()).unzip();
         let left = session.map(|s| s.until.saturating_duration_since(Instant::now()));
+        let now = session.and_then(|s| self.item_summary(s.shown.as_deref()?));
+        let ahead = session.map(|s| self.ahead(output, s)).unwrap_or_default();
+        let plays = session.map(|s| self.plays(output, s, candidate.as_ref())).unwrap_or_default();
         reply(BrowseState {
             model: MODEL,
             serial: self.changes.serial(),
@@ -35,6 +38,9 @@ impl Daemon {
             count: session.map_or(0, |s| s.count),
             shown: session.and_then(|s| s.shown.clone()),
             candidate,
+            now,
+            ahead,
+            plays,
             path,
             transition: session.map(|s| s.transition.clone()).unwrap_or_default(),
             idle_ms: left.map_or(0, |d| d.as_millis().min(u128::from(u32::MAX)) as u32),
@@ -47,6 +53,7 @@ pub async fn told(daemon: &Weak<Daemon>, emitter: SignalEmitter<'_>, told: Told)
     let sent = Playlists::browse_changed(&emitter, &told.output, &told.json).await;
     sent.unwrap_or_else(|e| tracing::debug!("cannot emit a browse signal: {e}"));
     if let Some(serial) = told.fresh {
+        super::shortcuts::launch::open(emitter.connection(), &told.output).await;
         tokio::spawn(expire(daemon.clone(), emitter.into_owned(), told.output, serial));
     }
     Ok(told.json)

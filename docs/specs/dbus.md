@@ -1295,8 +1295,20 @@ screen plays one, else the library. Every method answers with a `BrowseState` an
 `expired`; only in the reply or signal that ends a session), `source`, `playlist`,
 `playlist_name`, `steps` (how far the candidate is from what the screen shows), `position`,
 `count`, `shown` (uid shown when browsing began), `candidate` (an `ItemSummary`: title, kind,
-thumbnail and package), `path`, `transition`, `idle_ms` (time left before it ends by itself) and
-`shortcuts` (`off`, `asking`, `bound`, `refused`, `unavailable`).
+thumbnail and package), `now` (the `ItemSummary` the screen shows), `ahead` (up to two
+`ItemSummary` that follow the candidate, without repeats), `plays` (how the candidate would come
+in: `kind` `fade`, `none` or `own`; `why` `chosen` for the transition picked with
+`BrowseTransition`, `screen` for the screen's own setting, `general` for the general one, `calm`
+when the system asks for less motion and `still` when the user does; `duration_ms` of the fade, 0
+otherwise), `path`, `transition`, `idle_ms` (time left before it ends by itself) and `shortcuts`
+(`off`, `asking`, `bound`, `refused`, `unavailable`).
+
+**The preview window.** Whenever a session begins, whoever began it (a shortcut, the tray or
+`wprs-ctl next --preview`), the daemon starts `wprs-app --browse OUTPUT` unless some process owns
+the bus name `io.github.wallpaper_rs.Preview`. The window claims that name and leaves at once when
+it is taken, so there is never a second one; it follows `BrowseChanged` for its output and closes
+when the session ends. A key press whose `Browse` fails (nothing to browse) also opens it, so it
+can say why.
 
 ### `Browse(s output, s source, i steps) → (s json)`
 
@@ -1336,7 +1348,7 @@ Sent on every change of a session, with the `BrowseState`, also when it ends by 
 keys: `browse-next` and `browse-previous`, proposing `shortcuts.next` and `shortcuts.previous`
 (`LOGO+ALT+N` and `LOGO+ALT+P`; the desktop may show its own dialog and let the user pick other
 keys). A key press starts or moves a session on the only screen (on every screen with several)
-and, when it starts one, opens `wprs-app --browse OUTPUT` to show the preview. Where the desktop
+and the preview window opens as said above. Where the desktop
 has no such portal (wlroots compositors, X11) the state is `unavailable` and the user binds
 `wprs-ctl next --preview` and `wprs-ctl prev --preview` to keys in the compositor.
 
