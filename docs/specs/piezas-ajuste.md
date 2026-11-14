@@ -44,6 +44,7 @@ una fila para añadir.
 - `text`, `tone` (`ambar` avisa, `coral` falla, `brote` salió bien; vacío es neutro), `icon` (uno
   propio del tono si no se da).
 - `lit`: está sobre algo encendido y usa los tonos hondos.
+- `Nota.fitWidth`: ancho máximo; el texto que no entra termina en «…» (la nota bajo una tapa).
 - El color nunca va solo: siempre hay palabras.
 
 **`Vacio`**: lo que hacer cuando no hay nada. `title`, `text`, `action` y `actionIcon` (botón

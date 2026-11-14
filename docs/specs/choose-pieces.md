@@ -36,7 +36,8 @@ Palabra de filtro aplicada que se puede quitar («Para adultos ✕»).
 
 ## Tapa
 
-Una portada: cuadro 16:9 con la imagen, nombre y nota.
+Una portada: cuadro 16:9 con la imagen, nombre y nota. La nota es la pieza `Nota`, recortada al
+ancho de la tapa; el filete de foco es el anillo común (`Anillo`).
 
 - `picture` (URL), `name`, `note`, `noteIcon` (nombre de ícono), `noteTone` (`""`, `"ambar"`,
   `"coral"` o `"brote"`).
@@ -68,6 +69,7 @@ La marca «En uso» de una tapa. Sin propiedades. Solo la pone la tapa.
 `Elegir` es la marca redonda de una tapa cuando se eligen varias (`chosen`). `Seleccion` es la línea
 que toma el lugar de la ficha: «N elegidos» y sus acciones.
 
+- Si no entra en una línea, las acciones pasan a dos o más líneas en columnas.
 - `Seleccion.count`; los hijos son las acciones (la principal, las calladas, «Dejar de elegir» en
   palabras y la tecla Esc).
 - Esc para dejar de elegir lo maneja la pantalla.

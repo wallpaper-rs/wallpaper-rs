@@ -9,12 +9,15 @@ Row {
     property string tone
     property string icon: Tono.icon(tone)
     property bool lit: false
+    property real fitWidth: 0
 
     spacing: Look.listaHueco
     Accessible.role: Accessible.StaticText
     Accessible.name: text
 
     IconImage {
+        id: mark
+
         anchors.verticalCenter: parent.verticalCenter
         visible: nota.icon !== ""
         name: nota.icon
@@ -24,7 +27,9 @@ Row {
 
     Text {
         anchors.verticalCenter: parent.verticalCenter
+        width: nota.fitWidth > 0 ? Math.min(implicitWidth, nota.fitWidth - (mark.visible ? mark.width + nota.spacing : 0)) : implicitWidth
         text: nota.text
+        elide: Text.ElideRight
         font.family: Look.letraTexto
         font.pixelSize: Look.tPie
         color: nota.lit ? Look.noche : Look.bruma

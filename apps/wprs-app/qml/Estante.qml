@@ -64,8 +64,11 @@ Coleccion {
                 from: estante
 
                 Loader {
+                    readonly property bool choosing: estante.choosing && estante.chosen.length > 0
+
                     active: cover.lit
-                    sourceComponent: estante.choosing && estante.chosen.length > 0 ? estante.selection : card
+                    width: choosing && item ? Math.min(item.implicitWidth, list.width - Look.margen - (slot.x - list.contentX)) : undefined
+                    sourceComponent: choosing ? estante.selection : card
                 }
             }
         }

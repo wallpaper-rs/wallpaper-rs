@@ -47,7 +47,9 @@ aplican solos.
 
 Un solo lugar por esqueleto y un aviso a la vez: primero el error del servicio, después el aviso
 de la cuenta y por último el aviso pasajero (`showPassiveNotification`), que se va solo a los 7 s o
-con su botón de cerrar.
+con su botón de cerrar. Los tres se dibujan con la misma pieza `Aviso` (ver `piezas-ajuste.md`): el
+error del servicio en Coral y con cruz (se oculta hasta que cambie), el pasajero con su acción
+(«Deshacer», por ejemplo) y su tono. Mientras el puntero o el foco están sobre el aviso no se va.
 
 ## Tamaño
 
@@ -64,7 +66,9 @@ maximiza.
   las teclas válidas son `left`, `right`, `up`, `down`, `Intro`, `Esc` y `Tab`. Sin ella la línea
   muestra «Tab Siguiente parte» y «Esc Menú».
 - `route` y `routeBack()` (opcional, páginas de opciones): los pasos de la ruta y qué hace Esc.
-- Avisos: `applicationWindow().showPassiveNotification(texto, tiempo, acción, función)`.
+- Avisos: `applicationWindow().showPassiveNotification(texto, tiempo, acción, función)`. En lugar
+  del texto puede ir `{text, tone}` (`tone`: `""`, `"ambar"`, `"coral"` o `"brote"`) para darle su
+  tono; la función es lo que hace la acción.
 
 El esqueleto sale del lugar: Ajustes, Perfiles y Cuenta usan el de opciones; los editores, el de
 trabajo; el resto, el de título.

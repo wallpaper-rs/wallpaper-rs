@@ -52,6 +52,7 @@ Item {
         id: row
 
         x: fija.title !== "" ? parent.width - width : 0
+        width: fija.title !== "" ? implicitWidth : fija.width
         y: Look.e4 + (parent.height - Look.e4 - height) / 2
         spacing: Look.e3
     }

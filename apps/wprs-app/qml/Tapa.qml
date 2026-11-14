@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls.impl
 import io.github.wallpaper_rs.app
 
 Item {
@@ -23,7 +22,6 @@ Item {
     signal doubleTapped
 
     readonly property bool grown: lit && !even
-    readonly property color tone: noteTone === "ambar" ? Look.ambar : noteTone === "coral" ? Look.coral : noteTone === "brote" ? Look.brote : Look.bruma
 
     implicitWidth: grown ? Look.tapaFoco : Look.tapa
     implicitHeight: square.height + (grown ? under.height + Look.e4 : label.height + Look.e3 + (note ? caption.height + Look.notaArriba : 0))
@@ -70,14 +68,9 @@ Item {
             opacity: tapa.chosen ? Look.veloTapaElegida : tapa.hovered ? Look.veloTapaSobre : Look.veloTapa
         }
 
-        Rectangle {
+        Anillo {
             visible: tapa.lit
-            anchors.fill: parent
-            anchors.margins: -(Look.filete + Look.anillo)
-            radius: Look.radio + Look.filete + Look.anillo
-            color: "transparent"
-            border.width: Look.anillo
-            border.color: Look.escarcha
+            gap: Look.filete
         }
 
         Uso {
@@ -108,34 +101,15 @@ Item {
         color: tapa.lit ? Look.escarcha : Look.bruma
     }
 
-    Row {
+    Nota {
         id: caption
 
         visible: !tapa.grown && tapa.note !== ""
         y: label.y + label.height + Look.notaArriba
-        width: parent.width
-        spacing: Look.usoHueco
-
-        IconImage {
-            visible: tapa.noteIcon !== ""
-            anchors.verticalCenter: parent.verticalCenter
-            width: Look.icono
-            height: Look.icono
-            sourceSize.width: width
-            sourceSize.height: height
-            name: tapa.noteIcon
-            color: tapa.tone
-        }
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            width: parent.width - (tapa.noteIcon ? Look.icono + parent.spacing : 0)
-            text: tapa.note
-            elide: Text.ElideRight
-            font.family: Look.letraTexto
-            font.pixelSize: Look.tPie
-            color: Look.bruma
-        }
+        fitWidth: parent.width
+        text: tapa.note
+        tone: tapa.noteTone
+        icon: tapa.noteIcon
     }
 
     Item {
