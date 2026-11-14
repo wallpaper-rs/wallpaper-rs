@@ -18469,3 +18469,221 @@ msgstr "Guardada en un archivo privado"
 
 msgid "Photos that renew themselves · 1 source · %1 photos"
 msgstr "Fotos que se renuevan solas · 1 fuente · %1 fotos"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "How to start"
+msgstr "Cómo empezar"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "Start a new one"
+msgstr "Empezar uno nuevo"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "Learn from an example"
+msgstr "Aprender con un ejemplo"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "More: preset, resource pack"
+msgstr "Más: preajuste, paquete de recursos"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "Open a folder…"
+msgstr "Abrir una carpeta…"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "A scene"
+msgstr "Una escena"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "layers, effects, animation"
+msgstr "capas, efectos, animación"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "A single-file wallpaper"
+msgstr "Un fondo de un solo archivo"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "picture, video or page"
+msgstr "imagen, vídeo o página"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "Example scenes"
+msgstr "Escenas de ejemplo"
+
+#: apps/wprs-app/qml/CreateBand.qml
+msgid "these first; then the others you have"
+msgstr "primero estas; después, las demás que tienes"
+
+#: apps/wprs-app/qml/CreateCopy.qml
+msgid "%1 copy"
+msgstr "Copia de %1"
+
+#: apps/wprs-app/qml/CreateCopy.qml
+msgid "Edit a copy of “%1”"
+msgstr "Editar una copia de «%1»"
+
+#: apps/wprs-app/qml/CreateCopy.qml
+msgid "%1: you can modify it and publish it under your name if you: %2."
+msgstr "%1: puedes modificarla y publicarla con tu nombre si: %2."
+
+#: apps/wprs-app/qml/CreateCopy.qml
+msgid "%1: you can modify it and publish it under your name."
+msgstr "%1: puedes modificarla y publicarla con tu nombre."
+
+#: apps/wprs-app/qml/CreateCopy.qml
+msgid "%1 allows no derived works."
+msgstr "%1 no permite obras derivadas."
+
+#: apps/wprs-app/qml/CreateCopy.qml
+msgid "It will be created as <b>“%1”</b> in %2"
+msgstr "Se crea <b>«%1»</b> en %2"
+
+#: apps/wprs-app/qml/CreateCopy.qml apps/wprs-app/qml/CreateFooter.qml
+msgid "Change…"
+msgstr "Cambiar…"
+
+#: apps/wprs-app/qml/CreateCopy.qml
+msgid "Id of the copy"
+msgstr "Identificador de la copia"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "Its folder is gone"
+msgstr "Su carpeta ya no está"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "Edited %1"
+msgstr "Editado %1"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "version %1"
+msgstr "versión %1"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "edited %1"
+msgstr "editado %1"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "Examples"
+msgstr "Ejemplos"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "just now"
+msgstr "ahora mismo"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "%1 minutes ago"
+msgstr "hace %1 minutos"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "an hour ago"
+msgstr "hace una hora"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "%1 hours ago"
+msgstr "hace %1 horas"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "yesterday"
+msgstr "ayer"
+
+#: apps/wprs-app/qml/CreateData.qml
+msgid "%1 days ago"
+msgstr "hace %1 días"
+
+#: apps/wprs-app/qml/CreateFooter.qml
+msgid "Find it…"
+msgstr "Buscarla…"
+
+#: apps/wprs-app/qml/CreateFooter.qml
+msgid "Keep editing"
+msgstr "Seguir editando"
+
+#: apps/wprs-app/qml/CreateFooter.qml
+msgid "It will be created as “%1” in %2"
+msgstr "Se crea «%1» en %2"
+
+#: apps/wprs-app/qml/CreateFooter.qml
+msgid "Its folder “%1” is gone. Did you move it or rename it?"
+msgstr "Su carpeta «%1» ya no está. ¿La moviste o le cambiaste el nombre?"
+
+#: apps/wprs-app/qml/CreateFooter.qml
+msgid "Remove from the list"
+msgstr "Quitar de la lista"
+
+#: apps/wprs-app/qml/CreatePage.qml
+msgid "My scene %1"
+msgstr "Mi escena %1"
+
+#: apps/wprs-app/qml/CreatePage.qml
+msgid "“%1” is not a wallpaper-rs project: it has no scene or package inside."
+msgstr ""
+"«%1» no es un proyecto de wallpaper-rs: no tiene ninguna escena ni paquete "
+"dentro."
+
+#: apps/wprs-app/qml/CreatePage.qml
+msgid "Choose another"
+msgstr "Elegir otra"
+
+#: apps/wprs-app/qml/CreatePage.qml
+msgid "Change row"
+msgstr "Cambiar de fila"
+
+#: apps/wprs-app/qml/CreateRecent.qml
+msgid "Continue with yours"
+msgstr "Seguir con lo tuyo"
+
+#: apps/wprs-app/qml/CreateRecent.qml
+msgid "Your first wallpaper starts here"
+msgstr "Aquí empieza tu primer fondo"
+
+#: apps/wprs-app/qml/CreateRecent.qml
+msgid ""
+"The easiest way is to edit a copy of an example scene and change it to your "
+"liking. To start from scratch, choose “Start a new one”."
+msgstr ""
+"Lo más fácil es editar una copia de una escena de ejemplo y cambiarla a tu "
+"gusto. Para empezar de cero, elige «Empezar uno nuevo»."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "Empty scene"
+msgstr "Escena vacía"
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "Start from nothing and add the layers you want."
+msgstr "Empieza de cero y añade las capas que quieras."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "Points that are born, float and fade out."
+msgstr "Puntos que nacen, flotan y se apagan."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "Layers at different depths, with relief."
+msgstr "Capas a distintas profundidades, con relieve."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "The time or the date, with your own font and colors."
+msgstr "La hora o la fecha, con tu propia letra y tus colores."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "One still picture. To add text or effects, use “Empty scene”."
+msgstr "Una sola imagen fija. Para añadir texto o efectos, usa «Escena vacía»."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "A video that loops without end."
+msgstr "Un vídeo que se repite sin fin."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "A page of your own that moves as the wallpaper."
+msgstr "Una página tuya que se mueve como fondo."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "A saved set of settings for a wallpaper you already have."
+msgstr "Un conjunto de ajustes guardado para un fondo que ya tienes."
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "Resource pack"
+msgstr "Paquete de recursos"
+
+#: apps/wprs-app/qml/CreateStarters.qml
+msgid "Parts of a scene, ready to use in other scenes."
+msgstr "Piezas de una escena, listas para usar en otras."
