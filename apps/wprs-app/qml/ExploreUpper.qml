@@ -7,6 +7,7 @@ Column {
 
     required property var catalog
     required property Installer installer
+    property var publisher: null
     readonly property alias repositories: repositories
     readonly property alias refresh: refresh
     readonly property alias updateAll: updateAll
@@ -89,6 +90,8 @@ Column {
 
         ExploreMore {
             id: more
+
+            publisher: upper.publisher
         }
     }
 }

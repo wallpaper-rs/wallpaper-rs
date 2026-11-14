@@ -7,7 +7,7 @@ QQC2.Button {
     id: more
 
     readonly property alias menu: menu
-    readonly property alias uploader: uploader
+    property var publisher: null
 
     function pick(index) {
         if (index === 0)
@@ -39,14 +39,7 @@ QQC2.Button {
         id: packages
 
         nameFilters: [App.tr("Packages (*.wpak)")]
-        onAccepted: {
-            uploader.file = App.path(selectedFile);
-            uploader.open();
-        }
-    }
-
-    UploadDialog {
-        id: uploader
+        onAccepted: more.publisher && more.publisher.openWith(App.path(selectedFile))
     }
 
     Component {

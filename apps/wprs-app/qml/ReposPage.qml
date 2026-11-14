@@ -52,6 +52,7 @@ Kirigami.Page {
     title: App.tr("Explore")
     padding: 0
     background: null
+    actions: uploader.shown ? uploader.actions : []
     onAtChanged: open = false
     Keys.onEscapePressed: event => {
         event.accepted = full;
@@ -75,6 +76,7 @@ Kirigami.Page {
         visible: !page.full && !page.catalog.fresh
         catalog: page.catalog
         installer: page.installer
+        publisher: uploader
     }
 
     Column {
@@ -179,5 +181,9 @@ Kirigami.Page {
                 folds: false
             }
         }
+    }
+
+    Publish {
+        id: uploader
     }
 }
