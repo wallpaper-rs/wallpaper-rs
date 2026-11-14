@@ -83,6 +83,11 @@ RowLayout {
         text: valor.fila.kind === "elige" ? valor.fila.options[valor.fila.current] ?? "" : valor.fila.value
     }
 
+    FilaPalabras {
+        fila: valor.fila
+        lit: valor.lit
+    }
+
     Words {
         visible: valor.fila.number !== ""
         text: valor.fila.number

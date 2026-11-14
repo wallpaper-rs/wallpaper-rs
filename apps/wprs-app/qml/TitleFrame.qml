@@ -10,6 +10,7 @@ Item {
     required property real sideBottom
     required property bool none
     readonly property bool full: !!(page && page.full)
+    readonly property bool owned: !!(page && page.now)
     readonly property alias seat: seat
     readonly property alias veil: veils.band
     readonly property real bandLow: page && page.full !== true && page.bandLow > 0 ? page.bandLow : 0
@@ -128,7 +129,15 @@ Item {
             }
         }
 
+        Loader {
+            anchors.right: parent.right
+            active: frame.owned
+            visible: active
+            sourceComponent: frame.owned ? frame.page.now : null
+        }
+
         StatusBar {
+            visible: !frame.owned
             anchors.right: parent.right
             width: Math.min(implicitWidth, frame.width - Look.menuAncho - Look.margen * 2)
         }

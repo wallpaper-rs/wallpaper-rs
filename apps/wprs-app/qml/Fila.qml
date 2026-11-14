@@ -26,6 +26,8 @@ FocusScope {
     property string fieldText
     property string placeholder
     property var keys: []
+    property var words: []
+    property int wordAt: 0
     readonly property bool lit: activeFocus
     readonly property bool hovered: hover.hovered
     readonly property color ink: lit ? (off ? Look.escarcha : Look.noche) : off ? Look.brumaBaja : Look.escarcha
@@ -37,11 +39,14 @@ FocusScope {
     signal edited(string text)
     signal captured(var keys)
     signal opened
+    signal worded(int index)
 
     function step(by) {
         if (off)
             return;
-        if (kind === "elige" && options.length > 0) {
+        if (kind === "texto" && words.length > 1) {
+            wordAt = Math.max(0, Math.min(words.length - 1, wordAt + by));
+        } else if (kind === "elige" && options.length > 0) {
             const next = Math.max(0, Math.min(options.length - 1, current + by));
             if (next !== current) {
                 current = next;
@@ -59,7 +64,9 @@ FocusScope {
     function act() {
         if (off)
             return;
-        if (kind === "llave") {
+        if (kind === "texto" && words.length > 0) {
+            worded(wordAt);
+        } else if (kind === "llave") {
             checked = !checked;
             toggled();
         } else if (kind === "despliega") {
