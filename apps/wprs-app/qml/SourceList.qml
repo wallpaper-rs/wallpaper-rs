@@ -12,8 +12,8 @@ FocusScope {
     readonly property int total: providers.reduce((sum, p) => sum + p.items, 0)
     readonly property bool offline: providers.some(p => p.offline)
     property bool wide: false
-    readonly property real tallest: column.implicitHeight
-    readonly property real lowest: Math.min(tallest, Look.altoBoton * 4 + Look.e4)
+    readonly property real tallest: column.implicitHeight + Look.e3 + own.height
+    readonly property real lowest: Math.min(tallest, Look.altoBoton * 5 + Look.e4 + Look.e3)
 
     signal rotate(var provider)
     signal details(var provider)
@@ -37,7 +37,11 @@ FocusScope {
     Flickable {
         id: flick
 
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: own.top
+        anchors.bottomMargin: Look.e3
         contentHeight: Math.max(height, column.implicitHeight)
         interactive: contentHeight > height
         clip: true
@@ -131,14 +135,18 @@ FocusScope {
                     onDown: index < cards.count - 1 && cards.itemAt(index + 1).enter()
                 }
             }
-
-            QQC2.Button {
-                flat: true
-                text: App.tr("Your own photos? Add a folder to your library")
-                icon.name: "plus"
-                onClicked: folder.open()
-            }
         }
+    }
+
+    QQC2.Button {
+        id: own
+
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        flat: true
+        text: App.tr("Your own photos? Add a folder to your library")
+        icon.name: "plus"
+        onClicked: folder.open()
     }
 
     FolderDialog {
