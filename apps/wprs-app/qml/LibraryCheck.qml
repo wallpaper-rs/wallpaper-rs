@@ -121,13 +121,14 @@ QtObject {
                 "entry": {
                     "uid": "01J9Z0X9Z6Q7X4F3K5E1V0R1MS",
                     "title": "Lost",
+                    "kind": "scene",
                     "missing": false,
                     "broken": "the picture header is cut short"
                 }
             }
         });
-        const found = [card.hurt, card.main];
+        const found = [card.hurt, card.main, card.said(card.entry)];
         card.destroy();
-        must(found.join() === "true," + App.tr("Show in folder"), "a damaged file does not offer to show its folder: " + found.join());
+        must(found.join("|") === ["true", App.tr("Show in folder"), App.tr("Could not open this scene: the file is damaged")].join("|"), "a damaged file does not offer to show its folder or names another kind: " + found.join("|"));
     }
 }

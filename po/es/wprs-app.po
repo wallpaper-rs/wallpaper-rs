@@ -20650,3 +20650,27 @@ msgstr "La de tu pantalla"
 #: apps/wprs-app/qml/SceneQualityRow.qml
 msgid "Your screen's: %1, in Settings › Screens"
 msgstr "La de tu pantalla: %1, en Ajustes › Pantallas"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this video: the file is missing"
+msgstr "No se pudo abrir este vídeo: el archivo no está"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this video: the file is damaged"
+msgstr "No se pudo abrir este vídeo: el archivo está dañado"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this scene: the file is missing"
+msgstr "No se pudo abrir esta escena: el archivo no está"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this scene: the file is damaged"
+msgstr "No se pudo abrir esta escena: el archivo está dañado"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this wallpaper: the file is missing"
+msgstr "No se pudo abrir este fondo: el archivo no está"
+
+#: apps/wprs-app/qml/LibraryCard.qml
+msgid "Could not open this wallpaper: the file is damaged"
+msgstr "No se pudo abrir este fondo: el archivo está dañado"

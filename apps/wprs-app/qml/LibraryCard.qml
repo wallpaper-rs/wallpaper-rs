@@ -11,12 +11,25 @@ Column {
     readonly property string screen: App.outputs.length > 1 ? page.target : ""
     readonly property string main: hurt ? App.tr("Show in folder") : screen !== "" ? App.tr("Set as wallpaper on %1", screen) : App.tr("Set as wallpaper")
 
+    function said(entry) {
+        const gone = entry.missing === true;
+        switch (entry.kind) {
+        case "image":
+            return gone ? App.tr("Could not open this picture: the file is missing") : App.tr("Could not open this picture: the file is damaged");
+        case "video":
+            return gone ? App.tr("Could not open this video: the file is missing") : App.tr("Could not open this video: the file is damaged");
+        case "scene":
+            return gone ? App.tr("Could not open this scene: the file is missing") : App.tr("Could not open this scene: the file is damaged");
+        }
+        return gone ? App.tr("Could not open this wallpaper: the file is missing") : App.tr("Could not open this wallpaper: the file is damaged");
+    }
+
     spacing: Look.e3
 
     Nota {
         visible: card.hurt
         tone: "coral"
-        text: card.entry && card.entry.missing ? App.tr("Could not open this picture: the file is missing") : App.tr("Could not open this picture: the file is damaged")
+        text: card.entry ? card.said(card.entry) : ""
     }
 
     Row {
@@ -35,7 +48,6 @@ Column {
         }
 
         QQC2.Button {
-            visible: !card.hurt
             flat: true
             anchors.verticalCenter: parent.verticalCenter
             text: App.tr("Options")

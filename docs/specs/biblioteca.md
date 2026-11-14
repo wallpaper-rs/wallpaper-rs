@@ -45,8 +45,10 @@ Con varias pantallas la rotación arranca en la pantalla elegida.
 
 ## Archivo dañado o que falta
 
-La ficha dice en Coral que no se pudo abrir el archivo y ofrece «Mostrar en la carpeta» (Intro) y
-«Quitar de la biblioteca…», que pregunta antes de quitar; los detalles muestran el error.
+La ficha dice en Coral que no se pudo abrir el archivo, con la palabra de su clase (imagen, vídeo,
+escena o fondo), y ofrece «Mostrar en la carpeta» (Intro), «Opciones ›», que abre el panel de la
+escena dañada, y «Quitar de la biblioteca…», que pregunta antes de quitar; los detalles muestran el
+error.
 
 ## Sin resultados y fallos
 
