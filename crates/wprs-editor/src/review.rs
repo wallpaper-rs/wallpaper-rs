@@ -42,9 +42,13 @@ pub fn needs(manifest: &Manifest, facts: &Facts) -> (Vec<Value>, Vec<Value>) {
 }
 
 pub fn report(dir: &Path, doc: &Value) -> Value {
+    report_in(dir, doc, &wprs_core::message::tr)
+}
+
+pub fn report_in(dir: &Path, doc: &Value, tr: &dyn Fn(&str) -> String) -> Value {
     let mut findings: Vec<Value> = problems(dir, doc)
         .iter()
-        .map(|p| finding(doc, if p.warning { "warning" } else { "error" }, &p.pointer, &p.message))
+        .map(|p| finding(doc, if p.warning { "warning" } else { "error" }, &p.pointer, &p.said.told(tr)))
         .collect();
     let mut out = json!({ "signature": signature(dir, &[]) });
     if let Some((manifest, facts)) = facts_of(doc, Some(dir)) {

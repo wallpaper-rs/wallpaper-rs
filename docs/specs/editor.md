@@ -1755,7 +1755,7 @@ jumps to the pointer in the editor and *Publish…* comes back to the same step;
 after a result.
 
 1. *Review* shows what `wprs_editor::review::report` returns, which `rig` answers for `{"review": {}}`:
-   every finding (level `error`, `warning` or `note`, message, the JSON Pointer to jump to and the
+   every finding (level `error`, `warning` or `note`, message in the language of the interface, the JSON Pointer to jump to and the
    file that holds it), the platforms that refuse the package or play it without a feature and the
    features a build adds. It holds the version, the license (a list of the common ones with what each
    allows; *All rights* is `LicenseRef-all-rights-reserved`) and two questions the author answers
@@ -1777,6 +1777,9 @@ after a result.
    offers *Manage keys…* and *Publish without signing*. A key without a password skips the step. *More*
    chooses another key or a key file, shows the fingerprint and saves a copy of the pair into a folder;
    until a copy is saved the step says *No copy saved*.
+   The signature goes into the package only: a folder without `manifest.json.minisig` before publishing
+   has none after it (`wprs_editor::package::publish`), so the review of the next publish does not warn
+   about an earlier signature. `wprs-ctl scene build --key` and `pack sign` still sign the folder.
 3. *Where?* offers *Save the file* (`<id>-<version>.wpak` next to the folder, or another path),
    *Upload to my server* (public or hidden, through `UploadAs` of `Sync1`, off while no server is
    connected) and *Add to a repository in a folder* (a recent one, *Open another…* or *Create one

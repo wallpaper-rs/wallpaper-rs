@@ -112,7 +112,7 @@ impl SceneEditor {
             let out = out.map_or_else(|| package::output(&dir, &doc), Ok)?;
             std::fs::create_dir_all(out.parent().unwrap_or(Path::new(".")))?;
             let signer = (!key.is_empty()).then(|| package::signer(Path::new(&key), password)).transpose()?;
-            let (sha256, _) = package::build_saved(&dir, &doc, &out, signer.as_ref())?;
+            let (sha256, _) = package::publish(&dir, &doc, &out, signer.as_ref())?;
             Ok(format!("{}\n{sha256}", out.display()))
         };
         self.work(

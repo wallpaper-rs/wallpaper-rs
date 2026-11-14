@@ -54,6 +54,15 @@ pub fn build_saved(dir: &Path, doc: &Value, out: &Path, signer: Option<&Signer>)
     Ok((sha256, fs::metadata(out)?.len()))
 }
 
+pub fn publish(dir: &Path, doc: &Value, out: &Path, signer: Option<&Signer>) -> Result<(String, u64)> {
+    let had = dir.join(SIGNATURE).exists();
+    let built = build_saved(dir, doc, out, signer);
+    if signer.is_some() && !had {
+        unsign(dir)?;
+    }
+    built
+}
+
 pub fn extract(file: &Path, dir: &Path) -> Result<String> {
     crate::copying::extract(file, dir, None, false)
 }
