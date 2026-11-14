@@ -141,6 +141,7 @@ PanelChico {
             RepoPolicy {
                 id: policy
 
+                Layout.fillWidth: true
                 Kirigami.FormData.label: App.tr("Policy:")
                 current: charter.current
             }

@@ -36,11 +36,29 @@ GridLayout {
 
     columns: 2
 
-    QQC2.CheckBox {
-        id: online
-
+    RowLayout {
         Layout.columnSpan: 2
-        text: App.tr("Let authors register online: clients trust per package the key that signed its first version")
+        Layout.fillWidth: true
+
+        QQC2.CheckBox {
+            id: online
+
+            Layout.alignment: Qt.AlignTop
+            Accessible.name: onlineWords.text
+        }
+
+        QQC2.Label {
+            id: onlineWords
+
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            wrapMode: Text.Wrap
+            text: App.tr("Let authors register online: clients trust per package the key that signed its first version")
+
+            TapHandler {
+                onTapped: online.toggle()
+            }
+        }
     }
 
     QQC2.CheckBox {
