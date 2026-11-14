@@ -19,7 +19,7 @@ MANIFEST
 json.dump(m, open(sys.argv[1], 'w'))" dusk/manifest.json
   ctl pack build dusk -o dusk.wpak >/dev/null
   cp -r src night && sed -i 's/dawn/night/; s/"Dawn"/"Night"/; s/"sky"/"dark"/' night/manifest.json
-  ctl pack upgrade night --rating mature --reason violence >/dev/null && ctl pack build night -o night.wpak >/dev/null
+  ctl pack upgrade night --rating mature --photosensitive false --reason violence >/dev/null && ctl pack build night -o night.wpak >/dev/null
   ctl repo init repo --name Example --root-key root.pub --online-key online.pub >/dev/null 2>&1
   ctl repo sign-root repo --key root.key >/dev/null
   ctl repo add repo dawn.wpak >/dev/null
