@@ -46,6 +46,29 @@ QtObject {
         must(found.join() === "true,true,true,no answer", "the service error does not offer to restart the service: " + found.join());
     }
 
+    function shelf() {
+        const placed = [];
+        const start = Qt.createComponent("FirstStart.qml").createObject(page, {
+            "page": {},
+            "adder": null,
+            "run": {
+                "shelf": [{
+                        "id": "org.example.snow",
+                        "title": "Snowfall",
+                        "kind": "scene"
+                    }],
+                "previewed": {},
+                "spec": pkg => pkg.id,
+                "place": (pkg, auto) => placed.push(pkg.id + ":" + auto)
+            }
+        });
+        const found = [start.examples[0].name, start.examples[0].caption === App.tr("Scene · Bundled examples"), start.shelf.currentIndex];
+        start.put();
+        start.destroy();
+        found.push(placed.join());
+        must(found.join() === "Snowfall,true,0,org.example.snow:false", "the examples' shelf does not light its first cover or set it: " + found.join());
+    }
+
     function unnoticed() {
         const run = Qt.createComponent("FirstRun.qml").createObject(page, {
             "bare": true,
@@ -82,6 +105,7 @@ QtObject {
     function exercise() {
         states();
         restart();
+        shelf();
         unnoticed();
         notice();
     }

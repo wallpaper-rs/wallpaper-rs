@@ -12,11 +12,13 @@ const SYSTEMD: (&str, &str, &str) =
 const DBUS: (&str, &str, &str) = ("org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus");
 
 pub async fn call(member: &str) -> Result<String, Error> {
-    match member {
-        "Restart" if checking() => Ok("[]".into()),
-        "Restart" => restart().await.map(|()| "[]".into()),
-        _ => Err(invalid(format!("unknown method Service.{member}"))),
+    if !SERVICE.iter().any(|(_, known, _)| *known == member) {
+        return Err(invalid(format!("unknown method Service.{member}")));
     }
+    if checking() {
+        return Ok("[]".into());
+    }
+    restart().await.map(|()| "[]".into())
 }
 
 async fn restart() -> Result<(), Error> {

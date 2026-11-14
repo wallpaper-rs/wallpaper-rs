@@ -23,9 +23,10 @@ Kirigami.Page {
     }
     readonly property string skeleton: opened !== "" ? "options" : ""
     readonly property bool full: all && opened === ""
-    readonly property real bandFrom: lower.y + bar.y
-    readonly property real bandLow: opened === "" && !all ? bar.height + Look.e5 + covers.implicitHeight : 0
+    readonly property real bandLow: opened !== "" ? 0 : state.alone ? state.low : all ? 0 : bar.height + Look.e5 + covers.implicitHeight
     readonly property real bandHigh: bandLow
+    readonly property real upperHeight: opened === "" ? state.high : 0
+    readonly property real bandFrom: state.alone ? lower.y : lower.y + bar.y
     property rect band
     property rect upper
     readonly property var route: opened !== "" ? [App.tr("Library"), host.item.title ?? ""].concat(level !== "" ? [panel.levelName] : []) : []
@@ -90,7 +91,7 @@ Kirigami.Page {
     title: opened !== "" ? host.item.title ?? "" : App.tr("Library")
     padding: 0
     background: null
-    readonly property var keyHints: opened !== "" ? undefined : covers.hints
+    readonly property var keyHints: opened !== "" ? undefined : state.starting ? state.start.hints : covers.hints
     actions: opened !== "" ? panel.actions : []
     readonly property var screens: App.state.outputs ?? {}
     onScreensChanged: shown()

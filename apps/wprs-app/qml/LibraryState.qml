@@ -16,6 +16,9 @@ Item {
 
     readonly property bool alone: starting || failed
     readonly property alias fault: fault
+    readonly property alias start: start
+    readonly property real low: starting ? start.low : failed ? fault.implicitHeight : 0
+    readonly property real high: starting ? start.high : 0
     property bool restarting: false
     property string refused
 
@@ -37,9 +40,14 @@ Item {
     }
 
     FirstStart {
+        id: start
+
         visible: state.starting
+        focus: state.starting
+        width: state.width
+        height: state.height
         run: first
-        tools: state.page.tools
+        page: state.page
         adder: folders
     }
 
@@ -65,6 +73,10 @@ Item {
     Fallo {
         id: fault
 
+        readonly property bool banded: (state.page.band?.width ?? 0) > 0
+
+        x: banded ? state.page.band.x : 0
+        y: banded ? state.page.band.y + Math.max(0, state.page.band.height - height) : 0
         visible: state.failed
         title: App.tr("The wallpaper service does not answer")
         text: state.refused !== "" ? App.tr("The service could not be started from here. The details say why; this page comes back by itself when the service answers.") : App.tr("Your library and the wallpapers of your desktop depend on it. Restarting it is usually enough; what you had set is not lost.")
