@@ -1,6 +1,6 @@
 import QtQuick
 import QtTest
-import "ui"
+import "plasmoid/contents/ui"
 
 TestCase {
     function shown(info) {

@@ -1,6 +1,6 @@
 import QtQuick
 import QtTest
-import "ui"
+import "plasmoid/contents/ui"
 import "app" as App
 
 Item {

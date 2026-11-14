@@ -95,7 +95,7 @@ qml installed || fail "the tray did not find the installed app"
 DBUS_SESSION_BUS_ADDRESS=$session
 
 echo "===== the tray rows show the wallpaper and its actions, and the app blurs a mature thumbnail until it is clicked or keyed"
-ln -sfn "$ui" "$WORK/ui"
+ln -sfn "${ui%/contents/ui}" "$WORK/plasmoid"
 QT_QPA_PLATFORM=offscreen timeout 60 /usr/lib/qt6/bin/qmltestrunner -input "$WORK/tray-row.qml" >"$OUT/tray-row.log" 2>&1 ||
   fail "the screen thumbnails: $(grep -A 3 FAIL "$OUT/tray-row.log")"
 QT_QPA_PLATFORM=offscreen timeout 60 /usr/lib/qt6/bin/qmltestrunner -input "$WORK/tray-left-out.qml" >"$OUT/tray-left-out.log" 2>&1 ||
