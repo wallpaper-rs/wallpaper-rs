@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +25,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
@@ -81,12 +84,20 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
     }
     BackHandler(text.isNotEmpty() || filter != 0 || searching, reset)
     val plain = query.isEmpty() && !searching && text.isEmpty()
+    val grid = rememberLazyGridState()
+    val focus = remember { FocusRequester() }
+    LaunchedEffect(searching) {
+        if (!searching) return@LaunchedEffect
+        grid.scrollToItem(0)
+        runCatching { focus.requestFocus() }
+    }
     Column {
         if (chosen.isEmpty()) Top(linked, { if (searching && text.isEmpty()) searching = false else searching = true }, { adding = true }, searching)
         else Selecting(main, chosen, items.orEmpty().map(Item::uid), bar = false)
         val shown = items.orEmpty()
         val inUse = now?.item?.uid
         LazyVerticalGrid(
+            state = grid,
             columns = GridCells.Adaptive(112.dp),
             contentPadding = PaddingValues(Measure.margin, 0.dp, Measure.margin, 96.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -100,7 +111,7 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
                             main.act { ask("favorite", "uids" to listOf(current.item.uid), "favorite" to loved) }
                         }
                         plain -> Header(stringResource(R.string.library))
-                        else -> Seek(text, { text = it }, stringResource(R.string.lib_search_library), Modifier.padding(top = Measure.e2, bottom = Measure.e2))
+                        else -> Seek(text, { text = it }, stringResource(R.string.lib_search_library), Modifier.padding(top = Measure.e2, bottom = Measure.e2).focusRequester(focus))
                     }
                     Choices(null, FILTERS.map { (label, query) -> query to stringResource(label) }, kind) { picked ->
                         filter = FILTERS.indexOfFirst { it.second == picked }
