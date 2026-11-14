@@ -18687,3 +18687,135 @@ msgstr "Paquete de recursos"
 #: apps/wprs-app/qml/CreateStarters.qml
 msgid "Parts of a scene, ready to use in other scenes."
 msgstr "Piezas de una escena, listas para usar en otras."
+
+#: apps/wprs-app/qml/SceneSettingsHead.qml
+msgid "Wallpaper details…"
+msgstr "Datos del fondo…"
+
+#: apps/wprs-app/qml/SceneSettingsHead.qml
+msgid "Title, author, license and tags"
+msgstr "Título, autor, licencia y etiquetas"
+
+#: apps/wprs-app/qml/SceneSettingsHead.qml
+msgid "Options you offer to whoever uses it"
+msgstr "Opciones que ofreces a quien lo use"
+
+#: apps/wprs-app/qml/SceneEmpty.qml apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Add a layer"
+msgstr "Añadir una capa"
+
+#: apps/wprs-app/qml/SceneEmpty.qml apps/wprs-app/qml/SceneLayerAdd.qml
+msgid "Time or date"
+msgstr "Hora o fecha"
+
+#: apps/wprs-app/qml/SceneLayerMore.qml
+msgid "Move on its own"
+msgstr "Mover sola"
+
+#: apps/wprs-app/qml/SceneEmpty.qml
+msgid "a photo or a drawing"
+msgstr "una foto o un dibujo"
+
+#: apps/wprs-app/qml/SceneEmpty.qml
+msgid "fixed words"
+msgstr "palabras fijas"
+
+#: apps/wprs-app/qml/SceneEmpty.qml
+msgid "updates by itself"
+msgstr "se actualiza sola"
+
+#: apps/wprs-app/qml/SceneEmpty.qml
+msgid "snow, sparks, dust"
+msgstr "nieve, chispas, polvo"
+
+#: apps/wprs-app/qml/SceneEmpty.qml
+msgid "or drop a picture here"
+msgstr "o suelta aquí una imagen"
+
+#: apps/wprs-app/qml/SceneEmpty.qml
+msgid "More layer kinds"
+msgstr "Más tipos de capa"
+
+#: apps/wprs-app/qml/SceneEmpty.qml
+msgid "A scene is built with layers, one on top of the other. Start with the background picture."
+msgstr "Una escena se arma con capas, una encima de otra. Empieza por la imagen de fondo."
+
+#: apps/wprs-app/qml/SceneLayers.qml
+msgid "There are no layers yet. The first one you add stays at the back; the next ones go on top."
+msgstr "Todavía no hay capas. La primera que añadas queda al fondo; las siguientes van encima."
+
+#: apps/wprs-app/qml/SceneTop.qml
+msgid "Unsaved ·"
+msgstr "Sin guardar ·"
+
+#: apps/wprs-app/qml/SceneTop.qml
+msgid "Saved"
+msgstr "Guardado"
+
+#: apps/wprs-app/qml/SceneTop.qml
+msgid "View as wallpaper"
+msgstr "Ver de fondo"
+
+#: apps/wprs-app/qml/SceneWhere.qml
+msgid "On which screen do you view it as your wallpaper?"
+msgstr "¿En qué pantalla la ves de fondo?"
+
+#: apps/wprs-app/qml/SceneWhere.qml
+msgid "On which screen do you set it as your wallpaper?"
+msgstr "¿En qué pantalla la pones de fondo?"
+
+#: apps/wprs-app/qml/SceneWhere.qml
+msgid "The window is minimized and a notice brings you back."
+msgstr "La ventana se minimiza y un aviso te trae de vuelta."
+
+#: apps/wprs-app/qml/SceneWhere.qml
+msgid "View it on %1"
+msgstr "Verla en %1"
+
+#: apps/wprs-app/qml/SceneWhere.qml
+msgid "Set it on %1"
+msgstr "Ponerla en %1"
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "Saved before setting it as the wallpaper."
+msgstr "Se guardó antes de ponerla de fondo."
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "“%1” is your wallpaper."
+msgstr "«%1» es tu fondo."
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "Back to the editor"
+msgstr "Volver al editor"
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "Saved before publishing."
+msgstr "Se guardó antes de publicar."
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "You are viewing “%1” as your wallpaper"
+msgstr "Estás viendo «%1» de fondo"
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "It is the scene as it is in the editor. Your usual wallpaper comes back when you finish."
+msgstr "Es la escena tal como está en el editor. Tu fondo de siempre vuelve cuando termines."
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "Keep it"
+msgstr "Dejarlo puesto"
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "The wallpaper view ended"
+msgstr "La vista de fondo terminó"
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "“%1” is no longer shown on the desktop."
+msgstr "«%1» ya no se muestra en el escritorio."
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "View it again"
+msgstr "Verla otra vez"
+
+#: apps/wprs-app/qml/SceneUse.qml
+msgid "“%1” is shown on the desktop as a preview."
+msgstr "«%1» se muestra en el escritorio como vista previa."

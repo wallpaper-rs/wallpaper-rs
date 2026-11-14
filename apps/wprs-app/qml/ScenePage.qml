@@ -14,7 +14,9 @@ Kirigami.Page {
     property alias editor: editor
     property alias tabs: panel.tabs
     property alias builder: builder
+    property alias use: use
     property alias settings: panel.settings
+    property alias layers: panel.layers
     property string spot
     property var picked: []
     property bool moving
@@ -28,6 +30,11 @@ Kirigami.Page {
         page: page
     }
     property string notice
+    property Component bar: Component {
+        SceneTop {
+            page: page
+        }
+    }
     property real clock: editor.time
     property real heard: 0
     readonly property var view: JSON.parse(editor.view || "{}")
@@ -56,8 +63,11 @@ Kirigami.Page {
         spot = pointer;
     }
 
-    title: App.tr("Scene: %1", view.title ?? "")
+    title: view.title ?? ""
     padding: 0
+    background: Rectangle {
+        color: Look.noche
+    }
     Component.onCompleted: {
         starter ? editor.create(folder, starter, heading) : editor.open(folder, source);
         if (App.checking)
@@ -65,58 +75,17 @@ Kirigami.Page {
                     "page": page
                 }).exercise();
     }
-    actions: [
-        Kirigami.Action {
-            text: App.tr("Back")
-            icon.name: "go-previous"
-            onTriggered: {
-                editor.autosave();
-                App.navigate(7, "");
-            }
-        },
-        Kirigami.Action {
-            text: App.tr("Undo")
-            icon.name: "edit-undo"
-            shortcut: "Ctrl+Z"
-            tooltip: page.view.history?.undo ? App.tr("Undo: %1", page.view.history.undo) : ""
-            enabled: (page.view.history?.done ?? []).length > 0
-            onTriggered: page.run("undo")
-        },
-        Kirigami.Action {
-            text: App.tr("Redo")
-            icon.name: "edit-redo"
-            shortcut: "Ctrl+Shift+Z"
-            tooltip: page.view.history?.redo ? App.tr("Redo: %1", page.view.history.redo) : ""
-            enabled: (page.view.history?.undone ?? []).length > 0
-            onTriggered: page.run("redo")
-        },
-        Kirigami.Action {
-            text: App.tr("Save")
-            icon.name: "document-save"
-            shortcut: "Ctrl+S"
-            enabled: editor.dirty && !editor.busy
-            onTriggered: editor.save()
-        },
-        Kirigami.Action {
-            text: App.tr("Build and apply…")
-            icon.name: "run-build"
-            enabled: editor.ready && !editor.busy
-            onTriggered: builder.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Show on the desktop")
-            icon.name: "view-visible"
-            checkable: true
-            checked: editor.live
-            enabled: editor.ready
-            onTriggered: editor.preview(checked)
-        }
-    ]
 
     SceneEditor {
         id: editor
 
-        onFinished: message => page.notice = message
+        onFinished: message => use.placing ? use.placed(message) : page.notice = message
+    }
+
+    SceneUse {
+        id: use
+
+        page: page
     }
 
     Timer {
@@ -134,60 +103,40 @@ Kirigami.Page {
         }
     }
 
-    header: SceneNotes {
-        page: page
-    }
-
-    RowLayout {
+    Item {
         anchors.fill: parent
         enabled: editor.ready
-        spacing: 0
 
         SceneSide {
             id: panel
 
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 14
-            Layout.fillWidth: false
-            Layout.fillHeight: true
+            width: Look.lateralIzq
+            height: parent.height
             page: page
         }
 
-        ColumnLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredWidth: Kirigami.Units.gridUnit
-            spacing: 0
-
-            SceneCanvas {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                page: page
-            }
-
-            SceneTimes {
-                Layout.fillWidth: true
-                Layout.fillHeight: false
-                Layout.preferredHeight: Kirigami.Units.gridUnit * 9
-                page: page
-            }
+        SceneStage {
+            x: Look.lateralIzq
+            width: parent.width - Look.lateralIzq - Look.lateralDer
+            height: parent.height - foot.height
+            page: page
         }
 
-        ColumnLayout {
-            Layout.preferredWidth: Math.min(Kirigami.Units.gridUnit * 28, Math.max(Kirigami.Units.gridUnit * 16, page.width * 0.24))
-            Layout.fillWidth: false
-            Layout.fillHeight: true
+        SceneFoot {
+            id: foot
 
-            SceneInspector {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                page: page
-            }
+            x: Look.lateralIzq
+            y: parent.height - height
+            width: parent.width - Look.lateralIzq - Look.lateralDer
+            height: Look.lienzoPieAlto
+            page: page
+        }
 
-            SceneProblems {
-                Layout.fillWidth: true
-                Layout.fillHeight: false
-                page: page
-            }
+        SceneFields {
+            x: parent.width - width
+            width: Look.lateralDer
+            height: parent.height
+            page: page
         }
     }
 

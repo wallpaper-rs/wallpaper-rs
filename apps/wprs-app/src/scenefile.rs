@@ -145,13 +145,14 @@ impl Drop for SceneEditorRust {
             None => {}
         }
         let (output, shown, split) = (self.output.to_string(), self.shown, self.halves.output.clone());
+        let desk = self.desk.clone();
         let dir = self.project.as_ref().map(|p| p.dir.to_string_lossy().into_owned()).unwrap_or_default();
         if output.is_empty() && !shown && split.is_empty() {
             return;
         }
         bus::farewell(async move {
             if shown {
-                bus::call("Daemon1", "PreviewScene", vec![json!(""), json!(dir), json!(""), json!(0.0)])
+                bus::call("Daemon1", "PreviewScene", vec![json!(desk), json!(dir), json!(""), json!(0.0)])
                     .await
                     .ok();
             }
@@ -177,3 +178,11 @@ macro_rules! shown {
 }
 
 shown!(String, &str, serde_json::Error);
+
+pub fn unshow(output: String, dir: Option<PathBuf>) {
+    let dir = dir.map(|d| d.to_string_lossy().into_owned()).unwrap_or_default();
+    bus::spawn(async move {
+        let args = vec![json!(output), json!(dir), json!(""), json!(0.0)];
+        bus::call("Daemon1", "PreviewScene", args).await.ok();
+    });
+}

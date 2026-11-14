@@ -13,6 +13,7 @@ mod depth;
 mod depthproc;
 mod depthview;
 mod depthwork;
+mod desknote;
 mod diff;
 mod editing;
 mod editor;

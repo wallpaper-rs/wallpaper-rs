@@ -117,7 +117,13 @@ impl SceneEditor {
         self.send();
     }
 
-    pub fn preview(mut self: Pin<&mut Self>, live: bool) {
+    pub fn preview(mut self: Pin<&mut Self>, live: bool, on: &QString) {
+        if live && self.desk != on.to_string() {
+            let old = std::mem::replace(&mut self.as_mut().rust_mut().desk, on.to_string());
+            if self.shown {
+                crate::scenefile::unshow(old, self.project.as_ref().map(|p| p.dir.clone()));
+            }
+        }
         self.as_mut().set_live(live);
         self.send();
     }
@@ -145,8 +151,8 @@ impl SceneEditor {
         targets.extend(streamed.then(|| (self.output.to_string(), document.clone())));
         targets.extend(plain);
         match (self.live, self.shown) {
-            (true, _) => targets.push((String::new(), document)),
-            (false, true) => targets.push((String::new(), String::new())),
+            (true, _) => targets.push((self.desk.clone(), document)),
+            (false, true) => targets.push((self.desk.clone(), String::new())),
             _ => {}
         }
         let (qt, live) = (self.qt_thread(), self.live);

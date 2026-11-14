@@ -1251,6 +1251,27 @@ the skinned vertices of each quality level and the shadowed lights of each tier.
 animate`, `clip`, `key`, `material`, `shadows`, `camera-path`, `new-material`, `debug3d` and `cost3d`
 do the same from the terminal.
 
+## Marco del editor
+
+La página del editor ocupa la barra de arriba con su propio contenido (`bar` de la página, ver
+`shell.md`): volver, el título, su estado («Guardado» o «Sin guardar ·» con «Guardar ahora»),
+deshacer y rehacer; a la derecha «Ver de fondo», «Poner de fondo» y «Publicar…». El resto se
+reparte en cinco regiones: el lateral izquierdo (`SceneSide`, 280 px) con las pestañas Capas,
+Recursos, Opciones y Probar; el lienzo (`SceneStage`), con la barra del lienzo arriba y, si la
+escena no tiene capas, la tarjeta «Añade una capa» con imagen, texto, hora o fecha y partículas;
+el pie (`SceneFoot`, 168 px) con la línea de tiempo; el lateral derecho (`SceneFields`, 320 px)
+con el inspector y los problemas. Lo que necesita la escena guardada la guarda antes y lo dice
+(«Se guardó antes de ponerla de fondo.», «Se guardó antes de publicar.»).
+
+«Ver de fondo» pregunta en qué pantalla cuando hay más de una, minimiza la ventana y deja un aviso
+fijo del sistema (`org.freedesktop.Notifications`, sin tiempo de espera) con «Volver al editor»,
+«Dejarlo puesto» (lo pone de fondo de verdad) y «Detener la vista previa». Si la vista termina sola
+(el daemon la corta o se cae), el aviso cambia a «La vista de fondo terminó» con «Verla otra vez».
+Sin servicio de avisos la ventana vuelve y el aviso queda dentro de ella. «Poner de fondo» pregunta
+la pantalla igual y avisa «“Título” es tu fondo.» con «Deshacer», que vuelve a poner lo que cada
+pantalla tenía. Las secciones de Recursos (scripts, plantillas, efectos y grupos de formas) se
+pliegan y recuerdan su estado entre sesiones.
+
 ## Preview
 
 The app asks the daemon for a virtual output named `preview:<n>` with `RequestStream` and shows its
@@ -1258,8 +1279,8 @@ PipeWire stream on the canvas, as the Plasma wallpaper does. Every change sends 
 with `PreviewScene` (`dbus.md`), at most once per 50 ms, with `solo` applied; a paused or scrubbed
 timeline holds the scene at that second, so a still preview renders only when something changes. A
 new document replaces the preview without a crossfade, and a playing preview keeps its time; package
-details that are still incomplete, such as a missing rating, do not stop it. *Show on the desktop*
-previews on every screen the same way. The app repeats the call every 30 seconds while a preview is
+details that are still incomplete, such as a missing rating, do not stop it. *Ver de fondo* muestra la
+misma vista previa en el escritorio, en la pantalla elegida o en todas. The app repeats the call every 30 seconds while a preview is
 on and ends it when the editor closes; the daemon ends it 60 seconds after the last call. A
 minimized window marks the preview output covered. `wprs-ctl scene preview DIR [-o OUTPUT] [--time
 T] [--quality Q] [--restart]` shows the saved folder for 60 seconds, at most at that quality level and

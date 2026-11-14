@@ -12,6 +12,7 @@ ColumnLayout {
     property bool seen: false
 
     property bool outside: false
+    property bool desk: false
 
     spacing: 0
 
@@ -27,8 +28,9 @@ ColumnLayout {
             seen = true;
         } else if (seen && page.editor.live) {
             seen = false;
-            page.editor.preview(false);
-            page.notice = App.tr("The preview on the desktop was ended from outside, so it is off here too.");
+            page.editor.preview(false, "");
+            if (!desk)
+                page.notice = App.tr("The preview on the desktop was ended from outside, so it is off here too.");
         }
     }
 
@@ -49,7 +51,7 @@ ColumnLayout {
         Layout.fillWidth: true
         type: Kirigami.MessageType.Information
         text: App.tr("This scene is shown on the desktop as a preview and is not applied. Stop the preview when you are done.")
-        visible: notes.page.editor.live
+        visible: notes.page.editor.live && !notes.desk
         actions: [
             Kirigami.Action {
                 text: App.tr("Stop the preview")

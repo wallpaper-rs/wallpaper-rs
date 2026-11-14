@@ -101,6 +101,10 @@ QtObject {
     readonly property int tArriba: 18
     readonly property int lateralIzq: 280
     readonly property int barraLienzoAlto: 44
+    readonly property int lateralDer: 320
+    readonly property int lienzoPieAlto: 168
+    readonly property int altoBotonArriba: 36
+    readonly property int entreAlto: 22
     readonly property int llaveAncho: 40
     readonly property int llaveAlto: 22
     readonly property int llavePunto: 16

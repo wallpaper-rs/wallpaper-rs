@@ -109,7 +109,7 @@ pub mod qobject {
         #[qinvokable]
         fn wave(self: Pin<&mut SceneEditor>, asset: &QString, buckets: i32);
         #[qinvokable]
-        fn preview(self: Pin<&mut SceneEditor>, live: bool);
+        fn preview(self: Pin<&mut SceneEditor>, live: bool, on: &QString);
         #[qinvokable]
         fn render(self: Pin<&mut SceneEditor>, out: &QString, spec: &QString);
         #[qinvokable]
@@ -167,6 +167,7 @@ pub struct SceneEditorRust {
     pub queued: bool,
     pub sent: u64,
     pub shown: bool,
+    pub desk: String,
     pub attached: (u32, u32),
 }
 

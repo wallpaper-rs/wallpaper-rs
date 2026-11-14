@@ -130,6 +130,7 @@ QtObject {
                 throw new Error(kind + ": " + (page.editor.error || JSON.stringify(page.view.problems)));
             App.backend.reap();
         }
+        ran("SceneFrameCheck.qml");
         page.editor.save();
         page.tabs.currentIndex = 2;
         page.editor.select("/manifest");

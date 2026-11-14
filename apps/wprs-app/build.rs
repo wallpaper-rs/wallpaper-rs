@@ -47,6 +47,7 @@ fn main() {
     .files([
         "src/backend.rs",
         "src/depth.rs",
+        "src/desknote.rs",
         "src/editor.rs",
         "src/items.rs",
         "src/keyboard.rs",
