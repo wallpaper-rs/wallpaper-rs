@@ -137,5 +137,8 @@ QtObject {
         page.tabs.currentIndex = 1;
         page.builder.open();
         page.builder.close();
+        page.use.apply("");
+        if (!page.use.placing)
+            throw new Error("setting the scene as the wallpaper did not start");
     }
 }

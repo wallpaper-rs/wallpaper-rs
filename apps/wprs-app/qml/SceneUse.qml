@@ -38,7 +38,11 @@ Item {
     function apply(output) {
         saved = store();
         const outputs = output === "" ? App.outputs : [output];
-        before = Object.fromEntries(outputs.map(name => [name, ((App.state.outputs ?? {})[name] ?? {}).item ?? ""]));
+        const shown = App.state.outputs ?? {};
+        const items = {};
+        for (const name of outputs)
+            items[name] = (shown[name] ?? {}).item ?? "";
+        before = items;
         screen = output;
         placing = true;
         page.editor.apply(output);

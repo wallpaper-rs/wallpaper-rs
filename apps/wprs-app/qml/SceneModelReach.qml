@@ -9,7 +9,7 @@ ColumnLayout {
 
     required property var motion
     readonly property var chains: motion.info?.ik ?? []
-    readonly property var parents: (motion.info?.bones ?? []).reduce((all, b) => Object.assign(all, Object.fromEntries([[b.name, b.parent]])), {})
+    readonly property var parents: (motion.info?.bones ?? []).reduce((all, b) => (all[b.name] = b.parent, all), {})
     readonly property string above: parents[motion.bone] ?? ""
     readonly property var layers: (motion.page.view.layers ?? []).map(l => l.id).filter(id => id !== motion.layerId)
     readonly property var choices: [null, "cursor"].concat(motion.bones.map(b => "bone:" + b), layers.map(id => "layer:" + id))

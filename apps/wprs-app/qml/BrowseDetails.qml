@@ -112,7 +112,11 @@ Rectangle {
                     counts: more.catalog.votes[more.key] ?? null
                     shown: more.catalog.counted
                     packageId: more.key
-                    onVoted: found => more.catalog.votes = Object.assign({}, more.catalog.votes, Object.fromEntries([[more.key, found]]))
+                    onVoted: found => {
+                        const votes = Object.assign({}, more.catalog.votes);
+                        votes[more.key] = found;
+                        more.catalog.votes = votes;
+                    }
                 }
             }
 

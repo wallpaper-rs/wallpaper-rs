@@ -147,7 +147,9 @@ Kirigami.Dialog {
                 chosen: dialog.chosen.includes(modelData.key)
                 picture: dialog.thumbnails[modelData.key] ?? ""
                 onToggled: on => dialog.toggle(modelData.key, on)
-                onRenamed: text => dialog.titles = Object.assign({}, dialog.titles, Object.fromEntries([[modelData.key, text]]))
+                onRenamed: text => dialog.titles = Object.assign({}, dialog.titles, {
+                    [modelData.key]: text
+                })
                 onPick: {
                     dialog.picking = modelData.key;
                     pictures.open();
@@ -187,7 +189,9 @@ Kirigami.Dialog {
         onAccepted: {
             const path = App.path(selectedFile);
             if (dialog.picking)
-                dialog.thumbnails = Object.assign({}, dialog.thumbnails, Object.fromEntries([[dialog.picking, path]]));
+                dialog.thumbnails = Object.assign({}, dialog.thumbnails, {
+                    [dialog.picking]: path
+                });
             else
                 dialog.thumbnail = path;
         }

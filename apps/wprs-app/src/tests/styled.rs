@@ -88,3 +88,16 @@ fn the_scan_reads_types_and_attached_uses_alike() {
     let found = controls("QQC2.ToolTip.text: x\nQQC2.Slider {\nQQC2.Overlay.overlay\nQQC2.dummy");
     assert_eq!(found, ["Overlay", "Slider", "ToolTip"].map(String::from).into());
 }
+
+#[test]
+fn the_scripts_of_the_app_call_only_what_its_script_engine_has() {
+    let missing = ["Object.fromEntries"];
+    let mut files = Vec::new();
+    sources(&root().join("qml"), &mut files);
+    for path in files {
+        let text = std::fs::read_to_string(&path).unwrap();
+        for call in missing.iter().filter(|call| text.contains(*call)) {
+            panic!("{} calls {call}, which the script engine of Qt does not have", path.display());
+        }
+    }
+}
