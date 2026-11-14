@@ -2,10 +2,6 @@ use super::{Kind, Tone};
 use crate::icons::icon;
 use maud::{Markup, html};
 
-pub fn section(title: &str, body: Markup) -> Markup {
-    html! { section.seccion { h2 { (title) } (body) } }
-}
-
 pub fn notice(tone: Tone, title: &str, body: Markup, actions: Option<Markup>) -> Markup {
     html! {
         div class={ "nota " (tone.class()) } role=(if tone == Tone::Bad { "alert" } else { "status" }) {

@@ -4,7 +4,6 @@ use maud::{DOCTYPE, Markup, html};
 
 pub const NO_WALLPAPER: &str = "f-ninguno";
 
-#[allow(dead_code)]
 pub struct Cover<'a> {
     pub src: &'a str,
     pub credit: Option<&'a str>,
@@ -17,7 +16,6 @@ pub struct Frame<'a> {
     pub cover: Option<Cover<'a>>,
 }
 
-#[allow(dead_code)]
 impl<'a> Frame<'a> {
     pub fn new(title: &'a str) -> Self {
         Frame { title, line: None, tone: NO_WALLPAPER, cover: None }
@@ -28,11 +26,13 @@ impl<'a> Frame<'a> {
         self
     }
 
+    #[allow(dead_code)]
     pub fn tone(mut self, tone: &'a str) -> Self {
         self.tone = tone;
         self
     }
 
+    #[allow(dead_code)]
     pub fn cover(mut self, cover: Cover<'a>) -> Self {
         self.cover = Some(cover);
         self

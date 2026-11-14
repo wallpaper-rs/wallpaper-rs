@@ -25,7 +25,6 @@ pub fn page(app: &App, auth: Option<&Auth>, current: &str, title: &str, body: Ma
     page_in(app, auth, Frame::new(title), current, body)
 }
 
-#[allow(dead_code)]
 pub fn page_in(app: &App, auth: Option<&Auth>, frame: Frame, current: &str, body: Markup) -> Markup {
     render(app, nav(auth, current, true), frame, body)
 }
