@@ -35,7 +35,7 @@ fun RepoAdd(main: Main, run: Run, close: (() -> Unit)? = null, added: () -> Unit
     }
     TaskPage(foot = {
         Action(add, Modifier.weight(1f).testTag("repo_add"), enabled = url.isNotBlank()) { Text(stringResource(R.string.repo_add_url)) }
-    }) {
+    }, above = { if (host.isNotEmpty()) Note(stringResource(R.string.repo_sent, host)) }) {
         Header(stringResource(R.string.repo_add_title), close)
         Note(stringResource(R.string.repo_about))
         TextBox(stringResource(R.string.repo_url), url, { url = it; problem = null }, example = stringResource(R.string.repo_url_example))
@@ -43,7 +43,6 @@ fun RepoAdd(main: Main, run: Run, close: (() -> Unit)? = null, added: () -> Unit
             stringResource(R.string.repo_fingerprint), print, { print = it; problem = null },
             problem = problem, example = stringResource(R.string.repo_fingerprint_help), kind = KeyboardType.Ascii, done = add,
         )
-        if (host.isNotEmpty()) Note(stringResource(R.string.repo_sent, host))
         Spacer(Modifier.height(Measure.e4))
     }
 }
