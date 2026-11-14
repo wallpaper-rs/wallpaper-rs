@@ -18634,7 +18634,7 @@ msgstr "Seguir con lo tuyo"
 
 #: apps/wprs-app/qml/CreateRecent.qml
 msgid "Your first wallpaper starts here"
-msgstr "Aquí empieza tu primer fondo"
+msgstr "Tu primer fondo empieza aquí"
 
 #: apps/wprs-app/qml/CreateRecent.qml
 msgid ""
@@ -18658,15 +18658,15 @@ msgstr "Puntos que nacen, flotan y se apagan."
 
 #: apps/wprs-app/qml/CreateStarters.qml
 msgid "Layers at different depths, with relief."
-msgstr "Capas a distintas profundidades, con relieve."
+msgstr "Capas a distinta profundidad, con relieve."
 
 #: apps/wprs-app/qml/CreateStarters.qml
 msgid "The time or the date, with your own font and colors."
-msgstr "La hora o la fecha, con tu propia letra y tus colores."
+msgstr "La hora o la fecha, con tu letra y tus colores."
 
 #: apps/wprs-app/qml/CreateStarters.qml
 msgid "One still picture. To add text or effects, use “Empty scene”."
-msgstr "Una sola imagen fija. Para añadir texto o efectos, usa «Escena vacía»."
+msgstr "Una imagen fija. Para ponerle texto o efectos, usa «Escena vacía»."
 
 #: apps/wprs-app/qml/CreateStarters.qml
 msgid "A video that loops without end."
@@ -18674,7 +18674,7 @@ msgstr "Un vídeo que se repite sin fin."
 
 #: apps/wprs-app/qml/CreateStarters.qml
 msgid "A page of your own that moves as the wallpaper."
-msgstr "Una página tuya que se mueve como fondo."
+msgstr "Una página propia que se mueve como fondo."
 
 #: apps/wprs-app/qml/CreateStarters.qml
 msgid "A saved set of settings for a wallpaper you already have."
