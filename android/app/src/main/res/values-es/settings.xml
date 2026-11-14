@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="more_options">Más opciones</string>
     <string name="less">Menos</string>
     <string name="more">Más</string>
     <string name="below_short">Menos de %d %%</string>
