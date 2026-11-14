@@ -13,6 +13,8 @@ Window {
     property real sample: 1
     readonly property bool active: session.active === true
     readonly property var candidate: session.candidate ?? null
+    readonly property string kind: !candidate ? "" : candidate.kind === "package" ? (candidate.package?.kind ?? "") : candidate.kind
+    property alias words: words
     readonly property var current: session.now ?? null
     readonly property var plays: session.plays ?? ({})
     readonly property bool calm: plays.why === "calm" || plays.why === "still"
@@ -157,6 +159,8 @@ Window {
         }
 
         PreviewText {
+            id: words
+
             anchors.left: parent.left
             anchors.bottom: hints.top
             anchors.bottomMargin: Look.e8

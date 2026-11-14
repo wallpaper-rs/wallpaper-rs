@@ -8,8 +8,8 @@ Column {
     required property var preview
     readonly property var item: preview.candidate
     readonly property var plays: preview.plays
-    readonly property string kindWord: !item ? "" : item.kind === "scene" ? App.tr("Scene") : item.kind === "video" ? App.tr("Video") : App.tr("Image")
-    readonly property string still: !item ? "" : item.kind === "scene" ? App.tr("Still picture of the scene: it moves once applied") : item.kind === "video" ? App.tr("Still picture of the video: it moves once applied") : ""
+    readonly property string kindWord: !item ? "" : preview.kind === "scene" ? App.tr("Scene") : preview.kind === "video" ? App.tr("Video") : App.tr("Image")
+    readonly property string still: !item ? "" : preview.kind === "scene" ? App.tr("Still picture of the scene: it moves once applied") : preview.kind === "video" ? App.tr("Still picture of the video: it moves once applied") : ""
     readonly property string seconds: (plays.duration_ms / 1000).toLocaleString(Qt.locale(), "f", 1)
     readonly property string reason: plays.why === "chosen" ? App.tr("chosen for this change") : plays.why === "screen" ? App.tr("the setting of this screen") : App.tr("your general setting")
     readonly property string how: plays.why === "calm" ? App.tr("simple fade · your system asks for less motion") : plays.why === "still" ? App.tr("simple fade · you asked for less motion") : plays.kind === "none" ? App.tr("no transition, %1", reason) : plays.kind === "own" ? App.tr("its author's transition, or a fade if it has none") : App.tr("fade · %1 s, %2", seconds, reason)

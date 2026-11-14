@@ -32,7 +32,7 @@ Timer {
                 "duration_ms": 600
             }
         })
-    readonly property var steps: [[() => {}, () => shown.began && shown.active && shown.mode !== "error" && shown.candidate.title === "Aurora" && shown.session.ahead.length === 1], [() => shown.press(Qt.Key_Right), () => shown.mode === "transicion" && shown.candidate.title === "Waves" && shown.sample < 1], [() => shown.heard("DP-1", calm), () => shown.mode === "menos-movimiento" && !shown.sampling && shown.keyHints.length === 5], [() => shown.heard("HDMI-A-1", Object.assign({}, calm, {
+    readonly property var steps: [[() => {}, () => shown.began && shown.active && shown.mode !== "error" && shown.candidate.title === "Aurora" && shown.session.ahead.length === 1 && shown.kind === "scene" && shown.words.kindWord === App.tr("Scene") && shown.words.still === App.tr("Still picture of the scene: it moves once applied")], [() => shown.press(Qt.Key_Right), () => shown.mode === "transicion" && shown.candidate.title === "Waves" && shown.sample < 1], [() => shown.heard("DP-1", calm), () => shown.mode === "menos-movimiento" && !shown.sampling && shown.keyHints.length === 5], [() => shown.heard("HDMI-A-1", Object.assign({}, calm, {
                         "plays": {
                             "kind": "none",
                             "why": "chosen"
