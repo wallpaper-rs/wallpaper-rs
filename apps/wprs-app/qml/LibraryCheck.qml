@@ -12,6 +12,10 @@ QtObject {
         onTriggered: check.close()
     }
 
+    property FirstRunCheck first: FirstRunCheck {
+        page: check.page
+    }
+
     function must(ok, text) {
         if (!ok)
             throw new Error(text);
@@ -41,6 +45,7 @@ QtObject {
         several();
         options();
         empty();
+        first.exercise();
         damaged();
         page.tools.shown();
     }

@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Dialogs
 import io.github.wallpaper_rs.app
 
 Item {
@@ -11,6 +12,8 @@ Item {
     readonly property bool failed: empty && library.error !== ""
     readonly property bool unmatched: empty && !failed && bar.filtered
 
+    readonly property bool starting: empty && !failed && !unmatched
+
     visible: empty
 
     Vacio {
@@ -22,21 +25,37 @@ Item {
         onActed: state.bar.clear()
     }
 
-    Vacio {
-        id: none
+    FirstStart {
+        visible: state.starting
+        run: first
+        tools: state.page.tools
+        adder: folders
+    }
 
-        visible: !state.failed && !state.unmatched
-        title: App.tr("Nothing here yet")
-        text: App.tr("Add folders in the settings, import files or drop them here.")
-        action: App.tr("Add wallpapers…")
-        actionIcon: "plus"
-        onActed: state.page.tools.dialogs.importer.start(none)
+    FirstRun {
+        id: first
+
+        bare: state.starting
+    }
+
+    FolderDialog {
+        id: folders
+
+        onAccepted: App.act("Import", [[App.path(selectedFolder)], false], "Library1")
+    }
+
+    Timer {
+        interval: 3000
+        repeat: true
+        running: state.failed && state.visible
+        onTriggered: state.page.search()
     }
 
     Fallo {
         visible: state.failed
-        title: App.tr("The library could not be read")
-        text: App.tr("The service answered with an error. Try again in a moment.")
+        title: App.tr("The wallpaper service does not answer")
+        text: App.tr("Your library and the wallpapers of your desktop depend on it. What you had set is not lost, and this page comes back by itself when the service answers.")
+        big: true
         details: state.library.error
         action: App.tr("Try again")
         onActed: state.page.search()

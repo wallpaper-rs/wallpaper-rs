@@ -20391,5 +20391,46 @@ msgstr "Poner en marcha"
 msgid "Next block"
 msgstr "Siguiente bloque"
 
-msgid "Change"
-msgstr "Cambiar"
+#: apps/wprs-app/qml/FirstStart.qml
+msgid "Choose where to start: the first wallpaper that enters your library becomes the wallpaper of your desktop."
+msgstr "Elige por dónde empezar: el primer fondo que entre en tu biblioteca queda de fondo en tu escritorio."
+
+#: apps/wprs-app/qml/FirstStart.qml
+msgid "Explore repositories"
+msgstr "Explorar repositorios"
+
+#: apps/wprs-app/qml/FirstStart.qml
+msgid "Add a folder"
+msgstr "Añadir una carpeta"
+
+#: apps/wprs-app/qml/FirstStart.qml
+msgid "Put as wallpaper"
+msgstr "Poner de fondo"
+
+#: apps/wprs-app/qml/FirstStart.qml
+msgid "You can also drop your files here."
+msgstr "También puedes soltar aquí tus archivos."
+
+#: apps/wprs-app/qml/FirstRun.qml
+msgid "“%1” is now the wallpaper of every screen."
+msgstr "«%1» quedó de fondo en todas las pantallas."
+
+#: apps/wprs-app/qml/FirstRun.qml
+msgid "“%1” is now your wallpaper. You can change it whenever you like from here."
+msgstr "«%1» quedó puesta de fondo. La cambias cuando quieras desde aquí."
+
+#: apps/wprs-app/qml/LibraryDrop.qml
+msgid "Drop to add them to your library"
+msgstr "Suelta para añadirlos a tu biblioteca"
+
+#: apps/wprs-app/qml/LibraryDrop.qml
+msgid "Pictures, videos, scenes or a whole folder. Then we ask whether to copy them or leave them where they are."
+msgstr "Imágenes, vídeos, escenas o una carpeta entera. Luego te preguntamos si copiarlos o dejarlos donde están."
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "The wallpaper service does not answer"
+msgstr "El servicio de fondos no responde"
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "Your library and the wallpapers of your desktop depend on it. What you had set is not lost, and this page comes back by itself when the service answers."
+msgstr "Tu biblioteca y los fondos de tu escritorio dependen de él. Lo que ya tenías puesto no se pierde, y esta página vuelve sola cuando el servicio responde."
