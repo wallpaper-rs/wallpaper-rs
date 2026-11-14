@@ -25,7 +25,7 @@ dentro de Ajustes, en la pestaña Pantallas. El menú es un solo bloque para el 
 
 | Esqueleto | Páginas | Partes |
 |---|---|---|
-| título | Biblioteca, Explorar, Listas, Fuentes, Crear | columna izquierda con logo y menú bajo su velo; lugar «ahora» arriba a la derecha (por ahora la barra de estado: pausa, volumen, trabajos); velo de banda abajo; la página a la derecha del menú o, si la pide, en la banda baja; un lugar de avisos; línea de atajos abajo a la derecha |
+| título | Biblioteca, Explorar, Listas, Fuentes, Crear | columna izquierda con logo y menú bajo su velo; lugar «ahora» arriba a la derecha (ver «Bloque ahora»); velo de banda abajo; la página a la derecha del menú o, si la pide, en la banda baja; un lugar de avisos; línea de atajos abajo a la derecha |
 | opciones | Ajustes, Cuenta | la imagen como franja con su velo; el menú; un panel opaco en Noche con el título de la página, sus acciones, palabras de sección y la ruta con «Esc volver»; la página; avisos sobre los atajos; atajos siempre al pie |
 | trabajo | editor de un fondo, editor de escenas, empaquetador | barra superior en Noche con la vuelta («‹ Biblioteca», «‹ Crear»…), el título y las acciones; la página ocupa el resto; avisos arriba a la izquierda del lienzo |
 
@@ -155,3 +155,37 @@ clave y trae fotos nuevas en la próxima actualización. «Quitar esta fuente» 
   ese conjunto, un aviso ofrece guardarla y la guarda con esas pantallas como regla.
 - La fila de cada carpeta de la biblioteca ofrece Revisarla otra vez, Rotar estas fotos (una lista
   con esa carpeta en todas las pantallas) y Quitarla, con confirmación.
+
+## Bloque ahora
+
+Arriba a la derecha de las pantallas de título está lo que hay de fondo en la pantalla elegida:
+
+- Con una pantalla dice «En tu escritorio»; con varias muestra una tira con la miniatura de cada
+  una y su nombre, y elegir una cambia la pantalla de la página (`target`) o la del bloque.
+- Título del fondo, su tipo y quién lo da; «Puesto hace un momento» durante un minuto después de
+  cambiarlo con la ventana visible.
+- Mandos: pausar o seguir, volumen general con silencio (solo si el fondo suena), favorito, ajuste
+  y filtro de esa pantalla.
+- Si la pantalla rota una lista: «Lista «Tarde» · cambia en 7 min» con Anterior, Siguiente y
+  «Pausar la lista». El reloj se actualiza una vez por minuto y solo con la ventana visible.
+  «Pausar la lista» detiene la rotación y ofrece Reanudar en el aviso; con la regla `resume` vuelve
+  al mismo fondo.
+- Poner un fondo a mano sobre una pantalla que rota avisa «La rotación de «Tarde» se detuvo porque
+  pusiste «Aurora boreal».» con Reanudar.
+- Trabajos en curso («Haciendo las miniaturas: 9 de 12») con Cancelar, y los fallidos con su motivo.
+- En una página que usa la banda baja el bloque se acorta: sin la tira de pantallas, sin la línea
+  de tipo y sin trabajos.
+
+## Listas
+
+La página de listas usa la banda baja: filtro Todas y En marcha (cada palabra con su número),
+«Nueva lista…» y un estante de tapas hechas con cuatro miniaturas de la lista. La ficha dice cuántos
+fondos tiene, cada cuánto cambia y si está detenida, con «Poner en marcha» (o «… en» la pantalla
+elegida), Intro y «Editar ›». Sin listas muestra «Aún no tienes listas» con el camino desde la
+biblioteca.
+
+Editar abre el esqueleto de opciones con la ruta «Listas › Tarde»: Nombre, «Cambia cada» (10 min,
+30 min, 1 h, Cada día u «Otro…», que admite segundos, minutos u horas), Pantalla (con varias), los
+fondos con Quitar, «Añadir fondos…» y «Añadir una carpeta…», y Más (historial, búsqueda, reglas y
+quitar la lista). Arriba están «Cambia en», «Pausar la lista» y «Detener». Quitar una lista ofrece
+Deshacer en el aviso, que la vuelve a crear con sus fondos y sus reglas.
