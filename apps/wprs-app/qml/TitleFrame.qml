@@ -80,41 +80,9 @@ Item {
         }
     }
 
-    RoundVeil {
-        y: -120
-        width: Look.menuAncho + 300
-        height: frame.sideBottom + 320
-        centerX: 0
-        centerY: 0.4
-        reachY: height * 0.6
-        inner: Look.velo * 0.95
-        middle: Look.velo * 0.82
-    }
-
-    RoundVeil {
-        visible: !frame.full
-        x: now.x - 132
-        y: now.y - 96
-        width: frame.width - x
-        height: now.height + 96 + 176
-        centerX: 1
-        centerY: 0.4
-        reachY: height * 0.72
-        inner: 0.2 + Look.velo * 0.78
-        middle: 0.14 + Look.velo * 0.76
-    }
-
-    Rectangle {
-        visible: frame.full
-        anchors.fill: parent
-        color: Qt.rgba(Look.noche.r, Look.noche.g, Look.noche.b, 0.55 + Look.velo * 0.3)
-    }
-
-    BandVeil {
-        visible: !frame.full
-        y: frame.page && frame.page.bandFrom !== undefined ? Math.max(0, Math.min(frame.bandLow > 0 ? frame.height : frame.height * 0.55, seat.y + frame.page.bandFrom - Look.veloBanda)) : frame.bandLow > 0 ? Math.max(0, frame.band.y - Look.veloBanda) : frame.height * 0.55
-        width: frame.width
-        height: frame.height - y
+    TitleVeils {
+        host: frame
+        lead: now
     }
 
     Column {
