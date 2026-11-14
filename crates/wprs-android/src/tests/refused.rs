@@ -72,7 +72,7 @@ const BIG: u64 = 16 << 20;
 
 #[test]
 fn every_feature_the_phone_leaves_out_has_a_note_on_its_page() {
-    let detail = include_str!("../../../../android/app/src/main/kotlin/Detail.kt");
+    let detail = include_str!("../../../../android/app/src/main/kotlin/About.kt");
     let res = concat!(env!("CARGO_MANIFEST_DIR"), "/../../android/app/src/main/res");
     let strings =
         ["values", "values-es"].map(|v| std::fs::read_to_string(format!("{res}/{v}/strings.xml")).unwrap());
@@ -82,7 +82,7 @@ fn every_feature_the_phone_leaves_out_has_a_note_on_its_page() {
     for (name, ..) in left {
         assert!(
             detail.contains(&format!("\"{name}\" -> R.string.lacks_{name}\n")),
-            "Detail.kt has no note for {name}"
+            "About.kt has no note for {name}"
         );
         for text in &strings {
             assert!(text.contains(&format!("<string name=\"lacks_{name}\">")), "no lacks_{name} string");
