@@ -25,9 +25,10 @@ fn package(dir: &Path) -> Result<String> {
     Ok(out.to_string_lossy().into_owned())
 }
 
-pub fn sample() -> Result<Value> {
+pub fn sample(name: &str) -> Result<Value> {
     ensure!(crate::bus::checking(), "sample repositories are made only by wprs-app --check");
-    let dir = crate::scenefile::projects_dir().join("stall");
+    ensure!(!name.is_empty() && !name.contains(['/', '.']), "a sample needs a plain folder name");
+    let dir = crate::scenefile::projects_dir().join(name);
     fs::create_dir_all(&dir)?;
     let (root, online) = (keygen(None)?, keygen(Some("check".into()))?);
     let file = |name: &str, text: &str| -> Result<String> {

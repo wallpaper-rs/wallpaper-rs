@@ -15,7 +15,7 @@ pub mod qobject {
         #[qinvokable]
         fn open(self: &Stall, folder: &QString) -> QString;
         #[qinvokable]
-        fn sample(self: &Stall) -> QString;
+        fn sample(self: &Stall, name: &QString) -> QString;
         #[qinvokable]
         fn add(self: Pin<&mut Stall>, folder: &QString, files: &QString, unlisted: bool);
         #[qinvokable]
@@ -102,8 +102,8 @@ impl Stall {
         });
     }
 
-    pub fn sample(&self) -> QString {
-        answer(crate::stallcheck::sample())
+    pub fn sample(&self, name: &QString) -> QString {
+        answer(crate::stallcheck::sample(&name.to_string()))
     }
 
     pub fn open(&self, folder: &QString) -> QString {

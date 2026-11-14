@@ -10,7 +10,7 @@ Timer {
     property int step: 0
     readonly property string pkg: "org.example.check"
     readonly property var steps: [[() => {
-                sample = JSON.parse(stall.backend.sample());
+                sample = JSON.parse(stall.backend.sample("stall"));
                 const charter = stall.admin.charter;
                 charter.start(null);
                 charter.roots.keys = [sample.root_pub];

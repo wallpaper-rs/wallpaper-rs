@@ -1778,7 +1778,9 @@ after a result.
    here…*, which makes its key, the repository, signs its root, adds the package and publishes its
    index). The last destination is remembered. Errors keep the page and offer their own way out: a
    version that exists already uploads with the next number, a key the server does not know is
-   registered with `AddAuthorKey` (the first time it is registered by itself), no connection retries or
+   registered with `AddAuthorKey` (the first time it is registered by itself; when the upload is still
+   refused after that, the server only takes the author keys its root lists, created without
+   `--online-authors`, and the page says to ask its administrator), no connection retries or
    saves the file, an unsigned root is signed now and an expired index is published again. *More*
    holds the days the index lasts, *Add it hidden* and *Feature it* with a note of up to 140 characters.
 

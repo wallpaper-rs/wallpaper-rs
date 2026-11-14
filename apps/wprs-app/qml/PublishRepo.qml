@@ -19,6 +19,8 @@ ColumnLayout {
     readonly property string key: (entry().key ?? "") !== "" ? entry().key : publish.sign.secret
     readonly property bool ready: making ? naming.text.trim() !== "" : folder !== "" && opened.error === undefined
     readonly property alias shelf: shelf
+    readonly property alias naming: naming
+    readonly property alias place: place
 
     function entry() {
         return known.find(r => r.folder === folder) ?? ({});

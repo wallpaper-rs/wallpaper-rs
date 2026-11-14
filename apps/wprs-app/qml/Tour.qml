@@ -76,6 +76,10 @@ Timer {
                 Qt.createComponent("RepoCheck.qml").createObject(host, {
                     "host": host
                 }).start();
+            if (App.backend.claim("shelf"))
+                Qt.createComponent("PublishRepoCheck.qml").createObject(host, {
+                    "host": host
+                }).start();
             return;
         } else if (at === host.pages.length + 1) {
             imaged = App.backend.claim("image");

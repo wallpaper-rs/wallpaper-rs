@@ -67,20 +67,23 @@ Item {
     }
 
     function refused(message) {
-        const kind = Publishing.upload(message);
-        if (kind === "registro" && !registered && publish.sign.current !== null)
+        const found = Publishing.upload(message);
+        if (found === "registro" && !registered && publish.sign.current !== null)
             return register(true);
+        const kind = found === "registro" && registered ? "lista" : found;
         stage = "";
         fail({
             "kind": kind,
             "title": ({
                     "version": App.tr("Version %1 already exists at %2", publish.version, host),
                     "registro": App.tr("%1 does not know your signature “%2”", host, publish.sign.keyName),
+                    "lista": App.tr("%1 only accepts the signatures its administrator lists", host),
                     "red": App.tr("There is no connection with %1", host)
                 })[kind] ?? App.tr("Could not upload to %1", host),
             "text": ({
                     "version": App.tr("A published version is not replaced. Upload it with the next number."),
                     "registro": App.tr("It is registered once in your account and afterwards it is not needed."),
+                    "lista": App.tr("Your signature is in your account, but this server does not take signatures from accounts. Ask its administrator to add it, or save it as a file."),
                     "red": App.tr("Nothing was lost. Try again, or save it as a file and upload it later.")
                 })[kind] ?? App.tr("Nothing was lost. Try again, or save it as a file."),
             "details": message

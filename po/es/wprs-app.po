@@ -17511,7 +17511,6 @@ msgstr "Pega una dirección de búsqueda de wallhaven.cc y pulsa Intro"
 msgid "The address will fill the search options when you save."
 msgstr "La dirección llenará las opciones de búsqueda al guardar."
 
-
 msgid "Keep secrets in a private file"
 msgstr "Guardar los secretos en un archivo privado"
 
@@ -19383,6 +19382,16 @@ msgstr "Una versión publicada no se reemplaza. Súbela con el número siguiente
 #: apps/wprs-app/qml/PublishWork.qml
 msgid "It is registered once in your account and afterwards it is not needed."
 msgstr "Se registra una vez en tu cuenta y después ya no hace falta."
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "%1 only accepts the signatures its administrator lists"
+msgstr "%1 solo acepta las firmas que su administrador incluye"
+
+#: apps/wprs-app/qml/PublishWork.qml
+msgid "Your signature is in your account, but this server does not take signatures from accounts. Ask its administrator to add it, or save it as a file."
+msgstr "Tu firma está en tu cuenta, pero este servidor no acepta firmas desde las cuentas. Pide a su administrador que la incluya, o guárdalo como archivo."
+
+
 
 #: apps/wprs-app/qml/PublishWork.qml
 msgid "Nothing was lost. Try again, or save it as a file and upload it later."

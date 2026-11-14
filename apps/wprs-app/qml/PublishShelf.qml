@@ -12,6 +12,7 @@ Item {
     property string rootKey: ""
     property string rootPublic: ""
     property string named: ""
+    property string added: ""
     property bool made: false
 
     function begin(path) {
@@ -35,7 +36,7 @@ Item {
 
     function feature() {
         stage = "feature";
-        stall.feature(repo.target, publish.manifest.id ?? "", repo.where.note, true);
+        stall.feature(repo.target, added, repo.where.note, true);
     }
 
     function index() {
@@ -101,6 +102,8 @@ Item {
             publish.fault = null;
             return repo.look();
         }
+        if (stage === "add")
+            added = String((reply.added ?? [""])[0]).split(" ")[0];
         if (stage === "add" && repo.where.featured)
             return feature();
         if (stage === "add" || stage === "feature")

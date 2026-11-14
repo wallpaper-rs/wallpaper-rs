@@ -82,7 +82,7 @@ QtObject {
     }
 
     function copying() {
-        const sample = JSON.parse(Qt.createQmlObject("import io.github.wallpaper_rs.app\nStall {}", page).sample());
+        const sample = JSON.parse(Qt.createQmlObject("import io.github.wallpaper_rs.app\nStall {}", page).sample("copying"));
         const dialog = Qt.createComponent("ItemCopy.qml").createObject(page, {});
         dialog.start(sample.wpak);
         expect(dialog.facts.verdict === "allowed" && dialog.ready, "a package with a free license cannot be copied: " + JSON.stringify(dialog.facts));
