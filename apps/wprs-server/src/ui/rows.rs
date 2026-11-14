@@ -74,7 +74,7 @@ pub fn status(tone: Tone, text: &str) -> Markup {
 pub fn status_line(tone: Tone, text: &str, detail: Option<&str>) -> Markup {
     html! {
         p class={ "linea-estado " (tone.class()) } {
-            (icon(tone.icon())) (text)
+            (icon(tone.icon())) span.linea-texto { (text) }
             @if let Some(d) = detail { span.tenue { (d) } }
         }
     }

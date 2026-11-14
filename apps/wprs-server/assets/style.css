@@ -178,6 +178,7 @@ h1, h2, h3, summary, b, small, .ayuda, .fila-valor, .fila-valor span, .intro, .t
 .linea-estado .ms { color: var(--brote); }
 .linea-estado.aviso .ms { color: var(--ambar); }
 .linea-estado.mal .ms { color: var(--coral); }
+.linea-estado .linea-texto { flex: 1 1 0; min-width: 0; }
 .linea-estado .tenue { flex-basis: 100%; color: var(--bruma); font-weight: 400; }
 .tenue { color: var(--bruma); font-weight: 400; }
 .fila.foco .tenue { color: var(--noche); }
