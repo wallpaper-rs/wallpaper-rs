@@ -81,7 +81,7 @@ fn every_feature_the_phone_leaves_out_has_a_note_on_its_page() {
     });
     for (name, ..) in left {
         assert!(
-            detail.contains(&format!("\"{name}\" -> R.string.lacks_{name}\n")),
+            detail.contains(&format!("\"{name}\" to R.string.lacks_{name},\n")),
             "About.kt has no note for {name}"
         );
         for text in &strings {
