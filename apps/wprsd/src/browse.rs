@@ -1,8 +1,8 @@
 use crate::compositor::lock;
 use crate::daemon::Daemon;
 use std::collections::HashMap;
-use std::sync::{LazyLock, Mutex};
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::{LazyLock, Mutex};
 use std::time::{Duration, Instant};
 use wprs_core::model::{BrowseEnd, BrowseSource, ShortcutsState};
 
