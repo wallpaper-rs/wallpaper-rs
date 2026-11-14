@@ -1,199 +1,190 @@
 import QtQuick
-import QtQuick.Dialogs
-import QtQuick.Layouts
-import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.ScrollablePage {
+Kirigami.Page {
     id: page
 
+    property int tab: 0
+    property string place: ""
+    property string query: ""
+    property int screen: 0
+    property Item opener: null
     property var sources: []
     property var inputs: ({})
+    property var playlists: []
+    property var profiles: []
+    property string active
+    readonly property var outputs: App.outputs
+    readonly property string output: outputs[Math.min(screen, outputs.length - 1)] ?? ""
+    readonly property var tabs: [wallpapers, screens, machine]
+    readonly property var words: [App.tr("Wallpapers"), App.tr("Screens"), App.tr("Device")]
+    readonly property var entries: tabs.reduce((all, owner, at) => all.concat(owner.rows.map(row => Object.assign({
+                    "tab": at
+                }, row))), [])
+    readonly property alias found: found
+    readonly property var route: place === "" ? [] : [words[SettingsPlaces.tab(place)], SettingsPlaces.word(place, output)]
+    readonly property var keyHints: SettingsPlaces.hints(query !== "", place, tab)
+    readonly property alias shown: shown
+    readonly property Component head: Component {
+        SettingsSearch {
+            owner: page
+        }
+    }
 
     function load() {
         App.query("ListSources", [], "Library1", reply => page && (page.sources = reply.sources));
         App.query("GetInputs", [], "Inputs1", reply => page && (page.inputs = reply));
+        App.query("List", [], "Playlists1", reply => page && (page.playlists = reply.playlists));
+        App.query("List", [], "Profiles1", reply => {
+            if (!page)
+                return;
+            page.profiles = reply.profiles;
+            page.active = reply.active ?? "";
+        });
+    }
+
+    function open(where, from) {
+        opener = from ?? null;
+        place = where;
+        enter();
+    }
+
+    function enter() {
+        const first = SettingsReach.rows(shown.item ?? tabs[tab])[0];
+        if (first)
+            first.forceActiveFocus(Qt.TabFocusReason);
+    }
+
+    function reach(entry) {
+        query = "";
+        tab = entry.tab;
+        place = entry.place ?? "";
+        Qt.callLater(() => {
+            const row = SettingsReach.rows(shown.item ?? tabs[tab]).find(fila => fila.text === entry.text);
+            if (row)
+                row.forceActiveFocus(Qt.TabFocusReason);
+            else
+                enter();
+        });
+    }
+
+    function routeBack() {
+        const back = opener;
+        place = "";
+        opener = null;
+        if (back)
+            back.forceActiveFocus(Qt.TabFocusReason);
     }
 
     function exercise() {
         Qt.createComponent("SettingsCheck.qml").createObject(page).exercise();
+        Qt.createComponent("SettingsTabsCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
     }
 
     title: App.tr("Settings")
+    padding: 0
     Component.onCompleted: load()
-    actions: [
-        Kirigami.Action {
-            text: App.tr("Add folder…")
-            icon.name: "folder-new"
-            onTriggered: folders.open()
-        },
-        Kirigami.Action {
-            text: App.tr("Reload configuration")
-            icon.name: "view-refresh"
-            onTriggered: App.act("Reload", [])
-        }
-    ]
 
     SettingsWatch {
         owner: page
     }
 
-    ColumnLayout {
-        Screens {
-            Layout.fillWidth: true
+    Connections {
+        target: App.backend
+
+        function onChanged(topic) {
+            if (topic === "playlists" || topic === "profiles")
+                page.load();
         }
+    }
 
-        Kirigami.FormLayout {
-            Layout.fillWidth: true
+    Filtro {
+        id: bar
 
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("General")
+        visible: page.place === "" && page.query === ""
+        sections: true
+        label: App.tr("Tabs")
+        words: page.words.map(text => ({
+                    "text": text
+                }))
+        current: page.tab
+        onPicked: index => page.tab = index
+    }
+
+    Flickable {
+        id: scroll
+
+        y: bar.visible ? bar.height + Look.e5 : 0
+        width: parent.width
+        height: parent.height - y
+        contentHeight: column.height + Look.e5
+        boundsBehavior: Flickable.StopAtBounds
+        clip: true
+
+        Item {
+            id: column
+
+            width: scroll.width
+            height: Math.max(found.visible ? found.height : 0, shown.active ? shown.height : 0, wallpapers.visible ? wallpapers.height : 0, screens.visible ? screens.height : 0, machine.visible ? machine.height : 0)
+
+            SettingsWallpapers {
+                id: wallpapers
+
+                width: parent.width
+                page: page
+                visible: page.query === "" && page.place === "" && page.tab === 0
             }
 
-            Settings {
-                daemon: App
-                model: (App.schema.options ?? []).filter(f => !["render.gpu", "surfaces.layer_namespace", "playback.quality", "playback.auto_pace", "pause.on_battery", "playback.hdr", "rgb.enabled", "rgb.server", "rgb.when_covered", "media.remote_covers"].includes(f.key))
-                values: App.state.options ?? {}
-                onEdited: (key, value) => App.act("SetOption", [key, value])
+            SettingsScreens {
+                id: screens
+
+                width: parent.width
+                page: page
+                visible: page.query === "" && page.place === "" && page.tab === 1
             }
 
-            BatteryPicker {
-                Kirigami.FormData.label: App.tr("Pause on battery")
-                daemon: App
+            SettingsMachine {
+                id: machine
+
+                width: parent.width
+                page: page
+                visible: page.query === "" && page.place === "" && page.tab === 2
             }
 
-            FillNote {
-                Layout.fillWidth: true
+            Loader {
+                id: shown
+
+                width: parent.width
+                active: page.query === "" && page.place !== ""
+                sourceComponent: places[page.place] ?? null
             }
 
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("Scene quality")
-            }
+            SettingsFound {
+                id: found
 
-            QualityPicker {
-                Kirigami.FormData.label: App.tr("Quality:")
-                daemon: App
-            }
-
-            PacePicker {
-                Kirigami.FormData.label: App.tr("Frame rate:")
-                daemon: App
-            }
-
-            HdrPicker {
-                Kirigami.FormData.label: App.tr("HDR (extra bright colors):")
-                daemon: App
-            }
-
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("Graphics card")
-            }
-
-            GpuPicker {
-                Kirigami.FormData.label: App.tr("Draw with:")
-            }
-
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("RGB lighting")
-            }
-
-            SettingsRgb {}
-
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("Desktop surfaces")
-            }
-
-            LayerNamespaceField {
-                Kirigami.FormData.label: App.tr("Surface name:")
-            }
-
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("Library folders")
-            }
-
-            Repeater {
-                model: page.sources
-
-                delegate: RowLayout {
-                    required property var modelData
-
-                    QQC2.Label {
-                        text: [modelData.path, modelData.recursive ? "" : App.tr("without subfolders"), modelData.provider ?? "", App.tr("Items: %1", modelData.items)].filter(t => t).join(" · ")
-                        color: modelData.error ? Look.coral : Kirigami.Theme.textColor
-                    }
-
-                    QQC2.ToolButton {
-                        icon.name: "view-refresh"
-                        text: App.tr("Rescan")
-                        display: QQC2.AbstractButton.IconOnly
-                        onClicked: App.act("Rescan", [modelData.uid], "Library1")
-                    }
-
-                    QQC2.ToolButton {
-                        visible: !modelData.provider
-                        icon.name: "list-remove"
-                        text: App.tr("Remove")
-                        display: QQC2.AbstractButton.IconOnly
-                        onClicked: App.act("RemoveSource", [modelData.uid], "Library1")
-                    }
-                }
-            }
-
-            QQC2.Switch {
-                id: recursive
-
-                text: App.tr("Include subfolders")
-                checked: true
-            }
-
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("Wallpaper permissions")
-            }
-
-            SettingsGrants {
-                inputs: page.inputs
-            }
-
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("Media player")
-            }
-
-            SettingsMedia {
-                inputs: page.inputs
-            }
-
-            Kirigami.Separator {
-                Kirigami.FormData.isSection: true
-                Kirigami.FormData.label: App.tr("About")
-            }
-
-            QQC2.Label {
-                Kirigami.FormData.label: App.tr("Version:")
-                text: [App.state.version, App.state.adapter, App.tr("data model %1", App.state.model ?? "")].filter(t => t).join(" · ")
-            }
-
-            QQC2.Label {
-                Kirigami.FormData.label: App.tr("Configuration:")
-                visible: !!App.state.config_error || !!App.state.library_error
-                text: [App.state.config_error, App.state.library_error].filter(t => t).join("\n")
-                color: Look.coral
-                wrapMode: Text.Wrap
+                width: parent.width
+                page: page
+                visible: page.query !== ""
             }
         }
     }
 
-    FolderDialog {
-        id: folders
+    SettingsPlacesList {
+        id: places
 
-        onAccepted: App.act("AddSource", [App.path(selectedFolder), recursive.checked], "Library1")
+        page: page
+    }
+
+    Connections {
+        target: page.Window.window
+
+        function onActiveFocusItemChanged() {
+            const item = page.Window.activeFocusItem;
+            if (item && SettingsReach.inside(item, column))
+                SettingsReach.reveal(scroll, item);
+        }
     }
 }

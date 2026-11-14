@@ -19498,3 +19498,420 @@ msgstr "Una nota de hasta 140 caracteres"
 #: apps/wprs-app/qml/PublishSign.qml
 msgid "Sign it"
 msgstr "Firmar"
+
+msgid "Tabs"
+msgstr "Pestañas"
+
+msgid "Layouts"
+msgstr "Disposiciones"
+
+msgid "Screens now: %1. Remember this layout?"
+msgstr "Pantallas ahora: %1. ¿Recordar esta disposición?"
+
+msgid "This folder cannot be found"
+msgstr "No se encuentra esta carpeta"
+
+msgid "It may have been moved or be on a disk that is not connected now. Its %1 wallpapers stay in your library until you decide."
+msgstr "Puede que se haya movido o que esté en un disco que ahora no está conectado. Sus %1 fondos siguen en tu biblioteca hasta que decidas."
+
+msgid "For the next folder you add"
+msgstr "Para la próxima carpeta que añadas"
+
+msgid "Check it again"
+msgstr "Revisarla otra vez"
+
+msgid "Its wallpapers leave your library with their ratings and tags. The files in the folder are not deleted."
+msgstr "Sus fondos salen de tu biblioteca con sus valoraciones y etiquetas. Los archivos de la carpeta no se borran."
+
+msgid "battery"
+msgstr "batería"
+
+msgid "quality"
+msgstr "calidad"
+
+msgid "full screen"
+msgstr "pantalla completa"
+
+msgid "folders"
+msgstr "carpetas"
+
+msgid "lights"
+msgstr "luces"
+
+msgid "1 setting"
+msgstr "1 ajuste"
+
+msgid "%1 settings"
+msgstr "%1 ajustes"
+
+msgid "across the three tabs"
+msgstr "en las tres pestañas"
+
+msgid "No setting speaks of “%1”"
+msgstr "Ningún ajuste habla de «%1»"
+
+msgid "The colors of the app come from the wallpaper you have on, so there is no theme to choose."
+msgstr "Los colores de la aplicación salen del fondo que tienes puesto, así que no hay un tema que elegir."
+
+msgid "Search with words for what you want to happen, for example:"
+msgstr "Busca con palabras de lo que quieres que pase, por ejemplo:"
+
+msgid "Try with"
+msgstr "Prueba con"
+
+msgid "New name for the layout"
+msgstr "Nombre nuevo de la disposición"
+
+msgid "When “%1” comes by itself"
+msgstr "Cuándo vuelve sola «%1»"
+
+msgid "The layout is used on its own when these are true. With nothing set, only when you choose it."
+msgstr "La disposición se usa sola cuando se cumple esto. Si no fijas nada, solo cuando tú la eliges."
+
+msgid "It keeps what each screen shows now. It comes back by itself when these same screens are connected."
+msgstr "Guarda lo que muestra ahora cada pantalla. Vuelve sola cuando estén conectadas estas mismas pantallas."
+
+msgid "Layout %1"
+msgstr "Disposición %1"
+
+msgid "Include the settings"
+msgstr "Incluir los ajustes"
+
+msgid "Quality, pauses and transitions come back with it"
+msgstr "La calidad, las pausas y las transiciones vuelven con ella"
+
+msgid "With %1"
+msgstr "Con %1"
+
+msgid "plugged in"
+msgstr "enchufado"
+
+msgid "Only when you choose it"
+msgstr "Solo cuando la eliges"
+
+msgid "Save this layout…"
+msgstr "Guardar esta disposición…"
+
+msgid "What each screen shows now, under a name"
+msgstr "Lo que muestra ahora cada pantalla, con un nombre"
+
+msgid "No layout"
+msgstr "Sin disposición"
+
+msgid "Stop following a layout; what is on now stays"
+msgstr "Deja de seguir una disposición; lo que está puesto se queda"
+
+msgid "Presets for every wallpaper"
+msgstr "Preajustes para cualquier fondo"
+
+msgid "Use it"
+msgstr "Usarla"
+
+msgid "Change the name…"
+msgstr "Cambiar el nombre…"
+
+msgid "Delete it…"
+msgstr "Eliminarla…"
+
+msgid "Delete the layout “%1”?"
+msgstr "¿Eliminar la disposición «%1»?"
+
+msgid "The wallpapers and the screens stay as they are now."
+msgstr "Los fondos y las pantallas quedan como están ahora."
+
+msgid "List that plays"
+msgstr "Lista que se reproduce"
+
+msgid "No list"
+msgstr "Ninguna lista"
+
+msgid "The wallpapers of this list take turns on this screen, as the list's rules say."
+msgstr "Los fondos de esta lista se turnan en esta pantalla, como dicen las reglas de la lista."
+
+msgid "HDR (extra bright colors)"
+msgstr "HDR, colores extra brillantes"
+
+msgid "Draw with"
+msgstr "Dibujar con"
+
+msgid "Check the whole library again"
+msgstr "Revisar toda la biblioteca"
+
+msgid "Change wallpaper with the keyboard"
+msgstr "Cambiar de fondo con el teclado"
+
+msgid "Goes to the next wallpaper of the list. To change the combination, press Enter and then the new keys."
+msgstr "Pasa al siguiente fondo de la lista. Para cambiar la combinación, pulsa Intro y luego las teclas nuevas."
+
+msgid "Previous wallpaper with the keyboard"
+msgstr "Volver al fondo anterior con el teclado"
+
+msgid "Goes back to the wallpaper before. To change the combination, press Enter and then the new keys."
+msgstr "Vuelve al fondo de antes. Para cambiar la combinación, pulsa Intro y luego las teclas nuevas."
+
+msgid "Keyboard shortcuts"
+msgstr "Atajos de teclado"
+
+msgid "The desktop is asked for these two combinations"
+msgstr "Se le piden al escritorio estas dos combinaciones"
+
+msgid "Where the desktop cannot give them, bind the commands of the terminal tool to your own keys."
+msgstr "Donde el escritorio no puede darlas, asigna los comandos de la herramienta de terminal a tus propias teclas."
+
+msgid "News from the repositories"
+msgstr "Novedades de los repositorios"
+
+msgid "Only when you ask"
+msgstr "Solo cuando las pides"
+
+msgid "Look for them"
+msgstr "Buscarlas solas"
+
+msgid "Look for them and install them"
+msgstr "Buscarlas e instalarlas solas"
+
+msgid "New wallpapers and new versions of the ones you have, in the repositories you added."
+msgstr "Fondos nuevos y versiones nuevas de los que tienes, en los repositorios que añadiste."
+
+msgid "Thumbnail cache"
+msgstr "Caché de miniaturas"
+
+msgid "They are made again when needed"
+msgstr "Se vuelven a hacer cuando hacen falta"
+
+msgid "%1 GB"
+msgstr "%1 GB"
+
+msgid "The most room the small pictures of your library may take on this computer."
+msgstr "Lo más que pueden ocupar en este equipo las imágenes pequeñas de tu biblioteca."
+
+msgid "Show the number of votes"
+msgstr "Mostrar el número de votos"
+
+msgid "Watch the library"
+msgstr "Vigilar la biblioteca"
+
+msgid "New wallpapers in your folders appear by themselves"
+msgstr "Los fondos nuevos de tus carpetas aparecen solos"
+
+msgid "Device"
+msgstr "Equipo"
+
+msgid "Pause when a full-screen window covers the wallpaper"
+msgstr "Pausar cuando una ventana a pantalla completa tapa el fondo"
+
+msgid "When you play or watch a film in full screen, the wallpaper stops drawing and uses nothing."
+msgstr "Cuando juegas o ves una película a pantalla completa, el fondo deja de dibujarse y no gasta nada."
+
+msgid "no battery detected"
+msgstr "batería no detectada"
+
+msgid "Your choice is kept even when the battery is not seen; it applies again as soon as there is one."
+msgstr "Lo que elegiste se guarda aunque no se vea la batería; vuelve a valer en cuanto haya una."
+
+msgid "Pause with the screen locked"
+msgstr "Pausar con la pantalla bloqueada"
+
+msgid "Every quality level"
+msgstr "Todos los niveles de calidad"
+
+msgid "Automatic levels lower themselves when they must; the fixed ones are kept even on battery."
+msgstr "Los niveles automáticos bajan solos cuando hace falta; los fijos se mantienen incluso con batería."
+
+msgid "Highest frames per second"
+msgstr "Máximo de imágenes por segundo"
+
+msgid "On every screen"
+msgstr "En todas las pantallas"
+
+msgid "According to the screen"
+msgstr "Según la pantalla"
+
+msgid "%1 per second"
+msgstr "%1 por segundo"
+
+msgid "Fewer frames per second use less battery. According to the screen follows its refresh rate."
+msgstr "Menos imágenes por segundo gastan menos batería. Según la pantalla sigue su frecuencia de refresco."
+
+msgid "When a scene is heavy"
+msgstr "Cuando una escena pesa"
+
+msgid "Keep the detail"
+msgstr "Mantener el detalle"
+
+msgid "Keep it smooth"
+msgstr "Mantener la fluidez"
+
+msgid "Keep the detail lowers the frames per second first; keep it smooth lowers the quality first."
+msgstr "Mantener el detalle baja primero las imágenes por segundo; mantener la fluidez baja primero la calidad."
+
+msgid "Lowest quality on battery below"
+msgstr "Calidad mínima con batería por debajo de"
+
+msgid "Below this charge every scene plays at the lowest quality, whatever you fixed."
+msgstr "Por debajo de esta carga, toda escena se reproduce con la calidad mínima, fijes lo que fijes."
+
+msgid "Length of the transition"
+msgstr "Duración de la transición"
+
+msgid "%1 ms"
+msgstr "%1 ms"
+
+msgid "Wallpaper of %1"
+msgstr "Fondo de %1"
+
+msgid "Screen you adjust"
+msgstr "Pantalla que ajustas"
+
+msgid "Transition on every screen"
+msgstr "Transición en todas las pantallas"
+
+msgid "What says “On every screen” applies to all of them."
+msgstr "Lo que dice «En todas las pantallas» vale para todas."
+
+msgid "It lowers itself on battery, when hot or if a scene weighs too much, and goes back up when it can. The other two: Save battery and Highest. Every level is in “More”."
+msgstr "Baja sola con batería, con calor o si una escena pesa demasiado, y vuelve a subir cuando puede. Las otras dos: Ahorrar batería y Máxima. Todos los niveles están en «Más»."
+
+msgid "Transition when the wallpaper changes"
+msgstr "Transición al cambiar de fondo"
+
+msgid "The passage from one wallpaper to the next. Its length is in “More”."
+msgstr "El paso de un fondo al siguiente. Su duración está en «Más»."
+
+msgid "Less motion"
+msgstr "Menos movimiento"
+
+msgid "Like the system"
+msgstr "Como el sistema"
+
+msgid "With less motion, every change of wallpaper is a plain fade. “Like the system” follows the setting of your desktop."
+msgstr "Con menos movimiento, cada cambio de fondo es un fundido simple. «Como el sistema» sigue el ajuste de tu escritorio."
+
+msgid "Full screen, battery, lock"
+msgstr "Pantalla completa, batería, bloqueo"
+
+msgid "More of %1"
+msgstr "Más de %1"
+
+msgid "Smoothness, fill color, HDR"
+msgstr "Fluidez, color de relleno, HDR"
+
+msgid "They keep which wallpaper goes on each screen"
+msgstr "Guardan qué fondo va en cada pantalla"
+
+msgid "useful with several screens or a laptop"
+msgstr "útiles con varias pantallas o un portátil"
+
+msgid "they change by themselves when you connect or remove a screen"
+msgstr "cambian solas al conectar o quitar una pantalla"
+
+msgid "Save this…"
+msgstr "Guardar esta…"
+
+msgid "Search a setting"
+msgstr "Buscar un ajuste"
+
+msgid "Mature content"
+msgstr "Contenido para adultos"
+
+msgid "Flashes"
+msgstr "Destellos"
+
+msgid "Lists per screen"
+msgstr "Listas por pantalla"
+
+msgid "Always high"
+msgstr "Siempre alta"
+
+msgid "You set it: it stays on battery"
+msgstr "La fijaste tú: se mantiene con batería"
+
+msgid ", even though the automatic one would lower it now"
+msgstr ", aunque la automática ahora bajaría"
+
+msgid "%1 cannot be found"
+msgstr "No se encuentra %1"
+
+msgid "List that plays on each screen"
+msgstr "Lista que se reproduce en cada pantalla"
+
+msgid "What is shown"
+msgstr "Qué se muestra"
+
+msgid "Blurred"
+msgstr "Difuminado"
+
+msgid "Hidden leaves it out of every list. Blurred shows its cover blurred until you open it. Visible shows it as it is."
+msgstr "Oculto lo deja fuera de todas las listas. Difuminado muestra su portada borrosa hasta que lo abres. Visible lo muestra tal cual."
+
+msgid "Disabled"
+msgstr "Deshabilitados"
+
+msgid "Allowed"
+msgstr "Permitidos"
+
+msgid "Wallpapers with flashes or sudden changes of light do not play, and the library marks them with “Has flashes, disabled”."
+msgstr "Los fondos con destellos o cambios bruscos de luz no se reproducen, y la biblioteca los marca con «Tiene destellos, deshabilitado»."
+
+msgid "Wallpapers with flashes or sudden changes of light play like any other."
+msgstr "Los fondos con destellos o cambios bruscos de luz se reproducen como cualquier otro."
+
+msgid "1 folder"
+msgstr "1 carpeta"
+
+msgid "%1 folders"
+msgstr "%1 carpetas"
+
+msgid "Keyboard shortcut, news, thumbnails, votes, watching folders"
+msgstr "Atajo de teclado, novedades, miniaturas, votos, vigilar carpetas"
+
+msgid "1 wallpaper"
+msgstr "1 fondo"
+
+msgid "%1 wallpapers"
+msgstr "%1 fondos"
+
+msgid "with subfolders"
+msgstr "con subcarpetas"
+
+msgid "Go to the setting"
+msgstr "Ir al ajuste"
+
+msgid "Clear the search"
+msgstr "Borrar la búsqueda"
+
+msgid "Choose what to do"
+msgstr "Elegir qué hacer"
+
+msgid "Like every screen"
+msgstr "Como todas las pantallas"
+
+msgid "Each wallpaper's own"
+msgstr "La de cada fondo"
+
+msgctxt "transition"
+msgid "None"
+msgstr "Ninguna"
+
+msgctxt "scene quality"
+msgid "Automatic"
+msgstr "Automática"
+
+msgid "Automatic, never below high"
+msgstr "Automática, nunca por debajo de alta"
+
+msgid "Automatic, never below reduced"
+msgstr "Automática, nunca por debajo de reducida"
+
+msgctxt "scene quality"
+msgid "Highest"
+msgstr "Máxima"
+
+msgid "Always reduced"
+msgstr "Siempre reducida"
+
+msgid "Save battery"
+msgstr "Ahorrar batería"
+
+msgid "Save this layout"
+msgstr "Guardar esta disposición"

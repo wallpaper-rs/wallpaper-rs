@@ -69,8 +69,8 @@ QtObject {
         seated("title", shell.titleFrame);
         host.showPage(5);
         seated("options", shell.optionsFrame);
-        if (shell.optionsFrame.sections.length !== 2)
-            fail("the settings show no section words");
+        if (shell.optionsFrame.sections.length !== 0 || shell.optionsFrame.page.words.length !== 3)
+            fail("the settings do not show their three tabs");
         host.showPage(0);
         host.work(blank);
         seated("work", shell.workFrame);

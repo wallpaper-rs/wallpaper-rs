@@ -96,7 +96,6 @@ FocusScope {
         visible: shell.kind === "options"
         page: visible ? shell.page : null
         current: shell.host.current
-        sections: [5, 2].includes(current) ? [[5, App.tr("General")], [2, App.tr("Profiles and presets")]] : []
         onEscaped: shell.stepBack()
         onChosen: page => shell.host.showPage(page)
     }

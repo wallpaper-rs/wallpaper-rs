@@ -36,18 +36,28 @@ Timer {
             throw new Error("the Tab key does not reach the menu");
         const pages = words.all.map((entry, at) => pick(at));
         host.showPage(5);
-        const section = walk.gather(host.shell, []).find(item => item.current === false && item.text === App.tr("Profiles and presets") && walk.shown(item));
+        const section = walk.gather(host.shell, []).find(item => item.label === App.tr("Tabs") && walk.shown(item));
         if (!section)
-            throw new Error("the settings do not show their sections");
+            throw new Error("the settings do not show their tabs");
         section.forceActiveFocus(Qt.TabFocusReason);
+        walk.press(Qt.Key_Right, 0);
         walk.press(Qt.Key_Return, 0);
-        pages.push(host.current);
+        const layouts = walk.gather(host.shell, []).find(item => item.kind === "pliega" && item.text === App.tr("Layouts") && walk.shown(item));
+        if (!layouts)
+            throw new Error("the screens tab does not show its layouts");
+        layouts.forceActiveFocus(Qt.TabFocusReason);
+        walk.press(Qt.Key_Return, 0);
+        if (host.shell.optionsFrame.page.place !== "layouts")
+            throw new Error("Enter on the layouts does not open them");
+        pages.push(2);
         const all = pages.slice().sort((a, b) => a - b).join();
         if (all !== Array.from({
                 "length": host.pages.length
             }, (v, at) => at).join())
             throw new Error("the arrow and Enter keys on the menu opened the pages " + pages.join(", "));
-        section.forceActiveFocus(Qt.TabFocusReason);
+        walk.press(Qt.Key_Escape, 0);
+        if (!layouts.activeFocus)
+            throw new Error("the Escape key does not bring the focus back to the layouts");
         walk.press(Qt.Key_Escape, 0);
         if (!words.activeFocus)
             throw new Error("the Escape key does not bring the focus back to the menu");
@@ -72,6 +82,7 @@ Timer {
         const list = scratch.list;
         pad.forceActiveFocus(Qt.TabFocusReason);
         walk.press(Qt.Key_Right, 0);
+        walk.press(Qt.Key_Return, 0);
         walk.press(Qt.Key_Down, 0);
         if (scratch.landed[0] !== 0.5 || scratch.landed[1] !== 0.5)
             throw new Error("the arrow keys do not move the alignment pad: " + scratch.landed.join(","));

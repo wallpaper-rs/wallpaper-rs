@@ -24,7 +24,9 @@ Kirigami.ApplicationWindow {
             }
         },
         Component {
-            ProfilesPage {
+            SettingsPage {
+                tab: 1
+                place: "layouts"
             }
         },
         Component {
@@ -131,6 +133,10 @@ Kirigami.ApplicationWindow {
     }
 
     ConsentAsk {
+        host: root
+    }
+
+    LayoutOffer {
         host: root
     }
 
