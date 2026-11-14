@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -135,13 +135,12 @@ fun host(url: String) = url.substringAfter("://").substringBefore('/').ifEmpty {
 
 @Composable
 fun ago(seconds: Long): String {
-    val context = LocalContext.current
     val minutes = ((System.currentTimeMillis() / 1000 - seconds) / 60).coerceAtLeast(0)
     return when {
-        minutes < 1 -> context.getString(R.string.just_now)
-        minutes < 60 -> context.getString(R.string.minutes_ago, minutes)
-        minutes < 60 * 24 -> context.getString(R.string.hours_ago, minutes / 60)
-        else -> context.getString(R.string.days_ago, minutes / (60 * 24))
+        minutes < 1 -> stringResource(R.string.just_now)
+        minutes < 60 -> stringResource(R.string.minutes_ago, minutes)
+        minutes < 60 * 24 -> stringResource(R.string.hours_ago, minutes / 60)
+        else -> stringResource(R.string.days_ago, minutes / (60 * 24))
     }
 }
 
