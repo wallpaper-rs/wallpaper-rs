@@ -28,6 +28,7 @@ QQC2.ScrollView {
 
     onVisibleChanged: visible && Qt.callLater(() => more && more.enter())
     onQueryChanged: count()
+    contentWidth: availableWidth
     Component.onCompleted: count()
 
     Filas {

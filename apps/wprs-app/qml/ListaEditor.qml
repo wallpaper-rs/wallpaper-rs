@@ -21,9 +21,20 @@ FocusScope {
     readonly property alias wallpapers: wallpapers
     readonly property alias list: list
     readonly property alias more: more
+    readonly property var hints: [{
+            "keys": ["up", "down"],
+            "text": App.tr("Move around")
+        }, {
+            "keys": ["left", "right"],
+            "text": App.tr("Change")
+        }, {
+            "keys": ["Esc"],
+            "text": App.tr("Back")
+        }]
     readonly property list<QtObject> actions: [
         Kirigami.Action {
             visible: editor.running
+            icon.name: "clock"
             text: editor.page.shelf.note(editor.playlist)
             enabled: false
         },
@@ -35,7 +46,6 @@ FocusScope {
         },
         Kirigami.Action {
             visible: editor.running
-            icon.name: "x"
             text: App.tr("Stop")
             onTriggered: editor.stop(false)
         }
@@ -93,7 +103,7 @@ FocusScope {
 
     QQC2.ScrollView {
         anchors.fill: parent
-        anchors.leftMargin: Look.margen
+        contentWidth: availableWidth
         visible: editor.page.level === ""
 
         Filas {
@@ -130,10 +140,8 @@ FocusScope {
                 id: wallpapers
 
                 text: App.tr("Wallpapers")
-                kind: "pliega"
-                value: String(editor.playlist.count ?? 0)
-                note: editor.manual ? App.tr("Drag to change the order") : App.tr("Chosen by its search")
-                onOpened: open = !open
+                kind: "despliega"
+                note: String(editor.playlist.count ?? 0) + " · " + (editor.manual ? App.tr("Drag to change the order") : App.tr("Chosen by its search"))
             }
 
             Sublista {
@@ -170,7 +178,6 @@ FocusScope {
         id: more
 
         anchors.fill: parent
-        anchors.leftMargin: Look.margen
         visible: editor.page.level === "more"
         page: editor.page
         playlist: editor.playlist

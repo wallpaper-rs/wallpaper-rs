@@ -20375,3 +20375,21 @@ msgstr "Se puede deshacer enseguida"
 
 msgid "What it showed lately, the newest first"
 msgstr "Lo que mostró hace poco, lo más reciente primero"
+
+msgctxt "playlists"
+msgid "All"
+msgstr "Todas"
+
+msgctxt "playlists"
+msgid "Running"
+msgstr "En marcha"
+
+msgctxt "playlists"
+msgid "Start"
+msgstr "Poner en marcha"
+
+msgid "Next block"
+msgstr "Siguiente bloque"
+
+msgid "Change"
+msgstr "Cambiar"

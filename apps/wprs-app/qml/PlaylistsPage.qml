@@ -24,7 +24,7 @@ Kirigami.Page {
     readonly property real bandHigh: bandLow
     property rect band
     property rect upper
-    readonly property var keyHints: playlist ? undefined : shelf.hints
+    readonly property var keyHints: playlist ? editor.hints : shelf.hints
     readonly property alias shelf: shelf
     readonly property alias editor: editor
     readonly property alias creator: creator
