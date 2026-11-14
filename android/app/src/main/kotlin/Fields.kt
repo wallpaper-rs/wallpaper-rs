@@ -33,7 +33,8 @@ fun Field(field: JSONObject, folded: Boolean, fold: () -> Unit, set: (String, An
         "bool" -> Toggle(label, value == true, enabled) { set(key, it) }
         "combo" -> {
             val options = field.optJSONArray("options").let { all -> (0 until (all?.length() ?: 0)).map { all!!.getJSONObject(it) } }
-            Choices(label, options.map { it.get("value").toString() to it.getString("label") }, value.toString()) { chosen ->
+            val icons = options.mapNotNull { option -> icon(option.optString("icon"))?.let { option.get("value").toString() to it } }.toMap()
+            Choices(label, options.map { it.get("value").toString() to it.getString("label") }, value.toString(), icons) { chosen ->
                 if (enabled) options.firstOrNull { it.get("value").toString() == chosen }?.let { set(key, it.get("value")) }
             }
         }

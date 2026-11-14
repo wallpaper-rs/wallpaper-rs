@@ -39,7 +39,7 @@ fun Header(title: String, back: (() -> Unit)? = null) = if (back == null) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Choices(label: String?, options: List<Pair<String, String>>, chosen: String, choose: (String) -> Unit) = Column {
+fun Choices(label: String?, options: List<Pair<String, String>>, chosen: String, icons: Map<String, Ph> = emptyMap(), choose: (String) -> Unit) = Column {
     label?.let { Group(it) }
     val t = tones
     FlowRow(Modifier.padding(horizontal = Measure.margin, vertical = Measure.e1), horizontalArrangement = Arrangement.spacedBy(Measure.e2)) {
@@ -49,12 +49,15 @@ fun Choices(label: String?, options: List<Pair<String, String>>, chosen: String,
                 on,
                 { choose(value) },
                 { Text(text, style = Type.text) },
+                leadingIcon = icons[value]?.let { { Glyph(it, null, size = Measure.iconSmall) } },
                 shape = RoundedCornerShape(Measure.rControl),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = t.nightHigh,
                     labelColor = t.frost,
+                    iconColor = t.frost,
                     selectedContainerColor = t.frost,
                     selectedLabelColor = t.night,
+                    selectedLeadingIconColor = t.night,
                 ),
                 border = BorderStroke(Measure.line, if (on) t.frost else t.nightLine),
             )
