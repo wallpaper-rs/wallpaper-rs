@@ -96,7 +96,7 @@ PlasmaExtras.Representation {
                 onClicked: panel.view = "main"
             }
 
-            Consent {
+            Ask {
                 Layout.fillWidth: true
                 Layout.margins: Look.e4
                 Layout.topMargin: 0
