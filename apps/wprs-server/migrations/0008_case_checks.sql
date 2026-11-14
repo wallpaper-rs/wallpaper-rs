@@ -1,0 +1,2 @@
+ALTER TABLE versions ADD COLUMN signer TEXT;
+ALTER TABLE versions ADD COLUMN asks TEXT NOT NULL DEFAULT '[]';
