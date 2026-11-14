@@ -122,7 +122,7 @@ fn package_texts_render_as_plain_text() {
             "ScenePresets",
             "SavedPresets",
             "ListaHistorial",
-            "RepoList",
+            "BrowseDetails",
             "Thumbnail",
             "SourceMore",
             "SourceMoreMain",

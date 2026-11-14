@@ -123,6 +123,7 @@ calls! {
     Repos1 repos {
         List list() json;
         Add add(url: str);
+        AddExamples add_examples();
         Refresh refresh(repo: str);
         Remove remove(repo: str, uninstall: bool);
         Browse browse(query: str, offset: u32, limit: u32) json;
