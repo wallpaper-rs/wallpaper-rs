@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,11 +37,11 @@ fun Tone.color() = when (this) {
 }
 
 @Composable
-fun StateLine(text: String, tone: Tone, modifier: Modifier = Modifier) =
+fun StateLine(text: String, tone: Tone, modifier: Modifier = Modifier, single: Boolean = false) =
     Row(modifier, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         val ink = tone.color()
         Glyph(tone.ph, null, Modifier.padding(top = 1.dp), tint = ink, size = 16.dp)
-        Text(text, color = ink, style = Type.foot.copy(fontWeight = Type.row.fontWeight))
+        Text(text, color = ink, style = Type.foot.copy(fontWeight = Type.row.fontWeight), maxLines = if (single) 1 else Int.MAX_VALUE, overflow = TextOverflow.Ellipsis)
     }
 
 @Composable

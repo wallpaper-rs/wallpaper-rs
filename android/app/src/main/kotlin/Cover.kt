@@ -41,7 +41,7 @@ fun Cover(item: Item, modifier: Modifier = Modifier, inUse: Boolean = false, pic
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,
     )
-    if (item.flashing) StateLine(stringResource(R.string.flashes_barred), Tone.Amber, Modifier.padding(top = 2.dp))
+    if (item.flashing) StateLine(stringResource(R.string.flashes_barred), Tone.Amber, Modifier.padding(top = 2.dp), single = true)
 }
 
 @Composable
