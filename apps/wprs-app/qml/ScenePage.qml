@@ -11,6 +11,7 @@ Kirigami.Page {
     property string starter
     property string heading
     property string source
+    property bool exercised: App.checking
     property alias editor: editor
     property alias tabs: panel.tabs
     property alias builder: builder
@@ -73,7 +74,7 @@ Kirigami.Page {
     }
     Component.onCompleted: {
         starter ? editor.create(folder, starter, heading) : editor.open(folder, source);
-        if (App.checking)
+        if (exercised)
             Qt.createComponent("SceneCheck.qml").createObject(page, {
                     "page": page
                 }).exercise();

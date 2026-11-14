@@ -17,6 +17,7 @@ QQC2.ItemDelegate {
     readonly property color ink: lit ? Look.noche : Look.escarcha
 
     leftPadding: Kirigami.Units.largeSpacing * (1 + modelData.depth * 2)
+    focusPolicy: Qt.StrongFocus
     onClicked: row.owner.pick(modelData, false)
 
     MouseArea {

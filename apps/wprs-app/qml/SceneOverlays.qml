@@ -6,6 +6,9 @@ Item {
 
     required property var page
     required property real ratio
+    readonly property bool keyTarget: true
+    property bool pointed: false
+    readonly property bool marked: activeFocus && !pointed
 
     function nudge(step, repeated) {
         const chosen = (page.view.gizmos ?? []).find(g => g.pointer === page.editor.selected);
@@ -25,12 +28,17 @@ Item {
 
     Connections {
         function onCanvasWanted() {
+            overlays.pointed = true;
             overlays.forceActiveFocus();
         }
 
         target: SceneFocus
     }
 
+    activeFocusOnTab: true
+    Accessible.role: Accessible.Canvas
+    Accessible.name: App.tr("Canvas")
+    onActiveFocusChanged: pointed = pointed && activeFocus
     Keys.onPressed: event => {
         const by = (event.modifiers & Qt.ShiftModifier) ? 10 : 1;
         const steps = {
@@ -42,9 +50,18 @@ Item {
         if (event.key === Qt.Key_Escape && page.picking !== "") {
             page.picking = "";
             event.accepted = true;
+        } else if (event.key === Qt.Key_Escape) {
+            nextItemInFocusChain(false).forceActiveFocus(Qt.BacktabFocusReason);
+            event.accepted = true;
         } else if (steps[event.key]) {
             event.accepted = nudge(steps[event.key], event.isAutoRepeat);
         }
+    }
+
+    Ring {
+        anchors.margins: Look.anilloHueco
+        z: 30
+        visible: overlays.marked
     }
 
     SceneGlowSplit {
