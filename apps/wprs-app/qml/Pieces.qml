@@ -10,7 +10,7 @@ Window {
     width: 1600
     height: 900
     visible: true
-    visibility: Window.FullScreen
+    visibility: window.sheet.toLowerCase() === "band" ? Window.Windowed : Window.FullScreen
     color: Look.noche
     title: "wallpaper-rs"
 

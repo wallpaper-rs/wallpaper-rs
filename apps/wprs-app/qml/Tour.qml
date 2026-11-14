@@ -60,6 +60,10 @@ Timer {
                 Qt.createComponent("PiecesChooseCheck.qml").createObject(host, {
                     "host": host
                 }).exercise();
+            if (App.backend.claim("pieces.band"))
+                Qt.createComponent("PiecesBandCheck.qml").createObject(host, {
+                    "host": host
+                }).exercise();
             if (App.backend.claim("pieces.adjust"))
                 Qt.createComponent("PiecesAdjustCheck.qml").createObject(host, {
                     "host": host
