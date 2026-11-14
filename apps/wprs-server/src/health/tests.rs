@@ -14,6 +14,7 @@ fn shown(line: &Line) -> String {
         action: row.action.clone(),
         lit: false,
         thumb: None,
+        confirm: None,
         more: row.more.clone(),
     };
     crate::ui::rows(vec![one], false).into_string()
