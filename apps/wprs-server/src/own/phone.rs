@@ -9,8 +9,8 @@ pub fn address(app: &App) -> String {
 }
 
 pub fn phone(app: &App, lit: bool) -> Markup {
-    let pin = qr::own_pin(&app.cfg).ok().flatten();
-    let code = qr::own_connect_svg(&app.cfg, None).ok();
+    let pin = qr::own_fingerprint(app).ok().flatten();
+    let code = qr::own_connect_svg(app, None).ok();
     let kind = if lit { Kind::Primary } else { Kind::Plain };
     html! {
         section.seccion aria-labelledby="telefono" {

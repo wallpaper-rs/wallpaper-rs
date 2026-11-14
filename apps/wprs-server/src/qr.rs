@@ -13,15 +13,7 @@ pub fn own_connect_svg(app: &App, invite: Option<&str>) -> Result<String> {
 }
 
 pub fn own_fingerprint(app: &App) -> Result<Option<String>> {
-    if app.settings().network != Network::Home {
-        return Ok(None);
-    }
-    let (cert, _) = lan::certificate(&app.cfg.data, &lan::host(&app.cfg.public_url))?;
-    Ok(Some(lan::fingerprint(&cert)))
-}
-
-pub fn own_pin(cfg: &Config) -> Result<Option<String>> {
-    pin_with(cfg, lan::wanted()?)
+    pin_with(&app.cfg, app.settings().network == Network::Home)
 }
 
 fn pin_with(cfg: &Config, self_signed: bool) -> Result<Option<String>> {
