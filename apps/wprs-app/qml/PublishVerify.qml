@@ -72,7 +72,7 @@ ColumnLayout {
         onClicked: verify.check()
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         visible: verify.verdict !== ""
         tone: verify.verdict === "valid" ? "brote" : verify.verdict === "invalid" ? "coral" : ""

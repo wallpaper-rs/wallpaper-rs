@@ -21,6 +21,8 @@ Item {
         if (!publish.editing)
             return deliver(publish.file);
         stage = "build";
+        if (publish.page.editor.dirty)
+            publish.page.editor.save();
         const out = publish.place === "file" ? publish.where.target : spare + "/" + Publishing.base(publish.where.suggested);
         publish.page.editor.build(out, publish.sign.secret, publish.sign.word);
     }

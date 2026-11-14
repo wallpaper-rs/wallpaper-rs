@@ -19471,3 +19471,7 @@ msgstr "Destacar"
 #: apps/wprs-app/qml/PublishWhere.qml
 msgid "A note of up to 140 characters"
 msgstr "Una nota de hasta 140 caracteres"
+
+#: apps/wprs-app/qml/PublishSign.qml
+msgid "Sign it"
+msgstr "Firmar"

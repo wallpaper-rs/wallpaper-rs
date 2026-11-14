@@ -41,7 +41,7 @@ ColumnLayout {
         color: Look.bruma
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         visible: done.kind === "repo" && done.result.made === true
         tone: "brote"
@@ -69,7 +69,7 @@ ColumnLayout {
         copied: done.result.link ?? ""
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         visible: done.kind === "server"
         text: App.tr("In review. How it goes: Account › Your uploads.")
@@ -88,7 +88,7 @@ ColumnLayout {
         details: done.result.address ?? ""
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         visible: done.kind === "repo" && (done.result.expires ?? "") !== ""
         text: App.tr("Publish again before %1: on that day the list of the repository expires.", Qt.formatDate(new Date(done.result.expires ?? 0), "dd-MM"))

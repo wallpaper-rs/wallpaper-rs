@@ -95,7 +95,7 @@ PublishStep {
     }
 
     number: 2
-    title: first ? App.tr("Your signature") : App.tr("Sign")
+    title: first ? App.tr("Your signature") : App.tr("Sign it")
     done: publish.unsigned ? App.tr("Published <b>without a signature</b>") : automatic ? App.tr("Signed only with <b>%1</b>: it has no password", Publishing.escaped(keyName)) : App.tr("Signed with your key <b>%1</b>", Publishing.escaped(keyName))
     mode: publish.at === 2 ? "abierto" : publish.at > 2 ? "hecho" : "cerrado"
     changeable: publish.result === null

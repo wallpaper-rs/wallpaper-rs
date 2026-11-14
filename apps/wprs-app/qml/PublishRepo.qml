@@ -135,7 +135,7 @@ ColumnLayout {
         }
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         visible: repo.making
         text: App.tr("Its keys are created, it is signed and its list is published; we tell you each step. For others to add it, the folder has to be somewhere they can reach.")

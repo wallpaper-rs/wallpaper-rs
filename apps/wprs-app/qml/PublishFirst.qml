@@ -58,7 +58,7 @@ ColumnLayout {
         Keys.onReturnPressed: first.make()
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         text: App.tr("It keeps anyone else who uses this computer from signing as you. We ask for it every time you publish.")
     }

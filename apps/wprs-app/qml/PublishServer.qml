@@ -39,7 +39,7 @@ ColumnLayout {
             onClicked: server.where.hidden = true
         }
 
-        Nota {
+        PublishNote {
             Layout.fillWidth: true
             visible: !server.publish.unsigned
             text: App.tr("The first time, your signature is registered in your account by itself; we let you know.")

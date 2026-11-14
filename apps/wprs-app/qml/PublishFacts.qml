@@ -37,19 +37,30 @@ ColumnLayout {
 
     spacing: Look.e2
 
-    Filas {
+    RowLayout {
         Layout.fillWidth: true
+        spacing: Look.e3
 
-        Fila {
+        Text {
+            Layout.fillWidth: true
             text: App.tr("Where it plays")
-            value: facts.where()
+            font.family: Look.letraTexto
+            font.pixelSize: Look.tCuerpo
+            color: Look.bruma
+        }
+
+        Text {
+            text: facts.where()
+            font.family: Look.letraTexto
+            font.pixelSize: Look.tCuerpo
+            color: Look.escarcha
         }
     }
 
     Repeater {
         model: facts.notes.concat((facts.review.report.build_adds ?? []).length > 0 ? [App.tr("Building adds to the features it needs: %1", facts.review.report.build_adds.map(f => f.name).join(", "))] : [])
 
-        delegate: Nota {
+        delegate: PublishNote {
             required property string modelData
 
             Layout.fillWidth: true
@@ -143,7 +154,7 @@ ColumnLayout {
         }
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         text: App.tr("Asked the first time you publish this wallpaper; whoever puts it on sees the notice first.")
     }

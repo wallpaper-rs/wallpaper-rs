@@ -125,7 +125,7 @@ ColumnLayout {
 
         QQC2.Button {
             highlighted: true
-            text: App.tr("Sign")
+            text: App.tr("Sign it")
             enabled: unlock.current !== null
             onClicked: unlock.sign.confirm()
         }

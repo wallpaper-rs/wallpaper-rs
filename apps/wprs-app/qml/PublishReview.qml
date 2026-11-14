@@ -8,7 +8,8 @@ PublishStep {
 
     required property var publish
     property var report: ({})
-    readonly property var findings: (report.findings ?? []).slice().sort((a, b) => rank(a) - rank(b))
+    readonly property var asked: ["/manifest/photosensitive", "/manifest/content", "/manifest/license"]
+    readonly property var findings: (report.findings ?? []).filter(f => !asked.includes(f.pointer)).sort((a, b) => rank(a) - rank(b))
     readonly property int blocking: count("error")
     readonly property int warnings: count("warning")
     readonly property var platforms: report.platforms ?? ({})
@@ -25,7 +26,7 @@ PublishStep {
     }
 
     function count(level) {
-        return (report.findings ?? []).filter(f => f.level === level).length;
+        return findings.filter(f => f.level === level).length;
     }
 
     function refresh() {
@@ -83,7 +84,7 @@ PublishStep {
         }
     }
 
-    Nota {
+    PublishNote {
         Layout.fillWidth: true
         visible: review.blocking > 0
         text: App.tr("“Go to the problem” takes you to the editor; when you come back, this page is as you left it.")
@@ -93,7 +94,6 @@ PublishStep {
         Layout.fillWidth: true
         review: review
     }
-
 
     SceneLineage {
         id: lineage
