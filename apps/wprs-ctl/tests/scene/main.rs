@@ -7,6 +7,7 @@ mod examples;
 mod language;
 mod marks;
 mod more;
+mod passing;
 mod presets;
 mod shading;
 mod textures;

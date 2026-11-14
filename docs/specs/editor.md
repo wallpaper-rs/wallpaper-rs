@@ -1943,3 +1943,29 @@ cada tipo.
 
 «Captura» guarda lo que se ve también cuando en «Probar» hay un preajuste elegido: la imagen o el
 clip llevan los valores del preajuste, con los valores sueltos que se probaron encima.
+## A scene's own transition
+
+*Options › Transitions* has two rows, *When it comes in* and *When it leaves*; each shows the
+duration of the transition the scene brings, or *Make a transition…*. Both open the same tool
+(`SceneTransitionState`, reached as `page.settings.passage`):
+
+- every change is the editor action `transition` (`TransitionEdit`: `way`, `make`, `effect`,
+  `duration_ms`, `curve`, `params`, `remove`) and the query `transition` returns both directions
+  with their curve `shape` (49 samples), the descriptor's `name` and `fields`, `plays` per quality
+  level and the `problem` of the validation in a person's words, plus the package's transition
+  `effects`, the named `curves` and the `limits`. The action runs the same checks as loading the
+  scene, so it never writes what loading refuses; a refused value leaves the scene as it was and
+  the panel shows the message beside the duration;
+- `make` copies the other direction's descriptor or writes the starter effect
+  `transitions/opening.{json,wgsl}` (a radial reveal with a `center` point and an `edge` width);
+  the files stay after an undo;
+- the canvas shows the crossing between a previous wallpaper (a plain colour or a picture the
+  author picks) and a still of the scene at the editor's clock, drawn by the renderer at the level
+  of *See as*; with *Less motion*, or at a level where the transition does not play, it shows the
+  plain fade the user would see. Point values (`vec2`) are handles on the canvas, reachable with
+  Tab and moved with the arrow keys;
+- the canvas bar holds *Try the transition*, *Previous wallpaper* and *Done*; the foot holds
+  *Progress* and the curve editor, with named curves and two Bézier handles that write a curve of
+  its own; the right panel holds the effect, the duration, the number values and the notes on the
+  quality level and on less motion. While the panel shows, the problems list of the inspector is
+  hidden.

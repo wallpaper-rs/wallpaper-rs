@@ -49,6 +49,7 @@ cambian, comprueban y miden la escena. Solo la vista previa en el escritorio lo 
 | [acciones.md](acciones.md) | Las acciones del editor, que se invocan con `wprs-ctl scene act`. |
 | [scripts.md](scripts.md) | Código JavaScript para lo que no se puede describir con valores. |
 | [paquete.md](paquete.md) | El manifiesto, firmar, empaquetar y publicar. |
+| [transiciones.md](transiciones.md) | Crear y probar la transición propia de un fondo, y sus límites. |
 | [cli.md](cli.md) | Las órdenes de `wprs-ctl` para crear, medir y publicar. |
 
 Todos los ejemplos completos están en la carpeta [`ejemplos/`](ejemplos/), una carpeta de escena
