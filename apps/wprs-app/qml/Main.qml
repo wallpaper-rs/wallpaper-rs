@@ -139,55 +139,8 @@ Kirigami.ApplicationWindow {
         host: root
     }
 
-    Connections {
-        target: App
-
-        function onNavigate(page, query) {
-            root.showPage(page, {
-                    "query": query
-                });
-        }
-
-        function onEdit(item) {
-            root.work(editor, {
-                    "item": item
-                });
-        }
-
-        function onCompose(folder, starter, text) {
-            const kind = starter ? (["web", "preset", "image", "video"].includes(starter) ? starter : "scene") : probe.kindOf(folder, text);
-            root.work(["scene", "assets"].includes(kind) ? composer : packager, {
-                    "folder": folder,
-                    "starter": starter,
-                    "heading": starter ? text : "",
-                    "source": starter ? "" : text
-                });
-        }
-    }
-
-    Component {
-        id: editor
-
-        EditPage {
-        }
-    }
-
-    Component {
-        id: composer
-
-        ScenePage {
-        }
-    }
-
-    Component {
-        id: packager
-
-        PackagePage {
-        }
-    }
-
-    SceneEditor {
-        id: probe
+    MainRoutes {
+        host: root
     }
 
     Tour {
