@@ -19,7 +19,7 @@ cleanup() {
   if [ "${status:-1}" != 0 ]; then
     for f in "$WORK"/*.log; do echo "== $f"; tail -n 40 "$f"; done
   fi
-  rm -rf "$WORK"
+  rm -rf "$WORK" 2>/dev/null || true
 }
 trap cleanup EXIT
 

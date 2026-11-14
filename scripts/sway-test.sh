@@ -13,11 +13,12 @@ chmod 700 "$XDG_RUNTIME_DIR"
 pids=()
 cleanup() {
   for p in "${pids[@]}"; do kill "$p" 2>/dev/null || true; done
+  for p in "${pids[@]}"; do for _ in $(seq 50); do kill -0 "$p" 2>/dev/null || break; sleep 0.1; done; kill -KILL "$p" 2>/dev/null || true; wait "$p" 2>/dev/null || true; done
   if [ -n "${DBUS_SESSION_BUS_PID:-}" ]; then kill "$DBUS_SESSION_BUS_PID" 2>/dev/null || true; fi
   if [ "${status:-1}" != 0 ]; then
     for f in "$WORK"/*.log; do echo "== $f"; tail -n 40 "$f"; done
   fi
-  rm -rf "$WORK"
+  rm -rf "$WORK" 2>/dev/null || true
 }
 trap cleanup EXIT
 
