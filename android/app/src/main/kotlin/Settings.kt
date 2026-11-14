@@ -188,7 +188,3 @@ private fun Notice(name: String, close: () -> Unit) {
         text = { LazyColumn { items(lines) { Text(it, style = MaterialTheme.typography.bodySmall) } } },
     )
 }
-
-fun Main.setAside() {
-    if (Native.setting("settings_set_aside", null) == "true") runOnUiThread { toast(getString(R.string.settings_set_aside)) }
-}

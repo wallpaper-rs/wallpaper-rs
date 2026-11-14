@@ -66,7 +66,7 @@ class Main : ComponentActivity() {
             Sync.soon(this, 0)
             thread(isDaemon = true) {
                 remirror(); runCatching { examples(this, false) }
-                Updates.found(Updates.count()); setAside()
+                Updates.found(Updates.count())
             }
         }
         setContent {

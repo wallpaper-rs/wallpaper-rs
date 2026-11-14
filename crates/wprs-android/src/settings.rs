@@ -21,8 +21,6 @@ const CHOICES: [(&str, &[&str]); 6] = [
     (LISTEN, &["shown", "app"]),
     ("video_convert", &["auto", "keep", "off"]),
 ];
-mod aside;
-
 const SHARED: &str = "config.toml";
 const OWN: &str = "settings.toml";
 
@@ -58,7 +56,7 @@ fn cached() -> Result<MutexGuard<'static, Option<Config>>, Error> {
     let mut cached = CONFIG.lock().unwrap_or_else(PoisonError::into_inner);
     if cached.is_none() {
         let path = store::dir()?.join(SHARED);
-        let mut config = aside::load(&path)?;
+        let mut config = Config::load_on(&path, wprs_core::Platform::Phone)?;
         if !std::fs::read_to_string(&path).is_ok_and(|text| text.contains("on_battery")) {
             config.pause.on_battery = wprs_core::BatteryPause::Never;
         }
@@ -120,9 +118,6 @@ fn table() -> Result<toml::Table, Error> {
 }
 
 pub(crate) fn setting(key: &str, value: Option<&str>) -> Result<String, Error> {
-    if key == aside::SET_ASIDE {
-        return Ok(aside::told(&store::dir()?.join(SHARED)).to_string());
-    }
     if let Some((_, allowed)) = CHOICES.iter().find(|(k, _)| *k == key) {
         let mut own = table()?;
         if let Some(value) = value {

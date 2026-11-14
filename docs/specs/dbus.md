@@ -3351,9 +3351,8 @@ only followed the charge threshold, reads `below:N`, or `never` when `N` is `0`)
 written in the new form at the first change, without the old keys.
 
 On the phone a settings file that still cannot be read (damaged, or with a key of a newer
-version) is renamed to `config.toml.broken` in the app's private folder, the settings start from
-their defaults and the app says so once with a notice; after the notice the file is kept as
-`config.toml.unread`. A later change writes a new `config.toml`.
+version) is left untouched: the settings that depend on it report an error and the network
+features stay off, so nothing is reset without the person seeing it.
 
 ```toml
 profile = "01J…"          # active profile uid, absent when none
