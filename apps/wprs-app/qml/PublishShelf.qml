@@ -16,7 +16,7 @@ Item {
         made = repo.making;
         if (made) {
             stage = "key";
-            keys.create(keys.folder(), repo.slug + "-repo", publish.sign.word, false);
+            keys.create(keys.shelves(), repo.slug + "-repo", publish.sign.word, false);
             return;
         }
         key = repo.key;

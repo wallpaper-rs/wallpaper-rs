@@ -15,6 +15,8 @@ pub mod qobject {
         #[qinvokable]
         fn folder(self: &Signing) -> QString;
         #[qinvokable]
+        fn shelves(self: &Signing) -> QString;
+        #[qinvokable]
         fn keys(self: &Signing, folder: &QString) -> QString;
         #[qinvokable]
         fn exists(self: &Signing, folder: &QString, name: &QString) -> bool;
@@ -100,6 +102,10 @@ impl Signing {
 
     pub fn folder(&self) -> QString {
         QString::from(default_folder().to_string_lossy().as_ref())
+    }
+
+    pub fn shelves(&self) -> QString {
+        QString::from(author_keys::repositories(&default_folder()).to_string_lossy().as_ref())
     }
 
     pub fn keys(&self, folder: &QString) -> QString {

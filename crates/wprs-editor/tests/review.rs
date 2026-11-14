@@ -146,3 +146,14 @@ fn scripts_that_do_not_compile_or_are_missing_are_problems_everywhere() {
     let bad = findings.iter().find(|f| f["pointer"] == "/scene/scripts/1/path").unwrap();
     assert_eq!((bad["level"].as_str(), bad["file"].as_str()), (Some("error"), Some("scripts/bad.js")));
 }
+
+#[test]
+fn a_repository_key_is_not_offered_as_an_author_signature() {
+    let root = tempfile::tempdir().unwrap();
+    let dir = root.path().join("keys");
+    author_keys::create(&dir, "ana", None, false).unwrap();
+    let shelf = author_keys::create(&author_keys::repositories(&dir), "shelf-repo", None, false).unwrap();
+    assert!(shelf["secret"].as_str().unwrap().starts_with(author_keys::repositories(&dir).to_str().unwrap()));
+    let names: Vec<_> = author_keys::list(&dir).as_array().unwrap().iter().map(|k| k["name"].clone()).collect();
+    assert_eq!(names, ["ana"]);
+}

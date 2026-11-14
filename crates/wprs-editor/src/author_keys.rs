@@ -11,6 +11,10 @@ pub fn folder() -> PathBuf {
     dirs::data_dir().unwrap_or_default().join("wallpaper-rs").join("keys")
 }
 
+pub fn repositories(dir: &Path) -> PathBuf {
+    dir.join("repositories")
+}
+
 fn named(name: &str) -> Result<()> {
     let fine = !name.is_empty()
         && name.len() <= 64
