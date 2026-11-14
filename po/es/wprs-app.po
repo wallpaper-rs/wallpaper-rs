@@ -18895,6 +18895,3 @@ msgstr "Error en el script"
 
 msgid "Lasts %1 s · repeats"
 msgstr "Dura %1 s · se repite"
-
-msgid "Change…"
-msgstr "Cambiar…"
