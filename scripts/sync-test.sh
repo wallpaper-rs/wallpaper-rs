@@ -36,7 +36,6 @@ port=$(python3 -c "import socket; s = socket.socket(); s.bind(('127.0.0.1', 0));
 URL=http://127.0.0.1:$port
 export WPRS_DATA=$WORK/server WPRS_LISTEN=127.0.0.1:$port WPRS_PUBLIC_URL=$URL WPRS_RATE_LIMITS=false
 export WPRS_AUTO_PUBLISH=never WPRS_PUBLISH_DELAY_SECS=1 WPRS_LOG=warn
-"$BIN/wprs-server" repo init --name Example >/dev/null
 "$BIN/wprs-server" serve >"$WORK/server.log" 2>&1 & pids+=($!)
 wait_for 20 curl -fsS "$URL/healthz" || fail "the server did not start"
 jar=$WORK/cookies
@@ -44,7 +43,14 @@ step() { curl -fsS -o /dev/null -b "$jar" -c "$jar" "$@"; }
 step --data-urlencode "token=$("$BIN/wprs-server" setup-token)" "$URL/setup"
 step -d network=own "$URL/setup/network"
 step -d handle=admin -d password=correct-horse-battery "$URL/setup/account"
+step -d name=Example "$URL/setup/repository"
+step -d saved=on "$URL/setup/saved"
+first=$(curl -fsS -b "$jar" "$URL/setup" | grep -o 'register?invite=[0-9a-f]*' | head -n 1 | cut -d= -f2)
+[ -n "$first" ] || fail "the access step did not show the first invitation"
 step -d access=invite "$URL/setup/access"
+curl -fsS -o /dev/null -H 'content-type: application/json' "$URL/api/v1/auth/register" \
+  -d "{\"handle\": \"friend\", \"password\": \"friend-horse-battery\", \"invite\": \"$first\"}" ||
+  fail "the first invitation did not let a second person in"
 curl -fsS -b "$jar" "$URL/setup" | grep 'Go to Administration' >/dev/null || fail "the setup did not finish"
 api() { curl -fsS -b "$jar" -H 'content-type: application/json' "$@"; }
 api -X PATCH -d '{"auto_publish": "never"}' "$URL/api/v1/admin/settings" | grep '"auto_publish":"never"' >/dev/null \
