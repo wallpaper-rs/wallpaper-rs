@@ -34,8 +34,12 @@ Kirigami.Page {
         view = view === "add" && providers.length === 0 ? "list" : view === "add" ? "pick" : "list";
     }
 
+    function apply(next) {
+        acts.apply(next);
+    }
+
     function load() {
-        App.query("List", [], "Providers1", reply => page && acts.apply(reply.providers));
+        App.query("List", [], "Providers1", reply => page && page.apply(reply.providers));
         App.query("List", [], "Playlists1", reply => page && (page.playlists = reply.playlists));
     }
 
