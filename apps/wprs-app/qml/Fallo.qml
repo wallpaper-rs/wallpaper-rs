@@ -12,9 +12,15 @@ RowLayout {
     property string details
     property string action
     property bool big: false
+    property string icon: "warning-circle"
+    property string actionIcon
+    property bool principal: false
+    property string other
+    readonly property alias button: main
     property alias detailsOpen: fold.open
 
     signal acted
+    signal otherActed
 
     width: Math.min(big ? Look.errorGrandeAncho : Look.errorAncho, parent ? parent.width : Look.errorAncho)
     spacing: Look.e4
@@ -25,7 +31,7 @@ RowLayout {
     IconImage {
         Layout.alignment: Qt.AlignTop
         Layout.topMargin: fallo.big ? Look.e2 : 2
-        name: "warning-circle"
+        name: fallo.icon
         sourceSize: fallo.big ? Qt.size(Look.iconoErrorGrande, Look.iconoErrorGrande) : Qt.size(Look.iconoError, Look.iconoError)
         color: Look.coral
     }
@@ -58,11 +64,31 @@ RowLayout {
             color: Look.bruma
         }
 
-        QQC2.Button {
+        RowLayout {
             Layout.topMargin: Look.e2
-            visible: fallo.action !== ""
-            text: fallo.action
-            onClicked: fallo.acted()
+            visible: fallo.action !== "" || fallo.other !== ""
+            spacing: Look.e3
+
+            QQC2.Button {
+                id: main
+
+                visible: fallo.action !== ""
+                highlighted: fallo.principal
+                text: fallo.action
+                icon.name: fallo.actionIcon
+                onClicked: fallo.acted()
+            }
+
+            PiecesTecla {
+                visible: fallo.principal && main.visible
+                text: App.trc("key", "Enter")
+            }
+
+            QQC2.Button {
+                visible: fallo.other !== ""
+                text: fallo.other
+                onClicked: fallo.otherActed()
+            }
         }
 
         Detalles {

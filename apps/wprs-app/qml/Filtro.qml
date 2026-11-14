@@ -67,7 +67,7 @@ FocusScope {
                         font.family: Look.letraTexto
                         font.pixelSize: Look.tCuenta
                         font.weight: Font.Medium
-                        color: Look.bruma
+                        color: word.modelData.tone === "coral" ? Look.coral : Look.bruma
                     }
                 }
 
