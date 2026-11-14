@@ -161,3 +161,4 @@ level|quality|string|optional|Quality level such as q0, q1, q2 or q3
 level|battery|boolean|optional|As on battery
 level|calm|boolean|optional|With calm motion
 history
+transition

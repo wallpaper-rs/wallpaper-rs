@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::path::PathBuf;
 
 mod declared;
 mod exports;
@@ -58,7 +57,7 @@ pub enum Action {
         #[serde(default)]
         at: Option<usize>,
         #[serde(default)]
-        file: Option<PathBuf>,
+        file: Option<std::path::PathBuf>,
     },
     RemoveLayer {
         id: String,
@@ -96,7 +95,7 @@ pub enum Action {
     },
     Keyframe(KeyframeEdit),
     Import {
-        file: PathBuf,
+        file: std::path::PathBuf,
         #[serde(default)]
         id: Option<String>,
         #[serde(default)]
@@ -105,9 +104,9 @@ pub enum Action {
         atlas: Option<[u32; 2]>,
     },
     ImportEffect {
-        descriptor: PathBuf,
+        descriptor: std::path::PathBuf,
         #[serde(default)]
-        wgsl: Option<PathBuf>,
+        wgsl: Option<std::path::PathBuf>,
     },
     RemoveEffect {
         effect: String,
@@ -120,7 +119,7 @@ pub enum Action {
     Rename(RenameEdit),
     Paste(PasteEdit),
     Thumbnail {
-        file: PathBuf,
+        file: std::path::PathBuf,
         #[serde(default)]
         animated: bool,
     },
@@ -195,6 +194,7 @@ pub enum Action {
     Film(crate::films::FilmEdit),
     Sprites(crate::cutter::SpriteEdit),
     Shader(ShaderEdit),
+    Transition(crate::passing::TransitionEdit),
     Undo {},
     Redo {},
 }

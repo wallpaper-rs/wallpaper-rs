@@ -750,3 +750,11 @@ wprs-ctl scene ask DIR level '{"quality":"q2"}'
 ask history
 wprs-ctl scene act DIR add_layer '{"kind":"solid","id":"backdrop"}'
 wprs-ctl scene ask DIR history '{}'
+
+act transition
+wprs-ctl scene act DIR transition '{"way":"in","make":true}'
+wprs-ctl scene act DIR transition '{"way":"in","duration_ms":1500,"curve":[0.2,0.8,0.4,1]}'
+
+ask transition
+wprs-ctl scene act DIR transition '{"way":"in","make":true}'
+wprs-ctl scene ask DIR transition '{}'

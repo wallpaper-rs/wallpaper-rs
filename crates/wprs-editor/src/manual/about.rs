@@ -1,6 +1,6 @@
 use super::w;
 #[rustfmt::skip]
-pub const ABOUT: [(&str, &str); 80] = [
+pub const ABOUT: [(&str, &str); 81] = [
     (
         "set",
         w(
@@ -154,6 +154,7 @@ pub const ABOUT: [(&str, &str); 80] = [
             "Write a package effect or material shader: make one from a template, write its WGSL or descriptor, or edit its parameters, passes and fields",
         ),
     ),
+    ("transition", w("Make, change or remove the transition the scene comes in or leaves with: its effect, duration, curve and values")),
     ("undo", w("Undo the last change")),
     ("redo", w("Redo the last undone change")),
 ];

@@ -1,6 +1,6 @@
 use super::w;
 #[rustfmt::skip]
-pub const ASKS: [(&str, &str); 79] = [
+pub const ASKS: [(&str, &str); 80] = [
     ("rig", w("Bones, points, parts and clips of a layer; what is asked when no other query is named")),
     ("weights", w("Weights of a bone over the mesh of a layer, as a heat map")),
     ("pose", w("The rig of a layer posed by clip, time or bone angles")),
@@ -180,4 +180,5 @@ pub const ASKS: [(&str, &str); 79] = [
             "The steps that undo would take back (oldest first) and redo would bring back (next first), and whether the scene has unsaved changes",
         ),
     ),
+    ("transition", w("The transitions of the scene: their effect, values, curve as points, the quality levels they play at and what breaks a rule")),
 ];

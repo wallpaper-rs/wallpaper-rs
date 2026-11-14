@@ -44,6 +44,7 @@ pub(crate) fn whole(action: &Action) -> bool {
                 | Action::Ambient(_)
                 | Action::Wind(_)
                 | Action::Particles(_)
+                | Action::Transition(_)
         ),
     }
 }

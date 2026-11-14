@@ -5937,3 +5937,43 @@ msgstr "solo un paquete de recursos ofrece partes"
 #: crates/wprs-editor/src/shaping/offered.rs
 msgid "a package offers at most %1 parts"
 msgstr "un paquete ofrece como máximo %1 partes"
+
+#: crates/wprs-editor/src/manual/about.rs
+msgid "Make, change or remove the transition the scene comes in or leaves with: its effect, duration, curve and values"
+msgstr "Crea, cambia o quita la transición con la que la escena entra o sale: su efecto, duración, curva y valores"
+
+#: crates/wprs-editor/src/manual/asks.rs
+msgid "The transitions of the scene: their effect, values, curve as points, the quality levels they play at and what breaks a rule"
+msgstr "Las transiciones de la escena: su efecto, valores, curva como puntos, los niveles de calidad en los que se ven y lo que no cumple una regla"
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "there is no transition %1 to remove"
+msgstr "no hay una transición %1 que quitar"
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "there is no transition %1 yet: make it first"
+msgstr "todavía no hay una transición %1: créala primero"
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "the transition breaks a rule: %1"
+msgstr "la transición no cumple una regla: %1"
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "a transition lasts from %1 to %2 s"
+msgstr "una transición dura de %1 a %2 s"
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "a transition takes at most %1 values"
+msgstr "una transición lleva como máximo %1 valores"
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "this effect costs too much for a transition: only light and medium effects, at most %1 units"
+msgstr "este efecto cuesta demasiado para una transición: solo efectos livianos y medios, como máximo %1 unidades"
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "this effect is not a transition: its descriptor needs \"stage\": \"transition\""
+msgstr "este efecto no es una transición: su descriptor necesita \"stage\": \"transition\""
+
+#: crates/wprs-editor/src/passing/mod.rs
+msgid "the effect of the transition does not work: %1"
+msgstr "el efecto de la transición no funciona: %1"

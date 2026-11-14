@@ -73,6 +73,7 @@ pub mod packing;
 pub mod pages;
 pub mod paint;
 mod params;
+pub mod passing;
 pub mod pictures;
 pub mod placing;
 pub mod pools;
