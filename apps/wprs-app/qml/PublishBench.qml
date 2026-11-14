@@ -15,19 +15,11 @@ QtObject {
         signal finished(string message)
 
         function value(pointer) {
-            return JSON.stringify({
-                    "id": "org.example.check",
-                    "version": "1.2.0",
-                    "license": "MIT",
-                    "photosensitive": false,
-                    "content": {}
-                });
+            return '{"id": "org.example.check", "version": "1.2.0", "license": "MIT", "photosensitive": false, "content": {}}';
         }
 
         function rig(path, query) {
-            return JSON.stringify({
-                    "findings": bench.findings
-                });
+            return '{"findings": ' + JSON.stringify(bench.findings) + '}';
         }
 
         function save() {

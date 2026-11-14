@@ -12,7 +12,9 @@ Timer {
     property int ticks: 0
     readonly property Stall probe: Stall {}
     readonly property var heights: [900, Kirigami.Units.gridUnit * 24]
-    readonly property var cases: ["server", "repo", "server red", "repo otro"]
+    readonly property PublishBench bench: PublishBench {}
+    readonly property string problem: '{"level": "error", "pointer": "/objects", "message": "The image this object draws is missing from the package, so it cannot be published; add it again or remove the object."}'
+    readonly property var cases: ["review", "review error", "server", "repo", "server red", "repo otro"]
 
     function start() {
         host.waiting++;
@@ -25,11 +27,17 @@ Timer {
     function open() {
         if (publish)
             publish.destroy();
+        const parts = cases[step % cases.length].split(" ");
+        bench.findings = parts.length > 1 && parts[0] === "review" ? JSON.parse("[" + Array(6).fill(problem).join(", ") + "]") : [];
         publish = Qt.createComponent("Publish.qml").createObject(host.contentItem, {
             "width": 1000,
-            "height": heights[Math.floor(step / cases.length)]
+            "height": heights[Math.floor(step / cases.length)],
+            "page": parts[0] === "review" ? bench : null
         });
-        publish.openWith(sample.wpak);
+        if (parts[0] === "review")
+            publish.open();
+        else
+            publish.openWith(sample.wpak);
         publish.account = {
             "state": "ready",
             "name": "Check server",
@@ -41,6 +49,8 @@ Timer {
     function act() {
         const parts = cases[step % cases.length].split(" ");
         publish.revealing.flick.contentY = 0;
+        if (parts[0] === "review")
+            return publish.revealing.restart();
         publish.where.pick(parts[0]);
         if (parts.length > 1)
             publish.fault = {
@@ -52,8 +62,8 @@ Timer {
     }
 
     function verify() {
-        const item = publish.fault !== null ? publish.where.trouble.button : publish.where.actions;
-        if (!item.visible)
+        const item = publish.revealing.target();
+        if (item === null || !item.visible)
             return "its main action is not shown";
         return publish.revealing.seen(item) ? "" : "its main action is out of view";
     }
@@ -81,7 +91,6 @@ Timer {
         ticks = 0;
         if (++step === cases.length * heights.length)
             return finish("");
-        if (step % cases.length === 0)
-            open();
+        open();
     }
 }

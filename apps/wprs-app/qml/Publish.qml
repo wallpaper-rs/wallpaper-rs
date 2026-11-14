@@ -88,6 +88,7 @@ Rectangle {
     onPlaceChanged: revealing.restart()
     onFaultChanged: revealing.restart()
     onAtChanged: revealing.restart()
+    onShownChanged: shown && revealing.restart()
     visible: shown
     z: 20
 

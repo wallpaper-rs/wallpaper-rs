@@ -20,6 +20,7 @@ PublishStep {
     readonly property bool ready: blocking === 0 && flashesAnswered && adultAnswered && license !== "" && lineage.confirmed
     readonly property alias lineage: lineage
     readonly property alias go: go
+    readonly property alias going: going
 
     function rank(finding) {
         return ["error", "warning", "note"].indexOf(finding.level);
@@ -63,6 +64,7 @@ PublishStep {
     mode: publish.at === 1 ? "abierto" : "hecho"
     changeable: publish.editing && publish.result === null
     onChange: publish.advance(1)
+    onReportChanged: publish.revealing.restart()
 
     Estado {
         Layout.fillWidth: true
@@ -114,6 +116,8 @@ PublishStep {
     }
 
     RowLayout {
+        id: going
+
         spacing: Look.e3
 
         QQC2.Button {
