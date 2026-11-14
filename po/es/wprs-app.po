@@ -20169,6 +20169,7 @@ msgstr "Tu biblioteca tiene solo «%1», que ya está puesto. Añade más fondos
 
 msgid "See as"
 msgstr "Ver como"
+
 #: apps/wprs-app/qml/ListasEstante.qml
 msgid "On your desktop"
 msgstr "En tu escritorio"
