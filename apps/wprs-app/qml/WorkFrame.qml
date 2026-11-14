@@ -11,6 +11,7 @@ Item {
     required property string backWord
     readonly property alias seat: seat
     readonly property alias backButton: back
+    readonly property bool own: !!(page && page.bar)
     readonly property point noticeAt: Qt.point(Look.lateralIzq + Look.e4, Look.arribaAlto + Look.barraLienzoAlto + Look.e4)
 
     signal leave
@@ -50,8 +51,17 @@ Item {
                 Accessible.name: text
             }
 
+            Loader {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                active: frame.own
+                visible: active
+                sourceComponent: frame.own ? frame.page.bar : null
+            }
+
             Kirigami.ActionToolBar {
                 Layout.fillWidth: true
+                visible: !frame.own
                 alignment: Qt.AlignRight
                 actions: frame.page?.actions ?? []
             }
