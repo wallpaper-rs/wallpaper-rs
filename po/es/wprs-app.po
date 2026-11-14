@@ -18443,9 +18443,6 @@ msgstr "Palabras, sentido, páginas y más"
 msgid "Collections"
 msgstr "Colecciones"
 
-msgid "For everyone"
-msgstr "Para todos"
-
 msgid "A bit daring"
 msgstr "Algo atrevido"
 
