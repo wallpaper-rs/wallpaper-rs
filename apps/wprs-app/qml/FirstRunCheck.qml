@@ -5,6 +5,7 @@ QtObject {
     id: check
 
     required property var page
+    property Item aside: Qt.createQmlObject("import QtQuick; FocusScope {}", page)
 
     function must(ok, text) {
         if (!ok)
@@ -12,7 +13,7 @@ QtObject {
     }
 
     function make(error, filtered) {
-        return Qt.createComponent("LibraryState.qml").createObject(page, {
+        return Qt.createComponent("LibraryState.qml").createObject(aside, {
             "page": {
                 "library": {
                     "total": 0,
@@ -48,7 +49,7 @@ QtObject {
 
     function shelf() {
         const placed = [];
-        const start = Qt.createComponent("FirstStart.qml").createObject(page, {
+        const start = Qt.createComponent("FirstStart.qml").createObject(aside, {
             "page": {},
             "adder": null,
             "run": {
@@ -110,7 +111,7 @@ QtObject {
         const found = [notices.text.includes("Snowfall"), notices.action, typeof notices.callback];
         notices.hide();
         run.destroy();
-        must(found.join() === "true," + App.tr("Undo") + ",function", "the first wallpaper does not announce itself with a way to undo it: " + found.join());
+        must(found.join() === "true," + (App.outputs.length > 1 ? App.tr("Apply to…") : App.tr("Undo")) + ",function", "the first wallpaper does not announce itself with a way to undo it: " + found.join());
     }
 
     function exercise() {
