@@ -305,11 +305,11 @@ msgstr "Traspasar a una clave nueva"
 
 #: apps/wprs-app/qml/AccountKeys.qml
 msgid ""
-"Sign the hand-over with the old key in Keys… of the build dialog, and paste "
-"the signature here."
+"Sign the hand-over with the old key in Manage keys… of the step “Sign it” "
+"when you publish, and paste the signature here."
 msgstr ""
-"Firma el traspaso con la clave vieja en Claves… del diálogo de construir y "
-"pega aquí la firma."
+"Firma el traspaso con la clave vieja en Administrar claves… del paso "
+"«Firmar» al publicar y pega aquí la firma."
 
 #: apps/wprs-app/qml/AccountKeys.qml apps/wprs-app/qml/SceneHandover.qml
 msgid "New public key:"

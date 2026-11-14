@@ -131,7 +131,7 @@ ColumnLayout {
         id: handing
 
         title: App.tr("Hand over to a new key")
-        text: App.tr("Sign the hand-over with the old key in Keys… of the build dialog, and paste the signature here.")
+        text: App.tr("Sign the hand-over with the old key in Manage keys… of the step “Sign it” when you publish, and paste the signature here.")
         quiet: App.tr("Cancel")
         principal: App.tr("OK")
         onAccepted: keys.rotate(keys.pending, successor.text.trim(), signature.text.trim())
