@@ -23,6 +23,9 @@ Flow {
         }, {
             "text": App.tr("Assets"),
             "kind": "assets"
+        }, {
+            "text": App.tr("Web"),
+            "kind": "web"
         }]
 
     signal changed
