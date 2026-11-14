@@ -30,6 +30,7 @@ pub mod lan;
 mod lang;
 mod layout;
 mod legal;
+mod mail;
 mod mailbox;
 mod me;
 mod mod_case;
@@ -101,6 +102,7 @@ pub struct App {
     validations: Semaphore,
     hashing: Semaphore,
     dirty: Notify,
+    mail: mail::Post,
     deciding: Mutex<()>,
     pieces: files::Pieces,
     settings: std::sync::RwLock<settings::Settings>,
@@ -129,6 +131,7 @@ impl App {
             validations: Semaphore::new(2),
             hashing: Semaphore::new(4),
             dirty: Notify::new(),
+            mail: mail::Post::default(),
             deciding: Mutex::new(()),
             pieces: files::Pieces::default(),
             #[cfg(feature = "oidc")]
@@ -144,6 +147,7 @@ impl App {
     pub async fn serve<L: Listener<Addr = SocketAddr>>(self: Arc<App>, listener: L) -> anyhow::Result<()> {
         self.announce().await?;
         jobs::spawn(self.clone());
+        mail::spawn(self.clone());
         let service = self.router().into_make_service_with_connect_info::<SocketAddr>();
         let listener = listener.tap_io(|_| {});
         Ok(axum::serve(listener, service).with_graceful_shutdown(shutdown()).await?)

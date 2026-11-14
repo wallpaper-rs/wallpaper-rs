@@ -57,7 +57,6 @@ pub fn current() -> Lang {
     CURRENT.try_with(|l| *l).unwrap_or(Lang::En)
 }
 
-#[cfg(test)]
 pub fn within<R>(lang: Lang, f: impl FnOnce() -> R) -> R {
     CURRENT.sync_scope(lang, f)
 }

@@ -16,6 +16,7 @@ use wprs_format::{
 use wprs_server::{App, Config};
 
 mod server;
+pub mod smtp;
 
 pub struct Server {
     pub app: Arc<App>,

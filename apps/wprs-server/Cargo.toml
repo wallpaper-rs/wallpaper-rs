@@ -22,6 +22,7 @@ clap.workspace = true
 futures-util.workspace = true
 getrandom.workspace = true
 image.workspace = true
+lettre.workspace = true
 maud.workspace = true
 mdns-sd.workspace = true
 openidconnect = { workspace = true, optional = true }
