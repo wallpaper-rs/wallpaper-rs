@@ -19,11 +19,11 @@ QQC2.ScrollView {
         }
     ]
 
-    readonly property bool puts: !!host.pkg ? host.pkg.kind !== "assets" : true
+    readonly property bool puts: !broken.hurt && (!!host.pkg ? host.pkg.kind !== "assets" : true)
     readonly property Component badge: Component {
         Item {
-            implicitWidth: Math.round(Look.tapa * 3 / 4)
-            implicitHeight: Math.round(implicitWidth * 9 / 16)
+            implicitWidth: panel.host.preview !== "" ? Math.round(Look.tapa * 3 / 4) : 0
+            implicitHeight: Math.round(Look.tapa * 3 / 4 * 9 / 16)
 
             Foto {
                 anchors.fill: parent
@@ -66,6 +66,8 @@ QQC2.ScrollView {
     function put() {
         if (puts)
             page.tools.put(page.opened);
+        else if (broken.hurt && broken.from !== "" && !!host.details.installed)
+            broken.reinstall();
     }
 
     contentWidth: availableWidth

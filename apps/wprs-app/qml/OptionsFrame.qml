@@ -64,7 +64,7 @@ Item {
 
                 Loader {
                     active: !!(frame.page && frame.page.badge)
-                    visible: active
+                    visible: active && !!item && item.implicitWidth > 0
                     sourceComponent: frame.page && frame.page.badge ? frame.page.badge : null
                 }
 
