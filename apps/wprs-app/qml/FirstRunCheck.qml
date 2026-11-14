@@ -49,7 +49,7 @@ QtObject {
         run.begin();
         must(run.phase === "", "a check began the first wallpaper by itself: " + run.phase);
         run.allowed = true;
-        run.saved.done = true;
+        run.tried = true;
         run.begin();
         must(run.phase === "", "the first wallpaper is applied twice");
         run.destroy();

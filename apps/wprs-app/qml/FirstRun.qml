@@ -13,12 +13,8 @@ Item {
     property string phase
     property bool allowed: !App.checking
     readonly property bool nothing: Object.values(App.state.outputs ?? {}).every(o => !o.item)
-    readonly property Core.Settings saved: Core.Settings {
-        property bool done: false
-
-        location: Core.StandardPaths.writableLocation(Core.StandardPaths.ConfigLocation) + "/wallpaper-rs/first-run.conf"
-        category: "first"
-    }
+    readonly property string marker: Core.StandardPaths.writableLocation(Core.StandardPaths.ConfigLocation).toString() + "/wallpaper-rs/first-run"
+    property bool tried: false
 
     function load() {
         if (!bare)
@@ -49,9 +45,10 @@ Item {
     }
 
     function begin() {
-        if (!bare || saved.done || phase !== "" || shelf.length === 0 || !nothing || !allowed)
+        if (!bare || tried || App.backend.readText(marker) !== "" || phase !== "" || shelf.length === 0 || !nothing || !allowed)
             return;
-        saved.done = true;
+        App.backend.writeText(marker, "1");
+        tried = true;
         place(shelf[0], true);
     }
 
