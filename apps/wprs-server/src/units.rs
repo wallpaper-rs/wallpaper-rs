@@ -24,7 +24,11 @@ pub fn date(ms: i64) -> String {
 
 pub fn gigabytes(bytes: u64) -> String {
     let tenths = (bytes * 10 + GB / 2) / GB;
-    if tenths.is_multiple_of(10) { (tenths / 10).to_string() } else { format!("{}.{}", tenths / 10, tenths % 10) }
+    if tenths.is_multiple_of(10) {
+        (tenths / 10).to_string()
+    } else {
+        format!("{}.{}", tenths / 10, tenths % 10)
+    }
 }
 
 pub fn parse_gigabytes(text: &str) -> Option<i64> {
