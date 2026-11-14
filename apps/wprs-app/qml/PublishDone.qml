@@ -105,9 +105,11 @@ ColumnLayout {
         spacing: Look.e3
 
         QQC2.Button {
+            id: put
+
             visible: done.publish.editing && done.kind !== "server"
             text: App.tr("Set as wallpaper")
-            onClicked: done.publish.page.editor.apply("")
+            onClicked: done.publish.page.use ? done.publish.page.use.place(put) : done.publish.page.editor.apply("")
         }
 
         QQC2.Button {

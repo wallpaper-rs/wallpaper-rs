@@ -1795,7 +1795,8 @@ after a result.
 
 «Done» says what to give the other person: the file with *Show in the folder*, the link of the server
 with *Copy the link* while it is reviewed, or the address of the repository with *Copy the address* and
-the day its index expires; *Set as wallpaper* and *Back to the editor* close it. *Upload package…* in
+the day its index expires; *Set as wallpaper* and *Back to the editor* close it. In the scene editor
+*Set as wallpaper* is the one of the top bar: it asks for the screen and offers *Undo*. *Upload package…* in
 *Repositories* opens the same page on step 3 for a finished `.wpak`.
 
 *Manage keys…* manages author keys. A pair is two files, `NAME.key` (secret, mode 0600) and
