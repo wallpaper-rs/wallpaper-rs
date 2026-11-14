@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
+import QtQuick.Controls.impl
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
@@ -12,6 +13,9 @@ QQC2.ItemDelegate {
 
     width: ListView.view.width
     highlighted: modelData.pointer === row.owner.page.editor.selected || row.owner.page.picked.includes(modelData.id)
+    readonly property bool lit: highlighted || visualFocus
+    readonly property color ink: lit ? Look.noche : Look.escarcha
+
     leftPadding: Kirigami.Units.largeSpacing * (1 + modelData.depth * 2)
     onClicked: row.owner.pick(modelData, false)
 
@@ -35,11 +39,17 @@ QQC2.ItemDelegate {
         color: Kirigami.Theme.highlightColor
     }
 
+    background: Rectangle {
+        color: row.lit ? Look.escarcha : row.hovered ? Look.nocheLinea : "transparent"
+    }
+
     contentItem: RowLayout {
-        Kirigami.Icon {
-            source: "handle-sort"
+        IconImage {
+            name: "handle-sort"
+            sourceSize: Qt.size(Kirigami.Units.iconSizes.small, Kirigami.Units.iconSizes.small)
             Layout.preferredWidth: Kirigami.Units.iconSizes.small
             Layout.preferredHeight: Kirigami.Units.iconSizes.small
+            color: row.ink
             opacity: grip.active ? 1 : 0.5
             Accessible.name: App.tr("Drag to move the layer")
 
@@ -63,10 +73,12 @@ QQC2.ItemDelegate {
             }
         }
 
-        Kirigami.Icon {
-            source: row.owner.icon(row.modelData.type)
+        IconImage {
+            name: row.owner.icon(row.modelData.type)
+            sourceSize: Qt.size(Kirigami.Units.iconSizes.small, Kirigami.Units.iconSizes.small)
             Layout.preferredWidth: Kirigami.Units.iconSizes.small
             Layout.preferredHeight: Kirigami.Units.iconSizes.small
+            color: row.ink
         }
 
         QQC2.Label {
@@ -74,6 +86,8 @@ QQC2.ItemDelegate {
             text: row.modelData.label ?? row.modelData.id
             textFormat: Text.PlainText
             elide: Text.ElideRight
+            color: row.ink
+            font.weight: row.lit ? Font.DemiBold : Font.Normal
             opacity: row.modelData.hidden ? 0.5 : 1
         }
 
@@ -84,6 +98,7 @@ QQC2.ItemDelegate {
                 required property var modelData
 
                 icon.name: modelData[3]
+                icon.color: row.ink
                 text: modelData[4]
                 display: QQC2.AbstractButton.IconOnly
                 checkable: true

@@ -10,7 +10,7 @@ RowLayout {
     required property var page
     required property var problem
     readonly property var owner: (page.view.layers ?? []).filter(item => problem.pointer === item.pointer || problem.pointer.startsWith(item.pointer + "/")).sort((a, b) => b.pointer.length - a.pointer.length)[0] ?? null
-    readonly property string said: problem.message.replace(/^\/\S*:\s*/, "")
+    readonly property string said: problem.message.replace(/^\/\S*:?\s+/, "")
     readonly property string fixing: Object.keys(problem.fix ?? {})[0] ?? ""
 
     spacing: Look.e2
