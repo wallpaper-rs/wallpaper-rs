@@ -88,7 +88,7 @@ private fun Unlinked() {
     Block(stringResource(R.string.connect_block), stringResource(R.string.connect_explain))
     ThinSeam()
     Block(stringResource(R.string.sync_block), stringResource(R.string.connect_first)) {
-        QuietAction({}, enabled = false) { Glyph(Ph.ArrowsClockwise, null); Text(stringResource(R.string.sync_now)) }
+        QuietAction({}, Modifier.fillMaxWidth(), enabled = false) { Glyph(Ph.ArrowsClockwise, null); Text(stringResource(R.string.sync_now)) }
     }
 }
 

@@ -55,6 +55,7 @@ fun App(main: Main) = Theme {
     val (shown, list, away) = Triple(item, playlist, aside)
     val veil = when {
         shown == null && away == Aside.Account -> Veil.Strip
+        shown == null && (away == Aside.More || away == Aside.Print) -> Veil.Band
         shown != null || away != null -> Veil.Panel
         else -> Veil.Shelf
     }

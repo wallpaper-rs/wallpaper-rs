@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 
 val DARK_BARS = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
 
-enum class Veil { Shelf, Title, Strip, Panel }
+enum class Veil { Shelf, Title, Strip, Band, Panel }
 
 private val TOP_BAND = 104.dp
 private val TITLE_BLOCK = 330.dp
@@ -43,6 +43,7 @@ private val SHELF_HALF = 500.dp
 private val SHELF_CLEAR = 566.dp
 private val STRIP = 260.dp
 private val STRIP_TOP = 96.dp
+private val BAND = 150.dp
 private const val FADE_STEPS = 11
 
 @Composable
@@ -79,6 +80,7 @@ private fun DrawScope.veils(veil: Veil, t: Tones) = when (veil) {
     Veil.Shelf -> drawRect(Brush.verticalGradient(listOf(t.veiled(0.9f), t.veiled(0.95f))))
     Veil.Title -> title(t)
     Veil.Strip -> strip(t)
+    Veil.Band -> band(t)
     Veil.Panel -> drawRect(t.night)
 }
 
@@ -124,5 +126,14 @@ private fun DrawScope.strip(t: Tones) {
     )
     across(t, 0f, high, v, 0f to 0.7f, 0.55f to 0.6f, 0.74f to 0f)
     down(t, 0.dp to v * 0.5f, STRIP_TOP to 0f)
+    drawRect(t.night, Offset(0f, high), Size(size.width, size.height - high))
+}
+
+private fun DrawScope.band(t: Tones) {
+    val high = BAND.toPx()
+    drawRect(
+        Brush.verticalGradient(0f to t.veiled(0.35f), 0.55f to t.veiled(0.7f), 1f to t.night, startY = 0f, endY = high),
+        size = Size(size.width, high),
+    )
     drawRect(t.night, Offset(0f, high), Size(size.width, size.height - high))
 }
