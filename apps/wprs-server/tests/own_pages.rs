@@ -154,3 +154,14 @@ async fn a_new_token_is_shown_once_with_its_name_in_the_result_screen() {
     }
     assert!(wprs_server::missed_texts().is_empty());
 }
+
+#[tokio::test]
+async fn a_good_row_never_shows_a_stored_english_sentence_in_spanish() {
+    let server = start(&[]).await;
+    let admin = server.admin().await;
+    let pkg = common::package(server.dir.path(), "org.example.dawn", "1.0.0");
+    common::upload(&server, &admin, &pkg).await;
+    let (_, page) = get(&server, "/account", &admin, ES).await;
+    assert!(page.contains("org.example.dawn") || page.contains("1.0.0"), "{page}");
+    assert!(!page.contains("Published automatically"));
+}
