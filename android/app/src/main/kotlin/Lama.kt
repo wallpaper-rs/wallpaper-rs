@@ -1,7 +1,6 @@
 package io.github.wallpaper_rs
 
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,21 +15,17 @@ import org.json.JSONObject
 
 @Composable
 fun LamaNote(main: Main, fill: String?, changes: Int) {
-    Note(stringResource(R.string.fill_note))
     if (fill != "lama") return
     var consent by remember { mutableStateOf<JSONObject?>(null) }
     val lama by loaded(JSONObject(), changes, Depth.working.value) { depth("lama") as JSONObject }
     val busy = Depth.working.value != null
     val off = stringResource(R.string.downloads_off)
     if (lama.optBoolean("installed")) {
-        ListItem(
-            headlineContent = { Text(stringResource(R.string.lama_model, lama.optString("size"))) },
-            trailingContent = {
-                WordAction({ main.act { withContext(Dispatchers.IO) { depth("forget_lama") } } }, enabled = !busy) {
-                    Text(stringResource(R.string.delete_model))
-                }
-            },
-        )
+        Setting(stringResource(R.string.lama_model, lama.optString("size")), trailing = {
+            WordAction({ main.act { withContext(Dispatchers.IO) { depth("forget_lama") } } }, enabled = !busy) {
+                Text(stringResource(R.string.delete_model))
+            }
+        })
     } else if (lama.has("files")) {
         Note(stringResource(R.string.lama_missing), MaterialTheme.colorScheme.error)
         WordAction({ if (lama.optBoolean("allowed")) consent = lama else main.toast(off) }, enabled = !busy) {

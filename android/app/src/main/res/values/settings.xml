@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="more_options">More options</string>
+    <string name="less">Less</string>
+    <string name="more">More</string>
+    <string name="below_short">Below %d %%</string>
+    <string name="on_battery">On battery</string>
+    <string name="block_wallpapers">Wallpapers</string>
+    <string name="block_screen">Screen</string>
+    <string name="block_phone">Phone</string>
+    <string name="search_settings">Search the settings</string>
+    <string name="no_setting_found">No setting is called that</string>
+    <string name="no_setting_found_text">Nothing in the settings has «%1$s» in its name.</string>
+    <string name="quality">Quality</string>
+    <string name="quality_automatic">Automatic</string>
+    <string name="quality_automatic_sub">Lower on battery, when hot or in heavy scenes</string>
+    <string name="quality_saving">Save battery</string>
+    <string name="quality_saving_sub">Always the lowest: the one that uses the least</string>
+    <string name="quality_top">Highest</string>
+    <string name="quality_top_sub">Always the highest</string>
+    <string name="level_min_q2">Automatic, but never below high</string>
+    <string name="level_min_q1">Automatic, but never below reduced</string>
+    <string name="level_q3">Always the highest</string>
+    <string name="level_q2">Always high</string>
+    <string name="level_q1">Always reduced</string>
+    <string name="level_q0">Always the lowest</string>
+    <string name="level_q0_sub">The one that uses the least battery</string>
+    <string name="motion_fluid">Fluid</string>
+    <string name="motion_medium">Medium</string>
+    <string name="motion_saving">Saving</string>
+    <string name="motion_least">Minimum</string>
+    <string name="allow_flashing_sub">More than three times per second</string>
+    <string name="auto_update_on">On: installed wallpapers update without asking</string>
+    <string name="auto_update_off">Off: you see what is new and update it yourself</string>
+    <string name="auto_refresh_sub">Once a day the phone asks your repositories what is new</string>
+    <string name="mobile_data_sub">Off: syncing and checks wait for Wi-Fi</string>
+    <string name="allow_download_sub">It is downloaded from the internet the first time a picture needs it</string>
+    <string name="depth_model_name">Depth model</string>
+    <string name="lama_model_name">LaMa model</string>
+    <string name="shortcut_missed_name">Shortcut that did not open</string>
+    <string name="volume">Volume of videos, scenes and pages</string>
+    <string name="update_all">Update all</string>
+    <string name="all_updated">Everything is up to date</string>
+    <string name="updates_offline">No connection: the list is the last one seen; it is checked again when the phone is online</string>
+    <plurals name="updated_count">
+        <item quantity="one">%d wallpaper updated</item>
+        <item quantity="other">%d wallpapers updated</item>
+    </plurals>
+</resources>

@@ -1,24 +1,18 @@
 package io.github.wallpaper_rs
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,59 +21,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-val FIT =
-    listOf("fill" to R.string.fill, "fit" to R.string.whole, "stretch" to R.string.stretch, "center" to R.string.center)
-private val COLORS = listOf("chosen" to R.string.when_chosen, "always" to R.string.always, "never" to R.string.never)
-private val BACKENDS = listOf("auto" to R.string.automatic, "vulkan" to R.string.vulkan, "gl" to R.string.gl)
-private val QUALITIES = listOf(
-    "auto" to R.string.quality_auto, "min-q2" to R.string.quality_min_q2, "min-q1" to R.string.quality_min_q1,
-    "q3" to R.string.quality_q3, "q2" to R.string.quality_q2, "q1" to R.string.quality_q1, "q0" to R.string.quality_q0,
-)
-private val PACES = listOf("detail" to R.string.pace_detail, "smooth" to R.string.pace_smooth)
-private val HDRS = listOf("auto" to R.string.hdr_auto, "on" to R.string.hdr_on, "off" to R.string.hdr_off)
-private val FILLS = listOf("simple" to R.string.fill_simple, "lama" to R.string.fill_lama, "off" to R.string.fill_off)
-private val CONVERTS = listOf("auto" to R.string.convert_auto, "keep" to R.string.convert_keep, "off" to R.string.never)
-private fun percents(steps: List<String>) =
-    listOf("0" to R.string.never) + steps.map { it to R.string.below_percent }
-private val PAUSES = listOf("never" to R.string.never, "always" to R.string.pause_always) +
-    listOf("10", "15", "20", "30").map { "below:$it" to R.string.below_percent }
-
-private val CHOICES = listOf(
-    Triple(R.string.fit, "fit", FIT),
-    Triple(R.string.battery_fps, "playback.max_fps", listOf("60", "30", "15", "10").map { it to R.string.fps }),
-    Triple(R.string.charger_fps, "charger_fps", listOf("60", "30").map { it to R.string.fps }),
-    Triple(R.string.pause_below, "pause.on_battery", PAUSES),
-    Triple(R.string.lowest_below, "playback.lowest_below_percent", percents(listOf("20", "30", "50"))),
-    Triple(R.string.system_colors, "system_colors", COLORS),
-    Triple(R.string.backend, "backend", BACKENDS),
-    Triple(R.string.scene_quality, "playback.quality", QUALITIES),
-    Triple(R.string.auto_pace, "playback.auto_pace", PACES),
-    Triple(R.string.hdr_output, "playback.hdr", HDRS),
-    Triple(R.string.parallax_fill, "parallax.fill", FILLS),
-    Triple(R.string.convert_videos, Convert.SETTING, CONVERTS),
-)
-private val TOGGLES = listOf(
-    Triple(R.string.fade, "transition.kind", "own" to "none"),
-    Triple(R.string.video_sound, "playback.muted", "false" to "true"),
-    Triple(R.string.duck, "playback.duck", "true" to "false"),
-    Triple(R.string.allow_download, "models.allow_download", "true" to "false"),
-    Triple(R.string.allow_flashing, "playback.allow_flashing", "true" to "false"),
-    Triple(R.string.scene_capture, "playback.scene_capture", "true" to "false"),
-    Triple(R.string.hide_mature, "library.hide_mature", "true" to "false"),
-    Triple(R.string.vote_counts, "repos.vote_counts", "true" to "false"),
-    Triple(R.string.auto_refresh, Updates.SETTING, "true" to "false"),
-    Triple(R.string.auto_update, Updates.AUTO, "true" to "false"),
-    Triple(R.string.mobile_data, Sync.NETWORK, "any" to "unmetered"),
-    Triple(R.string.show_mature, Unveil.KEY, "true" to "false"),
-)
-private val KEYS = CHOICES.map { it.second } + TOGGLES.map { it.second } + VOLUME
-private val NOTICES = listOf("onnxruntime", "onnxruntime-third-party-notices", "depth-anything-v2", "lama", "onest", "red-hat-display", "phosphor")
-
 @Composable
 fun Settings(main: Main, account: () -> Unit = {}) {
     var changes by remember { mutableIntStateOf(0) }
-    var notice by remember { mutableStateOf<String?>(null) }
-    val values by loaded(emptyMap<String, String>(), changes) { KEYS.associateWith { Native.setting(it, null) } }
+    var query by rememberSaveable { mutableStateOf("") }
+    var unfolded by rememberSaveable { mutableIntStateOf(0) }
+    val values by loaded(emptyMap<String, String>(), changes) { SETTING_KEYS.associateWith { Native.setting(it, null) } }
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val report by produceState(JSONObject(), lifecycle) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -94,92 +41,42 @@ fun Settings(main: Main, account: () -> Unit = {}) {
             withContext(Dispatchers.IO) { work() }
             changes++
         }
+        Unit
     }
-    val set = { key: String, value: String ->
-        change {
-            Native.setting(key, value)
-            Unveil.load()
-            if (key == Updates.SETTING || key == Updates.AUTO) Updates.schedule(main)
-            if (key == Updates.AUTO && value == "true") Native.account("{\"op\": \"refresh_repos\", \"force\": false}")
-            if (key == Sync.NETWORK) Sync.network(main)
-        }
-    }
-    LazyColumn {
+    val set = { key: String, value: String -> change { stored(main, key, value) } }
+    val knobs = Knobs(main, values, report, changes, set, change)
+    val labels = SETTING_LINES.map { stringResource(it.label) }
+    val accountLabel = stringResource(R.string.account)
+    val searching = query.isNotBlank()
+    val found = SETTING_LINES.filterIndexed { i, _ -> finds(query, labels[i]) }
+    val more = stringResource(R.string.more_options)
+    LazyColumn(Modifier.testTag("settings")) {
         item { Header(stringResource(R.string.settings)) }
-        item { Setting(stringResource(R.string.account), onClick = account) }
-        items(CHOICES) { (label, key, options) ->
-            val texts = options.map { (value, text) -> value to stringResource(text, value.substringAfter(":").toIntOrNull() ?: 0) }
-            Choices(stringResource(label), texts, values[key].orEmpty()) { set(key, it) }
-            if (key == "playback.quality") CostWarning(report)
-            if (key == "playback.auto_pace") PaceNote()
-            if (key == "parallax.fill") LamaNote(main, values[key], changes)
-        }
-        items(TOGGLES) { (label, key, states) ->
-            val (on, off) = states
-            Toggle(stringResource(label), values[key] == on) { set(key, if (it) on else off) }
-            if (key == "playback.muted") Loudness(values[VOLUME], values[key] == on) { set(VOLUME, it) }
-        }
-        item {
-            val model by loaded(JSONObject(), changes, Depth.working.value) { depth("model") as JSONObject }
-            if (model.optBoolean("installed")) Setting(stringResource(R.string.depth_model, model.getString("size")), trailing = {
-                WordAction({ change { depth("forget") } }, enabled = Depth.working.value == null) { Text(stringResource(R.string.delete_model)) }
-            })
-        }
-        item { Removal(main) }
-        item { Grade(main) }
-        item { ShortcutMissed() }
-        item {
-            Header(stringResource(R.string.diagnostics))
-            val answers = stringResource(R.string.no) to stringResource(R.string.yes)
-            val yes = { flag: String -> if (report.optBoolean(flag)) answers.second else answers.first }
-            listOfNotNull(
-                stringResource(R.string.gpu, report.optString("gpu").ifEmpty { stringResource(R.string.not_started) }),
-                stringResource(R.string.frames, report.optLong("frames"), report.optInt("fps")),
-                stringResource(R.string.cap, report.optInt("cap")),
-                stringResource(R.string.power, yes("charging"), yes("saver"), report.optInt("thermal")),
-                stringResource(levelWords(report.optInt("pace")), report.optString("tier"), report.optString("quality"), report.optInt("pace_fps"))
-                    .takeIf { report.optString("tier").isNotEmpty() },
-                stringResource(if (report.optBoolean("measured")) R.string.tier_measured else R.string.tier_detected)
-                    .takeIf { report.optString("tier").isNotEmpty() },
-                stringResource(R.string.tier_timed).takeIf { report.optBoolean("timed") && report.optString("tier").isNotEmpty() },
-                levelReason(report.optString("reason"))?.let { stringResource(R.string.level_reason, stringResource(it)) },
-                stringResource(R.string.level_chosen).takeIf { report.optString("reason") == "user" },
-                frameNote(report),
-                costNote(report),
-                hdrState(report.optJSONObject("hdr")),
-                stringResource(R.string.particles_cpu).takeIf { report.optString("particles") == "cpu" },
-                stringResource(R.string.scripts_stopped).takeIf { report.optString("scripts") == "off" },
-                stringResource(R.string.script_stopped).takeIf { report.optString("scripts") == "stopped" },
-                stringResource(if (report.optBoolean("stamps")) R.string.timed_gpu else R.string.timed_wait).takeIf { report.has("stamps") },
-            ).plus(
-                report.optJSONArray("left_out").let { left ->
-                    (0 until (left?.length() ?: 0)).map {
-                        val effect = left!!.getJSONObject(it)
-                        stringResource(R.string.left_out, effect.optString("id"), leftOutReason(effect.optString("reason")))
-                    }
-                },
-            ).forEach { Text(it, Modifier.padding(16.dp, 4.dp), style = MaterialTheme.typography.bodyMedium) }
-            if ((report.optJSONArray("left_out")?.length() ?: 0) > 0) {
-                WordAction({ change { Native.retry() } }, Modifier.padding(8.dp, 0.dp)) {
-                    Text(stringResource(R.string.retry_effects))
-                }
+        item { Finder(query, stringResource(R.string.search_settings)) { query = it } }
+        if (finds(query, accountLabel)) item { Setting(accountLabel, Modifier.testTag("account"), onClick = account) }
+        Block.entries.forEach { block ->
+            val bit = 1 shl block.ordinal
+            val open = unfolded and bit != 0
+            val mine = SETTING_LINES.filter { it.block == block }
+            val shown = if (searching) mine.filter { it in found } else mine.filter { !it.more || open }
+            if (shown.isEmpty()) return@forEach
+            item(key = block.name) { Group(stringResource(block.label), Modifier.testTag("block_${block.name}")) }
+            items(shown, key = { it.label }) { it.draw(knobs) }
+            if (!searching && mine.any { it.more }) {
+                item(key = "more_${block.name}") { Fold(more, open, Modifier.testTag("more_${block.name}")) { unfolded = unfolded xor bit } }
             }
         }
-        item { PerfControls() }
-        item { Header(stringResource(R.string.licenses)) }
-        items(NOTICES) { ListItem(headlineContent = { Text(it) }, modifier = Modifier.clickable { notice = it }) }
+        if (searching && found.isEmpty() && !finds(query, accountLabel)) {
+            item { Blank(stringResource(R.string.no_setting_found), stringResource(R.string.no_setting_found_text, query.trim()), Modifier.testTag("nothing_found")) }
+        }
     }
-    notice?.let { Notice(it) { notice = null } }
 }
 
-@Composable
-private fun Notice(name: String, close: () -> Unit) {
-    val assets = LocalContext.current.assets
-    val lines by loaded(emptyList<String>(), name) { assets.open("$name.txt").bufferedReader().use { it.readLines() } }
-    AlertDialog(
-        onDismissRequest = close,
-        confirmButton = { WordAction(close) { Text(stringResource(R.string.close)) } },
-        title = { Text(name) },
-        text = { LazyColumn { items(lines) { Text(it, style = MaterialTheme.typography.bodySmall) } } },
-    )
+private fun stored(main: Main, key: String, value: String) {
+    Native.setting(key, value)
+    if (key == Unveil.HIDE) Native.setting(Unveil.KEY, if (value == "true") "false" else "true")
+    Unveil.load()
+    if (key == Updates.SETTING || key == Updates.AUTO) Updates.schedule(main)
+    if (key == Updates.AUTO && value == "true") Native.account("{\"op\": \"refresh_repos\", \"force\": false}")
+    if (key == Sync.NETWORK) Sync.network(main)
 }

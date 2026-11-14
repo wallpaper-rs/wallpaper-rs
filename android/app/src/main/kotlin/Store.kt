@@ -64,12 +64,13 @@ class Item(json: JSONObject) {
 
 object Unveil {
     const val KEY = "library.show_mature"
+    const val HIDE = "library.hide_mature"
 
     @Volatile
     var mature = false
 
     fun load() {
-        mature = runCatching { Native.setting(KEY, null) == "true" }.getOrDefault(false)
+        mature = runCatching { Native.setting(HIDE, null) != "true" }.getOrDefault(false)
     }
 }
 

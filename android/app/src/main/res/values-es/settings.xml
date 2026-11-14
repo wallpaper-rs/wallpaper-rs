@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="more_options">Más opciones</string>
+    <string name="less">Menos</string>
+    <string name="more">Más</string>
+    <string name="below_short">Menos de %d %%</string>
+    <string name="on_battery">Con batería</string>
+    <string name="block_wallpapers">Fondos</string>
+    <string name="block_screen">Pantalla</string>
+    <string name="block_phone">Teléfono</string>
+    <string name="search_settings">Buscar en Ajustes</string>
+    <string name="no_setting_found">Ningún ajuste se llama así</string>
+    <string name="no_setting_found_text">Ningún ajuste lleva «%1$s» en su nombre.</string>
+    <string name="quality">Calidad</string>
+    <string name="quality_automatic">Automática</string>
+    <string name="quality_automatic_sub">Baja con batería, con calor o en escenas pesadas</string>
+    <string name="quality_saving">Ahorrar batería</string>
+    <string name="quality_saving_sub">Siempre la más baja: la que menos gasta</string>
+    <string name="quality_top">Máxima</string>
+    <string name="quality_top_sub">Siempre la más alta</string>
+    <string name="level_min_q2">Automática, pero nunca por debajo de alta</string>
+    <string name="level_min_q1">Automática, pero nunca por debajo de reducida</string>
+    <string name="level_q3">Siempre la más alta</string>
+    <string name="level_q2">Siempre alta</string>
+    <string name="level_q1">Siempre reducida</string>
+    <string name="level_q0">Siempre la más baja</string>
+    <string name="level_q0_sub">La que menos batería gasta</string>
+    <string name="motion_fluid">Fluida</string>
+    <string name="motion_medium">Media</string>
+    <string name="motion_saving">Ahorro</string>
+    <string name="motion_least">Mínima</string>
+    <string name="allow_flashing_sub">Más de tres veces por segundo</string>
+    <string name="auto_update_on">Encendido: los fondos instalados se actualizan sin preguntar</string>
+    <string name="auto_update_off">Apagado: ves qué hay nuevo y lo actualizas tú</string>
+    <string name="auto_refresh_sub">Una vez al día el teléfono pregunta a tus repositorios qué hay nuevo</string>
+    <string name="mobile_data_sub">Apagado: la sincronización y las comprobaciones esperan al wifi</string>
+    <string name="allow_download_sub">Se descarga de internet la primera vez que una imagen lo necesita</string>
+    <string name="depth_model_name">Modelo de profundidad</string>
+    <string name="lama_model_name">Modelo LaMa</string>
+    <string name="shortcut_missed_name">Atajo que no se abrió</string>
+    <string name="volume">Volumen de vídeos, escenas y páginas</string>
+    <string name="update_all">Actualizar todo</string>
+    <string name="all_updated">Todo está al día</string>
+    <string name="updates_offline">Sin conexión: la lista es la última que se vio; se vuelve a buscar cuando haya conexión</string>
+    <plurals name="updated_count">
+        <item quantity="one">%d fondo actualizado</item>
+        <item quantity="other">%d fondos actualizados</item>
+    </plurals>
+</resources>

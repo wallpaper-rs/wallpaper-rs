@@ -82,7 +82,6 @@
     <string name="automatic">Automático</string>
     <string name="fade">Fundido entre fondos</string>
     <string name="video_sound">Reproducir el sonido de los vídeos y las escenas</string>
-    <string name="sound_volume">Volumen de vídeos, escenas y páginas: %1$d %%</string>
     <string name="parallax">Moverse con el teléfono</string>
     <string name="make_map">Calcular un mapa de profundidad</string>
     <string name="remake_map">Volver a calcular el mapa de profundidad</string>
@@ -92,7 +91,7 @@
     <string name="model_terms">%1$s (%2$s) se descarga de %3$s con la licencia %4$s (%5$s). Después, los mapas de profundidad se calculan en el teléfono y tus fotos no salen de él.</string>
     <string name="downloads_off">La descarga del modelo de profundidad está desactivada en Ajustes</string>
     <string name="allow_download">Permitir descargar el modelo de profundidad</string>
-    <string name="allow_flashing">Permitir fondos que destellan</string>
+    <string name="allow_flashing">Permitir fondos con destellos</string>
     <string name="scene_capture">Dejar que las escenas reaccionen al sonido que suena</string>
     <string name="depth_model">Modelo de profundidad (%s)</string>
     <string name="delete_model">Borrar</string>
@@ -143,7 +142,6 @@
         <item quantity="other">No se pueden abrir %d archivos</item>
     </plurals>
     <string name="hide_mature">Ocultar el contenido para adultos</string>
-    <string name="show_mature">Mostrar el contenido para adultos sin difuminar</string>
     <string name="home_screen">La pantalla de inicio</string>
     <string name="lock_screen">La pantalla de bloqueo</string>
     <string name="both_screens">Las dos pantallas</string>
@@ -169,14 +167,6 @@
     <string name="depth_device_auto">El dispositivo más rápido</string>
     <string name="depth_device_cpu">El procesador</string>
     <string name="picture_changed">Esta imagen cambió después de editarla, así que puede que la edición ya no le encaje.</string>
-    <string name="scene_quality">Calidad de las escenas</string>
-    <string name="quality_auto">Automática: baja con batería, con calor o en escenas pesadas</string>
-    <string name="quality_min_q2">Automática, pero nunca por debajo de alta (2 de 3)</string>
-    <string name="quality_min_q1">Automática, pero nunca por debajo de reducida (1 de 3)</string>
-    <string name="quality_q3">Siempre la más alta (3 de 3)</string>
-    <string name="quality_q2">Siempre alta (2 de 3)</string>
-    <string name="quality_q1">Siempre reducida (1 de 3)</string>
-    <string name="quality_q0">Siempre la más baja (0 de 3), la que menos batería gasta</string>
     <string name="perf_record">Medir el rendimiento del fondo que se muestra</string>
     <string name="perf_hint">Actívalo, mira el fondo durante 30 segundos, vuelve y copia el informe.</string>
     <string name="perf_copy">Copiar informe de rendimiento</string>
