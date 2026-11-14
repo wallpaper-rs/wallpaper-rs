@@ -4,6 +4,7 @@ mod catalog;
 mod chrome;
 mod keeping;
 mod legal;
+mod mail;
 mod own;
 mod people;
 mod policies;
@@ -14,7 +15,7 @@ mod words;
 
 type Texts = &'static [(&'static str, &'static str)];
 
-pub const TEXTS: [Texts; 12] = [
+pub const TEXTS: [Texts; 13] = [
     chrome::TEXTS,
     catalog::TEXTS,
     account::TEXTS,
@@ -27,6 +28,7 @@ pub const TEXTS: [Texts; 12] = [
     setup_done::TEXTS,
     keeping::TEXTS,
     people::TEXTS,
+    mail::TEXTS,
 ];
 
 pub const WORDS: Texts = words::WORDS;

@@ -53,7 +53,7 @@ async fn the_health_page_lists_its_rows_in_both_languages() {
         "Casos pendientes",
         "Invitaciones vivas",
         "Cómo programarla",
-        "Cómo arreglarlo",
+        "Configurar el correo",
         "Nunca",
     ] {
         assert!(spanish.contains(word), "{word}");

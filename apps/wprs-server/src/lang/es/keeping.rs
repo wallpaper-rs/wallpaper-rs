@@ -58,24 +58,8 @@ pub const TEXTS: super::Texts = &[
     ("{}; {}", "{}; {}"),
     ("How to fix it", "Cómo arreglarlo"),
     (
-        "The password of the mail is in the settings file of the server (.env, in its folder), next to the mail address.",
-        "La contraseña del correo está en el archivo de ajustes del servidor (.env, en su carpeta), junto a la dirección del correo.",
-    ),
-    (
-        "Write the new password your mail provider gave you and restart the server.",
-        "Escribe la contraseña nueva que te dio tu proveedor de correo y reinicia el servidor.",
-    ),
-    (
         "The next notice goes out by itself; this row turns green when it arrives.",
         "El próximo aviso sale solo; esta fila se pone verde cuando llegue.",
-    ),
-    (
-        "Not set up: the server sends no notices by mail yet",
-        "Sin configurar: el servidor todavía no envía avisos por correo",
-    ),
-    (
-        "The server does not send mail yet. When it does, the account and password of the mail provider go in the settings file of the server (.env, in its folder), and this row says whether the last notice arrived.",
-        "El servidor todavía no envía correo. Cuando lo haga, la cuenta y la contraseña del proveedor de correo irán en el archivo de ajustes del servidor (.env, en su carpeta), y esta fila dirá si llegó el último aviso.",
     ),
     ("Pending cases", "Casos pendientes"),
     ("None", "Ninguno"),

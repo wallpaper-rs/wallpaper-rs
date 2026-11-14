@@ -1,5 +1,6 @@
 use super::facts::Facts;
-use super::mail::Mail;
+use super::mail::{Found, Mail};
+use super::mail_row::{self, Asked};
 use super::rows::{self, Line};
 use crate::icons::icon;
 use crate::lang::{count, since, t, tf, tm};
@@ -13,16 +14,18 @@ pub struct Extras {
     pub featured: i64,
     pub failed: Option<String>,
     pub advanced: bool,
+    pub asked: Asked,
+    pub tested: Option<String>,
 }
 
-pub fn lines(facts: &Facts, mail: &Mail, failed: bool) -> Vec<Line> {
+pub fn lines(facts: &Facts, mail: &Found, asked: &Asked, failed: bool) -> Vec<Line> {
     let mut out = Vec::new();
     out.extend(facts.cert.as_ref().map(rows::certificate));
     out.extend(facts.sign.as_ref().map(|s| rows::signature(s, failed)));
     out.push(rows::backup(facts.backup));
     out.extend(facts.disk.as_ref().map(rows::disk));
-    out.push(rows::mail(mail));
-    out.push(rows::cases(facts.cases, facts.reports));
+    out.push(mail_row::mail(mail, asked));
+    out.push(rows::cases(facts.cases, facts.reports, facts.last_report));
     out.push(rows::invites(facts.invites, facts.first_invite));
     out
 }
@@ -112,19 +115,30 @@ fn advanced(extras: &Extras) -> Markup {
     }
 }
 
-pub fn render(facts: &Facts, mail: &Mail, extras: &Extras) -> (Markup, Markup) {
-    let found = lines(facts, mail, extras.failed.is_some());
+pub fn render(facts: &Facts, mail: &Found, extras: &Extras) -> (Markup, Markup) {
+    let found = lines(facts, mail, &extras.asked, extras.failed.is_some());
+    let writes = match &mail.mail {
+        Mail::NotSet => None,
+        _ => mail.setup.as_ref().map(|s| s.to.clone()),
+    };
     let line = headline(facts, &found, extras.failed.is_some());
     let items = found.into_iter().map(|l| l.row).collect();
     let body = html! {
         @if let Some(raw) = &extras.failed { (failure(facts, raw)) }
+        @if let Some(to) = &extras.tested {
+            (notice(Tone::Good, &tf("The test mail went out to {}.", &[to]), html! { p.texto { (t("If it does not arrive in a few minutes, look in the spam folder of that address.")) } }, None))
+        }
         @if facts.packages == 0 && extras.failed.is_none() {
             (empty(t("Everything is ready for the first wallpaper."), html! {
                 (t("Upload it from the desktop app (Account → Add server) or from your Account page. For someone else to install what you publish, give them an invitation from People and the code for phones on this page."))
             }))
             div.acciones { (link_button(Kind::Primary, "/account", t("Upload a wallpaper"))) (link_button(Kind::Plain, "/admin/personas", t("Go to People"))) }
         }
-        section.seccion aria-labelledby="salud" { h2 #salud { (t("Health")) } (list(items, false)) }
+        section.seccion aria-labelledby="salud" {
+            h2 #salud { (t("Health")) }
+            (list(items, false))
+            @if let Some(to) = &writes { p.intro { (tf("If a row turns red or has little time left, we write to {}.", &[to])) } }
+        }
         @if extras.repo_url.is_some() { (phones(extras)) }
         (advanced(extras))
     };
