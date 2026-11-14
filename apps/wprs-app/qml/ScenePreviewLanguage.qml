@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-RowLayout {
+ColumnLayout {
     id: language
 
     required property var page
@@ -15,9 +15,12 @@ RowLayout {
     }
 
     visible: languages.length > 1
+    spacing: Look.e1
 
     QQC2.Label {
+        Layout.fillWidth: true
         text: App.tr("Language of the preview")
+        elide: Text.ElideRight
     }
 
     QQC2.ComboBox {
