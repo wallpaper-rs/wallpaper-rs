@@ -25,17 +25,27 @@ RowLayout {
     }
 
     QQC2.Button {
+        id: rootOpen
+
         icon.name: "document-encrypted"
         text: App.tr("Root…")
         enabled: admin.stall.shown !== null && !admin.stall.busy
-        onClicked: rooting.open()
+        onClicked: {
+            rooting.opener = rootOpen;
+            rooting.open();
+        }
     }
 
     QQC2.Button {
+        id: keysOpen
+
         icon.name: "view-certificate"
         text: App.tr("Author keys…")
         enabled: admin.stall.shown !== null && !admin.stall.busy
-        onClicked: keying.open()
+        onClicked: {
+            keying.opener = keysOpen;
+            keying.open();
+        }
     }
 
     RepoCharter {
@@ -67,6 +77,7 @@ RowLayout {
 
         shown: admin.stall.shown
         onRevoke: fingerprint => {
+            keying.close();
             revoking.target = ["key", fingerprint, ""];
             revoking.ask(App.tr("Revoke the author key %1: every signature it made stops counting. Publish next.", fingerprint), false);
         }

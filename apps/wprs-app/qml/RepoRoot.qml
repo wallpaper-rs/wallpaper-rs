@@ -5,7 +5,7 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.Dialog {
+PanelChico {
     id: rooting
 
     property var root: null
@@ -16,11 +16,13 @@ Kirigami.Dialog {
     signal rotate
 
     title: App.tr("Root of the repository")
-    standardButtons: Kirigami.Dialog.Close
-    padding: Kirigami.Units.largeSpacing
+    width: Look.panelChico * 3 / 2
+    quiet: App.tr("Close")
     onClosed: password.text = ""
 
     Kirigami.FormLayout {
+        width: rooting.width - 2 * Look.e4
+
         QQC2.Label {
             Kirigami.FormData.label: App.tr("Version:")
             text: rooting.root?.version ?? ""
@@ -28,6 +30,8 @@ Kirigami.Dialog {
 
         QQC2.Label {
             Kirigami.FormData.label: App.tr("Signed:")
+            Layout.fillWidth: true
+            wrapMode: Text.Wrap
             text: rooting.root ? App.tr("%1 of %2 root keys", rooting.root.signers.length, rooting.root.threshold) + (rooting.root.complete ? "" : " · " + App.tr("not complete: clients refuse it until enough root keys sign it")) : ""
         }
 

@@ -4,7 +4,7 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.Dialog {
+PanelChico {
     id: keying
 
     property var shown: null
@@ -16,10 +16,12 @@ Kirigami.Dialog {
     signal revoke(string fingerprint)
 
     title: App.tr("Author keys")
-    standardButtons: Kirigami.Dialog.Close
-    padding: Kirigami.Units.largeSpacing
+    width: Look.panelChico * 3 / 2
+    quiet: App.tr("Close")
 
     ColumnLayout {
+        width: keying.width - 2 * Look.e4
+
         Repeater {
             model: keying.rows
 
@@ -29,6 +31,7 @@ Kirigami.Dialog {
 
                 QQC2.Label {
                     Layout.fillWidth: true
+                    wrapMode: Text.WrapAnywhere
                     text: modelData.author + " · " + modelData.fingerprint + (gone ? " · " + App.tr("revoked") : "")
                 }
 

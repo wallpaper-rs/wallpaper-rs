@@ -5,7 +5,7 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.Dialog {
+PanelChico {
     id: publishing
 
     property string key: ""
@@ -14,15 +14,18 @@ Kirigami.Dialog {
     signal publish(string key, string password, int days)
 
     title: App.tr("Publish the repository")
-    standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-    padding: Kirigami.Units.largeSpacing
+    width: Look.panelChico * 3 / 2
+    quiet: App.tr("Cancel")
+    principal: App.tr("OK")
     onAccepted: {
         publish(key, password.text, days.value);
         password.text = "";
     }
-    onRejected: password.text = ""
+    onClosed: password.text = ""
 
     Kirigami.FormLayout {
+        width: publishing.width - 2 * Look.e4
+
         RowLayout {
             Kirigami.FormData.label: App.tr("Online key:")
 

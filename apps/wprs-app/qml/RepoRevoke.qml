@@ -4,7 +4,7 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.Dialog {
+PanelChico {
     id: revoking
 
     property string subject: ""
@@ -21,13 +21,16 @@ Kirigami.Dialog {
     }
 
     title: App.tr("Revoke")
-    standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-    padding: Kirigami.Units.largeSpacing
+    quiet: App.tr("Cancel")
+    principal: App.tr("OK")
+    borra: true
     onAccepted: revoke(reasons[reason.currentIndex], noted ? message.text : "")
 
     Kirigami.FormLayout {
+        width: revoking.width - 2 * Look.e4
+
         QQC2.Label {
-            Layout.maximumWidth: Kirigami.Units.gridUnit * 24
+            Layout.maximumWidth: revoking.width - 2 * Look.e4
             wrapMode: Text.Wrap
             text: revoking.subject
         }

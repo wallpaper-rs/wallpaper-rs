@@ -15,9 +15,10 @@ QQC2.Popup {
     property string principalIcon
     property bool borra: false
     property bool padded: true
+    property bool ready: true
     property Item first: principal !== "" ? main : quiet !== "" ? calm : null
     default property alias content: dentro.data
-    readonly property alias foot: extra.data
+    property alias foot: extra.data
 
     signal accepted
     signal rejected
@@ -26,7 +27,7 @@ QQC2.Popup {
         if (body.Window.activeFocusItem === calm) {
             rejected();
             close();
-        } else if (main.visible && !borra) {
+        } else if (main.visible && !borra && ready) {
             accepted();
             close();
         }
@@ -173,6 +174,7 @@ QQC2.Popup {
                     id: main
 
                     visible: panel.principal !== ""
+                    enabled: panel.ready
                     highlighted: true
                     palette.highlight: panel.borra ? Look.coral : Look.luna
                     text: panel.principal

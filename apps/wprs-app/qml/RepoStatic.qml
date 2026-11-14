@@ -42,7 +42,7 @@ ColumnLayout {
 
     function ask(text, run) {
         pending = run;
-        confirm.subtitle = text;
+        confirm.text = text;
         confirm.open();
     }
 
@@ -100,10 +100,15 @@ ColumnLayout {
         }
 
         QQC2.Button {
+            id: publishOpen
+
             icon.name: "document-send"
             text: App.tr("Publish…")
             enabled: stall.shown !== null && !backend.busy
-            onClicked: publishing.open()
+            onClicked: {
+                publishing.opener = publishOpen;
+                publishing.open();
+            }
         }
 
         QQC2.BusyIndicator {
@@ -151,11 +156,12 @@ ColumnLayout {
         }
     }
 
-    Kirigami.PromptDialog {
+    PanelChico {
         id: confirm
 
         title: App.tr("Change the repository")
-        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
+        quiet: App.tr("Cancel")
+        principal: App.tr("OK")
         onAccepted: {
             if (!stall.busy)
                 stall.pending();
