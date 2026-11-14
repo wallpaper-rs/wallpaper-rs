@@ -6,28 +6,27 @@ QtObject {
         {
             "id": "empty",
             "icon": "stack",
-            "example": "pulse",
             "name": App.tr("Empty scene"),
             "note": App.tr("Start from nothing and add the layers you want.")
         },
         {
             "id": "particles",
             "icon": "sparkle",
-            "example": "lights",
+            "picture": "qrc:/wprs/starters/particles.jpg",
             "name": App.tr("Particles"),
             "note": App.tr("Points that are born, float and fade out.")
         },
         {
             "id": "parallax",
             "icon": "stack",
-            "example": "dusk",
+            "picture": "qrc:/wprs/starters/parallax.jpg",
             "name": App.tr("Layered parallax"),
             "note": App.tr("Layers at different depths, with relief.")
         },
         {
             "id": "clock",
             "icon": "clock",
-            "example": "orbits",
+            "picture": "qrc:/wprs/starters/clock.jpg",
             "name": App.tr("Text clock"),
             "note": App.tr("The time or the date, with your own font and colors.")
         }

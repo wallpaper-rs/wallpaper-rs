@@ -57,12 +57,10 @@ Item {
             opacity: punto.off ? Look.tapaApagada : 1
         }
 
-        IconImage {
-            anchors.centerIn: parent
+        PuntoDibujo {
+            anchors.fill: parent
             visible: punto.picture == "" && punto.icon !== ""
-            name: punto.icon
-            sourceSize: Qt.size(Look.icono * 2, Look.icono * 2)
-            color: Look.bruma
+            icon: punto.icon
         }
 
         Rectangle {

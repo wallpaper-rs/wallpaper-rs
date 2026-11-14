@@ -21,7 +21,7 @@ QtObject {
                 "noteIcon": entry.missing ? "warning-circle" : "",
                 "noteTone": entry.missing ? "coral" : ""
             }))
-    readonly property var sceneModel: pictured(story.scene)
+    readonly property var sceneModel: story.scene
     readonly property var singleModel: story.single
     readonly property var moreModel: story.more
     readonly property var learnModel: page.scenes.map(item => ({
@@ -44,14 +44,5 @@ QtObject {
             return hours === 1 ? App.tr("an hour ago") : App.tr("%1 hours ago", hours);
         const days = Math.round(hours / 24);
         return days === 1 ? App.tr("yesterday") : App.tr("%1 days ago", days);
-    }
-
-    function pictured(list) {
-        return list.map(entry => {
-            const found = page.scenes.find(item => (item.package.id ?? "").endsWith("." + entry.example));
-            return Object.assign({
-                    "picture": found && found.thumb ? App.url(found.thumb) : ""
-                }, entry);
-        });
     }
 }

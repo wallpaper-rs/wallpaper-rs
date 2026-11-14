@@ -27,7 +27,10 @@ Column {
                     "text": App.tr("Learn from an example"),
                     "count": band.page.scenes.length
                 }]
-            onPicked: index => band.page.learn = index === 1
+            onPicked: index => {
+                band.page.learn = index === 1;
+                band.page.focused = index === 1 ? learn : scene;
+            }
         }
 
         Item {

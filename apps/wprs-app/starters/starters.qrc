@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/wprs/starters">
+<file>particles.jpg</file>
+<file>parallax.jpg</file>
+<file>clock.jpg</file>
+</qresource>
+</RCC>

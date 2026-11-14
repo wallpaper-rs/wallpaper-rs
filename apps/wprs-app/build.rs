@@ -31,6 +31,7 @@ fn main() {
         .unwrap();
     println!("cargo::rerun-if-changed=../../po");
     println!("cargo::rerun-if-changed=qml");
+    println!("cargo::rerun-if-changed=starters");
     shim::install();
     let look = look::write(
         &PathBuf::from("look").canonicalize().unwrap(),
@@ -42,6 +43,7 @@ fn main() {
         QmlModule::new("io.github.wallpaper_rs.app").qml_files(pages.chain(singletons)),
     )
     .qrc(look)
+    .qrc("starters/starters.qrc")
     .files([
         "src/backend.rs",
         "src/depth.rs",

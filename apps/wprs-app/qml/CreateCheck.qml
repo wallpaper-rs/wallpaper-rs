@@ -56,6 +56,7 @@ QtObject {
         expect(empty.facts.sceneModel.length === 4, "the scene starters are four");
         expect(empty.facts.singleModel.length === 3, "the single-file starters are three");
         expect(empty.facts.moreModel.length === 2, "the extra starters are two");
+        expect(empty.facts.sceneModel.filter(entry => entry.picture !== undefined).length === 3, "three scene starters show what they draw");
         const first = build([], examples);
         first.reset();
         expect(first.learn && first.atExamples, "a first visit with examples opens on the examples");
