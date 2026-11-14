@@ -3,6 +3,10 @@ import QtQuick.Controls.impl
 import io.github.wallpaper_rs.app
 
 Rectangle {
+    id: uso
+
+    property string screen
+
     implicitWidth: row.implicitWidth + Look.e2 + Look.marcaTapa
     implicitHeight: Look.usoAlto
     radius: Look.radioChico
@@ -31,7 +35,7 @@ Rectangle {
             id: words
 
             anchors.verticalCenter: parent.verticalCenter
-            text: App.tr("In use")
+            text: uso.screen !== "" ? App.tr("On %1", uso.screen) : App.tr("In use")
             font.family: Look.letraTexto
             font.pixelSize: Look.tTecla
             font.weight: Font.DemiBold

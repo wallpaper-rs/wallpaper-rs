@@ -11,6 +11,7 @@ FocusScope {
     property string noteIconRole: "noteIcon"
     property string noteToneRole: "noteTone"
     property string inUseRole: "inUse"
+    property string usedOnRole: "usedOn"
     property string offRole: "off"
     property bool choosing
     property var chosen: []

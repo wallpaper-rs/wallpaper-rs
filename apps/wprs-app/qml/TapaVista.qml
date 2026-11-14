@@ -13,6 +13,7 @@ Tapa {
     noteIcon: from.role(model, from.noteIconRole) ?? ""
     noteTone: from.role(model, from.noteToneRole) ?? ""
     inUse: from.role(model, from.inUseRole) === true
+    usedOn: String(from.role(model, from.usedOnRole) ?? "")
     off: from.role(model, from.offRole) === true
     lit: index === from.view.currentIndex
     choosing: from.choosing

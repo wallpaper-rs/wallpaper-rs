@@ -12,6 +12,7 @@ Item {
     property bool lit
     property bool off
     property bool inUse
+    property string usedOn
     property bool choosing
     property bool chosen
     property bool even
@@ -75,6 +76,7 @@ Item {
 
         Uso {
             visible: tapa.inUse
+            screen: tapa.usedOn
             x: Look.marcaTapa
             y: parent.height - height - Look.marcaTapa
         }
