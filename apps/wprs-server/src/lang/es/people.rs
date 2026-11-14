@@ -1,0 +1,65 @@
+pub const TEXTS: super::Texts = &[
+    ("Invitation created", "Invitación creada"),
+    ("Only you have an account · no live invitation", "Solo tú tienes cuenta · ninguna invitación viva"),
+    ("{} · expires on {}", "{} · vence el {}"),
+    ("the new one", "la nueva"),
+    ("Confirm", "Confirmar"),
+    ("Cancel", "Cancelar"),
+    (
+        "Revoke this invitation? Whoever has the link can no longer create their account. The accounts that already got in with it stay.",
+        "¿Revocar esta invitación? Quien tenga el enlace ya no podrá crear su cuenta. Las cuentas que ya entraron con ella siguen.",
+    ),
+    ("Create an invitation", "Crear una invitación"),
+    ("How many people", "Cuántas personas"),
+    ("Days it works", "Días que sirve"),
+    (
+        "The link and its code are shown only once, when it is created.",
+        "El enlace y su código se muestran una sola vez, al crearla.",
+    ),
+    ("Choose one of the roles.", "Elige uno de los roles."),
+    (
+        "Put a number of people from 1 to 1000 and create it again.",
+        "Pon un número de personas de 1 a 1000 y créala otra vez.",
+    ),
+    (
+        "An invitation works 90 days at most. Put 90 or less and create it again.",
+        "Una invitación sirve 90 días como mucho. Pon 90 o menos y créala otra vez.",
+    ),
+    ("Your new invitation", "Tu invitación nueva"),
+    (
+        "For one person, with the role \"{}\"; it works until {}. It is shown only this time: if you lose it, revoke it and create another.",
+        "Para una persona, con rol «{}»; sirve hasta el {}. Se muestra solo esta vez: si la pierdes, revócala y crea otra.",
+    ),
+    (
+        "For {} people, with the role \"{}\"; it works until {}. It is shown only this time: if you lose it, revoke it and create another.",
+        "Para {} personas, con rol «{}»; sirve hasta el {}. Se muestra solo esta vez: si la pierdes, revócala y crea otra.",
+    ),
+    (
+        "Have them read it with their phone camera, or send them the link.",
+        "Que lo lea con la cámara de su teléfono, o mándale el enlace.",
+    ),
+    (
+        "It opens the page to create their account, with the invitation already filled in.",
+        "Abre la página para crear su cuenta, con la invitación ya puesta.",
+    ),
+    ("Copy the link", "Copiar el enlace"),
+    ("None alive.", "Ninguna viva."),
+    ("you", "tú"),
+    ("Change your space", "Cambiar su espacio"),
+    ("Space for wallpapers, in GB", "Espacio para fondos, en GB"),
+    ("Space, in GB", "Espacio, en GB"),
+    ("Uses all its space: {} of {}", "Usa todo su espacio: {} de {}"),
+    ("{} · active · uses {} of {}", "{} · activa · usa {} de {}"),
+    ("{} · active since {}", "{} · activa desde {}"),
+    ("{} · active since {} · uses {} of {}", "{} · activa desde {} · usa {} de {}"),
+    ("{} · suspended · uses {} of {}", "{} · suspendida · usa {} de {}"),
+    ("For now it is only you.", "Por ahora solo estás tú."),
+    (
+        "Create an invitation and give it to whoever you want to get in: it reaches them as a link or a QR code. Their account appears here when they use it.",
+        "Crea una invitación y dásela a quien quieras que entre: le llega como enlace o como código QR. Su cuenta aparece aquí cuando la use.",
+    ),
+    (
+        "The role of each account is changed only here. Suspending an account closes its sessions.",
+        "El rol de cada cuenta se cambia solo aquí. Suspender una cuenta cierra sus sesiones.",
+    ),
+];
