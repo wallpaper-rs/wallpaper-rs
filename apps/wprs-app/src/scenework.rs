@@ -110,6 +110,7 @@ impl SceneEditor {
         let (key, password) = (key.to_string(), Some(password.to_string()).filter(|p| !p.is_empty()));
         let job = move || {
             let out = out.map_or_else(|| package::output(&dir, &doc), Ok)?;
+            std::fs::create_dir_all(out.parent().unwrap_or(Path::new(".")))?;
             let signer = (!key.is_empty()).then(|| package::signer(Path::new(&key), password)).transpose()?;
             let (sha256, _) = package::build_saved(&dir, &doc, &out, signer.as_ref())?;
             Ok(format!("{}\n{sha256}", out.display()))

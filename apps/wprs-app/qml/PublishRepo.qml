@@ -55,12 +55,13 @@ ColumnLayout {
         look();
     }
 
-    function remember(secret, expires) {
+    function remember(secret, root, expires) {
         const rest = known.filter(r => r.folder !== target);
         publish.memory.repos = JSON.stringify([{
                 "folder": target,
                 "name": name,
                 "key": secret,
+                "root": root,
                 "expires": expires
             }].concat(rest).slice(0, 6));
     }
@@ -72,6 +73,7 @@ ColumnLayout {
 
     function signRoot() {
         shelf.key = key;
+        shelf.rootKey = (entry().root ?? "") !== "" ? entry().root : key;
         shelf.root();
     }
 

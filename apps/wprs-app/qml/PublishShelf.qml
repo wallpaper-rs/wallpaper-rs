@@ -9,17 +9,22 @@ Item {
     property string stage: ""
     property string file: ""
     property string key: ""
+    property string rootKey: ""
+    property string rootPublic: ""
+    property string named: ""
     property bool made: false
 
     function begin(path) {
         file = path;
         made = repo.making;
         if (made) {
-            stage = "key";
-            keys.create(keys.shelves(), repo.slug + "-repo", publish.sign.word, false);
+            stage = "rootkey";
+            named = repo.slug.slice(0, 40) + "-" + Date.now().toString(36);
+            keys.create(keys.shelves(), named + "-root", publish.sign.word, false);
             return;
         }
         key = repo.key;
+        rootKey = repo.entry().root ?? "";
         add();
     }
 
@@ -40,11 +45,12 @@ Item {
 
     function root() {
         stage = "root";
-        stall.sign_root(repo.target, key, publish.sign.word);
+        stall.signRoot(repo.target, rootKey, publish.sign.word);
     }
 
     function again() {
         key = repo.key;
+        rootKey = repo.entry().root ?? "";
         stage = "again";
         stall.publish(repo.target, key, publish.sign.word, repo.where.days);
     }
@@ -61,12 +67,23 @@ Item {
     }
 
     function created(reply) {
+        if (stage === "rootkey") {
+            rootKey = reply.secret;
+            rootPublic = reply["public"];
+            stage = "onlinekey";
+            return keys.create(keys.shelves(), named + "-online", publish.sign.word, false);
+        }
         key = reply.secret;
         stage = "create";
+        const signer = publish.unsigned ? null : publish.sign.current;
+        const authors = {};
+        if (signer !== null && signer["public"])
+            authors[Publishing.authorId(signer.name)] = [signer["public"]];
         stall.create(repo.target, JSON.stringify({
             "name": repo.name,
-            "root_keys": [reply["public"]],
+            "root_keys": [rootPublic],
             "online_keys": [reply["public"]],
+            "authors": authors,
             "threshold": 1
         }));
     }
@@ -90,7 +107,7 @@ Item {
             return index();
         const again = stage === "again";
         stage = "";
-        repo.remember(key, reply.published ? reply.published.expires : "");
+        repo.remember(key, rootKey, reply.published ? reply.published.expires : "");
         if (again) {
             publish.fault = null;
             return repo.look();

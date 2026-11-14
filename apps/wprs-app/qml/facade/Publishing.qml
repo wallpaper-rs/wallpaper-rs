@@ -107,6 +107,11 @@ QtObject {
         return parts.join(".");
     }
 
+    function authorId(name) {
+        const id = String(name).toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^[^a-z]+/, "");
+        return (id !== "" ? id : "author").slice(0, 32);
+    }
+
     function said(error) {
         return String(error ?? "").toLowerCase();
     }

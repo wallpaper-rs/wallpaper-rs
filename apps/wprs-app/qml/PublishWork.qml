@@ -125,19 +125,23 @@ Item {
         target: work.publish.editing ? work.publish.page.editor : null
 
         function onFinished(message) {
-            if (work.stage === "build")
-                work.deliver(String(message).split("\n")[0]);
+            if (work.stage !== "build")
+                return;
+            Qt.callLater(() => work && (work.publish.page.notice = ""));
+            work.deliver(String(message).split("\n")[0]);
         }
 
         function onErrorChanged() {
             const error = work.publish.page.editor.error;
-            if (work.stage === "build" && error !== "")
-                work.fail({
-                    "kind": "otro",
-                    "title": App.tr("Could not make “%1”", work.publish.name),
-                    "text": App.tr("Nothing was lost. Fix it in the editor and try again."),
-                    "details": error
-                });
+            if (work.stage !== "build" || error === "")
+                return;
+            work.fail({
+                "kind": "otro",
+                "title": App.tr("Could not make “%1”", work.publish.name),
+                "text": App.tr("Nothing was lost. Fix it in the editor and try again."),
+                "details": error
+            });
+            Qt.callLater(() => work && (work.publish.page.editor.error = ""));
         }
     }
 }

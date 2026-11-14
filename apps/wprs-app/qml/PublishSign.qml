@@ -26,6 +26,7 @@ PublishStep {
         return {
             "name": Publishing.base(path).replace(/\.key$/, ""),
             "secret": path,
+            "public": String(path).replace(/\.key$/, ".pub"),
             "encrypted": true,
             "fingerprint": ""
         };
