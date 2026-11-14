@@ -17,16 +17,20 @@ carpeta. Usa el esqueleto de título; el editor se abre como siempre, con `host.
 
 Sin proyectos y con ejemplos instalados, la página abre en «Aprender con un ejemplo». El pie sigue
 la tarjeta marcada: título, una línea, «Cambiar…» (título y carpeta) y el botón principal.
+«Cambiar…» deja en una sola fila el nombre del punto de partida, «Título», «Carpeta» y «Crear», con
+el foco en «Título»; la carpeta se muestra con `~` para la carpeta personal y también se puede
+escribir así. Intro en cualquiera de los dos campos crea; Esc vuelve a las tarjetas con la misma
+tarjeta marcada. En una ventana demasiado angosta los campos pasan debajo del título y «Crear»
+queda en la línea del título.
 
 ## Cómo se abre el editor
 
 `App.compose(carpeta, punto de partida, título)` crea la carpeta si hace falta y abre el editor de
 escenas o el empaquetador con `host.work`. Para imagen y vídeo se elige antes el archivo: su ruta
-viaja en `App.media` y el empaquetador la aplica con `manifestEdit("media", {file})` tras crear.
+viaja en `App.media` y el empaquetador la toma (`App.takeMedia()`, que la deja vacía) y la aplica
+con `manifestEdit("media", {file})` tras crear.
 Al cargar cualquier proyecto se anota en la lista de recientes.
 
 ## Límites
 
 - Las tarjetas de «Empezar uno nuevo» son imágenes fijas o íconos, sin vista previa animada.
-- La lista de ejemplos se lee al abrir la página: si la biblioteca aún se está llenando, vuelve a
-  entrar a la página para verla completa.
