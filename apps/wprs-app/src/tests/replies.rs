@@ -144,8 +144,11 @@ fn the_call_table_follows_the_dbus_documentation() {
 fn animated_previews_play_only_when_shown_allowed_and_on_mains() {
     let tray = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../integrations/plasma-tray/contents/ui");
     let app = |name: &str| qml_files().into_iter().find(|(n, _)| n == name).unwrap().1;
-    for text in [app("Thumbnail.qml"), std::fs::read_to_string(tray.join("Thumbnail.qml")).unwrap()] {
-        assert!(text.contains("AnimatedImage {") && text.contains("thumbnail.animated && !thumbnail.mature"));
+    for (text, shown) in [
+        (app("Thumbnail.qml"), "thumbnail.animated && !thumbnail.mature"),
+        (std::fs::read_to_string(tray.join("Thumbnail.qml")).unwrap(), "thumbnail.animated !== \"\""),
+    ] {
+        assert!(text.contains("AnimatedImage {") && text.contains(shown));
         assert!(text.contains(
             "playing: visible && thumbnail.moving && thumbnail.Window.visibility !== Window.Hidden"
         ));
