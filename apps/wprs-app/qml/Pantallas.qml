@@ -58,7 +58,7 @@ Row {
                 Foto {
                     anchors.fill: parent
                     anchors.margins: Look.anillo
-                    source: screen.thumb
+                    source: screen.thumb !== "" ? App.url(screen.thumb) : ""
                 }
 
                 Rectangle {
