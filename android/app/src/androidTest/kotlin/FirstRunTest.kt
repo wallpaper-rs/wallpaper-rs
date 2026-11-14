@@ -62,6 +62,7 @@ class FirstRunTest {
         val monitor = instrumentation.addMonitor(IntentFilter(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER), ActivityResult(Activity.RESULT_OK, null), true)
         try {
             start()
+            imported()
             shows("first_$BOTH")
             compose.onNodeWithTag("first_$BOTH").performClick()
             compose.waitUntil(TIMEOUT_MS) { monitor.hits == 1 }
@@ -72,6 +73,12 @@ class FirstRunTest {
         Render.call { Native.commit(BOTH) }
         Wallpaper.commitWhenLive = null
         compose.waitUntil(TIMEOUT_MS) { runBlocking { nowOn() } != null }
+    }
+
+    private fun imported() = compose.waitUntil(SLOW_MS) {
+        var idle = false
+        scenario?.onActivity { idle = it.importing.intValue == 0 }
+        idle && runBlocking { fetch("items", "query" to "") }.isNotEmpty()
     }
 
     @Test
@@ -128,6 +135,7 @@ class FirstRunTest {
     companion object {
         const val TIMEOUT_MS = 20_000L
         const val QUIET_MS = 3_000L
+        const val SLOW_MS = 120_000L
     }
 
     @Test
