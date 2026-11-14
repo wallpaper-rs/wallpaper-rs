@@ -29,7 +29,7 @@ fun Field(field: JSONObject, folded: Boolean, fold: () -> Unit, set: (String, An
     val (value, enabled) = field.opt("value") to field.optBoolean("enabled", true)
     val padded = Modifier.fillMaxWidth().padding(16.dp, 4.dp)
     when (field.getString("kind")) {
-        "slider" -> Slide(field, padded, enabled) { set(key, it) }
+        "slider" -> Slide(field, Modifier.fillMaxWidth(), enabled) { set(key, it) }
         "bool" -> Toggle(label, value == true, enabled) { set(key, it) }
         "combo" -> {
             val options = field.optJSONArray("options").let { all -> (0 until (all?.length() ?: 0)).map { all!!.getJSONObject(it) } }

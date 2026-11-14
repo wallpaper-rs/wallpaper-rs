@@ -2,10 +2,10 @@ package io.github.wallpaper_rs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,13 +37,13 @@ internal fun Slide(field: JSONObject, modifier: Modifier, enabled: Boolean, set:
     var at by remember(field.toString()) { mutableFloatStateOf(toPosition(current)) }
     val format = NumberFormat.getInstance().apply { maximumFractionDigits = places }
     val send = { v: Double -> set(if (places == 0) Math.round(v) else v) }
-    Text("${field.getString("label")} ${format.format(toValue(at))}${field.optString("unit").let { if (it.isEmpty()) "" else " $it" }}")
     val range = if (log) 0f..1f else low.toFloat()..high.toFloat()
     val steps = if (step > 0.0) ((high - low) / step).toInt() - 1 else 0
-    Slider(at, { at = it }, enabled = enabled, valueRange = range, steps = steps.coerceIn(0, MAX_STEPS), onValueChangeFinished = { send(toValue(at)) })
+    val unit = field.optString("unit").let { if (it.isEmpty()) "" else " $it" }
+    Rail(field.getString("label"), "${format.format(toValue(at))}$unit", at, range, steps.coerceIn(0, MAX_STEPS), enabled, change = { at = it }) { send(toValue(it)) }
     if (field.optBoolean("editable")) {
         var typed by remember(field.toString()) { mutableStateOf(format.format(current)) }
-        OutlinedTextField(typed, { typed = it }, enabled = enabled, singleLine = true,
+        OutlinedTextField(typed, { typed = it }, Modifier.padding(horizontal = Measure.margin), enabled = enabled, singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { runCatching { format.parse(typed)?.toDouble() }.getOrNull()?.let(send) }))
     }

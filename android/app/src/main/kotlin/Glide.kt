@@ -20,37 +20,51 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Glide(label: String, saved: Float, range: ClosedFloatingPointRange<Float>, modifier: Modifier = Modifier, save: (Float) -> Unit) {
-    val t = tones
     var value by remember(saved) { mutableFloatStateOf(saved.coerceIn(range)) }
+    Rail(label, shown(value, range.endInclusive - range.start), value, range, modifier = modifier, change = { value = it }, save = save)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Rail(
+    label: String, value: String, at: Float, range: ClosedFloatingPointRange<Float>, steps: Int = 0, enabled: Boolean = true,
+    modifier: Modifier = Modifier, change: (Float) -> Unit, save: (Float) -> Unit,
+) {
+    val t = tones
     val span = range.endInclusive - range.start
-    val nudge = { by: Float -> value = (value + by * span / GLIDE_NUDGES).coerceIn(range); save(value) }
+    val nudge = { by: Float ->
+        val moved = (at + by * if (steps > 0) span / (steps + 1) else span / GLIDE_NUDGES).coerceIn(range)
+        change(moved)
+        save(moved)
+    }
+    val (lit, rail) = if (enabled) t.frost to t.nightLine else t.mistLow to t.nightLine
     Column(modifier.fillMaxWidth().padding(horizontal = Measure.margin, vertical = Measure.e1).testTag("glide")) {
         Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
-            Text(label, Modifier.weight(1f), style = Type.row)
-            Text(shown(value, span), color = t.frost, style = Type.row.copy(fontWeight = FontWeight.Bold))
+            Text(label, Modifier.weight(1f), color = if (enabled) Color.Unspecified else t.mistLow, style = Type.row)
+            Text(value, color = lit, style = Type.row.copy(fontWeight = FontWeight.Bold))
         }
         Row(Modifier.fillMaxWidth(), Arrangement.spacedBy(Measure.e2), Alignment.CenterVertically) {
-            Square({ nudge(-1f) }, Ph.Minus, stringResource(R.string.glide_less), boxed = false)
+            Square({ if (enabled) nudge(-1f) }, Ph.Minus, stringResource(R.string.glide_less), boxed = false)
             Slider(
-                value, { value = it }, Modifier.weight(1f), valueRange = range, onValueChangeFinished = { save(value) },
-                thumb = { Box(Modifier.size(GLIDE_THUMB).background(t.frost, CircleShape)) },
+                at, change, Modifier.weight(1f), enabled = enabled, valueRange = range, steps = steps, onValueChangeFinished = { save(at) },
+                thumb = { Box(Modifier.size(GLIDE_THUMB).background(lit, CircleShape)) },
                 track = {
-                    val share = if (span > 0f) (value - range.start) / span else 0f
-                    Box(Modifier.fillMaxWidth().height(GLIDE_RAIL).background(t.nightLine, CircleShape)) {
-                        Box(Modifier.fillMaxWidth(share).height(GLIDE_RAIL).background(t.frost, CircleShape))
+                    val share = if (span > 0f) (at - range.start) / span else 0f
+                    Box(Modifier.fillMaxWidth().height(GLIDE_RAIL).background(rail, CircleShape)) {
+                        Box(Modifier.fillMaxWidth(share).height(GLIDE_RAIL).background(lit, CircleShape))
                     }
                 },
             )
-            Square({ nudge(1f) }, Ph.Plus, stringResource(R.string.glide_more), boxed = false)
+            Square({ if (enabled) nudge(1f) }, Ph.Plus, stringResource(R.string.glide_more), boxed = false)
         }
     }
 }

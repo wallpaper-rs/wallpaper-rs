@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import org.json.JSONObject
 
@@ -23,21 +24,28 @@ private val LACKS = mapOf(
 )
 
 @Composable
-fun About(main: Main, uid: String, item: Item?, picture: Boolean, state: JSONObject, open: (String) -> Unit) = Column {
-    item?.let { Labels(main, it) }
-    item?.about?.takeIf { it.isNotEmpty() }?.let { Text(it, Modifier.padding(horizontal = Measure.margin), tones.mist, style = Type.text, maxLines = 4) }
-    item?.lacks?.mapNotNull(LACKS::get)?.map { stringResource(it) }?.takeIf { it.isNotEmpty() }?.let { Note(it.joinToString(" ")) }
-    if (item != null) Kin(main, uid, open)
+fun Own(main: Main, uid: String, item: Item?, picture: Boolean, state: JSONObject, form: JSONObject) = Column {
     if (picture && state.optBoolean("changed")) Note(stringResource(R.string.picture_changed), MaterialTheme.colorScheme.error)
     if (picture) Relief(main, uid, state)
-    if (item?.scene == false) Kept(main, uid)
     item?.takeIf { it.video && !it.reel }?.let { ConvertVideo(main, it) }
-    item?.takeIf { it.video || it.scene || it.web }?.let { OwnSound(main, it) }
-    item?.takeIf { it.scene && !it.web && !it.flashes }?.let { shown ->
+    if (item?.scene == true || item?.reel == true) SceneControls(main, uid, form)
+}
+
+@Composable
+fun About(main: Main, uid: String, item: Item, form: JSONObject, open: (String) -> Unit) = Column(Modifier.testTag("more_page")) {
+    item.about.takeIf { it.isNotEmpty() }?.let { Text(it, Modifier.padding(horizontal = Measure.margin), tones.mist, style = Type.text) }
+    Labels(main, item)
+    item.lacks.mapNotNull(LACKS::get).map { stringResource(it) }.takeIf { it.isNotEmpty() }?.let { Note(it.joinToString(" ")) }
+    Kin(main, uid, open)
+    item.takeIf { it.video || it.scene || it.web }?.let { OwnSound(main, it) }
+    if (!item.scene) Kept(main, uid)
+    item.takeIf { it.scene && !it.web && !it.flashes }?.let { shown ->
         Toggle(stringResource(R.string.keep_moving), shown.moving) {
             main.act { ask(if (it) "confirm" else "unconfirm", "uid" to uid, "what" to "motion") }
         }
     }
+    if (item.scene || item.reel) SceneMore(main, uid, form)
+    Exposes(item.exposes)
 }
 
 @Composable

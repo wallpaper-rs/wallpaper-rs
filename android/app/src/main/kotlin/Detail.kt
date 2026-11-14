@@ -46,6 +46,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     var ready by remember(uid) { mutableStateOf(false) }
     var adding by remember { mutableStateOf(false) }
     var removing by remember { mutableStateOf(false) }
+    var more by remember(uid) { mutableStateOf(false) }
     LaunchedEffect(uid, item == null, barred) {
         if (item == null || barred) return@LaunchedEffect
         runCatching { ask("pick", "choice" to choice("item", uid)) }
@@ -56,6 +57,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     val state by loaded(JSONObject(), uid, picture, main.revision.intValue, Depth.working.value, powered.intValue) {
         if (picture) depth("item", "uid" to uid) as JSONObject else JSONObject()
     }
+    val form by if (item?.scene == true || item?.reel == true) sceneForm(main, uid) else remember { mutableStateOf(JSONObject()) }
     val inUse by loaded(false, uid, main.revision.intValue) { nowOn() == uid }
     val report = standing(inUse)
     val undecided by loaded(emptyList<String>(), uid, picture, main.revision.intValue) { if (picture) emptyList() else asked(uid) }
@@ -81,9 +83,11 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
         if (inUse && heavy(report)) PlayAnyway(main)
         Asks(main, uid, undecided)
         if (picture) Framing(main, uid, state)
-        About(main, uid, item, picture, state, open)
-        if (item?.scene == true || item?.reel == true) Scene(main, uid)
-        item?.exposes?.let { Exposes(it) }
+        Own(main, uid, item, picture, state, form)
+        item?.let { shown ->
+            Fold(stringResource(R.string.more_options), more, Modifier.testTag("more_wallpaper")) { more = !more }
+            if (more) About(main, uid, shown, form, open)
+        }
     }
     Column(Modifier.fillMaxSize()) {
         if (wide) {
