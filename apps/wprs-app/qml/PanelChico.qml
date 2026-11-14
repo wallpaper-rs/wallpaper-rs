@@ -54,7 +54,7 @@ QQC2.Popup {
     focus: true
     closePolicy: QQC2.Popup.CloseOnEscape | QQC2.Popup.CloseOnPressOutside
     onAboutToShow: place()
-    onOpened: (first ?? body).forceActiveFocus(Qt.TabFocusReason)
+    onOpened: (borra ? (calm.visible ? calm : body) : (first ?? body)).forceActiveFocus(Qt.TabFocusReason)
     onClosed: opener?.forceActiveFocus(Qt.TabFocusReason)
 
     background: Rectangle {
