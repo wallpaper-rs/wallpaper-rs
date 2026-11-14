@@ -95,13 +95,14 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
         Importing(main)
         if (query.isEmpty()) AwayNotes(main)
         if (items?.isEmpty() == true) Empty(main, hollow(kind, searched), sources)
+        val shown = items.orEmpty()
         LazyVerticalGrid(
             columns = GridCells.Adaptive(112.dp),
             contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 96.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(items.orEmpty(), key = Item::uid) { item ->
+            items(shown, key = Item::uid) { item ->
                 val tap = { if (chosen.isEmpty()) open(item.uid) else chosen.toggle(item.uid) }
                 val press = Modifier.combinedClickable(onLongClick = { chosen.toggle(item.uid) }, onClick = tap)
                 Thumb(item, Modifier.aspectRatio(0.75f).then(press), item.uid in chosen)
