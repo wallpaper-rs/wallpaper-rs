@@ -2,14 +2,13 @@ package io.github.wallpaper_rs
 
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.json.JSONObject
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(Baselined::class)
 class ShadeTest {
     private fun shaded(argb: Int) = tonesOf(JSONObject(Native.tones(IntArray(96 * 54) { argb }, 96)))
 
