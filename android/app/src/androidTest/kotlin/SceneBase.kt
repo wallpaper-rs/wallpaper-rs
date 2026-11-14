@@ -56,7 +56,7 @@ abstract class SceneBase {
 
     protected fun show(title: String): String {
         val uid = find(title)
-        Native.setting("playback.allow_flashing", "true")
+        Device.setting("playback.allow_flashing", "true")
         Native.library(JSONObject(mapOf("op" to "pick", "choice" to choice("item", uid))).toString())
         Render.call {
             Native.commit(BOTH)

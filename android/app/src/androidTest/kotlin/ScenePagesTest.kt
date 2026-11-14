@@ -53,7 +53,7 @@ class ScenePagesTest : SceneBase() {
         assertTrue(item().title == "Destello" && item().lacks.isEmpty())
         val pick = JSONObject(mapOf("op" to "pick", "choice" to choice("item", uid))).toString()
         assertTrue(JSONObject(Native.library(pick)).getString("error").contains("flashes"))
-        Native.setting("playback.allow_flashing", "true")
+        Device.setting("playback.allow_flashing", "true")
         assertTrue(item().mature && !item().flashing)
         ask("confirm", "uid" to uid, "what" to "mature")
         assertTrue(!item().mature)

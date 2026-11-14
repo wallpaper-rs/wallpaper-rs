@@ -13,6 +13,11 @@ object Device {
     fun shell(command: String): String =
         ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation.executeShellCommand(command)).use { String(it.readBytes()) }
 
+    fun setting(key: String, value: String): String {
+        sanctioned += "setting $key"
+        return Native.setting(key, value)
+    }
+
     fun unplugged(level: Int? = null) {
         sanctioned += Probes.BATTERY
         shell("dumpsys battery unplug")

@@ -32,7 +32,9 @@ object Updates {
 
     fun count() = runCatching { JSONArray(Native.account("{\"op\": \"updates\"}")).length() }.getOrDefault(0)
 
-    fun repos() = runCatching { JSONObject(Native.account("{\"op\": \"repos\"}")).optJSONArray("repos")?.length() }.getOrNull() ?: 0
+    fun repos() = runCatching {
+        JSONObject(Native.account("{\"op\": \"repos\"}")).optJSONArray("repos")?.let { all -> (0 until all.length()).count { !all.getJSONObject(it).optBoolean("bundled") } }
+    }.getOrNull() ?: 0
 
     fun on() = runCatching { Native.setting(SETTING, null) }.getOrNull() != "false"
 

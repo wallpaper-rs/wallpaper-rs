@@ -71,9 +71,9 @@ class SourcesTest {
         text(R.string.sources).assertIsDisplayed()
         text(R.string.providers).assertIsDisplayed()
         reached(context.getString(kindTitle("bing"))).assertIsDisplayed()
-        reached(context.getString(R.string.repos_none)).assertIsDisplayed()
         reached(context.getString(R.string.repo_fingerprint)).assertIsDisplayed()
         assertEquals(0, providers().length())
+        assertEquals(0, Updates.repos())
     }
 
     @Test
@@ -100,7 +100,7 @@ class SourcesTest {
         assertTrue("a refusal replaces the help text", refused)
         compose.onNode(hasText(url)).assertIsDisplayed()
         if (print.isNotEmpty()) compose.onNode(hasText(print)).assertIsDisplayed()
-        assertEquals(0, (runBlocking { account("repos") } as JSONObject).optJSONArray("repos")?.length() ?: 0)
+        assertEquals(0, Updates.repos())
     }
 
     @Test
