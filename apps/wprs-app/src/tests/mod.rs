@@ -123,7 +123,9 @@ fn package_texts_render_as_plain_text() {
             "History",
             "RepoList",
             "Thumbnail",
-            "WallhavenDialog",
+            "SourceMore",
+            "SourceMoreMain",
+            "SourceMoreList",
         ])
         .map(|name| dir.join(name));
     let tray = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../integrations/plasma-tray/contents/ui");

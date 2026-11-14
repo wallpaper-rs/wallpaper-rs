@@ -120,7 +120,13 @@ grande «Rotar estas fotos» (crea o reutiliza la lista `source:<fuente>` y la a
 salidas), «Actualizar» y «Detalles». Si no hay ninguna, la página muestra las tarjetas de tipos para
 añadir una; Bing, NASA y Wikimedia se añaden con un clic, los demás piden primero lo que necesitan
 (búsqueda, servidor, clave). Las claves nunca se vuelven a mostrar. Un proveedor en error se trata
-como falta de conexión y se avisa una sola vez. Las opciones de Wallhaven siguen en su diálogo.
+como falta de conexión y se avisa una sola vez. En una fuente de
+Wallhaven, «Más opciones» abre en la misma página dos grupos sin desplazamiento: «Qué fotos»
+(categorías, contenido y tamaño y colores, cada uno con su nivel de casillas) y «Cómo buscarlas»
+(orden con «Mezclar otra vez» cuando es al azar, colecciones de un usuario, parecidos a una foto y
+«Otras opciones de búsqueda» con las palabras, el sentido, el período, las páginas y el tope). Cada
+cambio se guarda al momento; Esc vuelve un nivel. Los colores se nombran por su código. Guardar las
+claves en un archivo privado, cuando no hay llavero, se confirma en un panel chico propio.
 
 En los detalles de una fuente, «Fotos guardadas» dice cuánto ocupa lo que trajo y ofrece «Borrar…»:
 el panel «¿Borrar las fotos guardadas?» borra esas fotos del equipo y de la biblioteca

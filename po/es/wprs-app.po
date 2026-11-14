@@ -18388,3 +18388,75 @@ msgstr ""
 
 msgid "Delete the photos"
 msgstr "Borrar"
+
+msgid "What photos"
+msgstr "Qué fotos"
+
+msgid "How to find them"
+msgstr "Cómo buscarlas"
+
+msgid "Size and colors"
+msgstr "Tamaño y colores"
+
+msgid "Minimum resolution, proportions and colors"
+msgstr "Resolución mínima, proporciones y colores"
+
+msgid "The general filter of Settings rules"
+msgstr "Manda el filtro general de Ajustes"
+
+msgid "Choose between for everyone, a bit daring and for adults; you can mark several. If adult content is hidden in Settings, those photos do not arrive even if you mark them here."
+msgstr "Elige entre para todos, algo atrevido y para adultos; puedes marcar varios. Si en Ajustes el contenido para adultos está oculto, esas fotos no llegan aunque las marques aquí."
+
+msgid "Any"
+msgstr "Cualquiera"
+
+msgid "%1 or more"
+msgstr "%1 o más"
+
+msgid "Shuffle again"
+msgstr "Mezclar otra vez"
+
+msgid "Collections of"
+msgstr "Colecciones de"
+
+msgid "User"
+msgstr "Usuario"
+
+msgid "Showing the collection %1"
+msgstr "Muestra la colección %1"
+
+msgid "Similar to"
+msgstr "Parecidos a"
+
+msgid "With the code of a Wallhaven photo, brings photos like that one"
+msgstr "Con el código de una foto de Wallhaven, trae fotos parecidas a esa"
+
+msgid "Photo code"
+msgstr "Código de la foto"
+
+msgid "Other search options"
+msgstr "Otras opciones de búsqueda"
+
+msgid "Search words, order, pages and more"
+msgstr "Palabras, sentido, páginas y más"
+
+msgid "Collections"
+msgstr "Colecciones"
+
+msgid "For everyone"
+msgstr "Para todos"
+
+msgid "A bit daring"
+msgstr "Algo atrevido"
+
+msgid "For adults"
+msgstr "Para adultos"
+
+msgid "%1 photos"
+msgstr "%1 fotos"
+
+msgid "No collections"
+msgstr "Sin colecciones"
+
+msgid "This user has no public collections."
+msgstr "Este usuario no tiene colecciones públicas."

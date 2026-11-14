@@ -11,10 +11,11 @@ Kirigami.Page {
     property string view: "list"
     property string kind
     property string current
+    property string level
     readonly property var chosen: providers.find(p => p.id === current) || ({})
     readonly property bool options: view !== "list"
     readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : view === "detail" && !!chosen.id ? SourceKinds.heading(chosen) : ""
-    readonly property Item shown: body.item
+    readonly property Item shown: body.shown
     readonly property var route: view === "list" ? [] : [App.tr("Sources"), leaf]
     readonly property var keyHints: [{
             "keys": ["up", "down"],
@@ -32,7 +33,14 @@ Kirigami.Page {
     }
 
     function routeBack() {
+        if (view === "more")
+            return level === "" ? open("detail") : deeper(SourceMoreWords.parent(level));
         view = view === "add" && providers.length === 0 ? "list" : view === "add" ? "pick" : "list";
+    }
+
+    function deeper(next) {
+        level = next;
+        open("more");
     }
 
     function apply(next) {
@@ -50,7 +58,7 @@ Kirigami.Page {
     }
 
     function focusView() {
-        const item = view === "list" ? (providers.length === 0 ? kinds : list) : view === "pick" ? picker : body.item;
+        const item = view === "list" ? (providers.length === 0 ? kinds : list) : view === "pick" ? picker : body.shown;
         if (item)
             item.enter();
     }
@@ -115,66 +123,12 @@ Kirigami.Page {
         onClosed: page.routeBack()
     }
 
-    Flickable {
-        id: scroll
-
-        function reveal(item) {
-            if (!item || !body.item || !body.item.contains(item.mapToItem(body.item, 0, 0)))
-                return;
-            const y = item.mapToItem(contentItem, 0, 0).y;
-            if (y < contentY)
-                contentY = Math.max(0, y - Look.e4);
-            else if (y + item.height > contentY + height)
-                contentY = y + item.height - height + Look.e4;
-        }
+    SourceBody {
+        id: body
 
         anchors.fill: parent
-        visible: page.view === "add" || page.view === "detail"
-        contentHeight: Math.max(height, body.implicitHeight)
-        interactive: contentHeight > height
-        clip: true
-
-        Connections {
-            target: page.Window.window
-
-            function onActiveFocusItemChanged() {
-                scroll.reveal(page.Window.window.activeFocusItem);
-            }
-        }
-
-        Loader {
-            id: body
-
-            anchors.bottom: parent.bottom
-            width: Math.min(scroll.width, Look.filasAncho)
-            active: scroll.visible && (page.view === "add" || !!page.chosen.id)
-            sourceComponent: page.view === "add" ? addForm : detailForm
-        }
-    }
-
-    Component {
-        id: addForm
-
-        SourceAdd {
-            kind: page.kind
-            taken: page.providers.map(p => p.id)
-            onDone: page.open("list")
-            onCancelled: page.routeBack()
-            onKeyFiler: dialogs.filer.open()
-        }
-    }
-
-    Component {
-        id: detailForm
-
-        SourceDetail {
-            provider: page.chosen
-            onClosed: page.open("list")
-            onRemoved: page.open("list")
-            onKeyAsked: dialogs.keys.ask(page.chosen.id)
-            onMore: dialogs.wallhaven.open()
-            onListed: App.act("Create", [SourceKinds.heading(page.chosen), "source:" + page.chosen.source], "Playlists1", () => App.navigate(1, ""))
-        }
+        host: page
+        dialogs: dialogs
     }
 
     SourceActions {
