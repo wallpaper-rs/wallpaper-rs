@@ -19,6 +19,13 @@ QtObject {
         return "elide" in item && "wrapMode" in item && "implicitWidth" in item && item.elide === Text.ElideNone && item.wrapMode === Text.NoWrap && String(item.text ?? "") !== "" && item.implicitWidth > item.width + 1;
     }
 
+    function chain(item) {
+        const names = [];
+        for (let at = item; at !== null && names.length < 4; at = at.parent)
+            names.push(String(at).split("(")[0].replace(/_QMLTYPE_\d+/, ""));
+        return names.join("<");
+    }
+
     function cuts(root) {
         const found = [];
         const walk = item => {
@@ -27,7 +34,7 @@ QtObject {
             const right = item.mapToItem(root, item.width, 0).x;
             const content = item.parent !== null && "contentX" in item.parent && item.parent.contentItem === item;
             if (!content && item.width > 0 && right > root.width + 1)
-                found.push(String(item).split("(")[0] + " «" + String(item.text ?? item.objectName ?? "") + "» ends at " + Math.round(right));
+                found.push(chain(item) + " «" + String(item.text ?? item.objectName ?? "") + "» ends at " + Math.round(right));
             if (clipped(item))
                 return found.push(String(item).split("(")[0] + " «" + item.text + "» needs " + Math.round(item.implicitWidth) + " in " + Math.round(item.width));
             for (const kid of item.children)
