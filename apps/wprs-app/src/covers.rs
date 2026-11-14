@@ -44,7 +44,7 @@ pub fn caption(item: &ItemSummary) -> String {
 }
 
 pub fn note(item: &ItemSummary) -> (String, &'static str, &'static str) {
-    let flashing = item.package.as_ref().is_some_and(|p| p.asks("photosensitive"));
+    let flashing = item.package.as_ref().is_some_and(|p| p.flash_disabled);
     if item.missing {
         (tr("The file is missing"), "warning-circle", "coral")
     } else if item.error.is_some() {

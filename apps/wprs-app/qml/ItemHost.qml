@@ -11,7 +11,7 @@ Item {
     readonly property var item: details.item ?? {}
     readonly property var credit: details.credit ?? null
     readonly property var pkg: item.package ?? null
-    readonly property bool flashing: !!pkg && pkg.photosensitive === true && !(pkg.confirmed ?? []).includes("photosensitive")
+    readonly property bool flashing: !!pkg && pkg.flash_disabled === true
     readonly property string animated: flashing ? "" : App.url(details.about ? details.about.animated ?? "" : "")
 
     signal apply(string uid)
