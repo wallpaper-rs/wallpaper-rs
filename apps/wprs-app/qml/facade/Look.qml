@@ -130,6 +130,7 @@ QtObject {
     readonly property int iconoError: 28
     readonly property int iconoErrorGrande: 40
     readonly property int altoSublista: 48
+    readonly property int miniatura: 56
     readonly property int altoCerrar: 30
     readonly property int panelChico: 360
     readonly property int pantalla: 112
