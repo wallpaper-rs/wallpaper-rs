@@ -20404,10 +20404,6 @@ msgid "Add a folder"
 msgstr "Añadir una carpeta"
 
 #: apps/wprs-app/qml/FirstStart.qml
-msgid "Put as wallpaper"
-msgstr "Poner de fondo"
-
-#: apps/wprs-app/qml/FirstStart.qml
 msgid "You can also drop your files here."
 msgstr "También puedes soltar aquí tus archivos."
 

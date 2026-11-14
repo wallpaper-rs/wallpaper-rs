@@ -51,7 +51,7 @@ Column {
                 required property int index
 
                 name: modelData.title
-                note: index === 0 ? App.tr("Put as wallpaper") : ""
+                note: index === 0 ? App.tr("Set as wallpaper") : ""
                 picture: start.run.previewed[start.run.spec(modelData)] ? App.backend.url(start.run.previewed[start.run.spec(modelData)]) : ""
                 lit: index === 0
                 onTapped: start.run.place(modelData, false)

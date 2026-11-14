@@ -9,7 +9,6 @@ Item {
     property var examples: []
     property var shelf: []
     property var pending: null
-    property int job: -1
     property bool automatic: false
     property string phase
     property bool allowed: !App.checking
@@ -62,21 +61,25 @@ Item {
         phase = "installing";
         pending = pkg;
         automatic = auto;
-        App.act("Install", [spec(pkg), false, false], "Repos1", id => run && (run.job = id), () => run && run.reset());
+        App.act("Install", [spec(pkg), false, false], "Repos1", () => run && run.watch(), () => run && run.reset());
     }
 
     function reset() {
         phase = "";
         pending = null;
-        job = -1;
     }
 
-    function finish() {
+    function watch() {
+        if (phase !== "installing" || !pending)
+            return;
         const pkg = pending;
+        if (App.jobs.some(j => j.kind === "install" && j.state === "failed" && String(j.target).includes(pkg.id)))
+            return reset();
         App.query("ListInstalled", [], "Repos1", reply => {
             const found = run ? reply.packages.find(p => p.id === pkg.id && p.item) : null;
-            if (!found)
-                return run && run.reset();
+            if (!found || !run || run.pending !== pkg || run.phase !== "installing")
+                return;
+            run.phase = "applying";
             App.act("Apply", [found.item, "", "", ""], "Library1", () => run && run.announce(pkg), () => run && run.reset());
         });
     }
@@ -106,14 +109,8 @@ Item {
         function onChanged(topic) {
             if (topic === "repos")
                 run.load();
-            else if (topic === "jobs" && run.job >= 0) {
-                const mine = App.jobs.find(j => j.id === run.job);
-                if (mine && mine.state === "done") {
-                    run.job = -1;
-                    run.finish();
-                } else if (mine && mine.state === "failed")
-                    run.reset();
-            }
+            if (["repos", "jobs", "library"].includes(topic))
+                run.watch();
         }
     }
 }
