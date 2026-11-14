@@ -27,6 +27,8 @@ impl SceneEditor {
                 let folder = project.dir.to_string_lossy().into_owned();
                 self.as_mut().rust_mut().files = check::check_files(&project.dir, &project.doc);
                 self.as_mut().rust_mut().persisted = project::stamp(&project.doc);
+                let title = wprs_editor::meta::title(&project.doc, &wprs_core::locale::languages());
+                crate::scenerecent::record(&project.dir, &title);
                 self.as_mut().rust_mut().project = Some(project);
                 self.as_mut().set_folder(QString::from(&folder));
                 self.as_mut().set_selected(QString::from("/scene/canvas"));
@@ -117,12 +119,15 @@ impl SceneEditor {
     }
 
     pub fn projects(&self) -> QString {
-        let found = std::fs::read_dir(projects_dir()).into_iter().flatten().flatten().filter_map(|entry| {
-            let doc = project::read(&entry.path()).ok()?;
-            let title = wprs_editor::meta::title(&doc, &wprs_core::locale::languages());
-            Some(json!({"folder": entry.path(), "title": title, "kind": wprs_editor::pages::kind(&doc)}))
-        });
-        QString::from(&serde_json::to_string(&found.collect::<Vec<_>>()).unwrap_or_default())
+        QString::from(&serde_json::to_string(&crate::scenerecent::list()).unwrap_or_default())
+    }
+
+    pub fn is_project(&self, folder: &QString) -> bool {
+        project::read(Path::new(&folder.to_string())).is_ok()
+    }
+
+    pub fn forget_project(&self, folder: &QString) {
+        crate::scenerecent::forget(Path::new(&folder.to_string()));
     }
 
     pub fn kind_of(&self, folder: &QString, package_file: &QString) -> QString {

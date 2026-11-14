@@ -117,6 +117,10 @@ pub mod qobject {
         #[qinvokable]
         fn projects(self: &SceneEditor) -> QString;
         #[qinvokable]
+        fn forget_project(self: &SceneEditor, folder: &QString);
+        #[qinvokable]
+        fn is_project(self: &SceneEditor, folder: &QString) -> bool;
+        #[qinvokable]
         fn kind_of(self: &SceneEditor, folder: &QString, package: &QString) -> QString;
         #[qsignal]
         fn finished(self: Pin<&mut SceneEditor>, message: QString);

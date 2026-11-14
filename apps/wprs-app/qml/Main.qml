@@ -44,7 +44,7 @@ Kirigami.ApplicationWindow {
             }
         },
         Component {
-            ScenesPage {
+            CreatePage {
             }
         }
     ]
@@ -150,13 +150,19 @@ Kirigami.ApplicationWindow {
         }
 
         function onCompose(folder, starter, text) {
+            const media = App.media;
+            App.media = "";
             const kind = starter ? (["web", "preset", "image", "video"].includes(starter) ? starter : "scene") : probe.kindOf(folder, text);
-            root.work(["scene", "assets"].includes(kind) ? composer : packager, {
-                    "folder": folder,
-                    "starter": starter,
-                    "heading": starter ? text : "",
-                    "source": starter ? "" : text
-                });
+            const scened = ["scene", "assets"].includes(kind);
+            const properties = {
+                "folder": folder,
+                "starter": starter,
+                "heading": starter ? text : "",
+                "source": starter ? "" : text
+            };
+            if (!scened)
+                properties.media = media;
+            root.work(scened ? composer : packager, properties);
         }
     }
 

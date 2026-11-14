@@ -11,6 +11,7 @@ Kirigami.Page {
     property string starter
     property string heading
     property string source
+    property string media
     property alias editor: editor
     property alias builder: builder
     property alias tabs: side
@@ -47,9 +48,13 @@ Kirigami.Page {
     title: App.tr("Package: %1", view.title ?? "")
     padding: 0
     Component.onCompleted: {
-        if (starter)
+        if (starter) {
             editor.create(folder, starter, heading);
-        else
+            if (media)
+                manifestEdit("media", {
+                        "file": media
+                    });
+        } else
             editor.open(folder, source);
         editor.select("/manifest");
         if (App.checking)

@@ -38,6 +38,7 @@ mod scenecode;
 mod scenecopy;
 mod scenedoc;
 mod scenefile;
+mod scenerecent;
 mod scenehear;
 mod scenelive;
 mod scenemedia;

@@ -22,6 +22,7 @@ QtObject {
     readonly property var jobs: JSON.parse(backend.jobs || "[]")
     readonly property var outputs: Object.keys(state.outputs ?? {})
     readonly property bool checking: backend.checking
+    property string media
     property int serial: 0
     property var pending: ({})
 

@@ -69,6 +69,8 @@ QtObject {
     readonly property int tapa: compacto ? 200 : amplio ? 300 : 256
     readonly property int tapaFoco: compacto ? 300 : amplio ? 500 : 420
     readonly property int tapaRejilla: compacto ? 200 : amplio ? 260 : 232
+    readonly property int tapaCrear: Math.round(tapa * 0.62)
+    readonly property int tapaCrearFoco: Math.round(tapaCrear * 1.35)
     readonly property int huecoEstante: compacto ? 22 : amplio ? 32 : 28
     readonly property int altoControl: 40
     readonly property int altoBoton: compacto ? 38 : 42
