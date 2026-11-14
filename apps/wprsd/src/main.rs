@@ -100,6 +100,7 @@ mod sync;
 mod sync1;
 mod thumbs;
 mod tidy;
+mod tones;
 mod timing;
 mod updating;
 mod variants;

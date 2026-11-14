@@ -7377,6 +7377,7 @@ dependencies = [
  "wprs-format",
  "wprs-ktx2",
  "wprs-library",
+ "wprs-palette",
  "wprs-pipewire",
  "wprs-providers",
  "wprs-render",

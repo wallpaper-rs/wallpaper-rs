@@ -140,6 +140,8 @@ model! {
         #[serde(default)]
         pub accent: Option<String>,
         #[serde(default)]
+        pub tones: Option<super::Tones>,
+        #[serde(default)]
         pub filter: Option<Filter>,
         #[serde(default)]
         pub hdr: HdrState,

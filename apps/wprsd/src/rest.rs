@@ -59,6 +59,7 @@ impl Daemon {
         info.claims.entry(SURFACE.into()).or_default();
         info.uploaded = None;
         (info.scene, info.video, info.accent, info.spread) = (None, None, None, false);
+        (info.tones, info.shown) = (None, None);
         drop(st);
         self.apply_activity();
         self.changes.changed("state", vec![output.to_owned()]);

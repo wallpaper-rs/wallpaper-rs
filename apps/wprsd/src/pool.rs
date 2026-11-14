@@ -141,6 +141,7 @@ impl Daemon {
         {
             self.changes.changed("library", vec![item.uid.clone()]);
         }
+        self.retone_waiting();
         let paths = response.written.iter().map(|size| (*size, self.thumbs.path(&item, *size)));
         let bytes = paths.clone().filter_map(|(_, p)| std::fs::metadata(p).ok()).map(|m| m.len()).sum();
         self.thumbs.added(bytes, self.state().config.library.thumb_cache_mb);

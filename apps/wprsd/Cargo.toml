@@ -32,6 +32,7 @@ jpeg-decoder.workspace = true
 serde = { workspace = true }
 clap.workspace = true
 wprs-library.workspace = true
+wprs-palette.workspace = true
 wprs-format.workspace = true
 blake3.workspace = true
 dirs.workspace = true

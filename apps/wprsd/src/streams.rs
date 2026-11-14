@@ -28,6 +28,8 @@ pub(crate) struct OutputInfo {
     pub(crate) scene: Option<std::sync::Arc<crate::scenes::ScenePack>>,
     pub(crate) video: Option<std::sync::Arc<crate::sceneprops::Props>>,
     pub(crate) accent: Option<String>,
+    pub(crate) tones: Option<wprs_core::model::Tones>,
+    pub(crate) shown: Option<std::path::PathBuf>,
     pub(crate) spread: bool,
     pub(crate) idle: bool,
 }

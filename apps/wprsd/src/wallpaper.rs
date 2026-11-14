@@ -117,6 +117,7 @@ impl Daemon {
         let kind = self.state().config.transition(output);
         let spec = Spec { content, fit, background: resolved.background, transition, kind, refresh, tone };
         self.compositor.configure(output, size, spec);
+        self.retone(output, image.as_deref());
         let mut st = self.state();
         if let Some(info) = st.outputs.get_mut(output) {
             (info.uploaded, info.scene, info.video, info.accent) = (upload, shown_scene, shown_video, accent);

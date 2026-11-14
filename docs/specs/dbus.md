@@ -797,7 +797,13 @@ the graphics card runs compute shaders in hardware, and each output's `accent` i
 (`#rrggbb`) its wallpaper suggests: `display.accent` of its package (with the current value of a
 color property it names), else the dominant color of the preview or picture, or `null`; the Plasma
 wallpaper plugin gives it to Plasma as the accent color of the wallpaper. `filter` is the filter of
-the output (`SetFilter`), or `null` when it shows its pictures as they are.
+the output (`SetFilter`), or `null` when it shows its pictures as they are. `tones` are the tones
+of the interface that its wallpaper gives (`noche`, `noche_alta`, `noche_linea`, `bruma`,
+`bruma_baja`, `luna`, `luna_honda` as `#rrggbb`, and `velo` from 0.62 to 0.96), derived once with the
+palette module from the picture itself or from the cached 256 px preview of the item, when the
+wallpaper of the output changes and when that preview becomes ready; they are `null` while there is
+no picture to derive from, and then a surface outside the app (the tray) uses the fixed tones.
+`wprs-ctl state --json` shows them.
 
 ### `GetSchema() → (s json)`
 
@@ -3100,8 +3106,11 @@ struct OutputState {
     particles: String, quality: String, quality_reason: String, quality_choice: Option<String>,
     quality_cost: f64, quality_budget: f64, quality_auto: String, quality_frame_ms: Option<f64>,
     quality_period_ms: Option<f64>, quality_step: String, quality_pace: u32, sandbox: String,
-    accent: Option<String>, filter: Option<Filter>, hdr: HdrState, away: Option<String>,
+    accent: Option<String>, tones: Option<Tones>, filter: Option<Filter>, hdr: HdrState,
+    away: Option<String>,
 }
+struct Tones { noche: String, noche_alta: String, noche_linea: String, bruma: String, bruma_baja: String,
+    luna: String, luna_honda: String, velo: f64 }
 struct PreviewState { error: Option<String>, console: Vec<String> }
 struct HdrState {
     choice: String, own: Option<String>, active: bool, offered: bool, display: bool,

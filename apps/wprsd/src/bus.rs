@@ -133,6 +133,7 @@ impl Daemon {
                 sandbox: s.sandbox.into(),
                 helper: s.helper,
                 accent: info.accent.clone(),
+                tones: info.tones.clone(),
                 filter: Some(st.config.filter(name)).filter(|f| !f.is_identity()),
                 hdr: crate::lights::state(&st.config, name, &s.hdr),
                 transition: crate::lights::passage(&st.config, name, s.passage),
