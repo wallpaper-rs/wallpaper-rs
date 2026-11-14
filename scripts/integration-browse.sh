@@ -56,8 +56,8 @@ ctl next -o TEST-31 --preview >/dev/null
 ctl browse apply -o TEST-31 >/dev/null
 expect "$shown" "$gold"
 ctl next -o TEST-31 --preview >/dev/null
-ended() { [ "$(ctl browse show -o TEST-31 --json | js "r['active']")" = False ]; }
-wait_for 20 ended || fail "an idle session did not expire"
+expired() { [ "$(ctl browse show -o TEST-31 --json | js "r['active']")" = False ]; }
+wait_for 20 expired || fail "an idle session did not expire"
 expect "$shown" "$gold"
 [ "$(opened)" = $((before + 2)) ] || fail "an expired session left no trace of its window"
 if [ -x "$BIN/wprs-app" ] && python3 -c 'import dbus' 2>/dev/null; then
