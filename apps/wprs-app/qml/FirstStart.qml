@@ -51,16 +51,14 @@ Column {
                 required property int index
 
                 name: modelData.title
-                note: index === 0 ? App.tr("Set as wallpaper") : ""
                 picture: start.run.previewed[start.run.spec(modelData)] ? App.backend.url(start.run.previewed[start.run.spec(modelData)]) : ""
-                lit: index === 0
                 onTapped: start.run.place(modelData, false)
             }
         }
     }
 
     Text {
-        text: App.tr("You can also drop your files here.")
+        text: App.tr("Click an example to set it as your wallpaper, or drop your own files here.")
         font.family: Look.letraTexto
         font.pixelSize: Look.tCuerpo
         color: Look.bruma

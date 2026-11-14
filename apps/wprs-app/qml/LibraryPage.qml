@@ -139,6 +139,7 @@ Kirigami.Page {
         LibraryBar {
             id: bar
 
+            visible: !state.alone
             y: page.all ? 0 : Math.max(0, covers.y - height - Look.e5)
             tools: tools
             total: library.total
@@ -157,9 +158,11 @@ Kirigami.Page {
         }
 
         LibraryState {
+            id: state
+
             page: page
             bar: bar
-            y: bar.y + bar.height + Look.e6
+            y: alone ? 0 : bar.y + bar.height + Look.e6
             width: parent.width
             height: Math.max(0, parent.height - y)
         }

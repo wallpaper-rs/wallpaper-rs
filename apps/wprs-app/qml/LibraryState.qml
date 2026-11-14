@@ -14,6 +14,8 @@ Item {
 
     readonly property bool starting: empty && !failed && !unmatched
 
+    readonly property bool alone: starting || failed
+
     visible: empty
 
     Vacio {

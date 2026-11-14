@@ -103,6 +103,13 @@ Item {
     Connections {
         target: App.backend
 
+        function onPreviewReady(spec, path) {
+            if (path !== "")
+                run.previewed = Object.assign({}, run.previewed, {
+                    [spec]: path
+                });
+        }
+
         function onChanged(topic) {
             if (topic === "repos")
                 run.load();
