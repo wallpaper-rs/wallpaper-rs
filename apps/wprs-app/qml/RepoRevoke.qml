@@ -39,6 +39,7 @@ PanelChico {
             id: reason
 
             Kirigami.FormData.label: App.tr("Reason:")
+            implicitContentWidthPolicy: QQC2.ComboBox.WidestText
             model: [App.tr("Malware"), App.tr("License"), App.tr("Takedown"), App.tr("Broken"), App.tr("Other")]
         }
 
