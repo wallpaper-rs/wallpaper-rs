@@ -42,7 +42,7 @@ got=$(ctl next -o TEST-31 --preview --from library --json | js "r['source'], r['
 [ "$got" = "('library', True)" ] || fail "browse the library: $got"
 ctl browse cancel -o TEST-31 >/dev/null
 expect "$shown" "$cyan"
-opened() { cat "$WORK/preview-opened" 2>/dev/null | wc -l; }
+opened() { [ -e "$WORK/preview-opened" ] && wc -l <"$WORK/preview-opened" || echo 0; }
 window() {
   dbus-send --session --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus \
     org.freedesktop.DBus.NameHasOwner string:io.github.wallpaper_rs.Preview | grep -q "boolean $1"
@@ -69,7 +69,8 @@ if [ -x "$BIN/wprs-app" ] && python3 -c 'import dbus' 2>/dev/null; then
   timeout 20 "$BIN/wprs-app" --browse TEST-31 || fail "a second preview window did not leave"
   window true || fail "the second window took the first one's place"
   ctl browse cancel -o TEST-31 >/dev/null
-  kill "$holder" && wait "$holder" 2>/dev/null || true
+  kill "$holder" 2>/dev/null || true
+  wait "$holder" 2>/dev/null || true
   echo "single preview window checks passed"
 fi
 kirigami=$(qtpaths6 --query QT_INSTALL_QML 2>/dev/null || true)/org/kde/kirigami
