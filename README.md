@@ -2283,6 +2283,10 @@ cuenta, el catálogo, instala y vota, pero no envía ni recibe nada de la biblio
 «conectado, sin sincronizar», que es normal y no un error. `server syncing on` enciende la
 sincronización después (con la clave de otro equipo, como `server join`); `server syncing off` la
 apaga y el equipo sigue conectado, con su clave guardada. `server link` hace los dos pasos juntos.
+Apagarla no borra nada: el equipo conserva la clave de la cuenta y los registros que ya recibió, y
+en el servidor quedan los datos sincronizados; al volver a encenderla sigue desde ahí sin otro
+emparejamiento. En el teléfono se apaga al instante; en el escritorio (la fila *Sincronizar mi
+biblioteca* de *Cuenta* o `server syncing off`) es un trabajo corto que termina enseguida.
 
 La sincronización mueve registros (títulos, etiquetas, valoraciones, favoritos y ediciones de la
 biblioteca, listas, perfiles, preajustes y ajustes), no archivos de paquetes ni lo que está puesto:

@@ -489,7 +489,9 @@ the library, asks for no sync key, and its state is `connected` with no warning.
 (`Sync1.SetSyncing(true, plaintext)`, `wprs-ctl server syncing on`, the phone op
 `{"op":"syncing","on":true,"plaintext"}`) sets sync up or joins it, as linking did. Turning it off
 cancels sync, pairing and file jobs and keeps the device, its token and its sync key, so turning it
-on again needs no new pairing. `Sync1.Link` and the phone op `link` do both steps at once. Sync,
+on again needs no new pairing. It deletes nothing: the device keeps the key of the account and the
+records it already received, and the server keeps the synced data. On the phone it takes effect at
+once; on the desktop it is a short job (`Sync1.SetSyncing(false, …)` returns its id). `Sync1.Link` and the phone op `link` do both steps at once. Sync,
 pairing, key rotation, escrow, files and reset answer `syncing is off` while connected.
 
 On a local network without a public name, `WPRS_TLS=self-signed` and `WPRS_ADVERTISE=true` let
