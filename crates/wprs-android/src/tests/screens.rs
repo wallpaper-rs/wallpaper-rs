@@ -86,6 +86,8 @@ pub(super) fn synced_lists_fade_their_own_way() {
     assert_eq!(ask(json!({ "op": "save", "playlist": info })), Value::Null);
     set(json!({ "playlist": list }), Target::Both);
     assert_eq!(on(false), on(true));
+    assert!(settings::look(true).fade.is_zero(), "a list fade overrode the cut the person chose");
+    settings::setting("transition.kind", Some("fade")).unwrap();
     assert_eq!(settings::look(true).fade, std::time::Duration::from_millis(250));
     crate::library::with(|lib| {
         let mut row = lib.rotation("home")?.unwrap();
