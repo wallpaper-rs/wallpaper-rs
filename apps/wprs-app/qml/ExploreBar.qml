@@ -8,6 +8,8 @@ Row {
     required property var catalog
     property bool full
     property bool roomy: true
+    readonly property real room: parent ? parent.width : 0
+    readonly property real others: [filter, hint, link, toggle].filter(item => item.visible).reduce((sum, item) => sum + item.width + spacing, 0)
     readonly property alias filter: filter
     readonly property alias search: search
     readonly property alias link: link
@@ -30,6 +32,8 @@ Row {
     }
 
     Text {
+        id: hint
+
         anchors.verticalCenter: parent.verticalCenter
         visible: bar.catalog.lone && bar.roomy
         text: App.tr("Do you have wallpapers elsewhere? Add a repository with its link.")
@@ -51,6 +55,7 @@ Row {
     Buscar {
         id: search
 
+        width: bar.room > 0 ? Math.max(Look.buscarAncho / 2, Math.min(Look.buscarAncho, bar.room - bar.others)) : Look.buscarAncho
         placeholder: App.tr("Search the repositories")
         onAccepted: bar.catalog.query = text.trim()
         onTextChanged: text === "" && (bar.catalog.query = "")
