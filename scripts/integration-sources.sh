@@ -103,7 +103,21 @@ printf 'hunter2\n' | ctl provider secret dav --secret-stdin
 listed=$(ctl provider sync dav --wait --json | jq_ "[(p['listed'], p['failed']) for p in r['output']['reports']]")
 [ "$listed" = "[(3, 0)]" ] || fail "a secret stored over an orphaned one was lost: $listed $(synced)"
 [ "$(synced)" = "[(True, False)]" ] || fail "the orphan was kept after a new secret: $(synced)"
-ctl provider rm dav --purge
+dsrc=$(ctl provider ls --json | jq_ "[p['source'] for p in r['providers'] if p['id'] == 'dav'][0]")
+first() { ctl lib search "source:$dsrc" --json | jq_ "([i['uid'] for i in r['items']] + [''])[0]"; }
+on31() { field "s['outputs'].get('TEST-31', {}).get('item')"; }
+some() { [ -n "$(first)" ]; }
+kept() { if [ "$1" = "$2" ]; then echo kept; else echo "$1"; fi; }
+ctl stream TEST-31 160 90 >/dev/null
+wait_for 10 some && was=$(first) && ctl lib apply "$was" -o TEST-31 && [ "$(on31)" = "$was" ] || fail "a provider photo was not shown"
+ctl provider clear-cache dav && cleared=$(kept "$(on31)" "$was")
+[ "$(find "$provided" -name '*.png' | wc -l)/$(first)" = "0/" ] || fail "clearing the cache kept photos: $(ls -a "$provided")"
+[ -e "$provided/.credits.json" ] && [ "$(secretly dav)/$(ctl provider ls --json | jq_ "[p['source'] for p in r['providers']]")" = "[('idle', True)]/['$dsrc']" ] ||
+  fail "clearing the cache changed the provider: $(ctl provider ls --json)"
+ctl provider sync dav --wait >/dev/null && wait_for 10 some && again=$(first) || fail "a cleared provider brought no photos again"
+ctl lib apply "$again" -o TEST-31 && ctl provider rm dav --purge
+[ "$(kept "$(on31)" "$again")" = "$cleared" ] || fail "clearing the cache and removing treat a shown photo apart: $cleared"
+ctl release TEST-31
 kill "$kr"
 wait "$kr" 2>/dev/null || true
 echo "online provider, size limit and orphaned secret checks passed"

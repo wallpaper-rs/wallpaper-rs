@@ -129,4 +129,13 @@ impl Library {
         tx.commit()?;
         Ok(items)
     }
+
+    pub fn empty_source(&mut self, uid: &str) -> Result<Vec<Item>> {
+        let tx = self.db.transaction()?;
+        let id = row_id(&tx, "source", uid)?;
+        let items = rows(&tx, &format!("{SELECT_ITEMS} WHERE i.source_id = ?1"), [id], item_row)?;
+        tx.execute("DELETE FROM items WHERE source_id = ?1", [id])?;
+        tx.commit()?;
+        Ok(items)
+    }
 }

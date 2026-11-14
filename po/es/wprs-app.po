@@ -18367,3 +18367,24 @@ msgstr "Tu biblioteca de fotos"
 msgctxt "all the sources"
 msgid "All"
 msgstr "Todas"
+
+msgid "The %1 photos it brought, on this computer"
+msgstr "Las %1 fotos que trajo, en este equipo"
+
+msgid "Delete…"
+msgstr "Borrar…"
+
+msgid "Delete the stored photos?"
+msgstr "¿Borrar las fotos guardadas?"
+
+msgid ""
+"The %1 photos this source brought (%2) are deleted from this computer and "
+"leave your library. Your folders are not touched. The source stays and "
+"brings new photos when it updates."
+msgstr ""
+"Se borran de este equipo las %1 fotos que trajo esta fuente (%2) y salen "
+"de tu biblioteca. Tus carpetas no se tocan. La fuente sigue y trae fotos "
+"nuevas al actualizar."
+
+msgid "Delete the photos"
+msgstr "Borrar"

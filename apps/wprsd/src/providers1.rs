@@ -43,6 +43,10 @@ impl Providers {
         self.d()?.remove_provider(id, purge).await
     }
 
+    async fn clear_cache(&self, id: String) -> Result<()> {
+        self.d()?.clear_provider_cache(id).await
+    }
+
     #[zbus(out_args("job"))]
     async fn sync(&self, id: String) -> Result<u64> {
         self.d()?.sync_providers(id).await

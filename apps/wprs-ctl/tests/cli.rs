@@ -178,6 +178,7 @@ fn provider_and_package_commands_parse() {
         ("provider wallhaven reseed art --wait --json", format!(r#"Provider(Wallhaven(Reseed {{ id: "art", {wait} }}))"#)),
         ("provider wallhaven collections art --user alice --json", r#"Provider(Wallhaven(Collections { id: "art", user: Some("alice"), json: true }))"#.into()),
         ("provider rm photos --purge", r#"Provider(Rm { id: "photos", purge: true })"#.into()),
+        ("provider clear-cache photos", r#"Provider(ClearCache { id: "photos" })"#.into()),
         ("remote ls", "Remote(Ls { json: false })".into()),
         ("remote add https://example.org/repo?fingerprint=ab --wait --json", format!(r#"Remote(Add {{ url: "https://example.org/repo?fingerprint=ab", {wait} }})"#)),
         ("remote refresh 0123abcd", r#"Remote(Refresh { repo: Some("0123abcd"), wait: Wait { wait: false, json: false } })"#.into()),

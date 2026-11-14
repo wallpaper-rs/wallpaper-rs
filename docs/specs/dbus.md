@@ -1531,6 +1531,14 @@ the same way as an orphaned one. `purge` also deletes the cache folder; without 
 files stay, but `.credits.json` goes too, so a provider added again under the same id syncs at
 once instead of waiting for the old `refresh` interval.
 
+### `ClearCache(s id)`
+
+Deletes the photos a provider brought: its items leave the library with their thumbnails and the
+files of its cache folder are deleted. The provider, its options, its secret, its library source
+and `.credits.json` stay, so the next scheduled sync keeps its time and brings new photos. A
+running sync of the provider is cancelled first. A photo of the provider that a screen shows is
+treated as `Remove` treats it. `NotFound` for an unknown id.
+
 ### `Sync(s id) → (t job)`
 
 Starts a `provider_sync` job; `id = ""` syncs every provider that is not `needs_secret`. A

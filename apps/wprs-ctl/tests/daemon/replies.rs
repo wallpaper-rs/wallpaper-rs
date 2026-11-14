@@ -55,6 +55,15 @@ async fn the_secret_store_is_chosen_and_the_notices_stay_in_the_list() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+async fn clearing_the_photos_of_a_provider_names_it_and_reports_an_unknown_one() {
+    let bus = Bus::start().await;
+    assert_eq!(bus.ctl(&["provider", "clear-cache", "nas"]), (0, String::new(), String::new()));
+    assert!(bus.log.has("ClearCache nas"));
+    let (code, _, err) = bus.ctl(&["provider", "clear-cache", "gone"]);
+    assert_eq!((code, err.as_str()), (1, "Error: provider \"gone\" not found\n"));
+}
+
+#[tokio::test(flavor = "multi_thread")]
 async fn playlist_rows_far_apart_are_read_before_removal() {
     let bus = Bus::start().await;
     let (code, _, err) = bus.ctl(&["playlist", "remove-at", "Mine", "551", "3", "550"]);

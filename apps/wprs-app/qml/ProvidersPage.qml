@@ -14,6 +14,7 @@ Kirigami.Page {
     readonly property var chosen: providers.find(p => p.id === current) || ({})
     readonly property bool options: view !== "list"
     readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : view === "detail" && !!chosen.id ? SourceKinds.heading(chosen) : ""
+    readonly property Item shown: body.item
     readonly property var route: view === "list" ? [] : [App.tr("Sources"), leaf]
     readonly property var keyHints: [{
             "keys": ["up", "down"],
@@ -43,8 +44,6 @@ Kirigami.Page {
         App.query("List", [], "Playlists1", reply => page && (page.playlists = reply.playlists));
     }
 
-
-
     function open(next) {
         view = next;
         Qt.callLater(() => page && page.focusView());
@@ -60,6 +59,9 @@ Kirigami.Page {
         current = providers.length > 0 ? providers[0].id : "";
         kind = "wallhaven";
         ["pick", "add", "detail", "list"].forEach(v => page.open(v));
+        Qt.createComponent("SourcesCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
     }
 
     title: App.tr("Sources")
@@ -186,7 +188,6 @@ Kirigami.Page {
         anchors.top: parent.top
         filer: dialogs.filer
     }
-
 
     SourceDialogs {
         id: dialogs

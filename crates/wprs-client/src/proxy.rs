@@ -143,6 +143,7 @@ pub trait Providers1 {
     fn set(&self, id: &str, key: &str, value: &str) -> Result<()>;
     fn update(&self, id: &str, options: HashMap<&str, &str>) -> Result<()>;
     fn remove(&self, id: &str, purge: bool) -> Result<()>;
+    fn clear_cache(&self, id: &str) -> Result<()>;
     fn sync(&self, id: &str) -> Result<u64>;
     fn collections(&self, id: &str, owner: &str) -> Result<String>;
     fn reseed(&self, id: &str) -> Result<u64>;

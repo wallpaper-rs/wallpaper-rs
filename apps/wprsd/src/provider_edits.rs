@@ -50,12 +50,42 @@ impl Daemon {
         self.run(move |d| d.drop_provider(&id, purge)).await
     }
 
-    fn drop_provider(&self, id: &str, purge: bool) -> Result<()> {
+    pub async fn clear_provider_cache(self: &Arc<Self>, id: String) -> Result<()> {
+        self.provider(&id)?;
+        self.library_ready()?;
+        self.jobs.find(JobKind::ProviderSync, &id).into_iter().try_for_each(|job| self.cancel_job(job))?;
+        self.run(move |d| d.empty_provider(&id)).await
+    }
+
+    fn empty_provider(&self, id: &str) -> Result<()> {
+        self.drop_photos(id, false)?;
+        let entries = std::fs::read_dir(self.provider_dir(id)).into_iter().flatten().flatten();
+        for entry in entries.filter(|e| e.file_name() != crate::remote::CREDITS) {
+            let path = entry.path();
+            let gone =
+                if path.is_dir() { std::fs::remove_dir_all(&path) } else { std::fs::remove_file(&path) };
+            gone.unwrap_or_else(|e| tracing::warn!(provider = id, "cannot delete a stored photo: {e}"));
+        }
+        tracing::info!(provider = id, "stored photos deleted");
+        self.library_changed(Vec::new());
+        self.changes.changed("providers", vec![id.to_owned()]);
+        Ok(())
+    }
+
+    fn drop_photos(&self, id: &str, source_too: bool) -> Result<()> {
         if let Some(source) = self.provider_source(id) {
-            let removed = self.store.write(|lib| lib.remove_source(&source.uid))?;
+            let removed = self.store.write(|lib| match source_too {
+                true => lib.remove_source(&source.uid),
+                false => lib.empty_source(&source.uid),
+            })?;
             self.forget_files(&removed);
             self.remember_credits(&source.path, &BTreeMap::new());
         }
+        Ok(())
+    }
+
+    fn drop_provider(&self, id: &str, purge: bool) -> Result<()> {
+        self.drop_photos(id, true)?;
         self.update_config(|c| {
             c.providers.remove(id);
             Ok(())

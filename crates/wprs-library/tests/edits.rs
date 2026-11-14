@@ -81,6 +81,15 @@ fn removing_items_and_sources_returns_the_removed_rows() {
 }
 
 #[test]
+fn emptying_a_source_keeps_the_source() {
+    let (_dir, mut library, source, items) = three_items();
+    assert_eq!(library.empty_source(&source).unwrap().len(), items.len());
+    assert_eq!(library.count("", NOW).unwrap(), 0);
+    assert!(library.sources().unwrap().iter().any(|s| s.uid == source));
+    assert!(matches!(library.empty_source("NOPE"), Err(Error::NotFound(..))));
+}
+
+#[test]
 fn entry_edits_apply_only_when_the_entries_hold_the_expected_items() {
     let (_dir, mut library, _, [a, b, c]) = three_items();
     let list = library.create_playlist("Zeta", None, &Rules::default()).unwrap();

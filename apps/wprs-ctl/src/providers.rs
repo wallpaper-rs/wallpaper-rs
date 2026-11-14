@@ -88,6 +88,11 @@ pub enum Provider {
         #[arg(long, help = "Also delete the downloaded files")]
         purge: bool,
     },
+    #[command(about = "Delete the photos a provider brought and keep the provider")]
+    ClearCache {
+        #[arg(help = "Id of the provider")]
+        id: String,
+    },
 }
 
 pub async fn run(client: &Client, command: Provider) -> Result<()> {
@@ -125,6 +130,7 @@ pub async fn run(client: &Client, command: Provider) -> Result<()> {
         }
         Provider::Wallhaven(command) => crate::wallhaven::run(client, *command).await?,
         Provider::Rm { id, purge } => providers.remove(&id, purge).await?,
+        Provider::ClearCache { id } => providers.clear_cache(&id).await?,
     }
     Ok(())
 }

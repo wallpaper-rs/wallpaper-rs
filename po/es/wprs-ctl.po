@@ -10730,3 +10730,6 @@ msgstr "se vio el fundido simple: ninguno de los dos fondos trae transición"
 
 msgid "a cut: the screen was not ready for a transition"
 msgstr "un corte: la pantalla no estaba lista para una transición"
+
+msgid "Delete the photos a provider brought and keep the provider"
+msgstr "Borrar las fotos que trajo un proveedor y conservar el proveedor"

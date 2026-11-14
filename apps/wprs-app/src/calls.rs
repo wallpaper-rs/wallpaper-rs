@@ -107,6 +107,7 @@ calls! {
         Set set(id: str, key: str, value: str);
         Update update(id: str, options: map);
         Remove remove(id: str, purge: bool);
+        ClearCache clear_cache(id: str);
         Sync sync(id: str);
         Collections collections(id: str, owner: str) json;
         Reseed reseed(id: str);

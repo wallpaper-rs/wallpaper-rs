@@ -112,3 +112,17 @@ del menú. Una página que no la pide queda como siempre, en la columna a la der
 - Con la banda, los avisos van a la derecha del menú, encima del bloque de arriba.
 - `wprs-app --pieces band [IMAGEN...]` muestra una página de prueba con la banda (la primera imagen
   hace de fondo).
+
+## Fuentes
+
+Cada proveedor en línea es una tarjeta: nombre, estado, «N fotos, actualizado hace…», el botón
+grande «Rotar estas fotos» (crea o reutiliza la lista `source:<fuente>` y la arranca en todas las
+salidas), «Actualizar» y «Detalles». Si no hay ninguna, la página muestra las tarjetas de tipos para
+añadir una; Bing, NASA y Wikimedia se añaden con un clic, los demás piden primero lo que necesitan
+(búsqueda, servidor, clave). Las claves nunca se vuelven a mostrar. Un proveedor en error se trata
+como falta de conexión y se avisa una sola vez. Las opciones de Wallhaven siguen en su diálogo.
+
+En los detalles de una fuente, «Fotos guardadas» dice cuánto ocupa lo que trajo y ofrece «Borrar…»:
+el panel «¿Borrar las fotos guardadas?» borra esas fotos del equipo y de la biblioteca
+(`Providers1.ClearCache`, `wprs-ctl provider clear-cache ID`); la fuente sigue con sus opciones y su
+clave y trae fotos nuevas en la próxima actualización. «Quitar esta fuente» quita además la fuente.

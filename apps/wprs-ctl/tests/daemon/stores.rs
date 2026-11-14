@@ -80,6 +80,14 @@ impl Providers {
         UIDS[0].into()
     }
 
+    fn clear_cache(&self, id: String) -> Result<(), Failure> {
+        self.0.push(format!("ClearCache {id}"));
+        match id.as_str() {
+            "nas" => Ok(()),
+            _ => Err(Failure::NotFound(format!("provider {id:?} not found"))),
+        }
+    }
+
     fn set_secret_store(&self, store: String) {
         self.0.push(format!("SetSecretStore {store}"));
     }

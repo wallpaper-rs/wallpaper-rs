@@ -10,6 +10,7 @@ FocusScope {
     readonly property var kind: SourceKinds.of(provider.kind)
     readonly property bool plain: provider.plain_http === true
     property bool purge: false
+    readonly property alias clearing: clear
 
     signal closed
     signal removed
@@ -56,8 +57,16 @@ FocusScope {
         }
 
         Fila {
+            id: stored
+
             text: App.tr("Stored photos")
+            note: App.tr("The %1 photos it brought, on this computer", detail.provider.items)
             value: App.bytes(detail.provider.cache_bytes)
+            words: detail.provider.cache_bytes > 0 ? [{
+                    "text": App.tr("Delete…"),
+                    "icon": "trash"
+                }] : []
+            onWorded: clear.open()
         }
 
         Fila {
@@ -114,6 +123,23 @@ FocusScope {
             tone: "ambar"
             text: detail.provider.last_error || ""
         }
+    }
+
+    PanelChico {
+        id: clear
+
+        opener: stored
+        title: App.tr("Delete the stored photos?")
+        text: App.tr("The %1 photos this source brought (%2) are deleted from this computer and leave your library. Your folders are not touched. The source stays and brings new photos when it updates.", detail.provider.items, App.bytes(detail.provider.cache_bytes))
+        principal: App.tr("Delete the photos")
+        principalIcon: "trash"
+        quiet: App.tr("Cancel")
+        borra: true
+        onAccepted: {
+            App.act("ClearCache", [detail.provider.id], "Providers1");
+            close();
+        }
+        onRejected: close()
     }
 
     PanelChico {
