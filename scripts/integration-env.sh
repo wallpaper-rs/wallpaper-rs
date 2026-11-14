@@ -51,5 +51,9 @@ export WPRS_PRIVATE_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS
 pipewire >"$WORK/pipewire.log" 2>&1 & pids+=($!)
 wait_for 10 test -S "$XDG_RUNTIME_DIR/pipewire-0"
 wireplumber >"$WORK/wireplumber.log" 2>&1 & pids+=($!)
+export WPRS_PREVIEW_APP=$WORK/preview-window WPRS_BROWSE_IDLE_MS=8000
+printf '#!/usr/bin/env bash\necho "$*" >>%q\n[ -e %q ] || exit 0\nexec env QT_QPA_PLATFORM=offscreen %q "$@"\n' \
+  "$WORK/preview-opened" "$WORK/preview-real" "$BIN/wprs-app" >"$WPRS_PREVIEW_APP"
+chmod +x "$WPRS_PREVIEW_APP"
 log=${WPRS_IT_LOG:-debug},naga=warn,wgpu_core=warn,wgpu_hal=warn
 export ROOT log
