@@ -11,10 +11,13 @@ Column {
     readonly property alias single: single
     readonly property alias extra: extra
     readonly property alias learn: learn
+    readonly property real oneLine: bar.height + spacing + (page.learn ? examples.implicitHeight : Math.max(sceneGroup.implicitHeight, singleGroup.implicitHeight, extraGroup.visible ? extraGroup.implicitHeight : 0))
 
     spacing: Look.e4
 
     RowLayout {
+        id: bar
+
         width: parent.width
         spacing: Look.e5
 
@@ -39,6 +42,8 @@ Column {
 
         QQC2.Button {
             visible: !band.page.learn
+            Layout.fillWidth: true
+            Layout.maximumWidth: implicitWidth
             flat: true
             text: App.tr("More: preset, resource pack")
             icon.name: "caret-right"
@@ -59,6 +64,8 @@ Column {
         spacing: Look.e7
 
         Column {
+            id: sceneGroup
+
             spacing: Look.e2
 
             CreateHead {
@@ -80,6 +87,8 @@ Column {
         }
 
         Column {
+            id: singleGroup
+
             spacing: Look.e2
 
             CreateHead {
@@ -101,6 +110,8 @@ Column {
         }
 
         Column {
+            id: extraGroup
+
             visible: band.page.more
             spacing: Look.e2
 
@@ -123,6 +134,8 @@ Column {
     }
 
     Column {
+        id: examples
+
         visible: band.page.learn
         width: parent.width
         spacing: Look.e2

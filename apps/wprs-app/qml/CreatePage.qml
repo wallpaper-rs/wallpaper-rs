@@ -23,12 +23,19 @@ Kirigami.Page {
     readonly property bool atExamples: learn && focused !== null && focused !== recent.row
     readonly property bool missing: onRecent && current !== null && current.missing === true
     readonly property string where: recents.shown(placed !== "" ? placed : helper.folderFor(named))
-    readonly property alias band: band
+    readonly property real bandLow: footer.height + Look.e4 + rows.oneLine
+    readonly property real bandHigh: bandLow
+    readonly property real upperHeight: recent.implicitHeight
+    readonly property real bandFrom: Math.min(upper.y, band.y)
+    property rect band
+    property rect upper
+    readonly property rect low: band.width > 0 ? band : Qt.rect(0, upperHeight + Look.e5, width, Math.max(0, height - upperHeight - Look.e5))
+    readonly property rect high: upper.width > 0 ? upper : Qt.rect(0, 0, width, upperHeight)
     readonly property alias facts: facts
 
     function reset() {
         learn = projects.length === 0 && scenes.length > 0;
-        focused = projects.length > 0 ? recent.row : learn ? band.learn : band.scene;
+        focused = projects.length > 0 ? recent.row : learn ? rows.learn : rows.scene;
     }
 
     function create(starter, media) {
@@ -63,13 +70,13 @@ Kirigami.Page {
             return;
         if (row === recent.row)
             return entry.missing ? pickFolder() : open(entry.folder);
-        if (row === band.learn)
+        if (row === rows.learn)
             return page.copyOf(entry);
         make(entry.id);
     }
 
     function copyOf(entry) {
-        const tile = band.learn.view.currentItem;
+        const tile = rows.learn.view.currentItem;
         App.query("GetItem", [entry.uid], "Library1", reply => copy && copy.start(reply.item.path, tile || footer.principal, entry.picture));
     }
 
@@ -90,6 +97,7 @@ Kirigami.Page {
 
     title: App.tr("Create")
     padding: 0
+    background: null
     property var keyHints: [{
             "keys": ["left", "right"],
             "text": App.tr("Move around")
@@ -97,26 +105,14 @@ Kirigami.Page {
             "keys": ["Tab"],
             "text": App.tr("Change row")
         }]
-    Component.onCompleted: fixed ? reset() : load()
-
-    function load() {
-        App.query("Search", ["kind:package", 0, 500], "Library1", reply => page && page.take(reply && reply.items ? reply.items : []));
-    }
-
-    function take(items) {
-        const first = scenes.length === 0;
-        scenes = items.filter(item => item.package && !item.missing);
-        if (!loaded || first && scenes.length > 0)
-            reset();
-        loaded = true;
-    }
+    Component.onCompleted: fixed ? reset() : facts.load()
 
     Connections {
         target: App.backend
 
         function onChanged(topic) {
             if (topic === "library" && !page.fixed)
-                page.load();
+                page.facts.load();
         }
     }
 
@@ -155,36 +151,33 @@ Kirigami.Page {
         page: page
     }
 
+    CreateRecent {
+        id: recent
+
+        page: page
+        x: page.high.x
+        y: page.high.y
+        width: page.high.width
+    }
+
     Flickable {
         id: flick
 
-        anchors.fill: parent
-        anchors.bottomMargin: footer.height + Look.e4
+        x: page.low.x
+        y: page.low.y
+        width: page.low.width
+        height: Math.max(0, page.low.height - footer.height - Look.e4)
         contentWidth: width
-        contentHeight: Math.max(height, column.height)
+        contentHeight: Math.max(height, rows.height)
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
-        Column {
-            id: column
+        CreateBand {
+            id: rows
 
+            page: page
             y: Math.max(0, flick.height - height)
             width: parent.width
-            spacing: Look.e5
-
-            CreateRecent {
-                id: recent
-
-                page: page
-                width: parent.width
-            }
-
-            CreateBand {
-                id: band
-
-                page: page
-                width: parent.width
-            }
         }
     }
 
@@ -192,8 +185,15 @@ Kirigami.Page {
         id: footer
 
         page: page
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        x: page.low.x
+        y: page.low.y + page.low.height - height
+        width: page.low.width - (page.low.x < page.high.x ? room.width + Look.e6 : 0)
+    }
+
+    Hints {
+        id: room
+
+        visible: false
+        model: page.keyHints
     }
 }

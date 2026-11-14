@@ -33,6 +33,18 @@ QtObject {
             })).sort((a, b) => b.example - a.example)
     readonly property string pie: !page.current ? "" : page.onRecent ? [SceneWords.kind(page.current.kind), page.current.version ? App.tr("version %1", page.current.version) : "", App.tr("edited %1", ago(page.current.edited))].filter(part => part !== "").join(" · ") : page.atExamples ? [App.tr("Scene"), page.current.example ? App.tr("Examples") : "", page.current.license].filter(part => part !== "").join(" · ") : ""
 
+    function load() {
+        App.query("Search", ["kind:package", 0, 500], "Library1", reply => facts && facts.take(reply && reply.items ? reply.items : []));
+    }
+
+    function take(items) {
+        const first = page.scenes.length === 0;
+        page.scenes = items.filter(item => item.package && !item.missing);
+        if (!page.loaded || first && page.scenes.length > 0)
+            page.reset();
+        page.loaded = true;
+    }
+
     function ago(seconds) {
         const minutes = Math.round((Date.now() / 1000 - seconds) / 60);
         if (minutes < 2)
