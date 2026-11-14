@@ -14,7 +14,7 @@ T.AbstractButton {
     readonly property color ink: enabled ? Look.escarcha : Look.brumaBaja
 
     implicitWidth: row.implicitWidth
-    implicitHeight: Look.altoOpcion
+    implicitHeight: Math.max(Look.altoOpcion, row.implicitHeight + Look.e3)
     leftPadding: Look.e4
     rightPadding: Look.e4
     focusPolicy: Qt.StrongFocus
@@ -46,6 +46,7 @@ T.AbstractButton {
             text: option.text
             color: option.ink
             font.weight: Font.Medium
+            wrapMode: Text.Wrap
         }
 
         Words {
