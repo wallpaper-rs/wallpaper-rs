@@ -679,18 +679,6 @@ msgstr "Escena"
 msgid "Sepia"
 msgstr "Sepia"
 
-#: integrations/plasma-tray/contents/ui/ScreenRow.qml
-msgid "Still: a window covers it"
-msgstr "Quieto: una ventana lo cubre"
-
-#: integrations/plasma-tray/contents/ui/ScreenRow.qml
-msgid "Still: on battery"
-msgstr "Quieto: con batería"
-
-#: integrations/plasma-tray/contents/ui/ScreenRow.qml
-msgid "Still: screen locked"
-msgstr "Quieto: pantalla bloqueada"
-
 #: integrations/plasma-tray/contents/ui/Own.qml
 msgid "Stretch"
 msgstr "Estirar"

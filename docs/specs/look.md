@@ -135,8 +135,8 @@ letras, deriva `contents/look/Look.qml` de `apps/wprs-app/qml/facade/Look.qml` y
   `shortcuts.next` si `shortcuts.enabled` está activo.
 - *Más* reúne los cuatro interruptores de sonido y destellos y *Pausar con batería* (Nunca, Siempre
   o por debajo del 20 %).
-- Una pantalla quieta lo dice con sus palabras según `outputs.<pantalla>.still_reason`: una ventana
-  la cubre, batería o pantalla bloqueada.
+- La fila de una pantalla no dice por qué un fondo está quieto: el motivo se lee solo en la
+  terminal (`wprs-ctl status`). Una escena demasiado pesada para el equipo sigue con su aviso.
 - El perfil ya no se elige en la bandeja: se hace en la app. La miniatura de un paquete para adultos
   ya no se difumina por fila.
 - El panel no se puede ver sin una sesión de Plasma con el plugin; `scripts/plasma-features.sh` corre

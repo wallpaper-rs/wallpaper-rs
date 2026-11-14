@@ -39,7 +39,6 @@ ColumnLayout {
 
     readonly property string meta: ({"scene": i18n("Scene"), "video": i18n("Video"), "image": i18n("Image"), "web": i18n("Web page"), "color": i18n("Color")})[info.kind] ?? ""
     readonly property string where: playing ? [name, i18n("“%1”, %2 of %3", playing.name, playing.position + 1, playing.count)].join(" · ") : [name, i18n("no playlist running")].join(" · ")
-    readonly property string still: ({"covered": i18n("Still: a window covers it"), "battery": i18n("Still: on battery"), "locked": i18n("Still: screen locked")})[info.still_reason] ?? ""
 
     spacing: Look.e2
     onItemChanged: {
@@ -136,7 +135,7 @@ ColumnLayout {
 
             Words {
                 Layout.fillWidth: true
-                text: row.single ? [row.meta, row.still].filter(t => t).join(" · ") : row.where + (row.still ? " · " + row.still : "")
+                text: row.single ? row.meta : row.where
                 soft: true
                 font.pixelSize: Look.tPie
             }
