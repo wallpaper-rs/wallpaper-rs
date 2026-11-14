@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
@@ -10,13 +9,24 @@ ColumnLayout {
     required property var host
     readonly property var pkg: host.pkg
     readonly property bool tunable: !!pkg && ["scene", "web"].includes(pkg.kind)
-    readonly property var screens: App.outputs.filter(name => ((App.state.outputs ?? {})[name] ?? {}).item === host.uid)
+    property var screens: App.outputs.filter(name => ((App.state.outputs ?? {})[name] ?? {}).item === host.uid)
+
+    property int bare: 0
+    readonly property bool empty: screens.length > 0 && bare === screens.length
 
     visible: tunable
 
-    Kirigami.Heading {
-        level: 4
-        text: App.tr("Settings")
+    Seccion {
+        visible: settings.bare < settings.screens.length || settings.screens.length === 0
+        text: App.tr("Author's options")
+    }
+
+    Vacio {
+        Layout.fillWidth: true
+        visible: settings.empty
+        small: true
+        title: App.tr("This scene has no options of its own")
+        text: App.tr("Its author left nothing to adjust: it looks the same for everybody. Below are your presets, which work for every scene, and the rest is under “More”.")
     }
 
     QQC2.Label {
@@ -48,7 +58,11 @@ ColumnLayout {
             }
 
             SceneControls {
+                readonly property bool none: props.package !== undefined && fields.length === 0
+
                 Layout.fillWidth: true
+                onNoneChanged: settings.bare += none ? 1 : -1
+                Component.onDestruction: settings && none && (settings.bare -= 1)
                 daemon: App
                 output: modelData
             }

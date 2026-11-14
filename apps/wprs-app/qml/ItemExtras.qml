@@ -9,17 +9,6 @@ ColumnLayout {
 
     required property var host
 
-    ItemSettings {
-        Layout.fillWidth: true
-        host: extras.host
-    }
-
-    SoundPicker {
-        Layout.fillWidth: true
-        daemon: App
-        item: extras.host.item.kind === "video" || ["video", "scene", "web"].includes(extras.host.pkg?.kind) ? extras.host.uid : ""
-    }
-
     Kirigami.Heading {
         level: 4
         text: App.tr("Tags")
@@ -80,46 +69,5 @@ ColumnLayout {
                 onClicked: App.act("RemoveItems", [modelData.uid, [extras.host.uid]], "Playlists1")
             }
         }
-    }
-
-    Kirigami.Heading {
-        level: 4
-        text: App.tr("Presets")
-    }
-
-    Repeater {
-        model: extras.host.details.presets ?? []
-
-        delegate: RowLayout {
-            required property var modelData
-
-            QQC2.Label {
-                Layout.fillWidth: true
-                text: [modelData.name, Labels.value(modelData.value.fit), modelData.value.background].filter(t => t).join(" · ")
-            }
-
-            QQC2.ToolButton {
-                icon.name: "edit-delete"
-                text: App.tr("Delete")
-                display: QQC2.AbstractButton.IconOnly
-                onClicked: App.act("DeletePreset", [modelData.uid], "Profiles1")
-            }
-        }
-    }
-
-    QQC2.Button {
-        text: App.tr("New preset…")
-        icon.name: "list-add"
-        onClicked: presets.open()
-    }
-
-    ItemCopyButton {
-        drawer: extras.host
-    }
-
-    PresetDialog {
-        id: presets
-
-        item: extras.host.uid
     }
 }

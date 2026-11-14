@@ -9,7 +9,8 @@ QQC2.ScrollView {
 
     required property var page
     readonly property var host: page.host
-    readonly property string levelName: page.level === "more" ? App.tr("More") : ""
+    readonly property string levelName: page.level === "more" ? App.tr("More") : page.level === "presets" ? App.tr("My presets") : ""
+    readonly property bool first: page.level === "" && !broken.hurt
     readonly property list<QtObject> actions: [
         Kirigami.Action {
             text: panel.host.item.favorite ? App.tr("Unfavorite") : App.tr("Favorite")
@@ -50,33 +51,63 @@ QQC2.ScrollView {
             cache: false
         }
 
+        SceneBroken {
+            id: broken
+
+            Layout.fillWidth: true
+            page: panel.page
+            visible: hurt && panel.page.level === ""
+        }
+
+        SceneStill {
+            Layout.fillWidth: true
+            host: panel.host
+            visible: reason !== "" && panel.first
+        }
+
+        ItemSettings {
+            Layout.fillWidth: true
+            host: panel.host
+            visible: tunable && panel.first
+        }
+
+        Fila {
+            Layout.fillWidth: true
+            visible: panel.first && !!panel.host.pkg && panel.host.pkg.kind !== "assets"
+            kind: "pliega"
+            text: App.tr("My presets")
+            note: App.tr("They work for every scene")
+            number: String(presets.all.length)
+            onOpened: panel.page.level = "presets"
+        }
+
         PackageAbout {
             Layout.fillWidth: true
-            visible: panel.page.level === "" && !!panel.host.details.about
+            visible: panel.first && !!panel.host.details.about
             info: panel.host.details.about ?? {}
             uid: panel.host.uid
             pkg: panel.host.pkg
         }
 
         Seccion {
-            visible: panel.page.level === ""
+            visible: panel.first
             text: App.tr("From its author")
         }
 
         ItemKin {
             Layout.fillWidth: true
-            visible: panel.page.level === ""
+            visible: panel.first
             host: panel.host
         }
 
         Seccion {
-            visible: panel.page.level === ""
+            visible: panel.first
             text: App.tr("Yours")
         }
 
         ItemExtras {
             Layout.fillWidth: true
-            visible: panel.page.level === ""
+            visible: panel.first
             host: panel.host
         }
 
@@ -84,11 +115,19 @@ QQC2.ScrollView {
             id: more
 
             Layout.fillWidth: true
-            visible: panel.page.level === ""
+            visible: panel.first
             kind: "pliega"
             text: App.tr("More")
             note: App.tr("Tags, playlists, rating, credits, details, remove")
             onOpened: panel.page.level = "more"
+        }
+
+        ItemPresets {
+            id: presets
+
+            Layout.fillWidth: true
+            visible: panel.page.level === "presets"
+            page: panel.page
         }
 
         LibraryMore {
