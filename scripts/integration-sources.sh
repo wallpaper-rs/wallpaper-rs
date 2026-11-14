@@ -109,12 +109,15 @@ on31() { field "s['outputs'].get('TEST-31', {}).get('item')"; }
 some() { [ -n "$(first)" ]; }
 kept() { if [ "$1" = "$2" ]; then echo kept; else echo "$1"; fi; }
 ctl stream TEST-31 160 90 >/dev/null
-wait_for 10 some && was=$(first) && ctl lib apply "$was" -o TEST-31 && [ "$(on31)" = "$was" ] || fail "a provider photo was not shown"
+if wait_for 10 some; then was=$(first); else fail "a provider brought no photos"; fi
+ctl lib apply "$was" -o TEST-31 || fail "a provider photo could not be applied"
+[ "$(on31)" = "$was" ] || fail "a provider photo was not shown"
 ctl provider clear-cache dav && cleared=$(kept "$(on31)" "$was")
 [ "$(find "$provided" -name '*.png' | wc -l)/$(first)" = "0/" ] || fail "clearing the cache kept photos: $(ls -a "$provided")"
-[ -e "$provided/.credits.json" ] && [ "$(secretly dav)/$(ctl provider ls --json | jq_ "[p['source'] for p in r['providers']]")" = "[('idle', True)]/['$dsrc']" ] ||
+[ -e "$provided/.credits.json" ] || fail "clearing the cache removed the credits"
+[ "$(secretly dav)/$(ctl provider ls --json | jq_ "[p['source'] for p in r['providers']]")" = "[('idle', True)]/['$dsrc']" ] ||
   fail "clearing the cache changed the provider: $(ctl provider ls --json)"
-ctl provider sync dav --wait >/dev/null && wait_for 10 some && again=$(first) || fail "a cleared provider brought no photos again"
+if ctl provider sync dav --wait >/dev/null && wait_for 10 some; then again=$(first); else fail "a cleared provider brought no photos again"; fi
 ctl lib apply "$again" -o TEST-31 && ctl provider rm dav --purge
 [ "$(kept "$(on31)" "$again")" = "$cleared" ] || fail "clearing the cache and removing treat a shown photo apart: $cleared"
 ctl release TEST-31
