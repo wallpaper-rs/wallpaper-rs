@@ -13,7 +13,7 @@ Item {
     property alias middle: mid.data
     default property alias actions: row.data
 
-    implicitHeight: Math.max(words.implicitHeight, row.implicitHeight) + Look.e4
+    implicitHeight: fields ? Look.e4 + words.implicitHeight + Look.e3 + mid.implicitHeight + Look.e3 : Math.max(words.implicitHeight, row.implicitHeight) + Look.e4
     Accessible.role: Accessible.Grouping
     Accessible.name: title
 
@@ -26,7 +26,7 @@ Item {
     Column {
         id: words
 
-        y: Look.e4 + (parent.height - Look.e4 - height) / 2
+        y: ficha.fields ? Look.e4 : Look.e4 + (parent.height - Look.e4 - height) / 2
         width: ficha.fields ? implicitWidth : parent.width - row.width - Look.e5
 
         Text {
@@ -52,8 +52,7 @@ Item {
         id: mid
 
         visible: ficha.fields
-        x: words.x + words.width + Look.e5
-        y: Look.e4 + (parent.height - Look.e4 - height) / 2
+        y: words.y + words.height + Look.e3
         spacing: Look.e4
     }
 

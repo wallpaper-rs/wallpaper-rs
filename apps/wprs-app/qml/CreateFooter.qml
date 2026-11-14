@@ -7,9 +7,9 @@ CreateFicha {
 
     required property var page
     readonly property var entry: page.current
-    readonly property bool starting: entry !== null && !page.onRecent && !page.onLearn
+    readonly property bool starting: entry !== null && !page.onRecent && !page.atExamples
     readonly property alias principal: principal
-    readonly property string ask: starting && entry.id === "image" ? App.tr("Choose the picture…") : starting && entry.id === "video" ? App.tr("Choose the video…") : starting ? App.tr("Create") : page.missing ? App.tr("Find it…") : page.onLearn ? App.tr("Edit a copy…") : App.tr("Keep editing")
+    readonly property string ask: starting && entry.id === "image" ? App.tr("Choose the picture…") : starting && entry.id === "video" ? App.tr("Choose the video…") : starting ? App.tr("Create") : page.missing ? App.tr("Find it…") : page.atExamples ? App.tr("Edit a copy…") : App.tr("Keep editing")
 
     title: entry ? entry.name : ""
     fields: starting && page.changing
@@ -65,7 +65,7 @@ CreateFicha {
         visible: ficha.entry !== null
         highlighted: true
         text: ficha.ask
-        icon.name: ficha.starting ? (ficha.entry.id === "image" || ficha.entry.id === "video" ? "folder-open" : "plus") : ficha.page.missing ? "magnifying-glass" : ficha.page.onLearn ? "copy" : "pencil-simple"
+        icon.name: ficha.starting ? (ficha.entry.id === "image" || ficha.entry.id === "video" ? "folder-open" : "plus") : ficha.page.missing ? "magnifying-glass" : ficha.page.atExamples ? "copy" : "pencil-simple"
         onClicked: ficha.page.act(ficha.page.focused)
     }
 

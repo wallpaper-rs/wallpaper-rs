@@ -19,7 +19,7 @@ Kirigami.Page {
     property string placed: ""
     readonly property var current: focused ? focused.current : null
     readonly property bool onRecent: focused === recent.row
-    readonly property bool onLearn: focused === band.learn
+    readonly property bool atExamples: learn && focused !== null && focused !== recent.row
     readonly property bool missing: onRecent && current !== null && current.missing === true
     readonly property string where: (placed !== "" ? placed : helper.folderFor(named)).split("/").filter(part => part !== "").slice(-2, -1).join("")
     readonly property alias band: band

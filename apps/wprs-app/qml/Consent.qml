@@ -1,1 +1,87 @@
-../../../integrations/plasma-tray/contents/ui/Consent.qml
+import QtQuick
+import org.kde.kirigami as Kirigami
+
+Kirigami.InlineMessage {
+    id: consent
+
+    required property var daemon
+    property var inputs: ({})
+    property string output: ""
+    property bool unconfirmed: false
+    property string problem: ""
+    readonly property bool pending: listed(inputs.asking) || unconfirmed && inputs.asking === undefined
+    readonly property bool quiet: listed(inputs.quiet)
+    readonly property string asked: [ask.scene, ask.key].concat(ask.inputs).join(" ")
+    readonly property var explained: ({
+            "audio": [daemon.tr("Follow the sound that plays"), daemon.tr("The sound is turned into levels on this computer while the wallpaper is shown; nothing is recorded, kept or sent, and the desktop may show a microphone indicator.")],
+            "pointer": [daemon.tr("Follow the pointer"), daemon.tr("Only the latest pointer position over this screen reaches the wallpaper; positions are never kept and keys are never read.")],
+            "clicks": [daemon.tr("Take clicks and taps"), daemon.tr("Only real clicks and taps on the wallpaper of this screen reach it; they are never kept and keys are never read.")],
+            "media": [daemon.tr("Show what the media player plays"), daemon.tr("While the wallpaper is shown, the title, artist, album, cover and progress of what a media player on this computer plays reach it; nothing of it is kept, logged or sent.")],
+            "media_network": [daemon.tr("Show what plays even though it can reach the network"), daemon.tr("This web wallpaper may also reach the sites it names, so the title, artist and cover of what plays could leave this computer. Allow it only if you trust it with them.")],
+            "audio_network": [daemon.tr("Follow the sound even though it can reach the network"), daemon.tr("This web wallpaper may also reach the sites it names, so what it hears, the sound that plays or the microphone, could leave this computer. Allow it only if you trust it with that.")],
+            "rgb": [daemon.tr("Send its colors to the RGB lighting"), daemon.tr("Up to 64 × 16 colors of the wallpaper go to your keyboard, mouse and other lights through the OpenRGB server set in Settings, on this computer unless you set another address, and only while RGB lighting is on there.")]
+        })
+    readonly property var ask: {
+        const shown = inputs.shown ?? {};
+        const decided = (map, scene, input) => ((map ?? {})[scene] ?? []).includes(input);
+        const wants = (s, input) => input.endsWith("_network") ? s[input.split("_")[0]] === true && s.network === true && (s.granted ?? []).includes(input.split("_")[0]) : s[input] === true;
+        const open = (s, input) => wants(s, input) && !(s.granted ?? []).includes(input) && !decided(inputs.declined, s.scene, input);
+        for (const name of Object.keys(shown).filter(name => consent.output === "" || name === consent.output)) {
+            const list = ["audio", "pointer", "clicks", "media", "media_network", "audio_network", "rgb"].filter(input => open(shown[name], input));
+            if (list.length > 0)
+                return {
+                    "screen": name,
+                    "scene": shown[name].scene,
+                    "key": shown[name].key ?? "",
+                    "title": shown[name].title || shown[name].scene,
+                    "inputs": list
+                };
+        }
+        return {
+            "screen": "",
+            "scene": "",
+            "key": "",
+            "title": "",
+            "inputs": []
+        };
+    }
+
+    function listed(map) {
+        return ask.inputs.some(input => ((map ?? {})[ask.scene] ?? []).includes(input));
+    }
+
+    function answer(allow) {
+        problem = "";
+        ask.inputs.forEach(input => daemon.act(allow ? "GrantPackage" : "Revoke", allow ? [ask.scene, ask.key, input] : [ask.scene, input], "Inputs1", () => {}, error => consent && consent.failed(error)));
+        if (allow && ask.inputs.includes("clicks") && !(inputs.clicks ?? []).includes(ask.screen))
+            daemon.act("SetClicks", [ask.screen, true], "Inputs1", () => {}, error => consent && consent.failed(error));
+    }
+
+    function failed(error) {
+        if (String(error.name).endsWith(".Unconfirmed"))
+            unconfirmed = true;
+        else if (!quiet)
+            problem = error.message;
+    }
+
+    onAskedChanged: {
+        unconfirmed = false;
+        problem = "";
+    }
+    visible: ask.inputs.length > 0
+    type: problem ? Kirigami.MessageType.Error : Kirigami.MessageType.Information
+    text: [daemon.tr("The wallpaper %1 asks for your permission:", String(ask.title).replace(/</g, "‹").replace(/>/g, "›"))].concat(ask.inputs.map(input => explained[input].join(": "))).concat(pending ? [daemon.tr("Confirm it in the desktop notification.")] : []).concat(quiet && !pending ? [daemon.tr("The notification was closed without an answer; try again in a few minutes.")] : []).concat(problem ? [problem] : []).join("\n")
+    actions: [
+        Kirigami.Action {
+            text: consent.daemon.tr("Allow")
+            icon.name: "dialog-ok-apply"
+            enabled: !consent.pending && !consent.quiet
+            onTriggered: consent.answer(true)
+        },
+        Kirigami.Action {
+            text: consent.daemon.tr("Not now")
+            icon.name: "dialog-cancel"
+            onTriggered: consent.answer(false)
+        }
+    ]
+}

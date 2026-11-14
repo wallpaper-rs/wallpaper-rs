@@ -31,7 +31,7 @@ QtObject {
                 "example": (item.tags ?? []).includes("example"),
                 "picture": item.thumb ? App.url(item.thumb) : ""
             })).sort((a, b) => b.example - a.example)
-    readonly property string pie: !page.current ? "" : page.onRecent ? [SceneWords.kind(page.current.kind), page.current.version ? App.tr("version %1", page.current.version) : "", App.tr("edited %1", ago(page.current.edited))].filter(part => part !== "").join(" · ") : page.onLearn ? [App.tr("Scene"), page.current.example ? App.tr("Examples") : "", page.current.license].filter(part => part !== "").join(" · ") : ""
+    readonly property string pie: !page.current ? "" : page.onRecent ? [SceneWords.kind(page.current.kind), page.current.version ? App.tr("version %1", page.current.version) : "", App.tr("edited %1", ago(page.current.edited))].filter(part => part !== "").join(" · ") : page.atExamples ? [App.tr("Scene"), page.current.example ? App.tr("Examples") : "", page.current.license].filter(part => part !== "").join(" · ") : ""
 
     function ago(seconds) {
         const minutes = Math.round((Date.now() / 1000 - seconds) / 60);
