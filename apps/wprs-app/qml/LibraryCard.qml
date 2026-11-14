@@ -26,13 +26,25 @@ Column {
 
     spacing: Look.e3
 
+    TextMetrics {
+        id: sixty
+
+        font.family: Look.letraFija
+        font.pixelSize: Look.tTecla
+        text: "0".repeat(60)
+    }
+
     Nota {
+        id: said
+
         visible: card.hurt
         tone: "coral"
         text: card.entry ? card.said(card.entry) : ""
     }
 
     Row {
+        id: deeds
+
         spacing: Look.e3
 
         QQC2.Button {
@@ -68,6 +80,7 @@ Column {
     }
 
     Detalles {
+        width: Math.max(said.implicitWidth, deeds.implicitWidth, Math.min(sixty.width + 2 * Look.e3, card.Window.width / 2))
         visible: card.hurt && String(card.entry.broken ?? "") !== ""
         details: String(card.entry ? card.entry.broken ?? "" : "")
     }
