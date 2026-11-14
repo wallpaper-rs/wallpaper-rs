@@ -5,7 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
@@ -54,9 +58,10 @@ class PhoneNoticesTest {
 
     @Test
     fun aServerAddressThatIsNotOneAnswersOnTheScreen() {
-        shown { main -> Server(main) { _, work -> main.act(false) { work() } } }
-        text(R.string.add_server).performClick()
-        text(R.string.server_blank).assertIsDisplayed()
+        shown { main -> Connect(Desk(main), {}, {}) {} }
+        compose.onAllNodes(hasSetTextAction())[0].performTextInput("not an address")
+        compose.onNodeWithTag("connect").performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithTag("problem").fetchSemanticsNodes().isNotEmpty() }
     }
 
     @Test

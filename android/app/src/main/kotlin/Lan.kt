@@ -4,9 +4,6 @@ import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.os.Build
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateMapOf
@@ -74,10 +71,6 @@ fun Nearby(pick: (String) -> Unit) {
         val finder = Finder(context, found).apply { start() }
         onDispose { finder.stop() }
     }
-    if (found.isNotEmpty()) Text(stringResource(R.string.lan_found), style = MaterialTheme.typography.titleSmall)
-    found.forEach { (name, url) ->
-        ListItem(headlineContent = { Text(name) }, supportingContent = { Text(url) }, trailingContent = {
-            WordAction({ pick(url) }) { Text(stringResource(R.string.repo_add)) }
-        })
-    }
+    if (found.isNotEmpty()) Group(stringResource(R.string.lan_found))
+    found.forEach { (name, url) -> Found(name, host(url)) { pick(url) } }
 }

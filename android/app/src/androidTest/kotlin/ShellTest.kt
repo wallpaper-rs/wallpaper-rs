@@ -69,7 +69,7 @@ class ShellTest {
         opened()
         tab(R.string.settings).performClick()
         compose.onNodeWithText(context.getString(R.string.account)).performClick()
-        compose.onNodeWithText(context.getString(R.string.add_server)).assertIsDisplayed()
+        compose.onNodeWithText(context.getString(R.string.not_connected)).assertIsDisplayed()
         compose.onNodeWithTag("tabs").assertDoesNotExist()
         back()
         compose.onNodeWithTag("tabs").assertIsDisplayed()

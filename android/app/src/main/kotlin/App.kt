@@ -5,10 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 
-enum class Aside { Sources, Account }
+enum class Aside { Sources, Account, Connect, More, Print }
+
+private fun Aside.back(): Aside? = when (this) {
+    Aside.Connect, Aside.More -> Aside.Account
+    Aside.Print -> Aside.More
+    else -> null
+}
 
 @Composable
 fun App(main: Main) = Theme {
@@ -16,10 +23,12 @@ fun App(main: Main) = Theme {
     var item by rememberSaveable { mutableStateOf<String?>(null) }
     var playlist by rememberSaveable { mutableStateOf<String?>(null) }
     var aside by rememberSaveable { mutableStateOf<Aside?>(null) }
+    var printFrom by rememberSaveable { mutableStateOf(Aside.More) }
+    val desk = remember(main) { Desk(main) }
     BackHandler(item != null || playlist != null || aside != null || tab != Tab.Library) {
         when {
             item != null -> item = null
-            aside != null -> aside = null
+            aside != null -> aside = if (aside == Aside.Print) printFrom else aside?.back()
             playlist != null -> playlist = null
             else -> tab = Tab.Library
         }
@@ -34,7 +43,11 @@ fun App(main: Main) = Theme {
     }
     if (main.placing.value) Placing(main)
     val (shown, list, away) = Triple(item, playlist, aside)
-    val veil = if (shown != null || away != null) Veil.Panel else Veil.Shelf
+    val veil = when {
+        shown == null && away == Aside.Account -> Veil.Strip
+        shown != null || away != null -> Veil.Panel
+        else -> Veil.Shelf
+    }
     val bar: (@Composable () -> Unit)? = if (shown == null && away == null) {
         {
             Tabs(tab, Updates.count.intValue) {
@@ -53,7 +66,10 @@ fun App(main: Main) = Theme {
                 aside = null
                 tab = Tab.Library
             }
-            away == Aside.Account -> Account(main) { aside = null }
+            away == Aside.Account -> Account(desk, { aside = it }, { aside = null; tab = Tab.Library }) { aside = null }
+            away == Aside.Connect -> Connect(desk, { printFrom = Aside.Connect; aside = it }, { aside = Aside.Account }) { aside = Aside.Account }
+            away == Aside.More -> More(desk, { printFrom = Aside.More; aside = it }) { aside = Aside.Account }
+            away == Aside.Print -> Print(desk) { aside = printFrom }
             tab == Tab.Library -> Library(main, { aside = Aside.Sources }) { item = it }
             tab == Tab.Lists && list != null -> Entries(main, list, { item = it }) { playlist = null }
             tab == Tab.Lists -> Playlists(main) { playlist = it }
