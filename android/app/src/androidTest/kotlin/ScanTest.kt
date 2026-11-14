@@ -27,6 +27,8 @@ import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -120,5 +122,21 @@ class ScanTest {
         }
         compose.waitUntil(10_000) { called != null }
         assertEquals("https://casa.example:8443" to PRINT, called)
+    }
+
+    @Test
+    fun aPastedCodeFillsTheAddressAndTheFingerprint() {
+        storage()
+        val desks = mutableListOf<Desk>()
+        scenario = ActivityScenario.launch(Main::class.java).onActivity { main ->
+            desks += Desk(main).apply { url = " wprs://connect/1?server=https://casa.example:8443&fp=$PRINT\n"; coded() }
+            desks += Desk(main).apply { url = "https://casa.example:8443"; coded() }
+        }
+        val (pasted, typed) = desks
+        assertEquals("https://casa.example:8443" to PRINT, pasted.url to pasted.print)
+        assertTrue(pasted.scanned)
+        assertEquals("https://casa.example:8443", typed.url)
+        assertNull(typed.print)
+        assertFalse(typed.scanned)
     }
 }

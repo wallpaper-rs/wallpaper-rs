@@ -91,7 +91,7 @@ class Desk(val main: Main) {
         }
     }
 
-    private fun coded() {
+    fun coded() {
         val text = url.trim().takeIf { it.startsWith("wprs://") } ?: return
         val code = runCatching { JSONObject(Native.connectCode(text)) }.getOrNull()?.takeIf { it.has("server") } ?: return
         url = code.getString("server")
