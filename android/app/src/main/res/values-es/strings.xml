@@ -9,10 +9,9 @@
     <string name="images">Imágenes</string>
     <string name="videos">Vídeos</string>
     <string name="favorites">Favoritos</string>
-    <string name="empty">Aún no hay nada. Añade fotos, vídeos o escenas, o consigue fondos de internet.</string>
+    <string name="empty">Añade fotos, vídeos o escenas, o consigue fondos de internet.</string>
     <string name="choose">Añadir</string>
     <string name="apply">Poner de fondo</string>
-    <string name="applied">Fondo actualizado</string>
     <string name="unsupported">Este dispositivo no permite fondos animados</string>
     <string name="favorite">Favorito</string>
     <string name="add_to_playlist">Añadir a una lista</string>
@@ -145,7 +144,6 @@
     </plurals>
     <string name="hide_mature">Ocultar el contenido para adultos</string>
     <string name="show_mature">Mostrar el contenido para adultos sin difuminar</string>
-    <string name="place_where">Usar como fondo en</string>
     <string name="home_screen">La pantalla de inicio</string>
     <string name="lock_screen">La pantalla de bloqueo</string>
     <string name="both_screens">Las dos pantallas</string>

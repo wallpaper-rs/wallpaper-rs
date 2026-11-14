@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_title">Aún no hay nada</string>
+    <string name="explore_repos">Explorar repositorios</string>
+    <string name="add_photos">Añadir fotos</string>
+    <string name="example_scenes">Escenas de ejemplo</string>
+    <string name="add_them">Añadirlas</string>
+    <string name="photos_sub">De tu galería</string>
+    <string name="files_sub">Escenas y otros archivos del teléfono</string>
+    <string name="animated">Fondo animado</string>
+    <string name="your_server">Tu servidor</string>
+    <string name="connect_server_note">Pega o escanea su dirección y verás aquí sus repositorios.</string>
+    <string name="first_set">%1$s ya es tu fondo</string>
+    <string name="first_set_home">Lo pusimos en tu pantalla de inicio.</string>
+    <string name="first_set_confirm">Elige dónde y el teléfono te lo muestra antes de ponerlo.</string>
+    <string name="first_where">¿Dónde lo quieres?</string>
+    <string name="done_home">Listo: es tu fondo de inicio</string>
+    <string name="done_lock">Listo: es tu fondo de bloqueo</string>
+    <string name="done_both">Listo: es tu fondo de inicio y de bloqueo</string>
+</resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sources">Fuentes</string>
+    <string name="sources">Repositorios</string>
     <string name="sources_intro">De dónde vienen los fondos nuevos: imágenes de internet y repositorios de paquetes. No se descarga nada hasta que enciendas algo.</string>
     <string name="get_wallpapers">Conseguir fondos de internet</string>
     <string name="from_internet">Desde internet</string>

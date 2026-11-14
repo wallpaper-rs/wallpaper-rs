@@ -65,7 +65,7 @@ class Main : ComponentActivity() {
         if (savedInstanceState == null) {
             Sync.soon(this, 0)
             thread(isDaemon = true) {
-                remirror(); runCatching { examples(this, false) }
+                remirror(); runCatching { examples(this, false) }; runOnUiThread { revision.intValue++ }
                 Updates.found(Updates.count())
             }
         }
@@ -104,7 +104,7 @@ class Main : ComponentActivity() {
 
     fun choose() = pick.launch(PickVisualMediaRequest(PickVisualMedia.ImageAndVideo))
 
-    fun chooseFiles() = files.launch(arrayOf("image/*", "video/*"))
+    fun chooseFiles() = files.launch(arrayOf("image/*", "video/*", "application/*"))
 
     fun chooseFolder() = folder.launch(null)
 

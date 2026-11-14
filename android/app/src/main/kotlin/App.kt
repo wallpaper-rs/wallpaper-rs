@@ -26,12 +26,17 @@ fun App(main: Main) = Theme {
     var playlist by rememberSaveable { mutableStateOf<String?>(null) }
     var aside by rememberSaveable { mutableStateOf<Aside?>(null) }
     var printFrom by rememberSaveable { mutableStateOf(Aside.More) }
+    var connectFrom by rememberSaveable { mutableStateOf(Aside.Account) }
     val desk = remember(main) { Desk(main) }
     val phone = stringResource(R.string.this_phone)
     BackHandler(item != null || playlist != null || aside != null || tab != Tab.Library) {
         when {
             item != null -> item = null
-            aside != null -> aside = if (aside == Aside.Print) printFrom else aside?.back()
+            aside != null -> aside = when (aside) {
+                Aside.Print -> printFrom
+                Aside.Connect -> connectFrom
+                else -> aside?.back()
+            }
             playlist != null -> playlist = null
             else -> tab = Tab.Library
         }
@@ -45,6 +50,7 @@ fun App(main: Main) = Theme {
         }
     }
     if (main.placing.value) Placing(main)
+    FirstRun(main)
     val (shown, list, away) = Triple(item, playlist, aside)
     val veil = when {
         shown == null && away == Aside.Account -> Veil.Strip
@@ -64,13 +70,13 @@ fun App(main: Main) = Theme {
     Shell(main, veil, bar) {
         when {
             shown != null -> Detail(main, shown, { item = it }) { item = null }
-            away == Aside.Sources -> Sources(main, { aside = null }) {
+            away == Aside.Sources -> Sources(main, { aside = null }, { connectFrom = Aside.Sources; aside = Aside.Connect }) {
                 main.search.value = it
                 aside = null
                 tab = Tab.Library
             }
-            away == Aside.Account -> Account(desk, { aside = it }, { aside = null; tab = Tab.Library }) { aside = null }
-            away == Aside.Connect -> Connect(desk, { printFrom = Aside.Connect; aside = it }, { aside = Aside.Account }) { aside = Aside.Account }
+            away == Aside.Account -> Account(desk, { connectFrom = Aside.Account; aside = it }, { aside = null; tab = Tab.Library }) { aside = null }
+            away == Aside.Connect -> Connect(desk, { printFrom = Aside.Connect; aside = it }, { aside = connectFrom }) { aside = connectFrom }
             away == Aside.More -> More(desk, { printFrom = Aside.More; aside = it }) { aside = Aside.Account }
             away == Aside.Print -> Print(desk) { aside = printFrom }
             away == Aside.Scan -> Scan(Camera, { desk.take(it, phone); aside = Aside.Connect }, { desk.blind = it; aside = Aside.Connect }) { aside = Aside.Connect }

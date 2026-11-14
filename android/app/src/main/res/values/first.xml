@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_title">Nothing here yet</string>
+    <string name="explore_repos">Explore repositories</string>
+    <string name="add_photos">Add photos</string>
+    <string name="example_scenes">Example scenes</string>
+    <string name="add_them">Add them</string>
+    <string name="photos_sub">From your gallery</string>
+    <string name="files_sub">Scenes and other files on the phone</string>
+    <string name="animated">Animated wallpaper</string>
+    <string name="your_server">Your server</string>
+    <string name="connect_server_note">Paste or scan its address and you will see its repositories here.</string>
+    <string name="first_set">%1$s is your wallpaper now</string>
+    <string name="first_set_home">We put it on your home screen.</string>
+    <string name="first_set_confirm">Choose where, and the phone shows it before it is put.</string>
+    <string name="first_where">Where do you want it?</string>
+    <string name="done_home">Done: it is your home wallpaper</string>
+    <string name="done_lock">Done: it is your lock wallpaper</string>
+    <string name="done_both">Done: it is your home and lock wallpaper</string>
+</resources>

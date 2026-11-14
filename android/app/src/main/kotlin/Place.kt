@@ -6,25 +6,23 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 
 const val BOTH = "both"
 const val HOME = "home"
 const val LOCK = "lock"
 
-private val TARGETS = listOf(HOME to R.string.home_screen, LOCK to R.string.lock_screen, BOTH to R.string.both_screens)
+val TARGETS = listOf(Triple(HOME, R.string.home_screen, Ph.House), Triple(LOCK, R.string.lock_screen, Ph.LockSimple), Triple(BOTH, R.string.both_screens, Ph.DeviceMobile))
 
 fun separate() = Build.VERSION.SDK_INT >= 34
 
 fun Main.setWallpaper() {
-    if (separate() && (active(HOME) || active(LOCK))) placing.value = true else place(BOTH)
+    if (separate()) placing.value = true else place(BOTH)
 }
 
 fun assigned(target: String, flags: Int) = when (flags) {
@@ -33,7 +31,13 @@ fun assigned(target: String, flags: Int) = when (flags) {
     else -> target
 }
 
-fun Context.announce() = Toast.makeText(this, R.string.applied, Toast.LENGTH_LONG).show()
+fun Context.announce(target: String) = Toast.makeText(this, done(target), Toast.LENGTH_LONG).show()
+
+fun done(target: String) = when (target) {
+    HOME -> R.string.done_home
+    LOCK -> R.string.done_lock
+    else -> R.string.done_both
+}
 
 fun Main.place(target: String) {
     placing.value = false
@@ -73,21 +77,14 @@ private fun Main.commit(target: String) = Render.post {
     Wallpaper.reload(Native.commit(target))
     runOnUiThread {
         revision.intValue++
-        announce()
+        announce(target)
     }
 }
 
 @Composable
-fun Placing(main: Main) = AlertDialog(
-    onDismissRequest = { main.placing.value = false },
-    confirmButton = {},
-    dismissButton = { WordAction({ main.placing.value = false }) { Text(stringResource(R.string.cancel)) } },
-    title = { Text(stringResource(R.string.place_where)) },
-    text = {
-        Column {
-            TARGETS.forEach { (target, label) ->
-                ListItem(headlineContent = { Text(stringResource(label)) }, modifier = Modifier.clickable { main.place(target) })
-            }
-        }
-    },
-)
+fun Placing(main: Main) = Sheet({ main.placing.value = false }, stringResource(R.string.first_where)) {
+    TARGETS.forEach { (target, label, ph) ->
+        SheetOption(stringResource(label), Modifier.testTag("place_$target"), ph) { main.place(target) }
+    }
+    WordAction({ main.placing.value = false }, Modifier.padding(horizontal = Measure.e2)) { Text(stringResource(R.string.cancel)) }
+}

@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,7 @@ import org.json.JSONObject
 fun JSONArray?.objects() = this?.let { list -> List(list.length(), list::getJSONObject) }.orEmpty()
 
 @Composable
-fun Repos(main: Main, status: JSONObject, run: Run) {
+fun Repos(main: Main, status: JSONObject, run: Run, add: () -> Unit) {
     var changed by remember { mutableIntStateOf(0) }
     var exploring by remember { mutableStateOf(false) }
     val shown by loaded(JSONObject(), changed, status.optInt("offers"), status.optLong("last_sync")) {
@@ -49,7 +50,7 @@ fun Repos(main: Main, status: JSONObject, run: Run) {
         changed++
         withContext(Dispatchers.IO) { Updates.schedule(main) }
     }
-    Text(stringResource(R.string.repos), Modifier.padding(horizontal = 16.dp), style = MaterialTheme.typography.titleSmall)
+    Group(stringResource(R.string.repos))
     if (shown.optJSONArray("repos").objects().isEmpty()) Note(stringResource(R.string.repos_none))
     shown.optJSONArray("offers").objects().forEach { offer ->
         val key = offer.optJSONArray("fingerprints")?.optString(0).orEmpty().take(16)
@@ -73,8 +74,13 @@ fun Repos(main: Main, status: JSONObject, run: Run) {
             },
         )
     }
-    RepoAdd(main, run) { changed++; exploring = true }
-    if (shown.optJSONArray("repos").objects().isNotEmpty()) WordAction({ exploring = true }, Modifier.padding(horizontal = 8.dp)) { Text(stringResource(R.string.repo_browse)) }
+    Column(Modifier.fillMaxWidth().padding(horizontal = Measure.margin, vertical = Measure.e3), Arrangement.spacedBy(Measure.e3)) {
+        if (shown.optJSONArray("repos").objects().isNotEmpty()) Action({ exploring = true }, Modifier.fillMaxWidth().testTag("explore_repos")) {
+            Glyph(Ph.Compass, null, Modifier.padding(end = Measure.e2), size = Measure.iconSmall)
+            Text(stringResource(R.string.repo_browse))
+        }
+        QuietAction(add, Modifier.fillMaxWidth()) { Text(stringResource(R.string.repo_add_title)) }
+    }
     if (shown.optJSONArray("repos").objects().isNotEmpty()) RepoUpdates(main, run)
     if (exploring) Explore(main, run) { exploring = false }
 }

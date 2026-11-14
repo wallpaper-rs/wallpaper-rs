@@ -7,22 +7,39 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlin.concurrent.thread
 
 @Composable
-fun Adding(main: Main, sources: () -> Unit, close: () -> Unit) = Sheet(close, stringResource(R.string.choose)) {
-    listOf<Triple<Int, Ph, () -> Unit>>(
-        Triple(R.string.photos, Ph.Images, { main.choose() }),
-        Triple(R.string.files, Ph.Files, { main.chooseFiles() }),
-        Triple(R.string.folder, Ph.FolderSimple, { main.chooseFolder() }),
-        Triple(R.string.from_internet, Ph.GlobeSimple, sources),
-    ).forEach { (label, ph, pick) ->
-        SheetOption(stringResource(label), ph = ph) {
-            close()
-            pick()
+fun Adding(main: Main, sources: () -> Unit, close: () -> Unit) {
+    var animated by remember { mutableStateOf(false) }
+    if (animated) return Sheet(close, stringResource(R.string.animated)) {
+        SheetOption(stringResource(R.string.examples), ph = Ph.Sparkle) { close(); main.examples() }
+        SheetOption(stringResource(R.string.open_package), ph = Ph.Files) { close(); main.openPackage() }
+    }
+    Sheet(close, stringResource(R.string.choose)) {
+        listOf<Triple<Int, Ph, () -> Unit>>(
+            Triple(R.string.photos, Ph.Images, { main.choose() }),
+            Triple(R.string.files, Ph.Files, { main.chooseFiles() }),
+            Triple(R.string.folder, Ph.FolderSimple, { main.chooseFolder() }),
+            Triple(R.string.animated, Ph.Sparkle, { animated = true }),
+            Triple(R.string.from_internet, Ph.GlobeSimple, sources),
+        ).forEach { (label, ph, pick) ->
+            val sub = when (label) {
+                R.string.photos -> stringResource(R.string.photos_sub)
+                R.string.files -> stringResource(R.string.files_sub)
+                else -> null
+            }
+            SheetOption(stringResource(label), ph = ph, sub = sub) {
+                if (label != R.string.animated) close()
+                pick()
+            }
         }
     }
 }

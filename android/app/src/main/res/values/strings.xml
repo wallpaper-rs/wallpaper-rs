@@ -10,10 +10,9 @@
     <string name="images">Images</string>
     <string name="videos">Videos</string>
     <string name="favorites">Favorites</string>
-    <string name="empty">Nothing here yet. Add photos, videos or scenes, or get wallpapers from the internet.</string>
+    <string name="empty">Add photos, videos or scenes, or get wallpapers from the internet.</string>
     <string name="choose">Add</string>
     <string name="apply">Set as wallpaper</string>
-    <string name="applied">Wallpaper updated</string>
     <string name="unsupported">This device cannot set live wallpapers</string>
     <string name="favorite">Favorite</string>
     <string name="add_to_playlist">Add to playlist</string>
@@ -147,7 +146,6 @@
     </plurals>
     <string name="hide_mature">Hide mature content</string>
     <string name="show_mature">Show mature content without blur</string>
-    <string name="place_where">Set as wallpaper on</string>
     <string name="home_screen">Home screen</string>
     <string name="lock_screen">Lock screen</string>
     <string name="both_screens">Home and lock screens</string>

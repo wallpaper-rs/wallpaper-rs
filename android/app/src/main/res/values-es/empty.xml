@@ -2,7 +2,7 @@
 <resources>
     <string name="empty_images">Aún no hay fotos. Elige una foto o un vídeo del teléfono.</string>
     <string name="empty_videos">Aún no hay vídeos. Elige una foto o un vídeo del teléfono.</string>
-    <string name="empty_scenes">Aún no hay escenas animadas. Añade las escenas de ejemplo o abre un paquete de escena.</string>
+    <string name="empty_scenes">Aún no hay escenas animadas. Añádelas con Añadir, Fondo animado.</string>
     <string name="empty_webs">Aún no hay páginas web. Abre un paquete de página web para añadir una.</string>
     <string name="pick_media">Elegir una foto o un vídeo</string>
     <string name="kind_video">Vídeo</string>

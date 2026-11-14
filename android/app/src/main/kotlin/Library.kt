@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -14,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -91,6 +89,7 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
         grid.scrollToItem(0)
         runCatching { focus.requestFocus() }
     }
+    val bare = plain && items?.isEmpty() == true
     Column {
         if (chosen.isEmpty()) Top(linked, { if (searching && text.isEmpty()) searching = false else searching = true }, { adding = true }, searching)
         else Selecting(main, chosen, items.orEmpty().map(Item::uid), bar = false)
@@ -110,15 +109,12 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
                         plain && current != null -> Now(current, where, { open(current.item.uid) }) { loved ->
                             main.act { ask("favorite", "uids" to listOf(current.item.uid), "favorite" to loved) }
                         }
+                        bare -> Unit
                         plain -> Header(stringResource(R.string.library))
                         else -> Seek(text, { text = it }, stringResource(R.string.lib_search_library), Modifier.padding(top = Measure.e2, bottom = Measure.e2).focusRequester(focus))
                     }
-                    Choices(null, FILTERS.map { (label, query) -> query to stringResource(label) }, kind) { picked ->
+                    if (!bare) Choices(null, FILTERS.map { (label, query) -> query to stringResource(label) }, kind) { picked ->
                         filter = FILTERS.indexOfFirst { it.second == picked }
-                    }
-                    if (kind == SCENES || kind == "kind:web") Row(Modifier.padding(horizontal = 8.dp), Arrangement.spacedBy(8.dp)) {
-                        if (kind == SCENES) WordAction(main::examples) { Text(stringResource(R.string.examples)) }
-                        WordAction(main::openPackage) { Text(stringResource(R.string.open_package)) }
                     }
                     Importing(main)
                     if (query.isEmpty()) AwayNotes(main)

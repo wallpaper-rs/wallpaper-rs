@@ -2,8 +2,7 @@ package io.github.wallpaper_rs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -33,20 +32,19 @@ fun Main.report(reply: Any?) {
     changed()
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Providers(main: Main, shown: JSONObject, run: Run, library: (String) -> Unit) {
     var adding by remember { mutableStateOf<JSONObject?>(null) }
     val kinds = shown.optJSONArray("kinds").objects()
-    Text(stringResource(R.string.providers), Modifier.padding(horizontal = 16.dp), style = MaterialTheme.typography.titleSmall)
+    Group(stringResource(R.string.providers))
     Note(stringResource(R.string.providers_intro))
     Note(stringResource(if (shown.optString("network") == "any") R.string.provider_network_any else R.string.provider_network_wifi))
     shown.optJSONArray("providers").objects().forEach { provider ->
         Provider(main, provider, kinds.first { it.getString("kind") == provider.getString("kind") }, run, library)
     }
-    Text(stringResource(R.string.provider_add_title), Modifier.padding(16.dp, 8.dp), style = MaterialTheme.typography.titleSmall)
-    FlowRow(Modifier.padding(horizontal = 16.dp), Arrangement.spacedBy(8.dp)) {
-        kinds.forEach { kind -> QuietAction({ adding = kind }) { Text(stringResource(kindTitle(kind.getString("kind")))) } }
+    Group(stringResource(R.string.provider_add_title))
+    Column(Modifier.fillMaxWidth().padding(horizontal = Measure.margin, vertical = Measure.e2), Arrangement.spacedBy(Measure.e3)) {
+        kinds.forEach { kind -> QuietAction({ adding = kind }, Modifier.fillMaxWidth()) { Text(stringResource(kindTitle(kind.getString("kind")))) } }
     }
     adding?.let { ProviderForm(main, it, null, run) { adding = null } }
 }

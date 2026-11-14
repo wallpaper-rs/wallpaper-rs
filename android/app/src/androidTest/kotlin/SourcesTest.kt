@@ -3,9 +3,12 @@ package io.github.wallpaper_rs
 import androidx.activity.compose.setContent
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollAction
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -55,13 +58,15 @@ class SourcesTest {
         return done()
     }
 
+    private fun field(label: Int) = compose.onNode(hasContentDescription(context.getString(label)) and hasSetTextAction())
+
     private fun providers() = runBlocking { account("providers") as JSONObject }.getJSONArray("providers")
 
     @Test
     fun anEmptyLibraryPointsToTheSourcesAndWithoutAnyServer() {
         var opened = 0
         shown { Empty(it, Hollow.LIBRARY) { opened++ } }
-        text(R.string.get_wallpapers).assertIsDisplayed().performClick()
+        text(R.string.explore_repos).assertIsDisplayed().performClick()
         assertEquals(1, opened)
     }
 
@@ -71,7 +76,7 @@ class SourcesTest {
         text(R.string.sources).assertIsDisplayed()
         text(R.string.providers).assertIsDisplayed()
         reached(context.getString(kindTitle("bing"))).assertIsDisplayed()
-        reached(context.getString(R.string.repo_fingerprint)).assertIsDisplayed()
+        reached(context.getString(R.string.repo_add_title)).assertIsDisplayed()
         assertEquals(0, providers().length())
         assertEquals(0, Updates.repos())
     }
@@ -79,7 +84,7 @@ class SourcesTest {
     @Test
     fun aRepositoryNeverAddsWithoutItsFingerprintAndSaysWhy() {
         shown { main -> RepoAdd(main, { _, work -> main.act(false) { work() } }) {} }
-        compose.onNode(hasText(context.getString(R.string.repo_url))).performTextInput("https://example.org/wallpapers/")
+        field(R.string.repo_url).performTextInput("https://example.org/wallpapers/")
         text(R.string.repo_add_url).performClick()
         compose.waitUntil(TIMEOUT_MS) { compose.onAllNodes(hasText(context.getString(R.string.error_android_repo_needs_fingerprint))).fetchSemanticsNodes().isNotEmpty() }
         text(R.string.repo_sent, "example.org").assertIsDisplayed()
@@ -87,10 +92,10 @@ class SourcesTest {
 
     private fun refused(url: String, print: String) {
         shown { Sources(it) {} }
-        reached(context.getString(R.string.repo_url))
-        compose.onNode(hasText(context.getString(R.string.repo_url))).performTextInput(url)
-        if (print.isNotEmpty()) compose.onNode(hasText(context.getString(R.string.repo_fingerprint))).performTextInput(print)
-        reached(context.getString(R.string.repo_add_url)).performClick()
+        reached(context.getString(R.string.repo_add_title)).performClick()
+        field(R.string.repo_url).performTextInput(url)
+        if (print.isNotEmpty()) field(R.string.repo_fingerprint).performTextInput(print)
+        compose.onNodeWithTag("repo_add").assertIsDisplayed().performClick()
         val help = context.getString(R.string.repo_fingerprint_help)
         val label = context.getString(R.string.repo_fingerprint)
         val refused = patient {

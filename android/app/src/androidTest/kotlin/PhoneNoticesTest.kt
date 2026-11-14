@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,18 +42,20 @@ class PhoneNoticesTest {
     private fun text(id: Int) = compose.onNodeWithText(context.getString(id))
 
     @Test
-    fun anEmptyLibraryOffersTheExampleScenesAndAPickerRightThere() {
+    fun anEmptyLibraryOffersTheRepositoriesFirstAndThePhotosSecond() {
         shown { Empty(it, Hollow.LIBRARY) {} }
+        text(R.string.empty_title).assertIsDisplayed()
         text(R.string.empty).assertIsDisplayed()
-        text(R.string.examples).assertIsDisplayed()
-        text(R.string.pick_media).assertIsDisplayed()
+        val explore = compose.onNodeWithText(context.getString(R.string.explore_repos)).assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+        val photos = compose.onNodeWithText(context.getString(R.string.add_photos)).assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+        assertTrue("explore comes first", explore.top < photos.top)
     }
 
     @Test
     fun theWebFilterTalksAboutWebPagesAndOffersNoExamples() {
         shown { Empty(it, Hollow.WEBS) {} }
         text(R.string.empty_webs).assertIsDisplayed()
-        text(R.string.examples).assertDoesNotExist()
+        text(R.string.add_them).assertDoesNotExist()
         text(R.string.empty).assertDoesNotExist()
     }
 

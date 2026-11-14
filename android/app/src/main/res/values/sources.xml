@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sources">Sources</string>
+    <string name="sources">Repositories</string>
     <string name="sources_intro">Where new wallpapers come from: pictures from the internet and repositories of packages. Nothing is downloaded until you turn something on.</string>
     <string name="get_wallpapers">Get wallpapers from the internet</string>
     <string name="from_internet">From the internet</string>

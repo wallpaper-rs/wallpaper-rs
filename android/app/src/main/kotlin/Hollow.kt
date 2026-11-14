@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 
 enum class Hollow(val text: Int) {
     LIBRARY(R.string.empty),
@@ -49,12 +48,23 @@ fun Empty(main: Main, why: Hollow, searched: String = "", reset: () -> Unit = {}
 }
 
 @Composable
-private fun Others(main: Main, why: Hollow, sources: () -> Unit) = Column(Modifier.padding(16.dp), Arrangement.spacedBy(12.dp)) {
-    Text(stringResource(why.text))
-    if (why == Hollow.LIBRARY) Action(main::examples) { Text(stringResource(R.string.examples)) }
-    if (why == Hollow.LIBRARY || why == Hollow.IMAGES || why == Hollow.VIDEOS) {
-        val pick = stringResource(R.string.pick_media)
-        if (why == Hollow.LIBRARY) QuietAction(main::choose) { Text(pick) } else Action(main::choose) { Text(pick) }
+private fun Others(main: Main, why: Hollow, sources: () -> Unit) = when (why) {
+    Hollow.LIBRARY -> Column(Modifier.padding(top = Measure.e8).testTag("empty")) {
+        Blank(stringResource(R.string.empty_title), stringResource(why.text)) {
+            Action(sources, Modifier.fillMaxWidth().testTag("explore")) {
+                Glyph(Ph.Compass, null, Modifier.padding(end = Measure.e2), size = Measure.iconSmall)
+                Text(stringResource(R.string.explore_repos))
+            }
+            QuietAction(main::choose, Modifier.fillMaxWidth()) {
+                Glyph(Ph.Image, null, Modifier.padding(end = Measure.e2), tones.frost, size = Measure.iconSmall)
+                Text(stringResource(R.string.add_photos))
+            }
+        }
+        Bundled(main)
     }
-    if (why == Hollow.LIBRARY) Action(sources) { Text(stringResource(R.string.get_wallpapers)) } else QuietAction(sources) { Text(stringResource(R.string.get_wallpapers)) }
+    else -> Column(Modifier.padding(horizontal = Measure.margin, vertical = Measure.e4), Arrangement.spacedBy(Measure.e3)) {
+        Text(stringResource(why.text))
+        if (why == Hollow.IMAGES || why == Hollow.VIDEOS) Action(main::choose) { Text(stringResource(R.string.pick_media)) }
+        QuietAction(sources) { Text(stringResource(R.string.explore_repos)) }
+    }
 }

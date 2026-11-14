@@ -1,6 +1,5 @@
 package io.github.wallpaper_rs
 
-import android.app.WallpaperManager
 import androidx.activity.SystemBarStyle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -68,15 +67,13 @@ private fun Backdrop(main: Main, veil: Veil) {
     }
     val screen = remember { main.wallpaperSize() }
     val poster by loaded(null, main.revision.intValue, started.intValue) {
-        (if (main.oursInUse()) posterOf(screen) else null).also { Shade.follow(it) }
+        (if (main.ours()) posterOf(screen) else null).also { Shade.follow(it) }
     }
     val picture = poster ?: return
     val t = tones
     Image(picture, null, Modifier.fillMaxSize().testTag("poster"), Alignment.TopCenter, ContentScale.Crop)
     Box(Modifier.fillMaxSize().drawBehind { veils(veil, t) })
 }
-
-private fun Main.oursInUse() = runCatching { WallpaperManager.getInstance(this).wallpaperInfo?.packageName == packageName }.getOrDefault(false)
 
 private fun DrawScope.veils(veil: Veil, t: Tones) = when (veil) {
     Veil.Shelf -> drawRect(Brush.verticalGradient(listOf(t.veiled(0.9f), t.veiled(0.95f))))
