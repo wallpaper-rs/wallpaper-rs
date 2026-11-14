@@ -68,15 +68,27 @@ Item {
                     sourceComponent: frame.page && frame.page.badge ? frame.page.badge : null
                 }
 
-                Text {
-                    text: frame.page?.title ?? ""
-                    color: Look.escarcha
-                    font.family: Look.letraTitulo
-                    font.pixelSize: Look.tPagina
-                    font.weight: Font.Bold
-                    font.letterSpacing: -0.03 * Look.tPagina
-                    Accessible.role: Accessible.Heading
-                    Accessible.name: text
+                ColumnLayout {
+                    spacing: Look.e1
+
+                    Text {
+                        text: frame.page?.title ?? ""
+                        color: Look.escarcha
+                        font.family: Look.letraTitulo
+                        font.pixelSize: Look.tPagina
+                        font.weight: Font.Bold
+                        font.letterSpacing: -0.03 * Look.tPagina
+                        Accessible.role: Accessible.Heading
+                        Accessible.name: text
+                    }
+
+                    Text {
+                        visible: text !== ""
+                        text: frame.page?.caption ?? ""
+                        color: Look.bruma
+                        font.pixelSize: Look.tCuerpo
+                        textFormat: Text.PlainText
+                    }
                 }
 
                 Kirigami.ActionToolBar {

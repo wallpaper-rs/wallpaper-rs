@@ -20,6 +20,7 @@ QQC2.ScrollView {
     ]
 
     readonly property bool puts: !broken.hurt && (!!host.pkg ? host.pkg.kind !== "assets" : true)
+    readonly property string caption: [host.item.kind ? Labels.value(host.pkg?.kind === "scene" ? "scene" : host.item.kind) : "", (host.details.about?.authors ?? []).join(", "), host.repo].filter(t => t).join(" · ")
     readonly property Component badge: Component {
         Item {
             implicitWidth: panel.host.preview !== "" ? Math.round(Look.tapa * 3 / 4) : 0

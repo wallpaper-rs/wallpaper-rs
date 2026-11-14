@@ -93,6 +93,7 @@ Kirigami.Page {
     actions: opened !== "" ? panel.actions : []
     readonly property Component badge: opened !== "" ? panel.badge : null
     readonly property Component head: opened !== "" ? panel.head : null
+    readonly property string caption: opened !== "" ? panel.caption : ""
     readonly property var screens: App.state.outputs ?? {}
     onScreensChanged: shown()
     Component.onCompleted: {
