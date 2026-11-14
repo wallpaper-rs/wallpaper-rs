@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import kotlinx.coroutines.CancellationException
 import org.json.JSONObject
 
 private const val SHOWN = ""
@@ -30,10 +31,13 @@ fun FirstRun(main: Main) {
         if (busy || offered != null || empty != true) return@LaunchedEffect
         val items = runCatching { fetch("items", "query" to "") }.getOrNull() ?: return@LaunchedEffect
         val first = items.firstOrNull { !it.flashing } ?: return@LaunchedEffect
-        empty = false
-        if (nowOn() != null) return@LaunchedEffect
-        runCatching { ask("pick", "choice" to choice("item", first.uid)) }
+        if (nowOn() != null) {
+            empty = false
+            return@LaunchedEffect
+        }
+        runCatching { ask("pick", "choice" to choice("item", first.uid)) }.onFailure { if (it is CancellationException) throw it }
         offered = first.uid
+        empty = false
         if (main.ours()) main.place(HOME)
     }
     offered?.takeIf { it != SHOWN }?.let { uid ->
