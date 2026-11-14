@@ -13,16 +13,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 
 private const val SEAM = 0.55f
+private const val BESIDE_CHARS = 22
+private val BESIDE_WIDTH = 168.dp
+
+fun valueBeside(value: String?) = value != null && value.length <= BESIDE_CHARS
 
 @Composable
 fun Setting(
@@ -41,11 +47,13 @@ fun Setting(
         horizontalArrangement = Arrangement.spacedBy(Measure.e3),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(Modifier.weight(1f)) {
+        val beside = valueBeside(value)
+        Column(Modifier.weight(1f).testTag("setting_name")) {
             Text(label, color = if (enabled) t.frost else t.mist, style = Type.row)
             sub?.let { Text(it, Modifier.padding(top = 2.dp), t.mist, style = Type.foot) }
+            if (!beside) value?.let { Text(it, Modifier.padding(top = 2.dp).testTag("setting_value"), t.mist, style = Type.text) }
         }
-        value?.let { Text(it, color = t.mist, style = Type.text) }
+        if (beside) value?.let { Text(it, Modifier.widthIn(max = BESIDE_WIDTH).testTag("setting_value"), t.mist, style = Type.text) }
         when {
             trailing != null -> trailing()
             onClick != null -> Glyph(Ph.CaretRight, null, tint = t.mistLow, size = Measure.iconSmall)
