@@ -26,13 +26,6 @@ ColumnLayout {
         onTriggered: panel.page.editor.watch()
     }
 
-    QQC2.Label {
-        Layout.fillWidth: true
-        visible: panel.scripts.length > 0
-        text: App.tr("Scripts")
-        font.bold: true
-    }
-
     SceneRepeater {
         id: list
 

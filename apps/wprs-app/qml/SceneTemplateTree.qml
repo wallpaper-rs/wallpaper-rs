@@ -25,12 +25,6 @@ ColumnLayout {
 
     visible: templates.length > 0
 
-    QQC2.Label {
-        Layout.fillWidth: true
-        text: App.tr("Templates")
-        font.bold: true
-    }
-
     SceneRepeater {
         id: list
 

@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
@@ -9,15 +8,13 @@ ColumnLayout {
 
     required property var page
 
-    QQC2.ItemDelegate {
+    Opcion {
         Layout.fillWidth: true
-        highlighted: head.page.editor.selected === "/manifest"
-        icon.name: "documentinfo"
-        text: App.tr("Package details")
+        lit: head.page.editor.selected === "/manifest"
+        icon: "info"
+        text: App.tr("Wallpaper details…")
+        note: App.tr("Title, author, license and tags")
         onClicked: head.page.editor.select("/manifest")
-
-        QQC2.ToolTip.text: (head.page.view.title ?? "") + " · " + (head.page.view.version ?? "")
-        QQC2.ToolTip.visible: hovered
     }
 
     Kirigami.InlineMessage {
@@ -36,6 +33,6 @@ ColumnLayout {
     Kirigami.Heading {
         Layout.fillWidth: true
         level: 4
-        text: App.tr("User properties")
+        text: App.tr("Options you offer to whoever uses it")
     }
 }

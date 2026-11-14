@@ -9,13 +9,7 @@ ColumnLayout {
     id: panel
 
     required property var page
-
-    QQC2.Label {
-        Layout.fillWidth: true
-        visible: effects.count > 0
-        text: App.tr("Effects")
-        font.bold: true
-    }
+    readonly property int count: effects.count
 
     ListView {
         id: effects

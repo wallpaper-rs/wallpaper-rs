@@ -1,67 +1,75 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-ColumnLayout {
+Rectangle {
     id: panel
 
     required property var page
-    property alias tabs: side
+    property alias tabs: stack
     property alias settings: settings
+    property alias layers: layers
 
-    Flow {
-        id: side
+    color: Look.nocheAlta
 
-        property int currentIndex: 0
-
-        Layout.fillWidth: true
-        Layout.minimumWidth: 0
-        Layout.preferredWidth: 0
-
-        Repeater {
-            model: [App.tr("Layers"), App.tr("Assets"), App.tr("Package"), App.tr("Player"), App.tr("Try")]
-
-            delegate: QQC2.ToolButton {
-                required property int index
-                required property string modelData
-
-                text: modelData
-                checkable: true
-                autoExclusive: true
-                checked: side.currentIndex === index
-                onClicked: side.currentIndex = index
-            }
-        }
+    Rectangle {
+        anchors.right: parent.right
+        width: Look.linea
+        height: parent.height
+        color: Look.nocheLinea
     }
 
-    StackLayout {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.minimumWidth: 0
-        Layout.preferredWidth: 0
-        currentIndex: side.currentIndex
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.rightMargin: Look.linea
+        spacing: 0
 
-        SceneLayers {
-            page: panel.page
+        Filtro {
+            Layout.fillWidth: true
+            Layout.margins: Look.e2
+            Layout.bottomMargin: 0
+            sections: true
+            label: App.tr("Sections")
+            current: stack.currentIndex
+            words: [App.tr("Layers"), App.tr("Assets"), App.tr("Options"), App.tr("Try")].map(text => ({
+                        "text": text
+                    }))
+            onPicked: index => stack.currentIndex = index
         }
 
-        SceneAssets {
-            page: panel.page
+        Rectangle {
+            Layout.fillWidth: true
+            implicitHeight: Look.linea
+            color: Look.nocheLinea
         }
 
-        SceneProperties {
-            id: settings
+        StackLayout {
+            id: stack
 
-            page: panel.page
-        }
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.minimumWidth: 0
+            Layout.preferredWidth: 0
 
-        SceneMedia {
-            page: panel.page
-        }
+            SceneLayers {
+                id: layers
 
-        SceneTry {
-            page: panel.page
+                page: panel.page
+            }
+
+            SceneAssets {
+                page: panel.page
+            }
+
+            SceneProperties {
+                id: settings
+
+                page: panel.page
+            }
+
+            SceneTrial {
+                page: panel.page
+            }
         }
     }
 }
