@@ -2,7 +2,7 @@ use crate::library::with;
 use crate::pack::{self, Pack};
 use crate::repos::bundled;
 use crate::said;
-use crate::{Error, chosen, opened, saved, settings, store};
+use crate::{Error, asks, chosen, opened, saved, settings, store};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet};
@@ -10,11 +10,11 @@ use std::fs;
 use std::path::Path;
 use std::sync::Arc;
 use wprs_core::model::Input;
-use wprs_scene::{Control, Property, Runtime, Values};
+use wprs_scene::{Control, Property, Values};
 
-const GRANTS: &str = "inputs.json";
+pub(crate) const GRANTS: &str = "inputs.json";
 
-type Grants = BTreeMap<String, BTreeSet<Input>>;
+pub(crate) type Grants = BTreeMap<String, BTreeSet<Input>>;
 
 #[derive(Deserialize)]
 #[serde(tag = "op", rename_all = "snake_case")]
@@ -24,6 +24,8 @@ pub(crate) enum Request {
     Preset { uid: String, preset: String },
     Reset { uid: String },
     Grant { uid: String, input: String, on: bool },
+    Decide { uid: String, allow: Vec<String>, deny: Vec<String> },
+    Asks { uid: String },
     Examples { dir: String },
     ExamplesRepo { dir: String, stamp: i64, force: bool },
     ExamplesDue { stamp: i64 },
@@ -52,7 +54,12 @@ pub(crate) fn request(request: Request) -> Result<Value, Error> {
             done(saved::apply(&pack, &saved::chosen(&pack, &preset)?))
         }
         Request::Reset { uid } => done(change(&*scene(&uid)?, BTreeMap::clear)),
-        Request::Grant { uid, input, on } => done(grant(&*scene(&uid)?, &input, on)),
+        Request::Grant { uid, input, on } => done(asks::grant(&*scene(&uid)?, &input, on)),
+        Request::Decide { uid, allow, deny } => done(asks::decide(&*scene(&uid)?, &allow, &deny)),
+        Request::Asks { uid } => {
+            let pack = scene(&uid)?;
+            Ok(json!(asks::undecided(&pack, asks::wants(&pack, values(&pack)).1)))
+        }
         Request::Examples { dir } => Ok(json!(pack::examples(Path::new(&dir))?)),
         Request::ExamplesRepo { dir, stamp, force } => bundled::offer(Path::new(&dir), stamp, force),
         Request::ExamplesDue { stamp } => Ok(json!(bundled::due(stamp)?)),
@@ -91,7 +98,7 @@ pub(crate) fn values(pack: &Pack) -> Values {
     )
 }
 
-fn grants() -> Grants {
+pub(crate) fn grants() -> Grants {
     let read = store::dir().ok().and_then(|dir| fs::read(dir.join(GRANTS)).ok());
     read.and_then(|bytes| serde_json::from_slice(&bytes).ok()).unwrap_or_default()
 }
@@ -121,13 +128,9 @@ fn form(pack: &Pack, languages: &[String], uid: &str) -> Result<Value, Error> {
     let (mut fields, presets) = wprs_scene::form(&props, &pack.presets, &values, &languages);
     let filled = saved::filled(pack);
     fields.iter_mut().for_each(|f| f.filled = filled.contains(&f.key));
-    let mut runtime = Runtime::new(Arc::clone(&pack.scene), values);
-    pack.inputs.into_iter().for_each(|allowed| runtime.declare(allowed));
-    let ran = runtime.uses();
+    let (ran, wants) = asks::wants(pack, values);
     let [audio, touch, taps] = granted(&pack.id);
-    let uses = pack.web.as_ref().map_or([ran.audio, ran.cursor, ran.clicks], |w| w.uses);
-    let media = pack.web.as_ref().map_or(ran.media, |w| w.media);
-    let network = pack.web.as_ref().is_some_and(|w| !w.network.is_empty());
+    let (uses, media, network) = ([wants.audio, wants.touch, wants.taps], wants.media, wants.network);
     Ok(json!({
         "fields": fields, "presets": presets, "scripts": pack.web.is_none() && ran.scripts, "sounds": sounds,
         "muted": settings::config().playback.muted,
@@ -137,6 +140,7 @@ fn form(pack: &Pack, languages: &[String], uid: &str) -> Result<Value, Error> {
             "media_network": allows(&pack.id, Input::MediaNetwork),
             "audio_network": allows(&pack.id, Input::AudioNetwork) },
         "access": crate::playing::access(), "video": pack.video.is_some(), "length": length, "probe": probe,
+        "undecided": asks::undecided(pack, wants),
     }))
 }
 
@@ -171,30 +175,4 @@ fn set(pack: &Pack, key: &str, value: &Value) -> Result<(), Error> {
         Some(value) => drop(values.insert(key.to_owned(), value)),
         None => drop(values.remove(key)),
     })
-}
-
-fn grant(pack: &Pack, input: &str, on: bool) -> Result<(), Error> {
-    let input = match input {
-        "audio" => Input::Audio,
-        "touch" => Input::Pointer,
-        "taps" => Input::Clicks,
-        "network" if pack.web.as_ref().is_some_and(|w| !w.network.is_empty()) => Input::Network,
-        "media" => Input::Media,
-        "audio_network" if pack.web.as_ref().is_some_and(|w| !w.network.is_empty()) => Input::AudioNetwork,
-        "media_network" if pack.web.as_ref().is_some_and(|w| !w.network.is_empty()) => Input::MediaNetwork,
-        _ => {
-            return Err(said("android.audio_touch_taps", "%1 is not audio, touch, taps or media", &[&input]));
-        }
-    };
-    let mut grants = grants();
-    let inputs = grants.entry(pack.id.clone()).or_default();
-    if on {
-        inputs.insert(input)
-    } else {
-        inputs.remove(&input)
-    };
-    grants.retain(|_, inputs| !inputs.is_empty());
-    store::write(&store::dir()?.join(GRANTS), &serde_json::to_vec_pretty(&grants)?)?;
-    store::changed();
-    Ok(())
 }

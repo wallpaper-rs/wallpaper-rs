@@ -7,6 +7,7 @@
     <string name="error_android_android_keystore_refused">The Android keystore refused the stored server secrets</string>
     <string name="error_android_another_account_task">Another account task is running; try again when it ends</string>
     <string name="error_android_audio_touch_taps">%1$s is not audio, touch or taps</string>
+    <string name="error_android_decided_twice">%1$s is both allowed and declined</string>
     <string name="error_android_choose_another_device">Choose another device than this phone</string>
     <string name="error_android_code_digits">The code has 6 digits</string>
     <string name="error_android_code_expired_before">The code expired before it was approved; link again</string>

@@ -54,6 +54,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     }
     val inUse by loaded(false, uid, main.revision.intValue) { nowOn() == uid }
     val report = standing(inUse)
+    val undecided by loaded(emptyList<String>(), uid, picture, main.revision.intValue) { if (picture) emptyList() else asked(uid) }
     val window = LocalWindowInfo.current.containerSize
     val screen = remember(window) { main.wallpaperSize() }
     val still by item?.let { thumbnail(it) } ?: remember { mutableStateOf(null) }
@@ -71,6 +72,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     val page: @Composable ColumnScope.() -> Unit = {
         item?.let { Heading(it, inUse, barred) }
         if (inUse) Standing(report)
+        Asks(main, uid, undecided)
         if (picture) Framing(main, uid, state)
         About(main, uid, item, picture, state, open)
         if (item?.scene == true || item?.reel == true) Scene(main, uid)

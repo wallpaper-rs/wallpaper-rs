@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="asks_title">This wallpaper asks for</string>
+
+    <string name="asks_note">Until you answer, it plays without these.</string>
+
+    <string name="asks_allow">Allow</string>
+
+    <string name="asks_without">Without it</string>
+</resources>

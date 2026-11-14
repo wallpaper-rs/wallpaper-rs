@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="asks_title">Este fondo pide</string>
+
+    <string name="asks_note">Hasta que respondas, funciona sin esto.</string>
+
+    <string name="asks_allow">Permitir</string>
+
+    <string name="asks_without">Sin eso</string>
+</resources>

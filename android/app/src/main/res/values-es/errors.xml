@@ -7,6 +7,7 @@
     <string name="error_android_android_keystore_refused">El almacén de claves de Android rechazó los secretos guardados del servidor</string>
     <string name="error_android_another_account_task">Otra tarea de la cuenta está en curso; vuelve a intentarlo cuando termine</string>
     <string name="error_android_audio_touch_taps">%1$s no es sonido, tacto ni toques</string>
+    <string name="error_android_decided_twice">%1$s está permitido y rechazado a la vez</string>
     <string name="error_android_choose_another_device">Elige un dispositivo distinto de este teléfono</string>
     <string name="error_android_code_digits">El código tiene 6 cifras</string>
     <string name="error_android_code_expired_before">El código caducó antes de aprobarse; vuelve a enlazar</string>
