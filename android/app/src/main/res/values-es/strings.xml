@@ -28,7 +28,6 @@
     <string name="votes_note">Los votos van a tu servidor con tu cuenta; guarda solo los recuentos y tu propio voto.</string>
     <string name="vote_counts">Mostrar los recuentos de votos de tu servidor</string>
     <string name="auto_refresh">Buscar actualizaciones en los repositorios cada día</string>
-    <string name="flashing">Destellos</string>
     <string name="lacks_gpu">Necesita shaders de cálculo, que la gráfica de este teléfono no tiene, así que puede dibujarse lento o con partes de menos.</string>
     <string name="lacks_display2">Su color alrededor de la imagen y su extensión sobre todas las pantallas no se usan en el teléfono.</string>
     <string name="lacks_spanned_scenes">Su escena no se extiende sobre varias pantallas en el teléfono.</string>

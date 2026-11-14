@@ -29,7 +29,6 @@
     <string name="votes_note">Votes go to your server with your account; it keeps only the counts and your own vote.</string>
     <string name="vote_counts">Show vote counts from your server</string>
     <string name="auto_refresh">Check repositories for updates every day</string>
-    <string name="flashing">Flashing lights</string>
     <string name="lacks_gpu">It needs compute shaders, which the graphics of this phone lack, so it may draw slowly or leave parts out.</string>
     <string name="lacks_display2">Its color around the picture and its spreading over every screen are not used on the phone.</string>
     <string name="lacks_spanned_scenes">Its scene is not spread over several screens on the phone.</string>

@@ -26,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLocale
@@ -118,11 +117,9 @@ fun Thumb(item: Item, modifier: Modifier = Modifier, picked: Boolean = false) {
     val shape = MaterialTheme.shapes.medium
     val outline = if (picked) Modifier.border(3.dp, MaterialTheme.colorScheme.primary, shape) else Modifier
     Box(modifier.then(outline).clip(shape).background(MaterialTheme.colorScheme.surfaceVariant)) {
-        val hidden = if (item.mature) Modifier.blur(24.dp) else Modifier
         val kind = stringResource(if (item.video) R.string.kind_video else if (item.scene) R.string.kind_scene else R.string.kind_photo)
-        bitmap?.let { Image(it, "$kind ${item.title}".trim(), Modifier.fillMaxSize().then(hidden), contentScale = ContentScale.Crop) }
-        if (item.mature) Glyph(Ph.Lock, stringResource(R.string.mature), Modifier.align(Alignment.Center), tones.frost)
-        if (item.flashing) Glyph(Ph.Warning, stringResource(R.string.flashing), Modifier.align(Alignment.TopEnd).padding(4.dp), tones.frost)
+        bitmap?.let { Image(it, "$kind ${item.title}".trim(), Modifier.fillMaxSize(), contentScale = ContentScale.Crop) }
+        if (item.flashing) StateLine(stringResource(R.string.flashes_barred), Tone.Amber, Modifier.align(Alignment.TopStart).fillMaxWidth().background(tones.nightHigh).padding(Measure.e1))
         if (item.failing != null) Glyph(Ph.Warning, stringResource(R.string.page_error), Modifier.align(Alignment.BottomEnd).padding(4.dp), MaterialTheme.colorScheme.error)
         val corner = Modifier.align(Alignment.BottomStart).padding(4.dp)
         if (item.video) Glyph(Ph.Play, null, corner, tones.frost)
