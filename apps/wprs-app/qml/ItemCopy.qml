@@ -141,8 +141,9 @@ PanelChico {
                 Accessible.name: App.tr("Id of the copy:")
             }
 
+            Item {}
+
             QQC2.Button {
-                Layout.column: 1
                 text: App.tr("Edit a copy")
                 icon.name: "edit-copy"
                 enabled: copying.ready
