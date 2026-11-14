@@ -31,6 +31,8 @@ fn the_certificate_row_is_good_near_and_bad() {
     let good = rows::certificate(&Cert { days: 89, own: false });
     assert_eq!(tone(&good), Some(Tone::Good));
     assert!(!shown(&good).contains("Renew now"));
+    assert!(shown(&good).contains("expires in"));
+    assert!(!shown(&rows::certificate(&Cert { days: 755_734, own: false })).contains("expires in"));
     let near = rows::certificate(&Cert { days: 9, own: false });
     assert_eq!(tone(&near), Some(Tone::Warn));
     let html = shown(&near);

@@ -33,7 +33,7 @@ pub fn certificate(cert: &Cert) -> Line {
     let (tone, text, detail) = match cert.days {
         d if d < 0 => (Tone::Bad, tf("Certificate expired {} ago", &[&days(-d)]), None),
         d if d <= 30 => (Tone::Warn, tf("Expires in {}", &[&days(d)]), None),
-        d => (Tone::Good, t("Valid").into(), Some(tf("expires in {}", &[&days(d)]))),
+        d => (Tone::Good, t("Valid").into(), (d <= 3650).then(|| tf("expires in {}", &[&days(d)]))),
     };
     let mut row = Row::new(html! { (t("Certificate")) });
     if tone == Tone::Good {
