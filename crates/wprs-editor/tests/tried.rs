@@ -42,3 +42,16 @@ fn the_form_shows_defaults_under_the_tried_values_without_secrets_or_buttons() {
     assert_eq!(fast["values"]["speed"].as_f64(), Some(8.0));
     assert_eq!(fast["presets"][0]["label"], "Fast");
 }
+
+#[test]
+fn a_capture_with_a_preset_chosen_renders_the_preset_values() {
+    let doc = json!({"manifest": {"properties": {
+        "speed": {"type": "slider", "min": 0, "max": 10, "default": 1}
+    }, "presets": [{"id": "fast", "label": "Fast", "values": {"speed": 8}}]}});
+    let spec = json!({"time": 0, "values": {}, "preset": "fast"});
+    let shown = wprs_editor::reach::tried(&doc, &wprs_editor::tried::rendered(&doc, &spec));
+    assert_eq!(shown["speed"].as_f64(), Some(8.0));
+    let spec = json!({"values": {"speed": 3}, "preset": "fast"});
+    assert_eq!(wprs_editor::tried::rendered(&doc, &spec)["speed"], 3);
+    assert!(wprs_editor::tried::rendered(&doc, &json!({"time": 0})).is_empty());
+}

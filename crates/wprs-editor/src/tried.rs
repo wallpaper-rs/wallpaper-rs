@@ -20,6 +20,10 @@ pub fn values(doc: &Value, look: &Value) -> Option<Value> {
     Some(Value::Object(tried))
 }
 
+pub fn rendered(doc: &Value, spec: &Value) -> wprs_scene::Values {
+    serde_json::from_value(values(doc, spec).unwrap_or_default()).unwrap_or_default()
+}
+
 pub fn stage(doc: &Value, look: &Value, document: &mut Value) {
     let Some(tried) = values(doc, look) else { return };
     if !document["preview"].is_object() {

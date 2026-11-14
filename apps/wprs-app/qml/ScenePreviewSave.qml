@@ -27,6 +27,8 @@ ColumnLayout {
             wanted.media = SceneLook.media;
         if (SceneLook.values !== null)
             wanted.values = SceneLook.values;
+        if (SceneLook.preset !== "")
+            wanted.preset = SceneLook.preset;
         if (sweep.checked)
             wanted.pointer = {
                 "from": [0.2, 0.5],

@@ -57,7 +57,7 @@ pub fn shoot(dir: &Path, doc: &Value, out: &Path, spec: &Value) -> anyhow::Resul
     };
     rehearsal.media = played.as_ref().map(|p| p.state.clone());
     let open = |bloom: bool| -> anyhow::Result<wprs_render::Opened> {
-        let tried: wprs_scene::Values = serde_json::from_value(spec["values"].clone()).unwrap_or_default();
+        let tried = wprs_editor::tried::rendered(doc, spec);
         let (scene, props) = wprs_editor::reach::open_with(doc, dir, bloom, &tried)?;
         let mut assets = SceneAssets::read(&scene, wprs_editor::reach::reader(dir))
             .and_then(|a| a.with_scripts(&scene, wprs_editor::reach::reader(dir)))
