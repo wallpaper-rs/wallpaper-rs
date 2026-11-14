@@ -5,8 +5,10 @@ Coleccion {
     id: rejilla
 
     property alias currentIndex: grid.currentIndex
-    readonly property int columns: Math.max(1, Math.floor((grid.width - grid.leftMargin + Look.huecoEstante) / (Look.tapaRejilla + Look.huecoEstante)))
-    readonly property real cover: (grid.width - grid.leftMargin - grid.rightMargin + Look.huecoEstante) / columns - Look.huecoEstante
+    readonly property real room: grid.width - grid.leftMargin - grid.rightMargin
+    readonly property int columns: Math.max(1, Math.floor(room / (Look.tapaRejilla + Look.huecoEstante)))
+    readonly property int cell: Math.floor(room / columns)
+    readonly property real cover: cell - Look.huecoEstante
 
     view: grid
     Accessible.role: Accessible.List
@@ -30,11 +32,12 @@ Coleccion {
         id: grid
 
         anchors.fill: parent
+        anchors.rightMargin: -Look.huecoEstante
         topMargin: Look.filete + Look.anillo
         leftMargin: Look.filete + Look.anillo
         rightMargin: Look.filete + Look.anillo
         bottomMargin: Look.e4
-        cellWidth: rejilla.cover + Look.huecoEstante
+        cellWidth: rejilla.cell
         cellHeight: Math.round(rejilla.cover * 9 / 16) + Look.e3 + Math.ceil(names.height) + Look.notaArriba + Math.max(Look.icono, Math.ceil(notes.height)) + Look.e5
         focus: true
         clip: true
