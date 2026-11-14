@@ -13,6 +13,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
@@ -81,7 +82,7 @@ class ShellTest {
         opened()
         compose.onNodeWithContentDescription(context.getString(R.string.choose)).performClick()
         compose.onNodeWithText(context.getString(R.string.from_internet)).performClick()
-        compose.onNodeWithText(context.getString(R.string.sources)).assertIsDisplayed()
+        compose.onAllNodesWithText(context.getString(R.string.sources))[0].assertIsDisplayed()
         back()
         tab(R.string.library).assertIsSelected()
     }

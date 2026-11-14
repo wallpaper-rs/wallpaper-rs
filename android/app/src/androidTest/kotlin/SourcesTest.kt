@@ -9,6 +9,7 @@ import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -73,7 +74,7 @@ class SourcesTest {
     @Test
     fun theSourcesPageOffersPicturesAndRepositoriesWithNothingSetUp() {
         shown { Sources(it) {} }
-        text(R.string.sources).assertIsDisplayed()
+        compose.onAllNodesWithText(context.getString(R.string.sources))[0].assertIsDisplayed()
         text(R.string.providers).assertIsDisplayed()
         reached(context.getString(kindTitle("bing"))).assertIsDisplayed()
         reached(context.getString(R.string.repo_add_title)).assertIsDisplayed()
@@ -121,7 +122,7 @@ class SourcesTest {
 
     @Test
     fun aFingerprintOfTheWrongLengthKeepsItsMessageAndWhatWasTyped() {
-        refused("https://example.org/wallpapers/", "abc123")
+        refused("https://example.net/wallpapers/", "abc123")
     }
 
     @Test
