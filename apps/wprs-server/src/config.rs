@@ -60,5 +60,7 @@ pub struct Config {
     pub notice_days: u64,
     pub takedown_days: u64,
     pub rate_limits: bool,
+    pub self_signed: bool,
+    pub advertise: bool,
     pub validator: PathBuf,
 }

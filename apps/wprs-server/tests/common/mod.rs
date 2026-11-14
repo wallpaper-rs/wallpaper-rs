@@ -29,6 +29,7 @@ pub enum Who {
     Nobody,
     Cookie(String),
     Bearer(String),
+    Raw(String),
 }
 
 pub async fn start(extra: &[(&str, &str)]) -> Server {

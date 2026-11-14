@@ -61,7 +61,7 @@ pub async fn purge(app: &Arc<App>) -> Res<()> {
             "DELETE FROM sessions WHERE seen_at < ?1 OR created_at < ?2",
             params![t - 7 * DAY, t - 30 * DAY],
         )?;
-        for table in ["device_codes", "setup_tokens", "mailbox", "invites", "strikes"] {
+        for table in ["device_codes", "setup_tokens", "setup_visits", "mailbox", "invites", "strikes"] {
             c.execute(&format!("DELETE FROM {table} WHERE expires_at < ?1"), [t])?;
         }
         let old = t - 180 * DAY;

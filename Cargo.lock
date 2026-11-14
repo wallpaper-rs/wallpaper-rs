@@ -7199,6 +7199,7 @@ dependencies = [
  "wprs-qr",
  "wprs-scene",
  "wprs-sync",
+ "x509-parser",
 ]
 
 [[package]]

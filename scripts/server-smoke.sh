@@ -17,10 +17,16 @@ curl -fsS "$URL/.well-known/wprs-server" | grep '"end_to_end_default":true' > /d
 docker compose logs wprs | grep 'one-time setup token' > /dev/null
 
 token=$(docker compose exec -T wprs wprs-server setup-token)
-status=$(curl -s -o /dev/null -w '%{http_code}' --data-urlencode "token=$token" -d handle=admin -d "password=$PASSWORD" "$URL/setup")
-test "$status" = 303
+jar=$(mktemp)
+step() { curl -s -o /dev/null -w '%{http_code}' -b "$jar" -c "$jar" "$@"; }
+test "$(step --data-urlencode "token=$token" "$URL/setup")" = 303
+test "$(step -d network=own "$URL/setup/network")" = 303
+test "$(step -d handle=admin -d "password=$PASSWORD" "$URL/setup/account")" = 303
 
 docker compose exec -T wprs wprs-server repo init --name "Smoke test" | grep 'Root key fingerprint' > /dev/null
+test "$(step -d access=closed "$URL/setup/access")" = 303
+test "$(step --data-urlencode "token=$token" "$URL/setup")" = 403
+rm -f "$jar"
 docker compose exec -T wprs wprs-server repo publish
 latest=$(curl -fsS "$URL/repo/entry/latest")
 curl -fsS "$URL/repo/entry/$latest.json.minisig" > /dev/null

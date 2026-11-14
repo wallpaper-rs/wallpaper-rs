@@ -54,7 +54,7 @@ pub async fn create_user(app: &App, client: &Client, r: Register) -> Res<i64> {
     check_password(&r.handle, &r.password)?;
     let invite = r.invite.trim().to_string();
     let closed = "registration is closed: ask an administrator for an account";
-    match app.cfg.registration {
+    match app.settings().registration {
         Registration::Closed => return Err(Problem::forbidden(closed)),
         Registration::Invite => require(!invite.is_empty(), "invite: this server needs an invitation code")?,
         Registration::Open => {}

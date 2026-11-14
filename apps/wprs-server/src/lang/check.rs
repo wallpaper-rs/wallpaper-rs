@@ -181,3 +181,11 @@ fn every_permission_the_validator_knows_has_a_spanish_word() {
     let missing: Vec<&str> = names.filter(|n| !known.contains_key(format!("asks {n}").as_str())).collect();
     assert!(missing.is_empty(), "no Spanish word for permission: {missing:?}");
 }
+
+#[test]
+fn every_month_a_certificate_date_shows_has_a_spanish_word() {
+    let known = super::vocabulary();
+    let missing: Vec<&str> =
+        crate::certs::MONTHS.iter().copied().filter(|m| !known.contains_key(m)).collect();
+    assert!(missing.is_empty(), "no Spanish word for: {missing:?}");
+}

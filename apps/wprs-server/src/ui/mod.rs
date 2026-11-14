@@ -4,6 +4,7 @@ mod case;
 mod forms;
 mod rows;
 mod size;
+mod steps;
 
 #[allow(unused_imports)]
 pub use blocks::{copyable, copyable_with, empty, fold, notice, section};
@@ -15,9 +16,10 @@ pub use forms::{
 };
 #[allow(unused_imports)]
 pub use rows::{Row, pairs, quiet_line, rows, status, status_line};
-
 #[allow(unused_imports)]
 pub use size::size;
+#[allow(unused_imports)]
+pub use steps::{Choice, choices, key_box, qr, steps};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Tone {

@@ -63,7 +63,7 @@ pub(super) async fn finish(app: &Arc<App>, auth: &Auth, id: String) -> Reply {
         Err(problem) => Err(problem),
     };
     let _ = fs::remove_file(&thumb);
-    let policy = app.cfg.auto_publish;
+    let policy = app.settings().auto_publish;
     let trusted = policy == Publish::All || (policy == Publish::Trusted && auth.role >= Role::Trusted);
     match checked {
         Err(problem) => fail(app, &id, &problem.detail).await,

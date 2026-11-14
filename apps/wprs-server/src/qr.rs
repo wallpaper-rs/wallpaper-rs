@@ -1,4 +1,5 @@
-use crate::{Config, lan};
+use crate::settings::Network;
+use crate::{App, Config, lan};
 use anyhow::Result;
 use wprs_qr::{Code, Link};
 
@@ -7,8 +8,16 @@ pub fn connect_svg(server: &str, fingerprint: Option<&str>, invite: Option<&str>
     Ok(Code::new(&link.text())?.svg())
 }
 
-pub fn own_connect_svg(cfg: &Config, invite: Option<&str>) -> Result<String> {
-    own_with(cfg, lan::wanted()?, invite)
+pub fn own_connect_svg(app: &App, invite: Option<&str>) -> Result<String> {
+    own_with(&app.cfg, app.settings().network == Network::Home, invite)
+}
+
+pub fn own_fingerprint(app: &App) -> Result<Option<String>> {
+    if app.settings().network != Network::Home {
+        return Ok(None);
+    }
+    let (cert, _) = lan::certificate(&app.cfg.data, &lan::host(&app.cfg.public_url))?;
+    Ok(Some(lan::fingerprint(&cert)))
 }
 
 pub fn own_pin(cfg: &Config) -> Result<Option<String>> {

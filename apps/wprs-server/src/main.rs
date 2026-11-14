@@ -27,7 +27,7 @@ enum Command {
     Healthcheck,
     #[command(about = "Print a new one-time token that creates an administrator at /setup")]
     SetupToken,
-    #[command(about = "Print the SHA-256 fingerprint of the certificate served with WPRS_TLS=self-signed")]
+    #[command(about = "Print the SHA-256 fingerprint of the certificate the server makes for itself")]
     Fingerprint,
     #[command(subcommand, about = "Manage the signed package repository")]
     Repo(Repo),
@@ -115,17 +115,7 @@ fn run(command: Command) -> Result<String> {
                 .await
                 .with_context(|| format!("cannot listen on {}", cfg.listen))?;
             tracing::info!("listening on {} for {}", cfg.listen, cfg.public_url);
-            let _announced = match lan::advertised()? {
-                true => Some(lan::advertise(cfg.listen.port())?),
-                false => None,
-            };
-            if !lan::wanted()? {
-                return App::open(cfg)?.serve(listener).await.map(|()| String::new());
-            }
-            let (cert, key) = lan::certificate(&cfg.data, &lan::host(&cfg.public_url))?;
-            tracing::info!("serving HTTPS with its own certificate, fingerprint {}", lan::fingerprint(&cert));
-            let tls = lan::tls(listener, lan::acceptor(cert, key)?)?;
-            App::open(cfg)?.serve(tls).await.map(|()| String::new())
+            App::open(cfg)?.serve_door(listener).await.map(|()| String::new())
         }),
         Command::Fingerprint => {
             Ok(lan::fingerprint(&lan::certificate(&cfg.data, &lan::host(&cfg.public_url))?.0))
@@ -170,9 +160,6 @@ fn run(command: Command) -> Result<String> {
 fn healthcheck(port: u16) -> Result<()> {
     let address = SocketAddr::from((Ipv4Addr::LOCALHOST, port));
     let mut stream = TcpStream::connect_timeout(&address, Duration::from_secs(3))?;
-    if lan::wanted()? {
-        return Ok(());
-    }
     stream.set_read_timeout(Some(Duration::from_secs(3)))?;
     stream.write_all(b"GET /healthz HTTP/1.0\r\nHost: localhost\r\n\r\n")?;
     let mut reply = String::new();

@@ -10,8 +10,7 @@ operator configures, and sends no telemetry.
 ```sh
 cp .env.sample .env                          # set WPRS_PUBLIC_URL, the only required variable
 docker compose up -d                         # pulls the published image
-docker compose logs wprs | grep setup        # one-time token for the first administrator
-docker compose exec wprs wprs-server repo init --name "Example wallpapers"
+docker compose logs wprs | grep setup        # one-time token for the setup assistant at /setup
 ```
 
 | Command | Effect |
@@ -19,7 +18,7 @@ docker compose exec wprs wprs-server repo init --name "Example wallpapers"
 | `serve` (default) | Run the server; migrations run first |
 | `migrate` | Apply database migrations and exit |
 | `healthcheck` | Exit 0 when `GET /healthz` on the local port answers 200 (the image `HEALTHCHECK`); with `WPRS_TLS=self-signed`, when the port accepts a connection |
-| `setup-token` | Print a one-time token (24 h) that creates an administrator at `/setup` |
+| `setup-token` | Print a one-time token (24 h) that opens the setup assistant at `/setup`; once the setup is finished it opens nothing |
 | `fingerprint` | Print the lowercase hex SHA-256 of the certificate served with `WPRS_TLS=self-signed`, making it first when there is none |
 | `repo init --name N [--require-author-signature] [--online-authors]` | Create the repository: a root key and an online key. The root secret key is printed once and never stored. `--online-authors` lets accounts register author keys online (below) |
 | `repo import DIR [--online-key FILE]` | Import `root/<N>.json` files signed offline (and `catalog.json` the first time) plus the online key |
@@ -49,6 +48,49 @@ the Rust dependencies in the sources it was built from. Check both with `cosign 
 issuer `https://token.actions.githubusercontent.com`, then pin that digest in `compose.yaml` in place of the tag
 (`image: ghcr.io/<owner>/wprs-server@sha256:<digest>`).
 
+### First setup
+
+Until it is set up, the server writes `the server is not set up yet: open <url>/setup and enter the
+one-time setup token …` at every start. `/setup` asks for that token and then walks four steps;
+each one is stored as soon as it is sent, so closing the browser or restarting the server resumes
+at the first step not done:
+
+1. **Network**: «Only at home» (the server makes its own certificate, as `WPRS_TLS=self-signed`,
+   and announces itself with mDNS, as `WPRS_ADVERTISE=true`) or «I have my certificate» with the
+   paths of a PEM certificate chain and its PEM private key inside the server. Both paths empty
+   means a reverse proxy in front holds the certificate. Before storing the paths the server reads
+   both files and checks that the certificate is in force, that it names the host of
+   `WPRS_PUBLIC_URL` (DNS name, `*.` wildcard or IP address) and that the key is the one of the
+   certificate; each wrong file is marked with the reason, and the raw errors are under «Details».
+   Serving HTTPS itself needs a `WPRS_PUBLIC_URL` that starts with `https://`. The choice takes
+   effect when the setup is finished and at every later start.
+2. **Account**: the administrator. «Change» on a later step edits the same account.
+3. **Repository**: its name and «Online authors» (as `repo init --online-authors`). The root
+   secret key is shown once, in that page only (`Cache-Control: no-store`): it is never stored,
+   logged or put in an address. It stays in memory until «I saved it» is marked; if the server
+   restarts before that, the step offers to make the repository again. A repository made before
+   with `repo init` or `repo import` skips this step.
+4. **Who gets in**: «Closed», «By invitation» or «Open», stored as the registration and
+   publishing choices below. The page also makes the first invitation (one use, 7 days) and shows
+   it once as a link and a QR code; choosing «Closed» deletes it.
+
+«Finish» stores the choices, applies the network choice and deletes every setup token and setup
+visit. From then on `/setup` shows the «Done» screen to administrators (QR code for the phone,
+the web address, the repository address with its fingerprint, how to upload) and sends everyone
+else to the catalog; no request to `/setup` can make another administrator or repository, and
+new setup tokens are refused. A server whose database already has an administrator and a
+repository counts as set up when it starts.
+
+The setup visit is a cookie `wprs-setup` (`__Host-wprs-setup` on HTTPS), 24 h, stored as a
+digest; the token form shares the login rate limit.
+
+### Stored settings
+
+The registration choice, the publishing choice and the network choice live in the database.
+The variables `WPRS_REGISTRATION`, `WPRS_AUTO_PUBLISH`, `WPRS_TLS` and `WPRS_ADVERTISE` only give
+the starting value: once a choice is stored it wins over them. «Closed» and «By invitation»
+publish every upload at once (`all`); «Open» publishes only from trusted accounts (`trusted`).
+
 ### Configuration
 
 Every setting is an environment variable (`.env` next to `compose.yaml` is read, and `.env.sample` lists
@@ -62,8 +104,8 @@ reads the value of `NAME` from a file, for secrets.
 | `WPRS_DATA` | `/data` | Data directory |
 | `WPRS_TRUSTED_PROXIES` | `127.0.0.0/8,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,fc00::/7` | Advanced: CIDRs whose `X-Forwarded-For` is believed, read right to left; setting it replaces the list, so a proxy outside the private networks must be added |
 | `WPRS_NAME` | `wallpaper-rs` | Instance name |
-| `WPRS_REGISTRATION` | `invite` | `closed`, `invite` or `open` |
-| `WPRS_AUTO_PUBLISH` | `trusted` | Publish uploads without review: `never`, `trusted` (role trusted and above) or `all` |
+| `WPRS_REGISTRATION` | `invite` | `closed`, `invite` or `open`, until the setup stores a choice |
+| `WPRS_AUTO_PUBLISH` | `trusted` | Publish uploads without review: `never`, `trusted` (role trusted and above) or `all`, until the setup stores a choice |
 | `WPRS_LICENSES` | `CC0-1.0,CC-BY-4.0,CC-BY-SA-4.0` | SPDX ids accepted in uploads |
 | `WPRS_PACKAGE_MAX_MIB`, `WPRS_USER_QUOTA_MIB` | `256`, `2048` | Package size and storage per account |
 | `WPRS_UPLOADS_PER_DAY` | `20` | Upload sessions per account and day |
@@ -79,7 +121,7 @@ reads the value of `NAME` from a file, for secrets.
 | `WPRS_NOTICE_DAYS` | `180` | Days a legal notice keeps the sender's name, email and signature (1 to 730) |
 | `WPRS_TAKEDOWN_DAYS` | `90` | Days a removed or revoked package stays in `held/` as evidence and for a counter-notice (1 to 3650) |
 | `WPRS_RATE_LIMITS` | `true` | In-memory rate limits |
-| `WPRS_TLS` | `off` | `self-signed` serves HTTPS itself with a certificate of its own, made on the first start in `tls/` (ECDSA P-256, valid for the host of `WPRS_PUBLIC_URL` and `localhost`); clients reach it only by its pinned fingerprint |
+| `WPRS_TLS` | `off` | `self-signed` serves HTTPS itself with a certificate of its own, made on the first start in `tls/` (ECDSA P-256, valid for the host of `WPRS_PUBLIC_URL` and `localhost`); clients reach it only by its pinned fingerprint. The same port still answers plain HTTP from loopback (the health check) and redirects plain requests from elsewhere to `WPRS_PUBLIC_URL`. Until the setup stores a network choice |
 | `WPRS_ADVERTISE` | `false` | Announce the server on the local network with mDNS as `_wprs._tcp`, instance `wallpaper-rs-<6 random hex digits>` drawn at every start, TXT `v=0`; nothing else about the server, the account or the devices is announced |
 | `WPRS_LOG` | `info` | Log filter |
 
@@ -340,6 +382,7 @@ review unless `WPRS_AUTO_PUBLISH` publishes them.
 | DELETE | `/api/v1/admin/invites/{id}` | admin | Revoke |
 | GET | `/api/v1/admin/users` | admin | Accounts |
 | PATCH | `/api/v1/admin/users/{id}` | admin | `{role?, status?: active\|suspended, quota_mib?}` |
+| GET, PATCH | `/api/v1/admin/settings` | admin | Stored settings `{registration, auto_publish, network, advertise, setup_done, public_url}`; change `{registration?, auto_publish?}` |
 | GET | `/api/v1/admin/repo` | admin | Repository state |
 | POST | `/api/v1/admin/repo/publish` | admin | Sign now → `{entry_version, expires, packages}` |
 | GET, POST | `/api/v1/admin/featured` | admin | List; feature `{id, note?}` (a published package, at most 64, a note of at most 200 characters on one line) |

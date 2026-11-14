@@ -1,7 +1,7 @@
 use crate::auth::{Auth, ROLES, Role};
-use crate::creds::{digest, hex, random};
-use crate::db::{DAY, audit, changed, now, rows};
+use crate::db::{audit, changed, now, rows};
 use crate::error::{Input, Problem, Res, require};
+use crate::invite::new_invite;
 use crate::jobs::republish;
 use crate::lang::{count, t, tm, word};
 use crate::web::{page, text};
@@ -53,16 +53,8 @@ async fn invite(State(app): St, auth: Auth, Input(i): Input<Invite>) -> Res<impl
         (i.role.unwrap_or_else(|| "user".into()), i.uses.unwrap_or(1), i.days.unwrap_or(7));
     let valid = ROLES.contains(&role.as_str()) && (1..=1000).contains(&uses) && (1..=90).contains(&days);
     require(valid, "role, 1 to 1000 uses and 1 to 90 days")?;
-    let (code, expires) = (hex(&random::<16>()), now() + days * DAY);
-    let (hash, kept) = (digest(&code), role.clone());
-    let sql = "INSERT INTO invites (code_hash, role, uses_left, expires_at, created_by) \
-               VALUES (?1, ?2, ?3, ?4, ?5)";
-    let id = app.db.run(move |c| {
-        c.execute(sql, params![hash, kept, uses, expires, auth.user])?;
-        audit(c, Some(auth.user), "invite", &kept, "")?;
-        Ok(c.last_insert_rowid())
-    });
-    let (id, url) = (id.await?, app.cfg.url(&format!("/register?invite={code}")));
+    let (code, id, expires) = new_invite(&app, auth.user, &role, uses, days).await?;
+    let url = app.cfg.url(&format!("/register?invite={code}"));
     let body = json!({"id": id, "code": code, "url": url, "role": role, "uses": uses, "expires_at": expires});
     Ok((StatusCode::CREATED, Json(body)))
 }
@@ -159,8 +151,7 @@ async fn administration(State(app): St, auth: Option<Auth>) -> Res<Response> {
                     button { (t("Sign and publish now")) }
                 }
             } @else {
-                p { (tm("No repository yet. Create one with {} and keep the printed root key offline.",
-                    &[html! { code { "wprs-server repo init --name \"…\"" } }])) }
+                p { (tm("No repository yet: create it in the {}.", &[html! { a href="/setup" { (t("setup")) } }])) }
             }
         }
         section.seccion { h2 { (t("Invitations")) }

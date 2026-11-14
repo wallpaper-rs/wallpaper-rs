@@ -7,12 +7,14 @@ mod authors;
 mod backup;
 mod cases;
 mod catalog;
+mod certs;
 mod checks;
 mod config;
 mod creds;
 mod db;
 mod device;
 mod discovery;
+mod door;
 mod entry;
 mod error;
 mod featuring;
@@ -21,6 +23,7 @@ mod frame;
 mod hiding;
 mod http;
 mod icons;
+mod invite;
 mod jobs;
 pub mod lan;
 mod lang;
@@ -46,6 +49,8 @@ mod repo;
 mod result;
 mod review;
 mod served;
+pub mod settings;
+mod setup;
 #[cfg(all(test, feature = "oidc"))]
 mod signon;
 #[cfg(feature = "oidc")]
@@ -68,7 +73,6 @@ pub use repo::{import, init, status};
 pub use validate::check;
 
 use axum::serve::{Listener, ListenerExt};
-use rusqlite::params;
 use std::fs::DirBuilder;
 use std::net::SocketAddr;
 use std::os::unix::fs::DirBuilderExt;
@@ -96,6 +100,9 @@ pub struct App {
     dirty: Notify,
     deciding: Mutex<()>,
     pieces: files::Pieces,
+    settings: std::sync::RwLock<settings::Settings>,
+    door: door::Door,
+    held: std::sync::Mutex<setup::Held>,
     #[cfg(feature = "oidc")]
     oidc: oidc::Oidc,
 }
@@ -105,8 +112,13 @@ impl App {
         for dir in ["db", "blobs", "thumbs", "held", "tmp", "keys", "repo", "logs", "backups"] {
             DirBuilder::new().recursive(true).mode(0o700).create(cfg.data.join(dir))?;
         }
+        let db = db::Db::open(&cfg.data.join("db/wprs.sqlite"))?;
+        let settings = db.read(|c| settings::load(c, &cfg))?;
         Ok(Arc::new(App {
-            db: db::Db::open(&cfg.data.join("db/wprs.sqlite"))?,
+            door: door::Door::new(&cfg, &settings.network)?,
+            settings: settings.into(),
+            held: Default::default(),
+            db,
             repo: repo::Repo::new(&cfg.data),
             limits: net::Limiter::new(cfg.rate_limits),
             hub: mailbox::Hub::default(),
@@ -127,30 +139,11 @@ impl App {
     }
 
     pub async fn serve<L: Listener<Addr = SocketAddr>>(self: Arc<App>, listener: L) -> anyhow::Result<()> {
-        let admins = self.db.run(|c| {
-            Ok(c.query_row("SELECT COUNT(*) FROM users WHERE role = 'admin'", [], |r| r.get::<_, i64>(0))?)
-        });
-        let admins = admins.await.map_err(|e| anyhow::anyhow!(e.detail))?;
-        if admins == 0 {
-            let token = self.setup_token().await?;
-            tracing::warn!(
-                "no admin account yet: open {} and enter the one-time setup token {token}",
-                self.cfg.url("/setup")
-            );
-        }
+        self.announce().await?;
         jobs::spawn(self.clone());
         let service = self.router().into_make_service_with_connect_info::<SocketAddr>();
         let listener = listener.tap_io(|_| {});
         Ok(axum::serve(listener, service).with_graceful_shutdown(shutdown()).await?)
-    }
-
-    pub async fn setup_token(&self) -> anyhow::Result<String> {
-        let token = creds::token('s');
-        let hash = creds::digest(&token);
-        let sql = "INSERT INTO setup_tokens (hash, expires_at) VALUES (?1, ?2)";
-        let stored = self.db.run(move |c| Ok(c.execute(sql, params![hash, db::now() + db::DAY])?));
-        stored.await.map_err(|e| anyhow::anyhow!(e.detail))?;
-        Ok(token)
     }
 
     pub async fn publish(self: &Arc<App>) -> anyhow::Result<Option<u64>> {

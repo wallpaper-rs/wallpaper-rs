@@ -108,6 +108,8 @@ impl Config {
             notice_days: num("NOTICE_DAYS", 180)?.clamp(1, 730),
             takedown_days: num("TAKEDOWN_DAYS", 90)?.clamp(1, 3650),
             rate_limits: flag("RATE_LIMITS", true)?,
+            self_signed: pick("TLS", get("TLS").as_deref(), &[("off", false), ("self-signed", true)], false)?,
+            advertise: flag("ADVERTISE", false)?,
             validator: std::env::current_exe().unwrap_or_else(|_| PathBuf::from("wprs-server")),
             public_url,
         })

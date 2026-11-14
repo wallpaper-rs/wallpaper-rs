@@ -1,10 +1,7 @@
 pub const TEXTS: super::Texts = &[
     ("Repository", "Repositorio"),
     ("Sign and publish now", "Firmar ahora"),
-    (
-        "No repository yet. Create one with {} and keep the printed root key offline.",
-        "Todavía no hay repositorio. Crea uno con {} y guarda fuera de línea la clave raíz que se imprime.",
-    ),
+    ("No repository yet: create it in the {}.", "Todavía no hay repositorio: créalo en la {}."),
     ("Invitations", "Invitaciones"),
     ("{} use left", "{} uso restante"),
     ("{} uses left", "{} usos restantes"),

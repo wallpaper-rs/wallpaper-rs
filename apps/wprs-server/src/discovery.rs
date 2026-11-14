@@ -24,7 +24,7 @@ pub async fn discovery(State(app): St) -> Json<Value> {
         .repo
         .info(c)
         .map(|r| json!({"url": r["url"], "repo_id": r["repo_id"], "entry_expires": r["entry_expires"]}));
-    let registration = format!("{:?}", c.registration).to_lowercase();
+    let registration = format!("{:?}", app.settings().registration).to_lowercase();
     let sync = json!({
         "end_to_end_default": true, "plaintext_requires_confirmation": true,
         "record_max_bytes": 262144, "quota_bytes": c.sync_quota, "files_quota_bytes": c.files_quota,

@@ -40,9 +40,15 @@ export WPRS_AUTO_PUBLISH=never WPRS_PUBLISH_DELAY_SECS=1 WPRS_LOG=warn
 "$BIN/wprs-server" serve >"$WORK/server.log" 2>&1 & pids+=($!)
 wait_for 20 curl -fsS "$URL/healthz" || fail "the server did not start"
 jar=$WORK/cookies
-curl -fsS -o /dev/null -c "$jar" --data-urlencode "token=$("$BIN/wprs-server" setup-token)" \
-  -d handle=admin -d password=correct-horse-battery "$URL/setup"
+step() { curl -fsS -o /dev/null -b "$jar" -c "$jar" "$@"; }
+step --data-urlencode "token=$("$BIN/wprs-server" setup-token)" "$URL/setup"
+step -d network=own "$URL/setup/network"
+step -d handle=admin -d password=correct-horse-battery "$URL/setup/account"
+step -d access=invite "$URL/setup/access"
+curl -fsS -b "$jar" "$URL/setup" | grep 'Go to Administration' >/dev/null || fail "the setup did not finish"
 api() { curl -fsS -b "$jar" -H 'content-type: application/json' "$@"; }
+api -X PATCH -d '{"auto_publish": "never"}' "$URL/api/v1/admin/settings" | grep '"auto_publish":"never"' >/dev/null \
+  || fail "the stored publishing choice did not change"
 invite=$(api -d '{"role": "moderator"}' "$URL/api/v1/admin/invites" | python3 -c "import json, sys; print(json.load(sys.stdin)['code'])")
 curl -fsS -o /dev/null -H 'content-type: application/json' "$URL/api/v1/auth/register" \
   -d "{\"handle\": \"reviewer\", \"password\": \"another-horse-battery\", \"invite\": \"$invite\"}"

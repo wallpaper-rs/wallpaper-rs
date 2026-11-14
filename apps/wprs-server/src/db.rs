@@ -22,6 +22,7 @@ pub(crate) const MIGRATIONS: &[&str] = &[
     include_str!("../migrations/0006_unlisted_versions.sql"),
     include_str!("../migrations/0007_votes_and_featured.sql"),
     include_str!("../migrations/0008_case_checks.sql"),
+    include_str!("../migrations/0009_settings_and_setup.sql"),
 ];
 
 pub fn now() -> i64 {
@@ -50,6 +51,10 @@ impl Db {
     pub async fn items(&self, sql: &'static str, values: Vec<rusqlite::types::Value>) -> crate::Reply {
         let found = self.run(move |c| rows(c, sql, rusqlite::params_from_iter(values))).await?;
         Ok(axum::Json(serde_json::json!({"items": found})))
+    }
+
+    pub fn read<T>(&self, work: impl FnOnce(&Connection) -> T) -> T {
+        work(&self.0.lock().unwrap_or_else(PoisonError::into_inner))
     }
 
     pub async fn run<T: Send + 'static>(

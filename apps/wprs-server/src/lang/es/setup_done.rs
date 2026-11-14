@@ -1,0 +1,101 @@
+pub const TEXTS: super::Texts = &[
+    ("Create the repository", "Crear el repositorio"),
+    (
+        "It is the collection the app and the phone see when they connect to this server.",
+        "Es la colección que la app y el teléfono ven cuando se conectan a este servidor.",
+    ),
+    ("Repository name", "Nombre del repositorio"),
+    ("Write a name of 1 to 80 characters.", "Escribe un nombre de 1 a 80 caracteres."),
+    ("Online authors", "Autores en línea"),
+    (
+        "Each person adds their author keys from their account, without touching the root key.",
+        "Cada persona añade sus claves de autor desde su cuenta, sin tocar la clave raíz.",
+    ),
+    ("Save the root key", "Guarda la clave raíz"),
+    (
+        "It is shown only this time. Keep it outside this server: in a password manager or on paper.",
+        "Se muestra solo esta vez. Guárdala fuera de este servidor: en un gestor de contraseñas o en papel.",
+    ),
+    ("Root key of «{}». Select it to copy it.", "Clave raíz de «{}». Selecciónala para copiarla."),
+    ("I saved it", "Ya la guardé"),
+    ("Mark «I saved it» to go on.", "Marca «Ya la guardé» para seguir."),
+    ("The root key is no longer shown.", "La clave raíz ya no se muestra."),
+    (
+        "The server started again before you marked «I saved it», and the key is never kept. Create the repository again to get a new key.",
+        "El servidor volvió a arrancar antes de que marcaras «Ya la guardé», y la clave nunca se guarda. Crea el repositorio otra vez para tener una clave nueva.",
+    ),
+    ("Create it again", "Crearlo otra vez"),
+    ("Closed", "Cerrado"),
+    (
+        "Nobody signs up on their own. What is uploaded is published at once.",
+        "Nadie se registra por su cuenta. Lo que se sube se publica enseguida.",
+    ),
+    ("By invitation", "Por invitación"),
+    (
+        "Whoever has an invitation from you gets in. What is uploaded is published at once.",
+        "Entra quien tenga una invitación tuya. Lo que se sube se publica enseguida.",
+    ),
+    (
+        "Anyone can sign up. What new accounts upload waits for your review.",
+        "Cualquiera puede registrarse. Lo que suben las cuentas nuevas espera tu revisión.",
+    ),
+    ("Your first invitation", "Tu primera invitación"),
+    ("QR code with the invitation link", "Código QR con el enlace de la invitación"),
+    ("Give it to whoever you want to get in.", "Dásela a quien quieras que entre."),
+    (
+        "It is shown only this time; you can make more in People.",
+        "Se muestra solo esta vez; puedes crear más en Personas.",
+    ),
+    ("Finish", "Terminar"),
+    ("Set up", "Configurado"),
+    ("No wallpapers yet", "Sin fondos todavía"),
+    ("Done: your server already hands out wallpapers.", "Listo: tu servidor ya reparte fondos."),
+    (
+        "What you publish appears in the app and on the phone of whoever connects with these details.",
+        "Lo que publiques aparece en la app y en el teléfono de quien se conecte con estos datos.",
+    ),
+    ("For the app and the phone", "Para la app y el teléfono"),
+    (
+        "The phone reads this code: it brings the address and the fingerprint.",
+        "El teléfono lee este código: trae la dirección y la huella.",
+    ),
+    ("The phone reads this code: it brings the address.", "El teléfono lee este código: trae la dirección."),
+    (
+        "QR code with the address and the fingerprint of the server",
+        "Código QR con la dirección y la huella del servidor",
+    ),
+    ("QR code with the address of the server", "Código QR con la dirección del servidor"),
+    (
+        "In the desktop app, paste the repository address below.",
+        "En la app de escritorio, pega la dirección del repositorio de abajo.",
+    ),
+    ("The web", "La web"),
+    ("Repository address, with its fingerprint", "Dirección del repositorio, con su huella"),
+    ("Copied", "Copiado"),
+    ("Copy", "Copiar"),
+    ("Advanced", "Avanzado"),
+    ("To upload wallpapers", "Para subir fondos"),
+    (
+        "In the desktop app, open Account → Add server.",
+        "En la app de escritorio, abre Cuenta → Añadir servidor.",
+    ),
+    (
+        "Paste the repository address above and sign in as {}.",
+        "Pega la dirección del repositorio de arriba y entra como {}.",
+    ),
+    (
+        "In the editor of your wallpaper, press {} and choose this server.",
+        "En el editor de tu fondo, toca {} y elige este servidor.",
+    ),
+    ("Publish…", "Publicar…"),
+    (
+        "Without the app, you can also upload a .wpak file from your Account page in this browser.",
+        "Sin la app, también puedes subir un archivo .wpak desde tu página de Cuenta en este navegador.",
+    ),
+    ("Go to Administration", "Ir a Administración"),
+    (
+        "There you see the health of the server; the invitations are in People.",
+        "Allí ves la salud del servidor; las invitaciones están en Personas.",
+    ),
+    ("setup", "configuración inicial"),
+];

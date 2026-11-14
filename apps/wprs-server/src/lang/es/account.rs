@@ -14,13 +14,7 @@ pub const TEXTS: super::Texts = &[
     ("Create account", "Crear cuenta"),
     ("terms", "términos"),
     ("privacy notice", "aviso de privacidad"),
-    (
-        "Enter the one-time setup token printed in the server log, or made with {}.",
-        "Escribe el código de un solo uso que sale en el registro del servidor, o que se crea con {}.",
-    ),
-    ("Setup token", "Código de puesta en marcha"),
-    ("Create administrator", "Crear administrador"),
-    ("Create the first administrator", "Crear el primer administrador"),
+    ("Setup token", "Código de arranque"),
     (
         "Approve only a code that your own new device shows on its screen.",
         "Aprueba solo un código que muestre la pantalla de tu propio dispositivo nuevo.",

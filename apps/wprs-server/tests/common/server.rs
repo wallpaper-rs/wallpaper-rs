@@ -10,6 +10,7 @@ impl Server {
             Who::Nobody => request,
             Who::Cookie(value) => request.header(COOKIE, format!("{}={value}", self.cfg.cookie())),
             Who::Bearer(token) => request.bearer_auth(token),
+            Who::Raw(header) => request.header(COOKIE, header),
         }
     }
 
@@ -34,15 +35,19 @@ impl Server {
         self.call(Method::POST, path, who).form(fields).send().await.unwrap()
     }
 
-    pub async fn admin(&self) -> Who {
+    pub async fn visit(&self) -> Who {
         let token = self.app.setup_token().await.unwrap();
-        let response = self
-            .form(
-                "/setup",
-                &Who::Nobody,
-                &[("token", &token), ("handle", "admin"), ("password", "correct horse battery")],
-            )
-            .await;
+        let response = self.form("/setup", &Who::Nobody, &[("token", &token)]).await;
+        assert_eq!(response.status(), StatusCode::SEE_OTHER);
+        Who::Raw(format!("{}-setup={}", self.cfg.cookie(), cookie(&response)))
+    }
+
+    pub async fn admin(&self) -> Who {
+        let visit = self.visit().await;
+        let response = self.form("/setup/network", &visit, &[("network", "own")]).await;
+        assert_eq!(response.status(), StatusCode::SEE_OTHER);
+        let fields = [("handle", "admin"), ("password", "correct horse battery")];
+        let response = self.form("/setup/account", &visit, &fields).await;
         assert_eq!(response.status(), StatusCode::SEE_OTHER);
         Who::Cookie(cookie(&response))
     }
