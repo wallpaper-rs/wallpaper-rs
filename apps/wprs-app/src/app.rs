@@ -131,6 +131,13 @@ pub fn path(uri: &str) -> Option<String> {
     path.starts_with('/').then_some(path)
 }
 
+pub fn write(path: &str, text: &str) -> bool {
+    if let Some(parent) = std::path::Path::new(path).parent() {
+        drop(std::fs::create_dir_all(parent));
+    }
+    std::fs::write(path, text).is_ok()
+}
+
 pub struct Application;
 
 fn token(data: &HashMap<String, OwnedVariant>) -> Option<String> {

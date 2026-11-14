@@ -50,9 +50,25 @@ La ficha dice en Coral que no se pudo abrir el archivo y ofrece «Mostrar en la 
 
 ## Sin resultados y fallos
 
-Una búsqueda sin resultados dice «Nada coincide con «…»» y ofrece «Quitar los filtros». Una biblioteca
-vacía invita a añadir fondos; si el servicio no responde, la pantalla muestra el fallo con sus detalles y
-«Probar de nuevo».
+Una búsqueda sin resultados dice «Nada coincide con «…»» y ofrece «Quitar los filtros».
+
+## Primer arranque
+
+Con la biblioteca vacía la página no muestra la barra de filtros: dice «Todavía no tienes fondos» y ofrece
+tres caminos, «Explorar repositorios» (principal), «Añadir una fuente» y «Añadir una carpeta», con los
+ejemplos incluidos (los del repositorio `bundled`) en una fila debajo; pulsar uno lo instala y lo pone de
+fondo. Soltar archivos o una carpeta sobre la página muestra «Suelta para añadirlos a tu biblioteca».
+
+El primer fondo se pone solo: cuando la biblioteca está vacía, ninguna pantalla muestra un fondo y el
+repositorio de ejemplos ya está, la app instala el primero que no pide nada (ni entradas ni permisos) y
+no parpadea, lo aplica a todas las pantallas con `Apply` y lo dice en un aviso con «Deshacer». Deshacer
+llama a `ClearWallpaper` y deja el escritorio como estaba. Sucede una sola vez: el archivo
+`wallpaper-rs/first-run` de la carpeta de configuración lo recuerda, aunque la biblioteca se vacíe después.
+Si el repositorio de ejemplos no está (instalación sin ejemplos) solo se ven los tres caminos.
+
+Si el servicio no responde, la página muestra solo el fallo, «El servicio de fondos no responde», con
+«Probar de nuevo» y los detalles; reintenta cada tres segundos y vuelve sola cuando el servicio contesta.
+No ofrece reiniciar el servicio: la app no tiene cómo hacerlo.
 
 ## Opciones de un fondo
 

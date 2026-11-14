@@ -170,13 +170,7 @@ impl Backend {
     }
 
     pub fn write_text(&self, url: &QString, text: &QString) -> bool {
-        let Some(path) = app::path(&url.to_string()).map(std::path::PathBuf::from) else {
-            return false;
-        };
-        if let Some(parent) = path.parent() {
-            drop(std::fs::create_dir_all(parent));
-        }
-        std::fs::write(path, text.to_string()).is_ok()
+        app::path(&url.to_string()).is_some_and(|path| app::write(&path, &text.to_string()))
     }
 
     pub fn read_text(&self, url: &QString) -> QString {
