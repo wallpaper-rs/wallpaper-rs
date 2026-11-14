@@ -57,7 +57,7 @@ class ShellTest {
     @Test
     fun theBarHoldsThreeWordsAndEachOneOpensItsPage() {
         opened()
-        compose.onAllNodes(isTab).assertCountEquals(3)
+        compose.onAllNodes(isTab and hasAnyAncestor(hasTestTag("tabs"))).assertCountEquals(3)
         tab(R.string.library).assertIsSelected()
         tab(R.string.playlists).performClick().assertIsSelected()
         page(R.string.playlists).assertIsDisplayed()
