@@ -93,6 +93,8 @@ object Native {
 
     external fun readCode(frame: ByteArray, size: IntArray): String
 
+    external fun tones(pixels: IntArray, width: Int): String
+
     external fun library(request: String): String
 
     external fun account(request: String): String

@@ -71,6 +71,7 @@ mod saved;
 mod scan;
 mod server;
 mod settings;
+mod shade;
 mod sound;
 mod stage;
 mod state;

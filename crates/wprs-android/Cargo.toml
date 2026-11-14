@@ -21,6 +21,7 @@ wprs-render.workspace = true
 wprs-scene.workspace = true
 wprs-script.workspace = true
 wprs-schedule.workspace = true
+wprs-palette.workspace = true
 wprs-qr = { workspace = true, features = ["read"] }
 wprs-sync.workspace = true
 anyhow.workspace = true

@@ -68,8 +68,7 @@ private fun Backdrop(main: Main, veil: Veil) {
     }
     val screen = remember { main.wallpaperSize() }
     val poster by loaded(null, main.revision.intValue, started.intValue) {
-        if (!main.oursInUse()) return@loaded null
-        posterOf(screen)
+        (if (main.oursInUse()) posterOf(screen) else null).also { Shade.follow(it) }
     }
     val picture = poster ?: return
     val t = tones
