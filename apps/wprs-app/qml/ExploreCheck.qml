@@ -69,6 +69,9 @@ QtObject {
             "bb22/flash@1.0.0": "/cache/flash.gif"
         };
         expect("vista", page.shelf.movingOf(0) !== "" && page.shelf.movingOf(1) === "", "only the card that may move gets its animated preview");
+        catalog.hidden = 2;
+        expect("oculto", page.upperBlock.hidden.visible && page.upperBlock.hidden.text === App.tr("%1 hidden by your content filter", 2), "the wallpapers the content filter hid must be counted");
+        catalog.hidden = 0;
     }
 
     function copying() {

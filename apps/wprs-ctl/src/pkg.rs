@@ -176,7 +176,8 @@ pub fn browse(page: BrowsePage) -> String {
         vec![prefix(&p.repo_id), p.id, p.version, p.kind, content, list(&p.asks), installed, p.title]
     });
     let head = ["REPO", "ID", "VERSION", "KIND", "CONTENT", "ASKS", "INSTALLED", "TITLE"];
-    show::lines([("query", page.query), ("packages", count)]) + &table(&head, rows)
+    let hid = (page.hidden > 0).then(|| ("hidden", fill(told("%1 by your content filter"), &[&page.hidden])));
+    show::lines([("query", page.query), ("packages", count)].into_iter().chain(hid)) + &table(&head, rows)
 }
 
 pub fn installed(reply: InstalledReply) -> String {

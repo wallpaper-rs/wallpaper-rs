@@ -6,6 +6,7 @@ Item {
 
     property var packages: []
     property int total
+    property int hidden
     property var repos: []
     property var installed: []
     property var previews: ({})
@@ -140,6 +141,7 @@ Item {
                 return;
             catalog.packages = reply.packages;
             catalog.total = reply.total;
+            catalog.hidden = reply.hidden ?? 0;
             catalog.loaded = true;
             App.query("GetVotes", [reply.packages.map(p => p.repo_id + "/" + p.id)], "Sync1", found => catalog && (catalog.votes = found.items ?? {}, catalog.counted = found.shown === true, catalog.voteRepo = found.repo_id ?? ""), () => catalog && (catalog.counted = false, catalog.voteRepo = ""));
             App.query("RequestPreviews", [reply.packages.filter(p => p.preview).map(catalog.spec)], "Repos1", found => catalog && (catalog.previews = Object.assign({}, catalog.previews, found[0])));

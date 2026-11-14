@@ -18,10 +18,13 @@ MANIFEST
   python3 -c "import json, sys; m = json.load(open(sys.argv[1])); m['previews']['animated'] = 'moving.gif'
 json.dump(m, open(sys.argv[1], 'w'))" dusk/manifest.json
   ctl pack build dusk -o dusk.wpak >/dev/null
+  cp -r src night && sed -i 's/dawn/night/; s/"Dawn"/"Night"/; s/"sky"/"dark"/' night/manifest.json
+  ctl pack upgrade night --rating mature --reason violence >/dev/null && ctl pack build night -o night.wpak >/dev/null
   ctl repo init repo --name Example --root-key root.pub --online-key online.pub >/dev/null 2>&1
   ctl repo sign-root repo --key root.key >/dev/null
   ctl repo add repo dawn.wpak >/dev/null
   ctl repo add repo dusk.wpak >/dev/null
+  ctl repo add repo night.wpak >/dev/null
   ctl repo publish repo --key online.key >/dev/null
 )
 anchor=$(ctl repo status "$site/repo" | sed -n 's/^anchor = //p')
@@ -33,9 +36,13 @@ if ctl remote add "http://127.0.0.1:$port/" 2>"$WORK/anchor.out"; then fail "a r
 grep -q "fingerprint or repo_id" "$WORK/anchor.out" || fail "anchor message: $(cat "$WORK/anchor.out")"
 repo=$(ctl remote add "http://127.0.0.1:$port/$anchor" --wait --json | jq_ "r['output']['repo_id']")
 [ "$(ctl remote ls --json | jq_ "[(x['name'], x['hosts'], x['packages'], x['stale']) for x in r['repos']]")" = \
-  "[('Example', ['127.0.0.1'], 2, False)]" ] || fail "repositories: $(ctl remote ls --json)"
+  "[('Example', ['127.0.0.1'], 3, False)]" ] || fail "repositories: $(ctl remote ls --json)"
 [ "$(ctl pkg search sky --json | jq_ "[(p['id'], p['version'], p['preview'], p['repo_name']) for p in r['packages']]")" = \
   "[('org.example.dawn', '1.0.0', True, 'Example')]" ] || fail "browse: $(ctl pkg search sky --json)"
+ctl config library.hide_mature true
+[ "$(ctl pkg search org.example --json | jq_ "(r['total'], r['hidden'])")" = "(1, 1)" ] || fail "hidden count: $(ctl pkg search org.example)"
+ctl pkg search org.example | grep -q '^hidden = 1 ' || fail "the hidden count is not said: $(ctl pkg search org.example)"
+ctl config library.hide_mature false
 preview=$(ctl pkg preview "${repo:0:8}/org.example.dawn")
 [ "$(head -c 3 "$preview" | od -An -tx1 | tr -d ' ')" = ffd8ff ] || fail "the preview is not a re-encoded JPEG"
 [ "$(stat -c %a "$preview") $(stat -c %a "$(dirname "$preview")")" = "600 700" ] || fail "previews are not private"

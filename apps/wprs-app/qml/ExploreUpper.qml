@@ -11,6 +11,7 @@ Column {
     readonly property alias refresh: refresh
     readonly property alias updateAll: updateAll
     readonly property alias more: more
+    readonly property alias hidden: hidden
 
     spacing: Look.e2
 
@@ -42,6 +43,17 @@ Column {
         visible: upper.catalog.total > upper.catalog.packages.length
         icon: "info"
         text: App.tr("Showing %1 of %2 wallpapers; refine the search to see the others.", upper.catalog.packages.length, upper.catalog.total)
+    }
+
+    QQC2.Button {
+        id: hidden
+
+        anchors.right: parent.right
+        visible: upper.catalog.hidden > 0
+        flat: true
+        text: upper.catalog.hidden === 1 ? App.tr("1 hidden by your content filter") : App.tr("%1 hidden by your content filter", upper.catalog.hidden)
+        Accessible.description: App.tr("Opens the settings, where the content filter is")
+        onClicked: applicationWindow().showPage(5)
     }
 
     Row {

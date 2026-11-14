@@ -130,6 +130,8 @@ model! {
         pub serial: u64,
         pub query: String,
         pub total: u32,
+        #[serde(default)]
+        pub hidden: u32,
         pub offset: u32,
         pub packages: Vec<RepoPackage>,
     }

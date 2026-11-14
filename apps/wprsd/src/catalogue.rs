@@ -75,11 +75,10 @@ impl Daemon {
         let serial = self.changes.serial();
         let hide = self.state().config.library.hide_mature;
         let mature = |i: &wprs_format::Item| i.release.content.as_ref().is_some_and(Rated::mature);
-        let items: Vec<_> = wprs_format::browse(&self.store.data, query)?
-            .into_iter()
-            .filter(|i| !hide || !mature(i))
-            .collect();
-        let total = items.len() as u32;
+        let found = wprs_format::browse(&self.store.data, query)?;
+        let all = found.len();
+        let items: Vec<_> = found.into_iter().filter(|i| !hide || !mature(i)).collect();
+        let (total, hidden) = (items.len() as u32, (all - items.len()) as u32);
         let (langs, revealed) = (languages(), self.revealed());
         let allowed = self.state().config.playback.allow_flashing;
         let package = |item: wprs_format::Item| {
@@ -119,7 +118,7 @@ impl Daemon {
             }
         };
         let packages = items.into_iter().skip(offset as usize).take(limit as usize).map(package).collect();
-        reply(BrowsePage { model: MODEL, serial, query: query.into(), total, offset, packages })
+        reply(BrowsePage { model: MODEL, serial, query: query.into(), total, hidden, offset, packages })
     }
 
     fn previews_of(&self, id: &str) -> Vec<PathBuf> {

@@ -10733,3 +10733,7 @@ msgstr "un corte: la pantalla no estaba lista para una transición"
 
 msgid "Delete the photos a provider brought and keep the provider"
 msgstr "Borrar las fotos que trajo un proveedor y conservar el proveedor"
+
+#: apps/wprs-ctl/src/pkg.rs
+msgid "%1 by your content filter"
+msgstr "%1 por tu filtro de contenido"

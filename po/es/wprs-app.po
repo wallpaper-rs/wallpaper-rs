@@ -20926,3 +20926,12 @@ msgstr "No hay repositorios"
 
 msgid "The bundled examples were removed. Add them again, or add a repository with its link."
 msgstr "Quitaste los ejemplos incluidos. Vuelve a añadirlos, o añade un repositorio con su enlace."
+
+msgid "1 hidden by your content filter"
+msgstr "1 oculto por tu filtro de contenido"
+
+msgid "%1 hidden by your content filter"
+msgstr "%1 ocultos por tu filtro de contenido"
+
+msgid "Opens the settings, where the content filter is"
+msgstr "Abre los ajustes, donde está el filtro de contenido"
