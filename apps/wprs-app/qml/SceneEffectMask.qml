@@ -1,10 +1,9 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.FormLayout {
+ColumnLayout {
     id: panel
 
     required property var page
@@ -83,54 +82,68 @@ Kirigami.FormLayout {
 
     visible: owner !== null
 
-    QQC2.ComboBox {
-        Kirigami.FormData.label: panel.index >= 0 ? App.tr("Mask of the effect:") : App.tr("Mask of the layer:")
-        model: [App.tr("None"), App.tr("A picture"), App.tr("A layer"), App.tr("A shape")]
-        currentIndex: ["", "texture", "layer", "shape"].indexOf(panel.source)
-        onActivated: index => {
-            if (index === 0)
-                panel.put({
-                        "off": true
-                    });
-            else if (index === 1 && panel.images.length > 0)
-                panel.put({
-                        "texture": panel.images[0]
-                    });
-            else if (index === 2 && panel.others.length > 0)
-                panel.put({
-                        "from": panel.others[0]
-                    });
-            else if (index === 3)
-                panel.put({
-                        "shape": panel.shaped("ellipse")
-                    });
+    SceneValueRow {
+        text: App.tr("Mask")
+
+        QQC2.ComboBox {
+            Layout.fillWidth: true
+            Accessible.name: App.tr("Mask")
+            model: [App.tr("None"), App.tr("A picture"), App.tr("A layer"), App.tr("A shape")]
+            currentIndex: ["", "texture", "layer", "shape"].indexOf(panel.source)
+            onActivated: index => {
+                if (index === 0)
+                    panel.put({
+                            "off": true
+                        });
+                else if (index === 1 && panel.images.length > 0)
+                    panel.put({
+                            "texture": panel.images[0]
+                        });
+                else if (index === 2 && panel.others.length > 0)
+                    panel.put({
+                            "from": panel.others[0]
+                        });
+                else if (index === 3)
+                    panel.put({
+                            "shape": panel.shaped("ellipse")
+                        });
+            }
         }
     }
 
-    QQC2.ComboBox {
-        Kirigami.FormData.label: panel.source === "texture" ? App.tr("Picture:") : App.tr("Layer:")
+    SceneValueRow {
         visible: panel.source === "texture" || panel.source === "layer"
-        model: panel.source === "texture" ? panel.images : panel.others
-        currentIndex: model.indexOf(panel.source === "texture" ? (typeof panel.mask === "string" ? panel.mask : panel.mask?.texture) : panel.mask?.layer)
-        onActivated: index => panel.put(panel.source === "texture" ? {
-                    "texture": panel.images[index]
-                } : {
-                    "from": panel.others[index]
-                })
+        text: panel.source === "texture" ? App.tr("Picture") : App.tr("Layer")
+
+        QQC2.ComboBox {
+            Layout.fillWidth: true
+            Accessible.name: panel.source === "texture" ? App.tr("Picture") : App.tr("Layer")
+            model: panel.source === "texture" ? panel.images : panel.others
+            currentIndex: model.indexOf(panel.source === "texture" ? (typeof panel.mask === "string" ? panel.mask : panel.mask?.texture) : panel.mask?.layer)
+            onActivated: index => panel.put(panel.source === "texture" ? {
+                        "texture": panel.images[index]
+                    } : {
+                        "from": panel.others[index]
+                    })
+        }
     }
 
-    QQC2.ComboBox {
-        Kirigami.FormData.label: App.tr("Shape:")
+    SceneValueRow {
         visible: panel.source === "shape"
-        model: ["rect", "ellipse", "ring", "polygon", "star", "line"].map(k => SceneWords.value(k))
-        currentIndex: ["rect", "ellipse", "ring", "polygon", "star", "line"].indexOf(panel.kind)
-        onActivated: index => panel.put({
-                    "shape": panel.shaped(["rect", "ellipse", "ring", "polygon", "star", "line"][index])
-                })
+        text: App.tr("Shape")
+
+        QQC2.ComboBox {
+            Layout.fillWidth: true
+            Accessible.name: App.tr("Shape")
+            model: ["rect", "ellipse", "ring", "polygon", "star", "line"].map(k => SceneWords.value(k))
+            currentIndex: ["rect", "ellipse", "ring", "polygon", "star", "line"].indexOf(panel.kind)
+            onActivated: index => panel.put({
+                        "shape": panel.shaped(["rect", "ellipse", "ring", "polygon", "star", "line"][index])
+                    })
+        }
     }
 
     SceneMaskThumb {
-        Kirigami.FormData.label: App.tr("Looks like:")
         visible: panel.source !== ""
         active: visible
         page: panel.page
@@ -139,7 +152,6 @@ Kirigami.FormLayout {
     }
 
     SceneEffectMaskTune {
-        Kirigami.FormData.label: App.tr("Mask:")
         Layout.fillWidth: true
         panel: panel
     }

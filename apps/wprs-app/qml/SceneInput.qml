@@ -13,6 +13,42 @@ ColumnLayout {
     readonly property bool bound: field.source !== "" && field.source !== "keys"
     readonly property var both: typeof value === "object" && value !== null && value.length >= 2 ? [Number(value[0]), Number(value[1])] : [Number(value ?? 0), Number(value ?? 0)]
 
+    readonly property Component editor: ({
+            "number": editors.number,
+            "integer": editors.number,
+            "bool": editors.check,
+            "enum": choiceEditor,
+            "variant": choiceEditor,
+            "color": colorEditor,
+            "accent": accentEditor,
+            "framerate": rateEditor,
+            "rgb": colorEditor,
+            "condition": hosts.condition,
+            "vec2": editors.pair,
+            "curve": editors.curve,
+            "stops": hosts.pairs,
+            "points": hosts.pairs,
+            "styles": hosts.styles,
+            "emitters": hosts.emitters,
+            "rules": hosts.rules,
+            "smooth": hosts.smooth,
+            "list": editors.list,
+            "ref:mask": editors.mask,
+            "ref:model": editors.rig,
+            "multiline": hosts.multiline,
+            "ref:font": hosts.fonts,
+            "format": hosts.format,
+            "texts": hosts.texts,
+            "markup": hosts.texts,
+            "flags": hosts.meta,
+            "lines": hosts.meta,
+            "computed": hosts.meta,
+            "ref:thumbnail": hosts.meta,
+            "ref:animated": hosts.meta,
+            "ref:trigger": hosts.trigger
+        })[input.field.widget] ?? (input.field.widget.startsWith("package:") ? hosts.authoring : /^(refs|map):|^ref:reach$/.test(input.field.widget) ? editors.refs : input.field.widget.startsWith("ref:") ? choiceEditor : editors.raw)
+    readonly property bool oneRow: !bound && (["number", "integer", "bool", "enum", "variant", "color", "rgb", "vec2"].includes(field.widget) || editor === choiceEditor) && !(["number", "integer"].includes(field.widget) && (field.options ?? []).length > 0)
+
     function commit(value, gesture) {
         page.change(field.pointer, value, gesture);
     }
@@ -39,46 +75,9 @@ ColumnLayout {
         color: Look.coral
     }
 
-    RowLayout {
-        Layout.fillWidth: true
-
-        QQC2.Label {
-            Layout.fillWidth: true
-            text: (input.field.title || SceneWords.label(input.field.key, input.field.pointer)) + (input.field.unit ? " (" + input.field.unit + ")" : "")
-            font.bold: input.field.widget === "group" || input.field.widget === "variant"
-            elide: Text.ElideRight
-            QQC2.ToolTip.text: input.field.help ?? ""
-            QQC2.ToolTip.visible: hint.hovered && (input.field.help ?? "") !== ""
-
-            HoverHandler {
-                id: hint
-            }
-        }
-
-        QQC2.ToolButton {
-            visible: input.field.widget === "group" && !input.field.set
-            icon.name: "list-add"
-            text: App.tr("Add")
-            onClicked: input.commit(input.field.sample)
-        }
-
-        QQC2.ToolButton {
-            visible: input.field.set && !input.field.required && input.field.widget !== "computed"
-            icon.name: "edit-reset"
-            text: input.field.widget === "group" ? App.tr("Remove") : App.tr("Default")
-            display: QQC2.AbstractButton.IconOnly
-            QQC2.ToolTip.text: text
-            QQC2.ToolTip.visible: hovered
-            onClicked: input.page.run("remove", {
-                    "pointer": input.field.pointer
-                })
-        }
-
-        SceneBind {
-            visible: input.field.bindable
-            page: input.page
-            field: input.field
-        }
+    SceneInputHead {
+        input: input
+        editor: input.oneRow ? input.editor : null
     }
 
     QQC2.Button {
@@ -104,41 +103,8 @@ ColumnLayout {
 
     Loader {
         Layout.fillWidth: true
-        active: !input.bound && input.field.widget !== "group"
-        sourceComponent: ({
-                "number": editors.number,
-                "integer": editors.number,
-                "bool": editors.check,
-                "enum": choiceEditor,
-                "variant": choiceEditor,
-                "color": colorEditor,
-                "accent": accentEditor,
-                "framerate": rateEditor,
-                "rgb": colorEditor,
-                "condition": hosts.condition,
-                "vec2": editors.pair,
-                "curve": editors.curve,
-                "stops": hosts.pairs,
-                "points": hosts.pairs,
-                "styles": hosts.styles,
-                "emitters": hosts.emitters,
-                "rules": hosts.rules,
-                "smooth": hosts.smooth,
-                "list": editors.list,
-                "ref:mask": editors.mask,
-                "ref:model": editors.rig,
-                "multiline": hosts.multiline,
-                "ref:font": hosts.fonts,
-                "format": hosts.format,
-                "texts": hosts.texts,
-                "markup": hosts.texts,
-                "flags": hosts.meta,
-                "lines": hosts.meta,
-                "computed": hosts.meta,
-                "ref:thumbnail": hosts.meta,
-                "ref:animated": hosts.meta,
-                "ref:trigger": hosts.trigger
-            })[input.field.widget] ?? (input.field.widget.startsWith("package:") ? hosts.authoring : /^(refs|map):|^ref:reach$/.test(input.field.widget) ? editors.refs : input.field.widget.startsWith("ref:") ? choiceEditor : editors.raw)
+        active: !input.bound && input.field.widget !== "group" && !input.oneRow
+        sourceComponent: input.editor
     }
 
     SceneTextureTools {

@@ -51,7 +51,7 @@ Item {
             }
 
             QQC2.TextField {
-                Layout.preferredWidth: Kirigami.Units.gridUnit * 5
+                Layout.preferredWidth: Look.e8 + Look.e2
                 Layout.fillWidth: !Array.isArray(input.field.range)
                 visible: !amount.named
                 property bool typed: false
