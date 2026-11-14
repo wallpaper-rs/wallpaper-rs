@@ -1,9 +1,13 @@
 use crate::bind::Slot;
-use crate::scene::swarm::staging::{left, within};
+use crate::scene::swarm::staging::within;
 use crate::texture::{create_texture, gpu_image};
 use crate::{GpuImage, Layer, RenderError, Renderer};
 use std::sync::Arc;
 use wprs_scene::{MAX_PARAMS, Quality, Ready};
+
+mod built;
+
+pub use built::{Building, Built};
 
 const PANE: wgpu::TextureFormat = wgpu::TextureFormat::Rgba8UnormSrgb;
 const WORDS: usize = MAX_PARAMS * 4 + 4;
@@ -39,18 +43,17 @@ impl Renderer {
         size: (u32, u32),
         quality: Quality,
     ) -> Result<Crossing, String> {
-        if !ready.plays_at(quality) {
-            return Err(format!("it costs too much for quality {}", quality as u8));
-        }
-        self.check_target(size.0, size.1).map_err(|e| e.to_string())?;
-        let d = &ready.effect;
-        left(d.key).map_or(Ok(()), Err)?;
-        let naga = wprs_scene::transition_shader(d)?;
-        let layout = Arc::new(layout(&self.device));
-        let made = within((d.key, self), None, {
+        let (naga, layout) = self.begin(&ready, quality)?;
+        let made = within((ready.effect.key, self), None, {
             let layout = layout.clone();
             move |device| pipeline(device, &layout, naga)
         })?;
+        self.crossing_of(&Built { pipeline: made, layout, ready, quality }, size)
+    }
+
+    pub fn crossing_of(&self, built: &Built, size: (u32, u32)) -> Result<Crossing, String> {
+        let (ready, quality, layout) = (built.ready.clone(), built.quality, &built.layout);
+        self.check_target(size.0, size.1).map_err(|e| e.to_string())?;
         let usage = wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::TEXTURE_BINDING;
         let pane = |label| create_texture(&self.device, label, size, PANE, usage);
         let (before, after) = (pane("wprs-render crossing before"), pane("wprs-render crossing after"));
@@ -64,7 +67,7 @@ impl Renderer {
         let views = [before.create_view(&Default::default()), after.create_view(&Default::default())];
         let group = self.device.create_bind_group(&wgpu::BindGroupDescriptor {
             label: Some("wprs-render crossing"),
-            layout: &layout,
+            layout,
             entries: &[
                 wgpu::BindGroupEntry { binding: 0, resource: uniform.as_entire_binding() },
                 wgpu::BindGroupEntry { binding: 1, resource: wgpu::BindingResource::Sampler(&self.clamp) },
@@ -82,7 +85,7 @@ impl Renderer {
         ]);
         let [b, a] = views;
         let panes = [(b, Vec::new()), (a, Vec::new())];
-        Ok(Crossing { pipeline: made, group, uniform, panes, out, words, ready })
+        Ok(Crossing { pipeline: built.pipeline.clone(), group, uniform, panes, out, words, ready })
     }
 
     pub fn cross(
@@ -132,7 +135,7 @@ fn pane_out(device: &wgpu::Device, size: (u32, u32)) -> wgpu::Texture {
     create_texture(device, "wprs-render crossing out", size, PANE, usage)
 }
 
-fn layout(device: &wgpu::Device) -> wgpu::BindGroupLayout {
+pub(crate) fn layout(device: &wgpu::Device) -> wgpu::BindGroupLayout {
     let entry = |binding, ty| wgpu::BindGroupLayoutEntry {
         binding,
         visibility: wgpu::ShaderStages::FRAGMENT,
@@ -160,7 +163,7 @@ fn layout(device: &wgpu::Device) -> wgpu::BindGroupLayout {
     })
 }
 
-fn pipeline(
+pub(crate) fn pipeline(
     device: &wgpu::Device,
     layout: &wgpu::BindGroupLayout,
     naga: wgpu::naga::Module,

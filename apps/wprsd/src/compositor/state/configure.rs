@@ -84,11 +84,21 @@ impl State {
         }
         let shown = Shown { content, fit, background, image, uv, transition, relief, scene, tone };
         let transition = !transition.unwrap_or(self.settings.transition).is_zero();
+        let tx = self.tx.clone();
+        let wake: std::sync::Arc<dyn Fn() + Send + Sync> =
+            std::sync::Arc::new(move || drop(tx.send(super::super::Command::Wake)));
         match self.outputs.get_mut(&name) {
             Some(output) => {
                 let passing = super::super::crossing::choose(&output.shown, &shown, self.motion.calm);
                 output.show(shown, size, transition, self.exporter.is_streaming(&name));
-                output.passing = passing.filter(|_| output.fade.is_some());
+                let mut passing = passing.filter(|_| output.fade.is_some());
+                if let Some(Err(why)) = passing.as_mut().map(|p| p.begin(self.renderer, &wake)) {
+                    tracing::warn!(
+                        "the transition of the scene was left out and the plain fade plays: {why}"
+                    );
+                    passing = None;
+                }
+                output.passing = passing;
             }
             None => {
                 let sink =

@@ -1,13 +1,20 @@
 use super::output::Shown;
 use std::sync::Arc;
+use std::time::Instant;
 use wprs_core::Fit;
-use wprs_render::{Crossing, Layer, Renderer};
+use wprs_render::{Building, Built, Crossing, Layer, Renderer};
 use wprs_scene::{Quality, Ready, Way};
 
 pub(super) struct Passing {
     steps: Vec<(Arc<Ready>, Quality)>,
+    pipes: Vec<Pipe>,
     built: Option<(usize, Crossing)>,
     background: [u8; 3],
+}
+
+enum Pipe {
+    Waiting(Building),
+    Done(Built),
 }
 
 pub(super) fn choose(old: &Shown, new: &Shown, calm: bool) -> Option<Passing> {
@@ -16,7 +23,12 @@ pub(super) fn choose(old: &Shown, new: &Shown, calm: bool) -> Option<Passing> {
     }
     let steps: Vec<_> =
         [(old, Way::Out), (new, Way::In)].into_iter().filter_map(|(s, w)| own(s, w)).collect();
-    (!steps.is_empty()).then_some(Passing { steps, built: None, background: new.background })
+    (!steps.is_empty()).then_some(Passing {
+        steps,
+        pipes: Vec::new(),
+        built: None,
+        background: new.background,
+    })
 }
 
 fn own(shown: &Shown, way: Way) -> Option<(Arc<Ready>, Quality)> {
@@ -44,6 +56,35 @@ pub(super) fn plain(background: [u8; 3]) -> Layer<'static> {
 }
 
 impl Passing {
+    pub(super) fn begin(
+        &mut self,
+        renderer: &Renderer,
+        wake: &Arc<dyn Fn() + Send + Sync>,
+    ) -> Result<(), String> {
+        let build = |(ready, quality): &(Arc<Ready>, Quality)| {
+            renderer.build_crossing(ready.clone(), *quality, wake.clone()).map(Pipe::Waiting)
+        };
+        self.pipes = self.steps.iter().map(build).collect::<Result<_, _>>()?;
+        Ok(())
+    }
+
+    pub(super) fn ready(&mut self, now: Instant) -> Result<bool, String> {
+        let mut done = !self.pipes.is_empty();
+        for pipe in &mut self.pipes {
+            if let Pipe::Waiting(building) = pipe {
+                match building.poll(now) {
+                    Some(built) => *pipe = Pipe::Done(built?),
+                    None => done = false,
+                }
+            }
+        }
+        Ok(done)
+    }
+
+    pub(super) fn until(&self) -> Option<Instant> {
+        self.pipes.iter().filter_map(|p| if let Pipe::Waiting(b) = p { Some(b.until()) } else { None }).min()
+    }
+
     pub(super) fn duration(&self) -> f32 {
         self.steps.iter().map(|(r, _)| r.duration.as_secs_f32()).sum()
     }
@@ -72,8 +113,10 @@ impl Passing {
         let fresh = |b: &(usize, Crossing)| b.0 == step && b.1.size() == size;
         if !self.built.as_ref().is_some_and(fresh) {
             self.built = None;
-            let (ready, quality) = self.steps[step].clone();
-            self.built = Some((step, renderer.crossing(ready, size, quality)?));
+            let Some(Pipe::Done(built)) = self.pipes.get(step) else {
+                return Err("it was not built yet".into());
+            };
+            self.built = Some((step, renderer.crossing_of(built, size)?));
         }
         let middle = plain(self.background);
         let (before, after) = match (self.steps.len(), step) {

@@ -84,3 +84,22 @@ fn a_transition_too_costly_for_the_quality_is_not_built() {
     assert!(refused.contains("quality 1"), "{refused}");
     assert!(r.crossing(medium, (W, H), Quality::Q2).is_ok());
 }
+
+#[test]
+fn a_transition_is_built_away_from_the_caller_and_says_when_it_is_ready() {
+    let Some(r) = renderer() else { return };
+    let (tx, rx) = std::sync::mpsc::channel();
+    let tx = std::sync::Mutex::new(tx);
+    let wake = Arc::new(move || drop(tx.lock().map(|t| t.send(()))));
+    let building = r.build_crossing(ready(json!({ "taps": 1 })), Quality::Q0, wake).expect("started");
+    assert!(building.until() > std::time::Instant::now());
+    rx.recv_timeout(std::time::Duration::from_secs(60)).expect("woken");
+    let built = building.poll(std::time::Instant::now()).expect("done").expect("built");
+    let (red, blue) = (solid(r, [255, 0, 0]), solid(r, [0, 0, 255]));
+    let mut crossing = r.crossing_of(&built, (W, H)).expect("allocated");
+    r.cross(&mut crossing, &[layer(&red)], &[layer(&blue)], 1.0).expect("drawn");
+    let got = r.read_image(crossing.image()).expect("read").get_pixel(1, H / 2).0;
+    assert!(got.iter().zip([0, 0, 255, 255]).all(|(a, b)| a.abs_diff(b) <= 2), "{got:?}");
+    let medium = ready(json!({ "taps": 4, "passes": 1, "scale": 1 }));
+    assert!(r.build_crossing(medium, Quality::Q1, Arc::new(|| {})).is_err());
+}

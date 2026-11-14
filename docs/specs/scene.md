@@ -1565,7 +1565,11 @@ screen uses the plain fade of the settings instead. The transition chosen in the
 rules over it: with `none` the change is a cut, and with reduced motion it is the plain fade.
 When a wallpaper with an `out` passage gives way to one with an `in` passage, `out` plays first
 and `in` after it, each with its own duration; the work exists only while a transition plays and
-each screen plays its own. The phone does not play package transitions yet (feature `transition`
+each screen plays its own. The shaders of the passage are built away from the drawing while the
+new wallpaper loads, within the same build limit as package effects (the log says
+when it is passed); the passage starts once they are ready, so it always plays from its first
+frame, and the old wallpaper stays on screen meanwhile. A build that fails or passes the limit
+gives the plain fade. The phone does not play package transitions yet (feature `transition`
 is `without` there) and uses its own fade.
 
 ### Newer effects and parameters

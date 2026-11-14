@@ -42,9 +42,11 @@ pub(super) fn draw(
     let layers = [from.unwrap_or(shown), shown];
     let damage = output.damage();
     let mut layers = &layers[usize::from(from.is_none())..];
+    let started = output.fading();
     let crossed = output
         .passing
         .as_mut()
+        .filter(|_| started)
         .zip(from)
         .map(|(p, from)| p.frame(renderer, (from, shown), progress, output.size));
     let (one, failed) = match crossed {

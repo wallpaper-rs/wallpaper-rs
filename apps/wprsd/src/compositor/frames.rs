@@ -49,8 +49,19 @@ impl State {
         for output in self.outputs.values_mut() {
             let slot = output.shown.content.video().and_then(|p| self.players.get(p));
             let page = output.shown.content.page().map(|p| self.pages.get(&p.key(general)));
-            let ready =
-                slot.is_none_or(|s| s.texture.is_some() || s.error.is_some()) && painted(output, page);
+            let crossing = match output.passing.as_mut().map(|p| p.ready(now)) {
+                Some(Err(why)) => {
+                    tracing::warn!(
+                        "the transition of the scene was left out and the plain fade plays: {why}"
+                    );
+                    output.passing = None;
+                    true
+                }
+                done => done.is_none_or(|d| d.unwrap_or(true)),
+            };
+            let ready = crossing
+                && slot.is_none_or(|s| s.texture.is_some() || s.error.is_some())
+                && painted(output, page);
             if let Some((_, start @ None)) = &mut output.fade
                 && ready
             {
@@ -75,6 +86,7 @@ impl State {
             .chain(self.page_due())
             .chain(self.starvation())
             .chain(self.backdrops())
+            .chain(self.outputs.values().filter_map(|o| o.passing.as_ref()?.until()))
             .chain(moving.and_then(|fps| self.motion.due(fps)))
             .min()
     }

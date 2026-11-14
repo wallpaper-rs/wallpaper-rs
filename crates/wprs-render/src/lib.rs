@@ -56,7 +56,7 @@ pub use animation::{MAX_ANIMATION, Pictures, animation};
 pub use bench::{Bench, Ceiling, Level, WARMUP, ceiling, save_frame, scene_bench, spread};
 pub use choose::{Chosen, Fallback, bus_of};
 pub use coded::Coding;
-pub use crossing::Crossing;
+pub use crossing::{Building, Built, Crossing};
 pub use decode::{
     decode_asset, decode_image, decode_limited, decode_reduced, decode_unoriented, decoded_size, image_size,
     needed_edge, picture_limits, thumbnails,

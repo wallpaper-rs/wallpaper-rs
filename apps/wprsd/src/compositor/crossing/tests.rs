@@ -31,6 +31,7 @@ fn the_leaving_transition_plays_first_and_the_coming_one_after() {
     let (out, coming) = passages();
     let both = Passing {
         steps: vec![(out.clone(), Quality::Q3), (coming, Quality::Q3)],
+        pipes: Vec::new(),
         built: None,
         background: [0; 3],
     };
@@ -39,6 +40,7 @@ fn the_leaving_transition_plays_first_and_the_coming_one_after() {
     assert_eq!(both.phase(0.125), (0, 0.5));
     assert_eq!(both.phase(0.625), (1, 0.5));
     assert_eq!(both.phase(1.0), (1, 1.0));
-    let alone = Passing { steps: vec![(out, Quality::Q3)], built: None, background: [0; 3] };
+    let alone =
+        Passing { steps: vec![(out, Quality::Q3)], pipes: Vec::new(), built: None, background: [0; 3] };
     assert_eq!((alone.duration(), alone.phase(0.5)), (1.0, (0, 0.5)));
 }
