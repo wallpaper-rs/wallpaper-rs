@@ -4,6 +4,7 @@ mod depth;
 mod details;
 mod editor;
 mod fake;
+mod following;
 mod gone;
 mod grid;
 mod icons;

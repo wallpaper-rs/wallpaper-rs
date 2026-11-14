@@ -26,6 +26,8 @@ FocusScope {
         }
 
         Fila {
+            id: onBattery
+
             text: App.tr("Pause on battery")
             note: part.battery ? "" : App.tr("no battery detected")
             off: !part.battery
@@ -34,6 +36,12 @@ FocusScope {
             current: Math.max(0, part.values.indexOf(part.chosen))
             explain: App.tr("Your choice is kept even when the battery is not seen; it applies again as soon as there is one.")
             onChosen: index => App.act("SetOption", ["pause.on_battery", part.values[index]])
+        }
+
+        Binding {
+            target: onBattery
+            property: "current"
+            value: Math.max(0, part.values.indexOf(part.chosen))
         }
 
         Fila {
