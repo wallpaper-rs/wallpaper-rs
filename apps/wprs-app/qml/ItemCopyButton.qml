@@ -11,8 +11,9 @@ QQC2.Button {
     icon.name: "edit-copy"
     visible: !!drawer.pkg && String(drawer.item.path ?? "").endsWith(".wpak") && !drawer.item.missing
     onClicked: {
+        const path = String(drawer.item.path);
         drawer.close();
-        copying.start(drawer.item.path);
+        copying.start(path);
     }
 
     ItemCopy {
