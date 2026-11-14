@@ -143,7 +143,15 @@ RowLayout {
         palette.placeholderText: valor.lit ? Look.noche : Look.bruma
         palette.mid: valor.lit ? Qt.rgba(Look.noche.r, Look.noche.g, Look.noche.b, 0.35) : Look.nocheLinea
         palette.highlight: valor.lit ? Look.noche : Look.luna
+        selectedTextColor: valor.lit ? Look.escarcha : Look.noche
         Accessible.name: valor.fila.text
+
+        background: Rectangle {
+            radius: Look.radioChico
+            color: valor.lit ? "transparent" : Look.nocheAlta
+            border.width: 1
+            border.color: valor.lit ? Qt.rgba(Look.noche.r, Look.noche.g, Look.noche.b, 0.35) : Look.nocheLinea
+        }
         Keys.onEscapePressed: valor.back(campo)
         Keys.onReturnPressed: valor.back(campo)
         Keys.onEnterPressed: valor.back(campo)
