@@ -30,6 +30,11 @@ ColumnLayout {
         item: more.host.item.kind === "video" || (!!more.pkg && ["video", "scene", "web"].includes(more.pkg.kind)) ? more.host.uid : ""
     }
 
+    SceneQualityRow {
+        Layout.fillWidth: true
+        uid: more.host.uid
+    }
+
     ItemCopyButton {
         drawer: more.host
     }

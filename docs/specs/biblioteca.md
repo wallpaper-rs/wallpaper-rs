@@ -84,9 +84,14 @@ tiene opciones propias» y deja «Mis preajustes» y «Más».
 El nivel «Más» (ruta «Biblioteca › nombre › Más») empieza por «Permisos de esta escena»: una fila por
 cada cosa que la escena pide (puntero, sonido, clics, lo que suena y sus variantes con red), con
 «Permitido» o «Sin permiso»; cambiarla responde con `Inputs1.Decide`. Siguen «Esta escena» (sonido,
-«Editar una copia…»), el nombre, la valoración, los datos del archivo, «Seguir moviéndose» con
-movimiento reducido, la privacidad de una página web y sus luces, «Editar…» y «Quitar de la
-biblioteca…».
+«Calidad de esta escena · La de tu pantalla», «Editar una copia…»), el nombre, la valoración, los
+datos del archivo, «Seguir moviéndose» con movimiento reducido, la privacidad de una página web y
+sus luces, «Editar…» y «Quitar de la biblioteca…».
+
+«Calidad de esta escena» no fija una calidad propia: la calidad se fija por pantalla. La fila
+aparece mientras la escena está en una pantalla y dice, con las palabras de Ajustes, la calidad de
+esa pantalla (`playback.quality.<pantalla>` o, si no tiene, `playback.quality`) y dónde se cambia;
+Intro abre Ajustes.
 
 ## Mis preajustes
 

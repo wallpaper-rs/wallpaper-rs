@@ -6,6 +6,9 @@ QtObject {
 
     required property var page
     readonly property string uid: "01J9Z0X9Z6Q7X4F3K5E1V0R1MS"
+    property SceneQualityCheck quality: SceneQualityCheck {
+        page: check.page
+    }
 
     function must(ok, text) {
         if (!ok)
@@ -25,6 +28,7 @@ QtObject {
         error();
         preajustes();
         mas();
+        quality.exercise();
     }
 
     function permisos() {
