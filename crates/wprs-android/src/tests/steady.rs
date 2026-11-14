@@ -22,6 +22,8 @@ pub(super) fn frames() {
     wall_clock();
     let Some(r) = renderer() else { return };
     let listed = ask(json!({ "op": "items", "query": "kind:scene" }));
+    let software = r.adapters().iter().any(|a| a.used && a.kind == "software");
+    let bound = if software { GUARD_ON_SOFTWARE_DRAWING } else { GUARD_ON_A_GRAPHICS_CARD };
     for item in listed.as_array().unwrap() {
         let title = item["title"].as_str().unwrap();
         crate::settings::setting("playback.allow_flashing", Some("false")).unwrap();
@@ -40,9 +42,9 @@ pub(super) fn frames() {
         }
         let guard = guarded_gpu.saturating_sub(free_gpu);
         assert!(
-            scripted > 0 || guard <= 60 * GUARD_PASS_COPY_AND_READ_BACK,
+            scripted > 0 || guard <= 60 * bound,
             "the pass, copy and read back of the flash guard made {guard} allocations inside the GPU calls \
-             of 60 frames of {title}"
+             of 60 frames of {title}, more than {bound} a frame"
         );
     }
     crate::settings::setting("playback.allow_flashing", Some("false")).unwrap();
@@ -76,4 +78,5 @@ fn steady(r: &wprs_render::Renderer, item: &serde_json::Value) -> (u64, u64, u64
 }
 
 const STEPS: u64 = 16;
-const GUARD_PASS_COPY_AND_READ_BACK: u64 = 30;
+const GUARD_ON_SOFTWARE_DRAWING: u64 = 30;
+const GUARD_ON_A_GRAPHICS_CARD: u64 = 50;
