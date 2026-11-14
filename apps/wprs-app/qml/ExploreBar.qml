@@ -7,6 +7,7 @@ Row {
 
     required property var catalog
     property bool full
+    property bool roomy: true
     readonly property alias filter: filter
     readonly property alias search: search
     readonly property alias link: link
@@ -21,7 +22,7 @@ Row {
         id: filter
 
         anchors.verticalCenter: parent.verticalCenter
-        visible: bar.catalog.words.length > 1
+        visible: bar.catalog.words.length > 0
         label: App.tr("Repositories")
         words: bar.catalog.words
         current: bar.catalog.word
@@ -30,7 +31,7 @@ Row {
 
     Text {
         anchors.verticalCenter: parent.verticalCenter
-        visible: bar.catalog.lone
+        visible: bar.catalog.lone && bar.roomy
         text: App.tr("Do you have wallpapers elsewhere? Add a repository with its link.")
         font.family: Look.letraTexto
         font.pixelSize: Look.tPie

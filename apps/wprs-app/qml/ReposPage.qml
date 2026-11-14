@@ -6,7 +6,7 @@ Kirigami.Page {
     id: page
 
     readonly property bool trouble: catalog.troubled !== "" || installer.failure !== null
-    readonly property real bandLow: bar.height + lower.spacing + (trouble ? fallo.implicitHeight : shelf.implicitHeight)
+    readonly property real bandLow: bar.height + lower.spacing + (trouble ? fallo.implicitHeight : none.visible ? none.implicitHeight : shelf.implicitHeight)
     readonly property real bandHigh: bandLow
     readonly property real upperHeight: upperBlock.visible ? upperBlock.implicitHeight : 0
     readonly property real bandFrom: upperBlock.visible ? Math.min(upper.y, band.y) : band.y
@@ -90,6 +90,7 @@ Kirigami.Page {
 
             catalog: page.catalog
             full: page.full
+            roomy: lower.width >= Look.filasAncho * 2
             onFlipped: page.flip()
         }
 
@@ -103,11 +104,22 @@ Kirigami.Page {
             onRepositories: applicationWindow().showPage(8)
         }
 
+        Vacio {
+            id: none
+
+            visible: page.catalog.loaded && page.catalog.repos.length === 0
+            title: App.tr("No repositories")
+            text: App.tr("The bundled examples were removed. Add them again, or add a repository with its link.")
+            action: App.tr("Add the examples again")
+            actionIcon: "arrow-counter-clockwise"
+            onActed: App.act("AddExamples", [], "Repos1")
+        }
+
         Estante {
             id: shelf
 
             width: parent.width + Look.margen
-            visible: !page.trouble && !page.full
+            visible: !page.trouble && !page.full && !none.visible
             label: App.tr("Explore")
             model: catalog.covers
             currentIndex: page.at

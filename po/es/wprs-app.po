@@ -20920,3 +20920,9 @@ msgstr "Incluido en este equipo"
 
 msgid "Paste the address of a repository of yours or someone else's"
 msgstr "Pega la dirección de un repositorio tuyo o de otra persona"
+
+msgid "No repositories"
+msgstr "No hay repositorios"
+
+msgid "The bundled examples were removed. Add them again, or add a repository with its link."
+msgstr "Quitaste los ejemplos incluidos. Vuelve a añadirlos, o añade un repositorio con su enlace."
