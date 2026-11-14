@@ -16,11 +16,16 @@ Coleccion {
     ListView {
         id: list
 
-        anchors.fill: parent
+        x: -Look.margen
+        width: parent.width + Look.margen
+        height: parent.height
         orientation: ListView.Horizontal
         spacing: Look.huecoEstante
-        leftMargin: Look.filete + Look.anillo
+        leftMargin: Look.margen + Look.filete + Look.anillo
         rightMargin: Look.filete + Look.anillo
+        highlightRangeMode: ListView.ApplyRange
+        preferredHighlightBegin: leftMargin
+        preferredHighlightEnd: width - rightMargin
         focus: true
         clip: true
         reuseItems: true
