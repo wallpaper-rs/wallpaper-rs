@@ -7,6 +7,7 @@ Coleccion {
     property Component actions
     property Component selection
     property alias currentIndex: list.currentIndex
+    readonly property real place: Look.filete + Look.anillo + Look.tapa + Look.huecoEstante
 
     view: list
     implicitHeight: Math.max(list.currentItem?.height ?? 0, Math.round(Look.tapaFoco * 9 / 16) + Look.e7 + Look.e4 + Look.filete + Look.anillo)
@@ -28,7 +29,7 @@ Coleccion {
             orientation: ListView.Horizontal
             spacing: Look.huecoEstante
             leftMargin: Look.filete + Look.anillo
-            rightMargin: Look.filete + Look.anillo
+            rightMargin: Math.max(Look.filete + Look.anillo, width - estante.place - Look.tapaFoco)
             displayMarginBeginning: Look.margen
             focus: true
             reuseItems: true
@@ -36,6 +37,9 @@ Coleccion {
             boundsBehavior: Flickable.StopAtBounds
             highlightFollowsCurrentItem: true
             highlightMoveDuration: Look.paso
+            highlightRangeMode: ListView.ApplyRange
+            preferredHighlightBegin: estante.place
+            preferredHighlightEnd: estante.place + Look.tapaFoco + Look.filete + Look.anillo
             highlight: Item {
             }
             model: estante.model
@@ -72,7 +76,7 @@ Coleccion {
                         readonly property bool choosing: estante.choosing && estante.chosen.length > 0
 
                         active: cover.lit
-                        x: choosing || !item ? 0 : Math.min(0, list.width - list.rightMargin - (slot.x - list.contentX) - item.width)
+                        x: choosing || !item ? 0 : Math.min(0, list.width - Look.filete - Look.anillo - (slot.x - list.contentX) - item.width)
                         width: choosing && item ? Math.min(item.implicitWidth, list.width - Look.margen - (slot.x - list.contentX)) : undefined
                         sourceComponent: choosing ? apart : card
                     }
