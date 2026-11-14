@@ -33,11 +33,13 @@ pub struct Facts {
     pub disk: Option<Disk>,
     pub cases: i64,
     pub reports: i64,
+    pub last_report: Option<i64>,
     pub invites: i64,
     pub first_invite: Option<i64>,
     pub packages: i64,
     pub published: Option<i64>,
     pub signed_at: i64,
+    pub sign_failed: Option<(i64, String)>,
 }
 
 pub fn not_after_der(der: &[u8]) -> Option<i64> {
@@ -87,6 +89,18 @@ const FULL: &str = "SELECT handle, quota_bytes, (SELECT COALESCE(SUM(size), 0) F
                     uploaded_by = users.id AND state != 'rejected') AS used FROM users WHERE status = 'active' \
                     AND quota_bytes > 0 AND used * 10 >= quota_bytes * 9 ORDER BY used * 1.0 / quota_bytes DESC";
 
+type Later = (Option<i64>, Option<(i64, String)>);
+
+fn later(c: &mut rusqlite::Connection) -> Res<Later> {
+    let report = "SELECT MAX(created_at) FROM cases WHERE state = 'open' AND reason IN ('report', 'notice')";
+    let report = one::<Option<i64>>(c, report, [])?.flatten();
+    let failed = "SELECT failed_at, failed_raw FROM repo_state WHERE failed_at IS NOT NULL";
+    let failed = rows(c, failed, [])?.into_iter().next().map(|r| {
+        (r["failed_at"].as_i64().unwrap_or_default(), r["failed_raw"].as_str().unwrap_or_default().to_owned())
+    });
+    Ok((report, failed))
+}
+
 pub async fn collect(app: &App) -> Res<Facts> {
     let (cases, reports, invites, first, packages, signed, published, full) = app
         .db
@@ -125,6 +139,7 @@ pub async fn collect(app: &App) -> Res<Facts> {
             u["quota_bytes"].as_u64().unwrap_or_default(),
         )
     });
+    let (last_report, sign_failed) = app.db.run(later).await?;
     let info = app.repo.info(&app.cfg);
     Ok(Facts {
         cert: cert(app),
@@ -133,10 +148,12 @@ pub async fn collect(app: &App) -> Res<Facts> {
         disk: disk(&app.cfg.data, full),
         cases,
         reports,
+        last_report,
         invites,
         first_invite: first,
         packages,
         published,
         signed_at: signed,
+        sign_failed,
     })
 }

@@ -1,5 +1,4 @@
 use super::facts::{Cert, Disk, Sign};
-use super::mail::Mail;
 use crate::lang::{count, since, t, tf, tm};
 use crate::ui::{Kind, Row, Tone, button, fix_fold, link_button, status};
 use crate::units::size;
@@ -10,11 +9,11 @@ pub struct Line {
     pub tone: Option<Tone>,
 }
 
-fn state(tone: Tone, text: &str, detail: Option<String>) -> Markup {
+pub fn state(tone: Tone, text: &str, detail: Option<String>) -> Markup {
     html! { (status(tone, text)) @if let Some(d) = detail { span { (d) } } }
 }
 
-fn post(action: &str, button: Markup) -> Markup {
+pub fn post(action: &str, button: Markup) -> Markup {
     html! { form method="post" action=(action) { (button) } }
 }
 
@@ -119,37 +118,7 @@ pub fn disk(disk: &Disk) -> Line {
     Line { row, tone: Some(tone) }
 }
 
-pub fn mail(found: &Mail) -> Line {
-    let name = Row::new(html! { (t("Mail")) });
-    match found {
-        Mail::Works(to) => Line {
-            row: name.value(state(Tone::Good, &tf("Reaches {}", &[to]), None)),
-            tone: Some(Tone::Good),
-        },
-        Mail::Failed { when, why, raw } => {
-            let detail = tf("{}; {}", &[&since(*when), why]);
-            let steps = html! {
-                ol { li { (t("The password of the mail is in the settings file of the server (.env, in its folder), next to the mail address.")) }
-                     li { (t("Write the new password your mail provider gave you and restart the server.")) }
-                     li { (t("The next notice goes out by itself; this row turns green when it arrives.")) } }
-                (crate::ui::fold(t("Details"), html! { pre.dato { (raw) } }, false))
-            };
-            let row = name
-                .value(state(Tone::Bad, t("The last notice did not go out"), Some(detail)))
-                .more(fix_fold(t("How to fix it"), steps, true));
-            Line { row, tone: Some(Tone::Bad) }
-        }
-        Mail::NotSet => {
-            let body = html! { p.texto { (t("The server does not send mail yet. When it does, the account and password of the mail provider go in the settings file of the server (.env, in its folder), and this row says whether the last notice arrived.")) } };
-            let row = name
-                .value(html! { span { (t("Not set up: the server sends no notices by mail yet")) } })
-                .more(fix_fold(t("How to fix it"), body, false));
-            Line { row, tone: None }
-        }
-    }
-}
-
-pub fn cases(open: i64, reports: i64) -> Line {
+pub fn cases(open: i64, reports: i64, last: Option<i64>) -> Line {
     let name = Row::new(html! { (t("Pending cases")) });
     if open == 0 {
         let row = name.value(html! { (t("None")) }).action(link_button(Kind::Link, "/mod", t("Review")));
@@ -160,8 +129,18 @@ pub fn cases(open: i64, reports: i64) -> Line {
         1 => tf("{}, one is a report", &[&open]),
         r => tf("{}, {} are reports", &[&open, &r]),
     };
-    let row =
-        name.value(state(Tone::Warn, &text, None)).action(link_button(Kind::Plain, "/mod", t("To review")));
+    let arrived = last.map(|at| {
+        let ago = since((crate::db::now() - at) / 1000);
+        match reports {
+            1 => tf("the report arrived {}", &[&ago]),
+            _ => tf("the last report arrived {}", &[&ago]),
+        }
+    });
+    let row = name.value(state(Tone::Warn, &text, arrived)).action(link_button(
+        Kind::Plain,
+        "/mod",
+        t("To review"),
+    ));
     Line { row, tone: Some(Tone::Warn) }
 }
 
