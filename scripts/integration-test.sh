@@ -11,6 +11,7 @@ source "$(dirname "$0")"/integration-browse.sh
 source "$(dirname "$0")"/integration-repos.sh
 source "$(dirname "$0")"/integration-scenes.sh
 source "$(dirname "$0")"/integration-crossing.sh
+source "$(dirname "$0")"/integration-passages.sh
 source "$(dirname "$0")"/integration-removal.sh
 source "$(dirname "$0")"/integration-folder.sh
 source "$(dirname "$0")"/integration-flip.sh
