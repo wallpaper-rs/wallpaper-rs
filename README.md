@@ -988,6 +988,10 @@ bindsym $mod+Alt+Escape exec wprs-ctl browse cancel
 
 y en X11 lo mismo con el gestor de atajos de tu entorno (o `xbindkeys`).
 
+El atajo, la bandeja y `wprs-ctl next --preview` abren una ventana sobre el escritorio con el fondo
+que pondrías y cómo entraría (← y → recorren, Intro aplica, Esc cancela); la guía
+`docs/usar/cambiar-con-el-teclado.md` la explica con sus límites.
+
 El proveedor Wallhaven usa la API oficial v1 y admite todas las opciones de su búsqueda: palabras
 (`query`), categorías y pureza, orden (`date_added`, `relevance`, `random`, `views`, `favorites`,
 `toplist`, `hot`), sentido, rango del `toplist` (`1d` a `1y`), resolución mínima y resoluciones
