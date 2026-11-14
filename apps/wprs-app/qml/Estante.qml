@@ -52,6 +52,7 @@ Coleccion {
                 required property int index
                 readonly property alias name: cover.name
                 readonly property alias caption: cover.caption
+                readonly property real room: cover.room
 
                 width: cover.width + (cover.lit ? Look.filete + Look.anillo : 0)
                 height: cover.y + cover.height
@@ -73,9 +74,26 @@ Coleccion {
                         active: cover.lit
                         x: choosing || !item ? 0 : Math.min(0, list.width - list.rightMargin - (slot.x - list.contentX) - item.width)
                         width: choosing && item ? Math.min(item.implicitWidth, list.width - Look.margen - (slot.x - list.contentX)) : undefined
-                        sourceComponent: choosing ? estante.selection : card
+                        sourceComponent: choosing ? apart : card
                     }
                 }
+            }
+        }
+    }
+
+    Component {
+        id: apart
+
+        Item {
+            implicitWidth: chosenRow.implicitWidth
+            implicitHeight: chosenRow.y + chosenRow.implicitHeight
+
+            Loader {
+                id: chosenRow
+
+                y: list.currentItem?.room ?? 0
+                width: parent.width
+                sourceComponent: estante.selection
             }
         }
     }

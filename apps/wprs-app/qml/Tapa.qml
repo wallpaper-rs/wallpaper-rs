@@ -25,6 +25,7 @@ Item {
     signal doubleTapped
 
     readonly property bool grown: lit && !even
+    readonly property real room: label.height + Look.notaArriba + caption.height
 
     implicitWidth: grown ? Look.tapaFoco : Look.tapa
     implicitHeight: square.height + (grown ? under.height + Look.e4 : label.height + Look.e3 + (note ? caption.height + Look.notaArriba : 0))
