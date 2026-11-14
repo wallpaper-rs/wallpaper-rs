@@ -76,6 +76,7 @@ mod store;
 #[cfg(test)]
 mod tests;
 mod tilt;
+mod told;
 mod unshared;
 mod updates;
 mod variant;

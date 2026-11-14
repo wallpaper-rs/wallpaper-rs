@@ -2,7 +2,7 @@ use crate::library::with;
 use crate::pack::{self, Pack};
 use crate::repos::bundled;
 use crate::said;
-use crate::{Error, asks, chosen, opened, saved, settings, store};
+use crate::{Error, asks, chosen, opened, saved, settings, store, told};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::collections::{BTreeMap, BTreeSet};
@@ -26,6 +26,7 @@ pub(crate) enum Request {
     Grant { uid: String, input: String, on: bool },
     Decide { uid: String, allow: Vec<String>, deny: Vec<String> },
     Asks { uid: String },
+    Tell { uid: String },
     Examples { dir: String },
     ExamplesRepo { dir: String, stamp: i64, force: bool },
     ExamplesDue { stamp: i64 },
@@ -60,6 +61,7 @@ pub(crate) fn request(request: Request) -> Result<Value, Error> {
             let pack = scene(&uid)?;
             Ok(json!(asks::undecided(&pack, asks::wants(&pack, values(&pack)).1)))
         }
+        Request::Tell { uid } => Ok(json!(told::tell(&*scene(&uid)?)?)),
         Request::Examples { dir } => Ok(json!(pack::examples(Path::new(&dir))?)),
         Request::ExamplesRepo { dir, stamp, force } => bundled::offer(Path::new(&dir), stamp, force),
         Request::ExamplesDue { stamp } => Ok(json!(bundled::due(stamp)?)),

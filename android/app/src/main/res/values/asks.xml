@@ -7,4 +7,13 @@
     <string name="asks_allow">Allow</string>
 
     <string name="asks_without">Without it</string>
+    <string name="play_anyway">Play anyway</string>
+
+    <string name="heavy_notice">%1$s is heavy for this phone and stands still.</string>
+
+    <string name="heavy_not_now">Not now</string>
+
+    <string name="glide_less">Less</string>
+
+    <string name="glide_more">More</string>
 </resources>

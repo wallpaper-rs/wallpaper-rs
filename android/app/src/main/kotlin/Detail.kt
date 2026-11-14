@@ -70,8 +70,10 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
         }
     }
     val page: @Composable ColumnScope.() -> Unit = {
+        if (inUse) item?.let { HeavyNotice(main, uid, it.title, report) }
         item?.let { Heading(it, inUse, barred) }
         if (inUse) Standing(report)
+        if (inUse && heavy(report)) PlayAnyway(main)
         Asks(main, uid, undecided)
         if (picture) Framing(main, uid, state)
         About(main, uid, item, picture, state, open)

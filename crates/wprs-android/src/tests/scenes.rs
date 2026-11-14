@@ -87,6 +87,7 @@ pub(super) fn scenes() {
         assert_eq!(draw(&mut stage, 1_000_000, 60, false).map(|shot| shot.0), Some(None));
     }
     super::asked::one_question(&pulse);
+    super::asked::told_once(&pulse);
     assert_eq!(ask(json!({ "op": "grant", "uid": pulse, "input": "audio", "on": true })), Value::Null);
     assert!(ask(json!({ "op": "grant", "uid": pulse, "input": "camera", "on": true }))["error"].is_string());
     assert_eq!(ask(json!({ "op": "scene", "uid": pulse, "languages": [] }))["granted"]["audio"], json!(true));

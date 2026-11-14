@@ -20,3 +20,8 @@ pub(super) fn one_question(pulse: &str) {
     let off = form(pulse);
     assert_eq!((&off["undecided"], &off["granted"]["audio"]), (&json!([]), &json!(false)));
 }
+
+pub(super) fn told_once(pulse: &str) {
+    let tell = || ask(json!({ "op": "tell", "uid": pulse }));
+    assert_eq!((tell(), tell()), (json!(true), json!(false)));
+}

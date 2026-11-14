@@ -7,4 +7,13 @@
     <string name="asks_allow">Permitir</string>
 
     <string name="asks_without">Sin eso</string>
+    <string name="play_anyway">Reproducir igual</string>
+
+    <string name="heavy_notice">%1$s es pesada para este teléfono y se queda quieta.</string>
+
+    <string name="heavy_not_now">Ahora no</string>
+
+    <string name="glide_less">Menos</string>
+
+    <string name="glide_more">Más</string>
 </resources>
