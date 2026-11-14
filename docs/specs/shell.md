@@ -197,3 +197,17 @@ Editar abre el esqueleto de opciones con la ruta «Listas › Tarde»: Nombre, �
 fondos con Quitar, «Añadir fondos…» y «Añadir una carpeta…», y Más (historial, búsqueda, reglas y
 quitar la lista). Arriba están «Cambia en», «Pausar la lista» y «Detener». Quitar una lista ofrece
 Deshacer en el aviso, que la vuelve a crear con sus fondos y sus reglas.
+
+«Fondos» se despliega en el mismo nivel: cada fondo trae su miniatura, «en pantalla ahora» si se
+está mostrando y Quitar. En una lista manual el orden se cambia arrastrando el asa de la fila o con
+Ctrl+Arriba y Ctrl+Abajo sobre el fondo elegido; la fila elegida conserva el foco al moverse. Si la
+lista cambió mientras tanto, el aviso lo dice y la vuelve a cargar. Una lista con búsqueda muestra
+sus fondos sin asas ni Quitar. «Añadir una carpeta…» copia los fondos de la carpeta una vez; seguirla
+para que los archivos nuevos entren solos está en Más, «Seguir una carpeta…». Se muestran hasta 500
+fondos.
+
+Más se arma con filas: Búsqueda (vacía es una lista manual; con texto dice cuántos fondos coinciden),
+«Convertir en manual» en una lista con búsqueda, «Seguir una carpeta…», una fila por regla de la lista
+(llave, elección o campo según la regla), Historial (pliegue con lo que mostró hace poco, lo más
+reciente primero, y la pantalla cuando hay varias) y «Quitar la lista». Abajo se ven las teclas
+Moverse, Cambiar y Volver.
