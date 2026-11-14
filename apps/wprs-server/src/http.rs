@@ -22,6 +22,8 @@ pub fn router(app: Arc<App>) -> Router {
         upload::routes,
         moderation::routes,
         hiding::routes,
+        crate::mod_page::routes,
+        crate::mod_case::routes,
         admin::routes,
         sync::routes,
         records::routes,
@@ -102,7 +104,10 @@ async fn guard(State(app): St, req: Request, next: Next) -> Response {
         .map(String::from);
     let signed =
         req.headers().contains_key(header::AUTHORIZATION) || req.headers().contains_key(header::COOKIE);
-    let long = path.starts_with("/api/v1/uploads/") || path.ends_with("/decision") || path == "/upload";
+    let long = path.starts_with("/api/v1/uploads/")
+        || path.ends_with("/decision")
+        || path.starts_with("/mod/cases/")
+        || path == "/upload";
     let long = long || path == "/api/v1/sync/events" || path.starts_with("/api/v1/sync/blobs/");
     let probe = path == "/healthz" || path == "/readyz";
     let mut response = match app.limits.take(&API, &key(ip, 32, 64)) {

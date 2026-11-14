@@ -30,6 +30,8 @@ pub struct Report {
     pub photosensitive: Option<bool>,
     #[serde(default)]
     pub facets: Vec<String>,
+    #[serde(default)]
+    pub asks: Vec<String>,
 }
 
 pub fn check(wpak: &Path, keys: &[String], require_signature: bool, thumb: &Path) -> anyhow::Result<Report> {
@@ -78,6 +80,7 @@ pub fn check(wpak: &Path, keys: &[String], require_signature: bool, thumb: &Path
         content: rating.map(|r| if r == Rating::General { "general" } else { "mature" }.into()),
         photosensitive: m.photosensitive,
         facets,
+        asks: wprs_format::asks(&package.manifest).into_iter().collect(),
     })
 }
 

@@ -7,11 +7,12 @@ pub struct Row {
     pub value: Option<Markup>,
     pub action: Option<Markup>,
     pub lit: bool,
+    pub thumb: Option<String>,
 }
 
 impl Row {
     pub fn new(name: Markup) -> Self {
-        Row { name, value: None, action: None, lit: false }
+        Row { name, value: None, action: None, lit: false, thumb: None }
     }
 
     pub fn value(mut self, value: Markup) -> Self {
@@ -21,6 +22,11 @@ impl Row {
 
     pub fn action(mut self, action: Markup) -> Self {
         self.action = Some(action);
+        self
+    }
+
+    pub fn thumb(mut self, src: String) -> Self {
+        self.thumb = Some(src);
         self
     }
 
@@ -35,6 +41,7 @@ pub fn rows(items: Vec<Row>, compact: bool) -> Markup {
         ul.filas.compactas[compact] {
             @for r in items {
                 li.fila.foco[r.lit] {
+                    @if let Some(src) = &r.thumb { img.miniatura src=(src) alt="" loading="lazy"; }
                     div.fila-texto {
                         div.fila-nombre { (r.name) }
                         @if let Some(v) = r.value { div.fila-valor { (v) } }

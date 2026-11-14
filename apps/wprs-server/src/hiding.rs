@@ -1,24 +1,16 @@
-use crate::admin::choose;
 use crate::auth::{Auth, Role};
 use crate::db::{audit, changed, now};
-use crate::error::Res;
 use crate::error::{Input, Problem, require};
-use crate::lang::{t, tf, word};
-use crate::moderation::open_cases;
-use crate::web::{page, text};
 use crate::{Reply, Router, St};
 use axum::Json;
 use axum::extract::{Path, State};
-use axum::response::{IntoResponse, Redirect, Response};
 use axum::routing::{delete, get};
-use maud::html;
 use rusqlite::params;
 use serde::Deserialize;
 use serde_json::json;
 
 pub fn routes() -> Router {
     Router::new()
-        .route("/mod", get(moderation))
         .route(
             "/api/v1/mod/hidden",
             get(hidden).post(|s: St, a: Auth, Input(h): Input<Hide>| hide(s, a, h, true)),
@@ -65,56 +57,4 @@ async fn hide(State(app): St, auth: Auth, h: Hide, on: bool) -> Reply {
     }
     app.dirty.notify_one();
     Ok(Json(json!({"id": id, "hidden": on})))
-}
-
-async fn moderation(State(app): St, auth: Option<Auth>) -> Res<Response> {
-    let Some(auth) = auth.filter(|a| a.role >= Role::Moderator) else {
-        return Ok(Redirect::to("/login?next=/mod").into_response());
-    };
-    let sql = "SELECT id, hidden AS reason FROM packages WHERE hidden IS NOT NULL ORDER BY hidden_at DESC";
-    let (cases, hidden) = app.db.run(move |c| Ok((open_cases(c)?, crate::db::rows(c, sql, [])?))).await?;
-    let decisions = ["approve", "reject", "remove", "revoke", "restore", "dismiss"];
-    let reasons = ["other", "malware", "license", "takedown", "broken"];
-    let body = html! {
-        @if cases.is_empty() { p { (t("No open cases.")) } }
-        @for case in &cases { section.seccion {
-            h2 { (tf("Case {}", &[&case["id"]])) ": " (word(text(case, "reason"))) " · " (text(case, "title")) }
-            img width="320" src={ "/media/" (text(case, "sha256")) ".jpg" }
-                alt=(tf("Preview of {}", &[&text(case, "title")]));
-            dl {
-                dt { (t("Package")) } dd { code { (text(case, "package")) " " (text(case, "version")) } }
-                dt { (t("State")) } dd { (word(text(case, "state"))) }
-                dt { (t("Uploaded by")) } dd { (text(case, "uploader")) }
-                dt { (t("Details")) } dd { (text(case, "detail")) }
-            }
-            form.formulario method="post" action={ "/api/v1/mod/cases/" (case["id"]) "/decision?back=/mod" } {
-                label { (t("Decision")) (choose("decision", t("Decision"), &decisions, "approve")) }
-                label { (t("Reason sent to the author (required to reject, remove or revoke)"))
-                    textarea name="statement" rows="3" {} }
-                label { (t("Revocation reason")) (choose("reason", t("Revocation reason"), &reasons, "other")) }
-                label { input type="checkbox" name="strike" value="true"; (t("Give the uploader a strike")) }
-                button { (t("Decide")) }
-            }
-        } }
-        h2 { (t("Hidden packages")) }
-        p.texto { (t("Hidden packages leave the catalog and search; whoever installed them keeps them and their updates.")) }
-        table { tbody { @for h in &hidden { tr {
-            td { a href={ "/packages/" (text(h, "id")) } { code { (text(h, "id")) } } } td { (text(h, "reason")) }
-            td { form method="post" action={ "/api/v1/mod/hidden/" (text(h, "id")) "?_method=DELETE&back=/mod" } {
-                button { (t("Show again")) }
-            } }
-        } } } }
-        form method="post" action="/api/v1/mod/hidden?back=/mod" {
-            label { (t("Package id")) input name="id" required; }
-            label { (t("Reason sent to the author")) input name="reason" required minlength="10"; }
-            button { (t("Hide")) }
-        }
-        h2 { (t("Blocklist")) }
-        form method="post" action="/api/v1/mod/blocklist?back=/mod" {
-            label { (t("SHA-256 of a .wpak")) input name="sha256" required pattern="[0-9a-f]{64}"; }
-            label { (t("Reason")) input name="reason" required; }
-            button { (t("Block")) }
-        }
-    };
-    Ok(page(&app, Some(&auth), "/mod", t("Moderation queue"), body).into_response())
 }

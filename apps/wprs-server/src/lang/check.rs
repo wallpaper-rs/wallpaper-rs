@@ -153,3 +153,19 @@ fn the_roles_and_states_have_words() {
         assert!(within(Lang::Es, || word(w)) != w, "{w}");
     }
 }
+
+#[test]
+fn every_state_the_review_pages_show_has_a_spanish_word() {
+    let shown = [
+        ["pending", "published", "rejected", "removed", "revoked"],
+        ["open", "closed", "actioned", "dismissed", "withdrawn"],
+        ["upload", "report", "notice", "counter", "approve"],
+        ["reject", "remove", "revoke", "restore", "dismiss"],
+        ["image", "video", "scene", "web", "general"],
+        ["mature", "unrated", "copyright", "illegal", "malware"],
+        ["spam", "other", "license", "takedown", "broken"],
+    ];
+    let known = super::vocabulary();
+    let missing: Vec<&str> = shown.iter().flatten().copied().filter(|w| !known.contains_key(w)).collect();
+    assert!(missing.is_empty(), "no Spanish word for: {missing:?}");
+}

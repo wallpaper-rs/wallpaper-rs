@@ -55,7 +55,7 @@ async fn the_account_and_administration_pages_speak_spanish() {
     }
     assert!(admin_es.contains("aria-current=\"page\""));
     let (_, _, moderation) = page(&server, "/mod", &admin, Some("es")).await;
-    assert!(moderation.contains("Lista negra") && moderation.contains("aria-current=\"page\""));
+    assert!(moderation.contains("Bloquear un archivo") && moderation.contains("aria-current=\"page\""));
 }
 
 #[tokio::test]

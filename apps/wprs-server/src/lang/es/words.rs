@@ -54,6 +54,8 @@ pub const WORDS: super::Texts = &[
     ("done", "terminada"),
     ("failed", "fallida"),
     ("open", "abierto"),
+    ("dismissed", "descartado"),
+    ("upload", "subida"),
     ("closed", "cerrado"),
     ("actioned", "atendido"),
     ("report", "denuncia"),
