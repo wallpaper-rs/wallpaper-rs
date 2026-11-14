@@ -8,7 +8,7 @@ Item {
     required property var page
     readonly property var tool: page.settings ? page.settings.passage : null
     readonly property var current: tool ? tool.current : null
-    readonly property string scene: page.heading ?? ""
+    readonly property string scene: page.title ?? ""
     readonly property bool coming: tool !== null && tool.way === "in"
     readonly property var points: current ? (current.fields ?? []).filter(f => f.type === "vec2") : []
 

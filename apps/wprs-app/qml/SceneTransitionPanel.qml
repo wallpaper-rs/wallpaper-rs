@@ -16,7 +16,7 @@ Rectangle {
     readonly property int level: Math.max(0, SceneLook.levels.indexOf(SceneLook.effective))
     readonly property bool plays: current !== null && (current.plays ?? [true, true, true, true])[level] === true
     readonly property string wayName: tool && tool.way === "out" ? App.tr("When it leaves") : App.tr("When it comes in")
-    readonly property string scene: page.heading ?? ""
+    readonly property string scene: page.title ?? ""
 
     visible: tool !== null && tool.open
     color: Look.nocheAlta
@@ -98,6 +98,7 @@ Rectangle {
 
             Nota {
                 Layout.fillWidth: true
+                wraps: true
                 visible: panel.tool !== null && panel.tool.said !== ""
                 tone: "coral"
                 text: panel.tool ? panel.tool.said : ""
@@ -140,12 +141,14 @@ Rectangle {
 
             Nota {
                 Layout.fillWidth: true
+                wraps: true
                 visible: panel.current !== null && (panel.current.fields ?? []).some(f => f.type === "vec2")
                 text: App.tr("Move the points on the canvas to place it.")
             }
 
             Nota {
                 Layout.fillWidth: true
+                wraps: true
                 visible: panel.current !== null
                 tone: panel.plays ? "" : "ambar"
                 text: App.tr("It looks as in «See as»: %1. Change the computer above to try the others.", SceneLook.names[panel.level]) + (panel.plays ? "" : " " + App.tr("On this computer whoever uses it sees a simple fade."))
@@ -153,11 +156,13 @@ Rectangle {
 
             Nota {
                 Layout.fillWidth: true
+                wraps: true
                 text: App.tr("With «Less motion» whoever uses it sees a simple fade.")
             }
 
             Nota {
                 Layout.fillWidth: true
+                wraps: true
                 visible: panel.current !== null && (panel.current.problem ?? null) !== null
                 tone: "coral"
                 text: panel.current && panel.current.problem ? panel.current.problem : ""

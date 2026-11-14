@@ -11,6 +11,7 @@ Row {
     property bool lit: false
     property real fitWidth: 0
     property bool wrap: false
+    property bool wraps: false
 
     spacing: Look.listaHueco
     Accessible.role: Accessible.StaticText
@@ -28,10 +29,10 @@ Row {
 
     Text {
         anchors.verticalCenter: parent.verticalCenter
-        width: nota.fitWidth > 0 ? Math.min(implicitWidth, nota.fitWidth - (mark.visible ? mark.width + nota.spacing : 0)) : implicitWidth
+        width: nota.wraps ? nota.width - (nota.icon !== "" ? Look.iconoNota + nota.spacing : 0) : nota.fitWidth > 0 ? Math.min(implicitWidth, nota.fitWidth - (mark.visible ? mark.width + nota.spacing : 0)) : implicitWidth
         text: nota.text
-        wrapMode: nota.wrap ? Text.Wrap : Text.NoWrap
-        elide: nota.wrap ? Text.ElideNone : Text.ElideRight
+        wrapMode: nota.wrap || nota.wraps ? Text.Wrap : Text.NoWrap
+        elide: nota.wrap || nota.wraps ? Text.ElideNone : Text.ElideRight
         font.family: Look.letraTexto
         font.pixelSize: Look.tPie
         color: nota.lit ? Look.noche : Look.bruma
