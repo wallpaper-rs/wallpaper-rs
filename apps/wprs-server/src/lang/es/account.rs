@@ -2,7 +2,6 @@ pub const TEXTS: super::Texts = &[
     ("Handle", "Usuario"),
     ("Password", "Contraseña"),
     ("3 to 32 characters.", "De 3 a 32 caracteres."),
-    ("Password (10 characters or more)", "Contraseña (10 caracteres o más)"),
     ("Invitation code", "Código de invitación"),
     (
         "It comes filled in if you opened the invitation link.",

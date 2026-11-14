@@ -31,15 +31,12 @@ pub const TEXTS: super::Texts = &[
         "A code needs a secure address (https), and this server has none. Type the address below in the app.",
         "Un código necesita una dirección segura (https) y este servidor no la tiene. Escribe la dirección de abajo en la app.",
     ),
-    ("Copy the address", "Copiar la dirección"),
-    ("Copied", "Copiada"),
     ("Fingerprint", "Huella"),
     (
         "For the desktop app: Account → Add server, and paste the address.",
         "Para la app de escritorio: Cuenta → Añadir servidor, y pega la dirección.",
     ),
     ("Waiting for review", "Espera revisión"),
-    ("Upload a wallpaper", "Subir un fondo"),
     ("Choose the file…", "Elegir el archivo…"),
     ("No file chosen", "Ningún archivo elegido"),
     ("What is \"unlisted\"", "Qué es «sin listar»"),
@@ -51,8 +48,6 @@ pub const TEXTS: super::Texts = &[
         "Remove \"{}\"? It stops syncing with your account and, to use it again, you will have to link it again.",
         "¿Quitar «{}»? Deja de sincronizar con tu cuenta y, para volver a usarlo, tendrás que vincularlo otra vez.",
     ),
-    ("Cancel", "Cancelar"),
-    ("Confirm", "Confirmar"),
     (
         "None yet. A phone that reads the code above shows up here.",
         "Ninguno todavía. Un teléfono que lee el código de arriba aparece aquí.",
@@ -79,7 +74,6 @@ pub const TEXTS: super::Texts = &[
         "Un archivo con tu cuenta, tus fondos y tus dispositivos.",
     ),
     ("Deletes the account and its data.", "Borra la cuenta y sus datos."),
-    ("Advanced", "Avanzado"),
     (
         "Separated by spaces: catalog:read, upload, sync, mod, admin.",
         "Separados por espacios: catalog:read, upload, sync, mod, admin.",
@@ -96,5 +90,4 @@ pub const TEXTS: super::Texts = &[
     ("Copy it now: it is not shown again.", "Cópialo ahora: no se vuelve a mostrar."),
     ("Token", "Token"),
     ("Expires", "Vence"),
-    ("Copy", "Copiar"),
 ];
