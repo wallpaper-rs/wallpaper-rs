@@ -15,6 +15,15 @@ Item {
     readonly property bool starting: empty && !failed && !unmatched
 
     readonly property bool alone: starting || failed
+    readonly property alias fault: fault
+    property bool restarting: false
+    property string refused
+
+    function restart() {
+        restarting = true;
+        refused = "";
+        App.act("Restart", [], "Service", () => state && (state.restarting = false, state.page.search()), error => state && (state.restarting = false, state.refused = error.message));
+    }
 
     visible: empty
 
@@ -54,12 +63,14 @@ Item {
     }
 
     Fallo {
+        id: fault
+
         visible: state.failed
         title: App.tr("The wallpaper service does not answer")
-        text: App.tr("Your library and the wallpapers of your desktop depend on it. What you had set is not lost, and this page comes back by itself when the service answers.")
+        text: state.refused !== "" ? App.tr("The service could not be started from here. The details say why; this page comes back by itself when the service answers.") : App.tr("Your library and the wallpapers of your desktop depend on it. Restarting it is usually enough; what you had set is not lost.")
         big: true
-        details: state.library.error
-        action: App.tr("Try again")
-        onActed: state.page.search()
+        details: [state.refused, state.library.error].filter(line => line !== "").join("\n")
+        action: state.restarting ? App.tr("Restarting the service…") : App.tr("Restart the service")
+        onActed: state.restarting || state.restart()
     }
 }

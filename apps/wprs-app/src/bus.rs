@@ -125,6 +125,9 @@ pub async fn daemon() -> Result<Daemon, Error> {
 
 pub async fn call(iface: &str, member: &str, args: Vec<Value>) -> Result<String, Error> {
     let iface = iface.strip_prefix("io.github.wallpaper_rs.").unwrap_or(iface);
+    if iface == "Service" {
+        return crate::service::call(member).await;
+    }
     let daemon = daemon().await?;
     let seen = || BUS.seen.lock().unwrap().get(topic(iface, member)).copied().unwrap_or(0);
     let mut reply = dispatch(&daemon, iface, member, args.clone()).await?;

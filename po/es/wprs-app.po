@@ -20428,5 +20428,17 @@ msgid "The wallpaper service does not answer"
 msgstr "El servicio de fondos no responde"
 
 #: apps/wprs-app/qml/LibraryState.qml
-msgid "Your library and the wallpapers of your desktop depend on it. What you had set is not lost, and this page comes back by itself when the service answers."
-msgstr "Tu biblioteca y los fondos de tu escritorio dependen de él. Lo que ya tenías puesto no se pierde, y esta página vuelve sola cuando el servicio responde."
+msgid "Your library and the wallpapers of your desktop depend on it. Restarting it is usually enough; what you had set is not lost."
+msgstr "Tu biblioteca y los fondos de tu escritorio dependen de él. Reiniciarlo suele bastar; lo que ya tenías puesto no se pierde."
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "The service could not be started from here. The details say why; this page comes back by itself when the service answers."
+msgstr "No se pudo iniciar el servicio desde aquí. Los detalles dicen por qué; esta página vuelve sola cuando el servicio responde."
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "Restart the service"
+msgstr "Reiniciar el servicio"
+
+#: apps/wprs-app/qml/LibraryState.qml
+msgid "Restarting the service…"
+msgstr "Reiniciando el servicio…"

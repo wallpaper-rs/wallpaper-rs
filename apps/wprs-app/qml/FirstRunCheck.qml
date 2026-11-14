@@ -18,7 +18,8 @@ QtObject {
                     "total": 0,
                     "loading": false,
                     "error": error
-                }
+                },
+                "search": () => {}
             },
             "bar": {
                 "filtered": filtered,
@@ -34,6 +35,15 @@ QtObject {
         fresh.destroy();
         broken.destroy();
         must(found.join() === "true,false,false,true", "an empty library with no error does not show the start, or a failed one still does: " + found.join());
+    }
+
+    function restart() {
+        const broken = make("no answer", false);
+        const before = broken.fault.action;
+        broken.fault.acted();
+        const found = [before === App.tr("Restart the service"), broken.restarting, broken.fault.action === App.tr("Restarting the service…"), broken.fault.details];
+        broken.destroy();
+        must(found.join() === "true,true,true,no answer", "the service error does not offer to restart the service: " + found.join());
     }
 
     function unnoticed() {
@@ -71,6 +81,7 @@ QtObject {
 
     function exercise() {
         states();
+        restart();
         unnoticed();
         notice();
     }

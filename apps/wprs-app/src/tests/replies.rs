@@ -1,5 +1,6 @@
 use super::{iface, literals, qml, qml_files};
 use crate::calls::CALLS;
+use crate::service::SERVICE;
 use std::path::Path;
 
 #[test]
@@ -7,7 +8,8 @@ fn qml_calls_name_members_of_the_call_table() {
     for line in qml().iter().flat_map(|file| file.lines().map(String::from).collect::<Vec<_>>()) {
         for member in literals(&line, ".query(").into_iter().chain(literals(&line, ".act(")) {
             let iface = iface(&line);
-            assert!(CALLS.iter().any(|(i, m, _)| (*i, *m) == (iface, member)), "{iface}.{member} in {line}");
+            let known = CALLS.iter().chain(SERVICE).any(|(i, m, _)| (*i, *m) == (iface, member));
+            assert!(known, "{iface}.{member} in {line}");
         }
     }
 }

@@ -67,8 +67,10 @@ llama a `ClearWallpaper` y deja el escritorio como estaba. Sucede una sola vez: 
 Si el repositorio de ejemplos no está (instalación sin ejemplos) solo se ven los tres caminos.
 
 Si el servicio no responde, la página muestra solo el fallo, «El servicio de fondos no responde», con
-«Probar de nuevo» y los detalles; reintenta cada tres segundos y vuelve sola cuando el servicio contesta.
-No ofrece reiniciar el servicio: la app no tiene cómo hacerlo.
+«Reiniciar el servicio» y los detalles; reintenta cada tres segundos y vuelve sola cuando el servicio
+contesta. El botón pide a systemd de la sesión que reinicie `wprsd.service` (como el applet de la bandeja);
+sin esa unidad pide al bus que active `io.github.wallpaper_rs.Daemon`. Si ninguna de las dos funciona, el
+texto lo dice y el motivo queda en «Detalles». En la app es la llamada `Service.Restart` de su tabla.
 
 ## Opciones de un fondo
 
