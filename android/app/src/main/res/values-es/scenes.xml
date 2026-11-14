@@ -107,5 +107,4 @@
     <string name="preset_install">Instalarlo</string>
     <string name="presets_of">Preajustes de este fondo:</string>
     <string name="text_count">%1$d de %2$d</string>
-    <string name="lacks_transition">En el teléfono entra con el fundido de siempre en lugar de la transición que trae.</string>
 </resources>

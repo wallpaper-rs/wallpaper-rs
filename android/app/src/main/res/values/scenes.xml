@@ -107,5 +107,4 @@
     <string name="preset_install">Install it</string>
     <string name="presets_of">Presets of this wallpaper:</string>
     <string name="text_count">%1$d of %2$d</string>
-    <string name="lacks_transition">It comes in with the phone\'s own fade instead of the transition it brings.</string>
 </resources>
