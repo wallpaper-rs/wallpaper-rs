@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.json.JSONArray
 import org.json.JSONObject
@@ -53,7 +54,7 @@ fun Bundled(main: Main) {
                 val picture by preview(item.getString("repo_id") + "/" + item.getString("id") + "/" + item.getString("version"))
                 val frame = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(Measure.rControl))
                 picture?.let { Image(it, null, frame, contentScale = ContentScale.Crop) } ?: Column(frame.background(tones.nightHigh)) {}
-                Text(item.optString("title").ifEmpty { item.getString("id") }, Modifier.padding(top = Measure.e1), style = Type.foot, maxLines = 1)
+                Text(item.optString("title").ifEmpty { item.getString("id") }, Modifier.padding(top = Measure.e1), style = Type.foot, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
     }
