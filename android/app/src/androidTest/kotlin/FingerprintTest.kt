@@ -14,6 +14,7 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
@@ -72,7 +73,7 @@ class FingerprintTest {
         val bottom = check.fetchSemanticsNode().boundsInWindow.bottom
         assertTrue("the button ends at $bottom, the keyboard starts at ${window - keyboard()}", bottom <= window - keyboard())
         check.performClick()
-        compose.onNodeWithText(context.getString(R.string.print_same)).assertIsDisplayed()
+        compose.onNodeWithText(context.getString(R.string.print_same)).performScrollTo().assertIsDisplayed()
     }
 
     private companion object {
