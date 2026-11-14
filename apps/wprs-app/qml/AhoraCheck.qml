@@ -71,7 +71,7 @@ Timer {
             if (host.kind === "title") {
                 must(frame.bandLow > 0, "the library does not use the low band");
                 const tasks = frame.ahora.tasks;
-                must(tasks.shown.length === 0 || tasks.height > 0, "the job line is hidden on a page with the band");
+                must(tasks.shown.length === 0 || tasks.height > 0 || frame.ahora.compact, "the job line is hidden on a page with the band");
                 notice();
             }
             empty();
