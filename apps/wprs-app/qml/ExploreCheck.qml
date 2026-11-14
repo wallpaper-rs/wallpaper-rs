@@ -71,6 +71,35 @@ QtObject {
         expect("vista", page.shelf.movingOf(0) !== "" && page.shelf.movingOf(1) === "", "only the card that may move gets its animated preview");
     }
 
+    function copying() {
+        const copy = Qt.createComponent("BrowseCopy.qml").createObject(check.page, {
+            "catalog": catalog,
+            "wallpaper": pkg("bb22", "dunes", {
+                "kind": "scene"
+            })
+        });
+        const button = Qt.createComponent("ItemCopyButton.qml").createObject(null, {
+            "drawer": copy
+        });
+        expect("copia", copy.record === null && !button.visible, "a scene that is not installed must not offer a copy");
+        catalog.installed = [{
+                "repo_id": "bb22",
+                "id": "dunes",
+                "version": "1.0.0",
+                "item": "AB12CD"
+            }];
+        copy.item = {
+            "path": "/library/dunes.wpak"
+        };
+        expect("copia", copy.record !== null && button.visible, "an installed scene must offer Edit a copy");
+        copy.wallpaper = pkg("bb22", "dunes", {
+            "kind": "image"
+        });
+        expect("copia", !button.visible, "a package that is not a scene must not offer a copy");
+        button.destroy();
+        copy.destroy();
+    }
+
     function exercise() {
         const notes = Qt.createComponent("BrowseNotes.qml").createObject(check.page);
         fill([examples], [pkg("aa11", "pond")], []);
@@ -159,6 +188,7 @@ QtObject {
         catalog.word = 2;
         expect("repo", page.fallo.kind === "unreadable" && catalog.words[2].count === App.tr("cannot be read"), "an unreadable repository must say so");
         motion();
+        copying();
         installer.said = [];
         notes.destroy();
         catalog.load();

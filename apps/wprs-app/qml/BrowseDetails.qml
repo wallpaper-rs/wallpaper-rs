@@ -10,6 +10,7 @@ Rectangle {
     required property var catalog
     readonly property string key: pkg ? pkg.repo_id + "/" + pkg.id : ""
     readonly property alias version: version
+    readonly property alias copy: copy
 
     implicitWidth: Look.masFicha
     implicitHeight: lines.implicitHeight + 2 * Look.e4
@@ -22,6 +23,13 @@ Rectangle {
 
     BrowseNotes {
         id: notes
+    }
+
+    BrowseCopy {
+        id: copy
+
+        wallpaper: more.pkg
+        catalog: more.catalog
     }
 
     ColumnLayout {
@@ -115,6 +123,11 @@ Rectangle {
         PrivacyNotice {
             Layout.fillWidth: true
             exposes: more.pkg && more.pkg.kind === "web" ? ["zone", "language", "gpu"] : []
+        }
+
+        ItemCopyButton {
+            flat: true
+            drawer: copy
         }
     }
 }
