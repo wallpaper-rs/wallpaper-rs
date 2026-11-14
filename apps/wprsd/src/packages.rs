@@ -129,6 +129,9 @@ impl Daemon {
             .collect();
         let (uid, old) = self.store.write(|lib| {
             if let Ok(uid) = lib.resolve_item(&path(&record.path)) {
+                if lib.item(&uid)?.meta.error.is_some() {
+                    lib.relink_item(&uid, &record.path, now())?;
+                }
                 return Ok((uid, None));
             }
             match siblings.iter().find_map(|p| lib.resolve_item(p).ok()) {

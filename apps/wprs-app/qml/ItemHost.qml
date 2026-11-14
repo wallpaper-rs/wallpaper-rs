@@ -37,7 +37,7 @@ Item {
             if (!host || host.uid !== uid)
                 return;
             host.details = reply;
-            if (first)
+            if (first || host.preview === "")
                 App.query("Thumbnail", [uid, 1024], "Library1", path => host && host.uid === uid && (host.preview = path[0] ?? ""), () => {});
             if (reply.installed)
                 App.query("List", [], "Repos1", list => {

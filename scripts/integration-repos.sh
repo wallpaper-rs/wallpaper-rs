@@ -53,6 +53,12 @@ item=$(ctl pkg install org.example.dawn --wait --json | jq_ "r['output']['item']
   "[('org.example.dawn', '1.0.0', '$item')]" ] || fail "installed: $(ctl pkg ls --json)"
 [ "$(ctl lib show "$item" --json | jq_ "r['installed']['version'], r['item']['title'], 'sky' in r['item']['tags']")" = \
   "('1.0.0', 'Dawn', True)" ] || fail "installed item: $(ctl lib show "$item" --json)"
+truncate -s 2000 "$(ctl lib show "$item" --json | jq_ "r['item']['path']")"
+ctl lib scan --wait >/dev/null
+[ "$(ctl lib show "$item" --json | jq_ "r['item']['error'] is not None")" = True ] || fail "a damaged package is not marked"
+ctl pkg install org.example.dawn@1.0.0 --wait >/dev/null
+[ "$(ctl lib show "$item" --json | jq_ "r['item']['error']")" = None ] ||
+  fail "a reinstalled package kept its damage: $(ctl lib show "$item" --json)"
 refused "use Repos1.Uninstall" Library1 Remove asb 1 "$item" false
 ctl pkg uninstall org.example.dawn
 [ "$(ctl pkg ls --json | jq_ "len(r['packages'])")" = 0 ] || fail "the package was kept"
