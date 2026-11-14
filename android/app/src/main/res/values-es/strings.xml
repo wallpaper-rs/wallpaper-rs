@@ -195,5 +195,4 @@
     <string name="choose_color">Elegir</string>
     <string name="hex_color">Código hexadecimal</string>
     <string name="save_text">Guardar</string>
-    <string name="text_count">%1$d de %2$d</string>
 </resources>
