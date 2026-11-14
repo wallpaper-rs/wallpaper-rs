@@ -1272,6 +1272,49 @@ la pantalla igual y avisa «“Título” es tu fondo.» con «Deshacer», que v
 pantalla tenía. Las secciones de Recursos (scripts, plantillas, efectos y grupos de formas) se
 pliegan y recuerdan su estado entre sesiones.
 
+### Barra del lienzo
+
+Encima del lienzo hay una barra de 44 px en dos grupos con texto. A la izquierda, lo que cambia la
+vista: el acercamiento («100 %», un menú con acercar, alejar y ajustar), «Probar el puntero» (el
+mouse sobre la vista previa hace de puntero y de clics de la escena), «Guía: …» (sin guía o la
+plantilla de pantallas elegida) y «Varias pantallas» (una pantalla, dos lado a lado, dos apiladas,
+tres lado a lado, mis pantallas o extenderse por todas). A la derecha, «Ver como: <equipo>», que
+abre el panel de ver como (los cuatro niveles de equipo, con batería, movimiento reducido, idioma,
+comparar dos niveles, reiniciar la vista previa y el pliegue «Efectos en este equipo»), y
+«Captura», que guarda una imagen o un clip de lo que muestra el lienzo con los valores de Probar.
+Debajo, la fila de lo elegido nombra la capa (o «Lienzo» si no hay nada elegido) y ofrece lo que
+se hace con ella sobre el lienzo: ajustar al lienzo (cubrir, caber o estirar), antes y después,
+lienzo y reloj, y «Más» con seguir a una capa, imanes y el resto de sus herramientas.
+
+### Lateral derecho
+
+El lateral derecho (320 px) muestra arriba el nombre de lo elegido y su tipo, y debajo sus valores,
+cada uno en una fila con el nombre a la izquierda y el control a la derecha; nada de lo que
+muestra pasa de su ancho, ni con la ventana más chica: un nombre largo se acorta con «…» y un
+texto largo se parte en líneas. En una capa, los valores de todos los días van arriba (posición,
+tamaño, opacidad, visible y anclaje), luego «Se mueve sola» y la lista de efectos por su nombre,
+con «Añadir un efecto»; al elegir un efecto, su tarjeta se abre debajo de la lista con sus
+valores. El resto va en secciones plegadas que recuerdan si quedaron abiertas: la del tipo de capa
+(«Imagen y recorte», «Letras y color», «Forma y relleno», «Partículas», «Luz», «Modelo y
+materiales»…), «Color y mezcla», «Profundidad» y «Máscara». Con el lienzo elegido muestra el
+brillo y el paralaje con sus valores, la luz ambiente (la esfera con la luz alrededor y la del
+cielo), las luces de la escena, la calidad de la vista previa y lo que cuesta en cada nivel.
+
+### Problemas
+
+Debajo de los valores, cada problema es una fila en palabras de persona con el nombre de la capa
+(«capa: lo que pasa»), «Ir», que elige el valor, y «Corregir» cuando el editor sabe arreglarlo; el
+puntero técnico queda bajo «Detalles». Sin problemas el panel es una línea, «Sin problemas». Un
+error de un script se muestra arriba con su línea y el texto del motor, y la consola del script
+debajo.
+
+### Línea de tiempo
+
+El pie empieza con una cabecera que dice el reloj en palabras («Línea de tiempo · Dura 10 s · se
+repite») y «Cambiar…», que abre el menú de las líneas de tiempo de la escena (elegir, añadir y
+editar cada una en su panel). Si la escena no tiene claves, el pie queda plegado en su cabecera;
+con claves muestra el cabezal, la curva de la clave elegida y un carril por valor animado.
+
 ## Preview
 
 The app asks the daemon for a virtual output named `preview:<n>` with `RequestStream` and shows its
