@@ -12,22 +12,28 @@ Seleccion {
     count: page.chosen.length
 
     QQC2.Button {
+        id: rotate
+
         highlighted: true
         icon.name: "clock-clockwise"
         text: App.tr("Rotate these every…")
-        onClicked: line.tools.chosen("rotator")
+        onClicked: line.tools.chosen("rotator", rotate)
     }
 
     QQC2.Button {
+        id: list
+
         flat: true
         text: App.tr("Playlist")
-        onClicked: line.tools.chosen("playlist")
+        onClicked: line.tools.chosen("playlist", list)
     }
 
     QQC2.Button {
+        id: tags
+
         flat: true
         text: App.tr("Tags")
-        onClicked: line.tools.chosen("tagger")
+        onClicked: line.tools.chosen("tagger", tags)
     }
 
     QQC2.Button {
@@ -80,13 +86,13 @@ Seleccion {
             if (index === 0)
                 line.tools.favorite(!line.items.favorite);
             else if (index === 1)
-                line.tools.chosen("rater");
+                line.tools.chosen("rater", more);
             else if (index === 2)
-                line.tools.chosen("allower");
+                line.tools.chosen("allower", more);
             else if (index === 3)
                 line.tools.share();
             else if (index === 5)
-                line.tools.chosen("remover");
+                line.tools.chosen("remover", more);
         }
     }
 }

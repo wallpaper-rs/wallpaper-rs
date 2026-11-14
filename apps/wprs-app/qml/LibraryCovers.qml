@@ -46,6 +46,15 @@ FocusScope {
         }
     }
 
+    function newest() {
+        covers.page.routeBack();
+        covers.page.all = false;
+        covers.page.bar.clear();
+        shelf.currentIndex = 0;
+        shelf.view.positionViewAtBeginning();
+        shelf.view.forceActiveFocus(Qt.TabFocusReason);
+    }
+
     function extend(from, to) {
         if (covers.page.chosen.length === 0)
             covers.page.library.toggle(from, true);

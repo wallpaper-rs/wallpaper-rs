@@ -99,7 +99,7 @@ Flow {
         onChosen: index => {
             const option = options[index];
             if (option.rename)
-                return bar.tools.renameTag(bar.tag);
+                return bar.tools.renameTag(bar.tag, more);
             bar.word = 0;
             bar.kind = option.kind ?? "";
             bar.tag = option.tag ?? "";
@@ -126,11 +126,13 @@ Flow {
     }
 
     QQC2.Button {
+        id: adder
+
         flat: true
         icon.name: "plus"
         text: App.tr("Add wallpapers…")
         display: bar.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
-        onClicked: bar.tools.dialogs.importer.open()
+        onClicked: bar.tools.dialogs.importer.start(adder)
         QQC2.ToolTip.text: text
         QQC2.ToolTip.visible: bar.tight && hovered
     }

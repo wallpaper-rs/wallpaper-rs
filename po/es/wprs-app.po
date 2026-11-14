@@ -17077,24 +17077,12 @@ msgid "Use path"
 msgstr "Usar la ruta"
 
 #: apps/wprs-app/qml/SelectionDialogs.qml
-msgid ""
-"Type or paste the full paths of the files to add, one per line, or choose "
-"them with the button below."
-msgstr ""
-"Escribe o pega las rutas completas de los archivos que quieres añadir, una "
-"por línea, o elígelos con el botón de abajo."
-
-#: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "One path per line"
 msgstr "Una ruta por línea"
 
 #: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "Paths to import"
 msgstr "Rutas que importar"
-
-#: apps/wprs-app/qml/SelectionDialogs.qml
-msgid "Import these paths"
-msgstr "Importar estas rutas"
 
 msgid "Allow the sound"
 msgstr "Permitir el sonido"
@@ -17419,6 +17407,111 @@ msgstr "Quitar el filtro %1"
 msgctxt "covers"
 msgid "%1 chosen"
 msgstr "%1 elegidos"
+
+#: apps/wprs-app/qml/Seleccion.qml
+msgctxt "covers"
+msgid "1 chosen"
+msgstr "1 elegido"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "Add %1 wallpapers"
+msgstr "Añadir %1 fondos"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "Add 1 wallpaper"
+msgstr "Añadir 1 fondo"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "Add wallpapers"
+msgstr "Añadir fondos"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "Copy them to your library or leave them where they are?"
+msgstr "¿Copiarlos a tu biblioteca o dejarlos donde están?"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "Copy them to your library"
+msgstr "Copiarlos a tu biblioteca"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "They stay here even if you move or delete the originals."
+msgstr "Siguen aquí aunque muevas o borres los originales."
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "Leave them where they are"
+msgstr "Dejarlos donde están"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "They take no extra space; if you move the folder, they stop showing."
+msgstr "No ocupan espacio de más; si mueves la carpeta, dejan de verse."
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "Write the paths…"
+msgstr "Escribir las rutas…"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "%1 wallpapers were added."
+msgstr "Se añadieron %1 fondos."
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "1 wallpaper was added."
+msgstr "Se añadió 1 fondo."
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "%1 could not be added."
+msgstr "%1 no se pudieron añadir."
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "The files could not be added: %1"
+msgstr "No se pudieron añadir los archivos: %1"
+
+#: apps/wprs-app/qml/LibraryAdd.qml
+msgid "See"
+msgstr "Ver"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "The wallpaper changes every %1 from now on."
+msgstr "El fondo cambiará cada %1 a partir de ahora."
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Added to the playlist."
+msgstr "Se añadieron a la lista."
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "day"
+msgstr "día"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Rotate"
+msgstr "Rotar"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Rotate %1 wallpapers"
+msgstr "Rotar %1 fondos"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "Rotate 1 wallpaper"
+msgstr "Rotar 1 fondo"
+
+#: apps/wprs-app/qml/RotateDialogs.qml
+msgid "seconds, minutes or hours"
+msgstr "segundos, minutos u horas"
+
+#: apps/wprs-app/qml/SelectionDialogs.qml
+msgid "Remove 1 wallpaper from the library?"
+msgstr "¿Quitar 1 fondo de la biblioteca?"
+
+#: apps/wprs-app/qml/SelectionDialogs.qml
+msgid "Remove %1 wallpapers from the library?"
+msgstr "¿Quitar %1 fondos de la biblioteca?"
+
+#: apps/wprs-app/qml/SelectionDialogs.qml
+msgid "The files stay where they are."
+msgstr "Los archivos quedan donde están."
+
+#: apps/wprs-app/qml/LibraryBar.qml
+msgid "Web"
+msgstr "Web"
 
 #: apps/wprs-app/qml/Uso.qml
 msgid "In use"

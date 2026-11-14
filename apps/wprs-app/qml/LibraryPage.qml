@@ -15,6 +15,7 @@ Kirigami.Page {
     readonly property alias library: library
     readonly property alias tools: tools
     readonly property alias covers: covers
+    readonly property alias bar: bar
     readonly property alias host: host
     readonly property var entry: {
         const current = covers.view.view ? covers.view.view.currentItem : null;
@@ -188,12 +189,14 @@ Kirigami.Page {
 
     LibraryDrop {
         anchors.fill: parent
+        tools: tools
     }
 
     Actions {
         id: tools
 
         items: library
+        page: page
         target: page.target
     }
 }

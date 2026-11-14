@@ -23,12 +23,14 @@ Item {
     }
 
     Vacio {
+        id: none
+
         visible: !state.failed && !state.unmatched
         title: App.tr("Nothing here yet")
         text: App.tr("Add folders in the settings, import files or drop them here.")
         action: App.tr("Add wallpapers…")
         actionIcon: "plus"
-        onActed: state.page.tools.dialogs.importer.open()
+        onActed: state.page.tools.dialogs.importer.start(none)
     }
 
     Fallo {

@@ -5,6 +5,7 @@ Item {
     id: tools
 
     required property ItemModel items
+    property var page
     property string target
     property var uids: []
     property var playlists: []
@@ -25,8 +26,9 @@ Item {
         return uids;
     }
 
-    function chosen(open) {
+    function chosen(open, from) {
         take();
+        dialogs[open].opener = from;
         dialogs[open].open();
     }
 
@@ -53,11 +55,6 @@ Item {
         });
     }
 
-    function remove(uid) {
-        uids = [uid];
-        dialogs.remover.open();
-    }
-
     function favorite(on) {
         App.act("SetFavorite", [take(), on], "Library1");
     }
@@ -66,8 +63,9 @@ Item {
         App.act("ShareFiles", [take(), true], "Sync1", () => applicationWindow().showPassiveNotification(App.tr("Sending the files, encrypted, to your server. Your other computers can then download them from the Library or from Account.")), () => applicationWindow().showPassiveNotification(App.tr("The files were not sent. Link this computer to your server with end-to-end encryption in Account first.")));
     }
 
-    function renameTag(name) {
+    function renameTag(name, from) {
         dialogs.renamer.from = name;
+        dialogs.renamer.opener = from;
         dialogs.renamer.open();
     }
 
