@@ -68,6 +68,8 @@ ColumnLayout {
     QQC2.ScrollView {
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.minimumHeight: 0
+        Layout.preferredHeight: 0
         visible: panel.problems.length > 0
         contentWidth: availableWidth
 
