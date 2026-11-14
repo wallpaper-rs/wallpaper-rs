@@ -6239,10 +6239,6 @@ msgid "Remove the camera"
 msgstr "Quitar la cámara"
 
 #: apps/wprs-app/qml/SceneCanvas.qml
-msgid "Guide:"
-msgstr "Guía:"
-
-#: apps/wprs-app/qml/SceneCanvas.qml
 msgid "No guide"
 msgstr "Sin guía"
 
@@ -6351,10 +6347,6 @@ msgid "Follow a layer"
 msgstr "Seguir a una capa"
 
 #: apps/wprs-app/qml/SceneCanvasTools.qml
-msgid "Tap the layer that %1 follows on the canvas; Escape cancels"
-msgstr "Toca en el lienzo la capa que seguirá %1; Escape cancela"
-
-#: apps/wprs-app/qml/SceneCanvasTools.qml
 msgid ""
 "Pick on the canvas the layer that the selected one follows, keeping it where "
 "it is"
@@ -6366,10 +6358,6 @@ msgstr ""
 #: apps/wprs-app/qml/SceneTemplateFollow.qml
 msgid "Stop following"
 msgstr "Dejar de seguir"
-
-#: apps/wprs-app/qml/SceneCanvasTools.qml
-msgid "Stop following %1, keeping the layer where it is"
-msgstr "Dejar de seguir a %1, sin mover la capa de su sitio"
 
 #: apps/wprs-app/qml/SceneCanvasZoom.qml
 msgid "Zoom out"
@@ -7639,10 +7627,6 @@ msgstr "Datos:"
 msgid "Read it as data, such as a normal map or a mask, not as colors"
 msgstr ""
 "Leerla como datos, como un mapa de normales o una máscara, no como colores"
-
-#: apps/wprs-app/qml/SceneInspector.qml
-msgid "Add effect"
-msgstr "Añadir un efecto"
 
 #: apps/wprs-app/qml/SceneInspector.qml
 msgid "Edit the particle system"
@@ -9624,10 +9608,6 @@ msgid "%1 on %2: left out of the scene at this level"
 msgstr "%1 en %2: se deja fuera de la escena en este nivel"
 
 #: apps/wprs-app/qml/ScenePreviewLevel.qml
-msgid "Preview level"
-msgstr "Nivel de la vista previa"
-
-#: apps/wprs-app/qml/ScenePreviewLevel.qml
 msgid ""
 "Show the preview as the daemon draws it at a quality level, on battery or "
 "with reduced motion, and compare two levels"
@@ -9732,10 +9712,6 @@ msgstr ""
 #: apps/wprs-app/qml/SceneProblems.qml
 msgid "Script console"
 msgstr "Consola de los scripts"
-
-#: apps/wprs-app/qml/SceneProblems.qml
-msgid "Script error"
-msgstr "Error del script"
 
 #: apps/wprs-app/qml/ScenePropLevels.qml
 msgid "Value in effect at every level"
@@ -18708,10 +18684,6 @@ msgstr "Añadir una capa"
 msgid "Time or date"
 msgstr "Hora o fecha"
 
-#: apps/wprs-app/qml/SceneLayerMore.qml
-msgid "Move on its own"
-msgstr "Mover sola"
-
 #: apps/wprs-app/qml/SceneEmpty.qml
 msgid "a photo or a drawing"
 msgstr "una foto o un dibujo"
@@ -18875,3 +18847,54 @@ msgstr "Ver la escena como en un"
 #: apps/wprs-app/qml/ScenePreviewPanel.qml
 msgid "Effects on this computer"
 msgstr "Efectos en este equipo"
+
+msgid "Color and blending"
+msgstr "Color y mezcla"
+
+msgid "Image and crop"
+msgstr "Imagen y recorte"
+
+msgid "Lettering and color"
+msgstr "Letra y color"
+
+msgid "Shape and fill"
+msgstr "Forma y relleno"
+
+msgid "Model and materials"
+msgstr "Modelo y materiales"
+
+msgid "Rig and bones"
+msgstr "Esqueleto y huesos"
+
+msgid "Touch and sensors"
+msgstr "Toque y sensores"
+
+msgid "Moves on its own"
+msgstr "Se mueve sola"
+
+msgid "Moves on its own: %1"
+msgstr "Se mueve sola: %1"
+
+msgid "Effects · %1"
+msgstr "Efectos · %1"
+
+msgid "Open the effect"
+msgstr "Abrir el efecto"
+
+msgid "Scripts · %1"
+msgstr "Scripts · %1"
+
+msgid "Go"
+msgstr "Ir"
+
+msgid "Error in the script, line %1"
+msgstr "Error en el script, línea %1"
+
+msgid "Error in the script"
+msgstr "Error en el script"
+
+msgid "Lasts %1 s · repeats"
+msgstr "Dura %1 s · se repite"
+
+msgid "Change…"
+msgstr "Cambiar…"

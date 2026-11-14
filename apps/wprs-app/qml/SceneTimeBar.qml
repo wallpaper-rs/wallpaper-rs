@@ -67,17 +67,5 @@ QQC2.ToolBar {
             now: bar.timeline.page.clock
             sources: SceneGraphSources.tracks(bar.timeline.tracks, bar.timeline.chosen)
         }
-
-        QQC2.ToolButton {
-            icon.name: "chronometer"
-            text: App.tr("Timelines")
-            onClicked: lines.popup()
-
-            SceneTimelineMenu {
-                id: lines
-
-                timeline: bar.timeline
-            }
-        }
     }
 }

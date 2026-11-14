@@ -62,22 +62,6 @@ QQC2.Menu {
         onTriggered: clip.rename()
     }
 
-    QQC2.Menu {
-        title: App.tr("Move on its own")
-        enabled: more.chosen
-
-        Repeater {
-            model: starts.moves
-
-            delegate: QQC2.MenuItem {
-                required property var modelData
-
-                text: modelData[2]
-                onTriggered: starts.keepMoving(modelData)
-            }
-        }
-    }
-
     QQC2.MenuSeparator {
     }
 
@@ -97,12 +81,6 @@ QQC2.Menu {
     QQC2.MenuItem {
         text: App.tr("Particle systems")
         onTriggered: more.owner.page.editor.select("/scene/particles")
-    }
-
-    SceneLayerStarts {
-        id: starts
-
-        owner: more.owner
     }
 
     SceneLayerClip {

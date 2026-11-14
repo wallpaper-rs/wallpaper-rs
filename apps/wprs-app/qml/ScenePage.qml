@@ -129,7 +129,7 @@ Kirigami.Page {
             x: Look.lateralIzq
             y: parent.height - height
             width: parent.width - Look.lateralIzq - Look.lateralDer
-            height: Look.lienzoPieAlto
+            height: foot.wanted
             page: page
         }
 

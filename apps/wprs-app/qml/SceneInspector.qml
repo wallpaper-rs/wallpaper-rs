@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
@@ -38,24 +37,34 @@ ColumnLayout {
         page.editor.select(to);
     }
 
-    function addEffect(id) {
-        page.run("effects", {
-                "add": {
-                    "layer": node.id,
-                    "effect": id
-                }
-            });
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: inspector.parts.length > 1
+        text: inspector.parts.slice(0, -1).map((part, i) => inspector.crumb(part, i)).join(" › ")
+        color: Look.bruma
+        font.pixelSize: Look.tPie
+        elide: Text.ElideLeft
     }
 
-    Kirigami.Heading {
+    QQC2.Label {
         Layout.fillWidth: true
-        level: 4
-        elide: Text.ElideLeft
-        text: inspector.node ? inspector.node.id : inspector.parts.map((part, i) => inspector.crumb(part, i)).join(" › ")
+        text: inspector.node ? inspector.node.id : inspector.crumb(inspector.parts[inspector.parts.length - 1] ?? "", inspector.parts.length - 1)
+        font.pixelSize: Look.tNombre
+        font.weight: Font.DemiBold
+        elide: Text.ElideRight
+    }
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: inspector.node !== null
+        text: inspector.node ? SceneWords.kind(inspector.node.type) : ""
+        color: Look.bruma
+        font.pixelSize: Look.tPie
     }
 
     RowLayout {
         Layout.fillWidth: true
+        visible: inspector.up !== "" || inspector.list !== "" || (inspector.node !== null && inspector.node.type === "particles")
 
         QQC2.ToolButton {
             icon.name: "go-previous"
@@ -84,13 +93,6 @@ ColumnLayout {
         }
 
         QQC2.ToolButton {
-            visible: inspector.node !== null && inspector.node.type !== "sound"
-            icon.name: "list-add"
-            text: App.tr("Add effect")
-            onClicked: catalog.open()
-        }
-
-        QQC2.ToolButton {
             visible: inspector.node === null && /\/\d+$/.test(inspector.pointer)
             icon.name: "edit-delete"
             text: App.tr("Remove")
@@ -112,20 +114,24 @@ ColumnLayout {
         }
     }
 
-    SceneEffectCatalog {
-        id: catalog
-
-        inspector: inspector
-    }
-
     QQC2.ScrollView {
+        id: scroll
+
         Layout.fillWidth: true
+        Layout.maximumWidth: inspector.width
         Layout.fillHeight: true
         contentWidth: availableWidth
         clip: true
 
         ColumnLayout {
-            width: parent.width
+            width: scroll.availableWidth
+
+            SceneLayerFields {
+                Layout.fillWidth: true
+                visible: inspector.node !== null
+                page: inspector.page
+                node: inspector.node ?? {}
+            }
 
             SceneShaping {
                 Layout.fillWidth: true
@@ -182,18 +188,11 @@ ColumnLayout {
                 page: inspector.page
             }
 
-            SceneRepeater {
-                id: listed
-
-                rows: inspector.page.fields
-
-                delegate: SceneInput {
-                    required property int index
-
-                    Layout.fillWidth: true
-                    page: inspector.page
-                    field: inspector.page.fields[index] ?? {}
-                }
+            SceneFieldList {
+                Layout.fillWidth: true
+                visible: inspector.node === null
+                page: inspector.page
+                rows: inspector.node === null ? inspector.page.fields : []
             }
         }
     }

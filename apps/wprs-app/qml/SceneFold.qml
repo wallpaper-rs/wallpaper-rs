@@ -23,7 +23,7 @@ ColumnLayout {
         if (App.checking)
             return;
         saved = keeper.createObject(fold);
-        open = saved.value(key, "") !== "closed";
+        open = saved.value(key, open ? "open" : "closed") !== "closed";
     }
 
     spacing: 0

@@ -12,7 +12,7 @@ ColumnLayout {
     readonly property string output: page.editor.output
     property var scriptLines: App.state.previews?.[panel.output]?.console ?? []
     property string scriptError: App.state.previews?.[panel.output]?.error ?? ""
-    readonly property real wanted: Kirigami.Units.gridUnit * (scriptError !== "" || scriptLines.length > 0 ? 16 : problems.length ? 7 : 2)
+    readonly property real wanted: Kirigami.Units.gridUnit * (scriptError !== "" || scriptLines.length > 0 ? 16 : problems.length ? 7 : 1.6)
     Layout.preferredHeight: wanted
     property var inputs: ({})
     readonly property var uses: (inputs.shown ?? {})[panel.output] ?? {}
@@ -50,53 +50,48 @@ ColumnLayout {
         onTriggered: panel.load()
     }
 
-    Kirigami.Heading {
-        level: 4
-        text: panel.problems.length ? App.tr("Problems (%1)", panel.problems.length) : panel.scriptError !== "" ? App.tr("Script error") : App.tr("No problems")
+    readonly property string line: (scriptError.match(/line (\d+)/) ?? scriptError.match(/:(\d+)(?::\d+)?\b/) ?? [])[1] ?? ""
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        visible: panel.problems.length === 0 && panel.scriptError === ""
+        text: App.tr("No problems")
+        color: Look.bruma
+    }
+
+    QQC2.Label {
+        visible: panel.problems.length > 0
+        text: App.tr("Problems (%1)", panel.problems.length)
+        font.weight: Font.DemiBold
     }
 
     QQC2.ScrollView {
         Layout.fillWidth: true
         Layout.fillHeight: true
         visible: panel.problems.length > 0
+        contentWidth: availableWidth
 
         ListView {
             model: panel.problems
             clip: true
+            spacing: Look.e1
 
-            delegate: QQC2.ItemDelegate {
+            delegate: SceneProblemRow {
                 required property var modelData
 
                 width: ListView.view.width
-                text: modelData.message
-                icon.name: modelData.warning ? "data-warning" : "data-error"
-                onClicked: panel.page.jump(modelData.pointer)
-
-                QQC2.ToolButton {
-                    readonly property string fixing: Object.keys(modelData.fix ?? {})[0] ?? ""
-
-                    anchors.right: parent.right
-                    visible: fixing !== ""
-                    icon.name: "dialog-ok-apply"
-                    text: App.tr("Fix")
-                    onClicked: panel.page.run(fixing, modelData.fix[fixing])
-                }
+                page: panel.page
+                problem: modelData
             }
         }
     }
 
-    QQC2.ScrollView {
+    Fallo {
+        objectName: "scriptError"
         Layout.fillWidth: true
-        Layout.preferredHeight: Kirigami.Units.gridUnit * 5
         visible: panel.scriptError !== ""
-
-        Area {
-            objectName: "scriptError"
-            readOnly: true
-            wrapMode: TextEdit.Wrap
-            text: panel.scriptError
-            color: Look.coral
-        }
+        title: panel.line !== "" ? App.tr("Error in the script, line %1", panel.line) : App.tr("Error in the script")
+        text: panel.scriptError
     }
 
     Kirigami.InlineMessage {

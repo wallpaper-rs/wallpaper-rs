@@ -10,12 +10,17 @@ ColumnLayout {
     SceneFold {
         Layout.fillWidth: true
         key: "scripts"
-        visible: scripts.scripts.length > 0
-        title: App.tr("Scripts")
+        title: scripts.scripts.length > 0 ? App.tr("Scripts · %1", scripts.scripts.length) : App.tr("Scripts")
 
         SceneScriptsList {
             id: scripts
 
+            Layout.fillWidth: true
+            visible: scripts.scripts.length > 0
+            page: parts.page
+        }
+
+        SceneScriptAdd {
             Layout.fillWidth: true
             page: parts.page
         }
