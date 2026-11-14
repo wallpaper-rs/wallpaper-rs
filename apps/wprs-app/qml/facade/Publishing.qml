@@ -126,7 +126,7 @@ QtObject {
             return "version";
         if (text.includes("no author key") || text.includes("unknown author key"))
             return "registro";
-        if (["connect", "unreachable", "timed out", "dns", "resolve", "network", "os error"].some(word => text.includes(word)))
+        if (["connect", "unreachable", "cannot reach", "timed out", "dns", "resolve", "network", "os error"].some(word => text.includes(word)))
             return "red";
         return "otro";
     }

@@ -36,7 +36,7 @@ QtObject {
         expect(publish.at === 3 && publish.unsigned && publish.sign.done.includes("<b>"), "publishing without signing does not reach the third step");
         publish.where.pick("file");
         expect(publish.where.can && publish.where.target.endsWith(".wpak"), "the file destination has no file name");
-        expect(Publishing.upload("409 Conflict: version 1.0.0 already exists") === "version" && Publishing.upload("unknown author key for account") === "registro" && Publishing.upload("network is unreachable (os error 101)") === "red", "an upload error is not told apart");
+        expect(Publishing.upload("409 Conflict: version 1.0.0 already exists") === "version" && Publishing.upload("unknown author key for account") === "registro" && Publishing.upload("network is unreachable (os error 101)") === "red" && Publishing.upload("cannot reach the server: error sending request") === "red", "an upload error is not told apart");
         expect(Publishing.nextVersion("1.2.0") === "1.2.1", "the next version is wrong");
         publish.where.pick("server");
         publish.work.refused("connect: network is unreachable (os error 101)");
