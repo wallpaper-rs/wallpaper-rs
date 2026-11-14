@@ -22,7 +22,11 @@ Kirigami.Page {
     }
     readonly property string skeleton: opened !== "" ? "options" : ""
     readonly property bool full: all && opened === ""
-    readonly property real bandFrom: bar.y
+    readonly property real bandFrom: lower.y + bar.y
+    readonly property real bandLow: opened === "" && !all ? bar.height + Look.e5 + covers.implicitHeight : 0
+    readonly property real bandHigh: bandLow
+    property rect band
+    property rect upper
     readonly property var route: opened !== "" ? [App.tr("Library"), host.item.title ?? ""].concat(level !== "" ? [panel.levelName] : []) : []
 
     function search() {
@@ -107,10 +111,13 @@ Kirigami.Page {
     }
 
     Item {
-        id: band
+        id: lower
 
         visible: page.opened === ""
-        anchors.fill: parent
+        x: page.bandLow > 0 ? page.band.x : 0
+        y: page.bandLow > 0 ? page.band.y : 0
+        width: page.bandLow > 0 ? page.band.width : page.width
+        height: page.bandLow > 0 ? page.band.height : page.height
 
         Column {
             y: Math.max(0, bar.y - height - Look.e3)
@@ -142,7 +149,7 @@ Kirigami.Page {
 
             visible: library.total > 0
             page: page
-            y: page.all ? bar.height + Look.e5 : Math.max(bar.height + Look.e5, band.height - height)
+            y: page.all ? bar.height + Look.e5 : Math.max(bar.height + Look.e5, lower.height - height)
             width: parent.width
         }
 
