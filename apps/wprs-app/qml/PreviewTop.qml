@@ -55,11 +55,21 @@ Column {
                     }
                 }
 
-                Text {
-                    text: App.screen(screen.modelData)
-                    font.family: Look.letraTexto
-                    font.pixelSize: Look.tPie
-                    color: screen.chosen ? Look.escarcha : Look.bruma
+                Rectangle {
+                    width: name.implicitWidth + Look.e3 * 2
+                    height: name.implicitHeight + Look.e1 * 2
+                    radius: Look.radioChico
+                    color: Look.veloColor
+
+                    Text {
+                        id: name
+
+                        anchors.centerIn: parent
+                        text: App.screen(screen.modelData)
+                        font.family: Look.letraTexto
+                        font.pixelSize: Look.tPie
+                        color: screen.chosen ? Look.escarcha : Look.bruma
+                    }
                 }
             }
         }

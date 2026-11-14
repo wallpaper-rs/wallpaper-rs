@@ -102,7 +102,6 @@ FocusScope {
             visible: tab.several
             text: App.tr("Screen you adjust")
             kind: "elige"
-            note: tab.page.output
             options: tab.page.outputs.map(name => App.screen(name))
             current: tab.page.screen
             explain: App.tr("What says “On every screen” applies to all of them.")
