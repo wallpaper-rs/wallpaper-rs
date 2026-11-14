@@ -15,8 +15,8 @@ ColumnLayout {
     readonly property bool scene: !!host.pkg && host.pkg.kind === "scene"
 
     function reinstall() {
-        const pkg = host.pkg;
-        App.act("Install", [host.details.installed.repo_id + "/" + pkg.id + "@" + pkg.version, false, false], "Repos1");
+        const had = host.details.installed;
+        App.act("Install", [had.repo_id + "/" + had.id + "@" + had.version, false, false], "Repos1");
     }
 
     visible: hurt
@@ -28,7 +28,7 @@ ColumnLayout {
         title: broken.scene ? App.tr("Could not open this scene") : App.tr("Could not open this wallpaper")
         text: broken.from !== "" ? App.tr("The file of “%1” is damaged or incomplete. It came from “%2”: you can install it again from there. Your wallpaper did not change.", broken.title, broken.from) : App.tr("The file of “%1” is damaged or incomplete. Your wallpaper did not change.", broken.title)
         details: String(broken.entry.broken ?? "")
-        action: broken.from !== "" && !!broken.host.pkg ? App.tr("Install it again") : ""
+        action: broken.from !== "" && !!broken.host.details.installed ? App.tr("Install it again") : ""
         onActed: broken.reinstall()
     }
 
