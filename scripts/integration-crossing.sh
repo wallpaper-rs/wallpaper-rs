@@ -35,6 +35,8 @@ imported() {
 }
 passage "$crossing/own.wpak" in "1.0, 0.0, 1.0" 10000
 read -r _ _ _ s31 < <(ctl stream TEST-31 160 90)
+"$BIN/probe" "$s31" 600 --hold >/dev/null 2>&1 & hold31=$!
+pids+=("$hold31")
 ctl set "$ROOT/tests/fixtures/green-64x32.png" -o TEST-31 --fit stretch
 shown "$s31" 0 255 0
 own=$(imported "$crossing/own.wpak")

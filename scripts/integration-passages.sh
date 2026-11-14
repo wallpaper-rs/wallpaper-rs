@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-declare BIN ROOT crossing s31
+declare BIN ROOT crossing s31 hold31
 green=$ROOT/tests/fixtures/green-64x32.png
 passage "$crossing/leaves.wpak" out "1.0, 0.0, 0.0" 6000
 passage "$crossing/comes.wpak" in "1.0, 0.0, 1.0" 6000
@@ -26,6 +26,7 @@ shown "$s31" 255 0 255
 expect "s['outputs']['TEST-31']['transition']['plays']" own
 wait_for 20 looks "$s31" 0 0 255 || fail "the scene that comes in did not settle after both passages: $("$BIN/probe" "$s31" 3)"
 ctl config transition.less_motion system
+kill "$hold31"
 ctl release TEST-31
 bus Library1 Remove asb 1 "$leaves" false >/dev/null
 bus Library1 Remove asb 1 "$comes" false >/dev/null
