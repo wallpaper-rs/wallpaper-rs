@@ -6,7 +6,8 @@ use wprs_core::model::{ItemKind, ItemSummary};
 pub const PAGE: u32 = 200;
 pub const ROLES: [&str; 22] = [
     "uid", "title", "kind", "color", "thumb", "favorite", "rating", "info", "missing", "broken", "revoked",
-    "selected", "tags", "mature", "flashing", "caption", "note", "noteIcon", "noteTone", "off", "inUse", "usedOn",
+    "selected", "tags", "mature", "flashing", "caption", "note", "noteIcon", "noteTone", "off", "inUse",
+    "usedOn",
 ];
 
 pub struct Row {

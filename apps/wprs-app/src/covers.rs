@@ -104,7 +104,8 @@ mod tests {
     fn a_missing_file_gets_a_coral_note() {
         let lost = items().into_iter().find(|i| i.missing).unwrap();
         assert_eq!(note(&lost).2, "coral");
-        let fine = items().into_iter().find(|i| !i.missing && i.error.is_none() && i.revoked.is_none()).unwrap();
+        let fine =
+            items().into_iter().find(|i| !i.missing && i.error.is_none() && i.revoked.is_none()).unwrap();
         assert!(note(&fine).0.is_empty() || note(&fine).2 == "ambar");
     }
 
