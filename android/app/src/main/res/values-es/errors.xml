@@ -148,4 +148,5 @@
     <string name="error_android_connect_server">La dirección del servidor de este código no es válida</string>
     <string name="error_android_connect_fingerprint">La huella del certificado de este código no es válida</string>
     <string name="error_android_connect_invite">La invitación de este código no es válida</string>
+    <string name="settings_set_aside">No se pudieron leer tus ajustes y empiezan de nuevo con los valores predeterminados. El archivo anterior se guardó aparte.</string>
 </resources>
