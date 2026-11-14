@@ -27,6 +27,7 @@ for bin in wprsd wprs-ctl wprs-app wprs-web; do
 done
 cp -r "$SRC/integrations/plasma-wallpaper" "$D/plasma-wallpaper"
 cp -r "$SRC/integrations/plasma-tray" "$D/plasma-tray"
+"$SRC/scripts/plasma-assets.sh" "$D/plasma-tray"
 cp -r "$SRC/integrations/kwin-pointer" "$D/kwin-pointer"
 sed -i "s/\"Version\": \"[^\"]*\"/\"Version\": \"$VERSION\"/" "$D"/*/metadata.json
 "$ROOT/scripts/translations.sh" build "$D"

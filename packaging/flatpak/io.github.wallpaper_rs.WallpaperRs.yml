@@ -49,6 +49,7 @@ modules:
       - cp -r integrations/kwin-pointer /app/share/wallpaper-rs/kwin-pointer
       - cp -r integrations/plasma-wallpaper /app/share/plasma/wallpapers/io.github.wallpaper_rs
       - cp -r integrations/plasma-tray /app/share/plasma/plasmoids/io.github.wallpaper_rs.tray
+      - scripts/plasma-assets.sh /app/share/plasma/plasmoids/io.github.wallpaper_rs.tray
       - for f in packaging/dbus/*.service; do sed 's|@BINDIR@|/app/bin|' "$f" > "/app/share/dbus-1/services/${f##*/}"; done
       - sed -e 's|@BINDIR@|/app/bin|' -e '/^DBusActivatable=/d' packaging/desktop/io.github.wallpaper_rs.desktop > /app/share/applications/io.github.wallpaper_rs.desktop
       - install -Dm644 -t /app/share/icons/hicolor/scalable/apps packaging/icons/io.github.wallpaper_rs.svg
