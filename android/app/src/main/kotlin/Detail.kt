@@ -1,6 +1,7 @@
 package io.github.wallpaper_rs
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLocale
@@ -56,11 +60,12 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     val report = standing(inUse)
     val undecided by loaded(emptyList<String>(), uid, picture, main.revision.intValue) { if (picture) emptyList() else asked(uid) }
     val window = LocalWindowInfo.current.containerSize
+    val wide = window.width > window.height
     val screen = remember(window) { main.wallpaperSize() }
     val still by item?.let { thumbnail(it) } ?: remember { mutableStateOf(null) }
     val preview = @Composable { modifier: Modifier ->
         Box(modifier.testTag("preview"), Alignment.Center) {
-            val shape = Modifier.aspectRatio(screen.width.coerceAtLeast(1) / screen.height.coerceAtLeast(1).toFloat(), true)
+            val shape = if (picture) Modifier.aspectRatio(screen.width.coerceAtLeast(1) / screen.height.coerceAtLeast(1).toFloat(), true) else Modifier.fillMaxSize()
             when {
                 ready && (item?.refused != true || item?.animated == null) ->
                     Live(main, main.revision.intValue, Depth.working.value, modifier = if (picture) shape.framing(main, uid, screen) else shape, still = still)
@@ -71,7 +76,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     }
     val page: @Composable ColumnScope.() -> Unit = {
         if (inUse) item?.let { HeavyNotice(main, uid, it.title, report) }
-        item?.let { Heading(it, inUse, barred) }
+        if (wide) item?.let { Heading(it, inUse, barred) }
         if (inUse) Standing(report)
         if (inUse && heavy(report)) PlayAnyway(main)
         Asks(main, uid, undecided)
@@ -81,7 +86,7 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
         item?.exposes?.let { Exposes(it) }
     }
     Column(Modifier.fillMaxSize()) {
-        if (window.width > window.height) {
+        if (wide) {
             Header(item?.title.orEmpty(), close)
             Row(Modifier.weight(1f)) {
                 preview(Modifier.weight(1f).fillMaxHeight().padding(horizontal = Measure.e4))
@@ -90,8 +95,13 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
         } else {
             val tall = with(LocalDensity.current) { (window.height * PREVIEW_SHARE).toDp() }
             Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
-                Box {
-                    preview(Modifier.fillMaxWidth().height(tall).padding(horizontal = Measure.e4))
+                Box(Modifier.fillMaxWidth().height(tall).clipToBounds().testTag("page_cover")) {
+                    preview(Modifier.fillMaxSize())
+                    item?.let {
+                        Box(Modifier.align(Alignment.BottomStart).fillMaxWidth().background(Brush.verticalGradient(listOf(Color.Transparent, tones.night)))) {
+                            Heading(it, inUse, barred)
+                        }
+                    }
                     Square(close, Ph.ArrowLeft, stringResource(R.string.back), Modifier.padding(Measure.e2), boxed = true)
                 }
                 page()
