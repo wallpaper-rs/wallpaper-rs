@@ -30,13 +30,11 @@ QQC2.ScrollView {
         width: Math.min(panel.availableWidth, Look.tapaFoco * 2)
         spacing: Look.e3
 
-        Image {
+        Foto {
             visible: panel.page.level === "" && panel.host.preview !== "" && !moving.visible
             Layout.preferredWidth: Look.tapaFoco
             Layout.preferredHeight: Math.round(Look.tapaFoco * 9 / 16)
             source: App.url(panel.host.preview)
-            fillMode: Image.PreserveAspectCrop
-            asynchronous: true
             cache: false
         }
 
