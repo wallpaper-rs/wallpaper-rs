@@ -7,6 +7,10 @@ QtObject {
     required property var page
     readonly property var library: page.library
     readonly property var covers: page.covers
+    property Timer later: Timer {
+        interval: 150
+        onTriggered: check.close()
+    }
 
     function must(ok, text) {
         if (!ok)
@@ -62,6 +66,10 @@ QtObject {
         must(page.skeleton === "options" && page.route.length === 2 && page.actions.length === 2, "the options of a wallpaper do not open in their own panel");
         page.level = "more";
         must(page.route.length === 3, "the More level of the options is not in the route");
+        later.start();
+    }
+
+    function close() {
         page.routeBack();
         must(page.level === "" && page.opened !== "", "Escape does not go back from the More level");
         page.routeBack();

@@ -9,6 +9,25 @@ FocusScope {
     readonly property Coleccion view: all ? grid : shelf
     readonly property alias shelf: shelf
     readonly property alias grid: grid
+    readonly property var hints: page.choosing ? [{
+            "keys": ["Esc"],
+            "text": App.tr("Stop choosing")
+        }] : covers.all ? [{
+            "keys": ["left", "right", "up", "down"],
+            "text": App.tr("Move around")
+        }, {
+            "keys": ["Esc"],
+            "text": App.tr("Show shelf")
+        }] : [{
+            "keys": ["left", "right"],
+            "text": App.tr("Move around")
+        }, {
+            "keys": ["down"],
+            "text": App.tr("See all")
+        }, {
+            "keys": ["Esc"],
+            "text": App.tr("Menu")
+        }]
 
     function look() {
         const count = covers.page.library.total;

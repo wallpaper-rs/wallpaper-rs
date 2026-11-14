@@ -22,6 +22,7 @@ Kirigami.Page {
     }
     readonly property string skeleton: opened !== "" ? "options" : ""
     readonly property bool full: all && opened === ""
+    readonly property real veilTop: bar.y - bar.height * 3
     readonly property var route: opened !== "" ? [App.tr("Library"), host.item.title ?? ""].concat(level !== "" ? [panel.levelName] : []) : []
 
     function search() {
@@ -50,16 +51,8 @@ Kirigami.Page {
         if (!entry)
             return;
         if (entry.missing === true || String(entry.broken ?? "") !== "")
-            return folder(entry.uid);
+            return tools.folder(entry.uid);
         tools.put(entry.uid);
-    }
-
-    function folder(uid) {
-        App.query("GetItem", [uid], "Library1", reply => {
-            const path = String(reply.item ? reply.item.path ?? "" : "");
-            if (page && path !== "")
-                Qt.openUrlExternally("file://" + path.substring(0, path.lastIndexOf("/")));
-        });
     }
 
     function open(uid) {
@@ -92,25 +85,7 @@ Kirigami.Page {
     title: opened !== "" ? host.item.title ?? "" : App.tr("Library")
     padding: 0
     background: null
-    readonly property var keyHints: opened !== "" ? undefined : choosing ? [{
-            "keys": ["Esc"],
-            "text": App.tr("Stop choosing")
-        }] : all ? [{
-            "keys": ["left", "right", "up", "down"],
-            "text": App.tr("Move around")
-        }, {
-            "keys": ["Esc"],
-            "text": App.tr("Show shelf")
-        }] : [{
-            "keys": ["left", "right"],
-            "text": App.tr("Move around")
-        }, {
-            "keys": ["down"],
-            "text": App.tr("See all")
-        }, {
-            "keys": ["Esc"],
-            "text": App.tr("Menu")
-        }]
+    readonly property var keyHints: opened !== "" ? undefined : covers.hints
     actions: opened !== "" ? panel.actions : []
     readonly property var screens: App.state.outputs ?? {}
     onScreensChanged: shown()

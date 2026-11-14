@@ -12,6 +12,14 @@ Item {
     readonly property alias dialogs: dialogs
     readonly property bool several: App.outputs.length > 1
 
+    function folder(uid) {
+        App.query("GetItem", [uid], "Library1", reply => {
+            const path = String(reply.item ? reply.item.path ?? "" : "");
+            if (tools && path !== "")
+                Qt.openUrlExternally("file://" + path.substring(0, path.lastIndexOf("/")));
+        });
+    }
+
     function take() {
         uids = JSON.parse(items.selection());
         return uids;

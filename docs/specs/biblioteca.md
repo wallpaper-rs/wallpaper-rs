@@ -17,6 +17,8 @@ La Biblioteca muestra los fondos guardados sobre la imagen del fondo en uso.
 - La barra de arriba filtra por Todos, Escenas, Imágenes, Vídeos y Favoritos; «Más» abre Paquetes,
   Recursos, las etiquetas y «Renombrar la etiqueta…». El buscador acepta `tag:`, `kind:`, `fav:` y
   `sort:`. «Añadir fondos…» importa archivos.
+- El velo de abajo sube hasta detrás de la barra, para que las palabras se lean también sobre un fondo
+  claro; su opacidad sigue los tonos que la app saca de la imagen.
 - Teclas: ← → para moverse, ↓ o «Ver todos» muestra la rejilla, Ctrl+A elige todos, Esc deja de elegir.
 
 ## Ver todos
