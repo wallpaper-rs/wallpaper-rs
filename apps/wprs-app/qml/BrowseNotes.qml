@@ -20,7 +20,7 @@ QtObject {
         })
 
     function asks(pkg) {
-        return (pkg.asks ?? []).map(a => String(a).toLowerCase().replace(/_/g, "")).filter(a => phrases[a] !== undefined);
+        return (pkg.asks ?? []).filter(a => phrases[a] !== undefined);
     }
 
     function newest(pkg) {
