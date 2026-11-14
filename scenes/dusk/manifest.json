@@ -9,7 +9,7 @@
   "strings": {
     "en": {
       "title": "Dusk hills",
-      "description": "Layered hills under a low sun.\n\n- **Blend modes** and a masked reflection\n- A timeline that brings the light in\n- Depth that follows the pointer once you allow it\n- Settings for the time of day, the light and a caption",
+      "description": "Layered hills under a low sun.\n\n- **Blend modes** and a masked reflection\n- A timeline that brings the light in\n- Depth that follows your finger or the pointer once you allow it\n- Settings for the time of day, the light and a caption",
       "changes": "Describes itself in English and Spanish and declares its rating and the inputs it uses.",
       "look": "Look", "mood": "Time of day", "dusk": "Dusk", "night": "Night", "stars": "Stars",
       "light": "Light color", "warmth": "Light strength", "sun_size": "Sun size", "vignette": "Dark corners",
@@ -19,7 +19,7 @@
     },
     "es": {
       "title": "Colinas al atardecer",
-      "description": "Colinas en capas bajo el sol del atardecer.\n\n- **Modos de fusión** y un reflejo con máscara\n- Una línea de tiempo que hace entrar la luz\n- Profundidad que sigue al puntero cuando lo permites\n- Ajustes para el momento del día, la luz y un rótulo",
+      "description": "Colinas en capas bajo el sol del atardecer.\n\n- **Modos de fusión** y un reflejo con máscara\n- Una línea de tiempo que hace entrar la luz\n- Profundidad que sigue a tu dedo o al puntero cuando lo permites\n- Ajustes para el momento del día, la luz y un rótulo",
       "changes": "Se describe en inglés y en español y declara su clasificación y las entradas que usa.",
       "look": "Aspecto", "mood": "Momento del día", "dusk": "Atardecer", "night": "Noche", "stars": "Estrellas",
       "light": "Color de la luz", "warmth": "Intensidad de la luz", "sun_size": "Tamaño del sol",
