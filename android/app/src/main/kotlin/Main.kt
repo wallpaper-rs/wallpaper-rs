@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -189,11 +188,7 @@ class Main : ComponentActivity() {
 
     private fun open(uri: Uri) = runCatching { contentResolver.openFileDescriptor(uri, "r") }.getOrNull()
 
-    fun name(uri: Uri) = runCatching {
-        contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { row ->
-            if (row.moveToFirst()) row.getString(0) else null
-        }
-    }.getOrNull().orEmpty()
+    fun name(uri: Uri) = titled(uri)
 }
 
 private const val EDITS = 30L

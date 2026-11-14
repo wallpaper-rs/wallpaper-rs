@@ -8,4 +8,6 @@
     <string name="kind_video">Video</string>
     <string name="kind_scene">Scene</string>
     <string name="kind_photo">Photo</string>
+    <string name="photo_dated">Photo from %1$s</string>
+    <string name="video_dated">Video from %1$s</string>
 </resources>
