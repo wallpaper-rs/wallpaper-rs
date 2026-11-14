@@ -564,7 +564,7 @@ pre.dato { white-space: pre-wrap; padding: var(--e-3) var(--e-4); border-radius:
 @media (max-width: 40rem) {
   .filas.compactas .fila-texto { flex-direction: column; align-items: flex-start; gap: 0; }
   .filas.compactas .fila-nombre { flex-basis: auto; }
-  .banda::before { background: linear-gradient(to bottom, rgb(var(--noche-rgb) / calc(var(--velo) * 1.3)) 0, rgb(var(--noche-rgb) / calc(var(--velo) * 1.15)) 45%, rgb(var(--noche-rgb) / calc(var(--velo) * 1.3)) 75%, var(--noche) 100%); }
+  .banda::before { background: linear-gradient(to bottom, rgb(var(--noche-rgb) / calc(var(--velo) * 1.3)) 0, rgb(var(--noche-rgb) / calc(var(--velo) * 0.75)) 45%, rgb(var(--noche-rgb) / calc(var(--velo) * 1.15)) 75%, var(--noche) 100%); }
   .fila-valor > .estado + *::before { content: none; }
   .fila-valor { flex-direction: column; align-items: flex-start; gap: 0; }
   :root { --t-portada: 2.5rem; --t-seccion: 1.625rem; --t-fila: 1.1875rem; --banda: 17rem; }
