@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lib_connected_to">Conectado a %1$s</string>
+
+    <string name="lib_on_home">En inicio</string>
+
+    <string name="lib_on_lock">En bloqueo</string>
+
+    <string name="lib_on_both">En inicio y bloqueo</string>
+
+    <string name="lib_rotating_home">Rotando en inicio</string>
+
+    <string name="lib_rotating_lock">Rotando en bloqueo</string>
+
+    <string name="lib_rotating_both">Rotando en inicio y bloqueo</string>
+
+    <string name="lib_options">Opciones</string>
+
+    <string name="lib_chosen_mark">Elegido</string>
+
+    <string name="lib_search_library">Buscar en la biblioteca</string>
+
+    <string name="lib_nothing_with">No hay nada con «%1$s»</string>
+
+    <string name="lib_nothing_with_note">Prueba con otra palabra o quita la búsqueda.</string>
+
+    <string name="lib_no_favorites">Aún no hay favoritos</string>
+
+    <string name="lib_no_favorites_note">Toca «Favorito» en un fondo y aparecerá aquí.</string>
+
+    <string name="lib_see_all">Ver todos</string>
+
+    <string name="lib_choose_all">Elegir todos</string>
+
+    <string name="lib_to_list">Lista</string>
+
+    <string name="lib_more">Más</string>
+
+    <string name="lib_rotate_these">Rotar estos</string>
+
+    <string name="lib_rotation_made">Lista «%1$s» creada: cambia cada hora</string>
+
+    <string name="lib_change_interval">Cambiar</string>
+
+    <plurals name="lib_chosen">
+        <item quantity="one">%d elegido</item>
+        <item quantity="many">%d elegidos</item>
+        <item quantity="other">%d elegidos</item>
+    </plurals>
+</resources>

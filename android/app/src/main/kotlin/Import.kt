@@ -3,35 +3,26 @@ package io.github.wallpaper_rs
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlin.concurrent.thread
 
 @Composable
-fun Adding(main: Main, sources: () -> Unit, modifier: Modifier) = Box(modifier) {
-    var open by remember { mutableStateOf(false) }
-    ExtendedFloatingActionButton(onClick = { open = true }, icon = { Glyph(Ph.Plus, stringResource(R.string.choose)) }, text = { Text(stringResource(R.string.choose)) })
-    DropdownMenu(open, { open = false }) {
-        listOf(R.string.photos to main::choose, R.string.files to main::chooseFiles, R.string.folder to main::chooseFolder, R.string.from_internet to sources).forEach { (label, pick) ->
-            DropdownMenuItem({ Text(stringResource(label)) }, {
-                open = false
-                pick()
-            })
+fun Adding(main: Main, sources: () -> Unit, close: () -> Unit) = Sheet(close, stringResource(R.string.choose)) {
+    listOf<Triple<Int, Ph, () -> Unit>>(
+        Triple(R.string.photos, Ph.Images, { main.choose() }),
+        Triple(R.string.files, Ph.Files, { main.chooseFiles() }),
+        Triple(R.string.folder, Ph.FolderSimple, { main.chooseFolder() }),
+        Triple(R.string.from_internet, Ph.GlobeSimple, sources),
+    ).forEach { (label, ph, pick) ->
+        SheetOption(stringResource(label), ph = ph) {
+            close()
+            pick()
         }
     }
 }

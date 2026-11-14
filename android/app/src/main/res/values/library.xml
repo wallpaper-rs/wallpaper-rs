@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lib_connected_to">Connected to %1$s</string>
+
+    <string name="lib_on_home">On the home screen</string>
+
+    <string name="lib_on_lock">On the lock screen</string>
+
+    <string name="lib_on_both">On home and lock screens</string>
+
+    <string name="lib_rotating_home">Rotating on the home screen</string>
+
+    <string name="lib_rotating_lock">Rotating on the lock screen</string>
+
+    <string name="lib_rotating_both">Rotating on home and lock screens</string>
+
+    <string name="lib_options">Options</string>
+
+    <string name="lib_chosen_mark">Chosen</string>
+
+    <string name="lib_search_library">Search the library</string>
+
+    <string name="lib_nothing_with">Nothing with “%1$s”</string>
+
+    <string name="lib_nothing_with_note">Try another word or clear the search.</string>
+
+    <string name="lib_no_favorites">No favorites yet</string>
+
+    <string name="lib_no_favorites_note">Tap “Favorite” on a wallpaper and it will show up here.</string>
+
+    <string name="lib_see_all">See all</string>
+
+    <string name="lib_choose_all">Choose all</string>
+
+    <string name="lib_to_list">List</string>
+
+    <string name="lib_more">More</string>
+
+    <string name="lib_rotate_these">Rotate these</string>
+
+    <string name="lib_rotation_made">List “%1$s” created: changes every hour</string>
+
+    <string name="lib_change_interval">Change</string>
+
+    <plurals name="lib_chosen">
+        <item quantity="one">%d chosen</item>
+        <item quantity="other">%d chosen</item>
+    </plurals>
+</resources>

@@ -4,8 +4,6 @@
     <string name="empty_videos">Aún no hay vídeos. Elige una foto o un vídeo del teléfono.</string>
     <string name="empty_scenes">Aún no hay escenas animadas. Añade las escenas de ejemplo o abre un paquete de escena.</string>
     <string name="empty_webs">Aún no hay páginas web. Abre un paquete de página web para añadir una.</string>
-    <string name="empty_favorites">Aún no tienes favoritos. Toca el corazón de un fondo para verlo aquí.</string>
-    <string name="empty_search">Nada coincide con tu búsqueda.</string>
     <string name="pick_media">Elegir una foto o un vídeo</string>
     <string name="kind_video">Vídeo</string>
     <string name="kind_scene">Escena</string>
