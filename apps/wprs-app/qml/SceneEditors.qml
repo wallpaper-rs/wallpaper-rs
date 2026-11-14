@@ -126,6 +126,7 @@ Item {
                     property bool typed: false
 
                     Layout.fillWidth: true
+                    Layout.minimumWidth: Look.e7 + Look.e2
                     text: String(Number(Number(input.both[index]).toFixed(4)))
                     onTextEdited: typed = true
                     onEditingFinished: {
