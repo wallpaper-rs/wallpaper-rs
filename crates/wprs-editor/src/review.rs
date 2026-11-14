@@ -46,20 +46,23 @@ pub fn report(dir: &Path, doc: &Value) -> Value {
 }
 
 pub fn report_in(dir: &Path, doc: &Value, tr: &dyn Fn(&str) -> String) -> Value {
-    let mut findings: Vec<Value> = problems(dir, doc)
+    let found = problems(dir, doc);
+    let mut findings: Vec<Value> = found
         .iter()
         .map(|p| finding(doc, if p.warning { "warning" } else { "error" }, &p.pointer, &p.said.told(tr)))
         .collect();
     let mut out = json!({ "signature": signature(dir, &[]) });
     if let Some((manifest, facts)) = facts_of(doc, Some(dir)) {
-        let notes = features::warnings(&manifest, &facts);
-        findings.extend(notes.iter().map(|n| finding(doc, "note", "/manifest/requires/features", n)));
-        let platforms = platforms(&manifest, &facts);
-        for (name, plays) in platforms.as_object().into_iter().flatten() {
-            if let Some(reason) = plays["refused"].as_str() {
-                findings.push(finding(doc, "warning", "/manifest/platforms", &format!("{name}: {reason}")));
+        let notes = features::notes(&manifest, &facts);
+        let fresh = notes.iter().filter(|n| !found.iter().any(|p| p.message == n.to_string()));
+        findings.extend(fresh.map(|n| finding(doc, "note", "/manifest/requires/features", &n.told(tr))));
+        for p in Platform::ALL {
+            if let Err(e) = features::playable(&manifest, &facts, p) {
+                let reason = e.message().told(tr);
+                findings.push(finding(doc, "warning", "/manifest/platforms", &format!("{}: {reason}", p.name())));
             }
         }
+        let platforms = platforms(&manifest, &facts);
         let (needed, added) = needs(&manifest, &facts);
         out["needs"] = json!(needed);
         out["build_adds"] = json!(added);

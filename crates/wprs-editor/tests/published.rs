@@ -48,4 +48,8 @@ fn the_findings_of_the_review_read_in_the_language_asked() {
         said["findings"].as_array().unwrap().iter().filter_map(|f| f["message"].as_str()).collect();
     assert!(messages.iter().any(|m| m.contains("firma una versión anterior")), "{messages:?}");
     assert!(messages.iter().any(|m| m.contains("la escena no usa")), "{messages:?}");
+    let mut once = messages.clone();
+    once.sort_unstable();
+    once.dedup();
+    assert_eq!(once.len(), messages.len(), "a finding is listed twice: {messages:?}");
 }
