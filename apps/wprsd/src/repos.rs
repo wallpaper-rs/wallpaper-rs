@@ -1,13 +1,13 @@
 use crate::compositor::lock;
 use crate::daemon::Daemon;
 use crate::error::{Error, Result, failed, invalid, not_found};
-use wprs_core::dbus::error::EXISTS;
 use crate::items::reply;
 use crate::jobs::{Ctl, now};
 use crate::kinds::{local, parse_url};
 use serde_json::Value;
 use settle::{Settled, settle, vanished};
 use std::sync::Arc;
+use wprs_core::dbus::error::EXISTS;
 use wprs_core::model::{JobKind, MODEL, RefreshOutput, Repo, RepoWarning, ReposReply, Update};
 use wprs_format::{Anchor, RepoInfo};
 use wprs_providers::HttpFetch;
@@ -37,7 +37,8 @@ impl Daemon {
         let host =
             |base: &String| reqwest::Url::parse(base).ok().and_then(|u| u.host_str().map(String::from));
         let hosts = info.hosts.iter().map(|base| host(base).unwrap_or_else(|| base.clone())).collect();
-        let (last_error_name, last_error) = lock(&self.remote.repo_errors).get(&info.repo_id).cloned().unzip();
+        let (last_error_name, last_error) =
+            lock(&self.remote.repo_errors).get(&info.repo_id).cloned().unzip();
         let added = info.url.split('?').next().unwrap_or_default();
         let jobs = [
             (JobKind::RepoRefresh, info.repo_id.as_str()),

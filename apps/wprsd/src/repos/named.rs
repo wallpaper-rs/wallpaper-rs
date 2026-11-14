@@ -29,7 +29,12 @@ fn unreachable(kind: std::io::ErrorKind) -> bool {
     use std::io::ErrorKind as K;
     matches!(
         kind,
-        K::TimedOut | K::NotConnected | K::ConnectionRefused | K::ConnectionReset | K::HostUnreachable | K::NetworkUnreachable
+        K::TimedOut
+            | K::NotConnected
+            | K::ConnectionRefused
+            | K::ConnectionReset
+            | K::HostUnreachable
+            | K::NetworkUnreachable
     )
 }
 
