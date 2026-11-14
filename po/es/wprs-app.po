@@ -17934,3 +17934,39 @@ msgstr "Tecla para el fondo siguiente"
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "Key for the previous wallpaper"
 msgstr "Tecla para el fondo anterior"
+
+msgid "The wallpaper's own"
+msgstr "La propia del fondo"
+
+msgid "Follow the system"
+msgstr "Seguir al sistema"
+
+msgid "Less motion: plain fades instead of transitions"
+msgstr "Menos movimiento: fundidos simples en lugar de transiciones"
+
+msgid "The transition each wallpaper brings, or a fade"
+msgstr "La transición que trae cada fondo, o un fundido"
+
+msgid "Always a plain fade"
+msgstr "Siempre un fundido simple"
+
+msgid "None: change at once"
+msgstr "Ninguna: cambiar de golpe"
+
+msgid "Transition of %1"
+msgstr "Transición de %1"
+
+msgid "Last change: the wallpaper's own transition."
+msgstr "Último cambio: la transición propia del fondo."
+
+msgid "Last change: what you chose."
+msgstr "Último cambio: lo que elegiste."
+
+msgid "Last change: a plain fade, because of less motion."
+msgstr "Último cambio: un fundido simple, por menos movimiento."
+
+msgid "Last change: a plain fade, because the wallpaper's transition could not play."
+msgstr "Último cambio: un fundido simple, porque la transición del fondo no se pudo ver."
+
+msgid "Last change: a plain fade, neither wallpaper brings a transition."
+msgstr "Último cambio: un fundido simple, ninguno de los dos fondos trae transición."

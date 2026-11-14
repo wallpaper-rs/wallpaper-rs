@@ -137,7 +137,7 @@ ColumnLayout {
         info: host.info
     }
 
-    HdrPicker {
+    ScreenPickers {
         visible: host.name !== ""
         daemon: host.daemon
         output: host.name

@@ -18,6 +18,7 @@ QtObject {
             "shortcuts.enabled": App.tr("Keys to browse wallpapers"),
             "shortcuts.next": App.tr("Key for the next wallpaper"),
             "shortcuts.previous": App.tr("Key for the previous wallpaper"),
+            "transition.less_motion": App.tr("Less motion: plain fades instead of transitions"),
             "pause.when_covered": App.tr("Pause when a window covers the screen"),
             "pause.when_locked": App.tr("Pause while the screen is locked"),
             "library.watch": App.tr("Watch library folders for changes"),
