@@ -89,6 +89,10 @@ calls! {
         Previous previous(output: str);
         History history(output: str, limit: u32) json;
         Browse browse(output: str, source: str, steps: i32) json;
+        BrowseApply browse_apply(output: str, transition: str) json;
+        BrowseTransition browse_transition(output: str, transition: str) json;
+        BrowseCancel browse_cancel(output: str) json;
+        GetBrowse get_browse(output: str) json;
     }
     Profiles1 profiles {
         List list() json;

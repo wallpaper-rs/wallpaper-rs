@@ -19986,3 +19986,90 @@ msgstr "En marcha"
 
 msgid "one device"
 msgstr "un equipo"
+
+msgid "%1 · My files"
+msgstr "%1 · Mis archivos"
+
+msgid "%1 · now"
+msgstr "%1 · ahora"
+
+msgid "Change screen"
+msgstr "Cambiar de pantalla"
+
+msgid "Change wallpaper"
+msgstr "Cambiar de fondo"
+
+msgid "Changes: %1"
+msgstr "Cambia: %1"
+
+msgid "Changes: every screen"
+msgstr "Cambia: todas las pantallas"
+
+msgid "chosen for this change"
+msgstr "elegido para este cambio"
+
+msgid "fade · %1 s, %2"
+msgstr "fundido · %1 s, %2"
+
+msgid "its author's transition, or a fade if it has none"
+msgstr "la transición de su autor, o un fundido si no trae una"
+
+msgid "List «%1» · %2 of %3"
+msgstr "Lista «%1» · %2 de %3"
+
+msgid "no transition, %1"
+msgstr "sin transición, %1"
+
+msgid "Now on your desktop: %1"
+msgstr "Ahora en tu escritorio: %1"
+
+msgid "Once applied: %1"
+msgstr "Al aplicar: %1"
+
+msgid "Open the library"
+msgstr "Abrir la biblioteca"
+
+msgid "simple fade · you asked for less motion"
+msgstr "fundido simple · pediste menos movimiento"
+
+msgid "simple fade · your system asks for less motion"
+msgstr "fundido simple · tu sistema pide menos movimiento"
+
+msgid "Still picture of the scene: it moves once applied"
+msgstr "Imagen quieta de la escena: se mueve al aplicarla"
+
+msgid "Still picture of the video: it moves once applied"
+msgstr "Imagen quieta del vídeo: se mueve al aplicarlo"
+
+msgid "The list «%1» has only «%2», which is already set. Add more wallpapers to it and the shortcut %3 goes through them one by one, with their preview."
+msgstr "La lista «%1» tiene solo «%2», que ya está puesto. Añádele más fondos y el atajo %3 los recorre uno a uno, con su vista previa."
+
+msgid "The preview could not open"
+msgstr "No se pudo abrir la vista previa"
+
+msgid "the setting of this screen"
+msgstr "el ajuste de esta pantalla"
+
+msgid "The wallpaper service does not answer."
+msgstr "El servicio de fondos no responde."
+
+msgid "The wallpaper service does not answer. What you have set stays as it is."
+msgstr "El servicio de fondos no responde. Lo que tienes puesto sigue igual."
+
+msgid "There is no other wallpaper to change to"
+msgstr "No hay otro fondo al que cambiar"
+
+msgid "This is how it comes in: %1"
+msgstr "Así entra: %1"
+
+msgid "your general setting"
+msgstr "tu ajuste general"
+
+msgid "Your library · %1 of %2"
+msgstr "Tu biblioteca · %1 de %2"
+
+msgid "Your library has no wallpapers yet. Add some and the shortcut %1 goes through them one by one, with their preview."
+msgstr "Tu biblioteca todavía no tiene fondos. Añade algunos y el atajo %1 los recorre uno a uno, con su vista previa."
+
+msgid "Your library has only «%1», which is already set. Add more wallpapers and the shortcut %2 goes through them one by one, with their preview."
+msgstr "Tu biblioteca tiene solo «%1», que ya está puesto. Añade más fondos y el atajo %2 los recorre uno a uno, con su vista previa."

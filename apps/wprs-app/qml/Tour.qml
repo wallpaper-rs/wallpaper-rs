@@ -72,6 +72,10 @@ Timer {
                 Qt.createComponent("CreateCheck.qml").createObject(host, {
                     "host": host
                 }).exercise();
+            if (App.backend.claim("preview"))
+                Qt.createComponent("PreviewCheck.qml").createObject(host, {
+                    "host": host
+                }).start();
             if (App.backend.claim("repo"))
                 Qt.createComponent("RepoCheck.qml").createObject(host, {
                     "host": host

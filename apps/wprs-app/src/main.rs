@@ -29,6 +29,7 @@ mod library;
 mod looks;
 mod packer;
 mod picture;
+mod preview;
 mod relief;
 mod reliefjobs;
 mod reliefland;
@@ -95,7 +96,7 @@ fn start() -> ExitCode {
         Some("--check") if !bus::checking() => return checkrun::run(),
         Some("--pieces") => return show(PIECES),
         Some("--depth") => return depthproc::child(&args[1..]),
-        Some("--browse") => {}
+        Some("--browse") => return preview::start(),
         Some("--page") => match app::page(args.get(1).map(String::as_str)) {
             Some(page) => return open(&args[2..], Some(page)),
             None => {
@@ -125,21 +126,25 @@ fn run() -> ExitCode {
 }
 
 fn show(url: &str) -> ExitCode {
+    ExitCode::from(engine(url))
+}
+
+fn engine(url: &str) -> u8 {
     let mut app = QGuiApplication::new();
     QGuiApplication::set_desktop_file_name(&QString::from(
         launcher(std::env::var("FLATPAK_ID").ok()).as_str(),
     ));
     let mut engine = QQmlApplicationEngine::new();
-    let (Some(mut app), Some(mut engine)) = (app.as_mut(), engine.as_mut()) else { return ExitCode::FAILURE };
+    let (Some(mut app), Some(mut engine)) = (app.as_mut(), engine.as_mut()) else { return 1 };
     app.as_mut().set_application_name(&QString::from("wallpaper-rs"));
     engine.as_mut().add_import_path(&QString::from("qrc:/qt/qml"));
     looks::install();
     if bus::checking() && shards::claim("compiled") {
         looks::qobject::compile_qml();
     }
-    if bus::checking() {
+    if bus::checking() || url == preview::PREVIEW {
         engine.as_mut().on_object_creation_failed(|_, _| std::process::exit(1)).release();
     }
     engine.load(&QUrl::from(url));
-    ExitCode::from(app.exec() as u8)
+    app.exec() as u8
 }

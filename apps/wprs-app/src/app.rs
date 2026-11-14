@@ -4,7 +4,7 @@ use percent_encoding::percent_decode_str;
 use serde_json::json;
 use std::collections::HashMap;
 use std::process::ExitCode;
-use wprs_client::{Client, Daemon1Proxy, Library1Proxy, Repos1Proxy, explain};
+use wprs_client::{Client, Daemon1Proxy, Library1Proxy, Playlists1Proxy, Repos1Proxy, explain};
 use wprs_core::dbus::{APP_ID, APP_PATH, BUS_NAME};
 use zbus::Connection;
 use zbus::fdo::{DBusProxy, RequestNameFlags};
@@ -66,7 +66,7 @@ pub async fn pass_on(conn: &Connection, uris: Vec<String>, page: Option<&str>) -
     Ok(())
 }
 
-async fn watch(conn: Connection) {
+pub(crate) async fn watch(conn: Connection) {
     let Ok(owners) = DBusProxy::new(&conn).await else { return };
     let Ok(mut owners) = owners.receive_name_owner_changed_with_args(&[(0, BUS_NAME)]).await else { return };
     let signals = conn.clone();
@@ -93,6 +93,8 @@ async fn forward(conn: Connection) -> zbus::Result<()> {
     let (mut finished, mut thumbs) =
         (daemon.receive_job_finished().await?, library.receive_thumbnail_ready().await?);
     let mut previews = repos.receive_preview_ready().await?;
+    let playlists = Playlists1Proxy::builder(&conn).cache_properties(CacheProperties::No).build().await?;
+    let mut browsed = playlists.receive_browse_changed().await?;
     loop {
         let event = tokio::select! {
             Some(s) = changed.next() => s.args().map(|a| {
@@ -105,6 +107,7 @@ async fn forward(conn: Connection) -> zbus::Result<()> {
             }
             Some(s) = thumbs.next() => s.args().map(|a| Event::Thumb(a.uid.into(), a.size, a.path.into())),
             Some(s) = previews.next() => s.args().map(|a| Event::Preview(a.spec.into(), a.path.into())),
+            Some(s) = browsed.next() => s.args().map(|a| Event::Changed("browse".into(), vec![a.output.into(), a.json.into()], 0)),
             else => return Ok(()),
         };
         event.map(publish).ok();
