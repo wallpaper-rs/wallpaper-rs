@@ -13,6 +13,7 @@ mod landing;
 mod notes;
 mod pages;
 mod picture;
+mod recent;
 mod regions;
 mod replies;
 mod stall;

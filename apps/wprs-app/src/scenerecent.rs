@@ -27,18 +27,25 @@ fn keep(list: &[(PathBuf, String)]) {
     std::fs::write(store(), Value::Array(rows).to_string()).ok();
 }
 
-pub fn record(folder: &Path, title: &str) {
-    let mut list = saved();
+pub fn put(mut list: Vec<(PathBuf, String)>, folder: &Path, title: &str) -> Vec<(PathBuf, String)> {
     list.retain(|(f, _)| f != folder);
     list.insert(0, (folder.to_owned(), title.to_owned()));
     list.truncate(40);
-    keep(&list);
+    list
+}
+
+pub fn record(folder: &Path, title: &str) {
+    keep(&put(saved(), folder, title));
 }
 
 pub fn forget(folder: &Path) {
     let mut list = saved();
     list.retain(|(f, _)| f != folder);
     keep(&list);
+}
+
+pub fn order(rows: &mut [Value]) {
+    rows.sort_by_key(|r| (r["missing"] == true, std::cmp::Reverse(r["edited"].as_u64().unwrap_or(0))));
 }
 
 fn edited(folder: &Path, doc: &Value) -> u64 {
@@ -83,6 +90,6 @@ pub fn list() -> Vec<Value> {
             }
         }
     }
-    rows.sort_by_key(|r| (r["missing"] == true, std::cmp::Reverse(r["edited"].as_u64().unwrap_or(0))));
+    order(&mut rows);
     rows
 }

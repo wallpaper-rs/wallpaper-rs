@@ -68,6 +68,10 @@ Timer {
                 Qt.createComponent("PiecesAdjustCheck.qml").createObject(host, {
                     "host": host
                 }).exercise();
+            if (App.backend.claim("create"))
+                Qt.createComponent("CreateCheck.qml").createObject(host, {
+                    "host": host
+                }).exercise();
             if (App.backend.claim("repo"))
                 Qt.createComponent("RepoCheck.qml").createObject(host, {
                     "host": host
