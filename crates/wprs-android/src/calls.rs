@@ -3,7 +3,7 @@ use crate::exports::on;
 use crate::power::Power;
 use crate::settings::{self, BACKEND};
 use crate::{account, choice, depth, gpu, library, stage, store};
-use jni::objects::{JIntArray, JObject, JString};
+use jni::objects::{JByteArray, JIntArray, JObject, JString};
 use jni::refs::Reference;
 use jni::sys::{jboolean, jint, jlong};
 use jni::{EnvUnowned, jni_mangle};
@@ -49,6 +49,23 @@ pub fn poster<'a>(
         size.get_region(env, 0, &mut facts)?;
         let [w, h, millis] = facts.map(i32::unsigned_abs);
         store::poster(&item.try_to_string(env)?, &argb, width.unsigned_abs(), (w, h), (millis, audio))
+    })
+}
+
+#[jni_mangle("io.github.wallpaper_rs.Native")]
+pub fn read_code<'a>(
+    mut env: EnvUnowned<'a>,
+    _: JObject<'a>,
+    frame: JByteArray<'a>,
+    size: JIntArray<'a>,
+) -> JString<'a> {
+    on(&mut env, |env| {
+        let mut facts = [0; 3];
+        size.get_region(env, 0, &mut facts)?;
+        let [width, height, stride] = facts.map(|n| n.unsigned_abs() as usize);
+        let luma = env.convert_byte_array(&frame)?;
+        let text = crate::scan::read(&luma, width, height, stride).unwrap_or_default();
+        Ok(env.new_string(text)?)
     })
 }
 

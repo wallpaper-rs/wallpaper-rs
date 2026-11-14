@@ -6,8 +6,12 @@ edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
 
+[features]
+read = ["dep:rqrr"]
+
 [dependencies]
 qrcodegen.workspace = true
+rqrr = { workspace = true, optional = true }
 thiserror.workspace = true
 
 [dev-dependencies]

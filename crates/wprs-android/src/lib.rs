@@ -67,6 +67,8 @@ mod repos;
 mod revoking;
 mod rotation;
 mod saved;
+#[cfg(any(target_os = "android", test))]
+mod scan;
 mod server;
 mod settings;
 mod sound;
