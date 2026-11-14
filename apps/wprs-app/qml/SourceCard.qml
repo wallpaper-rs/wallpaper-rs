@@ -41,7 +41,7 @@ FocusScope {
     Column {
         id: left
 
-        width: Look.fuenteQuien
+        width: Math.max(Look.fuenteQuien, acts.implicitWidth)
         spacing: Look.e2
 
         Row {
@@ -87,6 +87,8 @@ FocusScope {
         }
 
         Row {
+            id: acts
+
             spacing: Look.huecoBoton
 
             QQC2.Button {
