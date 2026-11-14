@@ -34,7 +34,7 @@ ColumnLayout {
 
         QQC2.Button {
             Kirigami.FormData.label: App.tr("Package:")
-            text: App.tr("Title, license, origin and more…")
+            text: App.tr("Wallpaper details…")
             icon.name: "documentinfo"
             onClicked: sections.page.editor.select("/manifest")
         }

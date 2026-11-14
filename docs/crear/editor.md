@@ -14,7 +14,7 @@ Mientras editas, los cambios viven en la memoria del editor. No llegan a los arc
 
 La ventana se titula **Escena: <título>**. Tiene cinco zonas.
 
-- **Barra de arriba**: **Volver**, **Deshacer**, **Rehacer**, **Guardar**, **Compilar y aplicar…** y **Ver en el escritorio** (un interruptor).
+- **Barra de arriba**: **Volver**, el título con su estado (**Guardado** o **Sin guardar ·** con **Guardar ahora**), **Deshacer**, **Rehacer** y, a la derecha, **Ver de fondo**, **Poner de fondo** y **Publicar…**. Los paquetes que no son escena (imagen, vídeo, página web y preajuste) usan la misma barra; **Ver de fondo** no está en un preajuste, que no se puede ver solo.
 - **Columna de la izquierda**, con cinco pestañas:
   - **Capas**: la lista de capas y sus herramientas ([lienzo](editor-lienzo.md)).
   - **Recursos**: los archivos de la escena y los scripts ([lienzo](editor-lienzo.md), [scripts](scripts.md)).
@@ -253,14 +253,14 @@ En la terminal: `wprs-ctl scene ask DIR effect_cost`, `cost3d` y `budget`; `wprs
 
 ## Cómo crear el paquete y aplicarlo
 
-Dónde está: **Compilar y aplicar…** en la barra de arriba.
+Dónde está: **Publicar…** en la barra de arriba, en una escena y en cualquier otro paquete.
 
 El diálogo se llama **Compilar y aplicar**. Mientras el editor trabaja, haya cambios sin guardar o errores en la lista de problemas, los botones están apagados y el diálogo dice por qué: **Espera: el editor sigue trabajando.**, **Tienes cambios sin guardar. Guárdalos para crear el paquete o aplicarlo.** (con un botón **Guardar ahora**) o **La escena tiene N problemas que resolver antes; están en el panel de Problemas.** Los avisos amarillos no lo impiden.
 
 Pasos:
 
 1. Guarda y deja sin errores la lista de problemas.
-2. Abre **Compilar y aplicar…**.
+2. Abre **Publicar…**.
 3. Pulsa **Crear el paquete**. El archivo `.wpak` queda junto a la carpeta, con el id y la versión como nombre, o donde pongas en **Archivo del paquete:**. El aviso verde dice dónde quedó y su huella.
 4. Para firmarlo, elige la **Clave de autor:** (**Elegir…** abre un archivo; **Claves…** gestiona tus claves) y escribe la **Contraseña de la clave:** si la tiene.
 5. Para verlo en una pantalla, elige **Pantalla:** (**Todas las pantallas** o una) y pulsa **Aplicar a la pantalla**. Hace el paquete, lo mete en la biblioteca y lo muestra, y el aviso verde dice qué mostró, en qué pantalla y a qué nivel de calidad (como `wprs-ctl scene apply`). Si cambias la escena y vuelves a aplicar, la pantalla muestra lo nuevo aunque no subas la versión. Para quitar el fondo después, **Quitar el fondo** en la fila de la pantalla, en la página **Ajustes**.

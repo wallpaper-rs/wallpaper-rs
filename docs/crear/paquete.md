@@ -127,7 +127,7 @@ sí hace con ella es decidir si alguien puede **editar una copia** de tu paquete
 | `GPL-3.0-or-later`, `AGPL-3.0-or-later`, `LGPL-3.0-or-later` | Con copyleft: lo derivado se publica con la misma licencia. |
 | `LicenseRef-<nombre>` | Condiciones propias, que describes tú en el paquete. |
 
-**En el editor** la licencia se elige en una lista (*Título, licencia, origen y más…*) de diez, cada una con una línea que dice qué permite:
+**En el editor** la licencia se elige en una lista (*Datos del fondo…*) de diez, cada una con una línea que dice qué permite:
 `CC0-1.0`, `CC-BY-4.0`, `CC-BY-SA-4.0`, `CC-BY-NC-4.0`, `CC-BY-NC-SA-4.0`, `CC-BY-ND-4.0`,
 `CC-BY-NC-ND-4.0`, `MIT`, `Apache-2.0` y `GPL-3.0-or-later`. Puedes escribir cualquier otra
 expresión SPDX a mano (para una que no está en la lista, el editor solo dice que es una expresión

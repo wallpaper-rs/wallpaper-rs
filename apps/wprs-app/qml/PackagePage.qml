@@ -13,6 +13,7 @@ Kirigami.Page {
     property string source
     property alias editor: editor
     property alias builder: builder
+    property alias use: use
     property alias tabs: side
     property string spot
     property string notice
@@ -21,43 +22,14 @@ Kirigami.Page {
     readonly property var fields: JSON.parse(editor.fields || "[]")
     readonly property var manifest: page.view.id === undefined ? ({}) : JSON.parse(editor.value("/manifest") || "{}")
     readonly property string kind: view.kind ?? ""
-    readonly property list<QtObject> tools: [
-        Kirigami.Action {
-            text: App.tr("Back")
-            icon.name: "go-previous"
-            onTriggered: {
-                editor.autosave();
-                App.navigate(7, "");
-            }
-        },
-        Kirigami.Action {
-            text: App.tr("Undo")
-            icon.name: "edit-undo"
-            shortcut: "Ctrl+Z"
-            enabled: (page.view.history?.done ?? []).length > 0
-            onTriggered: page.run("undo")
-        },
-        Kirigami.Action {
-            text: App.tr("Redo")
-            icon.name: "edit-redo"
-            shortcut: "Ctrl+Shift+Z"
-            enabled: (page.view.history?.undone ?? []).length > 0
-            onTriggered: page.run("redo")
-        },
-        Kirigami.Action {
-            text: App.tr("Save")
-            icon.name: "document-save"
-            shortcut: "Ctrl+S"
-            enabled: editor.dirty && !editor.busy
-            onTriggered: editor.save()
-        },
-        Kirigami.Action {
-            text: App.tr("Build and apply…")
-            icon.name: "run-build"
-            enabled: editor.ready && !editor.busy
-            onTriggered: builder.open()
+    readonly property bool viewable: ["web", "image", "video"].includes(kind)
+    readonly property var packagePage: page
+    property Component bar: builder.shown ? null : packageTop
+    property Component packageTop: Component {
+        SceneTop {
+            page: packagePage
         }
-    ]
+    }
 
     function run(action, args, gesture) {
         editor.run(action, JSON.stringify(args ?? {}), gesture === true);
@@ -81,9 +53,9 @@ Kirigami.Page {
         spot = pointer;
     }
 
-    title: builder.shown ? builder.title : App.tr("Package: %1", view.title ?? "")
+    title: builder.shown ? builder.title : view.title ?? ""
     padding: 0
-    actions: builder.shown ? builder.actions : tools
+    actions: builder.shown ? builder.actions : []
     Component.onCompleted: {
         if (starter) {
             editor.create(folder, starter, heading);
@@ -104,7 +76,13 @@ Kirigami.Page {
     SceneEditor {
         id: editor
 
-        onFinished: message => page.notice = message
+        onFinished: message => use.placing ? use.placed(message) : page.notice = message
+    }
+
+    SceneUse {
+        id: use
+
+        page: page
     }
 
     Timer {

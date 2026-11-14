@@ -1920,3 +1920,26 @@ lama-big-fp32`), *Remove LaMa* (`models remove lama-big-fp32`) and *Rebuild the 
 deletes every layer set of the cache (the same as `edit depth layers --clear` for each picture) and
 reloads the daemon so that it builds those of the pictures it shows; the button shows how many sets
 are kept, or the progress of the `layers` job of the daemon while one runs.
+
+## Teclado del editor y paquetes que no son escena
+
+El editor se recorre con Tab: las pestañas del lateral izquierdo y sus listas, la barra del
+lienzo, el lienzo, los campos de lo elegido, los problemas y la línea de tiempo. El lienzo toma el
+foco con Tab y muestra la marca de foco (solo cuando llega con el teclado, no con un clic); con una
+capa elegida, las flechas la mueven un píxel y Mayús con una flecha diez, y Esc deja el lienzo y
+devuelve el foco al control anterior (si se estaba eligiendo un punto, Esc primero cancela esa
+elección). La comprobación de la app (`SceneKeysCheck`, unidad `keys.editor`) abre una escena,
+recorre con Tab cada pestaña, falla si un control o una de esas regiones no se alcanza, y mueve
+una capa con las flechas en el lienzo.
+
+Los paquetes que no son escena (imagen, vídeo, página web y preajuste) usan la barra de arriba
+del editor (`SceneTop`): volver, el título con su estado, Deshacer, Rehacer, «Poner de fondo» y
+«Publicar…», que pasa por `SceneUse.publish()` como en una escena; «Ver de fondo» solo aparece en
+los tipos que se pueden ver solos (imagen, vídeo y página web). El botón de los datos se llama
+«Datos del fondo…», la pestaña «Vista previa» se llama «Ver como» (con los niveles «Equipo
+lento» a «Equipo muy rápido») y la pestaña «Propiedades» de una página web se llama «Opciones».
+La unidad `PackageTopCheck` comprueba los botones de la barra y los nombres de las pestañas en
+cada tipo.
+
+«Captura» guarda lo que se ve también cuando en «Probar» hay un preajuste elegido: la imagen o el
+clip llevan los valores del preajuste, con los valores sueltos que se probaron encima.

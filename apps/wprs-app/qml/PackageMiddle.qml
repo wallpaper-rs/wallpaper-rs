@@ -16,9 +16,9 @@ ColumnLayout {
         })[kind] ?? ["settings"]
     readonly property var titles: ({
             "settings": App.tr("Settings"),
-            "properties": App.tr("Properties"),
+            "properties": App.tr("Options"),
             "presets": App.tr("Presets"),
-            "preview": App.tr("Preview")
+            "preview": App.tr("See as")
         })
     readonly property string current: names[Math.min(tabs.currentIndex, names.length - 1)]
 

@@ -65,6 +65,7 @@ RowLayout {
         implicitHeight: Look.altoBotonArriba
         icon.name: "monitor-play"
         text: App.tr("View as wallpaper")
+        visible: top.page.viewable !== false
         enabled: top.page.editor.ready
         onClicked: top.page.use.view(view)
     }

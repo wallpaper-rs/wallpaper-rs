@@ -20073,3 +20073,6 @@ msgstr "Tu biblioteca todavía no tiene fondos. Añade algunos y el atajo %1 los
 
 msgid "Your library has only «%1», which is already set. Add more wallpapers and the shortcut %2 goes through them one by one, with their preview."
 msgstr "Tu biblioteca tiene solo «%1», que ya está puesto. Añade más fondos y el atajo %2 los recorre uno a uno, con su vista previa."
+
+msgid "See as"
+msgstr "Ver como"

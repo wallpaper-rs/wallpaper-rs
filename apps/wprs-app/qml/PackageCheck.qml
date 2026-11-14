@@ -8,6 +8,9 @@ QtObject {
     }
 
     function exercise() {
+        Qt.createComponent("PackageTopCheck.qml").createObject(page, {
+            "page": page
+        }).exercise();
         if (page.kind === "image" || page.kind === "video") {
             Qt.createComponent("PackageMediaCheck.qml").createObject(page, {
                 "page": page
