@@ -46,7 +46,6 @@ Flickable {
     Loader {
         id: body
 
-        anchors.bottom: parent.bottom
         width: Math.min(scroll.width, Look.filasAncho)
         active: scroll.visible && (scroll.host.view === "add" || !!scroll.host.chosen.id)
         sourceComponent: scroll.host.view === "add" ? addForm : scroll.host.view === "more" ? moreForm : detailForm
