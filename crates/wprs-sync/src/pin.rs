@@ -62,6 +62,13 @@ impl ServerCertVerifier for Pinned {
     }
 }
 
+pub fn pinned_tls(pin: &str) -> Result<ClientConfig> {
+    match valid_pin(pin) {
+        true => config(Some(pin)),
+        false => Err(Error::Invalid("a certificate fingerprint has 64 lowercase hex digits".into())),
+    }
+}
+
 pub(crate) fn config(pin: Option<&str>) -> Result<ClientConfig> {
     let provider = Arc::new(aws_lc_rs::default_provider());
     let verifier = Arc::new(Pinned { pin: pin.map(str::to_ascii_lowercase), provider: provider.clone() });

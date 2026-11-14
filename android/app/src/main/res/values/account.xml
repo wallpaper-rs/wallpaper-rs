@@ -61,6 +61,7 @@
     <string name="recovery_sub">A phrase to get back to your library if you lose everything</string>
     <string name="remove_server_note">This phone stops syncing and the server forgets it. The library of this phone stays.</string>
     <string name="remove_server_row">Remove the server</string>
+    <string name="server_repo_failed">Your server\'s wallpapers could not be added</string>
     <string name="retry">Retry</string>
     <string name="rotate_sub">Changes the key on all your devices</string>
     <string name="sealed">encrypted</string>

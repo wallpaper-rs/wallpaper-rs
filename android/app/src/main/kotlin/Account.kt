@@ -33,12 +33,14 @@ fun Account(desk: Desk, open: (Aside) -> Unit, library: () -> Unit, close: () ->
     val offline = desk.failed?.id in Desk.OFFLINE || status.optJSONObject("last_reply")?.optString("id") in Desk.OFFLINE
     val linked = state !in setOf("none", "linking", "unlinked")
     val arrived = desk.arrived
+    val unadded = status.optJSONObject("repository_failed")?.let(::refusal)
     TaskPage(foot = {
         when {
             !linked -> Action({ open(Aside.Connect) }, Modifier.weight(1f)) { Glyph(Ph.LinkSimple, null); Text(stringResource(R.string.connect)) }
             desk.task != null -> {}
             arrived != null -> Action({ desk.arrived = null; library() }, Modifier.weight(1f)) { Glyph(Ph.Images, null); Text(stringResource(R.string.see_in_library)) }
             offline -> Action(desk::sync, Modifier.weight(1f)) { Glyph(Ph.ArrowClockwise, null); Text(stringResource(R.string.retry)) }
+            unadded != null -> Action(desk::repository, Modifier.weight(1f).testTag("repository_retry")) { Glyph(Ph.ArrowClockwise, null); Text(stringResource(R.string.retry)) }
             state == "signed_out" -> Action({ desk.connect(main.getString(R.string.this_phone)) }, Modifier.weight(1f)) { Glyph(Ph.LinkSimple, null); Text(stringResource(R.string.connect)) }
             else -> Action({ start(desk, status) }, Modifier.weight(1f)) { Glyph(Ph.ArrowsClockwise, null); Text(stringResource(R.string.sync_now)) }
         }
@@ -56,6 +58,7 @@ fun Account(desk: Desk, open: (Aside) -> Unit, library: () -> Unit, close: () ->
             )
             desk.failed != null -> Problem(main.told(desk.failed!!), null)
             state == "signed_out" -> Problem(stringResource(R.string.signed_out), null)
+            unadded != null -> Problem(stringResource(R.string.server_repo_failed), null, details = main.told(unadded))
             status.optBoolean("outdated") -> Problem(stringResource(R.string.outdated), null)
         }
         when {

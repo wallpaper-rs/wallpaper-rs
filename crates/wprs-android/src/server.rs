@@ -59,7 +59,10 @@ pub(crate) async fn add(url: &str, fingerprint: Option<&str>) -> Result<Value, E
         .filter(|id| !id.is_empty())
         .and(found["repository"]["url"].as_str())
         .map(String::from);
-    update(|s| (s.url, s.name, s.pin, s.repo_id, s.repo_url) = (url, name.clone(), pin, repo_id, repo_url))?;
+    update(|s| {
+        (s.url, s.name, s.pin, s.repo_id, s.repo_url) = (url, name.clone(), pin, repo_id, repo_url);
+        s.repo_failed = None;
+    })?;
     Ok(json!({"name": name, "registration": found["registration"]}))
 }
 

@@ -61,6 +61,7 @@
     <string name="recovery_sub">Una frase para volver a tu biblioteca si pierdes todo</string>
     <string name="remove_server_note">Este teléfono deja de sincronizar y el servidor lo olvida. La biblioteca de este teléfono se queda.</string>
     <string name="remove_server_row">Quitar el servidor</string>
+    <string name="server_repo_failed">No se pudieron añadir los fondos de tu servidor</string>
     <string name="retry">Reintentar</string>
     <string name="rotate_sub">Cambia la clave en todos tus dispositivos</string>
     <string name="sealed">cifrado</string>

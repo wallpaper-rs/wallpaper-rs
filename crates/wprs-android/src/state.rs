@@ -56,6 +56,7 @@ pub(crate) struct Saved {
     pub(crate) signed_out: bool,
     pub(crate) repo_id: Option<String>,
     pub(crate) repo_url: Option<String>,
+    pub(crate) repo_failed: Option<serde_json::Value>,
 }
 
 impl Saved {

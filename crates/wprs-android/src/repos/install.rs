@@ -1,6 +1,7 @@
 use super::{ITEMS, dir, installed};
 use crate::library::now;
 use crate::said;
+use crate::state::read;
 use crate::{Error, library, store};
 use serde_json::{Value, json};
 use std::path::PathBuf;
@@ -26,8 +27,14 @@ pub(crate) fn fetched(spec: &str) -> Result<(String, PathBuf), Error> {
 }
 
 pub(crate) fn fetch() -> Result<HttpFetch, Error> {
-    HttpFetch::new(Arc::default())
-        .map_err(|e| said("android.web_client", "web connections cannot start: %1", &[&e]))
+    let failed =
+        |e: &dyn std::fmt::Display| said("android.web_client", "web connections cannot start: %1", &[&e]);
+    let web = HttpFetch::new(Arc::default()).map_err(|e| failed(&e))?;
+    let (url, pin) = read(|s| (s.url.clone(), s.pin.clone()));
+    match pin.filter(|p| !url.is_empty() && !p.is_empty()) {
+        Some(pin) => web.pinned(&url, wprs_sync::pinned_tls(&pin)?).map_err(|e| failed(&e)),
+        None => Ok(web),
+    }
 }
 
 pub(crate) fn add_url(url: &str) -> Result<Value, Error> {

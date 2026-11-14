@@ -91,6 +91,11 @@ impl Daemon {
         lock(&self.account.saved)
     }
 
+    pub(crate) fn server_pin(&self) -> Option<(String, String)> {
+        let saved = self.saved();
+        saved.pin.clone().filter(|p| !p.is_empty() && !saved.url.is_empty()).map(|p| (saved.url.clone(), p))
+    }
+
     fn sync_path(&self) -> PathBuf {
         self.store.data.join("sync.json")
     }

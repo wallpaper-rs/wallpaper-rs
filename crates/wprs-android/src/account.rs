@@ -37,6 +37,7 @@ enum Request {
         plaintext: bool,
     },
     Wait,
+    Repository,
     Join {
         device: String,
     },
@@ -139,6 +140,7 @@ fn run(request: Request) -> Result<Value, Error> {
         Request::Files => return Ok(private::list()),
         Request::ShareFiles { targets, share } => return private::share(&targets, share),
         Request::Repos => return repos::list(),
+        Request::Repository => return repos::server_repository(),
         Request::Offer { repo, add } => return repos::confirm(&repo, add),
         Request::RemoveRepo { repo_id } => return repos::remove(&repo_id),
         Request::Browse { query } => return repos::browse(&query),
@@ -188,7 +190,7 @@ fn run(request: Request) -> Result<Value, Error> {
         }
     })?;
     if waited {
-        repos::server_repository();
+        drop(repos::server_repository());
     }
     Ok(reply)
 }

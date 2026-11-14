@@ -180,6 +180,7 @@ pub(super) fn scenes() {
     looks::drawn();
     super::bundled::the_examples_come_as_a_repository_that_stays_removed(&examples);
     super::previewed::repository_previews_come_from_that_repository_once_and_within_a_bound();
+    super::pinned::the_servers_own_certificate_is_trusted_only_for_its_own_origin();
     super::sounded::scene_sounds_play_pause_and_release();
     super::sounded::a_one_shot_sound_pauses_when_it_ends_and_is_dropped_later();
     power::device(false, 0);

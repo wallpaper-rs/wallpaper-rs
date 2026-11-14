@@ -36,7 +36,7 @@ pub use kept::{arrived, hold, keep, keep_name, playlist_rules, renamed, rules, t
 pub use keys::{Ids, SyncKey};
 pub use mailbox::{Letter, Peer, ack, devices, from, inbox, next, nonce, post};
 pub use order::{clash, positions};
-pub use pin::{fingerprint, peek, untrusted, valid_pin};
+pub use pin::{fingerprint, peek, pinned_tls, untrusted, valid_pin};
 pub use plan::{Clash, Rules, Step, Winner, step};
 pub use record::{Context, open, pad, seal, unpad};
 pub use session::Session;

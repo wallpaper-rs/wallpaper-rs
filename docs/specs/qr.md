@@ -19,6 +19,8 @@ wprs://connect/1?server=<dirección>[&fp=<huella>][&invite=<código>]
 
 El enlace de invitación (`<servidor>/register?invite=<código>`) no se pone en el código tal cual: el código lleva `invite` y quien lo lee reconstruye el enlace con `Link::invitation_url`. Así el teléfono sabe a qué servidor pertenece la invitación y qué huella comparar.
 
+La huella guardada al conectar vale solo para el origen del servidor (esquema, host y puerto): el teléfono y el escritorio la usan para todo lo que piden a ese origen (agregar y actualizar su repositorio, portadas y vistas previas, instalar paquetes), con `HttpFetch::pinned` de `wprs-providers` y `pinned_tls` de `wprs-sync`. Cualquier otro host sigue con la confianza del sistema, y una redirección que sale del origen no se sigue con la huella. Una huella distinta o ausente rechaza la conexión como antes. Si el repositorio del servidor no se puede agregar al conectar, la página de la cuenta lo dice («No se pudieron añadir los fondos de tu servidor», con el motivo en los detalles) y «Reintentar» vuelve a intentarlo (`account` `repository`).
+
 ## Dibujo
 
 - Nivel de corrección M, tamaño automático (versión 1 a 40), zona silenciosa de 4 módulos.

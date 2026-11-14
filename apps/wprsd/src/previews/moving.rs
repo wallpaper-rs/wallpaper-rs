@@ -22,7 +22,9 @@ impl Daemon {
         let dir = self.store.cache.join("previews");
         private_dir(&dir).ok()?;
         let download = dir.join(format!(".tmp-{}", NEXT.fetch_add(1, Ordering::Relaxed)));
-        let fetch = HttpFetch::new(Arc::default()).ok()?.within(&self.bases(&repo_id));
+        let fetch =
+            crate::repos::pinned(self, HttpFetch::new(Arc::default()).ok()?.within(&self.bases(&repo_id)))
+                .ok()?;
         let got = wprs_format::animated(&self.store.data, &fetch, &repo_id, &id, &version, &download);
         let check =
             |data: Vec<u8>| wprs_format::media::preview(true, &format!("p.{}", found.ext), &data).is_ok();

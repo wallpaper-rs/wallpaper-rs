@@ -52,3 +52,4 @@ tracing = { workspace = true, features = ["log"] }
 
 [dev-dependencies]
 rquickjs.workspace = true
+tokio-rustls.workspace = true

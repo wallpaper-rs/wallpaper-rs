@@ -19,8 +19,18 @@ pub fn newer(a: &str, b: &str) -> bool {
     semver::Version::parse(a).ok() > semver::Version::parse(b).ok()
 }
 
-pub fn fetcher(ctl: &Ctl, bases: &[String]) -> Result<HttpFetch> {
-    Ok(HttpFetch::new(ctl.flag()).map_err(|e| failed(e.to_string()))?.within(bases))
+pub fn fetcher(d: &Daemon, ctl: &Ctl, bases: &[String]) -> Result<HttpFetch> {
+    pinned(d, HttpFetch::new(ctl.flag()).map_err(|e| failed(e.to_string()))?.within(bases))
+}
+
+pub fn pinned(d: &Daemon, fetch: HttpFetch) -> Result<HttpFetch> {
+    match d.server_pin() {
+        Some((url, pin)) => {
+            let tls = wprs_sync::pinned_tls(&pin).map_err(|e| failed(e.to_string()))?;
+            fetch.pinned(&url, tls).map_err(|e| failed(e.to_string()))
+        }
+        None => Ok(fetch),
+    }
 }
 
 fn warning(text: &str) -> RepoWarning {
@@ -110,7 +120,7 @@ impl Daemon {
         }
         let (url, target) = (url.to_owned(), url.split('?').next().unwrap_or_default());
         Ok(self.start_job(JobKind::RepoAdd, target, move |d, ctl| {
-            let info = wprs_format::add_repo(&d.store.data, &fetcher(ctl, &[])?, &url, now())?;
+            let info = wprs_format::add_repo(&d.store.data, &fetcher(d, ctl, &[])?, &url, now())?;
             lock(&d.remote.repo_errors).remove(&info.repo_id);
             tracing::info!(repo = &info.repo_id[..8], "repository added");
             d.changes.changed("repos", vec![info.repo_id.clone()]);
@@ -139,7 +149,7 @@ impl Daemon {
         for id in ids {
             let bases = known.iter().find(|r| r.repo_id == id).map_or(&[][..], |r| &r.hosts);
             let updated = ctl.check().and_then(|()| {
-                Ok(wprs_format::update_repo(&self.store.data, &fetcher(ctl, bases)?, &id, now())?)
+                Ok(wprs_format::update_repo(&self.store.data, &fetcher(self, ctl, bases)?, &id, now())?)
             });
             match settle(updated, || self.gone(&id)) {
                 Settled::Done(outcome) => {

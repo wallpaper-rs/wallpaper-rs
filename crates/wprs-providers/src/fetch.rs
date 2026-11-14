@@ -3,6 +3,7 @@ use crate::{AGENT, Result, local, redirect, refused};
 use reqwest::blocking::Client;
 use reqwest::redirect::Policy;
 use reqwest::{StatusCode, Url};
+use std::any::Any;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::{self, Read, Write};
@@ -25,6 +26,7 @@ pub struct HttpFetch {
     cancel: Arc<AtomicBool>,
     window: Duration,
     origins: Origins,
+    pinned: Option<(String, Client)>,
 }
 
 impl HttpFetch {
@@ -42,13 +44,25 @@ impl HttpFetch {
         #[cfg(target_os = "android")]
         let builder = builder.tls_certs_only(wprs_core::roots::certificates());
         let client = builder.connect_timeout(Duration::from_secs(10)).timeout(window).build()?;
-        Ok(Self { client, cancel, window, origins })
+        Ok(Self { client, cancel, window, origins, pinned: None })
     }
 
     pub fn within(self, bases: &[String]) -> Self {
         let parsed = bases.iter().filter_map(|base| Url::parse(base).ok());
         declared(&self.origins).extend(parsed.map(|url| origin(&url)));
         self
+    }
+
+    pub fn pinned(mut self, base: &str, tls: impl Any) -> Result<Self> {
+        let url = Url::parse(base).map_err(|e| crate::Error::Invalid(e.to_string()))?;
+        let home = origin(&url);
+        let own = home.clone();
+        let policy =
+            Policy::custom(move |a| if origin(a.url()) == own { redirect(a, false) } else { a.stop() });
+        let builder = Client::builder().user_agent(AGENT).referer(false).redirect(policy);
+        let builder = builder.tls_backend_preconfigured(tls).connect_timeout(Duration::from_secs(10));
+        self.pinned = Some((home, builder.timeout(self.window).build()?));
+        Ok(self)
     }
 
     fn live(&self) -> io::Result<()> {
@@ -78,9 +92,14 @@ impl Fetch for HttpFetch {
                 "plain http is only allowed to loopback hosts",
             ));
         }
-        declared(&self.origins).insert(origin(&url));
+        let home = origin(&url);
+        declared(&self.origins).insert(home.clone());
         let (tx, rx) = mpsc::sync_channel(4);
-        let request = self.client.get(url);
+        let client = match &self.pinned {
+            Some((pinned, client)) if *pinned == home => client,
+            _ => &self.client,
+        };
+        let request = client.get(url);
         thread::Builder::new().name("fetch".into()).spawn(move || stream(request, max, &tx))?;
         let (mut since, mut window) = (Instant::now(), 0);
         loop {

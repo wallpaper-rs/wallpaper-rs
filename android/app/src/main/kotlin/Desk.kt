@@ -79,6 +79,11 @@ class Desk(val main: Main) {
         }
     }
 
+    fun repository() {
+        failed = null
+        run(main.getString(R.string.repo_checking)) { runCatching { account("repository") } }
+    }
+
     fun syncing() {
         offer = false
         failed = null

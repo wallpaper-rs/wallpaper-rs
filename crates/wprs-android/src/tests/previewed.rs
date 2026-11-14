@@ -48,7 +48,7 @@ fn serve(dir: PathBuf) -> (u16, Arc<AtomicU32>) {
     (port, hits)
 }
 
-fn package(dir: &Path, id: &str) -> PathBuf {
+pub(super) fn package(dir: &Path, id: &str) -> PathBuf {
     let src = dir.join(format!("src-{id}"));
     fs::create_dir_all(&src).unwrap();
     let manifest = Manifest {

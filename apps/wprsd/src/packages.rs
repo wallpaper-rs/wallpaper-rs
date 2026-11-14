@@ -90,7 +90,7 @@ impl Daemon {
             let record = match done {
                 Some(done) => done,
                 None => {
-                    let fetch = Progress(fetcher(ctl, &bases)?, |done| ctl.progress(done, size));
+                    let fetch = Progress(fetcher(d, ctl, &bases)?, |done| ctl.progress(done, size));
                     wprs_format::install(&d.store.data, &fetch, &spec, now(), allow_stale, allow_downgrade)?
                 }
             };

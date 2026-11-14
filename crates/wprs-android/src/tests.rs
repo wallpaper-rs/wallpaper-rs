@@ -27,6 +27,7 @@ mod lit;
 mod looks;
 mod paced;
 mod pages;
+mod pinned;
 mod played;
 mod posted;
 mod previewed;

@@ -121,11 +121,14 @@ pub(crate) fn add(url: &str) -> Result<Value, Error> {
     add_url(url)
 }
 
-pub(crate) fn server_repository() {
-    let Some(url) = read(|s| s.repo_url.clone()) else { return };
-    if read(|s| s.repo_id.clone()).is_some_and(|id| !added().contains(&id)) && shared(&url) {
-        drop(add_url(&url));
+pub(crate) fn server_repository() -> Result<Value, Error> {
+    let Some(url) = read(|s| s.repo_url.clone()) else { return Ok(Value::Null) };
+    if !read(|s| s.repo_id.clone()).is_some_and(|id| !added().contains(&id)) || !shared(&url) {
+        return Ok(Value::Null);
     }
+    let added = add_url(&url);
+    update(|s| s.repo_failed = added.as_ref().err().map(Error::reply))?;
+    added
 }
 
 pub(crate) fn confirm(repo: &str, add_it: bool) -> Result<Value, Error> {
