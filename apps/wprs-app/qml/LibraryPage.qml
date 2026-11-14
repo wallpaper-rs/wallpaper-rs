@@ -26,7 +26,6 @@ Kirigami.Page {
     readonly property bool tellsService: opened === "" && state.failed
     readonly property real bandLow: opened !== "" ? 0 : state.alone ? state.low : all ? 0 : bar.height + Look.e5 + covers.implicitHeight
     readonly property real bandHigh: bandLow
-    readonly property real upperHeight: opened === "" ? state.high : 0
     readonly property real bandFrom: state.alone ? lower.y : lower.y + bar.y
     property rect band
     property rect upper

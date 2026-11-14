@@ -58,66 +58,33 @@ FocusScope {
     required property var page
     readonly property bool banded: (page.band?.width ?? 0) > 0
     readonly property real low: Math.max(explore.height, side.height) + Look.e4 + (shelf.visible ? shelf.implicitHeight : 0)
-    readonly property real high: upperBlock.implicitHeight
     readonly property alias shelf: shelf
     readonly property var examples: run.shelf.slice(0, 12).map(pkg => ({
                 "picture": run.previewed[run.spec(pkg)] ? App.backend.url(run.previewed[run.spec(pkg)]) : "",
                 "name": pkg.title,
                 "caption": pkg.kind === "scene" ? App.tr("Scene · Bundled examples") : App.tr("Bundled examples")
             }))
-    readonly property var hints: [{
-            "keys": ["left", "right"],
-            "text": App.tr("Move around")
-        }, {
-            "keys": [App.trc("key", "Enter")],
-            "text": App.tr("Set as wallpaper")
-        }, {
+    readonly property var hints: (examples.length > 0 ? [{
+                "keys": ["left", "right"],
+                "text": App.tr("Move around")
+            }, {
+                "keys": [App.trc("key", "Enter")],
+                "text": App.tr("Set as wallpaper")
+            }] : []).concat([{
             "keys": [],
             "text": App.tr("You can also drop your files here")
-        }]
+        }])
 
     function put() {
         if (shelf.currentIndex >= 0 && shelf.currentIndex < run.shelf.length)
             run.place(run.shelf[shelf.currentIndex], false);
     }
 
-    Column {
-        id: upperBlock
-
-        x: start.banded ? start.page.upper.x + Math.max(0, start.page.upper.width - width) : 0
-        y: start.banded ? start.page.upper.y : 0
-        width: Math.min(Look.tapaFoco * 2, start.banded ? start.page.upper.width : start.width)
-        spacing: Look.e2
-
-        Text {
-            width: parent.width
-            horizontalAlignment: start.banded ? Text.AlignRight : Text.AlignLeft
-            text: App.tr("You have no wallpapers yet")
-            wrapMode: Text.WordWrap
-            font.family: Look.letraTitulo
-            font.pixelSize: Look.tPagina
-            font.weight: Font.Bold
-            font.letterSpacing: -0.03 * Look.tPagina
-            color: Look.escarcha
-        }
-
-        Text {
-            width: parent.width
-            horizontalAlignment: start.banded ? Text.AlignRight : Text.AlignLeft
-            text: App.tr("Choose where to start: the first wallpaper that enters your library becomes the wallpaper of your desktop.")
-            wrapMode: Text.WordWrap
-            font.family: Look.letraTexto
-            font.pixelSize: Look.tCuerpo
-            color: Look.escarcha
-        }
-    }
-
     Item {
         id: lower
 
-        x: start.banded ? start.page.band.x : 0
-        y: start.banded ? start.page.band.y + Math.max(0, start.page.band.height - height) : upperBlock.height + Look.e6
-        width: start.banded ? start.page.band.width : start.width
+        y: start.banded ? Math.max(0, start.height - height) : 0
+        width: start.width
         implicitHeight: shelf.y + (shelf.visible ? shelf.implicitHeight : 0)
         height: implicitHeight
 

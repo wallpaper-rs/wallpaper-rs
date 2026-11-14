@@ -18,7 +18,6 @@ Item {
     readonly property alias fault: fault
     readonly property alias start: start
     readonly property real low: starting ? start.low : failed ? fault.implicitHeight : 0
-    readonly property real high: starting ? start.high : 0
     property bool restarting: false
     property string refused
 
