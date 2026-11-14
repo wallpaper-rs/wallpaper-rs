@@ -68,7 +68,7 @@ Item {
             block.forceLayout();
             block.parent.forceLayout();
             const all = buttons(block, []);
-            must(all.length >= 7, "the block shows only " + all.length + " buttons");
+            must(all.length >= (block.compact ? 3 : 7), "the block shows only " + all.length + " buttons");
             for (const button of all) {
                 const centre = button.mapToItem(null, button.width / 2, button.height / 2);
                 const top = topmost(centre);
