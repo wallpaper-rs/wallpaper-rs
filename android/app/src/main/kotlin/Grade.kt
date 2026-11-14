@@ -45,9 +45,9 @@ private val SLIDERS = mapOf(
 
 @Composable
 private fun Looks(label: String, names: List<Pair<String, String>>, swatches: JSONObject?, chosen: String, choose: (String) -> Unit) =
-    Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        Text(label, style = MaterialTheme.typography.titleSmall)
-        Row(Modifier.horizontalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) {
+    Column(Modifier.padding(horizontal = Measure.margin, vertical = Measure.e1)) {
+        Text(label, style = Type.row)
+        Row(Modifier.padding(top = Measure.e2).horizontalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) {
             names.forEach { (value, text) ->
                 val colors = swatches?.optJSONArray(value)?.let { all -> (0 until all.length()).map { Color(all.getLong(it).toInt()) } }.orEmpty()
                 val border = if (value == chosen) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant

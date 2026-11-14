@@ -140,7 +140,7 @@ private fun Foot(main: Main, uid: String, item: Item?, usable: Boolean, add: () 
         Square(add, Ph.Playlist, stringResource(R.string.add_to_playlist))
         Square(remove, Ph.Trash, stringResource(R.string.remove))
         Action(main::setWallpaper, Modifier.weight(1f), enabled = usable) {
-            Glyph(Ph.Image, null, size = Measure.iconSquare)
+            Glyph(Ph.Image, null, Modifier.padding(end = Measure.e2), size = Measure.iconSquare)
             Text(stringResource(R.string.apply))
         }
     }
