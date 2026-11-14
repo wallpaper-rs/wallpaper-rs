@@ -66,6 +66,12 @@ QtObject {
         late.facts.take(examples);
         expect(late.learn && late.atExamples && late.facts.learnModel.length === 1, "examples that arrive after the page opened are listed and lead");
         late.destroy();
+        const tiles = empty.focused;
+        tiles.currentIndex = 1;
+        empty.foot.rename(true);
+        expect(empty.changing && empty.foot.titleField.activeFocus, "Change… opens the name fields with the focus in the title");
+        App.backend.press(Qt.Key_Escape, 0);
+        expect(!empty.changing && empty.focused === tiles && tiles.activeFocus && tiles.currentIndex === 1, "Esc in the name fields goes back to the same tile");
         expect(empty.where.indexOf("/") >= 0, "the caption names the folder path: " + empty.where);
         const used = build(mine, examples);
         used.reset();

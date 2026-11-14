@@ -19,6 +19,10 @@ pub mod qobject {
         fn is_project(self: &Recents, folder: &QString) -> bool;
         #[qinvokable]
         fn shown(self: &Recents, folder: &QString) -> QString;
+        #[qinvokable]
+        fn homed(self: &Recents, folder: &QString) -> QString;
+        #[qinvokable]
+        fn expanded(self: &Recents, text: &QString) -> QString;
     }
 }
 
@@ -42,8 +46,28 @@ impl Recents {
     }
 
     pub fn shown(&self, folder: &QString) -> QString {
-        let home = dirs::home_dir().map(|h| h.to_string_lossy().into_owned()).unwrap_or_default();
-        QString::from(&short_path(&folder.to_string(), &home, 56))
+        QString::from(&short_path(&folder.to_string(), &home(), 56))
+    }
+
+    pub fn homed(&self, folder: &QString) -> QString {
+        QString::from(&short_path(&folder.to_string(), &home(), usize::MAX))
+    }
+
+    pub fn expanded(&self, text: &QString) -> QString {
+        QString::from(&full_path(&text.to_string(), &home()))
+    }
+}
+
+fn home() -> String {
+    dirs::home_dir().map(|h| h.to_string_lossy().into_owned()).unwrap_or_default()
+}
+
+pub fn full_path(text: &str, home: &str) -> String {
+    match text.strip_prefix('~') {
+        Some(rest) if !home.is_empty() && (rest.is_empty() || rest.starts_with('/')) => {
+            format!("{}{rest}", home.trim_end_matches('/'))
+        }
+        _ => text.to_owned(),
     }
 }
 

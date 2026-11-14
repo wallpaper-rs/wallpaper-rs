@@ -9,6 +9,7 @@ CreateFicha {
     readonly property var entry: page.current
     readonly property bool starting: entry !== null && !page.onRecent && !page.atExamples
     readonly property alias principal: principal
+    readonly property alias titleField: titleField
     readonly property string ask: starting && entry.id === "image" ? App.tr("Choose the picture…") : starting && entry.id === "video" ? App.tr("Choose the video…") : starting ? App.tr("Create") : page.missing ? App.tr("Find it…") : page.atExamples ? App.tr("Edit a copy…") : App.tr("Keep editing")
 
     title: entry ? entry.name : ""
@@ -16,6 +17,14 @@ CreateFicha {
     tone: page.missing ? "coral" : ""
     icon: page.missing ? "warning-circle" : ""
     caption: !entry ? "" : starting ? App.tr("It will be created as “%1” in %2", page.named, page.where) : page.missing ? App.tr("Its folder “%1” is gone. Did you move it or rename it?", entry.folder.split("/").slice(-1).join("")) : page.facts.pie
+
+    function rename(on) {
+        page.changing = on;
+        if (on)
+            titleField.forceActiveFocus(Qt.TabFocusReason);
+        else if (page.focused)
+            page.focused.forceActiveFocus(Qt.TabFocusReason);
+    }
 
     middle: [
         Row {
@@ -30,9 +39,14 @@ CreateFicha {
             }
 
             QQC2.TextField {
+                id: titleField
+
                 width: Look.avisoAncho * 0.45
                 text: ficha.page.named
+                Accessible.name: App.tr("Title")
                 onTextEdited: ficha.page.named = text
+                onAccepted: ficha.page.act(ficha.page.focused)
+                Keys.onEscapePressed: ficha.rename(false)
             }
         },
         Row {
@@ -48,8 +62,11 @@ CreateFicha {
 
             QQC2.TextField {
                 width: Look.avisoAncho * 0.7
-                text: ficha.page.placed !== "" ? ficha.page.placed : helper.folderFor(ficha.page.named)
-                onTextEdited: ficha.page.placed = text
+                text: paths.homed(ficha.page.placed !== "" ? ficha.page.placed : helper.folderFor(ficha.page.named))
+                Accessible.name: App.tr("Folder")
+                onTextEdited: ficha.page.placed = paths.expanded(text)
+                onAccepted: ficha.page.act(ficha.page.focused)
+                Keys.onEscapePressed: ficha.rename(false)
             }
         }
     ]
@@ -58,7 +75,7 @@ CreateFicha {
         visible: ficha.starting && !ficha.page.changing
         flat: true
         text: App.tr("Change…")
-        onClicked: ficha.page.changing = true
+        onClicked: ficha.rename(true)
     }
 
     QQC2.Button {
@@ -84,5 +101,9 @@ CreateFicha {
 
     SceneEditor {
         id: helper
+    }
+
+    Recents {
+        id: paths
     }
 }

@@ -32,6 +32,7 @@ Kirigami.Page {
     readonly property rect low: band.width > 0 ? band : Qt.rect(0, upperHeight + Look.e5, width, Math.max(0, height - upperHeight - Look.e5))
     readonly property rect high: upper.width > 0 ? upper : Qt.rect(0, 0, width, upperHeight)
     readonly property alias facts: facts
+    readonly property alias foot: footer
 
     function reset() {
         learn = projects.length === 0 && scenes.length > 0;

@@ -1,4 +1,4 @@
-use crate::scenerecent::{order, put, short_path};
+use crate::scenerecent::{full_path, order, put, short_path};
 use serde_json::json;
 use std::path::{Path, PathBuf};
 
@@ -44,4 +44,13 @@ fn a_path_shows_the_home_folder_as_a_tilde_and_shortens_in_the_middle() {
     let long = short_path("/h/me/one/two/three/four/five/six/seven/my-scene", "/h/me/", 20);
     assert_eq!(long.chars().count(), 20);
     assert!(long.starts_with("~/one/") && long.ends_with("my-scene") && long.contains('…'), "{long}");
+}
+
+#[test]
+fn a_typed_folder_starting_with_a_tilde_lands_in_the_home_folder() {
+    assert_eq!(full_path("~/Documents/a", "/h/me/"), "/h/me/Documents/a");
+    assert_eq!(full_path("~", "/h/me"), "/h/me");
+    assert_eq!(full_path("~other/a", "/h/me"), "~other/a");
+    assert_eq!(full_path("/srv/a", "/h/me"), "/srv/a");
+    assert_eq!(full_path(&short_path("/h/me/x/y", "/h/me", usize::MAX), "/h/me"), "/h/me/x/y");
 }
