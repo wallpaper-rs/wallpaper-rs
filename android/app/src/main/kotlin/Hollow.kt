@@ -60,7 +60,6 @@ private fun Others(main: Main, why: Hollow, sources: () -> Unit) = when (why) {
                 Text(stringResource(R.string.add_photos))
             }
         }
-        Bundled(main)
     }
     else -> Column(Modifier.padding(horizontal = Measure.margin, vertical = Measure.e4), Arrangement.spacedBy(Measure.e3)) {
         Text(stringResource(why.text))

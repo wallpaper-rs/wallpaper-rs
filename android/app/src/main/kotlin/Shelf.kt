@@ -62,7 +62,8 @@ fun Shelf(main: Main, sources: () -> Unit, explore: () -> Unit, all: (Boolean) -
             AwayNotes(main)
             if (bare) Empty(main, Hollow.LIBRARY, sources = explore)
         }
-        if (!bare) Column(Modifier.padding(bottom = Measure.e4)) {
+        if (bare) Bundled(main)
+        else Column(Modifier.padding(bottom = Measure.e4)) {
             Kinds(tab, { tab = it }) { all(false) }
             val shown = items
             when {
