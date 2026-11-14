@@ -19,10 +19,7 @@ QtObject {
     }
 
     function veilOf(frame) {
-        for (let at = 0; at < frame.children.length; at++)
-            if (typeof frame.children[at].shade === "function" && frame.children[at].centerX === undefined)
-                return frame.children[at];
-        return null;
+        return frame.veil ?? null;
     }
 
     function settle(sheet, high) {

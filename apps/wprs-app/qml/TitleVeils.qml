@@ -6,6 +6,7 @@ Item {
 
     required property Item host
     required property Item lead
+    readonly property alias band: bandVeil
 
     anchors.fill: parent
 
@@ -40,6 +41,8 @@ Item {
     }
 
     BandVeil {
+        id: bandVeil
+
         visible: !veils.host.full
         y: veils.host.page && veils.host.page.bandFrom !== undefined ? Math.max(0, Math.min(veils.host.bandLow > 0 ? veils.host.height : veils.host.height * 0.55, veils.host.seat.y + veils.host.page.bandFrom - Look.veloBanda)) : veils.host.bandLow > 0 ? Math.max(0, veils.host.band.y - Look.veloBanda) : veils.host.height * 0.55
         width: veils.host.width

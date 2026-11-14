@@ -11,6 +11,7 @@ Item {
     required property bool none
     readonly property bool full: !!(page && page.full)
     readonly property alias seat: seat
+    readonly property alias veil: veils.band
     readonly property real bandLow: page && page.full !== true && page.bandLow > 0 ? page.bandLow : 0
     readonly property real upperLow: bandLow > 0 && page.upperHeight > 0 ? page.upperHeight : 0
     readonly property real bandBottom: height - Look.margenAbajo
@@ -81,6 +82,8 @@ Item {
     }
 
     TitleVeils {
+        id: veils
+
         host: frame
         lead: now
     }
