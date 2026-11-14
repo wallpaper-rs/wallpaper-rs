@@ -57,4 +57,12 @@ QtObject {
         const days = Math.round(hours / 24);
         return days === 1 ? App.tr("yesterday") : App.tr("%1 days ago", days);
     }
+
+    function refuse(folder) {
+        const name = folder.split("/").filter(part => part !== "").slice(-1).join("");
+        applicationWindow().showPassiveNotification({
+            "text": App.tr("“%1” is not a wallpaper-rs project: it has no scene or package inside.", name),
+            "tone": "coral"
+        }, 12000, App.tr("Choose another"), () => facts.page && facts.page.pickFolder());
+    }
 }

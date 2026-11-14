@@ -52,13 +52,8 @@ Kirigami.Page {
 
     function open(folder) {
         if (!recents.isProject(folder))
-            return refuse(folder);
+            return facts.refuse(folder);
         App.compose(folder, "", "");
-    }
-
-    function refuse(folder) {
-        const name = folder.split("/").filter(part => part !== "").slice(-1).join("");
-        applicationWindow().showPassiveNotification(App.tr("“%1” is not a wallpaper-rs project: it has no scene or package inside.", name), 12000, App.tr("Choose another"), () => page && page.pickFolder());
     }
 
     function pickFolder() {
