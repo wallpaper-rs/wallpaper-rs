@@ -253,22 +253,19 @@ En la terminal: `wprs-ctl scene ask DIR effect_cost`, `cost3d` y `budget`; `wprs
 
 ## Cómo crear el paquete y aplicarlo
 
-Dónde está: **Publicar…** en la barra de arriba, en una escena y en cualquier otro paquete.
+Dónde está: **Publicar…** en la barra de arriba, en una escena y en cualquier otro paquete. A su lado, **Ver de fondo** muestra la escena en el escritorio como vista previa (un aviso ofrece **Volver al editor**, **Dejarlo puesto** y **Detener la vista previa**) y **Poner de fondo** la deja puesta (pregunta en qué pantalla cuando hay más de una y ofrece **Deshacer**). Lo que necesita la escena guardada se guarda antes y el editor lo dice.
 
-El diálogo se llama **Compilar y aplicar**. Mientras el editor trabaja, haya cambios sin guardar o errores en la lista de problemas, los botones están apagados y el diálogo dice por qué: **Espera: el editor sigue trabajando.**, **Tienes cambios sin guardar. Guárdalos para crear el paquete o aplicarlo.** (con un botón **Guardar ahora**) o **La escena tiene N problemas que resolver antes; están en el panel de Problemas.** Los avisos amarillos no lo impiden.
+**Publicar…** abre la página **Publicar «nombre»** encima del editor: a la izquierda la miniatura y el nombre del paquete, a la derecha tres pasos numerados en la misma página. Un paso terminado se pliega en una línea con **Cambiar**, el siguiente se abre solo e **Intro** hace su acción principal. **Volver al editor** cierra la página sin perder el paso en que ibas.
 
-Pasos:
+1. **Revisar**: lo que el paquete dirá al mundo. Lista cada problema, aviso o nota (con **Ir al problema**, que te lleva al campo en el editor), dónde se reproduce, la **Versión** y la **Licencia** (con **Cambiar**), y dos preguntas que contestas una vez: si tiene destellos y si tiene contenido para adultos. Si falta la miniatura o es más vieja que los archivos, **Actualizar la miniatura** la vuelve a tomar. **Seguir** queda apagado, con el motivo, mientras haya errores, preguntas sin contestar o falte la licencia. **Más** comprueba la firma de un paquete ya hecho.
+2. **Tu firma** la primera vez: con tu nombre de autor y una contraseña opcional se crea tu par de claves, y un aviso ofrece **Guardar una copia…**. Las siguientes veces el paso se llama **Firmar** y pide la contraseña de la clave si la tiene; con una contraseña equivocada ofrece **Administrar claves…** y **Publicar sin firmar**. Una clave sin contraseña se salta el paso. **Más** elige otra clave o un archivo de clave, muestra la huella y guarda una copia del par.
+3. **¿Dónde?**: **Guardar el archivo** (el `.wpak` queda junto a la carpeta con el id y la versión como nombre, u otra ruta), **Subir a mi servidor** (público u oculto; apagado si no hay servidor conectado) o **Añadir a un repositorio en una carpeta** (uno reciente, **Abrir otro…** o **Crear uno aquí…**). Recuerda el último destino. Si algo falla, la página se queda y ofrece su salida: subir con el número de versión siguiente, registrar tu firma en el servidor, reintentar o guardar el archivo.
 
-1. Guarda y deja sin errores la lista de problemas.
-2. Abre **Publicar…**.
-3. Pulsa **Crear el paquete**. El archivo `.wpak` queda junto a la carpeta, con el id y la versión como nombre, o donde pongas en **Archivo del paquete:**. El aviso verde dice dónde quedó y su huella.
-4. Para firmarlo, elige la **Clave de autor:** (**Elegir…** abre un archivo; **Claves…** gestiona tus claves) y escribe la **Contraseña de la clave:** si la tiene.
-5. Para verlo en una pantalla, elige **Pantalla:** (**Todas las pantallas** o una) y pulsa **Aplicar a la pantalla**. Hace el paquete, lo mete en la biblioteca y lo muestra, y el aviso verde dice qué mostró, en qué pantalla y a qué nivel de calidad (como `wprs-ctl scene apply`). Si cambias la escena y vuelves a aplicar, la pantalla muestra lo nuevo aunque no subas la versión. Para quitar el fondo después, **Quitar el fondo** en la fila de la pantalla, en la página **Ajustes**.
-6. **Revisar el paquete…** (en **Antes de construir:**) muestra todo lo que el paquete dirá al mundo antes de crearlo, y **Añadir a un repositorio…** (en **Publicar:**) lo prepara para publicarlo.
+Al terminar, la parte **Listo** dice qué darle a la otra persona: el archivo con **Mostrar en la carpeta**, el enlace del servidor con **Copiar el enlace** o la dirección del repositorio con **Copiar la dirección**. **Poner de fondo** y **Volver al editor** cierran la página.
 
 Todo esto se explica en [paquete](paquete.md).
 
-En la terminal: `wprs-ctl scene build DIR [-o ARCHIVO] [--key CLAVE]` y `wprs-ctl scene apply DIR [-o SALIDA]`. La primera se niega si hay errores (también un script que no compila), y `scene apply` imprime lo mismo que el aviso verde. Para quitar el fondo: `wprs-ctl clear [-o SALIDA]` y `wprs-ctl restore`.
+En la terminal: `wprs-ctl scene build DIR [-o ARCHIVO] [--key CLAVE]` y `wprs-ctl scene apply DIR [-o SALIDA]`. La primera se niega si hay errores (también un script que no compila), y `scene apply` construye la escena en la biblioteca y la muestra. Para quitar el fondo: `wprs-ctl clear [-o SALIDA]` y `wprs-ctl restore`.
 
 ## El editor de imágenes
 

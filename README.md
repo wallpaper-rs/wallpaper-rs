@@ -2989,9 +2989,10 @@ guardan hasta 500 pasos o 64 MiB, y un arrastre cuenta como un solo paso. Lo que
 se copia cada 30 segundos y al cerrar en `~/.local/state/wallpaper-rs/editor/`, que solo puede leer
 tu usuario, y la app ofrece recuperarlo al volver a abrir la carpeta; la copia se borra al cerrar
 con todo guardado y las que llevan 30 días sin usarse se borran solas. Importar, compilar y aplicar
-trabajan en segundo plano, sin bloquear la ventana. *Compilar y aplicar…* crea el `.wpak` con el
-mismo código que `wprs-ctl pack build`, lo firma si eliges una clave de autor (como `wprs-ctl pack
-sign`) y lo aplica a una pantalla o a todas.
+trabajan en segundo plano, sin bloquear la ventana. *Publicar…* abre una página de tres pasos
+(revisar, firmar y elegir dónde) que crea el `.wpak` con el mismo código que `wprs-ctl pack build`,
+lo firma con tu clave de autor (como `wprs-ctl pack sign`) y lo guarda, lo sube a tu servidor o lo
+añade a un repositorio; *Poner de fondo* lo aplica a una pantalla o a todas.
 
 Cada acción del editor tiene su orden en `wprs-ctl scene`, que trabaja sobre la carpeta sin daemon
 (salvo `preview` y `apply`, que usan el servicio), guarda al momento y comparte con la app el
@@ -3055,7 +3056,7 @@ paquete…* y las copias de la biblioteca abren también páginas web, imágenes
 página del paquete muestra la lista de archivos con su papel (la página de entrada, el script que
 corre antes, la vista previa), su tamaño y el total; *Añadir archivos…* los copia a la carpeta y
 cada archivo ofrece usarlo como página de entrada o como miniatura. Los problemas, deshacer,
-guardar y *Compilar y aplicar…* funcionan como en las escenas.
+guardar, *Poner de fondo* y *Publicar…* funcionan como en las escenas.
 
 ```sh
 wprs-ctl scene new reloj --from web --title Reloj   # index.html, app.js y el manifiesto
