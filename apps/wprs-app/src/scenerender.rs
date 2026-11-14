@@ -49,6 +49,9 @@ pub fn wanted(spec: &Value, doc: &Value) -> (Rehearsal, Option<Versus>) {
 }
 
 pub fn shoot(dir: &Path, doc: &Value, out: &Path, spec: &Value) -> anyhow::Result<String> {
+    if let Some(parent) = out.parent().filter(|p| !p.as_os_str().is_empty()) {
+        std::fs::create_dir_all(parent)?;
+    }
     if crate::scenecross::wanted(spec) {
         return crate::scenecross::cross(dir, doc, out, spec);
     }

@@ -20,7 +20,7 @@ Item {
     property string said: ""
     property bool waiting: false
     readonly property var current: info[way] ?? null
-    readonly property string folder: Core.StandardPaths.writableLocation(Core.StandardPaths.CacheLocation)
+    readonly property string folder: App.path(Core.StandardPaths.writableLocation(Core.StandardPaths.CacheLocation))
     readonly property string still: folder + "/transition-still.png"
     readonly property string beforeName: before === "" ? App.tr("Plain color") : before.split("/").pop()
     readonly property string look: SceneLook.effective + (SceneLook.calm ? "-calm" : "")
