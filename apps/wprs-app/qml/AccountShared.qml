@@ -1,108 +1,69 @@
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-ColumnLayout {
+FocusScope {
     id: shared
 
-    required property var account
-    required property var dialogs
-    readonly property bool encrypted: shared.account?.encrypted === true
-    readonly property var offers: shared.account?.offers ?? []
-    readonly property var recovery: ({
-            "off": App.tr("No recovery passphrase: if every device is lost, so is the synced data."),
-            "current": App.tr("The server keeps the current sync key, locked with your recovery passphrase."),
-            "stale": App.tr("A device that may know the recovery passphrase was revoked, so the server keeps an older sync key: set a new, different passphrase.")
-        })
+    property var page: null
+    property var offer: ({})
+    readonly property var offers: page && page.account ? page.account.offers : []
+    readonly property alias menu: menu
 
-    Kirigami.Heading {
-        level: 3
-        visible: shared.offers.length > 0
-        text: App.tr("Repositories added on your other devices")
+    function enter() {
+        const first = rows.itemAt(0);
+        (first || empty).forceActiveFocus(Qt.TabFocusReason);
     }
 
-    Repeater {
-        model: shared.offers
+    width: parent ? parent.width : 0
+    height: list.height
 
-        delegate: RowLayout {
-            required property var modelData
-            property bool expanded
+    Filas {
+        id: list
 
-            Layout.fillWidth: true
+        Vacio {
+            id: empty
 
-            QQC2.Label {
-                Layout.fillWidth: true
-                wrapMode: Text.Wrap
-                text: expanded ? App.tr("%1 at %2, key %3", modelData.name, modelData.url, (modelData.fingerprints[0] ?? "").slice(0, 16)) : App.tr("%1 at %2", modelData.name, modelData.url)
-            }
+            width: parent.width
+            visible: shared.offers.length === 0
+            small: true
+            title: App.tr("Nothing to add")
+            text: App.tr("Repositories that you add on your other devices wait here until you choose whether to add them on this computer.")
+        }
 
-            QQC2.ToolButton {
-                icon.name: "documentinfo"
-                text: App.tr("Details…")
-                display: QQC2.AbstractButton.IconOnly
-                QQC2.ToolTip.text: text
-                QQC2.ToolTip.visible: hovered
-                checkable: true
-                checked: expanded
-                onToggled: expanded = checked
-            }
+        Repeater {
+            id: rows
 
-            QQC2.Button {
-                text: App.tr("Add it here")
-                icon.name: "list-add"
-                onClicked: App.act("ConfirmRepo", [modelData.id, true], "Sync1")
-            }
+            model: shared.offers
 
-            QQC2.Button {
-                text: App.tr("Not here")
-                icon.name: "dialog-cancel"
-                onClicked: App.act("ConfirmRepo", [modelData.id, false], "Sync1")
+            delegate: Fila {
+                id: row
+
+                required property var modelData
+
+                text: modelData.name
+                note: modelData.url
+                kind: "pliega"
+                value: App.tr("add it here?")
+                explain: App.tr("Its key starts with %1. Add it only if you added it yourself on another device.", (modelData.fingerprints[0] || "").slice(0, 16))
+                onOpened: {
+                    shared.offer = modelData;
+                    menu.opener = row;
+                    menu.open();
+                }
             }
         }
     }
 
-    Kirigami.Heading {
-        level: 3
-        visible: shared.encrypted
-        text: App.tr("Recovery")
-    }
+    ListaMenu {
+        id: menu
 
-    RowLayout {
-        visible: shared.encrypted && shared.account?.state !== "needs_key"
-
-        QQC2.Label {
-            Layout.fillWidth: true
-            wrapMode: Text.Wrap
-            text: shared.recovery[shared.account?.recovery] ?? ""
-        }
-
-        QQC2.Button {
-            text: shared.account?.recovery === "off" ? App.tr("Set a passphrase…") : App.tr("Change the passphrase…")
-            icon.name: "document-encrypt"
-            onClicked: shared.dialogs.escrower.open()
-        }
-
-        QQC2.Button {
-            visible: shared.account?.recovery !== "off"
-            text: App.tr("Remove it")
-            icon.name: "edit-delete"
-            onClicked: unlocker.open()
-        }
-    }
-
-    Kirigami.Dialog {
-        id: unlocker
-
-        title: App.tr("Remove the recovery passphrase")
-        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-        onAccepted: App.act("SetEscrow", [""], "Sync1")
-
-        QQC2.Label {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 24
-            wrapMode: Text.Wrap
-            text: App.tr("Without it, only a device that holds the sync key can give it to a new one; if you lose every device, the synced data cannot be read any more.")
-        }
+        options: [{
+                "text": App.tr("Add it here"),
+                "icon": "plus"
+            }, {
+                "text": App.tr("Not here"),
+                "icon": "x"
+            }]
+        onChosen: index => App.act("ConfirmRepo", [shared.offer.id, index === 0], "Sync1")
     }
 }

@@ -1,10 +1,9 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.ScrollablePage {
+Kirigami.Page {
     id: page
 
     property var account: null
@@ -15,10 +14,35 @@ Kirigami.ScrollablePage {
     property string failureDetail
     property string lastName
     property bool lastPlain
+    property bool plain: false
+    property string level
     readonly property alias filer: filer
-    readonly property alias dialogs: dialogs
-    readonly property string phase: account?.state ?? ""
+    readonly property alias panels: panels
+    readonly property alias secrets: secrets
+    readonly property alias codes: codes
+    readonly property alias revoker: revoker
+    readonly property alias shown: shown
+    readonly property string phase: account ? account.state : ""
     readonly property bool keyed: ["ready", "paused", "error"].includes(phase)
+    readonly property bool linked: !!account && !!account.device
+    readonly property var levels: ({
+            "server": App.tr("Server"),
+            "devices": App.tr("Devices of the account"),
+            "repos": App.tr("Repositories of your other devices"),
+            "more": App.tr("More"),
+            "details": App.tr("Details")
+        })
+    property var route: level === "" ? [] : [App.tr("Account"), levels[level]]
+    property var keyHints: [{
+            "keys": ["up", "down"],
+            "text": App.tr("Move")
+        }, {
+            "keys": ["left", "right"],
+            "text": App.tr("Change")
+        }, {
+            "keys": ["Intro"],
+            "text": App.tr("Open")
+        }]
 
     function load() {
         App.query("GetStatus", [], "Sync1", reply => {
@@ -29,10 +53,8 @@ Kirigami.ScrollablePage {
         }, error => page && (page.error = error.message));
     }
 
-    function link(name, plaintext) {
-        lastName = name;
-        lastPlain = plaintext;
-        App.query("Link", [name, plaintext], "Sync1", reply => {
+    function call(member, args) {
+        App.query(member, args, "Sync1", reply => {
             if (!page)
                 return;
             page.failure = "";
@@ -46,32 +68,50 @@ Kirigami.ScrollablePage {
         });
     }
 
+    function link(name, plaintext) {
+        lastName = name;
+        lastPlain = plaintext;
+        call("Connect", [name]);
+    }
+
+    function relink() {
+        page.link(page.lastName, page.lastPlain);
+    }
+
+    function open(name) {
+        level = name;
+        Qt.callLater(() => page && shown.item && shown.item.enter && shown.item.enter());
+    }
+
+    function enter() {
+        if (shown.item && shown.item.enter)
+            shown.item.enter();
+    }
+
+    function routeBack() {
+        const from = level;
+        level = "";
+        Qt.callLater(() => page && shown.item && shown.item.enter && shown.item.enter(from));
+    }
+
     function exercise() {
-        dialogs.linker.open();
-        page.failure = "keyring";
-        if (!problem.visible)
-            throw new Error("a link that failed for lack of a keyring shows no notice on the account page");
-        filer.open();
-        filer.close();
-        page.failure = "";
-        const kept = page.account;
-        page.account = Object.assign({}, kept, {
-            "state": "signed_out"
-        });
-        if (!problem.signedOut)
-            throw new Error("a computer the server no longer accepts shows no notice on the account page");
-        page.account = kept;
-        revoker.device = {
-            "id": "0",
-            "name": "Device 2"
-        };
-        revoker.open();
-        revoker.close();
+        Qt.createComponent("AccountCheck.qml").createObject(page, {
+            "page": page
+        }).run();
     }
 
     title: App.tr("Account")
+    padding: 0
+    background: null
+    actions: [
+        Kirigami.Action {
+            text: App.tr("Sync now")
+            icon.name: "arrows-clockwise"
+            visible: page.keyed && !(page.account && page.account.paused)
+            onTriggered: App.act("SyncNow", [], "Sync1")
+        }
+    ]
     Component.onCompleted: load()
-    actions: tools.list
 
     Connections {
         target: App.backend
@@ -82,109 +122,63 @@ Kirigami.ScrollablePage {
         }
     }
 
-    ColumnLayout {
-        Kirigami.PlaceholderMessage {
-            Layout.fillWidth: true
-            visible: !page.account
-            icon.name: page.error ? "data-error" : "folder-cloud"
-            text: page.error || App.tr("No server yet")
-            explanation: page.error ? "" : App.tr("A wallpaper-rs server keeps your library, playlists and settings in sync between your computers, encrypted end to end.")
-        }
+    Connections {
+        target: page.Window.window
 
-        Kirigami.InlineMessage {
-            Layout.fillWidth: true
-            visible: page.code !== "" && page.phase === "linking"
-            type: Kirigami.MessageType.Information
-            text: App.tr("Open %1 and enter the code %2, or approve it on a linked computer.", page.address, page.code)
-        }
-
-        Kirigami.InlineMessage {
-            Layout.fillWidth: true
-            visible: page.account?.encrypted === false
-            type: Kirigami.MessageType.Warning
-            text: App.tr("Sync is not encrypted: the operator of the server can read your library, playlists and settings.")
-        }
-
-        AccountProblem {
-            id: problem
-
-            Layout.fillWidth: true
-            page: page
-        }
-
-        AccountSummary {
-            Layout.fillWidth: true
-            visible: !!page.account
-            account: page.account ?? {}
-        }
-
-        Repeater {
-            model: page.account?.devices ?? []
-
-            delegate: AccountDevice {
-                required property var modelData
-
-                Layout.fillWidth: true
-                device: modelData
-                keyed: page.keyed
-                joining: page.phase === "needs_key"
-                pairing: page.account?.pairing ?? null
-                onShare: codes.share(modelData)
-                onRevoke: {
-                    revoker.device = modelData;
-                    revoker.open();
-                }
-            }
-        }
-
-        AccountShared {
-            Layout.fillWidth: true
-            visible: !!page.account?.device
-            account: page.account
-            dialogs: dialogs
-        }
-
-        AccountFiles {
-            Layout.fillWidth: true
-            account: page.account
-        }
-
-        AccountUploads {
-            Layout.fillWidth: true
-            visible: !!page.account && items.length > 0
-            account: page.account
-        }
-
-        AccountSessions {
-            Layout.fillWidth: true
-            account: page.account
-        }
-
-        AccountKeys {
-            Layout.fillWidth: true
-            visible: !!page.account
-            account: page.account
+        function onActiveFocusItemChanged() {
+            const item = page.Window.activeFocusItem;
+            if (!item || !page.contains(item.mapToItem(page, 0, 0)))
+                return;
+            const top = item.mapToItem(flick.contentItem, 0, 0).y;
+            if (top < flick.contentY)
+                flick.contentY = Math.max(0, top - Look.e4);
+            else if (top + item.height > flick.contentY + flick.height)
+                flick.contentY = Math.min(flick.contentHeight - flick.height, top + item.height - flick.height + Look.e4);
         }
     }
 
-    AccountDialogs {
-        id: dialogs
+    Flickable {
+        id: flick
+
+        anchors.fill: parent
+        clip: true
+        contentWidth: width
+        contentHeight: shown.height + Look.e4
+        boundsBehavior: Flickable.StopAtBounds
+        QQC2.ScrollBar.vertical: QQC2.ScrollBar {}
+
+        Loader {
+            id: shown
+
+            width: flick.width
+            source: ({
+                    "": "AccountMain.qml",
+                    "server": "AccountServer.qml",
+                    "devices": "AccountDevices.qml",
+                    "repos": "AccountShared.qml",
+                    "more": "AccountMore.qml",
+                    "details": "AccountSummary.qml"
+                })[page.level]
+            onLoaded: item.page = page
+        }
+    }
+
+    AccountPanels {
+        id: panels
 
         page: page
     }
 
-    AccountActions {
-        id: tools
+    AccountSecrets {
+        id: secrets
 
         page: page
-        dialogs: dialogs
-        codes: codes
     }
 
     SecretFiler {
         id: filer
 
-        onChosen: page.link(page.lastName, page.lastPlain)
+        onChosen: page.relink()
     }
 
     AccountRevoke {

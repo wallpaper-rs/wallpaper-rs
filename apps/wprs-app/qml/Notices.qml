@@ -54,9 +54,9 @@ Column {
     AccountNotice {
         id: account
 
-        width: visible ? parent.width : Look.avisoAncho
+        width: Math.min(notices.width, implicitWidth)
         host: notices.host
-        visible: phase === "signed_out" && !notices.failing
+        visible: phase === "signed_out" && !dismissed && !notices.failing
     }
 
     Aviso {

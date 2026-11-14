@@ -1,48 +1,46 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.Dialog {
+PanelChico {
     id: revoker
 
     property var device: ({})
 
-    title: App.tr("Remove %1 from the account", revoker.device.label ?? revoker.device.name ?? "")
-    standardButtons: Kirigami.Dialog.Cancel
+    function ask(target, from) {
+        device = target;
+        opener = from;
+        open();
+    }
+
+    title: App.tr("Remove %1 from the account?", revoker.device.label || revoker.device.name || "")
+    text: App.tr("This device can no longer sync with your account, and the sync key is replaced so that it cannot read what you sync from now on. Do it for a device you lost or no longer use.")
+    quiet: App.tr("Cancel")
     onClosed: password.text = ""
-    customFooterActions: [
-        Kirigami.Action {
-            text: App.tr("Remove device")
-            icon.name: "edit-delete"
-            enabled: password.text.length > 0
-            onTriggered: {
-                App.passphrase("RevokeDevice", revoker.device.id + "\n" + password.text);
-                revoker.close();
-            }
-        }
-    ]
 
-    ColumnLayout {
-        QQC2.Label {
-            Layout.fillWidth: true
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 26
-            wrapMode: Text.Wrap
-            text: App.tr("This device can no longer sync with your account, and the sync key is replaced so that it cannot read what you sync from now on. Do it for a computer you lost or no longer use.")
-        }
+    QQC2.TextField {
+        id: password
 
-        Kirigami.PasswordField {
-            id: password
+        width: revoker.width - 2 * Look.e4
+        echoMode: TextInput.Password
+        placeholderText: App.tr("Password of the account")
+        Accessible.name: placeholderText
+    }
 
-            Layout.fillWidth: true
-            placeholderText: App.tr("Password of the account")
-        }
+    Nota {
+        width: revoker.width - 2 * Look.e4
+        text: App.tr("An account that signs in through single sign-on removes devices on the account page of the server.")
+    }
 
-        QQC2.Label {
-            Layout.fillWidth: true
-            wrapMode: Text.Wrap
-            text: App.tr("Removing a device asks for the password of the account. An account that signs in through single sign-on removes devices on the account page of the server.")
+    QQC2.Button {
+        highlighted: true
+        palette.highlight: Look.coral
+        enabled: password.text.length > 0
+        text: App.tr("Remove device")
+        icon.name: "trash"
+        onClicked: {
+            App.passphrase("RevokeDevice", revoker.device.id + "\n" + password.text);
+            revoker.close();
         }
     }
 }

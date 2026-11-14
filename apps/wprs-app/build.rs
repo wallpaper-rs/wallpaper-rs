@@ -46,6 +46,7 @@ fn main() {
     .qrc("starters/starters.qrc")
     .files([
         "src/backend.rs",
+        "src/connectcode.rs",
         "src/depth.rs",
         "src/desknote.rs",
         "src/editor.rs",

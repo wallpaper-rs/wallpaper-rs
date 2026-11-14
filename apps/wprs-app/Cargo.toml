@@ -15,6 +15,7 @@ wprs-format.workspace = true
 wprs-render = { workspace = true, features = ["avif"] }
 wprs-scene.workspace = true
 wprs-palette.workspace = true
+wprs-qr.workspace = true
 dirs.workspace = true
 anyhow.workspace = true
 cxx.workspace = true

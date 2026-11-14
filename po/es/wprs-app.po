@@ -12,49 +12,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps/wprs-app/qml/AccountActions.qml
-msgid "Add server…"
-msgstr "Añadir un servidor…"
-
-#: apps/wprs-app/qml/AccountActions.qml
-msgid "Link this computer…"
-msgstr "Enlazar este equipo…"
-
-#: apps/wprs-app/qml/AccountActions.qml apps/wprs-app/qml/ProviderCard.qml
+#: apps/wprs-app/qml/ProviderCard.qml
 msgid "Sync now"
 msgstr "Sincronizar ahora"
 
-#: apps/wprs-app/qml/AccountActions.qml
-msgid "Resume sync"
-msgstr "Reanudar la sincronización"
-
-#: apps/wprs-app/qml/AccountActions.qml
-msgid "Pause sync"
-msgstr "Pausar la sincronización"
-
-#: apps/wprs-app/qml/AccountActions.qml
-msgid "Approve a device…"
-msgstr "Aprobar un equipo…"
-
-#: apps/wprs-app/qml/AccountActions.qml
 msgid "Restore with the recovery passphrase…"
 msgstr "Recuperar con la frase de recuperación…"
 
-#: apps/wprs-app/qml/AccountActions.qml
 msgid "Replace the sync key"
 msgstr "Cambiar la clave de sincronización"
 
-#: apps/wprs-app/qml/AccountActions.qml
 msgid "Reset synced data…"
 msgstr "Restablecer los datos sincronizados…"
 
-#: apps/wprs-app/qml/AccountActions.qml apps/wprs-app/qml/AccountProblem.qml
+#: apps/wprs-app/qml/AccountProblem.qml
 msgid "Remove server…"
 msgstr "Quitar el servidor…"
-
-#: apps/wprs-app/qml/AccountCodes.qml
-msgid "Approve a device"
-msgstr "Aprobar un equipo"
 
 #: apps/wprs-app/qml/AccountCodes.qml
 msgid "Look up"
@@ -77,14 +50,6 @@ msgid "Password of the account"
 msgstr "Contraseña de la cuenta"
 
 #: apps/wprs-app/qml/AccountCodes.qml
-msgid ""
-"Approving asks for the password of the account. An account that signs in "
-"through single sign-on approves on the account page of the server."
-msgstr ""
-"Para aprobar hace falta la contraseña de la cuenta. Una cuenta que entra con "
-"inicio de sesión único aprueba en la página de la cuenta del servidor."
-
-#: apps/wprs-app/qml/AccountCodes.qml
 msgid "unnamed software"
 msgstr "un programa sin nombre"
 
@@ -93,86 +58,44 @@ msgid "A device on %1 running %2 asked for this code at %3."
 msgstr "Un equipo con %1 y %2 pidió este código el %3."
 
 #: apps/wprs-app/qml/AccountCodes.qml
-msgid "Share the sync key with %1"
-msgstr "Compartir la clave de sincronización con %1"
-
-#: apps/wprs-app/qml/AccountCodes.qml
 msgid "Send the key"
 msgstr "Enviar la clave"
-
-#: apps/wprs-app/qml/AccountCodes.qml
-msgid ""
-"This computer shows %1. Type the code that %2 shows: the key leaves only "
-"when both match."
-msgstr ""
-"Este equipo muestra %1. Escribe el código que muestra %2: la clave sale solo "
-"si coinciden."
 
 #: apps/wprs-app/qml/AccountCodes.qml
 msgid "Waiting for %1: choose this computer there to get the key."
 msgstr "Esperando a %1: elige allí este equipo para recibir la clave."
 
-#: apps/wprs-app/qml/AccountCodes.qml apps/wprs-app/qml/AccountDevice.qml
+#: apps/wprs-app/qml/AccountCodes.qml
 msgid "The 6 digits shown on that device"
 msgstr "Las 6 cifras que muestra ese equipo"
 
-#: apps/wprs-app/qml/AccountDevice.qml
 msgid "this computer"
 msgstr "este equipo"
 
-#: apps/wprs-app/qml/AccountDevice.qml
 msgid "seen %1"
 msgstr "visto %1"
 
-#: apps/wprs-app/qml/AccountDevice.qml
 msgid "never connected"
 msgstr "nunca se ha conectado"
 
-#: apps/wprs-app/qml/AccountDevice.qml
-msgid "linked %1"
-msgstr "enlazado el %1"
-
-#: apps/wprs-app/qml/AccountDevice.qml
-msgid "This computer shows %1. Type the code that device shows:"
-msgstr "Este equipo muestra %1. Escribe el código que muestra ese equipo:"
-
-#: apps/wprs-app/qml/AccountDevice.qml
 msgid "Take the key"
 msgstr "Recibir la clave"
 
-#: apps/wprs-app/qml/AccountDevice.qml
 msgid "Get the key from it"
 msgstr "Recibir la clave de este"
 
-#: apps/wprs-app/qml/AccountDevice.qml
-msgid "Share the key…"
-msgstr "Compartir la clave…"
-
-#: apps/wprs-app/qml/AccountDevice.qml
 msgid "Remove device…"
 msgstr "Quitar equipo…"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Add server"
 msgstr "Añadir un servidor"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Fingerprint of its own certificate, only for a server at home"
 msgstr "Huella de su propio certificado, solo para un servidor de casa"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
-msgid "Link this computer"
-msgstr "Enlazar este equipo"
-
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Name of this computer, seen only by your devices"
 msgstr "Nombre de este equipo, que solo ven tus equipos"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
-msgid "Sync without end-to-end encryption"
-msgstr "Sincronizar sin cifrado de extremo a extremo"
-
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid ""
 "The operator of the server will be able to read your library, playlists and "
 "settings."
@@ -180,19 +103,12 @@ msgstr ""
 "Quien administra el servidor podrá leer tu biblioteca, tus listas y tus "
 "ajustes."
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Remove server"
 msgstr "Quitar el servidor"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Also forget the synced copies on this computer"
 msgstr "Olvidar también las copias sincronizadas en este equipo"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
-msgid "Reset synced data"
-msgstr "Restablecer los datos sincronizados"
-
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid ""
 "This deletes every synced record on the server and uploads the library, "
 "playlists and settings of this computer under a new key. Every other device "
@@ -203,45 +119,24 @@ msgstr ""
 "demás equipos tendrán que recibir la clave otra vez. Úsalo solo cuando "
 "ningún equipo tenga ya la clave."
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Recovery passphrase"
 msgstr "Frase de recuperación"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Lock the key with it"
 msgstr "Cerrar la clave con ella"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
-msgid ""
-"The server will keep the sync key locked with this passphrase, so that a new "
-"computer can get it when no device is left. Whoever gets a copy of the "
-"server's data can try to guess it without limit: use at least 20 characters, "
-"several unrelated words that you use nowhere else, and keep them somewhere "
-"safe."
-msgstr ""
-"El servidor guardará la clave de sincronización cerrada con esta frase, para "
-"que un equipo nuevo pueda obtenerla cuando no quede ningún otro. Quien "
-"consiga una copia de los datos del servidor puede intentar adivinarla sin "
-"límite: usa al menos 20 caracteres, varias palabras sin relación que no uses "
-"en ningún otro sitio, y guárdalas en un lugar seguro."
-
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Passphrase"
 msgstr "Frase"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Repeat the passphrase"
 msgstr "Repite la frase"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Restore the sync key"
 msgstr "Recuperar la clave de sincronización"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid "Restore"
 msgstr "Recuperar"
 
-#: apps/wprs-app/qml/AccountDialogs.qml
 msgid ""
 "Use it only when none of your devices holds the key any more: give the "
 "recovery passphrase that you set on one of them."
@@ -304,10 +199,6 @@ msgstr "Quitar del servidor"
 #: apps/wprs-app/qml/AccountFiles.qml
 msgid "Share a folder…"
 msgstr "Compartir una carpeta…"
-
-#: apps/wprs-app/qml/AccountFiles.qml
-msgid "Remove %1 from the server"
-msgstr "Quitar %1 del servidor"
 
 #: apps/wprs-app/qml/AccountFiles.qml
 msgid ""
@@ -452,103 +343,15 @@ msgstr "Aún no hay servidor"
 
 #: apps/wprs-app/qml/AccountPage.qml
 msgid ""
-"A wallpaper-rs server keeps your library, playlists and settings in sync "
-"between your computers, encrypted end to end."
-msgstr ""
-"Un servidor de wallpaper-rs mantiene sincronizados tu biblioteca, tus listas "
-"y tus ajustes entre tus equipos, cifrados de extremo a extremo."
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid "Open %1 and enter the code %2, or approve it on a linked computer."
-msgstr ""
-"Abre %1 e introduce el código %2, o apruébalo en un equipo ya enlazado."
-
-#: apps/wprs-app/qml/AccountPage.qml
-msgid ""
 "Sync is not encrypted: the operator of the server can read your library, "
 "playlists and settings."
 msgstr ""
 "La sincronización no está cifrada: quien administra el servidor puede leer "
 "tu biblioteca, tus listas y tus ajustes."
 
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid ""
-"The link was refused on the server. Link again when you are ready to approve "
-"it on your own computer."
-msgstr ""
-"El servidor rechazó el enlace. Vuelve a enlazar cuando estés listo para "
-"aprobarlo desde tu propio equipo."
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid "The code was not approved in time. Link again to get a new code."
-msgstr ""
-"El código no se aprobó a tiempo. Vuelve a enlazar para obtener un código "
-"nuevo."
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid ""
-"This account syncs without end-to-end encryption, so this computer was not "
-"linked. Link again and tick the box to sync without encryption only if you "
-"accept that the operator of the server can read your synced data."
-msgstr ""
-"Esta cuenta sincroniza sin cifrado de extremo a extremo, así que este equipo "
-"no se enlazó. Vuelve a enlazar y marca la casilla de sincronizar sin cifrado "
-"solo si aceptas que quien administra el servidor pueda leer tus datos "
-"sincronizados."
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid ""
-"This computer could not be linked. Check that the server can be reached and "
-"link again."
-msgstr ""
-"No se pudo enlazar este equipo. Comprueba que el servidor responde y vuelve "
-"a enlazar."
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid "Link again…"
-msgstr "Volver a enlazar…"
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid "Details: %1"
-msgstr "Detalles: %1"
-
-#: apps/wprs-app/qml/AccountProblem.qml
-msgid ""
-"The server no longer accepts this computer: it was removed from the account "
-"or the account was deleted. Remove the server here and link this computer "
-"again to keep syncing."
-msgstr ""
-"El servidor ya no acepta este equipo: se quitó de la cuenta o se borró la "
-"cuenta. Quita aquí el servidor y vuelve a enlazar este equipo para seguir "
-"sincronizando."
-
-#: apps/wprs-app/qml/AccountRevoke.qml
-msgid "Remove %1 from the account"
-msgstr "Quitar %1 de la cuenta"
-
 #: apps/wprs-app/qml/AccountRevoke.qml
 msgid "Remove device"
 msgstr "Quitar equipo"
-
-#: apps/wprs-app/qml/AccountRevoke.qml
-msgid ""
-"This device can no longer sync with your account, and the sync key is "
-"replaced so that it cannot read what you sync from now on. Do it for a "
-"computer you lost or no longer use."
-msgstr ""
-"Este equipo ya no podrá sincronizar con tu cuenta, y se cambia la clave de "
-"sincronización para que no pueda leer lo que sincronices desde ahora. Hazlo "
-"con un equipo que perdiste o que ya no usas."
-
-#: apps/wprs-app/qml/AccountRevoke.qml
-msgid ""
-"Removing a device asks for the password of the account. An account that "
-"signs in through single sign-on removes devices on the account page of the "
-"server."
-msgstr ""
-"Quitar un equipo pide la contraseña de la cuenta. Una cuenta que inicia "
-"sesión con inicio de sesión único quita los equipos en la página de la "
-"cuenta del servidor."
 
 #: apps/wprs-app/qml/AccountSessions.qml
 msgid "Uploads that did not finish"
@@ -592,18 +395,6 @@ msgstr ""
 "el servidor guarda una clave de sincronización anterior: pon una frase nueva "
 "y distinta."
 
-#: apps/wprs-app/qml/AccountShared.qml
-msgid "Repositories added on your other devices"
-msgstr "Repositorios añadidos en tus otros equipos"
-
-#: apps/wprs-app/qml/AccountShared.qml
-msgid "%1 at %2, key %3"
-msgstr "%1 en %2, clave %3"
-
-#: apps/wprs-app/qml/AccountShared.qml
-msgid "%1 at %2"
-msgstr "%1 en %2"
-
 #: apps/wprs-app/qml/AccountShared.qml apps/wprs-app/qml/AccountSummary.qml
 
 #: apps/wprs-app/qml/RepoList.qml
@@ -619,10 +410,6 @@ msgid "Not here"
 msgstr "Aquí no"
 
 #: apps/wprs-app/qml/AccountShared.qml
-msgid "Recovery"
-msgstr "Recuperación"
-
-#: apps/wprs-app/qml/AccountShared.qml
 msgid "Set a passphrase…"
 msgstr "Poner una frase…"
 
@@ -635,10 +422,6 @@ msgid "Remove it"
 msgstr "Quitarla"
 
 #: apps/wprs-app/qml/AccountShared.qml
-msgid "Remove the recovery passphrase"
-msgstr "Quitar la frase de recuperación"
-
-#: apps/wprs-app/qml/AccountShared.qml
 msgid ""
 "Without it, only a device that holds the sync key can give it to a new one; "
 "if you lose every device, the synced data cannot be read any more."
@@ -648,32 +431,8 @@ msgstr ""
 "podrán leer."
 
 #: apps/wprs-app/qml/AccountSummary.qml
-msgid "Server:"
-msgstr "Servidor:"
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "Certificate:"
-msgstr "Certificado:"
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "its own, pinned by the fingerprint %1"
-msgstr "propio, fijado por la huella %1"
-
-#: apps/wprs-app/qml/AccountSummary.qml
 msgid "its own, pinned"
 msgstr "propio, fijado"
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "Account:"
-msgstr "Cuenta:"
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "This computer:"
-msgstr "Este equipo:"
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "%1, named %2 for your devices"
-msgstr "%1, que tus equipos ven como %2"
 
 #: apps/wprs-app/qml/AccountSummary.qml apps/wprs-app/qml/ProviderCard.qml
 msgid "State:"
@@ -684,16 +443,8 @@ msgid "Last sync:"
 msgstr "Última sincronización:"
 
 #: apps/wprs-app/qml/AccountSummary.qml
-msgid "Storage:"
-msgstr "Espacio:"
-
-#: apps/wprs-app/qml/AccountSummary.qml
 msgid "%1 of %2"
 msgstr "%1 de %2"
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "Syncs:"
-msgstr "Se sincroniza:"
 
 #: apps/wprs-app/qml/AccountSummary.qml
 msgid ""
@@ -704,20 +455,12 @@ msgstr ""
 "biblioteca, las listas, los perfiles, los preajustes y los ajustes."
 
 #: apps/wprs-app/qml/AccountSummary.qml
-msgid "Stays on each computer:"
-msgstr "Queda en cada equipo:"
-
-#: apps/wprs-app/qml/AccountSummary.qml
 msgid ""
 "Which wallpaper is set on each screen and how it is placed, and the settings "
 "that depend on the computer."
 msgstr ""
 "Qué fondo está puesto en cada pantalla y cómo se coloca, y los ajustes que "
 "dependen del equipo."
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "Wallpaper files:"
-msgstr "Archivos de fondos:"
 
 #: apps/wprs-app/qml/AccountSummary.qml
 msgid ""
@@ -728,16 +471,8 @@ msgstr ""
 "equipos los descargan desde la Biblioteca o desde aquí."
 
 #: apps/wprs-app/qml/AccountSummary.qml
-msgid "Skipped records:"
-msgstr "Registros omitidos:"
-
-#: apps/wprs-app/qml/AccountSummary.qml
 msgid "%1 records cannot be decrypted with this key and are skipped"
 msgstr "%1 registros no se pueden descifrar con esta clave y se omiten"
-
-#: apps/wprs-app/qml/AccountSummary.qml
-msgid "Waiting changes:"
-msgstr "Cambios pendientes:"
 
 #: apps/wprs-app/qml/AccountSummary.qml
 msgid ""
@@ -17546,17 +17281,6 @@ msgstr ""
 "imágenes, viajan por la red sin cifrar."
 
 msgid ""
-"This computer could not keep its access to the server because no system "
-"keyring is available. Start or unlock your keyring and link again. If this"
-" computer has none, you can keep it in a private file instead: anyone who "
-"can read your files could then use it."
-msgstr ""
-"Este equipo no pudo guardar su acceso al servidor porque no hay ningún "
-"llavero del sistema disponible. Inicia o desbloquea tu llavero y vuelve a "
-"enlazar. Si este equipo no tiene ninguno, puedes guardarlo en un archivo "
-"privado: quien pueda leer tus archivos podría usarlo."
-
-msgid ""
 "This computer keeps its secrets (the passwords and API keys of providers, "
 "and its access to the sync server) in a private file, not in the system "
 "keyring: whoever can read your files can use them."
@@ -19925,3 +19649,340 @@ msgstr "Puede que se haya movido o que esté en un disco que ahora no está cone
 
 msgid "Last change: at once, without a transition."
 msgstr "Último cambio: de golpe, sin transición."
+
+msgid "Devices of the account"
+msgstr "Equipos de la cuenta"
+
+msgid "Repositories of your other devices"
+msgstr "Repositorios de tus otros equipos"
+
+msgid "Could not read the account"
+msgstr "No se pudo leer la cuenta"
+
+msgid "The wallpaper service did not answer. It may still be starting."
+msgstr "El servicio de fondos no respondió. Puede que todavía esté arrancando."
+
+msgid "A wallpaper-rs server gives you its repositories to browse, install and vote, and can keep your library, playlists and settings the same on your devices, encrypted end to end."
+msgstr "Un servidor de wallpaper-rs te da sus repositorios para explorar, instalar y votar, y puede mantener tu biblioteca, tus listas y tus ajustes iguales en tus equipos, cifrados de extremo a extremo."
+
+msgid "Add a server…"
+msgstr "Añadir un servidor…"
+
+msgid "Repositories, browse, install and vote"
+msgstr "Repositorios, explorar, instalar y votar"
+
+msgid "not connected"
+msgstr "sin conectar"
+
+msgid "Sync my library"
+msgstr "Sincronizar mi biblioteca"
+
+msgid "Wallpapers, playlists and settings, between your devices"
+msgstr "Fondos, listas y ajustes, entre tus equipos"
+
+msgid "connect first"
+msgstr "conecta primero"
+
+msgid "Get the key from another device"
+msgstr "Recibir la clave de otro equipo"
+
+msgid "This device needs the key of a device that already syncs"
+msgstr "Este equipo necesita la clave de uno que ya sincroniza"
+
+msgid "choose the device"
+msgstr "elige el equipo"
+
+msgid "Another device is waiting"
+msgstr "Otro equipo está esperando"
+
+msgid "Check that both screens show the same number"
+msgstr "Comprueba que las dos pantallas muestren el mismo número"
+
+msgid "%1 devices"
+msgstr "%1 equipos"
+
+msgid "%1 to add"
+msgstr "%1 para añadir"
+
+msgid "none to add"
+msgstr "nada para añadir"
+
+msgid "Another device, recovery passphrase…"
+msgstr "Otro dispositivo, frase de recuperación…"
+
+msgid "Server, certificate, storage"
+msgstr "Servidor, certificado, almacenamiento"
+
+msgid "This computer could not keep its access to the server because no system keyring is available. Start or unlock your keyring and connect again. If this computer has none, you can keep it in a private file instead: anyone who can read your files could then use it."
+msgstr "Este equipo no pudo guardar su acceso al servidor porque no hay un llavero del sistema disponible. Inicia o desbloquea tu llavero y vuelve a conectar. Si este equipo no tiene uno, puedes guardarlo en un archivo privado: cualquiera que pueda leer tus archivos podría usarlo."
+
+msgid "The connection was refused on the server. Connect again when you are ready to approve it on your own device."
+msgstr "El servidor rechazó la conexión. Vuelve a conectar cuando estés listo para aprobarla en tu propio equipo."
+
+msgid "The code was not approved in time. Connect again to get a new code."
+msgstr "El código no se aprobó a tiempo. Vuelve a conectar para recibir uno nuevo."
+
+msgid "This account syncs without end-to-end encryption, so syncing was not turned on. Allow it under More only if you accept that the operator of the server can read your synced data."
+msgstr "Esta cuenta sincroniza sin cifrado de extremo a extremo, así que la sincronización no se activó. Permítelo en Más solo si aceptas que quien opera el servidor pueda leer lo que sincronizas."
+
+msgid "This computer could not be connected. Check that the server can be reached and connect again."
+msgstr "No se pudo conectar este equipo. Comprueba que el servidor esté accesible y vuelve a conectar."
+
+msgid "This computer is not connected"
+msgstr "Este equipo no está conectado"
+
+msgid "Connect again…"
+msgstr "Volver a conectar…"
+
+msgid "The server no longer accepts this computer"
+msgstr "El servidor ya no acepta este equipo"
+
+msgid "It was removed from the account or the account was deleted. Remove the server here and connect this computer again to keep syncing."
+msgstr "Se quitó de la cuenta o la cuenta se borró. Quita aquí el servidor y vuelve a conectar este equipo para seguir sincronizando."
+
+msgid "The last sync failed"
+msgstr "Falló la última sincronización"
+
+msgid "Your library stays as it is on this computer. Sync is tried again by itself; you can also try now."
+msgstr "Tu biblioteca sigue igual en este equipo. La sincronización se reintenta sola; también puedes intentarlo ahora."
+
+msgid "The address of the server. A server at home with its own certificate also needs its fingerprint."
+msgstr "La dirección del servidor. Un servidor en casa con certificado propio necesita también su huella."
+
+msgid "Address of the server"
+msgstr "Dirección del servidor"
+
+msgid "Connect this computer"
+msgstr "Conectar este equipo"
+
+msgid "The server shows a code to approve with your account. Connecting gives you its repositories; your library is synced only when you turn it on."
+msgstr "El servidor muestra un código para aprobar con tu cuenta. Al conectar recibes sus repositorios; tu biblioteca se sincroniza solo cuando lo activas."
+
+msgid "Remove server?"
+msgstr "¿Quitar el servidor?"
+
+msgid "This computer leaves the account and stops syncing. Your library stays here."
+msgstr "Este equipo sale de la cuenta y deja de sincronizar. Tu biblioteca se queda aquí."
+
+msgid "Reset synced data?"
+msgstr "¿Reiniciar los datos sincronizados?"
+
+msgid "The server will keep the sync key locked with this passphrase, so that a new device can get it when no device is left. Whoever gets a copy of the server's data can try to guess it without limit: use at least 20 characters, several unrelated words that you use nowhere else, and keep them somewhere safe."
+msgstr "El servidor guardará la clave de sincronización cerrada con esta frase, para que un equipo nuevo pueda recibirla cuando no quede ninguno. Quien consiga una copia de los datos del servidor puede intentar adivinarla sin límite: usa al menos 20 caracteres, varias palabras sin relación que no uses en ningún otro sitio, y guárdalas en un lugar seguro."
+
+msgid "Remove the recovery passphrase?"
+msgstr "¿Quitar la frase de recuperación?"
+
+msgid "Approve another device"
+msgstr "Aprobar otro equipo"
+
+msgid "Code shown by the new device"
+msgstr "Código que muestra el equipo nuevo"
+
+msgid "Let %1 sync"
+msgstr "Dejar que %1 sincronice"
+
+msgid "another device"
+msgstr "otro equipo"
+
+msgid "This computer shows %1. Check that both screens show the same number, then type the one that %2 shows: the key leaves only when both match."
+msgstr "Este equipo muestra %1. Comprueba que las dos pantallas muestren el mismo número y escribe el que muestra %2: la clave sale solo cuando coinciden."
+
+msgid "Remove %1 from the account?"
+msgstr "¿Quitar %1 de la cuenta?"
+
+msgid "This device can no longer sync with your account, and the sync key is replaced so that it cannot read what you sync from now on. Do it for a device you lost or no longer use."
+msgstr "Ese equipo ya no podrá sincronizar con tu cuenta, y la clave de sincronización se reemplaza para que no pueda leer lo que sincronices desde ahora. Hazlo con un equipo que perdiste o que ya no usas."
+
+msgid "An account that signs in through single sign-on removes devices on the account page of the server."
+msgstr "Una cuenta que entra con inicio de sesión único quita equipos en la página de la cuenta del servidor."
+
+msgid "Let it sync…"
+msgstr "Dejar que sincronice…"
+
+msgid "added %1"
+msgstr "añadido %1"
+
+msgid "This device never finished connecting, so it cannot receive the key. Remove it if you no longer use it."
+msgstr "Este equipo nunca terminó de conectarse, así que no puede recibir la clave. Quítalo si ya no lo usas."
+
+msgid "Connected, you browse, install and vote on its repositories. Your library is synced only when you turn syncing on."
+msgstr "Conectado, exploras, instalas y votas en sus repositorios. Tu biblioteca se sincroniza solo cuando activas la sincronización."
+
+msgid "Certificate"
+msgstr "Certificado"
+
+msgid "public"
+msgstr "público"
+
+msgid "Pinned by the fingerprint %1"
+msgstr "Fijado por la huella %1"
+
+msgid "The server shows a certificate that any device trusts."
+msgstr "El servidor muestra un certificado en el que confía cualquier equipo."
+
+msgid "Connect this computer…"
+msgstr "Conectar este equipo…"
+
+msgid "Approve a code with your account"
+msgstr "Aprueba un código con tu cuenta"
+
+msgid "Code for the phone"
+msgstr "Código para el teléfono"
+
+msgid "The address and the fingerprint, nothing secret"
+msgstr "La dirección y la huella, nada secreto"
+
+msgid "This computer leaves the account"
+msgstr "Este equipo sale de la cuenta"
+
+msgid "Connect your phone"
+msgstr "Conecta tu teléfono"
+
+msgid "Scan it with the wallpaper-rs app on your phone: it adds this server and checks its certificate. It carries no key and no password."
+msgstr "Escanéalo con la app de wallpaper-rs en tu teléfono: añade este servidor y comprueba su certificado. No lleva ninguna clave ni contraseña."
+
+msgid "Code with the address of the server"
+msgstr "Código con la dirección del servidor"
+
+msgid "Nothing to add"
+msgstr "Nada para añadir"
+
+msgid "Repositories that you add on your other devices wait here until you choose whether to add them on this computer."
+msgstr "Los repositorios que añades en tus otros equipos esperan aquí hasta que eliges si los añades en este."
+
+msgid "add it here?"
+msgstr "¿añadirlo aquí?"
+
+msgid "Its key starts with %1. Add it only if you added it yourself on another device."
+msgstr "Su clave empieza por %1. Añádelo solo si lo añadiste tú en otro equipo."
+
+msgid "Another device"
+msgstr "Otro dispositivo"
+
+msgid "Approve another device…"
+msgstr "Aprobar otro equipo…"
+
+msgid "A new device of yours shows a code"
+msgstr "Un equipo nuevo tuyo muestra un código"
+
+msgid "Check that both screens show the same number before you approve."
+msgstr "Comprueba que las dos pantallas muestren el mismo número antes de aprobar."
+
+msgid "Remove the passphrase…"
+msgstr "Quitar la frase…"
+
+msgid "Encryption"
+msgstr "Cifrado"
+
+msgid "Allow syncing without encryption"
+msgstr "Permitir sincronizar sin cifrado"
+
+msgid "Only for an account that already syncs that way"
+msgstr "Solo para una cuenta que ya sincroniza así"
+
+msgid "This account syncs without encryption"
+msgstr "Esta cuenta sincroniza sin cifrado"
+
+msgid "Sync key and server"
+msgstr "Clave de sincronización y servidor"
+
+msgid "Every device of the account gets the new key at its next sync."
+msgstr "Cada equipo de la cuenta recibe la clave nueva en su próxima sincronización."
+
+msgid "This computer"
+msgstr "Este equipo"
+
+msgid "%1 for the server"
+msgstr "%1 para el servidor"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "Last sync: %1"
+msgstr "Última sincronización: %1"
+
+msgid "What syncs"
+msgstr "Qué se sincroniza"
+
+msgid "What stays on each computer"
+msgstr "Qué queda en cada equipo"
+
+msgid "Wallpaper files"
+msgstr "Archivos de fondos"
+
+msgid "Skipped records"
+msgstr "Registros omitidos"
+
+msgid "Waiting changes"
+msgstr "Cambios en espera"
+
+msgid "The last sync stopped with this error."
+msgstr "La última sincronización se detuvo con este error."
+
+msgid "Remove %1 from the server?"
+msgstr "¿Quitar %1 del servidor?"
+
+msgid "never synced"
+msgstr "nunca sincronizado"
+
+msgid "synced just now"
+msgstr "sincronizado hace un momento"
+
+msgid "synced %1 min ago"
+msgstr "sincronizado hace %1 min"
+
+msgid "synced %1 h ago"
+msgstr "sincronizado hace %1 h"
+
+msgid "synced %1"
+msgstr "sincronizado %1"
+
+msgid "Connected to %1"
+msgstr "Conectado a %1"
+
+msgid "Server added · this computer is not connected yet"
+msgstr "Servidor añadido · este equipo todavía no está conectado"
+
+msgid "Open %1 and enter the code %2"
+msgstr "Abre %1 y escribe el código %2"
+
+msgid "Waiting for the approval of the code"
+msgstr "Esperando la aprobación del código"
+
+msgid "Connected · not syncing"
+msgstr "Conectado · sin sincronizar"
+
+msgid "waiting for the key"
+msgstr "esperando la clave"
+
+msgid "sync paused"
+msgstr "sincronización en pausa"
+
+msgid "the last sync failed"
+msgstr "falló la última sincronización"
+
+msgid "This computer can no longer sync"
+msgstr "Este equipo ya no puede sincronizar"
+
+msgid "not encrypted"
+msgstr "sin cifrar"
+
+msgid "encrypted"
+msgstr "cifrado"
+
+msgid "Connect this computer to the server first. Connecting alone sends nothing of your library."
+msgstr "Conecta primero este equipo al servidor. Conectar por sí solo no envía nada de tu biblioteca."
+
+msgid "Connected, not syncing: you browse and install from the server, and nothing of your library leaves this computer. Turn it on to keep your devices the same."
+msgstr "Conectado, sin sincronizar: exploras e instalas desde el servidor, y nada de tu biblioteca sale de este equipo. Actívala para mantener tus equipos iguales."
+
+msgid "Your devices keep the same things, encrypted: the server cannot read them. Pausing deletes nothing; resume whenever you like."
+msgstr "Tus equipos guardan lo mismo, cifrado: el servidor no puede leerlo. Pausarla no borra nada; la retomas cuando quieras."
+
+msgctxt "sync of the library"
+msgid "On"
+msgstr "En marcha"
+
+msgid "one device"
+msgstr "un equipo"

@@ -36,8 +36,7 @@ ColumnLayout {
         }
     }
 
-    Kirigami.Heading {
-        level: 3
+    Seccion {
         text: App.tr("Private files")
     }
 
@@ -94,11 +93,14 @@ ColumnLayout {
             }
 
             QQC2.Button {
+                id: drop
+
                 visible: modelData.stored
                 text: App.tr("Remove from the server")
                 icon.name: "edit-delete"
                 onClicked: {
                     dropper.file = modelData;
+                    dropper.opener = drop;
                     dropper.open();
                 }
             }
@@ -117,19 +119,17 @@ ColumnLayout {
         onAccepted: App.act("ShareFiles", [[App.path(selectedFolder)], true], "Sync1")
     }
 
-    Kirigami.Dialog {
+    PanelChico {
         id: dropper
 
         property var file: ({})
 
-        title: App.tr("Remove %1 from the server", dropper.file.name ?? "")
-        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
+        title: App.tr("Remove %1 from the server?", dropper.file.name ?? "")
+        text: dropper.file.item ? App.tr("The other devices can no longer download it; this computer keeps its copy.") : App.tr("No device holds this file: once it leaves the server it is lost for good.")
+        quiet: App.tr("Cancel")
+        principal: App.tr("Remove from the server")
+        principalIcon: "trash"
+        borra: true
         onAccepted: App.act("ShareFiles", [[dropper.file.shared ? dropper.file.item : dropper.file.id], false], "Sync1")
-
-        QQC2.Label {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 24
-            wrapMode: Text.Wrap
-            text: dropper.file.item ? App.tr("The other devices can no longer download it; this computer keeps its copy.") : App.tr("No device holds this file: once it leaves the server it is lost for good.")
-        }
     }
 }

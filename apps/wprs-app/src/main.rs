@@ -8,6 +8,7 @@ mod callmacro;
 mod calls;
 mod checkrun;
 mod choices;
+mod connectcode;
 mod covers;
 mod depth;
 mod depthproc;

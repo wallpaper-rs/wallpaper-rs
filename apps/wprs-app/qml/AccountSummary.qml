@@ -1,107 +1,94 @@
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.FormLayout {
+FocusScope {
     id: summary
 
-    required property var account
-    property bool expanded
+    property var page: null
+    readonly property var account: page && page.account ? page.account : ({})
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Server:")
-        text: [summary.account.name, summary.account.url].filter(t => t).join(" · ")
+    function enter() {
+        first.forceActiveFocus(Qt.TabFocusReason);
     }
 
-    RowLayout {
-        Kirigami.FormData.label: App.tr("Certificate:")
-        visible: (summary.account.pin ?? "") !== ""
+    width: parent ? parent.width : 0
+    height: list.height
 
-        QQC2.Label {
-            Layout.fillWidth: true
-            wrapMode: Text.WrapAnywhere
-            text: summary.expanded ? App.tr("its own, pinned by the fingerprint %1", summary.account.pin ?? "") : App.tr("its own, pinned")
+    Filas {
+        id: list
+
+        Fila {
+            id: first
+
+            text: App.tr("Server")
+            value: summary.account.name || ""
+            note: summary.account.url || ""
         }
 
-        QQC2.ToolButton {
-            icon.name: "documentinfo"
-            text: App.tr("Details…")
-            display: QQC2.AbstractButton.IconOnly
-            QQC2.ToolTip.text: text
-            QQC2.ToolTip.visible: hovered
-            checkable: true
-            checked: summary.expanded
-            onToggled: summary.expanded = checked
+        Fila {
+            visible: (summary.account.pin || "") !== ""
+            text: App.tr("Certificate")
+            value: App.tr("its own, pinned")
+            explain: App.tr("Pinned by the fingerprint %1", summary.account.pin || "")
         }
-    }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Account:")
-        text: summary.account.handle ?? "–"
-    }
+        Fila {
+            text: App.tr("Account")
+            value: summary.account.handle || "–"
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("This computer:")
-        text: summary.account.device ? App.tr("%1, named %2 for your devices", summary.account.device, summary.account.label) : "–"
-    }
+        Fila {
+            text: App.tr("This computer")
+            value: summary.account.device ? summary.account.label : "–"
+            note: summary.account.device ? App.tr("%1 for the server", summary.account.device) : ""
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("State:")
-        text: App.value(summary.account.state)
-    }
+        Fila {
+            text: App.tr("State")
+            value: App.value(summary.account.state || "")
+            note: App.tr("Last sync: %1", App.time(summary.account.last_sync) || "–")
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Last sync:")
-        text: App.time(summary.account.last_sync) || "–"
-    }
+        Fila {
+            text: App.tr("Storage")
+            value: App.tr("%1 of %2", App.bytes(summary.account.used_bytes || 0), App.bytes(summary.account.quota_bytes || 0))
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Storage:")
-        text: App.tr("%1 of %2", App.bytes(summary.account.used_bytes ?? 0), App.bytes(summary.account.quota_bytes ?? 0))
-    }
+        Fila {
+            text: App.tr("What syncs")
+            explain: App.tr("Titles, tags, ratings, favorites and image edits of your library, playlists, profiles, presets and settings.")
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Syncs:")
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-        wrapMode: Text.Wrap
-        text: App.tr("Titles, tags, ratings, favorites and image edits of your library, playlists, profiles, presets and settings.")
-    }
+        Fila {
+            text: App.tr("What stays on each computer")
+            explain: App.tr("Which wallpaper is set on each screen and how it is placed, and the settings that depend on the computer.")
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Stays on each computer:")
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-        wrapMode: Text.Wrap
-        text: App.tr("Which wallpaper is set on each screen and how it is placed, and the settings that depend on the computer.")
-    }
+        Fila {
+            text: App.tr("Wallpaper files")
+            explain: App.tr("Only the ones you send with “Send files to my other computers”; your other computers download them from the Library or from here.")
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Wallpaper files:")
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-        wrapMode: Text.Wrap
-        text: App.tr("Only the ones you send with “Send files to my other computers”; your other computers download them from the Library or from here.")
-    }
+        Fila {
+            visible: (summary.account.quarantined || 0) > 0
+            text: App.tr("Skipped records")
+            value: String(summary.account.quarantined || 0)
+            explain: App.tr("%1 records cannot be decrypted with this key and are skipped", summary.account.quarantined || 0)
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Skipped records:")
-        visible: (summary.account.quarantined ?? 0) > 0
-        text: App.tr("%1 records cannot be decrypted with this key and are skipped", summary.account.quarantined ?? 0)
-        wrapMode: Text.Wrap
-    }
+        Fila {
+            visible: (summary.account.unapplied || 0) > 0
+            text: App.tr("Waiting changes")
+            value: String(summary.account.unapplied || 0)
+            explain: App.tr("%1 changes from other devices cannot be applied here yet; they are tried again at every sync", summary.account.unapplied || 0)
+        }
 
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Waiting changes:")
-        visible: (summary.account.unapplied ?? 0) > 0
-        text: App.tr("%1 changes from other devices cannot be applied here yet; they are tried again at every sync", summary.account.unapplied ?? 0)
-        wrapMode: Text.Wrap
-    }
-
-    QQC2.Label {
-        Kirigami.FormData.label: App.tr("Error:")
-        visible: !!summary.account.last_error
-        text: summary.account.last_error ?? ""
-        color: Look.coral
-        wrapMode: Text.Wrap
+        Fila {
+            visible: !!summary.account.last_error
+            text: App.tr("Error")
+            status: summary.account.last_error || ""
+            statusTone: "coral"
+            explain: App.tr("The last sync stopped with this error.")
+        }
     }
 }

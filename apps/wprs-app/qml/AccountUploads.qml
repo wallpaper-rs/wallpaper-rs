@@ -26,8 +26,7 @@ ColumnLayout {
         }
     }
 
-    Kirigami.Heading {
-        level: 3
+    Seccion {
         text: App.tr("Your uploads")
     }
 

@@ -149,6 +149,8 @@ calls! {
         AddServer add_server(url: str);
         AddPinnedServer add_pinned_server(url: str, fingerprint: str);
         Link link(name: str, plaintext: bool);
+        Connect connect(name: str);
+        SetSyncing set_syncing(on: bool, plaintext: bool);
         PreviewCode preview_code(user_code: str);
         Approve approve(user_code: str);
         ApproveDevice approve_device(user_code: str, password: str);
