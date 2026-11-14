@@ -16,7 +16,7 @@ Column {
     readonly property var job: pkg ? installer.running(pkg) : null
     readonly property bool here: pkg ? notes.here(pkg) : false
     readonly property bool older: pkg ? notes.older(pkg) : false
-    readonly property bool own: pkg ? pkg.own !== undefined : false
+    readonly property bool own: !!p.own
     readonly property alias main: main
     readonly property alias second: second
     readonly property alias more: more
@@ -69,9 +69,9 @@ Column {
             id: main
 
             highlighted: !row.older
-            text: row.catalog.veiled(row.p) ? App.tr("Show the picture") : row.own || row.p.update ? App.tr("Update to %1", row.own ? row.p.own?.update : notes.newest(row.p)) : row.older ? App.tr("Install the older one…") : row.here || row.catalog.fresh ? App.tr("Set as wallpaper") : App.tr("Install")
-            icon.name: row.catalog.veiled(row.p) ? "eye" : row.own || row.p.update ? "arrow-circle-up" : row.older ? "clock-counter-clockwise" : row.here || row.catalog.fresh ? "image" : "download-simple"
-            visible: !(row.own && !row.p.own?.update)
+            text: row.catalog.veiled(row.p) ? App.tr("Show the picture") : row.p.own || row.p.update ? App.tr("Update to %1", row.p.own ? row.p.own.update : notes.newest(row.p)) : row.older ? App.tr("Install the older one…") : row.here || row.catalog.fresh ? App.tr("Set as wallpaper") : App.tr("Install")
+            icon.name: row.catalog.veiled(row.p) ? "eye" : row.p.own || row.p.update ? "arrow-circle-up" : row.older ? "clock-counter-clockwise" : row.here || row.catalog.fresh ? "image" : "download-simple"
+            visible: !(row.p.own && !row.p.own.update)
             onClicked: row.act()
         }
 
