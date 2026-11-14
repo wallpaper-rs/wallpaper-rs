@@ -73,6 +73,11 @@ Item {
                     alignment: Qt.AlignRight
                     actions: frame.page?.actions ?? []
                 }
+
+                Loader {
+                    active: !!(frame.page && frame.page.head)
+                    sourceComponent: frame.page && frame.page.head ? frame.page.head : null
+                }
             }
 
             Row {
