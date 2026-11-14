@@ -97,5 +97,4 @@ pub const TEXTS: super::Texts = &[
         "There you see the health of the server; the invitations are in People.",
         "Allí ves la salud del servidor; las invitaciones están en Personas.",
     ),
-    ("setup", "configuración inicial"),
 ];

@@ -7,7 +7,7 @@ mod size;
 mod steps;
 
 #[allow(unused_imports)]
-pub use blocks::{copyable, copyable_with, empty, fold, notice, section};
+pub use blocks::{copyable, copyable_with, empty, fix_fold, fold, notice, section};
 #[allow(unused_imports)]
 pub use case::{back_link, case_head, confirm, subheading};
 #[allow(unused_imports)]

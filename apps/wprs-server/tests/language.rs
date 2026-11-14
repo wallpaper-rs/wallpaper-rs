@@ -60,10 +60,14 @@ async fn the_account_and_administration_pages_speak_spanish() {
             && english.contains("aria-current=\"page\"")
     );
     let (_, _, admin_es) = page(&server, "/admin", &admin, Some("es")).await;
-    for word in ["Administración", "Invitaciones", "Cuentas", "Crear invitación", "Fondos destacados"] {
+    for word in ["Administración", "Salud", "Última copia de seguridad", "Personas", "Avanzado"] {
         assert!(admin_es.contains(word), "{word}");
     }
     assert!(admin_es.contains("aria-current=\"page\""));
+    let (_, _, people_es) = page(&server, "/admin/personas", &admin, Some("es")).await;
+    for word in ["Invitaciones", "Cuentas", "Crear invitación", "Quién entra", "Cuántas personas"] {
+        assert!(people_es.contains(word), "{word}");
+    }
     let (_, _, moderation) = page(&server, "/mod", &admin, Some("es")).await;
     assert!(moderation.contains("Bloquear un archivo") && moderation.contains("aria-current=\"page\""));
 }
@@ -95,7 +99,15 @@ async fn no_page_shows_english_when_spanish_was_asked() {
     let server = start(&[]).await;
     let admin = server.admin().await;
     let paths = ["/", "/login", "/register", "/setup", "/legal", "/legal/terms", "/legal/privacy"];
-    let more = ["/legal/content", "/legal/notice", "/legal/counter-notice", "/account", "/admin", "/mod"];
+    let more = [
+        "/legal/content",
+        "/legal/notice",
+        "/legal/counter-notice",
+        "/account",
+        "/admin",
+        "/admin/personas",
+        "/mod",
+    ];
     for path in paths.iter().chain(more.iter()).chain(["/admin/featured", "/link"].iter()) {
         let (_, _, html) = page(&server, path, &admin, Some("es")).await;
         assert!(html.contains("<html lang=\"es\"") || html.is_empty(), "{path}");

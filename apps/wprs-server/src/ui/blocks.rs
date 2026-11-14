@@ -27,6 +27,10 @@ pub fn fold(summary: &str, body: Markup, big: bool) -> Markup {
     html! { details.mas.grande[big] { summary { (summary) } div.mas-cuerpo { (body) } } }
 }
 
+pub fn fix_fold(summary: &str, body: Markup, open: bool) -> Markup {
+    html! { details.mas.arreglo open[open] { summary { (summary) } div.mas-cuerpo { (body) } } }
+}
+
 pub fn copyable(text: &str, label: &str, done: &str) -> Markup {
     copyable_with(text, label, done, Kind::Plain)
 }

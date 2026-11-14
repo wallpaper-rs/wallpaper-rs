@@ -103,7 +103,7 @@ async fn invites_users_and_transparency_need_an_admin() {
         .unwrap();
     assert!(csv.starts_with("category,name,count"));
     let page = server.call(Method::GET, "/admin", &admin).send().await.unwrap().text().await.unwrap();
-    assert!(page.contains("No repository yet"));
+    assert!(page.contains("Health") && !page.contains("Index signature"));
     assert_eq!(
         server.call(Method::GET, "/admin", &Who::Nobody).send().await.unwrap().status(),
         StatusCode::SEE_OTHER

@@ -2,6 +2,7 @@ mod account;
 mod admin;
 mod catalog;
 mod chrome;
+mod keeping;
 mod legal;
 mod own;
 mod policies;
@@ -23,6 +24,7 @@ pub const TEXTS: [Texts; 10] = [
     own::TEXTS,
     setup::TEXTS,
     setup_done::TEXTS,
+    keeping::TEXTS,
 ];
 
 pub const WORDS: Texts = words::WORDS;

@@ -10,7 +10,7 @@ pub const WORDS: super::Texts = &[
     ("false", "no"),
     ("user", "usuario"),
     ("trusted", "de confianza"),
-    ("moderator", "moderador"),
+    ("moderator", "moderación"),
     ("admin", "administración"),
     ("public", "público"),
     ("unlisted", "sin listar"),

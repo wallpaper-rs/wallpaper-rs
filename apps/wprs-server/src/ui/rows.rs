@@ -9,11 +9,12 @@ pub struct Row {
     pub lit: bool,
     pub thumb: Option<String>,
     pub confirm: Option<Markup>,
+    pub more: Option<Markup>,
 }
 
 impl Row {
     pub fn new(name: Markup) -> Self {
-        Row { name, value: None, action: None, lit: false, thumb: None, confirm: None }
+        Row { name, value: None, action: None, lit: false, thumb: None, confirm: None, more: None }
     }
 
     pub fn value(mut self, value: Markup) -> Self {
@@ -36,6 +37,11 @@ impl Row {
         self
     }
 
+    pub fn more(mut self, more: Markup) -> Self {
+        self.more = Some(more);
+        self
+    }
+
     pub fn lit(mut self) -> Self {
         self.lit = true;
         self
@@ -54,6 +60,7 @@ pub fn rows(items: Vec<Row>, compact: bool) -> Markup {
                     }
                     @if let Some(a) = r.action { div.fila-accion { (a) } }
                     @if let Some(c) = r.confirm { (c) }
+                    @if let Some(m) = r.more { (m) }
                 }
             }
         }
