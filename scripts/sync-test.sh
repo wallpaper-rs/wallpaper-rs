@@ -49,7 +49,7 @@ first=$(curl -fsS -b "$jar" "$URL/setup" | grep -o 'register?invite=[0-9a-f]*' |
 [ -n "$first" ] || fail "the access step did not show the first invitation"
 step -d access=invite "$URL/setup/access"
 curl -fsS -o /dev/null -H 'content-type: application/json' "$URL/api/v1/auth/register" \
-  -d "{\"handle\": \"friend\", \"password\": \"friend-horse-battery\", \"invite\": \"$first\"}" ||
+  -d "{\"handle\": \"friend\", \"password\": \"second-horse-staple\", \"invite\": \"$first\"}" ||
   fail "the first invitation did not let a second person in"
 curl -fsS -b "$jar" "$URL/setup" | grep 'Go to Administration' >/dev/null || fail "the setup did not finish"
 api() { curl -fsS -b "$jar" -H 'content-type: application/json' "$@"; }
