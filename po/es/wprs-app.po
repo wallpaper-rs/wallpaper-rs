@@ -19922,6 +19922,12 @@ msgstr "Este equipo nunca terminó de conectarse, así que no puede recibir la c
 msgid "Connected, you browse, install and vote on its repositories. Your library is synced only when you turn syncing on."
 msgstr "Conectado, exploras, instalas y votas en sus repositorios. Tu biblioteca se sincroniza solo cuando activas la sincronización."
 
+msgid "Once your account approves this computer, you browse, install and vote on its repositories."
+msgstr "Cuando tu cuenta apruebe este equipo, vas a poder explorar, instalar y votar en sus repositorios."
+
+msgid "Connect this computer to browse, install and vote on its repositories."
+msgstr "Conecta este equipo para explorar, instalar y votar en sus repositorios."
+
 msgid "Certificate"
 msgstr "Certificado"
 

@@ -7,6 +7,7 @@ FocusScope {
     property var page: null
     readonly property var account: page ? page.account : null
     readonly property string pin: account && account.pin ? account.pin : ""
+    readonly property string phase: account ? account.state ?? "" : ""
     readonly property alias qr: qr
     readonly property alias code: code
 
@@ -26,7 +27,7 @@ FocusScope {
             text: App.tr("Address")
             value: level.account ? level.account.name || level.account.url : ""
             note: level.account && level.account.name ? level.account.url : ""
-            explain: App.tr("Connected, you browse, install and vote on its repositories. Your library is synced only when you turn syncing on.")
+            explain: ["connected", "needs_key", "ready", "paused", "error"].includes(level.phase) ? App.tr("Connected, you browse, install and vote on its repositories. Your library is synced only when you turn syncing on.") : level.phase === "linking" ? App.tr("Once your account approves this computer, you browse, install and vote on its repositories.") : App.tr("Connect this computer to browse, install and vote on its repositories.")
         }
 
         Fila {
