@@ -28,7 +28,12 @@ FocusScope {
     }
 
     implicitHeight: all ? grid.height + fixed.implicitHeight + Look.e5 : shelf.implicitHeight
-    onAllChanged: Qt.callLater(look)
+    onAllChanged: {
+        if (all && grid.currentIndex < 0)
+            grid.currentIndex = Math.max(0, shelf.currentIndex);
+        Qt.callLater(look);
+        Qt.callLater(() => covers && covers.view.forceActiveFocus());
+    }
     Keys.onDownPressed: event => {
         event.accepted = !covers.page.all;
         covers.page.all = true;

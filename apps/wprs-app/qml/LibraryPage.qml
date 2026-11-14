@@ -91,6 +91,7 @@ Kirigami.Page {
 
     title: opened !== "" ? host.item.title ?? "" : App.tr("Library")
     padding: 0
+    background: null
     readonly property var keyHints: opened !== "" ? undefined : choosing ? [{
             "keys": ["Esc"],
             "text": App.tr("Stop choosing")
@@ -173,7 +174,9 @@ Kirigami.Page {
         LibraryState {
             page: page
             bar: bar
-            anchors.fill: parent
+            y: bar.y + bar.height + Look.e6
+            width: parent.width
+            height: Math.max(0, parent.height - y)
         }
     }
 

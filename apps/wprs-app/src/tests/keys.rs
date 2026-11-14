@@ -37,7 +37,9 @@ fn the_library_covers_take_the_keyboard() {
     for needle in ["FocusScope {", "Keys.onDownPressed", "Keys.onEscapePressed", "Qt.Key_A"] {
         assert!(covers.contains(needle), "{needle}");
     }
-    assert!(read("qml/Estante.qml").contains("focus: true") && read("qml/Rejilla.qml").contains("focus: true"));
+    assert!(
+        read("qml/Estante.qml").contains("focus: true") && read("qml/Rejilla.qml").contains("focus: true")
+    );
 }
 
 #[test]

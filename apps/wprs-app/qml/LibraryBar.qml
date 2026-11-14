@@ -2,12 +2,13 @@ import QtQuick
 import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-Row {
+Flow {
     id: bar
 
     required property var tools
     required property int total
     property bool all: false
+    readonly property bool tight: all || width < Look.tapaFoco * 2 + Look.tapa
     property int word: 0
     property string kind
     property string tag
@@ -40,12 +41,12 @@ Row {
     }
 
     spacing: Look.e4
+    width: parent.width
     Component.onCompleted: tagsLoad()
 
     Filtro {
         id: words
 
-        anchors.verticalCenter: parent.verticalCenter
         label: App.tr("Show")
         current: bar.kind === "" && bar.tag === "" ? bar.word : -1
         words: [App.tr("All"), App.tr("Scenes"), App.tr("Pictures"), App.tr("Videos"), App.tr("Favorites")].map((text, index) => index === words.current ? {
@@ -65,7 +66,6 @@ Row {
     QQC2.Button {
         id: more
 
-        anchors.verticalCenter: parent.verticalCenter
         flat: true
         text: bar.kind !== "" ? bar.extra.find(entry => entry.kind === bar.kind).text : bar.tag !== "" ? Labels.tag(bar.tag) : App.tr("More")
         icon.name: "caret-down"
@@ -107,7 +107,6 @@ Row {
     Buscar {
         id: find
 
-        anchors.verticalCenter: parent.verticalCenter
         placeholder: bar.all ? App.tr("Search") : App.tr("Search your library")
         onTextChanged: wait.restart()
         onAccepted: {
@@ -124,18 +123,16 @@ Row {
     }
 
     QQC2.Button {
-        anchors.verticalCenter: parent.verticalCenter
         flat: true
         icon.name: "plus"
         text: App.tr("Add wallpapers…")
-        display: bar.all ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+        display: bar.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
         onClicked: bar.tools.dialogs.importer.open()
         QQC2.ToolTip.text: text
-        QQC2.ToolTip.visible: bar.all && hovered
+        QQC2.ToolTip.visible: bar.tight && hovered
     }
 
     QQC2.Button {
-        anchors.verticalCenter: parent.verticalCenter
         flat: true
         icon.name: bar.all ? "rows" : "squares-four"
         text: bar.all ? App.tr("Show shelf") : App.tr("See all")

@@ -13,5 +13,7 @@ fn a_screen_says_when_its_page_threw_and_why_a_picture_does_not_move() {
         assert!(notes.contains(&format!("\"{word}\":")), "{word} has no note");
     }
     let covers = include_str!("../covers.rs");
-    assert!(covers.contains(r#"tr("The file is missing")"#) && covers.contains(r#"tr("The file is damaged")"#));
+    assert!(
+        covers.contains(r#"tr("The file is missing")"#) && covers.contains(r#"tr("The file is damaged")"#)
+    );
 }
