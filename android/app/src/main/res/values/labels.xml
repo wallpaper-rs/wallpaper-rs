@@ -7,4 +7,19 @@
     <string name="rename">Rename</string>
     <string name="title_label">Title</string>
     <string name="save">Save</string>
+    <string name="tag_word_example">Example</string>
+    <string name="tag_word_water">Water</string>
+    <string name="tag_word_pointer">Touch</string>
+    <string name="tag_word_sound">Sound</string>
+    <string name="tag_word_abstract">Abstract</string>
+    <string name="tag_word_music">Music</string>
+    <string name="tag_word_space">Space</string>
+    <string name="tag_word_script">Script</string>
+    <string name="tag_word_audio">Audio</string>
+    <string name="tag_word_media">Media</string>
+    <string name="tag_word_landscape">Landscape</string>
+    <string name="tag_word_depth">Depth</string>
+    <string name="tag_word_winter">Winter</string>
+    <string name="tag_word_particles">Particles</string>
+    <string name="tag_word_three_d">3D</string>
 </resources>

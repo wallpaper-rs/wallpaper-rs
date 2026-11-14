@@ -50,10 +50,7 @@ internal fun Tint(label: String, value: String, alpha: Boolean, modifier: Modifi
     val rgba = Hex.parse(value, alpha) ?: listOf(0, 0, 0, 255)
     Row(modifier.clickable(enabled) { open = true }, verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(32.dp).background(color(rgba), CircleShape).border(1.dp, MaterialTheme.colorScheme.outline, CircleShape))
-        Column(Modifier.padding(start = 12.dp)) {
-            Text(label, style = MaterialTheme.typography.titleSmall)
-            Text(Hex.format(rgba, alpha), style = MaterialTheme.typography.bodySmall)
-        }
+        Text(label, Modifier.padding(start = 12.dp), style = MaterialTheme.typography.titleSmall)
     }
     if (open) Mixer(label, rgba, alpha, { open = false }) {
         open = false

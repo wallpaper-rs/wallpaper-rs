@@ -24,6 +24,27 @@ import androidx.compose.ui.unit.dp
 
 private const val STARS = 5
 
+private val TAG_WORDS = mapOf(
+    "example" to R.string.tag_word_example,
+    "water" to R.string.tag_word_water,
+    "pointer" to R.string.tag_word_pointer,
+    "sound" to R.string.tag_word_sound,
+    "abstract" to R.string.tag_word_abstract,
+    "music" to R.string.tag_word_music,
+    "space" to R.string.tag_word_space,
+    "script" to R.string.tag_word_script,
+    "audio" to R.string.tag_word_audio,
+    "media" to R.string.tag_word_media,
+    "landscape" to R.string.tag_word_landscape,
+    "depth" to R.string.tag_word_depth,
+    "winter" to R.string.tag_word_winter,
+    "particles" to R.string.tag_word_particles,
+    "3d" to R.string.tag_word_three_d,
+)
+
+@Composable
+fun tagWord(tag: String) = TAG_WORDS[tag.lowercase()]?.let { stringResource(it) } ?: tag
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Labels(main: Main, item: Item) = Column(Modifier.padding(horizontal = 16.dp), Arrangement.spacedBy(4.dp)) {
@@ -41,9 +62,10 @@ fun Labels(main: Main, item: Item) = Column(Modifier.padding(horizontal = 16.dp)
     }
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         item.tags.forEach { tag ->
+            val word = tagWord(tag)
             InputChip(
-                false, { main.act { ask("retag", "uids" to uids, "add" to emptyList<String>(), "remove" to listOf(tag)) } }, { Text(tag) },
-                trailingIcon = { Glyph(Ph.X, stringResource(R.string.tag_remove, tag)) },
+                false, { main.act { ask("retag", "uids" to uids, "add" to emptyList<String>(), "remove" to listOf(tag)) } }, { Text(word) },
+                trailingIcon = { Glyph(Ph.X, stringResource(R.string.tag_remove, word)) },
             )
         }
     }
