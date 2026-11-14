@@ -46,4 +46,5 @@
         <item quantity="one">%d wallpaper updated</item>
         <item quantity="other">%d wallpapers updated</item>
     </plurals>
+    <string name="show_mature">Show mature content without blur</string>
 </resources>

@@ -74,7 +74,6 @@ fun Settings(main: Main, account: () -> Unit = {}) {
 
 private fun stored(main: Main, key: String, value: String) {
     Native.setting(key, value)
-    if (key == Unveil.HIDE) Native.setting(Unveil.KEY, if (value == "true") "false" else "true")
     Unveil.load()
     if (key == Updates.SETTING || key == Updates.AUTO) Updates.schedule(main)
     if (key == Updates.AUTO && value == "true") Native.account("{\"op\": \"refresh_repos\", \"force\": false}")

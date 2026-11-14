@@ -30,7 +30,7 @@ private val QUALITIES = listOf(
 val SETTING_KEYS = listOf(
     "fit", "playback.max_fps", "charger_fps", "pause.on_battery", "playback.lowest_below_percent", "system_colors", "backend",
     "playback.quality", "playback.auto_pace", "playback.hdr", "parallax.fill", Convert.SETTING, "transition.kind", "playback.muted",
-    "playback.duck", "models.allow_download", "playback.allow_flashing", "playback.scene_capture", "library.hide_mature",
+    "playback.duck", "models.allow_download", "playback.allow_flashing", "playback.scene_capture", "library.hide_mature", Unveil.KEY,
     "repos.vote_counts", Updates.SETTING, Updates.AUTO, Sync.NETWORK, VOLUME,
 )
 

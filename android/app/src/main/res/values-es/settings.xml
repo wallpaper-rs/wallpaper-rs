@@ -46,4 +46,5 @@
         <item quantity="one">%d fondo actualizado</item>
         <item quantity="other">%d fondos actualizados</item>
     </plurals>
+    <string name="show_mature">Mostrar el contenido para adultos sin difuminar</string>
 </resources>

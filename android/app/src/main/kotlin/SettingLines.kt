@@ -41,6 +41,7 @@ private val WALLPAPERS = listOf(
     Line(R.string.auto_refresh, Block.Wallpapers, more = true) {
         flip(it, R.string.auto_refresh, Updates.SETTING, "true", "false", stringResource(R.string.auto_refresh_sub))
     },
+    Line(R.string.show_mature, Block.Wallpapers, more = true) { flip(it, R.string.show_mature, Unveil.KEY, "true", "false") },
     Line(R.string.vote_counts, Block.Wallpapers, more = true) { flip(it, R.string.vote_counts, "repos.vote_counts", "true", "false") },
 )
 
