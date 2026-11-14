@@ -62,6 +62,12 @@ Item {
                 Layout.fillWidth: true
                 spacing: Look.e5
 
+                Loader {
+                    active: !!(frame.page && frame.page.badge)
+                    visible: active
+                    sourceComponent: frame.page && frame.page.badge ? frame.page.badge : null
+                }
+
                 Text {
                     text: frame.page?.title ?? ""
                     color: Look.escarcha

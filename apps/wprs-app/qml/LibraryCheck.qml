@@ -78,7 +78,7 @@ QtObject {
 
     function options() {
         page.open(library.uid(0));
-        must(page.skeleton === "options" && page.route.length === 2 && page.actions.length === 2, "the options of a wallpaper do not open in their own panel");
+        must(page.skeleton === "options" && page.route.length === 2 && page.actions.length === 1 && page.head !== null, "the options of a wallpaper do not open in their own panel");
         page.level = "presets";
         must(page.route.length === 3 && page.route[2] === App.tr("My presets"), "the level My presets of the options is not in the route");
         page.level = "more";

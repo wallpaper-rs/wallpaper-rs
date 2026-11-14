@@ -94,6 +94,8 @@ Kirigami.Page {
     background: null
     readonly property var keyHints: opened !== "" ? undefined : state.starting ? state.start.hints : covers.hints
     actions: opened !== "" ? panel.actions : []
+    readonly property Component badge: opened !== "" ? panel.badge : null
+    readonly property Component head: opened !== "" ? panel.head : null
     readonly property var screens: App.state.outputs ?? {}
     onScreensChanged: shown()
     Component.onCompleted: {
