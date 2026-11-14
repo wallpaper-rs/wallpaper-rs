@@ -1,132 +1,117 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-RowLayout {
+Column {
     id: row
 
-    required property var modelData
+    required property var pkg
     required property var catalog
-    readonly property bool veiled: modelData.content === "mature" && !modelData.revealed && !row.catalog.shown[modelData.repo_id + "/" + modelData.id] && !App.unveiled
-    readonly property bool here: modelData.installed.includes(version.currentText)
-    readonly property bool wants: (pointer.hovered || cover.activeFocus || version.activeFocus || install.activeFocus) && !veiled && !row.catalog.battery && modelData.photosensitive !== true
+    required property Installer installer
+    property bool open
+    property bool folds: true
+    readonly property var job: pkg ? installer.running(pkg) : null
+    readonly property bool here: pkg ? notes.here(pkg) : false
+    readonly property bool older: pkg ? notes.older(pkg) : false
+    readonly property bool own: pkg ? pkg.own !== undefined : false
+    readonly property alias main: main
+    readonly property alias second: second
+    readonly property alias more: more
 
-    function reveal() {
-        const key = row.modelData.repo_id + "/" + row.modelData.id;
-        row.catalog.shown = Object.assign({}, row.catalog.shown, {
-                [key]: true
+    signal details
+
+    function act() {
+        if (row.catalog.veiled(row.pkg))
+            return row.catalog.reveal(row.pkg);
+        if (row.own || row.pkg.update)
+            return row.installer.update(row.pkg);
+        if (row.older)
+            return row.installer.install(row.pkg, row.pkg.versions[row.pkg.versions.length - 1], false, main, false, false);
+        if (row.here)
+            return row.installer.apply({
+                "repo": row.pkg.repo_id,
+                "id": row.pkg.id,
+                "title": row.pkg.title
             });
-        App.act("Reveal", [key], "Repos1");
+        row.installer.install(row.pkg, row.catalog.versions[row.pkg.repo_id + "/" + row.pkg.id] ?? "", row.catalog.fresh, main, false, false);
     }
 
-    onWantsChanged: {
-        if (wants)
-            row.catalog.animate(modelData);
+    spacing: Look.e3
+
+    BrowseNotes {
+        id: notes
     }
 
-    Image {
-        id: cover
-
-        readonly property bool keyTarget: row.veiled
-
-        Layout.preferredWidth: Kirigami.Units.gridUnit * 8
-        Layout.preferredHeight: Kirigami.Units.gridUnit * 5
-        source: App.url(row.catalog.previews[row.catalog.spec(row.modelData)] ?? "")
-        asynchronous: true
-        fillMode: Image.PreserveAspectCrop
-        sourceSize: row.veiled ? Qt.size(12, 12) : undefined
-        activeFocusOnTab: row.veiled
-        Accessible.role: Accessible.Button
-        Accessible.name: App.tr("Show the mature content")
-        Keys.onPressed: event => {
-            if (row.veiled && [Qt.Key_Return, Qt.Key_Enter, Qt.Key_Space].includes(event.key)) {
-                row.reveal();
-                event.accepted = true;
-            }
-        }
-
-        Rectangle {
-            anchors.fill: parent
-            visible: cover.activeFocus
-            color: "transparent"
-            border.color: Kirigami.Theme.focusColor
-            border.width: 3
-        }
-
-        HoverHandler {
-            id: pointer
-        }
-
-        AnimatedImage {
-            anchors.fill: parent
-            visible: row.wants && status === AnimatedImage.Ready
-            source: row.wants ? App.url(row.catalog.moving[row.catalog.spec(row.modelData)] ?? "") : ""
-            playing: visible && row.Window.visibility !== Window.Hidden
-            cache: false
-            fillMode: Image.PreserveAspectCrop
-        }
-
-        TapHandler {
-            enabled: row.veiled
-            onTapped: row.reveal()
-        }
+    Estado {
+        visible: row.older && !row.job
+        text: App.tr("Installed · the repository offers an older version")
+        tone: "brote"
+        icon: "check-circle"
     }
 
-    ColumnLayout {
-        Layout.fillWidth: true
-
-        Kirigami.Heading {
-            level: 4
-            text: (row.modelData.featured ? App.tr("Featured") + " · " : "") + row.modelData.title + " · " + Labels.value(row.modelData.kind)
-            textFormat: Text.PlainText
-        }
-
-        QQC2.Label {
-            Layout.fillWidth: true
-            wrapMode: Text.Wrap
-            textFormat: Text.PlainText
-            text: [row.modelData.content ? App.plain(row.modelData.description) : row.modelData.description, row.modelData.authors.join(", ") + " · " + row.modelData.license + " · " + App.bytes(row.modelData.size), row.modelData.id + " · " + row.modelData.repo_name, row.modelData.installed.length > 0 ? App.tr("Installed: %1", row.modelData.installed.join(", ")) : "", row.modelData.update && row.modelData.changes ? App.tr("What's new: %1", App.plain(row.modelData.changes)) : "", row.veiled ? App.tr("Mature content: click the picture or press Enter on it to show it") : ""].filter(t => t).join("\n")
-        }
-
-        QQC2.Label {
-            Layout.fillWidth: true
-            visible: row.modelData.photosensitive === true
-            wrapMode: Text.Wrap
-            textFormat: Text.PlainText
-            color: Look.coral
-            text: row.modelData.flash_disabled ? App.tr("Flashes and is disabled: allow wallpapers that flash in the settings.") : App.tr("Flashes or shows fast patterns that can trigger seizures in people with photosensitive epilepsy.")
-        }
-
-        BrowseVotes {
-            readonly property string spec: row.modelData.repo_id + "/" + row.modelData.id
-            visible: row.catalog.voteRepo !== "" && row.modelData.repo_id === row.catalog.voteRepo
-            counts: row.catalog.votes[spec] ?? null
-            shown: row.catalog.counted
-            onVoted: found => row.catalog.votes = Object.assign({}, row.catalog.votes, Object.fromEntries([[spec, found]]))
-            packageId: spec
-        }
-
-        PrivacyNotice {
-            Layout.fillWidth: true
-            exposes: row.modelData.kind === "web" ? ["zone", "language", "gpu"] : []
-        }
+    Progreso {
+        visible: row.job !== null
+        width: Look.progresoInstala
+        text: App.tr("Installing “%1”…", row.pkg ? row.pkg.title : "")
+        count: row.job && row.job.total > 0 ? App.tr("%1 of %2", App.bytes(row.job.done), App.bytes(row.job.total)) : ""
+        value: row.job && row.job.total > 0 ? row.job.done / row.job.total : 0
+        indeterminate: !row.job || row.job.total === 0
     }
 
-    QQC2.ComboBox {
-        id: version
+    Row {
+        visible: row.job === null
+        spacing: Look.e3
 
-        model: row.modelData.versions
-        currentIndex: count - 1
-    }
+        QQC2.Button {
+            id: main
 
-    QQC2.Button {
-        id: install
+            highlighted: !row.older
+            text: row.catalog.veiled(row.pkg) ? App.tr("Show the picture") : row.own || row.pkg.update ? App.tr("Update to %1", row.own ? row.pkg.own.update : notes.newest(row.pkg)) : row.older ? App.tr("Install the older one…") : row.here || row.catalog.fresh ? App.tr("Set as wallpaper") : App.tr("Install")
+            icon.name: row.catalog.veiled(row.pkg) ? "eye" : row.own || row.pkg.update ? "arrow-circle-up" : row.older ? "clock-counter-clockwise" : row.here || row.catalog.fresh ? "image" : "download-simple"
+            visible: !(row.own && !row.pkg.own.update)
+            onClicked: row.act()
+        }
 
-        text: row.here ? App.trc("a package that is already installed", "Installed") : row.modelData.update && version.currentIndex === version.count - 1 ? App.tr("Update") : App.tr("Install")
-        icon.name: row.here ? "dialog-ok" : "download"
-        enabled: !row.here
-        onClicked: row.catalog.installer.install(row.modelData.repo_id + "/" + row.modelData.id + "@" + version.currentText)
+        PiecesTecla {
+            anchors.verticalCenter: parent.verticalCenter
+            visible: main.visible && main.highlighted
+            text: App.trc("key", "Enter")
+        }
+
+        QQC2.Button {
+            id: second
+
+            visible: !row.here && !row.older && !row.own && !row.pkg.update && !row.catalog.fresh && !row.catalog.veiled(row.pkg)
+            text: App.tr("Install and set as wallpaper")
+            icon.name: "image"
+            onClicked: row.installer.install(row.pkg, row.catalog.versions[row.pkg.repo_id + "/" + row.pkg.id] ?? "", true, second, false, false)
+        }
+
+        Estado {
+            anchors.verticalCenter: parent.verticalCenter
+            visible: row.here
+            text: App.tr("Installed")
+            tone: "brote"
+            icon: "check-circle"
+        }
+
+        BrowseOwn {
+            id: more
+
+            anchors.verticalCenter: parent.verticalCenter
+            visible: row.own
+            pkg: row.pkg
+            installer: row.installer
+        }
+
+        QQC2.Button {
+            visible: !row.own && row.folds
+            flat: true
+            text: App.tr("Details")
+            icon.name: row.open ? "caret-down" : "caret-right"
+            LayoutMirroring.enabled: true
+            Accessible.name: App.tr("Details of “%1”", row.pkg ? row.pkg.title : "")
+            onClicked: row.details()
+        }
     }
 }
