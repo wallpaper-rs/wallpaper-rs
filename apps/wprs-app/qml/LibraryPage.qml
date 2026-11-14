@@ -108,6 +108,7 @@ Kirigami.Page {
             page.sync();
             if (library.total > 0 && covers.view.currentIndex < 0)
                 covers.view.currentIndex = 0;
+            Qt.callLater(covers.keep);
             Qt.callLater(covers.look);
         }
     }

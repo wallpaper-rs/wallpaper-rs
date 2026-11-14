@@ -46,6 +46,16 @@ FocusScope {
         }
     }
 
+    function keep() {
+        const at = view.currentIndex;
+        if (at < 0)
+            return;
+        view.currentIndex = -1;
+        view.currentIndex = at;
+        if (covers.page.activeFocus)
+            view.view.forceActiveFocus();
+    }
+
     function newest() {
         covers.page.routeBack();
         covers.page.all = false;
