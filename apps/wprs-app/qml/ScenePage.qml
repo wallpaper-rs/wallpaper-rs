@@ -31,8 +31,8 @@ Kirigami.Page {
     }
     property string notice
     readonly property var scenePage: page
-    property Component bar: builder.shown ? null : top
-    property Component top: Component {
+    property Component bar: builder.shown ? null : sceneTop
+    property Component sceneTop: Component {
         SceneTop {
             page: scenePage
         }
