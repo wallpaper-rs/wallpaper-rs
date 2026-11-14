@@ -75,7 +75,7 @@ fun Grade(main: Main) = Column {
         }
     }
     val change = { key: String, value: Any -> send(JSONObject(filter.toString()).put(key, value)) }
-    Header(stringResource(R.string.filter))
+    Text(stringResource(R.string.filter), Modifier.padding(start = Measure.margin, end = Measure.margin, top = Measure.e3), style = Type.row)
     val screens = listOf("home" to stringResource(R.string.home_screen), "lock" to stringResource(R.string.lock_screen))
     Choices(null, screens, if (lock) "lock" else "home") { lock = it == "lock" }
     val own = shown.optBoolean("own")
