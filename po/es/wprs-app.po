@@ -17915,6 +17915,7 @@ msgstr "De dónde vienen los fondos de esta lista."
 #: apps/wprs-app/qml/PiecesSaid.qml
 msgid "You have no lists yet"
 msgstr "Aún no tienes listas"
+
 #: apps/wprs-app/qml/BatteryPicker.qml
 msgid "Below %1 %"
 msgstr "Por debajo de %1 %"
@@ -17922,6 +17923,7 @@ msgstr "Por debajo de %1 %"
 #: apps/wprs-app/qml/BatteryPicker.qml
 msgid "Never"
 msgstr "Nunca"
+
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "Keys to browse wallpapers"
 msgstr "Teclas para recorrer fondos"
