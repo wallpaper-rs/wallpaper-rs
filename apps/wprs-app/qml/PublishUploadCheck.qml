@@ -16,7 +16,7 @@ Timer {
             "url": "http://127.0.0.1:9/"
         })
 
-    function serve(name, args, done, failed) {
+    function serve(name, args, iface, done, failed) {
         calls = calls.concat([name]);
         if (name === "AddAuthorKey")
             return Qt.callLater(() => args[0].includes("untrusted comment") ? done() : failed({

@@ -10,7 +10,7 @@ Item {
     property var job: null
     property bool registered: false
     property string lastPath: ""
-    property var act: (name, args, done, failed) => App.act(name, args, "Sync1", done, failed)
+    property var act: (name, args, iface, done, failed) => App.act(name, args, iface, done, failed)
     readonly property bool busy: stage !== "" || publish.where.repo.shelf.stage !== ""
     readonly property string doing: stage === "build" ? App.tr("Making the package…") : stage === "upload" ? App.tr("Uploading…") : stage === "register" ? App.tr("Registering your signature…") : App.tr("Publishing…")
     property var watched: job === null ? null : App.jobs.find(j => j.id === job) ?? null
@@ -45,7 +45,7 @@ Item {
         stage = "upload";
         job = null;
         lastPath = path;
-        work.act("UploadAs", [path, publish.where.hidden ? "unlisted" : "public"], reply => work && (work.job = Array.isArray(reply) ? reply[0] : reply), error => work && work.refused(String(error.message ?? error)));
+        work.act("UploadAs", [path, publish.where.hidden ? "unlisted" : "public"], "Sync1", reply => work && (work.job = Array.isArray(reply) ? reply[0] : reply), error => work && work.refused(String(error.message ?? error)));
     }
 
     function check() {
@@ -95,7 +95,7 @@ Item {
         registered = true;
         stage = "register";
         const text = App.readText("file://" + publish.sign.current["public"]);
-        work.act("AddAuthorKey", [text], () => {
+        work.act("AddAuthorKey", [text], "Sync1", () => {
             if (!work)
                 return;
             applicationWindow().showPassiveNotification(App.tr("Your signature “%1” is now registered in your account at %2.", publish.sign.keyName, host), "long");
