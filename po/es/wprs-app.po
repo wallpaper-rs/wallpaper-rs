@@ -20467,6 +20467,10 @@ msgstr "Tu biblioteca y los fondos de tu escritorio dependen de él. Reiniciarlo
 msgid "The service could not be started from here. The details say why; this page comes back by itself when the service answers."
 msgstr "No se pudo iniciar el servicio desde aquí. Los detalles dicen por qué; esta página vuelve sola cuando el servicio responde."
 
+#: apps/wprs-app/src/app.rs
+msgid "The wallpaper service stopped."
+msgstr "El servicio de fondos se detuvo."
+
 #: apps/wprs-app/qml/LibraryState.qml
 msgid "Restart the service"
 msgstr "Reiniciar el servicio"

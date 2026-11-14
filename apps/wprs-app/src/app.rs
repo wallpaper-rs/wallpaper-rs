@@ -75,8 +75,10 @@ pub(crate) async fn watch(conn: Connection) {
     });
     connect(&conn).await;
     while let Some(change) = owners.next().await {
-        if change.args().is_ok_and(|a| a.new_owner.is_some()) {
-            connect(&conn).await;
+        match change.args().map(|a| a.new_owner.is_some()) {
+            Ok(true) => connect(&conn).await,
+            Ok(false) => set_link(Err(crate::tr::tr("The wallpaper service stopped."))),
+            Err(_) => {}
         }
     }
 }

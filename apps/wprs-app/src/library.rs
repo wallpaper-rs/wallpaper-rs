@@ -65,6 +65,7 @@ impl ItemModel {
                 self.as_mut().rust_mut().sent.clear();
                 self.refresh();
             }
+            Event::Link(Err(_)) => self.refresh(),
             _ => {}
         }
     }
