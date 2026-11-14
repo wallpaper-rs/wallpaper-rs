@@ -63,6 +63,7 @@ Item {
             "kind": "server",
             "id": id,
             "state": output.state ?? "",
+            "registered": registered,
             "link": String(publish.account.url ?? "").replace(/\/$/, "") + "/packages/" + id
         });
     }

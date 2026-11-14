@@ -71,6 +71,8 @@ Timer {
             return "the signature was not registered once and the upload retried: " + JSON.stringify(calls);
         if (publish.result.kind !== "server" || publish.result.id !== "org.example.check")
             return "the page did not say it was uploaded: " + JSON.stringify(publish.result);
+        if (publish.result.registered !== true)
+            return "the done page does not say the signature was registered";
         return publish.at === 4 ? "" : "the page did not reach its last part";
     }
 

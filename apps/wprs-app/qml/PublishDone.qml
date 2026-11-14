@@ -18,7 +18,7 @@ ColumnLayout {
     Keys.onReturnPressed: back.clicked()
 
     Estado {
-        text: App.tr("Done")
+        text: App.tr("Ready")
         tone: "brote"
     }
 
@@ -46,6 +46,13 @@ ColumnLayout {
         visible: done.kind === "repo" && done.result.made === true
         tone: "brote"
         text: App.tr("Signed, “%1” %2 was added and its list was published", done.publish.name, done.publish.version)
+    }
+
+    PublishNote {
+        Layout.fillWidth: true
+        visible: done.kind === "server" && done.result.registered === true
+        tone: "brote"
+        text: App.tr("Your signature “%1” is now registered in your account at %2.", done.sign.keyName, done.publish.where.host)
     }
 
     PublishCopy {
