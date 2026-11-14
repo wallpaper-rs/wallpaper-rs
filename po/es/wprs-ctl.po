@@ -10700,3 +10700,33 @@ msgstr "a la vista en %1: %2"
 
 msgid "transition: %1"
 msgstr "transición: %1"
+
+msgid "%1: %2; the last change: %3"
+msgstr "%1: %2; el último cambio: %3"
+
+msgid "the transition of each wallpaper"
+msgstr "la transición de cada fondo"
+
+msgid "the plain fade"
+msgstr "el fundido simple"
+
+msgid "a cut"
+msgstr "un corte"
+
+msgid "the wallpaper's own transition played"
+msgstr "se vio la transición propia del fondo"
+
+msgid "what you chose played"
+msgstr "se vio lo que elegiste"
+
+msgid "the plain fade played, because of less motion"
+msgstr "se vio el fundido simple, por menos movimiento"
+
+msgid "the plain fade played, because the wallpaper's transition could not play"
+msgstr "se vio el fundido simple, porque la transición del fondo no se pudo ver"
+
+msgid "the plain fade played: neither wallpaper brings a transition"
+msgstr "se vio el fundido simple: ninguno de los dos fondos trae transición"
+
+msgid "a cut: the screen was not ready for a transition"
+msgstr "un corte: la pantalla no estaba lista para una transición"

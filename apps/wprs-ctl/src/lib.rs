@@ -70,6 +70,7 @@ pub mod moderate;
 mod naming;
 pub mod pack;
 mod paging;
+mod passing;
 mod paths;
 pub mod pkg;
 pub mod playlists;

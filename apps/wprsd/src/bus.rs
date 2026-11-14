@@ -135,6 +135,7 @@ impl Daemon {
                 accent: info.accent.clone(),
                 filter: Some(st.config.filter(name)).filter(|f| !f.is_identity()),
                 hdr: crate::lights::state(&st.config, name, &s.hdr),
+                transition: crate::lights::passage(&st.config, name, s.passage),
                 away: crate::account::away_title(&away, st.config.profile.as_deref(), name),
             };
             crate::rotation::overlay(&st, name, &mut state);
@@ -173,6 +174,7 @@ impl Daemon {
             gpu_restart: self.gpus.restart(&st.config.render.gpu),
             qualities: st.config.own_qualities(),
             hdrs: st.config.own_hdrs(),
+            transitions: st.config.own_transitions(),
             layer_shell: crate::layers::state(&st.config),
             plasma: crate::plasma::PLASMA.load(std::sync::atomic::Ordering::Relaxed),
         };

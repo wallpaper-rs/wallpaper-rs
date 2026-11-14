@@ -1,4 +1,6 @@
-use super::{Credit, GpuAdapter, HdrState, LayerShellState, OutputPlaylist, PreviewState, Uid};
+use super::{
+    Credit, GpuAdapter, HdrState, LayerShellState, OutputPlaylist, PreviewState, TransitionState, Uid,
+};
 use crate::{Filter, Fit, Screen};
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -46,6 +48,8 @@ model! {
         pub qualities: BTreeMap<String, String>,
         #[serde(default)]
         pub hdrs: BTreeMap<String, String>,
+        #[serde(default)]
+        pub transitions: BTreeMap<String, String>,
         #[serde(default)]
         pub layer_shell: LayerShellState,
         #[serde(default)]
@@ -139,6 +143,8 @@ model! {
         pub filter: Option<Filter>,
         #[serde(default)]
         pub hdr: HdrState,
+        #[serde(default)]
+        pub transition: TransitionState,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pub away: Option<String>,
     }

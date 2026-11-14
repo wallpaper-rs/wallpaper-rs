@@ -6,7 +6,7 @@ pub use notes::{measured, note, notes, sandbox_lines};
 use serde_json::json;
 use wprs_client::Client;
 use wprs_core::model::{OutputState, State};
-use wprs_core::{HdrChoice, QualityChoice};
+use wprs_core::{HdrChoice, QualityChoice, TransitionKind};
 
 const SETTLE: std::time::Duration = std::time::Duration::from_millis(300);
 
@@ -99,14 +99,18 @@ pub async fn run(client: &Client, args: QualityArgs) -> Result<()> {
 
 pub fn own(state: &serde_json::Value, key: &str, json: bool) -> bool {
     let quality = key.strip_prefix(QualityChoice::OWN).map(|o| ("qualities", o));
-    let Some((list, output)) = quality.or_else(|| key.strip_prefix(HdrChoice::OWN).map(|o| ("hdrs", o)))
-    else {
+    let passage = || key.strip_prefix(TransitionKind::OWN).map(|o| ("transitions", o));
+    let hdr = || key.strip_prefix(HdrChoice::OWN).map(|o| ("hdrs", o));
+    let Some((list, output)) = quality.or_else(hdr).or_else(passage) else {
         return false;
     };
     let own = state[list].get(output).cloned().unwrap_or_default();
     match json {
         true => println!("{}", serde_json::Value::Object([(key.to_owned(), own)].into_iter().collect())),
-        false => println!("{key} = {}", own.as_str().unwrap_or("none")),
+        false => println!("{key} = {}", own.as_str().unwrap_or(crate::passing::unset(list))),
+    }
+    if list == "transitions" && !json {
+        crate::passing::lines(state, Some(output));
     }
     true
 }

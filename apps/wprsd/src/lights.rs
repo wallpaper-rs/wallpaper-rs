@@ -1,6 +1,6 @@
 use crate::compositor::Hdr;
 use wprs_core::Config;
-use wprs_core::model::HdrState;
+use wprs_core::model::{HdrState, TransitionState};
 
 pub(crate) fn state(config: &Config, output: &str, hdr: &Hdr) -> HdrState {
     let nits = |v: Option<f32>| v.map(|n| f64::from(n.round()));
@@ -16,6 +16,15 @@ pub(crate) fn state(config: &Config, output: &str, hdr: &Hdr) -> HdrState {
         encoding: hdr.encoding.into(),
         max_cll: hdr.described.map(|m| m.max_cll),
         max_fall: hdr.described.map(|m| m.max_fall),
+    }
+}
+
+pub(crate) fn passage(config: &Config, output: &str, told: crate::compositor::Passage) -> TransitionState {
+    TransitionState {
+        choice: config.transition(output).as_str().into(),
+        own: config.own_transition(output).map(|c| c.as_str().into()),
+        plays: told.plays.into(),
+        why: told.why.into(),
     }
 }
 
