@@ -671,3 +671,6 @@ main input[type=checkbox] { appearance: none; flex: none; width: 1.4rem; height:
 main input[type=checkbox]:checked { background: var(--escarcha); border-color: var(--escarcha); }
 main input[type=checkbox]:checked::after { content: ""; width: 0.4rem; height: 0.75rem; margin-top: -0.15rem; border: solid var(--noche); border-width: 0 3px 3px 0; transform: rotate(45deg); }
 main label:has(> input[type=checkbox]) { flex-direction: row; align-items: center; gap: var(--e-3); font-weight: 400; }
+
+.qr svg { color: var(--noche); }
+.acciones > .boton { max-width: 100%; white-space: normal; }

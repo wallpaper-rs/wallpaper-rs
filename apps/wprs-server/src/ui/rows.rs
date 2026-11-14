@@ -8,11 +8,12 @@ pub struct Row {
     pub action: Option<Markup>,
     pub lit: bool,
     pub thumb: Option<String>,
+    pub confirm: Option<Markup>,
 }
 
 impl Row {
     pub fn new(name: Markup) -> Self {
-        Row { name, value: None, action: None, lit: false, thumb: None }
+        Row { name, value: None, action: None, lit: false, thumb: None, confirm: None }
     }
 
     pub fn value(mut self, value: Markup) -> Self {
@@ -27,6 +28,11 @@ impl Row {
 
     pub fn thumb(mut self, src: String) -> Self {
         self.thumb = Some(src);
+        self
+    }
+
+    pub fn confirm(mut self, ask: Markup) -> Self {
+        self.confirm = Some(ask);
         self
     }
 
@@ -47,6 +53,7 @@ pub fn rows(items: Vec<Row>, compact: bool) -> Markup {
                         @if let Some(v) = r.value { div.fila-valor { (v) } }
                     }
                     @if let Some(a) = r.action { div.fila-accion { (a) } }
+                    @if let Some(c) = r.confirm { (c) }
                 }
             }
         }
@@ -68,4 +75,8 @@ pub fn status_line(tone: Tone, text: &str, detail: Option<&str>) -> Markup {
 
 pub fn pairs(items: &[(&str, Markup)]) -> Markup {
     html! { dl.pares { @for (k, v) in items { dt { (k) } dd { (v) } } } }
+}
+
+pub fn quiet_line(text: &str) -> Markup {
+    html! { p.linea-estado { span.tenue { (text) } } }
 }

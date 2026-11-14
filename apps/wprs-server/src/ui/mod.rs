@@ -3,9 +3,10 @@ mod blocks;
 mod case;
 mod forms;
 mod rows;
+mod size;
 
 #[allow(unused_imports)]
-pub use blocks::{copyable, empty, fold, notice, section};
+pub use blocks::{copyable, copyable_with, empty, fold, notice, section};
 #[allow(unused_imports)]
 pub use case::{back_link, case_head, confirm, subheading};
 #[allow(unused_imports)]
@@ -13,7 +14,10 @@ pub use forms::{
     Kind, button, button_named, checkbox, disabled_button, field, file_picker, form_actions, link_button,
 };
 #[allow(unused_imports)]
-pub use rows::{Row, pairs, rows, status, status_line};
+pub use rows::{Row, pairs, quiet_line, rows, status, status_line};
+
+#[allow(unused_imports)]
+pub use size::size;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Tone {

@@ -10,7 +10,7 @@ pub enum Kind {
 }
 
 impl Kind {
-    fn class(self) -> &'static str {
+    pub fn class(self) -> &'static str {
         match self {
             Kind::Plain => "boton",
             Kind::Primary => "boton principal",

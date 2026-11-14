@@ -1,9 +1,10 @@
 use crate::App;
+use crate::db::now;
 use crate::frame::Frame;
-use crate::lang::{Lang, current, t, word};
+use crate::lang::{Lang, current, since, t, word};
 use crate::layout::bare_page;
 use crate::pages::local;
-use crate::ui::{Kind, Tone, fold, link_button, notice, pairs, status_line};
+use crate::ui::{Kind, Row, Tone, copyable, empty, fold, link_button, notice, pairs, rows, status_line};
 use axum::body::{Body, to_bytes};
 use axum::http::StatusCode;
 use axum::http::header::{self, HeaderValue};
@@ -76,7 +77,26 @@ fn failure(value: &Value, back: &str, status: StatusCode) -> Markup {
     }
 }
 
+fn token_made(value: &Value, back: &str) -> Markup {
+    let ends = (value["expires_at"].as_i64().unwrap_or_default() - now()) / 1000;
+    html! {
+        div.resultado {
+            (empty(t("Token created."), html! { (t("Copy it now: it is not shown again.")) }))
+            (rows(vec![
+                Row::new(html! { (t("Name")) }).value(html! { (shown(&value["name"])) }),
+                Row::new(html! { (t("Token")) }).value(copyable(&shown(&value["token"]), t("Copy"), t("Copied"))),
+                Row::new(html! { (t("Scopes")) }).value(html! { code.dato { (shown(&value["scopes"])) } }),
+                Row::new(html! { (t("Expires")) }).value(html! { (since(-ends)) }),
+            ], true))
+            div.acciones { (continue_button(back)) }
+        }
+    }
+}
+
 fn success(value: &Value, back: &str) -> Markup {
+    if value["token"].is_string() {
+        return token_made(value, back);
+    }
     let items: Vec<(String, Markup)> = value
         .as_object()
         .into_iter()

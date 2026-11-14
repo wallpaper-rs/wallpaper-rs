@@ -11,15 +11,22 @@ pub fn own_connect_svg(cfg: &Config, invite: Option<&str>) -> Result<String> {
     own_with(cfg, lan::wanted()?, invite)
 }
 
-fn own_with(cfg: &Config, self_signed: bool, invite: Option<&str>) -> Result<String> {
-    let pin = match self_signed {
+pub fn own_pin(cfg: &Config) -> Result<Option<String>> {
+    pin_with(cfg, lan::wanted()?)
+}
+
+fn pin_with(cfg: &Config, self_signed: bool) -> Result<Option<String>> {
+    match self_signed {
         true => {
             let (cert, _) = lan::certificate(&cfg.data, &lan::host(&cfg.public_url))?;
-            Some(lan::fingerprint(&cert))
+            Ok(Some(lan::fingerprint(&cert)))
         }
-        false => None,
-    };
-    connect_svg(&cfg.public_url, pin.as_deref(), invite)
+        false => Ok(None),
+    }
+}
+
+fn own_with(cfg: &Config, self_signed: bool, invite: Option<&str>) -> Result<String> {
+    connect_svg(&cfg.public_url, pin_with(cfg, self_signed)?.as_deref(), invite)
 }
 
 #[cfg(test)]

@@ -1,4 +1,4 @@
-use super::Tone;
+use super::{Kind, Tone};
 use crate::icons::icon;
 use maud::{Markup, html};
 
@@ -28,10 +28,14 @@ pub fn fold(summary: &str, body: Markup, big: bool) -> Markup {
 }
 
 pub fn copyable(text: &str, label: &str, done: &str) -> Markup {
+    copyable_with(text, label, done, Kind::Plain)
+}
+
+pub fn copyable_with(text: &str, label: &str, done: &str, kind: Kind) -> Markup {
     html! {
         div.copiar {
             code.dato { (text) }
-            button.boton type="button" hidden data-copied=(done) { (icon("copy")) span data-label { (label) } }
+            button class=(kind.class()) type="button" hidden data-copied=(done) { (icon("copy")) span data-label { (label) } }
         }
     }
 }

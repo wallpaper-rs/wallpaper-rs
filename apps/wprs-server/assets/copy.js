@@ -21,3 +21,14 @@
     });
   }
 })();
+(() => {
+  for (const box of document.querySelectorAll("label.archivo")) {
+    const input = box.querySelector("input[type=file]");
+    const name = box.querySelector(".archivo-nombre");
+    if (!input || !name) continue;
+    const idle = name.textContent;
+    input.addEventListener("change", () => {
+      name.textContent = input.files.length ? input.files[0].name : idle;
+    });
+  }
+})();

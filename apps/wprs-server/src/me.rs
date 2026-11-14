@@ -105,6 +105,7 @@ async fn new_token(State(app): St, auth: Auth, Input(t): Input<NewToken>) -> Res
     require((1..=most).contains(&days), "days: 1 to 365, at most 90 for mod and admin scopes")?;
     let (token, scopes, expires) = (creds::token('p'), scopes.join(" "), now() + days * DAY);
     let (hash, shown, name) = (digest(&token), scopes.clone(), t.name.trim().to_string());
+    let called = name.clone();
     let sql = "INSERT INTO tokens (user_id, name, hash, scopes, created_at, expires_at) \
                VALUES (?1, ?2, ?3, ?4, ?5, ?6)";
     let id = app.db.run(move |c| {
@@ -112,7 +113,10 @@ async fn new_token(State(app): St, auth: Auth, Input(t): Input<NewToken>) -> Res
         Ok(c.last_insert_rowid())
     });
     let id = id.await?;
-    Ok((StatusCode::CREATED, Json(json!({"id": id, "token": token, "scopes": shown, "expires_at": expires}))))
+    Ok((
+        StatusCode::CREATED,
+        Json(json!({"id": id, "name": called, "token": token, "scopes": shown, "expires_at": expires})),
+    ))
 }
 
 #[derive(Deserialize)]
