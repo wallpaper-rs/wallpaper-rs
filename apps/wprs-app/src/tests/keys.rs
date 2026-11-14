@@ -17,7 +17,7 @@ fn an_action_shortcut_is_written_as_keys_so_its_tooltip_never_shows_a_number() {
         .map(|(name, _)| name)
         .collect();
     assert!(loose.is_empty(), "shortcuts given as a standard key number: {loose:?}");
-    assert!(read("qml/PackagePage.qml").contains("shortcut: \"Ctrl+S\""));
+    assert!(read("qml/SceneTop.qml").contains("sequence: \"Ctrl+S\""));
 }
 
 #[test]
