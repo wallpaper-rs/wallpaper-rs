@@ -15,7 +15,7 @@ async fn claim() -> bool {
         }
     };
     let name = format!("{APP_ID}.Preview");
-    let asked = conn.request_name_with_flags(name.as_str(), RequestNameFlags::DO_NOT_QUEUE.into()).await;
+    let asked = conn.request_name_with_flags(name.as_str(), RequestNameFlags::DO_NOT_QUEUE).await;
     if let Err(zbus::Error::NameTaken) = asked {
         return false;
     }
