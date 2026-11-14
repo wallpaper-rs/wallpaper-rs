@@ -130,7 +130,7 @@ fn package_texts_render_as_plain_text() {
         ])
         .map(|name| dir.join(name));
     let tray = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../integrations/plasma-tray/contents/ui");
-    for name in files.chain(["ScreenRow", "Header", "Thumbnail"].map(|name| tray.join(name))) {
+    for name in files.chain(["ScreenRow", "Head", "Thumbnail"].map(|name| tray.join(name))) {
         let text = std::fs::read_to_string(name.with_extension("qml")).unwrap();
         let name = name.display();
         let tips = text.lines().map(str::trim_start).filter(|l| l.contains("ToolTip.text:"));

@@ -1,6 +1,5 @@
 import QtQuick
-import org.kde.kirigami as Kirigami
-import org.kde.plasma.components as PlasmaComponents3
+import "../look"
 
 Rectangle {
     id: thumbnail
@@ -8,51 +7,38 @@ Rectangle {
     required property var daemon
     required property string item
     required property string source
-    required property bool mature
     required property bool scene
     property string animated
     property bool moving
 
-    border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.2)
+    radius: Look.radioChico
+    color: Look.nocheAlta
     clip: true
 
     Image {
         anchors.fill: parent
-        anchors.margins: parent.border.width
         source: thumbnail.source
-        sourceSize: thumbnail.mature ? Qt.size(12, 12) : undefined
         asynchronous: true
         fillMode: Image.PreserveAspectCrop
     }
 
     AnimatedImage {
         anchors.fill: parent
-        anchors.margins: parent.border.width
-        visible: thumbnail.animated !== "" && !thumbnail.mature && status === AnimatedImage.Ready
-        source: thumbnail.animated && !thumbnail.mature ? thumbnail.animated : ""
+        visible: thumbnail.animated !== "" && status === AnimatedImage.Ready
+        source: thumbnail.animated
         playing: visible && thumbnail.moving && thumbnail.Window.visibility !== Window.Hidden
         cache: false
         fillMode: Image.PreserveAspectCrop
     }
 
-    PlasmaComponents3.ToolButton {
-        anchors.fill: parent
-        visible: thumbnail.mature
-        icon.name: "view-private"
-        text: i18n("Mature content: click the picture to always show this package")
-        display: PlasmaComponents3.AbstractButton.IconOnly
-        PlasmaComponents3.ToolTip.text: text
-        PlasmaComponents3.ToolTip.visible: hovered || visualFocus
-        onClicked: thumbnail.daemon.act("Confirm", [[thumbnail.item], "mature"], "Library1")
-    }
-
-    Kirigami.Icon {
+    Glyph {
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.margins: Kirigami.Units.smallSpacing
-        width: Kirigami.Units.iconSizes.small
+        anchors.margins: Look.e1
+        width: Look.iconoNota
         height: width
         visible: thumbnail.scene
-        source: "view-media-visualization"
+        name: "sparkle"
+        tone: Look.escarcha
     }
 }

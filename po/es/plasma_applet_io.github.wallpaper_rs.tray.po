@@ -157,11 +157,6 @@ msgstr "Activar el sonido"
 
 #: integrations/plasma-tray/contents/ui/Header.qml
 #, kde-format
-msgid "Mute"
-msgstr "Silenciar"
-
-#: integrations/plasma-tray/contents/ui/Header.qml
-#, kde-format
 msgid "Let scenes play their sounds"
 msgstr "Dejar que las escenas reproduzcan sus sonidos"
 
@@ -179,16 +174,6 @@ msgstr "Silenciar los fondos mientras otra aplicación reproduce sonido"
 #, kde-format
 msgid "Allow wallpapers that flash"
 msgstr "Permitir los fondos que destellan"
-
-#: integrations/plasma-tray/contents/ui/Header.qml
-#, kde-format
-msgid "No profile"
-msgstr "Sin perfil"
-
-#: integrations/plasma-tray/contents/ui/Header.qml
-#, kde-format
-msgid "Profile: %1"
-msgstr "Perfil: %1"
 
 #: integrations/plasma-tray/contents/ui/LeftOut.qml
 #, kde-format
@@ -483,11 +468,6 @@ msgstr "Elige wallpaper-rs como tipo de fondo en los ajustes del escritorio."
 
 #: integrations/plasma-tray/contents/ui/Panel.qml
 #, kde-format
-msgid "Change the other settings with wprs-ctl"
-msgstr "Cambia los demás ajustes con wprs-ctl"
-
-#: integrations/plasma-tray/contents/ui/Panel.qml
-#, kde-format
 msgid "Open wallpaper-rs"
 msgstr "Abrir wallpaper-rs"
 
@@ -508,57 +488,8 @@ msgstr "Elegir…"
 
 #: integrations/plasma-tray/contents/ui/ScreenButtons.qml
 #, kde-format
-msgid "Remove"
-msgstr "Quitar"
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
-msgid ""
-"Remove the wallpaper and show only the background color. Use Plasma's own "
-"wallpaper to go back to the one Plasma had."
-msgstr ""
-"Quita el fondo y muestra solo el color de fondo. Con «El de Plasma» "
-"vuelve el fondo que tenía Plasma."
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
-msgid "Plasma's own"
-msgstr ""
-"El de Plasma"
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
-msgid ""
-"Switch the screens back to the wallpaper type you had in Plasma. Choosing a "
-"wallpaper here uses wallpaper-rs again."
-msgstr ""
-"Devuelve las pantallas al tipo de fondo que tenías en Plasma. Si "
-"eliges un fondo aquí, se vuelve a usar wallpaper-rs."
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
-msgid "Bring back"
-msgstr "Recuperar"
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
-msgid "Bring back the wallpaper that was removed"
-msgstr "Recupera el fondo que se quitó"
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
 msgid "Favorite"
 msgstr "Favorito"
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
-msgid "Remove from favorites"
-msgstr "Quitar de favoritos"
-
-#: integrations/plasma-tray/contents/ui/ScreenButtons.qml
-#, kde-format
-msgid "Add to favorites"
-msgstr "Añadir a favoritos"
 
 #: integrations/plasma-tray/contents/ui/ScreenButtons.qml
 #, kde-format
@@ -569,11 +500,6 @@ msgstr "Imágenes y vídeos"
 #, kde-format
 msgid "Background color"
 msgstr "Color de fondo"
-
-#: integrations/plasma-tray/contents/ui/ScreenRow.qml
-#, kde-format
-msgid "%1 of %2"
-msgstr "%1 de %2"
 
 #: integrations/plasma-tray/contents/ui/ScreenRow.qml
 #, kde-format
@@ -599,24 +525,6 @@ msgstr "Sus partículas se mueven en el procesador, así que se muestran menos"
 msgid "Let clicks and taps on this screen reach its wallpaper"
 msgstr "Dejar que los clics y toques de esta pantalla lleguen a su fondo"
 
-#: integrations/plasma-tray/contents/ui/ScreenRow.qml
-#, kde-format
-msgid "Flashes or shows fast patterns; you allowed it"
-msgstr "Destella o muestra patrones rápidos; lo has permitido"
-
-#: integrations/plasma-tray/contents/ui/ScreenRow.qml
-#, kde-format
-msgid "Flashes or shows fast patterns that can trigger seizures"
-msgstr ""
-"Destella o muestra patrones rápidos que pueden provocar crisis epilépticas"
-
-#: integrations/plasma-tray/contents/ui/Thumbnail.qml
-#, kde-format
-msgid "Mature content: click the picture to always show this package"
-msgstr ""
-"Contenido para adultos: haz clic en la imagen para mostrar siempre este "
-"paquete"
-
 #: integrations/plasma-tray/contents/ui/main.qml
 #, kde-format
 msgid "Paused"
@@ -627,3 +535,202 @@ msgstr "En pausa"
 msgid "Playing"
 msgstr "Reproduciendo"
 
+#: integrations/plasma-tray/contents/ui/More.qml
+msgid "Always"
+msgstr "Siempre"
+
+#: integrations/plasma-tray/contents/ui/More.qml
+msgid "Below 20 %"
+msgstr "Por debajo del 20 %"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Black and white"
+msgstr "Blanco y negro"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Bring back the previous one"
+msgstr "Recuperar el anterior"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Center"
+msgstr "Centrar"
+
+#: integrations/plasma-tray/contents/ui/Panel.qml
+msgid "Change with preview…"
+msgstr "Cambiar con vista previa…"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Color"
+msgstr "Color"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Cool"
+msgstr "Frío"
+
+#: integrations/plasma-tray/contents/ui/Notice.qml
+msgid "Details"
+msgstr "Detalles"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Dusk"
+msgstr "Crepúsculo"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Faded"
+msgstr "Desvaído"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Favorite, Fit, Filter and remove"
+msgstr "Favorito, ajuste, filtro y quitar"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Fill"
+msgstr "Rellenar"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Filter"
+msgstr "Filtro"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Fit"
+msgstr "Ajuste"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Go back to Plasma's wallpaper"
+msgstr "Volver al fondo de Plasma"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Golden"
+msgstr "Dorado"
+
+#: integrations/plasma-tray/contents/ui/Notes.qml
+msgid "Has flashes, turned off"
+msgstr "Tiene destellos, desactivado"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Image"
+msgstr "Imagen"
+
+#: integrations/plasma-tray/contents/ui/Head.qml
+msgid "Master volume"
+msgstr "Volumen general"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Matte"
+msgstr "Mate"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Mint"
+msgstr "Menta"
+
+#: integrations/plasma-tray/contents/ui/Panel.qml
+msgid "More"
+msgstr "Más"
+
+#: integrations/plasma-tray/contents/ui/Panel.qml
+msgid "More · all screens"
+msgstr "Más · todas las pantallas"
+
+#: integrations/plasma-tray/contents/ui/Head.qml
+msgid "Mute all"
+msgstr "Silenciar todo"
+
+#: integrations/plasma-tray/contents/ui/More.qml
+msgid "Never"
+msgstr "Nunca"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Night"
+msgstr "Noche"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Noir"
+msgstr "Negro intenso"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "None"
+msgstr "Ninguno"
+
+#: integrations/plasma-tray/contents/ui/More.qml
+msgid "Pause on battery"
+msgstr "Pausar con batería"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Punch"
+msgstr "Intenso"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Remove the wallpaper of this screen"
+msgstr "Quitar el fondo de esta pantalla"
+
+#: integrations/plasma-tray/contents/ui/Notice.qml
+msgid "Restart the service"
+msgstr "Reiniciar el servicio"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Rose"
+msgstr "Rosa"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Scene"
+msgstr "Escena"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Sepia"
+msgstr "Sepia"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Still: a window covers it"
+msgstr "Quieto: una ventana lo cubre"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Still: on battery"
+msgstr "Quieto: con batería"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Still: screen locked"
+msgstr "Quieto: pantalla bloqueada"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Stretch"
+msgstr "Estirar"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Subdued"
+msgstr "Apagado"
+
+#: integrations/plasma-tray/contents/ui/Foot.qml
+msgid "The other settings: in Settings… or with wprs-ctl"
+msgstr "Los demás ajustes: en Ajustes… o con wprs-ctl"
+
+#: integrations/plasma-tray/contents/ui/Notice.qml
+msgid "The wallpaper service is not answering"
+msgstr "El servicio del fondo no responde"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Tile"
+msgstr "Mosaico"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Video"
+msgstr "Vídeo"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Vivid"
+msgstr "Vivo"
+
+#: integrations/plasma-tray/contents/ui/Own.qml
+msgid "Warm"
+msgstr "Cálido"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "Web page"
+msgstr "Página web"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "no playlist running"
+msgstr "sin lista en marcha"
+
+#: integrations/plasma-tray/contents/ui/ScreenRow.qml
+msgid "“%1”, %2 of %3"
+msgstr "«%1», %2 de %3"

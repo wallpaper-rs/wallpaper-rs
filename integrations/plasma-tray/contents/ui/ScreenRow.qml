@@ -1,13 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
-import org.kde.kirigami as Kirigami
-import org.kde.plasma.components as PlasmaComponents3
+import "../look"
 
 ColumnLayout {
     id: row
 
     required property var daemon
     required property int index
+    property bool single: false
+    signal more(string name)
     required property string name
     required property var info
     readonly property string item: info.item ?? ""
@@ -18,8 +19,6 @@ ColumnLayout {
     property var details: ({})
     property string animated
     readonly property var pkg: details.package ?? {}
-    readonly property var confirmed: pkg.confirmed ?? []
-    readonly property bool mature: pkg.content === "mature" && !confirmed.includes("mature") && daemon.current?.options?.["library.show_mature"] !== true
     readonly property bool allowed: pkg.flash_disabled !== true
 
     function load() {
@@ -38,7 +37,11 @@ ColumnLayout {
         });
     }
 
-    spacing: Kirigami.Units.smallSpacing
+    readonly property string meta: ({"scene": i18n("Scene"), "video": i18n("Video"), "image": i18n("Image"), "web": i18n("Web page"), "color": i18n("Color")})[info.kind] ?? ""
+    readonly property string where: playing ? [name, i18n("“%1”, %2 of %3", playing.name, playing.position + 1, playing.count)].join(" · ") : [name, i18n("no playlist running")].join(" · ")
+    readonly property string still: ({"covered": i18n("Still: a window covers it"), "battery": i18n("Still: on battery"), "locked": i18n("Still: screen locked")})[info.still_reason] ?? ""
+
+    spacing: Look.e2
     onItemChanged: {
         thumb = "";
         animated = "";
@@ -67,23 +70,53 @@ ColumnLayout {
         onTriggered: row.load()
     }
 
-    Kirigami.Separator {
+    Item {
         Layout.fillWidth: true
-        Layout.bottomMargin: Kirigami.Units.smallSpacing
-        visible: row.index > 0
-    }
-
-    RowLayout {
-        spacing: Kirigami.Units.largeSpacing
+        Layout.preferredHeight: width * 7 / 16
+        visible: row.single
 
         Thumbnail {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 4
-            Layout.preferredHeight: Kirigami.Units.gridUnit * 2.5
-            color: row.info.background || Kirigami.Theme.alternateBackgroundColor
+            anchors.fill: parent
+            radius: 0
             daemon: row.daemon
             item: row.item
             source: row.daemon.url(row.thumb)
-            mature: row.mature
+            animated: row.pkg.photosensitive === true && !row.allowed ? "" : row.daemon.url(row.animated)
+            moving: !(row.daemon.state?.on_battery ?? false)
+            scene: false
+            color: row.info.background || Look.nocheAlta
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            gradient: Gradient {
+                GradientStop {
+                    position: 0.4
+                    color: "transparent"
+                }
+                GradientStop {
+                    position: 1
+                    color: Look.noche
+                }
+            }
+        }
+    }
+
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.leftMargin: row.single ? Look.e4 : 0
+        Layout.rightMargin: row.single ? Look.e4 : 0
+        spacing: Look.e3
+
+        Thumbnail {
+            Layout.preferredWidth: 72
+            Layout.preferredHeight: 40
+            Layout.alignment: Qt.AlignTop
+            visible: !row.single
+            color: row.info.background || Look.nocheAlta
+            daemon: row.daemon
+            item: row.item
+            source: row.daemon.url(row.thumb)
             animated: row.pkg.photosensitive === true && !row.allowed ? "" : row.daemon.url(row.animated)
             moving: !(row.daemon.state?.on_battery ?? false)
             scene: row.info.kind === "scene"
@@ -93,102 +126,67 @@ ColumnLayout {
             Layout.fillWidth: true
             spacing: 0
 
-            PlasmaComponents3.Label {
+            Words {
                 Layout.fillWidth: true
                 text: row.title
-                textFormat: Text.PlainText
-                elide: Text.ElideRight
+                title: row.single
+                font.pixelSize: row.single ? Look.tFila : Look.tCuerpo
+                font.weight: row.single ? Font.Bold : Font.DemiBold
             }
 
-            PlasmaComponents3.Label {
+            Words {
                 Layout.fillWidth: true
-                text: row.info.error || [row.name].concat(row.playing ? [i18n("%1 of %2", row.playing.position + 1, row.playing.count), row.playing.name] : []).join(" · ")
-                textFormat: Text.PlainText
-                elide: Text.ElideRight
-                font: Kirigami.Theme.smallFont
-                color: row.info.error ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.disabledTextColor
+                text: row.single ? [row.meta, row.still].filter(t => t).join(" · ") : row.where + (row.still ? " · " + row.still : "")
+                soft: true
+                font.pixelSize: Look.tPie
             }
+        }
 
-            PlasmaComponents3.Label {
-                Layout.fillWidth: true
-                visible: (row.info.left_out ?? []).length > 0
-                text: (row.info.left_out ?? []).map(l => reasons.text(l)).join("\n")
-                textFormat: Text.PlainText
-                wrapMode: Text.Wrap
-                font: Kirigami.Theme.smallFont
-                color: Kirigami.Theme.disabledTextColor
-            }
-
-            PlasmaComponents3.ToolButton {
-                visible: (row.info.left_out ?? []).length > 0
-                icon.name: "view-refresh"
-                text: i18n("Try again")
-                onClicked: row.daemon.act("RetryEffects", [])
-            }
-
-            PlasmaComponents3.Label {
-                Layout.fillWidth: true
-                visible: !!row.info.away
-                text: i18n("%1 exists only on another device. Publishing it to the server or to a repository makes it available here.", row.info.away ?? "")
-                textFormat: Text.PlainText
-                wrapMode: Text.Wrap
-                font: Kirigami.Theme.smallFont
-                color: Kirigami.Theme.disabledTextColor
-            }
-
-            PlasmaComponents3.Label {
-                Layout.fillWidth: true
-                visible: row.info.particles === "cpu"
-                text: i18n("Its particles run on the processor, so fewer of them are shown")
-                wrapMode: Text.Wrap
-                font: Kirigami.Theme.smallFont
-                color: Kirigami.Theme.disabledTextColor
-            }
-
-            PlasmaComponents3.Label {
-                Layout.fillWidth: true
-                visible: !!row.info.quality
-                text: row.info.quality ? row.reasons.level(row.info, row.daemon.current) : ""
-                textFormat: Text.PlainText
-                wrapMode: Text.Wrap
-                font: Kirigami.Theme.smallFont
-                color: Kirigami.Theme.disabledTextColor
-            }
-
-            PlasmaComponents3.Switch {
-                Layout.fillWidth: true
-                visible: row.daemon.inputs.shown?.[row.name]?.clicks === true
-                text: i18n("Let clicks and taps on this screen reach its wallpaper")
-                checked: (row.daemon.inputs.clicks ?? []).includes(row.name)
-                onToggled: {
-                    row.daemon.act("SetClicks", [row.name, checked], "Inputs1");
-                    checked = Qt.binding(() => (row.daemon.inputs.clicks ?? []).includes(row.name));
-                }
-            }
-
-            PlasmaComponents3.Label {
-                Layout.fillWidth: true
-                visible: text !== ""
-                text: row.reasons.privacy(row.pkg.exposes ?? [], row.info.sandbox ?? "")
-                textFormat: Text.PlainText
-                wrapMode: Text.Wrap
-                font: Kirigami.Theme.smallFont
-                color: row.info.sandbox === "reduced" ? Kirigami.Theme.neutralTextColor : Kirigami.Theme.disabledTextColor
-            }
-
-            PlasmaComponents3.Label {
-                Layout.fillWidth: true
-                visible: row.pkg.photosensitive === true
-                text: row.allowed ? i18n("Flashes or shows fast patterns; you allowed it") : i18n("Flashes or shows fast patterns that can trigger seizures")
-                wrapMode: Text.Wrap
-                font: Kirigami.Theme.smallFont
-                color: row.allowed ? Kirigami.Theme.disabledTextColor : Kirigami.Theme.negativeTextColor
-            }
+        Status {
+            visible: row.single
+            paused: row.daemon.current.paused === true
+            Layout.alignment: Qt.AlignTop
         }
     }
 
-    ScreenButtons {
+    Notes {
         Layout.fillWidth: true
+        Layout.leftMargin: row.single ? Look.e4 : Look.e1
+        Layout.rightMargin: row.single ? Look.e4 : 0
         host: row
+    }
+
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.topMargin: Look.e1
+        Layout.leftMargin: row.single ? Look.e4 : 0
+        spacing: 0
+
+        Command {
+            enabled: row.playing !== null
+            quiet: true
+            glyph: "skip-forward"
+            text: i18n("Next")
+            onClicked: row.daemon.act("Next", [row.name], "Playlists1")
+        }
+
+        Command {
+            quiet: true
+            text: i18n("Choose…")
+            onClicked: row.daemon.choose(row.name)
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+
+        Command {
+            visible: !row.single
+            quiet: true
+            glyph: "dots-three"
+            text: ""
+            Accessible.name: i18n("Favorite, Fit, Filter and remove")
+            onClicked: row.more(row.name)
+        }
     }
 }

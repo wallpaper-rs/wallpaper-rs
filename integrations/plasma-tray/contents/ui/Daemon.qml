@@ -29,11 +29,29 @@ QtObject {
             "Library1.GetItem": "(s)",
             "Library1.SetFavorite": "(asb)",
             "Library1.Confirm": "(ass)",
+            "Daemon1.SetFilter": "(ss)",
             "Playlists1.Next": "(s)",
+            "Playlists1.Browse": "(ssi)",
             "Profiles1.Activate": "(s)"
         })
 
     signal updated(string topic, var ids)
+    signal choose(string name)
+
+    function restart() {
+        send({
+            "service": "org.freedesktop.systemd1",
+            "path": "/org/freedesktop/systemd1",
+            "iface": "org.freedesktop.systemd1.Manager",
+            "member": "RestartUnit",
+            "signature": "(ss)",
+            "arguments": ["wprsd.service", "replace"]
+        }, () => daemon.refresh(), reply => daemon.actionError = reply?.error?.message || i18n("The wallpaper-rs daemon is not running"));
+    }
+
+    function browse(output) {
+        act("Browse", [output, "", 1], "Playlists1");
+    }
 
     function send(message, onReply, onError) {
         DBus.SessionBus.asyncCall(message, onReply, onError);

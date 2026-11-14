@@ -115,3 +115,29 @@ del estilo e imprime el error de cada componente que no carga (archivo, línea y
 - Barra (`ToolBar`): Noche alta con una línea hacia el contenido.
 
 Licencias de las letras y los íconos: `apps/wprs-app/licenses/`.
+
+## La bandeja de Plasma
+
+El panel de la bandeja y la app comparten la misma letra, los mismos nombres de tono, las mismas
+medidas y los mismos íconos, y los toman de una sola fuente: `scripts/plasma-assets.sh` copia las
+letras, deriva `contents/look/Look.qml` de `apps/wprs-app/qml/facade/Look.qml` y copia solo los
+íconos que el panel nombra. Lo corren `scripts/package.sh` y la receta de Flatpak; la carpeta
+`contents/look` no se guarda en el repositorio.
+
+- Los tonos de cada pantalla los publica el demonio en `GetState` (`outputs.<pantalla>.tones`, ver
+  `dbus.md`); el panel viste con los de la primera pantalla o, en la vista de una pantalla, con los de
+  esa. Sin fondo del que derivarlos usa los tonos fijos.
+- Con una pantalla, su portada es el encabezado del menú. Con más de una hay una fila por pantalla
+  (miniatura, nombre del fondo, *Siguiente*, *Elegir…* y *⋯*), y *⋯* abre la vista de esa pantalla:
+  *Favorito*, *Ajuste*, *Filtro*, los clics y toques, *Quitar el fondo de esta pantalla*, *Volver al
+  fondo de Plasma* y *Recuperar el anterior*.
+- *Cambiar con vista previa…* llama a `Playlists1.Browse` y muestra a la derecha la tecla de
+  `shortcuts.next` si `shortcuts.enabled` está activo.
+- *Más* reúne los cuatro interruptores de sonido y destellos y *Pausar con batería* (Nunca, Siempre
+  o por debajo del 20 %).
+- Una pantalla quieta lo dice con sus palabras según `outputs.<pantalla>.still_reason`: una ventana
+  la cubre, batería o pantalla bloqueada.
+- El perfil ya no se elige en la bandeja: se hace en la app. La miniatura de un paquete para adultos
+  ya no se difumina por fila.
+- El panel no se puede ver sin una sesión de Plasma con el plugin; `scripts/plasma-features.sh` corre
+  `tests/tray-row.qml` y `tests/tray-left-out.qml` allí.

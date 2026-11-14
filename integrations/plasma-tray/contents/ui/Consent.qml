@@ -1,7 +1,8 @@
 import QtQuick
-import org.kde.kirigami as Kirigami
+import QtQuick.Layouts
+import "../look"
 
-Kirigami.InlineMessage {
+Rectangle {
     id: consent
 
     required property var daemon
@@ -68,20 +69,44 @@ Kirigami.InlineMessage {
         unconfirmed = false;
         problem = "";
     }
+    readonly property string message: [daemon.tr("The wallpaper %1 asks for your permission:", String(ask.title).replace(/</g, "‹").replace(/>/g, "›"))].concat(ask.inputs.map(input => explained[input].join(": "))).concat(pending ? [daemon.tr("Confirm it in the desktop notification.")] : []).concat(quiet && !pending ? [daemon.tr("The notification was closed without an answer; try again in a few minutes.")] : []).concat(problem ? [problem] : []).join("\n")
+
     visible: ask.inputs.length > 0
-    type: problem ? Kirigami.MessageType.Error : Kirigami.MessageType.Information
-    text: [daemon.tr("The wallpaper %1 asks for your permission:", String(ask.title).replace(/</g, "‹").replace(/>/g, "›"))].concat(ask.inputs.map(input => explained[input].join(": "))).concat(pending ? [daemon.tr("Confirm it in the desktop notification.")] : []).concat(quiet && !pending ? [daemon.tr("The notification was closed without an answer; try again in a few minutes.")] : []).concat(problem ? [problem] : []).join("\n")
-    actions: [
-        Kirigami.Action {
-            text: consent.daemon.tr("Allow")
-            icon.name: "dialog-ok-apply"
-            enabled: !consent.pending && !consent.quiet
-            onTriggered: consent.answer(true)
-        },
-        Kirigami.Action {
-            text: consent.daemon.tr("Not now")
-            icon.name: "dialog-cancel"
-            onTriggered: consent.answer(false)
+    implicitHeight: body.implicitHeight + 2 * Look.e3
+    radius: Look.radio
+    color: Look.nocheAlta
+    border.width: Look.linea
+    border.color: problem ? Look.coral : Look.nocheLinea
+
+    ColumnLayout {
+        id: body
+
+        anchors.fill: parent
+        anchors.margins: Look.e3
+        spacing: Look.e2
+
+        Words {
+            Layout.fillWidth: true
+            text: consent.message
+            wrapMode: Text.Wrap
+            color: consent.problem ? Look.coral : Look.escarcha
         }
-    ]
+
+        RowLayout {
+            spacing: Look.e2
+
+            Command {
+                glyph: "check"
+                text: consent.daemon.tr("Allow")
+                enabled: !consent.pending && !consent.quiet
+                onClicked: consent.answer(true)
+            }
+
+            Command {
+                quiet: true
+                text: consent.daemon.tr("Not now")
+                onClicked: consent.answer(false)
+            }
+        }
+    }
 }

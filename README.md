@@ -101,10 +101,11 @@ pide más píxeles de los que tiene la pantalla; el daemon reduce el stream a lo
 pantalla, los del modo que anuncia el compositor Wayland, para no gastar GPU ni memoria de más (el
 tamaño y la escala que le pasa el plugin no bastan, porque llevan la misma escala que la petición).
 
-El icono de wallpaper-rs en la bandeja reúne lo básico: pausar o reanudar, silenciar, el volumen, el
-perfil y una fila por pantalla con la miniatura y el nombre de su fondo y los botones *Siguiente*
-(solo con una lista en marcha), *Elegir…* y *Favorito*; la miniatura de un paquete para adultos sale
-difuminada hasta que haces clic en ella y, si el fondo destella, la fila lo avisa. También pregunta
+El icono de wallpaper-rs en la bandeja reúne lo básico con el aspecto de la app: pausar o reanudar,
+silenciar, el volumen, una portada o una fila por pantalla con la miniatura y el nombre de su fondo y
+los botones *Siguiente* (solo con una lista en marcha), *Elegir…* y *⋯* (favorito, ajuste, filtro y
+quitar el fondo), *Cambiar con vista previa…* y *Más* (sonido, destellos y pausa con batería); si el
+fondo destella o está quieto, la fila lo dice. También pregunta
 qué permitir a una escena que lo pide. Todo lo demás está en la app: *Abrir wallpaper-rs* la abre y
 *Ajustes…* la abre directamente en su página *Ajustes*, con el modo de ajuste, el color de fondo,
 el filtro y la lista de cada pantalla o de todas a la vez, los ajustes de cada escena, los fotogramas

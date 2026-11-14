@@ -35,7 +35,7 @@ fn pages_match_the_window_the_launcher_and_the_tray() {
     let desktop = read("../../packaging/desktop/io.github.wallpaper_rs.desktop");
     assert!(desktop.contains("Actions=settings;\n\n[Desktop Action settings]\n"));
     assert!(desktop.contains("\nExec=@BINDIR@/wprs-app --page settings\n"));
-    assert!(read("../../integrations/plasma-tray/contents/ui/Panel.qml").contains("openApp(\"settings\")"));
+    assert!(read("../../integrations/plasma-tray/contents/ui/Foot.qml").contains("openApp(\"settings\")"));
     assert_eq!([page(Some("settings")), page(Some("Settings")), page(None)], [Some("settings"), None, None]);
 }
 
@@ -56,17 +56,7 @@ fn the_tray_leaves_every_advanced_setting_to_the_settings_page() {
     let only = ["scene_sound", "scene_capture", "duck", "allow_flashing"];
     assert_eq!(options, only, "the tray sets only the sound switches and the flashing switch");
     assert!(settings.contains("\"SetOption\""));
-    for call in [
-        "SetPaused",
-        "SetMuted",
-        "SetOption",
-        "SetVolume",
-        "Activate",
-        "Next",
-        "SetWallpaper",
-        "SetFavorite",
-        "Confirm",
-    ] {
+    for call in ["SetPaused", "SetMuted", "SetOption", "SetVolume", "Next", "SetWallpaper", "SetFavorite"] {
         assert!(tray.contains(&format!("act(\"{call}\"")), "{call}");
     }
 }
@@ -83,11 +73,11 @@ fn the_tray_offers_the_app_only_where_it_is_installed() {
     assert!(read(&format!("../../packaging/dbus/{APP_ID}.service")).contains("Exec=@BINDIR@/wprs-app"));
     let tray = read("../../integrations/plasma-tray/contents/ui/Daemon.qml");
     assert!(tray.contains(&format!("const app = \"{APP_ID}\"")) && tray.contains("\"ListActivatableNames\""));
-    let panel = read("../../integrations/plasma-tray/contents/ui/Panel.qml");
-    assert_eq!(panel.matches("visible: panel.daemon.hasApp\n").count(), 2);
-    assert!(panel.contains("visible: !panel.daemon.hasApp\n"));
-    let row = read("../../integrations/plasma-tray/contents/ui/ScreenRow.qml");
-    assert!(row.contains("row.daemon.act(\"RetryEffects\", [])") && row.contains("i18n(\"Try again\")"));
+    let foot = read("../../integrations/plasma-tray/contents/ui/Foot.qml");
+    assert_eq!(foot.matches("visible: foot.daemon.hasApp\n").count(), 2);
+    assert!(foot.contains("visible: !foot.daemon.hasApp && foot.note\n"));
+    let notes = read("../../integrations/plasma-tray/contents/ui/Notes.qml");
+    assert!(notes.contains("daemon.act(\"RetryEffects\", [])") && notes.contains("i18n(\"Try again\")"));
 }
 
 #[tokio::test]

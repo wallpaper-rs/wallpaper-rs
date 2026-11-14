@@ -13,19 +13,26 @@ Item {
         property var decided: []
         property var asked: []
         property var acts: []
+        property var opened: []
 
-        function i18n(text) {
-            return text;
+        function i18n(text, first, second, third) {
+            return [text, first, second, third].filter(part => part !== undefined).join(" ");
         }
 
         width: 400
         index: 0
         name: "X-1"
         info: ({
-                "item": "A"
+                "item": "A",
+                "playlist": null,
+                "still_reason": "battery"
             })
         daemon: QtObject {
+            property var current: ({})
+            property var state: ({})
+
             signal updated(string topic, var ids)
+            signal choose(string name)
 
             function query(member, args, iface, onReply) {
                 row.asked.push(member);
@@ -51,6 +58,8 @@ Item {
                 return path;
             }
         }
+
+        onMore: name => opened.push(name)
     }
 
     App.Thumbnail {
@@ -81,33 +90,34 @@ Item {
             return test(item) ? item : Array.from(item.data ?? []).map(child => find(child, test)).find(found => found) ?? null;
         }
 
-        function decide(what) {
-            row.decided = what;
-            row.daemon.updated("library", ["A"]);
-        }
-
-        function test_mature_and_flashing() {
+        function test_row_shows_the_wallpaper_and_its_actions() {
             tryVerify(() => row.thumb !== "");
-            const image = find(row, item => item instanceof Image && String(item.source).endsWith("green.png"));
-            const warning = find(row, item => String(item.text ?? "").startsWith("Flashes"));
-            const reveal = find(row, item => String(item.text ?? "").startsWith("Mature content"));
-            tryCompare(image, "status", Image.Ready);
             compare(row.asked, ["GetItem", "Thumbnail"]);
-            compare([image.implicitHeight, warning.visible, reveal.visible], [12, true, true]);
-            compare(warning.text, "Flashes or shows fast patterns that can trigger seizures");
-            compare([reveal.activeFocusOnTab, reveal.width, reveal.height], [true, image.parent.width, image.parent.height]);
-            reveal.forceActiveFocus();
-            keyClick(Qt.Key_Space);
-            compare(row.acts, [["Library1", "Confirm", ["A"], "mature"]]);
-            mouseClick(image);
-            compare(row.acts.length, 2);
-            decide(["mature"]);
-            tryCompare(image, "implicitHeight", 32);
-            compare(reveal.visible, false);
-            mouseClick(image);
-            compare(row.acts.length, 2);
-            decide(["mature", "photosensitive"]);
-            tryCompare(warning, "text", "Flashes or shows fast patterns; you allowed it");
+            tryCompare(row, "title", "Storm");
+            const next = find(row, item => String(item.text ?? "") === "Next");
+            const choose = find(row, item => String(item.text ?? "") === "Choose…");
+            const more = find(row, item => item.glyph === "dots-three");
+            const still = find(row, item => String(item.text ?? "").includes("Still: on battery"));
+            compare(next.enabled, false);
+            compare(still.text, "X-1 · no playlist running · Still: on battery");
+            compare(find(row, item => String(item.text ?? "").startsWith("Mature content")), null);
+            row.info = {
+                "item": "A",
+                "playlist": {
+                    "name": "Calm",
+                    "position": 0,
+                    "count": 3
+                }
+            };
+            compare(next.enabled, true);
+            mouseClick(next);
+            compare(row.acts, [["Playlists1", "Next", "X-1"]]);
+            let chosen = [];
+            row.daemon.choose.connect(name => chosen.push(name));
+            mouseClick(choose);
+            compare(chosen, ["X-1"]);
+            mouseClick(more);
+            compare(row.opened, ["X-1"]);
         }
 
         function test_the_app_reveals_with_a_key() {
