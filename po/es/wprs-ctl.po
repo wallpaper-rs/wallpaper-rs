@@ -17,8 +17,8 @@ msgid "yes, allowed"
 msgstr "sí, permitido"
 
 #: apps/wprs-ctl/src/about.rs
-msgid "yes, asks before it is shown"
-msgstr "sí, pregunta antes de mostrarse"
+msgid "yes, disabled"
+msgstr "sí, deshabilitado"
 
 #: apps/wprs-ctl/src/about.rs
 msgid "Description:"
@@ -850,21 +850,11 @@ msgstr "Para una página web: la pantalla en la que se muestra mientras se captu
 
 #: apps/wprs-ctl/src/caution.rs
 msgid ""
-"Warning: this wallpaper flashes or shows fast patterns that can trigger "
-"seizures in people with photosensitive epilepsy."
+"To allow wallpapers that flash, run: wprs-ctl config playback.allow_flashing "
+"true"
 msgstr ""
-"Aviso: este fondo parpadea o muestra patrones rápidos que pueden provocar "
-"convulsiones en personas con epilepsia fotosensible."
-
-#: apps/wprs-ctl/src/caution.rs
-msgid "Show it anyway? You will not be asked again for this package."
-msgstr ""
-"¿Mostrarlo de todos modos? No se volverá a preguntar para este paquete."
-
-#: apps/wprs-ctl/src/caution.rs
-msgid "not applied; run wprs-ctl lib confirm photosensitive %1 to allow it"
-msgstr ""
-"no aplicado; ejecuta wprs-ctl lib confirm photosensitive %1 para permitirlo"
+"Para permitir los fondos que destellan, ejecuta: wprs-ctl config "
+"playback.allow_flashing true"
 
 #: apps/wprs-ctl/src/caution.rs
 msgid "Installed %1 %2."
@@ -3372,6 +3362,15 @@ msgstr "se detuvo sin respuesta"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid ""
+"Answer for every input a shown scene asks for in one go: allow some, leave "
+"the others out; the scene runs without what is left out"
+msgstr ""
+"Responde de una vez a todo lo que pide una escena que se ve: permite "
+"unas entradas y deja fuera las demás; la escena corre sin lo que se deja"
+" fuera"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid ""
 "Let the scene package shown now use an input whenever it is shown; another "
 "package with the same id does not get it"
 msgstr ""
@@ -3381,6 +3380,20 @@ msgstr ""
 #: apps/wprs-ctl/src/inputs.rs
 msgid "Package id of the scene"
 msgstr "Id del paquete de la escena"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "Inputs to allow"
+msgstr "Entradas que se permiten"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "Inputs to leave out"
+msgstr "Entradas que se dejan fuera"
+
+#: apps/wprs-ctl/src/inputs.rs
+msgid "The screen whose package answers, when several show one with this id"
+msgstr ""
+"La pantalla cuyo paquete responde, cuando varias muestran uno con este "
+"id"
 
 #: apps/wprs-ctl/src/inputs.rs
 msgid "Input to let the scene read"
@@ -3497,15 +3510,15 @@ msgstr "Muestra los niveles de las 64 bandas del sonido que sigue la escena de u
 msgid "The screen, such as a preview output named preview:1"
 msgstr "La pantalla, por ejemplo una salida de vista previa llamada preview:1"
 
-#: apps/wprs-ctl/src/inputs.rs
+#: apps/wprs-ctl/src/inputs/giving.rs
 msgid "%1 does not show %2"
 msgstr "%1 no muestra %2"
 
-#: apps/wprs-ctl/src/inputs.rs
+#: apps/wprs-ctl/src/inputs/giving.rs
 msgid "more than one package with the id %1 is shown; choose one with --output"
 msgstr "se muestra más de un paquete con el id %1; elige uno con --output"
 
-#: apps/wprs-ctl/src/inputs.rs
+#: apps/wprs-ctl/src/inputs/giving.rs
 msgid ""
 "Asked in a desktop notification: the scene gets the input once you allow it "
 "there."
@@ -3513,9 +3526,17 @@ msgstr ""
 "Se preguntó en una notificación del escritorio: la escena recibe la entrada "
 "en cuanto la permitas allí."
 
-#: apps/wprs-ctl/src/inputs.rs
+#: apps/wprs-ctl/src/inputs/giving.rs
 msgid "%1 may use %2"
 msgstr "%1 puede usar %2"
+
+#: apps/wprs-ctl/src/inputs/giving.rs
+msgid "%1 is not shown"
+msgstr "%1 no se muestra"
+
+#: apps/wprs-ctl/src/inputs/giving.rs
+msgid "%1 answered"
+msgstr "%1 respondido"
 
 #: apps/wprs-ctl/src/inputs/asking.rs
 msgid " && wprs-ctl input clicks on -o %1"
@@ -3552,6 +3573,10 @@ msgstr "no se vuelve a preguntar durante unos minutos para %1: %2"
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid "%1 shows %2 using %3 (allowed: %4)"
 msgstr "%1 muestra %2, que usa %3 (permitido: %4)"
+
+#: apps/wprs-ctl/src/inputs/shown.rs
+msgid "%1 runs %2 without: %3"
+msgstr "%1 corre %2 sin: %3"
 
 #: apps/wprs-ctl/src/inputs/shown.rs
 msgid "%1 shows an image whose parallax follows the pointer"
@@ -3644,6 +3669,10 @@ msgstr "ninguno de %1"
 #: apps/wprs-ctl/src/items.rs
 msgid "%1 (%2 times)"
 msgstr "%1 (%2 veces)"
+
+#: apps/wprs-ctl/src/items.rs
+msgid "flashes and is disabled"
+msgstr "destella y está deshabilitado"
 
 #: apps/wprs-ctl/src/items.rs
 msgid "not shown here"
@@ -4561,15 +4590,14 @@ msgstr "Lado de la miniatura en píxeles"
 
 #: apps/wprs-ctl/src/library.rs
 msgid ""
-"Show mature thumbnails of packages, allow photosensitive packages to be "
-"shown, let scenes keep moving when the desktop asks for reduced motion, or "
-"hide the time zone, the language, the graphics card or storage from a web "
-"page"
+"Show mature thumbnails of packages, let scenes keep moving when the desktop "
+"asks for reduced motion, or hide the time zone, the language, the graphics "
+"card or storage from a web page"
 msgstr ""
-"Mostrar las miniaturas para adultos de los paquetes, permitir que se "
-"muestren paquetes fotosensibles, dejar que las escenas sigan moviéndose "
-"cuando el escritorio pide menos movimiento, u ocultar a una página web la "
-"zona horaria, el idioma, la tarjeta gráfica o el almacenamiento"
+"Mostrar las miniaturas para adultos de los paquetes, dejar que las "
+"escenas sigan moviéndose cuando el escritorio pide menos movimiento, u "
+"ocultar a una página web la zona horaria, el idioma, la tarjeta gráfica "
+"o el almacenamiento"
 
 #: apps/wprs-ctl/src/library.rs
 msgid "What to allow"

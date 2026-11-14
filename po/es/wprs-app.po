@@ -867,12 +867,12 @@ msgstr "Alineación"
 #: apps/wprs-app/qml/ApplyDialog.qml
 msgid ""
 "This wallpaper flashes or shows fast patterns that can trigger seizures in "
-"people with photosensitive epilepsy. Apply it only if that is safe for "
-"whoever sees this screen; you will not be asked again for this package."
+"people with photosensitive epilepsy. Wallpapers that flash are disabled: "
+"allow them in the settings to apply it."
 msgstr ""
-"Este fondo destella o muestra patrones rápidos que pueden provocar crisis a "
-"personas con epilepsia fotosensible. Aplícalo solo si es seguro para quien "
-"vea esta pantalla; no se volverá a preguntar por este paquete."
+"Este fondo destella o muestra patrones rápidos que pueden provocar "
+"crisis a personas con epilepsia fotosensible. Los fondos que destellan "
+"están deshabilitados: permítelos en los ajustes para aplicarlo."
 
 #: apps/wprs-app/qml/ApplyDialog.qml apps/wprs-app/qml/SceneBuild.qml
 msgid "Screen:"
@@ -980,6 +980,12 @@ msgid "Mature content: click the picture or press Enter on it to show it"
 msgstr ""
 "Contenido para adultos: haz clic en la imagen o pulsa Intro sobre ella para "
 "mostrarlo"
+
+#: apps/wprs-app/qml/BrowseRow.qml
+msgid "Flashes and is disabled: allow wallpapers that flash in the settings."
+msgstr ""
+"Destella y está deshabilitado: permite los fondos que destellan en los "
+"ajustes."
 
 #: apps/wprs-app/qml/BrowseRow.qml
 msgid "Show the mature content"
@@ -3326,11 +3332,12 @@ msgstr "%1, de %2"
 #: apps/wprs-app/qml/PackageAbout.qml
 msgid ""
 "This wallpaper flashes or shows fast patterns that can trigger seizures in "
-"people with photosensitive epilepsy. Playlists skip it until you allow it."
+"people with photosensitive epilepsy. It is disabled, and playlists skip it, "
+"until wallpapers that flash are allowed."
 msgstr ""
-"Este fondo destella o muestra patrones rápidos que pueden provocar crisis a "
-"personas con epilepsia fotosensible. Las listas lo saltan hasta que lo "
-"permitas."
+"Este fondo destella o muestra patrones rápidos que pueden provocar "
+"crisis a personas con epilepsia fotosensible. Está deshabilitado y las "
+"listas lo saltan hasta que se permitan los fondos que destellan."
 
 #: apps/wprs-app/qml/PackageAbout.qml
 msgid ""
@@ -3341,8 +3348,8 @@ msgstr ""
 "personas con epilepsia fotosensible."
 
 #: apps/wprs-app/qml/PackageAbout.qml
-msgid "Allow this wallpaper…"
-msgstr "Permitir este fondo…"
+msgid "Allow wallpapers that flash…"
+msgstr "Permitir los fondos que destellan…"
 
 #: apps/wprs-app/qml/PackageAbout.qml
 msgid "Rating:"
@@ -3384,20 +3391,20 @@ msgstr "Idiomas:"
 msgid "What's new:"
 msgstr "Novedades:"
 
-#: apps/wprs-app/qml/PackageAbout.qml
-msgid "Allow this wallpaper?"
-msgstr "¿Permitir este fondo?"
+#: apps/wprs-app/qml/PackageAbout.qml apps/wprs-app/qml/SelectionDialogs.qml
+msgid "Allow wallpapers that flash?"
+msgstr "¿Permitir los fondos que destellan?"
 
-#: apps/wprs-app/qml/PackageAbout.qml
+#: apps/wprs-app/qml/PackageAbout.qml apps/wprs-app/qml/SelectionDialogs.qml
 msgid ""
-"It flashes or shows fast patterns that can trigger seizures in people with "
-"photosensitive epilepsy. Allow it only if that is safe for whoever sees your "
-"screens; screens and playlists may then show it without asking again."
+"Wallpapers that flash or show fast patterns can trigger seizures in people "
+"with photosensitive epilepsy. Allow them only if that is safe for whoever "
+"sees your screens; every screen and playlist may then show them."
 msgstr ""
-"Destella o muestra patrones rápidos que pueden provocar crisis a personas "
-"con epilepsia fotosensible. Permítelo solo si es seguro para quien vea tus "
-"pantallas; después las pantallas y las listas podrán mostrarlo sin volver a "
-"preguntar."
+"Los fondos que destellan o muestran patrones rápidos pueden provocar "
+"crisis a personas con epilepsia fotosensible. Permítelos solo si es "
+"seguro para quien vea tus pantallas; después cualquier pantalla o lista "
+"podrá mostrarlos."
 
 #: apps/wprs-app/qml/PackageAbout.qml
 msgid "Open this address in the browser?"
@@ -12855,21 +12862,6 @@ msgid "Choose all"
 msgstr "Elegir todas"
 
 #: apps/wprs-app/qml/SelectionDialogs.qml
-msgid "Allow these wallpapers?"
-msgstr "¿Permitir estos fondos?"
-
-#: apps/wprs-app/qml/SelectionDialogs.qml
-msgid ""
-"They flash or show fast patterns that can trigger seizures in people with "
-"photosensitive epilepsy. Allow them only if that is safe for whoever sees "
-"your screens; screens and playlists may then show them without asking again."
-msgstr ""
-"Destellan o muestran patrones rápidos que pueden provocar crisis a personas "
-"con epilepsia fotosensible. Permítelos solo si es seguro para quien vea tus "
-"pantallas; después las pantallas y las listas podrán mostrarlos sin volver a "
-"preguntar."
-
-#: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "Import files"
 msgstr "Importar archivos"
 
@@ -13280,11 +13272,11 @@ msgstr "Contenido para adultos: abre los detalles para mostrarlo"
 
 #: apps/wprs-app/qml/Tile.qml
 msgid ""
-"Flashes or shows fast patterns; playlists skip it until you allow it in its "
-"details"
+"Flashes or shows fast patterns; it is disabled, and playlists skip it, until "
+"wallpapers that flash are allowed"
 msgstr ""
-"Destella o muestra patrones rápidos; las listas lo saltan hasta que lo "
-"permitas en sus detalles"
+"Destella o muestra patrones rápidos; está deshabilitado y las listas lo "
+"saltan hasta que se permitan los fondos que destellan"
 
 #: apps/wprs-app/qml/Tile.qml
 msgid ""
@@ -14503,9 +14495,8 @@ msgid "Depth layers of the parallax"
 msgstr "Capas de profundidad del paralaje"
 
 #: apps/wprs-app/qml/facade/Labels.qml
-msgid "Slow down or stop wallpapers that flash more than three times a second"
-msgstr ""
-"Frenar o detener los fondos que destellan más de tres veces por segundo"
+msgid "Allow wallpapers that flash"
+msgstr "Permitir los fondos que destellan"
 
 #: apps/wprs-app/qml/facade/Labels.qml
 msgid "Let scenes play their sounds"
@@ -17374,15 +17365,23 @@ msgstr "Ruta de un paquete de recursos"
 msgid "Use path"
 msgstr "Usar la ruta"
 
-msgid "Type or paste the full paths of the files to add, one per line, or choose them with the button below."
-msgstr "Escribe o pega las rutas completas de los archivos que quieres añadir, una por línea, o elígelos con el botón de abajo."
+#: apps/wprs-app/qml/SelectionDialogs.qml
+msgid ""
+"Type or paste the full paths of the files to add, one per line, or choose "
+"them with the button below."
+msgstr ""
+"Escribe o pega las rutas completas de los archivos que quieres añadir, una "
+"por línea, o elígelos con el botón de abajo."
 
+#: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "One path per line"
 msgstr "Una ruta por línea"
 
+#: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "Paths to import"
 msgstr "Rutas que importar"
 
+#: apps/wprs-app/qml/SelectionDialogs.qml
 msgid "Import these paths"
 msgstr "Importar estas rutas"
 

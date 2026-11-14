@@ -141,19 +141,19 @@ msgstr ""
 msgid "A script of this scene stopped and the scene goes on without it: %1"
 msgstr "Un script de esta escena se detuvo y la escena sigue sin él: %1"
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid "Allow"
 msgstr "Permitir"
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid "Not now"
 msgstr "Ahora no"
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid "Let a wallpaper show what plays?"
 msgstr "¿Dejar que un fondo muestre lo que suena?"
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid ""
 "Let “%1” show the title, artist, album, cover and progress of what the media "
 "player plays? Nothing of it is kept, logged or sent."
@@ -162,11 +162,11 @@ msgstr ""
 "avance de lo que suena en el reproductor? Nada de eso se guarda, se registra "
 "ni se envía."
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid "Let a wallpaper follow the sound?"
 msgstr "¿Dejar que un fondo siga el sonido?"
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid ""
 "Let “%1” follow the sound that plays? The sound is turned into levels on "
 "this computer; nothing is recorded, kept or sent."
@@ -174,17 +174,55 @@ msgstr ""
 "¿Dejar que «%1» siga el sonido que suena? El sonido se convierte en niveles "
 "en este equipo; no se graba, no se guarda y no se envía."
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid "Let a wallpaper follow the pointer?"
 msgstr "¿Dejar que un fondo siga el puntero?"
 
-#: apps/wprsd/src/words.rs
+#: apps/wprsd/src/words/ask.rs
 msgid ""
 "Let “%1” follow the pointer? Only its latest position over the screen "
 "reaches the wallpaper, and it is never kept."
 msgstr ""
 "¿Dejar que «%1» siga el puntero? Al fondo solo llega su última posición "
 "sobre la pantalla, y nunca se guarda."
+
+#: apps/wprsd/src/words/ask.rs
+msgid ""
+"This wallpaper flashes or shows fast patterns that can trigger seizures in "
+"people with photosensitive epilepsy, and wallpapers that flash are turned "
+"off: allow them in the settings first."
+msgstr ""
+"Este fondo destella o muestra patrones rápidos que pueden provocar "
+"crisis a personas con epilepsia fotosensible, y los fondos que destellan"
+" están desactivados: permítelos antes en los ajustes."
+
+#: apps/wprsd/src/words/ask.rs
+msgid "what plays"
+msgstr "lo que suena"
+
+#: apps/wprsd/src/words/ask.rs
+msgid "the sound"
+msgstr "el sonido"
+
+#: apps/wprsd/src/words/ask.rs
+msgid "clicks"
+msgstr "los clics"
+
+#: apps/wprsd/src/words/ask.rs
+msgid "the pointer"
+msgstr "el puntero"
+
+#: apps/wprsd/src/words/ask.rs
+msgid "Let a wallpaper use these?"
+msgstr "¿Dejar que un fondo use esto?"
+
+#: apps/wprsd/src/words/ask.rs
+msgid ""
+"“%1” asks to use: %2. Until you answer it runs without them, and nothing is "
+"kept or sent."
+msgstr ""
+"«%1» pide usar: %2. Hasta que respondas corre sin ello, y nada se guarda"
+" ni se envía."
 
 #: apps/wprsd/src/words.rs
 msgid ""
@@ -296,3 +334,4 @@ msgid ""
 msgstr ""
 "El paquete está instalado pero incompleto: no se pudo instalar %1, que "
 "necesita."
+
