@@ -37,7 +37,7 @@ RowLayout {
         id: chosen
 
         rightPadding: Look.e2
-        text: App.trc("covers", "%1 chosen", seleccion.count)
+        text: seleccion.count === 1 ? App.trc("covers", "1 chosen") : App.trc("covers", "%1 chosen", seleccion.count)
         font.family: Look.letraTitulo
         font.pixelSize: Look.tFoco
         font.weight: Font.Bold
