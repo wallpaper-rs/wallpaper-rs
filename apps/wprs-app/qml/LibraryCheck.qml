@@ -24,6 +24,11 @@ QtObject {
         must(library.selected === library.total && page.choosing, "Ctrl+A does not choose every wallpaper of the library");
         App.backend.press(Qt.Key_Escape, 0);
         must(library.selected === 0 && !page.choosing, "Escape does not clear the choice of the library");
+        must(library.total > 1, "the check library has fewer than two wallpapers");
+        covers.shelf.currentIndex = 0;
+        App.backend.press(Qt.Key_Right, Qt.ShiftModifier);
+        must(library.selected === 2 && page.choosing, "Shift with an arrow key does not extend the choice: " + library.selected);
+        App.backend.press(Qt.Key_Escape, 0);
         App.backend.press(Qt.Key_Down, 0);
         must(page.all && page.full, "the Down key does not show every wallpaper");
         App.backend.press(Qt.Key_Escape, 0);

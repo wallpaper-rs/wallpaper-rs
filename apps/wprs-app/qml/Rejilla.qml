@@ -46,6 +46,7 @@ Coleccion {
         highlight: Item {
         }
         model: rejilla.model
+        Keys.onPressed: event => rejilla.press(event)
 
         delegate: TapaVista {
             width: rejilla.cover

@@ -39,6 +39,7 @@ Coleccion {
             highlight: Item {
             }
             model: estante.model
+            Keys.onPressed: event => estante.press(event)
             Component.onCompleted: Qt.callLater(() => {
                 positionViewAtBeginning();
                 positionViewAtIndex(currentIndex, ListView.Contain);

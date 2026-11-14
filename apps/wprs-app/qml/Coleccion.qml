@@ -19,9 +19,11 @@ FocusScope {
     readonly property string currentName: view.currentItem?.name ?? ""
     readonly property string currentCaption: view.currentItem?.caption ?? ""
     property Item view
+    property int from: -1
 
     signal activated(int index)
     signal toggled(int index)
+    signal extended(int from, int to)
 
     function role(entry, name) {
         const found = entry[name];
@@ -29,10 +31,29 @@ FocusScope {
     }
 
     function tap(index, modifiers) {
+        const before = view.currentIndex;
         view.currentIndex = index;
         view.forceActiveFocus();
-        if (choosing || modifiers & Qt.ControlModifier)
+        if (modifiers & Qt.ShiftModifier)
+            extended(before, index);
+        else if (choosing || modifiers & Qt.ControlModifier)
             toggled(index);
+    }
+
+    function press(event) {
+        const moves = [Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down, Qt.Key_Home, Qt.Key_End, Qt.Key_PageUp, Qt.Key_PageDown];
+        from = event.modifiers & Qt.ShiftModifier && moves.includes(event.key) ? view.currentIndex : -1;
+    }
+
+    Connections {
+        target: view
+
+        function onCurrentIndexChanged() {
+            const start = from;
+            from = -1;
+            if (start >= 0 && view.currentIndex >= 0 && start !== view.currentIndex)
+                extended(start, view.currentIndex);
+        }
     }
 
     Keys.onReturnPressed: activated(view.currentIndex)

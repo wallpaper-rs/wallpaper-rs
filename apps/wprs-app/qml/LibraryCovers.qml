@@ -46,6 +46,14 @@ FocusScope {
         }
     }
 
+    function extend(from, to) {
+        if (covers.page.chosen.length === 0)
+            covers.page.library.toggle(from, true);
+        covers.page.choosing = true;
+        covers.page.library.range(to, false);
+        covers.page.sync();
+    }
+
     implicitHeight: all ? grid.height + fixed.implicitHeight + Look.e5 : shelf.implicitHeight
     onAllChanged: {
         if (all && grid.currentIndex < 0)
@@ -94,6 +102,7 @@ FocusScope {
         }
         onActivated: covers.page.activate()
         onToggled: index => covers.page.toggle(index)
+        onExtended: (from, to) => covers.extend(from, to)
         onCurrentIndexChanged: Qt.callLater(covers.look)
     }
 
@@ -120,6 +129,7 @@ FocusScope {
         chosen: covers.page.chosen
         onActivated: covers.page.activate()
         onToggled: index => covers.page.toggle(index)
+        onExtended: (from, to) => covers.extend(from, to)
     }
 
     Connections {
