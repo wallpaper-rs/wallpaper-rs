@@ -21,4 +21,7 @@
     <string name="auto_update">Actualizar automáticamente los repositorios</string>
     <string name="away_note">%1$s existe solo en otro equipo. Publicarlo en el servidor o en un repositorio lo hace disponible aquí.</string>
     <string name="away_note_repo">%1$s viene del repositorio %2$s, que no está agregado en este dispositivo. Agregar el repositorio lo hace disponible aquí.</string>
+    <string name="repo_on_phone">En este teléfono</string>
+    <string name="repo_search_all">Buscar en los repositorios</string>
+    <string name="repo_manage_note">Añádelos, quítalos o actualízalos</string>
 </resources>

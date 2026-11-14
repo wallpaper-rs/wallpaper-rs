@@ -21,4 +21,7 @@
     <string name="auto_update">Update repositories automatically</string>
     <string name="away_note">%1$s exists only on another device. Publishing it to the server or to a repository makes it available here.</string>
     <string name="away_note_repo">%1$s comes from the repository %2$s, which is not added on this device. Adding the repository makes it available here.</string>
+    <string name="repo_on_phone">On this phone</string>
+    <string name="repo_search_all">Search the repositories</string>
+    <string name="repo_manage_note">Add, remove or update them</string>
 </resources>

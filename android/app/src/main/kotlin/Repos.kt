@@ -37,7 +37,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @Composable
-private fun repoName(bundled: Boolean, name: String) = if (bundled) stringResource(R.string.repo_examples) else name
+fun repoName(bundled: Boolean, name: String) = if (bundled) stringResource(R.string.repo_examples) else name
 
 fun JSONArray?.objects() = this?.let { list -> List(list.length(), list::getJSONObject) }.orEmpty()
 

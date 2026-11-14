@@ -12,6 +12,7 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
@@ -87,6 +88,12 @@ class FirstRunTest {
         compose.onNodeWithText(context.getString(R.string.empty_title)).assertIsDisplayed()
         shows("bundled")
         compose.onNodeWithTag("explore").performClick()
+        shows("explore_page")
+        shows("offered")
+        compose.onNodeWithTag("explore_page").performScrollToNode(hasTestTag("connect_server"))
+        compose.onNodeWithTag("connect_server").assertIsDisplayed()
+        compose.onNodeWithTag("explore_page").performScrollToNode(hasTestTag("manage_repos"))
+        compose.onNodeWithTag("manage_repos").performClick()
         shows("sources")
         val name = bundledName()
         compose.waitUntil(TIMEOUT_MS) { compose.onAllNodes(hasText(name)).fetchSemanticsNodes().isNotEmpty() }
@@ -114,12 +121,13 @@ class FirstRunTest {
         opened()
         shows("explore")
         compose.onNodeWithTag("explore").performClick()
-        shows("connect_server")
+        shows("explore_page")
+        compose.onNodeWithTag("explore_page").performScrollToNode(hasTestTag("connect_server"))
         compose.onNodeWithTag("connect_server").performClick()
         shows("address")
         shows("scan")
         scenario?.onActivity { it.onBackPressedDispatcher.onBackPressed() }
-        shows("sources")
+        shows("explore_page")
     }
 
     @Test
