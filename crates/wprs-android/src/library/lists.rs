@@ -67,6 +67,11 @@ pub(super) fn rotate(lib: &mut Library, name: &str, items: &[String], every: &st
     Ok(json!(uid))
 }
 
+pub(super) fn named(lib: &Library, mut items: Vec<Item>) -> Result<Vec<Item>, Error> {
+    lib.localize(&mut items, &super::languages())?;
+    Ok(items)
+}
+
 pub(super) fn listed(items: Vec<Item>) -> Result<Value, Error> {
     let allowed = settings::playback().allow_flashing;
     let listed = items.into_iter().map(|item| {

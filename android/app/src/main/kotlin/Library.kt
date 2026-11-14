@@ -72,7 +72,7 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
     val context = LocalContext.current
     val revision = main.revision.intValue
     val items by loaded<List<Item>?>(null, revision, query, languages) { fetch("items", "query" to query, "languages" to languages) }
-    val now by loaded<Showing?>(null, revision) { showing() }
+    val now by loaded<Showing?>(null, revision, languages) { showing(languages) }
     val linked by loaded<String?>(null, revision) { linkedName(Sync.status(), context.online()) }
     val where = remember(now) { context.screens() }
     chosen.follow(items)

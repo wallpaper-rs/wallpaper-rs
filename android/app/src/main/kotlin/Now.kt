@@ -34,10 +34,10 @@ import org.json.JSONObject
 
 class Showing(val item: Item, val listed: Boolean)
 
-suspend fun showing(): Showing? {
+suspend fun showing(languages: List<String>): Showing? {
     val current = ask("current") as? JSONObject ?: return null
     val uid = current.takeUnless { it.isNull("on") }?.optString("on")?.takeIf(String::isNotEmpty) ?: return null
-    val item = runCatching { Item(ask("item", "uid" to uid) as JSONObject) }.getOrNull() ?: return null
+    val item = runCatching { Item(ask("item", "uid" to uid, "languages" to languages) as JSONObject) }.getOrNull() ?: return null
     return Showing(item, !current.isNull("playlist"))
 }
 

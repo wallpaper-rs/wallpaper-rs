@@ -32,6 +32,10 @@ pub(super) fn scenes() {
     let titles: BTreeSet<_> =
         spanish.as_array().unwrap().iter().map(|i| i["title"].as_str().unwrap()).collect();
     assert!(titles.contains("Pulso") && titles.contains("Colinas al atardecer"), "{titles:?}");
+    let mix = ask(json!({ "op": "create", "name": "Nombres" })).as_str().unwrap().to_owned();
+    ask(json!({ "op": "add", "playlist": mix, "items": [pulse] }));
+    assert_eq!(ask(json!({ "op": "entries", "playlist": mix }))[0]["title"], "Pulso");
+    ask(json!({ "op": "delete", "playlist": mix }));
     let lacks = |title: &str| {
         let found = listed.as_array().unwrap().iter().find(|i| i["title"] == title).unwrap();
         ask(json!({ "op": "item", "uid": found["uid"] }))["lacks"].clone()

@@ -10,7 +10,7 @@ use wprs_library::{Library, PlaylistInfo, Rules};
 mod labels;
 mod lists;
 
-use lists::listed;
+use lists::{listed, named};
 pub(crate) use lists::{drop_playlist, remove as drop_items};
 
 const DATABASE: &str = "library.db";
@@ -150,7 +150,7 @@ fn answer(lib: &mut Library, request: Request, on_battery: bool) -> Result<Value
         Request::Favorite { uids, favorite } => json!(lib.set_favorite_many(&known(lib, &uids), favorite)?),
         Request::Remove { uids } => lists::remove(lib, &uids, now)?,
         Request::Playlists => lists::playlists(lib, now)?,
-        Request::Entries { playlist } => listed(lib.playlist_items(&playlist, now)?)?,
+        Request::Entries { playlist } => listed(named(lib, lib.playlist_items(&playlist, now)?)?)?,
         Request::Create { name } => json!(lib.create_playlist(&name, None, &Rules::default())?),
         Request::Save { playlist } => json!(lib.update_playlist(&playlist)?),
         Request::Delete { playlist } => {
