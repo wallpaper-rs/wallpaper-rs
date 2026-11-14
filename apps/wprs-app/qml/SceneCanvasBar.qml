@@ -20,59 +20,75 @@ ColumnLayout {
         implicitHeight: Look.barraLienzoAlto
         color: Look.nocheAlta
 
-        RowLayout {
+        Flickable {
+            id: strip
+
             anchors.fill: parent
-            anchors.leftMargin: Look.e3
-            anchors.rightMargin: Look.e3
-            spacing: Look.e2
-
-            SceneZoomMenu {
-                canvas: bar.canvas
+            contentWidth: Math.max(width, row.implicitWidth + Look.e3 * 2)
+            contentHeight: height
+            flickableDirection: Flickable.HorizontalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+            QQC2.ScrollBar.horizontal: QQC2.ScrollBar {
+                policy: strip.contentWidth > strip.width ? QQC2.ScrollBar.AlwaysOn : QQC2.ScrollBar.AlwaysOff
             }
 
-            QQC2.ToolButton {
-                icon.name: "cursor-click"
-                text: App.tr("Test the pointer")
-                checkable: true
-                checked: bar.canvas.testing
-                QQC2.ToolTip.text: App.tr("Test the pointer and clicks")
-                QQC2.ToolTip.visible: hovered
-                onToggled: {
-                    bar.canvas.testing = checked;
-                    if (!checked)
-                        bar.page.editor.touch(-1, -1, 0);
+            RowLayout {
+                id: row
+
+                x: Look.e3
+                width: strip.contentWidth - Look.e3 * 2
+                height: strip.height
+                spacing: Look.e2
+
+                SceneZoomMenu {
+                    canvas: bar.canvas
                 }
-            }
 
-            QQC2.ComboBox {
-                id: guides
+                QQC2.ToolButton {
+                    icon.name: "cursor-click"
+                    text: App.tr("Test the pointer")
+                    checkable: true
+                    checked: bar.canvas.testing
+                    QQC2.ToolTip.text: App.tr("Test the pointer and clicks")
+                    QQC2.ToolTip.visible: hovered
+                    onToggled: {
+                        bar.canvas.testing = checked;
+                        if (!checked)
+                            bar.page.editor.touch(-1, -1, 0);
+                    }
+                }
 
-                Layout.minimumWidth: Look.altoCampo * 3
-                Accessible.name: App.tr("Guide")
-                model: bar.canvas.aspects.map(aspect => aspect || App.tr("No guide"))
-                displayText: App.tr("Guide: %1", currentText)
-            }
+                QQC2.ComboBox {
+                    id: guides
 
-            SceneSpanPick {
-                id: spans
+                    Layout.minimumWidth: Look.altoCampo * 3
+                    Accessible.name: App.tr("Guide")
+                    model: bar.canvas.aspects.map(aspect => aspect || App.tr("No guide"))
+                    displayText: App.tr("Guide: %1", currentText)
+                }
 
-                page: bar.page
-            }
+                SceneSpanPick {
+                    id: spans
 
-            Item {
-                Layout.fillWidth: true
-            }
+                    page: bar.page
+                }
 
-            SceneSeeAs {
-                id: seeAs
+                Item {
+                    Layout.fillWidth: true
+                }
 
-                page: bar.page
-            }
+                SceneSeeAs {
+                    id: seeAs
 
-            SceneCapture {
-                id: capture
+                    page: bar.page
+                }
 
-                page: bar.page
+                SceneCapture {
+                    id: capture
+
+                    page: bar.page
+                }
             }
         }
     }
