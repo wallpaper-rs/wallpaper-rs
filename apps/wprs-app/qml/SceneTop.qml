@@ -10,8 +10,14 @@ RowLayout {
     readonly property var history: page.view.history ?? ({})
     readonly property bool dirty: page.editor.dirty
     readonly property bool filled: (page.view.layers ?? []).length > 0
+    property real roomy: 0
+    readonly property bool tight: width > 0 && width < roomy
 
     spacing: Look.e3
+    onImplicitWidthChanged: {
+        if (!tight || implicitWidth > roomy)
+            roomy = implicitWidth;
+    }
 
     Estado {
         text: top.dirty ? App.tr("Unsaved ·") : App.tr("Saved")
@@ -39,6 +45,7 @@ RowLayout {
         flat: true
         icon.name: "arrow-counter-clockwise"
         text: App.tr("Undo")
+        display: top.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
         enabled: (top.history.done ?? []).length > 0
         QQC2.ToolTip.text: top.history.undo ? App.tr("Undo: %1", top.history.undo) : ""
         QQC2.ToolTip.visible: hovered && QQC2.ToolTip.text !== ""
@@ -49,6 +56,7 @@ RowLayout {
         flat: true
         icon.name: "arrow-clockwise"
         text: App.tr("Redo")
+        display: top.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
         enabled: (top.history.undone ?? []).length > 0
         QQC2.ToolTip.text: top.history.redo ? App.tr("Redo: %1", top.history.redo) : ""
         QQC2.ToolTip.visible: hovered && QQC2.ToolTip.text !== ""
@@ -65,6 +73,9 @@ RowLayout {
         implicitHeight: Look.altoBotonArriba
         icon.name: "monitor-play"
         text: App.tr("View as wallpaper")
+        display: top.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+        QQC2.ToolTip.text: text
+        QQC2.ToolTip.visible: top.tight && hovered
         visible: top.page.viewable !== false
         enabled: top.page.editor.ready
         onClicked: top.page.use.view(view)
@@ -76,6 +87,9 @@ RowLayout {
         implicitHeight: Look.altoBotonArriba
         icon.name: "image"
         text: App.tr("Set as wallpaper")
+        display: top.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+        QQC2.ToolTip.text: text
+        QQC2.ToolTip.visible: top.tight && hovered
         enabled: top.page.editor.ready
         onClicked: top.page.use.place(place)
     }
