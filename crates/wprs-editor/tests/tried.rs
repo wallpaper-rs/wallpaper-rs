@@ -55,3 +55,17 @@ fn a_capture_with_a_preset_chosen_renders_the_preset_values() {
     assert_eq!(wprs_editor::tried::rendered(&doc, &spec)["speed"], 3);
     assert!(wprs_editor::tried::rendered(&doc, &json!({"time": 0})).is_empty());
 }
+
+#[test]
+fn the_form_reads_the_texts_of_each_language_instead_of_their_keys() {
+    let manifest: serde_json::Value =
+        serde_json::from_str(include_str!("../../../scenes/dusk/manifest.json")).unwrap();
+    let doc = json!({ "manifest": manifest });
+    let label = |language: &str| {
+        let form = wprs_editor::tried::query(&doc, &json!({"languages": [language]}));
+        let mood = form["fields"].as_array().unwrap().iter().find(|f| f["key"] == "mood").cloned().unwrap();
+        (mood["label"].as_str().unwrap().to_owned(), mood["options"][0]["label"].as_str().unwrap().to_owned())
+    };
+    assert_eq!(label("en"), ("Time of day".to_owned(), "Dusk".to_owned()));
+    assert!(!label("es").0.starts_with('@'));
+}

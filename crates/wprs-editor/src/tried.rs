@@ -1,3 +1,4 @@
+use serde::Deserialize;
 use serde_json::{Map, Value, json};
 
 pub fn values(doc: &Value, look: &Value) -> Option<Value> {
@@ -33,10 +34,18 @@ pub fn stage(doc: &Value, look: &Value, document: &mut Value) {
 }
 
 pub fn query(doc: &Value, ask: &Value) -> Value {
-    let properties = serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
-    let presets: Vec<wprs_scene::Preset> =
-        serde_json::from_value(doc["manifest"]["presets"].clone()).unwrap_or_default();
-    let languages: Vec<String> = serde_json::from_value(ask["languages"].clone()).unwrap_or_default();
+    let (properties, presets) = match wprs_format::Manifest::deserialize(&doc["manifest"]) {
+        Ok(manifest) => {
+            let shown = manifest.localized();
+            (shown.properties, shown.presets)
+        }
+        Err(_) => (
+            serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default(),
+            serde_json::from_value(doc["manifest"]["presets"].clone()).unwrap_or_default(),
+        ),
+    };
+    let mut languages: Vec<String> = serde_json::from_value(ask["languages"].clone()).unwrap_or_default();
+    languages.extend(doc["manifest"]["default_locale"].as_str().map(String::from));
     let tried = values(doc, ask).unwrap_or_default();
     let layer: wprs_scene::Values =
         tried.as_object().map(|o| o.clone().into_iter().collect()).unwrap_or_default();
