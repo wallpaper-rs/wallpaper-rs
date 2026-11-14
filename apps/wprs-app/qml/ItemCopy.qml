@@ -5,7 +5,7 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.Dialog {
+PanelChico {
     id: copying
 
     property string file: ""
@@ -41,15 +41,15 @@ Kirigami.Dialog {
     }
 
     title: App.tr("Edit a copy")
-    padding: Kirigami.Units.largeSpacing
-    preferredWidth: Kirigami.Units.gridUnit * 30
-    standardButtons: Kirigami.Dialog.Close
+    width: Look.panelChico * 3 / 2
+    quiet: App.tr("Close")
 
     SceneEditor {
         id: helper
     }
 
     ColumnLayout {
+        width: copying.width - 2 * Look.e4
         spacing: Kirigami.Units.smallSpacing
 
         QQC2.Label {
@@ -94,21 +94,33 @@ Kirigami.Dialog {
             text: App.tr("I made this package or its author allows a copy")
         }
 
-        Kirigami.FormLayout {
+        GridLayout {
             Layout.fillWidth: true
+            columns: 2
 
             QQC2.Label {
-                Kirigami.FormData.label: App.tr("Package:")
+                text: App.tr("Package:")
+            }
+
+            QQC2.Label {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                textFormat: Text.PlainText
                 text: (copying.facts.title ?? "") + " · " + (copying.facts.kind ?? "") + " " + (copying.facts.version ?? "")
             }
 
+            QQC2.Label {
+                text: App.tr("Folder:")
+            }
+
             RowLayout {
-                Kirigami.FormData.label: App.tr("Folder:")
+                Layout.fillWidth: true
 
                 QQC2.TextField {
                     id: folder
 
                     Layout.fillWidth: true
+                    Accessible.name: App.tr("Folder:")
                 }
 
                 QQC2.Button {
@@ -118,13 +130,19 @@ Kirigami.Dialog {
                 }
             }
 
+            QQC2.Label {
+                text: App.tr("Id of the copy:")
+            }
+
             QQC2.TextField {
                 id: newId
 
-                Kirigami.FormData.label: App.tr("Id of the copy:")
+                Layout.fillWidth: true
+                Accessible.name: App.tr("Id of the copy:")
             }
 
             QQC2.Button {
+                Layout.column: 1
                 text: App.tr("Edit a copy")
                 icon.name: "edit-copy"
                 enabled: copying.ready

@@ -4,7 +4,7 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-Kirigami.Dialog {
+PanelChico {
     id: trial
 
     property string uid
@@ -49,11 +49,13 @@ Kirigami.Dialog {
     }
 
     title: App.tr("The page and its lights")
-    preferredWidth: Kirigami.Units.gridUnit * 30
-    standardButtons: Kirigami.Dialog.Close
+    width: Look.panelChico * 3 / 2
+    quiet: App.tr("Close")
     onClosed: stop()
 
     ColumnLayout {
+        width: trial.width - 2 * Look.e4
+
         Rectangle {
             id: screen
 

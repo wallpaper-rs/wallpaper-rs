@@ -73,11 +73,16 @@ ColumnLayout {
     }
 
     QQC2.Button {
+        id: trying
+
         visible: !!more.pkg && more.pkg.kind === "web"
         enabled: !!more.pkg && !more.pkg.unshown
         text: App.tr("Try the page and its lights…")
         icon.name: "lightbulb"
-        onClicked: lights.start(more.host.uid)
+        onClicked: {
+            lights.opener = trying;
+            lights.start(more.host.uid);
+        }
     }
 
     PageLights {

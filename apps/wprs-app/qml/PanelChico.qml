@@ -33,8 +33,13 @@ QQC2.Popup {
     }
 
     function place() {
-        if (!opener || !parent)
+        if (!parent)
             return;
+        if (!opener) {
+            x = (parent.width - width) / 2;
+            y = Math.max(Look.e4, (parent.height - implicitHeight) / 2);
+            return;
+        }
         const below = opener.mapToItem(parent, 0, opener.height + Look.e2);
         const above = opener.mapToItem(parent, 0, -Look.e2).y - implicitHeight;
         x = below.x;

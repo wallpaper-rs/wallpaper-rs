@@ -39,7 +39,7 @@ ColumnLayout {
         text: about.styled ? App.markup(about.info.description) : (about.info.description ?? "")
         textFormat: about.styled ? Text.StyledText : Text.PlainText
         wrapMode: Text.Wrap
-        onLinkActivated: link => opener.ask(link)
+        onLinkActivated: link => browsing.ask(link, null)
     }
 
     Kirigami.FormLayout {
@@ -124,7 +124,7 @@ ColumnLayout {
             text: App.markup(about.info.changes)
             textFormat: Text.StyledText
             wrapMode: Text.Wrap
-            onLinkActivated: link => opener.ask(link)
+            onLinkActivated: link => browsing.ask(link, null)
         }
     }
 
@@ -136,37 +136,48 @@ ColumnLayout {
             model: about.info.links ?? []
 
             delegate: QQC2.Button {
+                id: link
+
                 required property var modelData
 
                 text: Labels.value(modelData.kind)
                 icon.name: "internet-services"
-                onClicked: opener.ask(modelData.url)
+                onClicked: browsing.ask(modelData.url, link)
             }
         }
     }
 
-    Kirigami.PromptDialog {
+    PanelChico {
         id: allow
 
         title: App.tr("Allow wallpapers that flash?")
-        subtitle: App.tr("Wallpapers that flash or show fast patterns can trigger seizures in people with photosensitive epilepsy. Allow them only if that is safe for whoever sees your screens; every screen and playlist may then show them.")
-        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
+        text: App.tr("Wallpapers that flash or show fast patterns can trigger seizures in people with photosensitive epilepsy. Allow them only if that is safe for whoever sees your screens; every screen and playlist may then show them.")
+        quiet: App.tr("Cancel")
+        principal: App.tr("OK")
         onAccepted: App.act("SetOption", ["playback.allow_flashing", "true"])
     }
 
-    Kirigami.PromptDialog {
-        id: opener
+    PanelChico {
+        id: browsing
 
         property string url
 
-        function ask(link) {
+        function ask(link, from) {
             url = link;
+            opener = from;
             open();
         }
 
         title: App.tr("Open this address in the browser?")
-        subtitle: url
-        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
+        quiet: App.tr("Cancel")
+        principal: App.tr("OK")
         onAccepted: Qt.openUrlExternally(url)
+
+        QQC2.Label {
+            width: browsing.width - 2 * Look.e4
+            text: browsing.url
+            textFormat: Text.PlainText
+            wrapMode: Text.WrapAnywhere
+        }
     }
 }
