@@ -96,7 +96,7 @@ QtObject {
     readonly property int marcaAncho: 16
     readonly property int marcaAlto: 4
     readonly property int menuSangria: 30
-    readonly property int avisoAncho: compacto ? 340 : 480
+    readonly property int avisoAncho: compacto ? 440 : 480
     readonly property int arribaAlto: 52
     readonly property int tArriba: 18
     readonly property int lateralIzq: 280
