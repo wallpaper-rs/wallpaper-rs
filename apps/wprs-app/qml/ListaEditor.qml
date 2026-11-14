@@ -74,10 +74,10 @@ FocusScope {
 
     function edit(member, args) {
         App.act(member, [uid].concat(args), "Playlists1", null, error => {
-            if (editor && error.name === App.conflict) {
-                applicationWindow().showPassiveNotification(App.tr("The playlist changed meanwhile; it was reloaded."));
-                editor.load();
-            }
+            if (!editor || error.name !== App.conflict)
+                return;
+            applicationWindow().showPassiveNotification(App.tr("The playlist changed meanwhile; it was reloaded."));
+            editor.load();
         });
     }
 
