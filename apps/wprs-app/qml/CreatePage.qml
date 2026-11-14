@@ -68,7 +68,7 @@ Kirigami.Page {
     }
 
     function copyOf(entry) {
-        App.query("GetItem", [entry.uid], "Library1", reply => page && copy.start(reply.item.path, footer.principal, entry.picture));
+        App.query("GetItem", [entry.uid], "Library1", reply => copy && copy.start(reply.item.path, footer.principal, entry.picture));
     }
 
     function forget() {
