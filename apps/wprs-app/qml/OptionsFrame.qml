@@ -17,6 +17,11 @@ Item {
     signal chosen(int page)
     signal escaped
 
+    function climb(steps) {
+        for (let i = 0; i < steps && frame.page && frame.page.routeBack; i++)
+            frame.page.routeBack();
+    }
+
     Keys.onEscapePressed: frame.escaped()
 
     Rectangle {
@@ -114,11 +119,23 @@ Item {
                         spacing: Look.e2
 
                         Text {
+                            Accessible.role: step.last ? Accessible.StaticText : Accessible.Link
+                            Accessible.name: text
                             text: step.modelData
                             color: step.last ? Look.escarcha : Look.bruma
                             font.family: Look.letraTitulo
                             font.pixelSize: Look.tSeccion
                             font.weight: step.last ? Font.Bold : Font.Normal
+
+                            HoverHandler {
+                                enabled: !step.last
+                                cursorShape: Qt.PointingHandCursor
+                            }
+
+                            TapHandler {
+                                enabled: !step.last
+                                onTapped: frame.climb(frame.route.length - 1 - step.index)
+                            }
                         }
 
                         Kirigami.Icon {
