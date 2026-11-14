@@ -53,6 +53,16 @@ Dos letras van dentro de la app: `letraTexto` («Onest», la letra de la aplicac
 - Escalón: `escalon` vale `compacto` hasta 800 px de alto, `amplio` desde 1800 × 1000 y `normal`
   en el resto; la ventana lo fija sola y las medidas que cambian con él cambian solas.
 
+## Sombras
+
+`Sombra` pone la sombra suave de una superficie: se pone como hija del fondo de la superficie, que
+debe ser opaco, y se dibuja debajo de él (`z: -1`) con el mismo `corner`. `kind` elige la sombra:
+`tapa` (toda tapa), `foco` (la tapa encendida), `fila` (la fila encendida) y `panel` (panel chico,
+menú de un control y aviso). Ejemplo: `Rectangle { radius: Look.radio; color: Look.noche;
+Sombra { kind: "panel" } }`. Solo existe cuando la ventana dibuja con la tarjeta gráfica; con el
+dibujo por software no se crea y la superficie queda como sin ella. No trabaja por cuadro: se
+dibuja una vez y se vuelve a dibujar solo si la superficie cambia.
+
 ## Íconos
 
 Los íconos son un juego propio (Phosphor, licencia MIT) dentro de la app, como tema de íconos

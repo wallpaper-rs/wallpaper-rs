@@ -50,6 +50,10 @@ Item {
         radius: Look.radio
         color: Look.nocheAlta
 
+        Sombra {
+            kind: tapa.lit ? "foco" : "tapa"
+        }
+
         Image {
             anchors.fill: parent
             source: tapa.picture

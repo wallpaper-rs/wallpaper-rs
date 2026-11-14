@@ -31,6 +31,10 @@ FocusScope {
         color: Look.nocheAlta
         border.width: Look.linea
         border.color: Look.nocheLinea
+
+        Sombra {
+            kind: "panel"
+        }
     }
 
     RowLayout {

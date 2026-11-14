@@ -103,5 +103,5 @@ sale por el borde derecho: la pantalla le da el ancho hasta el borde de la venta
 - Las esquinas de la imagen de una tapa son rectas: el dibujo en software no recorta imágenes
   redondeadas sin efectos de capa.
 - Una tapa apagada se atenúa más; no pasa a gris.
-- Las tapas no llevan sombra.
+- La sombra de las tapas (`Sombra`) se ve solo cuando la ventana dibuja con la tarjeta gráfica.
 - Los botones de la ficha muestran su anillo de foco cuando se llega a ellos con Tab.

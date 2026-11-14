@@ -95,6 +95,13 @@ FocusScope {
         anchors.fill: parent
         radius: Look.radio
         color: fila.lit ? (fila.off ? Look.nocheLinea : Look.escarcha) : fila.hovered ? Look.nocheAlta : "transparent"
+
+        Sombra {
+            id: lift
+
+            active: fila.lit && !fila.off && lift.hondo
+            kind: "fila"
+        }
     }
 
     HoverHandler {

@@ -46,6 +46,11 @@ QQC2.Popup {
         color: Look.noche
         border.width: Look.linea
         border.color: Look.nocheLinea
+
+        Sombra {
+            corner: Look.radioPanel
+            kind: "panel"
+        }
     }
 
     contentItem: FocusScope {

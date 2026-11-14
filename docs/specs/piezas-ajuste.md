@@ -87,5 +87,6 @@ principal, señal `acted`), `small` (dentro de una lista, sin acción en general
 - No pintan la ventana ni las pantallas: eso lo hacen las pantallas con estas piezas.
 - Los botones, la llave suelta, el campo de texto y el riel suelto son controles del estilo propio;
   las piezas los usan y no los vuelven a dibujar.
-- Sin sombras ni efectos de capa: se ven igual con dibujo por software. La foto de cabecera del
-  panel chico tiene esquinas rectas bajo el borde redondeado.
+- La fila encendida, el panel chico (también el menú de un control) y el aviso llevan su sombra
+  (`Sombra`) solo cuando la ventana dibuja con la tarjeta gráfica; con el dibujo por software se
+  ven sin ella. La foto de cabecera del panel chico tiene esquinas rectas bajo el borde redondeado.
