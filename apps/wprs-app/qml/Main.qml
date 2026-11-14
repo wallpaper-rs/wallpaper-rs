@@ -69,7 +69,7 @@ Kirigami.ApplicationWindow {
         if (current >= 0)
             from = current;
         current = -1;
-        open(component, properties);
+        open(typeof component === "string" ? Qt.createComponent(component) : component, properties);
         size.roomy();
     }
 

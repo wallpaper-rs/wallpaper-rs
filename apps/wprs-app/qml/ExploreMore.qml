@@ -13,7 +13,7 @@ QQC2.Button {
         if (index === 0)
             packages.open();
         else if (index === 1)
-            applicationWindow().work(stall, {});
+            applicationWindow().work("RepoStaticPage.qml", {});
     }
 
     text: App.tr("More")
@@ -40,12 +40,5 @@ QQC2.Button {
 
         nameFilters: [App.tr("Packages (*.wpak)")]
         onAccepted: more.publisher && more.publisher.openWith(App.path(selectedFile))
-    }
-
-    Component {
-        id: stall
-
-        RepoStaticPage {
-        }
     }
 }

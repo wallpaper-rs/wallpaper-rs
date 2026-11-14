@@ -33,17 +33,22 @@ Timer {
         host: tour.host
         walk: tour.walking
     }
+    readonly property StallOpenCheck opening: StallOpenCheck {
+        host: tour.host
+    }
 
     interval: 300
     repeat: true
     running: App.checking
     onTriggered: {
-        if (Object.keys(App.pending).length > 0 || probing.running || editing.running)
+        if (Object.keys(App.pending).length > 0 || probing.running || editing.running || opening.running)
             return;
         if (!probing.finished)
             return probing.begin();
         if (!editing.finished)
             return editing.begin();
+        if (!opening.finished)
+            return opening.begin();
         const at = step++;
         if (at > 0 && at <= host.pages.length && owns(at)) {
             walking.check(host.names[at - 1]);
