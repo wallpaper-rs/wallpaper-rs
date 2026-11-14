@@ -71,6 +71,7 @@ Coleccion {
                         readonly property bool choosing: estante.choosing && estante.chosen.length > 0
 
                         active: cover.lit
+                        x: choosing || !item ? 0 : Math.min(0, list.width - list.rightMargin - (slot.x - list.contentX) - item.width)
                         width: choosing && item ? Math.min(item.implicitWidth, list.width - Look.margen - (slot.x - list.contentX)) : undefined
                         sourceComponent: choosing ? estante.selection : card
                     }

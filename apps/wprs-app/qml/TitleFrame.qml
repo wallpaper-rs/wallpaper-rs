@@ -16,7 +16,7 @@ Item {
     readonly property alias veil: veils.band
     readonly property real bandLow: page && page.full !== true && page.bandLow > 0 ? page.bandLow : 0
     readonly property real upperLow: bandLow > 0 && page.upperHeight > 0 ? page.upperHeight : 0
-    readonly property real bandBottom: height - Look.margenAbajo
+    readonly property real bandBottom: height - Look.margenAbajo - Look.atajosAlto - Look.e4
     readonly property real bandTop: Math.max(sideBottom, bandBottom - (bandLow > 0 && page && page.bandHigh > 0 ? page.bandHigh : bandBottom))
     readonly property bool fits: bandLow > 0 && bandBottom - bandTop >= bandLow && bandTop - Look.e3 - column.y >= upperLow
     property bool banded: false
@@ -36,7 +36,7 @@ Item {
     function measure() {
         const top = column.y + Look.e3 + upperLow;
         if (bandLow > 0 && Look.escalon === "normal" && !fits)
-            need = (sideBottom >= top ? sideBottom + bandLow : top + (page.bandHigh > 0 ? Math.max(page.bandHigh, bandLow) : Infinity)) + Look.margenAbajo;
+            need = (sideBottom >= top ? sideBottom + bandLow : top + (page.bandHigh > 0 ? Math.max(page.bandHigh, bandLow) : Infinity)) + Look.margenAbajo + Look.atajosAlto + Look.e4;
     }
 
     function place(grow) {
