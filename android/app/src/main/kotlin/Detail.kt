@@ -120,7 +120,7 @@ private fun Heading(item: Item, inUse: Boolean, barred: Boolean) = Column(Modifi
 
 @Composable
 private fun Foot(main: Main, uid: String, item: Item?, usable: Boolean, add: () -> Unit, remove: () -> Unit) =
-    Row(Modifier.fillMaxWidth().padding(horizontal = Measure.e4, vertical = Measure.e3), Arrangement.spacedBy(Measure.e2), Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth().padding(horizontal = Measure.e3, vertical = Measure.e3), Arrangement.spacedBy(Measure.e1), Alignment.CenterVertically) {
         val favorite = item?.favorite == true
         Square({ main.act { ask("favorite", "uids" to listOf(uid), "favorite" to !favorite) } }, Ph.Heart, stringResource(R.string.favorite), lit = favorite)
         Square(add, Ph.Playlist, stringResource(R.string.add_to_playlist))
