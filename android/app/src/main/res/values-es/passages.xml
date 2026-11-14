@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="passage_cut">Al cambiar, el fondo siguiente aparece de golpe.</string>
+    <string name="passage_still">El movimiento está reducido: al cambiar, el fondo siguiente aparece de golpe.</string>
+    <string name="passage_saving">Mientras el teléfono ahorra batería el fondo queda quieto, así que al cambiar el siguiente aparece de golpe.</string>
+    <string name="passage_fade">Al cambiar, el fondo siguiente aparece con un fundido.</string>
+    <string name="passage_light">Un fondo con una transición liviana entra con ella; una más pesada se cambia por un fundido con la calidad que fijaste.</string>
+    <string name="passage_own">Un fondo que trae su propia transición entra con ella; los demás aparecen con un fundido.</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="passage_cut">Changes cut straight to the next wallpaper.</string>
+    <string name="passage_still">Motion is reduced, so changes cut straight to the next wallpaper.</string>
+    <string name="passage_saving">While the phone saves battery the wallpaper stands still, so changes cut straight to the next one.</string>
+    <string name="passage_fade">Changes fade into the next wallpaper.</string>
+    <string name="passage_light">A wallpaper that brings a light transition comes in with it; a heavier one fades in at the quality you fixed.</string>
+    <string name="passage_own">A wallpaper that brings its own transition comes in with it; the others fade in.</string>
+</resources>
