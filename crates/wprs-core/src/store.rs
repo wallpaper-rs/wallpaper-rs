@@ -1,5 +1,6 @@
 use crate::config::Config;
 use crate::keep::keep;
+use crate::older::{Platform, upgrade};
 use std::io::Write;
 use std::os::unix::fs::DirBuilderExt;
 use std::path::{Path, PathBuf};
@@ -32,16 +33,29 @@ impl Config {
     }
 
     pub fn load(path: &Path) -> Result<Config, ConfigError> {
+        Self::load_on(path, Platform::Desktop)
+    }
+
+    pub fn load_on(path: &Path, platform: Platform) -> Result<Config, ConfigError> {
         let text = match std::fs::read_to_string(path) {
             Ok(text) => text,
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(Config::default()),
             Err(source) => return Err(ConfigError::Read { path: path.into(), source }),
         };
-        let mut config: Config = toml::from_str(&text).map_err(|e| ConfigError::parse(&text, &e))?;
+        let mut config = Self::parse_on(&text, platform)?;
         for key in config.normalize() {
             tracing::warn!(key, "invalid value replaced by the nearest valid one");
         }
         Ok(config)
+    }
+
+    pub fn parse_on(text: &str, platform: Platform) -> Result<Config, ConfigError> {
+        let error = match toml::from_str::<Config>(text) {
+            Ok(config) => return Ok(config),
+            Err(error) => error,
+        };
+        let Some(converted) = upgrade(text, platform) else { return Err(ConfigError::parse(text, &error)) };
+        toml::from_str::<Config>(&converted).map_err(|e| ConfigError::parse(&converted, &e))
     }
 
     pub fn save(&self, path: &Path) -> Result<(), ConfigError> {

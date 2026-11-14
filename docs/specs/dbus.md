@@ -3343,6 +3343,18 @@ reports the error in `GetState().config_error` (`null` when the file is fine), a
 `invalid configuration at line L, column C: <message>`. Before the first save, the broken file
 is copied to `config.toml.broken` (mode `0600`).
 
+A file written by the version before is read with the same meaning: `playback.flash_guard =
+true` becomes `playback.allow_flashing = false` (`flash_guard = false` was the default and leaves
+flashing wallpapers disabled), and `pause.on_battery = true` / `false` with `pause.below_percent =
+N` become `always`, `below:N` or `never` (`on_battery = true` wins on the desktop; the phone, which
+only followed the charge threshold, reads `below:N`, or `never` when `N` is `0`). The file is
+written in the new form at the first change, without the old keys.
+
+On the phone a settings file that still cannot be read (damaged, or with a key of a newer
+version) is renamed to `config.toml.broken` in the app's private folder, the settings start from
+their defaults and the app says so once with a notice; after the notice the file is kept as
+`config.toml.unread`. A later change writes a new `config.toml`.
+
 ```toml
 profile = "01J…"          # active profile uid, absent when none
 

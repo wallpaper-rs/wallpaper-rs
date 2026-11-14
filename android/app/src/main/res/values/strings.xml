@@ -45,6 +45,7 @@
     <string name="lacks_transition">It comes in with the phone\'s own fade instead of the transition it brings.</string>
     <string name="lacks_media_info">It shows its placeholders instead of the cover, title and progress of what plays on the phone.</string>
     <string name="failed_without_reason">Something failed without giving a reason.</string>
+    <string name="settings_set_aside">Your settings could not be read and start again from the defaults. The old file was kept apart.</string>
     <string name="cancel">Cancel</string>
     <string name="size" translatable="false">%1$d × %2$d</string>
     <string name="duration" translatable="false">%1$d:%2$02d</string>

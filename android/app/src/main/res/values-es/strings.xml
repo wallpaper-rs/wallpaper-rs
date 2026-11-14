@@ -44,6 +44,7 @@
     <string name="lacks_transition">En el teléfono entra con el fundido de siempre en lugar de la transición que trae.</string>
     <string name="lacks_media_info">En el teléfono muestra sus imágenes de reemplazo en vez de la carátula, el título y el avance de lo que suena.</string>
     <string name="failed_without_reason">Algo falló sin dar ningún motivo.</string>
+    <string name="settings_set_aside">No se pudieron leer tus ajustes y empiezan de nuevo con los valores predeterminados. El archivo anterior se guardó aparte.</string>
     <string name="cancel">Cancelar</string>
     <string name="no_playlists">Aún no hay listas</string>
     <string name="in_use">En uso</string>

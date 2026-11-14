@@ -1,0 +1,53 @@
+[default]
+
+[outputs]
+
+[playback]
+volume = 0.5
+muted = true
+max_fps = "display"
+software_parallax = false
+flash_guard = false
+scene_sound = true
+scene_capture = true
+duck = false
+quality = "auto"
+auto_pace = "detail"
+hdr = "auto"
+lowest_below_percent = 0
+
+[transition]
+kind = "fade"
+duration_ms = 600
+
+[pause]
+when_covered = true
+on_battery = true
+when_locked = true
+below_percent = 0
+
+[library]
+watch = true
+thumb_cache_mb = 512
+hide_mature = false
+show_mature = false
+
+[repos]
+auto_refresh = true
+auto_update = false
+vote_counts = true
+
+[models]
+allow_download = true
+
+[media]
+remote_covers = false
+
+[parallax]
+fill = "lama"
+layers = 5
+
+[rgb]
+enabled = false
+server = "127.0.0.1:6742"
+when_covered = "pause"
