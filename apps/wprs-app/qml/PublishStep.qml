@@ -49,13 +49,13 @@ Rectangle {
             spacing: Look.e4
 
             Item {
-                Layout.preferredWidth: Look.pasoLado
-                Layout.preferredHeight: Look.pasoNum
+                Layout.preferredWidth: PublishLook.pasoLado
+                Layout.preferredHeight: PublishLook.pasoNum
 
                 Rectangle {
-                    width: Look.pasoNum
-                    height: Look.pasoNum
-                    radius: Look.pasoNum / 2
+                    width: PublishLook.pasoNum
+                    height: PublishLook.pasoNum
+                    radius: PublishLook.pasoNum / 2
                     color: step.open ? Look.escarcha : "transparent"
                     border.width: Look.linea
                     border.color: step.open ? Look.escarcha : Look.nocheLinea
@@ -107,7 +107,7 @@ Rectangle {
             id: content
 
             Layout.fillWidth: true
-            Layout.leftMargin: Look.pasoLado + Look.e4
+            Layout.leftMargin: PublishLook.pasoLado + Look.e4
             visible: step.open
             spacing: Look.e3
         }
@@ -116,7 +116,7 @@ Rectangle {
             id: tail
 
             Layout.fillWidth: true
-            Layout.leftMargin: Look.pasoLado + Look.e4
+            Layout.leftMargin: PublishLook.pasoLado + Look.e4
             visible: step.mode === "hecho" && children.length > 0
             spacing: Look.e2
         }

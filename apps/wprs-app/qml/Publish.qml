@@ -129,7 +129,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: Math.min(Look.publicarAncho, parent.width * 0.6)
+        width: Math.min(PublishLook.publicarAncho, parent.width * 0.6)
         color: Look.noche
 
         QQC2.ScrollView {

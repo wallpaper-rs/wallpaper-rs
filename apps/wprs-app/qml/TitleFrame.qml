@@ -108,11 +108,8 @@ Item {
         anchors.rightMargin: Look.margen
         spacing: Look.e3
 
-        Loader {
-            anchors.right: parent.right
-            active: frame.owned
-            visible: active
-            sourceComponent: frame.owned ? frame.page.now : null
+        TitleOwned {
+            frame: frame
         }
 
         Ahora {

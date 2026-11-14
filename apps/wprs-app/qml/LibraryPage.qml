@@ -123,18 +123,8 @@ Kirigami.Page {
         width: placed ? page.band.width : page.width
         height: placed ? page.band.height : page.height
 
-        Column {
-            y: Math.max(0, bar.y - height - Look.e3)
-            width: Math.min(parent.width, Look.tapaFoco * 2)
-            visible: !page.all
-
-            SyncedFiles {
-                width: parent.width
-            }
-
-            AwayNote {
-                width: parent.width
-            }
+        LibraryNotes {
+            page: page
         }
 
         LibraryBar {

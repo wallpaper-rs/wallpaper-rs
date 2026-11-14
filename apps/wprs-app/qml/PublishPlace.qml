@@ -55,7 +55,7 @@ Rectangle {
 
             IconImage {
                 name: place.icon
-                sourceSize: Qt.size(Look.iconoDestino, Look.iconoDestino)
+                sourceSize: Qt.size(PublishLook.iconoDestino, PublishLook.iconoDestino)
                 color: place.lit ? Look.escarcha : Look.bruma
             }
 
@@ -97,7 +97,7 @@ Rectangle {
             id: content
 
             Layout.fillWidth: true
-            Layout.leftMargin: Look.iconoDestino + Look.e3
+            Layout.leftMargin: PublishLook.iconoDestino + Look.e3
             visible: place.lit && children.length > 0
             spacing: Look.e2
         }

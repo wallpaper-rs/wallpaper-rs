@@ -56,7 +56,7 @@ ColumnLayout {
     }
 
     QQC2.Button {
-        Layout.leftMargin: Look.iconoDestino + 2 * Look.e3
+        Layout.leftMargin: PublishLook.iconoDestino + 2 * Look.e3
         visible: !server.publish.linked
         flat: true
         text: App.tr("Connect one in Account ›")
