@@ -59,8 +59,10 @@ FocusScope {
                 spacing: Look.e3
 
                 Nota {
-                    height: again.height
+                    height: Math.max(again.height, implicitHeight)
                     tone: "ambar"
+                    wrap: true
+                    fitWidth: column.width
                     text: App.tr("No connection. Your sources cannot bring new photos. What you already have stays in your library.")
                 }
 

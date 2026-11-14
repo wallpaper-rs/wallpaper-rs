@@ -158,6 +158,7 @@ Kirigami.Page {
 
         x: page.bandLow > 0 ? page.upper.x : 0
         y: page.bandLow > 0 ? page.upper.y : 0
+        width: page.bandLow > 0 ? page.upper.width : page.width
         visible: page.view === "list"
         filer: dialogs.filer
     }

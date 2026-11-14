@@ -33,6 +33,8 @@ Column {
     Nota {
         visible: notice.store === "file"
         tone: "ambar"
+        wrap: true
+        fitWidth: notice.width
         text: App.tr("This computer keeps its keys in a private file, not in the system keyring.")
     }
 
@@ -47,6 +49,8 @@ Column {
     Nota {
         visible: notice.store === "keyring" && !notice.found
         tone: "ambar"
+        wrap: true
+        fitWidth: notice.width
         text: App.tr("No system keyring was found, so keys cannot be stored.")
     }
 

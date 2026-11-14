@@ -45,6 +45,7 @@ una fila para añadir.
   propio del tono si no se da).
 - `lit`: está sobre algo encendido y usa los tonos hondos.
 - `Nota.fitWidth`: ancho máximo; el texto que no entra termina en «…» (la nota bajo una tapa).
+- `Nota.wrap`: con `fitWidth`, el texto pasa a la línea siguiente en vez de recortarse; lo usan los avisos que hay que leer enteros (el llavero en Fuentes, sin conexión).
 - El color nunca va solo: siempre hay palabras.
 
 **`Vacio`**: lo que hacer cuando no hay nada. `title`, `text`, `action` y `actionIcon` (botón
