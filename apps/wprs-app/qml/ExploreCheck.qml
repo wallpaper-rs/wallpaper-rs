@@ -112,7 +112,7 @@ QtObject {
         expect("primero", catalog.covers.length === 1 && catalog.covers[0].name === "pond", "the example must be on the shelf");
         installer.tell(App.tr("“%1” is now your wallpaper.", "pond"), {}, true);
         expect("primero", installer.said[installer.said.length - 1].includes("pond"), "setting the first wallpaper must be said");
-        fill([examples, house], [pkg("aa11", "pond"), pkg("bb22", "dunes", {
+        fill([house, examples], [pkg("aa11", "pond"), pkg("bb22", "dunes", {
                 "featured": true,
                 "asks": ["network"],
                 "photosensitive": true,
@@ -122,7 +122,7 @@ QtObject {
                 "id": "pond",
                 "version": "1.0.0"
             }]);
-        expect("normal", page.upperBlock.visible && catalog.words.map(w => w.kind).join() === "featured,all,repo,repo", "the filter words are " + catalog.words.map(w => w.kind));
+        expect("normal", page.upperBlock.visible && catalog.words.map(w => w.kind === "repo" ? w.text : w.kind).join() === ["featured", "all", App.tr("Examples"), "Home"].join(), "the filter words are " + catalog.words.map(w => w.text));
         expect("normal", catalog.covers.length === 1 && catalog.covers[0].name === "dunes", "Featured must come first");
         expect("detalles", notes.of(catalog.chosen[0])[0] === App.tr("Has flashes, disabled"), "a wallpaper with its flashes off must say so: " + notes.of(catalog.chosen[0])[0]);
         page.open = true;

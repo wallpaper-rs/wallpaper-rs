@@ -41,7 +41,9 @@ Item {
                 "count": packages.length,
                 "kind": "all"
             });
-        repos.forEach(r => {
+        repos.slice().sort((a, b) => Number(b.bundled === true) - Number(a.bundled === true) || catalog.repoName(a).localeCompare(catalog.repoName(b), undefined, {
+                "sensitivity": "base"
+            })).forEach(r => {
             const trouble = catalog.trouble(r);
             list.push({
                 "text": catalog.repoName(r),
