@@ -7,6 +7,9 @@ QtObject {
     required property var page
     readonly property var library: page.library
     readonly property var covers: page.covers
+    property SceneDailyCheck daily: SceneDailyCheck {
+        page: check.page
+    }
     property Timer later: Timer {
         interval: 150
         onTriggered: check.close()
@@ -47,6 +50,7 @@ QtObject {
         empty();
         first.exercise();
         damaged();
+        daily.exercise();
         page.tools.shown();
     }
 
@@ -74,6 +78,8 @@ QtObject {
     function options() {
         page.open(library.uid(0));
         must(page.skeleton === "options" && page.route.length === 2 && page.actions.length === 2, "the options of a wallpaper do not open in their own panel");
+        page.level = "presets";
+        must(page.route.length === 3 && page.route[2] === App.tr("My presets"), "the level My presets of the options is not in the route");
         page.level = "more";
         must(page.route.length === 3, "the More level of the options is not in the route");
         later.start();

@@ -20432,10 +20432,6 @@ msgid "“%1” is now the wallpaper on %2."
 msgstr "«%1» quedó de fondo en %2."
 
 #: apps/wprs-app/qml/FirstRun.qml
-msgid "%1 and %2"
-msgstr "%1 y %2"
-
-#: apps/wprs-app/qml/FirstRun.qml
 msgid "Only on %1"
 msgstr "Solo en %1"
 
@@ -20478,3 +20474,155 @@ msgstr "Reiniciar el servicio"
 #: apps/wprs-app/qml/LibraryState.qml
 msgid "Restarting the service…"
 msgstr "Reiniciando el servicio…"
+
+#: apps/wprs-app/qml/PreguntaPermisos.qml
+msgid "“%1” asks for permission to use"
+msgstr "«%1» pide permiso para usar"
+
+#: apps/wprs-app/qml/PreguntaPermisos.qml
+msgid "It is already set and works without this. We remember it for next time."
+msgstr "Ya está puesta y funciona sin esto. Lo recordamos para la próxima vez."
+
+#: apps/wprs-app/qml/PreguntaPermisos.qml
+msgid "Without this"
+msgstr "Sin esto"
+
+#: apps/wprs-app/qml/facade/Permisos.qml
+msgid "The sound of the computer"
+msgstr "El sonido del equipo"
+
+#: apps/wprs-app/qml/facade/Permisos.qml
+msgid "Clicks and taps"
+msgstr "Los clics y toques"
+
+#: apps/wprs-app/qml/PermisosAsk.qml
+msgid "“%1” plays without what you left out. You can allow it in its options, under More."
+msgstr "«%1» funciona sin lo que no permitiste. Puedes permitirlo en sus opciones, en «Más»."
+
+#: apps/wprs-app/qml/ScenePermisos.qml
+msgid "Permissions of this scene"
+msgstr "Permisos de esta escena"
+
+#: apps/wprs-app/qml/ScenePermisos.qml
+msgid "Not allowed"
+msgstr "Sin permiso"
+
+#: apps/wprs-app/qml/ItemPresets.qml
+msgid "fill %1"
+msgstr "relleno %1"
+
+#: apps/wprs-app/qml/ItemPresets.qml
+msgid "“%1” is now used on “%2”."
+msgstr "«%1» ahora se usa en «%2»."
+
+#: apps/wprs-app/qml/ItemPresets.qml
+msgid "Enter uses it on “%1”. It works for every scene."
+msgstr "Con Intro se usa en «%1». Vale para todas las escenas."
+
+#: apps/wprs-app/qml/ItemPresets.qml
+msgid "Delete “%1”…"
+msgstr "Eliminar «%1»…"
+
+#: apps/wprs-app/qml/ItemPresets.qml
+msgid "Delete “%1”?"
+msgstr "¿Eliminar «%1»?"
+
+#: apps/wprs-app/qml/ItemPresets.qml
+msgid "It leaves “My presets” and every scene that uses it. It cannot be undone."
+msgstr "Se borra de «Mis preajustes» y deja de estar en todas las escenas. No se puede deshacer."
+
+#: apps/wprs-app/qml/PresetMaker.qml
+msgid "It keeps how a scene is placed and the fill color shown where the picture does not reach. It works for every scene."
+msgstr "Guarda cómo se coloca una escena y el color de relleno que se ve donde falta imagen. Vale para todas las escenas."
+
+#: apps/wprs-app/qml/PresetMaker.qml
+msgid "For example, Cinema"
+msgstr "Por ejemplo, Cine"
+
+#: apps/wprs-app/qml/SceneStill.qml
+msgid "Still on its poster: it flashes, and flashing wallpapers are off in Settings › Playback."
+msgstr "Quieta en su póster: tiene destellos y los fondos con destellos están apagados en Ajustes › Reproducción."
+
+#: apps/wprs-app/qml/SceneStill.qml
+msgid "Still on its poster: it is too heavy for this computer with the automatic quality. If you play it anyway it uses the lowest quality: it may drop frames and use more battery."
+msgstr "Quieta en su póster: es demasiado pesada para este equipo con la calidad automática. Si la reproduces igual usará la calidad más baja: puede perder fotogramas y gastar más batería."
+
+#: apps/wprs-app/qml/SceneStill.qml
+msgid "Still on its poster: a window covers the screen."
+msgstr "Quieta en su póster: una ventana tapa la pantalla."
+
+#: apps/wprs-app/qml/SceneStill.qml
+msgid "Still on its poster to save battery."
+msgstr "Quieta en su póster para ahorrar batería."
+
+#: apps/wprs-app/qml/SceneStill.qml
+msgid "Still on its poster while the screen is locked."
+msgstr "Quieta en su póster mientras la pantalla está bloqueada."
+
+#: apps/wprs-app/qml/SceneStill.qml
+msgid "Still on its poster: playback is paused."
+msgstr "Quieta en su póster: la reproducción está en pausa."
+
+#: apps/wprs-app/qml/SceneStill.qml
+msgid "Play anyway"
+msgstr "Reproducir igual"
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "Could not open this scene"
+msgstr "No se pudo abrir esta escena"
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "Could not open this wallpaper"
+msgstr "No se pudo abrir este fondo"
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "The file of “%1” is damaged or incomplete. It came from “%2”: you can install it again from there. Your wallpaper did not change."
+msgstr "El archivo de «%1» está dañado o incompleto. Vino de «%2»: puedes volver a instalarla de ahí. Lo que tienes de fondo ahora no cambió."
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "The file of “%1” is damaged or incomplete. Your wallpaper did not change."
+msgstr "El archivo de «%1» está dañado o incompleto. Lo que tienes de fondo ahora no cambió."
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "Install it again"
+msgstr "Volver a instalarla"
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "Remove “%1” from your library?"
+msgstr "¿Quitar «%1» de tu biblioteca?"
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "It leaves your library. If you want it later, you can install it again from “%1”."
+msgstr "Sale de tu biblioteca. Si después la quieres, la vuelves a instalar desde «%1»."
+
+#: apps/wprs-app/qml/SceneBroken.qml
+msgid "It leaves your library."
+msgstr "Sale de tu biblioteca."
+
+#: apps/wprs-app/qml/ItemSettings.qml
+msgid "Author's options"
+msgstr "Opciones del autor"
+
+#: apps/wprs-app/qml/ItemSettings.qml
+msgid "This scene has no options of its own"
+msgstr "Esta escena no tiene opciones propias"
+
+#: apps/wprs-app/qml/ItemSettings.qml
+msgid "Its author left nothing to adjust: it looks the same for everybody. Below are your presets, which work for every scene, and the rest is under “More”."
+msgstr "Su autor no dejó nada que ajustar: se ve igual para todos. Abajo quedan tus preajustes, que valen para todas las escenas, y lo demás en «Más»."
+
+#: apps/wprs-app/qml/LibraryPanel.qml
+msgid "My presets"
+msgstr "Mis preajustes"
+
+#: apps/wprs-app/qml/LibraryPanel.qml
+msgid "They work for every scene"
+msgstr "Valen para todas las escenas"
+
+#: apps/wprs-app/qml/LibraryMore.qml
+msgid "This scene"
+msgstr "Esta escena"
+
+#: apps/wprs-app/qml/StillAsk.qml
+msgid "“%1” stays still on its poster. It is too heavy for this computer with the automatic quality. If you play it anyway it uses the lowest quality: it may drop frames and use more battery."
+msgstr "«%1» se queda quieta en su póster. Es demasiado pesada para este equipo con la calidad automática. Si la reproduces igual usará la calidad más baja: puede perder fotogramas y gastar más batería."

@@ -75,8 +75,51 @@ texto lo dice y el motivo queda en «Detalles». En la app es la llamada `Servic
 ## Opciones de un fondo
 
 Usa el esqueleto de opciones: el título es el nombre del fondo, con «Favorito» y «Poner de fondo»
-arriba, y la ruta «Biblioteca › nombre» (Esc vuelve). El primer nivel muestra la vista previa, lo que
-el paquete usa, «De su autora» (variantes y fondo base), «Tuyo» (ajustes por pantalla, sonido,
-preajustes, etiquetas, listas) y «Más». El nivel «Más» tiene el nombre, la valoración, los datos del
-archivo, «Seguir moviéndose» con movimiento reducido, la privacidad de una página web y sus luces,
-«Editar…» y «Quitar de la biblioteca…».
+arriba, y la ruta «Biblioteca › nombre» (Esc vuelve). El primer nivel muestra la vista previa, por
+qué la escena está quieta si lo está, «Opciones del autor» (las de la escena en cada pantalla donde
+está puesta), «Mis preajustes», lo que el paquete usa, «De su autora» (variantes y fondo base),
+«Tuyo» (etiquetas, listas) y «Más». Una escena puesta sin opciones propias dice «Esta escena no
+tiene opciones propias» y deja «Mis preajustes» y «Más».
+
+El nivel «Más» (ruta «Biblioteca › nombre › Más») empieza por «Permisos de esta escena»: una fila por
+cada cosa que la escena pide (puntero, sonido, clics, lo que suena y sus variantes con red), con
+«Permitido» o «Sin permiso»; cambiarla responde con `Inputs1.Decide`. Siguen «Esta escena» (sonido,
+«Editar una copia…»), el nombre, la valoración, los datos del archivo, «Seguir moviéndose» con
+movimiento reducido, la privacidad de una página web y sus luces, «Editar…» y «Quitar de la
+biblioteca…».
+
+## Mis preajustes
+
+El nivel «Mis preajustes» (ruta «Biblioteca › nombre › Mis preajustes») lista los preajustes del
+fondo y los globales (`Profiles1.ListPresets`), con su colocación y su relleno. Intro usa el
+preajuste en ese fondo (`Library1.Apply` con el preajuste); «Eliminar…» pide confirmación en un
+panel junto a la fila. «Nuevo preajuste…» abre un panel con «Nombre», «Colocación» y «Color de
+relleno»; Tab pasa al campo siguiente, Esc cancela y «Guardar» crea un preajuste global
+(`Profiles1.SavePreset` con elemento vacío).
+
+## Pregunta de permisos
+
+Cuando una pantalla muestra una escena que pide cosas que la persona todavía no respondió (el campo
+`undecided` de `GetInputs().shown`), la app hace una sola pregunta, «“nombre” pide permiso para usar»,
+con una línea por cosa (puntero, sonido del equipo, clics y toques, lo que suena, y lo que suena o el
+sonido con red), su explicación y «Permitir» o «Sin esto» en cada una. «Permitir» al pie aplica lo
+elegido y «Sin esto» deja todo afuera, con `Inputs1.Decide`; la escena ya funciona mientras tanto sin
+esos permisos, y si algo quedó afuera un aviso dice dónde cambiarlo. La red y las luces no se
+preguntan acá. Se pregunta una vez por escena en cada sesión de la app; lo respondido se recuerda en
+el servicio. La pieza es `PreguntaPermisos` y otras pantallas la usan con `ask(escena, clave,
+nombre, cosas)`.
+
+## Quieta en su póster
+
+Si la escena puesta está quieta, el panel lo dice con su causa: una ventana tapa la pantalla, para
+ahorrar batería, pantalla bloqueada, reproducción en pausa (`outputs.<pantalla>.still_reason`), o es
+demasiado pesada para el equipo con la calidad automática (`quality_auto` = `still`). En este último
+caso ofrece «Reproducir igual», que fija `playback.quality.<pantalla>` en `min-q1`, y además la app
+muestra una vez un aviso con el mismo botón. Un fondo con destellos mientras están apagados en
+Ajustes (`flash_disabled`) también lo dice; el ajuste general solo se cambia en Ajustes.
+
+## Escena dañada
+
+Si el archivo falta o está dañado, el panel muestra «No se pudo abrir esta escena» con el motivo,
+«Volver a instalarla» cuando vino de un repositorio, «Mostrar en la carpeta» y «Quitar de la
+biblioteca…» con confirmación.
