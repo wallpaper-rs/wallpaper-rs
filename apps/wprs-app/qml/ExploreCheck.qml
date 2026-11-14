@@ -64,11 +64,13 @@ QtObject {
         page.shelf.wanted(0);
         page.shelf.wanted(1);
         expect("vista", catalog.asked["bb22/dunes@1.0.0"] === true && !catalog.asked["bb22/flash@1.0.0"], "a card under the pointer must ask for its animated preview, unless it flashes");
+        page.shelf.focus = false;
         catalog.moving = {
             "bb22/dunes@1.0.0": "/cache/dunes.gif",
             "bb22/flash@1.0.0": "/cache/flash.gif"
         };
         expect("vista", page.shelf.movingOf(0) !== "" && page.shelf.movingOf(1) === "", "only the card that may move gets its animated preview");
+        catalog.moving = {}, page.shelf.focus = true;
         catalog.hidden = 2;
         expect("oculto", page.upperBlock.hidden.visible && page.upperBlock.hidden.text === App.tr("%1 hidden by your content filter", 2), "the wallpapers the content filter hid must be counted");
         catalog.hidden = 0;
@@ -81,7 +83,7 @@ QtObject {
                 "kind": "scene"
             })
         });
-        const button = Qt.createComponent("ItemCopyButton.qml").createObject(null, {
+        const button = Qt.createComponent("ItemCopyButton.qml").createObject(check.page, {
             "drawer": copy
         });
         expect("copia", copy.record === null && !button.visible, "a scene that is not installed must not offer a copy");
@@ -99,8 +101,7 @@ QtObject {
             "kind": "image"
         });
         expect("copia", !button.visible, "a package that is not a scene must not offer a copy");
-        button.destroy();
-        copy.destroy();
+        button.destroy(), copy.destroy();
     }
 
     function exercise() {
