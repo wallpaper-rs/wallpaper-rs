@@ -78,7 +78,7 @@ QtObject {
         must(page.opened === "", "going back does not return to the shelf");
         const all = page.playlists;
         page.playlists = [];
-        must(page.shelf.empty && page.bandLow === 0, "the playlists page shows no empty state without playlists");
+        must(page.shelf.empty && page.bandLow > 0, "the playlists page shows no empty state in the band without playlists");
         page.playlists = all;
     }
 }
