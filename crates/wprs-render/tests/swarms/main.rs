@@ -3,7 +3,7 @@ use serde_json::{Value, json};
 use std::collections::BTreeMap;
 use std::sync::Arc;
 use wprs_core::Fit;
-use wprs_render::{Layer, Pixels, Renderer, SceneAssets, SceneView};
+use wprs_render::{Layer, Pixels, Renderer, SceneAssets, SceneView, set_step_budget};
 use wprs_scene::{Census, Quality, Runtime, SCHEMA, Scene, Values};
 
 mod deep;
@@ -20,6 +20,7 @@ mod timed;
 const SIZE: (u32, u32) = (160, 80);
 
 fn renderer() -> Option<&'static Renderer> {
+    set_step_budget(None);
     match Renderer::shared() {
         Ok(r) => Some(r),
         Err(e) if std::env::var_os("WPRS_REQUIRE_GPU").is_none() => {

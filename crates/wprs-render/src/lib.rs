@@ -84,7 +84,7 @@ pub use scene::{
     MAX_FONT, MAX_SCENE_BUILD, Opened, Pixels, RGB_MOST, Reel, Rehearsal, SceneAssets, SceneStats, SceneView,
     ScriptHost, Stamping, Trace, Versus, drawn_effects, finish_builds, finish_gpu, font, lit, local_wall,
     on_today, profiled_passes, reset_profiled_passes, retry_effects, serve_script_host, set_build_timeout,
-    set_gpu_budget, split, stop_builds, stop_effects,
+    set_gpu_budget, split, stop_builds, stop_effects, swarm::set_step_budget,
 };
 use std::sync::OnceLock;
 use std::sync::atomic::{AtomicU64, Ordering};

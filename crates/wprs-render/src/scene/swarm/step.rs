@@ -2,10 +2,20 @@ use super::super::clock::SIM_AT;
 use super::dispatch::Job;
 use super::{Stamp, Swarms};
 use crate::{RenderError, Renderer};
+use std::sync::atomic::{AtomicU64, Ordering::Relaxed};
 use std::time::{Duration, Instant};
 use wprs_scene::{Cloud, Content, Draw, Frame, Quality, Runtime, Sim};
 
-pub(super) const CUT: Duration = Duration::from_millis(200);
+const CUT_US: u64 = 200_000;
+static LIMIT_US: AtomicU64 = AtomicU64::new(CUT_US);
+
+pub fn set_step_budget(limit: Option<Duration>) {
+    LIMIT_US.store(limit.map_or(u64::MAX, |l| u64::try_from(l.as_micros()).unwrap_or(u64::MAX)), Relaxed);
+}
+
+pub(super) fn cut() -> Duration {
+    Duration::from_micros(LIMIT_US.load(Relaxed))
+}
 
 impl Swarms {
     pub(crate) fn run(
@@ -48,7 +58,7 @@ impl Swarms {
                 }
                 flight.sims.resize(parts, Sim::default());
                 for j in 0..count {
-                    if start.elapsed() > CUT {
+                    if start.elapsed() > cut() {
                         break;
                     }
                     (0..parts).for_each(|p| flight.sims[p] = bake.apply(p, swarm.sim(j, p)));

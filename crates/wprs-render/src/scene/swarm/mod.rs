@@ -17,6 +17,7 @@ mod setup;
 mod show;
 pub(crate) use lamp::{Lamp, Lamps};
 pub(crate) use setup::sprites;
+pub use step::set_step_budget;
 mod sort;
 mod sprite;
 mod stage;

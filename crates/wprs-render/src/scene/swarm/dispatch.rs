@@ -1,5 +1,5 @@
 use super::stages::{Phase, Task};
-use super::step::CUT;
+use super::step::cut;
 use super::{CHUNK, SIM, Swarms};
 use crate::{RenderError, Renderer};
 use std::time::Instant;
@@ -55,7 +55,7 @@ impl Swarms {
             if first + CHUNK < longest {
                 self.stamp.submit(r);
                 r.finish()?;
-                if start.elapsed() > CUT {
+                if start.elapsed() > cut() {
                     break;
                 }
             }
