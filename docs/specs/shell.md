@@ -97,7 +97,9 @@ del menú. Una página que no la pide queda como siempre, en la columna a la der
   redimensionar, sin mover la página de lugar: el foco queda donde estaba y nada tapa el menú.
 - El velo de banda cubre la ventana a lo ancho desde 190 px arriba de la banda. Si el texto de la
   banda empieza más abajo que `band`, la página declara `bandFrom` (en sus coordenadas) y el velo
-  empieza 190 px arriba de ese punto, para que se lea sobre un fondo claro.
+  empieza 190 px arriba de ese punto, para que se lea sobre un fondo claro. Una página sin banda
+  puede declarar `bandFrom` igual (la Biblioteca, en el punto de su barra): el velo sube hasta
+  190 px arriba de ese punto, pero nunca empieza más abajo que en las demás páginas.
 - Una página que ocupa todo el alto (`full`) no usa la banda.
 - Con la banda, los avisos van a la derecha del menú, encima del bloque de arriba.
 - `wprs-app --pieces band [IMAGEN...]` muestra una página de prueba con la banda (la primera imagen

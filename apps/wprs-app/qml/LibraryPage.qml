@@ -22,7 +22,7 @@ Kirigami.Page {
     }
     readonly property string skeleton: opened !== "" ? "options" : ""
     readonly property bool full: all && opened === ""
-    readonly property real veilTop: bar.y - bar.height * 3
+    readonly property real bandFrom: bar.y
     readonly property var route: opened !== "" ? [App.tr("Library"), host.item.title ?? ""].concat(level !== "" ? [panel.levelName] : []) : []
 
     function search() {

@@ -96,7 +96,7 @@ Item {
 
     BandVeil {
         visible: !frame.full
-        y: frame.bandLow > 0 ? Math.max(0, (frame.page.bandFrom !== undefined ? frame.page.bandFrom : frame.band.y) - Look.veloBanda) : frame.page && frame.page.veilTop !== undefined ? Math.min(frame.height * 0.55, seat.y + frame.page.veilTop) : frame.height * 0.55
+        y: frame.page && frame.page.bandFrom !== undefined ? Math.max(0, Math.min(frame.bandLow > 0 ? frame.height : frame.height * 0.55, seat.y + frame.page.bandFrom - Look.veloBanda)) : frame.bandLow > 0 ? Math.max(0, frame.band.y - Look.veloBanda) : frame.height * 0.55
         width: frame.width
         height: frame.height - y
     }
