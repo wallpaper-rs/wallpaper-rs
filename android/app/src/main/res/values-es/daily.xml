@@ -15,4 +15,5 @@
     <string name="lowered_heat_why">El teléfono está caliente: la animación baja hasta que se enfríe.</string>
 
     <string name="flashes_barred">Tiene destellos, deshabilitado</string>
+    <string name="allow_in_settings">Permitirlos en Ajustes</string>
 </resources>

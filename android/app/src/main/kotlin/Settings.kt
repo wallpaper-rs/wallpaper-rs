@@ -3,6 +3,7 @@ package io.github.wallpaper_rs
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +26,8 @@ import org.json.JSONObject
 @Composable
 fun Settings(main: Main, account: () -> Unit = {}) {
     var changes by remember { mutableIntStateOf(0) }
-    var query by rememberSaveable { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf(Jump.find.value.orEmpty()) }
+    LaunchedEffect(Unit) { Jump.find.value = null }
     var unfolded by rememberSaveable { mutableIntStateOf(0) }
     val values by loaded(emptyMap<String, String>(), changes) { SETTING_KEYS.associateWith { Native.setting(it, null) } }
     val lifecycle = LocalLifecycleOwner.current.lifecycle

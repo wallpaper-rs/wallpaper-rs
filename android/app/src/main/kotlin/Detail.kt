@@ -129,7 +129,16 @@ private fun Heading(item: Item, inUse: Boolean, barred: Boolean) = Column(Modifi
         if (inUse) InUse()
         Text(facts(item), color = tones.mist, style = Type.foot)
     }
-    if (barred) StateLine(stringResource(R.string.flashes_barred), Tone.Amber, Modifier.padding(top = Measure.e2))
+    if (barred) {
+        StateLine(stringResource(R.string.flashes_barred), Tone.Amber, Modifier.padding(top = Measure.e2))
+        val find = stringResource(R.string.allow_flashing)
+        WordAction({ allowIn(find) }, Modifier.testTag("allow_flashes")) { Text(stringResource(R.string.allow_in_settings)) }
+    }
+}
+
+fun allowIn(find: String) {
+    Jump.find.value = find
+    Jump.to.value = Tab.Settings
 }
 
 @Composable

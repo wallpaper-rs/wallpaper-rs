@@ -125,4 +125,5 @@ private fun summary(list: Playlist): String = every(list.rules) + " · " + plura
 
 object Jump {
     val to = mutableStateOf<Tab?>(null)
+    val find = mutableStateOf<String?>(null)
 }

@@ -49,6 +49,7 @@ fun App(main: Main) = Theme {
         jump?.let {
             tab = it
             playlist = null
+            item = null
             Jump.to.value = null
         }
     }

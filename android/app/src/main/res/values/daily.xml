@@ -15,4 +15,5 @@
     <string name="lowered_heat_why">The phone is hot: the animation stays lower until it cools down.</string>
 
     <string name="flashes_barred">Has flashes, disabled</string>
+    <string name="allow_in_settings">Allow them in Settings</string>
 </resources>
