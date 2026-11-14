@@ -10,9 +10,10 @@ Item {
     property var job: null
     property bool registered: false
     property string lastPath: ""
+    property var act: (name, args, done, failed) => App.act(name, args, "Sync1", done, failed)
     readonly property bool busy: stage !== "" || publish.where.repo.shelf.stage !== ""
     readonly property string doing: stage === "build" ? App.tr("Making the package…") : stage === "upload" ? App.tr("Uploading…") : stage === "register" ? App.tr("Registering your signature…") : App.tr("Publishing…")
-    readonly property var watched: job === null ? null : App.jobs.find(j => j.id === job) ?? null
+    property var watched: job === null ? null : App.jobs.find(j => j.id === job) ?? null
     readonly property string host: publish.where.host
     readonly property string spare: App.path(Core.StandardPaths.writableLocation(Core.StandardPaths.CacheLocation)) + "/publish"
 
@@ -44,7 +45,7 @@ Item {
         stage = "upload";
         job = null;
         lastPath = path;
-        App.act("UploadAs", [path, publish.where.hidden ? "unlisted" : "public"], "Sync1", reply => work && (work.job = Array.isArray(reply) ? reply[0] : reply), error => work && work.refused(String(error.message ?? error)));
+        work.act("UploadAs", [path, publish.where.hidden ? "unlisted" : "public"], reply => work && (work.job = Array.isArray(reply) ? reply[0] : reply), error => work && work.refused(String(error.message ?? error)));
     }
 
     function check() {
@@ -94,7 +95,7 @@ Item {
         registered = true;
         stage = "register";
         const text = App.readText("file://" + publish.sign.current["public"]);
-        App.act("AddAuthorKey", [text], "Sync1", () => {
+        work.act("AddAuthorKey", [text], () => {
             if (!work)
                 return;
             applicationWindow().showPassiveNotification(App.tr("Your signature “%1” is now registered in your account at %2.", publish.sign.keyName, host), "long");

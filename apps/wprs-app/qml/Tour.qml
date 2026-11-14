@@ -80,6 +80,10 @@ Timer {
                 Qt.createComponent("PublishRepoCheck.qml").createObject(host, {
                     "host": host
                 }).start();
+            if (App.backend.claim("upload"))
+                Qt.createComponent("PublishUploadCheck.qml").createObject(host, {
+                    "host": host
+                }).start();
             return;
         } else if (at === host.pages.length + 1) {
             imaged = App.backend.claim("image");
