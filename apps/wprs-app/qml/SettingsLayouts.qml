@@ -90,9 +90,14 @@ FocusScope {
         }
 
         Fila {
+            id: making
+
             text: App.tr("New preset…")
             kind: "pliega"
-            onOpened: preset.open()
+            onOpened: {
+                preset.opener = making;
+                preset.open();
+            }
         }
     }
 
