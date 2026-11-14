@@ -5,7 +5,7 @@ import io.github.wallpaper_rs.app
 Kirigami.Page {
     id: page
 
-    property int tab: 0
+    property int tab: SettingsPlaces.tab(place)
     property string place: ""
     property string query: ""
     property int screen: 0

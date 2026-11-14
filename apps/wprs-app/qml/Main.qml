@@ -25,7 +25,6 @@ Kirigami.ApplicationWindow {
         },
         Component {
             SettingsPage {
-                tab: 1
                 place: "layouts"
             }
         },
