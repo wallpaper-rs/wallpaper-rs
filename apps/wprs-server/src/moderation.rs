@@ -27,7 +27,8 @@ pub fn open_cases(c: &Connection) -> Res<Vec<Value>> {
     let sql = concat!(
         "SELECT c.id, c.reason, c.detail, c.priority, c.created_at, v.package_id AS package, \
                v.version, v.title, v.kind, v.state, v.sha256, v.license, v.signer, v.asks, v.photosensitive, \
-               v.content, u.handle AS uploader, ",
+               v.content, u.handle AS uploader, \
+               (SELECT m.state FROM mail_queue m WHERE m.case_id = c.id ORDER BY m.id DESC LIMIT 1) AS mailed, ",
         crate::cases::after!(),
         " FROM cases c \
                JOIN versions v ON v.id = c.version_id LEFT JOIN users u ON u.id = v.uploaded_by \
@@ -76,7 +77,9 @@ async fn report(
         c.execute(insert, params![version.ok_or_else(|| Problem::missing("package"))?, detail, now()])?;
         Ok(c.last_insert_rowid())
     });
-    Ok((StatusCode::CREATED, Json(json!({"case": case.await?}))))
+    let case = case.await?;
+    crate::mail::case(&app, case).await?;
+    Ok((StatusCode::CREATED, Json(json!({"case": case}))))
 }
 
 #[derive(Deserialize)]

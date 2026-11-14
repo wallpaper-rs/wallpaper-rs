@@ -148,9 +148,11 @@ async fn notice(State(app): St, auth: Option<Auth>, client: Client, Form(n): For
         let (id, at) = (c.last_insert_rowid(), now());
         let values =
             params![receipt, id, n.kind, n.name, n.email, n.location, n.work, n.explanation, n.signature, at];
-        Ok(c.execute(notice, values)?)
+        c.execute(notice, values)?;
+        Ok(id)
     });
-    stored.await?;
+    let case = stored.await?;
+    crate::mail::case(&app, case).await?;
     let body = html! {
         p { (tm("Thank you. Your receipt number is {}.", &[html! { strong { code { (shown) } } }])) }
         p { (tm("Follow the decision at {}.", &[html! { a href={ "/legal/notice/" (shown) } { "/legal/notice/" (shown) } }])) }

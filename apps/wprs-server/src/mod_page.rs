@@ -85,8 +85,14 @@ fn case_row(case: &Value, allowed: &[String]) -> Row {
     };
     let (title, made) = (text(case, "title"), ago(case["created_at"].as_i64().unwrap_or(0)));
     let who = text(case, "uploader");
+    let mailed = match case["mailed"].as_str() {
+        Some("sent") => t(" · notice sent by mail"),
+        Some("queued") => t(" · notice by mail on its way"),
+        Some(_) => t(" · the notice by mail did not go out"),
+        None => "",
+    };
     let line = match is_report(case) {
-        true => tf("{} · by {}", &[&made, &who]),
+        true => tf("{} · by {}", &[&made, &who]) + mailed,
         false if case["newer"].is_null() && first(case) => tf("{} · first upload · {}", &[&who, &made]),
         false => tf("{} · version {} · {}", &[&who, &newest(case), &made]),
     };

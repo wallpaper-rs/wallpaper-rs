@@ -17,6 +17,9 @@ pub fn spawn(app: Arc<App>) {
             if let Err(problem) = republish(&app, false).await {
                 tracing::warn!(detail = %problem.detail, "signing the repository failed");
             }
+            if let Err(problem) = crate::mail::watch(&app).await {
+                tracing::warn!(detail = %problem.detail, "watching the health rows failed");
+            }
             tokio::select! {
                 () = app.dirty.notified() => tokio::time::sleep(delay).await,
                 () = tokio::time::sleep(Duration::from_secs(60)) => {}
@@ -42,9 +45,14 @@ pub async fn republish(app: &Arc<App>, force: bool) -> Res<Option<Published>> {
     let shared = app.clone();
     let published =
         tokio::task::spawn_blocking(move || shared.repo.publish(shared.cfg.entry_days, t)).await?;
-    let sql = "UPDATE repo_state SET dirty = MAX(dirty, ?1), signed_at = IIF(?1, signed_at, ?2)";
-    let failed = published.is_err();
-    app.db.run(move |c| Ok(c.execute(sql, params![failed, t])?)).await?;
+    let sql = "UPDATE repo_state SET dirty = MAX(dirty, ?1), signed_at = IIF(?1, signed_at, ?2), \
+               failed_at = IIF(?1, ?2, NULL), failed_raw = ?3";
+    let raw = published.as_ref().err().map(|e| format!("{e:#}"));
+    let failed = raw.is_some();
+    app.db.run(move |c| Ok(c.execute(sql, params![failed, t, raw])?)).await?;
+    if failed {
+        crate::mail::rewatch(app);
+    }
     let published = published.map_err(|e| Problem::conflict("publish", format!("{e:#}")))?;
     tracing::info!(entry = published.version, packages = published.packages, "signed the repository index");
     Ok(Some(published))
