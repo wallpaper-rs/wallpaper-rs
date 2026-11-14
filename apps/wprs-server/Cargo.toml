@@ -11,6 +11,7 @@ oidc = ["dep:openidconnect", "dep:reqwest"]
 
 [dependencies]
 wprs-format = { workspace = true, features = ["sign"] }
+wprs-palette.workspace = true
 wprs-qr.workspace = true
 wprs-scene.workspace = true
 anyhow.workspace = true

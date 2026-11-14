@@ -231,6 +231,7 @@ the verified shards before installing.
 | GET | `/api/v1/packages/{id}/versions` | — | `{items: [item]}` |
 | POST | `/api/v1/packages/{id}/reports` | — | `{category: copyright\|illegal\|malware\|mature\|spam\|other, details}` → `201 {case}` |
 | GET | `/media/{sha256}.jpg` | — | Thumbnail of a pending or published version |
+| GET | `/band/{sha256}.css` | — | Tones of the band for the version on its cover (`404` for any other version) |
 | POST | `/api/v1/packages/{id}/vote` | session or token | `{vote: up\|down\|none}` → `{id, up, down, mine}`; one vote per account and package, at most 60 changes an hour (`429`), `404` for a package that is not published |
 | GET | `/api/v1/packages/{id}/vote` | session or token | `{id, up, down, mine}` |
 | GET | `/api/v1/votes?ids=` | — | `{items: {id: {up, down, mine?}}}` for at most 100 package ids separated by commas; `mine` (`up`, `down` or `none`) only with a session |
@@ -245,6 +246,19 @@ The desktop app and the phone vote with the token of the device and read the cou
 is off. They ask and vote only for packages of the repository the server announces (its `repo_id`
 in `/.well-known/wprs-server`): ids of packages from other repositories never reach the server, and
 rows of other repositories show no counts and no vote buttons.
+
+Every page of the server draws, behind the menu and the title, the cover of the newest version
+that a visitor without an account sees in the catalog: published, listed, newest listed version of
+a package the moderators did not hide, and rated for everybody (`content` is `general`; mature and
+unrated versions never reach the band, which the sign-in page shows too). The page links its
+thumbnail (`/media/{sha256}.jpg`) and a stylesheet of the same server (`/band/{sha256}.css`) that
+sets the tones of the page; both addresses carry the version, so browsers keep them for a year and
+fetch new ones when the newest version changes. A credit line under the title names the wallpaper
+and its owner. The tones are worked out once from the thumbnail, the first time that version is
+on the band, and stored with it; the veil over the cover grows with the cover until the title, the
+menu and the status line read at 4.5:1 or more over its brightest part (95th percentile). With no
+such version, or with a thumbnail that cannot be read, pages draw the plain band in the default
+tones. The setup assistant draws the plain band until the first wallpaper is published.
 
 Search uses an SQLite FTS5 index with the trigram tokenizer (without diacritics) over the id,
 title, description and tags of published versions, kept up to date by triggers: every word of `q`

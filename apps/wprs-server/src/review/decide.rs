@@ -152,7 +152,7 @@ pub async fn decide(app: &Arc<App>, actor: Option<i64>, case: i64, d: Decision) 
         None => {}
     }
     if next.is_some_and(|s| s != "rejected") {
-        app.dirty.notify_one();
+        app.changed().await;
     }
     Ok(json!({"case": case, "decision": d.decision, "subject": subject, "state": next.unwrap_or(&state)}))
 }

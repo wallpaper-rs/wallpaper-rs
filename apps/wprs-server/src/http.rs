@@ -35,7 +35,14 @@ pub fn router(app: Arc<App>) -> Router {
         votes::routes,
         featuring::routes,
     ]);
-    modules.extend([web::routes, crate::assets::routes, pages::routes, legal::routes, crate::setup::routes]);
+    modules.extend([
+        web::routes,
+        crate::assets::routes,
+        pages::routes,
+        legal::routes,
+        crate::setup::routes,
+        crate::band::routes,
+    ]);
     #[cfg(feature = "oidc")]
     modules.push(crate::oidc::routes);
     let inner = modules

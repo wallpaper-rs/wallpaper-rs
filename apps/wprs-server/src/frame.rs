@@ -1,61 +1,52 @@
 use crate::App;
-use crate::lang::{current, t};
+use crate::band::Shown;
+use crate::lang::{current, t, tf};
 use maud::{DOCTYPE, Markup, html};
 
 pub const NO_WALLPAPER: &str = "f-ninguno";
 
-pub struct Cover<'a> {
-    pub src: &'a str,
-    pub credit: Option<&'a str>,
-}
-
 pub struct Frame<'a> {
     pub title: &'a str,
     pub line: Option<Markup>,
-    pub tone: &'a str,
-    pub cover: Option<Cover<'a>>,
 }
 
 impl<'a> Frame<'a> {
     pub fn new(title: &'a str) -> Self {
-        Frame { title, line: None, tone: NO_WALLPAPER, cover: None }
+        Frame { title, line: None }
     }
 
     pub fn line(mut self, line: Markup) -> Self {
         self.line = Some(line);
         self
     }
+}
 
-    #[allow(dead_code)]
-    pub fn tone(mut self, tone: &'a str) -> Self {
-        self.tone = tone;
-        self
-    }
-
-    #[allow(dead_code)]
-    pub fn cover(mut self, cover: Cover<'a>) -> Self {
-        self.cover = Some(cover);
-        self
+fn credit(shown: &Shown) -> String {
+    match &shown.by {
+        Some(by) => tf("Cover: “{}” by {}, the latest published", &[&shown.title, by]),
+        None => tf("Cover: “{}”, the latest published", &[&shown.title]),
     }
 }
 
 pub fn render(app: &App, nav: Markup, frame: Frame, body: Markup) -> Markup {
-    let band = if frame.cover.is_some() { "banda" } else { "banda sin" };
+    let shown = app.band();
+    let band = if shown.is_some() { "banda" } else { "banda sin" };
     html! {
         (DOCTYPE)
-        html lang=(current().code()) class=(frame.tone) {
+        html lang=(current().code()) class=[shown.is_none().then_some(NO_WALLPAPER)] {
             head {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
                 title { (frame.title) " · " (app.cfg.name) }
                 link rel="stylesheet" href="/static/style.css";
+                @if let Some(s) = &shown { link rel="stylesheet" href={ "/band/" (s.sha) ".css" }; }
                 script src="/static/copy.js" defer {}
             }
             body {
                 a.saltar href="#contenido" { (t("Skip to content")) }
                 div.pagina {
                     header class=(band) {
-                        @if let Some(c) = &frame.cover { img.portada-img src=(c.src) alt="" ; }
+                        @if let Some(s) = &shown { img.portada-img src={ "/media/" (s.sha) ".jpg" } alt=""; }
                         div.barra {
                             a.marca href="/" { (app.cfg.name) }
                             nav.nav aria-label=(t("Site")) { (nav) }
@@ -63,9 +54,7 @@ pub fn render(app: &App, nav: Markup, frame: Frame, body: Markup) -> Markup {
                         div.cabeza {
                             h1 { (frame.title) }
                             @if let Some(line) = &frame.line { (line) }
-                            @if let Some(credit) = frame.cover.as_ref().and_then(|c| c.credit) {
-                                p.portada-de { (credit) }
-                            }
+                            @if let Some(s) = &shown { p.portada-de { (credit(s)) } }
                         }
                     }
                     main.columna #contenido { (body) }

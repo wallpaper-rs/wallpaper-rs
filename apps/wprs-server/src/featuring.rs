@@ -78,7 +78,7 @@ async fn set(State(app): St, auth: Auth, f: Feature, on: bool) -> Reply {
     if let Err(e) = marked {
         tracing::info!("a featured package is not in the repository yet: {e}");
     }
-    app.dirty.notify_one();
+    app.changed().await;
     Ok(Json(json!({"id": id, "featured": on})))
 }
 

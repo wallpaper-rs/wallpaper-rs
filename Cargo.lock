@@ -7247,6 +7247,7 @@ dependencies = [
  "tracing-subscriber",
  "wiremock",
  "wprs-format",
+ "wprs-palette",
  "wprs-qr",
  "wprs-scene",
  "wprs-sync",

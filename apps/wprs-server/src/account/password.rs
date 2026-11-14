@@ -31,6 +31,7 @@ pub(super) async fn forget(
     app.db
         .run(move |c| changed(c.execute("DELETE FROM users WHERE id = ?1", [auth.user])?, "account"))
         .await?;
+    app.changed().await;
     let _ = tokio::fs::remove_dir_all(files).await;
     Ok((StatusCode::NO_CONTENT, [(header::SET_COOKIE, creds::cookie(&app.cfg, "", 0))]))
 }

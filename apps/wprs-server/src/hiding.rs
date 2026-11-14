@@ -55,6 +55,6 @@ async fn hide(State(app): St, auth: Auth, h: Hide, on: bool) -> Reply {
     if let Err(e) = marked {
         tracing::info!("a hidden package is not in the repository yet: {e}");
     }
-    app.dirty.notify_one();
+    app.changed().await;
     Ok(Json(json!({"id": id, "hidden": on})))
 }

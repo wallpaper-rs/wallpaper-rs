@@ -34,6 +34,13 @@ pub struct Report {
     pub asks: Vec<String>,
 }
 
+pub fn picture_limits() -> Pixels {
+    let mut limits = Pixels::default();
+    (limits.max_image_width, limits.max_image_height, limits.max_alloc) =
+        (Some(16384), Some(16384), Some(512 << 20));
+    limits
+}
+
 pub fn check(wpak: &Path, keys: &[String], require_signature: bool, thumb: &Path) -> anyhow::Result<Report> {
     for (resource, value) in [(Resource::As, 1 << 30), (Resource::Cpu, 60)] {
         let _ = setrlimit(resource, Rlimit { current: Some(value), maximum: Some(value) });
@@ -54,10 +61,7 @@ pub fn check(wpak: &Path, keys: &[String], require_signature: bool, thumb: &Path
     let preview =
         package.manifest.thumbnail().cloned().context("the server needs a preview image in the package")?;
     let mut reader = ImageReader::new(Cursor::new(package.read_file(&preview)?)).with_guessed_format()?;
-    let mut limits = Pixels::default();
-    (limits.max_image_width, limits.max_image_height, limits.max_alloc) =
-        (Some(16384), Some(16384), Some(512 << 20));
-    reader.limits(limits);
+    reader.limits(picture_limits());
     let image = reader.decode().context("the preview is not a PNG, JPEG, WebP, GIF or BMP image")?;
     JpegEncoder::new_with_quality(File::create(thumb)?, 80)
         .encode_image(&image.thumbnail(640, 640).to_rgb8())?;

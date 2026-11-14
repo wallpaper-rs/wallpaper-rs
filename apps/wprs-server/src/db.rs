@@ -24,6 +24,7 @@ pub(crate) const MIGRATIONS: &[&str] = &[
     include_str!("../migrations/0008_case_checks.sql"),
     include_str!("../migrations/0009_settings_and_setup.sql"),
     include_str!("../migrations/0010_mail.sql"),
+    include_str!("../migrations/0011_band_sheet.sql"),
 ];
 
 pub fn now() -> i64 {

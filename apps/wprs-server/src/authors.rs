@@ -13,7 +13,7 @@ use std::sync::Arc;
 
 async fn dirty(app: &Arc<App>) -> Res<()> {
     app.db.run(|c| Ok(c.execute("UPDATE repo_state SET dirty = 1", [])?)).await?;
-    app.dirty.notify_one();
+    app.changed().await;
     Ok(())
 }
 

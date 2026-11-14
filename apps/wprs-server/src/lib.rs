@@ -5,6 +5,7 @@ mod assets;
 mod auth;
 mod authors;
 mod backup;
+mod band;
 mod cases;
 mod catalog;
 mod certs;
@@ -102,6 +103,7 @@ pub struct App {
     validations: Semaphore,
     hashing: Semaphore,
     dirty: Notify,
+    band: band::Band,
     mail: mail::Post,
     deciding: Mutex<()>,
     pieces: files::Pieces,
@@ -119,6 +121,7 @@ impl App {
         }
         let db = db::Db::open(&cfg.data.join("db/wprs.sqlite"))?;
         let settings = db.read(|c| settings::load(c, &cfg))?;
+        let band = db.read(|c| band::Band::open(c, &cfg.data));
         Ok(Arc::new(App {
             door: door::Door::new(&cfg, &settings.network)?,
             settings: settings.into(),
@@ -131,6 +134,7 @@ impl App {
             validations: Semaphore::new(2),
             hashing: Semaphore::new(4),
             dirty: Notify::new(),
+            band,
             mail: mail::Post::default(),
             deciding: Mutex::new(()),
             pieces: files::Pieces::default(),

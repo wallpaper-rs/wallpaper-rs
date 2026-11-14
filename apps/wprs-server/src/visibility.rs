@@ -54,7 +54,7 @@ async fn set(State(app): St, auth: Auth, Path(id): Path<String>, Input(v): Input
     .await
     .map_err(Problem::internal)?
     .map_err(Problem::internal)?;
-    app.dirty.notify_one();
+    app.changed().await;
     let visibility = if shown { "public" } else { "unlisted" };
     Ok(Json(json!({"id": id, "version": version, "visibility": visibility})))
 }

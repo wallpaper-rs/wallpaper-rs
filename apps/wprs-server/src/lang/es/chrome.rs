@@ -36,4 +36,6 @@ pub const TEXTS: super::Texts = &[
     ("That clashes with what is already there", "Choca con lo que ya hay"),
     ("Too many tries: wait a moment", "Demasiados intentos: espera un momento"),
     ("The server failed", "El servidor falló"),
+    ("Cover: “{}” by {}, the latest published", "Portada: «{}», de {}, lo último publicado"),
+    ("Cover: “{}”, the latest published", "Portada: «{}», lo último publicado"),
 ];

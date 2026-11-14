@@ -38,7 +38,7 @@ pub async fn repository(State(app): St, headers: HeaderMap, Form(f): Form<Reposi
     let kept = name.clone();
     app.change(move |c| put(c, &[("root_key", "pending"), ("repo_name", &kept)])).await?;
     app.held.lock().unwrap_or_else(PoisonError::into_inner).key = Some((visit, name, root.secret));
-    app.dirty.notify_one();
+    app.changed().await;
     Ok(again())
 }
 
