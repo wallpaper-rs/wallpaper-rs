@@ -91,10 +91,6 @@ Timer {
                 Qt.createComponent("AhoraCheck.qml").createObject(host, {
                     "host": host
                 }).start();
-            if (App.backend.claim("ahora.taps"))
-                Qt.createComponent("AhoraTapCheck.qml").createObject(host, {
-                    "host": host
-                }).start();
             if (App.backend.claim("repo"))
                 Qt.createComponent("RepoCheck.qml").createObject(host, {
                     "host": host

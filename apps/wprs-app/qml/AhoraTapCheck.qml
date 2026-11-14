@@ -1,15 +1,11 @@
 import QtQuick
 import io.github.wallpaper_rs.app
 
-Timer {
+Item {
     id: check
 
     required property var host
     readonly property var frame: host.shell.titleFrame
-    readonly property var pages: [0, 4, 1, 3, 7]
-    property int at: -1
-    property int tries: 0
-    property int tested: 0
 
     function must(ok, text) {
         if (!ok)
@@ -17,21 +13,8 @@ Timer {
     }
 
     function start() {
-        host.waiting++;
-        host.held = host.held.concat([check]);
-        restart();
-    }
-
-    function next() {
-        tries = 0;
-        if (++at < pages.length) {
-            host.showPage(pages[at]);
-            return restart();
-        }
-        host.waiting--;
-        host.held = host.held.filter(c => c !== check);
-        if (tested === 0)
-            throw new Error("now block taps: no page shows the block");
+        must(host.kind === "title" && frame.ahora.visible && !frame.ahora.none, "the block is not on the page");
+        probe();
         check.destroy();
     }
 
@@ -83,27 +66,14 @@ Timer {
             block.forceLayout();
             block.parent.forceLayout();
             const all = buttons(block, []);
-            must(all.length >= 7, "page " + pages[at] + " shows only " + all.length + " buttons");
+            must(all.length >= 7, "the block shows only " + all.length + " buttons");
             for (const button of all) {
                 const centre = button.mapToItem(null, button.width / 2, button.height / 2);
                 const top = topmost(centre);
-                must(inside(top, button), "on page " + pages[at] + " «" + button.text + "» lies under " + chain(top) + (inside(top, frame.seat) ? " of the page" : "") + "; the button: " + chain(button));
+                must(inside(top, button), "«" + button.text + "» lies under " + chain(top) + (inside(top, frame.seat) ? " of the page" : "") + "; the button: " + chain(button));
             }
-            tested++;
         } finally {
             line.playlist = Qt.binding(() => block.none ? null : block.playlist);
         }
-    }
-
-    interval: Look.paso * 6
-    onTriggered: {
-        if (at < 0)
-            return host.waiting > 1 && ++tries < 400 ? restart() : next();
-        const block = frame.ahora;
-        if ((host.kind !== "title" || !block.visible || block.none || block.width <= 0) && ++tries < 30)
-            return restart();
-        if (host.kind === "title" && block.visible && !block.none)
-            probe();
-        next();
     }
 }

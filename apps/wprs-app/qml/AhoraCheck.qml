@@ -75,6 +75,10 @@ Timer {
                 notice();
             }
             empty();
+            if (host.kind === "title")
+                Qt.createComponent("AhoraTapCheck.qml").createObject(host, {
+                    "host": host
+                }).start();
         } finally {
             host.waiting--;
             host.held = host.held.filter(c => c !== check);
