@@ -407,7 +407,9 @@ same with a personal token that has the `mod` scope (`WPRS_SERVER_TOKEN`). Every
 Nobody approves, restores or dismisses a case of their own
 upload (`403`); restrictive decisions on one's own upload are allowed. Restrictive decisions need a `statement` of at least 10
 characters, which the uploader sees in `/api/v1/me/packages`. `strike: true` adds a strike;
-three strikes within a year suspend uploads. Every decision is audited. Cases come from
+three strikes within a year suspend uploads. Every decision is audited. Approving or rejecting a
+pending version answers `409 superseded` once a newer version of the package was uploaded;
+dismissing such a case is still accepted (it only closes the case, the version stays pending). Cases come from
 uploads (priority 0), reports (1), copyright notices and counter-notices (2) and notices of
 illegal content (3).
 
@@ -443,6 +445,14 @@ prueba» (`POST /admin/mail/test`) sends at once and says whether it went out.
 
 A failed automatic signing is stored in `repo_state.failed_at` and `failed_raw`: the row «Firma del
 índice» turns red with when and why until a signing works again.
+
+On the health page (`/admin`) the row «Firma del índice» appears only once the index was signed
+for the first time (after the publish delay of the first upload). Under «Para los teléfonos» the
+QR carries the address and, on a home network, the fingerprint of the certificate, while the
+address one can copy below it is the repository address for the desktop app, whose `fingerprint`
+is that of the repository key: two fingerprints, each right for its use. On a Spanish page, a
+detail the server gives only in English is kept under the fold «Detalles» of the error notice; on
+an English page it is shown as it is.
 
 ## Legal pages
 
