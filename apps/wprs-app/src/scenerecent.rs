@@ -8,14 +8,20 @@ fn store() -> PathBuf {
     if crate::bus::checking() {
         return projects_dir().join(".recent.json");
     }
-    dirs::state_dir().or_else(dirs::data_local_dir).unwrap_or_default().join("wallpaper-rs").join("recent-projects.json")
+    dirs::state_dir()
+        .or_else(dirs::data_local_dir)
+        .unwrap_or_default()
+        .join("wallpaper-rs")
+        .join("recent-projects.json")
 }
 
 fn saved() -> Vec<(PathBuf, String)> {
     let text = std::fs::read_to_string(store()).unwrap_or_default();
     let list: Vec<Value> = serde_json::from_str(&text).unwrap_or_default();
     list.iter()
-        .filter_map(|e| Some((PathBuf::from(e["folder"].as_str()?), e["title"].as_str().unwrap_or_default().to_owned())))
+        .filter_map(|e| {
+            Some((PathBuf::from(e["folder"].as_str()?), e["title"].as_str().unwrap_or_default().to_owned()))
+        })
         .collect()
 }
 
@@ -52,7 +58,9 @@ fn edited(folder: &Path, doc: &Value) -> u64 {
     let entry = project::entry(doc).unwrap_or_default();
     ["manifest.json", entry.as_str()]
         .iter()
-        .filter_map(|n| std::fs::metadata(folder.join(n)).ok()?.modified().ok()?.duration_since(UNIX_EPOCH).ok())
+        .filter_map(|n| {
+            std::fs::metadata(folder.join(n)).ok()?.modified().ok()?.duration_since(UNIX_EPOCH).ok()
+        })
         .map(|d| d.as_secs())
         .max()
         .unwrap_or(0)
@@ -75,7 +83,9 @@ fn row(folder: &Path, title: &str) -> Value {
             "poster": poster(folder, &doc),
             "missing": false,
         }),
-        Err(_) => json!({"folder": folder, "title": title, "kind": "", "edited": 0, "poster": "", "missing": true}),
+        Err(_) => {
+            json!({"folder": folder, "title": title, "kind": "", "edited": 0, "poster": "", "missing": true})
+        }
     }
 }
 
