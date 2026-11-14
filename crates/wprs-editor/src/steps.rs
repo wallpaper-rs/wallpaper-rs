@@ -85,6 +85,7 @@ pub fn step(name: &str) -> Message {
         "film" => said("editor.step.film", "Edit a film", &[]),
         "sprites" => said("editor.step.sprites", "Edit sprites", &[]),
         "shader" => said("editor.step.shader", "Edit a shader", &[]),
+        "transition" => said("editor.step.transition", "Edit the transition", &[]),
         other => said("editor.step", "%1", &[&other]),
     }
 }

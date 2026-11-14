@@ -5977,3 +5977,7 @@ msgstr "este efecto no es una transición: su descriptor necesita \"stage\": \"t
 #: crates/wprs-editor/src/passing/mod.rs
 msgid "the effect of the transition does not work: %1"
 msgstr "el efecto de la transición no funciona: %1"
+
+#: crates/wprs-editor/src/steps.rs
+msgid "Edit the transition"
+msgstr "Editar la transición"
