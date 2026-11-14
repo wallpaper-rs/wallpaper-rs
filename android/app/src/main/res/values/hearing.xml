@@ -8,5 +8,5 @@
     <string name="rotate_every">Rotate every…</string>
     <string name="rotation_name">Rotation</string>
     <string name="wallpaper_sound">Sound of this wallpaper</string>
-    <string name="wallpaper_volume">Volume of this wallpaper: %d%%</string>
+    <string name="wallpaper_volume">Volume of this wallpaper</string>
 </resources>
