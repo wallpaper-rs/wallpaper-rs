@@ -116,7 +116,7 @@ Item {
             id: ahora
 
             anchors.right: parent.right
-            visible: !frame.owned
+            visible: !frame.owned && frame.page?.tellsService !== true
             page: frame.page
             none: frame.none
             compact: frame.upperLow > 0

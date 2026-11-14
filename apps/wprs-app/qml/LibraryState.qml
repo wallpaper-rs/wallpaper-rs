@@ -75,9 +75,13 @@ Item {
 
         readonly property bool banded: (state.page.band?.width ?? 0) > 0
 
-        x: banded ? state.page.band.x : 0
-        y: banded ? state.page.band.y + Math.max(0, state.page.band.height - height) : 0
+        y: banded ? Math.max(0, state.height - height) : 0
         visible: state.failed
+        focus: state.failed
+        principal: true
+        actionIcon: "arrow-clockwise"
+        Keys.onReturnPressed: state.restarting || state.restart()
+        Keys.onEnterPressed: state.restarting || state.restart()
         title: App.tr("The wallpaper service does not answer")
         text: state.refused !== "" ? App.tr("The service could not be started from here. The details say why; this page comes back by itself when the service answers.") : App.tr("Your library and the wallpapers of your desktop depend on it. Restarting it is usually enough; what you had set is not lost.")
         big: true

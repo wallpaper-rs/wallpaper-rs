@@ -125,6 +125,7 @@ FocusScope {
 
         z: 4
         host: shell.host
+        told: shell.active?.page?.tellsService === true
         x: (shell.active?.noticeAt.x ?? 0)
         y: shell.kind === "work" ? (shell.active?.noticeAt.y ?? 0) : (shell.active?.noticeAt.y ?? 0) - height
         width: Math.min(Look.avisoAncho, shell.width - x - Look.e4)

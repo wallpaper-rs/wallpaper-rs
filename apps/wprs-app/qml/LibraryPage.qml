@@ -23,6 +23,7 @@ Kirigami.Page {
     }
     readonly property string skeleton: opened !== "" ? "options" : ""
     readonly property bool full: all && opened === ""
+    readonly property bool tellsService: opened === "" && state.failed
     readonly property real bandLow: opened !== "" ? 0 : state.alone ? state.low : all ? 0 : bar.height + Look.e5 + covers.implicitHeight
     readonly property real bandHigh: bandLow
     readonly property real upperHeight: opened === "" ? state.high : 0

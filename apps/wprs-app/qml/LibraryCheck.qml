@@ -99,7 +99,9 @@ QtObject {
                         "total": 0,
                         "loading": false,
                         "error": error
-                    }
+                    },
+                    "band": Qt.rect(300, 200, 900, 600),
+                    "upper": Qt.rect(300, 0, 900, 200)
                 },
                 "bar": {
                     "filtered": filtered,
@@ -108,6 +110,10 @@ QtObject {
             });
         const none = make("", true);
         const broken = make("no answer", false);
+        broken.width = 900;
+        broken.height = 600;
+        const fault = broken.fault;
+        must(fault.visible && fault.x === 0 && fault.y >= 0 && fault.y + fault.height <= broken.height + 1, "the service error block is drawn outside its band: " + [fault.x, fault.y, fault.height]);
         const found = [none.visible, none.unmatched, none.failed, broken.failed];
         none.destroy();
         broken.destroy();

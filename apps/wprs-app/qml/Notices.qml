@@ -10,8 +10,9 @@ Column {
     property string action: ""
     property var callback: null
     property string dismissed: ""
+    property bool told: false
     readonly property string banner: App.backend.banner
-    readonly property bool failing: banner !== "" && banner !== dismissed
+    readonly property bool failing: banner !== "" && banner !== dismissed && !told
     readonly property bool busy: failing || account.visible
 
     function show(message, timeout, actionText, onAction) {
