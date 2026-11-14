@@ -79,6 +79,7 @@ impl Daemon {
             fit: Fit::Fill,
             background: [0; 3],
             transition,
+            kind: wprs_core::TransitionKind::None,
             refresh,
             tone: Default::default(),
         };

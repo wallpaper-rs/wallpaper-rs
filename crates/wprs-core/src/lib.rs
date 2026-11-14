@@ -29,6 +29,7 @@ pub mod shortcuts;
 pub mod spread;
 pub mod stash;
 mod store;
+mod transition;
 pub use edit::travel;
 
 pub use battery::BatteryPause;
@@ -46,6 +47,7 @@ pub use parallax::{Fill, Parallax};
 pub use quality::QualityChoice;
 pub use settings::{Library, Models, Pause, Playback, Repos, Transition, TransitionKind};
 pub use store::{gpu_tier, stopped_effects};
+pub use transition::LessMotion;
 
 pub const VERSION: &str = match option_env!("WPRS_VERSION") {
     Some(v) if !v.is_empty() => v,

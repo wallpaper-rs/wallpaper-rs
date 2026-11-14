@@ -64,6 +64,7 @@ impl State {
             _ => kept,
         }
         .map_or((None, None, None), |(image, uv, relief)| (Some(image), Some(uv), relief));
+        let kind = spec.kind;
         let (content, fit, background, transition, refresh, tone) =
             (spec.content, spec.fit, spec.background, spec.transition, spec.refresh, spec.tone);
         let scene = match &content {
@@ -83,22 +84,14 @@ impl State {
             None => super::super::feed::declare(&name, scene.as_ref()),
         }
         let shown = Shown { content, fit, background, image, uv, transition, relief, scene, tone };
-        let transition = !transition.unwrap_or(self.settings.transition).is_zero();
-        let tx = self.tx.clone();
-        let wake: std::sync::Arc<dyn Fn() + Send + Sync> =
-            std::sync::Arc::new(move || drop(tx.send(super::super::Command::Wake)));
+        let cut = kind == wprs_core::TransitionKind::None;
+        let transition = !cut && !transition.unwrap_or(self.settings.transition).is_zero();
+        let reduced = self.settings.less_motion.reduces(self.motion.calm);
         match self.outputs.get_mut(&name) {
             Some(output) => {
-                let passing = super::super::crossing::choose(&output.shown, &shown, self.motion.calm);
+                let (passing, told) = super::super::crossing::choose(&output.shown, &shown, kind, reduced);
                 output.show(shown, size, transition, self.exporter.is_streaming(&name));
-                let mut passing = passing.filter(|_| output.fade.is_some());
-                if let Some(Err(why)) = passing.as_mut().map(|p| p.begin(self.renderer, &wake)) {
-                    tracing::warn!(
-                        "the transition of the scene was left out and the plain fade plays: {why}"
-                    );
-                    passing = None;
-                }
-                output.passing = passing;
+                output.begin(passing, told, transition, (self.renderer, &self.tx));
             }
             None => {
                 let sink =

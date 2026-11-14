@@ -44,3 +44,28 @@ fn the_leaving_transition_plays_first_and_the_coming_one_after() {
         Passing { steps: vec![(out, Quality::Q3)], pipes: Vec::new(), built: None, background: [0; 3] };
     assert_eq!((alone.duration(), alone.phase(0.5)), (1.0, (0, 0.5)));
 }
+
+#[test]
+fn the_choice_of_the_person_rules_over_the_transition_of_the_wallpaper() {
+    use super::super::output::Shown;
+    use wprs_core::TransitionKind::{Fade, None, Own};
+    let shown = || Shown {
+        content: super::super::Content::Color,
+        fit: wprs_core::Fit::Stretch,
+        background: [0; 3],
+        image: Option::None,
+        transition: Option::None,
+        uv: Option::None,
+        relief: Option::None,
+        scene: Option::None,
+        tone: Default::default(),
+    };
+    let told = |kind, reduced| {
+        let (passing, told) = super::choose(&shown(), &shown(), kind, reduced);
+        (passing.is_some(), told.plays, told.why)
+    };
+    assert_eq!(told(Own, false), (false, "fade", "plain"));
+    assert_eq!(told(Own, true), (false, "fade", "plain"));
+    assert_eq!(told(Fade, false), (false, "fade", "chosen"));
+    assert_eq!(told(None, true), (false, "none", "chosen"));
+}

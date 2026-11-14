@@ -97,6 +97,9 @@ pub(super) fn draw(
     output.shown.scene.iter_mut().for_each(|s| s.damage = Some(Default::default()));
     (output.last_render, output.failed) = (Some(now), 0);
     output.fade = output.fade.take().filter(|_| progress < 1.0);
+    if failed {
+        output.told = super::super::status::Passage::FALLEN;
+    }
     if failed || output.fade.is_none() {
         output.passing = None;
     }

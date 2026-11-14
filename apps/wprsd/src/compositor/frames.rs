@@ -54,7 +54,7 @@ impl State {
                     tracing::warn!(
                         "the transition of the scene was left out and the plain fade plays: {why}"
                     );
-                    output.passing = None;
+                    (output.passing, output.told) = (None, super::status::Passage::FALLEN);
                     true
                 }
                 done => done.is_none_or(|d| d.unwrap_or(true)),

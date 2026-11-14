@@ -1,9 +1,12 @@
-use super::output::Shown;
 use std::sync::Arc;
 use std::time::Instant;
 use wprs_core::Fit;
 use wprs_render::{Building, Built, Crossing, Layer, Renderer};
-use wprs_scene::{Quality, Ready, Way};
+use wprs_scene::{Quality, Ready};
+
+mod choice;
+
+pub(super) use choice::choose;
 
 pub(super) struct Passing {
     steps: Vec<(Arc<Ready>, Quality)>,
@@ -15,31 +18,6 @@ pub(super) struct Passing {
 enum Pipe {
     Waiting(Building),
     Done(Built),
-}
-
-pub(super) fn choose(old: &Shown, new: &Shown, calm: bool) -> Option<Passing> {
-    if calm {
-        return None;
-    }
-    let steps: Vec<_> =
-        [(old, Way::Out), (new, Way::In)].into_iter().filter_map(|(s, w)| own(s, w)).collect();
-    (!steps.is_empty()).then_some(Passing {
-        steps,
-        pipes: Vec::new(),
-        built: None,
-        background: new.background,
-    })
-}
-
-fn own(shown: &Shown, way: Way) -> Option<(Arc<Ready>, Quality)> {
-    let scene = shown.scene.as_ref()?;
-    match scene.spec.pack.scene.passages.way(way)? {
-        Ok(ready) => Some((ready.clone(), scene.drawn_at())),
-        Err(why) => {
-            tracing::warn!("the transition of the scene was left out and the plain fade plays: {why}");
-            None
-        }
-    }
 }
 
 pub(super) fn plain(background: [u8; 3]) -> Layer<'static> {

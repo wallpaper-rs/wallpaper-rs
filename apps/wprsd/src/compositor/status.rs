@@ -20,6 +20,7 @@ pub struct OutputStatus {
     pub sandbox: &'static str,
     pub helper: Option<u32>,
     pub hdr: super::light::Hdr,
+    pub passage: Passage,
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, serde::Serialize)]
@@ -69,4 +70,21 @@ pub(super) fn problems_changed(
         all.get(n).map(|s| s.problems.clone())
     };
     names.iter().any(|n| problems(now, n) != problems(old, n))
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize)]
+pub struct Passage {
+    pub plays: &'static str,
+    pub why: &'static str,
+}
+
+impl Passage {
+    pub(super) const CUT: Passage = Passage { plays: "none", why: "cut" };
+    pub(super) const FALLEN: Passage = Passage { plays: "fade", why: "fallen" };
+}
+
+impl Default for Passage {
+    fn default() -> Self {
+        Passage::CUT
+    }
 }

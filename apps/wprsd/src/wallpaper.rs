@@ -114,7 +114,8 @@ impl Daemon {
         let accent = self.accent(output, (image.as_deref(), &display), &content, shown_video.as_deref());
         let pixels = content.pixels();
         let tone = crate::look::tone(&display, &content, (filter, self.state().config.hdr(output)));
-        let spec = Spec { content, fit, background: resolved.background, transition, refresh, tone };
+        let kind = self.state().config.transition(output);
+        let spec = Spec { content, fit, background: resolved.background, transition, kind, refresh, tone };
         self.compositor.configure(output, size, spec);
         let mut st = self.state();
         if let Some(info) = st.outputs.get_mut(output) {

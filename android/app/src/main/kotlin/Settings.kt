@@ -59,7 +59,7 @@ private val CHOICES = listOf(
     Triple(R.string.convert_videos, Convert.SETTING, CONVERTS),
 )
 private val TOGGLES = listOf(
-    Triple(R.string.fade, "transition.kind", "fade" to "none"),
+    Triple(R.string.fade, "transition.kind", "own" to "none"),
     Triple(R.string.video_sound, "playback.muted", "false" to "true"),
     Triple(R.string.duck, "playback.duck", "true" to "false"),
     Triple(R.string.allow_download, "models.allow_download", "true" to "false"),

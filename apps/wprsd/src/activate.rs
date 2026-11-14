@@ -57,6 +57,7 @@ impl Daemon {
             for (name, mut section) in freed.iter().filter_map(|o| Some((o, sections.remove(o)?))) {
                 section.scenes = c.scene_section(name).clone();
                 (section.quality, section.hdr) = (c.own_quality(name), c.own_hdr(name));
+                section.transition = c.own_transition(name);
                 match name.is_empty() {
                     true => c.default = section,
                     false => drop(c.outputs.insert(name.clone(), section)),

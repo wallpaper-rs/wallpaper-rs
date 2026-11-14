@@ -136,7 +136,7 @@ impl State {
                 };
                 published.get(name).is_some_and(|s| {
                     same(s)
-                        && (s.sandbox, s.helper, s.hdr) == (sandbox.0, sandbox.1, o.hdr)
+                        && (s.sandbox, s.helper, s.hdr, s.passage) == (sandbox.0, sandbox.1, o.hdr, o.told)
                         && s.console.iter().eq(lines())
                         && s.problems == self.page_problems(name, o)
                         && s.software_still == self.held_by_software(o)
@@ -177,6 +177,7 @@ impl State {
                     sandbox,
                     helper,
                     hdr: o.hdr,
+                    passage: o.told,
                 };
                 (name.clone(), status)
             };

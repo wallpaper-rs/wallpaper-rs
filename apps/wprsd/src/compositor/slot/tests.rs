@@ -20,6 +20,7 @@ fn heard() -> (Settings, bool) {
             duck: 1.0,
             quality: Default::default(),
             pace: Default::default(),
+            less_motion: Default::default(),
         },
         false,
     )

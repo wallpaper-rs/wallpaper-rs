@@ -1562,7 +1562,11 @@ plays (a light one everywhere, a medium one only at levels 2 and 3).
 A transition is not part of the picture: one that fails its checks does not refuse the scene. The
 check of the package (`wprs-ctl pack check`) lists the reason in words, the log notes it, and the
 screen uses the plain fade of the settings instead. The transition chosen in the settings still
-rules over it: with `none` the change is a cut, and with reduced motion it is the plain fade.
+rules over it: `transition.kind` (or `transition.kind.<output>` for one screen) is `own` by
+default, which plays the wallpaper's transition; `fade` always gives the plain fade and `none` a
+cut. `transition.less_motion` (`system` by default, `always`, `never`) turns every transition into
+the plain fade while it reduces, and `none` stays a cut. The state of each screen says which one
+played at its last change and why (`own`, `chosen`, `reduced`, `fallen`, `plain`).
 When a wallpaper with an `out` passage gives way to one with an `in` passage, `out` plays first
 and `in` after it, each with its own duration; the work exists only while a transition plays and
 each screen plays its own. The shaders of the passage are built away from the drawing while the

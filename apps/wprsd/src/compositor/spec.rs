@@ -165,6 +165,7 @@ pub struct Spec {
     pub fit: Fit,
     pub background: [u8; 3],
     pub transition: Option<Duration>,
+    pub kind: wprs_core::TransitionKind,
     pub refresh: u32,
     pub tone: super::Tone,
 }
@@ -181,4 +182,5 @@ pub struct Settings {
     pub duck: f64,
     pub quality: wprs_core::QualityChoice,
     pub pace: wprs_core::AutoPace,
+    pub less_motion: wprs_core::LessMotion,
 }

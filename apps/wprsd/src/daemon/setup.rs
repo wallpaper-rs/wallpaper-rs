@@ -1,10 +1,11 @@
 use crate::compositor::Settings;
-use wprs_core::{Config, Playback, dbus};
+use wprs_core::{Config, Playback, Transition, dbus};
 use zbus::fdo;
 
 pub(crate) fn settings(config: &Config) -> Settings {
     let playback = config.playback.sanitized();
-    let transition = config.transition.duration();
+    let transition =
+        std::time::Duration::from_millis(config.transition.duration_ms.min(Transition::MAX_MS).into());
     let Playback {
         max_fps,
         volume,
@@ -28,6 +29,7 @@ pub(crate) fn settings(config: &Config) -> Settings {
         duck,
         quality,
         pace: auto_pace,
+        less_motion: config.transition.less_motion,
     }
 }
 

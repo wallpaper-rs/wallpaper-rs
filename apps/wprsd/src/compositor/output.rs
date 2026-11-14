@@ -41,6 +41,7 @@ pub(super) struct Output {
     pub(super) bright_video: bool,
     pub(super) lit: [wprs_render::Lit; 2],
     pub(super) passing: Option<super::crossing::Passing>,
+    pub(super) told: super::status::Passage,
 }
 
 impl Output {
@@ -70,6 +71,7 @@ impl Output {
             bright_video: false,
             lit: Default::default(),
             passing: None,
+            told: Default::default(),
         }
     }
 

@@ -96,6 +96,7 @@ impl Playback {
 #[serde(rename_all = "lowercase")]
 pub enum TransitionKind {
     #[default]
+    Own,
     Fade,
     None,
 }
@@ -105,11 +106,12 @@ pub enum TransitionKind {
 pub struct Transition {
     pub kind: TransitionKind,
     pub duration_ms: u32,
+    pub less_motion: crate::transition::LessMotion,
 }
 
 impl Default for Transition {
     fn default() -> Self {
-        Self { kind: TransitionKind::Fade, duration_ms: 600 }
+        Self { kind: TransitionKind::Own, duration_ms: 600, less_motion: Default::default() }
     }
 }
 
@@ -118,7 +120,9 @@ impl Transition {
 
     pub fn duration(&self) -> Duration {
         match self.kind {
-            TransitionKind::Fade => Duration::from_millis(u64::from(self.duration_ms.min(Self::MAX_MS))),
+            TransitionKind::Own | TransitionKind::Fade => {
+                Duration::from_millis(u64::from(self.duration_ms.min(Self::MAX_MS)))
+            }
             TransitionKind::None => Duration::ZERO,
         }
     }
