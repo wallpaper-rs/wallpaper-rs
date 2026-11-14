@@ -19915,3 +19915,13 @@ msgstr "Ahorrar batería"
 
 msgid "Save this layout"
 msgstr "Guardar esta disposición"
+
+msgctxt "list"
+msgid "None"
+msgstr "Ninguna"
+
+msgid "It may have been moved or be on a disk that is not connected now. Its wallpaper stays in your library until you decide."
+msgstr "Puede que se haya movido o que esté en un disco que ahora no está conectado. Su fondo sigue en tu biblioteca hasta que decidas."
+
+msgid "Last change: at once, without a transition."
+msgstr "Último cambio: de golpe, sin transición."

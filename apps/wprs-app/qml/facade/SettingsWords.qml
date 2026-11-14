@@ -6,6 +6,7 @@ QtObject {
     readonly property var passages: ["own", "fade", "none"]
     readonly property var levels: ["auto", "min-q2", "min-q1", "q3", "q2", "q1", "q0"]
     readonly property var reasons: ({
+            "cut": App.tr("Last change: at once, without a transition."),
             "own": App.tr("Last change: the wallpaper's own transition."),
             "chosen": App.tr("Last change: what you chose."),
             "reduced": App.tr("Last change: a plain fade, because of less motion."),

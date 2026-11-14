@@ -46,7 +46,7 @@ FocusScope {
                 value: modelData.error ? App.tr("Not found") : App.tr("Up to date")
                 status: modelData.error ? App.tr("This folder cannot be found") : ""
                 statusTone: "coral"
-                explain: modelData.error ? App.tr("It may have been moved or be on a disk that is not connected now. Its %1 wallpapers stay in your library until you decide.", modelData.items ?? 0) : String(modelData.path ?? "")
+                explain: !modelData.error ? String(modelData.path ?? "") : modelData.items === 1 ? App.tr("It may have been moved or be on a disk that is not connected now. Its wallpaper stays in your library until you decide.") : App.tr("It may have been moved or be on a disk that is not connected now. Its %1 wallpapers stay in your library until you decide.", modelData.items ?? 0)
                 onOpened: part.choose(modelData, folder)
             }
         }
