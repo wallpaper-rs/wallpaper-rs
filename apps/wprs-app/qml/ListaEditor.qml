@@ -31,7 +31,7 @@ FocusScope {
         },
         Kirigami.Action {
             visible: editor.running
-            icon.name: "stop-fill"
+            icon.name: "x"
             text: App.tr("Stop")
             onTriggered: editor.stop(false)
         }
@@ -128,7 +128,7 @@ FocusScope {
             QQC2.Button {
                 visible: wallpapers.open
                 flat: true
-                icon.name: "folder-plus"
+                icon.name: "folder-add"
                 text: App.tr("Add a folder…")
                 onClicked: folder.open()
             }

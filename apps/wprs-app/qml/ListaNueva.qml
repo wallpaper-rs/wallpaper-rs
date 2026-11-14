@@ -16,7 +16,7 @@ PanelChico {
         name.text = "";
         search.text = creator.page.query;
     }
-    onAccepted: name.text.trim() !== "" && App.act("Create", [name.text.trim(), search.text.trim()], "Playlists1", made => creator.page && (creator.page.opened = made[0]))
+    onAccepted: name.text.trim() !== "" && App.act("Create", [name.text.trim(), search.text.trim()], "Playlists1", made => creator && (creator.page.opened = made[0]))
     foot: [
         Column {
             spacing: Look.e2
