@@ -120,3 +120,32 @@ Un fondo que el teléfono juzga pesado queda quieto con la línea «Quieta porqu
 «Reproducir igual», que fija la calidad en «mínimo 1» para todos los fondos (se deshace en Ajustes →
 Calidad). La primera vez por paquete aparece además un aviso arriba de la página con «Ahora no» y
 «Reproducir igual».
+
+## Primer inicio
+
+Con la biblioteca vacía la página no muestra encabezado ni filtros: dice «Aún no hay nada» y ofrece
+primero «Explorar repositorios» y después «Añadir fotos», con la tira de fondos de ejemplo y su
+botón «Añadirlas». La hoja «Añadir» agrupa fotos, archivos (también paquetes), carpetas y fondos
+animados. La página «Repositorios» (antes «Fuentes») lleva a «Conectar al servidor» y la vuelta
+atrás regresa a ella; agregar un repositorio a mano es una página propia con la huella en un solo
+campo y el botón fijo sobre el teclado.
+
+Lo primero que se añade a una biblioteca vacía pasa a ser el fondo: un solo aviso dice «X ya es tu
+fondo», con el nombre en el idioma de la app, y pregunta dónde (inicio, bloqueo o ambos). Si el
+fondo del sistema ya es el nuestro se pone solo; si no, la vista previa del sistema lo confirma.
+Una carpeta sin imágenes lo dice y ofrece «Elegir otra». Los tonos de la app salen del póster del
+fondo en uso, una vez por cambio.
+
+## Ajustes
+
+Tres bloques, Fondos, Pantalla y Teléfono, con la cuenta como primera fila y un pliegue «Más
+opciones» por bloque. El buscador filtra por el nombre de la fila sin mirar mayúsculas ni
+acentos; si nada coincide dice «Ningún ajuste se llama así». La calidad se elige en tres palabras
+(Automática, Ahorrar batería, Máxima) y los siete niveles quedan tras «Más opciones»; un nivel
+fijo manda.
+
+La fila «Fundido entre fondos» (`transition.kind`) explica qué hace la elección en este teléfono:
+de golpe si está apagada o si el movimiento está reducido (`transition.less_motion` o «quitar
+animaciones» del sistema), con un fundido para `fade`, con la transición propia del fondo para
+`own`, y con una calidad fija baja solo las transiciones livianas. La fila no dice nada del ahorro
+de batería: las páginas no cuentan por qué un fondo está quieto.
