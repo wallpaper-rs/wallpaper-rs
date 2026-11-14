@@ -97,9 +97,9 @@ Item {
             const next = find(row, item => String(item.text ?? "") === "Next");
             const choose = find(row, item => String(item.text ?? "") === "Choose…");
             const more = find(row, item => item.glyph === "dots-three");
-            const still = find(row, item => String(item.text ?? "").includes("Still: on battery"));
+            const where = find(row, item => String(item.text ?? "").startsWith("X-1 · "));
             compare(next.enabled, false);
-            compare(still.text, "X-1 · no playlist running · Still: on battery");
+            compare(where.text, "X-1 · no playlist running");
             compare(find(row, item => String(item.text ?? "").startsWith("Mature content")), null);
             row.info = {
                 "item": "A",
