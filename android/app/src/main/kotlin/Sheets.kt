@@ -47,16 +47,17 @@ fun Sheet(close: () -> Unit, title: String? = null, note: String? = null, conten
 }
 
 @Composable
-fun SheetOption(label: String, modifier: Modifier = Modifier, ph: Ph? = null, sub: String? = null, chosen: Boolean = false, onClick: () -> Unit) {
+fun SheetOption(label: String, modifier: Modifier = Modifier, ph: Ph? = null, sub: String? = null, chosen: Boolean = false, removes: Boolean = false, onClick: () -> Unit) {
     val t = tones
+    val ink = if (removes) t.coral else t.frost
     Row(
         modifier.fillMaxWidth().clickable(role = Role.RadioButton, onClick = onClick).heightIn(min = Measure.option).padding(horizontal = Measure.margin),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ph?.let { Glyph(it, null, tint = t.mist, size = 22.dp) }
+        ph?.let { Glyph(it, null, tint = if (removes) t.coral else t.mist, size = 22.dp) }
         Column(Modifier.weight(1f).padding(vertical = Measure.e2)) {
-            Text(label, style = Type.row.copy(fontWeight = if (chosen) FontWeight.SemiBold else FontWeight.Normal))
+            Text(label, color = ink, style = Type.row.copy(fontWeight = if (chosen) FontWeight.SemiBold else FontWeight.Normal))
             sub?.let { Text(it, color = t.mist, style = Type.foot) }
         }
         if (chosen) Glyph(Ph.Check, null, tint = t.moon, size = 22.dp)

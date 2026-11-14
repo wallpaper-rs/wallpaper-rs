@@ -70,7 +70,7 @@ fun ChosenBar(main: Main, chosen: SnapshotStateList<String>, playlist: String?, 
                 done { ask("favorite", "uids" to uids, "favorite" to false) }
             }
             SheetOption(stringResource(R.string.fit), ph = Ph.SlidersHorizontal) { sheet = "fit" }
-            if (playlist == null) SheetOption(stringResource(R.string.remove), ph = Ph.Trash) { sheet = "remove" }
+            if (playlist == null) SheetOption(stringResource(R.string.remove), ph = Ph.Trash, removes = true) { sheet = "remove" }
         }
         "fit" -> Fits(close) { fit -> main.fit(uids, fit, chosen::clear) }
         "remove" -> Removing(uids.size, close) { done { ask("remove", "uids" to uids) } }
