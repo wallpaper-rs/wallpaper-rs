@@ -23,7 +23,7 @@ pub const TEXTS: super::Texts = &[
     ),
     ("Index signature", "Firma del índice"),
     ("Up to date", "Al día"),
-    ("next in {}", "próxima en {}"),
+    ("next {}", "próxima {}"),
     ("Sign now", "Firmar ahora"),
     ("Sign again", "Firmar otra vez"),
     ("Expired {} ago", "Vencida hace {}"),

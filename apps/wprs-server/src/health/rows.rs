@@ -71,7 +71,7 @@ pub fn signature(sign: &Sign, failed: bool) -> Line {
             t("Sign now"),
         )
     } else {
-        let next = tf("next in {}", &[&days(sign.next_in / 86400)]);
+        let next = tf("next {}", &[&since(-sign.next_in)]);
         (Tone::Good, t("Up to date").into(), next, Kind::Plain, t("Sign now"))
     };
     let row = Row::new(html! { (t("Index signature")) })
