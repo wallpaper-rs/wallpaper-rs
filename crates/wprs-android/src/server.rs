@@ -54,7 +54,12 @@ pub(crate) async fn add(url: &str, fingerprint: Option<&str>) -> Result<Value, E
     let name: String =
         found["name"].as_str().unwrap_or_default().chars().filter(|c| !c.is_control()).take(128).collect();
     let repo_id = Some(announced(&found, &url));
-    update(|s| (s.url, s.name, s.pin, s.repo_id) = (url, name.clone(), pin, repo_id))?;
+    let repo_url = repo_id
+        .as_ref()
+        .filter(|id| !id.is_empty())
+        .and(found["repository"]["url"].as_str())
+        .map(String::from);
+    update(|s| (s.url, s.name, s.pin, s.repo_id, s.repo_url) = (url, name.clone(), pin, repo_id, repo_url))?;
     Ok(json!({"name": name, "registration": found["registration"]}))
 }
 

@@ -28,13 +28,16 @@ mix=$(ask 'library {"op": "create", "name": "Phone mix"}' | jq_ "r")
 ask "library {\"op\": \"add\", \"playlist\": \"$mix\", \"items\": [\"$green\"]}" >/dev/null
 [ "$(phone "['state']")" = none ] || fail "a new phone: $(phone "")"
 ask "account {\"op\": \"add\", \"url\": \"$URL\"}" >/dev/null
-started=$(ask 'account {"op": "link", "label": "Pocket", "plaintext": false}')
+started=$(ask 'account {"op": "connect", "label": "Pocket"}')
 send 'account {"op": "wait"}'
 printf 'correct-horse-battery\n' | a server approve "$(field "$started" "['code']")" --yes --wait >"$WORK/phone-approve.out" 2>&1
 grep -q "^platform = android" "$WORK/phone-approve.out" || fail "the phone link: $(cat "$WORK/phone-approve.out")"
 linked=$(reply)
 pocket=$(field "$linked" "['device']")
-[ "$(field "$linked" "['needs_key']")/$(phone "['state']")" = True/needs_key ] || fail "the linked phone: $linked"
+[ "$(field "$linked" "['syncing']")/$(phone "['state']")" = False/connected ] || fail "connecting started syncing: $linked"
+[ "$(ask 'account {"op": "repos"}' | jq_ "[x['name'] for x in r['repos']]")" = "['Example']" ] || fail "the server repository after connecting"
+synced=$(ask 'account {"op": "syncing", "on": true, "plaintext": false}')
+[ "$(field "$synced" "['needs_key']")/$(phone "['state']")" = True/needs_key ] || fail "the linked phone: $synced"
 send 'account {"op": "join", "device": "Device 1"}'
 held=$(a server share "$pocket" 2>/dev/null | sed -n 's/^code = //p' | tr -d ' ')
 joined=$(reply | jq_ "r['code'].replace(' ', '')")

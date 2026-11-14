@@ -24,7 +24,7 @@ repo_id=$(ask 'account {"op": "browse", "query": "lagoon"}' | jq_ "r[0]['repo_id
 item=$(ask "account {\"op\": \"install\", \"repo_id\": \"$repo_id\", \"id\": \"org.example.lagoon\"}" | jq_ "r['item']")
 [ "$(ask 'account {"op": "browse", "query": "lagoon"}' | jq_ "r[0]['installed']")" = True ] || fail "lagoon was not installed"
 [ "$(ask "library {\"op\": \"item\", \"uid\": \"$item\"}" | jq_ "r['kind']")" = package ] || fail "the installed package"
-[ "$(ask 'account {"op": "repos"}' | jq_ "sorted(x['name'] for x in r['repos'])")" = "['Studio']" ] || fail "the phone repositories"
+[ "$(ask 'account {"op": "repos"}' | jq_ "sorted(x['name'] for x in r['repos'])")" = "['Example', 'Studio']" ] || fail "the phone repositories"
 sync_phone >/dev/null
 a server sync --wait >/dev/null
 a server status --json | jq_ "[o['name'] for o in r['account']['offers']]" | grep Studio >/dev/null &&

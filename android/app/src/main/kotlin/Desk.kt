@@ -50,6 +50,7 @@ class Desk(val main: Main) {
 
     fun connect(phone: String) {
         failed = null
+        coded()
         val pin = print
         run("") {
             try {
@@ -88,6 +89,14 @@ class Desk(val main: Main) {
                 failed = e
             }
         }
+    }
+
+    private fun coded() {
+        val text = url.trim().takeIf { it.startsWith("wprs://") } ?: return
+        val code = runCatching { JSONObject(Native.connectCode(text)) }.getOrNull()?.takeIf { it.has("server") } ?: return
+        url = code.getString("server")
+        print = code.text("fingerprint")
+        scanned = true
     }
 
     companion object {

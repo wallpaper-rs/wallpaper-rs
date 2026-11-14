@@ -157,8 +157,9 @@ fn run(request: Request) -> Result<Value, Error> {
         said("android.another_account_task", "another account task is running; try again when it ends", &[])
     })?;
     CANCEL.store(false, Relaxed);
+    let waited = matches!(request, Request::Wait);
     let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build()?;
-    runtime.block_on(async {
+    let reply = runtime.block_on(async {
         match request {
             Request::Add { url, fingerprint } => link::add(&url, fingerprint.as_deref()).await,
             Request::Link { label, plaintext } => link::start(&label, Some(plaintext)).await,
@@ -185,5 +186,9 @@ fn run(request: Request) -> Result<Value, Error> {
             }
             _ => Ok(Value::Null),
         }
-    })
+    })?;
+    if waited {
+        repos::server_repository();
+    }
+    Ok(reply)
 }

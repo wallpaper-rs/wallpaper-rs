@@ -55,6 +55,7 @@ pub(crate) struct Saved {
     pub(crate) declined: BTreeSet<String>,
     pub(crate) signed_out: bool,
     pub(crate) repo_id: Option<String>,
+    pub(crate) repo_url: Option<String>,
 }
 
 impl Saved {

@@ -121,6 +121,13 @@ pub(crate) fn add(url: &str) -> Result<Value, Error> {
     add_url(url)
 }
 
+pub(crate) fn server_repository() {
+    let Some(url) = read(|s| s.repo_url.clone()) else { return };
+    if read(|s| s.repo_id.clone()).is_some_and(|id| !added().contains(&id)) && shared(&url) {
+        drop(add_url(&url));
+    }
+}
+
 pub(crate) fn confirm(repo: &str, add_it: bool) -> Result<Value, Error> {
     let repo = repo.trim().to_ascii_lowercase();
     let offers = read(|s| s.offers.clone());
