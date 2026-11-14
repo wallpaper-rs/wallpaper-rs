@@ -6,6 +6,12 @@ Timer {
 
     required property var publish
     required property var flick
+    property int tries: 0
+
+    function ask() {
+        tries = 0;
+        restart();
+    }
 
     function seen(item) {
         const top = item.mapToItem(flick.contentItem, 0, 0).y;
@@ -29,5 +35,9 @@ Timer {
     }
 
     interval: 50
-    onTriggered: run()
+    onTriggered: {
+        run();
+        if (++tries < 4)
+            restart();
+    }
 }

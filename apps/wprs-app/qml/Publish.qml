@@ -85,10 +85,10 @@ Rectangle {
 
     anchors.fill: parent
     color: Look.noche
-    onPlaceChanged: revealing.restart()
-    onFaultChanged: revealing.restart()
-    onAtChanged: revealing.restart()
-    onShownChanged: shown && revealing.restart()
+    onPlaceChanged: revealing.ask()
+    onFaultChanged: revealing.ask()
+    onAtChanged: revealing.ask()
+    onShownChanged: shown && revealing.ask()
     visible: shown
     z: 20
 

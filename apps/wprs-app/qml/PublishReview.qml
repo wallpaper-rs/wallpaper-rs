@@ -64,7 +64,7 @@ PublishStep {
     mode: publish.at === 1 ? "abierto" : "hecho"
     changeable: publish.editing && publish.result === null
     onChange: publish.advance(1)
-    onReportChanged: publish.revealing.restart()
+    onReportChanged: publish.revealing.ask()
 
     Estado {
         Layout.fillWidth: true

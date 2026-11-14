@@ -50,7 +50,7 @@ Timer {
         const parts = cases[step % cases.length].split(" ");
         publish.revealing.flick.contentY = 0;
         if (parts[0] === "review")
-            return publish.revealing.restart();
+            return publish.revealing.ask();
         publish.where.pick(parts[0]);
         if (parts.length > 1)
             publish.fault = {
