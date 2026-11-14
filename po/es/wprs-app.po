@@ -19463,3 +19463,11 @@ msgstr "Elige una licencia"
 #: apps/wprs-app/qml/PublishReview.qml
 msgid "Confirm the copy"
 msgstr "Confirma la copia"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "Feature it"
+msgstr "Destacar"
+
+#: apps/wprs-app/qml/PublishWhere.qml
+msgid "A note of up to 140 characters"
+msgstr "Una nota de hasta 140 caracteres"

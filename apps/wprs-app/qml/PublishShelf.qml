@@ -28,6 +28,11 @@ Item {
         stall.add(repo.target, JSON.stringify([file]), repo.where.hidden);
     }
 
+    function feature() {
+        stage = "feature";
+        stall.feature(repo.target, publish.manifest.id ?? "", repo.where.note, true);
+    }
+
     function index() {
         stage = "index";
         stall.publish(repo.target, key, publish.sign.word, repo.where.days);
@@ -80,7 +85,9 @@ Item {
             publish.fault = null;
             return repo.look();
         }
-        if (stage === "add")
+        if (stage === "add" && repo.where.featured)
+            return feature();
+        if (stage === "add" || stage === "feature")
             return index();
         const again = stage === "again";
         stage = "";

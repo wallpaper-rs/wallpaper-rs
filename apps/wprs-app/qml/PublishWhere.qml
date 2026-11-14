@@ -11,6 +11,8 @@ PublishStep {
     property string out: ""
     property bool hidden: false
     property int days: 7
+    property bool featured: false
+    property string note: ""
     readonly property var account: publish.account ?? ({})
     readonly property string host: String(account.url ?? "").replace(/^[a-z]+:\/\//, "").replace(/\/.*$/, "")
     readonly property string server: account.name ? App.tr("%1, at %2", account.name, host) : host
@@ -115,6 +117,22 @@ PublishStep {
             text: App.tr("Add it hidden")
             checked: where.hidden
             onToggled: where.hidden = checked
+        }
+
+        QQC2.CheckBox {
+            visible: where.publish.place === "repo"
+            text: App.tr("Feature it")
+            checked: where.featured
+            onToggled: where.featured = checked
+        }
+
+        QQC2.TextField {
+            Layout.fillWidth: true
+            visible: where.publish.place === "repo" && where.featured
+            maximumLength: 140
+            placeholderText: App.tr("A note of up to 140 characters")
+            text: where.note
+            onTextEdited: where.note = text
         }
     }
 

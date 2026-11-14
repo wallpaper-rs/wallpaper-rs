@@ -778,7 +778,7 @@ never guesses the rating, the photosensitivity or the origin: `rating`, `reasons
 and `derived_from` set them (the origin is original with a rating and no `derived_from`), and what
 is not given stays as problems until the author sets it.
 
-A preset package (`kind: preset`) shows *Publish as a preset* under its settings: the steps of the query `preset_steps` (base, values, title, license, preview and a review without errors, each done or not), *Edit…* for the title and the license, *Capture the thumbnail* and *Record a preview* (gif, or webp with the *WebP* box), which draw the installed base scene with the values of the preset through `shot` with `base`, *Choose a picture…*, and *Publish…*, enabled when every step is done, which opens the build dialog with its repository and publishing steps. `wprs-ctl scene new DIR --from preset` takes `--base ID`, `--range`, `--values FILE`, `--license` and `--preview FILE` to make the same package in one command.
+A preset package (`kind: preset`) shows *Publish as a preset* under its settings: the steps of the query `preset_steps` (base, values, title, license, preview and a review without errors, each done or not), *Edit…* for the title and the license, *Capture the thumbnail* and *Record a preview* (gif, or webp with the *WebP* box), which draw the installed base scene with the values of the preset through `shot` with `base`, *Choose a picture…*, and *Publish…*, enabled when every step is done, which opens the publishing page. `wprs-ctl scene new DIR --from preset` takes `--base ID`, `--range`, `--values FILE`, `--license` and `--preview FILE` to make the same package in one command.
 
 ## User properties and presets
 
@@ -1747,34 +1747,60 @@ without it, and packs the folder with the code of `wprs-ctl pack build` into `-o
 `$XDG_DATA_HOME/wallpaper-rs/scenes/`, imports it into the library and shows it on an output, or
 on every output.
 
-*Review the package…* in the build dialog shows what `wprs_editor::review::report` returns, which
-`rig` answers for `{"review": {}}`: every finding of the problems list (level `error`, `warning` or
-`note`, message, the JSON Pointer to jump to and the file that holds it: `manifest.json`,
-`scene.json` or the missing asset), the notes of `wprs-ctl pack check`, the platforms that refuse the
-package or play it without a feature, the features a build adds, and the signature state of the
-folder. *Check the signature* answers `{"signature": {"path", "keys"}}` for a built `.wpak` or the
-folder, given the public key of the author: `valid` with the fingerprints that signed, `invalid` with
-the reason, `unsigned`, or `unchecked` while no key is given. `wprs-ctl pack check DIR|FILE` prints the
-same facts and `wprs-ctl pack validate DIR|FILE --key PUB` checks the signature of a folder as well
-as of a package.
+*Publish…* in the editor opens the publishing page over the editor, «Publish “NAME”»: three numbered
+steps on one page and a «Done» part, with the thumbnail and the name of the package on the left. A
+step that is done folds into one line with *Change*; the next one opens by itself and takes the focus,
+and Enter runs its main action. The page keeps its state while it is closed, so *Go to the problem*
+jumps to the pointer in the editor and *Publish…* comes back to the same step; it starts again only
+after a result.
 
-*Keys…* in the build dialog manages author keys. A pair is two files, `NAME.key` (secret, mode 0600)
-and `NAME.pub`, in the keys folder of the app (`$XDG_DATA_HOME/wallpaper-rs/keys`, mode 0700); a key
-may be encrypted with a password, which is asked only to create it and to sign. The app never shows or
-logs a secret key, replaces a pair only after asking and warning that the old secret key is lost for
-good, and gives a key to the build dialog by its path, as `--key` does. The same dialog signs the
-hand-over of an online author to a new key (`wprs-ctl pack rotate-key OLD.key NEW.pub --author ID`)
-and shows the signature to paste in the account. `wprs-ctl repo keygen NAME` makes the same pair in
-the current folder, with the code of `wprs_editor::author_keys`.
+1. *Review* shows what `wprs_editor::review::report` returns, which `rig` answers for `{"review": {}}`:
+   every finding (level `error`, `warning` or `note`, message, the JSON Pointer to jump to and the
+   file that holds it), the platforms that refuse the package or play it without a feature and the
+   features a build adds. It holds the version, the license (a list of the common ones with what each
+   allows; *All rights* is `LicenseRef-all-rights-reserved`) and two questions the author answers
+   once, flashes (`/manifest/photosensitive`) and adult content (`/manifest/content`, rating `mature`
+   or `general`); for a copy of a package whose license allows no changes it asks to confirm the copy.
+   *Go on* stays off, with the reason, while there are errors, unanswered questions or no license.
+   *More* holds *Check the signature*, which answers `{"signature": {"path", "keys"}}` for a built
+   `.wpak` or the folder: `valid` with the fingerprints that signed, `invalid` with the reason,
+   `unsigned`, or `unchecked` while no key is given. `wprs-ctl pack check DIR|FILE` prints the same
+   facts and `wprs-ctl pack validate DIR|FILE --key PUB` checks the signature.
+2. *Sign*, or *Your signature* the first time, when the keys folder has no key: the author name and an
+   optional password make the pair, and a notice offers *Save a copy…*. With a key it signs with the
+   author key and asks its password when it has one, checked before going on; a wrong one says so and
+   offers *Manage keys…* and *Publish without signing*. A key without a password skips the step. *More*
+   chooses another key or a key file, shows the fingerprint and saves a copy of the pair into a folder;
+   until a copy is saved the step says *No copy saved*.
+3. *Where?* offers *Save the file* (`<id>-<version>.wpak` next to the folder, or another path),
+   *Upload to my server* (public or hidden, through `UploadAs` of `Sync1`, off while no server is
+   connected) and *Add to a repository in a folder* (a recent one, *Open another…* or *Create one
+   here…*, which makes its key, the repository, signs its root, adds the package and publishes its
+   index). The last destination is remembered. Errors keep the page and offer their own way out: a
+   version that exists already uploads with the next number, a key the server does not know is
+   registered with `AddAuthorKey` (the first time it is registered by itself), no connection retries or
+   saves the file, an unsigned root is signed now and an expired index is published again. *More*
+   holds the days the index lasts, *Add it hidden* and *Feature it* with a note of up to 140 characters.
 
-*Add to a repository…* in the build dialog is the publishing step of the editor. It opens the folder
-of a static repository (made in *Repositories* or with `wprs-ctl repo init`), adds the built package
-to it, also unlisted, features it with a note of up to 140 characters or stops featuring it, and
-publishes the repository with the secret online key and the days its index lasts. It calls the same
-`wprs_format::stall` operations as the *Static repository* tab of *Repositories*, which also keeps the
-operations of the root: new repository, signing the root, rotating it, revoking a package or a key and
-the author keys. The command line has them as `wprs-ctl repo add [--unlisted]`, `unlist`, `list-again`,
-`feature`, `unfeature`, `revoke`, `unrevoke`, `revoke-key`, `init`, `sign-root`, `rotate-root` and `publish`.
+«Done» says what to give the other person: the file with *Show in the folder*, the link of the server
+with *Copy the link* while it is reviewed, or the address of the repository with *Copy the address* and
+the day its index expires; *Set as wallpaper* and *Back to the editor* close it. *Upload package…* in
+*Repositories* opens the same page on step 3 for a finished `.wpak`.
+
+*Manage keys…* manages author keys. A pair is two files, `NAME.key` (secret, mode 0600) and
+`NAME.pub`, in the keys folder of the app (`$XDG_DATA_HOME/wallpaper-rs/keys`, mode 0700); a key may
+be encrypted with a password, which is asked only to create it and to sign. The app never shows or
+logs a secret key or a password, replaces a pair only after asking and warning that the old secret key
+is lost for good, and gives a key by its path, as `--key` does. The same dialog signs the hand-over of
+an online author to a new key (`wprs-ctl pack rotate-key OLD.key NEW.pub --author ID`) and shows the
+signature to paste in the account. `wprs-ctl repo keygen NAME` makes the same pair in the current
+folder, with the code of `wprs_editor::author_keys`.
+
+The repository destination calls the same `wprs_format::stall` operations as the *Static repository*
+tab of *Repositories*, which also keeps the operations of the root: rotating it, revoking a package or
+a key and the author keys. The command line has them as `wprs-ctl repo add [--unlisted]`, `unlist`,
+`list-again`, `feature`, `unfeature`, `revoke`, `unrevoke`, `revoke-key`, `init`, `sign-root`,
+`rotate-root` and `publish`.
 
 ## Picture depth tools
 
