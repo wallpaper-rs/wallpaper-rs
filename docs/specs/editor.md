@@ -1253,7 +1253,7 @@ do the same from the terminal.
 
 ## Marco del editor
 
-La página del editor ocupa la barra de arriba con su propio contenido (`bar` de la página, ver
+La página del editor ocupa la barra de arriba con su propio contenido (`topBar` de la página, ver
 `shell.md`): volver, el título, su estado («Guardado» o «Sin guardar ·» con «Guardar ahora»),
 deshacer y rehacer; a la derecha «Ver de fondo», «Poner de fondo» y «Publicar…». El resto se
 reparte en cinco regiones: el lateral izquierdo (`SceneSide`, 280 px) con las pestañas Capas,

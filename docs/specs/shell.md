@@ -64,7 +64,7 @@ maximiza.
 
 - `title`: el título que muestra el esqueleto.
 - `actions`: las acciones de la página; el esqueleto las pone en su barra.
-- `bar` (opcional, solo en el esqueleto de trabajo): un componente que ocupa la barra superior después del
+- `topBar` (opcional, solo en el esqueleto de trabajo): un componente que ocupa la barra superior después del
   título, en lugar de las acciones; lo usa una página cuya barra tiene un orden propio (estado, grupos).
 - `keyHints` (opcional): lista `[{keys: ["left", "right"], text: "…"}]` para la línea de atajos;
   las teclas válidas son `left`, `right`, `up`, `down`, `Intro`, `Esc` y `Tab`. Sin ella la línea

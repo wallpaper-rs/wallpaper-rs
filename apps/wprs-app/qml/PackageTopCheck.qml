@@ -16,7 +16,7 @@ QtObject {
     }
 
     function exercise() {
-        const bar = page.bar.createObject(applicationWindow().contentItem);
+        const bar = page.topBar.createObject(applicationWindow().contentItem);
         const shown = words(bar);
         const wanted = [App.tr("Undo"), App.tr("Redo"), App.tr("Set as wallpaper"), App.tr("Publish…")].concat(page.viewable ? [App.tr("View as wallpaper")] : []);
         const missing = wanted.filter(word => !shown.includes(word));

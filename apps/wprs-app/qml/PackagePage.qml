@@ -24,7 +24,7 @@ Kirigami.Page {
     readonly property string kind: view.kind ?? ""
     readonly property bool viewable: ["web", "image", "video"].includes(kind)
     readonly property var packagePage: page
-    property Component bar: builder.shown ? null : packageTop
+    property Component topBar: builder.shown ? null : packageTop
     property Component packageTop: Component {
         SceneTop {
             page: packagePage
