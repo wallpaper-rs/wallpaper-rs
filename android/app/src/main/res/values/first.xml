@@ -17,4 +17,6 @@
     <string name="done_home">Done: it is your home wallpaper</string>
     <string name="done_lock">Done: it is your lock wallpaper</string>
     <string name="done_both">Done: it is your home and lock wallpaper</string>
+    <string name="folder_empty_hint">Choose a folder that has photos or videos.</string>
+    <string name="choose_other">Choose another</string>
 </resources>

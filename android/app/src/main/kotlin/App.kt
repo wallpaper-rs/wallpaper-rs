@@ -51,6 +51,7 @@ fun App(main: Main) = Theme {
     }
     if (main.placing.value) Placing(main)
     FirstRun(main)
+    EmptyFolder(main)
     val (shown, list, away) = Triple(item, playlist, aside)
     val veil = when {
         shown == null && away == Aside.Account -> Veil.Strip

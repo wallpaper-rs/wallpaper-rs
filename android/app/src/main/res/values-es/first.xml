@@ -17,4 +17,6 @@
     <string name="done_home">Listo: es tu fondo de inicio</string>
     <string name="done_lock">Listo: es tu fondo de bloqueo</string>
     <string name="done_both">Listo: es tu fondo de inicio y de bloqueo</string>
+    <string name="folder_empty_hint">Elige una carpeta que tenga fotos o vídeos.</string>
+    <string name="choose_other">Elegir otra</string>
 </resources>

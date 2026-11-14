@@ -18,7 +18,6 @@ import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -72,7 +71,7 @@ class FirstRunTest {
         }
         Render.call { Native.commit(BOTH) }
         Wallpaper.commitWhenLive = null
-        assertNotNull("a wallpaper is in use", runBlocking { nowOn() })
+        compose.waitUntil(TIMEOUT_MS) { runBlocking { nowOn() } != null }
     }
 
     @Test
@@ -129,5 +128,17 @@ class FirstRunTest {
     companion object {
         const val TIMEOUT_MS = 20_000L
         const val QUIET_MS = 3_000L
+    }
+
+    @Test
+    fun aFolderWithoutPicturesSaysWhichFolderWorksAndOffersAnother() {
+        opened()
+        shows("explore")
+        instrumentation.runOnMainSync { emptyFolder.value = true }
+        compose.onNodeWithText(context.getString(R.string.folder_empty_hint)).assertIsDisplayed()
+        shows("choose_other")
+        compose.onNodeWithText(context.getString(R.string.cancel)).performClick()
+        compose.waitUntil(TIMEOUT_MS) { compose.onAllNodes(hasTestTag("choose_other")).fetchSemanticsNodes().isEmpty() }
+        assertTrue(!emptyFolder.value)
     }
 }

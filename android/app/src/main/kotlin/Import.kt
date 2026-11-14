@@ -3,15 +3,19 @@ package io.github.wallpaper_rs
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlin.concurrent.thread
@@ -56,6 +60,20 @@ fun Importing(main: Main) {
     }
 }
 
+val emptyFolder = mutableStateOf(false)
+
+@Composable
+fun EmptyFolder(main: Main) {
+    if (!emptyFolder.value) return
+    val close = { emptyFolder.value = false }
+    Sheet(close, stringResource(R.string.folder_empty), stringResource(R.string.folder_empty_hint)) {
+        Row(Modifier.fillMaxWidth().padding(horizontal = Measure.margin, vertical = Measure.e3), Arrangement.spacedBy(Measure.e3)) {
+            QuietAction(close) { Text(stringResource(R.string.cancel)) }
+            Action({ close(); main.chooseFolder() }, Modifier.weight(1f).testTag("choose_other")) { Glyph(Ph.FolderSimple, null); Text(stringResource(R.string.choose_other)) }
+        }
+    }
+}
+
 private val COLUMNS = arrayOf(Document.COLUMN_DOCUMENT_ID, Document.COLUMN_MIME_TYPE)
 private const val MAX_FILES = 5000
 
@@ -65,7 +83,7 @@ fun Main.importFolder(tree: Uri) {
         val found = runCatching { media(tree) }.getOrDefault(emptyList())
         runOnUiThread {
             importing.intValue--
-            if (found.isEmpty()) toast(getString(R.string.folder_empty)) else store(found)
+            if (found.isEmpty()) emptyFolder.value = true else store(found)
         }
     }
 }
