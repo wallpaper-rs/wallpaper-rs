@@ -3,11 +3,27 @@ use crate::error::Res;
 use rusqlite::Connection;
 use serde_json::{Value, json};
 
-const CASE: &str = "SELECT c.id, c.reason, c.detail, c.priority, c.created_at, c.state, c.decision, c.statement, \
+macro_rules! after {
+    () => {
+        "CASE WHEN v.state = 'pending' THEN (SELECT v2.version FROM versions v2 \
+        WHERE v2.package_id = v.package_id AND v2.id > v.id ORDER BY v2.id DESC LIMIT 1) END AS newer, \
+        CASE WHEN v.state = 'pending' THEN (SELECT c2.id FROM cases c2 JOIN versions v2 ON v2.id = c2.version_id \
+        WHERE v2.package_id = v.package_id AND v2.id > v.id AND c2.state = 'open' \
+        ORDER BY v2.id DESC LIMIT 1) END AS newer_case, \
+        NOT EXISTS (SELECT 1 FROM versions v3 WHERE v3.package_id = v.package_id AND v3.id < v.id) AS first_upload"
+    };
+}
+pub(crate) use after;
+
+const CASE: &str = concat!(
+    "SELECT c.id, c.reason, c.detail, c.priority, c.created_at, c.state, c.decision, c.statement, \
     v.package_id AS package, v.version, v.title, v.kind, v.state AS version_state, v.sha256, v.license, \
     v.signer, v.asks, v.photosensitive, v.content, v.created_at AS uploaded_at, v.uploaded_by AS uploader_id, \
-    u.handle AS uploader FROM cases c JOIN versions v ON v.id = c.version_id \
-    LEFT JOIN users u ON u.id = v.uploaded_by WHERE c.id = ?1";
+    u.handle AS uploader, ",
+    after!(),
+    " FROM cases c JOIN versions v ON v.id = c.version_id \
+    LEFT JOIN users u ON u.id = v.uploaded_by WHERE c.id = ?1"
+);
 
 const HIDDEN: &str = "SELECT p.id, p.hidden AS reason, p.hidden_at, u.handle AS owner, \
     (SELECT v.title FROM versions v WHERE v.package_id = p.id ORDER BY v.created_at DESC LIMIT 1) AS title, \
@@ -43,4 +59,10 @@ pub fn history(c: &Connection, case: &Value) -> Res<Value> {
         "known": true, "earlier": earlier, "published": tally("published")?, "rejected": tally("rejected")?,
         "strikes": strikes, "since": since,
     }))
+}
+
+pub fn newer(c: &Connection, version_id: i64) -> Res<Option<String>> {
+    let sql = "SELECT v2.version FROM versions v2 JOIN versions v ON v.id = ?1 \
+               WHERE v2.package_id = v.package_id AND v2.id > v.id ORDER BY v2.id DESC LIMIT 1";
+    one::<String>(c, sql, [version_id])
 }

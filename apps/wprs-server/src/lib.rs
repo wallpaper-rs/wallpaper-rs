@@ -31,6 +31,7 @@ mod me;
 mod mod_case;
 mod mod_form;
 mod mod_more;
+mod mod_newer;
 mod mod_page;
 mod moderation;
 mod net;

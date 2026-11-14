@@ -39,6 +39,12 @@ pub async fn decide(app: &Arc<App>, actor: Option<i64>, case: i64, d: Decision) 
     if !open {
         return Err(Problem::conflict("case_closed", "this case was already decided"));
     }
+    if matches!(choice, "approve" | "reject") && state == "pending" {
+        let newer = app.db.run(move |c| crate::cases::newer(c, version_id)).await?;
+        if newer.is_some() {
+            return Err(Problem::conflict("superseded", "a newer version was uploaded"));
+        }
+    }
     if actor.is_some() && actor == owner && !restrictive {
         return Err(Problem::forbidden("moderators cannot approve, restore or dismiss their own uploads"));
     }

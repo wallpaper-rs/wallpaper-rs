@@ -24,11 +24,15 @@ pub fn routes() -> Router {
 }
 
 pub fn open_cases(c: &Connection) -> Res<Vec<Value>> {
-    let sql = "SELECT c.id, c.reason, c.detail, c.priority, c.created_at, v.package_id AS package, \
+    let sql = concat!(
+        "SELECT c.id, c.reason, c.detail, c.priority, c.created_at, v.package_id AS package, \
                v.version, v.title, v.kind, v.state, v.sha256, v.license, v.signer, v.asks, v.photosensitive, \
-               v.content, u.handle AS uploader FROM cases c \
+               v.content, u.handle AS uploader, ",
+        crate::cases::after!(),
+        " FROM cases c \
                JOIN versions v ON v.id = c.version_id LEFT JOIN users u ON u.id = v.uploaded_by \
-               WHERE c.state = 'open' ORDER BY c.priority DESC, c.created_at LIMIT 200";
+               WHERE c.state = 'open' ORDER BY c.priority DESC, c.created_at LIMIT 200"
+    );
     rows(c, sql, [])
 }
 

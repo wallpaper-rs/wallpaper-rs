@@ -69,16 +69,26 @@ fn report_kind(case: &Value) -> String {
     }
 }
 
+fn first(case: &Value) -> bool {
+    case["first_upload"].as_i64() == Some(1) || case["first_upload"].as_bool() == Some(true)
+}
+
+fn newest(case: &Value) -> String {
+    text(case, if case["newer"].is_null() { "version" } else { "newer" }).to_string()
+}
+
 fn case_row(case: &Value, allowed: &[String]) -> Row {
-    let (tone, said) = match is_report(case) {
-        true => (Tone::Warn, report_kind(case)),
-        false => verdict(&checks(case, allowed)),
+    let (tone, said) = match (is_report(case), case["newer"].as_str()) {
+        (true, _) => (Tone::Warn, report_kind(case)),
+        (false, Some(_)) => (Tone::Warn, t("There is a newer version").to_string()),
+        (false, None) => verdict(&checks(case, allowed)),
     };
     let (title, made) = (text(case, "title"), ago(case["created_at"].as_i64().unwrap_or(0)));
     let who = text(case, "uploader");
     let line = match is_report(case) {
         true => tf("{} · by {}", &[&made, &who]),
-        false => tf("{} · version {} · {}", &[&who, &text(case, "version"), &made]),
+        false if case["newer"].is_null() && first(case) => tf("{} · first upload · {}", &[&who, &made]),
+        false => tf("{} · version {} · {}", &[&who, &newest(case), &made]),
     };
     Row::new(html! { (title) })
         .thumb(format!("/media/{}.jpg", text(case, "sha256")))

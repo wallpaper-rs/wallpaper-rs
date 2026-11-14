@@ -6,6 +6,7 @@ use crate::frame::Frame;
 use crate::lang::{count, t, tf, word};
 use crate::layout::page_in;
 use crate::mod_form::{Draft, decision_form};
+use crate::mod_newer::{again, newer_link};
 use crate::mod_page::{Lead, ago, cap, frame_line, screen};
 use crate::moderation::open_cases;
 use crate::review::{Decision, decide};
@@ -86,6 +87,7 @@ async fn card(app: &App, auth: &Auth, id: i64, draft: Draft) -> Res<Option<Marku
     let title = text(&found, "title");
     let body = html! {
         (back_link("/mod", &tf("Review · case {} of {}", &[&position, &list.len()])))
+        @if !found["newer"].is_null() { (crate::mod_newer::superseded(&found)) }
         article.seccion {
             (case_head(&format!("/media/{}.jpg", text(&found, "sha256")), &tf("Preview of {}", &[&title]), title, &foot))
             (subheading(t("Who uploads it")))
@@ -123,7 +125,11 @@ fn explain(problem: &Problem) -> String {
     }
 }
 
-fn refused(title: &str, id: i64, problem: &Problem) -> Markup {
+fn refused(title: &str, id: i64, problem: &Problem, found: Option<&Value>) -> Markup {
+    if let (Some(case), "superseded") = (found, problem.code) {
+        let head = tf("The decision on “{}” was not applied.", &[&title]);
+        return notice(Tone::Bad, &head, again(case), Some(newer_link(case)));
+    }
     let raw = &problem.detail;
     let said = format!(
         "{} {}: {}",
@@ -163,7 +169,7 @@ async fn apply(
             let (found, list) =
                 app.db.run(move |c| Ok((case(c, id)?, crate::moderation::open_cases(c)?))).await?;
             let title = found.as_ref().map_or(String::new(), |c| text(c, "title").to_string());
-            let lead = Lead::Failed(refused(&title, id, &problem));
+            let lead = Lead::Failed(refused(&title, id, &problem, found.as_ref()));
             Ok((problem.status, screen(&app, &auth, lead, list).await?).into_response())
         }
     }
