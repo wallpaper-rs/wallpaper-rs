@@ -11,7 +11,7 @@ Fila {
     readonly property string screen: names.find(name => (quality.outputs[name] ?? {}).item === quality.uid) ?? ""
     readonly property string level: String(settings["playback.quality." + screen] ?? settings["playback.quality"] ?? "auto")
 
-    function words(level) {
+    function levelName(level) {
         const all = {
             "auto": App.tr("Automatic quality"),
             "min-q2": App.tr("Automatic, at least high"),
@@ -28,6 +28,6 @@ Fila {
     kind: "pliega"
     text: App.tr("Quality of this scene")
     value: App.tr("Like your screen")
-    note: App.tr("Your screen's: %1, in Settings › Screens", words(level))
+    note: App.tr("Your screen's: %1, in Settings › Screens", levelName(level))
     onOpened: applicationWindow().activate("settings")
 }
