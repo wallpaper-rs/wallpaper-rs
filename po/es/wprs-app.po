@@ -296,6 +296,10 @@ msgid "Register the key"
 msgstr "Registrar la clave"
 
 #: apps/wprs-app/qml/AccountKeys.qml
+msgid "OK"
+msgstr "Aceptar"
+
+#: apps/wprs-app/qml/AccountKeys.qml
 msgid "Hand over to a new key"
 msgstr "Traspasar a una clave nueva"
 

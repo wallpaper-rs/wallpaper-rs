@@ -81,10 +81,13 @@ ColumnLayout {
             }
 
             QQC2.Button {
+                id: handOver
+
                 text: App.tr("Hand over…")
                 icon.name: "go-next"
                 onClicked: {
                     keys.pending = modelData.fingerprint;
+                    handing.opener = handOver;
                     handing.open();
                 }
             }
@@ -124,39 +127,42 @@ ColumnLayout {
         }
     }
 
-    Kirigami.Dialog {
+    PanelChico {
         id: handing
 
         title: App.tr("Hand over to a new key")
-        standardButtons: Kirigami.Dialog.Ok | Kirigami.Dialog.Cancel
-        padding: Kirigami.Units.largeSpacing
-        onAccepted: {
-            keys.rotate(keys.pending, successor.text.trim(), signature.text.trim());
+        text: App.tr("Sign the hand-over with the old key in Keys… of the build dialog, and paste the signature here.")
+        quiet: App.tr("Cancel")
+        principal: App.tr("OK")
+        onAccepted: keys.rotate(keys.pending, successor.text.trim(), signature.text.trim())
+        onClosed: {
             successor.text = "";
             signature.text = "";
         }
 
-        Kirigami.FormLayout {
-            QQC2.Label {
-                Layout.maximumWidth: Kirigami.Units.gridUnit * 28
-                wrapMode: Text.Wrap
-                text: App.tr("Sign the hand-over with the old key in Keys… of the build dialog, and paste the signature here.")
-            }
+        QQC2.Label {
+            width: handing.width - 2 * Look.e4
+            text: App.tr("New public key:")
+        }
 
-            QQC2.TextField {
-                id: successor
+        QQC2.TextField {
+            id: successor
 
-                Kirigami.FormData.label: App.tr("New public key:")
-                implicitWidth: Kirigami.Units.gridUnit * 24
-            }
+            width: handing.width - 2 * Look.e4
+            Accessible.name: App.tr("New public key:")
+        }
 
-            Area {
-                id: signature
+        QQC2.Label {
+            width: handing.width - 2 * Look.e4
+            text: App.tr("Signature:")
+        }
 
-                Kirigami.FormData.label: App.tr("Signature:")
-                implicitWidth: Kirigami.Units.gridUnit * 24
-                font.family: "monospace"
-            }
+        Area {
+            id: signature
+
+            width: handing.width - 2 * Look.e4
+            font.family: "monospace"
+            Accessible.name: App.tr("Signature:")
         }
     }
 
