@@ -8,7 +8,7 @@ use std::path::Path;
 use wprs_library::Kind;
 
 pub(super) fn scenes() {
-    let examples = drawn_examples();
+    let examples = super::bundled::drawn_examples();
     let added = ask(json!({ "op": "examples", "dir": examples }));
     let uids: Vec<String> = serde_json::from_value(added.clone()).unwrap_or_else(|_| panic!("{added}"));
     assert_eq!(uids.len(), 6);
@@ -177,25 +177,4 @@ pub(super) fn scenes() {
     super::sounded::scene_sounds_play_pause_and_release();
     super::sounded::a_one_shot_sound_pauses_when_it_ends_and_is_dropped_later();
     power::device(false, 0);
-}
-
-fn drawn_examples() -> std::path::PathBuf {
-    let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scenes");
-    let copy = store::dir().unwrap().join("examples");
-    let scenes = fs::read_dir(&source).unwrap().flatten().map(|e| e.path());
-    scenes
-        .filter(|d| d.join("scene.json").is_file())
-        .for_each(|d| tree(&d, &copy.join(d.file_name().unwrap())));
-    copy
-}
-
-fn tree(from: &Path, to: &Path) {
-    fs::create_dir_all(to).unwrap();
-    for entry in fs::read_dir(from).unwrap().flatten() {
-        let target = to.join(entry.file_name());
-        match entry.path().is_dir() {
-            true => tree(&entry.path(), &target),
-            false => drop(fs::copy(entry.path(), target).unwrap()),
-        }
-    }
 }

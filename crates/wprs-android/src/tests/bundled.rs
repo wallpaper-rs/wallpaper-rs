@@ -1,4 +1,6 @@
 use crate::repos::{self, bundled};
+use crate::store;
+use std::fs;
 use std::path::Path;
 
 pub(super) fn the_examples_come_as_a_repository_that_stays_removed(source: &Path) {
@@ -22,4 +24,25 @@ pub(super) fn the_examples_come_as_a_repository_that_stays_removed(source: &Path
     assert_eq!(again["repo_id"], id.as_str());
     assert!(repos::added().contains(&id));
     repos::remove(&id).unwrap();
+}
+
+pub(super) fn drawn_examples() -> std::path::PathBuf {
+    let source = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scenes");
+    let copy = store::dir().unwrap().join("examples");
+    let scenes = fs::read_dir(&source).unwrap().flatten().map(|e| e.path());
+    scenes
+        .filter(|d| d.join("scene.json").is_file())
+        .for_each(|d| tree(&d, &copy.join(d.file_name().unwrap())));
+    copy
+}
+
+fn tree(from: &Path, to: &Path) {
+    fs::create_dir_all(to).unwrap();
+    for entry in fs::read_dir(from).unwrap().flatten() {
+        let target = to.join(entry.file_name());
+        match entry.path().is_dir() {
+            true => tree(&entry.path(), &target),
+            false => drop(fs::copy(entry.path(), target).unwrap()),
+        }
+    }
 }
