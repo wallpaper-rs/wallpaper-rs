@@ -164,7 +164,7 @@ mod tests {
     #[test]
     fn consent_texts_speak_of_wallpapers_not_only_scenes() {
         for input in [Input::Media, Input::Audio, Input::Pointer] {
-            let (title, body) = super::request("Page", input);
+            let (title, body) = super::ask::request("Page", input);
             assert!(!title.contains("scene") && !body.contains("scene"));
         }
     }

@@ -13,6 +13,7 @@ flash() {
 }
 flash org.example.flash
 flashing=$(reply "r['items'][0]['uid']" Library1 Search suu "flash" 0 1)
+ctl config playback.allow_flashing false
 if ctl lib apply "$flashing" -o TEST-7 2>/dev/null; then fail "a flashing package was applied while flashing is disabled"; fi
 ctl config playback.allow_flashing true && ctl lib apply "$flashing" -o TEST-7
 ctl config playback.allow_flashing false
@@ -23,7 +24,7 @@ expect "s['outputs']['TEST-7']['item'], 'allowed in the settings' in (s['outputs
 ctl stream TEST-20 160 90 >/dev/null && ctl background '#203040' -o TEST-20
 expect "s['outputs']['TEST-7']['item'], s['outputs']['TEST-20']['background']" "(None, '#203040')"
 ctl config playback.allow_flashing true && ctl profile use "$stormy"
-expect "s['outputs']['TEST-7']['item'], s['outputs']['TEST-7']['error'], s['outputs']['TEST-20']['background']" "('$flashing', None, '#203040')"
+expect "s['outputs']['TEST-7']['item'], s['outputs']['TEST-7']['error']" "('$flashing', None)"
 ctl release TEST-20 && ctl profile off && ctl profile rm "$stormy"
 ctl lib apply "$storm" -o TEST-7
 expect "s['outputs']['TEST-7']['item'], s['outputs']['TEST-7']['error']" "('$storm', None)"

@@ -21,6 +21,7 @@ fn wall_clock() {
 pub(super) fn frames() {
     wall_clock();
     let Some(r) = renderer() else { return };
+    crate::settings::setting("playback.allow_flashing", Some("true")).unwrap();
     let power = power::Power {
         charging: true,
         saver: false,

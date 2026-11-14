@@ -855,12 +855,15 @@ tarjeta se mide y se guarda aparte, así que volver a una no la mide otra vez. L
 las escenas pesadas con más calidad y gasta más energía. El ajuste no se sincroniza ni entra en los
 perfiles, y el teléfono, que tiene una sola GPU, no lo muestra y lo ignora.
 
-Para quien es sensible a los destellos, `playback.flash_guard` (*Frenar o detener los fondos que
-destellan más de tres veces por segundo* en la página *Ajustes* de la app, que el botón *Ajustes…*
-de la bandeja abre, un interruptor propio en la bandeja, `wprs-ctl config playback.flash_guard true` y
-un interruptor en los ajustes del teléfono) mide el brillo de cada fotograma de las escenas y, si una destella más de tres veces por
-segundo, la reproduce más despacio o la detiene; `wprs-ctl state` lo indica en `flashes`. Está apagado por
-defecto porque cuesta una pequeña lectura de la GPU por fotograma.
+Los fondos que destellan están deshabilitados por defecto: `playback.allow_flashing` (*Permitir los
+fondos que destellan* en la página *Ajustes* de la app, que el botón *Ajustes…* de la bandeja abre, un
+interruptor propio en la bandeja, `wprs-ctl config playback.allow_flashing true` y un interruptor en los
+ajustes del teléfono) viene apagado, y mientras esté apagado cada paquete fotosensible lleva el aviso
+«destella y está deshabilitado» en las listas, no se reproduce y la rotación lo salta. Además, mientras
+esté apagado el programa mide el brillo de cada fotograma que cambió de las escenas y, si una destella
+más de tres veces por segundo, la reproduce más despacio o la detiene; `wprs-ctl state` lo indica en
+`flashes`. Esa medida cuesta una pequeña lectura de la GPU por fotograma que cambió; con el ajuste
+encendido no se mide ni se avisa de nada.
 
 Los streams llevan cada fotograma en memoria de la GPU (DMA-BUF) cuando el controlador Vulkan
 puede exportarla y el consumidor (KPipeWire en Plasma) importarla: el daemon dibuja directamente en

@@ -51,7 +51,7 @@ pub(super) fn calmed() {
         let at = ((64, 32), 1_000_000, 60);
         let fps = stage.render(r, at, (still, wprs_scene::Tier::T3), &[], true).unwrap().fps;
         assert!(!stage.moving && fps == 0, "a withdrawn choice kept the scene moving");
-        assert_eq!(settings::setting("playback.allow_flashing", Some("false")).unwrap(), "true");
+        assert_eq!(settings::setting("playback.allow_flashing", Some("false")).unwrap(), "false");
         assert!(power::guarded());
         let mut stage = Stage::new(uid.clone(), pack::load(&path).unwrap());
         for n in 0..240 {
@@ -60,7 +60,7 @@ pub(super) fn calmed() {
                 .unwrap();
         }
         assert_ne!(crate::stage::report::flashes(), "", "the guard let ten flashes a second through");
-        settings::setting("playback.flash_guard", Some("false")).unwrap();
+        settings::setting("playback.allow_flashing", Some("true")).unwrap();
         assert!(!power::guarded());
     }
     assert!(power::hears());

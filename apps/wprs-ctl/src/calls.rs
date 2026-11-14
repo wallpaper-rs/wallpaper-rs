@@ -144,6 +144,7 @@ pub const CALLS: &[(&str, &str, &str, &[&str])] = &[
     ("Repos1", "ListInstalled", "pkg ls", &[]),
     ("Inputs1", "Grant", "input grant", &["SCENE", "INPUT"]),
     ("Inputs1", "GrantPackage", "input grant", &["SCENE", "--output", "INPUT"]),
+    ("Inputs1", "Decide", "input decide", &["SCENE", "--output", "--allow", "--without"]),
     ("Inputs1", "Revoke", "input revoke", &["SCENE", "INPUT"]),
     ("Inputs1", "GetInputs", "input status", &[]),
     ("Inputs1", "SetPointer", "input pointer", &["X", "Y"]),

@@ -150,7 +150,7 @@ mark=$(wc -l <"$WORK/library-signals.log")
 ctl lib confirm mature "$storm"
 told() { tail -n "+$mark" "$WORK/library-signals.log" | grep -A5 "member=Changed" | grep "$newer" >/dev/null; }
 wait_for 5 told || fail "Confirm did not announce the other version: $(tail -n "+$mark" "$WORK/library-signals.log")"
-[ "$(reply "r['item']['package']['confirmed']" Library1 GetItem s "$newer")" = "['mature', 'photosensitive']" ] ||
+[ "$(reply "r['item']['package']['confirmed']" Library1 GetItem s "$newer")" = "['mature']" ] ||
   fail "the other version does not keep the decisions: $(ctl lib show "$newer" --json)"
 ctl release TEST-7 && expect "list(s['outputs'])" "[]"
 bus Library1 Remove asb 3 "$newer" "$storm" "$calm" false >/dev/null
