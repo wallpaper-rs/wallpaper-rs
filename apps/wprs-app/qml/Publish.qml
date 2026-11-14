@@ -21,7 +21,7 @@ Rectangle {
     property var manifest: ({})
     property int shots: 0
     readonly property bool editing: page !== null && page.editor !== undefined
-    readonly property string name: Publishing.title(manifest, file)
+    readonly property string name: editing && (page.view.title ?? "") !== "" ? page.view.title : Publishing.title(manifest, file)
     readonly property string version: manifest.version ?? ""
     readonly property string author: (manifest.authors ?? [])[0] ?? ""
     readonly property alias memory: memory
