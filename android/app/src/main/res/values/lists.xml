@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lists_unread">Could not read the playlists</string>
+
+    <string name="lists_unread_why">Try again in a moment.</string>
+
+    <string name="lists_retry">Retry</string>
+
+    <string name="lists_how">Choose several wallpapers in the library and tap «Rotate these».</string>
+
+    <string name="lists_go_library">Go to the library</string>
+
+    <string name="list_empty">This playlist is empty</string>
+
+    <string name="list_empty_how">Add wallpapers from their page in the library.</string>
+
+    <string name="list_wallpapers">Wallpapers</string>
+
+    <string name="list_more">More options</string>
+
+    <string name="list_delete_ask">Delete the playlist «%1$s»?</string>
+
+    <string name="list_delete_note">Its wallpapers stay in your library.</string>
+</resources>

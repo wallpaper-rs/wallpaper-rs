@@ -2,6 +2,7 @@ package io.github.wallpaper_rs
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,6 +22,14 @@ fun App(main: Main) = Theme {
             aside != null -> aside = null
             playlist != null -> playlist = null
             else -> tab = Tab.Library
+        }
+    }
+    val jump = Jump.to.value
+    LaunchedEffect(jump) {
+        jump?.let {
+            tab = it
+            playlist = null
+            Jump.to.value = null
         }
     }
     if (main.placing.value) Placing(main)

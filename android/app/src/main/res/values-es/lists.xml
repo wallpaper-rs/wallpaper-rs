@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lists_unread">No se pudieron leer las listas</string>
+
+    <string name="lists_unread_why">Prueba otra vez en un momento.</string>
+
+    <string name="lists_retry">Reintentar</string>
+
+    <string name="lists_how">Elige varios fondos en la biblioteca y toca «Rotar estos».</string>
+
+    <string name="lists_go_library">Ir a la biblioteca</string>
+
+    <string name="list_empty">Esta lista está vacía</string>
+
+    <string name="list_empty_how">Añade fondos desde su página en la biblioteca.</string>
+
+    <string name="list_wallpapers">Fondos</string>
+
+    <string name="list_more">Más opciones</string>
+
+    <string name="list_delete_ask">¿Borrar la lista «%1$s»?</string>
+
+    <string name="list_delete_note">Sus fondos siguen en tu biblioteca.</string>
+</resources>

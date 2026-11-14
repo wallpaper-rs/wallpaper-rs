@@ -21,6 +21,7 @@ enum class Ph(val rest: Int, val lit: Int) {
     Copy(R.drawable.ph_copy, R.drawable.ph_copy_fill),
     CopySimple(R.drawable.ph_copy_simple, R.drawable.ph_copy_simple_fill),
     DeviceMobile(R.drawable.ph_device_mobile, R.drawable.ph_device_mobile_fill),
+    DotsSixVertical(R.drawable.ph_dots_six_vertical, R.drawable.ph_dots_six_vertical_fill),
     DotsThree(R.drawable.ph_dots_three, R.drawable.ph_dots_three_fill),
     Files(R.drawable.ph_files, R.drawable.ph_files_fill),
     FolderSimple(R.drawable.ph_folder_simple, R.drawable.ph_folder_simple_fill),
