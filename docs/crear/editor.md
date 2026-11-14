@@ -12,9 +12,9 @@ Mientras editas, los cambios viven en la memoria del editor. No llegan a los arc
 
 ## Cómo es la ventana
 
-La ventana se titula **Escena: <título>**. Tiene cinco zonas.
+La barra de arriba muestra el título de la escena o del paquete, sin otra palabra delante, junto a la vuelta a la página de la que vienes (**‹ Crear**, por ejemplo). La ventana tiene cinco zonas.
 
-- **Barra de arriba**: **Volver**, el título con su estado (**Guardado** o **Sin guardar ·** con **Guardar ahora**), **Deshacer**, **Rehacer** y, a la derecha, **Ver de fondo**, **Poner de fondo** y **Publicar…**. Los paquetes que no son escena (imagen, vídeo, página web y preajuste) usan la misma barra; **Ver de fondo** no está en un preajuste, que no se puede ver solo.
+- **Barra de arriba**: la vuelta (**‹ Crear** o la página de la que vienes), el título con su estado (**Guardado** o **Sin guardar ·** con **Guardar ahora**), **Deshacer**, **Rehacer** y, a la derecha, **Ver de fondo**, **Poner de fondo** y **Publicar…**. Los paquetes que no son escena (imagen, vídeo, página web y preajuste) usan la misma barra; **Ver de fondo** no está en un preajuste, que no se puede ver solo.
 - **Columna de la izquierda**, con cinco pestañas:
   - **Capas**: la lista de capas y sus herramientas ([lienzo](editor-lienzo.md)).
   - **Recursos**: los archivos de la escena y los scripts ([lienzo](editor-lienzo.md), [scripts](scripts.md)).
