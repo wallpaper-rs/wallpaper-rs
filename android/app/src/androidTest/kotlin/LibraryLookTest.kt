@@ -15,6 +15,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
@@ -81,6 +82,30 @@ class LibraryLookTest {
         text(R.string.lib_options).assertIsDisplayed()
         compose.onNodeWithTag("in_use", useUnmergedTree = true).assertIsDisplayed()
         compose.onNodeWithTag("cover").assertIsDisplayed()
+    }
+
+    @Test
+    fun theShelfFocusesOneCardThatOffersToBePutAndTheKindsLeadToTheGrid() {
+        val items = List(3, ::stored).map(::item)
+        var all = 0
+        shown { main ->
+            Kinds(0, {}) { all++ }
+            Cards(main, items, null, 360.dp) {}
+        }
+        compose.onNodeWithTag("focused").assertIsDisplayed()
+        text(R.string.apply).assertIsDisplayed()
+        text(R.string.videos).assertIsDisplayed()
+        text(R.string.lib_see_all).performClick()
+        compose.waitForIdle()
+        assertEquals(1, all)
+    }
+
+    @Test
+    fun theCardInUseSaysItStays() {
+        val item = item(stored(0))
+        shown { main -> Cards(main, listOf(item), item.uid, 360.dp) {} }
+        text(R.string.lib_stays).assertIsDisplayed()
+        text(R.string.apply).assertDoesNotExist()
     }
 
     @Test

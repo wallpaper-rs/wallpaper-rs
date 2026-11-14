@@ -46,4 +46,5 @@
         <item quantity="one">%d chosen</item>
         <item quantity="other">%d chosen</item>
     </plurals>
+    <string name="lib_stays">Stays until you choose another</string>
 </resources>

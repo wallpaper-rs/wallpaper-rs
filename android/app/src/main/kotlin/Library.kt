@@ -43,7 +43,8 @@ private val FILTERS = listOf(
 )
 
 @Composable
-fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
+fun Library(main: Main, sources: () -> Unit, explore: () -> Unit, back: () -> Unit, open: (String) -> Unit) = Box(Modifier.fillMaxSize()) {
+    BackHandler(onBack = back)
     var filter by rememberSaveable { mutableIntStateOf(0) }
     var text by rememberSaveable { mutableStateOf("") }
     var searching by rememberSaveable { mutableStateOf(false) }
@@ -72,7 +73,6 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
     val items by loaded<List<Item>?>(null, revision, query, languages) { fetch("items", "query" to query, "languages" to languages) }
     val now by loaded<Showing?>(null, revision, languages) { showing(languages) }
     val linked by loaded<String?>(null, revision) { linkedName(Sync.status(), context.online()) }
-    val where = remember(now) { context.screens() }
     chosen.follow(items)
     val reset = {
         text = ""
@@ -89,7 +89,6 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
         grid.scrollToItem(0)
         runCatching { focus.requestFocus() }
     }
-    val bare = plain && items?.isEmpty() == true
     Column {
         if (chosen.isEmpty()) Top(linked, { if (searching && text.isEmpty()) searching = false else searching = true }, { adding = true }, searching)
         else Selecting(main, chosen, items.orEmpty().map(Item::uid), bar = false)
@@ -104,21 +103,16 @@ fun Library(main: Main, sources: () -> Unit, open: (String) -> Unit) = Box(Modif
         ) {
             item(key = "head", span = { GridItemSpan(maxLineSpan) }) {
                 Column(Modifier.bleed(Measure.margin)) {
-                    val current = now
                     when {
-                        plain && current != null -> Now(current, where, { open(current.item.uid) }) { loved ->
-                            main.act { ask("favorite", "uids" to listOf(current.item.uid), "favorite" to loved) }
-                        }
-                        bare -> Unit
-                        plain -> Header(stringResource(R.string.library))
+                        plain -> Header(stringResource(R.string.library), back)
                         else -> Seek(text, { text = it }, stringResource(R.string.lib_search_library), Modifier.padding(top = Measure.e2, bottom = Measure.e2).focusRequester(focus))
                     }
-                    if (!bare) Choices(null, FILTERS.map { (label, query) -> query to stringResource(label) }, kind) { picked ->
+                    Choices(null, FILTERS.map { (label, query) -> query to stringResource(label) }, kind) { picked ->
                         filter = FILTERS.indexOfFirst { it.second == picked }
                     }
                     Importing(main)
                     if (query.isEmpty()) AwayNotes(main)
-                    if (items?.isEmpty() == true) Empty(main, hollow(kind, searched), searched, reset, sources)
+                    if (items?.isEmpty() == true) Empty(main, hollow(kind, searched), searched, reset, explore)
                 }
             }
             items(shown, key = Item::uid) { item ->

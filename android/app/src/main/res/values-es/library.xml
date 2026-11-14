@@ -47,4 +47,5 @@
         <item quantity="many">%d elegidos</item>
         <item quantity="other">%d elegidos</item>
     </plurals>
+    <string name="lib_stays">Se queda puesto hasta que elijas otro</string>
 </resources>

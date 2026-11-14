@@ -28,6 +28,7 @@ fun App(main: Main) = Theme {
     var printFrom by rememberSaveable { mutableStateOf(Aside.More) }
     var connectFrom by rememberSaveable { mutableStateOf(Aside.Account) }
     var sourcesFrom by rememberSaveable { mutableStateOf<Aside?>(null) }
+    var every by rememberSaveable { mutableStateOf(false) }
     val desk = remember(main) { Desk(main) }
     val phone = stringResource(R.string.this_phone)
     BackHandler(item != null || playlist != null || aside != null || tab != Tab.Library) {
@@ -55,10 +56,15 @@ fun App(main: Main) = Theme {
     FirstRun(main)
     EmptyFolder(main)
     val (shown, list, away) = Triple(item, playlist, aside)
+    val sources = {
+        sourcesFrom = null
+        aside = Aside.Sources
+    }
     val veil = when {
         shown == null && away == Aside.Account -> Veil.Strip
         shown == null && (away == Aside.More || away == Aside.Print) -> Veil.Band
         shown != null || away != null -> Veil.Panel
+        tab == Tab.Library && !every -> Veil.Title
         else -> Veil.Shelf
     }
     val bar: (@Composable () -> Unit)? = if (shown == null && away == null) {
@@ -77,6 +83,7 @@ fun App(main: Main) = Theme {
             away == Aside.Sources -> Sources(main, { aside = sourcesFrom }, { connectFrom = Aside.Sources; aside = Aside.Connect }) {
                 main.search.value = it
                 aside = null
+                every = true
                 tab = Tab.Library
             }
             away == Aside.Explore -> Explore(main, { aside = null }, { sourcesFrom = Aside.Explore; aside = Aside.Sources }) { connectFrom = Aside.Explore; aside = Aside.Connect }
@@ -85,7 +92,8 @@ fun App(main: Main) = Theme {
             away == Aside.More -> More(desk, { printFrom = Aside.More; aside = it }) { aside = Aside.Account }
             away == Aside.Print -> Print(desk) { aside = printFrom }
             away == Aside.Scan -> Scan(Camera, { desk.take(it, phone); aside = Aside.Connect }, { desk.blind = it; aside = Aside.Connect }) { aside = Aside.Connect }
-            tab == Tab.Library -> Library(main, { sourcesFrom = null; aside = Aside.Explore }) { item = it }
+            tab == Tab.Library && !every -> Shelf(main, sources, { aside = Aside.Explore }, { search -> if (search) main.search.value = ""; every = true }) { item = it }
+            tab == Tab.Library -> Library(main, sources, { aside = Aside.Explore }, { every = false }) { item = it }
             tab == Tab.Lists && list != null -> Entries(main, list, { item = it }) { playlist = null }
             tab == Tab.Lists -> Playlists(main) { playlist = it }
             else -> Settings(main) { aside = Aside.Account }
