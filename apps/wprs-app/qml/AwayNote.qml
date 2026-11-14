@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
@@ -30,12 +29,11 @@ ColumnLayout {
     Repeater {
         model: note.shown
 
-        Kirigami.InlineMessage {
+        Nota {
             required property var modelData
 
             Layout.fillWidth: true
-            visible: true
-            type: Kirigami.MessageType.Information
+            wraps: true
             text: modelData.repo
                 ? App.tr("%1 comes from the repository %2, which is not added on this device. Adding the repository makes it available here.", modelData.title || modelData.key.slice(0, 8), modelData.repo)
                 : App.tr("%1 exists only on another device. Publishing it to the server or to a repository makes it available here.", modelData.title || modelData.key.slice(0, 8))

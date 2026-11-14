@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls as QQC2
 import QtQuick.Layouts
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
@@ -36,10 +35,9 @@ ColumnLayout {
             Layout.fillWidth: true
             spacing: Look.e1
 
-            Kirigami.InlineMessage {
+            Nota {
                 Layout.fillWidth: true
-                visible: true
-                type: Kirigami.MessageType.Information
+                wraps: true
                 text: App.tr("%1 (%2) was sent to your server from another computer and is not in this library yet.", modelData.name, App.bytes(modelData.size))
             }
 
