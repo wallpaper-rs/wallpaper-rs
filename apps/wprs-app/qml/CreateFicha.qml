@@ -12,9 +12,15 @@ Item {
     property bool fields
     property alias middle: mid.data
     default property alias actions: row.data
-    readonly property bool stacked: fields && heading.implicitWidth + mid.implicitWidth + row.implicitWidth + 2 * Look.e5 > width
+    property bool stacked: false
+
+    function decide() {
+        stacked = fields && heading.implicitWidth + mid.implicitWidth + row.implicitWidth + 2 * Look.e5 > width;
+    }
 
     implicitHeight: stacked ? Look.e4 + words.implicitHeight + Look.e3 + mid.implicitHeight + Look.e3 : Math.max(words.implicitHeight, row.implicitHeight, fields ? mid.implicitHeight : 0) + Look.e4
+    onWidthChanged: Qt.callLater(decide)
+    onFieldsChanged: decide()
     Accessible.role: Accessible.Grouping
     Accessible.name: title
 
@@ -55,6 +61,7 @@ Item {
         id: mid
 
         visible: ficha.fields
+        onImplicitWidthChanged: Qt.callLater(ficha.decide)
         x: ficha.stacked ? 0 : heading.implicitWidth + Look.e5
         y: ficha.stacked ? words.y + words.height + Look.e3 : Look.e4 + (parent.height - Look.e4 - height) / 2
         spacing: Look.e4

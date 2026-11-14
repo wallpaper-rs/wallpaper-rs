@@ -70,6 +70,11 @@ QtObject {
         tiles.currentIndex = 1;
         empty.foot.rename(true);
         expect(empty.changing && empty.foot.titleField.activeFocus, "Change… opens the name fields with the focus in the title");
+        for (const wide of [true, false]) {
+            empty.foot.width = wide ? 4000 : 300;
+            empty.foot.decide();
+            expect(empty.foot.stacked !== wide, wide ? "the name fields share the title row" : "the name fields wrap under the title when the row is too narrow");
+        }
         App.backend.press(Qt.Key_Escape, 0);
         expect(!empty.changing && empty.focused === tiles && tiles.activeFocus && tiles.currentIndex === 1, "Esc in the name fields goes back to the same tile");
         expect(empty.where.indexOf("/") >= 0, "the caption names the folder path: " + empty.where);
