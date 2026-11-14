@@ -20360,3 +20360,18 @@ msgstr "Elige por dónde empezar: lo primero que entre en tu biblioteca queda de
 #: apps/wprs-app/qml/Ahora.qml
 msgid "Still at its poster"
 msgstr "Quieta en su póster"
+
+msgid "Ctrl+Up and Ctrl+Down change its place"
+msgstr "Ctrl+Arriba y Ctrl+Abajo cambian su lugar"
+
+msgid "on screen now"
+msgstr "en pantalla ahora"
+
+msgid "Follow a folder…"
+msgstr "Seguir una carpeta…"
+
+msgid "You can undo it right after"
+msgstr "Se puede deshacer enseguida"
+
+msgid "What it showed lately, the newest first"
+msgstr "Lo que mostró hace poco, lo más reciente primero"

@@ -34,6 +34,25 @@ QtObject {
         must(text === App.tr("List “%1” · changes in %2", "Sea", App.tr("%1 min", 7)), "the rotating line does not say when the list changes: " + text);
     }
 
+    function ordering() {
+        const list = page.editor.list;
+        page.editor.items = [{
+                "uid": "a",
+                "title": "A"
+            }, {
+                "uid": "b",
+                "title": "B"
+            }];
+        must(list.movable && list.otherText !== "" && list.addText !== "", "a manual playlist cannot be ordered or filled at level one");
+        let moved = [];
+        const seen = (from, to) => moved = [from, to];
+        list.reordered.connect(seen);
+        list.move(0, 1);
+        list.move(0, -1);
+        list.reordered.disconnect(seen);
+        must(moved.length === 2 && moved[0] === 0 && moved[1] === 1, "moving a wallpaper of a playlist does not ask for its new place");
+    }
+
     function exercise() {
         must(page.loaded && page.playlists.length === 2, "the playlists page did not load the playlists");
         must(page.shelf.filter.words[1].count === page.running.length && page.shelf.filter.words[0].count === 2, "the filter of the playlists does not count every word");
@@ -47,8 +66,12 @@ QtObject {
         page.opened = first.uid;
         must(page.skeleton === "options" && page.route.length === 2, "editing a playlist does not open its options");
         must(page.shelf.covers.visible === false && page.bandLow === 0, "the shelf stays under the playlist editor");
+        ordering();
         page.level = "more";
         must(page.route.length === 3, "the More level of a playlist has no route");
+        const rules = (App.schema.rules ?? []).length - 1;
+        must(page.editor.more.rows.children.filter(row => row.kind !== undefined).length >= 4, "the More level does not show search, folder and removal as rows");
+        must(rules > 0 && page.editor.more.rules.count === rules, "the More level does not show every rule of the playlist as a row");
         page.routeBack();
         must(page.level === "" && page.opened === first.uid, "going back from More closes the playlist");
         page.routeBack();

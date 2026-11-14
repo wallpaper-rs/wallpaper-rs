@@ -68,10 +68,15 @@ fn the_self_check_walks_every_page_with_the_keyboard() {
 fn every_list_and_click_target_of_the_main_pages_takes_the_keyboard() {
     let control = read("qml/Mando.qml");
     assert!(control.contains("activeFocusOnTab: !off") && control.contains("Keys.onReturnPressed"));
-    for page in ["Browse", "RepoList", "RepoStatic", "Installed", "History"] {
+    for page in ["Browse", "RepoList", "RepoStatic", "Installed"] {
         let text = read(&format!("qml/{page}.qml"));
         assert!(text.contains("FocusList {") && !text.contains("ListView {"), "{page}");
     }
+    for page in ["ListaEditor", "ListaHistorial"] {
+        assert!(read(&format!("qml/{page}.qml")).contains("Sublista {"), "{page}");
+    }
+    let sublist = read("qml/Sublista.qml");
+    assert!(sublist.contains("activeFocusOnTab: true") && sublist.contains("Qt.ControlModifier ? sublista.move("));
     let list = read("qml/FocusList.qml");
     for needle in ["activeFocusOnTab: true", "keyNavigationEnabled: true", "Kirigami.Theme.focusColor"] {
         assert!(list.contains(needle), "{needle}");

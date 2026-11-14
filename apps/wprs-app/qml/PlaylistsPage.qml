@@ -26,6 +26,7 @@ Kirigami.Page {
     property rect upper
     readonly property var keyHints: playlist ? undefined : shelf.hints
     readonly property alias shelf: shelf
+    readonly property alias editor: editor
     readonly property alias creator: creator
 
     function load() {
