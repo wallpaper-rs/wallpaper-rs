@@ -12,6 +12,9 @@ Item {
     readonly property var presets: page.view.presets ?? []
     property alias list: list
     property alias tools: tools
+    readonly property SceneTransitionState passage: SceneTransitionState {
+        page: panel.page
+    }
 
     function add(kind) {
         let n = 1;
@@ -133,6 +136,11 @@ Item {
                         text: App.tr("Add preset")
                         icon.name: "list-add"
                         onClicked: panel.addPreset()
+                    }
+
+                    SceneTransitions {
+                        Layout.fillWidth: true
+                        tool: panel.passage
                     }
                 }
             }

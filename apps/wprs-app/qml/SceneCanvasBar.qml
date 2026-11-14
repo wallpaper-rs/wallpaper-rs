@@ -82,6 +82,11 @@ ColumnLayout {
         page: bar.page
     }
 
+    SceneTransitionBar {
+        Layout.fillWidth: true
+        page: bar.page
+    }
+
     Rectangle {
         Layout.fillWidth: true
         implicitHeight: Look.linea

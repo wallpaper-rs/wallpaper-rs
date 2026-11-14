@@ -10,7 +10,7 @@ Rectangle {
     readonly property bool keyed: (page.view.tracks ?? []).length > 0 || page.mesh.clip !== ""
     property bool unfolded: false
     readonly property bool folded: !keyed && !unfolded
-    readonly property real wanted: folded ? Look.barraLienzoAlto : Look.lienzoPieAlto
+    readonly property real wanted: folded && !passage.visible ? Look.barraLienzoAlto : Look.lienzoPieAlto
 
     color: Look.noche
 
@@ -77,5 +77,12 @@ Rectangle {
             visible: !foot.folded
             page: foot.page
         }
+    }
+
+    SceneTransitionFoot {
+        id: passage
+
+        anchors.fill: parent
+        page: foot.page
     }
 }

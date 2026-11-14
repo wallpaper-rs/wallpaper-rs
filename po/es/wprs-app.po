@@ -21148,3 +21148,132 @@ msgstr "Apagadas"
 msgctxt "lights"
 msgid "not detected"
 msgstr "no detectadas"
+
+msgid "%1 comes in · %2 %"
+msgstr "Entra %1 · %2 %"
+
+msgid "%1 leaves"
+msgstr "Sale %1"
+
+msgid "%1 of the transition"
+msgstr "%1 de la transición"
+
+msgid "%1 s / curve: %2"
+msgstr "%1 s / curva: %2"
+
+msgid "Curve…"
+msgstr "Curva…"
+
+msgid "Curve end handle"
+msgstr "Asa del final de la curva"
+
+msgid "Curve start handle"
+msgstr "Asa del comienzo de la curva"
+
+msgid "even"
+msgstr "pareja"
+
+msgid "gentle"
+msgstr "leve"
+
+msgid "going past"
+msgstr "se pasa y vuelve"
+
+msgid "hold, then jump"
+msgstr "espera y salta"
+
+msgid "It looks as in «See as»: %1. Change the computer above to try the others."
+msgstr "Se ve como en «Ver como»: %1. Cambia el equipo arriba para probar los otros."
+
+msgid "jump at the end"
+msgstr "salta al final"
+
+msgid "light"
+msgstr "ligera"
+
+msgid "Make a transition…"
+msgstr "Crear una transición…"
+
+msgid "medium"
+msgstr "media"
+
+msgid "Move the points on the canvas to place it."
+msgstr "Mueve los puntos sobre el lienzo para ubicarla."
+
+msgid "On this computer whoever uses it sees a simple fade."
+msgstr "En este equipo quien lo use ve un fundido simple."
+
+msgid "Options › Transitions › %1"
+msgstr "Opciones › Transiciones › %1"
+
+msgid "own curve"
+msgstr "curva propia"
+
+msgid "Own effect"
+msgstr "Efecto propio"
+
+msgid "Plain color"
+msgstr "Color liso"
+
+msgid "Previous wallpaper: %1"
+msgstr "Fondo anterior: %1"
+
+msgid "Remove the transition"
+msgstr "Quitar la transición"
+
+msgid "round"
+msgstr "redonda"
+
+msgid "s"
+msgstr "s"
+
+msgid "sharp"
+msgstr "brusca"
+
+msgid "soft at both ends, %1"
+msgstr "suave en los dos extremos, %1"
+
+msgid "soft at the end, %1"
+msgstr "suave al final, %1"
+
+msgid "soft at the start, %1"
+msgstr "suave al comienzo, %1"
+
+msgid "springy"
+msgstr "elástica"
+
+msgid "strong"
+msgstr "fuerte"
+
+msgid "Transition when it comes in"
+msgstr "Transición al entrar"
+
+msgid "Transition when it leaves"
+msgstr "Transición al salir"
+
+msgid "Transitions"
+msgstr "Transiciones"
+
+msgid "Try the transition"
+msgstr "Probar la transición"
+
+msgid "Used when someone leaves «%1»"
+msgstr "Se usa cuando alguien deja «%1»"
+
+msgid "Used when someone moves to «%1»"
+msgstr "Se usa cuando alguien pasa a «%1»"
+
+msgid "very strong"
+msgstr "muy fuerte"
+
+msgid "When it comes in"
+msgstr "Al entrar"
+
+msgid "When it leaves"
+msgstr "Al salir"
+
+msgid "With «Less motion» whoever uses it sees a simple fade."
+msgstr "Con «Menos movimiento» quien lo use ve un fundido simple."
+
+msgid "Without one of its own, whoever uses it sees the one chosen in their settings."
+msgstr "Sin una propia, quien lo use ve la que tenga elegida en sus ajustes."

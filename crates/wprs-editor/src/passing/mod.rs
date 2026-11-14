@@ -12,7 +12,7 @@ mod starter;
 pub use ask::{query, shape};
 pub use edit::{TransitionEdit, Way};
 
-pub(crate) fn path(way: Way) -> String {
+pub fn path(way: Way) -> String {
     format!("/scene/transition/{}", way.key())
 }
 
@@ -86,7 +86,7 @@ fn fresh(dir: &Path, doc: &Value, e: &TransitionEdit) -> Result<Value> {
     Ok(json!({ "descriptor": descriptor, "wgsl": wgsl, "duration_ms": 1200, "curve": "out_cubic" }))
 }
 
-pub(crate) fn readied(dir: &Path, way: Way, value: &Value) -> Result<Readied> {
+pub fn readied(dir: &Path, way: Way, value: &Value) -> Result<Readied> {
     let text =
         json!({ "schema": SCHEMA, "canvas": { "size": [16, 16] }, "transition": { way.key(): value } });
     let mut scene = Scene::load(&text.to_string(), &Default::default())
@@ -102,7 +102,7 @@ pub(crate) fn readied(dir: &Path, way: Way, value: &Value) -> Result<Readied> {
     found.ok_or_else(|| anyhow!("no transition"))
 }
 
-pub(crate) fn check(dir: &Path, way: Way, value: &Value) -> Result<()> {
+pub fn check(dir: &Path, way: Way, value: &Value) -> Result<()> {
     let ms = value["duration_ms"].as_u64().unwrap_or(1000);
     let (low, high) = (MIN_TRANSITION_MS as f64 / 1000.0, MAX_TRANSITION_MS as f64 / 1000.0);
     ensure!(

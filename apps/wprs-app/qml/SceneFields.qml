@@ -38,4 +38,9 @@ Rectangle {
             page: fields.page
         }
     }
+
+    SceneTransitionPanel {
+        anchors.fill: parent
+        page: fields.page
+    }
 }

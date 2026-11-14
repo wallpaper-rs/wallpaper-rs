@@ -152,6 +152,12 @@ ColumnLayout {
                 page: canvas.page
                 testing: canvas.testing
             }
+
+            SceneTransitionView {
+                anchors.fill: parent
+                z: 6
+                page: canvas.page
+            }
         }
     }
 }
