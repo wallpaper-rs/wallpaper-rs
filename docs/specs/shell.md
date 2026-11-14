@@ -25,7 +25,7 @@ Ajustes (palabras de sección arriba del panel). El menú es un solo bloque para
 
 | Esqueleto | Páginas | Partes |
 |---|---|---|
-| título | Biblioteca, Explorar, Listas, Fuentes, Crear | columna izquierda con logo y menú bajo su velo; lugar «ahora» arriba a la derecha (por ahora la barra de estado: pausa, volumen, trabajos); velo de banda abajo; la página a la derecha del menú; un lugar de avisos; línea de atajos abajo a la derecha |
+| título | Biblioteca, Explorar, Listas, Fuentes, Crear | columna izquierda con logo y menú bajo su velo; lugar «ahora» arriba a la derecha (por ahora la barra de estado: pausa, volumen, trabajos); velo de banda abajo; la página a la derecha del menú o, si la pide, en la banda baja; un lugar de avisos; línea de atajos abajo a la derecha |
 | opciones | Ajustes, Perfiles y preajustes, Cuenta | la imagen como franja con su velo; el menú; un panel opaco en Noche con el título de la página, sus acciones, palabras de sección y la ruta con «Esc volver»; la página; avisos sobre los atajos; atajos siempre al pie |
 | trabajo | editor de un fondo, editor de escenas, empaquetador | barra superior en Noche con la vuelta («‹ Biblioteca», «‹ Crear»…), el título y las acciones; la página ocupa el resto; avisos arriba a la izquierda del lienzo |
 
@@ -72,3 +72,30 @@ maximiza.
 
 El esqueleto sale del lugar: Ajustes, Perfiles y Cuenta usan el de opciones; los editores, el de
 trabajo; el resto, el de título.
+
+## Banda baja de las pantallas de título
+
+Una página de título puede pedir la banda baja: una franja de margen a margen bajo el menú (palabras
+de filtro, estante, ficha del elegido) y, si la necesita, un bloque arriba de la banda a la derecha
+del menú. Una página que no la pide queda como siempre, en la columna a la derecha del menú.
+
+- La página declara `bandLow` (el alto mínimo con el que su banda se ve bien; mayor que cero la
+  activa), `bandHigh` (opcional: el alto que quiere como máximo; sin él la banda llega hasta el
+  menú) y `upperHeight` (opcional: el alto de su bloque de arriba).
+- La página declara también `property rect band` y `property rect upper`; el esqueleto las llena
+  en coordenadas de la página, que ocupa toda la ventana. La página pone su banda en `band` y su
+  bloque en `upper`, sin conocer las medidas de la ventana.
+- Con lugar: `band` va del margen izquierdo al derecho, pegada al margen de abajo, con el alto
+  entre `bandLow` y `bandHigh` según lo que haya bajo el menú; `upper` va a la derecha del menú,
+  justo encima de la banda, con el alto pedido. Los atajos quedan en la esquina de abajo a la
+  derecha de la banda.
+- Sin lugar (ventana baja, o el bloque de arriba no entra): las dos van a la columna de la derecha
+  del menú, el bloque arriba y la banda debajo, como en las páginas de siempre. El cambio ocurre al
+  redimensionar, sin mover la página de lugar: el foco queda donde estaba y nada tapa el menú.
+- El velo de banda cubre la ventana a lo ancho desde 190 px arriba de la banda. Si el texto de la
+  banda empieza más abajo que `band`, la página declara `bandFrom` (en sus coordenadas) y el velo
+  empieza 190 px arriba de ese punto, para que se lea sobre un fondo claro.
+- Una página que ocupa todo el alto (`full`) no usa la banda.
+- Con la banda, los avisos van a la derecha del menú, encima del bloque de arriba.
+- `wprs-app --pieces band [IMAGEN...]` muestra una página de prueba con la banda (la primera imagen
+  hace de fondo).

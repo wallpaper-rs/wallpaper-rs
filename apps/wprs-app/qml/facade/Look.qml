@@ -77,6 +77,7 @@ QtObject {
     readonly property int filasAncho: compacto ? 600 : amplio ? 740 : 660
     readonly property int explicaAncho: compacto ? 260 : amplio ? 340 : 300
     readonly property int atajosAlto: 26
+    readonly property int veloBanda: 190
     readonly property int teclaAncho: 28
     readonly property int teclaAlto: 26
     readonly property int teclaRadio: 5

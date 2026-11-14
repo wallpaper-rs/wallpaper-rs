@@ -10,12 +10,58 @@ Item {
     required property real sideBottom
     required property bool none
     readonly property alias seat: seat
-    readonly property point noticeAt: Qt.point(seat.x + Look.e4, seat.y + seat.height - Look.e3)
+    readonly property real bandLow: page && page.full !== true && page.bandLow > 0 ? page.bandLow : 0
+    readonly property real upperLow: bandLow > 0 && page.upperHeight > 0 ? page.upperHeight : 0
+    readonly property real bandBottom: height - Look.margenAbajo
+    readonly property real bandTop: Math.max(sideBottom, bandBottom - (bandLow > 0 && page.bandHigh > 0 ? page.bandHigh : bandBottom))
+    readonly property bool fits: bandLow > 0 && bandBottom - bandTop >= bandLow && bandTop - Look.e3 - column.y >= upperLow
+    property bool banded: false
+    property real placedFor: 0
+    readonly property real stacked: upperLow > 0 ? upperLow + Look.e4 : 0
+    readonly property rect band: banded ? Qt.rect(Look.margen, bandTop, width - 2 * Look.margen, bandBottom - bandTop) : Qt.rect(column.x, column.y + stacked, column.width, Math.max(0, column.height - stacked))
+    readonly property rect upper: banded ? Qt.rect(column.x, bandTop - Look.e3 - upperLow, column.width, upperLow) : Qt.rect(column.x, column.y, column.width, upperLow)
+    readonly property point noticeAt: banded ? Qt.point(column.x + Look.e4, upper.y - Look.e3) : Qt.point(column.x + Look.e4, column.y + column.height - Look.e3)
     readonly property point hintsAt: Qt.point(width - Look.margen, height - Look.margenAbajo)
 
     signal escaped
 
+    function place(grow) {
+        placedFor = bandLow;
+        if (grow || !fits)
+            banded = fits;
+    }
+
+    function resized() {
+        place(true);
+        regrow.restart();
+    }
+
     Keys.onEscapePressed: frame.escaped()
+    Component.onCompleted: resized()
+    onWidthChanged: resized()
+    onHeightChanged: resized()
+    onSideBottomChanged: resized()
+    onPageChanged: resized()
+    onBandLowChanged: {
+        if (banded)
+            settle.restart();
+        else if (placedFor === 0)
+            resized();
+    }
+
+    Timer {
+        id: settle
+
+        interval: Look.paso * 2
+        onTriggered: frame.place(false)
+    }
+
+    Timer {
+        id: regrow
+
+        interval: Look.paso * 2
+        onTriggered: frame.place(true)
+    }
 
     RoundVeil {
         y: -120
@@ -41,7 +87,7 @@ Item {
     }
 
     BandVeil {
-        y: frame.height * 0.55
+        y: frame.bandLow > 0 ? Math.max(0, (frame.page.bandFrom !== undefined ? frame.page.bandFrom : frame.band.y) - Look.veloBanda) : frame.height * 0.55
         width: frame.width
         height: frame.height - y
     }
@@ -94,19 +140,43 @@ Item {
     Kirigami.ActionToolBar {
         id: tools
 
-        x: seat.x
+        x: column.x
         y: now.y + now.height + Look.e5
-        width: seat.width
+        width: column.width
         alignment: Qt.AlignRight
         actions: frame.page?.actions ?? []
     }
 
     Item {
-        id: seat
+        id: column
 
         x: Look.margen + Look.menuAncho
         y: tools.actions.length > 0 ? tools.y + tools.height + Look.e3 : tools.y
         width: frame.width - x - Look.margen
         height: frame.height - y - Look.margenAbajo - Look.atajosAlto - Look.e4
+        onYChanged: frame.resized()
+    }
+
+    Item {
+        id: seat
+
+        x: frame.bandLow > 0 ? 0 : column.x
+        y: frame.bandLow > 0 ? 0 : column.y
+        width: frame.bandLow > 0 ? frame.width : column.width
+        height: frame.bandLow > 0 ? frame.height : column.height
+    }
+
+    Binding {
+        target: frame.page
+        property: "band"
+        value: frame.band
+        when: frame.bandLow > 0
+    }
+
+    Binding {
+        target: frame.page
+        property: "upper"
+        value: frame.upper
+        when: frame.bandLow > 0
     }
 }
