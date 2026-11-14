@@ -76,8 +76,8 @@ Item {
         };
         failure = null;
         App.act("Install", [spec, stale === true, downgrade === true], "Repos1", job => installer && (installer.watching = installer.watching.concat([Object.assign(entry, {
-                        "job": job
-                    })])), error => {
+                        "job": job[0]
+                    })]), installer.announce(App.jobs)), error => {
             if (!installer)
                 return;
             if (error.name === App.stale)
@@ -115,11 +115,10 @@ Item {
     }
 
     Connections {
-        target: App.backend
+        target: App
 
-        function onChanged(topic) {
-            if (topic === "jobs")
-                installer.announce(App.jobs);
+        function onJobsChanged() {
+            installer.announce(App.jobs);
         }
     }
 
