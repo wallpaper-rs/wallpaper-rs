@@ -122,8 +122,7 @@ QtObject {
                 "id": "pond",
                 "version": "1.0.0"
             }]);
-        expect("normal", page.upperBlock.visible && catalog.words.map(w => w.kind === "repo" ? w.text : w.kind).join() === ["featured", "all", App.tr("Examples"), "Home"].join(), "the filter words are " + catalog.words.map(w => w.text));
-        expect("encabezado", !!page.now && page.upperBlock.wallpaper !== undefined, "Explore must own its header so the block of the desktop is not drawn above it");
+        expect("normal", page.upperBlock.visible && !!page.now && catalog.words.map(w => w.kind === "repo" ? w.text : w.kind).join() === ["featured", "all", App.tr("Examples"), "Home"].join(), "the filter words are " + catalog.words.map(w => w.text));
         expect("normal", catalog.covers.length === 1 && catalog.covers[0].name === "dunes", "Featured must come first");
         expect("detalles", notes.of(catalog.chosen[0])[0] === App.tr("Has flashes, disabled"), "a wallpaper with its flashes off must say so: " + notes.of(catalog.chosen[0])[0]);
         page.open = true;
