@@ -131,8 +131,11 @@ Kirigami.ApplicationWindow {
         }
     }
 
-    ConsentAsk {
+    PermisosAsk {
         host: root
+    }
+
+    StillAsk {
     }
 
     LayoutOffer {

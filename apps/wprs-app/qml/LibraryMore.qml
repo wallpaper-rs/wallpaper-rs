@@ -12,6 +12,28 @@ ColumnLayout {
 
     spacing: Look.e3
 
+    ScenePermisos {
+        Layout.fillWidth: true
+        uid: more.host.uid
+    }
+
+    Seccion {
+        visible: sound.item !== ""
+        text: App.tr("This scene")
+    }
+
+    SoundPicker {
+        id: sound
+
+        Layout.fillWidth: true
+        daemon: App
+        item: more.host.item.kind === "video" || (!!more.pkg && ["video", "scene", "web"].includes(more.pkg.kind)) ? more.host.uid : ""
+    }
+
+    ItemCopyButton {
+        drawer: more.host
+    }
+
     QQC2.TextField {
         Layout.fillWidth: true
         text: more.host.item.title ?? ""

@@ -14,12 +14,6 @@ ColumnLayout {
     property string problem: ""
     readonly property string packageId: props.package ?? ""
     readonly property var uses: (inputs.shown ?? {})[output] ?? {}
-    readonly property var granted: uses.granted ?? []
-
-    function offered(input) {
-        const first = input.split("_")[0];
-        return input.endsWith("_network") ? uses[first] === true && uses.network === true && granted.includes(first) : uses[input] === true;
-    }
     readonly property var fields: (props.fields ?? []).filter(field => field.visible && !scene.closed(field.group))
 
     function load() {
@@ -36,20 +30,6 @@ ColumnLayout {
 
     function closed(group) {
         return group !== "" && folded[packageId + "/" + group] === true;
-    }
-
-    function listed(map, input) {
-        return ((map ?? {})[uses.scene] ?? []).includes(input);
-    }
-
-    function decide(input, allow) {
-        problem = "";
-        const failed = error => {
-            if (!String(error.name).endsWith(".Unconfirmed") && !scene.listed(scene.inputs.quiet, input))
-                scene.problem = error.message;
-            scene.load();
-        };
-        daemon.act(allow ? "GrantPackage" : "Revoke", allow ? [uses.scene, uses.key, input] : [uses.scene, input], "Inputs1", () => scene && scene.load(), failed);
     }
 
     function set(key, value) {
@@ -74,64 +54,11 @@ ColumnLayout {
         onTriggered: scene.load()
     }
 
-    Consent {
-        Layout.fillWidth: true
-        daemon: scene.daemon
-        inputs: scene.inputs
-        output: scene.output
-    }
-
     Kirigami.InlineMessage {
         Layout.fillWidth: true
         visible: scene.problem !== ""
         type: Kirigami.MessageType.Error
         text: scene.problem
-    }
-
-    Repeater {
-        model: [["audio", scene.daemon.tr("Follow the sound that plays"), scene.daemon.tr("The sound is turned into levels on this computer while the wallpaper is shown; nothing is recorded, kept or sent, and the desktop may show a microphone indicator.")], ["pointer", scene.daemon.tr("Follow the pointer"), scene.daemon.tr("Only the latest pointer position over this screen reaches the wallpaper; positions are never kept and keys are never read.")], ["clicks", scene.daemon.tr("Take clicks and taps"), scene.daemon.tr("Only real clicks and taps on the wallpaper of this screen reach it; they are never kept and keys are never read.")], ["media", scene.daemon.tr("Show what the media player plays"), scene.daemon.tr("While the wallpaper is shown, the title, artist, album, cover and progress of what a media player on this computer plays reach it; nothing of it is kept, logged or sent.")], ["media_network", scene.daemon.tr("Show what plays even though it can reach the network"), scene.daemon.tr("This web wallpaper may also reach the sites it names, so the title, artist and cover of what plays could leave this computer. Allow it only if you trust it with them.")], ["audio_network", scene.daemon.tr("Follow the sound even though it can reach the network"), scene.daemon.tr("This web wallpaper may also reach the sites it names, so what it hears, the sound that plays or the microphone, could leave this computer. Allow it only if you trust it with that.")]].filter(input => scene.offered(input[0]))
-
-        delegate: ColumnLayout {
-            id: input
-
-            required property var modelData
-            readonly property bool asking: scene.listed(scene.inputs.asking, modelData[0])
-            readonly property bool quiet: scene.listed(scene.inputs.quiet, modelData[0])
-
-            Layout.fillWidth: true
-
-            Connections {
-                target: scene
-
-                function onInputsChanged() {
-                    toggle.checked = Qt.binding(() => scene.granted.includes(input.modelData[0]));
-                }
-            }
-
-            QQC2.Switch {
-                id: toggle
-
-                text: input.modelData[1]
-                checked: scene.granted.includes(input.modelData[0])
-                enabled: !input.asking && (!input.quiet || checked)
-                onToggled: scene.decide(input.modelData[0], checked)
-            }
-
-            QQC2.Label {
-                Layout.fillWidth: true
-                visible: input.asking || input.quiet
-                text: input.asking ? scene.daemon.tr("Confirm it in the desktop notification.") : scene.daemon.tr("The notification was closed without an answer; try again in a few minutes.")
-                wrapMode: Text.Wrap
-            }
-
-            QQC2.Label {
-                Layout.fillWidth: true
-                text: input.modelData[2]
-                wrapMode: Text.Wrap
-                font: Kirigami.Theme.smallFont
-                color: Kirigami.Theme.disabledTextColor
-            }
-        }
     }
 
     QQC2.Switch {

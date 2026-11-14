@@ -1,1 +1,0 @@
-../../../integrations/plasma-tray/contents/ui/Consent.qml
