@@ -18,15 +18,15 @@ lateral, barra global ni título propio de Kirigami: el esqueleto se encarga.
 ## Menú
 
 Biblioteca, Explorar, Listas, Fuentes y Crear; aparte, más abajo, Ajustes y Cuenta. La palabra del
-lugar actual va en Escarcha y negrita con la marca de acento. Perfiles y preajustes vive dentro de
-Ajustes (palabras de sección arriba del panel). El menú es un solo bloque para el teclado.
+lugar actual va en Escarcha y negrita con la marca de acento. Las disposiciones (antes perfiles) viven
+dentro de Ajustes, en la pestaña Pantallas. El menú es un solo bloque para el teclado.
 
 ## Esqueletos
 
 | Esqueleto | Páginas | Partes |
 |---|---|---|
 | título | Biblioteca, Explorar, Listas, Fuentes, Crear | columna izquierda con logo y menú bajo su velo; lugar «ahora» arriba a la derecha (por ahora la barra de estado: pausa, volumen, trabajos); velo de banda abajo; la página a la derecha del menú o, si la pide, en la banda baja; un lugar de avisos; línea de atajos abajo a la derecha |
-| opciones | Ajustes, Perfiles y preajustes, Cuenta | la imagen como franja con su velo; el menú; un panel opaco en Noche con el título de la página, sus acciones, palabras de sección y la ruta con «Esc volver»; la página; avisos sobre los atajos; atajos siempre al pie |
+| opciones | Ajustes, Cuenta | la imagen como franja con su velo; el menú; un panel opaco en Noche con el título de la página, sus acciones, palabras de sección y la ruta con «Esc volver»; la página; avisos sobre los atajos; atajos siempre al pie |
 | trabajo | editor de un fondo, editor de escenas, empaquetador | barra superior en Noche con la vuelta («‹ Biblioteca», «‹ Crear»…), el título y las acciones; la página ocupa el resto; avisos arriba a la izquierda del lienzo |
 
 Los escalones de tamaño de `look.md` (compacto hasta 800 px de alto, amplio desde 1800 × 1000) se
@@ -76,7 +76,7 @@ maximiza.
   del texto puede ir `{text, tone}` (`tone`: `""`, `"ambar"`, `"coral"` o `"brote"`) para darle su
   tono; la función es lo que hace la acción.
 
-El esqueleto sale del lugar: Ajustes, Perfiles y Cuenta usan el de opciones; los editores, el de
+El esqueleto sale del lugar: Ajustes y Cuenta usan el de opciones; los editores, el de
 trabajo; el resto, el de título. Una página de título puede pedir otro esqueleto mientras muestra
 un nivel propio con `skeleton` («options»): la Biblioteca lo usa para las opciones de un fondo y
 Fuentes para añadir una fuente y para sus detalles.
@@ -136,3 +136,22 @@ En los detalles de una fuente, «Fotos guardadas» dice cuánto ocupa lo que tra
 el panel «¿Borrar las fotos guardadas?» borra esas fotos del equipo y de la biblioteca
 (`Providers1.ClearCache`, `wprs-ctl provider clear-cache ID`); la fuente sigue con sus opciones y su
 clave y trae fotos nuevas en la próxima actualización. «Quitar esta fuente» quita además la fuente.
+
+## Ajustes
+
+- Tres pestañas: Fondos, Pantallas y Equipo. Cada pestaña declara sus filas en `rows`
+  (`{text, value, place, explain, off}`): con eso el buscador del encabezado filtra las filas de las
+  tres por su etiqueta, sin distinguir mayúsculas ni tildes, y al elegir un resultado abre la
+  pestaña y el lugar de la fila y le da el foco. Sin resultados dice «Ningún ajuste habla de…» y
+  propone palabras para probar.
+- Cada fila que abre algo lleva a un lugar con ruta y «Esc volver»: Más, Carpetas de la
+  biblioteca, Listas por pantalla, Pausar, Más de la pantalla y Disposiciones.
+- Pantallas muestra la calidad de las escenas (Automática, Ahorrar batería, Máxima; los siete
+  niveles en «Más de…»), la transición de cada pantalla con el motivo del último cambio, la
+  general, Menos movimiento, Pausar y Disposiciones. Una fila cuyo equipo no se detecta (la
+  batería) queda en gris con «no detectada», y lo que la persona fijó se mantiene.
+- Disposiciones: cada una es una fila con sus reglas; Intro ofrece Usarla, Reglas automáticas,
+  Cambiar el nombre y Eliminarla. Al conectar o quitar una pantalla, si ninguna disposición guarda
+  ese conjunto, un aviso ofrece guardarla y la guarda con esas pantallas como regla.
+- La fila de cada carpeta de la biblioteca ofrece Revisarla otra vez, Rotar estas fotos (una lista
+  con esa carpeta en todas las pantallas) y Quitarla, con confirmación.
