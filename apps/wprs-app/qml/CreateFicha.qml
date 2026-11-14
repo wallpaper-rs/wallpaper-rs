@@ -64,7 +64,7 @@ Item {
         id: row
 
         x: parent.width - width
-        y: Look.e4 + (parent.height - Look.e4 - height) / 2
+        y: ficha.stacked ? words.y + (words.height - height) / 2 : Look.e4 + (parent.height - Look.e4 - height) / 2
         spacing: Look.e3
     }
 }
