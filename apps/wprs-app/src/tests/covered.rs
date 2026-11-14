@@ -9,7 +9,11 @@ fn the_rgb_choice_while_covered_applies_only_while_the_covered_wallpaper_pauses(
     );
     assert_eq!(text.matches("off: !lights.pauses").count(), 1, "a choice stayed open with nothing to choose");
     assert!(text.contains(r#"App.tr("While a window covers the wallpaper and it pauses")"#));
-    let hint = text.lines().find(|l| l.contains(r#"lights.covered === "follow" ?"#)).unwrap().trim();
+    let hint = text
+        .lines()
+        .map(str::trim)
+        .find(|l| l.starts_with("explain:") && l.contains(r#"lights.covered === "follow" ?"#))
+        .unwrap();
     assert!(
         hint.starts_with(
             r#"explain: !lights.pauses ? App.tr("Pausing while a window covers the screen is off"#
