@@ -9,8 +9,12 @@ T.Button {
     readonly property bool principal: highlighted
     readonly property bool palabra: flat && !highlighted
     readonly property color fondo: palette.highlight
-    readonly property color hondo: Qt.colorEqual(fondo, Look.luna) ? Look.lunaHonda : Look.mix(fondo, Look.noche, 0.2)
+    readonly property color hondo: Qt.colorEqual(fondo, Look.luna) ? Look.lunaHonda : control.mix(fondo, Look.noche, 0.2)
     readonly property color tinta: !enabled ? (principal ? Look.bruma : Look.brumaBaja) : principal ? Look.noche : Look.escarcha
+
+    function mix(a, b, amount) {
+        return Qt.rgba(a.r + (b.r - a.r) * amount, a.g + (b.g - a.g) * amount, a.b + (b.b - a.b) * amount, 1);
+    }
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
@@ -49,7 +53,7 @@ T.Button {
             if (control.palabra)
                 return "transparent";
             if (control.principal)
-                return !control.enabled ? Look.nocheLinea : control.down ? control.hondo : control.hovered ? Look.mix(control.fondo, Look.escarcha, 0.12) : control.fondo;
+                return !control.enabled ? Look.nocheLinea : control.down ? control.hondo : control.hovered ? control.mix(control.fondo, Look.escarcha, 0.12) : control.fondo;
             if (!control.enabled)
                 return "transparent";
             return control.down ? Look.noche : control.hovered || control.checked ? Look.nocheLinea : Look.nocheAlta;
