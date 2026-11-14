@@ -21,6 +21,7 @@ PanelChico {
         files = [];
         typing = false;
         area.text = "";
+        open();
         chooser.open();
     }
 
@@ -60,7 +61,7 @@ PanelChico {
     title: paths.length > 1 ? App.tr("Add %1 wallpapers", paths.length) : paths.length === 1 ? App.tr("Add 1 wallpaper") : App.tr("Add wallpapers")
     text: App.tr("Copy them to your library or leave them where they are?")
     quiet: App.tr("Cancel")
-    principal: paths.length > 0 || typing ? App.tr("Add") : App.tr("Choose files…")
+    principal: App.tr("Add")
     first: copy ? copying : leaving
     onAccepted: paths.length > 0 ? bring(paths, copy) : typing || chooser.open()
     foot: [
@@ -114,9 +115,8 @@ PanelChico {
         onAccepted: {
             add.files = Array.from(selectedFiles, file => App.path(file));
             add.typing = false;
-            add.open();
+            add.opened || add.open();
         }
-        onRejected: add.opened || add.open()
     }
 
     Connections {
