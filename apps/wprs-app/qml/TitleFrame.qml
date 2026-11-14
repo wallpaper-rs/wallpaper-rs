@@ -120,7 +120,7 @@ Item {
             visible: !frame.owned && frame.page?.tellsService !== true
             page: frame.page
             none: frame.none
-            compact: frame.upperLow > 0
+            compact: frame.upperLow > 0 || Look.escalon === "bajo"
         }
 
         Rectangle {

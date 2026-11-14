@@ -26,7 +26,7 @@ QtObject {
     readonly property string letraTexto: "Onest"
 
     property string escalon: "normal"
-    readonly property bool compacto: escalon === "compacto"
+    readonly property bool compacto: escalon === "compacto" || escalon === "bajo"
     readonly property bool amplio: escalon === "amplio"
 
     readonly property real tPortada: compacto ? 52 : amplio ? 80 : 66
@@ -66,8 +66,8 @@ QtObject {
     readonly property int menuAncho: compacto ? 272 : amplio ? 360 : 312
     readonly property int menuAlto: compacto ? 34 : amplio ? 52 : 46
     readonly property int aparteAlto: compacto ? 28 : amplio ? 42 : 38
-    readonly property int tapa: compacto ? 200 : amplio ? 300 : 256
-    readonly property int tapaFoco: compacto ? 300 : amplio ? 500 : 420
+    readonly property int tapa: escalon === "bajo" ? 160 : compacto ? 200 : amplio ? 300 : 256
+    readonly property int tapaFoco: escalon === "bajo" ? 240 : compacto ? 300 : amplio ? 500 : 420
     readonly property int tapaRejilla: compacto ? 200 : amplio ? 260 : 232
     readonly property int tapaCrear: Math.round(tapa * 0.62)
     readonly property int tapaCrearFoco: Math.round(tapaCrear * 1.35)
@@ -189,7 +189,7 @@ QtObject {
     }
 
     function step(width, height) {
-        return height <= 800 ? "compacto" : width >= 1800 && height >= 1000 ? "amplio" : "normal";
+        return height <= 680 ? "bajo" : height <= 800 ? "compacto" : width >= 1800 && height >= 1000 ? "amplio" : "normal";
     }
 
     onTonesChanged: bridge.paint(tones)

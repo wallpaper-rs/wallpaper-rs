@@ -8,7 +8,7 @@ Binding {
 
     target: Look
     property: "escalon"
-    value: tight ? "compacto" : Look.step(host.width, host.height)
+    value: tight && Look.step(host.width, host.height) !== "bajo" ? "compacto" : Look.step(host.width, host.height)
     Component.onCompleted: {
         const theme = host.Kirigami.Theme;
         theme.negativeTextColor = Look.coral;

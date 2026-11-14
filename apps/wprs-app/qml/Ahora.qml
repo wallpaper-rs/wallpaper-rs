@@ -158,7 +158,7 @@ Column {
         id: controls
 
         anchors.right: parent.right
-        visible: !ahora.none
+        visible: !ahora.none && !(ahora.compact && rotating.visible)
         screen: ahora.screen
         info: ahora.info
         item: ahora.item
