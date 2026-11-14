@@ -76,7 +76,9 @@ fn every_list_and_click_target_of_the_main_pages_takes_the_keyboard() {
         assert!(read(&format!("qml/{page}.qml")).contains("Sublista {"), "{page}");
     }
     let sublist = read("qml/Sublista.qml");
-    assert!(sublist.contains("activeFocusOnTab: true") && sublist.contains("Qt.ControlModifier ? sublista.move("));
+    assert!(
+        sublist.contains("activeFocusOnTab: true") && sublist.contains("Qt.ControlModifier ? sublista.move(")
+    );
     let list = read("qml/FocusList.qml");
     for needle in ["activeFocusOnTab: true", "keyNavigationEnabled: true", "Kirigami.Theme.focusColor"] {
         assert!(list.contains(needle), "{needle}");
