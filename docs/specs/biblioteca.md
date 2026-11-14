@@ -15,11 +15,17 @@ La Biblioteca muestra los fondos guardados sobre la imagen del fondo en uso.
 - Una nota en la tapa avisa de un archivo que falta o está dañado, de un fondo retirado por su repositorio
   o de uno con destellos (apagado hasta que el usuario lo permita).
 - La barra de arriba filtra por Todos, Escenas, Imágenes, Vídeos y Favoritos; «Más» abre Paquetes,
-  Recursos, las etiquetas y «Renombrar la etiqueta…». El buscador acepta `tag:`, `kind:`, `fav:` y
-  `sort:`. «Añadir fondos…» importa archivos.
+  Recursos, Web, las etiquetas y «Renombrar la etiqueta…». El número de fondos se ve junto a la palabra
+  elegida. El buscador acepta `tag:`, `kind:`, `fav:` y `sort:`.
+- «Añadir fondos…» abre el selector de archivos y después el panel «Añadir N fondos», que pregunta si
+  copiarlos a la biblioteca o dejarlos donde están. «Escribir las rutas…» cambia la lista por un campo
+  con una ruta por línea. Al terminar, el aviso «Se añadieron N fondos.» con «Ver» vuelve al estante en
+  Todos, donde los nuevos quedan primero. Soltar archivos sobre la biblioteca los añade sin copiarlos,
+  con el mismo aviso.
 - El velo de abajo sube hasta detrás de la barra, para que las palabras se lean también sobre un fondo
   claro; su opacidad sigue los tonos que la app saca de la imagen.
-- Teclas: ← → para moverse, ↓ o «Ver todos» muestra la rejilla, Ctrl+A elige todos, Esc deja de elegir.
+- Teclas: ← → para moverse, ↓ o «Ver todos» muestra la rejilla, Mayús con una flecha (o Mayús+clic)
+  elige los fondos entre el anterior y el nuevo, Ctrl+A elige todos, Esc deja de elegir.
 
 ## Ver todos
 
@@ -29,8 +35,13 @@ fija abajo. Esc o «Ver el estante» vuelve al estante.
 ## Varios elegidos
 
 Ctrl+clic o Espacio (al elegir) eligen fondos. En lugar de la ficha aparece la línea de la selección:
-«N elegidos», «Rotar estos cada…», «Lista», «Etiquetas», «Más» (favorito, valoración, permitir los
-destellos, enviar los archivos a los otros equipos, quitar) y «Dejar de elegir» (Esc).
+«N elegidos» («1 elegido» con uno), «Rotar estos cada…», «Lista», «Etiquetas», «Más» (favorito,
+valoración, permitir los destellos, enviar los archivos a los otros equipos, quitar) y «Dejar de elegir»
+(Esc). Cada acción abre un panel chico junto a su botón: «Rotar N fondos» con 10 min, 30 min, 1 h, Cada
+día, «Otro…» (segundos, minutos u horas) y «Usar una carpeta en su lugar…»; «Lista» con las listas
+hechas a mano y «Una lista nueva…»; «Etiquetas» con las que se añaden y las que se quitan; y las
+preguntas de valorar, permitir los destellos y quitar (con «Eliminar también las copias importadas»).
+Con varias pantallas la rotación arranca en la pantalla elegida.
 
 ## Archivo dañado o que falta
 
