@@ -15,7 +15,7 @@ ColumnLayout {
 
         QQC2.ComboBox {
             Layout.fillWidth: true
-            model: [App.tr("Q0, lowest"), App.tr("Q1"), App.tr("Q2"), App.tr("Q3, highest")]
+            model: SceneLook.names.map((name, i) => name + " · Q" + i)
             currentIndex: SceneLook.levels.indexOf(SceneLook.versus)
             onActivated: index => SceneLook.versus = SceneLook.levels[index]
         }

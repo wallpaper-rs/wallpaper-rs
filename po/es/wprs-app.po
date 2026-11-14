@@ -18819,3 +18819,59 @@ msgstr "Verla otra vez"
 #: apps/wprs-app/qml/SceneUse.qml
 msgid "“%1” is shown on the desktop as a preview."
 msgstr "«%1» se muestra en el escritorio como vista previa."
+
+#: apps/wprs-app/qml/SceneCanvasBar.qml
+msgid "Test the pointer"
+msgstr "Probar el puntero"
+
+#: apps/wprs-app/qml/SceneCanvasBar.qml
+msgid "Guide: %1"
+msgstr "Guía: %1"
+
+#: apps/wprs-app/qml/SceneCanvasBar.qml
+msgid "Guide"
+msgstr "Guía"
+
+#: apps/wprs-app/qml/SceneZoomMenu.qml
+msgid "Zoom: %1"
+msgstr "Zoom: %1"
+
+#: apps/wprs-app/qml/SceneSpanPick.qml
+msgid "Several screens: %1"
+msgstr "Varias pantallas: %1"
+
+#: apps/wprs-app/qml/SceneSeeAs.qml
+msgid "See as: %1"
+msgstr "Ver como: %1"
+
+#: apps/wprs-app/qml/SceneCapture.qml
+msgid "Capture"
+msgstr "Captura"
+
+#: apps/wprs-app/qml/SceneCapture.qml
+msgid "Save a picture or a clip of what the canvas shows, with the values of Try"
+msgstr "Guarda una imagen o un clip de lo que muestra el lienzo, con los valores de Probar"
+
+#: apps/wprs-app/qml/facade/SceneLook.qml
+msgid "Slow computer"
+msgstr "Equipo lento"
+
+#: apps/wprs-app/qml/facade/SceneLook.qml
+msgid "Medium computer"
+msgstr "Equipo medio"
+
+#: apps/wprs-app/qml/facade/SceneLook.qml
+msgid "Fast computer"
+msgstr "Equipo rápido"
+
+#: apps/wprs-app/qml/facade/SceneLook.qml
+msgid "Very fast computer"
+msgstr "Equipo muy rápido"
+
+#: apps/wprs-app/qml/ScenePreviewPanel.qml
+msgid "See the scene as on a"
+msgstr "Ver la escena como en un"
+
+#: apps/wprs-app/qml/ScenePreviewPanel.qml
+msgid "Effects on this computer"
+msgstr "Efectos en este equipo"

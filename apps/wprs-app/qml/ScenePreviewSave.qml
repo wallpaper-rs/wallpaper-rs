@@ -25,6 +25,8 @@ ColumnLayout {
             wanted.time_of_day = hour.value * 3600 + minute.value * 60;
         if (SceneLook.media !== null)
             wanted.media = SceneLook.media;
+        if (SceneLook.values !== null)
+            wanted.values = SceneLook.values;
         if (sweep.checked)
             wanted.pointer = {
                 "from": [0.2, 0.5],

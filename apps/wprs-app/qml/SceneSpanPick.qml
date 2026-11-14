@@ -1,36 +1,57 @@
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
-RowLayout {
+QQC2.ToolButton {
     id: pick
 
     required property var page
-    readonly property string layout: ["", "dual", "triple", "vertical", "mine"][spans.currentIndex]
+    property int current: 0
+    readonly property string layout: ["", "dual", "triple", "vertical", "mine"][current]
+    readonly property var names: [App.tr("One screen"), App.tr("Two side by side"), App.tr("Three side by side"), App.tr("Two stacked"), App.tr("My screens")]
 
-    QQC2.Label {
-        text: App.tr("Screens:")
-    }
+    text: current === 0 ? App.tr("Several screens") : names[current]
+    icon.name: "caret-down"
+    Accessible.name: App.tr("Several screens: %1", names[current])
+    onClicked: menu.popup(pick, 0, pick.height)
 
-    QQC2.ComboBox {
-        id: spans
+    QQC2.Menu {
+        id: menu
 
-        model: [App.tr("One screen"), App.tr("Two side by side"), App.tr("Three side by side"), App.tr("Two stacked"), App.tr("My screens")]
-    }
 
-    QQC2.CheckBox {
-        visible: spans.currentIndex > 0
-        text: App.tr("Spread over every screen")
-        checked: pick.page.editor.value("/manifest/display/span") === "\"all-outputs\""
-        onToggled: pick.page.run("manifest", {
-            "display": checked ? {
-                "values": {
-                    "span": "all-outputs"
-                }
-            } : {
-                "clear": ["span"]
+        Repeater {
+            model: pick.names
+
+            delegate: QQC2.MenuItem {
+                required property int index
+                required property string modelData
+
+                text: modelData
+                checkable: true
+                checked: pick.current === index
+                onTriggered: pick.current = index
             }
-        })
+        }
+
+        QQC2.MenuSeparator {
+            visible: pick.current > 0
+        }
+
+        QQC2.MenuItem {
+            visible: pick.current > 0
+            height: visible ? implicitHeight : 0
+            text: App.tr("Spread over every screen")
+            checkable: true
+            checked: pick.page.editor.value("/manifest/display/span") === "\"all-outputs\""
+            onTriggered: pick.page.run("manifest", {
+                    "display": checked ? {
+                        "values": {
+                            "span": "all-outputs"
+                        }
+                    } : {
+                        "clear": ["span"]
+                    }
+                })
+        }
     }
 }

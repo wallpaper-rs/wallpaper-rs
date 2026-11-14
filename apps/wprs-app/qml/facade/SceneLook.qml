@@ -24,6 +24,7 @@ QtObject {
             "duration": 200
         })
     readonly property var levels: ["q0", "q1", "q2", "q3"]
+    readonly property var names: [App.tr("Slow computer"), App.tr("Medium computer"), App.tr("Fast computer"), App.tr("Very fast computer")]
 
     function preview(page) {
         const look = JSON.parse(page.editor.look || "{}");

@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
@@ -44,48 +43,11 @@ ColumnLayout {
         }
     }
 
-    QQC2.ToolBar {
+    SceneCanvasBar {
+        id: bar
+
         Layout.fillWidth: true
-
-        RowLayout {
-            anchors.fill: parent
-
-            SceneCanvasZoom {
-                canvas: canvas
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
-
-            QQC2.Label {
-                text: App.tr("Guide:")
-            }
-
-            QQC2.ComboBox {
-                id: guides
-
-                model: canvas.aspects.map(aspect => aspect || App.tr("No guide"))
-            }
-
-            SceneCanvasTools {
-                page: canvas.page
-            }
-
-            ScenePreviewLevel {
-                page: canvas.page
-            }
-
-            SceneOverwrite {
-                page: canvas.page
-            }
-
-            SceneSpanPick {
-                id: spans
-
-                page: canvas.page
-            }
-        }
+        canvas: canvas
     }
 
     Rectangle {
@@ -93,7 +55,7 @@ ColumnLayout {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-        color: Kirigami.Theme.alternateBackgroundColor
+        color: Look.noche
         clip: true
 
         DragHandler {
@@ -150,7 +112,7 @@ ColumnLayout {
             width: canvas.size[0] * canvas.ratio
             height: canvas.size[1] * canvas.ratio
             color: canvas.page.view.canvas?.background ?? "black"
-            border.color: Kirigami.Theme.disabledTextColor
+            border.color: Look.nocheLinea
 
             QQC2.Label {
                 anchors.centerIn: parent
@@ -158,8 +120,7 @@ ColumnLayout {
                 visible: canvas.stream === null
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.Wrap
-                color: "white"
-                style: Text.Outline
+                color: Look.escarcha
                 text: canvas.missing ? App.tr("Install the KPipeWire QML module to see the preview here, or use Show on the desktop.") : App.tr("The preview appears here while wprsd runs.")
             }
 
@@ -175,7 +136,7 @@ ColumnLayout {
                 z: 5
                 page: canvas.page
                 ratio: canvas.ratio
-                layout: spans.layout
+                layout: bar.spans.layout
             }
 
             SceneGuide {
@@ -183,7 +144,7 @@ ColumnLayout {
                 z: 3
                 size: canvas.size
                 ratio: canvas.ratio
-                aspect: canvas.aspects[guides.currentIndex]
+                aspect: canvas.aspects[bar.guides.currentIndex]
             }
 
             SceneCanvasTouch {

@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 ColumnLayout {
@@ -9,13 +8,48 @@ ColumnLayout {
 
     required property var page
 
-    spacing: Kirigami.Units.smallSpacing
-
-    SceneQuality {
-        page: panel.page
+    function pick(level) {
+        SceneLook.quality = level;
+        SceneLook.preview(panel.page);
     }
 
-    QQC2.CheckBox {
+    spacing: Look.e1
+
+    QQC2.Label {
+        Layout.fillWidth: true
+        Layout.leftMargin: Look.e2
+        text: App.tr("See the scene as on a")
+        color: Look.bruma
+        font.pixelSize: Look.tPie
+        wrapMode: Text.Wrap
+    }
+
+    Repeater {
+        model: SceneLook.levels
+
+        delegate: QQC2.ToolButton {
+            required property int index
+            required property string modelData
+
+            Layout.fillWidth: true
+            icon.name: "gauge"
+            text: SceneLook.names[index]
+            checkable: true
+            checked: SceneLook.quality === modelData
+            Accessible.name: text + ", " + modelData.toUpperCase()
+            onClicked: panel.pick(modelData)
+        }
+    }
+
+    Rectangle {
+        Layout.fillWidth: true
+        implicitHeight: Look.linea
+        color: Look.nocheLinea
+    }
+
+    QQC2.Switch {
+        Layout.fillWidth: true
+        icon.name: "battery-medium"
         text: App.tr("On battery")
         checked: SceneLook.battery
         onToggled: {
@@ -24,7 +58,9 @@ ColumnLayout {
         }
     }
 
-    QQC2.CheckBox {
+    QQC2.Switch {
+        Layout.fillWidth: true
+        icon.name: "person-simple-walk"
         text: App.tr("Reduced motion")
         checked: SceneLook.calm
         onToggled: {
@@ -38,13 +74,10 @@ ColumnLayout {
         page: panel.page
     }
 
-    ScenePreviewEffects {
+    Rectangle {
         Layout.fillWidth: true
-        page: panel.page
-    }
-
-    Kirigami.Separator {
-        Layout.fillWidth: true
+        implicitHeight: Look.linea
+        color: Look.nocheLinea
     }
 
     ScenePreviewCompare {
@@ -52,12 +85,28 @@ ColumnLayout {
         page: panel.page
     }
 
-    Kirigami.Separator {
+    Rectangle {
         Layout.fillWidth: true
+        implicitHeight: Look.linea
+        color: Look.nocheLinea
     }
 
-    ScenePreviewSave {
+    QQC2.ToolButton {
         Layout.fillWidth: true
-        page: panel.page
+        icon.name: "arrows-clockwise"
+        text: App.tr("Restart the preview")
+        onClicked: SceneLook.again(panel.page)
+    }
+
+    SceneFold {
+        Layout.fillWidth: true
+        key: "see-as-effects"
+        title: App.tr("Effects on this computer")
+        open: false
+
+        ScenePreviewEffects {
+            Layout.fillWidth: true
+            page: panel.page
+        }
     }
 }

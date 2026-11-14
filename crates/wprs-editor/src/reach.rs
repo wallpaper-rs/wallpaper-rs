@@ -73,10 +73,23 @@ pub fn parse(doc: &Value, dir: &Path, bloom: bool) -> anyhow::Result<wprs_scene:
 }
 
 pub fn open(doc: &Value, dir: &Path, bloom: bool) -> anyhow::Result<(wprs_scene::Scene, wprs_scene::Values)> {
+    open_with(doc, dir, bloom, &wprs_scene::Values::new())
+}
+
+pub fn open_with(
+    doc: &Value,
+    dir: &Path,
+    bloom: bool,
+    values: &wprs_scene::Values,
+) -> anyhow::Result<(wprs_scene::Scene, wprs_scene::Values)> {
     let scene = parse(doc, dir, bloom)?;
+    Ok((scene, tried(doc, values)))
+}
+
+pub fn tried(doc: &Value, values: &wprs_scene::Values) -> wprs_scene::Values {
     let properties: std::collections::BTreeMap<String, wprs_format::Property> =
         serde_json::from_value(doc["manifest"]["properties"].clone()).unwrap_or_default();
-    Ok((scene, wprs_scene::effective(&properties, &[])))
+    wprs_scene::effective(&properties, &[values])
 }
 
 pub fn reader(dir: &Path) -> impl Fn(&str) -> Result<Vec<u8>, String> + '_ {

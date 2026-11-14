@@ -108,3 +108,16 @@ fn a_render_draws_what_the_preview_draws_with_one_alone_and_a_pinned_seed() {
     assert_eq!(shown["clock"]["seed"], wprs_editor::reach::shown(&doc, false)["clock"]["seed"]);
     assert!(wprs_editor::reach::shown(&doc, false)["canvas"].get("bloom").is_none());
 }
+
+#[test]
+fn tried_values_override_the_defaults_of_a_capture() {
+    let doc = json!({"manifest": {"properties": {
+        "speed": {"type": "slider", "min": 0, "max": 10, "default": 1}
+    }}});
+    let tried: wprs_scene::Values = serde_json::from_value(json!({"speed": 7, "unknown": 3})).unwrap();
+    let props = wprs_editor::reach::tried(&doc, &tried);
+    assert_eq!(props.get("speed"), Some(&json!(7.0)));
+    assert!(!props.contains_key("unknown"));
+    let plain = wprs_editor::reach::tried(&doc, &wprs_scene::Values::new());
+    assert_eq!(plain.get("speed"), Some(&json!(1.0)));
+}
