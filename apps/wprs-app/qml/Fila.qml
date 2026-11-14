@@ -186,6 +186,7 @@ FocusScope {
 
         Estado {
             visible: fila.status !== ""
+            wrap: parent.width
             text: fila.status
             tone: fila.statusTone
         }

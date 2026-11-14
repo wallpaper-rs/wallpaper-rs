@@ -9,6 +9,7 @@ Row {
     property string tone
     property string icon: Tono.icon(tone)
     property bool lit: false
+    property real wrap: 0
 
     spacing: Look.huecoEstado
     Accessible.role: Accessible.StaticText
@@ -23,7 +24,9 @@ Row {
 
     Text {
         anchors.verticalCenter: parent.verticalCenter
+        width: estado.wrap > 0 ? Math.min(implicitWidth, estado.wrap - Look.iconoEstado - Look.huecoEstado) : implicitWidth
         text: estado.text
+        wrapMode: Text.WordWrap
         font.family: Look.letraTexto
         font.pixelSize: Look.tCuerpo
         font.weight: Font.Medium
