@@ -17387,6 +17387,10 @@ msgstr "Cerrar"
 msgid "Explore"
 msgstr "Explorar"
 
+#: apps/wprs-app/qml/ExploreUpper.qml
+msgid "Your wallpaper is still %1"
+msgstr "Tu fondo sigue siendo %1"
+
 #: apps/wprs-app/qml/WordMenu.qml
 msgid "Lists"
 msgstr "Listas"

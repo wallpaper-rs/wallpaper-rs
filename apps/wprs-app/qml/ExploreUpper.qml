@@ -13,8 +13,35 @@ Column {
     readonly property alias updateAll: updateAll
     readonly property alias more: more
     readonly property alias hidden: hidden
+    readonly property string item: {
+        const screens = App.state.outputs ?? {};
+        const first = App.outputs.length > 0 ? screens[App.outputs[0]] : null;
+        return first ? first.item ?? "" : "";
+    }
+    property string wallpaper: ""
+
+    function load() {
+        const uid = item;
+        if (uid === "")
+            wallpaper = "";
+        else
+            App.query("GetItem", [uid], "Library1", reply => upper && upper.item === uid && (upper.wallpaper = reply.item?.title ?? ""));
+    }
 
     spacing: Look.e2
+    onItemChanged: load()
+    Component.onCompleted: load()
+
+    Text {
+        anchors.right: parent.right
+        visible: upper.wallpaper !== ""
+        text: App.tr("Your wallpaper is still %1", upper.wallpaper)
+        textFormat: Text.PlainText
+        font.family: Look.letraTexto
+        font.pixelSize: Look.tCuerpo
+        font.weight: Font.Medium
+        color: Look.bruma
+    }
 
     Text {
         anchors.right: parent.right

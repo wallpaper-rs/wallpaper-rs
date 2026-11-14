@@ -10,6 +10,7 @@ Kirigami.Page {
     readonly property real bandHigh: bandLow
     readonly property real upperHeight: upperBlock.visible ? upperBlock.implicitHeight : 0
     readonly property real bandFrom: upperBlock.visible ? Math.min(upper.y, band.y) : band.y
+    readonly property Component now: Item {}
     property rect band
     property rect upper
     property bool full
