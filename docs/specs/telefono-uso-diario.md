@@ -8,7 +8,27 @@ que se ve en ese momento.
 
 ## Biblioteca
 
-(Se completa con la pantalla de la biblioteca.)
+La fila de arriba lleva, a la izquierda, «Conectado a NOMBRE» solo cuando la sincronización está
+vinculada y el teléfono tiene red; a la derecha, la búsqueda y «Añadir» como dos cuadros con icono
+(`Now.kt`). Debajo va la tarjeta del fondo en uso: dónde está puesto (solo cuando el servicio de
+fondos de la app está elegido en una pantalla), el título, sus datos, «Opciones» y «Favorito»
+(`Now.kt`, primer elemento de la cuadrícula de `Library.kt`). La cuadrícula muestra cada portada con
+su nombre debajo; la del fondo en uso dice «En uso» y un fondo con destellos lleva una línea ámbar
+bajo el nombre en vez de verse borroso (`Cover.kt`). Abrir la búsqueda sube la cuadrícula y enfoca el
+campo. Una búsqueda sin resultados dice qué se buscó y ofrece borrarla; «Favoritos» vacío ofrece ver
+todo; sin red, la línea de conexión desaparece.
+
+Una pulsación larga en una portada abre la selección (`Select.kt`, `Picked.kt`). Arriba: «Cancelar»,
+«N elegidos» y «Elegir todos». Abajo: «Lista», «Favorito», «Más» («Quitar de la lista», «Quitar
+favorito», «Ajuste», «Quitar») y «Rotar estos». «Rotar estos» crea la lista «Rotación», que cambia
+cada hora (si el nombre ya existe, el núcleo le agrega un número y el aviso muestra el nombre real),
+y avisa «Lista «Rotación» creada: cambia cada hora» con «Cambiar», que abre el intervalo. Dentro de
+una lista la barra no muestra «Lista» ni «Rotar estos», y «Más» ofrece «Quitar de la lista».
+«Favorito» en la barra siempre marca; desmarcar está en «Más» → «Quitar favorito».
+
+Piezas compartidas con las otras pantallas: `Seek` (campo de búsqueda), `Cover` y `Thumb` (portadas),
+`Choose` (hoja para elegir una lista) y `Removing` (pregunta antes de quitar). Pruebas:
+`LibraryLookTest` (normal, búsqueda vacía, favoritos vacíos, sin red, selección y rotación).
 
 ## Página de un fondo
 
@@ -81,4 +101,22 @@ que se ve en ese momento.
 
 ## Pregunta agrupada
 
-(Se completa con la pregunta de lo que pide un fondo.)
+Cuando un fondo pide algo que nadie respondió todavía (sonido, sonido por red, tocar, toques,
+medios, medios por red, red), su página muestra un solo bloque bajo la línea de estado: «Este fondo
+pide», la nota «Hasta que respondas, funciona sin esto.» y una fila por cada pedido con «Sin eso» y
+«Permitir» (`Asks.kt`). No se dibuja nada si el fondo no pide nada (fotos, videos). «Permitir» en el
+sonido pide antes el micrófono al sistema; si el sistema lo niega, se avisa y no se guarda la
+respuesta. Cada respuesta recarga el fondo con lo permitido. El sonido por red no se pregunta si se
+negó el sonido, ni los medios por red si se negaron los medios.
+
+La misma pregunta existe como hoja desde el pie (`AsksSheet`), que se cierra sola cuando no queda
+nada por responder; la usan el primer arranque y los ajustes. Las respuestas se guardan por paquete:
+`inputs.json` (lo permitido) y `declined.json` (lo respondido «Sin eso»). Operaciones del núcleo del
+teléfono (`crates/wprs-android/src/asks.rs`): `asks` (lo que falta responder), `decide` (permitir y
+negar varios a la vez; un pedido en las dos listas es el error `android.decided_twice`), y `scene`
+devuelve también `undecided`.
+
+Un fondo que el teléfono juzga pesado queda quieto con la línea «Quieta porque es pesada» y el botón
+«Reproducir igual», que fija la calidad en «mínimo 1» para todos los fondos (se deshace en Ajustes →
+Calidad). La primera vez por paquete aparece además un aviso arriba de la página con «Ahora no» y
+«Reproducir igual».
