@@ -167,6 +167,7 @@ Kirigami.Page {
         contentHeight: Math.max(height, rows.height)
         clip: true
         boundsBehavior: Flickable.StopAtBounds
+        QQC2.ScrollBar.vertical: QQC2.ScrollBar {}
 
         CreateBand {
             id: rows

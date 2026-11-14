@@ -18,8 +18,15 @@ Column {
     RowLayout {
         id: bar
 
+        property real roomy: 0
+        readonly property bool tight: width > 0 && width < roomy
+
         width: parent.width
         spacing: Look.e5
+        onImplicitWidthChanged: {
+            if (!tight || implicitWidth > roomy)
+                roomy = implicitWidth;
+        }
 
         Filtro {
             label: App.tr("How to start")
@@ -42,17 +49,21 @@ Column {
 
         QQC2.Button {
             visible: !band.page.learn
-            Layout.minimumWidth: 0
-            Layout.preferredWidth: implicitWidth
             flat: true
+            display: bar.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+            icon.name: bar.tight ? "dots-three" : "caret-right"
             text: App.tr("More: preset, resource pack")
-            icon.name: "caret-right"
-            LayoutMirroring.enabled: true
+            QQC2.ToolTip.text: text
+            QQC2.ToolTip.visible: bar.tight && hovered
+            LayoutMirroring.enabled: !bar.tight
             onClicked: band.page.more = !band.page.more
         }
 
         QQC2.Button {
             text: App.tr("Open a folder…")
+            display: bar.tight ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+            QQC2.ToolTip.text: text
+            QQC2.ToolTip.visible: bar.tight && hovered
             icon.name: "folder-open"
             onClicked: band.page.pickFolder()
         }
