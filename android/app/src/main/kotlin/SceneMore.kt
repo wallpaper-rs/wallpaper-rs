@@ -4,11 +4,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +24,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SceneMore(main: Main, uid: String, form: JSONObject, modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -57,7 +57,7 @@ fun SceneMore(main: Main, uid: String, form: JSONObject, modifier: Modifier = Mo
         saved.forEach { (preset, name) ->
             Saved(name, { naming = preset to name }, { exporting = preset; writing.launch("$name.json") }) { main.act { ask("forget", "preset" to preset) } }
         }
-        Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp)) {
+        FlowRow(Modifier.padding(horizontal = 8.dp)) {
             WordAction({ naming = "" to "" }) { Text(stringResource(R.string.save_preset)) }
             WordAction({ exporting = ""; writing.launch(FILE) }) { Text(stringResource(R.string.export_settings)) }
             WordAction({ reading.launch(arrayOf(JSON, "text/plain")) }) { Text(stringResource(R.string.import_settings)) }
