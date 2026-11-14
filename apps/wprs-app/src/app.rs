@@ -12,8 +12,17 @@ use zbus::proxy::CacheProperties;
 use zbus::{OwnedVariant, Variant};
 
 const APPLICATION: &str = "org.freedesktop.Application";
-pub const PAGES: [&str; 8] =
-    ["library", "playlists", "profiles", "providers", "repos", "settings", "account", "scenes"];
+pub const PAGES: [&str; 9] = [
+    "library",
+    "playlists",
+    "profiles",
+    "providers",
+    "repos",
+    "settings",
+    "account",
+    "scenes",
+    "repositories",
+];
 
 pub fn page(name: Option<&str>) -> Option<&'static str> {
     PAGES.into_iter().find(|page| name == Some(page))

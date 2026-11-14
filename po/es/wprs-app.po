@@ -20674,3 +20674,249 @@ msgstr "No se pudo abrir este fondo: el archivo no está"
 #: apps/wprs-app/qml/LibraryCard.qml
 msgid "Could not open this wallpaper: the file is damaged"
 msgstr "No se pudo abrir este fondo: el archivo está dañado"
+
+msgid "offline"
+msgstr "sin conexión"
+
+msgid "cannot be read"
+msgstr "no se puede leer"
+
+msgid "Updates"
+msgstr "Actualizaciones"
+
+msgid "asks for the microphone"
+msgstr "pide el micrófono"
+
+msgid "answers clicks"
+msgstr "responde a los clics"
+
+msgid "uses the network"
+msgstr "usa la red"
+
+msgid "lights up your devices"
+msgstr "ilumina tus dispositivos"
+
+msgid "reads what is playing"
+msgstr "lee lo que está sonando"
+
+msgid "you have %1, there is %2"
+msgstr "tienes la %1, hay una %2"
+
+msgid "you have %1"
+msgstr "tienes la %1"
+
+msgid "Version revoked"
+msgstr "Versión revocada"
+
+msgid "The new version also %1"
+msgstr "La nueva versión además %1"
+
+msgid "Has flashes, disabled"
+msgstr "Tiene destellos, deshabilitado"
+
+msgid "Uses the network"
+msgstr "Usa la red"
+
+msgid "“%1” is installed."
+msgstr "«%1» está instalado."
+
+msgid "Could not install “%1”."
+msgstr "No se pudo instalar «%1»."
+
+msgid "Go to your library"
+msgstr "Ir a tu biblioteca"
+
+msgid "“%1” is now your wallpaper."
+msgstr "«%1» quedó de fondo."
+
+msgid "Its signed list expired, so it may miss recent fixes or withdrawals. Install anyway?"
+msgstr "Su lista firmada venció, así que puede faltarle algún arreglo o retiro reciente. ¿Instalar de todos modos?"
+
+msgid "Install anyway"
+msgstr "Instalar de todos modos"
+
+msgid "The repository offers “%1” %2 and you have %3. The older one may bring errors already fixed."
+msgstr "El repositorio ofrece «%1» %2 y tú tienes la %3. La anterior puede traer errores ya corregidos."
+
+msgid "Install the older one"
+msgstr "Instalar la anterior"
+
+msgid "Installed · the repository offers an older version"
+msgstr "Instalado · el repositorio ofrece una versión anterior"
+
+msgid "Installing “%1”…"
+msgstr "Instalando «%1»…"
+
+msgid "Show the picture"
+msgstr "Mostrar la imagen"
+
+msgid "Install the older one…"
+msgstr "Instalar la anterior…"
+
+msgid "Install and set as wallpaper"
+msgstr "Instalar y poner de fondo"
+
+msgid "Details of “%1”"
+msgstr "Detalles de «%1»"
+
+msgid "What's new"
+msgstr "Novedades"
+
+msgid "Uninstall…"
+msgstr "Desinstalar…"
+
+msgid "What's new in %1"
+msgstr "Novedades de la %1"
+
+msgid "Uninstall “%1”?"
+msgstr "¿Desinstalar «%1»?"
+
+msgid "You can install it again from Explore."
+msgstr "Puedes volver a instalarlo desde Explorar."
+
+msgid "In favour · %1"
+msgstr "A favor · %1"
+
+msgid "Vote in favour"
+msgstr "Votar a favor"
+
+msgid "Against · %1"
+msgstr "En contra · %1"
+
+msgid "Vote against"
+msgstr "Votar en contra"
+
+msgid "%1, the newest"
+msgstr "%1, la más nueva"
+
+msgid "Your vote"
+msgstr "Tu voto"
+
+msgid "Has flashes, disabled: allow wallpapers that flash in the settings."
+msgstr "Tiene destellos, deshabilitado: permite los fondos con destellos en los ajustes."
+
+msgid "Has flashes or fast patterns that can trigger seizures in people with photosensitive epilepsy."
+msgstr "Tiene destellos o patrones rápidos que pueden provocar crisis en personas con epilepsia fotosensible."
+
+msgid "It %1; it asks you before it starts."
+msgstr "Este fondo %1; te lo pregunta antes de empezar."
+
+msgid "its author"
+msgstr "su autor"
+
+msgid "The signature does not match"
+msgstr "La firma no coincide"
+
+msgid "No connection with “%1”"
+msgstr "No hay conexión con «%1»"
+
+msgid "“%1” cannot be read"
+msgstr "No se puede leer «%1»"
+
+msgid "“%1” is not signed by %2, who published it, so nothing was installed and your library is the same. It may be a damaged download or a change made by someone who is not %2. Try again; if it happens again, tell whoever keeps “%3”."
+msgstr "«%1» no está firmado por %2, que lo publicó, así que no se instaló nada y tu biblioteca sigue igual. Puede ser una descarga dañada o un cambio hecho por alguien que no es %2. Prueba otra vez; si vuelve a pasar, avisa a quien mantiene «%3»."
+
+msgid "Could not reach %1. What you already installed stays in your library, and the bundled examples need no connection."
+msgstr "No se pudo llegar a %1. Lo que ya instalaste sigue en tu biblioteca, y los ejemplos incluidos no necesitan conexión."
+
+msgid "Its list of wallpapers arrived damaged or incomplete. What you already installed from it keeps working."
+msgstr "Su lista de fondos llegó dañada o incompleta. Lo que ya instalaste de ahí sigue funcionando."
+
+msgid "Download again"
+msgstr "Descargar otra vez"
+
+msgid "See the examples"
+msgstr "Ver los ejemplos"
+
+msgid "Repositories…"
+msgstr "Repositorios…"
+
+msgid "Showing %1 of %2 wallpapers; refine the search to see the others."
+msgstr "Se muestran %1 de %2 fondos; afina la búsqueda para ver los demás."
+
+msgid "Check for news"
+msgstr "Buscar novedades"
+
+msgid "Update my wallpapers"
+msgstr "Actualizar mis fondos"
+
+msgid "More: tools to publish wallpapers"
+msgstr "Más: herramientas para publicar fondos"
+
+msgid "Upload a package…"
+msgstr "Subir un paquete…"
+
+msgid "Static repository…"
+msgstr "Repositorio estático…"
+
+msgid "Back to Explore"
+msgstr "Volver a Explorar"
+
+msgid "Do you have wallpapers elsewhere? Add a repository with its link."
+msgstr "¿Tienes fondos en otro sitio? Añade un repositorio con su enlace."
+
+msgid "Add by link…"
+msgstr "Añadir por enlace…"
+
+msgid "Search the repositories"
+msgstr "Buscar en los repositorios"
+
+msgid "See the shelf"
+msgstr "Ver estante"
+
+msgid "Add by link"
+msgstr "Añadir por enlace"
+
+msgid "Example: https://casa.example/fondos"
+msgstr "Ejemplo: https://casa.example/fondos"
+
+msgid "All the wallpapers"
+msgstr "Todos los fondos"
+
+msgid "Your repositories"
+msgstr "Tus repositorios"
+
+msgid "Add the examples again"
+msgstr "Volver a añadir los ejemplos"
+
+msgid "The wallpapers that come with the app"
+msgstr "Los fondos que vienen con la aplicación"
+
+msgid "Brings back the bundled examples. They need no connection."
+msgstr "Recupera los ejemplos incluidos. No necesitan conexión."
+
+msgid "Needs a look"
+msgstr "Requiere atención"
+
+msgid "Out of date"
+msgstr "Desactualizado"
+
+msgid "The stored copy cannot be read: check for news to fetch it again."
+msgstr "La copia guardada no se puede leer: busca novedades para traerla otra vez."
+
+msgid "Last check · %1"
+msgstr "Última comprobación · %1"
+
+msgid "Contact · %1"
+msgstr "Contacto · %1"
+
+msgid "Fingerprint · %1"
+msgstr "Huella · %1"
+
+msgid "Remove the repository…"
+msgstr "Quitar el repositorio…"
+
+msgid "The examples stay; you can hide what you do not want from your library."
+msgstr "Los ejemplos se quedan; puedes ocultar de tu biblioteca lo que no quieras."
+
+msgid "Remove “%1”?"
+msgstr "¿Quitar «%1»?"
+
+msgid "You will no longer see its wallpapers here."
+msgstr "Ya no verás sus fondos aquí."
+
+msgid "Included on this computer"
+msgstr "Incluido en este equipo"
+
+msgid "Paste the address of a repository of yours or someone else's"
+msgstr "Pega la dirección de un repositorio tuyo o de otra persona"

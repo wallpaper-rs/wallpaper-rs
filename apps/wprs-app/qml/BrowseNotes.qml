@@ -56,7 +56,7 @@ QtObject {
         if (pkg.own && pkg.own.revoked)
             return [App.tr("Version revoked"), "warning-circle", "coral"];
         if (pkg.own && (pkg.own.asks ?? []).length > 0)
-            return [App.tr("The new version also asks for %1", pkg.own.asks.join(", ")), "warning", "ambar"];
+            return [App.tr("The new version also %1", pkg.own.asks.map(a => phrases[a] ?? a).join(", ")), "warning", "ambar"];
         if (pkg.photosensitive === true && pkg.flash_disabled)
             return [App.tr("Has flashes, disabled"), "warning", "ambar"];
         if ((pkg.installed ?? []).length > 0 && !pkg.own)

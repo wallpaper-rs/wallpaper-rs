@@ -14,7 +14,7 @@ FocusScope {
     signal chosen(int page)
 
     function owner(page) {
-        return page === 2 ? 5 : page;
+        return page === 2 ? 5 : page === 8 ? 4 : page;
     }
 
     function move(by) {

@@ -35,7 +35,7 @@ Rectangle {
         Text {
             Layout.fillWidth: true
             visible: text !== ""
-            text: more.pkg ? (more.pkg.content ? App.plain(more.pkg.description) : more.pkg.description) : ""
+            text: more.pkg ? (more.pkg.content ? App.plain(more.pkg.description ?? "") : more.pkg.description ?? "") : ""
             textFormat: Text.PlainText
             wrapMode: Text.WordWrap
             lineHeight: 1.3

@@ -9,6 +9,9 @@ Column {
     required property var catalog
     required property Installer installer
     property bool open
+    readonly property var p: pkg ?? {
+        "versions": []
+    }
     property bool folds: true
     readonly property var job: pkg ? installer.running(pkg) : null
     readonly property bool here: pkg ? notes.here(pkg) : false
@@ -21,19 +24,19 @@ Column {
     signal details
 
     function act() {
-        if (row.catalog.veiled(row.pkg))
+        if (row.catalog.veiled(row.p))
             return row.catalog.reveal(row.pkg);
-        if (row.own || row.pkg.update)
+        if (row.own || row.p.update)
             return row.installer.update(row.pkg);
         if (row.older)
-            return row.installer.install(row.pkg, row.pkg.versions[row.pkg.versions.length - 1], false, main, false, false);
+            return row.installer.install(row.pkg, row.p.versions[row.p.versions.length - 1], false, main, false, false);
         if (row.here)
             return row.installer.apply({
-                "repo": row.pkg.repo_id,
-                "id": row.pkg.id,
-                "title": row.pkg.title
+                "repo": row.p.repo_id,
+                "id": row.p.id,
+                "title": row.p.title
             });
-        row.installer.install(row.pkg, row.catalog.versions[row.pkg.repo_id + "/" + row.pkg.id] ?? "", row.catalog.fresh, main, false, false);
+        row.installer.install(row.pkg, row.catalog.versions[row.p.repo_id + "/" + row.p.id] ?? "", row.catalog.fresh, main, false, false);
     }
 
     spacing: Look.e3
@@ -52,7 +55,7 @@ Column {
     Progreso {
         visible: row.job !== null
         width: Look.progresoInstala
-        text: App.tr("Installing “%1”…", row.pkg ? row.pkg.title : "")
+        text: App.tr("Installing “%1”…", row.pkg ? row.p.title : "")
         count: row.job && row.job.total > 0 ? App.tr("%1 of %2", App.bytes(row.job.done), App.bytes(row.job.total)) : ""
         value: row.job && row.job.total > 0 ? row.job.done / row.job.total : 0
         indeterminate: !row.job || row.job.total === 0
@@ -66,9 +69,9 @@ Column {
             id: main
 
             highlighted: !row.older
-            text: row.catalog.veiled(row.pkg) ? App.tr("Show the picture") : row.own || row.pkg.update ? App.tr("Update to %1", row.own ? row.pkg.own.update : notes.newest(row.pkg)) : row.older ? App.tr("Install the older one…") : row.here || row.catalog.fresh ? App.tr("Set as wallpaper") : App.tr("Install")
-            icon.name: row.catalog.veiled(row.pkg) ? "eye" : row.own || row.pkg.update ? "arrow-circle-up" : row.older ? "clock-counter-clockwise" : row.here || row.catalog.fresh ? "image" : "download-simple"
-            visible: !(row.own && !row.pkg.own.update)
+            text: row.catalog.veiled(row.p) ? App.tr("Show the picture") : row.own || row.p.update ? App.tr("Update to %1", row.own ? row.p.own.update : notes.newest(row.p)) : row.older ? App.tr("Install the older one…") : row.here || row.catalog.fresh ? App.tr("Set as wallpaper") : App.tr("Install")
+            icon.name: row.catalog.veiled(row.p) ? "eye" : row.own || row.p.update ? "arrow-circle-up" : row.older ? "clock-counter-clockwise" : row.here || row.catalog.fresh ? "image" : "download-simple"
+            visible: !(row.own && !row.p.own.update)
             onClicked: row.act()
         }
 
@@ -81,10 +84,10 @@ Column {
         QQC2.Button {
             id: second
 
-            visible: !row.here && !row.older && !row.own && !row.pkg.update && !row.catalog.fresh && !row.catalog.veiled(row.pkg)
+            visible: !row.here && !row.older && !row.own && !row.p.update && !row.catalog.fresh && !row.catalog.veiled(row.p)
             text: App.tr("Install and set as wallpaper")
             icon.name: "image"
-            onClicked: row.installer.install(row.pkg, row.catalog.versions[row.pkg.repo_id + "/" + row.pkg.id] ?? "", true, second, false, false)
+            onClicked: row.installer.install(row.pkg, row.catalog.versions[row.p.repo_id + "/" + row.p.id] ?? "", true, second, false, false)
         }
 
         Estado {
@@ -110,7 +113,7 @@ Column {
             text: App.tr("Details")
             icon.name: row.open ? "caret-down" : "caret-right"
             LayoutMirroring.enabled: true
-            Accessible.name: App.tr("Details of “%1”", row.pkg ? row.pkg.title : "")
+            Accessible.name: App.tr("Details of “%1”", row.pkg ? row.p.title : "")
             onClicked: row.details()
         }
     }
