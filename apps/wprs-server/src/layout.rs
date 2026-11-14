@@ -13,7 +13,7 @@ pub fn nav(auth: Option<&Auth>, current: &str, sign_in: bool) -> Markup {
         @if let Some(a) = auth {
             (link("/account", &tf("Account ({})", &[&a.handle])))
             @if a.role >= Role::Moderator { (link("/mod", t("Review"))) }
-            @if a.role >= Role::Admin { (link("/admin", t("Administration"))) }
+            @if a.role >= Role::Admin { (link("/admin/personas", t("People"))) (link("/admin", t("Administration"))) }
             form method="post" action="/logout" { button { (t("Sign out")) } }
         } @else if sign_in {
             (link("/login", t("Sign in")))
