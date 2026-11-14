@@ -37,5 +37,14 @@ QtObject {
         const lost = tabs.concat([App.tr("Wallpaper details…")]).filter(word => !named.includes(word));
         if (lost.length > 0 || named.includes(App.tr("Preview")) || named.includes(App.tr("Properties")))
             throw new Error(page.kind + ": the package page lacks " + lost.join(", ") + " among " + named.join(", "));
+        const middle = gather(page, []).find(at => at.titles !== undefined && at.current !== undefined);
+        if (middle.current !== "settings")
+            throw new Error(page.kind + ": the package page opens on " + middle.current);
+        const strip = gather(middle, []).find(at => at.contentModel !== undefined && at.currentIndex !== undefined);
+        strip.currentIndex = middle.names.length;
+        const opened = middle.current;
+        strip.currentIndex = 0;
+        if (opened !== "try")
+            throw new Error(page.kind + ": the Try tab opens " + opened);
     }
 }

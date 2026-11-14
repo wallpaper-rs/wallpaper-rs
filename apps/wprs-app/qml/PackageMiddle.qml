@@ -18,9 +18,10 @@ ColumnLayout {
             "settings": App.tr("Settings"),
             "properties": App.tr("Options"),
             "presets": App.tr("Presets"),
-            "preview": App.tr("See as")
+            "preview": App.tr("See as"),
+            "try": App.tr("Try")
         })
-    readonly property string current: names[Math.min(tabs.currentIndex, names.length - 1)]
+    readonly property string current: names.concat(["try"])[tabs.currentIndex] ?? "settings"
 
     spacing: 0
 
@@ -31,7 +32,7 @@ ColumnLayout {
         visible: middle.names.length > 1
 
         Repeater {
-            model: middle.names
+            model: middle.names.concat(["try"])
 
             delegate: QQC2.TabButton {
                 required property string modelData
@@ -39,16 +40,12 @@ ColumnLayout {
                 text: middle.titles[modelData]
             }
         }
-
-        QQC2.TabButton {
-            text: App.tr("Try")
-        }
     }
 
     StackLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        currentIndex: ["settings", "properties", "presets", "preview"].indexOf(middle.current)
+        currentIndex: ["settings", "properties", "presets", "preview", "try"].indexOf(middle.current)
 
         QQC2.ScrollView {
             contentWidth: availableWidth
