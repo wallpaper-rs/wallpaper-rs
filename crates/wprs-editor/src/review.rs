@@ -59,7 +59,12 @@ pub fn report_in(dir: &Path, doc: &Value, tr: &dyn Fn(&str) -> String) -> Value 
         for p in Platform::ALL {
             if let Err(e) = features::playable(&manifest, &facts, p) {
                 let reason = e.message().told(tr);
-                findings.push(finding(doc, "warning", "/manifest/platforms", &format!("{}: {reason}", p.name())));
+                findings.push(finding(
+                    doc,
+                    "warning",
+                    "/manifest/platforms",
+                    &format!("{}: {reason}", p.name()),
+                ));
             }
         }
         let platforms = platforms(&manifest, &facts);
