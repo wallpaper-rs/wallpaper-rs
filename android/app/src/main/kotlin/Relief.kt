@@ -3,17 +3,13 @@ package io.github.wallpaper_rs
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocument
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -107,30 +103,17 @@ fun Relief(main: Main, uid: String, state: JSONObject) {
     }
     Depth.failure.value?.takeIf { it.first == uid && busy == null }?.let { (_, error) -> Note(LocalContext.current.told(error).ifBlank { error.javaClass.simpleName }, MaterialTheme.colorScheme.error) }
     consent?.let { model ->
-        AlertDialog(
-            onDismissRequest = { consent = null },
-            confirmButton = {
-                WordAction({
-                    consent = null
-                    Depth.make(uid)
-                }) { Text(stringResource(R.string.download)) }
-            },
-            dismissButton = { WordAction({ consent = null }) { Text(stringResource(R.string.cancel)) } },
-            title = { Text(stringResource(R.string.download_model)) },
-            text = {
-                val terms = listOf("title", "size", "hosts", "license", "license_url").map(model::getString)
-                Text(stringResource(R.string.model_terms, *terms.toTypedArray()))
-            },
-        )
+        val terms = listOf("title", "size", "hosts", "license", "license_url").map(model::getString)
+        val close = { consent = null }
+        Question(stringResource(R.string.download_model), stringResource(R.string.model_terms, *terms.toTypedArray()), stringResource(R.string.download), stringResource(R.string.cancel), false, close) {
+            close()
+            Depth.make(uid)
+        }
     }
 }
 
 @Composable
-fun Level(label: String, saved: Float, range: ClosedFloatingPointRange<Float>, save: (Float) -> Unit) = Column(Modifier.padding(horizontal = 16.dp)) {
-    var value by remember(saved) { mutableFloatStateOf(saved.coerceIn(range)) }
-    Text(label, style = MaterialTheme.typography.bodyMedium)
-    Slider(value, { value = it }, valueRange = range, onValueChangeFinished = { save(value) })
-}
+fun Level(label: String, saved: Float, range: ClosedFloatingPointRange<Float>, save: (Float) -> Unit) = Glide(label, saved, range, save = save)
 
 private const val PNG = "image/png"
 private const val MIN_STRENGTH = 0.002f
