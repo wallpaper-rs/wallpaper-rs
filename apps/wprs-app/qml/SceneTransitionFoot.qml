@@ -71,6 +71,7 @@ Rectangle {
                 id: slider
 
                 Layout.fillWidth: true
+                Layout.minimumWidth: Look.e8 * 2
                 from: 0
                 to: 1
                 stepSize: 0.01
@@ -85,6 +86,10 @@ Rectangle {
             QQC2.Label {
                 text: foot.current ? App.tr("%1 s / curve: %2", Number(foot.current.duration_ms / 1000).toLocaleString(Qt.locale(), "f", 1), foot.curveName(foot.current.curve)) : ""
                 color: Look.bruma
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+                Layout.minimumWidth: 0
+                Layout.maximumWidth: implicitWidth
             }
 
             QQC2.ToolButton {

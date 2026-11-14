@@ -23,17 +23,20 @@ Rectangle {
         QQC2.Label {
             text: bar.tool && bar.tool.way === "out" ? App.tr("Transition when it leaves") : App.tr("Transition when it comes in")
             font.weight: Font.DemiBold
+            elide: Text.ElideRight
+            Layout.fillWidth: true
+            Layout.minimumWidth: 0
         }
 
         QQC2.ToolButton {
             icon.name: bar.tool && bar.tool.playing ? "media-playback-pause" : "media-playback-start"
             text: App.tr("Try the transition")
+            display: bar.width < Look.e8 * 10 ? QQC2.AbstractButton.IconOnly : QQC2.AbstractButton.TextBesideIcon
+            Accessible.name: text
+            QQC2.ToolTip.visible: hovered && display === QQC2.AbstractButton.IconOnly
+            QQC2.ToolTip.text: text
             enabled: bar.tool !== null && bar.tool.current !== null
             onClicked: bar.tool.playing = !bar.tool.playing
-        }
-
-        Item {
-            Layout.fillWidth: true
         }
 
         QQC2.ToolButton {
@@ -68,6 +71,6 @@ Rectangle {
         id: files
 
         nameFilters: [App.tr("Pictures") + " (*.png *.jpg *.jpeg *.webp)"]
-        onAccepted: bar.tool.before = decodeURIComponent(selectedFile.toString().replace("file://", ""))
+        onAccepted: bar.tool.before = App.path(selectedFile)
     }
 }
