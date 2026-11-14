@@ -10,6 +10,7 @@ Timer {
     property var calls: []
     property int ticks: 0
     readonly property Stall probe: Stall {}
+    readonly property PublishBench bench: PublishBench {}
     readonly property var account: ({
             "state": "ready",
             "name": "Check server",
@@ -73,6 +74,9 @@ Timer {
             return "the page did not say it was uploaded: " + JSON.stringify(publish.result);
         if (publish.result.registered !== true)
             return "the done page does not say the signature was registered";
+        publish.page = bench;
+        if (!publish.done.apply.visible)
+            return "the done page does not offer to set it as the wallpaper";
         return publish.at === 4 ? "" : "the page did not reach its last part";
     }
 

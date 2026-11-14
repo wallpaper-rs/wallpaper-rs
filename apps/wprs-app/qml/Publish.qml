@@ -30,6 +30,7 @@ Rectangle {
     readonly property alias review: review
     readonly property alias sign: sign
     readonly property alias where: where
+    readonly property alias done: done
     readonly property bool linked: ["ready", "paused", "error"].includes(account ? account.state : "")
     readonly property string title: App.tr("Publish “%1”", name)
     readonly property list<QtObject> actions: [

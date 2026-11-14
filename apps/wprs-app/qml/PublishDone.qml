@@ -11,6 +11,7 @@ ColumnLayout {
     readonly property string kind: result.kind ?? ""
     readonly property string named: App.tr("“%1” %2", publish.name, publish.version)
     readonly property var sign: publish.sign
+    readonly property alias apply: apply
 
     visible: publish.result !== null
     spacing: Look.e3
@@ -105,11 +106,11 @@ ColumnLayout {
         spacing: Look.e3
 
         QQC2.Button {
-            id: put
+            id: apply
 
-            visible: done.publish.editing && done.kind !== "server"
+            visible: done.publish.editing
             text: App.tr("Set as wallpaper")
-            onClicked: done.publish.page.use ? done.publish.page.use.place(put) : done.publish.page.editor.apply("")
+            onClicked: done.publish.page.use ? done.publish.page.use.place(apply) : done.publish.page.editor.apply("")
         }
 
         QQC2.Button {
