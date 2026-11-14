@@ -53,7 +53,7 @@ async fn registering_and_linking_read_in_both_languages() {
     let (_, missing) = get(&server, "/link?code=ZZZZ-ZZZZ", &ana, ES).await;
     assert!(
         missing.contains("Ningún dispositivo espera este código")
-            && missing.contains("aria-invalid") == false
+            && !missing.contains("aria-invalid")
     );
     let key = "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=";
     let (_, started) = server
