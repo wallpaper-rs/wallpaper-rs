@@ -70,7 +70,7 @@ fun Schedule(rules: JSONObject, save: (String, Any) -> Unit) = Column(Modifier.p
                 trailingIcon = { Glyph(Ph.X, stringResource(R.string.remove_hour)) })
         }
         AssistChip({
-            TimePickerDialog(context, { _, hour, minute -> save("at", JSONArray(timed(times, hour, minute))) }, 8, 0, true).show()
+            TimePickerDialog(context, R.style.Clock, { _, hour, minute -> save("at", JSONArray(timed(times, hour, minute))) }, 8, 0, true).show()
         }, { Text(stringResource(R.string.add_hour)) }, leadingIcon = { Glyph(Ph.Plus, null) })
     }
     if (times.isNotEmpty()) Text(stringResource(R.string.hours_hint), style = MaterialTheme.typography.bodySmall)
