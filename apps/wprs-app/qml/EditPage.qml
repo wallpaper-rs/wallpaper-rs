@@ -126,7 +126,7 @@ Kirigami.Page {
         }
 
         ColumnLayout {
-            Layout.preferredWidth: Kirigami.Units.gridUnit * 17
+            Layout.preferredWidth: Math.max(Kirigami.Units.gridUnit * 17, stack.need + 2 * Kirigami.Units.smallSpacing + panel.leftPadding + panel.rightPadding)
             Layout.maximumWidth: Layout.preferredWidth
             Layout.fillWidth: false
             Layout.fillHeight: true
@@ -145,6 +145,10 @@ Kirigami.Page {
                 contentWidth: availableWidth
 
                 StackLayout {
+                    id: stack
+
+                    readonly property real need: children[currentIndex]?.width ?? 0
+
                     x: Kirigami.Units.smallSpacing
                     width: panel.availableWidth - 2 * Kirigami.Units.smallSpacing
                     currentIndex: side.currentIndex
