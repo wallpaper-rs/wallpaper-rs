@@ -49,6 +49,42 @@ msgstr ""
 msgid "Password of the account"
 msgstr "Contraseña de la cuenta"
 
+msgid "black"
+msgstr "negro"
+
+msgid "blue"
+msgstr "azul"
+
+msgid "dark %1"
+msgstr "%1 oscuro"
+
+msgid "dark grey"
+msgstr "gris oscuro"
+
+msgid "green"
+msgstr "verde"
+
+msgid "grey"
+msgstr "gris"
+
+msgid "light %1"
+msgstr "%1 claro"
+
+msgid "light grey"
+msgstr "gris claro"
+
+msgid "orange"
+msgstr "naranja"
+
+msgid "plum"
+msgstr "ciruela"
+
+msgid "red"
+msgstr "rojo"
+
+msgid "teal"
+msgstr "verde azulado"
+
 #: apps/wprs-app/qml/AccountCodes.qml
 msgid "unnamed software"
 msgstr "un programa sin nombre"
@@ -143,6 +179,9 @@ msgid ""
 msgstr ""
 "Úsalo solo cuando ninguno de tus equipos tenga ya la clave: escribe la frase "
 "de recuperación que pusiste en uno de ellos."
+
+msgid "violet"
+msgstr "violeta"
 
 #: apps/wprs-app/qml/AccountFiles.qml
 msgid "waiting to upload"
@@ -2047,6 +2086,12 @@ msgstr "La tarjeta del bus PCI %1, que ahora no está conectada"
 #: apps/wprs-app/qml/GpuPicker.qml
 msgid "The first card whose name has “%1”"
 msgstr "La primera tarjeta cuyo nombre tiene «%1»"
+
+msgid "white"
+msgstr "blanco"
+
+msgid "yellow"
+msgstr "amarillo"
 
 #: apps/wprs-app/qml/GpuPicker.qml
 msgid "“%1”, which no card matches"

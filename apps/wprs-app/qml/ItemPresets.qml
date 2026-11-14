@@ -18,7 +18,7 @@ ColumnLayout {
 
     function caption(preset) {
         const value = preset.value ?? {};
-        return [value.fit ? Labels.value(value.fit) : "", value.background ? App.tr("fill %1", value.background) : ""].filter(t => t).join(" · ");
+        return [value.fit ? Labels.value(value.fit) : "", value.background ? App.tr("fill %1", Labels.colour(value.background)) : ""].filter(t => t).join(" · ");
     }
 
     function use(preset) {

@@ -77,6 +77,17 @@ QtObject {
         return LabelFeatureWords.features[name] ?? used;
     }
 
+    function colour(text) {
+        const c = Qt.color(String(text ?? ""));
+        const l = c.hslLightness;
+        if (c.hslSaturation < 0.12 || l < 0.06 || l > 0.94)
+            return l < 0.12 ? App.tr("black") : l > 0.88 ? App.tr("white") : l < 0.4 ? App.tr("dark grey") : l > 0.7 ? App.tr("light grey") : App.tr("grey");
+        const h = c.hslHue * 360;
+        const bounds = [[15, App.tr("red")], [40, App.tr("orange")], [65, App.tr("yellow")], [160, App.tr("green")], [195, App.tr("teal")], [255, App.tr("blue")], [290, App.tr("violet")], [340, App.tr("plum")], [361, App.tr("red")]];
+        const hue = bounds.find(b => h < b[0])[1];
+        return l < 0.3 ? App.tr("dark %1", hue) : l > 0.7 ? App.tr("light %1", hue) : hue;
+    }
+
     function field(key) {
         return fields[key] ?? WallhavenWords.fields[key] ?? key;
     }
