@@ -61,10 +61,13 @@ Kirigami.Page {
 
     function remove(p) {
         App.query("Get", [p.uid, 0, 100000], "Playlists1", reply => {
+            if (!page)
+                return;
             const uids = reply.items.map(item => item.uid);
             App.act("Delete", [p.uid], "Playlists1", () => {
-                if (page)
-                    page.routeBack();
+                if (!page)
+                    return;
+                page.routeBack();
                 applicationWindow().showPassiveNotification(App.tr("The list “%1” was removed.", p.name), "long", App.tr("Undo"), () => App.act("Create", [p.name, p.query ?? ""], "Playlists1", made => {
                     if (p.query === null && uids.length > 0)
                         App.act("AddItems", [made[0], uids], "Playlists1");
