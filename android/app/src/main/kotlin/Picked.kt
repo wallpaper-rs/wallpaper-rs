@@ -91,8 +91,9 @@ private fun Deed(ph: Ph, label: String, onClick: () -> Unit) = Column(
 @Composable
 fun Rotated(main: Main, made: Made, modifier: Modifier = Modifier, gone: () -> Unit) {
     var changing by remember(made) { mutableStateOf(false) }
-    LaunchedEffect(made, changing) {
-        if (changing) return@LaunchedEffect
+    val asking = main.placing.value
+    LaunchedEffect(made, changing, asking) {
+        if (changing || asking) return@LaunchedEffect
         delay(NOTICE_MS)
         gone()
     }
