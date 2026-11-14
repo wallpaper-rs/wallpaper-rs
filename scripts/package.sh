@@ -20,7 +20,7 @@ export SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git -C "$ROOT" log -1 --format=%
 SRC=$STAGE/src
 D=$STAGE/$NAME
 mkdir -p "$SRC" "$D/bin" "$D/packaging"
-git -C "$ROOT" archive HEAD integrations packaging scenes LICENSE README.md | tar -x -C "$SRC"
+git -C "$ROOT" archive HEAD integrations packaging scenes scripts/plasma-assets.sh apps/wprs-app/look apps/wprs-app/qml/facade/Look.qml LICENSE README.md | tar -x -C "$SRC"
 for bin in wprsd wprs-ctl wprs-app wprs-web; do
   install -m755 "$BIN/$bin" "$D/bin/"
   objcopy --remove-section=.comment "$D/bin/$bin"
