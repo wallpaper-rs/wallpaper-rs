@@ -133,6 +133,10 @@ fn chosen(lib: &Library, preview: bool, lock: bool) -> Result<Option<(String, Op
     Ok(uid.map(|uid| based(lib, uid)))
 }
 
+pub(crate) fn on(lib: &Library) -> Option<String> {
+    chosen(lib, false, false).ok().flatten().map(|(uid, _)| uid)
+}
+
 #[cfg(test)]
 pub(crate) fn shown(preview: bool) -> Option<Shown> {
     shown_on(preview, false)

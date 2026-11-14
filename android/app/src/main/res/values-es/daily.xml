@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kind_web">Página web</string>
+
+    <string name="still_heavy">Quieta porque es pesada</string>
+
+    <string name="still_heavy_why">Se ve su imagen fija para cuidar la batería y la temperatura.</string>
+
+    <string name="lowered_battery">Calidad reducida por la batería</string>
+
+    <string name="lowered_battery_why">Vuelve sola al cargar.</string>
+
+    <string name="lowered_heat">Calidad reducida por el calor</string>
+
+    <string name="lowered_heat_why">El teléfono está caliente: la animación baja hasta que se enfríe.</string>
+
+    <string name="flashes_barred">Tiene destellos, deshabilitado</string>
+</resources>

@@ -182,7 +182,7 @@ fn answer(lib: &mut Library, request: Request, on_battery: bool) -> Result<Value
         }
         Request::Current => {
             let image = shown.image.and_then(|path| lib.resolve_item(path.to_str()?).ok());
-            json!({ "image": image, "playlist": shown.playlist })
+            json!({ "image": image, "playlist": shown.playlist, "on": choice::on(lib) })
         }
     };
     if !reads {

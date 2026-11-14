@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -62,7 +61,7 @@ fun Scene(main: Main, uid: String, modifier: Modifier = Modifier) {
     val keeping = rememberLauncherForActivityResult(OpenDocument()) { source -> source?.let { main.act(false) { imported = read(it) } } }
     val small = MaterialTheme.typography.bodySmall
     val chooser = rememberChooser(main, uid)
-    Column(modifier.verticalScroll(rememberScrollState())) {
+    Column(modifier) {
         WebPrivacy(main, uid, form.optJSONObject("web"))
         val (uses, granted) = form.optJSONObject("uses") to form.optJSONObject("granted")
         if (uses?.optBoolean("audio") == true) Toggle(stringResource(R.string.react_sound), granted?.optBoolean("audio") == true) { on ->

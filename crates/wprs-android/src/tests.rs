@@ -133,7 +133,7 @@ fn the_library_imports_rotates_and_keeps_settings() {
     assert_eq!(ask(json!({ "op": "entries", "playlist": mix })).as_array().map(Vec::len), Some(2));
     assert_ne!(shown(false), clip);
     ask(json!({ "op": "delete", "playlist": mix }));
-    assert_eq!(ask(json!({ "op": "current" })), json!({ "image": null, "playlist": null }));
+    assert_eq!(ask(json!({ "op": "current" })), json!({ "image": null, "playlist": null, "on": null }));
     assert!(ask(json!({ "op": "nothing" }))["error"].is_string());
 
     assert_eq!(settings::setting("fit", Some("fit")).unwrap(), "fit");

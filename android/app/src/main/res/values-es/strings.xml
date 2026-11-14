@@ -11,7 +11,7 @@
     <string name="favorites">Favoritos</string>
     <string name="empty">Aún no hay nada. Añade fotos, vídeos o escenas, o consigue fondos de internet.</string>
     <string name="choose">Añadir</string>
-    <string name="apply">Usar como fondo</string>
+    <string name="apply">Poner de fondo</string>
     <string name="applied">Fondo actualizado</string>
     <string name="unsupported">Este dispositivo no permite fondos animados</string>
     <string name="favorite">Favorito</string>
@@ -29,9 +29,6 @@
     <string name="vote_counts">Mostrar los recuentos de votos de tu servidor</string>
     <string name="auto_refresh">Buscar actualizaciones en los repositorios cada día</string>
     <string name="flashing">Destellos</string>
-    <string name="mature_warning">Este fondo tiene contenido para adultos.</string>
-    <string name="flashing_warning">Este fondo destella o muestra patrones rápidos que pueden provocar crisis a personas con epilepsia fotosensible. Los fondos que destellan están deshabilitados hasta que los permitas.</string>
-    <string name="show_anyway">Mostrar igualmente</string>
     <string name="lacks_gpu">Necesita shaders de cálculo, que la gráfica de este teléfono no tiene, así que puede dibujarse lento o con partes de menos.</string>
     <string name="lacks_display2">Su color alrededor de la imagen y su extensión sobre todas las pantallas no se usan en el teléfono.</string>
     <string name="lacks_spanned_scenes">Su escena no se extiende sobre varias pantallas en el teléfono.</string>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kind_web">Web page</string>
+
+    <string name="still_heavy">Still because it is heavy</string>
+
+    <string name="still_heavy_why">Its still picture shows to look after the battery and the temperature.</string>
+
+    <string name="lowered_battery">Quality lowered for the battery</string>
+
+    <string name="lowered_battery_why">It goes back by itself when charging.</string>
+
+    <string name="lowered_heat">Quality lowered for the heat</string>
+
+    <string name="lowered_heat_why">The phone is hot: the animation stays lower until it cools down.</string>
+
+    <string name="flashes_barred">Has flashes, disabled</string>
+</resources>

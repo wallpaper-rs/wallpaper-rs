@@ -1,20 +1,19 @@
 package io.github.wallpaper_rs
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -25,12 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 @Composable
@@ -39,12 +38,12 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     val item by loaded<Item?>(null, uid, main.revision.intValue) {
         (ask("item", "uid" to uid, "languages" to languages) as? JSONObject)?.let(::Item)
     }
-    val asks = item?.let { if (it.flashing) "photosensitive" else if (it.mature) "mature" else null }
+    val barred = item?.flashing == true
     var ready by remember(uid) { mutableStateOf(false) }
     var adding by remember { mutableStateOf(false) }
     var removing by remember { mutableStateOf(false) }
-    LaunchedEffect(uid, item == null, asks) {
-        if (item == null || asks != null) return@LaunchedEffect
+    LaunchedEffect(uid, item == null, barred) {
+        if (item == null || barred) return@LaunchedEffect
         runCatching { ask("pick", "choice" to choice("item", uid)) }
         ready = true
     }
@@ -53,82 +52,48 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
     val state by loaded(JSONObject(), uid, picture, main.revision.intValue, Depth.working.value, powered.intValue) {
         if (picture) depth("item", "uid" to uid) as JSONObject else JSONObject()
     }
+    val inUse by loaded(false, uid, main.revision.intValue) { nowOn() == uid }
+    val report = standing(inUse)
     val window = LocalWindowInfo.current.containerSize
     val screen = remember(window) { main.wallpaperSize() }
+    val still by item?.let { thumbnail(it) } ?: remember { mutableStateOf(null) }
     val preview = @Composable { modifier: Modifier ->
-        Box(modifier.padding(horizontal = 16.dp), Alignment.Center) {
-            if (asks != null) Caution(asks) { main.act { withContext(Dispatchers.IO) { if (asks == "photosensitive") Native.setting("playback.allow_flashing", "true") else ask("confirm", "uid" to uid, "what" to asks) } } }
-            else if (ready && (item?.refused != true || item?.animated == null)) {
-                val shape = Modifier.aspectRatio(screen.width.coerceAtLeast(1) / screen.height.coerceAtLeast(1).toFloat(), true)
-                Live(main, main.revision.intValue, Depth.working.value, modifier = if (picture) shape.framing(main, uid, screen) else shape)
-            } else item?.animated?.let { Animated(it, Modifier.fillMaxSize()) }
+        Box(modifier.testTag("preview"), Alignment.Center) {
+            val shape = Modifier.aspectRatio(screen.width.coerceAtLeast(1) / screen.height.coerceAtLeast(1).toFloat(), true)
+            when {
+                ready && (item?.refused != true || item?.animated == null) ->
+                    Live(main, main.revision.intValue, Depth.working.value, modifier = if (picture) shape.framing(main, uid, screen) else shape, still = still)
+                item?.animated != null -> item?.animated?.let { Animated(it, Modifier.fillMaxSize()) }
+                else -> still?.let { Image(it, null, shape.testTag("still"), contentScale = ContentScale.Crop) }
+            }
         }
     }
-    val about = @Composable { modifier: Modifier ->
-        Column(modifier.verticalScroll(rememberScrollState())) {
-            item?.let { Text(facts(it), Modifier.padding(16.dp, 8.dp), style = MaterialTheme.typography.bodyMedium) }
-            item?.let { Labels(main, it) }
-            item?.about?.takeIf { it.isNotEmpty() }?.let { Text(it, Modifier.padding(16.dp, 0.dp), style = MaterialTheme.typography.bodySmall, maxLines = 4) }
-            item?.lacks?.takeIf { it.isNotEmpty() }?.let { lacks ->
-                val notes = lacks.mapNotNull { lack ->
-                    when (lack) {
-                        "gpu" -> R.string.lacks_gpu
-                        "display2" -> R.string.lacks_display2
-                        "spanned_scenes" -> R.string.lacks_spanned_scenes
-                        "script_geometry" -> R.string.lacks_script_geometry
-                        "script_storage" -> R.string.lacks_script_storage
-                        "script_animations" -> R.string.lacks_script_animations
-                        "script_camera" -> R.string.lacks_script_camera
-                        "script_hierarchy" -> R.string.lacks_script_hierarchy
-                        "rgb" -> R.string.lacks_rgb
-                        "transition" -> R.string.lacks_transition
-                        "media_info" -> R.string.lacks_media_info
-                        else -> null
-                    }
-                }.map { stringResource(it) }
-                if (notes.isNotEmpty()) Note(notes.joinToString(" "))
-            }
-            if (item != null) Kin(main, uid, open)
-            if (picture && state.optBoolean("changed")) Note(stringResource(R.string.picture_changed), MaterialTheme.colorScheme.error)
-            if (picture) {
-                Framing(main, uid, state)
-                Relief(main, uid, state)
-            }
-            if (item?.scene == false) Kept(main, uid)
-            item?.takeIf { it.video && !it.reel }?.let { ConvertVideo(main, it) }
-            item?.takeIf { it.video || it.scene || it.web }?.let { OwnSound(main, it) }
-            item?.takeIf { it.scene && !it.web && !it.flashes }?.let { shown ->
-                Toggle(stringResource(R.string.keep_moving), shown.moving) {
-                    main.act { ask(if (it) "confirm" else "unconfirm", "uid" to uid, "what" to "motion") }
-                }
-            }
-        }
+    val page: @Composable ColumnScope.() -> Unit = {
+        item?.let { Heading(it, inUse, barred) }
+        if (inUse) Standing(report)
+        if (picture) Framing(main, uid, state)
+        About(main, uid, item, picture, state, open)
+        if (item?.scene == true || item?.reel == true) Scene(main, uid)
+        item?.exposes?.let { Exposes(it) }
     }
     Column(Modifier.fillMaxSize()) {
-        Header(item?.title.orEmpty(), close)
-        if (window.width > window.height) Row(Modifier.weight(1f)) {
-            preview(Modifier.weight(1f).fillMaxHeight())
-            Column(Modifier.weight(1f)) {
-                about(Modifier.weight(1f, false))
-                if (item?.scene == true || item?.reel == true) Scene(main, uid, Modifier.weight(1f))
+        if (window.width > window.height) {
+            Header(item?.title.orEmpty(), close)
+            Row(Modifier.weight(1f)) {
+                preview(Modifier.weight(1f).fillMaxHeight().padding(horizontal = Measure.e4))
+                Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), content = page)
             }
         } else {
-            preview(Modifier.weight(1f).fillMaxWidth())
-            about(Modifier.heightIn(max = 360.dp))
-            if (item?.scene == true || item?.reel == true) Scene(main, uid, Modifier.weight(1f))
-        }
-        item?.exposes?.let { Exposes(it) }
-        Row(Modifier.padding(16.dp), Arrangement.spacedBy(8.dp), Alignment.CenterVertically) {
-            Action(main::setWallpaper, Modifier.weight(1f), enabled = ready && asks == null) { Text(stringResource(R.string.apply)) }
-            val favorite = item?.favorite == true
-            IconButton({ main.act { ask("favorite", "uids" to listOf(uid), "favorite" to !favorite) } }) {
-                Glyph(Ph.Heart, stringResource(R.string.favorite), lit = favorite)
+            val tall = with(LocalDensity.current) { (window.height * PREVIEW_SHARE).toDp() }
+            Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+                Box {
+                    preview(Modifier.fillMaxWidth().height(tall).padding(horizontal = Measure.e4))
+                    Square(close, Ph.ArrowLeft, stringResource(R.string.back), Modifier.padding(Measure.e2), boxed = true)
+                }
+                page()
             }
-            IconButton({ adding = true }) {
-                Glyph(Ph.Playlist, stringResource(R.string.add_to_playlist))
-            }
-            IconButton({ removing = true }) { Glyph(Ph.Trash, stringResource(R.string.remove)) }
         }
+        Foot(main, uid, item, ready && !barred, { adding = true }) { removing = true }
     }
     if (adding) AddTo({ adding = false }) { playlist -> main.act { ask("add", "playlist" to playlist, "items" to listOf(uid)) } }
     if (removing) Removing(1, { removing = false }) {
@@ -140,15 +105,26 @@ fun Detail(main: Main, uid: String, open: (String) -> Unit, close: () -> Unit) {
 }
 
 @Composable
-private fun Caution(asks: String, confirm: () -> Unit) = Column(Modifier.fillMaxSize(), Arrangement.Center, Alignment.CenterHorizontally) {
-    val flashing = asks == "photosensitive"
-    Glyph(if (flashing) Ph.Warning else Ph.Lock, null, Modifier.padding(8.dp), MaterialTheme.colorScheme.error)
-    Text(stringResource(if (flashing) R.string.flashing_warning else R.string.mature_warning), Modifier.padding(16.dp), style = MaterialTheme.typography.bodyLarge)
-    QuietAction(confirm) { Text(stringResource(if (flashing) R.string.allow_flashing else R.string.show_anyway)) }
+private fun Heading(item: Item, inUse: Boolean, barred: Boolean) = Column(Modifier.padding(start = Measure.margin, end = Measure.margin, top = Measure.e3, bottom = Measure.e2)) {
+    Text(item.title, style = Type.titleM)
+    Row(Modifier.padding(top = Measure.e1), Arrangement.spacedBy(Measure.e2), Alignment.CenterVertically) {
+        if (inUse) InUse()
+        Text(facts(item), color = tones.mist, style = Type.foot)
+    }
+    if (barred) StateLine(stringResource(R.string.flashes_barred), Tone.Amber, Modifier.padding(top = Measure.e2))
 }
 
 @Composable
-private fun facts(item: Item): String = listOfNotNull(
-    stringResource(R.string.size, item.width, item.height).takeIf { item.width > 0 },
-    stringResource(R.string.duration, item.millis / 60_000, item.millis / 1000 % 60).takeIf { item.millis > 0 },
-).joinToString(" · ")
+private fun Foot(main: Main, uid: String, item: Item?, usable: Boolean, add: () -> Unit, remove: () -> Unit) =
+    Row(Modifier.fillMaxWidth().padding(horizontal = Measure.e4, vertical = Measure.e3), Arrangement.spacedBy(Measure.e2), Alignment.CenterVertically) {
+        val favorite = item?.favorite == true
+        Square({ main.act { ask("favorite", "uids" to listOf(uid), "favorite" to !favorite) } }, Ph.Heart, stringResource(R.string.favorite), lit = favorite)
+        Square(add, Ph.Playlist, stringResource(R.string.add_to_playlist))
+        Square(remove, Ph.Trash, stringResource(R.string.remove))
+        Action(main::setWallpaper, Modifier.weight(1f), enabled = usable) {
+            Glyph(Ph.Image, null, size = Measure.iconSquare)
+            Text(stringResource(R.string.apply))
+        }
+    }
+
+private const val PREVIEW_SHARE = 0.36f
