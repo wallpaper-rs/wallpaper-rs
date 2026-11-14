@@ -22,7 +22,9 @@ Item {
     property bool banded: false
     property real placedFor: 0
     property real need: 0
-    readonly property bool tight: height < need
+    property var needs: ({})
+    readonly property string needKey: page ? page.title ?? "" : ""
+    readonly property bool tight: visible && height < need
     readonly property real stacked: upperLow > 0 ? upperLow + Look.e4 : 0
     readonly property rect band: banded ? Qt.rect(Look.margen, bandTop, width - 2 * Look.margen, bandBottom - bandTop) : Qt.rect(column.x, column.y + stacked, column.width, Math.max(0, column.height - stacked))
     readonly property rect upper: banded ? Qt.rect(column.x, bandTop - Look.e3 - upperLow, column.width, upperLow) : Qt.rect(column.x, column.y, column.width, upperLow)
@@ -44,6 +46,7 @@ Item {
     }
 
     function resized() {
+        Qt.callLater(frame.measure);
         place(true);
         regrow.restart();
     }
@@ -53,8 +56,13 @@ Item {
     onWidthChanged: resized()
     onHeightChanged: resized()
     onSideBottomChanged: resized()
+    onNeedChanged: {
+        if (needKey !== "")
+            needs[needKey] = need;
+    }
     onPageChanged: {
-        need = 0;
+        if (page)
+            need = needs[needKey] ?? 0;
         resized();
     }
     onBandLowChanged: {
