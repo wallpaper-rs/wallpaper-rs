@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
+import io.github.wallpaper_rs.app
 
 ColumnLayout {
     id: scene
@@ -102,22 +103,23 @@ ColumnLayout {
         onReset: scene.load()
     }
 
-    Fila {
-        readonly property var labels: scene.props.preset_labels ?? []
-
-        Layout.fillWidth: true
-        visible: scene.rows && labels.length > 0
-        text: scene.daemon.tr("Author's preset")
-        words: labels.map(preset => preset.label)
-        onWorded: index => scene.daemon.act("ApplyScenePreset", [scene.output, labels[index].value])
-    }
-
     SceneRepeater {
         id: listed
 
         rows: scene.fields
 
         delegate: scene.rows ? piece : field
+    }
+
+    Fila {
+        readonly property var labels: scene.props.preset_labels ?? []
+
+        Layout.fillWidth: true
+        visible: scene.rows && labels.length > 0
+        kind: "elige"
+        text: scene.daemon.tr("Author's preset")
+        options: labels.map(preset => preset.label)
+        onChosen: index => scene.daemon.act("ApplyScenePreset", [scene.output, labels[index].value])
     }
 
     Component {
@@ -151,6 +153,8 @@ ColumnLayout {
             readonly property bool simple: ["bool", "slider", "combo"].includes(row.kind) && (row.label ?? "") !== ""
 
             Layout.fillWidth: true
+            Layout.leftMargin: simple ? 0 : Look.filaLado
+            Layout.rightMargin: simple ? 0 : Look.filaFin
             sourceComponent: simple ? option : full
 
             Component {
