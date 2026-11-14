@@ -11,7 +11,9 @@ fn the_rgb_choice_while_covered_applies_only_while_the_covered_wallpaper_pauses(
     assert!(text.contains(r#"App.tr("While a window covers the wallpaper and it pauses")"#));
     let hint = text.lines().find(|l| l.contains(r#"lights.covered === "follow" ?"#)).unwrap().trim();
     assert!(
-        hint.starts_with(r#"explain: !lights.pauses ? App.tr("Pausing while a window covers the screen is off"#)
+        hint.starts_with(
+            r#"explain: !lights.pauses ? App.tr("Pausing while a window covers the screen is off"#
+        )
     );
     assert!(
         hint.contains(r#"App.tr("While the covered wallpaper pauses, the lights keep changing"#),
