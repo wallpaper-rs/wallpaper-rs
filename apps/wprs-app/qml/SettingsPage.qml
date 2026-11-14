@@ -23,7 +23,7 @@ Kirigami.Page {
                     "tab": at
                 }, row))), [])
     readonly property alias found: found
-    readonly property var route: place === "" ? [] : [words[SettingsPlaces.tab(place)], SettingsPlaces.word(place, output)]
+    readonly property var route: place === "" ? [] : [words[SettingsPlaces.tab(place)]].concat(SettingsPlaces.trail(place, output))
     readonly property var keyHints: SettingsPlaces.hints(query !== "", place, tab)
     readonly property alias shown: shown
     readonly property Component head: Component {
@@ -71,9 +71,13 @@ Kirigami.Page {
 
     function routeBack() {
         const back = opener;
-        place = "";
+        const left = SettingsPlaces.word(place, output);
+        place = SettingsPlaces.up(place);
         opener = null;
-        if (back)
+        const up = place;
+        if (up !== "")
+            Qt.callLater(() => place === up && (SettingsReach.rows(shown.item).find(row => row.text === left) ?? shown.item).forceActiveFocus(Qt.TabFocusReason));
+        else if (back)
             back.forceActiveFocus(Qt.TabFocusReason);
     }
 

@@ -1,12 +1,10 @@
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-ColumnLayout {
+FocusScope {
     id: lights
 
+    property var page: null
     property var status: ({})
     property string problem: ""
     property var options: App.state.options ?? {}
@@ -14,6 +12,8 @@ ColumnLayout {
     readonly property string server: String(options["rgb.server"] ?? "127.0.0.1:6742")
     readonly property string covered: String(options["rgb.when_covered"] ?? "pause")
     readonly property bool pauses: options["pause.when_covered"] !== false
+    readonly property var devices: status.devices ?? []
+    readonly property alias coveredRow: coveredRow
 
     function load() {
         App.query("GetStatus", [], "Rgb1", reply => lights && (lights.status = reply ?? {}), error => lights && (lights.problem = error.message));
@@ -29,6 +29,11 @@ ColumnLayout {
         load();
     }
 
+    function set(key, value) {
+        App.act("SetOption", [key, value], "Daemon1", () => lights && lights.load(), error => lights && (lights.problem = error.message));
+    }
+
+    implicitHeight: filas.height + board.height + Look.e4
     Component.onCompleted: load()
 
     Timer {
@@ -38,129 +43,100 @@ ColumnLayout {
         onTriggered: lights.load()
     }
 
-    QQC2.Label {
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-        wrapMode: Text.Wrap
-        text: App.tr("Wallpapers that send colors to keyboards, mice and other lights reach them through an OpenRGB server, and only after you allow it for each package. Turn this on to let them; the address is this computer unless you change it.")
-    }
+    Filas {
+        id: filas
 
-    QQC2.Switch {
-        text: App.tr("Send colors to RGB lighting")
-        checked: lights.on
-        onToggled: App.act("SetOption", ["rgb.enabled", String(checked)], "Daemon1", () => lights && lights.load())
-    }
-
-    RowLayout {
-        QQC2.Label {
-            text: App.tr("OpenRGB server:")
+        Fila {
+            text: App.tr("Send colors to RGB lighting")
+            kind: "llave"
+            checked: lights.on
+            value: checked ? App.tr("Yes") : App.tr("No")
+            explain: App.tr("Wallpapers that send colors to keyboards, mice and other lights reach them through an OpenRGB server, and only after you allow it for each package. Turn this on to let them; the address is this computer unless you change it.")
+            onToggled: lights.set("rgb.enabled", String(checked))
         }
 
-        QQC2.TextField {
-            id: address
-
-            Layout.fillWidth: true
-            text: lights.server
-            placeholderText: "127.0.0.1:6742"
-            onEditingFinished: {
+        Fila {
+            text: App.tr("OpenRGB server")
+            kind: "campo"
+            fieldText: lights.server
+            placeholder: "127.0.0.1:6742"
+            explain: lights.status.local === false ? App.tr("The colors of your wallpaper go over the network to %1. Anyone who can watch that network could see them; use an address on this computer to keep them here.", lights.server) : ""
+            status: lights.problem || lights.status.error || (lights.status.connected ? App.tr("Connected; %1 sends the colors now.", lights.status.source ?? App.tr("nothing")) : App.tr("Not connected."))
+            statusTone: lights.problem || lights.status.error ? "coral" : lights.status.local === false ? "ambar" : ""
+            onEdited: text => {
                 if (text !== lights.server)
-                    App.act("SetOption", ["rgb.server", text], "Daemon1", () => lights && lights.load(), error => lights && (lights.problem = error.message));
+                    lights.set("rgb.server", text);
             }
         }
 
-        QQC2.Button {
+        Fila {
             text: App.tr("Connect")
-            icon.name: "network-connect"
-            enabled: lights.on
-            onClicked: lights.ask("Connect", [])
+            kind: "pliega"
+            off: !lights.on
+            onOpened: lights.ask("Connect", [])
         }
-    }
 
-    QQC2.Label {
-        text: App.tr("While a window covers the wallpaper and it pauses:")
-    }
+        Fila {
+            id: coveredRow
 
-    QQC2.RadioButton {
-        text: App.tr("Keep following the wallpaper")
-        checked: lights.covered === "follow"
-        enabled: lights.pauses
-        onToggled: if (checked) App.act("SetOption", ["rgb.when_covered", "follow"], "Daemon1", () => lights && lights.load())
-    }
-
-    QQC2.RadioButton {
-        text: App.tr("Pause and leave the lights as they are")
-        checked: lights.covered !== "follow"
-        enabled: lights.pauses
-        onToggled: if (checked) App.act("SetOption", ["rgb.when_covered", "pause"], "Daemon1", () => lights && lights.load())
-    }
-
-    QQC2.Label {
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-        wrapMode: Text.Wrap
-        color: Kirigami.Theme.disabledTextColor
-        text: !lights.pauses ? App.tr("Pausing while a window covers the screen is off, so the covered wallpaper keeps drawing and the lights keep following it whatever you choose here.") : lights.covered === "follow" ? App.tr("While the covered wallpaper pauses, the lights keep changing with the scene or page, which keeps running without being drawn, as long as the server has devices connected.") : App.tr("While the covered wallpaper pauses, nothing is sent and nothing runs for the lights until it shows again.")
-    }
-
-    Kirigami.InlineMessage {
-        Layout.fillWidth: true
-        visible: lights.status.local === false
-        type: Kirigami.MessageType.Warning
-        text: App.tr("The colors of your wallpaper go over the network to %1. Anyone who can watch that network could see them; use an address on this computer to keep them here.", lights.server)
-    }
-
-    QQC2.Label {
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-        wrapMode: Text.Wrap
-        color: lights.problem || lights.status.error ? Look.coral : Kirigami.Theme.textColor
-        text: lights.problem || lights.status.error || (lights.status.connected ? App.tr("Connected; %1 sends the colors now.", lights.status.source ?? App.tr("nothing")) : App.tr("Not connected."))
-    }
-
-    Repeater {
-        model: Object.keys(lights.status.waiting ?? {})
-
-        delegate: QQC2.Label {
-            required property string modelData
-            readonly property string why: String(lights.status.waiting[modelData])
-
-            Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-            wrapMode: Text.Wrap
-            color: Kirigami.Theme.disabledTextColor
-            text: why === "locked" ? App.tr("%1: the lights wait while the session is locked, because the wallpaper pauses then.", modelData) : why === "battery" ? App.tr("%1: the lights wait while the computer is on battery, because the wallpaper pauses then.", modelData) : why === "colorless" ? App.tr("%1: the lights wait, the covered screen shows something that sends no colors.", modelData) : why === "ungranted" ? App.tr("%1: the lights wait, the wallpaper there does not have permission to use the lights.", modelData) : App.tr("%1: the lights wait while the wallpaper is paused.", modelData)
+            text: App.tr("While a window covers the wallpaper and it pauses")
+            kind: "elige"
+            off: !lights.pauses
+            options: [App.tr("Keep following the wallpaper"), App.tr("Pause and leave the lights as they are")]
+            current: lights.covered === "follow" ? 0 : 1
+            explain: !lights.pauses ? App.tr("Pausing while a window covers the screen is off, so the covered wallpaper keeps drawing and the lights keep following it whatever you choose here.") : lights.covered === "follow" ? App.tr("While the covered wallpaper pauses, the lights keep changing with the scene or page, which keeps running without being drawn, as long as the server has devices connected.") : App.tr("While the covered wallpaper pauses, nothing is sent and nothing runs for the lights until it shows again.")
+            onChosen: index => lights.set("rgb.when_covered", index === 0 ? "follow" : "pause")
         }
-    }
 
-    Repeater {
-        model: lights.status.devices ?? []
+        Repeater {
+            model: Object.keys(lights.status.waiting ?? {})
 
-        delegate: RowLayout {
-            required property var modelData
+            delegate: Fila {
+                required property string modelData
+                readonly property string why: String(lights.status.waiting[modelData])
 
-            QQC2.Label {
-                Layout.fillWidth: true
-                textFormat: Text.PlainText
-                text: !modelData.own_mode ? App.tr("%1, with %2 lights", (modelData.key ?? modelData.name), modelData.leds) : modelData.taken ? App.tr("%1, with %2 lights; its own mode %3 comes back when the lights stop", (modelData.key ?? modelData.name), modelData.leds, modelData.own_mode) : App.tr("%1, with %2 lights, in its own mode %3", (modelData.key ?? modelData.name), modelData.leds, modelData.own_mode)
+                objectName: "dynamic"
+                text: modelData
+                value: App.tr("Waiting")
+                explain: why === "locked" ? App.tr("%1: the lights wait while the session is locked, because the wallpaper pauses then.", modelData) : why === "battery" ? App.tr("%1: the lights wait while the computer is on battery, because the wallpaper pauses then.", modelData) : why === "colorless" ? App.tr("%1: the lights wait, the covered screen shows something that sends no colors.", modelData) : why === "ungranted" ? App.tr("%1: the lights wait, the wallpaper there does not have permission to use the lights.", modelData) : App.tr("%1: the lights wait while the wallpaper is paused.", modelData)
             }
+        }
 
-            QQC2.Button {
-                text: App.tr("Test")
-                icon.name: "color-management"
-                enabled: !lights.status.testing
-                onClicked: lights.ask("Test", [modelData.index])
+        Repeater {
+            model: lights.devices
+
+            delegate: Fila {
+                required property var modelData
+
+                objectName: "dynamic"
+                text: modelData.key ?? modelData.name
+                note: !modelData.own_mode ? App.tr("%1 lights", modelData.leds) : modelData.taken ? App.tr("%1 lights; its own mode %2 comes back when the lights stop", modelData.leds, modelData.own_mode) : App.tr("%1 lights, in its own mode %2", modelData.leds, modelData.own_mode)
+                kind: "pliega"
+                value: App.tr("Test")
+                off: lights.status.testing === true
+                onOpened: lights.ask("Test", [modelData.index])
             }
+        }
+
+        Fila {
+            text: App.tr("Test every device")
+            visible: lights.devices.length > 1
+            kind: "pliega"
+            off: lights.status.testing === true
+            onOpened: lights.ask("Test", [-1])
         }
     }
 
     RgbBoard {
-        visible: (lights.status.devices ?? []).length > 0
+        id: board
+
+        x: Look.filaLado
+        y: filas.height + Look.e4
+        width: filas.width - Look.filaLado * 2
+        visible: lights.devices.length > 0
+        height: visible ? implicitHeight : 0
         status: lights.status
         onSaved: lights.load()
         onFailed: error => lights.failed(error)
-    }
-
-    QQC2.Button {
-        visible: (lights.status.devices ?? []).length > 1
-        text: App.tr("Test every device")
-        icon.name: "color-management"
-        enabled: !lights.status.testing
-        onClicked: lights.ask("Test", [-1])
     }
 }

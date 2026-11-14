@@ -20935,3 +20935,215 @@ msgstr "%1 ocultos por tu filtro de contenido"
 
 msgid "Opens the settings, where the content filter is"
 msgstr "Abre los ajustes, donde está el filtro de contenido"
+
+msgid "Scene permissions"
+msgstr "Permisos de las escenas"
+
+msgid "What each scene can use of this computer: the pointer, the sound, the music that plays. You take it back from here whenever you want."
+msgstr "Lo que cada escena puede usar de este equipo: el puntero, el sonido, la música que suena. Desde aquí lo retiras cuando quieras."
+
+msgid "Sound of the scenes"
+msgstr "Sonido de las escenas"
+
+msgid "What you are listening to"
+msgstr "Lo que estás escuchando"
+
+msgid "Scenes can show the song that plays"
+msgstr "Las escenas pueden mostrar la canción que suena"
+
+msgid "With covers from the internet"
+msgstr "Con carátulas de internet"
+
+msgid "Without covers from the internet"
+msgstr "Sin carátulas de internet"
+
+msgid "RGB lights"
+msgstr "Luces RGB"
+
+msgid "They are handled by OpenRGB, which is not running on this computer"
+msgstr "Se manejan con OpenRGB, que no está en marcha en este equipo"
+
+msgid "Keyboards, mice and other lights follow the wallpaper"
+msgstr "Teclados, ratones y otras luces siguen al fondo"
+
+msgid "Start OpenRGB and its server, or search for “OpenRGB” to change its address or turn the lights off."
+msgstr "Pon en marcha OpenRGB y su servidor, o busca «OpenRGB» para cambiar su dirección o apagar las luces."
+
+msgid "Graphics card, HDR, version"
+msgstr "Tarjeta gráfica, HDR, versión"
+
+msgid "How it is drawn"
+msgstr "Cómo se dibuja"
+
+msgid "Automatic chooses the one that saves the most power. A dedicated card draws heavy scenes at a higher quality and uses more power. Here: any integrated card, any dedicated card or one in particular; the processor, in “For tests”."
+msgstr "Automática elige la que más energía ahorra. Una dedicada dibuja escenas pesadas con más calidad y gasta más. Aquí: cualquier integrada, cualquier dedicada o una en concreto; el procesador, en «Para pruebas»."
+
+msgid "A change waits for the next start"
+msgstr "Un cambio espera al próximo arranque"
+
+msgid "HDR, extra bright colors"
+msgstr "HDR, colores extra brillantes"
+
+msgid "No connected screen supports it"
+msgstr "Ninguna pantalla conectada lo admite"
+
+msgid "Depth quality"
+msgstr "Calidad de la profundidad"
+
+msgid "Downloads are turned off"
+msgstr "Las descargas están apagadas"
+
+msgid "What it needs is downloaded by itself, when it is needed"
+msgstr "Lo que necesita se descarga solo, cuando hace falta"
+
+msgid "Maintenance"
+msgstr "Mantenimiento"
+
+msgid "If something does not show"
+msgstr "Si algo no aparece"
+
+msgid "Reload the settings reads the configuration file again. Check the whole library looks through every folder again."
+msgstr "Recargar los ajustes vuelve a leer el archivo de configuración. Revisar toda la biblioteca vuelve a recorrer cada carpeta."
+
+msgid "Reload the settings"
+msgstr "Recargar los ajustes"
+
+msgid "Check the whole library"
+msgstr "Revisar toda la biblioteca"
+
+msgid "Version %1"
+msgstr "Versión %1"
+
+msgid "The configuration has a problem"
+msgstr "La configuración tiene un problema"
+
+msgid "For tests"
+msgstr "Para pruebas"
+
+msgid "Name of the surface, drawing with the processor"
+msgstr "Nombre de la superficie, dibujar con el procesador"
+
+msgid "Downloaded once, when a picture first needs it"
+msgstr "Se descarga una vez, cuando una imagen lo necesita"
+
+msgid "Fill behind near objects"
+msgstr "Relleno detrás de lo cercano"
+
+msgid "Smart fill paints what a near object hid when it moves; simple fill stretches the edges; no fill leaves the gap."
+msgstr "El relleno inteligente pinta lo que tapaba lo cercano cuando se mueve; el simple estira los bordes; sin relleno queda el hueco."
+
+msgid "Depth layers"
+msgstr "Capas de profundidad"
+
+msgid "%1 layers"
+msgstr "%1 capas"
+
+msgid "More layers separate near and far better and take longer to compute."
+msgstr "Más capas separan mejor lo cercano de lo lejano y tardan más en calcularse."
+
+msgid "Graphics"
+msgstr "Gráficos"
+
+msgid "Data model"
+msgstr "Modelo de datos"
+
+msgid "Configuration"
+msgstr "Configuración"
+
+msgid "Has a problem"
+msgstr "Tiene un problema"
+
+msgid "Fix the file and use “Reload the settings”."
+msgstr "Corrige el archivo y usa «Recargar los ajustes»."
+
+msgid "Each scene still asks you first. The sound is turned into levels on this computer and never recorded, kept or sent."
+msgstr "Cada escena te pregunta antes. El sonido se convierte en niveles en este equipo y nunca se graba, se guarda ni se envía."
+
+msgid "What scenes may use"
+msgstr "Lo que pueden usar las escenas"
+
+msgid "A scene asks the first time it wants the pointer, the sound or the music that plays."
+msgstr "Una escena pregunta la primera vez que quiere el puntero, el sonido o la música que suena."
+
+msgid "The scene stops using it now and asks again the next time it wants it."
+msgstr "La escena deja de usarlo ahora y vuelve a preguntar la próxima vez que lo quiera."
+
+msgid "What plays now"
+msgstr "Lo que suena ahora"
+
+msgid "No scene reads it"
+msgstr "Ninguna escena lo lee"
+
+msgid "Draw with the processor"
+msgstr "Dibujar con el procesador"
+
+msgid "Instead of a graphics card, slow"
+msgstr "En lugar de una tarjeta gráfica, lento"
+
+msgid "Depth drawn by the processor"
+msgstr "Profundidad dibujada por el procesador"
+
+msgid "OpenRGB server"
+msgstr "Servidor de OpenRGB"
+
+msgid "While a window covers the wallpaper and it pauses"
+msgstr "Mientras una ventana tapa el fondo y se pausa"
+
+msgid "Waiting"
+msgstr "En espera"
+
+msgid "%1 lights"
+msgstr "%1 luces"
+
+msgid "%1 lights; its own mode %2 comes back when the lights stop"
+msgstr "%1 luces; su modo propio %2 vuelve cuando las luces se detienen"
+
+msgid "%1 lights, in its own mode %2"
+msgstr "%1 luces, en su modo propio %2"
+
+msgid "Now the integrated card draws"
+msgstr "Ahora dibuja la integrada"
+
+msgid "Now the dedicated card draws"
+msgstr "Ahora dibuja la dedicada"
+
+msgid "Now %1 draws"
+msgstr "Ahora dibuja %1"
+
+msgid "dedicated card: not detected"
+msgstr "tarjeta dedicada: no detectada"
+
+msgid "Smart fill"
+msgstr "Relleno inteligente"
+
+msgid "No fill"
+msgstr "Sin relleno"
+
+msgid "They play and react to sound"
+msgstr "Suenan y reaccionan al sonido"
+
+msgid "They play their sound"
+msgstr "Suenan"
+
+msgid "They react to sound"
+msgstr "Reaccionan al sonido"
+
+msgid "%1, %2 layers"
+msgstr "%1, %2 capas"
+
+msgid "1 scene"
+msgstr "1 escena"
+
+msgid "%1 scenes"
+msgstr "%1 escenas"
+
+msgid "1 device"
+msgstr "1 dispositivo"
+
+msgctxt "lights"
+msgid "Off"
+msgstr "Apagadas"
+
+msgctxt "lights"
+msgid "not detected"
+msgstr "no detectadas"

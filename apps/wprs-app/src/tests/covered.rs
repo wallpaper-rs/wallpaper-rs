@@ -7,15 +7,11 @@ fn the_rgb_choice_while_covered_applies_only_while_the_covered_wallpaper_pauses(
         text.contains(r#"options["pause.when_covered"] !== false"#),
         "the choice ignored pause.when_covered"
     );
-    assert_eq!(
-        text.matches("enabled: lights.pauses").count(),
-        2,
-        "a choice stayed open with nothing to choose"
-    );
-    assert!(text.contains(r#"App.tr("While a window covers the wallpaper and it pauses:")"#));
+    assert_eq!(text.matches("off: !lights.pauses").count(), 1, "a choice stayed open with nothing to choose");
+    assert!(text.contains(r#"App.tr("While a window covers the wallpaper and it pauses")"#));
     let hint = text.lines().find(|l| l.contains(r#"lights.covered === "follow" ?"#)).unwrap().trim();
     assert!(
-        hint.starts_with(r#"text: !lights.pauses ? App.tr("Pausing while a window covers the screen is off"#)
+        hint.starts_with(r#"explain: !lights.pauses ? App.tr("Pausing while a window covers the screen is off"#)
     );
     assert!(
         hint.contains(r#"App.tr("While the covered wallpaper pauses, the lights keep changing"#),
@@ -108,7 +104,7 @@ fn screens_that_show_a_web_page_can_open_its_settings() {
 #[test]
 fn identical_cards_are_offered_by_their_pci_bus() {
     let files = qml_files();
-    let picker = files.iter().find(|(n, _)| n == "GpuPicker.qml").map(|(_, t)| t.clone()).unwrap();
+    let picker = files.iter().find(|(n, _)| n == "GpuChoices.qml").map(|(_, t)| t.clone()).unwrap();
     assert!(picker.contains(r#"const value = twins ? "pci:" + card.bus : card.name;"#));
     assert!(picker.contains(r#"App.tr("%1 · on PCI bus %2", label(card.name, same), card.bus)"#));
 }
@@ -116,9 +112,9 @@ fn identical_cards_are_offered_by_their_pci_bus() {
 #[test]
 fn a_choice_that_waits_for_a_restart_offers_one() {
     let files = qml_files();
-    for name in ["GpuPicker.qml", "LayerNamespaceField.qml"] {
+    for name in ["SettingsAdvanced.qml", "SettingsTesting.qml"] {
         let text = files.iter().find(|(n, _)| n == name).map(|(_, t)| t.clone()).unwrap();
-        assert!(text.contains(r#"onClicked: App.act("Restart", [], "Daemon1")"#), "{name} offers no restart");
+        assert!(text.contains(r#"onOpened: App.act("Restart", [], "Daemon1")"#), "{name} offers no restart");
     }
 }
 

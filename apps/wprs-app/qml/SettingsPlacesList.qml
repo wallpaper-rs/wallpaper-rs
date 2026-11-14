@@ -34,4 +34,44 @@ QtObject {
             page: list.page
         }
     }
+    readonly property Component grants: Component {
+        SettingsGrants {
+            page: list.page
+        }
+    }
+    readonly property Component sound: Component {
+        SettingsSound {
+            page: list.page
+        }
+    }
+    readonly property Component media: Component {
+        SettingsMedia {
+            page: list.page
+        }
+    }
+    readonly property Component lights: Component {
+        SettingsRgb {
+            page: list.page
+        }
+    }
+    readonly property Component advanced: Component {
+        SettingsAdvanced {
+            page: list.page
+        }
+    }
+    readonly property Component depth: Component {
+        SettingsDepth {
+            page: list.page
+        }
+    }
+    readonly property Component version: Component {
+        SettingsVersion {
+            page: list.page
+        }
+    }
+    readonly property Component testing: Component {
+        SettingsTesting {
+            page: list.page
+        }
+    }
 }

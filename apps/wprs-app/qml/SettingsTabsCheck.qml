@@ -5,7 +5,7 @@ QtObject {
     id: check
 
     required property var page
-    readonly property var places: ["more", "folders", "lists", "pause", "screen", "layouts"]
+    readonly property var places: ["more", "folders", "lists", "pause", "screen", "layouts", "grants", "sound", "media", "lights", "advanced", "depth", "version", "testing"]
 
     function same(found, wanted, what) {
         if (found !== wanted)
@@ -146,6 +146,9 @@ QtObject {
         vacio();
         error();
         labels();
+        Qt.createComponent("SettingsMachineCheck.qml").createObject(check, {
+            "page": page
+        }).exercise();
         home(tab);
         page.place = place;
     }

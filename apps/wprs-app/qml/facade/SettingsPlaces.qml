@@ -10,14 +10,38 @@ QtObject {
             "lists": 0,
             "pause": 1,
             "screen": 1,
-            "layouts": 1
+            "layouts": 1,
+            "grants": 2,
+            "sound": 2,
+            "media": 2,
+            "lights": 2,
+            "advanced": 2,
+            "depth": 2,
+            "version": 2,
+            "testing": 2
+        })
+    readonly property var parents: ({
+            "depth": "advanced",
+            "version": "advanced",
+            "testing": "advanced"
         })
 
     function tab(place) {
         return tabs[place] ?? 0;
     }
 
+    function up(place) {
+        return parents[place] ?? "";
+    }
+
+    function trail(place, output) {
+        return (up(place) === "" ? [] : [word(up(place), output)]).concat([word(place, output)]);
+    }
+
     function word(place, output) {
+        const own = MachineWords.place(place);
+        if (own !== "")
+            return own;
         if (place === "more")
             return App.tr("More");
         if (place === "folders")

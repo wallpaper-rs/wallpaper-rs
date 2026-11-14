@@ -78,16 +78,14 @@ QtObject {
         reasons.destroy();
     }
 
-    function lights(options, hints) {
+    function lights(options) {
         const panel = Qt.createComponent("SettingsRgb.qml").createObject(stage.contentItem, {
             "options": options
         });
         if (!panel)
             throw new Error("SettingsRgb.qml did not load");
-        const texts = panel.children.filter(item => item.text !== undefined);
-        const radios = texts.filter(item => item.checkable === true && item.autoExclusive === true);
-        const hint = texts.find(item => hints.includes(item.text));
-        const found = JSON.stringify([radios.map(r => r.enabled), radios.map(r => r.checked), hint?.text ?? ""]);
+        const row = panel.coveredRow;
+        const found = JSON.stringify([row.off, row.current, row.explain]);
         panel.destroy();
         return found;
     }
@@ -97,17 +95,16 @@ QtObject {
         const off = App.tr("Pausing while a window covers the screen is off, so the covered wallpaper keeps drawing and the lights keep following it whatever you choose here.");
         const follow = App.tr("While the covered wallpaper pauses, the lights keep changing with the scene or page, which keeps running without being drawn, as long as the server has devices connected.");
         const paused = App.tr("While the covered wallpaper pauses, nothing is sent and nothing runs for the lights until it shows again.");
-        const hints = [off, follow, paused];
         same(lights({
             "pause.when_covered": false,
             "rgb.when_covered": "follow"
-        }, hints), JSON.stringify([[false, false], [true, false], off]), "covered lights without the covered pause");
+        }), JSON.stringify([true, 0, off]), "covered lights without the covered pause");
         same(lights({
             "rgb.when_covered": "follow"
-        }, hints), JSON.stringify([[true, true], [true, false], follow]), "covered lights that follow");
+        }), JSON.stringify([false, 0, follow]), "covered lights that follow");
         same(lights({
             "rgb.when_covered": "pause"
-        }, hints), JSON.stringify([[true, true], [false, true], paused]), "covered lights that pause");
+        }), JSON.stringify([false, 1, paused]), "covered lights that pause");
         stage.destroy();
     }
 

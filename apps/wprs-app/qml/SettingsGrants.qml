@@ -1,43 +1,45 @@
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
-ColumnLayout {
-    id: permissions
+FocusScope {
+    id: part
 
-    property var inputs: ({})
-    readonly property var grants: inputs.grants ?? {}
+    required property var page
+    readonly property var grants: page.inputs.grants ?? {}
+    readonly property var pairs: Object.keys(grants).reduce((all, scene) => all.concat((grants[scene] ?? []).map(input => [scene, input])), [])
 
-    QQC2.Label {
-        Layout.maximumWidth: Kirigami.Units.gridUnit * 30
-        wrapMode: Text.Wrap
-        text: [App.tr("A wallpaper follows the sound that plays or the pointer, or takes clicks, only after you allow it for that wallpaper, and only while it is shown; clicks also have to be turned on for each screen in its wallpaper settings. The sound is turned into levels on this computer and never recorded, kept or sent; pointer positions and clicks are never kept."), permissions.inputs.capturing ? App.tr("A wallpaper is following the sound now.") : "", permissions.inputs.tracking ? App.tr("A wallpaper is following the pointer now.") : "", Object.keys(permissions.grants).length ? "" : App.tr("No wallpaper has been allowed yet.")].filter(t => t).join("\n")
-    }
+    implicitHeight: filas.height
 
-    Repeater {
-        model: Object.keys(permissions.grants)
+    Filas {
+        id: filas
 
-        delegate: RowLayout {
-            id: grant
+        Fila {
+            text: App.tr("What scenes may use")
+            value: MachineWords.scenes(Object.keys(part.grants).length)
+            explain: App.tr("A wallpaper follows the sound that plays or the pointer, or takes clicks, only after you allow it for that wallpaper, and only while it is shown; clicks also have to be turned on for each screen in its wallpaper settings. The sound is turned into levels on this computer and never recorded, kept or sent; pointer positions and clicks are never kept.")
+            status: MachineWords.following(part.page.inputs)
+        }
 
-            required property string modelData
+        Vacio {
+            visible: part.pairs.length === 0
+            small: true
+            title: App.tr("No wallpaper has been allowed yet.")
+            text: App.tr("A scene asks the first time it wants the pointer, the sound or the music that plays.")
+        }
 
-            QQC2.Label {
-                text: grant.modelData
-            }
+        Repeater {
+            model: part.pairs
 
-            Repeater {
-                model: permissions.grants[grant.modelData]
+            delegate: Fila {
+                required property var modelData
 
-                delegate: QQC2.Button {
-                    required property string modelData
-
-                    icon.name: "dialog-cancel"
-                    text: App.tr("Stop using %1", Labels.value(modelData))
-                    onClicked: App.act("Revoke", [grant.modelData, modelData], "Inputs1")
-                }
+                objectName: "dynamic"
+                text: modelData[0]
+                note: Labels.value(modelData[1])
+                kind: "pliega"
+                value: App.tr("Stop using %1", Labels.value(modelData[1]))
+                explain: App.tr("The scene stops using it now and asks again the next time it wants it.")
+                onOpened: App.act("Revoke", [modelData[0], modelData[1]], "Inputs1")
             }
         }
     }

@@ -157,6 +157,17 @@ clave y trae fotos nuevas en la próxima actualización. «Quitar esta fuente» 
   ese conjunto, un aviso ofrece guardarla y la guarda con esas pantallas como regla.
 - La fila de cada carpeta de la biblioteca ofrece Revisarla otra vez, Rotar estas fotos (una lista
   con esa carpeta en todas las pantallas) y Quitarla, con confirmación.
+- Equipo resume en cinco filas Permisos de las escenas (cuántas escenas tienen alguno), Sonido de
+  las escenas, Lo que estás escuchando, Luces RGB y Avanzado; cada una abre su lugar. En Permisos
+  cada permiso de cada escena es una fila que lo retira con Intro. Las luces quedan en gris con «no
+  detectadas» si están encendidas y no hay servidor ni dispositivos; su lugar sigue a mano desde el
+  buscador («OpenRGB») para cambiar la dirección o apagarlas.
+- Avanzado agrupa la tarjeta gráfica (Automática, cualquier integrada, cualquier dedicada o una en
+  concreto; «tarjeta dedicada: no detectada» si no hay), HDR (en gris con «no detectado» si ninguna
+  pantalla lo admite y no está en Nunca), Calidad de la profundidad, Mantenimiento (Recargar los
+  ajustes, Revisar toda la biblioteca), la versión con sus detalles y Para pruebas (nombre de la
+  superficie, dibujar con el procesador). Los lugares dentro de Avanzado llevan la ruta completa y
+  «Esc volver» regresa a Avanzado.
 
 ## Bloque ahora
 

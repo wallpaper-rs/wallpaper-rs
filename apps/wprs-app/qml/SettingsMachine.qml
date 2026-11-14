@@ -1,107 +1,100 @@
 import QtQuick
-import QtQuick.Controls as QQC2
-import org.kde.kirigami as Kirigami
 import io.github.wallpaper_rs.app
 
 FocusScope {
     id: tab
 
     required property var page
-    readonly property var placed: ["render.gpu", "surfaces.layer_namespace", "playback.quality", "playback.auto_pace", "playback.max_fps", "playback.lowest_below_percent", "playback.allow_flashing", "playback.hdr", "pause.on_battery", "pause.when_covered", "pause.when_locked", "rgb.enabled", "rgb.server", "rgb.when_covered", "media.remote_covers", "transition.kind", "transition.less_motion", "transition.duration_ms", "shortcuts.enabled", "shortcuts.next", "shortcuts.previous", "library.hide_mature", "library.show_mature", "library.watch", "library.thumb_cache_mb", "repos.auto_refresh", "repos.auto_update", "repos.vote_counts"]
-    readonly property var fields: (App.schema.options ?? []).filter(field => !placed.includes(field.key))
-    readonly property var rows: fields.map(field => ({
-                "text": App.field(field.key)
-            })).concat([App.tr("HDR (extra bright colors)"), App.tr("Draw with"), App.tr("RGB lighting"), App.tr("Surface name"), App.tr("Wallpaper permissions"), App.tr("Media player"), App.tr("Check the whole library again"), App.tr("Reload configuration")].map(text => ({
-                "text": text
-            })))
+    property var lightsStatus: ({})
+    readonly property var options: App.state.options ?? {}
+    readonly property var inputs: page.inputs
+    readonly property int granted: Object.keys(inputs.grants ?? {}).length
+    readonly property bool lightsOn: options["rgb.enabled"] === true
+    readonly property var rows: [
+        {
+            "text": grants.text,
+            "value": grants.value
+        },
+        {
+            "text": sound.text,
+            "value": sound.value
+        },
+        {
+            "text": media.text,
+            "value": media.value
+        },
+        {
+            "text": lights.text,
+            "value": lights.value,
+            "off": lights.off
+        },
+        {
+            "text": advanced.text,
+            "value": advanced.value
+        }
+    ].concat(SettingsMachineRows.places())
 
-    implicitHeight: form.implicitHeight
+    function loadLights() {
+        App.query("GetStatus", [], "Rgb1", reply => tab && (tab.lightsStatus = reply ?? {}));
+    }
 
-    Kirigami.FormLayout {
-        id: form
+    implicitHeight: filas.height
+    onVisibleChanged: if (visible)
+        loadLights()
+    Component.onCompleted: loadLights()
 
-        width: tab.width
+    Filas {
+        id: filas
 
-        Settings {
-            daemon: App
-            model: tab.fields
-            values: App.state.options ?? {}
-            onEdited: (key, value) => App.act("SetOption", [key, value])
+        Fila {
+            id: grants
+
+            text: App.tr("Scene permissions")
+            kind: "pliega"
+            value: MachineWords.scenes(tab.granted)
+            explain: App.tr("What each scene can use of this computer: the pointer, the sound, the music that plays. You take it back from here whenever you want.")
+            status: MachineWords.following(tab.inputs)
+            onOpened: tab.page.open("grants", grants)
         }
 
-        FillNote {}
+        Fila {
+            id: sound
 
-        HdrPicker {
-            Kirigami.FormData.label: App.tr("HDR (extra bright colors)")
-            daemon: App
+            text: App.tr("Sound of the scenes")
+            kind: "pliega"
+            value: MachineWords.sound(tab.options)
+            onOpened: tab.page.open("sound", sound)
         }
 
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-            Kirigami.FormData.label: App.tr("Graphics card")
+        Fila {
+            id: media
+
+            text: App.tr("What you are listening to")
+            note: App.tr("Scenes can show the song that plays")
+            kind: "pliega"
+            value: tab.options["media.remote_covers"] === true ? App.tr("With covers from the internet") : App.tr("Without covers from the internet")
+            onOpened: tab.page.open("media", media)
         }
 
-        GpuPicker {
-            Kirigami.FormData.label: App.tr("Draw with")
+        Fila {
+            id: lights
+
+            text: App.tr("RGB lights")
+            note: off ? App.tr("They are handled by OpenRGB, which is not running on this computer") : App.tr("Keyboards, mice and other lights follow the wallpaper")
+            kind: off ? "texto" : "pliega"
+            off: !MachineWords.lightsFound(tab.lightsOn, tab.lightsStatus)
+            value: MachineWords.lights(tab.lightsOn, tab.lightsStatus)
+            explain: off ? App.tr("Start OpenRGB and its server, or search for “OpenRGB” to change its address or turn the lights off.") : ""
+            onOpened: tab.page.open("lights", lights)
         }
 
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-            Kirigami.FormData.label: App.tr("RGB lighting")
-        }
+        Fila {
+            id: advanced
 
-        SettingsRgb {}
-
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-        }
-
-        LayerNamespaceField {
-            Kirigami.FormData.label: App.tr("Surface name")
-        }
-
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-            Kirigami.FormData.label: App.tr("Wallpaper permissions")
-        }
-
-        SettingsGrants {
-            inputs: tab.page.inputs
-        }
-
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-            Kirigami.FormData.label: App.tr("Media player")
-        }
-
-        SettingsMedia {
-            inputs: tab.page.inputs
-        }
-
-        Kirigami.Separator {
-            Kirigami.FormData.isSection: true
-        }
-
-        QQC2.Label {
-            Kirigami.FormData.label: App.tr("Version:")
-            text: [App.state.version, App.state.adapter, App.tr("data model %1", App.state.model ?? "")].filter(part => !!part).join(" · ")
-        }
-
-        QQC2.Label {
-            Kirigami.FormData.label: App.tr("Configuration:")
-            visible: !!App.state.config_error || !!App.state.library_error
-            text: [App.state.config_error, App.state.library_error].filter(part => !!part).join("\n")
-            color: Look.coral
-        }
-
-        QQC2.Button {
-            text: App.tr("Check the whole library again")
-            onClicked: tab.page.sources.forEach(source => App.act("Rescan", [source.uid], "Library1"))
-        }
-
-        QQC2.Button {
-            text: App.tr("Reload configuration")
-            onClicked: App.act("Reload", [])
+            text: App.tr("Advanced")
+            kind: "pliega"
+            value: App.tr("Graphics card, HDR, version")
+            onOpened: tab.page.open("advanced", advanced)
         }
     }
 }
