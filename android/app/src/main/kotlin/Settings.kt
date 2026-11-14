@@ -121,14 +121,9 @@ fun Settings(main: Main, account: () -> Unit = {}) {
         }
         item {
             val model by loaded(JSONObject(), changes, Depth.working.value) { depth("model") as JSONObject }
-            if (model.optBoolean("installed")) ListItem(
-                headlineContent = { Text(stringResource(R.string.depth_model, model.getString("size"))) },
-                trailingContent = {
-                    WordAction({ change { depth("forget") } }, enabled = Depth.working.value == null) {
-                        Text(stringResource(R.string.delete_model))
-                    }
-                },
-            )
+            if (model.optBoolean("installed")) Setting(stringResource(R.string.depth_model, model.getString("size")), trailing = {
+                WordAction({ change { depth("forget") } }, enabled = Depth.working.value == null) { Text(stringResource(R.string.delete_model)) }
+            })
         }
         item { Removal(main) }
         item { Grade(main) }
