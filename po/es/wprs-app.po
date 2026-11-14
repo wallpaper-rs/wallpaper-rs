@@ -20428,8 +20428,20 @@ msgid "Bundled examples"
 msgstr "Ejemplos incluidos"
 
 #: apps/wprs-app/qml/FirstRun.qml
-msgid "“%1” is now the wallpaper of every screen."
-msgstr "«%1» quedó de fondo en todas las pantallas."
+msgid "“%1” is now the wallpaper on %2."
+msgstr "«%1» quedó de fondo en %2."
+
+#: apps/wprs-app/qml/FirstRun.qml
+msgid "%1 and %2"
+msgstr "%1 y %2"
+
+#: apps/wprs-app/qml/FirstRun.qml
+msgid "Only on %1"
+msgstr "Solo en %1"
+
+#: apps/wprs-app/qml/FirstRun.qml
+msgid "On no screen"
+msgstr "En ninguna pantalla"
 
 #: apps/wprs-app/qml/FirstRun.qml
 msgid "“%1” is now your wallpaper. You can change it whenever you like from here."

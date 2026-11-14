@@ -69,6 +69,17 @@ QtObject {
         must(found.join() === "Snowfall,true,0,org.example.snow:false", "the examples' shelf does not light its first cover or set it: " + found.join());
     }
 
+    function screens() {
+        const run = Qt.createComponent("FirstRun.qml").createObject(page, {
+            "bare": false
+        });
+        const one = run.told("Snowfall", ["DP-1"]);
+        const two = run.told("Snowfall", ["DP-1", "HDMI-1"]);
+        run.destroy();
+        const found = [one.action === App.tr("Undo"), one.text.includes("DP-1"), two.action === App.tr("Apply to…"), two.text.includes("DP-1"), two.text.includes("HDMI-1")];
+        must(found.join() === "true,false,true,true,true", "the first wallpaper's notice does not speak of the screens only when there are several: " + found.join());
+    }
+
     function unnoticed() {
         const run = Qt.createComponent("FirstRun.qml").createObject(page, {
             "bare": true,
@@ -106,6 +117,7 @@ QtObject {
         states();
         restart();
         shelf();
+        screens();
         unnoticed();
         notice();
     }

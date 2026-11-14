@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls as QQC2
 import QtCore as Core
 import io.github.wallpaper_rs.app
 
@@ -83,15 +84,32 @@ Item {
         });
     }
 
+    function told(title, outputs) {
+        if (outputs.length < 2)
+            return {
+                "text": App.tr("“%1” is now your wallpaper. You can change it whenever you like from here.", title),
+                "action": App.tr("Undo")
+            };
+        const names = App.tr("%1 and %2", outputs.slice(0, -1).join(", "), outputs[outputs.length - 1]);
+        return {
+            "text": App.tr("“%1” is now the wallpaper on %2.", title, names),
+            "action": App.tr("Apply to…")
+        };
+    }
+
     function announce(pkg) {
-        const several = App.outputs.length > 1;
-        const text = several ? App.tr("“%1” is now the wallpaper of every screen.", pkg.title) : App.tr("“%1” is now your wallpaper. You can change it whenever you like from here.", pkg.title);
+        const outputs = App.outputs;
+        const said = told(pkg.title, outputs);
         applicationWindow().showPassiveNotification({
-            "text": text,
-            "action": App.tr("Undo"),
-            "undo": () => run && run.undo()
+            "text": said.text,
+            "action": said.action,
+            "undo": () => run && (outputs.length > 1 ? screens.popup() : run.undo())
         });
         reset();
+    }
+
+    function only(output, outputs) {
+        outputs.filter(other => other !== output).forEach(other => App.act("ClearWallpaper", [other], "Daemon1"));
     }
 
     function undo() {
@@ -117,6 +135,28 @@ Item {
                 run.load();
             if (["repos", "jobs", "library"].includes(topic))
                 run.watch();
+        }
+    }
+
+    QQC2.Menu {
+        id: screens
+
+        Instantiator {
+            model: App.outputs
+            onObjectAdded: (index, object) => screens.insertItem(index, object)
+            onObjectRemoved: (index, object) => screens.removeItem(object)
+
+            delegate: QQC2.MenuItem {
+                required property string modelData
+
+                text: App.tr("Only on %1", modelData)
+                onTriggered: run.only(modelData, App.outputs)
+            }
+        }
+
+        QQC2.MenuItem {
+            text: App.tr("On no screen")
+            onTriggered: run.undo()
         }
     }
 }
