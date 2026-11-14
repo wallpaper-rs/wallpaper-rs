@@ -119,8 +119,10 @@ Cada proveedor en línea es una tarjeta: nombre, estado, «N fotos, actualizado 
 grande «Rotar estas fotos» (crea o reutiliza la lista `source:<fuente>` y la arranca en todas las
 salidas), «Actualizar» y «Detalles». Si no hay ninguna, la página muestra las tarjetas de tipos para
 añadir una; Bing, NASA y Wikimedia se añaden con un clic, los demás piden primero lo que necesitan
-(búsqueda, servidor, clave). Las claves nunca se vuelven a mostrar. Un proveedor en error se trata
-como falta de conexión y se avisa una sola vez. En una fuente de
+(búsqueda, servidor, clave). Las claves nunca se vuelven a mostrar. Una fuente en error dice su propio
+problema en su tarjeta. Solo cuando una fuente no llega a su servidor (`offline` del daemon) la
+lista muestra arriba el aviso «No hay conexión…» con «Reintentar», y esa tarjeta sigue con su
+resumen normal. En una fuente de
 Wallhaven, «Más opciones» abre en la misma página dos grupos sin desplazamiento: «Qué fotos»
 (categorías, contenido y tamaño y colores, cada uno con su nivel de casillas) y «Cómo buscarlas»
 (orden con «Mezclar otra vez» cuando es al azar, colecciones de un usuario, parecidos a una foto y

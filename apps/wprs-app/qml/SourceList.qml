@@ -10,6 +10,7 @@ FocusScope {
     required property var providers
     required property var playlists
     readonly property int total: providers.reduce((sum, p) => sum + p.items, 0)
+    readonly property bool offline: providers.some(p => p.offline)
 
     signal rotate(var provider)
     signal details(var provider)
@@ -20,6 +21,10 @@ FocusScope {
     function enter() {
         const first = cards.itemAt(0);
         (first || adding).forceActiveFocus(Qt.TabFocusReason);
+    }
+
+    function card(id) {
+        return cards.itemAt(providers.findIndex(p => p.id === id));
     }
 
     function rotating(provider) {
@@ -40,6 +45,26 @@ FocusScope {
             anchors.bottom: parent.bottom
             width: Math.min(flick.width, Look.tiposAncho)
             spacing: Look.e4
+
+            Row {
+                visible: list.offline
+                spacing: Look.e3
+
+                Nota {
+                    width: column.width - again.width - Look.e3
+                    anchors.verticalCenter: parent.verticalCenter
+                    tone: "ambar"
+                    text: App.tr("No connection. Your sources cannot bring new photos. What you already have stays in your library.")
+                }
+
+                QQC2.Button {
+                    id: again
+
+                    text: App.tr("Try again")
+                    icon.name: "arrows-clockwise"
+                    onClicked: list.refreshAsked("")
+                }
+            }
 
             Row {
                 spacing: Look.e3

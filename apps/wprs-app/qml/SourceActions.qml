@@ -14,9 +14,6 @@ QtObject {
             if (was[p.id] === 0 && p.items > 0)
                 applicationWindow().showPassiveNotification(App.tr("%1 brought %2 photos to your library.", SourceKinds.of(p.kind).name, p.items));
         });
-        const offline = next.some(p => p.state === "error") && !host.providers.some(p => p.state === "error");
-        if (offline)
-            applicationWindow().showPassiveNotification(App.tr("No connection. Your sources cannot bring new photos. What you already have stays in your library."), 8000, App.tr("Try again"), () => App.act("Sync", [""], "Providers1"));
         host.seen = marks;
         host.providers = next;
     }

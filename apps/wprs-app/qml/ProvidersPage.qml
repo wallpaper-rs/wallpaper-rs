@@ -16,6 +16,7 @@ Kirigami.Page {
     readonly property bool options: view !== "list"
     readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : view === "detail" && !!chosen.id ? SourceKinds.heading(chosen) : ""
     readonly property Item shown: body.shown
+    readonly property alias cards: list
     readonly property var route: view === "list" ? [] : [App.tr("Sources"), leaf]
     readonly property var keyHints: [{
             "keys": ["up", "down"],

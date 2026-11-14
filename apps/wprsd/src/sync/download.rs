@@ -5,7 +5,7 @@ use std::collections::HashSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
-use wprs_core::dbus::error::NEEDS_SECRET;
+use wprs_core::dbus::error::{NEEDS_SECRET, OFFLINE};
 use wprs_library::Source;
 use wprs_providers::{Cache, Item, Provider};
 
@@ -30,6 +30,9 @@ pub fn failure(e: wprs_providers::Error, secret: bool) -> Error {
         }
         wprs_providers::Error::Invalid(message) if message.contains("plain http") => invalid(message),
         wprs_providers::Error::Setting(message) => invalid(message),
+        wprs_providers::Error::Http(e) if e.is_connect() || e.is_timeout() => {
+            Error::Named(OFFLINE, format!("no connection: {e}"))
+        }
         e => failed(e.to_string()),
     }
 }
@@ -110,5 +113,28 @@ impl Daemon {
         })?;
         paths.retain(|p| p.starts_with(&source.path));
         Ok(paths)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    async fn failed_with(url: &str) -> (String, String) {
+        let e = reqwest::Client::new().get(url).send().await.and_then(|r| r.error_for_status()).unwrap_err();
+        failure(wprs_providers::Error::from(e), false).parts()
+    }
+
+    #[tokio::test]
+    async fn only_an_unreachable_server_counts_as_no_connection() {
+        let (name, _) = failed_with("http://127.0.0.1:9/").await;
+        assert_eq!(name, OFFLINE);
+        let server = wiremock::MockServer::start().await;
+        wiremock::Mock::given(wiremock::matchers::any())
+            .respond_with(wiremock::ResponseTemplate::new(500))
+            .mount(&server)
+            .await;
+        let (name, message) = failed_with(&server.uri()).await;
+        assert_ne!(name, OFFLINE, "{message}");
     }
 }

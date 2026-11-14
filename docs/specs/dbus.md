@@ -99,6 +99,7 @@ Every error carries a readable English message. An error raised without a descri
 | `io.github.wallpaper_rs.Error.Conflict` | A playlist edit by index found other entries than expected: `the playlist changed; reload it` |
 | `io.github.wallpaper_rs.Error.Newer` | A package needs a newer wallpaper-rs: a newer manifest version, a `requires.engine` this version does not meet or a feature of `requires.features` it does not know (see `package.md`) |
 | `io.github.wallpaper_rs.Error.FlashingDisabled` | `Apply` of a package that flashes while `playback.allow_flashing` is off (`this wallpaper flashes and flashing wallpapers are disabled; allow flashing in the settings to play it`); turn the setting on and apply again |
+| `io.github.wallpaper_rs.Error.Offline` | A provider sync could not reach its server: the connection failed or timed out (`no connection: …`) |
 | `io.github.wallpaper_rs.Error.Unconfirmed` | `Grant`/`GrantPackage` from a caller that must be confirmed: the user is asked in a desktop notification; treat it as pending, not as a failure |
 | `org.freedesktop.DBus.Error.AccessDenied` | `Grant`/`GrantPackage` while the same question rests after the user answered *Not now*, closed the notification or left it unanswered (ten minutes, listed in `GetInputs().quiet`), or with no notification service to ask; `SetPointer` from a caller that may not report the pointer |
 
@@ -1485,7 +1486,11 @@ sync is older than `refresh`; the schedule is checked again 5 s after `Add`, `Se
 1 h. A provider whose required secret is missing is in state `needs_secret` and does not sync
 automatically; one whose secret was rejected (HTTP 401 or 403, `NeedsSecret`) waits for
 `SetSecret`. Automatic syncs never show an unlock prompt: with a locked keyring the provider's
-state becomes `locked` and the sync waits for its next due time.
+state becomes `locked` and the sync waits for its next due time. A sync that could not reach the
+server at all (the connection failed or timed out) fails with `Offline` and leaves the provider in
+state `error` with `offline = true`; any other failure, such as an error answer of the server or an
+invalid setting, leaves `offline = false`. Clients tell the user there is no connection only for
+`offline`, and show `last_error` as the provider's own problem otherwise.
 
 ### `List() → (s json)`
 
@@ -3237,7 +3242,7 @@ struct Provider {
     id: String, kind: String, options: BTreeMap<String, String>, source: Option<Uid>,
     state: ProviderState, has_secret: bool, hosts: Vec<String>, items: u32, cache_bytes: u64,
     last_sync: Option<Time>, next_sync: Option<Time>, last_error: Option<String>, job: Option<u64>,
-    orphan_secret: bool, plain_http: bool,
+    orphan_secret: bool, plain_http: bool, offline: bool,
 }
 struct ProvidersReply {
     model: u32, serial: u64, providers: Vec<Provider>, store: String, keyring_found: bool,

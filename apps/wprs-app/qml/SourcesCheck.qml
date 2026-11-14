@@ -47,7 +47,25 @@ QtObject {
             fail("going back from the more options does not return to the details");
     }
 
+    function failing(offline) {
+        const art = page.providers.find(p => p.id === "art");
+        const broken = Object.assign({}, art, {
+            "state": "error",
+            "offline": offline,
+            "last_error": offline ? "no connection: the server could not be reached" : "the server answered 500"
+        });
+        page.apply(page.providers.map(p => p.id === "art" ? broken : p));
+        const card = page.cards.card("art");
+        if (page.cards.offline !== offline)
+            fail(offline ? "a source without connection does not show the no connection notice" : "a source in error shows the no connection notice");
+        if (!card || card.problem !== (offline ? "" : broken.last_error))
+            fail(offline ? "a source without connection shows a problem of its own" : "a source in error does not say its problem");
+    }
+
     function exercise() {
+        failing(false);
+        failing(true);
+        page.load();
         clearing();
         more();
         page.open("list");

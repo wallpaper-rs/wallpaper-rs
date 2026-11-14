@@ -35,6 +35,7 @@ pub mod error {
     pub const NEWER: &str = "io.github.wallpaper_rs.Error.Newer";
     pub const UNCONFIRMED: &str = "io.github.wallpaper_rs.Error.Unconfirmed";
     pub const FLASHING: &str = "io.github.wallpaper_rs.Error.FlashingDisabled";
+    pub const OFFLINE: &str = "io.github.wallpaper_rs.Error.Offline";
 
     const SILENT: &str = "failed without giving a reason";
 

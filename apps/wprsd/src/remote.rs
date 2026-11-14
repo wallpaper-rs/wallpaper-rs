@@ -11,7 +11,7 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex, OnceLock};
 use std::time::UNIX_EPOCH;
 use tokio::sync::Notify;
-use wprs_core::dbus::error::NEEDS_SECRET;
+use wprs_core::dbus::error::{NEEDS_SECRET, OFFLINE};
 use wprs_core::model::Credit;
 use wprs_library::Source;
 
@@ -25,6 +25,7 @@ pub struct Health {
     pub retry_at: Option<i64>,
     pub rejected: bool,
     pub locked: bool,
+    pub offline: bool,
 }
 
 #[derive(Default)]
@@ -169,6 +170,7 @@ impl Daemon {
                     health.failures += 1;
                     let backoff = (30_i64 << (health.failures - 1).min(7)).min(3600);
                     (health.retry_at, health.rejected) = (Some(now() + backoff), name == NEEDS_SECRET);
+                    health.offline = name == OFFLINE;
                     health.last_error = Some(message);
                 }
             }

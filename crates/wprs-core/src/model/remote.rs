@@ -23,6 +23,8 @@ model! {
         pub orphan_secret: bool,
         #[serde(default)]
         pub plain_http: bool,
+        #[serde(default)]
+        pub offline: bool,
     }
 
     pub struct ProvidersReply {

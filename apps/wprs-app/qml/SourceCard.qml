@@ -10,7 +10,7 @@ FocusScope {
     required property var provider
     property bool rotating: false
     readonly property var kind: SourceKinds.of(provider.kind)
-    readonly property string problem: provider.state === "needs_secret" ? App.tr("%1 rejected the key", kind.name) : provider.state === "locked" ? App.tr("The keyring is locked") : provider.state === "error" ? (provider.last_error || App.tr("It could not reach %1", kind.name)) : ""
+    readonly property string problem: provider.state === "needs_secret" ? App.tr("%1 rejected the key", kind.name) : provider.state === "locked" ? App.tr("The keyring is locked") : provider.state === "error" && !provider.offline ? (provider.last_error || App.tr("It could not reach %1", kind.name)) : ""
     readonly property string tone: provider.state === "locked" || provider.state === "needs_secret" ? "coral" : "ambar"
     readonly property bool broken: problem !== ""
     readonly property bool bare: provider.items === 0

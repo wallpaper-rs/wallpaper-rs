@@ -68,9 +68,9 @@ impl Daemon {
             .into_iter()
             .chain(self.jobs.find(JobKind::ProviderSync, ""));
         let job = job.min();
-        let (last_error, rejected, locked) = lock(&self.remote.health)
+        let (last_error, rejected, locked, offline) = lock(&self.remote.health)
             .get(id)
-            .map_or((None, false, false), |h| (h.last_error.clone(), h.rejected, h.locked));
+            .map_or((None, false, false, false), |h| (h.last_error.clone(), h.rejected, h.locked, h.offline));
         let mut provider = Provider {
             id: id.into(),
             kind,
@@ -87,6 +87,7 @@ impl Daemon {
             job,
             orphan_secret: self.orphaned(id),
             plain_http: false,
+            offline,
         };
         let (known, _, options) = match entry(value) {
             Ok(parsed) => parsed,
