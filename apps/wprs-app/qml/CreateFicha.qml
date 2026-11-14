@@ -12,8 +12,9 @@ Item {
     property bool fields
     property alias middle: mid.data
     default property alias actions: row.data
+    readonly property bool stacked: fields && heading.implicitWidth + mid.implicitWidth + row.implicitWidth + 2 * Look.e5 > width
 
-    implicitHeight: fields ? Look.e4 + words.implicitHeight + Look.e3 + mid.implicitHeight + Look.e3 : Math.max(words.implicitHeight, row.implicitHeight) + Look.e4
+    implicitHeight: stacked ? Look.e4 + words.implicitHeight + Look.e3 + mid.implicitHeight + Look.e3 : Math.max(words.implicitHeight, row.implicitHeight, fields ? mid.implicitHeight : 0) + Look.e4
     Accessible.role: Accessible.Grouping
     Accessible.name: title
 
@@ -26,10 +27,12 @@ Item {
     Column {
         id: words
 
-        y: ficha.fields ? Look.e4 : Look.e4 + (parent.height - Look.e4 - height) / 2
-        width: ficha.fields ? implicitWidth : parent.width - row.width - Look.e5
+        y: ficha.stacked ? Look.e4 : Look.e4 + (parent.height - Look.e4 - height) / 2
+        width: ficha.fields ? heading.implicitWidth : parent.width - row.width - Look.e5
 
         Text {
+            id: heading
+
             width: parent.width
             text: ficha.title
             elide: Text.ElideRight
@@ -52,7 +55,8 @@ Item {
         id: mid
 
         visible: ficha.fields
-        y: words.y + words.height + Look.e3
+        x: ficha.stacked ? 0 : heading.implicitWidth + Look.e5
+        y: ficha.stacked ? words.y + words.height + Look.e3 : Look.e4 + (parent.height - Look.e4 - height) / 2
         spacing: Look.e4
     }
 
