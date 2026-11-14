@@ -12,6 +12,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Author's preset"
+msgstr "Preajuste del autor"
+
+msgid "Even when the desktop asks for reduced motion"
+msgstr "Aunque el escritorio pida reducir el movimiento"
+
+msgid "Keep moving"
+msgstr "Seguir en movimiento"
+
 #: apps/wprs-app/qml/ProviderCard.qml
 msgid "Sync now"
 msgstr "Sincronizar ahora"

@@ -71,6 +71,11 @@ QQC2.ScrollView {
             visible: tunable && panel.first
         }
 
+        Seccion {
+            visible: panel.first
+            text: App.tr("Yours")
+        }
+
         Fila {
             Layout.fillWidth: true
             visible: panel.first && !!panel.host.pkg && panel.host.pkg.kind !== "assets"
@@ -79,36 +84,6 @@ QQC2.ScrollView {
             note: App.tr("They work for every scene")
             number: String(presets.all.length)
             onOpened: panel.page.level = "presets"
-        }
-
-        PackageAbout {
-            Layout.fillWidth: true
-            visible: panel.first && !!panel.host.details.about
-            info: panel.host.details.about ?? {}
-            uid: panel.host.uid
-            pkg: panel.host.pkg
-        }
-
-        Seccion {
-            visible: panel.first
-            text: App.tr("From its author")
-        }
-
-        ItemKin {
-            Layout.fillWidth: true
-            visible: panel.first
-            host: panel.host
-        }
-
-        Seccion {
-            visible: panel.first
-            text: App.tr("Yours")
-        }
-
-        ItemExtras {
-            Layout.fillWidth: true
-            visible: panel.first
-            host: panel.host
         }
 
         Fila {

@@ -13,6 +13,7 @@ ColumnLayout {
     property var folded: ({})
     property string problem: ""
     property bool tools: true
+    property bool rows: false
     readonly property string packageId: props.package ?? ""
     readonly property var uses: (inputs.shown ?? {})[output] ?? {}
     readonly property var fields: (props.fields ?? []).filter(field => field.visible && !scene.closed(field.group))
@@ -93,7 +94,7 @@ ColumnLayout {
 
     ScenePresets {
         Layout.fillWidth: true
-        visible: scene.packageId !== ""
+        visible: scene.packageId !== "" && !scene.rows
         daemon: scene.daemon
         output: scene.output
         props: scene.props
@@ -101,12 +102,28 @@ ColumnLayout {
         onReset: scene.load()
     }
 
+    Fila {
+        readonly property var labels: scene.props.preset_labels ?? []
+
+        Layout.fillWidth: true
+        visible: scene.rows && labels.length > 0
+        text: scene.daemon.tr("Author's preset")
+        words: labels.map(preset => preset.label)
+        onWorded: index => scene.daemon.act("ApplyScenePreset", [scene.output, labels[index].value])
+    }
+
     SceneRepeater {
         id: listed
 
         rows: scene.fields
 
-        delegate: SceneField {
+        delegate: scene.rows ? piece : field
+    }
+
+    Component {
+        id: field
+
+        SceneField {
             required property int index
             modelData: listed.rows[index]
 
@@ -119,6 +136,47 @@ ColumnLayout {
                 const next = Object.assign({}, scene.folded);
                 next[scene.packageId + "/" + key] = on;
                 scene.folded = next;
+            }
+        }
+    }
+
+    Component {
+        id: piece
+
+        Loader {
+            id: slot
+
+            required property int index
+            readonly property var row: listed.rows[index]
+            readonly property bool simple: ["bool", "slider", "combo"].includes(row.kind) && (row.label ?? "") !== ""
+
+            Layout.fillWidth: true
+            sourceComponent: simple ? option : full
+
+            Component {
+                id: option
+
+                SceneOption {
+                    modelData: slot.row
+                    onTuned: (key, value) => scene.set(key, value)
+                }
+            }
+
+            Component {
+                id: full
+
+                SceneField {
+                    modelData: slot.row
+                    daemon: scene.daemon
+                    output: scene.output
+                    folded: scene.closed(slot.row.key)
+                    onEdited: (key, value) => scene.set(key, value)
+                    onFold: (key, on) => {
+                        const next = Object.assign({}, scene.folded);
+                        next[scene.packageId + "/" + key] = on;
+                        scene.folded = next;
+                    }
+                }
             }
         }
     }

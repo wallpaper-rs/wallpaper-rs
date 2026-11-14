@@ -18,7 +18,7 @@ ColumnLayout {
 
     Seccion {
         visible: settings.bare < settings.screens.length || settings.screens.length === 0
-        text: App.tr("Author's options")
+        text: App.tr("From its author")
     }
 
     Vacio {
@@ -66,6 +66,7 @@ ColumnLayout {
                 daemon: App
                 output: modelData
                 tools: false
+                rows: true
             }
         }
     }

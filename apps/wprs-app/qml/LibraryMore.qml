@@ -50,6 +50,28 @@ ColumnLayout {
         onRated: stars => App.act("SetRating", [[more.host.uid], stars], "Library1")
     }
 
+    ItemExtras {
+        Layout.fillWidth: true
+        host: more.host
+    }
+
+    Seccion {
+        text: App.tr("Details")
+    }
+
+    ItemKin {
+        Layout.fillWidth: true
+        host: more.host
+    }
+
+    PackageAbout {
+        Layout.fillWidth: true
+        visible: !!more.host.details.about
+        info: more.host.details.about ?? {}
+        uid: more.host.uid
+        pkg: more.pkg
+    }
+
     ItemFacts {
         Layout.fillWidth: true
         host: more.host
