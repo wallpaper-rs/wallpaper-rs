@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
@@ -47,13 +48,16 @@ fun Settings(main: Main, account: () -> Unit = {}) {
     val knobs = Knobs(main, values, report, changes, set, change)
     val labels = SETTING_LINES.map { stringResource(it.label) }
     val accountLabel = stringResource(R.string.account)
+    val context = LocalContext.current
+    val linked by loaded<String?>(null, main.revision.intValue) { linkedName(Sync.status(), context.online()) }
+    val linkedLabel = linked?.let { stringResource(R.string.connected_to, it) }
     val searching = query.isNotBlank()
     val found = SETTING_LINES.filterIndexed { i, _ -> finds(query, labels[i]) }
     val more = stringResource(R.string.more_options)
     LazyColumn(Modifier.testTag("settings")) {
         item { Header(stringResource(R.string.settings)) }
         item { Finder(query, stringResource(R.string.search_settings)) { query = it } }
-        if (finds(query, accountLabel)) item { Setting(accountLabel, Modifier.testTag("account"), onClick = account) }
+        if (finds(query, accountLabel)) item { Setting(accountLabel, Modifier.testTag("account"), linkedLabel, onClick = account) }
         Block.entries.forEach { block ->
             val bit = 1 shl block.ordinal
             val open = unfolded and bit != 0
