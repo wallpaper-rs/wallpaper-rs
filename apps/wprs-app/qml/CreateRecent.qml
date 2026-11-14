@@ -15,10 +15,12 @@ Item {
 
         visible: recent.any
         anchors.right: parent.right
-        width: Math.min(parent.width, row.contentWidth)
+        width: Math.min(parent.width, Math.max(row.contentWidth, heading.implicitWidth + row.pad))
         spacing: Look.e3
 
         Text {
+            id: heading
+
             x: row.pad
             text: App.tr("Continue with yours")
             font.family: Look.letraTitulo

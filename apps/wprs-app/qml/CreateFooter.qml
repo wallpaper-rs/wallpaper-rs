@@ -18,10 +18,11 @@ CreateFicha {
     caption: !entry ? "" : starting ? App.tr("It will be created as “%1” in %2", page.named, page.where) : page.missing ? App.tr("Its folder “%1” is gone. Did you move it or rename it?", entry.folder.split("/").slice(-1).join("")) : page.facts.pie
 
     middle: [
-        Column {
-            spacing: Look.e1
+        Row {
+            spacing: Look.e2
 
             Text {
+                anchors.verticalCenter: parent.verticalCenter
                 text: App.tr("Title")
                 font.family: Look.letraTexto
                 font.pixelSize: Look.tPie
@@ -34,10 +35,11 @@ CreateFicha {
                 onTextEdited: ficha.page.named = text
             }
         },
-        Column {
-            spacing: Look.e1
+        Row {
+            spacing: Look.e2
 
             Text {
+                anchors.verticalCenter: parent.verticalCenter
                 text: App.tr("Folder")
                 font.family: Look.letraTexto
                 font.pixelSize: Look.tPie

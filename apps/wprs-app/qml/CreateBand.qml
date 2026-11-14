@@ -42,8 +42,8 @@ Column {
 
         QQC2.Button {
             visible: !band.page.learn
-            Layout.fillWidth: true
-            Layout.maximumWidth: implicitWidth
+            Layout.minimumWidth: 0
+            Layout.preferredWidth: implicitWidth
             flat: true
             text: App.tr("More: preset, resource pack")
             icon.name: "caret-right"
