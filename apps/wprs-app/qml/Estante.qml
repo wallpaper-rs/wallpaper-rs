@@ -13,62 +13,66 @@ Coleccion {
     Accessible.role: Accessible.List
     Accessible.name: label
 
-    ListView {
-        id: list
-
+    Item {
         x: -Look.margen
         width: parent.width + Look.margen
         height: parent.height
-        orientation: ListView.Horizontal
-        spacing: Look.huecoEstante
-        leftMargin: Look.margen + Look.filete + Look.anillo
-        rightMargin: Look.filete + Look.anillo
-        highlightRangeMode: ListView.ApplyRange
-        preferredHighlightBegin: leftMargin
-        preferredHighlightEnd: width - rightMargin
-        focus: true
         clip: true
-        reuseItems: true
-        cacheBuffer: Look.tapa
-        boundsBehavior: Flickable.StopAtBounds
-        highlightFollowsCurrentItem: true
-        highlightMoveDuration: Look.paso
-        highlight: Item {
-        }
-        model: estante.model
-        Component.onCompleted: Qt.callLater(() => {
-            positionViewAtBeginning();
-            positionViewAtIndex(currentIndex, ListView.Contain);
-        })
 
-        delegate: Item {
-            id: slot
+        ListView {
+            id: list
 
-            required property var model
-            required property int index
-            readonly property alias name: cover.name
-            readonly property alias caption: cover.caption
+            x: Look.margen
+            width: parent.width - Look.margen
+            height: parent.height
+            orientation: ListView.Horizontal
+            spacing: Look.huecoEstante
+            leftMargin: Look.filete + Look.anillo
+            rightMargin: Look.filete + Look.anillo
+            displayMarginBeginning: Look.margen
+            focus: true
+            reuseItems: true
+            cacheBuffer: Look.tapa
+            boundsBehavior: Flickable.StopAtBounds
+            highlightFollowsCurrentItem: true
+            highlightMoveDuration: Look.paso
+            highlight: Item {
+            }
+            model: estante.model
+            Component.onCompleted: Qt.callLater(() => {
+                positionViewAtBeginning();
+                positionViewAtIndex(currentIndex, ListView.Contain);
+            })
 
-            width: cover.width + (cover.lit ? Look.filete + Look.anillo : 0)
-            height: cover.y + cover.height
-            z: cover.lit ? 1 : 0
+            delegate: Item {
+                id: slot
 
-            TapaVista {
-                id: cover
+                required property var model
+                required property int index
+                readonly property alias name: cover.name
+                readonly property alias caption: cover.caption
 
-                y: Look.filete + Look.anillo + Math.round((Look.tapaFoco - width) * 9 / 16)
-                width: implicitWidth
-                height: implicitHeight
-                model: slot.model
-                index: slot.index
-                from: estante
+                width: cover.width + (cover.lit ? Look.filete + Look.anillo : 0)
+                height: cover.y + cover.height
+                z: cover.lit ? 1 : 0
 
-                Loader {
-                    readonly property bool choosing: estante.choosing && estante.chosen.length > 0
+                TapaVista {
+                    id: cover
 
-                    active: cover.lit
-                    width: choosing && item ? Math.min(item.implicitWidth, list.width - Look.margen - (slot.x - list.contentX)) : undefined
-                    sourceComponent: choosing ? estante.selection : card
+                    y: Look.filete + Look.anillo + Math.round((Look.tapaFoco - width) * 9 / 16)
+                    width: implicitWidth
+                    height: implicitHeight
+                    model: slot.model
+                    index: slot.index
+                    from: estante
+
+                    Loader {
+                        readonly property bool choosing: estante.choosing && estante.chosen.length > 0
+
+                        active: cover.lit
+                        width: choosing && item ? Math.min(item.implicitWidth, list.width - Look.margen - (slot.x - list.contentX)) : undefined
+                        sourceComponent: choosing ? estante.selection : card
+                    }
                 }
             }
         }

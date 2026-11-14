@@ -78,9 +78,9 @@ que toma el lugar de la ficha: «N elegidos» y sus acciones.
 
 La primera fila de una colección: tapas en reposo, una encendida y agrandada con su ficha debajo. Se
 sale por los dos bordes de la ventana: la pantalla lo pone en el margen de la página y le da el
-ancho hasta el borde derecho; por la izquierda las tapas siguen `Look.margen` más allá de su lado
-izquierdo, así que al desplazarse se van bajo el borde de la ventana y no se cortan en el margen.
-La tapa encendida no pasa del margen de la página.
+ancho hasta el borde derecho; por la izquierda las tapas se siguen dibujando `Look.margen` más allá
+de su lado izquierdo, así que al desplazarse se van bajo el borde de la ventana y no se cortan en el
+margen. La tapa encendida no pasa del margen de la página.
 
 - `model`: cualquier modelo de lista (o un arreglo de objetos). Los nombres de los roles se eligen
   con `pictureRole` (`picture`), `nameRole` (`name`), `captionRole` (`caption`), `noteRole`,
