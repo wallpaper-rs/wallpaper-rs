@@ -70,6 +70,11 @@ PublishStep {
         tone: review.blocking > 0 ? "coral" : review.warnings > 0 ? "ambar" : "brote"
     }
 
+    PublishThumb {
+        Layout.fillWidth: true
+        publish: review.publish
+    }
+
     Repeater {
         model: review.findings
 

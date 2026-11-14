@@ -1762,6 +1762,11 @@ after a result.
    once, flashes (`/manifest/photosensitive`) and adult content (`/manifest/content`, rating `mature`
    or `general`); for a copy of a package whose license allows no changes it asks to confirm the copy.
    *Go on* stays off, with the reason, while there are errors, unanswered questions or no license.
+   When the package has no thumbnail, or its picture is older than the newest saved file of the folder
+   (`wprs_editor::previews::outdated`, two seconds of margin, signatures left out), one line says so
+   with *Update the thumbnail*, the same capture as the package details; the picture on the left
+   changes as soon as the capture lands. Without a thumbnail the library draws a cover by itself, but
+   a server refuses the upload.
    *More* holds *Check the signature*, which answers `{"signature": {"path", "keys"}}` for a built
    `.wpak` or the folder: `valid` with the fingerprints that signed, `invalid` with the reason,
    `unsigned`, or `unchecked` while no key is given. `wprs-ctl pack check DIR|FILE` prints the same

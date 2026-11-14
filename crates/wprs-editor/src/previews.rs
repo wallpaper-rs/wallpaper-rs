@@ -81,3 +81,27 @@ fn field(doc: &Value, animated: bool) -> Result<&'static str> {
 pub fn adopt(doc: &Value, animated: bool, path: &str) -> Result<Vec<Op>> {
     Ok(set(doc, &format!("/manifest/{}", field(doc, animated)?), json!(path)))
 }
+
+fn newest(dir: &Path, skip: &Path) -> Option<std::time::SystemTime> {
+    fs::read_dir(dir)
+        .ok()?
+        .flatten()
+        .filter(|e| e.path() != skip)
+        .filter(|e| !e.file_name().to_string_lossy().starts_with('.'))
+        .filter(|e| e.path().extension().is_none_or(|x| x != "minisig"))
+        .filter_map(|e| match e.file_type().ok()?.is_dir() {
+            true => newest(&e.path(), skip),
+            false => e.metadata().ok()?.modified().ok(),
+        })
+        .max()
+}
+
+pub fn outdated(dir: &Path, preview: &str) -> bool {
+    let file = dir.join(preview);
+    let taken = match preview.is_empty() {
+        true => None,
+        false => fs::metadata(&file).and_then(|m| m.modified()).ok(),
+    };
+    let Some(taken) = taken else { return true };
+    newest(dir, &file).is_some_and(|last| last > taken + std::time::Duration::from_secs(2))
+}

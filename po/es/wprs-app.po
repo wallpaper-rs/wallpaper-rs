@@ -19391,7 +19391,17 @@ msgstr "%1 solo acepta las firmas que su administrador incluye"
 msgid "Your signature is in your account, but this server does not take signatures from accounts. Ask its administrator to add it, or save it as a file."
 msgstr "Tu firma está en tu cuenta, pero este servidor no acepta firmas desde las cuentas. Pide a su administrador que la incluya, o guárdalo como archivo."
 
+#: apps/wprs-app/qml/PublishThumb.qml
+msgid "It has no thumbnail: the library draws one by itself, but a server does not take it without one."
+msgstr "No tiene miniatura: la biblioteca dibuja una por su cuenta, pero un servidor no lo acepta sin ella."
 
+#: apps/wprs-app/qml/PublishThumb.qml
+msgid "The thumbnail is older than the last change."
+msgstr "La miniatura es anterior al último cambio."
+
+#: apps/wprs-app/qml/PublishThumb.qml
+msgid "Update the thumbnail"
+msgstr "Actualizar la miniatura"
 
 #: apps/wprs-app/qml/PublishWork.qml
 msgid "Nothing was lost. Try again, or save it as a file and upload it later."

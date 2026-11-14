@@ -6,7 +6,7 @@ Item {
     id: picture
 
     required property var publish
-    readonly property string preview: publish.editing && publish.manifest.preview ? "file://" + publish.page.editor.folder + "/" + publish.manifest.preview : ""
+    readonly property string preview: publish.editing && Publishing.thumbnail(publish.manifest) !== "" ? "file://" + publish.page.editor.folder + "/" + Publishing.thumbnail(publish.manifest) + "?" + publish.shots : ""
     readonly property string kind: publish.editing ? (publish.page.kind ?? "scene") : ""
 
     clip: true

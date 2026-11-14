@@ -154,6 +154,30 @@ fn a_repository_key_is_not_offered_as_an_author_signature() {
     author_keys::create(&dir, "ana", None, false).unwrap();
     let shelf = author_keys::create(&author_keys::repositories(&dir), "shelf-repo", None, false).unwrap();
     assert!(shelf["secret"].as_str().unwrap().starts_with(author_keys::repositories(&dir).to_str().unwrap()));
-    let names: Vec<_> = author_keys::list(&dir).as_array().unwrap().iter().map(|k| k["name"].clone()).collect();
+    let names: Vec<_> =
+        author_keys::list(&dir).as_array().unwrap().iter().map(|k| k["name"].clone()).collect();
     assert_eq!(names, ["ana"]);
+}
+
+#[test]
+fn a_thumbnail_older_than_the_last_change_is_outdated() {
+    let dir = tempfile::tempdir().unwrap();
+    let at = |secs| std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_secs(secs);
+    let touch = |name: &str, secs| {
+        std::fs::write(dir.path().join(name), b"x").unwrap();
+        std::fs::File::options()
+            .write(true)
+            .open(dir.path().join(name))
+            .unwrap()
+            .set_modified(at(secs))
+            .unwrap();
+    };
+    assert!(wprs_editor::previews::outdated(dir.path(), ""));
+    assert!(wprs_editor::previews::outdated(dir.path(), "preview.jpg"));
+    touch("scene.json", 1000);
+    touch("preview.jpg", 1001);
+    touch("manifest.json.minisig", 5000);
+    assert!(!wprs_editor::previews::outdated(dir.path(), "preview.jpg"));
+    touch("scene.json", 2000);
+    assert!(wprs_editor::previews::outdated(dir.path(), "preview.jpg"));
 }

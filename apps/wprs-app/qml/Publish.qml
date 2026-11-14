@@ -19,6 +19,7 @@ Rectangle {
     property var result: null
     property var fault: null
     property var manifest: ({})
+    property int shots: 0
     readonly property bool editing: page !== null && page.editor !== undefined
     readonly property string name: Publishing.title(manifest, file)
     readonly property string version: manifest.version ?? ""

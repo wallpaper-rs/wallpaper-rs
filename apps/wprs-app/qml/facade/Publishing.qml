@@ -107,6 +107,10 @@ QtObject {
         return parts.join(".");
     }
 
+    function thumbnail(manifest) {
+        return String((manifest.previews ?? {}).thumbnail ?? manifest.preview ?? "");
+    }
+
     function authorId(name) {
         const id = String(name).toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^[^a-z]+/, "");
         return (id !== "" ? id : "author").slice(0, 32);

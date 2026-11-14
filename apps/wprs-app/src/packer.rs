@@ -19,6 +19,9 @@ pub mod qobject {
 
         #[qinvokable]
         fn flatten(self: Pin<&mut Packer>, file: &QString);
+
+        #[qinvokable]
+        fn outdated(self: &Packer, folder: &QString, preview: &QString) -> bool;
     }
 
     impl cxx_qt::Threading for Packer {}
@@ -110,5 +113,11 @@ impl Packer {
             })
             .ok();
         });
+    }
+}
+
+impl Packer {
+    pub fn outdated(&self, folder: &QString, preview: &QString) -> bool {
+        wprs_editor::previews::outdated(&PathBuf::from(folder.to_string()), &preview.to_string())
     }
 }
