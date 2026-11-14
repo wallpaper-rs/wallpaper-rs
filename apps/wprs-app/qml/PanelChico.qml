@@ -22,6 +22,16 @@ QQC2.Popup {
     signal accepted
     signal rejected
 
+    function pressEnter() {
+        if (body.Window.activeFocusItem === calm) {
+            rejected();
+            close();
+        } else if (main.visible && !borra) {
+            accepted();
+            close();
+        }
+    }
+
     function place() {
         if (!opener || !parent)
             return;
@@ -60,6 +70,8 @@ QQC2.Popup {
         implicitHeight: column.implicitHeight
         Accessible.role: Accessible.Dialog
         Accessible.name: panel.title
+        Keys.onReturnPressed: panel.pressEnter()
+        Keys.onEnterPressed: panel.pressEnter()
 
         Column {
             id: column

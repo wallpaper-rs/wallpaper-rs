@@ -12,6 +12,7 @@ ColumnLayout {
     property var inputs: ({})
     property var folded: ({})
     property string problem: ""
+    property bool tools: true
     readonly property string packageId: props.package ?? ""
     readonly property var uses: (inputs.shown ?? {})[output] ?? {}
     readonly property var fields: (props.fields ?? []).filter(field => field.visible && !scene.closed(field.group))
@@ -96,6 +97,7 @@ ColumnLayout {
         daemon: scene.daemon
         output: scene.output
         props: scene.props
+        tools: scene.tools
         onReset: scene.load()
     }
 

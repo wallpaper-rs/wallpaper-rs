@@ -65,6 +65,7 @@ ColumnLayout {
                 Component.onDestruction: settings && none && (settings.bare -= 1)
                 daemon: App
                 output: modelData
+                tools: false
             }
         }
     }

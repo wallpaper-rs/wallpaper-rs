@@ -12,6 +12,7 @@ ColumnLayout {
     required property var props
     readonly property var saved: props.user_presets ?? []
     property string notice: ""
+    property bool tools: true
 
     signal reset
 
@@ -74,24 +75,28 @@ ColumnLayout {
 
         QQC2.Button {
             icon.name: "document-save"
+            visible: presets.tools
             text: presets.daemon.tr("Save as preset…")
             onClicked: naming.open()
         }
 
         QQC2.ToolButton {
             icon.name: "edit-copy"
+            visible: presets.tools
             text: presets.daemon.tr("Copy settings")
             onClicked: presets.exported(text => presets.copy(text))
         }
 
         QQC2.ToolButton {
             icon.name: "edit-paste"
+            visible: presets.tools
             text: presets.daemon.tr("Paste settings")
             onClicked: presets.imported(presets.paste())
         }
 
         QQC2.ToolButton {
             icon.name: "document-export"
+            visible: presets.tools
             text: presets.daemon.tr("Export…")
             display: QQC2.AbstractButton.IconOnly
             onClicked: writing.open()
@@ -99,6 +104,7 @@ ColumnLayout {
 
         QQC2.ToolButton {
             icon.name: "document-import"
+            visible: presets.tools
             text: presets.daemon.tr("Import…")
             display: QQC2.AbstractButton.IconOnly
             onClicked: reading.open()
@@ -106,13 +112,14 @@ ColumnLayout {
 
         QQC2.Button {
             icon.name: "edit-undo"
+            visible: presets.tools
             text: presets.daemon.tr("Reset")
             onClicked: presets.daemon.act("ResetSceneProperties", [presets.output], "Daemon1", () => presets && presets.reset())
         }
     }
 
     QQC2.CheckBox {
-        visible: presets.output !== ""
+        visible: presets.output !== "" && presets.tools
         text: presets.daemon.tr("Same settings on every screen")
         checked: presets.props.shared === true
         onToggled: presets.daemon.act("ShareSceneValues", [presets.output, checked])
@@ -120,6 +127,7 @@ ColumnLayout {
 
     SavedPresets {
         Layout.fillWidth: true
+        visible: presets.tools
         daemon: presets.daemon
         output: presets.output
         list: presets.saved

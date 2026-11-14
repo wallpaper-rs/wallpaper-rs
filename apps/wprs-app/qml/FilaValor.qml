@@ -128,7 +128,7 @@ RowLayout {
         id: campo
 
         visible: valor.fila.kind === "campo"
-        implicitWidth: Look.campoAncho
+        implicitWidth: Math.min(Look.campoAncho, Math.round(valor.fila.width / 2))
         implicitHeight: Look.altoControl
         activeFocusOnTab: false
         enabled: !valor.fila.off
