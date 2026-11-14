@@ -19,7 +19,7 @@ Kirigami.Page {
     property string current
     property string level
     readonly property var chosen: providers.find(p => p.id === current) || ({})
-    readonly property bool options: view !== "list"
+    readonly property string skeleton: view !== "list" ? "options" : ""
     readonly property string leaf: view === "pick" ? App.tr("Add a source") : view === "add" ? App.tr("Add %1", SourceKinds.of(kind).name) : !!chosen.id ? SourceKinds.heading(chosen) : ""
     readonly property Item shown: body.shown
     readonly property alias cards: list
