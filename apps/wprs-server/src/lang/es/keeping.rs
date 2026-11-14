@@ -61,7 +61,7 @@ pub const TEXTS: super::Texts = &[
         "The next notice goes out by itself; this row turns green when it arrives.",
         "El próximo aviso sale solo; esta fila se pone verde cuando llegue.",
     ),
-    ("Pending cases", "Casos pendientes"),
+    ("Pending cases", "Casos por revisar"),
     ("None", "Ninguno"),
     ("To review", "Revisar"),
     ("Live invitations", "Invitaciones vivas"),

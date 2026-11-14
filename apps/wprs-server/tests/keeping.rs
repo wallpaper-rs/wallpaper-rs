@@ -50,7 +50,7 @@ async fn the_health_page_lists_its_rows_in_both_languages() {
         "Última copia de seguridad",
         "Disco y cuotas",
         "Correo",
-        "Casos pendientes",
+        "Casos por revisar",
         "Invitaciones vivas",
         "Cómo programarla",
         "Configurar el correo",
