@@ -169,3 +169,11 @@ fn every_state_the_review_pages_show_has_a_spanish_word() {
     let missing: Vec<&str> = shown.iter().flatten().copied().filter(|w| !known.contains_key(w)).collect();
     assert!(missing.is_empty(), "no Spanish word for: {missing:?}");
 }
+
+#[test]
+fn every_permission_the_validator_knows_has_a_spanish_word() {
+    let known = super::vocabulary();
+    let names = wprs_format::Input::ALL.iter().map(|i| i.name()).chain(["rgb"]);
+    let missing: Vec<&str> = names.filter(|n| !known.contains_key(format!("asks {n}").as_str())).collect();
+    assert!(missing.is_empty(), "no Spanish word for permission: {missing:?}");
+}

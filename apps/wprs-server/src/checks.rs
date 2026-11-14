@@ -1,4 +1,4 @@
-use crate::lang::{t, tf};
+use crate::lang::{t, tf, word};
 use crate::ui::Tone;
 use serde_json::Value;
 
@@ -19,6 +19,16 @@ fn asks(case: &Value) -> Vec<String> {
     list
 }
 
+fn named(ask: &str) -> String {
+    let (head, rest) = ask.split_once(' ').unwrap_or((ask, ""));
+    let key = format!("asks {head}");
+    let shown = match word(&key) == key {
+        true => head,
+        false => word(&key),
+    };
+    format!("{shown} {rest}").trim_end().to_string()
+}
+
 pub fn checks(case: &Value, allowed: &[String]) -> Vec<Check> {
     let license = case["license"].as_str().unwrap_or_default();
     let who = case["uploader"].as_str().unwrap_or_default();
@@ -33,7 +43,10 @@ pub fn checks(case: &Value, allowed: &[String]) -> Vec<Check> {
     let asked = asks(case);
     let permissions = match asked.is_empty() {
         true => (Tone::Good, t("None: it uses no network and no microphone").to_string()),
-        false => (Tone::Warn, tf("Asks for: {}", &[&asked.join(", ")])),
+        false => (
+            Tone::Warn,
+            tf("Asks for: {}", &[&asked.iter().map(|a| named(a)).collect::<Vec<_>>().join(", ")]),
+        ),
     };
     let flashing = match case["photosensitive"].as_bool() {
         Some(false) => (Tone::Good, t("It has none").to_string()),
