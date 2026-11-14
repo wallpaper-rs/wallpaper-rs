@@ -58,7 +58,7 @@ Item {
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: 2
+                columns: 1
                 columnSpacing: Look.e2
                 rowSpacing: Look.e2
 

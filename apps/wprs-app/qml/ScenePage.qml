@@ -30,9 +30,10 @@ Kirigami.Page {
         page: page
     }
     property string notice
+    readonly property var scenePage: page
     property Component bar: Component {
         SceneTop {
-            page: page
+            page: scenePage
         }
     }
     property real clock: editor.time

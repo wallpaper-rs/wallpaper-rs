@@ -8,6 +8,7 @@ Rectangle {
     required property var page
 
     color: Look.nocheAlta
+    clip: true
 
     Rectangle {
         width: Look.linea

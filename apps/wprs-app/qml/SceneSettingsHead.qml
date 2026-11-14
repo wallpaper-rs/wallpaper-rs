@@ -13,8 +13,16 @@ ColumnLayout {
         lit: head.page.editor.selected === "/manifest"
         icon: "info"
         text: App.tr("Wallpaper details…")
-        note: App.tr("Title, author, license and tags")
         onClicked: head.page.editor.select("/manifest")
+    }
+
+    Text {
+        Layout.fillWidth: true
+        Layout.leftMargin: Look.e3
+        wrapMode: Text.WordWrap
+        text: App.tr("Title, author, license and tags")
+        color: Look.brumaBaja
+        font.pixelSize: Look.tPie
     }
 
     Kirigami.InlineMessage {

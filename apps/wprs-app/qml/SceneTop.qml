@@ -82,6 +82,7 @@ RowLayout {
     QQC2.Button {
         implicitHeight: Look.altoBotonArriba
         highlighted: top.filled
+        palette.highlight: Look.luna
         icon.name: "paper-plane-tilt"
         text: App.tr("Publish…")
         enabled: top.page.editor.ready

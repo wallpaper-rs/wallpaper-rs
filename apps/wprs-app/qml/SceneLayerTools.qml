@@ -44,20 +44,27 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
-        spacing: Look.e1
+        Layout.minimumWidth: 0
+        spacing: 0
 
         QQC2.ToolButton {
+            padding: Look.e1
             icon.name: "copy"
             text: App.tr("Duplicate")
+            display: QQC2.AbstractButton.IconOnly
             enabled: tools.chosen
+            QQC2.ToolTip.text: text
+            QQC2.ToolTip.visible: hovered
             onClicked: tools.owner.page.run("duplicate_layer", {
                     "id": tools.owner.current.id
                 })
         }
 
         QQC2.ToolButton {
+            padding: Look.e1
             icon.name: "stack"
-            text: App.tr("Group")
+            text: App.tr("Group the layers")
+            display: QQC2.AbstractButton.IconOnly
             enabled: tools.chosen
             QQC2.ToolTip.text: App.tr("Group the selected layer and the ones picked with Ctrl")
             QQC2.ToolTip.visible: hovered
@@ -70,13 +77,18 @@ ColumnLayout {
         }
 
         QQC2.ToolButton {
+            padding: Look.e1
             icon.name: "trash"
             text: App.tr("Remove")
+            display: QQC2.AbstractButton.IconOnly
             enabled: tools.chosen
+            QQC2.ToolTip.text: text
+            QQC2.ToolTip.visible: hovered
             onClicked: tools.remove()
         }
 
         QQC2.ToolButton {
+            padding: Look.e1
             icon.name: "arrow-up"
             text: App.tr("Raise")
             display: QQC2.AbstractButton.IconOnly
@@ -87,6 +99,7 @@ ColumnLayout {
         }
 
         QQC2.ToolButton {
+            padding: Look.e1
             icon.name: "arrow-down"
             text: App.tr("Lower")
             display: QQC2.AbstractButton.IconOnly
@@ -103,6 +116,7 @@ ColumnLayout {
         QQC2.ToolButton {
             id: more
 
+            padding: Look.e1
             text: App.tr("More")
             icon.name: "caret-down"
             onClicked: menu.popup(more, 0, more.height)

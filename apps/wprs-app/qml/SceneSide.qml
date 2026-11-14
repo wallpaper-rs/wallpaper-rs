@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls as QQC2
 import io.github.wallpaper_rs.app
 
 Rectangle {
@@ -11,6 +12,7 @@ Rectangle {
     property alias layers: layers
 
     color: Look.nocheAlta
+    clip: true
 
     Rectangle {
         anchors.right: parent.right
@@ -24,17 +26,38 @@ Rectangle {
         anchors.rightMargin: Look.linea
         spacing: 0
 
-        Filtro {
+        RowLayout {
             Layout.fillWidth: true
-            Layout.margins: Look.e2
-            Layout.bottomMargin: 0
-            sections: true
-            label: App.tr("Sections")
-            current: stack.currentIndex
-            words: [App.tr("Layers"), App.tr("Assets"), App.tr("Options"), App.tr("Try")].map(text => ({
-                        "text": text
-                    }))
-            onPicked: index => stack.currentIndex = index
+            Layout.leftMargin: Look.e2
+            Layout.topMargin: Look.e2
+            spacing: 0
+
+            Repeater {
+                model: [App.tr("Layers"), App.tr("Assets"), App.tr("Options"), App.tr("Try")]
+
+                delegate: QQC2.TabButton {
+                    required property string modelData
+                    required property int index
+                    readonly property bool lit: stack.currentIndex === index
+
+                    text: modelData
+                    leftPadding: Look.e2
+                    rightPadding: Look.e2
+                    font.pixelSize: Look.tCuerpo
+                    font.weight: lit ? Font.DemiBold : Font.Normal
+                    checked: lit
+                    Accessible.role: Accessible.PageTab
+                    onClicked: stack.currentIndex = index
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        width: parent.width
+                        height: Look.linea * 2
+                        visible: parent.lit
+                        color: Look.luna
+                    }
+                }
+            }
         }
 
         Rectangle {
