@@ -185,7 +185,7 @@ Column {
     Estado {
         anchors.right: parent.right
         topPadding: Look.e3
-        visible: App.backend.lastError !== ""
+        visible: App.backend.lastError !== "" && App.backend.lastError !== App.backend.banner
         tone: "coral"
         text: App.backend.lastError
     }

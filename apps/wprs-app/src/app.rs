@@ -93,7 +93,12 @@ pub(crate) async fn watch(conn: Connection) {
 }
 
 async fn connect(conn: &Connection) {
-    set_link(Client::new(conn.clone()).await.map(Daemon::Bus).map_err(|e| e.to_string()));
+    set_link(Client::new(conn.clone()).await.map(Daemon::Bus).map_err(|e| {
+        match wprs_client::error_name(&e).is_some_and(crate::events::absent) {
+            true => crate::tr::tr("The wallpaper service does not answer"),
+            false => e.to_string(),
+        }
+    }));
 }
 
 async fn forward(conn: Connection) -> zbus::Result<()> {

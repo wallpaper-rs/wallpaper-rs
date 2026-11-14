@@ -16,6 +16,10 @@ fn q(text: &str) -> QString {
     QString::from(text)
 }
 
+pub(crate) fn absent(name: &str) -> bool {
+    matches!(name.strip_prefix("org.freedesktop.DBus.Error."), Some("ServiceUnknown" | "NameHasNoOwner"))
+}
+
 pub(crate) fn told(message: String, tr: impl Fn(&str) -> String) -> String {
     match wprs_core::dbus::error::silent(&message) {
         Some("") => tr(SILENT),
@@ -129,7 +133,9 @@ impl Backend {
                     if *this.checking() {
                         eprintln!("call failed: {}", e.message);
                     }
-                    this.as_mut().set_last_error(QString::from(&e.message));
+                    if !absent(&e.name) {
+                        this.as_mut().set_last_error(QString::from(&e.message));
+                    }
                     this.failed(QString::from(&tag), QString::from(&e.name), QString::from(&e.message));
                 }
             })
